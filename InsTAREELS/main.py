@@ -1,0 +1,468 @@
+import json
+import ctypes
+from ctypes import wintypes
+import os
+from pathlib import Path
+import queue
+import threading
+import time
+
+# Publish actual interpreter identity before loading UI/native dependencies.
+_session = os.environ.get("JARVIS_SESSION_ID")
+if _session:
+    _runtime = Path(__file__).resolve().parent / ".jarvis-runtime"
+    _runtime.mkdir(exist_ok=True)
+    (_runtime / ("heartbeat-" + _session + ".json")).write_text(json.dumps({
+        "session": _session, "pid": os.getpid(), "at": time.time(), "status": "starting"}), encoding="utf-8")
+import tkinter as tk
+from tkinter import messagebox, ttk
+from tkinter.scrolledtext import ScrolledText
+from PIL import ImageTk
+
+from jarvis.actions import Actions, Desktop
+from jarvis.audio import Listener
+from jarvis.engine import Engine
+from jarvis.commands import Command
+from jarvis.speech import Speech
+from jarvis.hud import render_hud
+from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
+
+BASE = Path(__file__).resolve().parent
+
+
+class App:
+    def __init__(self, root):
+        self.root = root
+        self.config = json.loads((BASE / "config.json").read_text(encoding="utf-8"))
+        self.events = queue.Queue()
+        self.closing = False
+        self.listening_requested = False
+        self.repair_offset = 0
+        self.speech = Speech(self.config.setdefault("speech", {"enabled": True, "language": "auto"}), self.report)
+        self.speech.start()
+        self.listener = None
+        self.session = 0
+        self.actions = Actions(self.config, BASE, self.report, Desktop())
+        self.actions.start()
+        self.external_handle = 0
+        self.actions.external_handle = lambda: self.external_handle
+        self.capture_count = 0
+        self.command_window = None
+        self.actions.knowledge.screen_handle = lambda: self.external_handle
+        self.orb_phase = 0.0
+        from jarvis.interface import build_interface
+        build_interface(self)
+        self.load_microphones()
+        self.actions.approval_handler = self.request_approval
+        root.protocol("WM_DELETE_WINDOW", self.close)
+        self.panel.withdraw()
+        root.after(40, self.animate_orb)
+        root.after(150, self.exclude_orb_from_capture)
+        root.after(300, self.remember_external_window)
+        root.after(80, self.drain)
+        self.watchdog = Watchdog(self.report)
+        self.ollama_service = OllamaService()
+        from jarvis.model_recovery import ModelRecovery
+        self.model_recovery = ModelRecovery(BASE, self.config, self.report, lambda: self.closing)
+        self.watchdog.register("Ollama", self.ollama_service.healthy, self.ollama_service.repair,
+            lambda: not self.closing and (self.config.get("brain", {}).get("enabled") or self.config.get("knowledge", {}).get("enabled")))
+        for name, worker in (("Action worker", self.actions), ("Question worker", self.actions.knowledge), ("Speech worker", self.speech)):
+            self.watchdog.register(name, lambda worker=worker: worker.thread.is_alive(),
+                lambda worker=worker, name=name: restart_thread(worker, name), lambda: not self.closing)
+        self.watchdog.register("Microphone", self.listener_healthy, self.repair_listener,
+            lambda: self.listening_requested and not self.closing)
+        self.watchdog.register("Configured models", self.model_recovery.healthy, self.model_recovery.repair,
+            lambda: not self.closing)
+        self.watchdog.register("God's Eye service", self.gods_eye_healthy, self.repair_gods_eye,
+            lambda: not self.closing and self.actions.gods_eye_view is not None)
+        self.watchdog.start()
+        self.root.after(100, self.runtime_tick)
+        if os.environ.get("JARVIS_AUTOLISTEN") == "1":
+            self.root.after(600, self.toggle_listening)
+        if os.environ.get("JARVIS_RESUME_TASK") == "1":
+            self.root.after(1200, self.resume_interrupted_task)
+        elif self.actions.task_state.unfinished():
+            self.report("repair", "Unfinished task retained. Say resume last task to inspect and continue it.")
+
+    def resume_interrupted_task(self):
+        if not self.closing and self.actions.generation == 0 and self.actions.queue.empty():
+            self.actions.submit(Command("resume_task", extra="automatic"))
+
+    def listener_healthy(self):
+        if not self.listener or not self.listener.thread.is_alive():
+            return False
+        audio_limit = 90 if self.listener.capture_started else 300
+        return time.monotonic() - self.listener.last_audio < audio_limit and (
+            self.listener.decode_started is None or time.monotonic() - self.listener.decode_started < 180)
+
+    def repair_listener(self):
+        if self.listener and self.listener.thread.is_alive():
+            self.listener.stop()
+            if self.actions.task_active:
+                return False  # Do not sacrifice a running task to repair unrelated audio resources.
+            if os.environ.get("JARVIS_SUPERVISED") == "1":
+                record(BASE, "Microphone/decoder stalled; restarting Jarvis to release its audio and CUDA resources.")
+                os._exit(72)
+            return False
+        self.report("restart_listener", "")
+        return False
+
+    def gods_eye_healthy(self):
+        from jarvis.gods_eye_view import ready
+        return ready()
+
+    def repair_gods_eye(self):
+        service = self.actions.gods_eye_view
+        service.close()
+        service.start(lambda: self.closing)
+        return self.gods_eye_healthy()
+
+    def runtime_tick(self):
+        if self.closing:
+            return
+        try:
+            runtime = BASE / ".jarvis-runtime"
+            runtime.mkdir(exist_ok=True)
+            if os.environ.get("JARVIS_SUPERVISED") == "1" and (runtime / "stop").exists():
+                self.close()
+                return
+            session = os.environ.get("JARVIS_SESSION_ID")
+            if session:
+                temporary = runtime / ("heartbeat-" + session + ".tmp")
+                temporary.write_text(json.dumps({"session": session, "pid": os.getpid(), "at": time.time(),
+                    "status": "running", "listening_requested": self.listening_requested}), encoding="utf-8")
+                os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
+            repairs = runtime / "repairs.jsonl"
+            if repairs.is_file():
+                with repairs.open("r", encoding="utf-8") as source:
+                    source.seek(self.repair_offset)
+                    for line in source:
+                        try:
+                            self.log_line("repair", json.loads(line)["message"])
+                        except (ValueError, KeyError):
+                            pass
+                    self.repair_offset = source.tell()
+        except Exception:
+            self.report("repair", "Runtime status update failed; will retry.")
+        finally:
+            if not self.closing:
+                self.root.after(2000, self.runtime_tick)
+
+    @ui_loop(40)
+    def animate_orb(self):
+        self.orb_phase += .13
+        listening = self.listener is not None and self.listener.thread.is_alive()
+        speaking = self.speech.speaking.is_set()
+        status = "SPEAKING" if speaking else "WORKING" if self.actions.task_active else "THINKING" if self.ui_activity else "LISTENING" if listening else "STANDBY"
+        self.hud_status.set(status)
+        self.orb_photo = ImageTk.PhotoImage(render_hud(self.orb_phase, listening, speaking, size=128), master=self.root)
+        self.orb.delete("all")
+        self.orb.create_image(69, 68, image=self.orb_photo)
+        self.orb.create_text(69, 144, text=status, fill="#48d9f3", font=("Consolas", 9, "bold"))
+        if self.panel.state() != "withdrawn":
+            self.panel_photo = ImageTk.PhotoImage(render_hud(self.orb_phase, listening, speaking, size=self.hud_size), master=self.root)
+            self.panel_logo.configure(image=self.panel_photo)
+        self.root.after(90, self.animate_orb)
+
+    def toggle_panel(self, _event=None):
+        if self.panel.state() == "withdrawn":
+            self.show_panel()
+        else:
+            self.hide_panel()
+
+    def show_panel(self):
+        self.panel.deiconify()
+        self.panel.lift()
+        self.exclude_window_from_capture(self.panel)
+        self.preview.focus_set()
+
+    def hide_panel(self):
+        self.panel.withdraw()
+
+    def show_menu(self, event):
+        self.menu.tk_popup(event.x_root, event.y_root)
+
+    @staticmethod
+    def exclude_window_from_capture(window):
+        """Windows 10 2004+: omit this window from OS screen captures."""
+        try:
+            user = ctypes.WinDLL("user32", use_last_error=True)
+            user.GetAncestor.argtypes = (wintypes.HWND, wintypes.UINT)
+            user.GetAncestor.restype = wintypes.HWND
+            user.SetWindowDisplayAffinity.argtypes = (wintypes.HWND, wintypes.DWORD)
+            user.SetWindowDisplayAffinity.restype = wintypes.BOOL
+            hwnd = user.GetAncestor(window.winfo_id(), 2)  # GA_ROOT, not Tk's client child.
+            return bool(hwnd and user.SetWindowDisplayAffinity(hwnd, 0x11))
+        except (AttributeError, OSError, tk.TclError):
+            return False
+
+    def exclude_orb_from_capture(self):
+        self.exclude_window_from_capture(self.root)
+
+    def remember_external_window(self):
+        try:
+            import win32gui
+            import win32process
+            hwnd = win32gui.GetForegroundWindow()
+            if (hwnd and win32gui.IsWindowVisible(hwnd)
+                    and win32process.GetWindowThreadProcessId(hwnd)[1] != os.getpid()
+                    and win32gui.GetWindowText(hwnd).strip()):
+                self.external_handle = hwnd
+        except Exception:
+            pass
+        self.root.after(300, self.remember_external_window)
+
+    def report(self, kind, message):
+        if kind == "state":
+            self.actions.suggest_enabled = message.startswith("Awake")
+            if self.actions.suggest_enabled:
+                self.actions.suggest_until = time.monotonic() + self.config.get("wake_timeout_seconds", 90)
+        elif kind in {"partial", "final"} and self.actions.suggest_enabled:
+            self.actions.suggest_until = time.monotonic() + self.config.get("wake_timeout_seconds", 90)
+        self.events.put((kind, message))
+
+    def request_approval(self, kind, detail, cancelled):
+        answer = {"approved": False}
+        ready = threading.Event()
+        self.report("approval", (kind, detail, answer, ready, cancelled))
+        while not ready.wait(.1):
+            if cancelled():
+                return False
+        return answer["approved"] and not cancelled()
+
+    def show_command_prompt(self):
+        if self.command_window and self.command_window.winfo_exists():
+            self.command_window.deiconify()
+            self.command_window.lift()
+            self.command_entry.focus_set()
+            return
+        window = self.command_window = tk.Toplevel(self.root)
+        window.title("Jarvis command prompt")
+        window.geometry("760x420")
+        window.configure(bg="#0d1424")
+        window.attributes("-topmost", True)
+        tk.Label(window, text="JARVIS COMMAND PROMPT  ·  working folder: " + str(self.actions.root),
+                 bg="#0d1424", fg="#a4eeff", anchor="w").pack(fill="x", padx=12, pady=(12, 6))
+        self.command_output = ScrolledText(window, bg="#121e30", fg="#e4edf3", insertbackground="white",
+            relief="flat", font=("Consolas", 10), state="disabled")
+        self.command_output.pack(fill="both", expand=True, padx=12)
+        row = tk.Frame(window, bg="#0d1424")
+        row.pack(fill="x", padx=12, pady=12)
+        self.command_entry = ttk.Entry(row)
+        self.command_entry.pack(side="left", fill="x", expand=True)
+        self.command_entry.bind("<Return>", lambda _event: self.run_command())
+        ttk.Button(row, text="Run", command=self.run_command).pack(side="left", padx=(8, 0))
+        self.command_entry.focus_set()
+        self.exclude_window_from_capture(window)
+
+    def run_command(self):
+        value = self.command_entry.get().strip()
+        if value:
+            self.command_entry.delete(0, "end")
+            self.actions.submit(Command("run_command", value))
+
+    def load_microphones(self):
+        try:
+            import sounddevice as sd
+            devices = sd.query_devices()
+            hosts = sd.query_hostapis()
+            labels = ["System default microphone"]
+            selected = 0
+            for index, device in enumerate(devices):
+                if device["max_input_channels"] > 0:
+                    self.mic_devices.append(index)
+                    labels.append(f"{device['name']} · {hosts[device['hostapi']]['name']} [{index}]")
+                    if self.config.get("microphone") in (index, device["name"]):
+                        selected = len(labels) - 1
+            self.mic_choice["values"] = labels
+            self.mic_choice.current(selected)
+        except Exception as exc:
+            self.log_line("warning", f"Microphone discovery failed: {exc}")
+
+    def log_line(self, kind, message):
+        if not message:
+            return
+        self.log.configure(state="normal")
+        self.log.insert("end", f"{time.strftime('%H:%M:%S')}  {kind.upper():8} {message}\n", (kind,))
+        if int(self.log.index("end-1c").split(".")[0]) > 600:
+            self.log.delete("1.0", "100.0")
+        self.log.see("end")
+        self.log.configure(state="disabled")
+
+    @ui_loop(80)
+    def drain(self):
+        for _ in range(300):
+            try:
+                kind, message = self.events.get_nowait()
+            except queue.Empty:
+                break
+            if kind == "partial":
+                if message:
+                    self.live.set(message)
+            elif kind == "state":
+                self.state.set(message)
+            elif kind == "screen_capture":
+                if self.capture_count == 0:
+                    self.hide_panel()
+                    self.root.withdraw()
+                self.capture_count += 1
+            elif kind == "screen_capture_done":
+                if self.capture_count:
+                    self.capture_count -= 1
+                if self.capture_count == 0 and self.root.state() == "withdrawn":
+                    self.root.deiconify()
+                    self.root.attributes("-topmost", True)
+                    self.exclude_orb_from_capture()
+            elif kind == "screen":
+                self.log_line(kind, message)
+            elif kind == "approval":
+                action, detail, answer, ready, cancelled = message
+                if cancelled():
+                    ready.set()
+                    continue
+                if action == "delete":
+                    prompt = "Move this exact file to the Recycle Bin?\n\n" + detail
+                    title = "Approve file deletion"
+                elif action == "command":
+                    prompt = ("Run this exact command? It can change or delete files.\n\n"
+                              "Working folder: " + str(self.actions.root) + "\n\n" + detail)
+                    title = "Approve command execution"
+                else:
+                    prompt = "Approve this exact external action? Review its destination and content.\n\n" + detail
+                    title = "Approve " + action.replace("_", " ")
+                try:
+                    answer["approved"] = messagebox.askyesno(title, prompt, parent=self.command_window
+                        if self.command_window and self.command_window.winfo_exists() else self.root)
+                except tk.TclError as exc:
+                    self.log_line("warning", "Approval dialog could not open: " + str(exc))
+                finally:
+                    ready.set()
+            elif kind == "command_output":
+                if self.command_window and self.command_window.winfo_exists():
+                    self.command_output.configure(state="normal")
+                    self.command_output.insert("end", message + "\n\n")
+                    self.command_output.see("end")
+                    self.command_output.configure(state="disabled")
+                self.log_line("command", message[-1000:])
+            elif kind == "show_command_prompt":
+                self.show_command_prompt()
+            elif kind == "question":
+                self.question.set(message[:700])
+                self.log_line(kind, message)
+            elif kind in {"thinking", "answer"}:
+                self.ui_activity = "thinking" if kind == "thinking" else ""
+                self.log_line(kind, message)
+                if kind == "answer":
+                    self.live.set(message[:450])
+                    self.speech.say(message)
+            elif kind == "spoken_reply":
+                self.ui_activity = ""
+                self.live.set(message[:450])
+                self.speech.say(message)
+            elif kind == "level":
+                self.level["value"] = message
+            elif kind == "backend":
+                self.backend.set(message)
+                self.log_line(kind, message)
+            elif kind in {"fatal", "listener_stopped"}:
+                self.state.set("Microphone off")
+                self.toggle.configure(text="Start listening")
+                self.mic_choice.configure(state="readonly")
+                self.level["value"] = 0
+                self.log_line(kind, message)
+            elif kind == "restart_listener":
+                if self.listening_requested and (not self.listener or not self.listener.thread.is_alive()):
+                    self.toggle_listening()
+            elif kind == "repair":
+                record(BASE, message)
+            else:
+                self.log_line(kind, message)
+        self.root.after(80, self.drain)
+
+    def toggle_listening(self):
+        if self.listener and self.listener.thread.is_alive():
+            self.stop()
+            return
+        self.session += 1
+        self.listening_requested = True
+        session = self.session
+        self.config["microphone"] = self.mic_devices[self.mic_choice.current()]
+        (BASE / "config.json").write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
+        self.mic_choice.configure(state="disabled")
+        if not self.actions.task_active:
+            self.actions.desktop.target = None
+            self.actions.typing_failed = False
+            self.actions.open_target_pending = False
+        # Generation check also prevents a stopping recognizer enqueueing new work.
+        def submit(command):
+            if session == self.session:
+                self.actions.submit(command)
+        engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
+        self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
+                                 muted=self.speech.speaking.is_set)
+        self.listener.start()
+        self.toggle.configure(text="Stop listening")
+
+    def stop(self):
+        self.listening_requested = False
+        self.session += 1
+        if self.listener:
+            self.listener.stop()
+        self.actions.cancel()
+        self.speech.cancel()
+        self.ui_activity = ""
+        self.state.set("Stopping microphone…")
+        self.toggle.configure(text="Start listening")
+
+    def preview_command(self):
+        engine = Engine(lambda c: self.log_line("preview", repr(c)), self.log_line)
+        engine.activate()
+        engine.feed(self.preview.get(), final=True)
+
+    def ask_question(self):
+        text = self.preview.get().strip()
+        if text:
+            self.actions.submit(Command("ask", text))
+
+    def send_input(self):
+        """Enter uses the same command/question routing as spoken instructions."""
+        text = self.preview.get().strip()
+        if text:
+            from jarvis.audio import command_text
+            engine = Engine(self.actions.submit, self.report)
+            engine.activate()
+            engine.feed(command_text(text), final=True)
+
+    def ask_screen(self):
+        text = self.preview.get().strip() or "What is visible in this window?"
+        self.report("question", text)
+        self.actions.knowledge.submit(text, screen=True)
+
+    def do_task(self):
+        text = self.preview.get().strip()
+        if text:
+            self.actions.submit(Command("task", text))
+
+    def close(self):
+        self.closing = True
+        if os.environ.get("JARVIS_SUPERVISED") == "1":
+            (BASE / ".jarvis-runtime" / "stop").touch()
+        self.watchdog.close()
+        self.model_recovery.close()
+        self.stop()
+        self.speech.close()
+        self.actions.close()
+        self.root.destroy()
+
+    def save_speech_settings(self, _event=None):
+        self.speech.options["enabled"] = self.speak_enabled.get()
+        if not self.speech.options["enabled"]:
+            self.speech.cancel()
+        language = {"Auto": "auto", "English": "en", "Hindi": "hi"}[self.answer_language.get()]
+        self.speech.options["language"] = language
+        self.config["knowledge"]["answer_language"] = language
+        (BASE / "config.json").write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
+
+
+if __name__ == "__main__":
+    App(tk.Tk()).root.mainloop()

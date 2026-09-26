@@ -1,0 +1,310 @@
+[
+  {
+    "tool": "think",
+    "toolkit": "thinking",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "write_spec",
+    "toolkit": "coding",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "write_tests",
+    "toolkit": "coding",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "write_code",
+    "toolkit": "coding",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "improve_code",
+    "toolkit": "coding",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "review_pull_request",
+    "toolkit": "github",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "knowledge_search",
+    "toolkit": "knowledge",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "list_files",
+    "toolkit": "files",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "read_file",
+    "toolkit": "files",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "append_file",
+    "toolkit": "files",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "search_files",
+    "toolkit": "files",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "query_resource",
+    "toolkit": "resource",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "web_search",
+    "toolkit": "duckduckgo",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "scrape_web",
+    "toolkit": "webscraper",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "github_search",
+    "toolkit": "github",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "github_read_file",
+    "toolkit": "github",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "github_pull_request",
+    "toolkit": "github",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "github_pr_files",
+    "toolkit": "github",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  },
+  {
+    "tool": "github_add_file",
+    "toolkit": "github",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GITHUB_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "github_delete_file",
+    "toolkit": "github",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GITHUB_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "google_search",
+    "toolkit": "google_search",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GOOGLE_SEARCH_KEY",
+      "JARVIS_GOOGLE_SEARCH_CX"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "serp_search",
+    "toolkit": "serp",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_SERPAPI_KEY"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "searx_search",
+    "toolkit": "searx",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_SEARX_URL"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "apollo_search",
+    "toolkit": "apollo",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_APOLLO_KEY"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "read_email",
+    "toolkit": "email",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_IMAP_HOST",
+      "JARVIS_EMAIL_USER",
+      "JARVIS_EMAIL_PASSWORD"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "send_email",
+    "toolkit": "email",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_SMTP_HOST",
+      "JARVIS_EMAIL_USER",
+      "JARVIS_EMAIL_PASSWORD"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "slack_send",
+    "toolkit": "slack",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_SLACK_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "twitter_send",
+    "toolkit": "twitter",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_TWITTER_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "calendar_list",
+    "toolkit": "calendar",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GOOGLE_ACCESS_TOKEN"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "calendar_details",
+    "toolkit": "calendar",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GOOGLE_ACCESS_TOKEN"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "calendar_create",
+    "toolkit": "calendar",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GOOGLE_ACCESS_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "calendar_delete",
+    "toolkit": "calendar",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_GOOGLE_ACCESS_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "jira_projects",
+    "toolkit": "jira",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_JIRA_URL",
+      "JARVIS_JIRA_USER",
+      "JARVIS_JIRA_TOKEN"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "jira_search",
+    "toolkit": "jira",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_JIRA_URL",
+      "JARVIS_JIRA_USER",
+      "JARVIS_JIRA_TOKEN"
+    ],
+    "approval": "none"
+  },
+  {
+    "tool": "jira_create",
+    "toolkit": "jira",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_JIRA_URL",
+      "JARVIS_JIRA_USER",
+      "JARVIS_JIRA_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "jira_edit",
+    "toolkit": "jira",
+    "configured": false,
+    "required_environment": [
+      "JARVIS_JIRA_URL",
+      "JARVIS_JIRA_USER",
+      "JARVIS_JIRA_TOKEN"
+    ],
+    "approval": "user"
+  },
+  {
+    "tool": "toolkit_status",
+    "toolkit": "toolkits",
+    "configured": true,
+    "required_environment": [],
+    "approval": "none"
+  }
+]

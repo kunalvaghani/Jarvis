@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "capabilities": [
+    "unified_tools",
+    "adaptive_planning",
+    "task_recovery",
+    "persistent_task_state",
+    "safe_task_resume",
+    "silent_recovery",
+    "local_experience_recall",
+    "task_dependencies",
+    "natural_spoken_replies",
+    "sentence_audio_streaming",
+    "modern_jarvis_hud",
+    "related_code_context",
+    "exact_code_replacements",
+    "coding_change_backups",
+    "reusable_question_worker",
+    "single_model_discovery_per_step",
+    "superagi_toolkits",
+    "credential_gated_integrations",
+    "scoped_resource_search"
+  ],
+  "main_imports": [
+    "tkinter",
+    "PIL",
+    "sounddevice",
+    "numpy",
+    "scipy",
+    "faster_whisper",
+    "requests",
+    "pywinauto",
+    "send2trash",
+    "ddgs",
+    "piper",
+    "pycaw",
+    "winrt.windows.media.control"
+  ],
+  "brain_imports": [
+    "requests",
+    "torch",
+    "laya",
+    "transformers"
+  ],
+  "services": [
+    "interface",
+    "ollama",
+    "models",
+    "microphone",
+    "action_worker",
+    "question_worker",
+    "speech_worker",
+    "brain_inference",
+    "gods_eye"
+  ],
+  "ui_assets": [
+    "jarvis/assets/jarvis-reference.gif"
+  ]
+}

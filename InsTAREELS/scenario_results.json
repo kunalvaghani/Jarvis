@@ -1,0 +1,279 @@
+{
+  "model": "qwen3.5:4b",
+  "passed": 13,
+  "total": 13,
+  "results": [
+    {
+      "case": 1,
+      "goal": "Open YouTube in Chrome",
+      "passed": true,
+      "seconds": 19.4,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "browse",
+            "value": "YouTube",
+            "browser": "chrome",
+            "expected": "YouTube open in Chrome",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 2,
+      "goal": "Open Chrome and search for Python tutorials",
+      "passed": true,
+      "seconds": 16.4,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "browser_search",
+            "value": "Python tutorials",
+            "browser": "chrome",
+            "expected": "Google search results for Python tutorials",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 3,
+      "goal": "Open folder Downloads and create a file called ideas.txt there and write hello Kunal in it",
+      "passed": true,
+      "seconds": 17.3,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "Downloads",
+            "browser": "chrome",
+            "expected": "Downloads folder open",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          },
+          {
+            "action": "create_file",
+            "value": "ideas.txt",
+            "browser": "chrome",
+            "expected": "File created with content",
+            "folder": "Downloads",
+            "content": "hello Kunal",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 4,
+      "goal": "Create a file called log.txt in this folder and write test run complete",
+      "passed": true,
+      "seconds": 19.5,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "create_file",
+            "value": "log.txt",
+            "browser": "chrome",
+            "expected": "File created with content",
+            "folder": "this folder",
+            "content": "test run complete",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 5,
+      "goal": "Play jazz on YouTube",
+      "passed": true,
+      "seconds": 17.9,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "media_search",
+            "value": "jazz",
+            "browser": "chrome",
+            "expected": "YouTube jazz search results",
+            "folder": "",
+            "content": "",
+            "platform": "youtube"
+          },
+          {
+            "action": "select",
+            "value": "jazz music result",
+            "browser": "chrome",
+            "expected": "Music playback controls visible",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 6,
+      "goal": "Play lo-fi focus on Spotify",
+      "passed": true,
+      "seconds": 20.3,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "media_search",
+            "value": "lo-fi focus",
+            "browser": "chrome",
+            "expected": "Spotify search results for lo-fi focus",
+            "folder": "",
+            "content": "",
+            "platform": "spotify"
+          },
+          {
+            "action": "select",
+            "value": "lo-fi focus result",
+            "browser": "chrome",
+            "expected": "Song selected in Spotify",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          },
+          {
+            "action": "select",
+            "value": "Play button",
+            "browser": "chrome",
+            "expected": "Music playback started",
+            "folder": "",
+            "content": "",
+            "platform": "spotify"
+          }
+        ]
+      }
+    },
+    {
+      "case": 7,
+      "goal": "Close Chrome",
+      "passed": true,
+      "seconds": 15.0,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "close_app",
+            "value": "chrome",
+            "browser": "chrome",
+            "expected": "Chrome closed",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 8,
+      "goal": "Open folder Downloads",
+      "passed": true,
+      "seconds": 15.2,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "Downloads",
+            "browser": "chrome",
+            "expected": "Downloads folder open",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 9,
+      "goal": "Choose Person 1 profile",
+      "passed": true,
+      "seconds": 16.0,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "select",
+            "value": "Open Person 1 profile",
+            "browser": "chrome",
+            "expected": "Person 1 profile selected",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 10,
+      "goal": "Open Downloads, create notes.txt there and write first line, then close Notepad",
+      "passed": true,
+      "seconds": 21.0,
+      "detail": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "Downloads",
+            "browser": "chrome",
+            "expected": "Downloads folder open",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          },
+          {
+            "action": "create_file",
+            "value": "notes.txt",
+            "browser": "chrome",
+            "expected": "File created in Downloads",
+            "folder": "Downloads",
+            "content": "first line",
+            "platform": ""
+          },
+          {
+            "action": "close_app",
+            "value": "notepad",
+            "browser": "chrome",
+            "expected": "Notepad closed",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ]
+      }
+    },
+    {
+      "case": 11,
+      "goal": "Execute file plan and refuse overwrite in isolated folder",
+      "passed": true,
+      "detail": "Created C:\\Users\\kunal\\AppData\\Local\\Temp\\tmp2pb0le66\\Downloads\\ideas.txt and wrote 11 characters"
+    },
+    {
+      "case": 12,
+      "goal": "Answer a general question locally",
+      "passed": true,
+      "seconds": 23.1,
+      "detail": "आसमान नीला दिखने का मुख्य कारण 'रे के प्रकीर्णन' (Rayleigh scattering) है। जब सूर्य की सफेद रोशनी पृथ्वी की वायुमंडलीय गैसों में से गुजरती है, तो छोटे कणों (जैसे नाइट्रोजन और ऑक्सीजन अणुओं) के कारण नीली रंग की प्रकाश तरंगें अन्य रंगों की तुलना में अधिक प्रकीर्णित हो जाती हैं। हमारा आँखें यह प्रकीर्ण"
+    },
+    {
+      "case": 13,
+      "goal": "Route a current question to web verification",
+      "passed": true
+    }
+  ]
+}

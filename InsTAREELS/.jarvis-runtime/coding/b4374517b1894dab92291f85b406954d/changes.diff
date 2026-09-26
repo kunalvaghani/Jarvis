@@ -1,0 +1,90 @@
+--- before/allaram.py
++++ after/allaram.py
+@@ -1 +1,86 @@
+-# Jarvis draft: allaram.py. Waiting for generated code.
++#!/usr/bin/env python3
++"""
++Alarm application for TestCodes project.
++This script provides a simple alarm functionality with a basic UI.
++"""
++import time
++
++class AlarmUI:
++    """
++    A class to handle the user interface for the alarm.
++    
++    Attributes:
++        set_time (tuple): The target time in (hour, minute) format.
++        current_time (tuple): The current time in (hour, minute) format.
++        is_alarmed (bool): Flag indicating if the alarm has been triggered.
++    """
++    
++    def __init__(self, set_time):
++        """
++        Initialize the AlarmUI with a specific set time.
++        
++        Args:
++            set_time (tuple): The time to set the alarm for in (hour, minute) format.
++        """
++        self.set_time = set_time
++        self.current_time = (time.localtime().tm_hour, time.localtime().tm_min)
++        self.is_alarmed = False
++    
++    def display(self):
++        """
++        Display the current alarm status in the console.
++        """
++        if self.is_alarmed:
++            print(f"\rALARM: {self.set_time[0]:02d}:{self.set_time[1]:02d} - ALARM SOUNDED!", end="")
++        else:
++            print(f"\rAlarm set for {self.set_time[0]:02d}:{self.set_time[1]:02d}", end="")
++    
++    def start(self):
++        """
++        Start the alarm countdown using the UI.
++        """
++        print(f"\nStarting alarm for {self.set_time[0]:02d}:{self.set_time[1]:02d}...")
++        while not self.is_alarmed:
++            current = time.localtime()
++            current_hour = current.tm_hour
++            current_min = current.tm_min
++            
++            if (current_hour, current_min) == self.set_time:
++                self.is_alarmed = True
++                print("\rALARM: {0:02d}:{1:02d} - ALARM SOUNDED!".format(self.set_time[0], self.set_time[1]))
++            
++            self.display()
++            time.sleep(1)
++    
++    def stop(self):
++        """
++        Stop the alarm and display a message.
++        """
++        print("\rAlarm stopped by user.")
++
++def main():
++    """
++    Main function to handle user input and start the alarm with UI.
++    """
++    try:
++        # Get user input for hour and minute
++        hour_input = input("Enter the hour (0-23): ").strip()
++        minute_input = input("Enter the minute (0-59): ").strip()
++        
++        hour = int(hour_input)
++        minute = int(minute_input)
++        
++        if not (0 <= hour <= 23 and 0 <= minute <= 59):
++            print("Invalid time. Please enter a valid hour and minute.")
++            return
++        
++        # Initialize and run the alarm with UI
++        alarm_ui = AlarmUI((hour, minute))
++        alarm_ui.start()
++    except ValueError:
++        print("Invalid input. Please enter valid integers for hour and minute.")
++    except KeyboardInterrupt:
++        alarm_ui.stop()
++
++if __name__ == "__main__":
++    main()
