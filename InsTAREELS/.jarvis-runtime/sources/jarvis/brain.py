@@ -11,6 +11,7 @@ import threading
 import time
 
 from .commands import Command
+from .clarification import TaskClarification
 from .names import common
 from .task_state import TaskState
 from .task_recovery import TaskFailure, action_key
@@ -26,7 +27,7 @@ def validate_plan(plan, completed=()):
     if not isinstance(plan, dict) or not isinstance(plan.get("steps"), list):
         raise ValueError("Planner returned an invalid plan.")
     if plan.get("question"):
-        raise ValueError(str(plan["question"])[:500])
+        raise TaskClarification(str(plan["question"])[:500])
     steps = plan["steps"]
     if not 1 <= len(steps) <= 6:
         raise ValueError("The plan must have one to six steps. Please narrow the task.")
@@ -139,6 +140,26 @@ def explicit_file_plan(goal):
     """Preserve exact words for simple file requests instead of asking a model to copy them."""
     from .commands import filename
     goal = goal.strip()
+    destination = None
+    prefix = re.match(r"^(?:in|inside) (?:the )?folder (.+?),\s*", goal, re.I)
+    if prefix:
+        destination, goal = prefix[1].strip(), goal[prefix.end():]
+    opening = re.match(r"^open (?:the )?folder (.+?)(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?=(?:create|make)\b)", goal, re.I)
+    if opening:
+        destination, goal = destination or opening[1].strip(), goal[opening.end():]
+    create = re.fullmatch(r"(?:create|make) (?:a |the )?file (?:called |named )?(.+?)"
+        r"(?:\s+(?:in|inside) (?:the )?(.+?)|\s+there)?"
+        r"(?:\s*(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?:write|put)\s+(.+?)(?:\s+(?:in|into) it[.!?]?)?|\s+(?:containing|with content)\s+(.+))?", goal, re.I)
+    if create:
+        folder = destination or create[2]
+        if not folder:
+            raise TaskClarification("Which folder should I create the file in? Say Downloads or a full folder path.", "folder")
+        steps = [{"action": "create_file", "value": filename(create[1]),
+            "folder": folder.strip(), "content": create[3] or create[4] or "",
+            "expected": "Named file created with the exact requested content"}]
+        if opening:
+            steps.insert(0, {"action": "open", "value": folder.strip(), "expected": "Requested folder opened"})
+        return {"steps": steps}
     delete = re.fullmatch(r"(?:delete|remove)(?: the)? file (.+?) (?:in|from) (?:the )?(.+?)\.?", goal, re.I)
     if delete:
         return {"steps": [{"action": "delete_file", "value": filename(delete[1]),
@@ -329,7 +350,7 @@ class Brain:
             if not isinstance(revised, dict) or not isinstance(revised.get("done"), bool):
                 raise ValueError("Adaptive planner returned an invalid completion status.")
             if revised.get("question"):
-                raise ValueError(str(revised["question"])[:500])
+                raise TaskClarification(str(revised["question"])[:500])
             if revised["done"]:
                 if revised.get("steps") != []:
                     raise ValueError("Adaptive planner marked done but still proposed actions.")
@@ -353,6 +374,8 @@ class Brain:
             return steps
         except (ValueError, OSError) as exc:
             self.checkpoint("replan_paused", evidence=str(exc))
+            if isinstance(exc, TaskClarification):
+                raise
             raise ValueError("Task paused after the last verified action: " + str(exc)) from exc
 
     def validate_remaining(self, steps, goal):
@@ -498,18 +521,34 @@ class Brain:
         state = getattr(self.actions, "task_state", None)
         resumed = getattr(self.actions, "resume_source", None)
         prior = resumed if isinstance(resumed, dict) else (state.previous(spoken_goal, "task") if isinstance(state, TaskState) else None)
-        inferred_python_name = python_file_request(goal)
+        exact_file = explicit_file_plan(goal)
+        try:
+            inferred_python_name = python_file_request(goal)
+        except ValueError as exc:
+            raise TaskClarification(str(exc), "python_purpose") from exc
         toolkit_workflow = bool(re.search(r"\b(?:github|repository|pull request|jira|calendar|email|slack|tweet)\b", goal, re.I)
                                 or re.match(r"(?:draft|write) (?:tests|spec|specification)\b", goal, re.I))
         if inferred_python_name and not toolkit_workflow:
             return create_python_from_goal(self.actions, self.client, goal, inferred_python_name, cancelled)
-        if workspace_coding_request(goal) and not toolkit_workflow:
-            selected_folder = prior["project"] if prior and prior.get("project") else self.actions._task_folder("this folder", cancelled)
+        if workspace_coding_request(goal) and not toolkit_workflow and not exact_file:
+            from .coder import named_folder_request
+            try:
+                selected_folder = prior["project"] if prior and prior.get("project") else self.actions._task_folder(named_folder_request(goal) or "this folder", cancelled)
+            except ValueError as exc:
+                if isinstance(exc, TaskClarification):
+                    raise
+                raise TaskClarification("Which folder should I work in? Say a folder name or full path. " + str(exc), "folder") from exc
             return Coder(self.actions, self.client).run(selected_folder, goal, cancelled, selected=True)
         fixed_media_plan = spotify_media_plan(goal) or youtube_search_plan(goal)
         initial_launch_plan = explicit_app_launch_plan(goal, self.actions.apps) if self.options.get("screen_aware", False) else None
         has_progress = bool(prior and ((prior.get("plan") or {}).get("completed") or
                            any(item.get("stage") == "verified" for item in prior.get("checkpoints", []))))
+        if exact_file and not has_progress:
+            for file_step in exact_file["steps"]:
+                if file_step["action"] in {"create_file", "modify_file", "delete_file"}:
+                    # Read-only destination resolution happens before any launch or write.
+                    # Missing/ambiguous folders can therefore ask a question safely.
+                    self.actions._task_folder(file_step["folder"], cancelled)
         if has_progress:
             fixed_media_plan = initial_launch_plan = None
         resume_completed = prior.get("plan", {}).get("completed", []) if has_progress and prior.get("plan") else []
@@ -521,7 +560,7 @@ class Brain:
         adaptive = self.options.get("adaptive_planning", False)
         recovery_enabled = self.options.get("task_recovery", False)
         visual = None
-        if screen_aware and (fixed_media_plan or initial_launch_plan):
+        if screen_aware and (fixed_media_plan or initial_launch_plan or exact_file):
             captured = {"title": snapshot.get("title", "Desktop"), "ocr": "", "summary": "",
                         "controls": snapshot.get("controls", [])}
         elif screen_aware:
@@ -538,7 +577,7 @@ class Brain:
         words = set(common(goal).split())
         apps = sorted(self.actions.apps, key=lambda name: (bool(words & set(common(name).split())),
             name in {"chrome", "notepad", "file explorer", "edge", "calculator"}), reverse=True)[:80]
-        exact_single_request = None if has_progress else (explicit_file_plan(goal) or explicit_command_plan(goal) or explicit_desktop_plan(goal))
+        exact_single_request = None if has_progress else (exact_file or explicit_command_plan(goal) or explicit_desktop_plan(goal))
         plan = exact_single_request or fixed_media_plan or initial_launch_plan or self.client.request("plan", cancelled, goal=goal,
             screen=self.visual_context(captured) if screen_aware else self.screen(snapshot), apps=apps,
             completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
@@ -664,7 +703,8 @@ class Brain:
                 else:
                     self.actions.report("brain", "Checking step " + str(number) + " with " + self.options["decision"])
                     decision = self.client.request("decide", cancelled, goal=goal, step=step,
-                        screen=self.planning_context(step_screen), candidates=candidates, suggestion=suggestion)
+                        screen=self.planning_context(step_screen), candidates=candidates, suggestion=suggestion,
+                        tools=ToolRegistry(self.actions).catalog(goal))
                 if cancelled():
                     raise ValueError("Task cancelled before action.")
                 if decision.get("approved") is not True:
@@ -833,7 +873,13 @@ class Brain:
                 executed_steps.append(step)
                 self.save_plan(steps[1:], completed, "Last action verified; reviewing remaining tasks")
                 if screen_aware or adaptive or (toolkit_step and len(steps) > 1):
-                    if (screen_aware and status.get("goal_done") is True and not (fixed_media_plan and len(steps) > 1)) or (exact_single_request and len(executed_steps) == 1):
+                    if exact_single_request:
+                        steps = steps[1:]
+                        if steps:
+                            continue
+                        self.save_plan([], completed, "All explicit steps verified; ready for final verification")
+                        break
+                    if screen_aware and status.get("goal_done") is True and not (fixed_media_plan and len(steps) > 1):
                         self.save_plan([], completed, "Goal ready for final verification")
                         break
                     if number >= 6:

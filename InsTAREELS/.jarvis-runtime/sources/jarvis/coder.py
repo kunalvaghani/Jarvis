@@ -42,6 +42,12 @@ def python_file_request(goal):
 
 
 def named_folder_request(goal):
+    prefix = re.match(r"^(?:in|inside) (?:the )?folder (.+?),\s*", goal, re.I)
+    if prefix:
+        return prefix[1].strip()
+    opening = re.match(r"^open (?:the )?folder (.+?)(?:,|\s+(?:and|then)\s+)", goal, re.I)
+    if opening:
+        return opening[1].strip()
     match = re.search(r"\b(?:in|inside|to) (?:the )?([a-z0-9][a-z0-9 -]{0,70}?) (?:project )?folder\b", goal, re.I)
     return match[1].strip() if match else None
 
@@ -97,8 +103,14 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
     from .task_state import TaskState
     state = getattr(actions, "task_state", None)
     resumed = getattr(actions, "resume_source", None)
-    folder = Path(resumed["project"] if isinstance(resumed, dict) and resumed.get("project") else
-                  actions._task_folder("this folder", cancelled)).resolve(strict=True)
+    from .clarification import TaskClarification
+    try:
+        folder = Path(resumed["project"] if isinstance(resumed, dict) and resumed.get("project") else
+                      actions._task_folder(named_folder_request(goal) or "this folder", cancelled)).resolve(strict=True)
+    except ValueError as exc:
+        if isinstance(exc, TaskClarification):
+            raise
+        raise TaskClarification("Which folder should I create the Python file in? Say a folder name or full path. " + str(exc), "folder") from exc
     if isinstance(state, TaskState):
         state.set_project(folder)
     requested_folder = named_folder_request(goal)

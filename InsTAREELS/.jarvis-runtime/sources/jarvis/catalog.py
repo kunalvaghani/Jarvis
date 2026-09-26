@@ -24,6 +24,9 @@ class Catalog:
         self.indexes = {}
 
     def resolve(self, name, kind):
+        # A user-supplied full path does not depend on a potentially stale index.
+        if Path(name).is_absolute():
+            return self._exists(str(Path(name).resolve()), kind)
         name = common(name) if not any(c in name for c in ("/", "\\", ":")) else name
         explicit = self.config.get("files" if kind == "file" else "folders", {})
         for alias, path in explicit.items():

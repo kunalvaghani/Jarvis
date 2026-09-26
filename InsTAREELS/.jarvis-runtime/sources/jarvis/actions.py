@@ -99,6 +99,7 @@ class Actions:
         self.ui_controls = None
         self.external_handle = lambda: 0
         self.pending_open = None
+        self.pending_question = None
         from .ui_memory import UIMemory
         from .knowledge import Knowledge
         self.ui_memory = UIMemory(Path(base) / "ui_memory.json")
@@ -132,7 +133,9 @@ class Actions:
     def cancel(self):
         self.generation += 1
         self.pending_open = None
+        self.pending_question = None
         self.knowledge.cancel()
+        self.projects.pending = None
         self.suggest_enabled = False
         self.dictation_active = False
         if self.ui_controls:
@@ -140,6 +143,7 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        command = self._resolve_reply(command)
         if self.task_active and command.kind == "resume_task":
             self.report("repair", "The current task is still running; it has not been forgotten.")
             return
@@ -167,6 +171,76 @@ class Actions:
         except queue.Full:
             self.cancel()
             self.report("warning", "Action queue full; queued tasks cancelled.")
+
+    def _resolve_reply(self, command):
+        """Route answers before the general-question worker can consume them."""
+        from .commands import Command
+        from .clarification import choice_index, short_reply
+        groups = []
+        if self.pending_open:
+            groups.append((self.pending_open, 45, [c.value for c in self.pending_open["choices"]]))
+        if self.projects.pending:
+            groups.append((self.projects.pending, 180, [p.name for p in self.projects.pending["choices"]]))
+        if self.ui_controls and self.ui_controls.pending:
+            groups.append((self.ui_controls.pending, 45, [c["name"] for c in self.ui_controls.pending["choices"]]))
+        for pending, lifetime, labels in groups:
+            if command.kind in {"task", "ask", "click_control", "choose_control", "select_context", "open", "open_folder", "open_project"}:
+                index = choice_index(command.value, labels)
+                if time.monotonic() - pending["time"] > lifetime:
+                    if index is not None or command.kind in {"choose_control", "select_context"}:
+                        self.report("question", "Those choices expired. Repeat the original request to get a fresh list.")
+                        return Command("clarification_blocked", "Those choices expired. Repeat the original request.")
+                    continue
+                if command.kind == "select_context" and command.value.endswith(":option") and command.value.split(":")[0].isdigit():
+                    index = int(command.value.split(":")[0]) - 1
+                if index is not None:
+                    if not 0 <= index < len(labels):
+                        self.report("question", "That number is not in the list. Choose 1 through " + str(len(labels)) + ".")
+                        return Command("clarification_blocked", "That number is not in the list; your choices are still available.")
+                    return Command("choose_control", str(index + 1))
+        pending = self.pending_question
+        if pending and time.monotonic() - pending["time"] > 180:
+            self.pending_question = None
+            if short_reply(command):
+                self.report("question", "That task question expired. Repeat the original request.")
+                return Command("clarification_blocked", "That task question expired. Repeat the original request.")
+            pending = None
+        if pending and short_reply(command):
+            self.pending_question = None
+            answer = command.value.strip()
+            if command.kind == "confirm_suggestion" and answer == "no":
+                return Command("sleep")
+            source = pending["source"]
+            blocker = self.task_state.resume_blocker(source)
+            if blocker:
+                self.report("question", "Task still paused: " + blocker)
+                return Command("clarification_blocked", blocker)
+            if pending["slot"] == "folder":
+                # Resolve before generating a new plan; an answer never authorizes a guessed path.
+                answer = answer.removeprefix("use ").removeprefix("in ")
+                choices = pending.get("choices", [])
+                index = choice_index(answer, choices) if choices else None
+                if index is not None:
+                    if not 0 <= index < len(choices):
+                        self.pending_question = pending
+                        self.report("question", pending["question"])
+                        return Command("clarification_blocked", "That folder number is not in the list.")
+                    answer = choices[index]
+                try:
+                    self.catalog.resolve(answer, "folder")
+                except ValueError as exc:
+                    self.pending_question = pending
+                    self.report("question", "I could not resolve that folder. Say its full path. " + str(exc))
+                    return Command("clarification_blocked", "Waiting for a valid destination folder.")
+                goal = "In folder " + answer + ", " + pending["goal"]
+            elif pending["slot"] == "python_purpose":
+                goal = "Create a Python file with " + answer + " code. Original request: " + pending["goal"]
+            else:
+                goal = pending["goal"] + "\nClarification question: " + pending["question"] + "\nYour answer: " + answer
+            return Command("clarified_task", goal, json.dumps(source))
+        if command.kind not in {"choose_control", "confirm_suggestion"}:
+            self.pending_question = None
+        return command
 
     def close(self):
         self.cancel()
@@ -222,18 +296,39 @@ class Actions:
             raise ValueError("Action cancelled; approval was not given.")
 
     def _task_folder(self, folder_name, cancelled):
+        from .clarification import TaskClarification
+        from .catalog import AmbiguousName
         folder_name = folder_name.strip()
         if folder_name.casefold() in {"here", "this folder", "current folder", "the open folder", "selected folder"}:
-            ui = self._ui()
-            return ui.runner({"operation": "folder", "handle": ui._handle(), "owner_pid": os.getpid()}, cancelled)["folder"]
+            try:
+                ui = self._ui()
+                return ui.runner({"operation": "folder", "handle": ui._handle(), "owner_pid": os.getpid()}, cancelled)["folder"]
+            except ValueError as exc:
+                raise TaskClarification("Which destination folder should I use? Say Downloads or a full folder path. " + str(exc), "folder") from exc
         if folder_name:
-            return self.catalog.resolve(folder_name, "folder")
-        raise ValueError("Name a destination folder or select one in File Explorer.")
+            try:
+                return self.catalog.resolve(folder_name, "folder")
+            except ValueError as exc:
+                question = "Which destination folder should I use? Say its full path. " + str(exc)
+                error = TaskClarification(question, "folder")
+                error.choices = exc.matches if isinstance(exc, AmbiguousName) else []
+                if error.choices:
+                    error.args = ("Which folder? " + "; ".join(f"{i}. {path}" for i, path in enumerate(error.choices, 1)),)
+                raise error from exc
+        raise TaskClarification("Name a destination folder or select one in File Explorer.", "folder")
 
     def execute(self, command, cancelled=lambda: False):
         from .commands import Command
         if cancelled():
             return
+        if command.kind == "clarification_blocked":
+            return command.value
+        if command.kind == "clarified_task":
+            self.resume_source = json.loads(command.extra)
+            try:
+                return self.execute(Command("task", command.value), cancelled)
+            finally:
+                self.resume_source = None
         if command.kind == "toolkit":
             from .tools import ToolRegistry
             params = json.loads(command.extra)
@@ -288,6 +383,7 @@ class Actions:
                 self.resume_source = None
         if command.kind == "task":
             self.pending_open = None
+            self.projects.pending = None
             self.last_created = None
             self.last_modified = None
             self.last_deleted = None
@@ -304,6 +400,14 @@ class Actions:
                 self.task_state.finish("paused" if paused else "completed", result)
                 return result
             except Exception as exc:
+                from .clarification import TaskClarification
+                if isinstance(exc, TaskClarification) and not cancelled():
+                    self.task_state.finish("paused", exc)
+                    self.pending_question = {"time": time.monotonic(), "goal": command.value,
+                        "question": str(exc), "slot": exc.slot, "choices": getattr(exc, "choices", []), "source": self.task_state.snapshot()}
+                    self.report("question", str(exc))
+                    self.report("spoken_reply", str(exc))
+                    return "Task paused, waiting for your answer: " + str(exc)
                 self.task_state.finish("cancelled" if cancelled() else
                     "paused" if str(exc).startswith("Task paused") else "failed", exc)
                 raise
