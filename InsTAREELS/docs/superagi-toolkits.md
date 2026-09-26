@@ -58,7 +58,58 @@ tool send_email {"value":"recipient@example.com","content":"{\"subject\":\"Meeti
 The explicit `tool` syntax accepts only `value`, `folder` and `content`. For tools
 requiring structured parameters, `content` is a JSON string. Tool descriptions
 and the status inventory identify required service configuration. Natural task
-planning sees only relevant configured tools to limit prompt overhead.
+planning now sees every configured operation, without a keyword filter. The
+planner chooses useful prerequisite tools by meaning and integrates their
+results into the remaining plan; you do not need to name toolkit operations.
+
+## Autonomous planning and chaining
+
+Give Jarvis the goal using **Do task**, `task ...`, or a compound natural request:
+
+- `task find useful public sources about Python asyncio and compare the tradeoffs`
+- `read file source.txt in Demo and draft tests for its functions`
+- `task review pull request 12 in GitHub repository owner/repository`
+- `task check my upcoming calendar meetings and draft a preparation checklist`
+- `task research Python asyncio and email a summary to recipient@example.com`
+
+These are examples of goals, not promises that every provider is configured.
+The final example needs the email environment variables and a visible approval
+of recipient, subject and exact body before sending. Drafting returns text;
+it does not execute generated code or silently save it into a project.
+
+With no account credentials the catalog contains 34 operations (15 core + 19
+toolkit). With all required configuration present it contains all 52. Initial
+planning, adaptive replanning and failure recovery share this catalog. Model
+names remain unchanged; planning/replanning uses a 16,384-token context budget
+to accommodate the complete catalog and result context.
+
+Toolkit results are independently checked against the expected step result.
+API responses, scoped file reads and drafts are verified from returned data,
+not from an unrelated desktop screenshot. Verified results are supplied as
+untrusted observations to later decisions, replanning and final goal checks.
+The runtime keeps up to 12,000 characters per tool response in task memory and
+supplies at most 16,000 characters across recent results (up to 10,000 for the
+latest and 3,000 for earlier results), with truncation markers. Full transient
+result context is cleared on a new task; it is not added to the durable plan
+beyond the existing compact 500-character result summaries. After a restart,
+tools must observe fresh data before relying on old results.
+
+When downstream arguments require unknown URLs, IDs, source text or repository
+SHAs, the planner should perform the prerequisite read first and replan from
+its result. No fabricated placeholder targets are dispatched. Compound read,
+search and list requests remain one task rather than swallowing the remaining
+goal into a folder or query. Initial and revised plans both enforce explicit
+external-write intent; dispatch retains credential checks and exact-content
+approval. Failed verification stops the chain, and uncertain actions are not
+replayed. Tool fingerprints include exact payloads and applicable folder scope.
+The existing six-action limit, microphone stop and Quit handling remain.
+
+Validation uses autonomous-plan dispatch tests for all 37 operations with
+mocked adapters, a real temporary-file read followed by draft inference with
+controlled model responses, and injected failed verification/unrequested-send
+checks. `verify_toolkit_planner.py` separately checks actual configured local
+model planning and source-driven replanning without executing desktop,
+web-tool or account actions. Fresh test results are recorded in the README.
 
 File tools stay inside an explicitly identified folder, reject linked/outside
 paths, bound scans and exclude common secret/hidden files from discovery. Appends
@@ -101,3 +152,5 @@ redirects, response limits, provider payloads, secret-safe errors, local-model
 routing, task-state isolation and toolkit evidence in the final goal check.
 The live temporary-file/local-model smoke passed with unchanged `qwen3.5:4b`;
 launcher checks report ready.
+
+Results on 2026-09-27: 330 regression tests passed; live configured Qwen planning selected research/read tools and used observed source text in a test-drafting replan; launcher reported ready. All 37 dispatch paths are covered with mocked adapters; account sends and remote writes were not performed. Repository reads now retain returned SHA/path/ref metadata alongside text for subsequent approved writes.

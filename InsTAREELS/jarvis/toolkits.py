@@ -37,7 +37,7 @@ TOOLS = {
     "web_search": ("duckduckgo", "Return public web search snippets for value query.", (), False),
     "scrape_web": ("webscraper", "Extract text from a public HTTP(S) URL in value, without executing JavaScript.", (), False),
     "github_search": ("github", "Search public GitHub repositories with value query.", (), False),
-    "github_read_file": ("github", "Read repository file; value owner/repo, content JSON {path,ref}.", (), False),
+    "github_read_file": ("github", "Read repository file and current SHA; value owner/repo, content JSON {path,ref}. Result includes text and metadata for later approved updates/deletion.", (), False),
     "github_pull_request": ("github", "Read PR details; value owner/repo, content JSON {number}.", (), False),
     "github_pr_files": ("github", "Read PR file patches; value owner/repo, content JSON {number}.", (), False),
     "github_add_file": ("github", "Create/update repository UTF-8 file after approval; content JSON {path,message,text,branch,sha optional}.", ("JARVIS_GITHUB_TOKEN",), True),
@@ -68,16 +68,9 @@ def status():
             for name, data in TOOLS.items()]
 
 
-def relevant(name, goal):
-    data = TOOLS[name]
-    if not all(os.environ.get(key) for key in data[2]):
-        return False
-    words = {"files": "file folder directory append", "resource": "resource", "knowledge": "knowledge notes document",
-        "duckduckgo": "search research web", "webscraper": "scrape extract website", "github": "github repository repo pull pr",
-        "coding": "spec specification test code", "thinking": "reason think solve", "toolkits": "toolkit",
-        "calendar": "calendar event", "email": "email mail inbox", "slack": "slack", "twitter": "tweet twitter",
-        "jira": "jira issue", "apollo": "apollo company", "searx": "searx", "google_search": "google search", "serp": "serp search"}
-    return bool(set(re.findall(r"\w+", goal.casefold())) & set(words[data[0]].split()))
+def available(name):
+    """Expose every configured operation; the planner chooses by task meaning."""
+    return all(os.environ.get(key) for key in TOOLS[name][2])
 
 
 def arguments(step):
@@ -325,7 +318,11 @@ def remote_tool(client, step, cancelled):
             raw = json.loads(call("GET", url, headers=headers, params={"ref": args.get("ref", "HEAD")}))
             if raw.get("size", 0) > 20000 or raw.get("encoding") != "base64":
                 raise ValueError("Choose a small text repository file.")
-            return base64.b64decode(raw["content"]).decode("utf-8")
+            text = base64.b64decode(raw["content"]).decode("utf-8")
+            if isinstance(raw.get("sha"), str) and raw["sha"]:
+                return json.dumps({"repository": value, "path": path, "ref": args.get("ref", "HEAD"),
+                                   "sha": raw["sha"], "text": text}, ensure_ascii=False)
+            return text
         body = {key: args[key] for key in ("message", "sha", "branch") if key in args}
         if not body.get("message"):
             raise ValueError("A commit message is required.")

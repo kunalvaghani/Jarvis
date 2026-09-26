@@ -11,6 +11,18 @@ from jarvis.engine import Engine
 
 
 class PlanTests(unittest.TestCase):
+    def test_planning_schema_allows_only_supplied_configured_tools(self):
+        from jarvis.brain_worker import SCHEMAS
+        models = Models.__new__(Models)
+        models.client = Mock()
+        with patch("jarvis.brain_worker.chat", return_value='{"question":"","steps":[]}') as generate:
+            models.generate("planner", "Plan", {"tools": [{"action": "read_file"}, {"action": "write_tests"}]}, "plan")
+        settings = generate.call_args.args[1]
+        actions = settings["format_schema"]["properties"]["steps"]["items"]["properties"]["action"]["enum"]
+        self.assertEqual(actions, ["read_file", "write_tests"])
+        self.assertEqual(settings["num_ctx"], 16384)
+        self.assertIn("slack_send", SCHEMAS["plan"]["properties"]["steps"]["items"]["properties"]["action"]["enum"])
+
     def test_exact_file_requests_keep_filename_and_replacement(self):
         delete = explicit_file_plan("Delete file old.txt in Downloads")
         self.assertEqual(delete["steps"][0]["action"], "delete_file")

@@ -52,10 +52,10 @@ class ToolRegistry:
         self.specs = {spec.name: spec for spec in SPECS}
 
     def catalog(self, goal=None):
-        from .toolkits import relevant
+        from .toolkits import available
         return [{"action": spec.name, "backend": spec.backend,
                  "description": spec.description, "approval": spec.approval}
-                for spec in self.specs.values() if goal is None or spec.name not in KIT_TOOLS or relevant(spec.name, goal)]
+                for spec in self.specs.values() if goal is None or spec.name not in KIT_TOOLS or available(spec.name)]
 
     def execute(self, step, cancelled, activate=None):
         name = step.get("action")

@@ -44,6 +44,10 @@ def parse(text: str) -> Command:
     text = normalize_spoken_code_request(text)
     if text.casefold() in {"list toolkits", "toolkit status", "show toolkits"}:
         return Command("toolkit", "toolkit_status", "{}")
+    # Do not swallow the next task as a folder name or a GitHub search query.
+    if (re.match(r"^(?:read|list|search|scrape|extract)\b", text, re.I)
+            and re.search(r"\s+(?:and(?: then)?|then)\s+(?:read|list|search|find|scrape|extract|review|summarize|draft|write|improve|send|email|schedule|create|add|update|modify|edit|delete|remove|post|publish|tell|compare|open|launch|browse|select|click|fill|scroll|press|play|close)\b", text, re.I)):
+        return Command("task", text)
     match = re.fullmatch(r"(read|list|search) files? (.+?) in (.+)", text, re.I)
     if match:
         return Command("toolkit", {"read": "read_file", "list": "list_files", "search": "search_files"}[match[1].casefold()],

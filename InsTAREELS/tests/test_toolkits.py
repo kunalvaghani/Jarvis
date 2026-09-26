@@ -104,14 +104,23 @@ class ToolkitTests(unittest.TestCase):
                 execute(self.actions, self.step("slack_send", "channel", "hi"), lambda: True)
         remote.assert_not_called()
 
-    def test_catalog_filters_unconfigured_and_irrelevant_tools(self):
+    def test_catalog_exposes_all_configured_tools_without_keyword_filtering(self):
         with patch.dict(os.environ, {}, clear=True):
             tools = ToolRegistry(self.actions).catalog("Read file notes.txt in project")
             names = {tool["action"] for tool in tools}
             self.assertIn("read_file", names)
             self.assertNotIn("slack_send", names)
-            self.assertNotIn("github_pull_request", names)
+            self.assertIn("github_pull_request", names)
+            self.assertIn("write_tests", names)
+            self.assertIn("web_search", names)
             self.assertIn("browse", names)
+
+    def test_all_37_operations_available_to_every_plan_when_configured(self):
+        variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
+        with patch.dict(os.environ, variables, clear=True):
+            for goal in ("Help me prepare for tomorrow", "Compare these options", "आज की बैठक की तैयारी करो"):
+                self.assertEqual({tool["action"] for tool in ToolRegistry(self.actions).catalog(goal)},
+                                 set(ToolRegistry(self.actions).specs))
 
     def test_natural_commands_and_explicit_json_wait_for_final_speech(self):
         self.assertEqual(parse("read file notes.txt in Documents").value, "read_file")
@@ -244,6 +253,156 @@ class ToolkitTests(unittest.TestCase):
             return {"verified": True}
         brain.client.request.side_effect = inference
         self.assertIn("Finished", brain.run("Read notes.txt in project", lambda: False))
+
+    def planned_brain(self, **options):
+        self.actions.apps = {}
+        self.actions.pending_open = None
+        self.actions.last_created = self.actions.last_modified = self.actions.last_deleted = self.actions.last_command = None
+        brain = Brain(self.actions, self.base, {"enabled": True, "planner": "qwen3.5:4b",
+                                               "decision": "qwen3.5:4b", **options})
+        brain.client = Mock()
+        self.actions.brain = brain
+        brain.observe = Mock(return_value=(0, {"title": "Desktop", "controls": []}))
+        brain.observe_after_action = Mock(side_effect=AssertionError("Toolkit result should not need desktop observation"))
+        return brain
+
+    def test_all_toolkit_operations_dispatch_from_autonomous_plans(self):
+        variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
+        intents = {"github_add_file": "add to GitHub", "github_delete_file": "delete from GitHub",
+                   "calendar_create": "schedule a meeting", "calendar_delete": "cancel calendar event",
+                   "jira_create": "create Jira issue", "jira_edit": "update Jira issue",
+                   "send_email": "send an email", "slack_send": "send a Slack message",
+                   "twitter_send": "publish a tweet", "append_file": "append hello to notes.txt in project"}
+        with patch.dict(os.environ, variables, clear=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
+            for name in TOOLS:
+                with self.subTest(tool=name):
+                    brain = self.planned_brain()
+                    step = {**self.step(name, "notes.txt", "hello" if name == "append_file" else ""), "expected": "Observed result"}
+                    def inference(operation, cancelled, **data):
+                        if operation == "plan":
+                            self.assertIn(name, {tool["action"] for tool in data["tools"]})
+                            return {"steps": [step]}
+                        if operation == "decide":
+                            return {"approved": True}
+                        return {"verified": True}
+                    brain.client.request.side_effect = inference
+                    self.assertIn("Finished", brain.run(intents.get(name, "Use " + name + " for this task"), lambda: False))
+                    self.assertEqual(dispatch.call_args.args[1]["action"], name)
+                    brain.observe_after_action.assert_not_called()
+            self.assertEqual(dispatch.call_count, 37)
+
+    def test_result_driven_replanning_uses_source_beyond_old_500_character_limit(self):
+        source = "# context\n" * 100 + "def subtract(a, b):\n    return a - b\n"
+        (self.root / "notes.txt").write_text(source, encoding="utf-8")
+        brain = self.planned_brain(screen_aware=True, adaptive_planning=True)
+        brain.visual_screen = Mock(return_value={"title": "Desktop", "summary": "", "controls": []})
+        read = {**self.step("read_file", "notes.txt"), "expected": "Source read"}
+        draft = {**self.step("write_tests", "Draft subtraction tests", source), "expected": "Tests drafted"}
+        def inference(operation, cancelled, **data):
+            if operation == "visual":
+                return {"summary": "Desktop"}
+            if operation == "plan":
+                return {"steps": [read]}
+            if operation == "decide":
+                if data["step"]["action"] == "write_tests":
+                    self.assertIn("def subtract", data["screen"]["tool_results"][0]["result"])
+                return {"approved": True}
+            if operation == "replan":
+                rows = data["screen"]["tool_results"]
+                self.assertIn("def subtract", rows[0]["result"])
+                self.assertIn("github_pr_files", {tool["action"] for tool in data["tools"]})
+                return {"done": len(rows) == 2, "steps": [] if len(rows) == 2 else [draft]}
+            if operation == "tool_text":
+                self.assertEqual(data["context"], source)
+                return {"text": "assert subtract(5, 2) == 3"}
+            if data["step"]["action"] == "goal":
+                self.assertIn("assert subtract", data["screen"]["tool_results"][-1]["result"])
+            return {"verified": True}
+        brain.client.request.side_effect = inference
+        self.assertIn("Finished", brain.run("Read notes.txt in project and draft tests for it", lambda: False))
+        self.assertEqual(brain.visual_screen.call_count, 1)
+        brain.observe_after_action.assert_not_called()
+        self.assertLessEqual(len(self.actions.task_state.snapshot()["plan"]["completed"][0]["result"]), 500)
+
+    def test_initial_plan_cannot_add_unrequested_external_send(self):
+        brain = self.planned_brain()
+        brain.client.request.return_value = {"steps": [{**self.step("slack_send", "channel", "hello"), "expected": "Sent"}]}
+        with patch("jarvis.toolkits.execute") as dispatch, self.assertRaisesRegex(ValueError, "not explicitly requested"):
+            brain.run("Research Python", lambda: False)
+        dispatch.assert_not_called()
+
+    def test_unconfigured_planned_tool_stops_before_dispatch_or_uncertainty(self):
+        brain = self.planned_brain(task_recovery=True)
+        step = {**self.step("calendar_list", "primary"), "expected": "Events read"}
+        brain.client.request.side_effect = [{"steps": [step]}, {"approved": True}]
+        with patch.dict(os.environ, {}, clear=True), patch("jarvis.toolkits.execute") as dispatch:
+            with self.assertRaisesRegex(ValueError, "JARVIS_GOOGLE_ACCESS_TOKEN"):
+                brain.run("Check my upcoming meetings", lambda: False)
+        dispatch.assert_not_called()
+        self.assertFalse(self.actions.task_state.snapshot().get("failures"))
+
+    def test_sixth_tool_can_complete_goal_without_screen_evidence(self):
+        brain = self.planned_brain(adaptive_planning=True)
+        count = 0
+        def inference(operation, cancelled, **data):
+            nonlocal count
+            if operation in {"plan", "replan"}:
+                return {"done": False, "steps": [{**self.step("web_search", "topic " + str(count)), "expected": "Sources read"}]}
+            if operation == "decide":
+                return {"approved": True}
+            if data["step"]["action"] != "goal":
+                count += 1
+            return {"verified": True}
+        brain.client.request.side_effect = inference
+        with patch("jarvis.toolkits.execute", return_value="Sources") as dispatch:
+            self.assertIn("Finished", brain.run("Compare six topics", lambda: False))
+        self.assertEqual(dispatch.call_count, 6)
+
+    def test_failed_tool_verification_does_not_feed_replanning_or_execute_dependents(self):
+        brain = self.planned_brain(adaptive_planning=True)
+        first = {**self.step("web_search", "Python"), "expected": "Research results"}
+        second = {**self.step("think", "Compare results"), "expected": "Comparison"}
+        brain.client.request.side_effect = [{"steps": [first, second]}, {"approved": True},
+                                           {"verified": False, "reason": "No matching results"}]
+        with patch("jarvis.toolkits.execute", return_value="No matching results") as dispatch:
+            self.assertIn("not be verified", brain.run("Compare Python options", lambda: False))
+        self.assertEqual(dispatch.call_count, 1)
+        self.assertEqual(brain.tool_observations, [])
+
+    def test_tool_context_is_bounded_and_cleared_for_next_task(self):
+        brain = self.planned_brain()
+        brain.tool_observations = [{"action": "read_file", "value": str(i), "result": "x" * 12000} for i in range(6)]
+        rows = brain.planning_context({})["tool_results"]
+        self.assertEqual(sum(len(row["result"]) for row in rows), 16000)
+        self.assertTrue(rows[-1]["truncated"])
+        brain.client.request.side_effect = ValueError("Stop test")
+        with self.assertRaisesRegex(ValueError, "Stop test"):
+            brain.run("New task", lambda: False)
+        self.assertEqual(brain.tool_observations, [])
+
+    def test_toolkit_fingerprints_distinguish_scope_and_exact_payloads(self):
+        from jarvis.task_recovery import action_key
+        original = self.step("read_file", "notes.txt")
+        self.assertNotEqual(action_key(original), action_key({**original, "folder": "Other"}))
+        original = self.step("slack_send", "channel", "hello")
+        self.assertNotEqual(action_key(original), action_key({**original, "content": "Hello"}))
+        self.assertEqual(action_key(original), action_key({**original, "browser": "edge"}))
+
+    def test_repository_read_exposes_observed_sha_for_dependent_write(self):
+        raw = {"encoding": "base64", "size": 5, "content": base64.b64encode(b"hello").decode(), "sha": "observed-current-sha"}
+        with patch("jarvis.toolkits.api", return_value=json.dumps(raw)):
+            result = remote_tool(Mock(), self.step("github_read_file", "owner/repo", '{"path":"notes.txt","ref":"main"}'), lambda: False)
+        data = json.loads(result)
+        self.assertEqual(data, {"repository": "owner/repo", "path": "notes.txt", "ref": "main",
+                                "sha": "observed-current-sha", "text": "hello"})
+
+    def test_compound_toolkit_commands_preserve_the_whole_goal(self):
+        for goal in ("read file notes.txt in Documents and draft tests for it",
+                     "list files in Documents then summarize the notes",
+                     "search github for assistants and review the first repository",
+                     "read file notes.txt in Documents then open Chrome"):
+            self.assertEqual(parse(goal).kind, "task")
+        self.assertEqual(parse("search github for mac and cheese").kind, "toolkit")
 
     def test_imap_reads_without_marking_seen_and_smtp_rejects_headers(self):
         variables = {"JARVIS_IMAP_HOST": "mail.example.com", "JARVIS_SMTP_HOST": "mail.example.com",

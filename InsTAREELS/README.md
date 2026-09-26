@@ -26,6 +26,7 @@ This bundled reference animation supplies the cropped circular logo used by the 
 - [God's Eye View](#gods-eye-view)
 - [Recovery and adaptive planning](#silent-startup-and-recovery)
 - [Integrations and toolkits](#integrations-and-toolkits)
+- [Autonomous toolkit use](#autonomous-toolkit-use)
 - [Architecture and project layout](#architecture-and-project-layout)
 - [Configuration and relocation](#configuration-and-relocation)
 - [Troubleshooting](#troubleshooting)
@@ -148,7 +149,7 @@ For projects on D:, say **“Jarvis open project folder”** to open the first a
 
 Only current, revalidated controls can be activated. Invalid plans, ambiguous choices, changed targets, and unverified results stop the loop or enter the bounded recovery path when failure is known to precede execution; uncertain clicks are never replayed. Tasks have a six-action budget. The planner can edit a named UTF-8 text file, or request deletion of one named file in a named folder. Deletion waits for your approval. It can propose a command only when your task asks for command execution; Jarvis displays that command for separate approval before running it. Generic desktop payment/upload/permission actions are unsupported. Configured toolkit adapters separately support selected account sends and remote writes with destination/content approval; see the toolkit guide. Screenshots and labels remain local and are treated as untrusted input. Model verification is fallible; a successful check is not a guarantee that every task succeeded.
 
-After each autonomous action, Jarvis fetches a fresh accessibility snapshot and, with screen awareness enabled, a new screenshot. It waits briefly for a window or control change; if the first visual check catches a loading page, it observes once more. It never repeats the action while waiting. The next step is planned only after the result is verified. Coding tasks similarly read back every created folder, draft, and edited file before moving to the next write. The local task journal records the observation checkpoint.
+After each desktop action, Jarvis fetches a fresh accessibility snapshot and, with screen awareness enabled, a new screenshot. Toolkit operations instead verify their returned data or service acknowledgement and supply the verified result to planning. It waits briefly for a window or control change; if the first visual check catches a loading page, it observes once more. It never repeats the action while waiting. The next step is planned only after the result is verified. Coding tasks similarly read back every created folder, draft, and edited file before moving to the next write. The local task journal records the observation checkpoint.
 
 Run `.\.venv\Scripts\python.exe verify_brain.py` to test all three models against synthetic screens without desktop actions. `--selector-only` checks Laya alone. `brain-worker.log` contains local runtime diagnostics. The model choices are configurable under `brain` in `config.json`.
 
@@ -341,6 +342,22 @@ Toolkit groups include file listing/reading/appending/search, local resource and
 
 Use **“list toolkits”** to inspect required environment variable names before launch. Provider credentials are not supplied by Codex plugins, and OAuth acquisition/refresh is not automated. See the guide for exact payloads, approvals, and current adapter limits. Email attachments, Instagram publishing, image generation, SuperAGI agent spawning, and its full service stack are not implemented by these adapters.
 
+## Autonomous toolkit use
+
+Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery now see every configured operation rather than a keyword-filtered subset. There are **34 available operations without account credentials**, and **52 when all required provider configuration is present**. The 18 account-backed operations still need their environment variables.
+
+Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. The configured models are unchanged; planning context is expanded to 16,384 tokens for the full catalog and observations.
+
+Examples:
+
+- `task find useful public sources about Python asyncio and compare the main tradeoffs`
+- `read file source.txt in Demo and draft tests for its functions`
+- `task check my upcoming calendar meetings and draft a preparation checklist`
+- `task review pull request 12 in GitHub repository owner/repository`
+- `task research Python asyncio and email a summary to recipient@example.com`
+
+External messages and remote changes require the appropriate account configuration and visible approval of the destination and exact payload. Drafting does not save or execute code. Every initial and revised plan checks write intent, while failure/cancellation blocks dependent actions and uncertain effects are never replayed. The six-action budget is unchanged. See [autonomous toolkit details](docs/superagi-toolkits.md#autonomous-planning-and-chaining).
+
 ## Architecture and project layout
 
 ```mermaid
@@ -466,6 +483,7 @@ Additional targeted checks:
 .\.venv\Scripts\python.exe verify_ui.py --preview artifacts\jarvis-hud-preview.png
 .\.venv\Scripts\python.exe verify_question_speed.py --live
 .\.venv\Scripts\python.exe verify_toolkits.py --live
+.\.venv\Scripts\python.exe verify_toolkit_planner.py
 ```
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
@@ -477,6 +495,8 @@ The **Preview text command** box accepts a full “Jarvis …” sentence and di
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
 
 ## Current validation and update history
+
+**2026-09-27 autonomous toolkit planning:** all **330 regression tests passed**, including autonomous dispatch coverage for all 37 added toolkit operations with mocked adapters, actual scoped temporary-file reads, bounded result context, configured-tool schemas, failed verification, and unrequested-send rejection. The actual local `qwen3.5:4b` selected research and source-reading tools and replanned from source text into `write_tests` without unnecessary clarification. Launcher readiness passed with no missing dependencies/models; **96 local documentation links/images/anchors passed**. The live planner check executed inference only, with no desktop, web-tool or account actions. All models remain unchanged.
 
 **2026-09-27 relocation validation:** all **317 tests passed** and `python -m jarvis.launcher --check` reported `ready` with an empty missing list. Direct checks confirmed the relative Jarvis-files alias, relocated Jarvis project discovery, and `python -m pip` in both Python environments. This verifies regressions and runtime readiness, not every real app, account operation, or live microphone condition.
 
