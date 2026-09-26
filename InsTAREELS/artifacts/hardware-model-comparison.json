@@ -1,0 +1,90 @@
+{
+  "date": "2026-09-27",
+  "scope": "Two synthetic UI checks per installed vision model; no desktop actions. First call can include load/warmup.",
+  "results": [
+    {
+      "model": "qwen3-vl:4b",
+      "case": "matching",
+      "expected": true,
+      "passed": true,
+      "result": {
+        "summary": "User goal: Fill Search field with 'robot tutorials'.",
+        "step_verified": true,
+        "goal_done": true,
+        "reason": "The search field currently contains the text 'robot tutorials', matching the user's goal. The 'Save draft' button is visible but not required for this task.",
+        "model_used": "qwen3-vl:4b"
+      },
+      "elapsed_seconds": 44.848
+    },
+    {
+      "model": "qwen3-vl:4b",
+      "case": "mismatching",
+      "expected": false,
+      "passed": true,
+      "result": {
+        "summary": "User goal: Fill Search field with 'mountain maps'. Current screen shows an example form with a search field containing 'robot tutorials'.",
+        "step_verified": false,
+        "goal_done": false,
+        "reason": "The search field currently contains 'robot tutorials', not 'mountain maps'. The user's goal requires changing the text to 'mountain maps', which has not been done yet.",
+        "model_used": "qwen3-vl:4b"
+      },
+      "elapsed_seconds": 9.481
+    },
+    {
+      "model": "qwen3.5:4b",
+      "case": "matching",
+      "expected": true,
+      "passed": true,
+      "result": {
+        "summary": "The screen shows an 'Example form' with a 'Search' field containing 'robot tutorials' and a 'Save draft' button. The previous step was to fill the Search field, which appears complete as the text matches the expected content.",
+        "step_verified": true,
+        "goal_done": false,
+        "reason": "The Search field is correctly filled with 'robot tutorials', but the user's goal may include additional steps not yet completed (e.g., saving the draft). No further actions are visible or required based on current evidence.",
+        "model_used": "qwen3.5:4b"
+      },
+      "elapsed_seconds": 25.391
+    },
+    {
+      "model": "qwen3.5:4b",
+      "case": "mismatching",
+      "expected": false,
+      "passed": true,
+      "result": {
+        "summary": "The screen shows an example form with a 'Search' field containing 'robot tutorials' and a 'Save draft' button. The user's goal is to fill the Search field with 'mountain maps', but the current content does not match.",
+        "step_verified": false,
+        "goal_done": false,
+        "reason": "The Search field currently contains 'robot tutorials', not 'mountain maps'. The previous step was null, so no comparison can be made. The user's goal has not been completed.",
+        "model_used": "qwen3.5:4b"
+      },
+      "elapsed_seconds": 19.899
+    },
+    {
+      "model": "qwen3-vl:2b",
+      "case": "matching",
+      "expected": true,
+      "passed": true,
+      "result": {
+        "summary": "The screen shows an 'Example form' with a 'Search' field containing the text 'robot tutorials' and a 'Save draft' button. The goal is to fill the Search field with 'robot tutorials', which is already done as the field contains the correct text.",
+        "step_verified": true,
+        "goal_done": true,
+        "reason": "The Search field is correctly filled with 'robot tutorials' as per the goal. The task is complete.",
+        "model_used": "qwen3-vl:2b"
+      },
+      "elapsed_seconds": 34.209
+    },
+    {
+      "model": "qwen3-vl:2b",
+      "case": "mismatching",
+      "expected": false,
+      "passed": true,
+      "result": {
+        "summary": "The screen shows an 'Example form' with a 'Search' field containing 'robot tutorials' and a 'Save draft' button. The goal is to fill the Search field with 'mountain maps'.",
+        "step_verified": false,
+        "goal_done": false,
+        "reason": "The current search field contains 'robot tutorials', which is not the desired 'mountain maps'. The task requires changing the text in the search field to 'mountain maps'. However, the previous screen does not provide any evidence of the current state or the expected result. The expected result is that the search field should contain 'mountain maps', but the current state shows 'robot tutorials'. Therefore, the step is not yet verified, and the goal is not yet done.",
+        "model_used": "qwen3-vl:2b"
+      },
+      "elapsed_seconds": 8.24
+    }
+  ]
+}

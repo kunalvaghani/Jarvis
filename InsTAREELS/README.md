@@ -53,6 +53,12 @@ This bundled reference animation supplies the cropped circular logo used by the 
 
 Local models do not make every task reliable. Custom/elevated apps may not expose usable controls; ambiguous targets require clarification. External writes and deletion use the applicable approval flow, and uncertain effects are never automatically replayed.
 
+## Hardware and current models
+
+On this PC (Ryzen 7 5800H, 32 GB RAM, RTX 3050 Laptop with 4 GB VRAM), keep **Qwen3.5 4B** for planning, decisions, code and answers, **Qwen3-VL 4B** for screen vision, and the pinned English **Laya** checkpoint for control ranking. Ollama and Laya use CPU; Whisper **medium.en** uses CUDA `int8_float16`. Piper supplies the English/Hindi voices. Laya's candidate suggestion still needs independent Qwen agreement for ambiguous controls.
+
+The 2026-09-27 comparison found all three installed vision candidates passed two synthetic field-verification checks each; that limited evidence does not justify switching the stack. Very large models in the supplied screenshots exceed practical local memory; smaller 7–14B alternatives can fit RAM in isolation but need end-to-end evaluation before replacement. [Hardware, model sizes, timings, sources and limitations](MODEL_AUDIT.md), [raw comparison results](artifacts/hardware-model-comparison.json). No model configuration changed.
+
 ## Unified task tools
 
 ### Desktop actions
@@ -484,6 +490,7 @@ Additional targeted checks:
 .\.venv\Scripts\python.exe verify_question_speed.py --live
 .\.venv\Scripts\python.exe verify_toolkits.py --live
 .\.venv\Scripts\python.exe verify_toolkit_planner.py
+.\.venv\Scripts\python.exe verify_hardware_models.py
 ```
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
@@ -495,6 +502,8 @@ The **Preview text command** box accepts a full “Jarvis …” sentence and di
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
 
 ## Current validation and update history
+
+**2026-09-27 hardware/model review:** actual hardware inspection, six synthetic vision step checks, and live Laya/Qwen agreement and unrelated-action rejection checks passed. All 330 regression tests passed; launcher readiness reported ready with no missing requirements. Current model assignments retained; see the model audit for the scope and timings.
 
 **2026-09-27 autonomous toolkit planning:** all **330 regression tests passed**, including autonomous dispatch coverage for all 37 added toolkit operations with mocked adapters, actual scoped temporary-file reads, bounded result context, configured-tool schemas, failed verification, and unrequested-send rejection. The actual local `qwen3.5:4b` selected research and source-reading tools and replanned from source text into `write_tests` without unnecessary clarification. Launcher readiness passed with no missing dependencies/models; **96 local documentation links/images/anchors passed**. The live planner check executed inference only, with no desktop, web-tool or account actions. All models remain unchanged.
 

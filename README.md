@@ -2,19 +2,19 @@
 
 A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Piper speech, and a draggable animated HUD. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
 
-**Documentation updated: 2026-09-27.** The application is in this `InsTAREELS` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
+**Documentation updated: 2026-09-27.** The application is in `InsTAREELS/`. All commands below run from that application directory unless stated otherwise.
 
 ## Images and media
 
-![Jarvis command center rendered layout preview](artifacts/jarvis-hud-preview.png)
+![Jarvis command center rendered layout preview](InsTAREELS/artifacts/jarvis-hud-preview.png)
 
-The current dark/cyan command center includes the HUD logo, microphone status, replies, conversation, voice settings, question/task input, terminal, preview, files, and Stop/Quit controls. This image is a rendered layout preview with sample conversation, not a live desktop screenshot. [HUD controls and preview generation](docs/hud-interface.md).
+The current dark/cyan command center includes the HUD logo, microphone status, replies, conversation, voice settings, question/task input, terminal, preview, files, and Stop/Quit controls. This image is a rendered layout preview with sample conversation, not a live desktop screenshot. [HUD controls and preview generation](InsTAREELS/docs/hud-interface.md).
 
-![Bundled animated HUD reference artwork](jarvis/assets/jarvis-reference.gif)
+![Bundled animated HUD reference artwork](InsTAREELS/jarvis/assets/jarvis-reference.gif)
 
-This bundled reference animation supplies the cropped circular logo used by the HUD renderer. It is third-party artwork; see [asset provenance](jarvis/assets/README.md). A [static reference image](artifacts/reference-logo.png), [earlier reference UI](integrations/reference-jarvis-ui.png), and [reference cover](integrations/reference-jarvis-cover.jpg) are also retained; they are reference material rather than screenshots of the current Jarvis panel.
+This bundled reference animation supplies the cropped circular logo used by the HUD renderer. It is third-party artwork; see [asset provenance](InsTAREELS/jarvis/assets/README.md). A [static reference image](InsTAREELS/artifacts/reference-logo.png), [earlier reference UI](InsTAREELS/integrations/reference-jarvis-ui.png), and [reference cover](InsTAREELS/integrations/reference-jarvis-cover.jpg) are also retained; they are reference material rather than screenshots of the current Jarvis panel.
 
-[Listen to the installed English voice preview](artifacts/jarvis-voice-preview.wav). The sample uses the local Piper voice and is not a microphone recording.
+[Listen to the installed English voice preview](InsTAREELS/artifacts/jarvis-voice-preview.wav). The sample uses the local Piper voice and is not a microphone recording.
 
 ## Contents
 
@@ -52,6 +52,12 @@ This bundled reference animation supplies the cropped circular logo used by the 
 | Recovery | Hidden single-instance supervisor, worker/service health checks, startup snapshots, bounded retries, and explicit-stop handling. |
 
 Local models do not make every task reliable. Custom/elevated apps may not expose usable controls; ambiguous targets require clarification. External writes and deletion use the applicable approval flow, and uncertain effects are never automatically replayed.
+
+## Hardware and current models
+
+On this PC (Ryzen 7 5800H, 32 GB RAM, RTX 3050 Laptop with 4 GB VRAM), keep **Qwen3.5 4B** for planning, decisions, code and answers, **Qwen3-VL 4B** for screen vision, and the pinned English **Laya** checkpoint for control ranking. Ollama and Laya use CPU; Whisper **medium.en** uses CUDA `int8_float16`. Piper supplies the English/Hindi voices. Laya's candidate suggestion still needs independent Qwen agreement for ambiguous controls.
+
+The 2026-09-27 comparison found all three installed vision candidates passed two synthetic field-verification checks each; that limited evidence does not justify switching the stack. Very large models in the supplied screenshots exceed practical local memory; smaller 7–14B alternatives can fit RAM in isolation but need end-to-end evaluation before replacement. [Hardware, model sizes, timings, sources and limitations](InsTAREELS/MODEL_AUDIT.md), [raw comparison results](InsTAREELS/artifacts/hardware-model-comparison.json). No model configuration changed.
 
 ## Unified task tools
 
@@ -250,9 +256,9 @@ Whisper recognition still depends on the microphone, noise, accent, and overlapp
 
 ## God's Eye View
 
-![God's Eye View upstream demonstration](integrations/gods-eye-view-src/gods-eye-view-main/docs/media/hero-open-source-reveal.gif)
+![God's Eye View upstream demonstration](InsTAREELS/integrations/gods-eye-view-src/gods-eye-view-main/docs/media/hero-open-source-reveal.gif)
 
-Bundled upstream demonstration, not a screenshot of a verified Jarvis task. Additional globe demos are available in the [upstream media guide](integrations/gods-eye-view-src/gods-eye-view-main/docs/media/README.md). Some showcased layers or analyst features have separate data/API requirements.
+Bundled upstream demonstration, not a screenshot of a verified Jarvis task. Additional globe demos are available in the [upstream media guide](InsTAREELS/integrations/gods-eye-view-src/gods-eye-view-main/docs/media/README.md). Some showcased layers or analyst features have separate data/API requirements.
 
 Say **“Jarvis open God's Eye View”** to start Bilawal Sidhu's local 3D Earth console and open it in Chrome. You can also say **“open God's Eye View in Edge”**. Jarvis starts the console only on request; the local server stops when Jarvis closes. The installed source is under `integrations/gods-eye-view-src/gods-eye-view-main`. While its browser window is active, Jarvis's existing screen questions can describe the visible view. The globe's own analyst and voice features need a separate OpenAI API key; no key is configured by this integration. Public data layers work without one. The globe adds spatial data and does not replace Jarvis's local Qwen planner or Laya selector.
 
@@ -297,46 +303,46 @@ The recovery design follows [Supervisor's process states and retry behavior](htt
 Jarvis adapts Ultron's memory decay code for recent successful UI suggestions
 and recalls compact summaries of related verified tasks when planning. This
 runs locally with the existing task history and dependencies. See
-[Ultron integration and attribution](docs/ultron-integration.md) for scope,
+[Ultron integration and attribution](InsTAREELS/docs/ultron-integration.md) for scope,
 license, and validation details.
 
 Spoken replies are enabled in the saved settings. Jarvis uses conversational
 answer wording and the installed British male Piper voice, playing sentences
 as they are synthesized. Stop voice interrupts playback; repair notices stay
 silent. Microsoft JARVIS dependency checks now validate related task steps.
-See [planning and speech integration details](docs/jarvis-repository-integrations.md)
+See [planning and speech integration details](InsTAREELS/docs/jarvis-repository-integrations.md)
 for source attribution, settings, and the voice preview.
 
 The launcher now uses the animated J.A.R.V.I.S. HUD logo in a draggable dock.
 Click it to open a modern command center with conversation and voice settings.
-See [HUD interface](docs/hud-interface.md) for controls, artwork attribution,
+See [HUD interface](InsTAREELS/docs/hud-interface.md) for controls, artwork attribution,
 and a rendered layout preview.
 
 Autonomous coding now uses related project sources, exact-match edits and
 shared context across generated files. Original files and diffs are saved before
 project writes; uncertain writes block automatic replay. See
-[agenticSeek-inspired coding improvements](docs/agenticseek-integration.md).
+[agenticSeek-inspired coding improvements](InsTAREELS/docs/agenticseek-integration.md).
 
 Questions reuse a hidden worker and task inference avoids duplicate model
 discovery, keeping the same configured models. See
-[GAR-inspired response speed improvements](docs/gar-response-speed.md)
+[GAR-inspired response speed improvements](InsTAREELS/docs/gar-response-speed.md)
 for measured latency and recovery behavior.
 
 SuperAGI-inspired adapters add 37 toolkit operations, including scoped resource
 search, coding drafts, GitHub, research and credential-gated account services.
 Say **“list toolkits”** to see configuration requirements. See
-[toolkit integration and command examples](docs/superagi-toolkits.md).
+[toolkit integration and command examples](InsTAREELS/docs/superagi-toolkits.md).
 
 | Integration | What Jarvis uses | Reference and attribution |
 | --- | --- | --- |
-| Ultron | Adapted time-decay ranking and compact recall of verified task summaries; no upstream server at runtime. | [Memory adaptation](docs/ultron-integration.md), retained Apache-2.0 license. |
-| Microsoft JARVIS | Adapted dependency validation for task IDs; execution stays sequential. | [Planning integration](docs/jarvis-repository-integrations.md), retained MIT license. |
-| isair/jarvis | Inspected voice design; independently implemented conversational speech and sentence playback using installed Piper voices. | [Speech integration](docs/jarvis-repository-integrations.md), reference license retained; no upstream runtime source copied. |
-| Jarvis HUD reference | Bundled reference animation cropped by the renderer; independently built Tk command center. | [HUD](docs/hud-interface.md) and [artwork provenance](jarvis/assets/README.md). |
-| agenticSeek | Related-source discovery, exact replacement validation, bounded feedback, and coding review artifacts. | [Coding improvements](docs/agenticseek-integration.md), retained GPLv3 reference license; no imported upstream runtime. |
-| General-Agent-Runtime | Reusable hidden question worker and removal of duplicate model discovery overhead. | [Response speed measurements](docs/gar-response-speed.md); configured models unchanged. |
-| SuperAGI | Independently implemented file/resource/coding/web/GitHub/account adapters. | [Toolkit guide](docs/superagi-toolkits.md), retained MIT reference license. |
-| God's Eye View | Separate on-demand local 3D Earth console. | [Installed source](integrations/gods-eye-view-src/gods-eye-view-main/README.md), MIT code and separate data/asset terms. |
+| Ultron | Adapted time-decay ranking and compact recall of verified task summaries; no upstream server at runtime. | [Memory adaptation](InsTAREELS/docs/ultron-integration.md), retained Apache-2.0 license. |
+| Microsoft JARVIS | Adapted dependency validation for task IDs; execution stays sequential. | [Planning integration](InsTAREELS/docs/jarvis-repository-integrations.md), retained MIT license. |
+| isair/jarvis | Inspected voice design; independently implemented conversational speech and sentence playback using installed Piper voices. | [Speech integration](InsTAREELS/docs/jarvis-repository-integrations.md), reference license retained; no upstream runtime source copied. |
+| Jarvis HUD reference | Bundled reference animation cropped by the renderer; independently built Tk command center. | [HUD](InsTAREELS/docs/hud-interface.md) and [artwork provenance](InsTAREELS/jarvis/assets/README.md). |
+| agenticSeek | Related-source discovery, exact replacement validation, bounded feedback, and coding review artifacts. | [Coding improvements](InsTAREELS/docs/agenticseek-integration.md), retained GPLv3 reference license; no imported upstream runtime. |
+| General-Agent-Runtime | Reusable hidden question worker and removal of duplicate model discovery overhead. | [Response speed measurements](InsTAREELS/docs/gar-response-speed.md); configured models unchanged. |
+| SuperAGI | Independently implemented file/resource/coding/web/GitHub/account adapters. | [Toolkit guide](InsTAREELS/docs/superagi-toolkits.md), retained MIT reference license. |
+| God's Eye View | Separate on-demand local 3D Earth console. | [Installed source](InsTAREELS/integrations/gods-eye-view-src/gods-eye-view-main/README.md), MIT code and separate data/asset terms. |
 
 Toolkit groups include file listing/reading/appending/search, local resource and knowledge search, thinking/specification/test/code drafts, public web search/static scraping, GitHub reads/reviews/approved writes, email, Google Calendar, Jira, Apollo, Slack, and X. Of the 37 added operations, 19 require no account credentials and 18 need environment configuration. No-credential web operations still need network access. Coding drafts are returned for review; the project coding workflow performs checked writes.
 
@@ -356,7 +362,7 @@ Examples:
 - `task review pull request 12 in GitHub repository owner/repository`
 - `task research Python asyncio and email a summary to recipient@example.com`
 
-External messages and remote changes require the appropriate account configuration and visible approval of the destination and exact payload. Drafting does not save or execute code. Every initial and revised plan checks write intent, while failure/cancellation blocks dependent actions and uncertain effects are never replayed. The six-action budget is unchanged. See [autonomous toolkit details](docs/superagi-toolkits.md#autonomous-planning-and-chaining).
+External messages and remote changes require the appropriate account configuration and visible approval of the destination and exact payload. Drafting does not save or execute code. Every initial and revised plan checks write intent, while failure/cancellation blocks dependent actions and uncertain effects are never replayed. The six-action budget is unchanged. See [autonomous toolkit details](InsTAREELS/docs/superagi-toolkits.md#autonomous-planning-and-chaining).
 
 ## Architecture and project layout
 
@@ -484,6 +490,7 @@ Additional targeted checks:
 .\.venv\Scripts\python.exe verify_question_speed.py --live
 .\.venv\Scripts\python.exe verify_toolkits.py --live
 .\.venv\Scripts\python.exe verify_toolkit_planner.py
+.\.venv\Scripts\python.exe verify_hardware_models.py
 ```
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
@@ -496,6 +503,8 @@ References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-
 
 ## Current validation and update history
 
+**2026-09-27 hardware/model review:** actual hardware inspection, six synthetic vision step checks, and live Laya/Qwen agreement and unrelated-action rejection checks passed. All 330 regression tests passed; launcher readiness reported ready with no missing requirements. Current model assignments retained; see the model audit for the scope and timings.
+
 **2026-09-27 autonomous toolkit planning:** all **330 regression tests passed**, including autonomous dispatch coverage for all 37 added toolkit operations with mocked adapters, actual scoped temporary-file reads, bounded result context, configured-tool schemas, failed verification, and unrequested-send rejection. The actual local `qwen3.5:4b` selected research and source-reading tools and replanned from source text into `write_tests` without unnecessary clarification. Launcher readiness passed with no missing dependencies/models; **96 local documentation links/images/anchors passed**. The live planner check executed inference only, with no desktop, web-tool or account actions. All models remain unchanged.
 
 **2026-09-27 relocation validation:** all **317 tests passed** and `python -m jarvis.launcher --check` reported `ready` with an empty missing list. Direct checks confirmed the relative Jarvis-files alias, relocated Jarvis project discovery, and `python -m pip` in both Python environments. This verifies regressions and runtime readiness, not every real app, account operation, or live microphone condition.
@@ -504,10 +513,10 @@ References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-
 
 Earlier implemented work includes streaming speech and direct commands; catalog/project and accessibility controls; local screen-aware planning and coding; Spotify/globe integration; supervisor/checkpoint recovery; adaptive plans and safe alternatives; verified task/UI recall; task dependency checks; sentence speech; the HUD interface; related-code edits and backups; reusable question inference; and the 37 toolkit adapters. Detailed source revisions and historical validation counts remain in the linked integration notes rather than being presented as current reruns.
 
-Historical measurements include approximately 43% less overlay render time in the earlier feature audit and roughly 17% lower warm question latency in a small reusable-worker benchmark. These measure particular components and samples, not an overall task-speed guarantee. See [feature audit](docs/FEATURE_AUDIT.md) and [response speed](docs/gar-response-speed.md) for methods and limitations. Real account-backed toolkit writes were tested with mocked transports; documentation does not claim a live message, event, or repository change occurred.
+Historical measurements include approximately 43% less overlay render time in the earlier feature audit and roughly 17% lower warm question latency in a small reusable-worker benchmark. These measure particular components and samples, not an overall task-speed guarantee. See [feature audit](InsTAREELS/docs/FEATURE_AUDIT.md) and [response speed](InsTAREELS/docs/gar-response-speed.md) for methods and limitations. Real account-backed toolkit writes were tested with mocked transports; documentation does not claim a live message, event, or repository change occurred.
 
 ## Documentation maintenance and attribution
 
-Update this README alongside future changes to features, setup, dependencies, settings, paths, interface, integrations, limitations, or verification. Refresh the parent [repository README](../README.md) when its overview changes. Add current UI media when available; label previews, references and upstream demos accurately. Keep links relative so the documentation works after moving the repository. Date test results and distinguish readiness, regression, synthetic inference, and live checks. These requirements are recorded in [application instructions](AGENTS.md) and [repository instructions](../AGENTS.md).
+Update this README alongside future changes to features, setup, dependencies, settings, paths, interface, integrations, limitations, or verification. Refresh the parent [repository README](InsTAREELS/../README.md) when its overview changes. Add current UI media when available; label previews, references and upstream demos accurately. Keep links relative so the documentation works after moving the repository. Date test results and distinguish readiness, regression, synthetic inference, and live checks. These requirements are recorded in [application instructions](InsTAREELS/AGENTS.md) and [repository instructions](InsTAREELS/../AGENTS.md).
 
-Reference repositories, retained licenses, and pinned revisions are documented under `docs/` and `integrations/`. Downloaded reference sources do not imply that their entire products run inside Jarvis. The bundled HUD branding/artwork and globe datasets have separate provenance and terms; see [HUD artwork](jarvis/assets/README.md) and [globe data sources](integrations/gods-eye-view-src/gods-eye-view-main/DATA_SOURCES.md). Do not infer a single project-wide license from an upstream reference license.
+Reference repositories, retained licenses, and pinned revisions are documented under `docs/` and `integrations/`. Downloaded reference sources do not imply that their entire products run inside Jarvis. The bundled HUD branding/artwork and globe datasets have separate provenance and terms; see [HUD artwork](InsTAREELS/jarvis/assets/README.md) and [globe data sources](InsTAREELS/integrations/gods-eye-view-src/gods-eye-view-main/DATA_SOURCES.md). Do not infer a single project-wide license from an upstream reference license.
