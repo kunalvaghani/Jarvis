@@ -2,6 +2,7 @@
 
 For every Jarvis upgrade in this workspace:
 
+- Keep `README.md` current in the same change: features, usage examples, setup, configuration, paths, architecture, integrations, limitations, troubleshooting, and dated verification results. Update the parent repository README when its overview changes. Include current UI images when available, distinguish rendered previews from live screenshots and upstream demos, preserve attribution, and verify repository-relative links. If there is no documentation impact, say so in the final report; do not invent results or add filler.
 - Keep `Start Jarvis.cmd`, `Stop Jarvis.cmd`, `jarvis_bootstrap.py`, `jarvis/launcher.py`, `runtime_manifest.json`, and `jarvis/recovery.py` compatible with the change.
 - Add new declared Python dependencies to the appropriate requirements file and runtime manifest. Register new long-running owned services with health checks and bounded recovery.
 - Keep recovery silent: hidden processes, no repair popups, no spoken repair announcements. Write repair status to the transcript and `.jarvis-runtime/repairs.jsonl`.

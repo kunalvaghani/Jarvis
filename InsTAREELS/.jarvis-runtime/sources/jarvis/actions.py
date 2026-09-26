@@ -340,9 +340,9 @@ class Actions:
             self.report("question", message)
             return message
         if command.kind == "open_project_root":
-            root = next((Path(raw) for raw in self.projects.roots if Path(raw).name.casefold() == "phython project" and Path(raw).is_dir()), None)
+            root = next((Path(raw) for raw in self.projects.roots if Path(raw).parent != Path(raw) and Path(raw).is_dir()), None)
             if root is None:
-                raise ValueError("The D-drive project folder is unavailable.")
+                raise ValueError("No configured project folder is available.")
             os.startfile(str(root))
             return f"Opened {root}"
         if command.kind == "open_project":

@@ -9,6 +9,20 @@ from jarvis.projects import Projects
 
 
 class ProjectTests(unittest.TestCase):
+    def test_open_project_root_uses_relocated_configured_folder(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "New Projects"
+            root.mkdir()
+            actions = Actions({"files_root": "Files", "apps": {},
+                               "project_roots": [str(root / "missing"), str(root)]},
+                              directory, lambda *_: None)
+            try:
+                with patch("jarvis.actions.os.startfile") as opened:
+                    self.assertEqual(actions.execute(Command("open_project_root")), f"Opened {root}")
+                    opened.assert_called_once_with(str(root))
+            finally:
+                actions.close()
+
     def test_project_phrases_and_short_choice(self):
         examples = {
             "open my pending project": Command("project_list"),

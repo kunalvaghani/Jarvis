@@ -1,6 +1,56 @@
 # Jarvis — local Windows voice assistant
 
-A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, and live dictation. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. No API key, audio uploads, or saved microphone recordings.
+A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Piper speech, and a draggable animated HUD. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
+
+**Documentation updated: 2026-09-27.** The application is in this `InsTAREELS` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
+
+## Images and media
+
+![Jarvis command center rendered layout preview](artifacts/jarvis-hud-preview.png)
+
+The current dark/cyan command center includes the HUD logo, microphone status, replies, conversation, voice settings, question/task input, terminal, preview, files, and Stop/Quit controls. This image is a rendered layout preview with sample conversation, not a live desktop screenshot. [HUD controls and preview generation](docs/hud-interface.md).
+
+![Bundled animated HUD reference artwork](jarvis/assets/jarvis-reference.gif)
+
+This bundled reference animation supplies the cropped circular logo used by the HUD renderer. It is third-party artwork; see [asset provenance](jarvis/assets/README.md). A [static reference image](artifacts/reference-logo.png), [earlier reference UI](integrations/reference-jarvis-ui.png), and [reference cover](integrations/reference-jarvis-cover.jpg) are also retained; they are reference material rather than screenshots of the current Jarvis panel.
+
+[Listen to the installed English voice preview](artifacts/jarvis-voice-preview.wav). The sample uses the local Piper voice and is not a microphone recording.
+
+## Contents
+
+- [Capabilities](#capabilities-at-a-glance)
+- [Setup and launch](#start)
+- [Speech recognition settings](#whisper-settings)
+- [Voice commands and dictation](#talk-while-it-works)
+- [Desktop, files, questions, and coding](#desktop-and-files)
+- [God's Eye View](#gods-eye-view)
+- [Recovery and adaptive planning](#silent-startup-and-recovery)
+- [Integrations and toolkits](#integrations-and-toolkits)
+- [Architecture and project layout](#architecture-and-project-layout)
+- [Configuration and relocation](#configuration-and-relocation)
+- [Troubleshooting](#troubleshooting)
+- [Verification](#verification-commands)
+- [Current validation and update history](#current-validation-and-update-history)
+- [Documentation maintenance and attribution](#documentation-maintenance-and-attribution)
+
+## Capabilities at a glance
+
+| Area | Current behavior |
+| --- | --- |
+| Voice input | English Whisper on CUDA, wake gating, Silero VAD, overlapping transcription, live dictation, and cancellation. |
+| Interface | Draggable animated launcher, command center, transcript, voice/settings controls, text input, and preview mode. |
+| Questions and screen understanding | Local Qwen answers, optional web research, English/Hindi replies, and local vision of the destination window. |
+| Desktop and browser | App/site launching, searches, exposed control selection, exact text-field filling, scrolling, supported shortcuts, menus, and dialogs. |
+| Files and projects | Scoped file creation/editing, approved deletion, catalog lookup, project discovery, recent-project memory, and Explorer context. |
+| Coding | Related-source context, bounded multi-file work, exact replacements, syntax checks, original-byte backups, diffs, atomic per-file writes, and readback. |
+| Task execution | Shared tool registry, dependency checks, independent decisions, observations, verification, adaptive replanning, and bounded safe alternatives. |
+| Memory | Durable checkpoints, related verified task summaries, and decaying successful UI suggestions. |
+| Speech output | Local British male English and Hindi Piper voices, sentence playback, interruption, and recognition mute during replies. |
+| Media and globe | Spotify session controls and on-demand God's Eye View browser console. |
+| Toolkits | 52 registered operations: 15 core tools plus 37 toolkit operations; provider tools become available only when configured. |
+| Recovery | Hidden single-instance supervisor, worker/service health checks, startup snapshots, bounded retries, and explicit-stop handling. |
+
+Local models do not make every task reliable. Custom/elevated apps may not expose usable controls; ambiguous targets require clarification. External writes and deletion use the applicable approval flow, and uncertain effects are never automatically replayed.
 
 ## Unified task tools
 
@@ -36,7 +86,9 @@ Requires Windows 10/11, Python 3.10+, and an NVIDIA CUDA GPU with an up-to-date 
 powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-Then close any older Jarvis window and double-click **Start Jarvis.cmd**. A small orb appears at the top center, just below the camera. Click it to open the control panel, choose your microphone, and click **Start listening**. Click the orb or **Hide** to collapse the panel; right-click the orb for quick controls and Quit. Windows capture exclusion keeps the orb and panel out of supported screenshots. Initial setup downloads CUDA libraries and the ~1.53 GB English Whisper model. Subsequent use is offline. The app verifies CUDA by running inference before starting capture and displays the actual device and precision. It does not silently fall back to CPU. Allow microphone access for desktop apps in Windows Settings if needed.
+Install Ollama before running **Setup Jarvis Brain.cmd** for local questions and screen-aware planning. That setup creates the separate brain environment, installs CPU inference dependencies, downloads the configured planning/vision and Laya models, and verifies them. A fresh installation needs internet access for these downloads. The optional God's Eye console also needs Node 24.14+ and `npm ci` in `integrations/gods-eye-view-src/gods-eye-view-main`.
+
+Then close any older Jarvis window and double-click **Start Jarvis.cmd**. The draggable animated HUD launcher opens the command center when clicked. Choose your microphone and click **Start listening** if listening is off. Click the launcher or **Hide** to collapse the panel; right-click the launcher for quick controls and Quit. The panel logo also toggles listening; Escape hides the panel, while **Quit Jarvis** actually stops supervision. Windows capture exclusion keeps the launcher and panel out of supported screenshots. Initial setup downloads CUDA libraries and the ~1.53 GB English Whisper model. Core inference subsequently works offline; web research and online services require connectivity. The app verifies CUDA by running inference before starting capture and displays the actual device and precision. It does not silently fall back to CPU. Allow microphone access for desktop apps in Windows Settings if needed.
 
 The input meter should move when you talk. Choose **Microphone Array (Realtek)** to try the laptop microphone, or your headset explicitly, rather than relying on the Windows default. The selection is saved to `config.json`.
 
@@ -88,13 +140,13 @@ The roles are:
 - **Qwen3.5 4B decision checker:** checks each step against your goal and selects a candidate when needed. A unique exact control name skips Laya's comparison; ambiguous choices require both models to agree. A final check considers the whole goal.
 - **Qwen3 VL 4B screen reader:** captures the active destination window after every action, checks whether the expected result is visible, and describes the landed screen to the planner. Jarvis then plans its next action from that screen, keeping a short record of completed actions so it does not repeat them.
 
-All inference runs locally on CPU; Whisper keeps the GPU. Laya stays loaded in a separate process between tasks. The automatic loop supports opening apps/files/folders, websites, browser and music searches, exposed UI controls, creating a new file with spoken content in a named folder, and requesting an app window to close. It cannot activate a button that the app does not expose to Windows UI Automation, type arbitrary text, or use keyboard shortcuts. A new instruction or **Stop all tasks** interrupts the plan.
+Brain and question inference use the local CPU configuration; Whisper keeps the GPU. Laya stays loaded in a separate process between tasks. The automatic loop supports opening apps/files/folders, websites, browser and music searches, exposed UI controls, exact text-field filling, scrolling, supported shortcuts, menus/dialogs, creating a new file with spoken content in a named folder, and requesting an app window to close. It cannot activate controls that the app does not expose to Windows UI Automation; text entry and shortcuts must pass the supported tool's destination checks. A new instruction or **Stop all tasks** interrupts the plan.
 
 Examples: **“Jarvis play jazz on YouTube”**, **“Jarvis play my playlist on Spotify”**, **“Jarvis open playlist Focus on Spotify”**, **“Jarvis pause Spotify”**, **“Jarvis resume Spotify”**, **“Jarvis next song on Spotify”**, **“Jarvis previous song on Spotify”**, **“Jarvis shuffle on”**, **“Jarvis repeat one”**, **“Jarvis skip 30 seconds on Spotify”**, **“Jarvis rewind 15 seconds on Spotify”**, **“Jarvis set Spotify volume to 50 percent”**, **“Jarvis mute Spotify”**, and **“Jarvis what's playing on Spotify.”** Spotify search opens the installed Spotify app. Searching alone does not start playback; Jarvis must select a result and verify the playing state. Playback controls use Spotify's Windows media session, and volume controls use Spotify's own audio session; neither targets another app's music. Spotify may require its own login or account permissions. Closing sends the normal window close request, so an app can present a Save prompt. File creation never overwrites an existing file; the spoken folder must be identified unambiguously in the catalog, or you can say **“this folder”** with File Explorer selected.
 
-For projects on D:, say **“Jarvis open project folder”** to open `D:\Phython Project`, **“Jarvis which project was I using”** to hear the last project Jarvis opened (or the most recently active folder it found), or **“Jarvis open my pending project”** for a numbered list of recent project folders. Say **“option two”** or the project name while the list is open. Jarvis then opens that project in File Explorer and Codex, and opens YouTube in Chrome. It remembers projects it opens in `project_memory.json`. Recent file activity is only a clue; Jarvis cannot determine whether work is actually pending. Change `project_roots` in `config.json` to scan other project parent folders.
+For projects on D:, say **“Jarvis open project folder”** to open the first available configured project root (currently `D:\Kunals GitHub Repo`), **“Jarvis which project was I using”** to hear the last project Jarvis opened (or the most recently active folder it found), or **“Jarvis open my pending project”** for a numbered list of recent project folders. Say **“option two”** or the project name while the list is open. Jarvis then opens that project in File Explorer and Codex, and opens YouTube in Chrome. It remembers projects it opens in `project_memory.json`. Recent file activity is only a clue; Jarvis cannot determine whether work is actually pending. Change `project_roots` in `config.json` to scan other project parent folders.
 
-Only current, revalidated controls can be activated. Invalid plans, ambiguous choices, changed targets, and unverified results stop the loop with an explanation; uncertain clicks are never replayed. Tasks stop after six verified actions. The planner can edit a named UTF-8 text file, or request deletion of one named file in a named folder. Deletion waits for your approval. It can propose a command only when your task asks for command execution; Jarvis displays that command for separate approval before running it. Send/payment/upload/permission actions remain unsupported. Screenshots and labels remain local and are treated as untrusted input. Model verification is fallible; a successful check is not a guarantee that every task succeeded.
+Only current, revalidated controls can be activated. Invalid plans, ambiguous choices, changed targets, and unverified results stop the loop or enter the bounded recovery path when failure is known to precede execution; uncertain clicks are never replayed. Tasks have a six-action budget. The planner can edit a named UTF-8 text file, or request deletion of one named file in a named folder. Deletion waits for your approval. It can propose a command only when your task asks for command execution; Jarvis displays that command for separate approval before running it. Generic desktop payment/upload/permission actions are unsupported. Configured toolkit adapters separately support selected account sends and remote writes with destination/content approval; see the toolkit guide. Screenshots and labels remain local and are treated as untrusted input. Model verification is fallible; a successful check is not a guarantee that every task succeeded.
 
 After each autonomous action, Jarvis fetches a fresh accessibility snapshot and, with screen awareness enabled, a new screenshot. It waits briefly for a window or control change; if the first visual check catches a loading page, it observes once more. It never repeats the action while waiting. The next step is planned only after the result is verified. Coding tasks similarly read back every created folder, draft, and edited file before moving to the next write. The local task journal records the observation checkpoint.
 
@@ -106,7 +158,7 @@ Sources: [Laya model and limitations](https://huggingface.co/convaiinnovations/l
 
 ### General questions and internet knowledge
 
-Restart Jarvis after updating. Click the orb and **Start listening**, then ask **“Jarvis why is the sky blue?”**, **“explain photosynthesis”**, or **“search the internet for today's technology news”**. Use **“ask …”** for anything that does not begin with a question word. You can also type a question in the panel and click **Ask**; **Preview** remains a preview only. Stop dictation before asking a question.
+Restart Jarvis after updating. Click the HUD launcher and **Start listening**, then ask **“Jarvis why is the sky blue?”**, **“explain photosynthesis”**, or **“search the internet for today's technology news”**. Use **“ask …”** for anything that does not begin with a question word. You can also type a question in the panel and click **Ask**; **Preview** remains a preview only. Stop dictation before asking a question.
 
 Answers appear in the transcript log, with a short preview above it, and are spoken aloud. **Speak answers** toggles playback; **Stop voice** interrupts it. English uses the local Piper Alan British male voice for an assistant sound; Hindi uses the local Piper Rohan voice. Both are installed by `setup.ps1`. These are assistant-style voices, not an imitation of an actor's voice. The **Answer language** control selects Auto, English, or Hindi. Auto responds in Hindi to Hindi or Hinglish questions and English to English questions. You can type or say questions such as “mujhe batao gravity kya hai” or “पानी क्यों उबलता है”. Hindi answers use Devanagari for accurate Hindi speech. Source URLs stay in the transcript rather than being read aloud. Voice synthesis runs locally. The microphone ignores speech while Jarvis is speaking so it does not hear its own answer; click **Stop voice** to interrupt playback. Questions run in a separate process and queue, so desktop actions and microphone capture can continue. **Stop all tasks** cancels pending questions and speech. The last three question/answer pairs stay in session memory for follow-ups; say **“forget conversation”** to clear them. This history is not saved to disk.
 
@@ -114,7 +166,7 @@ The local Ollama model **qwen3.5:4b** provides answers. Jarvis starts the instal
 
 ### Jarvis command prompt and file edits
 
-Click **Command prompt** in the orb panel, or say **“Jarvis open Jarvis command prompt.”** Enter a Windows command and press **Run**. Jarvis shows the exact command in an approval dialog first, runs it from `JarvisFiles`, and displays its output and exit code. Commands time out after 60 seconds. A command can change or delete files, so review the entire command before approving it. You can also say **“Jarvis run command dir”** or ask a task to run a command.
+Click **Terminal** in the command center, or say **“Jarvis open Jarvis command prompt.”** Enter a Windows command and press **Run**. Jarvis shows the exact command in an approval dialog first, runs it from `JarvisFiles`, and displays its output and exit code. Commands time out after 60 seconds. A command can change or delete files, so review the entire command before approving it. You can also say **“Jarvis run command dir”** or ask a task to run a command.
 
 ### Coding in a named project
 
@@ -131,7 +183,7 @@ For a direct text edit in `JarvisFiles`, say **“Jarvis modify file notes dot t
 
 ### Questions about your screen
 
-Open the app you want Jarvis to inspect, then ask **“What is on my screen?”**, **“What does this error mean?”**, or **“Screen pe kya dikh raha hai?”**. You can also click the orb, type a question, and press **Ask screen**. Jarvis briefly hides both the panel and orb, captures the last active external window, then restores the orb. It reads visible text with local OCR and sends the screenshot to the local **qwen3-vl:4b** vision model. The screenshot stays in memory and is not sent to a web search service or saved to disk. The window title appears in the action log so you can see which app it read.
+Open the app you want Jarvis to inspect, then ask **“What is on my screen?”**, **“What does this error mean?”**, or **“Screen pe kya dikh raha hai?”**. You can also click the HUD launcher, type a question, and press **Ask screen**. Jarvis briefly hides both the panel and HUD launcher, captures the last active external window, then restores the launcher. It reads visible text with local OCR and sends the screenshot to the local **qwen3-vl:4b** vision model. The screenshot stays in memory and is not sent to a web search service or saved to disk. The window title appears in the action log so you can see which app it read.
 
 Screen answers describe one frame at question time. They can read visible text and describe images, but cannot reliably infer motion, hidden content, or what happened earlier. Screen content is treated as untrusted input and cannot trigger desktop actions. Run **Setup Jarvis Brain.cmd** if the vision model is missing; it downloads the model configured in `knowledge.screen_model`.
 
@@ -197,6 +249,10 @@ Whisper recognition still depends on the microphone, noise, accent, and overlapp
 
 ## God's Eye View
 
+![God's Eye View upstream demonstration](integrations/gods-eye-view-src/gods-eye-view-main/docs/media/hero-open-source-reveal.gif)
+
+Bundled upstream demonstration, not a screenshot of a verified Jarvis task. Additional globe demos are available in the [upstream media guide](integrations/gods-eye-view-src/gods-eye-view-main/docs/media/README.md). Some showcased layers or analyst features have separate data/API requirements.
+
 Say **“Jarvis open God's Eye View”** to start Bilawal Sidhu's local 3D Earth console and open it in Chrome. You can also say **“open God's Eye View in Edge”**. Jarvis starts the console only on request; the local server stops when Jarvis closes. The installed source is under `integrations/gods-eye-view-src/gods-eye-view-main`. While its browser window is active, Jarvis's existing screen questions can describe the visible view. The globe's own analyst and voice features need a separate OpenAI API key; no key is configured by this integration. Public data layers work without one. The globe adds spatial data and does not replace Jarvis's local Qwen planner or Laya selector.
 
 God's Eye View's source code is [MIT licensed](https://github.com/bilawalsidhu/gods-eye-view/blob/main/LICENSE). Its bundled assets and third-party data retain [separate terms](https://github.com/bilawalsidhu/gods-eye-view/blob/main/DATA_SOURCES.md). The installed local copy can be updated from [upstream](https://github.com/bilawalsidhu/gods-eye-view); run `npm ci` in its folder after an update. It uses Node 24.14 or newer.
@@ -235,7 +291,7 @@ Crashes preserve task checkpoints and pause unfinished work. File writes, shell 
 
 The recovery design follows [Supervisor's process states and retry behavior](https://supervisord.org/subprocess.html) and [Ollama's service configuration](https://docs.ollama.com/faq). Research also included [Supervisor's restart discussion on GitHub](https://github.com/Supervisor/supervisor/issues/212) and [a Python background watchdog discussion on Reddit](https://www.reddit.com/r/Python/comments/42oy0x/running_watchdog_in_the_background/).
 
-## Verification commands
+## Integrations and toolkits
 
 Jarvis adapts Ultron's memory decay code for recent successful UI suggestions
 and recalls compact summaries of related verified tasks when planning. This
@@ -270,19 +326,168 @@ search, coding drafts, GitHub, research and credential-gated account services.
 Say **“list toolkits”** to see configuration requirements. See
 [toolkit integration and command examples](docs/superagi-toolkits.md).
 
+| Integration | What Jarvis uses | Reference and attribution |
+| --- | --- | --- |
+| Ultron | Adapted time-decay ranking and compact recall of verified task summaries; no upstream server at runtime. | [Memory adaptation](docs/ultron-integration.md), retained Apache-2.0 license. |
+| Microsoft JARVIS | Adapted dependency validation for task IDs; execution stays sequential. | [Planning integration](docs/jarvis-repository-integrations.md), retained MIT license. |
+| isair/jarvis | Inspected voice design; independently implemented conversational speech and sentence playback using installed Piper voices. | [Speech integration](docs/jarvis-repository-integrations.md), reference license retained; no upstream runtime source copied. |
+| Jarvis HUD reference | Bundled reference animation cropped by the renderer; independently built Tk command center. | [HUD](docs/hud-interface.md) and [artwork provenance](jarvis/assets/README.md). |
+| agenticSeek | Related-source discovery, exact replacement validation, bounded feedback, and coding review artifacts. | [Coding improvements](docs/agenticseek-integration.md), retained GPLv3 reference license; no imported upstream runtime. |
+| General-Agent-Runtime | Reusable hidden question worker and removal of duplicate model discovery overhead. | [Response speed measurements](docs/gar-response-speed.md); configured models unchanged. |
+| SuperAGI | Independently implemented file/resource/coding/web/GitHub/account adapters. | [Toolkit guide](docs/superagi-toolkits.md), retained MIT reference license. |
+| God's Eye View | Separate on-demand local 3D Earth console. | [Installed source](integrations/gods-eye-view-src/gods-eye-view-main/README.md), MIT code and separate data/asset terms. |
+
+Toolkit groups include file listing/reading/appending/search, local resource and knowledge search, thinking/specification/test/code drafts, public web search/static scraping, GitHub reads/reviews/approved writes, email, Google Calendar, Jira, Apollo, Slack, and X. Of the 37 added operations, 19 require no account credentials and 18 need environment configuration. No-credential web operations still need network access. Coding drafts are returned for review; the project coding workflow performs checked writes.
+
+Use **“list toolkits”** to inspect required environment variable names before launch. Provider credentials are not supplied by Codex plugins, and OAuth acquisition/refresh is not automated. See the guide for exact payloads, approvals, and current adapter limits. Email attachments, Instagram publishing, image generation, SuperAGI agent spawning, and its full service stack are not implemented by these adapters.
+
+## Architecture and project layout
+
+```mermaid
+flowchart TD
+    Input[Microphone or text input] --> Route[Wake gating and command routing]
+    Route --> Direct[Direct commands]
+    Route --> Brain[Local planner and decision checks]
+    Route --> Questions[Reusable question worker]
+    Brain --> Registry[Shared tool registry and dependency checks]
+    Direct --> Registry
+    Registry --> Actions[Desktop, browser, files, coding and toolkits]
+    Actions --> Observe[Fresh screen, controls and file evidence]
+    Observe --> Verify[Step and full goal verification]
+    Verify --> Replan[Adaptive remaining plan]
+    Replan --> Brain
+    Verify --> Journal[Persistent checkpoints and verified history]
+    Questions --> Reply[Transcript and Piper sentence playback]
+    Verify --> Reply
+    Supervisor[Bootstrap, launcher and watchdog] --> Brain
+    Supervisor --> Questions
+    Supervisor --> Input
+```
+
+Planning, observation and inference can retry within their defined bounds; external actions cannot be replayed after uncertainty. Task history informs planning and is never an executable replay queue. Question work and speech use separate workers so desktop tasks and capture can continue.
+
+```text
+Jarvis/
+  README.md                     Repository entry point
+  AGENTS.md                     Documentation maintenance instructions
+  InsTAREELS/
+    README.md                   Complete application guide
+    AGENTS.md                   Runtime and documentation requirements
+    main.py                     App state and UI lifecycle
+    jarvis_bootstrap.py          Minimal supervised entry point
+    Start Jarvis.cmd             Hidden single-instance startup
+    Stop Jarvis.cmd              Explicit supervisor shutdown
+    config.json                 Local settings, apps, folders and models
+    runtime_manifest.json       Dependencies, capabilities and owned services
+    requirements*.txt           Main and isolated brain dependencies
+    jarvis/                     Application modules and assets
+    tests/                      Regression tests and synthetic speech fixture
+    docs/                       Audits, integration notes and recovery design
+    artifacts/                  HUD preview and synthetic voice sample
+    integrations/               References, licenses and globe source
+    models/                     Downloaded Whisper, Laya and voice assets
+    JarvisFiles/                Default direct-file and terminal workspace
+    .venv/                      Main Python environment
+    .venv-brain/                Isolated CPU brain environment
+    .jarvis-runtime/             Health state, snapshots, repairs and coding diffs
+```
+
+| Modules | Responsibility |
+| --- | --- |
+| `audio.py`, `whisper_backend.py`, `engine.py`, `commands.py` | Capture, VAD/transcription, wake/stream handling, and command parsing. |
+| `interface.py`, `hud.py`, `main.py` | Dock/panel rendering, controls, event handling, and app lifecycle. |
+| `actions.py`, `desktop_actions.py`, `ui_controls.py`, `ui_worker.py`, `browser.py` | Direct actions, accessibility-backed operations, checked destinations, and browser launching. |
+| `brain.py`, `brain_worker.py`, `model_selection.py`, `screen_worker.py` | Planning/decisions, Laya, model availability/fallback, and screen observation. |
+| `tools.py`, `toolkits.py`, `task_graph.py` | Shared tool schemas/routes, provider adapters, and task dependencies. |
+| `coder.py`, `code_context.py`, `projects.py`, `catalog.py` | Checked source generation/edits, project context/discovery, and indexed path lookup. |
+| `knowledge.py`, `knowledge_worker.py`, `question_client.py`, `speech.py`, `piper_speech.py` | Answers, web/screen context, worker reuse, voice synthesis, and playback. |
+| `task_state.py`, `task_recovery.py`, `experience.py`, `ui_memory.py` | Checkpoints, safe alternatives, verified task recall, and UI suggestions. |
+| `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
+| `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+
+## Configuration and relocation
+
+| Setting | Current saved value / purpose |
+| --- | --- |
+| `model_path` | `models/faster-whisper-medium.en`, resolved from the app directory. |
+| `whisper` | `medium.en`, CUDA, `int8_float16`, English, 1 s partial interval, 0.8 s silence, 0.45 VAD threshold. |
+| `files_root` | `JarvisFiles`, resolved from the app directory. |
+| `folders["jarvis files"]` | Relative `JarvisFiles` alias; follows a future app directory move. |
+| `project_roots` | `D:\Kunals GitHub Repo`, its `Jarvis` directory, existing `D:\Phython Project`, and `D:\`. These are local machine paths. |
+| `microphone`, `wake_timeout_seconds` | Default device (`null`), 90 s wake inactivity timeout. |
+| `knowledge` | Enabled, `qwen3.5:4b`, `qwen3-vl:4b`, English answers, internet enabled, CPU inference (`num_gpu: 0`). |
+| `speech` | Enabled, English, length scale 1.05, noise 0.667/0.8, sentence silence 0.18 s. |
+| `brain` | Enabled, Qwen planner/decision/vision, Laya selector, screen awareness, adaptive planning, and task recovery enabled. |
+| `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
+
+Current application location: `D:\Kunals GitHub Repo\Jarvis\InsTAREELS`. Launchers use their own directory; application/model paths derive from source locations. Run commands from the app directory so Python resolves the `jarvis` package. The **open project folder** command uses the first existing non-drive-root entry in `project_roots`, rather than relying on the old folder name.
+
+After another move, review absolute `project_roots` and app/folder aliases, then refresh the PC catalog for moved indexed paths. Historical task records describe the original targets and should not be blindly rewritten. Python virtual environments also contain absolute activation/console-launcher paths: the activation scripts in both current environments were corrected during this relocation. Prefer `python.exe -m pip` from the selected environment; if an environment is moved again and fails, recreate it with the setup scripts. Verify readiness before restarting Jarvis.
+
+Runtime records include `task_state.json` (bounded task history/checkpoints), `ui_memory.json` (successful choices), optional `project_memory.json` (opened projects), the file catalog/SQLite index, worker logs, and `.jarvis-runtime/repairs.jsonl`. Coding originals/diffs/hashes are stored in `.jarvis-runtime/coding/<id>/`. The UI transcript and question conversation history are bounded in memory; task metadata and repair records persist locally. Screenshots and generated file contents are not embedded in task-state records.
+
+## Troubleshooting
+
+| Symptom | Check / action |
+| --- | --- |
+| Startup fails or dependencies/models are missing | Run the launcher readiness command below; inspect `.jarvis-runtime/repairs.jsonl` and worker logs. Rerun the relevant setup/resume script. |
+| Setup interrupted | Rerun **Resume Whisper Setup.cmd** or **Setup Jarvis Brain.cmd** when connectivity returns. Downloads are designed to resume. |
+| GPU speech check fails | Confirm NVIDIA driver/GPU availability and inspect `verify_whisper.py` output. This configuration does not silently use CPU Whisper. |
+| No recognized speech | Check Windows microphone access, the selected device and input meter, listening state, and whether reply playback is muting recognition. |
+| Answers/planning unavailable | Install/start Ollama, complete brain setup, and inspect the configured model names and worker logs. |
+| Jarvis ignores a spoken selection | Stop dictation, keep the destination visible, list exposed controls, and name an unambiguous current label. Choices expire after 45 s. |
+| File lookup fails after a move | Check aliases and run **Refresh PC Catalog.cmd**; restart Jarvis. An outdated SQLite index is rejected rather than guessed. |
+| Project folder opens the wrong location | Reorder/update `project_roots` in `config.json`; the first existing non-drive root is used for the generic project-folder command. |
+| Toolkit is unavailable | Use **list toolkits**, set the required provider environment variables before startup, and review provider scopes in the toolkit guide. |
+| Unfinished task after a crash | Inspect fresh screen/file state and use **resume last task** when appropriate. An uncertain write/click remains paused until inspected. |
+| Panel disappears but Jarvis remains active | Closing/hiding the panel is intentional; use **Quit Jarvis** or **Stop Jarvis.cmd** to stop supervision. |
+| Globe fails to launch | Check Node, installed `node_modules`, port 4173, and `jarvis-launch.log` in the globe source directory. |
+
+## Verification commands
+
+Use the main environment explicitly to avoid another installed Python or a stale moved console launcher:
+
 ```powershell
-python -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m jarvis.launcher --check
 .\.venv\Scripts\python.exe verify_whisper.py --audio tests\fixtures\jarvis-command.wav
 .\.venv\Scripts\python.exe verify_brain.py
 .\.venv\Scripts\python.exe verify_scenarios.py
 .\.venv\Scripts\python.exe verify_speech.py
 .\.venv\Scripts\python.exe verify_ui.py
-python verify_coder.py --workflow-smoke
-.\.venv\Scripts\python.exe main.py
+.\.venv\Scripts\python.exe verify_coder.py --workflow-smoke
 ```
+
+Additional targeted checks:
+
+```powershell
+.\.venv\Scripts\python.exe verify_desktop_planner.py
+.\.venv\Scripts\python.exe verify_desktop_planner.py --vision-only
+.\.venv\Scripts\python.exe verify_ui.py --preview artifacts\jarvis-hud-preview.png
+.\.venv\Scripts\python.exe verify_question_speed.py --live
+.\.venv\Scripts\python.exe verify_toolkits.py --live
+```
+
+Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
 
 The **Preview text command** box accepts a full “Jarvis …” sentence and displays planned actions without executing them. Automated tests cover streaming, duplicate prevention, wake gating, explicit deletion, cancellation, and filesystem restrictions. Live microphone accuracy and typing into your chosen apps need a spoken trial on your PC.
 
 `verify_whisper.py` loads the configured model, executes GPU inference, prints the recognized text, timing, and planned commands, and never executes desktop actions. The included WAV is synthetic test speech, not a recording of the user. Unit tests cover punctuation normalization, overlap stitching, backpressure, cancellation during inference, plus the existing file and typing restrictions.
 
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
+
+## Current validation and update history
+
+**2026-09-27 relocation validation:** all **317 tests passed** and `python -m jarvis.launcher --check` reported `ready` with an empty missing list. Direct checks confirmed the relative Jarvis-files alias, relocated Jarvis project discovery, and `python -m pip` in both Python environments. This verifies regressions and runtime readiness, not every real app, account operation, or live microphone condition.
+
+**2026-09-27 documentation and follow-up fix:** expanded both README entry points, embedded existing media with provenance, documented current settings/architecture/integrations, and added ongoing documentation requirements. Reviewing the generic project-folder command revealed a remaining hardcoded old folder name; it now uses the configured project roots, with a regression test for a renamed root and a missing first entry. All **318 regression tests passed**, the launcher reported `ready` with no missing assets/dependencies, and all **56 local documentation links, images, and anchors** passed validation.
+
+Earlier implemented work includes streaming speech and direct commands; catalog/project and accessibility controls; local screen-aware planning and coding; Spotify/globe integration; supervisor/checkpoint recovery; adaptive plans and safe alternatives; verified task/UI recall; task dependency checks; sentence speech; the HUD interface; related-code edits and backups; reusable question inference; and the 37 toolkit adapters. Detailed source revisions and historical validation counts remain in the linked integration notes rather than being presented as current reruns.
+
+Historical measurements include approximately 43% less overlay render time in the earlier feature audit and roughly 17% lower warm question latency in a small reusable-worker benchmark. These measure particular components and samples, not an overall task-speed guarantee. See [feature audit](docs/FEATURE_AUDIT.md) and [response speed](docs/gar-response-speed.md) for methods and limitations. Real account-backed toolkit writes were tested with mocked transports; documentation does not claim a live message, event, or repository change occurred.
+
+## Documentation maintenance and attribution
+
+Update this README alongside future changes to features, setup, dependencies, settings, paths, interface, integrations, limitations, or verification. Refresh the parent [repository README](../README.md) when its overview changes. Add current UI media when available; label previews, references and upstream demos accurately. Keep links relative so the documentation works after moving the repository. Date test results and distinguish readiness, regression, synthetic inference, and live checks. These requirements are recorded in [application instructions](AGENTS.md) and [repository instructions](../AGENTS.md).
+
+Reference repositories, retained licenses, and pinned revisions are documented under `docs/` and `integrations/`. Downloaded reference sources do not imply that their entire products run inside Jarvis. The bundled HUD branding/artwork and globe datasets have separate provenance and terms; see [HUD artwork](jarvis/assets/README.md) and [globe data sources](integrations/gods-eye-view-src/gods-eye-view-main/DATA_SOURCES.md). Do not infer a single project-wide license from an upstream reference license.
