@@ -1,0 +1,87 @@
+{
+  "date": "2026-09-27T09:00:00.883962+00:00",
+  "model": "qwen3.5:4b",
+  "scope": "Live component/agent acceptance; no microphone or desktop interaction",
+  "runner_pid": 5140,
+  "tasks": [
+    {
+      "number": 7,
+      "name": "Read and remember exact configuration",
+      "goal": "Read runtime_manifest.json. Name the HTTP library appearing in both main_imports and brain_imports, and the exact capability for approved MCP stdio tools. Remember the library name and capability for a follow-up.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is **requests**. The exact capability for approved MCP stdio tools is **approved_mcp_stdio_tools**.",
+        "tools": [
+          "read_file"
+        ],
+        "session_id": "f722ce5e1e9540518b3d5baf827deccd"
+      },
+      "seconds": 57.09
+    },
+    {
+      "number": 8,
+      "name": "Resume persisted live conversation",
+      "goal": "Based on the previous manifest inspection, repeat the exact HTTP library and MCP capability name you identified. Use prior findings rather than guessing.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is **requests**. The exact capability for approved MCP stdio tools is **approved_mcp_stdio_tools**.",
+        "tools": [],
+        "session_id": "f722ce5e1e9540518b3d5baf827deccd"
+      },
+      "seconds": 43.06
+    },
+    {
+      "number": 9,
+      "name": "Fork and continue real conversation",
+      "goal": "In this fork, restate the HTTP library and MCP capability from the earlier manifest finding, and explain what the names mean.",
+      "status": "passed",
+      "evidence": {
+        "answer": "Based on the historical record in `history`, the HTTP library is **requests** and the MCP capability is **approved_mcp_stdio_tools**. \n\n**Explanation of Names:**\n1.  **`requests`**: This refers to the popular Python HTTP library used for making client-side requests (GET, POST, etc.) to web services. It abstracts away the complexity of low-level socket programming.\n2.  **`approved_mcp_stdio_tools`**: This is a specific capability identifier within the Jarvis MCP (Model Context Protocol) bridge. It indicates that the system has been granted permission to execute tools via the Standard Input/Output (stdio) channel, which allows for secure, sandboxed execution of external commands or scripts without requiring elevated privileges or direct file system access beyond what is explicitly permitted.",
+        "tools": [],
+        "session_id": "bdf1f344648d4086a2d0c8e2d45accbe"
+      },
+      "seconds": 60.64
+    },
+    {
+      "number": 12,
+      "name": "Research official Python JSON documentation",
+      "goal": "Retrieve the live official page using Jarvis scrape_web and compare load/loads with the local model.",
+      "status": "passed",
+      "evidence": {
+        "url": "https://docs.python.org/3/library/json.html",
+        "fetched_chars": 101,
+        "answer": "json.loads parses a JSON string into a Python object, while json.load reads and decodes a JSON file directly into memory. The former is used when the input is text data, whereas the latter handles file streams."
+      },
+      "seconds": 24.0
+    },
+    {
+      "number": 13,
+      "name": "Large task: build and execute multi-file expense application",
+      "goal": "Create main.py, ledger.py and README.md as a complete standard-library CSV expense reporting app. ledger.py defines read_totals(path) returning {\"total\":\"0.00\",\"by_category\":{}} with two-decimal strings; read CSV columns category,amount using csv and Decimal, preserve quoted fields, reject nonfinite amounts, accept negative refunds, map blank category to uncategorized, empty data returns zero and empty categories, invalid amount raises ValueError mentioning row number, missing columns raises ValueError. main.py accepts one positional CSV path, prints only the report JSON on success, errors print to stderr and exit nonzero. README.md explains usage. No installation or network. Order ledger.py before main.py for shared interfaces. Preserve source CSV files.",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error": "Generated main.py failed syntax validation: unterminated string literal (detected at line 11) (main.py, line 11)",
+      "seconds": 298.56
+    }
+  ],
+  "owned_ollama_pid": 10236,
+  "ollama": "temporary owned server started for authorized live tests",
+  "available_models": [
+    "qwen3.5:4b",
+    "qwen3-vl:4b",
+    "qwen3:4b",
+    "qwen2.5:3b",
+    "qwen3-vl:2b"
+  ],
+  "web_fetch": {
+    "url": "https://docs.python.org/3/library/json.html",
+    "fetched_chars": 101,
+    "found_json_loads": true
+  },
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5
+  },
+  "owned_ollama_stopped": true
+}

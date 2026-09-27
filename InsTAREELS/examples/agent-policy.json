@@ -1,0 +1,6 @@
+{
+  "deny_tools": ["send_email", "slack_send", "twitter_send"],
+  "hooks": [
+    {"event": "before_tool", "tool": "mcp_call", "decision": "deny"}
+  ]
+}

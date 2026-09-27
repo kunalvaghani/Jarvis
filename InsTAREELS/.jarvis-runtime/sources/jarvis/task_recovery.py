@@ -12,7 +12,7 @@ def action_key(step):
     action = step.get("action", "")
     from .toolkits import TOOLS
     if action in TOOLS:
-        folder = step.get("folder", "") if TOOLS[action][0] in {"files", "resource", "knowledge"} else ""
+        folder = step.get("folder", "") if TOOLS[action][0] in {"files", "resource", "knowledge", "agent"} else ""
         return (action, str(step.get("value", "")), "", str(folder), str(step.get("content", "")), "", "")
     # Ignore fields that dispatch does not use; changing dummy fields is no new approach.
     browser = step.get("browser", "chrome") if action in {"browse", "browser_search"} else ""

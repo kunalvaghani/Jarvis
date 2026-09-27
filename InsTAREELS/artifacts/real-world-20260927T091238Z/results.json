@@ -1,0 +1,159 @@
+{
+  "date": "2026-09-27T09:12:38.457433+00:00",
+  "model": "qwen3.5:4b",
+  "scope": "Live component/agent acceptance; no microphone or desktop interaction",
+  "runner_pid": 5488,
+  "tasks": [
+    {
+      "number": 7,
+      "name": "Read and remember exact configuration",
+      "goal": "Read runtime_manifest.json. Name the HTTP library appearing in both main_imports and brain_imports, and the exact capability for approved MCP stdio tools. Remember the library name and capability for a follow-up.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is **requests**. The exact capability for approved MCP stdio tools is **approved_mcp_stdio_tools**.",
+        "tools": [
+          "read_file"
+        ],
+        "session_id": "29187fc36e2740f290a394abd80f718d"
+      },
+      "seconds": 59.22
+    },
+    {
+      "number": 8,
+      "name": "Resume persisted live conversation",
+      "goal": "Based on the previous manifest inspection, repeat the exact HTTP library and MCP capability name you identified. Use prior findings rather than guessing.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is **requests**. The exact capability for approved MCP stdio tools is **approved_mcp_stdio_tools**.",
+        "tools": [],
+        "session_id": "29187fc36e2740f290a394abd80f718d"
+      },
+      "seconds": 47.45
+    },
+    {
+      "number": 9,
+      "name": "Fork and continue real conversation",
+      "goal": "In this fork, restate the HTTP library and MCP capability from the earlier manifest finding, and explain what the names mean.",
+      "status": "passed",
+      "evidence": {
+        "answer": "Based on the historical record in `history` (version 1), the HTTP library is **requests** and the MCP capability is **approved_mcp_stdio_tools**. \n\n**Explanation of names:**\n*   **requests**: This refers to the popular Python HTTP library used for making requests. In this context, it likely handles the communication layer for the HTTP-based tools or APIs integrated into Jarvis.\n*   **approved_mcp_stdio_tools**: This capability indicates that specific Model Context Protocol (MCP) tools are permitted to execute via standard input/output (stdio) streams. The term \"approved\" suggests a security filter ensuring only vetted tools can run in this manner, while \"stdio\" refers to the Unix-like communication method using stdin/stdout.",
+        "tools": [],
+        "session_id": "9749aba68c8044f5b75b475f88273854"
+      },
+      "seconds": 59.5
+    },
+    {
+      "number": 12,
+      "name": "Research official Python JSON documentation",
+      "goal": "Retrieve the live official page using Jarvis scrape_web and compare load/loads with the local model.",
+      "status": "passed",
+      "evidence": {
+        "url": "https://docs.python.org/3/library/json.html",
+        "fetched_chars": 10120,
+        "answer": "json.loads() deserializes a JSON string directly into a Python object, whereas json.load() performs the same operation but reads from a file-like object.\n"
+      },
+      "seconds": 68.88
+    },
+    {
+      "number": 13,
+      "name": "Large task: build and execute multi-file expense application",
+      "goal": "Create main.py, ledger.py and README.md as a complete standard-library CSV expense reporting app. ledger.py defines read_totals(path) returning {\"total\":\"0.00\",\"by_category\":{}} with two-decimal strings; read CSV columns category,amount using csv and Decimal, preserve quoted fields, reject nonfinite amounts, accept negative refunds, map blank category to uncategorized, empty data returns zero and empty categories, invalid amount raises ValueError mentioning row number, missing columns raises ValueError. main.py accepts one positional CSV path, prints only the report JSON on success, errors print to stderr and exit nonzero. README.md explains usage. No installation or network. Order ledger.py before main.py for shared interfaces. Preserve source CSV files.",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error": "Generated app acceptance failed: [{\"case\": \"ordinary\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '32.50', 'by_category': {'food': '12.50', 'transport': '20.00'}}\\n\", \"stderr\": \"\"}, {\"case\": \"refund\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '7.00', 'by_category': {'food': '7.00'}}\\n\", \"stderr\": \"\"}, {\"case\": \"precision\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '0.30', 'by_category': {'food': '0.30'}}\\n\", \"stderr\": \"\"}, {\"case\": \"blank-category\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '5.00', 'by_category': {'uncategorized': '5.00'}}\\n\", \"stderr\": \"\"}, {\"case\": \"empty\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '0.00', 'by_category': {}}\\n\", \"stderr\": \"\"}, {\"case\": \"invalid\", \"passed\": true, \"exit_code\": 1, \"stdout\": \"\", \"stderr\": \"Error: Invalid amount on row 2: [<class 'decimal.ConversionSyntax'>]\\n\"}, {\"case\": \"missing-header\", \"passed\": true, \"exit_code\": 1, \"stdout\": \"\", \"stderr\": \"Error: Missing required columns 'category' and 'amount'.\\n\"}, {\"case\": \"quoted-category\", \"passed\": false, \"exit_code\": 0, \"stdout\": \"{'total': '12.50', 'by_category': {'food, dining': '12.50'}}\\n\", \"stderr\": \"\"}, {\"case\": \"missing-header-empty\", \"passed\": true, \"exit_code\": 1, \"stdout\": \"\", \"stderr\": \"Error: Missing required columns 'category' and 'amount'.\\n\"}, {\"case\": \"nonfinite-amount\", \"passed\": true, \"exit_code\": 1, \"stdout\": \"\", \"stderr\": \"Error: Invalid amount on row 2: non-finite value (NaN).\\n\"}]",
+      "seconds": 304.08
+    }
+  ],
+  "owned_ollama_pid": 30100,
+  "ollama": "temporary owned server started for authorized live tests",
+  "available_models": [
+    "qwen3.5:4b",
+    "qwen3-vl:4b",
+    "qwen3:4b",
+    "qwen2.5:3b",
+    "qwen3-vl:2b"
+  ],
+  "web_fetch": {
+    "url": "https://docs.python.org/3/library/json.html",
+    "fetched_chars": 10120,
+    "found_json_loads": true
+  },
+  "build_cases": [
+    {
+      "case": "ordinary",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '32.50', 'by_category': {'food': '12.50', 'transport': '20.00'}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "refund",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '7.00', 'by_category': {'food': '7.00'}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "precision",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '0.30', 'by_category': {'food': '0.30'}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "blank-category",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '5.00', 'by_category': {'uncategorized': '5.00'}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "empty",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '0.00', 'by_category': {}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "invalid",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Invalid amount on row 2: [<class 'decimal.ConversionSyntax'>]\n"
+    },
+    {
+      "case": "missing-header",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Missing required columns 'category' and 'amount'.\n"
+    },
+    {
+      "case": "quoted-category",
+      "passed": false,
+      "exit_code": 0,
+      "stdout": "{'total': '12.50', 'by_category': {'food, dining': '12.50'}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "missing-header-empty",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Missing required columns 'category' and 'amount'.\n"
+    },
+    {
+      "case": "nonfinite-amount",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Invalid amount on row 2: non-finite value (NaN).\n"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5
+  },
+  "owned_ollama_stopped": true
+}

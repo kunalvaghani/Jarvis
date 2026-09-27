@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-27T09:06:55.579873+00:00",
+  "status": "passed",
+  "tool": "scrape_web",
+  "url": "https://docs.python.org/3/library/json.html",
+  "source_body_contains_json_loads": true,
+  "fetched_chars": 10120,
+  "sha256": "5202be5ee1d8c29b8b72ca51498945f2b84fbda6818d82dee2dc4dd2662ef05a",
+  "excerpt": ":\n>>> importjson>>> json.loads('[\"foo\", {\"bar\":[\"baz\", null, 1.0, 2]}]')['foo', {'bar': ['baz', None, 1.0, 2]}]>>> json.loads('\"\\\\\"foo\\\\bar\"')'\"foo\\x0"
+}

@@ -1,0 +1,123 @@
+{
+  "date": "2026-09-27T08:45:42.070220+00:00",
+  "model": "qwen3.5:4b",
+  "scope": "Live component/agent acceptance; no microphone or desktop interaction",
+  "runner_pid": 29580,
+  "tasks": [
+    {
+      "number": 6,
+      "name": "Inspect working tree and recent commits together",
+      "goal": "Use read_batch to run git_status and git_log independently for this real project. Report observed modifications and recent commit subjects; cite the literal identifiers git_status and git_log.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The `git_status` tool revealed multiple modified files, including core components like `jarvis/brain.py`, `jarvis/coder.py`, and `README.md`. The `git_log` tool reported recent commit subjects starting with 'option choosing fixed' and 'checked for latest models and fixed it'.",
+        "tools": [
+          "read_batch"
+        ],
+        "session_id": "36848cca41504a47b8400ad12aa40ce1"
+      },
+      "seconds": 68.94
+    },
+    {
+      "number": 7,
+      "name": "Read and remember exact configuration",
+      "goal": "Read runtime_manifest.json. Name the HTTP library appearing in both main_imports and brain_imports, and the exact capability for approved MCP stdio tools. Remember the library name and capability for a follow-up.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is `requests`. The exact capability for approved MCP stdio tools is `approved_mcp_stdio_tools`.",
+        "tools": [
+          "read_file"
+        ],
+        "session_id": "c47ca607484e48139316547fc8b8caf3"
+      },
+      "seconds": 39.0
+    },
+    {
+      "number": 8,
+      "name": "Resume persisted live conversation",
+      "goal": "Based on the previous manifest inspection, repeat the exact HTTP library and MCP capability name you identified. Use prior findings rather than guessing.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library appearing in both `main_imports` and `brain_imports` is `requests`. The exact capability for approved MCP stdio tools is `approved_mcp_stdio_tools`.",
+        "tools": [],
+        "session_id": "c47ca607484e48139316547fc8b8caf3"
+      },
+      "seconds": 43.12
+    },
+    {
+      "number": 9,
+      "name": "Fork and continue real conversation",
+      "goal": "In this fork, restate the HTTP library and MCP capability from the earlier manifest finding, and explain what the names mean.",
+      "status": "passed",
+      "evidence": {
+        "answer": "The HTTP library is **requests**, and the MCP capability is **approved_mcp_stdio_tools**.\n\n**Explanation of Names:**\n*   **`requests`**: This refers to the Python `requests` library, a popular package for making HTTP requests. In this context, it handles network communication for fetching data or sending commands.\n*   **`approved_mcp_stdio_tools`**: This denotes a specific capability within the Model Context Protocol (MCP) implementation. \"Stdio\" refers to Standard Input/Output, meaning these tools execute via process pipes rather than direct file system access. \"Approved\" implies this is a whitelist of safe, pre-validated tools that can be executed by the agent without requiring further user permission for each individual invocation.",
+        "tools": [],
+        "session_id": "cb0c67d78ea64c0d83dc053e338f12fd"
+      },
+      "seconds": 56.86
+    },
+    {
+      "number": 10,
+      "name": "Large parallel repository safety investigation",
+      "goal": "Three independent live agents inspect recovery, deny-policy enforcement and CLI session/teams, using the actual source and separate budgets.",
+      "status": "passed",
+      "evidence": {
+        "research_agents": [
+          {
+            "session_id": "40e16fd24caf46a4825f9ce6f5718914",
+            "goal": "Read jarvis/task_recovery.py and explain action_key and uncertain effects.",
+            "answer": "In `jarvis/task_recovery.py`, the `action_key` function generates a unique identifier for a task step to determine if it has been previously attempted. It constructs a tuple containing the action name, value, browser (for browsing/searching), folder path, content (for file operations), find string, and platform.\n\nRegarding uncertain effects: The module's docstring explicitly states that \"uncertain external effects must never be retried.\" This means if a task involves actions where the outcome is unpredictable or could cause data loss (like file deletion or shell commands), the system will not automatically retry them upon failure. Instead, it preserves task checkpoints and requires user approval before any recovery action is taken.",
+            "ok": true
+          },
+          {
+            "session_id": "38369ef8be214867aaec9a310ece9eeb",
+            "goal": "Read jarvis/agent_events.py and explain deny_tools and before_tool policy.",
+            "answer": "The file `jarvis/agent_events.py` defines the metadata-only tool lifecycle events and declarative deny hooks for Jarvis.\n\n**deny_tools:**\nThe `deny_tools` field is a list of strings found in `.jarvis/policy.json`. If a specific tool name or a wildcard (`*`) appears in this list, the `check_policy` function raises a `ValueError`, effectively denying access to that tool.\n\n**before_tool policy:**\nThe `before_tool` policy is enforced via hooks defined in `.jarvis/policy.json`. Each hook must be a dictionary with keys `event`, `tool`, and `decision`. To implement a deny rule, the `event` must be `'before_tool'` and the `decision` must be `'deny'`. If a hook matches the current tool name (or uses the wildcard `*`), it raises a `ValueError`, denying the tool execution.\n\nBoth mechanisms rely on reading `.jarvis/policy.json` and checking for specific string entries or hook configurations before allowing a tool to proceed.",
+            "ok": true
+          },
+          {
+            "session_id": "5cfa4948f4e64f8c840da016da2c0e7e",
+            "goal": "Read jarvis/agent_cli.py and explain session.fork and team.run.",
+            "answer": "In `jarvis/agent_cli.py`, the methods are handled within the `AgentSession` class (imported from `.agent_session`).\n\n1. **session.fork**: When the CLI receives a JSONL request with method `session.fork`, it calls `session.fork(emit)`. This creates a new session instance based on the current one, passing the `emit` function to handle output. The result returned is a dictionary containing the identifier of this newly forked session (`{'session_id': session.fork(emit).identifier}`).\n\n2. **team.run**: When the CLI receives a JSONL request with method `team.run`, it calls `session.research_parallel(request.get('goals'), provider)`. This method appears to handle parallel research or multi-agent execution using the provided goals and Ollama provider, returning the result of this parallel operation.",
+            "ok": true
+          }
+        ],
+        "separate_sessions": 3
+      },
+      "seconds": 144.19
+    },
+    {
+      "number": 12,
+      "name": "Research official Python JSON documentation",
+      "goal": "Retrieve the live official page using Jarvis scrape_web and compare load/loads with the local model.",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error": "The model reached its answer limit. Ask a shorter question.",
+      "seconds": 57.78
+    },
+    {
+      "number": 13,
+      "name": "Large task: build and execute multi-file expense application",
+      "goal": "Create main.py, ledger.py and README.md as a complete standard-library CSV expense reporting app. ledger.py defines read_totals(path) returning {\"total\":\"0.00\",\"by_category\":{}} with two-decimal strings; read CSV columns category,amount using Decimal, accept negative refunds, map blank category to uncategorized, empty data returns zero and empty categories, invalid amount raises ValueError mentioning row number, missing columns raises ValueError. main.py accepts one positional CSV path, prints only the report JSON on success, errors print to stderr and exit nonzero. README.md explains usage. No installation or network. Order ledger.py before main.py for shared interfaces. Preserve source CSV files.",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error": "Generated main.py failed syntax validation: invalid syntax (main.py, line 3)",
+      "seconds": 388.03
+    }
+  ],
+  "owned_ollama_pid": 20856,
+  "ollama": "temporary owned server started for authorized live tests",
+  "available_models": [
+    "qwen3.5:4b",
+    "qwen3-vl:4b",
+    "qwen3:4b",
+    "qwen2.5:3b",
+    "qwen3-vl:2b"
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 2,
+    "total": 7
+  },
+  "owned_ollama_stopped": true
+}

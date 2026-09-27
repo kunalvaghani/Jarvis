@@ -11,6 +11,7 @@ import tempfile
 from .projects import MARKERS, SKIP
 from .commands import normalize_spoken_code_request
 from .code_context import related_context, bounded_references, apply_replacements, check_python_interfaces, save_change_review
+from .agent_context import coding_context
 
 
 SOURCE_EXTENSIONS = {".py", ".js", ".jsx", ".ts", ".tsx", ".json", ".html", ".css", ".md", ".txt", ".yaml", ".yml", ".toml",
@@ -145,7 +146,8 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
     actions.report("plan", f"Write Python code into {name}, then test it")
     step = {"path": name, "reason": "Implement the requested Python program in a new file"}
     content = template or generate_checked(client, cancelled, destination, goal=goal, project=folder.name,
-        path=name, reason=step["reason"], current="", plan=[step], files=[], references={})
+        path=name, reason=step["reason"], current="", plan=[step], files=[], references={},
+        **coding_context(folder, goal, name))
     check_content(destination, content)
     if cancelled():
         raise ValueError(f"Coding task cancelled; draft remains at {destination}.")
@@ -169,8 +171,10 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
 def project_files(project, limit=160):
     found = []
     for folder, directories, files in os.walk(project, followlinks=False):
-        directories[:] = sorted(d for d in directories if d.casefold() not in SKIP_LOWER and not d.startswith(".")
-                                and not (Path(folder) / d).is_symlink())
+        directories[:] = sorted((d for d in directories if d.casefold() not in SKIP_LOWER and not d.startswith(".")
+                                 and not (Path(folder) / d).is_symlink()), key=lambda d: (
+            d.casefold() in {'integrations', 'vendor', 'artifacts', 'third_party'},
+            d.casefold() not in {'src', 'app', 'jarvis', 'lib'}, d.casefold()))
         for name in sorted(files):
             path = Path(folder) / name
             if not name.startswith(".") and path.suffix.lower() in SOURCE_EXTENSIONS and not path.is_symlink():
@@ -334,11 +338,12 @@ class Coder:
                              + ", ".join(existing_named))
         direct_edit = len(named_files) == 1 and len(existing_named) == 1 and edit_request
         context = related_context(project, files, goal, existing_named)
+        runtime_context = coding_context(project, goal, files=files)
         plan = ({"directories": [simple_folder], "files": []} if simple_folder else
                 {"directories": [], "files": [{"path": existing_named[0], "reason": goal[:160]}]}
                 if direct_edit else
                 self.client.request("code_plan", cancelled, goal=goal, project=project.name, files=files,
-                                    prior_task=prior, references=context))
+                                    prior_task=prior, references=context, **runtime_context))
         if isinstance(plan, dict) and isinstance(plan.get("directories", []), list) and isinstance(plan.get("files"), list):
             plan = {**plan, "directories": [strip_project_prefix(name, project) for name in plan.get("directories", [])],
                 "files": [{**step, "path": strip_project_prefix(step.get("path"), project)} if isinstance(step, dict) else step
@@ -393,6 +398,9 @@ class Coder:
         selected_names = {path.name.casefold() for _, path, _, _ in sources}
         if not named_files <= selected_names:
             raise ValueError("The coding plan omitted a file you named: " + ", ".join(sorted(named_files - selected_names)))
+        # Resolve all target guidance before creating any folders or draft files.
+        target_contexts = {step['path']: coding_context(project, goal, step['path'], files)
+                           for step, _, _, _ in sources}
         created_dirs = []
         for folder in planned_dirs:
             if cancelled():
@@ -435,7 +443,8 @@ class Coder:
             content = ((Path(__file__).parent / "templates" / "calculator_gui.py").read_text(encoding="utf-8")
                        if known_calculator else generate_checked(self.client, cancelled, path, goal=goal,
                        project=project.name, path=step["path"], reason=step["reason"], current=current,
-                       plan=steps, files=files[:100], references=references, prior_task=prior))
+                       plan=steps, files=files[:100], references=references, prior_task=prior,
+                       **target_contexts[step['path']]))
             check_content(path, content)
             generated_context.append((step["path"], content))
             checkpoint("generated_file", target=path, evidence="syntax checked where applicable")

@@ -168,6 +168,16 @@ class ToolkitTests(unittest.TestCase):
         self.assertIn("Hello\nWorld", result)
         self.assertNotIn("secret()", result)
 
+    def test_web_navigation_and_literal_focus_do_not_hide_main_content(self):
+        html = ('<nav><div><p>' + 'navigation ' * 2000 + '</p></div></nav>'
+                '<main><p>' + 'introduction ' * 2000 + '</p><h2><span>json.</span><strong>loads</strong></h2><p>Deserialize a string</p></main>')
+        with patch('jarvis.toolkits.api', return_value=html):
+            result = remote_tool(Mock(), self.step('scrape_web', 'https://example.com', '{"query":"json.loads"}'), lambda: False)
+        self.assertIn('json.loads', result)
+        self.assertIn('Deserialize a string', result)
+        self.assertNotIn('navigation', result)
+        self.assertIn('Earlier page text omitted', result)
+
     def test_github_read_and_write_payloads(self):
         source = base64.b64encode(b"value = 1\n").decode()
         with patch("jarvis.toolkits.api", return_value=json.dumps({"encoding": "base64", "size": 10, "content": source})) as request:
@@ -272,7 +282,8 @@ class ToolkitTests(unittest.TestCase):
                    "calendar_create": "schedule a meeting", "calendar_delete": "cancel calendar event",
                    "jira_create": "create Jira issue", "jira_edit": "update Jira issue",
                    "send_email": "send an email", "slack_send": "send a Slack message",
-                   "twitter_send": "publish a tweet", "append_file": "append hello to notes.txt in project"}
+                   "twitter_send": "publish a tweet", "append_file": "append hello to notes.txt in project",
+                   "mcp_list_tools": "List MCP tools", "mcp_call": "Call MCP tool"}
         with patch.dict(os.environ, variables, clear=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
             for name in TOOLS:
                 with self.subTest(tool=name):
@@ -289,7 +300,7 @@ class ToolkitTests(unittest.TestCase):
                     self.assertIn("Finished", brain.run(intents.get(name, "Use " + name + " for this task"), lambda: False))
                     self.assertEqual(dispatch.call_args.args[1]["action"], name)
                     brain.observe_after_action.assert_not_called()
-            self.assertEqual(dispatch.call_count, 37)
+            self.assertEqual(dispatch.call_count, len(TOOLS))
 
     def test_result_driven_replanning_uses_source_beyond_old_500_character_limit(self):
         source = "# context\n" * 100 + "def subtract(a, b):\n    return a - b\n"

@@ -51,6 +51,7 @@ search github for local voice assistant
 extract text from https://example.com
 tool write_spec {"value":"A Python calculator"}
 tool read_file {"value":"src/main.py","folder":"this folder"}
+tool scrape_web {"value":"https://docs.python.org/3/library/json.html","content":"{\"query\":\"json.loads\"}"}
 tool github_pull_request {"value":"owner/repository","content":"{\"number\":12}"}
 tool send_email {"value":"recipient@example.com","content":"{\"subject\":\"Meeting\",\"body\":\"See you tomorrow.\"}"}
 ```
@@ -58,7 +59,8 @@ tool send_email {"value":"recipient@example.com","content":"{\"subject\":\"Meeti
 The explicit `tool` syntax accepts only `value`, `folder` and `content`. For tools
 requiring structured parameters, `content` is a JSON string. Tool descriptions
 and the status inventory identify required service configuration. Natural task
-planning now sees every configured operation, without a keyword filter. The
+planning uses the core catalog and `tool_search` to discover configured toolkit
+operations when deferred discovery is enabled. The
 planner chooses useful prerequisite tools by meaning and integrates their
 results into the remaining plan; you do not need to name toolkit operations.
 
@@ -77,11 +79,19 @@ The final example needs the email environment variables and a visible approval
 of recipient, subject and exact body before sending. Drafting returns text;
 it does not execute generated code or silently save it into a project.
 
-With no account credentials the catalog contains 34 operations (15 core + 19
-toolkit). With all required configuration present it contains all 52. Initial
-planning, adaptive replanning and failure recovery share this catalog. Model
+The registry now contains 64 operations (15 core, 37 toolkit and 12 agent/MCP).
+Forty-six have no account environment-variable requirement, including MCP
+wrappers that still need trusted local configuration and approvals. Eighteen
+remain credential-gated. Initial planning, adaptive replanning and failure
+recovery share catalog discovery. Model
 names remain unchanged; planning/replanning uses a 16,384-token context budget
 to accommodate the complete catalog and result context.
+
+`scrape_web` excludes navigation and hidden page text, and supports optional JSON
+`content` with a literal `query` for a bounded excerpt around that text. Missing
+matches and omitted text are marked; it does not execute JavaScript. Toolkit
+text generation now has a bounded 1,200-token answer budget. Live failures and
+corrected checks are recorded in the [2026-09-27 task report](real-world-validation.md).
 
 Toolkit results are independently checked against the expected step result.
 API responses, scoped file reads and drafts are verified from returned data,

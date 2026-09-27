@@ -1,0 +1,96 @@
+{
+  "date": "2026-09-27T09:27:39.874516+00:00",
+  "unique_live_scenarios": 13,
+  "scope": "Real local inference, repository/Git, scoped disk, public web and generated CLI; no microphone/desktop/account/MCP-provider live actions",
+  "regression_tests_passed": 376,
+  "launcher_status": "ready",
+  "launcher_missing": [],
+  "initial_full_run": {
+    "passed": 8,
+    "failed": 5
+  },
+  "initial_runnable_app": {
+    "passed_cases": 4,
+    "failed_cases": 6
+  },
+  "feedback_guided_repair": {
+    "passed_cases": 10,
+    "failed_cases": 0,
+    "report": "real-world-20260927T092312Z/results.json"
+  },
+  "answer_quality_limits": [
+    "Recovery explanation inferred an unsupported retry exception",
+    "Instruction explanation misstated ordering and byte limits",
+    "One research-agent explanation overstated recovery approval requirements",
+    "Earlier fork answers invented approval exemption or sandboxing; latest answer avoided those claims"
+  ],
+  "invalidated_attempts": [
+    {
+      "report": "real-world-20260927T090000Z/results.json",
+      "task": 12,
+      "reason": "No-match query text caused a false-positive checker result; not credited as source research"
+    }
+  ],
+  "reports": [
+    {
+      "report": "real-world-20260927T082342Z/results.json",
+      "summary": {
+        "passed": 8,
+        "failed": 5,
+        "total": 13
+      },
+      "owned_ollama_stopped": true,
+      "mode": "task trials"
+    },
+    {
+      "report": "real-world-20260927T084542Z/results.json",
+      "summary": {
+        "passed": 5,
+        "failed": 2,
+        "total": 7
+      },
+      "owned_ollama_stopped": true,
+      "mode": "task trials"
+    },
+    {
+      "report": "real-world-20260927T090000Z/results.json",
+      "summary": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5
+      },
+      "owned_ollama_stopped": true,
+      "mode": "task trials"
+    },
+    {
+      "report": "real-world-20260927T090850Z/results.json",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "total": 1
+      },
+      "owned_ollama_stopped": true,
+      "mode": "task trials"
+    },
+    {
+      "report": "real-world-20260927T091238Z/results.json",
+      "summary": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5
+      },
+      "owned_ollama_stopped": true,
+      "mode": "task trials"
+    },
+    {
+      "report": "real-world-20260927T092312Z/results.json",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "total": 1
+      },
+      "owned_ollama_stopped": true,
+      "mode": "feedback-guided repair in a fresh copy"
+    }
+  ]
+}

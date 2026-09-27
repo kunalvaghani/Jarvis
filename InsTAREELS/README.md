@@ -27,6 +27,7 @@ This bundled reference animation supplies the cropped circular logo used by the 
 - [Recovery and adaptive planning](#silent-startup-and-recovery)
 - [Integrations and toolkits](#integrations-and-toolkits)
 - [Autonomous toolkit use](#autonomous-toolkit-use)
+- [Agent runtime and project research](#agent-runtime-and-project-research)
 - [Architecture and project layout](#architecture-and-project-layout)
 - [Configuration and relocation](#configuration-and-relocation)
 - [Troubleshooting](#troubleshooting)
@@ -48,7 +49,8 @@ This bundled reference animation supplies the cropped circular logo used by the 
 | Memory | Durable checkpoints, related verified task summaries, and decaying successful UI suggestions. |
 | Speech output | Local British male English and Hindi Piper voices, sentence playback, interruption, and recognition mute during replies. |
 | Media and globe | Spotify session controls and on-demand God's Eye View browser console. |
-| Toolkits | 52 registered operations: 15 core tools plus 37 toolkit operations; provider tools become available only when configured. |
+| Toolkits | 64 registered operations: 15 core, 37 earlier toolkit adapters and 12 agent/MCP tools; configuration and runtime approval gates apply. |
+| Agent runtime | Hierarchical repository guidance, explicit skills, deferred tools, source maps, Git observations, read batches, events/deny hooks, approved MCP stdio, and headless read-only sessions/research agents. |
 | Recovery | Hidden single-instance supervisor, worker/service health checks, startup snapshots, bounded retries, and explicit-stop handling. |
 
 Local models do not make every task reliable. Custom/elevated apps may not expose usable controls; ambiguous targets require clarification. External writes and deletion use the applicable approval flow, and uncertain effects are never automatically replayed.
@@ -66,6 +68,33 @@ For an offered file/app, project or UI list, reply **“one,” “the second on
 On this PC (Ryzen 7 5800H, 32 GB RAM, RTX 3050 Laptop with 4 GB VRAM), keep **Qwen3.5 4B** for planning, decisions, code and answers, **Qwen3-VL 4B** for screen vision, and the pinned English **Laya** checkpoint for control ranking. Ollama and Laya use CPU; Whisper **medium.en** uses CUDA `int8_float16`. Piper supplies the English/Hindi voices. Laya's candidate suggestion still needs independent Qwen agreement for ambiguous controls.
 
 The 2026-09-27 comparison found all three installed vision candidates passed two synthetic field-verification checks each; that limited evidence does not justify switching the stack. Very large models in the supplied screenshots exceed practical local memory; smaller 7–14B alternatives can fit RAM in isolation but need end-to-end evaluation before replacement. [Hardware, model sizes, timings, sources and limitations](MODEL_AUDIT.md), [raw comparison results](artifacts/hardware-model-comparison.json). No model configuration changed.
+
+## Agent runtime and project research
+
+Jarvis now has **64 registered operations**: 15 core tools, 37 existing toolkit
+adapters and 12 agent/MCP operations. Coding tasks read applicable `AGENTS.md`,
+explicitly selected `$name` skills and a bounded repository symbol map. Local
+plugin bundles can contribute declarative skills. Planning uses deferred toolkit
+discovery (`agent_runtime.deferred_tools: true`) with `tool_search`; configured
+tools are discoverable without exposing the whole catalog on every request.
+
+New tools inspect source maps and Git status/log/diffs, read repository guidance
+and skills, and batch up to four independent local reads. Metadata events and
+optional deny hooks record/control tool execution. Trusted stdio MCP servers
+require explicit configuration, exact allowlists and visible approval for each
+server start/call. These path checks and policies are application controls, not
+an OS sandbox.
+
+The headless read-only agent supports resumable/forked JSONL sessions and up to
+three separate research agents. From the app directory, run
+`python -m jarvis.agent_cli --project . --goal "Map this project"`; Ollama must
+already be running. `python verify_agent_runtime.py` checks a fixture without a
+model, and `--live` requests a temporary-project local-model check.
+
+[Setup, usage, MCP/policy examples, research coverage and limits](docs/codex-runtime-integration.md).
+No new Python dependencies or UI changes were introduced. Arbitrary JavaScript,
+an OS sandbox, write-capable subagents, remote execution and Codex protocol/model
+parity remain outside the implemented scope.
 
 ## Unified task tools
 
@@ -358,9 +387,9 @@ Use **“list toolkits”** to inspect required environment variable names befor
 
 ## Autonomous toolkit use
 
-Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery now see every configured operation rather than a keyword-filtered subset. There are **34 available operations without account credentials**, and **52 when all required provider configuration is present**. The 18 account-backed operations still need their environment variables.
+Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery receive relevant configured toolkit operations plus previously discovered tools. `tool_search` loads more operations for subsequent steps. Set `agent_runtime.deferred_tools` to false to expose the entire configured catalog. There are **46 operations with no required account environment variables**, and **64 registered in total**. The 18 account-backed operations need their environment variables; MCP wrappers additionally need trusted local server configuration and approval.
 
-Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. The configured models are unchanged; planning context is expanded to 16,384 tokens for the full catalog and observations.
+Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. The configured models are unchanged; planning and coding use a 16,384-token context for selected tools, guidance and observations.
 
 Examples:
 
@@ -431,6 +460,8 @@ Jarvis/
 | `brain.py`, `brain_worker.py`, `model_selection.py`, `screen_worker.py` | Planning/decisions, Laya, model availability/fallback, and screen observation. |
 | `tools.py`, `toolkits.py`, `task_graph.py` | Shared tool schemas/routes, provider adapters, and task dependencies. |
 | `coder.py`, `code_context.py`, `projects.py`, `catalog.py` | Checked source generation/edits, project context/discovery, and indexed path lookup. |
+| `agent_context.py`, `agent_tools.py`, `agent_events.py`, `mcp_bridge.py` | Repository guidance/skills/maps, scoped reads/batches, metadata events/deny hooks and approved stdio MCP. |
+| `agent_session.py`, `agent_cli.py` | Headless read-only provider loop, JSONL sessions/forks, bounded research agents and stdio API. |
 | `knowledge.py`, `knowledge_worker.py`, `question_client.py`, `speech.py`, `piper_speech.py` | Answers, web/screen context, worker reuse, voice synthesis, and playback. |
 | `task_state.py`, `task_recovery.py`, `experience.py`, `ui_memory.py` | Checkpoints, safe alternatives, verified task recall, and UI suggestions. |
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
@@ -449,6 +480,7 @@ Jarvis/
 | `knowledge` | Enabled, `qwen3.5:4b`, `qwen3-vl:4b`, English answers, internet enabled, CPU inference (`num_gpu: 0`). |
 | `speech` | Enabled, English, length scale 1.05, noise 0.667/0.8, sentence silence 0.18 s. |
 | `brain` | Enabled, Qwen planner/decision/vision, Laya selector, screen awareness, adaptive planning, and task recovery enabled. |
+| `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
 
 Current application location: `D:\Kunals GitHub Repo\Jarvis\InsTAREELS`. Launchers use their own directory; application/model paths derive from source locations. Run commands from the app directory so Python resolves the `jarvis` package. The **open project folder** command uses the first existing non-drive-root entry in `project_roots`, rather than relying on the old folder name.
@@ -500,9 +532,24 @@ Additional targeted checks:
 .\.venv\Scripts\python.exe verify_toolkit_planner.py
 .\.venv\Scripts\python.exe verify_hardware_models.py
 .\.venv\Scripts\python.exe verify_clarification.py
+.\.venv\Scripts\python.exe verify_real_world.py
 ```
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
+
+`verify_real_world.py` performs thirteen live local-model/repository/file/web
+checks and a three-file application build with ten CLI cases. It keeps dated
+results in `artifacts/real-world-*`, uses a fresh workspace for each rerun, and
+closes only a test-owned Ollama server. No desktop, microphone or third-party
+account/MCP actions are covered. See the [live test report](docs/real-world-validation.md)
+for observed failures and answer-quality limits. Source inspection now obtains
+explicitly requested read observations before inference; repository maps favor
+application code over reference trees. Bounded model-response correction and
+CPU queue deadlines improve headless research. The web scraper supports a literal
+excerpt query, such as JSON `content` `{"query":"json.loads"}`.
+Text inference also inspects local Qwen template metadata: prompt-only templates
+receive explicit role delimiters; native chat templates retain their chat API.
+This corrects guidance delivery without changing the installed model.
 
 The **Preview text command** box accepts a full “Jarvis …” sentence and displays planned actions without executing them. Automated tests cover streaming, duplicate prevention, wake gating, explicit deletion, cancellation, and filesystem restrictions. Live microphone accuracy and typing into your chosen apps need a spoken trial on your PC.
 
@@ -511,6 +558,35 @@ The **Preview text command** box accepts a full “Jarvis …” sentence and di
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
 
 ## Current validation and update history
+
+**2026-09-27 live task trials:** thirteen real scenarios used the installed local
+model, actual repository/Git, scoped disk writes and live Python documentation.
+The three-agent investigation completed after a CPU queue timeout fix. The
+three-file expense application initially passed **4/10 real CLI cases**; after
+explicit failure feedback and a Jarvis-generated repair in a fresh copy,
+**10/10 passed**, preserving every CSV input. Earlier source answers and builds
+failed; some audit prose remains inaccurate despite keyword checks. The
+[complete task/evidence report](docs/real-world-validation.md) preserves those
+failures and distinguishes repair success from an autonomous first attempt.
+All **376 regression tests passed**; launcher readiness reported `ready` with no
+missing requirements. Microphone, desktop and real account/MCP-provider actions
+were not live-tested. Both README files and the integration guides were updated.
+All **129 local documentation links and anchors** in the updated documentation resolved.
+
+**2026-09-27 agent runtime integration:** all **370 regression tests passed**,
+including 23 new runtime tests with real temporary Git/MCP fixtures, timeout,
+blocked stdin, oversized/invalid output, cancellation, approval/allowlist gates,
+instruction preflight, skills, policy hooks, batches, session resume/fork and
+isolated research-agent failures. Launcher readiness reported `ready` with no
+missing requirements. These are regression/readiness results, not validation of
+real third-party MCP providers or desktop/account actions. The attempted live
+headless model smoke check could not connect because Ollama was not running;
+live model behavior had not yet been verified at that stage. Subsequent live
+trials are recorded in the [live task report](docs/real-world-validation.md).
+The fixture-provider smoke check inspected source, preserved project files and
+resumed its saved session successfully.
+The headless stdio metadata/catalog check passed; all **108 local documentation
+links and anchors** across both README files and the new guide resolved.
 
 **2026-09-27 file-task and clarification fix:** all **347 regression tests passed**, including the reported spoken sentence, exact contents, folder questions and answers, option names/numbers/ordinals, expired/invalid choices, cancellation, and uncertain-action blocking. The live Qwen smoke check created and read back two temporary files, including a task continued by a Downloads answer; Explorer launch/observations were simulated, with no real desktop, microphone or account actions. Launcher readiness reported ready with no missing requirements. Both README files document the new behavior and `verify_clarification.py` reproduces the smoke check.
 

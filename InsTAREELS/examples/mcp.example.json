@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "example": {
+      "enabled": false,
+      "trusted": false,
+      "command": "C:/absolute/path/to/python.exe",
+      "args": ["C:/absolute/path/to/a/reviewed_mcp_server.py"],
+      "allow_tools": ["exact_tool_name"],
+      "env_names": [],
+      "timeout_seconds": 20
+    }
+  }
+}

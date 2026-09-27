@@ -387,6 +387,8 @@ class Brain:
                           "github_delete_file": r"\b(?:delete|remove)\b", "calendar_create": r"\b(?:create|add|schedule)\b",
                           "calendar_delete": r"\b(?:delete|remove|cancel)\b", "jira_create": r"\b(?:create|add)\b",
                           "jira_edit": r"\b(?:edit|update|modify)\b"}.get(pending["action"], r"\b(?:send|post|publish|tweet)\b")
+                if pending['action'] in {'mcp_list_tools', 'mcp_call'}:
+                    intent = r'\bmcp\b'
                 if not re.search(intent, low_goal):
                     raise ValueError("External toolkit write was not explicitly requested.")
             if pending["action"] == "append_file":
@@ -518,6 +520,8 @@ class Brain:
         from .commands import normalize_spoken_code_request
         spoken_goal = goal
         goal = normalize_spoken_code_request(goal)
+        if isinstance(getattr(self.actions, '_discovered_tools', None), set):
+            self.actions._discovered_tools.clear()
         state = getattr(self.actions, "task_state", None)
         resumed = getattr(self.actions, "resume_source", None)
         prior = resumed if isinstance(resumed, dict) else (state.previous(spoken_goal, "task") if isinstance(state, TaskState) else None)

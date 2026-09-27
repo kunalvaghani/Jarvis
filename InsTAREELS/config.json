@@ -1,4 +1,7 @@
 {
+  "agent_runtime": {
+    "deferred_tools": true
+  },
   "model_path": "models/faster-whisper-medium.en",
   "whisper": {
     "model": "medium.en",

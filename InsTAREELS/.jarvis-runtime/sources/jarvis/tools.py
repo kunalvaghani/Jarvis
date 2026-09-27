@@ -1,6 +1,7 @@
 """Shared capabilities and dispatch for the planner and desktop task runner."""
 from dataclasses import dataclass
 import json
+import re
 
 from .commands import Command
 from .desktop_actions import CONTROL_ACTIONS, validate_desktop_step
@@ -53,11 +54,59 @@ class ToolRegistry:
 
     def catalog(self, goal=None):
         from .toolkits import available
-        return [{"action": spec.name, "backend": spec.backend,
+        rows = [{"action": spec.name, "backend": spec.backend,
                  "description": spec.description, "approval": spec.approval}
                 for spec in self.specs.values() if goal is None or spec.name not in KIT_TOOLS or available(spec.name)]
+        config = getattr(self.actions, 'config', {})
+        options = config.get('agent_runtime', {}) if isinstance(config, dict) else {}
+        if goal is None or not options.get('deferred_tools', False):
+            return rows
+        loaded = getattr(self.actions, '_discovered_tools', set())
+        loaded = loaded if isinstance(loaded, set) else set()
+        selected = {row['action'] for row in self.search(goal)} | loaded | {'tool_search', 'toolkit_status'}
+        return [row for row in rows if row['action'] not in KIT_TOOLS or row['action'] in selected]
+
+    def search(self, query, limit=12):
+        """Rank configured deferred tools; never expose credentials or start providers."""
+        from .toolkits import available
+        words = set(re.findall(r'[a-z][a-z0-9_]+', query.casefold())) - {'the', 'and', 'with', 'for', 'this'}
+        scored = []
+        allowed = getattr(self.actions, 'allowed_tools', None)
+        for spec in self.specs.values():
+            if isinstance(allowed, (set, frozenset)) and spec.name not in allowed:
+                continue
+            if spec.name in KIT_TOOLS and not available(spec.name):
+                continue
+            corpus = set(re.findall(r'[a-z][a-z0-9_]+',
+                                   (spec.name.replace('_', ' ') + ' ' + spec.description).casefold()))
+            score = len(words & corpus) + (5 if spec.name in query.casefold() else 0)
+            if score:
+                scored.append((score, spec))
+        scored.sort(key=lambda item: (-item[0], item[1].name))
+        return [{'action': spec.name, 'backend': spec.backend, 'description': spec.description,
+                 'approval': spec.approval} for _, spec in scored[:limit]]
 
     def execute(self, step, cancelled, activate=None):
+        from .agent_events import check_policy, event
+        name = step.get('action')
+        check_policy(self.actions, name)
+        call_id = event(self.actions, 'tool.started', name)
+        try:
+            result = self._execute(step, cancelled, activate)
+        except Exception as exc:
+            # Audit failures cannot turn an uncertain write into a retriable action.
+            try:
+                event(self.actions, 'tool.failed', name, call_id, error_type=type(exc).__name__)
+            except (OSError, ValueError):
+                pass
+            raise
+        try:
+            event(self.actions, 'tool.completed', name, call_id, backend=result.backend)
+        except (OSError, ValueError):
+            pass
+        return result
+
+    def _execute(self, step, cancelled, activate=None):
         name = step.get("action")
         if name not in self.specs:
             raise ValueError("Unsupported tool: " + str(name))

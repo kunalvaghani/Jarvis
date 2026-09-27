@@ -10,6 +10,16 @@ from jarvis.task_state import TaskState
 
 
 class CodingWorkflowTests(unittest.TestCase):
+    def test_application_source_precedes_large_reference_trees(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'integrations').mkdir()
+            (root / 'jarvis').mkdir()
+            for index in range(200):
+                (root / 'integrations' / f'upstream{index}.py').write_text('x = 1')
+            (root / 'jarvis/runtime.py').write_text('def run(): pass')
+            self.assertIn('jarvis/runtime.py', project_files(root, limit=20))
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

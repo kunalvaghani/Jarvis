@@ -16,4 +16,10 @@ ui_memory.json
 ui_memory.tmp
 task_state.json
 .jarvis-task-*
+.firecrawl/
+.jarvis-runtime/agent-events.jsonl
+.jarvis-runtime/sessions/
+artifacts/real-world-*/ollama.log
+artifacts/real-world-*/.jarvis-runtime/
+artifacts/real-world-*/task_state.json
 ollama-server*.log

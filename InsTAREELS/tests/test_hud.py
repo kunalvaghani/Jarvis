@@ -1,4 +1,5 @@
 from pathlib import Path
+import gc
 import tempfile
 import unittest
 from unittest.mock import patch, Mock
@@ -35,13 +36,21 @@ class InterfaceTests(unittest.TestCase):
     def setUp(self):
         self.root = tk.Tk()
         self.root.withdraw()
-        self.addCleanup(self.root.destroy)
+        self.addCleanup(self.close_interface)
         self.app = Mock()
         self.app.root = self.root
         self.app.config = {"whisper": {"model": "test"}, "knowledge": {"answer_language": "en"}}
         self.app.speech.options = {"enabled": True}
         build_interface(self.app)
         self.root.update_idletasks()
+
+    def close_interface(self):
+        # Tk variables and callback cycles must be collected on the thread that
+        # owns Tcl, before later worker tests trigger garbage collection.
+        self.root.destroy()
+        self.app = None
+        self.root = None
+        gc.collect()
 
     def buttons(self, parent):
         for child in parent.winfo_children():

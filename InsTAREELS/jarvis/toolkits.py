@@ -19,6 +19,7 @@ import tempfile
 from urllib.parse import quote, urlsplit
 
 import requests
+from .agent_tools import TOOLS as AGENT_TOOLS
 
 # name: (toolkit, description, required environment variables, external write)
 TOOLS = {
@@ -35,7 +36,7 @@ TOOLS = {
     "search_files": ("files", "Search filenames and text in folder; value is literal query.", (), False),
     "query_resource": ("resource", "Find literal content matches in scoped text resources; value query, folder scope.", (), False),
     "web_search": ("duckduckgo", "Return public web search snippets for value query.", (), False),
-    "scrape_web": ("webscraper", "Extract text from a public HTTP(S) URL in value, without executing JavaScript.", (), False),
+    "scrape_web": ("webscraper", "Extract public page text without JavaScript or navigation clutter; value URL, optional content JSON {query} selects a literal excerpt.", (), False),
     "github_search": ("github", "Search public GitHub repositories with value query.", (), False),
     "github_read_file": ("github", "Read repository file and current SHA; value owner/repo, content JSON {path,ref}. Result includes text and metadata for later approved updates/deletion.", (), False),
     "github_pull_request": ("github", "Read PR details; value owner/repo, content JSON {number}.", (), False),
@@ -60,6 +61,7 @@ TOOLS = {
     "jira_edit": ("jira", "Edit Jira issue after approval; value issue key, content JSON {fields}.", ("JARVIS_JIRA_URL", "JARVIS_JIRA_USER", "JARVIS_JIRA_TOKEN"), True),
     "toolkit_status": ("toolkits", "List tools and missing configuration; never displays credentials.", (), False),
 }
+TOOLS.update(AGENT_TOOLS)
 
 
 def status():
@@ -93,6 +95,9 @@ def validate_step(step):
         raise ValueError("Tool value and content must be text; value cannot be empty.")
     if len(step.get("content", "")) > 10000:
         raise ValueError("Tool content exceeds 10,000 characters.")
+    if step['action'] in AGENT_TOOLS and step['action'] not in {'tool_search', 'mcp_status', 'mcp_list_tools', 'mcp_call'}:
+        if not isinstance(step.get('folder'), str) or not step['folder'].strip():
+            raise ValueError('Agent observations need an explicit project folder.')
     if step["action"] in {"list_files", "read_file", "append_file", "search_files", "query_resource", "knowledge_search"}:
         if not isinstance(step.get("folder"), str) or not step["folder"].strip():
             raise ValueError("Toolkit file operations need an explicit folder.")
@@ -198,19 +203,31 @@ def public_url(url):
 
 
 class PageText(HTMLParser):
+    BLOCKS = {'p', 'div', 'li', 'dt', 'dd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'tr', 'section', 'br'}
     def __init__(self):
         super().__init__()
-        self.hidden = 0
+        self.stack = []
         self.parts = []
     def handle_starttag(self, tag, attrs):
-        if tag in {"script", "style", "noscript"}:
-            self.hidden += 1
+        attrs = dict(attrs)
+        hidden = (bool(self.stack and self.stack[-1][1])
+                  or tag in {'script', 'style', 'noscript', 'nav', 'aside', 'footer', 'head'}
+                  or attrs.get('role') == 'navigation' or attrs.get('aria-hidden') == 'true'
+                  or 'hidden' in attrs)
+        if not hidden and tag in self.BLOCKS:
+            self.parts.append('\n')
+        if tag not in {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}:
+            self.stack.append((tag, hidden))
     def handle_endtag(self, tag):
-        if tag in {"script", "style", "noscript"}:
-            self.hidden = max(0, self.hidden-1)
+        if not (self.stack and self.stack[-1][1]) and tag in self.BLOCKS:
+            self.parts.append('\n')
+        for index in range(len(self.stack) - 1, -1, -1):
+            if self.stack[index][0] == tag:
+                del self.stack[index:]
+                break
     def handle_data(self, data):
-        if not self.hidden and data.strip():
-            self.parts.append(data.strip())
+        if not (self.stack and self.stack[-1][1]):
+            self.parts.append(data)
 
 
 def api(client, method, url, cancelled, **kwargs):
@@ -248,6 +265,9 @@ def execute(actions, step, cancelled):
         raise ValueError("Configure environment variables for " + name + ": " + ", ".join(missing))
     if cancelled():
         raise ValueError("Tool cancelled.")
+    if name in AGENT_TOOLS:
+        from .agent_tools import execute as agent_execute
+        return agent_execute(actions, step, cancelled)
     if name == "toolkit_status":
         return json.dumps(status(), indent=2)
     if data[0] in {"files", "resource", "knowledge"}:
@@ -294,7 +314,23 @@ def remote_tool(client, step, cancelled):
         text = call("GET", value)
         parser = PageText()
         parser.feed(text)
-        return "Untrusted page text from " + value + ":\n" + "\n".join(parser.parts)[:10000]
+        # Inline spans often split names such as json.loads across text nodes.
+        # Preserve their adjacency; only block elements introduce boundaries.
+        plain = re.sub(r'[ \t]+', ' ', ''.join(parser.parts)).strip()
+        plain = re.sub(r'\n\s*\n+', '\n', plain)
+        params = arguments(step)
+        query = params.get('query', urlsplit(value).fragment)
+        if not isinstance(query, str) or len(query) > 200:
+            raise ValueError('Scrape query must be literal text up to two hundred characters.')
+        start = 0
+        if query:
+            index = plain.casefold().find(query.casefold())
+            if index < 0:
+                return 'Untrusted page text from ' + value + ':\nNo literal match for ' + query
+            start = max(0, index - 800)
+        excerpt = plain[start:start + 10000]
+        return ('Untrusted page text from ' + value + ':\n' + ('[Earlier page text omitted]\n' if start else '')
+                + excerpt + ('\n[Page text truncated]' if start + len(excerpt) < len(plain) else ''))
     if name.startswith("github_"):
         headers = {"Accept": "application/vnd.github+json", "User-Agent": "Jarvis-toolkit"}
         if env.get("JARVIS_GITHUB_TOKEN"):

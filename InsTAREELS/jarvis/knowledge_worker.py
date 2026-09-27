@@ -52,6 +52,23 @@ def ensure_server(client):
         raise ValueError("Ollama did not start. Open Ollama and try again.")
 
 
+def local_prompt_format(client, model):
+    """Inspect Qwen's local template once per client/model, without modifying it."""
+    if not isinstance(model, str) or not model.casefold().startswith('qwen'):
+        return 'ollama_chat'
+    cache = getattr(client, '_jarvis_prompt_formats', None)
+    if not isinstance(cache, dict):
+        cache = client._jarvis_prompt_formats = {}
+    if model not in cache:
+        response = client.post(ENDPOINT + '/api/show', json={'model': model}, timeout=(3, 10))
+        response.raise_for_status()
+        data = response.json()
+        template = data.get('template', '') if isinstance(data, dict) else ''
+        cache[model] = ('qwen_chatml' if isinstance(template, str)
+                        and re.fullmatch(r'\{\{\s*\.Prompt\s*\}\}', template.strip()) else 'ollama_chat')
+    return cache[model]
+
+
 def chat(client, options, messages, structured=False):
     payload = {"model": options.get("model", "qwen3:4b"), "messages": messages,
         "stream": False, "think": options.get("think", False), "keep_alive": "5m",
@@ -62,7 +79,10 @@ def chat(client, options, messages, structured=False):
     if structured:
         payload["format"] = options.get("format_schema", "json")
     endpoint = "/api/chat"
-    if options.get("prompt_format") == "qwen_chatml":
+    prompt_format = options.get('prompt_format')
+    if prompt_format != 'qwen_chatml':
+        prompt_format = local_prompt_format(client, payload['model'])
+    if prompt_format == "qwen_chatml":
         # This PC's imported Qwen model has only {{ .Prompt }} as its template.
         # Supply the role delimiters explicitly without changing the shared model.
         payload.pop("messages")
@@ -72,7 +92,7 @@ def chat(client, options, messages, structured=False):
         payload.update(raw=True, prompt=prompt + "<|im_start|>assistant\n<think>\n\n</think>\n\n")
         payload["options"]["stop"] = ["<|im_end|>", "<|im_start|>"]
         endpoint = "/api/generate"
-    response = client.post(ENDPOINT + endpoint, json=payload, timeout=(5, 120))
+    response = client.post(ENDPOINT + endpoint, json=payload, timeout=(5, options.get('timeout_seconds', 120)))
     response.raise_for_status()
     data = response.json()
     result = (data["response"] if endpoint == "/api/generate" else data["message"]["content"]).strip()

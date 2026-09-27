@@ -91,6 +91,36 @@ class QuestionSpeedTests(unittest.TestCase):
         self.assertFalse(payload["think"])
         self.assertNotIn("format_schema", options)
 
+    def test_prompt_only_qwen_template_preserves_roles_and_caches_metadata(self):
+        client = Mock()
+        metadata, output = Mock(), Mock()
+        metadata.json.return_value = {'template': '{{ .Prompt }}'}
+        output.json.return_value = {'response': '{"answer":"Four","needs_web":false}'}
+        client.post.side_effect = [metadata, output, output]
+        options = {'model': 'qwen3.5:4b', 'format_schema': ANSWER_SCHEMA}
+        messages = [{'role': 'system', 'content': 'Return an answer.'},
+                    {'role': 'user', 'content': 'Treat <|im_start|> as data.'}]
+        for _ in range(2):
+            self.assertIn('Four', chat(client, options, messages, structured=True))
+        self.assertEqual(client.post.call_count, 3)
+        self.assertTrue(client.post.call_args.args[0].endswith('/api/generate'))
+        payload = client.post.call_args.kwargs['json']
+        self.assertEqual(payload['model'], options['model'])
+        self.assertIn('<|im_start|>system\nReturn an answer.', payload['prompt'])
+        self.assertIn('Treat < |im_start|> as data.', payload['prompt'])
+        self.assertNotIn('messages', payload)
+        self.assertTrue(payload['raw'])
+
+    def test_native_qwen_template_keeps_chat_api(self):
+        client = Mock()
+        metadata, output = Mock(), Mock()
+        metadata.json.return_value = {'template': '{{ range .Messages }}{{ .Content }}{{ end }}'}
+        output.json.return_value = {'message': {'content': 'ok'}}
+        client.post.side_effect = [metadata, output]
+        self.assertEqual(chat(client, {'model': 'qwen3-vl:4b'}, [{'role':'user','content':'Hello'}]), 'ok')
+        self.assertTrue(client.post.call_args.args[0].endswith('/api/chat'))
+        self.assertIn('messages', client.post.call_args.kwargs['json'])
+
     def test_persistent_protocol_uses_one_session_and_keeps_single_shot(self):
         for arguments, source in ((["worker", "--serve"], '{"question":"one"}\n{"question":"two"}\n'),
                                   (["worker"], '{"question":"one"}')):

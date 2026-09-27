@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-27T09:08:50.714952+00:00",
+  "model": "qwen3.5:4b",
+  "scope": "Live component/agent acceptance; no microphone or desktop interaction",
+  "runner_pid": 18036,
+  "tasks": [
+    {
+      "number": 12,
+      "name": "Research official Python JSON documentation",
+      "goal": "Retrieve the live official page using Jarvis scrape_web and compare load/loads with the local model.",
+      "status": "passed",
+      "evidence": {
+        "url": "https://docs.python.org/3/library/json.html",
+        "fetched_chars": 10120,
+        "answer": "json.loads() deserializes a JSON string directly into a Python object, whereas json.load() performs the same operation but reads from a file-like object.\n"
+      },
+      "seconds": 72.17
+    }
+  ],
+  "owned_ollama_pid": 13816,
+  "ollama": "temporary owned server started for authorized live tests",
+  "available_models": [
+    "qwen3.5:4b",
+    "qwen3-vl:4b",
+    "qwen3:4b",
+    "qwen2.5:3b",
+    "qwen3-vl:2b"
+  ],
+  "web_fetch": {
+    "url": "https://docs.python.org/3/library/json.html",
+    "fetched_chars": 10120,
+    "found_json_loads": true
+  },
+  "summary": {
+    "passed": 1,
+    "failed": 0,
+    "total": 1
+  },
+  "owned_ollama_stopped": true
+}

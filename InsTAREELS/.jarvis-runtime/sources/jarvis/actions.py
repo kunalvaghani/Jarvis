@@ -85,6 +85,9 @@ class Desktop:
 
 class Actions:
     def __init__(self, config, base, report, desktop=None, recycler=None):
+        self.base = Path(base).resolve()
+        self.config = config
+        self._discovered_tools = set()
         self.root = (Path(base) / config["files_root"]).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.apps = config["apps"]
