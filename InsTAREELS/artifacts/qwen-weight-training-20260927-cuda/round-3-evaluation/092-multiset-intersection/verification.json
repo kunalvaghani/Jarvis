@@ -1,0 +1,36 @@
+{
+  "id": "092-multiset-intersection",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": "[]\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        1,
+        2
+      ],
+      "stdout": "[1, 1, 2]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    }
+  ]
+}

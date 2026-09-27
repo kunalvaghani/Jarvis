@@ -1,0 +1,40 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [\"a\", \"b\", \"c\"], \"stdout\": \"[\\\"c\\\", \\\"a\\\", \\\"b\\\"]\\r\\n\", \"stderr\": \"\", \"input\": {\"a\": [\"c\"], \"b\": [\"c\"]}}, {\"case\": 2, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [], \"stdout\": \"[\\\"b\\\", \\\"a\\\"]\\r\\n\", \"stderr\": \"\", \"input\": {\"a\": [\"b\"], \"b\": [\"a\"]}}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ],
+      "stdout": "[\"c\", \"a\", \"b\"]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[\"b\", \"a\"]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "076-topological-sort\\attempt-1"
+}

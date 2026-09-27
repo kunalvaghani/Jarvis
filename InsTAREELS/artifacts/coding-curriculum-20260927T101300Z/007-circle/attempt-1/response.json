@@ -1,0 +1,5 @@
+{
+  "content": "import sys\nimport math\nimport json\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps(0.0))\n            return\n        \n        radius = float(input_data)\n        area = math.pi * (radius ** 2)\n        print(json.dumps(area))\n    except ValueError:\n        print(json.dumps(0.0))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin, calculate the area using math.pi * r^2, and output exactly one JSON value.",
+  "model_used": "qwen3.5:4b"
+}

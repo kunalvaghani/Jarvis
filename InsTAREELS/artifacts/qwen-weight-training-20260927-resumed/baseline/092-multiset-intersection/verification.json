@@ -1,0 +1,36 @@
+{
+  "id": "092-multiset-intersection",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 23, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        1,
+        2
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 23, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 23, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\092-multiset-intersection\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    }
+  ]
+}

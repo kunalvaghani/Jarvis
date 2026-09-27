@@ -1,0 +1,62 @@
+{
+  "model": "qwen3.5:4b",
+  "inference": {
+    "num_gpu": 0,
+    "num_ctx": 16384,
+    "num_predict": 5000,
+    "temperature": 0.1,
+    "think": false
+  },
+  "reference_cases_sha256": "08f51697bfa599ab5d07e74b6cea932c23e824dae71c31eb683a232fe4ead06e",
+  "phase_ranges": {
+    "1": "completed projects 1..11",
+    "2": "completed projects 12..21",
+    "3": "completed projects 22..100"
+  },
+  "canonical_lessons": {
+    "1": {
+      "syntax": "Return literal Python source, without Markdown fences. Preserve escaped newlines in JSON encoding.",
+      "json": "Serialize stdout with json.dumps/json.dump; Python dictionary repr is not JSON. Print no commentary to stdout.",
+      "runtime": "Check imports, empty inputs and input types; do not invent library interfaces.",
+      "timeout": "Use bounded algorithms appropriate for input sizes; avoid infinite loops and blocking input beyond one JSON value.",
+      "logic": "Validate edge cases, ordering, duplicates and boundary conditions against the specified contract.",
+      "policy": "Use only the permitted standard library; avoid dynamic execution, network, process and filesystem access."
+    },
+    "2": {
+      "syntax": "Return literal Python source, without Markdown fences. Preserve escaped newlines in JSON encoding.",
+      "json": "Parse JSON input with json.load/json.loads, not whitespace splitting. Serialize stdout with json.dumps/json.dump; Python repr is not JSON. Do not silently swallow valid-input errors or print commentary.",
+      "runtime": "Import json before json.load/json.loads/json.dumps and sys before reading sys.stdin. Check empty inputs and input types; do not invent library interfaces.",
+      "timeout": "Use bounded algorithms appropriate for input sizes; avoid infinite loops and blocking input beyond one JSON value.",
+      "logic": "Validate edge cases, ordering, duplicates and boundary conditions against the specified contract.",
+      "policy": "Use only the permitted standard library; avoid dynamic execution, network, process and filesystem access."
+    },
+    "3": {
+      "syntax": "Return literal Python source, without Markdown fences. Preserve escaped newlines in JSON encoding.",
+      "json": "Parse JSON input with json.load/json.loads, not whitespace splitting. Serialize stdout with json.dumps/json.dump; Python repr is not JSON. Do not silently swallow valid-input errors or print commentary.",
+      "runtime": "Import json before json.load/json.loads/json.dumps and sys before reading sys.stdin. Check empty inputs and input types; do not invent library interfaces.",
+      "timeout": "Use bounded algorithms appropriate for input sizes; avoid infinite loops and blocking input beyond one JSON value.",
+      "logic": "Validate edge cases, ordering, duplicates and boundary conditions against the specified contract.",
+      "policy": "Use only the permitted standard library; avoid dynamic execution, dunder introspection, network, process and filesystem access.",
+      "missing_import": "Explicitly import every module used: json for JSON parsing/serialization and sys for stdin/stdout/stderr.",
+      "input_shape": "Follow the input type in the examples. A JSON pair/triple is a list, not an object with invented keys. Do not call .get on lists.",
+      "output_shape": "Match the exact expected JSON output type. Return a scalar or list directly when required; do not wrap it in a named object.",
+      "silent_output": "For every valid input, print its computed JSON value. Do not silently return or swallow errors caused by parsing JSON as whitespace."
+    }
+  },
+  "repair_feedback_inputs": {
+    "1": false,
+    "2": true,
+    "3": true
+  },
+  "stronger_alias_guard": {
+    "1": false,
+    "2": false,
+    "3": true
+  },
+  "related_reference_recall": false,
+  "ordinary_coder_import_guard_in_training": false,
+  "stdout_reader": "legacy full-file read before 8000-byte size check",
+  "case_deadline_seconds": 5,
+  "max_completed_attempts_per_project": 2,
+  "note": "Protocol changes and interrupted attempt directories are preserved; results are not a controlled learning experiment."
+}

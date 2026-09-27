@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "json",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 20.0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON object\\\"}\\r\\n\"}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 22.22222222222222, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON object\\\"}\\r\\n\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 20.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 22.22222222222222,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 18.51851851851852,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    }
+  ],
+  "path": "010-bmi\\attempt-1"
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\006-triangle\main.py", line 13, in <module>
+    data = json.loads(input_data)
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\006-triangle\main.py", line 24, in <module>
+    print(json.dumps(None), file=sys.stderr)
+NameError: name 'json' is not defined

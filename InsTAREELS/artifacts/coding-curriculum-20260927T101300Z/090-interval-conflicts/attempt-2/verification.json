@@ -1,0 +1,50 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [[0, 1]], \"stdout\": \"[[0, 1], [0, 2], [1, 2]]\\r\\n\", \"stderr\": \"\", \"input\": [[1, 3], [3, 5], [7, 8]]}, {\"case\": 2, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [[0, 1], [0, 2]], \"stdout\": \"[[0, 1], [0, 2], [1, 2]]\\r\\n\", \"stderr\": \"\", \"input\": [[0, 10], [2, 3], [4, 5]]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          0,
+          1
+        ]
+      ],
+      "stdout": "[[0, 1], [0, 2], [1, 2]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "stdout": "[[0, 1], [0, 2], [1, 2]]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "090-interval-conflicts\\attempt-2"
+}

@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "output_shape",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 5, \"stdout\": \"{\\\"weekdays\\\": [\\\"Monday\\\", \\\"Tuesday\\\", \\\"Wednesday\\\", \\\"Thursday\\\", \\\"Friday\\\"]}\\r\\n\", \"stderr\": \"\", \"input\": [\"2026-09-21\", \"2026-09-28\"]}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 0, \"stdout\": \"{\\\"weekdays\\\": []}\\r\\n\", \"stderr\": \"\", \"input\": [\"2026-09-26\", \"2026-09-28\"]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 5,
+      "stdout": "{\"weekdays\": [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\"]}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "{\"weekdays\": []}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "{\"weekdays\": []}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "083-business-days\\attempt-2"
+}

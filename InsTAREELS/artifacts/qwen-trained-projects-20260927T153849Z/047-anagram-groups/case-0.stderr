@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\047-anagram-groups\main.py", line 10, in <module>
+    result = (json.dumps(group_anagrams(x)))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\047-anagram-groups\main.py", line 6, in group_anagrams
+    return [sorted(x) for x in (sorted(set(s)) for s in s.split())]
+AttributeError: 'list' object has no attribute 'split'

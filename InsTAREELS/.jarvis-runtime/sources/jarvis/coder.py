@@ -234,7 +234,7 @@ def check_content(path, content):
             ast.parse(content, filename=str(path))
         elif path.suffix.lower() == ".json":
             json.loads(content)
-    except (SyntaxError, ValueError) as exc:
+    except (SyntaxError, ValueError, MemoryError, RecursionError) as exc:
         raise ValueError(f"Generated {path.name} failed syntax validation: {exc}") from exc
 
 
@@ -253,6 +253,15 @@ def comment_markdown_preamble(content):
 
 
 def generate_checked(client, cancelled, file_path, **request):
+    from .coding_lessons import recall, LESSONS, check_learned_imports
+    learned_lessons = []
+    options = getattr(client, 'options', getattr(getattr(client, 'brain', None), 'options', {}))
+    trained = (isinstance(options, dict) and options.get('trained_coder_checkpoint') and file_path.suffix.lower() == '.py')
+    if trained:
+        request.pop('coding_lessons', None)
+    elif isinstance(getattr(client, 'base', None), Path):
+        learned_lessons = recall(client.base, request.get('goal', ''), limit=len(LESSONS))
+        request.setdefault('coding_lessons', learned_lessons[:5])
     previous, validation_error = "", ""
     for attempt in range(3):
         if cancelled():
@@ -266,6 +275,8 @@ def generate_checked(client, cancelled, file_path, **request):
                     raise ValueError("Return targeted replacements or full content, not both.")
                 content = apply_replacements(request.get("current", ""), result["replacements"])
             check_content(file_path, content)
+            if file_path.suffix.lower() == '.py':
+                check_learned_imports(content, learned_lessons)
             if file_path.suffix.lower() == ".py" and request.get("current"):
                 check_python_interfaces(request["current"], content, request.get("goal", ""))
             return content
@@ -275,6 +286,7 @@ def generate_checked(client, cancelled, file_path, **request):
                 if commented != content:
                     try:
                         check_content(file_path, commented)
+                        check_learned_imports(commented, learned_lessons)
                         if request.get("current"):
                             check_python_interfaces(request["current"], commented, request.get("goal", ""))
                         return commented

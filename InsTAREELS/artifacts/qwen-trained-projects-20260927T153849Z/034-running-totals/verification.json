@@ -1,0 +1,74 @@
+{
+  "id": "034-running-totals",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        1,
+        3,
+        6
+      ],
+      "stdout": "6\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        -2,
+        0,
+        5
+      ],
+      "stdout": "5\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": []
+    },
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": [
+        1,
+        3,
+        6
+      ]
+    },
+    {
+      "input": [
+        -2,
+        2,
+        5
+      ],
+      "expected": [
+        -2,
+        0,
+        5
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef longest_common_prefix(strings):\n    if not strings:\n        return \"\"\n    \n    prefix = strings[0]\n    for s in strings[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix:\n                return \"\"\n    return prefix\n\nif __name__ == \"__main__\":\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps([]))\n            sys.exit(0)\n        \n        data = json.loads(input_data)\n        result = longest_common_prefix(data)\n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps({\"error\": str(e)}), file=sys.stderr)\n",
+  "explanation": "Created main.py to read a JSON list of strings from stdin, compute the longest common prefix, and output the result as JSON. Handles empty input by returning an empty string (as per contract: empty list returns empty string). Uses only standard library modules (json, sys) with proper imports and error handling.",
+  "model_used": "qwen3.5:4b"
+}

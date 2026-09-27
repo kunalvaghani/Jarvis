@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\098-longest-palindrome\main.py", line 43, in main
+    print(json.dumps(result))
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\098-longest-palindrome\main.py", line 48, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\098-longest-palindrome\main.py", line 45, in main
+    print(json.dumps({"error": str(e)}), file=sys.stderr)
+NameError: name 'json' is not defined

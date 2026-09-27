@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-corrective\round-2-evaluation\089-word-ranking\main.py", line 6, in <module>
+    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-corrective\round-2-evaluation\089-word-ranking\main.py", line 6, in <genexpr>
+    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))
+TypeError: unhashable type: 'list'

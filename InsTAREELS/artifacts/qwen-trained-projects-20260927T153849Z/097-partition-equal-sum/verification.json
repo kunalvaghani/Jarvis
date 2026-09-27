@@ -1,0 +1,60 @@
+{
+  "id": "097-partition-equal-sum",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": true,
+      "stdout": "true\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": true,
+      "stdout": "false\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": false,
+      "stdout": "false\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": true
+    },
+    {
+      "input": [
+        1,
+        5,
+        11,
+        5
+      ],
+      "expected": true
+    },
+    {
+      "input": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "expected": false
+    }
+  ],
+  "trained_on_project": true
+}

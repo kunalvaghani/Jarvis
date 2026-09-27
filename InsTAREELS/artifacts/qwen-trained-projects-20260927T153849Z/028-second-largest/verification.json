@@ -1,0 +1,60 @@
+{
+  "id": "028-second-largest",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": null,
+      "stdout": "null\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 2,
+      "stdout": "2\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": -5,
+      "stdout": "-5\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        1
+      ],
+      "expected": null
+    },
+    {
+      "input": [
+        3,
+        2,
+        3,
+        1
+      ],
+      "expected": 2
+    },
+    {
+      "input": [
+        -2,
+        -5
+      ],
+      "expected": -5
+    }
+  ],
+  "trained_on_project": false
+}

@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 121.00000000000001,
+      "stdout": "121.00000000000001\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 20.0,
+      "stdout": "20.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 100.0,
+      "stdout": "100.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "012-compound-interest\\attempt-1-102649478648"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "037-missing-integers",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\037-missing-integers\\main.py\", line 6, in <module>\r\n    result = (list(range(1,x[0]+1)) - set(x[0]))\r\nTypeError: can only concatenate list (not \"int\") to list\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        2,
+        4
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\037-missing-integers\\main.py\", line 6, in <module>\r\n    result = (list(range(1,x[0]+1)) - set(x[0]))\r\nTypeError: can only concatenate list (not \"int\") to list\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\037-missing-integers\\main.py\", line 6, in <module>\r\n    result = (list(range(1,x[0]+1)) - set(x[0]))\r\nTypeError: can only concatenate list (not \"int\") to list\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        [],
+        3
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": [
+        [
+          1,
+          3
+        ],
+        4
+      ],
+      "expected": [
+        2,
+        4
+      ]
+    },
+    {
+      "input": [
+        [
+          1,
+          2
+        ],
+        2
+      ],
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

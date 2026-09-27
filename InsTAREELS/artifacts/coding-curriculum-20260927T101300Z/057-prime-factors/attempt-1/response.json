@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef prime_factors(n):\n    factors = []\n    d = 2\n    while d * d <= n:\n        while n % d == 0:\n            factors.append(d)\n            n //= d\n        d += 1\n    if n > 1:\n        factors.append(n)\n    return factors\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps([]))\n            return\n        value = json.loads(input_data)\n        if not isinstance(value, int) or value < 1:\n            print(json.dumps([]))\n            return\n        result = prime_factors(value)\n        print(json.dumps(result))\n    except Exception:\n        print(json.dumps([]), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read an integer from stdin, compute its ascending prime factors with multiplicity, and output the result as a JSON array. Handles edge cases like non-integer input or values less than 1 by printing an empty list.",
+  "model_used": "qwen3.5:4b"
+}

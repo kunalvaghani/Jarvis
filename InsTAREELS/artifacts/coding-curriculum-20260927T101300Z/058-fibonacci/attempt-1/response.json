@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef fibonacci(n):\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps(None))\n            return\n        value = json.loads(input_data)\n        result = fibonacci(value)\n        print(json.dumps(result))\n    except (json.JSONDecodeError, ValueError):\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON integer from stdin, compute the Nth Fibonacci number (F0=0, F1=1), and output the result as JSON. Handles empty input and invalid JSON gracefully.",
+  "model_used": "qwen3.5:4b"
+}

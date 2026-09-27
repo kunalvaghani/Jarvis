@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"\", \"stdout\": \"\\r\\n\", \"stderr\": \"\", \"input\": []}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"aaabb\", \"stdout\": \"aaabb\\r\\n\", \"stderr\": \"\", \"input\": [[\"a\", 3], [\"b\", 2]]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "aaabb",
+      "stdout": "aaabb\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "045-run-length-decode\\attempt-2"
+}

@@ -1,0 +1,71 @@
+{
+  "id": "014-evens",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 7, in <module>\r\n    result = (json.dumps(process(json.load(sys.stdin))))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 5, in process\r\n    return x if (x % 2 == 0) else None\r\nTypeError: unsupported operand type(s) for %: 'list' and 'int'\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        2,
+        4
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 7, in <module>\r\n    result = (json.dumps(process(json.load(sys.stdin))))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 5, in process\r\n    return x if (x % 2 == 0) else None\r\nTypeError: unsupported operand type(s) for %: 'list' and 'int'\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        -2,
+        0
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 7, in <module>\r\n    result = (json.dumps(process(json.load(sys.stdin))))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\014-evens\\main.py\", line 5, in process\r\n    return x if (x % 2 == 0) else None\r\nTypeError: unsupported operand type(s) for %: 'list' and 'int'\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": []
+    },
+    {
+      "input": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "expected": [
+        2,
+        4
+      ]
+    },
+    {
+      "input": [
+        -2,
+        -1,
+        0
+      ],
+      "expected": [
+        -2,
+        0
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

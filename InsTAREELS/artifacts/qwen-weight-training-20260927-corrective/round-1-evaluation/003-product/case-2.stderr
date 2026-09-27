@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-corrective\round-1-evaluation\003-product\main.py", line 5, in <module>
+    result = (x[0] if x else 1) * (x[1] if x else 1) * (x[2] if x else 1)
+IndexError: list index out of range

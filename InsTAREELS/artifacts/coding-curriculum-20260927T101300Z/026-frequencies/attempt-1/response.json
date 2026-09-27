@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps({}), file=sys.stderr)\n            return\n        frequency_map = {}\n        for item in input_data:\n            if isinstance(item, str):\n                frequency_map[item] = frequency_map.get(item, 0) + 1\n        print(json.dumps(frequency_map))\n    except json.JSONDecodeError as e:\n        print(json.dumps({}), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, count string items into a frequency map, and print the result as JSON. Handles invalid input by printing an empty object to stderr.",
+  "model_used": "qwen3.5:4b"
+}

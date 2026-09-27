@@ -1,0 +1,62 @@
+{
+  "id": "053-polynomial-derivative",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": "[]\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [
+        2,
+        6
+      ],
+      "stdout": "",
+      "stderr": "[]\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": "[]\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        5
+      ],
+      "expected": []
+    },
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": [
+        2,
+        6
+      ]
+    },
+    {
+      "input": [],
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

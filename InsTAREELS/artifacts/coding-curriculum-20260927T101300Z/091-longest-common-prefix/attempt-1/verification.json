@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "fl",
+      "stdout": "\"fl\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "091-longest-common-prefix\\attempt-1"
+}

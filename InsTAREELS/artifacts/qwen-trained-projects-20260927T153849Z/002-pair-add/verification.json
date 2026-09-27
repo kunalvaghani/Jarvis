@@ -1,0 +1,59 @@
+{
+  "id": "002-pair-add",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 12,
+      "stdout": "12\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": -3,
+      "stdout": "-3\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        0,
+        0
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        4,
+        8
+      ],
+      "expected": 12
+    },
+    {
+      "input": [
+        -5,
+        2
+      ],
+      "expected": -3
+    }
+  ],
+  "trained_on_project": true
+}

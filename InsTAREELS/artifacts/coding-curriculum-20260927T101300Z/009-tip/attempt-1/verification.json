@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "runtime",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": 120.0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON object\\\"}\\r\\n\"}, {\"case\": 1, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": 50.0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON object\\\"}\\r\\n\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 120.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 50.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON object\"}\r\n"
+    }
+  ],
+  "path": "009-tip\\attempt-1"
+}

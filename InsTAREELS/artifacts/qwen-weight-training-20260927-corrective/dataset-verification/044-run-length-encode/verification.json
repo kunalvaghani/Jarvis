@@ -1,0 +1,63 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [],
+    "stdout": "[]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      [
+        "a",
+        3
+      ],
+      [
+        "b",
+        2
+      ],
+      [
+        "c",
+        1
+      ]
+    ],
+    "stdout": "[[\"a\", 3], [\"b\", 2], [\"c\", 1]]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      [
+        "a",
+        1
+      ],
+      [
+        "b",
+        1
+      ],
+      [
+        "a",
+        1
+      ],
+      [
+        "b",
+        1
+      ],
+      [
+        "a",
+        1
+      ]
+    ],
+    "stdout": "[[\"a\", 1], [\"b\", 1], [\"a\", 1], [\"b\", 1], [\"a\", 1]]\r\n",
+    "stderr": ""
+  }
+]

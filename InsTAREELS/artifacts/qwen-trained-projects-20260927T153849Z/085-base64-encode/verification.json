@@ -1,0 +1,50 @@
+{
+  "id": "085-base64-encode",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "aGVsbG8=",
+      "stdout": "\"aGVsbG8=\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "Y2Fmw6k=",
+      "stdout": "\"Y2Fmw6k=\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "",
+      "expected": ""
+    },
+    {
+      "input": "hello",
+      "expected": "aGVsbG8="
+    },
+    {
+      "input": "caf\u00e9",
+      "expected": "Y2Fmw6k="
+    }
+  ],
+  "trained_on_project": true
+}

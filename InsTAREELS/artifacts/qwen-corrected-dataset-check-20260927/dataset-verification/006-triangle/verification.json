@@ -1,0 +1,29 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": 6.0,
+    "stdout": "6.0\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": 0.0,
+    "stdout": "0.0\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": 12.5,
+    "stdout": "12.5\r\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,26 @@
+```python
+import json
+
+def merge_jsons(input_data):
+    # Base case: if the input is empty, return an empty dictionary
+    if not input_data:
+        return {}
+    
+    # Recursive case: merge the first element with the result of the recursive call on the rest of the input
+    merged = input_data[0]
+    for item in input_data[1:]:
+        merged.update(item)
+    
+    return merged
+
+# Read input from stdin
+input_value = sys.stdin.read()
+
+# Merge the JSON values
+merged_output = merge_jsons(json.loads(input_value))
+
+# Write the merged JSON output to stdout
+print(merged_output)
+```
+
+This Python script defines a function `merge_jsons` that takes a JSON string as input, merges it into a single JSON object, and then writes the merged JSON object to the standard output. The script reads input from the standard input, processes it using the `merge_jsons` function, and then prints the result.

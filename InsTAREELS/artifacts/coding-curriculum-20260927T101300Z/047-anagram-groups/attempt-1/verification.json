@@ -1,0 +1,54 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        [
+          "ate",
+          "eat",
+          "tea"
+        ],
+        [
+          "nat",
+          "tan"
+        ]
+      ],
+      "stdout": "[[\"ate\", \"eat\", \"tea\"], [\"nat\", \"tan\"]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "b"
+        ]
+      ],
+      "stdout": "[[\"a\", \"a\"], [\"b\"]]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "047-anagram-groups\\attempt-1"
+}

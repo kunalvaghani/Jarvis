@@ -1,0 +1,39 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      {
+        "a": "1",
+        "b": "2"
+      }
+    ],
+    "stdout": "[{\"a\": \"1\", \"b\": \"2\"}]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      {
+        "a": "x,y",
+        "b": "z"
+      }
+    ],
+    "stdout": "[{\"a\": \"x,y\", \"b\": \"z\"}]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [],
+    "stdout": "[]\r\n",
+    "stderr": ""
+  }
+]

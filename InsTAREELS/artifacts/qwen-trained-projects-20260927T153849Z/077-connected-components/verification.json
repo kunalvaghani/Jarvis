@@ -1,0 +1,84 @@
+{
+  "id": "077-connected-components",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c"
+        ]
+      ],
+      "stdout": "[\"[\\\"b\\\", \\\"a\\\"]\", \"[\\\"b\\\", \\\"a\\\"]\"]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a"
+        ]
+      ],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": {},
+      "expected": []
+    },
+    {
+      "input": {
+        "a": [
+          "b"
+        ],
+        "b": [
+          "a"
+        ],
+        "c": []
+      },
+      "expected": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": []
+      },
+      "expected": [
+        [
+          "a"
+        ]
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

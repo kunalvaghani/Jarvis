@@ -1,0 +1,5 @@
+{
+  "content": "import sys\nimport json\n\ndef main():\n    try:\n        input_data = sys.stdin.read()\n        if not input_data.strip():\n            print(json.dumps(0))\n            return\n        \n        data = json.loads(input_data)\n        \n        if isinstance(data, list):\n            total = sum(data)\n            print(json.dumps(total))\n        else:\n            print(json.dumps(0))\n    except Exception as e:\n        print(json.dumps(0), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin. If it is a list of numbers, it calculates the sum and prints it as JSON. For an empty list or non-list input, it prints 0.",
+  "model_used": "qwen3.5:4b"
+}

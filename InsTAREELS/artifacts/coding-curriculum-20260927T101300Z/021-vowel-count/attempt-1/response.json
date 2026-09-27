@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = sys.stdin.read()\n        if not input_data.strip():\n            print(json.dumps(0))\n            return\n        \n        parsed = json.loads(input_data)\n        if not isinstance(parsed, (str, int, float, list, dict)):\n            print(json.dumps(0))\n            return\n        \n        text = str(parsed)\n        vowels = set('aeiouAEIOU')\n        count = sum(1 for char in text if char in vowels)\n        \n        print(json.dumps(count))\n    except Exception:\n        print(json.dumps(0))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read JSON from stdin, convert input to string, count ASCII vowels case-insensitively, and output the result as JSON.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef merge_sorted_lists(lists):\n    result = []\n    i, j = 0, 0\n    while i < len(lists[0]) and j < len(lists[1]):\n        if lists[i] <= lists[j]:\n            result.append(lists[i])\n            i += 1\n        else:\n            result.append(lists[j])\n            j += 1\n    result.extend(lists[i:])\n    return result\n\nif __name__ == \"__main__\":\n    input_data = sys.stdin.read()\n    try:\n        parsed = json.loads(input_data)\n        if not isinstance(parsed, list) or len(parsed) != 2:\n            print(json.dumps({\"error\": \"Input must be a list of exactly two lists\"}), file=sys.stderr)\n            sys.exit(1)\n        merged = merge_sorted_lists(parsed)\n        print(json.dumps(merged))\n    except json.JSONDecodeError as e:\n        print(json.dumps({\"error\": f\"Invalid JSON: {e}\"}), file=sys.stderr)\n        sys.exit(1)",
+  "explanation": "Created main.py to read a JSON array of two sorted integer lists from stdin, merge them into a single sorted list, and output the result as JSON. Implemented edge case handling for empty lists and invalid input shapes.",
+  "model_used": "qwen3.5:4b"
+}

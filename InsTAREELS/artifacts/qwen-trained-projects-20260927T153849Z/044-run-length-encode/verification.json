@@ -1,0 +1,118 @@
+{
+  "id": "044-run-length-encode",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          3
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "[[\"a\", 3], [\"a\", 3], [\"a\", 3], [\"b\", 2], [\"b\", 2], [\"c\", 1]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ]
+      ],
+      "stdout": "[[\"a\", 3], [\"b\", 2], [\"a\", 3], [\"b\", 2], [\"a\", 3]]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "",
+      "expected": []
+    },
+    {
+      "input": "aaabbc",
+      "expected": [
+        [
+          "a",
+          3
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ]
+    },
+    {
+      "input": "ababa",
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ]
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

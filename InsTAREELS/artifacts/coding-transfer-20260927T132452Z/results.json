@@ -1,0 +1,180 @@
+{
+  "at": "2026-09-27T13:24:52.136822+00:00",
+  "task": "invoice calculator",
+  "visible_examples": 2,
+  "withheld_cases": 8,
+  "learning": "ordinary generator with experience recall; no execution-feedback repair",
+  "status": "executed",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 0.0,
+        "discount": 0.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "{\"subtotal\": 0.0, \"discount\": 0.0, \"net\": 0.0, \"tax\": 0.0, \"total\": 0.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 20.0,
+        "discount": 0.0,
+        "net": 20.0,
+        "tax": 1.0,
+        "total": 21.0
+      },
+      "stdout": "{\"subtotal\": 20.0, \"discount\": 0.0, \"net\": 20.0, \"tax\": 1.0, \"total\": 21.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 37.0,
+        "discount": 3.7,
+        "net": 33.3,
+        "tax": 1.67,
+        "total": 34.97
+      },
+      "stdout": "{\"subtotal\": 37.0, \"discount\": 3.7, \"net\": 33.3, \"tax\": 1.67, \"total\": 34.97}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 3,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 0.5,
+        "discount": 0.0,
+        "net": 0.5,
+        "tax": 0.05,
+        "total": 0.55
+      },
+      "stdout": "{\"subtotal\": 0.5, \"discount\": 0.0, \"net\": 0.5, \"tax\": 0.05, \"total\": 0.55}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 4,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 80.0,
+        "discount": 80.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "{\"subtotal\": 80.0, \"discount\": 80.0, \"net\": 0.0, \"tax\": 0.0, \"total\": 0.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 5,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 100.0,
+        "discount": 20.0,
+        "net": 80.0,
+        "tax": 0.0,
+        "total": 80.0
+      },
+      "stdout": "{\"subtotal\": 100.0, \"discount\": 20.0, \"net\": 80.0, \"tax\": 0.0, \"total\": 80.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 6,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 0.0,
+        "discount": 0.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "{\"subtotal\": 0.0, \"discount\": 0.0, \"net\": 0.0, \"tax\": 0.0, \"total\": 0.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 7,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 29.0,
+        "discount": 0.0,
+        "net": 29.0,
+        "tax": 2.18,
+        "total": 31.18
+      },
+      "stdout": "{\"subtotal\": 29.0, \"discount\": 0.0, \"net\": 29.0, \"tax\": 2.18, \"total\": 31.18}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 8,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 0.05,
+        "discount": 0.01,
+        "net": 0.04,
+        "tax": 0.0,
+        "total": 0.04
+      },
+      "stdout": "{\"subtotal\": 0.05, \"discount\": 0.01, \"net\": 0.04, \"tax\": 0.0, \"total\": 0.04}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 9,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "subtotal": 100000.0,
+        "discount": 5000.0,
+        "net": 95000.0,
+        "tax": 17100.0,
+        "total": 112100.0
+      },
+      "stdout": "{\"subtotal\": 100000.0, \"discount\": 5000.0, \"net\": 95000.0, \"tax\": 17100.0, \"total\": 112100.0}\r\n",
+      "stderr": ""
+    }
+  ],
+  "source_sha256": "856a29d2c9571065c56a5993de189752c5b3eadc667bbc583ed9a0e6375c0fea",
+  "source_unchanged": true,
+  "summary": {
+    "passed": 10,
+    "total": 10
+  },
+  "inference_events": [
+    {
+      "operation": "code_edit",
+      "lesson_kinds": [
+        "logic",
+        "silent_output",
+        "runtime",
+        "output_shape",
+        "input_shape"
+      ],
+      "validation_error": "",
+      "model_used": "qwen3.5:4b"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 5.0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Invalid number: +\\\"}\\r\\n\", \"input\": [\"2\", \"3\", \"+\"]}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 3.0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Invalid number: -\\\"}\\r\\n\", \"input\": [\"5\", \"2\", \"-\"]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 5.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid number: +\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 3.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid number: -\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 6.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid number: /\"}\r\n"
+    }
+  ],
+  "path": "051-rpn-calculator\\attempt-1"
+}

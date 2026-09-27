@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\074-shortest-hop-distance\main.py", line 40, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\074-shortest-hop-distance\main.py", line 28, in main
+    data = json.loads(input_data)
+NameError: name 'json' is not defined

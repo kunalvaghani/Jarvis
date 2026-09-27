@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps([]), file=sys.stderr)\n            return\n        \n        result = []\n        cumulative_sum = 0\n        for num in input_data:\n            if isinstance(num, (int, float)):\n                cumulative_sum += num\n                result.append(cumulative_sum)\n            else:\n                print(json.dumps([]), file=sys.stderr)\n                return\n        \n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        print(json.dumps([]), file=sys.stderr)\n    except Exception:\n        print(json.dumps([]), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON list from stdin, compute cumulative sums of numeric values, and output the result as a JSON list. Handles edge cases like non-list input, non-numeric elements, and invalid JSON.",
+  "model_used": "qwen3.5:4b"
+}

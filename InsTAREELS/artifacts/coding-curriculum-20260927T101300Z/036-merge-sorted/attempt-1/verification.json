@@ -1,0 +1,45 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [], \"stdout\": \"[[], []]\\r\\n\", \"stderr\": \"\", \"input\": [[], []]}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [1, 2, 3, 4], \"stdout\": \"[[1, 3], [1, 3], [2, 4]]\\r\\n\", \"stderr\": \"\", \"input\": [[1, 3], [2, 4]]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[[], []]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "stdout": "[[1, 3], [1, 3], [2, 4]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        1,
+        1,
+        1
+      ],
+      "stdout": "[[1, 1], [1]]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "036-merge-sorted\\attempt-1"
+}

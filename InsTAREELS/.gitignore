@@ -1,5 +1,8 @@
 .venv/
 .venv-brain/
+.venv-training/
+artifacts/qwen-*/**/*.safetensors
+artifacts/qwen-*/**/training-state.pt
 brain-worker.log
 __pycache__/
 *.pyc
@@ -19,6 +22,8 @@ task_state.json
 .firecrawl/
 .jarvis-runtime/agent-events.jsonl
 .jarvis-runtime/sessions/
+.jarvis-runtime/coding-lessons.jsonl
+artifacts/coding-curriculum-*/ollama.log
 artifacts/real-world-*/ollama.log
 artifacts/real-world-*/.jarvis-runtime/
 artifacts/real-world-*/task_state.json

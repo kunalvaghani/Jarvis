@@ -1,0 +1,41 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [],
+    "stdout": "[]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      [
+        "a",
+        "b"
+      ],
+      [
+        "c"
+      ]
+    ],
+    "stdout": "[[\"a\", \"b\"], [\"c\"]]\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": [
+      [
+        "a"
+      ]
+    ],
+    "stdout": "[[\"a\"]]\r\n",
+    "stderr": ""
+  }
+]

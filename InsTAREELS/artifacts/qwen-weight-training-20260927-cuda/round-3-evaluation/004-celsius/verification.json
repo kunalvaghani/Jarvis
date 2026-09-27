@@ -1,0 +1,33 @@
+{
+  "id": "004-celsius",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 32.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 212.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": -40.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+    }
+  ]
+}

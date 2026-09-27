@@ -1,0 +1,450 @@
+{
+  "heldout_loss": 0.3487235765372004,
+  "projects_passed": 3,
+  "projects_total": 14,
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            1,
+            2,
+            3
+          ],
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "084-date-difference",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 2,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 26, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 15, in main\r\n    start_date = datetime.strptime(start_date, \"%Y-%m-%d\")\r\nNameError: name 'datetime' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": -1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 26, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 15, in main\r\n    start_date = datetime.strptime(start_date, \"%Y-%m-%d\")\r\nNameError: name 'datetime' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 26, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\084-date-difference\\main.py\", line 15, in main\r\n    start_date = datetime.strptime(start_date, \"%Y-%m-%d\")\r\nNameError: name 'datetime' is not defined\r\n"
+        }
+      ]
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "passed": false,
+      "error": "syntax: expected 'except' or 'finally' block (<unknown>, line 176)"
+    },
+    {
+      "id": "028-second-largest",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": null,
+          "stdout": "null\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -5,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "032-transpose",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stdout": "[[1, 3], [2, 4]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ],
+          "stdout": "[[1], [2], [3]]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "089-word-ranking",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            [
+              "a",
+              2
+            ],
+            [
+              "b",
+              2
+            ],
+            [
+              "c",
+              1
+            ]
+          ],
+          "stdout": "a b a: 1\r\nb c: 1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            [
+              "a",
+              1
+            ],
+            [
+              "z",
+              1
+            ]
+          ],
+          "stdout": "z a: 1\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "082-deep-merge",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {},
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 29, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 5, in main\r\n    data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": {
+              "b": 1,
+              "c": 2
+            }
+          },
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 29, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 5, in main\r\n    data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": [
+              2
+            ]
+          },
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 29, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\082-deep-merge\\main.py\", line 5, in main\r\n    data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        }
+      ]
+    },
+    {
+      "id": "035-moving-average",
+      "passed": false,
+      "error": "syntax: expected an indented block after 'if' statement on line 91 (<unknown>, line 91)"
+    },
+    {
+      "id": "025-ordered-unique",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            2,
+            1,
+            3
+          ],
+          "stdout": "[2, 1, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "052-polynomial-value",
+      "passed": false,
+      "error": "syntax: '(' was never closed (<unknown>, line 68)"
+    },
+    {
+      "id": "004-celsius",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 32.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 212.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -40.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+        }
+      ]
+    },
+    {
+      "id": "092-multiset-intersection",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            1,
+            2
+          ],
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "050-roman-numerals",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "I",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\050-roman-numerals\\main.py\", line 38, in <module>\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "XLIX",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\050-roman-numerals\\main.py\", line 38, in <module>\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "MCMXCIV",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-1-evaluation\\050-roman-numerals\\main.py\", line 38, in <module>\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+        }
+      ]
+    },
+    {
+      "id": "003-product",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 1,
+          "stdout": "1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 24,
+          "stdout": "24\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "0\r\n",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "004-celsius",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 32.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 212.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": -40.0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input is not a dictionary\"}\r\n"
+    }
+  ]
+}

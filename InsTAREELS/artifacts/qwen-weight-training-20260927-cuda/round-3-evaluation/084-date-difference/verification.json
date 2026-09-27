@@ -1,0 +1,33 @@
+{
+  "id": "084-date-difference",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 2,
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": -1,
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "null\r\n"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": {\"a\": 0, \"b\": 2, \"c\": 1}, \"stdout\": \"{\\\"a\\\": 0, \\\"b\\\": 5, \\\"c\\\": 1}\\r\\n\", \"stderr\": \"\", \"input\": [{\"a\": [[\"b\", 5], [\"c\", 1]], \"c\": [[\"b\", 1]]}, \"a\"]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": 0
+      },
+      "stdout": "{\"a\": 0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": {
+        "a": 0,
+        "b": 2,
+        "c": 1
+      },
+      "stdout": "{\"a\": 0, \"b\": 5, \"c\": 1}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": 0,
+        "b": 0
+      },
+      "stdout": "{\"a\": 0, \"b\": 0}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "075-weighted-shortest-path\\attempt-2"
+}

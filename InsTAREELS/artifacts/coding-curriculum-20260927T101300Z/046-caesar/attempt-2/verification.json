@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "bcd",
+      "stdout": "\"bcd\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "abc",
+      "stdout": "\"abc\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "Hg!",
+      "stdout": "\"Hg!\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "046-caesar\\attempt-2"
+}

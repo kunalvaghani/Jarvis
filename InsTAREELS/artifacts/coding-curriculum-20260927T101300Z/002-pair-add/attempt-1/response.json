@@ -1,0 +1,5 @@
+{
+  "content": "import sys\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(\"Error: No input provided.\", file=sys.stderr)\n            sys.exit(1)\n        \n        data = json.loads(input_data)\n        if not isinstance(data, list) or len(data) != 2:\n            print(\"Error: Input must be a JSON array with exactly two numbers.\", file=sys.stderr)\n            sys.exit(1)\n        \n        num1, num2 = data[0], data[1]\n        result = num1 + num2\n        \n        print(result)\n    except json.JSONDecodeError:\n        print(\"Error: Invalid JSON input.\", file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(f\"Error: {e}\", file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON array of two numbers from stdin, calculate their sum, and print the result as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

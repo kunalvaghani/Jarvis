@@ -1,0 +1,72 @@
+{
+  "id": "081-flatten-object",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "a.b": 2,
+        "c": [
+          1,
+          2
+        ]
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\081-flatten-object\\main.py\", line 24, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\081-flatten-object\\main.py\", line 18, in main\r\n    result[key] = main(value)\r\nTypeError: main() takes 0 positional arguments but 1 was given\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {},
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\081-flatten-object\\main.py\", line 24, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\081-flatten-object\\main.py\", line 18, in main\r\n    result[key] = main(value)\r\nTypeError: main() takes 0 positional arguments but 1 was given\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": {},
+      "expected": {}
+    },
+    {
+      "input": {
+        "a": {
+          "b": 2
+        },
+        "c": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "a.b": 2,
+        "c": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "input": {
+        "a": {}
+      },
+      "expected": {}
+    }
+  ],
+  "trained_on_project": true
+}

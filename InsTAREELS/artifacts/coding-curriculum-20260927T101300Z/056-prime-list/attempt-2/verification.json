@@ -1,0 +1,52 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "runtime",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": [], \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON array\\\"}\\r\\n\", \"input\": 1}, {\"case\": 1, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": [2, 3, 5, 7], \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a JSON array\\\"}\\r\\n\", \"input\": 10}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON array\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON array\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        2,
+        3,
+        5,
+        7,
+        11,
+        13,
+        17,
+        19,
+        23,
+        29
+      ],
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a JSON array\"}\r\n"
+    }
+  ],
+  "path": "056-prime-list\\attempt-2"
+}

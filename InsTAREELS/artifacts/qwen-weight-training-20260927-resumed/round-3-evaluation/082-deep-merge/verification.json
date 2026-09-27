@@ -1,0 +1,42 @@
+{
+  "id": "082-deep-merge",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {},
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "a": {
+          "b": 1,
+          "c": 2
+        }
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "a": [
+          2
+        ]
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+    }
+  ]
+}

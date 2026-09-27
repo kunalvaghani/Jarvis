@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-resumed\baseline\052-polynomial-value\main.py", line 24, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-resumed\baseline\052-polynomial-value\main.py", line 5, in main
+    input_data = json.load(sys.stdin)
+NameError: name 'sys' is not defined

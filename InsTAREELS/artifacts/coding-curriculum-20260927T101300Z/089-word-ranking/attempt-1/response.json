@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        return\n    \n    if not isinstance(input_data, list):\n        return\n    \n    words = []\n    for item in input_data:\n        if isinstance(item, str):\n            tokens = item.lower().split()\n            words.extend(tokens)\n    \n    word_counts = {}\n    for w in words:\n        word_counts[w] = word_counts.get(w, 0) + 1\n    \n    result = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))\n    print(json.dumps(result))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read JSON list of strings from stdin, tokenize into lowercase words, count occurrences, sort by descending count then alphabetical order, and output the result as a JSON list of [word, count] pairs.",
+  "model_used": "qwen3.5:4b"
+}

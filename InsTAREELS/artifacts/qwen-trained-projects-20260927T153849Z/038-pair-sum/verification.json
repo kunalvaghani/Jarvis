@@ -1,0 +1,54 @@
+{
+  "id": "038-pair-sum",
+  "passed": false,
+  "kind": "syntax",
+  "error": "unmatched ')' (<unknown>, line 37)",
+  "executed": false,
+  "input_cases": [
+    {
+      "input": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        5
+      ],
+      "expected": [
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": [
+        [
+          2,
+          2,
+          2
+        ],
+        4
+      ],
+      "expected": [
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "input": [
+        [],
+        0
+      ],
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

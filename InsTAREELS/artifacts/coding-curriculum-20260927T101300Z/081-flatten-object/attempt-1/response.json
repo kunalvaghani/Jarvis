@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef flatten(obj):\n    result = {}\n    if isinstance(obj, dict):\n        for key, value in obj.items():\n            if isinstance(value, list):\n                result[key] = value\n            elif isinstance(value, dict):\n                flattened = flatten(value)\n                for k, v in flattened.items():\n                    result[f\"{key}.{k}\"] = v\n            else:\n                result[key] = value\n    return result\n\ntry:\n    input_data = json.load(sys.stdin)\nexcept json.JSONDecodeError as e:\n    sys.stderr.write(f\"Error: {e}\\n\")\n    sys.exit(1)\n\noutput = flatten(input_data)\nprint(json.dumps(output))",
+  "explanation": "The code imports json and sys, reads one JSON value from stdin, flattens nested objects into dotted keys while preserving lists as leaves, and prints the result. It handles empty inputs and invalid JSON gracefully.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ntry:\n    data = json.load(sys.stdin)\nexcept json.JSONDecodeError:\n    sys.exit(1)\n\nif not isinstance(data, list) or len(data) != 2:\n    sys.exit(1)\n\nwidth, height = data\n\nif not (isinstance(width, (int, float)) and isinstance(height, (int, float))):\n    sys.exit(1)\n\narea = width * height\nprint(area)\n",
+  "explanation": "Creates main.py that reads a JSON array [width, height] from stdin, validates both are numeric, calculates the area, and prints it as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

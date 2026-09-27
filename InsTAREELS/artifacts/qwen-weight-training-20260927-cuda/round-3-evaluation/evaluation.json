@@ -1,0 +1,550 @@
+{
+  "heldout_loss": 0.2795992930020605,
+  "projects_passed": 3,
+  "projects_total": 14,
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            1,
+            2,
+            3
+          ],
+          "stdout": "[1, 2, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "084-date-difference",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -1,
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "null\r\n"
+        }
+      ]
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            ""
+          ],
+          "stdout": "[\"\"]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            "()"
+          ],
+          "stdout": "[\")(\", \"))\"]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            "((()))",
+            "(()())",
+            "(())()",
+            "()(())",
+            "()()()"
+          ],
+          "stdout": "[\")()()(\", \")()())\", \")())((\", \")())()\", \")()))(\", \")())))\", \"))(()(\", \"))(())\", \"))()((\", \"))()()\", \"))())(\", \"))()))\", \")))(((\", \")))(()\", \")))()(\", \")))())\", \"))))((\", \"))))()\", \")))))(\", \"))))))\"]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "028-second-largest",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": null,
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -5,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "032-transpose",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [],
+          "stdout": "",
+          "stderr": "[]\r\n"
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stdout": "[[1, 3], [2, 4]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-3-evaluation\\032-transpose\\main.py\", line 33, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-3-evaluation\\032-transpose\\main.py\", line 29, in main\r\n    result = transpose(input_data)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\round-3-evaluation\\032-transpose\\main.py\", line 14, in transpose\r\n    result[i][j] = matrix[j][i]\r\nIndexError: list index out of range\r\n"
+        }
+      ]
+    },
+    {
+      "id": "089-word-ranking",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            [
+              "a",
+              2
+            ],
+            [
+              "b",
+              2
+            ],
+            [
+              "c",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "[]\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            [
+              "a",
+              1
+            ],
+            [
+              "z",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "[]\r\n"
+        }
+      ]
+    },
+    {
+      "id": "082-deep-merge",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": {},
+          "stdout": "[{}, {}]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": {
+              "b": 1,
+              "c": 2
+            }
+          },
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": [
+              2
+            ]
+          },
+          "stdout": "",
+          "stderr": "null\r\n"
+        }
+      ]
+    },
+    {
+      "id": "035-moving-average",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            1.5,
+            2.5
+          ],
+          "stdout": "[1.5, 2.5]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            2,
+            4
+          ],
+          "stdout": "[2.0, 4.0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "025-ordered-unique",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            2,
+            1,
+            3
+          ],
+          "stdout": "[2, 1, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "052-polynomial-value",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 17,
+          "stdout": "",
+          "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 5,
+          "stdout": "",
+          "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+        }
+      ]
+    },
+    {
+      "id": "004-celsius",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 32.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 212.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": -40.0,
+          "stdout": "",
+          "stderr": "{\"error\": \"Invalid input format\"}\r\n"
+        }
+      ]
+    },
+    {
+      "id": "092-multiset-intersection",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "",
+          "stderr": "[]\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            1,
+            2
+          ],
+          "stdout": "[1, 1, 2]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "050-roman-numerals",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": "I",
+          "stdout": "I\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": "XLIX",
+          "stdout": "XLIX\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": "MCMXCIV",
+          "stdout": "MCMXCIV\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "003-product",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 1,
+          "stdout": "1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 24,
+          "stdout": "24\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "0\r\n",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

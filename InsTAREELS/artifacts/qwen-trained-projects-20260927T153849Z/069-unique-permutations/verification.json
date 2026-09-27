@@ -1,0 +1,111 @@
+{
+  "id": "069-unique-permutations",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        []
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 12, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 28, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 24, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 12, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 28, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 24, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 12, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 28, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\069-unique-permutations\\main.py\", line 24, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": [
+        []
+      ]
+    },
+    {
+      "input": [
+        1,
+        2
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "input": [
+        1,
+        1,
+        2
+      ],
+      "expected": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          1
+        ]
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

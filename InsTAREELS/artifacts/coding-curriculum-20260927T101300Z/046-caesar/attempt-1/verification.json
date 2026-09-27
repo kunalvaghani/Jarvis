@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"bcd\", \"stdout\": \"\", \"stderr\": \"name 'shift_amount' is not defined\\r\\n\", \"input\": [\"abc\", 1]}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"abc\", \"stdout\": \"\", \"stderr\": \"name 'shift_amount' is not defined\\r\\n\", \"input\": [\"xyz\", 3]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "bcd",
+      "stdout": "",
+      "stderr": "name 'shift_amount' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "abc",
+      "stdout": "",
+      "stderr": "name 'shift_amount' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "Hg!",
+      "stdout": "",
+      "stderr": "name 'shift_amount' is not defined\r\n"
+    }
+  ],
+  "path": "046-caesar\\attempt-1"
+}

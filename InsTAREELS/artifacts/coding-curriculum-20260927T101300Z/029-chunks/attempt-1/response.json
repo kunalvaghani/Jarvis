@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list) or len(input_data) != 2:\n            print(json.dumps(None), file=sys.stderr)\n            return\n        \n        items, chunk_size = input_data\n        if not isinstance(items, list) or not isinstance(chunk_size, int) or chunk_size <= 0:\n            print(json.dumps(None), file=sys.stderr)\n            return\n        \n        result = []\n        for i in range(0, len(items), chunk_size):\n            result.append(items[i:i + chunk_size])\n        \n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON pair [list, int] from stdin, split the list into consecutive chunks of size chunk_size (retaining the final partial chunk), and print the resulting list of lists as JSON. Handles invalid input by printing None to stderr.",
+  "model_used": "qwen3.5:4b"
+}

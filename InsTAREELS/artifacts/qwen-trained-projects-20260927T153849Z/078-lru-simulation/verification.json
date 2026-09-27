@@ -1,0 +1,96 @@
+{
+  "id": "078-lru-simulation",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "a",
+          "c"
+        ]
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 47, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 21, in main\r\n    if len(x) != 1 or len(y) != 2:\r\nTypeError: object of type 'int' has no len()\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "b"
+        ]
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 47, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 21, in main\r\n    if len(x) != 1 or len(y) != 2:\r\nTypeError: object of type 'int' has no len()\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "hits": 0,
+        "keys": []
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 47, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\078-lru-simulation\\main.py\", line 21, in main\r\n    if len(x) != 1 or len(y) != 2:\r\nTypeError: object of type 'int' has no len()\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        2,
+        [
+          "a",
+          "b",
+          "a",
+          "c"
+        ]
+      ],
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "a",
+          "c"
+        ]
+      }
+    },
+    {
+      "input": [
+        1,
+        [
+          "a",
+          "a",
+          "b"
+        ]
+      ],
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "b"
+        ]
+      }
+    },
+    {
+      "input": [
+        2,
+        []
+      ],
+      "expected": {
+        "hits": 0,
+        "keys": []
+      }
+    }
+  ],
+  "trained_on_project": true
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef flatten_one_level(data):\n    result = []\n    for item in data:\n        if isinstance(item, list):\n            result.extend(item)\n        else:\n            result.append(item)\n    return result\n\ntry:\n    input_data = json.load(sys.stdin)\n    output_data = flatten_one_level(input_data)\n    print(json.dumps(output_data))\nexcept json.JSONDecodeError as e:\n    sys.stderr.write(f\"JSON decode error: {e}\\n\")\nexcept Exception as e:\n    sys.stderr.write(f\"Error: {e}\\n\")\n",
+  "explanation": "Created main.py to read one JSON value from stdin, flatten exactly one level of nested lists, and print the result as JSON. Handles edge cases including empty input, non-list items, and mixed structures.",
+  "model_used": "qwen3.5:4b"
+}

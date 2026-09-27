@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = sys.stdin.read()\n        if not input_data.strip():\n            print(json.dumps(0))\n            return\n        \n        data = json.loads(input_data)\n        \n        if isinstance(data, list):\n            count = sum(1 for item in data if isinstance(item, (int, float)) and item > 0)\n        elif isinstance(data, dict):\n            count = sum(1 for value in data.values() if isinstance(value, (int, float)) and value > 0)\n        else:\n            print(json.dumps(0))\n            return\n        \n        print(json.dumps(count))\n    except json.JSONDecodeError:\n        print(json.dumps(0), file=sys.stderr)\n    except Exception:\n        print(json.dumps(0), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin, count values strictly greater than zero (handling lists and dicts), and output the result as JSON. Includes error handling for empty input and invalid JSON.",
+  "model_used": "qwen3.5:4b"
+}

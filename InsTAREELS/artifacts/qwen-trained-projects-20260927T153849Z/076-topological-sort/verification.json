@@ -1,0 +1,72 @@
+{
+  "id": "076-topological-sort",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 29, in main\r\n    graph = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 41, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 30, in main\r\n    except (json.JSONDecodeError, ValueError):\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 29, in main\r\n    graph = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 41, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 30, in main\r\n    except (json.JSONDecodeError, ValueError):\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 29, in main\r\n    graph = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 41, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\076-topological-sort\\main.py\", line 30, in main\r\n    except (json.JSONDecodeError, ValueError):\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": {},
+      "expected": []
+    },
+    {
+      "input": {
+        "a": [
+          "c"
+        ],
+        "b": [
+          "c"
+        ]
+      },
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          "b"
+        ],
+        "b": [
+          "a"
+        ]
+      },
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

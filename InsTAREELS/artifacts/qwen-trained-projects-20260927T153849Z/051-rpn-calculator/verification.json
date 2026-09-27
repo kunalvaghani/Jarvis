@@ -1,0 +1,36 @@
+{
+  "id": "051-rpn-calculator",
+  "passed": false,
+  "kind": "policy",
+  "error": "Use only permitted pure standard-library imports.",
+  "executed": false,
+  "input_cases": [
+    {
+      "input": [
+        "2",
+        "3",
+        "+"
+      ],
+      "expected": 5.0
+    },
+    {
+      "input": [
+        "5",
+        "2",
+        "-"
+      ],
+      "expected": 3.0
+    },
+    {
+      "input": [
+        "4",
+        "2",
+        "/",
+        "3",
+        "*"
+      ],
+      "expected": 6.0
+    }
+  ],
+  "trained_on_project": true
+}

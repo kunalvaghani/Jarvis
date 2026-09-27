@@ -1,0 +1,33 @@
+{
+  "id": "052-polynomial-value",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 17,
+      "stdout": "",
+      "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 5,
+      "stdout": "",
+      "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "{\"error\": \"object of type 'int' has no len()\"}\r\n"
+    }
+  ]
+}

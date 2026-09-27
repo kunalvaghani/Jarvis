@@ -1,0 +1,70 @@
+{
+  "id": "080-csv-records",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        {
+          "a": "1",
+          "b": "2"
+        }
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 13, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 18, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 15, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        {
+          "a": "x,y",
+          "b": "z"
+        }
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 13, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 18, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 15, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 13, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 18, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\080-csv-records\\main.py\", line 15, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "a,b\n1,2\n",
+      "expected": [
+        {
+          "a": "1",
+          "b": "2"
+        }
+      ]
+    },
+    {
+      "input": "a,b\n\"x,y\",z\n",
+      "expected": [
+        {
+          "a": "x,y",
+          "b": "z"
+        }
+      ]
+    },
+    {
+      "input": "a,b\n",
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

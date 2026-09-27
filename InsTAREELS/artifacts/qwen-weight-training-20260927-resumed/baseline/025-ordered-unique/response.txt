@@ -1,0 +1,32 @@
+```python
+import json
+
+def main():
+    # Read input from stdin
+    input_data = sys.stdin.read()
+    
+    # Parse the JSON input
+    data = json.loads(input_data)
+    
+    # Initialize an empty list to store the result
+    result = []
+    
+    # Iterate over each element in the input data
+    for item in data:
+        # Check if the current element is an integer
+        if isinstance(item, int):
+            # If it's the first occurrence of the integer, add it to the result
+            if not result or result[-1] != item:
+                result.append(item)
+    
+    # Convert the result list back to a JSON string
+    output_data = json.dumps(result)
+    
+    # Write the output to stdout
+    print(output_data)
+
+if __name__ == "__main__":
+    main()
+```
+
+This Python script reads a JSON input from `sys.stdin`, parses it, and then iterates over each element. It checks if the element is an integer and adds it to a list if it's the first occurrence of that integer. Finally, it converts the list back to a JSON string and prints it to `stdout`.

@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 10.0, \"stdout\": \"{\\\"interest\\\": 10.0}\\r\\n\", \"stderr\": \"\"}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 0.0, \"stdout\": \"{\\\"interest\\\": 0.0}\\r\\n\", \"stderr\": \"\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 10.0,
+      "stdout": "{\"interest\": 10.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 0.0,
+      "stdout": "{\"interest\": 0.0}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 30.0,
+      "stdout": "{\"interest\": 30.0}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "011-simple-interest\\attempt-1"
+}

@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "runtime",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": 1, \"stdout\": \"\", \"stderr\": \"Traceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 9, in main\\r\\n    value = json.loads(data)\\r\\nNameError: name 'json' is not defined\\r\\n\\r\\nDuring handling of the above exception, another exception occurred:\\r\\n\\r\\nTraceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 30, in <module>\\r\\n    main()\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 22, in main\\r\\n    except json.JSONDecodeError as e:\\r\\nNameError: name 'json' is not defined\\r\\n\"}, {\"case\": 1, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": 24, \"stdout\": \"\", \"stderr\": \"Traceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 9, in main\\r\\n    value = json.loads(data)\\r\\nNameError: name 'json' is not defined\\r\\n\\r\\nDuring handling of the above exception, another exception occurred:\\r\\n\\r\\nTraceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 30, in <module>\\r\\n    main()\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\003-product\\\\attempt-1\\\\main.py\\\", line 22, in main\\r\\n    except json.JSONDecodeError as e:\\r\\nNameError: name 'json' is not defined\\r\\n\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 9, in main\r\n    value = json.loads(data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 22, in main\r\n    except json.JSONDecodeError as e:\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 24,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 9, in main\r\n    value = json.loads(data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 22, in main\r\n    except json.JSONDecodeError as e:\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 9, in main\r\n    value = json.loads(data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\003-product\\attempt-1\\main.py\", line 22, in main\r\n    except json.JSONDecodeError as e:\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "path": "003-product\\attempt-1"
+}

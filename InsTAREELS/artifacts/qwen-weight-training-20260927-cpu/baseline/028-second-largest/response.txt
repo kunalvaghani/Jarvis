@@ -1,0 +1,27 @@
+```python
+import sys
+
+def find_second_largest_distinct_value(input_json):
+    # Convert the input string to a list of integers
+    data = json.loads(input_json)
+    
+    # Use a set to store distinct integers
+    unique_integers = set(data)
+    
+    # Check if there are at least two distinct integers
+    if len(unique_integers) < 2:
+        return None
+    
+    # Find the second largest distinct integer
+    second_largest = max(unique_integers) - 1
+    
+    # Return the result as a JSON object
+    return {"input": input_json, "expected": second_largest}
+
+# Example usage
+input_data = '{"input": [1], "expected": null}'
+result = find_second_largest_distinct_value(input_data)
+print(result)
+```
+
+This Python script defines a function `find_second_largest_distinct_value` that takes a JSON string as input, converts it into a list of integers, removes duplicates, and then finds the second largest distinct integer. If there are fewer than two distinct integers, it returns `None`. The example usage demonstrates how to call this function with a sample input and print the result.

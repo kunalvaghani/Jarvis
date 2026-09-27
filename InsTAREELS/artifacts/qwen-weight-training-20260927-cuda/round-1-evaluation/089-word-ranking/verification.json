@@ -1,0 +1,55 @@
+{
+  "id": "089-word-ranking",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          2
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "a b a: 1\r\nb c: 1\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "z",
+          1
+        ]
+      ],
+      "stdout": "z a: 1\r\n",
+      "stderr": ""
+    }
+  ]
+}

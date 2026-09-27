@@ -1,0 +1,33 @@
+{
+  "id": "050-roman-numerals",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "I",
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "XLIX",
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "MCMXCIV",
+      "stdout": "",
+      "stderr": "null\r\n"
+    }
+  ]
+}

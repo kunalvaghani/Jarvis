@@ -1,0 +1,62 @@
+{
+  "id": "057-prime-factors",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        2,
+        2,
+        3
+      ],
+      "stdout": "[2, 2, 3]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        97
+      ],
+      "stdout": "[97]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": 1,
+      "expected": []
+    },
+    {
+      "input": 12,
+      "expected": [
+        2,
+        2,
+        3
+      ]
+    },
+    {
+      "input": 97,
+      "expected": [
+        97
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

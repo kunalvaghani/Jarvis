@@ -1,0 +1,63 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "runtime",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": [[1, 2], [2, 1]], \"stdout\": \"\", \"stderr\": \"Traceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 32, in <module>\\r\\n    main()\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 26, in main\\r\\n    generate_permutations([], list(unique_elements))\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 24, in generate_permutations\\r\\n    generate_permutations(current + [val], new_remaining)\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 23, in generate_permutations\\r\\n    new_remaining.pop(i)\\r\\nIndexError: pop index out of range\\r\\n\", \"input\": [1, 2]}, {\"case\": 2, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": [[1, 1, 2], [1, 2, 1], [2, 1, 1]], \"stdout\": \"\", \"stderr\": \"Traceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 32, in <module>\\r\\n    main()\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 26, in main\\r\\n    generate_permutations([], list(unique_elements))\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 24, in generate_permutations\\r\\n    generate_permutations(current + [val], new_remaining)\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-1\\\\main.py\\\", line 23, in generate_permutations\\r\\n    new_remaining.pop(i)\\r\\nIndexError: pop index out of range\\r\\n\", \"input\": [1, 1, 2]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        []
+      ],
+      "stdout": "[[]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 32, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 26, in main\r\n    generate_permutations([], list(unique_elements))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 24, in generate_permutations\r\n    generate_permutations(current + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 23, in generate_permutations\r\n    new_remaining.pop(i)\r\nIndexError: pop index out of range\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 32, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 26, in main\r\n    generate_permutations([], list(unique_elements))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 24, in generate_permutations\r\n    generate_permutations(current + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-1\\main.py\", line 23, in generate_permutations\r\n    new_remaining.pop(i)\r\nIndexError: pop index out of range\r\n"
+    }
+  ],
+  "path": "069-unique-permutations\\attempt-1"
+}

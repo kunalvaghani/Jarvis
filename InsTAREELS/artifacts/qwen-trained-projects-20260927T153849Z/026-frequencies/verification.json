@@ -1,0 +1,67 @@
+{
+  "id": "026-frequencies",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {},
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\026-frequencies\\main.py\", line 5, in <module>\r\n    result = (json.dumps({k: v for k, v in collections.Counter(x).items()}))\r\nNameError: name 'collections' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "a": 2,
+        "b": 1
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\026-frequencies\\main.py\", line 5, in <module>\r\n    result = (json.dumps({k: v for k, v in collections.Counter(x).items()}))\r\nNameError: name 'collections' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "x": 2
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\026-frequencies\\main.py\", line 5, in <module>\r\n    result = (json.dumps({k: v for k, v in collections.Counter(x).items()}))\r\nNameError: name 'collections' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": {}
+    },
+    {
+      "input": [
+        "a",
+        "b",
+        "a"
+      ],
+      "expected": {
+        "a": 2,
+        "b": 1
+      }
+    },
+    {
+      "input": [
+        "x",
+        "x"
+      ],
+      "expected": {
+        "x": 2
+      }
+    }
+  ],
+  "trained_on_project": true
+}

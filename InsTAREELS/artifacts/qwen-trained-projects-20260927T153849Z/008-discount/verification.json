@@ -1,0 +1,59 @@
+{
+  "id": "008-discount",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 80.0,
+      "stdout": "80.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 20.0,
+      "stdout": "20.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0.0,
+      "stdout": "0.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        100,
+        20
+      ],
+      "expected": 80.0
+    },
+    {
+      "input": [
+        20,
+        0
+      ],
+      "expected": 20.0
+    },
+    {
+      "input": [
+        80,
+        100
+      ],
+      "expected": 0.0
+    }
+  ],
+  "trained_on_project": true
+}

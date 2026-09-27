@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps(None), file=sys.stderr)\n            sys.exit(1)\n        \n        if len(input_data) == 0:\n            print(json.dumps(0))\n            return\n        \n        max_val = max(input_data)\n        min_val = min(input_data)\n        result = max_val - min_val\n        \n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(json.dumps(None), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin, validate it is a list, compute the difference between maximum and minimum values (or 0 for empty lists), and output the result as JSON. Handles errors by printing None to stderr and exiting.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,28 @@
+import json
+
+def transpose_matrix(input_json):
+    # Check if the input is a list of dictionaries
+    if not isinstance(input_json, list) or not all(isinstance(item, dict) for item in input_json):
+        return []
+
+    # Initialize an empty list to store the transposed matrix
+    transposed = []
+
+    # Iterate over each dictionary in the input
+    for row in input_json:
+        # Create a new list to hold the current row
+        row_transposed = []
+        # Iterate over each element in the current row
+        for element in row.values():
+            # Append the element to the new row_transposed list
+            row_transposed.append(element)
+        # Append the new row_transposed list to the transposed list
+        transposed.append(row_transposed)
+
+    # Convert the transposed list to a JSON string
+    return json.dumps(transposed, indent=4)
+
+# Example usage
+input_data = '{"input": [], "expected": []}'
+output_data = transpose_matrix(input_data)
+print(output_data)

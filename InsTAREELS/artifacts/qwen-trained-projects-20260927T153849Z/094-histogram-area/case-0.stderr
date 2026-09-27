@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\094-histogram-area\main.py", line 51, in main
+    data = json.loads(input_data)
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\094-histogram-area\main.py", line 67, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\094-histogram-area\main.py", line 64, in main
+    print(json.dumps(0))
+NameError: name 'json' is not defined

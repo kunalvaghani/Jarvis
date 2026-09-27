@@ -1,0 +1,48 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        0,
+        0,
+        0
+      ],
+      "stdout": "[0, 0, 0]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1,
+        1,
+        1
+      ],
+      "stdout": "[1, 1, 1]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        25,
+        0,
+        0
+      ],
+      "stdout": "[25, 0, 0]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "013-seconds\\attempt-1"
+}

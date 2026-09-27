@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\081-flatten-object\main.py", line 24, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\081-flatten-object\main.py", line 18, in main
+    result[key] = main(value)
+TypeError: main() takes 0 positional arguments but 1 was given

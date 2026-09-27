@@ -1,0 +1,24 @@
+```python
+import json
+
+def flatten_json(input_data):
+    # Flatten the nested list
+    flattened = []
+    for item in input_data:
+        if isinstance(item, list):
+            flattened.extend(flatten_json(item))
+        else:
+            flattened.append(item)
+    return flattened
+
+# Read input from stdin
+input_data = json.load(sys.stdin)
+
+# Flatten the input data
+flattened_data = flatten_json(input_data)
+
+# Write the flattened data to stdout
+json.dump(flattened_data, sys.stdout, indent=4)
+```
+
+This Python script defines a function `flatten_json` that takes a JSON input, flattens it by recursively processing nested lists, and then writes the flattened data to the standard output. The `json.load` function is used to read the input from the standard input, and `json.dump` is used to write the flattened data to the standard output with indentation for better readability.

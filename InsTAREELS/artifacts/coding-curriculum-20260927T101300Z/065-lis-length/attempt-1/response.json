@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        print(json.dumps(0), file=sys.stderr)\n        return\n    \n    if not isinstance(data, list):\n        print(json.dumps(0), file=sys.stderr)\n        return\n    \n    n = len(data)\n    if n == 0:\n        print(json.dumps(0))\n        return\n    \n    lis_length = 1\n    prev = data[0]\n    \n    for i in range(1, n):\n        if data[i] > prev:\n            lis_length += 1\n            prev = data[i]\n    \n    print(json.dumps(lis_length))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "The code reads a single JSON list from stdin, computes the length of the longest strictly increasing subsequence using a linear scan, and prints the result as a JSON integer. It handles empty input, non-list inputs, and invalid JSON by printing an error to stderr.",
+  "model_used": "qwen3.5:4b"
+}

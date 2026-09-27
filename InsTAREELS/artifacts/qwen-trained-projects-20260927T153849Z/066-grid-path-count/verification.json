@@ -1,0 +1,59 @@
+{
+  "id": "066-grid-path-count",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 19, in <module>\r\n    result = count_right_down_paths(json.loads(input_data))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 5, in count_right_down_paths\r\n    rows, cols = len(grid), len(grid[0])\r\nTypeError: object of type 'int' has no len()\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 6,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 19, in <module>\r\n    result = count_right_down_paths(json.loads(input_data))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 5, in count_right_down_paths\r\n    rows, cols = len(grid), len(grid[0])\r\nTypeError: object of type 'int' has no len()\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 5,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 19, in <module>\r\n    result = count_right_down_paths(json.loads(input_data))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\066-grid-path-count\\main.py\", line 5, in count_right_down_paths\r\n    rows, cols = len(grid), len(grid[0])\r\nTypeError: object of type 'int' has no len()\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        1,
+        1
+      ],
+      "expected": 1
+    },
+    {
+      "input": [
+        3,
+        3
+      ],
+      "expected": 6
+    },
+    {
+      "input": [
+        2,
+        5
+      ],
+      "expected": 5
+    }
+  ],
+  "trained_on_project": true
+}

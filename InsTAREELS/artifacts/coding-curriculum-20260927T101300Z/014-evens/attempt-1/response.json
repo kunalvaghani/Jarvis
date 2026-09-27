@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        return\n    \n    if not isinstance(input_data, list):\n        return\n    \n    result = []\n    for item in input_data:\n        if isinstance(item, int) and item % 2 == 0:\n            result.append(item)\n    \n    print(json.dumps(result))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin, filter even integers while preserving order, and output the result as JSON.",
+  "model_used": "qwen3.5:4b"
+}

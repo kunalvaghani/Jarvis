@@ -1,0 +1,550 @@
+{
+  "heldout_loss": 0.31611212342977524,
+  "projects_passed": 7,
+  "projects_total": 14,
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            1,
+            2,
+            3
+          ],
+          "stdout": "[1, 2, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "084-date-difference",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -1,
+          "stdout": "",
+          "stderr": "null\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "null\r\n"
+        }
+      ]
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            ""
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 29, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 34, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 31, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            "()"
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 29, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 34, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 31, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            "((()))",
+            "(()())",
+            "(())()",
+            "()(())",
+            "()()()"
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 29, in main\r\n    print(json.dumps(result))\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 34, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\099-balanced-parentheses-generation\\main.py\", line 31, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        }
+      ]
+    },
+    {
+      "id": "028-second-largest",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": null,
+          "stdout": "null\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "2\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": -5,
+          "stdout": "-5\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "032-transpose",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stdout": "[[1, 3], [2, 4]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ],
+          "stdout": "[[1], [2], [3]]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "089-word-ranking",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            [
+              "a",
+              2
+            ],
+            [
+              "b",
+              2
+            ],
+            [
+              "c",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\089-word-ranking\\main.py\", line 6, in <lambda>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\nTypeError: bad operand type for unary -: 'str'\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            [
+              "a",
+              1
+            ],
+            [
+              "z",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\089-word-ranking\\main.py\", line 6, in <lambda>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\nTypeError: bad operand type for unary -: 'str'\r\n"
+        }
+      ]
+    },
+    {
+      "id": "082-deep-merge",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": {},
+          "stdout": "[{}, {}]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": {
+            "a": {
+              "b": 1,
+              "c": 2
+            }
+          },
+          "stdout": "[{\"a\": {\"b\": 1}}, {\"a\": {\"c\": 2}}]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": {
+            "a": [
+              2
+            ]
+          },
+          "stdout": "[{\"a\": [1]}, {\"a\": [2]}]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "035-moving-average",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            1.5,
+            2.5
+          ],
+          "stdout": "[2.0]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            2,
+            4
+          ],
+          "stdout": "[3.0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "025-ordered-unique",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            2,
+            1,
+            3
+          ],
+          "stdout": "[2, 1, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "052-polynomial-value",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 17,
+          "stdout": "17\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 5,
+          "stdout": "5\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "0\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "004-celsius",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 32.0,
+          "stdout": "32.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 212.0,
+          "stdout": "212.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": -40.0,
+          "stdout": "-40.0\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "092-multiset-intersection",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 11, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 42, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 39, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            1,
+            2
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 11, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 42, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 39, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 11, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 42, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\092-multiset-intersection\\main.py\", line 39, in main\r\n    print(json.dumps([]), file=sys.stderr)\r\nNameError: name 'json' is not defined\r\n"
+        }
+      ]
+    },
+    {
+      "id": "050-roman-numerals",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "I",
+          "stdout": "\"I\"\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "XLIX",
+          "stdout": "\"XLIX\"\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "MCMXCIV",
+          "stdout": "\"MCMXCIV\"\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "003-product",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 1,
+          "stdout": "1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 24,
+          "stdout": "24\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\003-product\\main.py\", line 5, in <module>\r\n    result = (x[0] if x else 1) * (x[1] if x else 1) * (x[2] if x else 1)\r\nIndexError: list index out of range\r\n"
+        }
+      ]
+    }
+  ]
+}

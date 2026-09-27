@@ -1,0 +1,35 @@
+{
+  "model": "standalone merged FP32 weights, no PEFT adapter loaded",
+  "project": "001-sum",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 6,
+      "stdout": "6\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 2,
+      "stdout": "2\r\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "note": "Original relative-path harness error preserved; corrected execution uses the same generated source."
+}

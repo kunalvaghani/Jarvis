@@ -1,0 +1,23 @@
+import json
+
+def merge_jsons(input_data):
+    # Base case: if input is empty, return the expected output
+    if not input_data:
+        return {"expected": {}}
+
+    # Recursive case: merge the first element of the list with the result of the recursive call
+    first_element = input_data[0]
+    merged = merge_jsons(first_element)
+
+    # Recursively merge the rest of the elements
+    for item in input_data[1:]:
+        merged.update(item)
+
+    return merged
+
+# Read input from stdin
+input_data = json.load(sys.stdin)
+
+# Call the function and print the result
+result = merge_jsons(input_data)
+print(json.dumps(result))

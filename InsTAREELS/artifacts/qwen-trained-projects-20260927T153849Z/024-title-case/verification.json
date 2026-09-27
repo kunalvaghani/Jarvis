@@ -1,0 +1,50 @@
+{
+  "id": "024-title-case",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "Hello World",
+      "stdout": "\"Hello World\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "Mixed Case",
+      "stdout": "\"Mixed Case\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "hello world",
+      "expected": "Hello World"
+    },
+    {
+      "input": "mIXed CASE",
+      "expected": "Mixed Case"
+    },
+    {
+      "input": "",
+      "expected": ""
+    }
+  ],
+  "trained_on_project": true
+}

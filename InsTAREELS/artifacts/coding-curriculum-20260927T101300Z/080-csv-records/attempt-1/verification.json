@@ -1,0 +1,46 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [{\"a\": \"1\", \"b\": \"2\"}], \"stdout\": \"[\\\"a,b\\\\n1,2\\\\n\\\"]\\r\\n\", \"stderr\": \"\", \"input\": \"a,b\\n1,2\\n\"}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [{\"a\": \"x,y\", \"b\": \"z\"}], \"stdout\": \"[\\\"a,b\\\\n\\\\\\\"x,y\\\\\\\",z\\\\n\\\"]\\r\\n\", \"stderr\": \"\", \"input\": \"a,b\\n\\\"x,y\\\",z\\n\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        {
+          "a": "1",
+          "b": "2"
+        }
+      ],
+      "stdout": "[\"a,b\\n1,2\\n\"]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        {
+          "a": "x,y",
+          "b": "z"
+        }
+      ],
+      "stdout": "[\"a,b\\n\\\"x,y\\\",z\\n\"]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[\"a,b\\n\"]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "080-csv-records\\attempt-1"
+}

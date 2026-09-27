@@ -1,0 +1,42 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        2,
+        2,
+        3
+      ],
+      "stdout": "[2, 2, 3]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        97
+      ],
+      "stdout": "[97]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "057-prime-factors\\attempt-1"
+}

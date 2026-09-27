@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\nimport base64\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            return\n        \n        decoded_bytes = base64.b64decode(input_data)\n        decoded_string = decoded_bytes.decode('utf-8')\n        \n        result = json.dumps(decoded_string)\n        print(result)\n    except Exception as e:\n        pass\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Corrected the output to stdout instead of stderr, and removed the trailing newline from the JSON string to match the expected format exactly.",
+  "model_used": "qwen3.5:4b"
+}

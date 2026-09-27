@@ -1,0 +1,33 @@
+{
+  "id": "003-product",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 22, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 24,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 22, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 22, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\003-product\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    }
+  ]
+}

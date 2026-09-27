@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps([], separators=(',', ':')), file=sys.stderr)\n            return\n        sorted_data = sorted(input_data)\n        print(json.dumps(sorted_data, separators=(',', ':')))  \n    except Exception as e:\n        print(json.dumps([], separators=(',', ':')), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, sort integers in ascending order while retaining duplicates, and output the result as compact JSON. Handles non-list inputs and errors by printing an empty list to stderr.",
+  "model_used": "qwen3.5:4b"
+}

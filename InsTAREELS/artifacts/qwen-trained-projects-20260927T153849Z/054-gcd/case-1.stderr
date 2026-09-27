@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\054-gcd\main.py", line 4, in <module>
+    x = json.load(sys.stdin)
+NameError: name 'json' is not defined

@@ -1,0 +1,41 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "{}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": 2,
+        "b": 1
+      },
+      "stdout": "{\"a\": 2, \"b\": 1}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "x": 2
+      },
+      "stdout": "{\"x\": 2}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "026-frequencies\\attempt-1"
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            return\n        \n        data = json.loads(input_data)\n        coefficients, value = data[0], data[1]\n        \n        result = 0\n        for i, coeff in enumerate(coefficients):\n            result += coeff * (value ** i)\n        \n        print(result)\n    except Exception:\n        pass\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON array from stdin containing coefficients and a value, compute the polynomial evaluation using ascending powers, and print the result as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,83 @@
+{
+  "id": "030-rotate",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        3,
+        1,
+        2
+      ],
+      "stdout": "[3, 1, 2]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        3,
+        1,
+        2
+      ],
+      "stdout": "[3, 1, 2]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        [],
+        3
+      ],
+      "expected": []
+    },
+    {
+      "input": [
+        [
+          1,
+          2,
+          3
+        ],
+        1
+      ],
+      "expected": [
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "input": [
+        [
+          1,
+          2,
+          3
+        ],
+        4
+      ],
+      "expected": [
+        3,
+        1,
+        2
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

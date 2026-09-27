@@ -1,0 +1,50 @@
+{
+  "id": "048-binary-to-int",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 5,
+      "stdout": "5\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 15,
+      "stdout": "15\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "0",
+      "expected": 0
+    },
+    {
+      "input": "101",
+      "expected": 5
+    },
+    {
+      "input": "1111",
+      "expected": 15
+    }
+  ],
+  "trained_on_project": true
+}

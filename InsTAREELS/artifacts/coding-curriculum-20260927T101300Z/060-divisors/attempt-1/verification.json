@@ -1,0 +1,48 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1
+      ],
+      "stdout": "[1]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        12
+      ],
+      "stdout": "[1, 2, 3, 4, 6, 12]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1,
+        17
+      ],
+      "stdout": "[1, 17]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "060-divisors\\attempt-1"
+}

@@ -1,0 +1,45 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "{}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": {
+          "b": 1,
+          "c": 2
+        }
+      },
+      "stdout": "{\"a\": {\"b\": 1, \"c\": 2}}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": [
+          2
+        ]
+      },
+      "stdout": "{\"a\": [2]}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "082-deep-merge\\attempt-1"
+}

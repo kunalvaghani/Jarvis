@@ -1,0 +1,59 @@
+{
+  "id": "055-lcm",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\055-lcm\\main.py\", line 7, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 12,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\055-lcm\\main.py\", line 7, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 21,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\055-lcm\\main.py\", line 7, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        0,
+        4
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        4,
+        6
+      ],
+      "expected": 12
+    },
+    {
+      "input": [
+        7,
+        3
+      ],
+      "expected": 21
+    }
+  ],
+  "trained_on_project": true
+}

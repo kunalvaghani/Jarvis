@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        sys.exit(1)\n\n    if not isinstance(input_data, list):\n        sys.exit(1)\n\n    unique_elements = sorted(set(input_data))\n    permutations = []\n    \n    def generate_permutations(current, remaining):\n        if len(remaining) == 0:\n            permutations.append(current[:])\n            return\n        for i in range(len(unique_elements)):\n            val = unique_elements[i]\n            new_remaining = remaining.copy()\n            new_remaining.pop(i)\n            generate_permutations(current + [val], new_remaining)\n    \n    generate_permutations([], list(unique_elements))\n    permutations.sort()\n\n    print(json.dumps(permutations))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, compute all sorted unique permutations of its elements, and output the result as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

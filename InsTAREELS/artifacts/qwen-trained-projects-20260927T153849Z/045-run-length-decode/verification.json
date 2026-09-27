@@ -1,0 +1,64 @@
+{
+  "id": "045-run-length-decode",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "aaabb",
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\045-run-length-decode\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\045-run-length-decode\\main.py\", line 26, in main\r\n    result = decode(s)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\045-run-length-decode\\main.py\", line 6, in decode\r\n    for char, count in s:\r\nValueError: not enough values to unpack (expected 2, got 1)\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": ""
+    },
+    {
+      "input": [
+        [
+          "a",
+          3
+        ],
+        [
+          "b",
+          2
+        ]
+      ],
+      "expected": "aaabb"
+    },
+    {
+      "input": [
+        [
+          "x",
+          0
+        ]
+      ],
+      "expected": ""
+    }
+  ],
+  "trained_on_project": true
+}

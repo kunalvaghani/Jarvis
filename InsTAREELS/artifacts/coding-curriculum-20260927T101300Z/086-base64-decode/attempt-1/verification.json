@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"\", \"stdout\": \"\", \"stderr\": \"\\\"\\\"\\r\\n\", \"input\": \"\"}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"hello\", \"stdout\": \"\", \"stderr\": \"\\\"hello\\\"\\r\\n\", \"input\": \"aGVsbG8=\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "",
+      "stderr": "\"\"\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "hello",
+      "stdout": "",
+      "stderr": "\"hello\"\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "caf\u00e9",
+      "stdout": "",
+      "stderr": "\"caf\\u00e9\"\r\n"
+    }
+  ],
+  "path": "086-base64-decode\\attempt-1"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "061-edit-distance",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 3,
+      "stdout": "3\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 3,
+      "stdout": "3\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        "",
+        "abc"
+      ],
+      "expected": 3
+    },
+    {
+      "input": [
+        "kitten",
+        "sitting"
+      ],
+      "expected": 3
+    },
+    {
+      "input": [
+        "same",
+        "same"
+      ],
+      "expected": 0
+    }
+  ],
+  "trained_on_project": true
+}

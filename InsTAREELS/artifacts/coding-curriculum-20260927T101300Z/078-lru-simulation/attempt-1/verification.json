@@ -1,0 +1,50 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": {\"hits\": 1, \"keys\": [\"a\", \"c\"]}, \"stdout\": \"{\\\"hits\\\": 3, \\\"keys\\\": [\\\"b\\\", \\\"c\\\"]}\\r\\n\", \"stderr\": \"\", \"input\": [2, [\"a\", \"b\", \"a\", \"c\"]]}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": {\"hits\": 1, \"keys\": [\"b\"]}, \"stdout\": \"{\\\"hits\\\": 2, \\\"keys\\\": [\\\"b\\\"]}\\r\\n\", \"stderr\": \"\", \"input\": [1, [\"a\", \"a\", \"b\"]]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "a",
+          "c"
+        ]
+      },
+      "stdout": "{\"hits\": 3, \"keys\": [\"b\", \"c\"]}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": {
+        "hits": 1,
+        "keys": [
+          "b"
+        ]
+      },
+      "stdout": "{\"hits\": 2, \"keys\": [\"b\"]}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "hits": 0,
+        "keys": []
+      },
+      "stdout": "{\"hits\": 0, \"keys\": []}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "078-lru-simulation\\attempt-1"
+}

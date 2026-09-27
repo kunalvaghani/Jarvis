@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\nimport base64\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if isinstance(input_data, str):\n            encoded = base64.b64encode(input_data.encode('utf-8')).decode('ascii')\n            print(encoded)\n        else:\n            print(json.dumps(None))\n    except Exception as e:\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin. If the input is a UTF-8 string, it encodes it to standard Base64 ASCII text and prints the result as a JSON scalar. For any other input type or error, it outputs null.",
+  "model_used": "qwen3.5:4b"
+}

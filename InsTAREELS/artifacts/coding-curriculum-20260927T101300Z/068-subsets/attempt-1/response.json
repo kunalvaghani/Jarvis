@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        return\n    \n    if not isinstance(data, list):\n        return\n    \n    result = []\n    for i in range(len(data) + 1):\n        subset = []\n        for j in range(i):\n            subset.append(data[j])\n        subset.sort()\n        result.append(subset)\n    \n    result.sort()\n    print(json.dumps(result))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, generate all subsets with elements sorted within each subset, sort the list of subsets lexicographically, and output as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

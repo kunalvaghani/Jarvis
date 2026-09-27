@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef jaccard_similarity(list1, list2):\n    set1 = set(list1)\n    set2 = set(list2)\n    if not set1 and not set2:\n        return 1.0\n    intersection = set1 & set2\n    union = set1 | set2\n    return len(intersection) / len(union)\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if isinstance(input_data, list) and len(input_data) == 2:\n            result = jaccard_similarity(input_data[0], input_data[1])\n            print(json.dumps(result))\n        else:\n            print(json.dumps(None))\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n    except Exception:\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list of two lists from stdin, compute Jaccard similarity (returning 1.0 for both empty lists), and print the result as a single JSON value.",
+  "model_used": "qwen3.5:4b"
+}

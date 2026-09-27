@@ -1,0 +1,74 @@
+{
+  "id": "013-seconds",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        0,
+        0,
+        0
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\013-seconds\\main.py\", line 5, in <module>\r\n    result = (int(x['hours']),int(x['minutes']),int(x['seconds']))\r\nTypeError: 'int' object is not subscriptable\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        1,
+        1,
+        1
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\013-seconds\\main.py\", line 5, in <module>\r\n    result = (int(x['hours']),int(x['minutes']),int(x['seconds']))\r\nTypeError: 'int' object is not subscriptable\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        25,
+        0,
+        0
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\013-seconds\\main.py\", line 5, in <module>\r\n    result = (int(x['hours']),int(x['minutes']),int(x['seconds']))\r\nTypeError: 'int' object is not subscriptable\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": 0,
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "input": 3661,
+      "expected": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "input": 90000,
+      "expected": [
+        25,
+        0,
+        0
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

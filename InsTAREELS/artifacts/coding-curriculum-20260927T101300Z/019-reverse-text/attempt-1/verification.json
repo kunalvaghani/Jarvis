@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": \"\", \"stdout\": \"{\\\"reversed\\\": \\\"\\\"}\\r\\n\", \"stderr\": \"\", \"input\": \"\"}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": \"cba\", \"stdout\": \"{\\\"reversed\\\": \\\"cba\\\"}\\r\\n\", \"stderr\": \"\", \"input\": \"abc\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "{\"reversed\": \"\"}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "cba",
+      "stdout": "{\"reversed\": \"cba\"}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "dlrow olleh",
+      "stdout": "{\"reversed\": \"dlrow olleh\"}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "019-reverse-text\\attempt-1"
+}

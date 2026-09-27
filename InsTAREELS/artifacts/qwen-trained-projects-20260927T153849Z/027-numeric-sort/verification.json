@@ -1,0 +1,74 @@
+{
+  "id": "027-numeric-sort",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "stdout": "[1, 2, 3]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        -1,
+        2,
+        2
+      ],
+      "stdout": "[-1, 2, 2]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": []
+    },
+    {
+      "input": [
+        3,
+        1,
+        2
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": [
+        2,
+        2,
+        -1
+      ],
+      "expected": [
+        -1,
+        2,
+        2
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

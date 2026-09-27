@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a list\\\"}\\r\\n\", \"input\": \"0\"}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": 5, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"Input must be a list\\\"}\\r\\n\", \"input\": \"101\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a list\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 5,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a list\"}\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 15,
+      "stdout": "",
+      "stderr": "{\"error\": \"Input must be a list\"}\r\n"
+    }
+  ],
+  "path": "048-binary-to-int\\attempt-2"
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps({\"error\": \"Input must be a JSON array\"}), file=sys.stderr)\n            sys.exit(1)\n        \n        seen = set()\n        result = []\n        for item in input_data:\n            if isinstance(item, int) and item not in seen:\n                seen.add(item)\n                result.append(item)\n        \n        print(json.dumps(result))\n    except json.JSONDecodeError as e:\n        print(json.dumps({\"error\": f\"Invalid JSON: {e}\"}), file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(json.dumps({\"error\": str(e)}), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON array from stdin, remove duplicate integers while preserving first occurrence order, and print the result as a JSON array. Handles invalid input types and malformed JSON with error messages to stderr.",
+  "model_used": "qwen3.5:4b"
+}

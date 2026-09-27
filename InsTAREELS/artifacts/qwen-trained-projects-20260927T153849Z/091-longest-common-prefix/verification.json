@@ -1,0 +1,57 @@
+{
+  "id": "091-longest-common-prefix",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "fl",
+      "stdout": "\"fl\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": ""
+    },
+    {
+      "input": [
+        "flower",
+        "flow",
+        "flight"
+      ],
+      "expected": "fl"
+    },
+    {
+      "input": [
+        "a",
+        "b"
+      ],
+      "expected": ""
+    }
+  ],
+  "trained_on_project": true
+}

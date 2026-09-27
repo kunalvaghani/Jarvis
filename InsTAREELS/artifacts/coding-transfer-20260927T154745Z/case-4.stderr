@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-transfer-20260927T154745Z\main.py", line 24, in <module>
+    result = calculate(input_data['items'])
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-transfer-20260927T154745Z\main.py", line 7, in calculate
+    discount = subtotal*Decimal(item['discount_pct'])/100
+NameError: name 'item' is not defined. Did you mean: 'items'?

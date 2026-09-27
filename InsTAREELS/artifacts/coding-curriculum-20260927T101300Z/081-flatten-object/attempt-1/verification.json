@@ -1,0 +1,42 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "{}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a.b": 2,
+        "c": [
+          1,
+          2
+        ]
+      },
+      "stdout": "{\"a.b\": 2, \"c\": [1, 2]}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "{}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "081-flatten-object\\attempt-1"
+}

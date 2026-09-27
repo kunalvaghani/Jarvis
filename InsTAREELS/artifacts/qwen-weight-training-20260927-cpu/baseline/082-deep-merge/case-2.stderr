@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cpu\baseline\082-deep-merge\main.py", line 19, in <module>
+    input_data = json.load(sys.stdin)
+NameError: name 'sys' is not defined

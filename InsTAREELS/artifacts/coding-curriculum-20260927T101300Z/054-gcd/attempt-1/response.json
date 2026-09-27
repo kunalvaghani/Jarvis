@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list) or len(input_data) != 2:\n            print(json.dumps(None), file=sys.stderr)\n            sys.exit(1)\n        x, y = input_data\n        if not (isinstance(x, int) and isinstance(y, int) and x >= 0 and y >= 0):\n            print(json.dumps(None), file=sys.stderr)\n            sys.exit(1)\n        result = gcd(x, y)\n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list of two nonnegative integers from stdin, compute their greatest common divisor using the Euclidean algorithm, and print the result as a single JSON value. Includes validation for input shape and type, handles edge cases like [0, 0], and uses explicit imports.",
+  "model_used": "qwen3.5:4b"
+}

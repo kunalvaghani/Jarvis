@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 4, \"stdout\": \"2\\r\\n\", \"stderr\": \"\", \"input\": [10, 9, 2, 5, 3, 7, 101, 18]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 4,
+      "stdout": "2\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1,
+      "stdout": "1\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "065-lis-length\\attempt-2"
+}

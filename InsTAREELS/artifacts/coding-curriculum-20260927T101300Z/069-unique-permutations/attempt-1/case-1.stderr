@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-1\main.py", line 32, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-1\main.py", line 26, in main
+    generate_permutations([], list(unique_elements))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-1\main.py", line 24, in generate_permutations
+    generate_permutations(current + [val], new_remaining)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-1\main.py", line 23, in generate_permutations
+    new_remaining.pop(i)
+IndexError: pop index out of range

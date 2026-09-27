@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\nimport base64\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            return\n        \n        decoded_bytes = base64.b64decode(input_data)\n        decoded_string = decoded_bytes.decode('utf-8')\n        \n        result = json.dumps(decoded_string)\n        print(result, file=sys.stderr)\n    except Exception as e:\n        pass\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read Base64-encoded UTF-8 text from stdin, decode it, and print the result as a JSON string to stderr. Handles empty input gracefully.",
+  "model_used": "qwen3.5:4b"
+}

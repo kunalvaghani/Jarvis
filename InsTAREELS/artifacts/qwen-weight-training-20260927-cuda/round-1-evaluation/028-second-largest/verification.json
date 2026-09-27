@@ -1,0 +1,33 @@
+{
+  "id": "028-second-largest",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": null,
+      "stdout": "null\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": 2,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": -5,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

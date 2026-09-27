@@ -1,0 +1,33 @@
+{
+  "id": "003-product",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1,
+      "stdout": "1\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 24,
+      "stdout": "24\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1-evaluation\\003-product\\main.py\", line 5, in <module>\r\n    result = (x[0] if x else 1) * (x[1] if x else 1) * (x[2] if x else 1)\r\nIndexError: list index out of range\r\n"
+    }
+  ]
+}

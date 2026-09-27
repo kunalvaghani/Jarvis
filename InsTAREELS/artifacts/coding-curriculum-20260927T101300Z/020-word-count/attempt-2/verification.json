@@ -1,0 +1,8 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "runtime",
+  "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=120)",
+  "cases": [],
+  "path": "020-word-count\\attempt-2"
+}

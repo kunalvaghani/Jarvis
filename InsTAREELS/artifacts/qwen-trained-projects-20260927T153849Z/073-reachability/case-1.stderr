@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\073-reachability\main.py", line 38, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\073-reachability\main.py", line 33, in main
+    dfs(start)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\073-reachability\main.py", line 31, in dfs
+    dfs(neighbor)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\073-reachability\main.py", line 31, in dfs
+    dfs(neighbor)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\073-reachability\main.py", line 30, in dfs
+    for neighbor in graph[node]:
+KeyError: 'c'

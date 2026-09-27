@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef solve(grid):\n    if not grid:\n        return None\n    \n    rows = len(grid)\n    cols = len(grid[0])\n    \n    dp = [[0] * cols for _ in range(rows)]\n    dp[0][0] = grid[0][0]\n    \n    for r in range(rows):\n        for c in range(cols):\n            if r == 0 and c == 0:\n                continue\n            top = dp[r-1][c] if r > 0 else float('inf')\n            left = dp[r][c-1] if c > 0 else float('inf')\n            dp[r][c] = grid[r][c] + min(top, left)\n    \n    return dp[rows-1][cols-1]\n\nif __name__ == \"__main__\":\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps(None))\n            sys.exit(0)\n        \n        grid = json.loads(input_data)\n        result = solve(grid)\n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps(None), file=sys.stderr)\n",
+  "explanation": "Created main.py to read a JSON numeric grid from stdin, compute the minimum path sum moving only right or down including both endpoints, and output the result as JSON.",
+  "model_used": "qwen3.5:4b"
+}

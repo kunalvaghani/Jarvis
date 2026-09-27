@@ -1,0 +1,51 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 2, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": [], \"stdout\": \"\", \"stderr\": \"null\\r\\n\", \"input\": [[1], 2]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "stdout": "[[1, 2], [1, 3], [2, 3]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        []
+      ],
+      "stdout": "[[]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": "null\r\n"
+    }
+  ],
+  "path": "070-combinations\\attempt-1"
+}

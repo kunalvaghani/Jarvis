@@ -1,0 +1,63 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [[]], \"stdout\": \"[]\\r\\n\", \"stderr\": \"\", \"input\": []}, {\"case\": 1, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": [[1, 2], [2, 1]], \"stdout\": \"\", \"stderr\": \"Traceback (most recent call last):\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-2\\\\main.py\\\", line 43, in <module>\\r\\n    main()\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-2\\\\main.py\\\", line 35, in main\\r\\n    backtrack([], list(unique_elements))\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-2\\\\main.py\\\", line 33, in backtrack\\r\\n    backtrack(path + [val], new_remaining)\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-2\\\\main.py\\\", line 33, in backtrack\\r\\n    backtrack(path + [val], new_remaining)\\r\\n  File \\\"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\coding-curriculum-20260927T101300Z\\\\069-unique-permutations\\\\attempt-2\\\\main.py\\\", line 33, in backtrack\\r\\n    backtrack(path + [val], \", \"input\": [1, 2]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        []
+      ],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 43, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 35, in main\r\n    backtrack([], list(unique_elements))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], "
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 43, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 35, in main\r\n    backtrack([], list(unique_elements))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], new_remaining)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-curriculum-20260927T101300Z\\069-unique-permutations\\attempt-2\\main.py\", line 33, in backtrack\r\n    backtrack(path + [val], "
+    }
+  ],
+  "path": "069-unique-permutations\\attempt-2"
+}

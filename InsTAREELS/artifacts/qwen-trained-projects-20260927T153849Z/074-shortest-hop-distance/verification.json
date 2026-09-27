@@ -1,0 +1,69 @@
+{
+  "id": "074-shortest-hop-distance",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 40, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 28, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 2,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 40, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 28, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": -1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 40, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\074-shortest-hop-distance\\main.py\", line 28, in main\r\n    data = json.loads(input_data)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        {},
+        "a",
+        "a"
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        {
+          "a": [
+            "b"
+          ],
+          "b": [
+            "c"
+          ]
+        },
+        "a",
+        "c"
+      ],
+      "expected": 2
+    },
+    {
+      "input": [
+        {},
+        "a",
+        "z"
+      ],
+      "expected": -1
+    }
+  ],
+  "trained_on_project": true
+}

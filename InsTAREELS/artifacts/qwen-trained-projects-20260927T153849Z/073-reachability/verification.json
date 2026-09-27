@@ -1,0 +1,86 @@
+{
+  "id": "073-reachability",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [
+        "a"
+      ],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\073-reachability\\main.py\", line 38, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\073-reachability\\main.py\", line 33, in main\r\n    dfs(start)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\073-reachability\\main.py\", line 31, in dfs\r\n    dfs(neighbor)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\073-reachability\\main.py\", line 31, in dfs\r\n    dfs(neighbor)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\073-reachability\\main.py\", line 30, in dfs\r\n    for neighbor in graph[node]:\r\nKeyError: 'c'\r\n"
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        "a"
+      ],
+      "stdout": "[\"a\"]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        {},
+        "a"
+      ],
+      "expected": [
+        "a"
+      ]
+    },
+    {
+      "input": [
+        {
+          "a": [
+            "b"
+          ],
+          "b": [
+            "c"
+          ]
+        },
+        "a"
+      ],
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "input": [
+        {
+          "a": [
+            "a"
+          ]
+        },
+        "a"
+      ],
+      "expected": [
+        "a"
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

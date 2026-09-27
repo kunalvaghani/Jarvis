@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef shift_char(c, shift):\n    if 'a' <= c <= 'z':\n        return chr((ord(c) - ord('a') + shift) % 26 + ord('a'))\n    return c\n\ndef main():\n    try:\n        data = json.load(sys.stdin)\n        if isinstance(data, list) and len(data) == 2:\n            text, shift = data\n            result = ''.join(shift_char(c, shift) for c in text)\n            print(json.dumps(result))\n    except Exception as e:\n        sys.stderr.write(str(e) + '\\n')\n\nif __name__ == '__main__':\n    main()",
+  "explanation": "Fixed undefined variable 'shift_amount' by using the local 'shift' parameter. Added explicit import for json and sys. Implemented shift logic to handle ASCII lowercase only while leaving other characters unchanged.",
+  "model_used": "qwen3.5:4b"
+}

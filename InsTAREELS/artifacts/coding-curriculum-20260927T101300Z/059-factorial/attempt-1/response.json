@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ntry:\n    data = json.load(sys.stdin)\nexcept json.JSONDecodeError:\n    sys.exit(1)\n\nif not isinstance(data, int):\n    sys.exit(1)\n\nif data < 0:\n    sys.exit(1)\n\nresult = 1\nfor i in range(1, data + 1):\n    result *= i\n\nprint(result)",
+  "explanation": "The script reads a single integer from stdin, validates it is non-negative, computes its factorial, and prints the result as JSON (integer).",
+  "model_used": "qwen3.5:4b"
+}

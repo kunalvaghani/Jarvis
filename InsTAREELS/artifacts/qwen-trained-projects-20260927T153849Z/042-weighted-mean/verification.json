@@ -1,0 +1,73 @@
+{
+  "id": "042-weighted-mean",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1.0,
+      "stdout": "1.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 2.5,
+      "stdout": "2.5\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 5.0,
+      "stdout": "5.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        [
+          1,
+          1
+        ]
+      ],
+      "expected": 1.0
+    },
+    {
+      "input": [
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "expected": 2.5
+    },
+    {
+      "input": [
+        [
+          0,
+          2
+        ],
+        [
+          10,
+          2
+        ]
+      ],
+      "expected": 5.0
+    }
+  ],
+  "trained_on_project": true
+}

@@ -1,0 +1,46 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        3,
+        3,
+        5,
+        5,
+        6,
+        7
+      ],
+      "stdout": "[3, 3, 5, 5, 6, 7]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        2,
+        1
+      ],
+      "stdout": "[2, 1]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "093-window-maxima\\attempt-1"
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cuda\round-3-evaluation\032-transpose\main.py", line 33, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cuda\round-3-evaluation\032-transpose\main.py", line 29, in main
+    result = transpose(input_data)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cuda\round-3-evaluation\032-transpose\main.py", line 14, in transpose
+    result[i][j] = matrix[j][i]
+IndexError: list index out of range

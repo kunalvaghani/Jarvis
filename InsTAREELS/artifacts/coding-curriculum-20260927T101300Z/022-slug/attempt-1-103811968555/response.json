@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef slugify(text):\n    text = text.lower()\n    result = []\n    prev_is_alpha = True\n    for char in text:\n        if char.isalnum():\n            prev_is_alpha = True\n            result.append(char)\n        else:\n            if not prev_is_alpha or (len(result) > 0 and result[-1] != '-'):\n                result.append('-')\n            prev_is_alpha = False\n    return ''.join(result).strip('-')\n\ndef main():\n    try:\n        data = json.load(sys.stdin)\n    except json.JSONDecodeError:\n        sys.stderr.write('Invalid JSON\\n')\n        sys.exit(1)\n    \n    if isinstance(data, list):\n        result = [slugify(item) for item in data]\n    else:\n        result = slugify(data)\n    \n    print(json.dumps(result))\n\nif __name__ == '__main__':\n    main()",
+  "explanation": "Created main.py to read JSON from stdin, apply the slugify transformation (lowercase, replace non-alphanumeric runs with hyphens, strip edge hyphens), and output the result as JSON.",
+  "model_used": "qwen3.5:4b"
+}

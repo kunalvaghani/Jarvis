@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cuda\baseline\084-date-difference\main.py", line 30, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-weight-training-20260927-cuda\baseline\084-date-difference\main.py", line 5, in main
+    input_data = sys.stdin.read()
+NameError: name 'sys' is not defined

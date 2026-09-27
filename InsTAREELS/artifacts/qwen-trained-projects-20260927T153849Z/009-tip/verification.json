@@ -1,0 +1,59 @@
+{
+  "id": "009-tip",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 120.0,
+      "stdout": "220.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 50.0,
+      "stdout": "100.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0.0,
+      "stdout": "0.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        100,
+        20
+      ],
+      "expected": 120.0
+    },
+    {
+      "input": [
+        50,
+        0
+      ],
+      "expected": 50.0
+    },
+    {
+      "input": [
+        0,
+        20
+      ],
+      "expected": 0.0
+    }
+  ],
+  "trained_on_project": true
+}

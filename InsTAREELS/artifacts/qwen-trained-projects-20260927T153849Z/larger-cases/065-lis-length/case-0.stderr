@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\065-lis-length\main.py", line 22, in main
+    x = json.loads(input_data)
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\065-lis-length\main.py", line 29, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\065-lis-length\main.py", line 26, in main
+    print(json.dumps(0))
+NameError: name 'json' is not defined

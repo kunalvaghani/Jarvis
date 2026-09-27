@@ -1,0 +1,26 @@
+```python
+import sys
+
+def transpose_matrix(matrix):
+    if not matrix:
+        return []
+    
+    transposed = []
+    for i in range(len(matrix[0])):
+        transposed.append([matrix[j][i] for j in range(len(matrix))]
+    return transposed
+
+def main():
+    input_data = sys.stdin.read()
+    try:
+        data = json.loads(input_data)
+        result = transpose_matrix(data['input'])
+        print(json.dumps(result))
+    except json.JSONDecodeError:
+        print("Invalid JSON input")
+
+if __name__ == "__main__":
+    main()
+```
+
+This Python script defines a function `transpose_matrix` that takes a JSON-like input and returns a new JSON-like output where the rows of the input matrix are transposed. The `main` function reads the input from standard input, decodes it into a Python dictionary, calls `transpose_matrix`, and then prints the result. If the input is invalid JSON, it prints an error message.

@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1.0,
+      "stdout": "1.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 2.5,
+      "stdout": "2.5\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 5.0,
+      "stdout": "5.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "042-weighted-mean\\attempt-1"
+}

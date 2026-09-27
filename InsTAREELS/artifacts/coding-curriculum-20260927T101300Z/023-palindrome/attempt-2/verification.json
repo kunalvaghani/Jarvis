@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "json",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": true, \"stdout\": \"True\\r\\n\", \"stderr\": \"\", \"input\": \"\"}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": true, \"stdout\": \"True\\r\\n\", \"stderr\": \"\", \"input\": \"A man, a plan, a canal: Panama\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": true,
+      "stdout": "True\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": true,
+      "stdout": "True\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": false,
+      "stdout": "False\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "023-palindrome\\attempt-2"
+}

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\066-grid-path-count\main.py", line 19, in <module>
+    result = count_right_down_paths(json.loads(input_data))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\066-grid-path-count\main.py", line 5, in count_right_down_paths
+    rows, cols = len(grid), len(grid[0])
+TypeError: object of type 'int' has no len()

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\nfrom datetime import datetime\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list) or len(input_data) != 2:\n            print(json.dumps(None), file=sys.stderr)\n            return\n        start_str, end_str = input_data\n        try:\n            start_date = datetime.fromisoformat(start_str)\n            end_date = datetime.fromisoformat(end_str)\n        except ValueError:\n            print(json.dumps(None), file=sys.stderr)\n            return\n        delta = end_date - start_date\n        days = delta.days\n        print(json.dumps(days))\n    except Exception:\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list of two ISO date strings from stdin, calculate the signed difference in days (end - start), and output the result as a single JSON number. Handles invalid inputs by printing null to stderr.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\063-coin-change\main.py", line 24, in main
+    data = json.loads(input_data)
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\063-coin-change\main.py", line 39, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\larger-cases\063-coin-change\main.py", line 36, in main
+    print(json.dumps(None), file=sys.stderr)
+NameError: name 'json' is not defined

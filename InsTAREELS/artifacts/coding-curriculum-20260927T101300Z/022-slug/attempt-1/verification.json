@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": \"hello-world\", \"stdout\": \"\\\"h- w-!\\\"\", \"stderr\": \"\", \"input\": \"Hello World!\"}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": \"a-b\", \"stdout\": \"\\\"  a-___b- \\\"\", \"stderr\": \"\", \"input\": \"  A___B \"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "hello-world",
+      "stdout": "\"h- w-!\"",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "a-b",
+      "stdout": "\"  a-___b- \"",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"",
+      "stderr": ""
+    }
+  ],
+  "path": "022-slug\\attempt-1"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "089-word-ranking",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          "a",
+          2
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "z",
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 30, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu\\baseline\\089-word-ranking\\main.py\", line 5, in main\r\n    input_data = sys.stdin.read()\r\nNameError: name 'sys' is not defined\r\n"
+    }
+  ]
+}

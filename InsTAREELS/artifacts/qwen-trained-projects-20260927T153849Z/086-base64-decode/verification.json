@@ -1,0 +1,50 @@
+{
+  "id": "086-base64-decode",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\086-base64-decode\\main.py\", line 4, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "hello",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\086-base64-decode\\main.py\", line 4, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "caf\u00e9",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\086-base64-decode\\main.py\", line 4, in <module>\r\n    x = json.load(sys.stdin)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "",
+      "expected": ""
+    },
+    {
+      "input": "aGVsbG8=",
+      "expected": "hello"
+    },
+    {
+      "input": "Y2Fmw6k=",
+      "expected": "caf\u00e9"
+    }
+  ],
+  "trained_on_project": true
+}

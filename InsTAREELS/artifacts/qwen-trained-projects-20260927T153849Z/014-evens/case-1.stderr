@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\014-evens\main.py", line 7, in <module>
+    result = (json.dumps(process(json.load(sys.stdin))))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\014-evens\main.py", line 5, in process
+    return x if (x % 2 == 0) else None
+TypeError: unsupported operand type(s) for %: 'list' and 'int'

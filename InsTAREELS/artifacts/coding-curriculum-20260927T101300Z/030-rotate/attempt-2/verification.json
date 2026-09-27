@@ -1,0 +1,44 @@
+{
+  "number": 2,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        3,
+        1,
+        2
+      ],
+      "stdout": "[3, 1, 2]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        3,
+        1,
+        2
+      ],
+      "stdout": "[3, 1, 2]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "030-rotate\\attempt-2"
+}

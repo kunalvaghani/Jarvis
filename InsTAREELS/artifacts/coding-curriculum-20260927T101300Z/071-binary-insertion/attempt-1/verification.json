@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "runtime",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"runtime\", \"exit_code\": 1, \"expected\": 0, \"stdout\": \"\", \"stderr\": \"{\\\"error\\\": \\\"list index out of range\\\"}\\r\\n\", \"input\": [[], 3]}, {\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": 1, \"stdout\": \"2\\r\\n\", \"stderr\": \"\", \"input\": [[1, 2, 2, 4], 2]}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "{\"error\": \"list index out of range\"}\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 1,
+      "stdout": "2\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 2,
+      "stdout": "1\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "071-binary-insertion\\attempt-1"
+}

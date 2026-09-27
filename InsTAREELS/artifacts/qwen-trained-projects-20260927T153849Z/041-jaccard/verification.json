@@ -1,0 +1,69 @@
+{
+  "id": "041-jaccard",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1,
+      "stdout": "1\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0.3333333333333333,
+      "stdout": "0.3333333333333333\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 1.0,
+      "stdout": "1.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        [],
+        []
+      ],
+      "expected": 1
+    },
+    {
+      "input": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "expected": 0.3333333333333333
+    },
+    {
+      "input": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": 1.0
+    }
+  ],
+  "trained_on_project": true
+}

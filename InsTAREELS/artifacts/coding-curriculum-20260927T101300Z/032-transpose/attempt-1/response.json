@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n        return\n    \n    if not isinstance(input_data, list):\n        print(json.dumps(None), file=sys.stderr)\n        return\n    \n    if len(input_data) == 0:\n        print(json.dumps([]))\n        return\n    \n    transposed = []\n    for i in range(len(input_data[0])):\n        row = []\n        for row_data in input_data:\n            if isinstance(row_data, list):\n                row.append(row_data[i])\n            else:\n                print(json.dumps(None), file=sys.stderr)\n                return\n        transposed.append(row)\n    \n    print(json.dumps(transposed))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read one JSON value from stdin, transpose rectangular matrix if input is a list of lists, and output the result as JSON. Handles empty matrix by returning []. Validates input structure and prints errors to stderr.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 43, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 35, in main
+    backtrack([], list(unique_elements))
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 33, in backtrack
+    backtrack(path + [val], new_remaining)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 33, in backtrack
+    backtrack(path + [val], new_remaining)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 33, in backtrack
+    backtrack(path + [val], new_remaining)
+  [Previous line repeated 994 more times]
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\069-unique-permutations\attempt-2\main.py", line 25, in backtrack
+    if len(remaining) == 0:
+RecursionError: maximum recursion depth exceeded while calling a Python object

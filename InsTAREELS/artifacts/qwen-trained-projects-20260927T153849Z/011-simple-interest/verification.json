@@ -1,0 +1,62 @@
+{
+  "id": "011-simple-interest",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 10.0,
+      "stdout": "10.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0.0,
+      "stdout": "0.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 30.0,
+      "stdout": "30.0\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        100,
+        5,
+        2
+      ],
+      "expected": 10.0
+    },
+    {
+      "input": [
+        200,
+        0,
+        10
+      ],
+      "expected": 0.0
+    },
+    {
+      "input": [
+        1000,
+        3,
+        1
+      ],
+      "expected": 30.0
+    }
+  ],
+  "trained_on_project": true
+}

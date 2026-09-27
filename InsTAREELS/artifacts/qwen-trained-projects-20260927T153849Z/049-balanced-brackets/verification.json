@@ -1,0 +1,22 @@
+{
+  "id": "049-balanced-brackets",
+  "passed": false,
+  "kind": "policy",
+  "error": "Dynamic execution or filesystem access is unsupported.",
+  "executed": false,
+  "input_cases": [
+    {
+      "input": "",
+      "expected": true
+    },
+    {
+      "input": "([{}])",
+      "expected": true
+    },
+    {
+      "input": "([)]",
+      "expected": false
+    }
+  ],
+  "trained_on_project": true
+}

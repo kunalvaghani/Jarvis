@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except (json.JSONDecodeError, ValueError):\n        return\n    \n    if not isinstance(input_data, int) or input_data <= 0:\n        return\n    \n    divisors = []\n    for i in range(1, input_data + 1):\n        if input_data % i == 0:\n            divisors.append(i)\n    \n    print(json.dumps(divisors))\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single integer from stdin, compute its positive divisors in ascending order, and output them as a JSON list. Handles edge cases like non-integer or non-positive inputs by exiting silently.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps([]), file=sys.stderr)\n            return\n        \n        result = []\n        for i in range(len(input_data) - 1):\n            result.append(input_data[i + 1])\n        \n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps([]), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, compute the derivative coefficients by taking elements starting from index 1 (ascending-power coefficients to derivative coefficients), and print the result as JSON. Constants (single-element lists) return an empty list per contract.",
+  "model_used": "qwen3.5:4b"
+}

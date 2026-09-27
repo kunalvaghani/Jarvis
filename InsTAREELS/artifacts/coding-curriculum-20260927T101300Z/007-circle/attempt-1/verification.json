@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 0.0,
+      "stdout": "0.0\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 3.141592653589793,
+      "stdout": "3.141592653589793\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": 28.274333882308138,
+      "stdout": "28.274333882308138\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "007-circle\\attempt-1"
+}

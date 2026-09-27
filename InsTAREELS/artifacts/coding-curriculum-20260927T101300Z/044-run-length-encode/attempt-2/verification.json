@@ -1,0 +1,70 @@
+{
+  "number": 2,
+  "passed": false,
+  "kind": "logic",
+  "feedback": "[{\"case\": 1, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [[\"a\", 3], [\"b\", 2], [\"c\", 1]], \"stdout\": \"[]\\r\\n\", \"stderr\": \"\", \"input\": \"aaabbc\"}, {\"case\": 2, \"passed\": false, \"kind\": \"logic\", \"exit_code\": 0, \"expected\": [[\"a\", 1], [\"b\", 1], [\"a\", 1], [\"b\", 1], [\"a\", 1]], \"stdout\": \"[]\\r\\n\", \"stderr\": \"\", \"input\": \"ababa\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          3
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ]
+      ],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "044-run-length-encode\\attempt-2"
+}

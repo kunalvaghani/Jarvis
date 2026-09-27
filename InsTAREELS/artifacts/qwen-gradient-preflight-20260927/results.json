@@ -1,0 +1,12 @@
+{
+  "status": "gradient_preflight_passed",
+  "scope": "Two genuine CPU optimizer updates on one sum project; not the full curriculum training or production model",
+  "losses": [
+    0.4949064254760742,
+    0.41441527009010315
+  ],
+  "parameter_absolute_delta": 250.64801120758057,
+  "trainable_parameters": 1081344,
+  "seconds": 4.5209996700286865,
+  "adapter_sha256": "51c2f84defd1ecb5e1d282ec103cee933819f388d265a57b93756dcec82ad33a"
+}

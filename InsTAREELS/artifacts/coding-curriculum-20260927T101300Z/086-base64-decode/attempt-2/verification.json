@@ -1,0 +1,36 @@
+{
+  "number": 2,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "hello",
+      "stdout": "\"hello\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "caf\u00e9",
+      "stdout": "\"caf\\u00e9\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "086-base64-decode\\attempt-2"
+}

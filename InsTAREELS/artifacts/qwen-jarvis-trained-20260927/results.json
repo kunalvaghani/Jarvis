@@ -1,0 +1,22 @@
+{
+  "base_model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "base_sha256": "f9523886352217ded3aeeef552b381af79d568c6d49a4b9e423288cea56b0a44",
+  "selected_checkpoint": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-1",
+  "local_adapter": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-jarvis-trained-20260927\\adapter",
+  "local_merged_model": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-jarvis-trained-20260927\\merged-model",
+  "merged_projection_absolute_delta": 181.5244598388672,
+  "merged_sha256": "ef31768db3acbbdf853e701bbe4d2f0889daaf85da45d13708d6612acb2a5181",
+  "selected_heldout_passes": 7,
+  "heldout_total": 14,
+  "selected_heldout_loss": 0.31611212342977524,
+  "completed_gradient_rounds": 6,
+  "gradient_examples": 681,
+  "optimizer_steps": 171,
+  "trainable_parameters": 1081344,
+  "phase_reports": [
+    "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\results.json",
+    "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\results.json",
+    "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\results.json"
+  ],
+  "note": "Best completed held-out result retained; corrective round-two parser failure recovered separately. No production configuration change."
+}

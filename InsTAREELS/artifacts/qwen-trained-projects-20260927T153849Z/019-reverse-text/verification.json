@@ -1,0 +1,50 @@
+{
+  "id": "019-reverse-text",
+  "passed": true,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\"\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "cba",
+      "stdout": "\"cba\"\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": "dlrow olleh",
+      "stdout": "\"dlrow olleh\"\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": "",
+      "expected": ""
+    },
+    {
+      "input": "abc",
+      "expected": "cba"
+    },
+    {
+      "input": "hello world",
+      "expected": "dlrow olleh"
+    }
+  ],
+  "trained_on_project": true
+}

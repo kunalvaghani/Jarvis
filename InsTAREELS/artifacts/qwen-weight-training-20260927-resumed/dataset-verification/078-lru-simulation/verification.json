@@ -1,0 +1,43 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": {
+      "hits": 1,
+      "keys": [
+        "a",
+        "c"
+      ]
+    },
+    "stdout": "{\"hits\": 1, \"keys\": [\"a\", \"c\"]}\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": {
+      "hits": 1,
+      "keys": [
+        "b"
+      ]
+    },
+    "stdout": "{\"hits\": 1, \"keys\": [\"b\"]}\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": {
+      "hits": 0,
+      "keys": []
+    },
+    "stdout": "{\"hits\": 0, \"keys\": []}\r\n",
+    "stderr": ""
+  }
+]

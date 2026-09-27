@@ -1,0 +1,29 @@
+[
+  {
+    "case": 0,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": "hello-world",
+    "stdout": "\"hello-world\"\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 1,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": "a-b",
+    "stdout": "\"a-b\"\r\n",
+    "stderr": ""
+  },
+  {
+    "case": 2,
+    "passed": true,
+    "kind": null,
+    "exit_code": 0,
+    "expected": "",
+    "stdout": "\"\"\r\n",
+    "stderr": ""
+  }
+]

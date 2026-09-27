@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef rotate_right(lst, k):\n    if not lst:\n        return []\n    n = len(lst)\n    if k <= 0:\n        return lst\n    k = k % n\n    if k == 0:\n        return lst\n    return lst[-k:] + lst[:-k]\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps(None), file=sys.stderr)\n            sys.exit(1)\n        result = rotate_right(input_data, input_data[1] if len(input_data) > 1 else 0)\n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a JSON list from stdin, perform right rotation by the second element (or 0 if missing), and print the result as JSON. Handles empty lists and edge cases per contract.",
+  "model_used": "qwen3.5:4b"
+}

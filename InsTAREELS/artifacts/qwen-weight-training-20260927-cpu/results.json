@@ -1,0 +1,17 @@
+{
+  "status": "superseded_by_cuda_run",
+  "base_model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "method": "CPU baseline evaluation; interrupted before full-curriculum gradient updates",
+  "started": "2026-09-27T14:49:52.132903+00:00",
+  "rounds": [],
+  "output": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cpu",
+  "base_sha256": "f9523886352217ded3aeeef552b381af79d568c6d49a4b9e423288cea56b0a44",
+  "base_revision": "ea3f2471cf1b1f0db85067f1ef93848e38e88c25",
+  "device": "cpu",
+  "gpu": null,
+  "precision": "torch.float32",
+  "training_projects": 55,
+  "heldout_projects": 14,
+  "dataset_sha256": "2788ead88bba83a05ca64ef6ba406d54a503c8cb47928871159e453eba12f935",
+  "reason": "CUDA dependencies finished downloading; partial CPU baseline preserved and full evaluation/training moved to a fresh GPU run"
+}

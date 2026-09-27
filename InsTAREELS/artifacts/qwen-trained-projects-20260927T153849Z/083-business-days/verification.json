@@ -1,0 +1,59 @@
+{
+  "id": "083-business-days",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 5,
+      "stdout": "null\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "null\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": 0,
+      "stdout": "null\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        "2026-09-21",
+        "2026-09-28"
+      ],
+      "expected": 5
+    },
+    {
+      "input": [
+        "2026-09-26",
+        "2026-09-28"
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        "2026-09-21",
+        "2026-09-21"
+      ],
+      "expected": 0
+    }
+  ],
+  "trained_on_project": true
+}

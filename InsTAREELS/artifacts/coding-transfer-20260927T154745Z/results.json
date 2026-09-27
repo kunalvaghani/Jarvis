@@ -1,0 +1,175 @@
+{
+  "at": "2026-09-27T15:47:45.884447+00:00",
+  "task": "invoice calculator",
+  "visible_examples": 2,
+  "withheld_cases": 8,
+  "learning": "actual trained Qwen checkpoint; no execution-feedback repair",
+  "checkpoint": "artifacts/qwen-jarvis-trained-20260927/adapter",
+  "status": "executed",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 0.0,
+        "discount": 0.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 20.0,
+        "discount": 0.0,
+        "net": 20.0,
+        "tax": 1.0,
+        "total": 21.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 37.0,
+        "discount": 3.7,
+        "net": 33.3,
+        "tax": 1.67,
+        "total": 34.97
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 3,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 0.5,
+        "discount": 0.0,
+        "net": 0.5,
+        "tax": 0.05,
+        "total": 0.55
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 4,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 80.0,
+        "discount": 80.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 5,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 100.0,
+        "discount": 20.0,
+        "net": 80.0,
+        "tax": 0.0,
+        "total": 80.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 6,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 0.0,
+        "discount": 0.0,
+        "net": 0.0,
+        "tax": 0.0,
+        "total": 0.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 7,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 29.0,
+        "discount": 0.0,
+        "net": 29.0,
+        "tax": 2.18,
+        "total": 31.18
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 8,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 0.05,
+        "discount": 0.01,
+        "net": 0.04,
+        "tax": 0.0,
+        "total": 0.04
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    },
+    {
+      "case": 9,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": {
+        "subtotal": 100000.0,
+        "discount": 5000.0,
+        "net": 95000.0,
+        "tax": 17100.0,
+        "total": 112100.0
+      },
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 24, in <module>\r\n    result = calculate(input_data['items'])\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\coding-transfer-20260927T154745Z\\main.py\", line 7, in calculate\r\n    discount = subtotal*Decimal(item['discount_pct'])/100\r\nNameError: name 'item' is not defined. Did you mean: 'items'?\r\n"
+    }
+  ],
+  "source_sha256": "64dfccb8c48f3d9ba33c9e48e0629ed8ad2189e1e3afa71aeabc4b25835b6e7f",
+  "source_unchanged": true,
+  "summary": {
+    "passed": 0,
+    "total": 10
+  },
+  "inference_events": [
+    {
+      "operation": "code_edit",
+      "lesson_kinds": [],
+      "validation_error": "",
+      "model_used": "jarvis-qwen-local-lora"
+    }
+  ]
+}

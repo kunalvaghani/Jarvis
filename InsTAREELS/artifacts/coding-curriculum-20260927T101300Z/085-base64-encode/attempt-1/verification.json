@@ -1,0 +1,36 @@
+{
+  "number": 1,
+  "passed": false,
+  "kind": "silent_output",
+  "feedback": "[{\"case\": 0, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"\", \"stdout\": \"\\r\\n\", \"stderr\": \"\", \"input\": \"\"}, {\"case\": 1, \"passed\": false, \"kind\": \"json\", \"exit_code\": 0, \"expected\": \"aGVsbG8=\", \"stdout\": \"aGVsbG8=\\r\\n\", \"stderr\": \"\", \"input\": \"hello\"}]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "",
+      "stdout": "\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "aGVsbG8=",
+      "stdout": "aGVsbG8=\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": "Y2Fmw6k=",
+      "stdout": "Y2Fmw6k=\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "085-base64-encode\\attempt-1"
+}

@@ -1,0 +1,99 @@
+{
+  "id": "089-word-ranking",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          "a",
+          2
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\089-word-ranking\\main.py\", line 6, in <lambda>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\nTypeError: bad operand type for unary -: 'str'\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "z",
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\089-word-ranking\\main.py\", line 6, in <lambda>\r\n    result = (sorted(([(i,j) for i in x for j in i.split() if j]), key=lambda x:(-x[1],x[0])))\r\nTypeError: bad operand type for unary -: 'str'\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [],
+      "expected": []
+    },
+    {
+      "input": [
+        "a b a",
+        "b c"
+      ],
+      "expected": [
+        [
+          "a",
+          2
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ]
+    },
+    {
+      "input": [
+        "z a"
+      ],
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "z",
+          1
+        ]
+      ]
+    }
+  ],
+  "trained_on_project": false
+}

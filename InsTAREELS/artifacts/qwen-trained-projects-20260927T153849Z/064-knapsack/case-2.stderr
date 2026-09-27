@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\qwen-trained-projects-20260927T153849Z\064-knapsack\main.py", line 41, in <module>
+    capacity = data[2]
+IndexError: list index out of range

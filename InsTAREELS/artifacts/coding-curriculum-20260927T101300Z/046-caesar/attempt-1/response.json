@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef shift_char(c):\n    if 'a' <= c <= 'z':\n        return chr((ord(c) - ord('a') + int(shift_amount)) % 26 + ord('a'))\n    return c\n\ndef main():\n    try:\n        data = json.load(sys.stdin)\n        if isinstance(data, list) and len(data) == 2:\n            text, shift = data\n            result = ''.join(shift_char(c) for c in text)\n            print(json.dumps(result))\n    except Exception as e:\n        sys.stderr.write(str(e) + '\\n')\n\nif __name__ == '__main__':\n    main()",
+  "explanation": "Created main.py to read a JSON list [string, integer] from stdin, apply ASCII lowercase shift to the string, and print the result as JSON. Implemented shift_char to handle only 'a'-'z', leaving other characters unchanged. Used explicit imports for json and sys.",
+  "model_used": "qwen3.5:4b"
+}

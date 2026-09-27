@@ -1,0 +1,369 @@
+{
+  "heldout_loss": 0.2983052773135049,
+  "projects_passed": 3,
+  "projects_total": 14,
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            1,
+            2,
+            3
+          ],
+          "stdout": "[1, 2, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "084-date-difference",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 2,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <module>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <genexpr>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\nValueError: invalid literal for int() with base 10: '-'\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": -1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <module>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <genexpr>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\nValueError: invalid literal for int() with base 10: '-'\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <module>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\084-date-difference\\main.py\", line 6, in <genexpr>\r\n    result = (sum((int(d2)-int(d1)) for d1,d2 in zip(*x)))\r\nValueError: invalid literal for int() with base 10: '-'\r\n"
+        }
+      ]
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "passed": false,
+      "error": "policy: Use only permitted pure standard-library imports."
+    },
+    {
+      "id": "028-second-largest",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": null,
+          "stdout": "null\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": -5,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "032-transpose",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stdout": "[[1, 3], [2, 4]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ],
+          "stdout": "[[1], [2], [3]]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "089-word-ranking",
+      "passed": false,
+      "error": "syntax: unmatched ')' (<unknown>, line 6)"
+    },
+    {
+      "id": "082-deep-merge",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {},
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": {
+              "b": 1,
+              "c": 2
+            }
+          },
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": {
+            "a": [
+              2
+            ]
+          },
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 7, in <module>\r\n    print(json.dumps(result(x)))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\082-deep-merge\\main.py\", line 6, in <lambda>\r\n    result = (lambda x: ({**x,**x[0]} if isinstance(x,dict) else x)(x))\r\nTypeError: 'list' object is not callable\r\n"
+        }
+      ]
+    },
+    {
+      "id": "035-moving-average",
+      "passed": false,
+      "error": "syntax: invalid syntax (<unknown>, line 303)"
+    },
+    {
+      "id": "025-ordered-unique",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            2,
+            1,
+            3
+          ],
+          "stdout": "[1, 2, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "052-polynomial-value",
+      "passed": false,
+      "error": "policy: Use only permitted pure standard-library imports."
+    },
+    {
+      "id": "004-celsius",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 32.0,
+          "stdout": "32.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 212.0,
+          "stdout": "212.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": -40.0,
+          "stdout": "-40.0\r\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "id": "092-multiset-intersection",
+      "passed": false,
+      "error": "policy: Use only permitted pure standard-library imports."
+    },
+    {
+      "id": "050-roman-numerals",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "I",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\050-roman-numerals\\main.py\", line 6, in <module>\r\n    result = (''.join(['XCIX' if i<=x else 'XC' if i<=400 else 'LX' if i<=900 else 'XC' if i<=4000 else 'CD' if i<=9000 else 'D' for i in x]))\r\nTypeError: 'int' object is not iterable\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "XLIX",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\050-roman-numerals\\main.py\", line 6, in <module>\r\n    result = (''.join(['XCIX' if i<=x else 'XC' if i<=400 else 'LX' if i<=900 else 'XC' if i<=4000 else 'CD' if i<=9000 else 'D' for i in x]))\r\nTypeError: 'int' object is not iterable\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": "MCMXCIV",
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\050-roman-numerals\\main.py\", line 6, in <module>\r\n    result = (''.join(['XCIX' if i<=x else 'XC' if i<=400 else 'LX' if i<=900 else 'XC' if i<=4000 else 'CD' if i<=9000 else 'D' for i in x]))\r\nTypeError: 'int' object is not iterable\r\n"
+        }
+      ]
+    },
+    {
+      "id": "003-product",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\003-product\\main.py\", line 6, in <module>\r\n    result = (reduce(lambda x,y:x*y,x))\r\nNameError: name 'reduce' is not defined\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 24,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\003-product\\main.py\", line 6, in <module>\r\n    result = (reduce(lambda x,y:x*y,x))\r\nNameError: name 'reduce' is not defined\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\round-3-evaluation\\003-product\\main.py\", line 6, in <module>\r\n    result = (reduce(lambda x,y:x*y,x))\r\nNameError: name 'reduce' is not defined\r\n"
+        }
+      ]
+    }
+  ]
+}

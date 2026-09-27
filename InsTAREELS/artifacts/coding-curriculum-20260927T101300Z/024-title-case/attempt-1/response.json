@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if isinstance(input_data, list):\n            result = [str(item).title() for item in input_data]\n        else:\n            result = str(input_data).title()\n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps({\"error\": str(e)}), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read JSON from stdin, apply str.title() to each element (handling both lists and scalars), and output the result as JSON.",
+  "model_used": "qwen3.5:4b"
+}

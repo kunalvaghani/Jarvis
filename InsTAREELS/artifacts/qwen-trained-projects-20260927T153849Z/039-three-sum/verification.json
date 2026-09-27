@@ -1,0 +1,95 @@
+{
+  "id": "039-three-sum",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\039-three-sum\\main.py\", line 39, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\039-three-sum\\main.py\", line 15, in main\r\n    if any(not isinstance(x, int) or not isinstance(y, int) or not isinstance(z, int) for x, y, z in input_data):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\039-three-sum\\main.py\", line 15, in <genexpr>\r\n    if any(not isinstance(x, int) or not isinstance(y, int) or not isinstance(z, int) for x, y, z in input_data):\r\nTypeError: cannot unpack non-iterable int object\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": [
+        -1,
+        0,
+        1,
+        2,
+        -1,
+        -4
+      ],
+      "expected": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "input": [],
+      "expected": []
+    }
+  ],
+  "trained_on_project": true
+}

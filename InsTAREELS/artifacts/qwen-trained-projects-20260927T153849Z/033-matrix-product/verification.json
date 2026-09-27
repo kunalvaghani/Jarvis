@@ -1,0 +1,86 @@
+{
+  "id": "033-matrix-product",
+  "passed": false,
+  "kind": "policy",
+  "error": "Use only permitted pure standard-library imports.",
+  "executed": false,
+  "input_cases": [
+    {
+      "input": [
+        [
+          [
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "input": [
+        [
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          11
+        ]
+      ]
+    },
+    {
+      "input": [
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    }
+  ],
+  "trained_on_project": true
+}

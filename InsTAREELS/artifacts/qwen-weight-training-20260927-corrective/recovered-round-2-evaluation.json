@@ -1,0 +1,437 @@
+{
+  "projects_passed": 4,
+  "projects_total": 14,
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            1,
+            2,
+            3
+          ],
+          "stdout": "[[1, 2], [], [3]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[[0]]\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "084-date-difference",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "-26\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": -1,
+          "stdout": "-1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 0,
+          "stdout": "0\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            ""
+          ],
+          "stdout": "[\"\"]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            "()"
+          ],
+          "stdout": "[\"()\"]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "json",
+          "exit_code": 0,
+          "expected": [
+            "((()))",
+            "(()())",
+            "(())()",
+            "()(())",
+            "()()()"
+          ],
+          "stdout": "",
+          "stderr": "{\"error\": \"sequence item 0: expected str instance, int found\"}\r\n"
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "028-second-largest",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": null,
+          "stdout": "1\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": 2,
+          "stdout": "null\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "logic",
+          "exit_code": 0,
+          "expected": -5,
+          "stdout": "null\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "032-transpose",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stdout": "[[1, 3], [2, 4]]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ],
+          "stdout": "[[1], [2], [3]]\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "089-word-ranking",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            [
+              "a",
+              2
+            ],
+            [
+              "b",
+              2
+            ],
+            [
+              "c",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\089-word-ranking\\main.py\", line 6, in <genexpr>\r\n    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))\r\nTypeError: unhashable type: 'list'\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": [
+            [
+              "a",
+              1
+            ],
+            [
+              "z",
+              1
+            ]
+          ],
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\089-word-ranking\\main.py\", line 6, in <module>\r\n    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\089-word-ranking\\main.py\", line 6, in <genexpr>\r\n    result = (sorted((list(set([i.split() for i in x if i])),-len(i)) for i in x))\r\nTypeError: unhashable type: 'list'\r\n"
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "082-deep-merge",
+      "passed": false,
+      "error": "syntax: expected 'else' after 'if' expression (<unknown>, line 6)",
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "035-moving-average",
+      "passed": false,
+      "error": "syntax: invalid syntax (<unknown>, line 6)",
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "025-ordered-unique",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [],
+          "stdout": "[]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            2,
+            1,
+            3
+          ],
+          "stdout": "[2, 1, 3]\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": [
+            0
+          ],
+          "stdout": "[0]\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "052-polynomial-value",
+      "passed": false,
+      "cases": [
+        {
+          "case": 0,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 17,
+          "stdout": "",
+          "stderr": "{\"error\": \"Invalid coefficient format\"}\r\n"
+        },
+        {
+          "case": 1,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 5,
+          "stdout": "",
+          "stderr": "{\"error\": \"Invalid coefficient format\"}\r\n"
+        },
+        {
+          "case": 2,
+          "passed": false,
+          "kind": "runtime",
+          "exit_code": 1,
+          "expected": 0,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\052-polynomial-value\\main.py\", line 56, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-corrective\\round-2-evaluation\\052-polynomial-value\\main.py\", line 31, in main\r\n    if not isinstance(coefficients[0], list) or len(coefficients[0]) != 2:\r\nIndexError: list index out of range\r\n"
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "004-celsius",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 32.0,
+          "stdout": "32.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": 212.0,
+          "stdout": "212.0\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": -40.0,
+          "stdout": "-40.0\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "092-multiset-intersection",
+      "passed": false,
+      "error": "syntax: expected 'except' or 'finally' block (<unknown>, line 40)",
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "050-roman-numerals",
+      "passed": true,
+      "cases": [
+        {
+          "case": 0,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "I",
+          "stdout": "\"I\"\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 1,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "XLIX",
+          "stdout": "\"XLIX\"\r\n",
+          "stderr": ""
+        },
+        {
+          "case": 2,
+          "passed": true,
+          "kind": null,
+          "exit_code": 0,
+          "expected": "MCMXCIV",
+          "stdout": "\"MCMXCIV\"\r\n",
+          "stderr": ""
+        }
+      ],
+      "provenance": "original completed CLI evaluation"
+    },
+    {
+      "id": "003-product",
+      "passed": false,
+      "error": "Parser rejected excessively nested source.",
+      "kind": "syntax",
+      "provenance": "preserved generated source rejected by repaired parser guard; never executed"
+    }
+  ],
+  "heldout_loss": null,
+  "training_loss": null,
+  "note": "Round-two weights and optimizer were saved. Final AST parsing exhausted the parser and aborted aggregate reporting. Counts recovered from original completed checks and the preserved rejected product source. Missing loss aggregates are not invented."
+}

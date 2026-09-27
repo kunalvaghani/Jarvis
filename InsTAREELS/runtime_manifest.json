@@ -23,6 +23,11 @@
     "safe_task_resume",
     "silent_recovery",
     "local_experience_recall",
+    "verified_coding_lesson_recall",
+    "learned_missing_import_check",
+    "related_coding_failure_examples",
+    "portable_coding_experience_seed",
+    "hundred_project_coding_curriculum",
     "task_dependencies",
     "natural_spoken_replies",
     "sentence_audio_streaming",
@@ -36,7 +41,11 @@
     "autonomous_toolkit_planning",
     "verified_tool_result_context",
     "credential_gated_integrations",
-    "scoped_resource_search"
+    "scoped_resource_search",
+    "local_qwen_weight_training",
+    "resumable_lora_checkpoints",
+    "heldout_coding_weight_evaluation",
+    "optional_trained_python_coder"
   ],
   "main_imports": [
     "tkinter",
@@ -72,5 +81,18 @@
   ],
   "ui_assets": [
     "jarvis/assets/jarvis-reference.gif"
-  ]
+  ],
+  "optional_training": {
+    "requirements": "requirements-training.txt",
+    "environment": ".venv-training",
+    "imports": [
+      "torch",
+      "transformers",
+      "peft",
+      "accelerate",
+      "huggingface_hub",
+      "safetensors"
+    ],
+    "long_running_service": false
+  }
 }

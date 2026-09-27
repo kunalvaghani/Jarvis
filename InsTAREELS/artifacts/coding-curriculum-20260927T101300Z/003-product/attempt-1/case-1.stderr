@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\003-product\attempt-1\main.py", line 9, in main
+    value = json.loads(data)
+NameError: name 'json' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\003-product\attempt-1\main.py", line 30, in <module>
+    main()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\artifacts\coding-curriculum-20260927T101300Z\003-product\attempt-1\main.py", line 22, in main
+    except json.JSONDecodeError as e:
+NameError: name 'json' is not defined

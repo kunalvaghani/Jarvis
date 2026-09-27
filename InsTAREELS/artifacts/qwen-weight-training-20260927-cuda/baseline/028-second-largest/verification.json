@@ -1,0 +1,33 @@
+{
+  "id": "028-second-largest",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": null,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 22, in <module>\r\n    result = find_second_largest_distinct_value(input_data)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 5, in find_second_largest_distinct_value\r\n    data = json.loads(input_json)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 2,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 22, in <module>\r\n    result = find_second_largest_distinct_value(input_data)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 5, in find_second_largest_distinct_value\r\n    data = json.loads(input_json)\r\nNameError: name 'json' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": -5,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 22, in <module>\r\n    result = find_second_largest_distinct_value(input_data)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-cuda\\baseline\\028-second-largest\\main.py\", line 5, in find_second_largest_distinct_value\r\n    data = json.loads(input_json)\r\nNameError: name 'json' is not defined\r\n"
+    }
+  ]
+}

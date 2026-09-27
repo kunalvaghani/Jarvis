@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef largest_rectangle_area(heights):\n    stack = []\n    max_area = 0\n    for i in range(len(heights) + 1):\n        h = heights[i] if i < len(heights) else 0\n        while stack and h < heights[stack[-1]]:\n            height = heights[stack.pop()]\n            width = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, height * width)\n        stack.append(i)\n    return max_area\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list):\n            print(json.dumps(0), file=sys.stderr)\n            sys.exit(1)\n        result = largest_rectangle_area(input_data)\n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps(0), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py implementing the largest rectangle area under histogram algorithm using a monotonic stack. Reads one JSON list from stdin, computes the maximum area for nonnegative heights with unit widths, and outputs exactly one JSON scalar value.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,28 @@
+```python
+import sys
+
+def celsius_to_fahrenheit(celsius):
+    return (celsius * 9/5) + 32
+
+def main():
+    # Read input from sys.stdin
+    input_value = sys.stdin.read()
+    
+    # Convert the input value to a float
+    try:
+        celsius = float(input_value)
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+        return
+    
+    # Convert Celsius to Fahrenheit
+    fahrenheit = celsius_to_fahrenheit(celsius)
+    
+    # Write the result to stdout
+    print(f"{fahrenheit:.2f}")
+
+if __name__ == "__main__":
+    main()
+```
+
+This Python script defines a function `celsius_to_fahrenheit` that converts a given Celsius temperature to Fahrenheit. It reads a line of input from `sys.stdin`, converts it to a float, and then uses this float to compute the Fahrenheit equivalent. The result is printed to `stdout`. If the input is not a valid number, an error message is displayed.

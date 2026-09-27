@@ -1,0 +1,58 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "[]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          2
+        ],
+        [
+          "b",
+          2
+        ],
+        [
+          "c",
+          1
+        ]
+      ],
+      "stdout": "[[\"a\", 2], [\"b\", 2], [\"c\", 1]]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        [
+          "a",
+          1
+        ],
+        [
+          "z",
+          1
+        ]
+      ],
+      "stdout": "[[\"a\", 1], [\"z\", 1]]\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "089-word-ranking\\attempt-1"
+}

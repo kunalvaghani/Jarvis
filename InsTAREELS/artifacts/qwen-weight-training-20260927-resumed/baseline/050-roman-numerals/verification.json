@@ -1,0 +1,33 @@
+{
+  "id": "050-roman-numerals",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "I",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 53, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 34, in main\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "XLIX",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 53, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 34, in main\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": "MCMXCIV",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 53, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-weight-training-20260927-resumed\\baseline\\050-roman-numerals\\main.py\", line 34, in main\r\n    input_data = json.load(sys.stdin)\r\nNameError: name 'sys' is not defined\r\n"
+    }
+  ]
+}

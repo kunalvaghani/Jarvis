@@ -1,0 +1,37 @@
+{
+  "model": "standalone merged FP32 weights, no PEFT adapter loaded",
+  "project": "001-sum",
+  "kind": null,
+  "error": null,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 2,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "C:\\Users\\kunal\\AppData\\Local\\Programs\\Python\\Python310\\python.exe: can't open file 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\main.py': [Errno 2] No such file or directory\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 2,
+      "expected": 6,
+      "stdout": "",
+      "stderr": "C:\\Users\\kunal\\AppData\\Local\\Programs\\Python\\Python310\\python.exe: can't open file 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\main.py': [Errno 2] No such file or directory\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 2,
+      "expected": 2,
+      "stdout": "",
+      "stderr": "C:\\Users\\kunal\\AppData\\Local\\Programs\\Python\\Python310\\python.exe: can't open file 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\artifacts\\\\qwen-jarvis-trained-20260927\\\\merged-model-smoke\\\\main.py': [Errno 2] No such file or directory\r\n"
+    }
+  ],
+  "passed": false,
+  "status": "harness_path_error_not_model_result"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "046-caesar",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "bcd",
+      "stdout": "[\"abc\", 1]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "abc",
+      "stdout": "[\"xyz\", 3]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": "Hg!",
+      "stdout": "[\"Hi!\", -2]\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        "abc",
+        1
+      ],
+      "expected": "bcd"
+    },
+    {
+      "input": [
+        "xyz",
+        3
+      ],
+      "expected": "abc"
+    },
+    {
+      "input": [
+        "Hi!",
+        -2
+      ],
+      "expected": "Hg!"
+    }
+  ],
+  "trained_on_project": true
+}

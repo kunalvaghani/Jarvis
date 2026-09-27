@@ -13,3 +13,12 @@ runtime. The repository's MIT license is retained at
 and is not claimed to have been created by this project or covered by that
 repository license. Iron Man/Stark/J.A.R.V.I.S. branding remains third-party
 artwork, copied here for the user's requested personal interface.
+
+## Verified coding experience metadata
+
+[coding-lessons-seed.jsonl](coding-lessons-seed.jsonl) contains 151 metadata records
+from the controlled 2026-09-27 curriculum and follow-up checks. It contains project
+IDs, timestamps, validation categories, attempts and case counts; it contains no
+model weights, generated instructions, private code, credentials or recordings.
+See [the dated evidence and limitations](../../docs/coding-curriculum.md). This data
+is separate from the third-party HUD artwork described above.

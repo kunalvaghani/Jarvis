@@ -1,0 +1,77 @@
+{
+  "id": "064-knapsack",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 7,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\064-knapsack\\main.py\", line 41, in <module>\r\n    capacity = data[2]\r\nIndexError: list index out of range\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\064-knapsack\\main.py\", line 41, in <module>\r\n    capacity = data[2]\r\nIndexError: list index out of range\r\n"
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "runtime",
+      "exit_code": 1,
+      "expected": 0,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-trained-projects-20260927T153849Z\\064-knapsack\\main.py\", line 41, in <module>\r\n    capacity = data[2]\r\nIndexError: list index out of range\r\n"
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        [
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        5
+      ],
+      "expected": 7
+    },
+    {
+      "input": [
+        [],
+        5
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        [
+          [
+            1,
+            10
+          ]
+        ],
+        0
+      ],
+      "expected": 0
+    }
+  ],
+  "trained_on_project": true
+}

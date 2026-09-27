@@ -1,0 +1,39 @@
+{
+  "id": "035-moving-average",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        1.5,
+        2.5
+      ],
+      "stdout": "[1.5, 2.5]\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": [],
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": [
+        2,
+        4
+      ],
+      "stdout": "[2.0, 4.0]\r\n",
+      "stderr": ""
+    }
+  ]
+}

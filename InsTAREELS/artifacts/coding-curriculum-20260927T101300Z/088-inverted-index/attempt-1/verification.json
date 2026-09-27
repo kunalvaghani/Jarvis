@@ -1,0 +1,52 @@
+{
+  "number": 1,
+  "passed": true,
+  "kind": null,
+  "feedback": "[]",
+  "cases": [
+    {
+      "case": 0,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {},
+      "stdout": "{}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 1,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "a": [
+          0
+        ],
+        "b": [
+          0,
+          1
+        ],
+        "c": [
+          1
+        ]
+      },
+      "stdout": "{\"a\": [0], \"b\": [0, 1], \"c\": [1]}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": true,
+      "kind": null,
+      "exit_code": 0,
+      "expected": {
+        "x": [
+          0,
+          1
+        ]
+      },
+      "stdout": "{\"x\": [0, 1]}\r\n",
+      "stderr": ""
+    }
+  ],
+  "path": "088-inverted-index\\attempt-1"
+}

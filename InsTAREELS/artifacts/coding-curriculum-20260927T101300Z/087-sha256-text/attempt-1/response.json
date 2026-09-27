@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\nimport hashlib\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n    except json.JSONDecodeError:\n        print(json.dumps(None), file=sys.stderr)\n        return\n    \n    if not isinstance(input_data, str):\n        print(json.dumps(None), file=sys.stderr)\n        return\n    \n    try:\n        text = input_data.lower()\n        digest = hashlib.sha256(text.encode('utf-8')).hexdigest()\n        print(digest)\n    except Exception:\n        print(json.dumps(None), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read a single JSON value from stdin, validate it is a string, convert to lowercase, compute SHA256 hex digest, and print the result as plain text (JSON scalar). Handles invalid input by printing null to stderr.",
+  "model_used": "qwen3.5:4b"
+}

@@ -4,6 +4,8 @@ A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA*
 
 **Documentation updated: 2026-09-27.** The application is in this `InsTAREELS` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
 
+**Actual Qwen weight training:** Downloaded Qwen2.5-Coder-0.5B-Instruct and completed six local CUDA LoRA gradient rounds: 681 training examples, 171 optimizer steps and 1,081,344 trained adapter parameters. Corrective training uses 86 projects, with 14 excluded from updates. The best checkpoint passed 7/14 validation projects versus 1/14 before training; later rounds regressed. Dedicated adapters and full merged weights are saved locally, with exact resume and optional Jarvis Python-coder integration. Fresh evaluation passed 31/100 projects and 1/10 larger cases; a new invoice task passed 0/10 cases. All 391 regression tests and launcher readiness passed. The existing 4B coder remains selected because this candidate is not ready for promotion. [Setup, evidence and limitations](docs/qwen-weight-training.md).
+
 ## Images and media
 
 ![Jarvis command center rendered layout preview](artifacts/jarvis-hud-preview.png)
@@ -44,7 +46,7 @@ This bundled reference animation supplies the cropped circular logo used by the 
 | Questions and screen understanding | Local Qwen answers, optional web research, English/Hindi replies, and local vision of the destination window. |
 | Desktop and browser | App/site launching, searches, exposed control selection, exact text-field filling, scrolling, supported shortcuts, menus, and dialogs. |
 | Files and projects | Scoped file creation/editing, approved deletion, catalog lookup, project discovery, recent-project memory, and Explorer context. |
-| Coding | Related-source context, bounded multi-file work, exact replacements, syntax checks, original-byte backups, diffs, atomic per-file writes, and readback. |
+| Coding | Related-source context, bounded multi-file work, exact replacements, syntax checks, original-byte backups, diffs, atomic per-file writes, readback, verified failure recall, related examples, and learned missing-import checks. |
 | Task execution | Shared tool registry, dependency checks, independent decisions, observations, verification, adaptive replanning, and bounded safe alternatives. |
 | Memory | Durable checkpoints, related verified task summaries, and decaying successful UI suggestions. |
 | Speech output | Local British male English and Hindi Piper voices, sentence playback, interruption, and recognition mute during replies. |
@@ -558,6 +560,28 @@ The **Preview text command** box accepts a full “Jarvis …” sentence and di
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
 
 ## Current validation and update history
+
+**2026-09-27 coding curriculum:** completed [100 standalone Python CLI projects](docs/coding-curriculum.md)
+with real local inference and executable checks: **69/100 passed**, including
+**61 first recorded attempts** and **8 repairs**; **31 failed** within two attempts.
+There were **405 actual CLI invocations** across the completed primary attempts.
+Ten larger follow-up checks passed **10/10**, and a new invoice calculator through
+normal Jarvis coding passed **10/10**, including eight withheld cases, in one inference.
+The report preserves all failures, two inference timeouts, interrupted files and protocol changes.
+
+Jarvis now recalls verified failure categories and related fixed examples, applies a
+learned check for selected missing Python imports before returning drafts, and ships
+**151 metadata records** so the experience survives a fresh checkout. This is
+experience memory, **not model-weight training** or guaranteed error elimination.
+Run `python train_coding.py --limit 100 --attempts 2` from this directory; larger and transfer
+verification commands are in the linked guide. Previously recalled examples are teaching
+data and cannot be called unseen tests in later repeated runs. Current project language,
+interfaces and permissions govern applicability of the curriculum lessons.
+
+All **386 regression tests passed**; launcher readiness reported `ready` with no
+missing requirements. No new dependencies or visible Jarvis UI changes were introduced.
+These are live coding checks plus regression/readiness results; microphone, desktop,
+real accounts and external MCP providers were not newly live-tested in this curriculum.
 
 **2026-09-27 live task trials:** thirteen real scenarios used the installed local
 model, actual repository/Git, scoped disk writes and live Python documentation.

@@ -1,0 +1,5 @@
+{
+  "content": "import json\nimport sys\n\ndef merge_intervals(intervals):\n    if not intervals:\n        return []\n    \n    sorted_intervals = sorted(intervals, key=lambda x: x[0])\n    merged = [sorted_intervals[0]]\n    \n    for current in sorted_intervals[1:]:\n        last = merged[-1]\n        if current[0] <= last[1]:\n            merged[-1] = [last[0], max(last[1], current[1])]\n        else:\n            merged.append(current)\n    \n    return merged\n\ndef main():\n    try:\n        input_data = sys.stdin.read().strip()\n        if not input_data:\n            print(json.dumps([]))\n            return\n        \n        intervals = json.loads(input_data)\n        result = merge_intervals(intervals)\n        print(json.dumps(result))\n    except json.JSONDecodeError:\n        pass\n    except Exception:\n        pass\n\nif __name__ == \"__main__\":\n    main()",
+  "explanation": "Created main.py to read JSON from stdin, merge overlapping or touching intervals, and print the result as JSON. Handles empty input by printing an empty list.",
+  "model_used": "qwen3.5:4b"
+}

@@ -1,0 +1,101 @@
+{
+  "id": "075-weighted-shortest-path",
+  "passed": false,
+  "cases": [
+    {
+      "case": 0,
+      "passed": false,
+      "kind": "json",
+      "exit_code": 0,
+      "expected": {
+        "a": 0
+      },
+      "stdout": "",
+      "stderr": "null\r\n"
+    },
+    {
+      "case": 1,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": {
+        "a": 0,
+        "b": 2,
+        "c": 1
+      },
+      "stdout": "{\"b\": 5, \"c\": 1}\r\n",
+      "stderr": ""
+    },
+    {
+      "case": 2,
+      "passed": false,
+      "kind": "logic",
+      "exit_code": 0,
+      "expected": {
+        "a": 0,
+        "b": 0
+      },
+      "stdout": "{\"b\": 0}\r\n",
+      "stderr": ""
+    }
+  ],
+  "executed": true,
+  "source_unchanged": true,
+  "input_cases": [
+    {
+      "input": [
+        {},
+        "a"
+      ],
+      "expected": {
+        "a": 0
+      }
+    },
+    {
+      "input": [
+        {
+          "a": [
+            [
+              "b",
+              5
+            ],
+            [
+              "c",
+              1
+            ]
+          ],
+          "c": [
+            [
+              "b",
+              1
+            ]
+          ]
+        },
+        "a"
+      ],
+      "expected": {
+        "a": 0,
+        "b": 2,
+        "c": 1
+      }
+    },
+    {
+      "input": [
+        {
+          "a": [
+            [
+              "b",
+              0
+            ]
+          ]
+        },
+        "a"
+      ],
+      "expected": {
+        "a": 0,
+        "b": 0
+      }
+    }
+  ],
+  "trained_on_project": true
+}
