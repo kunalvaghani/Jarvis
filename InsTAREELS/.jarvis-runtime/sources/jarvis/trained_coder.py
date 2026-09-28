@@ -13,7 +13,7 @@ def generate(base, checkpoint, request):
     if not interpreter.is_file():
         raise ValueError('Trained coder environment is missing')
     context = {key:request.get(key) for key in ('goal','path','reason','current','references',
-              'repository_instructions','selected_skills','previous','validation_error')}
+              'repository_instructions','selected_skills','previous','validation_error','pc_context')}
     completed = subprocess.run([str(interpreter), str(base/'qwen_jarvis_coder.py'),
                      '--checkpoint',str(checkpoint), '--request-stdin'],
                      input=json.dumps(context, ensure_ascii=False), text=True, encoding='utf-8',

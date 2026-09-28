@@ -1,0 +1,506 @@
+{
+  "training": [
+    {
+      "id": "js-positive-sum",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(numbers): sum only finite positive numbers; an empty array returns 0.",
+      "source": "function solve(numbers) { return numbers.reduce((sum, value) => sum + (Number.isFinite(value) && value > 0 ? value : 0), 0); }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          [
+            2,
+            -3,
+            4,
+            null
+          ],
+          6
+        ],
+        [
+          [],
+          0
+        ]
+      ]
+    },
+    {
+      "id": "js-stable-unique",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(values): return first occurrences in original order, comparing values with JavaScript Set semantics.",
+      "source": "function solve(values) { const seen = new Set(); return values.filter(value => { if (seen.has(value)) return false; seen.add(value); return true; }); }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          [
+            "a",
+            "b",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ],
+        [
+          [],
+          []
+        ]
+      ]
+    },
+    {
+      "id": "js-word-counts",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(words): return a plain object mapping each string to its occurrence count. Avoid prototype-key collisions.",
+      "source": "function solve(words) { const counts = Object.create(null); for (const word of words) counts[word] = (counts[word] ?? 0) + 1; return counts; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          [
+            "toString",
+            "a",
+            "a"
+          ],
+          {
+            "toString": 1,
+            "a": 2
+          }
+        ],
+        [
+          [],
+          {}
+        ]
+      ]
+    },
+    {
+      "id": "js-chunk",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve({items,size}): split items into consecutive arrays of size; reject nonpositive or noninteger size.",
+      "source": "function solve({ items, size }) { if (!Number.isInteger(size) || size < 1) throw new RangeError('size must be positive'); const result = []; for (let i = 0; i < items.length; i += size) result.push(items.slice(i, i + size)); return result; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          {
+            "items": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "size": 2
+          },
+          [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ]
+        ],
+        [
+          {
+            "items": [],
+            "size": 3
+          },
+          []
+        ]
+      ]
+    },
+    {
+      "id": "js-sorted-by-score",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(rows): return a new array sorted by descending numeric score, breaking ties by ascending name; do not mutate input.",
+      "source": "function solve(rows) { return [...rows].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)); }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          [
+            {
+              "name": "Z",
+              "score": 2
+            },
+            {
+              "name": "A",
+              "score": 2
+            },
+            {
+              "name": "B",
+              "score": 4
+            }
+          ],
+          [
+            {
+              "name": "B",
+              "score": 4
+            },
+            {
+              "name": "A",
+              "score": 2
+            },
+            {
+              "name": "Z",
+              "score": 2
+            }
+          ]
+        ],
+        [
+          [],
+          []
+        ]
+      ]
+    },
+    {
+      "id": "js-parse-int",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(text): parse a whole signed decimal integer; return null for trailing text or unsafe integers.",
+      "source": "function solve(text) { if (!/^[+-]?\\d+$/.test(text)) return null; const value = Number(text); return Number.isSafeInteger(value) ? value : null; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          "-42",
+          -42
+        ],
+        [
+          "12px",
+          null
+        ],
+        [
+          "9007199254740993",
+          null
+        ]
+      ]
+    },
+    {
+      "id": "js-merge-records",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve({base,patch}): return a new shallow merged object; neither input may be mutated.",
+      "source": "function solve({ base, patch }) { return { ...base, ...patch }; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          {
+            "base": {
+              "a": 1
+            },
+            "patch": {
+              "a": 2,
+              "b": 3
+            }
+          },
+          {
+            "a": 2,
+            "b": 3
+          }
+        ],
+        [
+          {
+            "base": {},
+            "patch": {}
+          },
+          {}
+        ]
+      ]
+    },
+    {
+      "id": "js-balanced-brackets",
+      "language": "javascript",
+      "split": "train",
+      "task": "Export solve(text): return whether (), [] and {} brackets are balanced; ignore other characters.",
+      "source": "function solve(text) { const stack = []; const pairs = { ')': '(', ']': '[', '}': '{' }; for (const ch of text) { if ('([{'.includes(ch)) stack.push(ch); else if (Object.hasOwn(pairs, ch) && stack.pop() !== pairs[ch]) return false; } return stack.length === 0; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          "a([{}])",
+          true
+        ],
+        [
+          "([)]",
+          false
+        ],
+        [
+          "",
+          true
+        ]
+      ]
+    },
+    {
+      "id": "sql-active-users",
+      "language": "sql",
+      "split": "train",
+      "task": "Select id and name of active users, ordered by id.",
+      "source": "SELECT id, name FROM users WHERE active = 1 ORDER BY id;",
+      "expected": [
+        [
+          1,
+          "Ada"
+        ],
+        [
+          2,
+          "Ben"
+        ],
+        [
+          4,
+          "Dee"
+        ]
+      ]
+    },
+    {
+      "id": "sql-paid-totals",
+      "language": "sql",
+      "split": "train",
+      "task": "Select user_id and total amount of paid orders for each user with paid orders, ordered by user_id.",
+      "source": "SELECT user_id, SUM(amount) AS total FROM orders WHERE status = 'paid' GROUP BY user_id ORDER BY user_id;",
+      "expected": [
+        [
+          1,
+          25
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          30
+        ]
+      ]
+    },
+    {
+      "id": "sql-no-orders",
+      "language": "sql",
+      "split": "train",
+      "task": "Select id and name of users with no orders of any status, ordered by id.",
+      "source": "SELECT u.id, u.name FROM users AS u WHERE NOT EXISTS (SELECT 1 FROM orders AS o WHERE o.user_id = u.id) ORDER BY u.id;",
+      "expected": [
+        [
+          4,
+          "Dee"
+        ]
+      ]
+    },
+    {
+      "id": "sql-order-counts",
+      "language": "sql",
+      "split": "train",
+      "task": "Select each user id and the count of all their orders, including zero, ordered by user id.",
+      "source": "SELECT u.id, COUNT(o.id) AS order_count FROM users AS u LEFT JOIN orders AS o ON o.user_id = u.id GROUP BY u.id ORDER BY u.id;",
+      "expected": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "sql-latest-paid",
+      "language": "sql",
+      "split": "train",
+      "task": "Select user_id and latest created_at among paid orders, ordered by user_id.",
+      "source": "SELECT user_id, MAX(created_at) AS latest_at FROM orders WHERE status = 'paid' GROUP BY user_id ORDER BY user_id;",
+      "expected": [
+        [
+          1,
+          "2026-02-01"
+        ],
+        [
+          2,
+          "2026-01-03"
+        ],
+        [
+          3,
+          "2026-01-04"
+        ]
+      ]
+    },
+    {
+      "id": "sql-average-paid",
+      "language": "sql",
+      "split": "train",
+      "task": "Select the average amount of paid orders as average_amount.",
+      "source": "SELECT AVG(amount) AS average_amount FROM orders WHERE status = 'paid';",
+      "expected": [
+        [
+          15.5
+        ]
+      ]
+    },
+    {
+      "id": "sql-high-value-users",
+      "language": "sql",
+      "split": "train",
+      "task": "Select user_id and paid total for users whose paid total is at least 20, ordered by user_id.",
+      "source": "SELECT user_id, SUM(amount) AS paid_total FROM orders WHERE status = 'paid' GROUP BY user_id HAVING SUM(amount) >= 20 ORDER BY user_id;",
+      "expected": [
+        [
+          1,
+          25
+        ],
+        [
+          3,
+          30
+        ]
+      ]
+    },
+    {
+      "id": "sql-name-search",
+      "language": "sql",
+      "split": "train",
+      "task": "Select id and name where name starts with A, ordered by id.",
+      "source": "SELECT id, name FROM users WHERE name LIKE 'A%' ORDER BY id;",
+      "expected": [
+        [
+          1,
+          "Ada"
+        ]
+      ]
+    },
+    {
+      "id": "python-replay-001-sum",
+      "language": "python",
+      "task": "Read one JSON value from stdin and print one JSON value. Sum a JSON list of numbers. Empty list returns 0.",
+      "source": "import sys\nimport json\n\ndef main():\n    try:\n        input_data = sys.stdin.read()\n        if not input_data.strip():\n            print(json.dumps(0))\n            return\n        \n        data = json.loads(input_data)\n        \n        if isinstance(data, list):\n            total = sum(data)\n            print(json.dumps(total))\n        else:\n            print(json.dumps(0))\n    except Exception as e:\n        print(json.dumps(0), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+      "split": "train",
+      "origin": "previously case-verified Python curriculum"
+    },
+    {
+      "id": "python-replay-024-title-case",
+      "language": "python",
+      "task": "Read one JSON value from stdin and print one JSON value. Apply Python str.title to input text.",
+      "source": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if isinstance(input_data, list):\n            result = [str(item).title() for item in input_data]\n        else:\n            result = str(input_data).title()\n        print(json.dumps(result))\n    except Exception as e:\n        print(json.dumps({\"error\": str(e)}), file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()",
+      "split": "train",
+      "origin": "previously case-verified Python curriculum"
+    },
+    {
+      "id": "python-replay-051-rpn-calculator",
+      "language": "python",
+      "task": "Read one JSON value from stdin and print one JSON value. Evaluate valid reverse Polish tokens +,-,*,/ with normal operand order.",
+      "source": "import sys\nimport json\n\ndef rpn(tokens):\n    stack=[]\n    for token in tokens:\n        if token in ['+','-','*','/']:\n            b,a=stack.pop(),stack.pop();stack.append({'+':lambda:a+b,'-':lambda:a-b,'*':lambda:a*b,'/':lambda:a/b}[token]())\n        else:stack.append(float(token))\n    return stack[0]\n\nx = json.load(sys.stdin)\nresult = (rpn(x))\nprint(json.dumps(result))\n",
+      "split": "train",
+      "origin": "previously case-verified Python curriculum"
+    },
+    {
+      "id": "python-replay-073-reachability",
+      "language": "python",
+      "task": "Read one JSON value from stdin and print one JSON value. Pair directed adjacency object,start to sorted reachable nodes including start.",
+      "source": "import json\nimport sys\n\ndef main():\n    try:\n        input_data = json.load(sys.stdin)\n        if not isinstance(input_data, list) or len(input_data) != 2:\n            print(json.dumps({\"error\": \"Input must be a list of two elements: [adjacency_object, start_node]\"}), file=sys.stderr)\n            sys.exit(1)\n        \n        adjacency = input_data[0]\n        if not isinstance(adjacency, dict):\n            print(json.dumps({\"error\": \"First element must be an object (adjacency list)\"}), file=sys.stderr)\n            sys.exit(1)\n        \n        start_node = input_data[1]\n        if not isinstance(start_node, str):\n            print(json.dumps({\"error\": \"Second element must be a string (start node)\"}), file=sys.stderr)\n            sys.exit(1)\n        \n        visited = set()\n        queue = [start_node]\n        visited.add(start_node)\n        result = [start_node]\n        \n        while queue:\n            current = queue.pop(0)\n            neighbors = adjacency.get(current, [])\n            if not isinstance(neighbors, list):\n                continue\n            for neighbor in neighbors:\n                if neighbor not in visited:\n                    visited.add(neighbor)\n                    result.append(neighbor)\n                    queue.append(neighbor)\n        \n        print(json.dumps(result))\n    except json.JSONDecodeError as e:\n        print(json.dumps({\"error\": f\"Invalid JSON input: {e}\"}), file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(json.dumps({\"error\": str(e)}), file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    main()",
+      "split": "train",
+      "origin": "previously case-verified Python curriculum"
+    }
+  ],
+  "heldout": [
+    {
+      "id": "js-merge-sorted",
+      "language": "javascript",
+      "split": "heldout",
+      "task": "Export solve({left,right}): merge two ascending numeric arrays into one ascending array, retaining duplicates.",
+      "source": "function solve({ left, right }) { const out = []; let i = 0, j = 0; while (i < left.length && j < right.length) out.push(left[i] <= right[j] ? left[i++] : right[j++]); return out.concat(left.slice(i), right.slice(j)); }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          {
+            "left": [
+              1,
+              3
+            ],
+            "right": [
+              2,
+              3
+            ]
+          },
+          [
+            1,
+            2,
+            3,
+            3
+          ]
+        ],
+        [
+          {
+            "left": [],
+            "right": [
+              4
+            ]
+          },
+          [
+            4
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "js-longest-run",
+      "language": "javascript",
+      "split": "heldout",
+      "task": "Export solve(values): length of the longest consecutive run of equal values; empty input returns 0.",
+      "source": "function solve(values) { let best = 0, run = 0; for (let i = 0; i < values.length; i++) { run = i && values[i] === values[i - 1] ? run + 1 : 1; best = Math.max(best, run); } return best; }\nmodule.exports = { solve };\n",
+      "cases": [
+        [
+          [
+            1,
+            1,
+            2,
+            2,
+            2,
+            1
+          ],
+          3
+        ],
+        [
+          [],
+          0
+        ]
+      ]
+    },
+    {
+      "id": "sql-paid-rank",
+      "language": "sql",
+      "split": "heldout",
+      "task": "Select user_id and paid total for users with paid orders, ordered by total descending then user_id ascending.",
+      "source": "SELECT user_id, SUM(amount) AS paid_total FROM orders WHERE status = 'paid' GROUP BY user_id ORDER BY paid_total DESC, user_id ASC;",
+      "expected": [
+        [
+          3,
+          30
+        ],
+        [
+          1,
+          25
+        ],
+        [
+          2,
+          7
+        ]
+      ]
+    },
+    {
+      "id": "sql-users-with-refunds",
+      "language": "sql",
+      "split": "heldout",
+      "task": "Select id and name of users with at least one refunded order, without duplicates, ordered by id.",
+      "source": "SELECT u.id, u.name FROM users AS u WHERE EXISTS (SELECT 1 FROM orders AS o WHERE o.user_id = u.id AND o.status = 'refunded') ORDER BY u.id;",
+      "expected": [
+        [
+          1,
+          "Ada"
+        ]
+      ]
+    }
+  ],
+  "reference_fixture": "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, active INTEGER);\nCREATE TABLE orders(id INTEGER PRIMARY KEY, user_id INTEGER, amount INTEGER, status TEXT, created_at TEXT);\nINSERT INTO users VALUES (1,'Ada',1),(2,'Ben',1),(3,'Cal',0),(4,'Dee',1);\nINSERT INTO orders VALUES (1,1,10,'paid','2026-01-01'),(2,1,15,'paid','2026-02-01'),\n (3,1,99,'refunded','2026-03-01'),(4,2,7,'paid','2026-01-03'),(5,3,30,'paid','2026-01-04');",
+  "generated_outputs_executed": false
+}

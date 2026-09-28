@@ -1,0 +1,1 @@
+SELECT user_id, SUM(amount) AS total FROM orders WHERE status = 'paid' GROUP BY user_id ORDER BY user_id;

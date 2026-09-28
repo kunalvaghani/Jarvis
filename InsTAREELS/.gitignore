@@ -1,8 +1,14 @@
 .venv/
 .venv-brain/
 .venv-training/
+.env
+.env.*
+!.env.example
+api_keys*.json
+secrets/
 artifacts/qwen-*/**/*.safetensors
 artifacts/qwen-*/**/training-state.pt
+artifacts/qwen-pc-*/
 brain-worker.log
 __pycache__/
 *.pyc

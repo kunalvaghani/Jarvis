@@ -1,0 +1,1 @@
+SELECT id, name FROM users WHERE name LIKE 'A%' ORDER BY id;

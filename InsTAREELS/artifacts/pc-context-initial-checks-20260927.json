@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-27",
+  "method": "fresh real-PC metadata and existing project resolver; read-only, no applications opened",
+  "cases": [
+    {
+      "name": "FinanceAgent",
+      "passed": true
+    },
+    {
+      "name": "ColdEmail_Helper",
+      "passed": true
+    },
+    {
+      "name": "Jarvis",
+      "passed": true
+    },
+    {
+      "name": "MyOwnCli",
+      "passed": false
+    },
+    {
+      "name": "MyPortfolioDesktop",
+      "passed": false
+    },
+    {
+      "name": "Linkedout",
+      "passed": true
+    },
+    {
+      "name": "General-Agent-Runtime",
+      "passed": true
+    },
+    {
+      "name": "ai-reel-autopilot",
+      "passed": true
+    },
+    {
+      "name": "AlienGuy_Game",
+      "passed": true
+    },
+    {
+      "name": "Local-AI-System-Lab",
+      "passed": true
+    },
+    {
+      "name": "downloads",
+      "passed": true
+    },
+    {
+      "name": "documents",
+      "passed": true
+    }
+  ],
+  "passed": 10,
+  "total": 12
+}

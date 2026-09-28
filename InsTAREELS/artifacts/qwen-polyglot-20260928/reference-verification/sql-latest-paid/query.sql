@@ -1,0 +1,1 @@
+SELECT user_id, MAX(created_at) AS latest_at FROM orders WHERE status = 'paid' GROUP BY user_id ORDER BY user_id;

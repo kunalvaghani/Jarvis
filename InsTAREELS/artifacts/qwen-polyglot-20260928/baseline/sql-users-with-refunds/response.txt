@@ -1,0 +1,1 @@
+SELECT DISTINCT u.id, u.name FROM users AS u JOIN orders AS o ON u.id = o.user_id WHERE o.status = 'refunded'

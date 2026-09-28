@@ -1,0 +1,1 @@
+SELECT u.id, u.name FROM users AS u WHERE NOT EXISTS (SELECT 1 FROM orders AS o WHERE o.user_id = u.id) ORDER BY u.id;

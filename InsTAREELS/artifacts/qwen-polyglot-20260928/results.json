@@ -1,0 +1,132 @@
+{
+  "status": "complete",
+  "started": "2026-09-28T16:28:04.782779+00:00",
+  "method": "local supervised LoRA gradient training",
+  "base_model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "initialized_from": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-jarvis-trained-20260927\\adapter",
+  "rounds": [
+    {
+      "round": 1,
+      "mean_training_loss": 0.5804357036948204,
+      "optimizer_steps": 5,
+      "adapter_absolute_delta": 312.5935030579567,
+      "checkpoint": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-polyglot-20260928\\round-1",
+      "adapter_sha256": "11da8655ccfea4dc91db233c45c574d2f579e02c36f986d7ecbb35c1e2890694",
+      "evaluation": {
+        "mean_heldout_loss": 0.43219367414712906,
+        "syntax_valid": 3,
+        "total": 4,
+        "tasks": [
+          {
+            "id": "js-merge-sorted",
+            "language": "javascript",
+            "loss": 0.5585559606552124,
+            "syntax_valid": true
+          },
+          {
+            "id": "js-longest-run",
+            "language": "javascript",
+            "loss": 0.5598134398460388,
+            "syntax_valid": false
+          },
+          {
+            "id": "sql-paid-rank",
+            "language": "sql",
+            "loss": 0.22334349155426025,
+            "syntax_valid": true
+          },
+          {
+            "id": "sql-users-with-refunds",
+            "language": "sql",
+            "loss": 0.38706180453300476,
+            "syntax_valid": true
+          }
+        ],
+        "generated_code_executed": false
+      }
+    },
+    {
+      "round": 2,
+      "mean_training_loss": 0.418783625215292,
+      "optimizer_steps": 5,
+      "adapter_absolute_delta": 489.7635272741318,
+      "checkpoint": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-polyglot-20260928\\round-2",
+      "adapter_sha256": "c49ec04e1fb83ae4b1289287950aadd411bfaf6ec241b104d7d3bd8216c50390",
+      "evaluation": {
+        "mean_heldout_loss": 0.3647792153060436,
+        "syntax_valid": 3,
+        "total": 4,
+        "tasks": [
+          {
+            "id": "js-merge-sorted",
+            "language": "javascript",
+            "loss": 0.4808444678783417,
+            "syntax_valid": false
+          },
+          {
+            "id": "js-longest-run",
+            "language": "javascript",
+            "loss": 0.5010072588920593,
+            "syntax_valid": true
+          },
+          {
+            "id": "sql-paid-rank",
+            "language": "sql",
+            "loss": 0.1483362466096878,
+            "syntax_valid": true
+          },
+          {
+            "id": "sql-users-with-refunds",
+            "language": "sql",
+            "loss": 0.3289288878440857,
+            "syntax_valid": true
+          }
+        ],
+        "generated_code_executed": false
+      }
+    }
+  ],
+  "device": "cuda",
+  "precision": "torch.bfloat16",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "training_examples": 20,
+  "heldout_tasks": 4,
+  "trainable_parameters": 1081344,
+  "dataset_sha256": "462543d3df8ff74c43d804fe305de43299e11def198563e83e6a6f831d04568d",
+  "baseline": {
+    "mean_heldout_loss": 0.5509964600205421,
+    "syntax_valid": 3,
+    "total": 4,
+    "tasks": [
+      {
+        "id": "js-merge-sorted",
+        "language": "javascript",
+        "loss": 0.7052609324455261,
+        "syntax_valid": true
+      },
+      {
+        "id": "js-longest-run",
+        "language": "javascript",
+        "loss": 0.6990166306495667,
+        "syntax_valid": false
+      },
+      {
+        "id": "sql-paid-rank",
+        "language": "sql",
+        "loss": 0.327777624130249,
+        "syntax_valid": true
+      },
+      {
+        "id": "sql-users-with-refunds",
+        "language": "sql",
+        "loss": 0.4719306528568268,
+        "syntax_valid": true
+      }
+    ],
+    "generated_code_executed": false
+  },
+  "completed": "2026-09-28T16:30:15.470440+00:00",
+  "best_checkpoint": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-polyglot-20260928\\round-2",
+  "peak_tensor_vram_bytes": 1805040128,
+  "production_promoted": false
+}

@@ -1,0 +1,9 @@
+{
+  "languages": [
+    "javascript",
+    "sql"
+  ],
+  "python_replay": true,
+  "system_prompt": "You are Jarvis, a coding assistant. Return only the complete requested source file or SQL query, without Markdown.",
+  "source_dataset_sha256": "462543d3df8ff74c43d804fe305de43299e11def198563e83e6a6f831d04568d"
+}

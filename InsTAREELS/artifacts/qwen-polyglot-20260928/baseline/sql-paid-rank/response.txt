@@ -1,0 +1,1 @@
+SELECT u.id, SUM(o.amount) as paid_total FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'paid' GROUP BY u.id ORDER BY paid_total DESC, u.id ASC

@@ -1,0 +1,35 @@
+{
+  "scope": "four prior Python validation projects; teacher-forced loss only",
+  "projects": [
+    {
+      "id": "031-flatten-list",
+      "loss": {
+        "before": 0.36762282252311707,
+        "after": 0.3513554036617279
+      }
+    },
+    {
+      "id": "084-date-difference",
+      "loss": {
+        "before": 0.2638014256954193,
+        "after": 0.2636153995990753
+      }
+    },
+    {
+      "id": "099-balanced-parentheses-generation",
+      "loss": {
+        "before": 0.7329660654067993,
+        "after": 0.7376782298088074
+      }
+    },
+    {
+      "id": "028-second-largest",
+      "loss": {
+        "before": 0.2243230640888214,
+        "after": 0.23145447671413422
+      }
+    }
+  ],
+  "mean_before": 0.3971783444285393,
+  "mean_after": 0.3960258774459362
+}

@@ -7,7 +7,7 @@ import time
 from .names import rank
 
 MARKERS = {".git", "pyproject.toml", "package.json", "Cargo.toml", "go.mod", "CMakeLists.txt"}
-SKIP = {".git", ".venv", "venv", "node_modules", "__pycache__", "build", "dist", ".next", "target", "models", "cache", ".cache"}
+SKIP = {".git", ".venv", ".venv-brain", ".venv-training", "venv", "node_modules", "__pycache__", "build", "dist", ".next", "target", "models", "cache", ".cache", "artifacts", ".jarvis-runtime"}
 SYSTEM = {"program files", "windowsapps", "xboxgames", "steamLibrary", "epic games", "ollama-models", "ollamamodels", "temp", "tmp", ".pnpm-store"}
 
 
@@ -28,7 +28,8 @@ def project_paths(roots):
             try:
                 if root.drive.upper() == "D:" and root.parent == root and child.name.casefold() == "phython project":
                     continue  # The more specific root scans this once.
-                if root.name.casefold() == "phython project" or any((child / marker).exists() for marker in MARKERS) or list(child.glob("*.sln")) or list(child.glob("*.uproject")):
+                container = root.parent != root and not any((root/marker).exists() for marker in MARKERS)
+                if container or root.name.casefold() == "phython project" or any((child / marker).exists() for marker in MARKERS) or list(child.glob("*.sln")) or list(child.glob("*.uproject")):
                     found[str(child.resolve()).casefold()] = child.resolve()
             except OSError:
                 continue

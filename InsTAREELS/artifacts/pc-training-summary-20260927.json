@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-27",
+  "base_model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "method": "actual LoRA forward/backward and AdamW updates on local PC metadata",
+  "privacy": "Local metadata only; private inventory/dataset/tensors Git-ignored; no uploads",
+  "completed_pc_rounds": 2,
+  "training_examples_per_round": 224,
+  "gradient_examples": 448,
+  "optimizer_steps": 112,
+  "trainable_parameters": 1081344,
+  "withheld_checks": 32,
+  "baseline_passed": 4,
+  "round_results": [
+    {
+      "round": 1,
+      "passed": 28,
+      "total": 32
+    },
+    {
+      "round": 2,
+      "passed": 32,
+      "total": 32
+    }
+  ],
+  "original_strict_round_passes": [
+    28,
+    31
+  ],
+  "fresh_live_model_checks": {
+    "passed": 11,
+    "total": 13,
+    "method": "fresh trained-weight generation on live PC metadata; read-only, no app launch"
+  },
+  "merged_model": {
+    "model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+    "merged_sha256": "0d9de7464fb5da3071667e5a221031c77d8c549171fee006cf14abcddd0e49a6",
+    "projection_absolute_delta": 202.4853515625,
+    "checkpoint": "round-2",
+    "method": "full FP32 model export, PC-trained adapter merged into original Qwen weights"
+  },
+  "configured_adapter": "artifacts/qwen-pc-training-20260927T161836Z/round-2",
+  "limits": "Validation entity names overlap training; fresh live failures are blocked by exact-name/path validation; no desktop actions performed."
+}

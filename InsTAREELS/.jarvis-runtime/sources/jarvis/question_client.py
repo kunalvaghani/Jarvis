@@ -46,6 +46,13 @@ class QuestionClient:
         threading.Thread(target=read, daemon=True).start()
 
     def request(self, request, cancelled):
+        import re
+        if re.search(r'\b(?:my (?:pc|computer|projects?|files?|folders?)|downloads|documents|project.*(?:path|location)|where.*(?:project|folder|file))\b',request.get('question',''),re.I):
+            from .pc_context import context
+            try:
+                request={**request,'pc_context':context(self.base,request['question'])}
+            except (OSError,ValueError):
+                pass
         for attempt in range(2):
             if cancelled():
                 raise ValueError("Question cancelled.")

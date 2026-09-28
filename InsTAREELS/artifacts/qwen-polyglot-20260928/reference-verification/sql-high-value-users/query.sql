@@ -1,0 +1,1 @@
+SELECT user_id, SUM(amount) AS paid_total FROM orders WHERE status = 'paid' GROUP BY user_id HAVING SUM(amount) >= 20 ORDER BY user_id;

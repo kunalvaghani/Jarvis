@@ -2,9 +2,17 @@
 
 A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Piper speech, and a draggable animated HUD. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
 
-**Documentation updated: 2026-09-27.** The application is in `InsTAREELS/`. All commands below run from that application directory unless stated otherwise.
+**Documentation updated: 2026-09-28.** The application is in `InsTAREELS/`. All commands below run from that application directory unless stated otherwise.
 
 **Actual Qwen weight training:** Downloaded Qwen2.5-Coder-0.5B-Instruct and completed six local CUDA LoRA gradient rounds: 681 training examples, 171 optimizer steps and 1,081,344 trained adapter parameters. Corrective training uses 86 projects, with 14 excluded from updates. The best checkpoint passed 7/14 validation projects versus 1/14 before training; later rounds regressed. Dedicated adapters and full merged weights are saved locally, with exact resume and optional Jarvis Python-coder integration. Fresh evaluation passed 31/100 projects and 1/10 larger cases; a new invoice task passed 0/10 cases. All 391 regression tests and launcher readiness passed. The existing 4B coder remains selected because this candidate is not ready for promotion. [Setup, evidence and limitations](InsTAREELS/docs/qwen-weight-training.md).
+
+**Additional coding-language training (2026-09-28):** Two local CUDA LoRA rounds added checked JavaScript and SQLite examples with Python replay to the dedicated 0.5B checkpoint. Held-out loss improved, while JavaScript still failed its export interface and SQL's two held-out tasks already passed before training. The existing 4B production coder remains selected. The new regression suite passed 400 tests and launcher readiness. [Evidence and usage](InsTAREELS/docs/qwen-weight-training.md#additional-javascript-and-sql-training-2026-09-28).
+
+**PC context and Qwen training:** A dedicated PC adapter completed two real gradient rounds (448 examples, 112 optimizer steps). Validation improved from 4/32 to 32/32; fresh model requests passed 11/13, while fresh exact-name lookup passed 12/12 real project/folder checks. The adapter is configured with live-path validation and metadata fallback. Project, folder and indexed-file context refreshes for planning, coding and PC questions; private contents are excluded. [Behavior, training and limits](InsTAREELS/docs/pc-model-training.md).
+
+**Local Qwen questions (2026-09-28):** General answers, planning, PC questions and screen vision use local Qwen models through Ollama. The optional cloud text provider and its credential setup have been removed. Web search remains available for current public information. See the app [configuration](InsTAREELS/config.json).
+
+**2026-09-28 regression/readiness check:** 398 automated tests passed and the launcher check reported ready with local Qwen planner and vision models. This is a regression/readiness result, not a new live end-to-end question or desktop-action test.
 
 ## Images and media
 

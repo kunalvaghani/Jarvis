@@ -1,0 +1,91 @@
+{
+  "run": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\qwen-polyglot-20260928",
+  "scope": "four held-out tasks on one fixed fixture",
+  "generated_javascript_executed": false,
+  "groups": {
+    "baseline": [
+      {
+        "id": "js-merge-sorted",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": true,
+        "functional_pass": null
+      },
+      {
+        "id": "js-longest-run",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": true,
+        "functional_pass": null
+      },
+      {
+        "id": "sql-paid-rank",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      },
+      {
+        "id": "sql-users-with-refunds",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      }
+    ],
+    "round-1-evaluation": [
+      {
+        "id": "js-merge-sorted",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": true,
+        "functional_pass": null
+      },
+      {
+        "id": "js-longest-run",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": true,
+        "functional_pass": null
+      },
+      {
+        "id": "sql-paid-rank",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      },
+      {
+        "id": "sql-users-with-refunds",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      }
+    ],
+    "round-2-evaluation": [
+      {
+        "id": "js-merge-sorted",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": false,
+        "functional_pass": null
+      },
+      {
+        "id": "js-longest-run",
+        "language": "javascript",
+        "interface_valid": false,
+        "external_dependency": false,
+        "functional_pass": null
+      },
+      {
+        "id": "sql-paid-rank",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      },
+      {
+        "id": "sql-users-with-refunds",
+        "language": "sql",
+        "interface_valid": true,
+        "functional_pass": true
+      }
+    ]
+  }
+}

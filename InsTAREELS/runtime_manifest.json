@@ -45,7 +45,10 @@
     "local_qwen_weight_training",
     "resumable_lora_checkpoints",
     "heldout_coding_weight_evaluation",
-    "optional_trained_python_coder"
+    "optional_trained_python_coder",
+    "fresh_pc_metadata_context",
+    "local_pc_context_weight_training",
+    "validated_trained_pc_resolver"
   ],
   "main_imports": [
     "tkinter",

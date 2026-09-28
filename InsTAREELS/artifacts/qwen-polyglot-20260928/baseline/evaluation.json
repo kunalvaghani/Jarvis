@@ -1,0 +1,32 @@
+{
+  "mean_heldout_loss": 0.5509964600205421,
+  "syntax_valid": 3,
+  "total": 4,
+  "tasks": [
+    {
+      "id": "js-merge-sorted",
+      "language": "javascript",
+      "loss": 0.7052609324455261,
+      "syntax_valid": true
+    },
+    {
+      "id": "js-longest-run",
+      "language": "javascript",
+      "loss": 0.6990166306495667,
+      "syntax_valid": false
+    },
+    {
+      "id": "sql-paid-rank",
+      "language": "sql",
+      "loss": 0.327777624130249,
+      "syntax_valid": true
+    },
+    {
+      "id": "sql-users-with-refunds",
+      "language": "sql",
+      "loss": 0.4719306528568268,
+      "syntax_valid": true
+    }
+  ],
+  "generated_code_executed": false
+}

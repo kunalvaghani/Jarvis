@@ -1,0 +1,1 @@
+SELECT AVG(amount) AS average_amount FROM orders WHERE status = 'paid';

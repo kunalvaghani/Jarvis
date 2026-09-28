@@ -1210,6 +1210,7 @@
   },
   "brain": {
     "enabled": true,
+    "trained_pc_checkpoint": "artifacts/qwen-pc-training-20260927T161836Z/round-2",
     "selector": "convaiinnovations/laya",
     "planner": "qwen3.5:4b",
     "decision": "qwen3.5:4b",

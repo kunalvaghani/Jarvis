@@ -1,6 +1,6 @@
 # Dedicated Qwen model and actual weight training
 
-Updated 2026-09-27. This pipeline performs supervised gradient updates to LoRA
+Updated 2026-09-28. This pipeline performs supervised gradient updates to LoRA
 parameters on a dedicated Qwen2.5-Coder-0.5B-Instruct base. It does not use the
 experience JSONL store as a substitute for training. LoRA freezes the original
 base parameters and trains added adapter matrices; this is parameter training,
@@ -224,3 +224,63 @@ inference:
 More rounds can reduce validation quality. Compare executable results before
 promoting a new checkpoint. Training on failed output as if it were correct is
 not supported; reference corrections must pass verification first.
+
+## Additional JavaScript and SQL training (2026-09-28)
+
+The [polyglot curriculum](../jarvis/polyglot_training_data.py) contains 20 authored tasks:
+10 JavaScript CommonJS files and 10 SQLite SELECT queries. Eight per language
+entered training; two per language remained held out. The JavaScript reference
+files passed syntax and executable examples, and the SQL reference queries returned
+the expected rows on a fixed in-memory fixture. The same four previously checked
+Python source examples were replayed in each round to limit forgetting. No model
+output was added to training as a correct answer.
+
+Starting from the earlier selected Qwen2.5-Coder-0.5B adapter, two CUDA BF16 LoRA
+rounds updated 1,081,344 adapter parameters over 20 presentations each, for 10
+optimizer steps total. The second-round checkpoint is at
+`artifacts/qwen-polyglot-20260928/round-2/`; its adapter SHA256 is recorded in the
+[training report](../artifacts/qwen-polyglot-20260928/results.json). Weight files
+remain local and Git-ignored. Peak allocated CUDA tensor memory was 1,805,040,128
+bytes; that is not total GPU memory consumption.
+
+| Held-out check | Prior adapter | Round 1 | Round 2 |
+| --- | ---: | ---: | ---: |
+| Mean teacher-forced loss, four tasks | 0.551 | 0.432 | 0.365 |
+| Generated syntax accepted by the initial check | 3/4 | 3/4 | 3/4 |
+| JavaScript files meeting the requested `solve` export | 0/2 | 0/2 | 0/2 |
+| SQL queries returning the expected rows | 2/2 | 2/2 | 2/2 |
+
+The [saved-output contract audit](../artifacts/qwen-polyglot-20260928/contract-audit.json)
+checked JavaScript exports without executing generated JavaScript. It executed only
+single SELECT queries against the fixed in-memory SQLite fixture with a progress
+limit. The SQL tasks already passed before this training, so their result is not
+evidence of improved execution accuracy. A lower loss does not establish reliable
+JavaScript coding. These four tasks are validation cases, not a broad independent
+benchmark. The main 4B Jarvis coder configuration was not changed.
+
+A separate [Python retention check](../artifacts/qwen-polyglot-20260928/python-retention.json)
+measured teacher-forced loss on four earlier held-out Python projects: mean 0.3972
+before versus 0.3960 after, with two individual tasks worsening. It did not run
+generated Python programs and cannot establish retained Python coding accuracy.
+On 2026-09-28, 400 regression tests passed and launcher readiness reported
+`ready` with the existing local Qwen planner and vision models. A standalone
+SQL inference smoke returned a plausible query for a training-set request;
+that generation was not executed or counted as held-out evidence.
+
+To repeat the training with the isolated environment and local Node.js available
+for checking the authored JavaScript references:
+
+```powershell
+./.venv-training/Scripts/python.exe train_polyglot_qwen.py --output artifacts/NEW-RUN --rounds 2
+./.venv-training/Scripts/python.exe audit_polyglot_qwen.py artifacts/NEW-RUN
+```
+
+The saved checkpoint can be queried explicitly without executing its output:
+
+```powershell
+./.venv-training/Scripts/python.exe qwen_polyglot_coder.py --checkpoint artifacts/qwen-polyglot-20260928/round-2 --language javascript --task "Return the sum of positive numbers."
+```
+
+The standalone interface currently supports JavaScript and SQLite tasks only.
+JavaScript generations require review and normal project tests before use; no
+automatic trained-model route was enabled in the Jarvis app.

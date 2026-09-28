@@ -1,0 +1,15 @@
+function solve(values) {
+  if (values.length === 0) return 0;
+  let maxLength = 1;
+  let currentLength = 1;
+  for (let i = 1; i < values.length; i++) {
+    if (values[i] === values[i - 1]) {
+      currentLength++;
+      maxLength = Math.max(maxLength, currentLength);
+    } else {
+      currentLength = 1;
+    }
+  }
+  return maxLength;
+}
+module.exports = solve;
