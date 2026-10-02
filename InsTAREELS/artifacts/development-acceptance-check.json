@@ -1,0 +1,589 @@
+{
+  "date": "2026-10-02T16:16:12.360701+00:00",
+  "scope": "Real tools and browsers on authored acceptance fixtures, not autonomous whole-project model generation or native-device verification.",
+  "checks": [
+    {
+      "stack": "vite",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard",
+      "build": [
+        {
+          "phase": "typecheck",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\node_modules\\typescript\\bin\\tsc",
+            "--noEmit"
+          ],
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "phase": "build",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\node_modules\\vite\\bin\\vite.js",
+            "build"
+          ],
+          "exit_code": 0,
+          "output": "ode_modules/framer-motion/dist/es/components/AnimateSharedLayout.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/context/DeprecatedLayoutGroupContext.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/context/DeprecatedLayoutGroupContext.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/value/use-inverted-scale.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/value/use-inverted-scale.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/context/PresenceContext.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/context/PresenceContext.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/utils/use-constant.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/utils/use-constant.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/value/use-combine-values.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/value/use-combine-values.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/utils/use-is-mounted.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/utils/use-is-mounted.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/value/use-computed.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/value/use-computed.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/context/LazyContext.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/context/LazyContext.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/components/Reorder/Item.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/components/Reorder/Item.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/components/Reorder/Group.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/components/Reorder/Group.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/motion/index.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/motion/index.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/context/ReorderContext.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/context/ReorderContext.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/context/MotionContext/create.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/context/MotionContext/create.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/render/html/use-html-visual-state.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/render/html/use-html-visual-state.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/render/dom/use-render.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/render/dom/use-render.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/render/svg/use-svg-visual-state.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/render/svg/use-svg-visual-state.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/render/svg/use-props.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/render/svg/use-props.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"node_modules/framer-motion/dist/es/render/html/use-props.mjs\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m node_modules/framer-motion/dist/es/render/html/use-props.mjs:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u2713 built in 373ms\n"
+        }
+      ],
+      "build_passed": true,
+      "goal_verified": true,
+      "source_fingerprint": "ec1a84499fe4f8ae285b603818a9f35671def007ef956e90598b41c70b88b12e",
+      "preview_url": "http://127.0.0.1:49560",
+      "browser": {
+        "source": "playwright_chromium",
+        "url": "http://127.0.0.1:49560",
+        "functional_assertions": 18,
+        "functional_interactions": 18,
+        "views": [
+          {
+            "name": "desktop",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-4044ab92e0e946f688182cf8b07f7402\\desktop.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Search and empty state recovery",
+                "passed": true
+              },
+              {
+                "name": "Status filter",
+                "passed": true
+              },
+              {
+                "name": "Validated create dialog and updated project",
+                "passed": true
+              },
+              {
+                "name": "Keyboard submit and Escape dialog",
+                "passed": true
+              },
+              {
+                "name": "Complete updates outcome",
+                "passed": true
+              },
+              {
+                "name": "Loading and recoverable error",
+                "passed": true
+              },
+              {
+                "name": "Navigation",
+                "passed": true
+              },
+              {
+                "name": "Motion preference applied",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "A little room to focus.",
+              "A clear view of what\u2019s next.",
+              "Active projects",
+              "Completed",
+              "Focus this week",
+              "Your week in focus",
+              "Progress is a practice.",
+              "Your projects 4",
+              "Studio website",
+              "Mobile onboarding",
+              "Brand guidelines",
+              "Customer insights"
+            ]
+          },
+          {
+            "name": "mobile",
+            "viewport": [
+              390,
+              844
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-4044ab92e0e946f688182cf8b07f7402\\mobile.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Search and empty state recovery",
+                "passed": true
+              },
+              {
+                "name": "Status filter",
+                "passed": true
+              },
+              {
+                "name": "Validated create dialog and updated project",
+                "passed": true
+              },
+              {
+                "name": "Keyboard submit and Escape dialog",
+                "passed": true
+              },
+              {
+                "name": "Complete updates outcome",
+                "passed": true
+              },
+              {
+                "name": "Loading and recoverable error",
+                "passed": true
+              },
+              {
+                "name": "Navigation",
+                "passed": true
+              },
+              {
+                "name": "Motion preference applied",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "A clear view of what\u2019s next.",
+              "Active projects",
+              "Completed",
+              "Focus this week",
+              "Your week in focus",
+              "Your projects 4",
+              "Studio website",
+              "Mobile onboarding",
+              "Brand guidelines",
+              "Customer insights"
+            ]
+          },
+          {
+            "name": "reduced-motion",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-4044ab92e0e946f688182cf8b07f7402\\reduced-motion.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": true,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Search and empty state recovery",
+                "passed": true
+              },
+              {
+                "name": "Status filter",
+                "passed": true
+              },
+              {
+                "name": "Validated create dialog and updated project",
+                "passed": true
+              },
+              {
+                "name": "Keyboard submit and Escape dialog",
+                "passed": true
+              },
+              {
+                "name": "Complete updates outcome",
+                "passed": true
+              },
+              {
+                "name": "Loading and recoverable error",
+                "passed": true
+              },
+              {
+                "name": "Navigation",
+                "passed": true
+              },
+              {
+                "name": "Motion preference applied",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "A little room to focus.",
+              "A clear view of what\u2019s next.",
+              "Active projects",
+              "Completed",
+              "Focus this week",
+              "Your week in focus",
+              "Progress is a practice.",
+              "Your projects 4",
+              "Studio website",
+              "Mobile onboarding",
+              "Brand guidelines",
+              "Customer insights"
+            ]
+          }
+        ],
+        "screenshots_are_functional_proof": false,
+        "native_platform_verified": false,
+        "checks_passed": true,
+        "goal_verified": true
+      },
+      "evidence_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\verification-9dd0802f789d4ee4aede81a69e1f5181.json"
+    },
+    {
+      "stack": "next",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next",
+      "build": [
+        {
+          "phase": "typecheck",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\node_modules\\typescript\\bin\\tsc",
+            "--noEmit"
+          ],
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "phase": "build",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\node_modules\\next\\dist\\bin\\next",
+            "build"
+          ],
+          "exit_code": 0,
+          "output": "\u25b2 Next.js 16.3.8 (Turbopack)\n\u2713 Running next.config took 35ms\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 435ms\n  Running TypeScript ...\n  Finished TypeScript in 541ms ...\n  Collecting page data using 4 workers ...\n  Generating static pages using 4 workers (0/3) ...\n\u2713 Generating static pages using 4 workers (3/3) in 2.5s\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u2514 \u25cb /_not-found\n\n\n\u25cb  (Static)  prerendered as static content\n\n"
+        }
+      ],
+      "build_passed": true,
+      "goal_verified": true,
+      "source_fingerprint": "996c914ab48463802c29d360e706e918ea1295db44b55fd410af36e8f2aa78f2",
+      "preview_url": "http://127.0.0.1:54689",
+      "browser": {
+        "source": "playwright_chromium",
+        "url": "http://127.0.0.1:54689",
+        "functional_assertions": 3,
+        "functional_interactions": 2,
+        "views": [
+          {
+            "name": "desktop",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\.jarvis\\development\\run-ccd94d7029aa42fa9756bc0377e01c3c\\desktop.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Next workspace"
+            ]
+          },
+          {
+            "name": "mobile",
+            "viewport": [
+              390,
+              844
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\.jarvis\\development\\run-ccd94d7029aa42fa9756bc0377e01c3c\\mobile.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Next workspace"
+            ]
+          },
+          {
+            "name": "reduced-motion",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\.jarvis\\development\\run-ccd94d7029aa42fa9756bc0377e01c3c\\reduced-motion.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": true,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Next workspace"
+            ]
+          }
+        ],
+        "screenshots_are_functional_proof": false,
+        "native_platform_verified": false,
+        "checks_passed": true,
+        "goal_verified": true
+      },
+      "evidence_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\.jarvis\\development\\verification-f7afb90edf264b34a51447ebed0042bd.json"
+    },
+    {
+      "stack": "electron",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron",
+      "build": [
+        {
+          "phase": "typecheck",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\node_modules\\typescript\\bin\\tsc",
+            "--noEmit"
+          ],
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "phase": "build",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\node_modules\\vite\\bin\\vite.js",
+            "build"
+          ],
+          "exit_code": 0,
+          "output": "vite v8.3.2 building client environment for production...\ntransforming...\n\u2713 16 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.36 kB \u2502 gzip:  0.26 kB\ndist/assets/index-DVmEi775.css    0.11 kB \u2502 gzip:  0.12 kB\ndist/assets/index-DdupDffp.js   219.78 kB \u2502 gzip: 68.68 kB\n\n\u001b[33m[MODULE_LEVEL_DIRECTIVE] \u001b[0mThe semantics of the module level directive \"use client\" in \"src/App.tsx\" may not be preserved when bundling.\n   \u001b[38;5;246m\u256d\u001b[0m\u001b[38;5;246m\u2500\u001b[0m\u001b[38;5;246m[\u001b[0m src/App.tsx:1:1 \u001b[38;5;246m]\u001b[0m\n   \u001b[38;5;246m\u2502\u001b[0m\n \u001b[38;5;246m1 \u2502\u001b[0m \"use client\";\n \u001b[38;5;240m  \u2502\u001b[0m \u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500  \n \u001b[38;5;240m  \u2502\u001b[0m       \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 module level directive may not be preserved\n \u001b[38;5;240m  \u2502\u001b[0m \n \u001b[38;5;240m  \u2502\u001b[0m \u001b[38;5;115mHelp\u001b[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives\n\u001b[38;5;246m\u2500\u2500\u2500\u256f\u001b[0m\n\n\u2713 built in 153ms\n"
+        }
+      ],
+      "build_passed": true,
+      "goal_verified": true,
+      "source_fingerprint": "2e2582bb9e9881c7d49449530ddb2e7a0bf6c9d3d3ef58008b2e50986e9c6a73",
+      "preview_url": "http://127.0.0.1:52667",
+      "browser": {
+        "source": "playwright_chromium",
+        "url": "http://127.0.0.1:52667",
+        "functional_assertions": 3,
+        "functional_interactions": 2,
+        "views": [
+          {
+            "name": "desktop",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\.jarvis\\development\\run-d61bbfb670c2448884c2e3d1a732d0e7\\desktop.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Electron renderer"
+            ]
+          },
+          {
+            "name": "mobile",
+            "viewport": [
+              390,
+              844
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\.jarvis\\development\\run-d61bbfb670c2448884c2e3d1a732d0e7\\mobile.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Electron renderer"
+            ]
+          },
+          {
+            "name": "reduced-motion",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\.jarvis\\development\\run-d61bbfb670c2448884c2e3d1a732d0e7\\reduced-motion.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": true,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Typed client state",
+                "passed": true
+              }
+            ],
+            "headings": [
+              "Electron renderer"
+            ]
+          }
+        ],
+        "screenshots_are_functional_proof": false,
+        "native_platform_verified": false,
+        "checks_passed": true,
+        "goal_verified": true
+      },
+      "evidence_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-electron\\.jarvis\\development\\verification-71f8debf5eb840948415c84d0e9714a0.json"
+    },
+    {
+      "stack": "expo",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo",
+      "build": [
+        {
+          "phase": "typecheck",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\node_modules\\typescript\\bin\\tsc",
+            "--noEmit"
+          ],
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "phase": "build",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node.EXE",
+            "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\node_modules\\expo\\bin\\cli",
+            "export",
+            "--platform",
+            "web"
+          ],
+          "exit_code": 0,
+          "output": "Starting Metro Bundler\n\nWeb Bundled 189ms index.js (134 modules)\n\n\u203a web bundles (1):\n_expo/static/js/web/index-37889d78d725caf267575caa30babe3e.js (350KB)\n\n\u203a Files (2):\nindex.html (1.2KB)\nmetadata.json (49B)\n\nExported: dist\n"
+        }
+      ],
+      "build_passed": true,
+      "goal_verified": true,
+      "source_fingerprint": "ebccf590b803fdb505fd81ebd256bec235e1cf445db8bd915cea9e64900fdbd4",
+      "preview_url": "http://127.0.0.1:60301",
+      "browser": {
+        "source": "playwright_chromium",
+        "url": "http://127.0.0.1:60301",
+        "functional_assertions": 3,
+        "functional_interactions": 2,
+        "views": [
+          {
+            "name": "desktop",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\.jarvis\\development\\run-3f013866a06b438ab0622dcb5006830a\\desktop.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Native components in web export",
+                "passed": true
+              }
+            ],
+            "headings": []
+          },
+          {
+            "name": "mobile",
+            "viewport": [
+              390,
+              844
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\.jarvis\\development\\run-3f013866a06b438ab0622dcb5006830a\\mobile.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": false,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Native components in web export",
+                "passed": true
+              }
+            ],
+            "headings": []
+          },
+          {
+            "name": "reduced-motion",
+            "viewport": [
+              1440,
+              1000
+            ],
+            "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\.jarvis\\development\\run-3f013866a06b438ab0622dcb5006830a\\reduced-motion.png",
+            "horizontal_overflow": false,
+            "keyboard_focus": true,
+            "console_errors": [],
+            "accessibility_violations": [],
+            "motion": {
+              "preference": true,
+              "activeTransformAnimations": 0
+            },
+            "scenarios": [
+              {
+                "name": "Native components in web export",
+                "passed": true
+              }
+            ],
+            "headings": []
+          }
+        ],
+        "screenshots_are_functional_proof": false,
+        "native_platform_verified": false,
+        "checks_passed": true,
+        "goal_verified": true
+      },
+      "evidence_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\.jarvis\\development\\verification-bb84e383808d42a4a96f784511852b13.json"
+    }
+  ]
+}

@@ -116,6 +116,7 @@ class ToolkitTests(unittest.TestCase):
             self.assertIn("browse", names)
 
     def test_all_37_operations_available_to_every_plan_when_configured(self):
+        self.actions.config = {'brain': {'visual_fallback': {'enabled': True}}}
         variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
         with patch.dict(os.environ, variables, clear=True):
             for goal in ("Help me prepare for tomorrow", "Compare these options", "आज की बैठक की तैयारी करो"):
@@ -283,7 +284,8 @@ class ToolkitTests(unittest.TestCase):
                    "jira_create": "create Jira issue", "jira_edit": "update Jira issue",
                    "send_email": "send an email", "slack_send": "send a Slack message",
                    "twitter_send": "publish a tweet", "append_file": "append hello to notes.txt in project",
-                   "mcp_list_tools": "List MCP tools", "mcp_call": "Call MCP tool"}
+                   "mcp_list_tools": "List MCP tools", "mcp_call": "Call MCP tool",
+                   "development_verify": "Verify the development project", "development_preview": "Start the development preview", "development_native": "Package the native app"}
         with patch.dict(os.environ, variables, clear=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
             for name in TOOLS:
                 with self.subTest(tool=name):

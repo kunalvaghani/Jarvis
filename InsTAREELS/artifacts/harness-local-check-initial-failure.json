@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-02T11:11:16.431199+05:30",
+  "sdk_version": "0.1.5rc1",
+  "scope": "Real upstream SDK and local Qwen inference; synthetic observations, no desktop actions or writes executed.",
+  "checks": [
+    {
+      "operation": "plan",
+      "ok": false,
+      "seconds": 7.64,
+      "error": "DeepSeek Harness inference failed: Harness turn failed: error"
+    },
+    {
+      "operation": "replan",
+      "ok": false,
+      "seconds": 8.547,
+      "error": "DeepSeek Harness inference failed: Harness turn failed: error"
+    },
+    {
+      "operation": "agent",
+      "ok": false,
+      "seconds": 8.61,
+      "error": "DeepSeek Harness inference failed: Harness turn failed: error"
+    }
+  ]
+}

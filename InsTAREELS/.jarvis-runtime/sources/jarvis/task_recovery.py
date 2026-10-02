@@ -21,6 +21,6 @@ def action_key(step):
     folder = step.get("folder", "") if action in {"create_file", "modify_file", "delete_file"} else ""
     content = step.get("content", "") if action in {"create_file", "modify_file", "fill_text"} else ""
     find = step.get("find", "") if action == "modify_file" else ""
-    platform = step.get("platform", "") if action == "media_search" else ""
+    platform = step.get("platform", "") if action in {"media_search", "media_control"} else ""
     return (common(action), common(str(step.get("value", ""))), common(browser),
             common(folder), content, find, common(platform))

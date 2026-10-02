@@ -90,23 +90,41 @@ class Actions:
         self._discovered_tools = set()
         self.root = (Path(base) / config["files_root"]).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
-        self.apps = config["apps"]
+        self.apps = dict(config["apps"])
         from .catalog import Catalog
         self.catalog = Catalog(config, base)
         from .projects import Projects
         self.projects = Projects(base, config.get("project_roots", [r"D:\Phython Project", "D:\\"]))
         from .task_state import TaskState
-        self.task_state = TaskState(base)
+        self.task_state = TaskState(base, read_only=bool(config.get('_ui_verification', False)))
         self.report = report
         self.desktop = desktop
         self.ui_controls = None
+        self.browser_automation = None
+        self.development_tools = None
         self.external_handle = lambda: 0
         self.pending_open = None
         self.pending_question = None
         from .ui_memory import UIMemory
         from .knowledge import Knowledge
+        from .obsidian_memory import ObsidianMemory
         self.ui_memory = UIMemory(Path(base) / "ui_memory.json")
+        self.memory = ObsidianMemory(base, config.get("memory"))
+        self.catalog.memory = self.memory
+        from .skill_memory import SkillMemory
+        self.skills = SkillMemory(self.memory)
+        self.memory.skills = self.skills
+        self.task_state.on_finish = self.skills.safe_record
+        interrupted = self.task_state.snapshot()
+        if (interrupted and interrupted.get('status') == 'interrupted'
+                and not config.get('_ui_verification', False)):
+            self.skills.experiences.safe_record(interrupted)
+        self._learning_local = threading.local()
         self.knowledge = Knowledge(config.get("knowledge", {}), report)
+        self.knowledge.memory = self.memory
+        self.knowledge.client.memory = self.memory
+        from .quick_answers import QuickAnswers
+        self.knowledge.quick = QuickAnswers(self.memory, config.get("weather", {}), settings=config)
         from .brain import Brain
         self.brain = Brain(self, base, config.get("brain", {}))
         self.task_active = False
@@ -130,6 +148,22 @@ class Actions:
         self.thread = threading.Thread(target=self._run, daemon=True)
 
     def start(self):
+        try:
+            self.skills.sync()
+        except (OSError, ValueError) as exc:
+            self.memory.error = "Skill sync: " + str(exc)
+        from .memory_index import installed_windows_apps
+        for app in installed_windows_apps():
+            executable = app["locations"].get("executable")
+            if executable and Path(executable).is_file():
+                self.apps.setdefault(app["name"].casefold(), [executable])
+        try:
+            self.memory.start()
+            self.memory.ensure_index(self.config)
+        except OSError as exc:
+            self.memory.error = str(exc)
+            self.memory.enabled = False
+            self.report("warning", "Obsidian memory could not start: " + str(exc))
         self.knowledge.start()
         self.thread.start()
 
@@ -146,14 +180,46 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        from .island_choices import navigation, task_answer
+        local = navigation(command.value) if command.kind in {'task', 'ask', 'play_media', 'open'} else None
+        if local:
+            self.report('island_navigation', local)
+            return  # Games/view changes never supersede a background task.
+        answer = task_answer(getattr(self, 'task_state', None), command.value) if command.kind in {'ask','task'} else None
+        if answer is not None:
+            self.report('answer', answer)
+            return
+        if command.kind == 'island_choice' and self.task_active:
+            self.report('question', 'The task is still running. Select its option once it pauses for an answer.')
+            return
+        if command.kind=='spotify_control' and command.value=='status':
+            self.report('island_navigation',('Music',''))
+            return
+        if command.kind=='spotify_control' and (self.task_active or command.extra=='island'):
+            from .island_media import TRANSPORT
+            if command.value in TRANSPORT:
+                from .agent_events import check_policy
+                try:
+                    check_policy(self,'spotify_control')
+                except ValueError as exc:
+                    self.report('warning',str(exc))
+                    return
+                self.report('island_transport',command.value)
+                return
+        if command.kind in {'play_media','media_search'} and command.extra=='spotify':
+            self.report('island_music_request',command.value)
+        elif command.kind=='task':
+            import re
+            music = re.fullmatch(r'(?:play|put on|start playing) (.+?) (?:on|from|in|using) spotify',command.value,re.I)
+            if music:
+                self.report('island_music_request',music[1])
+        self.memory.ensure_index(self.config)
         command = self._resolve_reply(command)
+        if command.kind not in {"ask", "forget_chat", "clarification_blocked"}:
+            self.memory.record("Jarvis request", f"{command.kind}: {command.value}")
         if self.task_active and command.kind == "resume_task":
             self.report("repair", "The current task is still running; it has not been forgotten.")
             return
-        if self.task_active:
-            # A new instruction supersedes an unfinished autonomous plan.
-            self.superseded_generations.add(self.generation)
-            self.generation += 1
         if command.kind == "ask":
             self.pending_open = None
             if self.ui_controls:
@@ -167,18 +233,24 @@ class Actions:
             return
         if command.kind == "sleep":
             self.cancel()
-            self.report("state", "Listening for Jarvis · queued tasks cancelled")
+            self.report("state", "Listening for Jarvis Â· queued tasks cancelled")
             return
+        if self.task_active:
+            # Mutating task requests retain single-owner desktop execution; questions run independently.
+            self.superseded_generations.add(self.generation)
+            self.generation += 1
         try:
             self.queue.put_nowait((self.generation, command))
         except queue.Full:
             self.cancel()
             self.report("warning", "Action queue full; queued tasks cancelled.")
 
-    def _resolve_reply(self, command):
+    def _resolve_reply(self, command, task_pending=None):
         """Route answers before the general-question worker can consume them."""
         from .commands import Command
         from .clarification import choice_index, short_reply
+        if command.kind == 'island_choice':
+            return command  # Validate again when the action worker executes it.
         groups = []
         if self.pending_open:
             groups.append((self.pending_open, 45, [c.value for c in self.pending_open["choices"]]))
@@ -186,7 +258,7 @@ class Actions:
             groups.append((self.projects.pending, 180, [p.name for p in self.projects.pending["choices"]]))
         if self.ui_controls and self.ui_controls.pending:
             groups.append((self.ui_controls.pending, 45, [c["name"] for c in self.ui_controls.pending["choices"]]))
-        for pending, lifetime, labels in groups:
+        for pending, lifetime, labels in ([] if task_pending else groups):
             if command.kind in {"task", "ask", "click_control", "choose_control", "select_context", "open", "open_folder", "open_project"}:
                 index = choice_index(command.value, labels)
                 if time.monotonic() - pending["time"] > lifetime:
@@ -201,7 +273,7 @@ class Actions:
                         self.report("question", "That number is not in the list. Choose 1 through " + str(len(labels)) + ".")
                         return Command("clarification_blocked", "That number is not in the list; your choices are still available.")
                     return Command("choose_control", str(index + 1))
-        pending = self.pending_question
+        pending = task_pending or self.pending_question
         if pending and time.monotonic() - pending["time"] > 180:
             self.pending_question = None
             if short_reply(command):
@@ -246,11 +318,19 @@ class Actions:
         return command
 
     def close(self):
+        self.skills.close()
+        if self.development_tools:
+            self.development_tools.close()
         self.cancel()
         if self.gods_eye_view:
             self.gods_eye_view.close()
         self.knowledge.close()
+        self.memory.close()
         self.closed.set()
+        if self.ui_controls:
+            self.ui_controls.close()
+        if self.browser_automation:
+            self.browser_automation.close()
         if self.thread.is_alive():
             self.thread.join(timeout=3)
         self.brain.client.close()
@@ -261,6 +341,24 @@ class Actions:
             self.ui_controls = UIControls(self.desktop, memory=self.ui_memory,
                 external_handle=lambda: self.external_handle())
         return self.ui_controls
+
+    def ui_healthy(self):
+        return self.ui_controls is None or self.ui_controls.healthy()
+
+    def repair_ui(self):
+        return not self.closed.is_set() and (self.ui_controls is None or self.ui_controls.repair())
+
+    def _browser(self):
+        if self.browser_automation is None:
+            from .browser_automation import BrowserAutomation
+            self.browser_automation = BrowserAutomation(self.apps, self.base)
+        return self.browser_automation
+
+    def browser_healthy(self):
+        return self.browser_automation is None or self.browser_automation.healthy()
+
+    def repair_browser(self):
+        return not self.closed.is_set() and (self.browser_automation is None or self.browser_automation.repair())
 
     def _suggest(self):
         if self.projects.pending and time.monotonic() - self.projects.pending["time"] >= 180:
@@ -312,6 +410,12 @@ class Actions:
             try:
                 return self.catalog.resolve(folder_name, "folder")
             except ValueError as exc:
+                if not isinstance(exc, AmbiguousName):
+                    matches = self.memory.project_matches(folder_name)
+                    if len(matches) == 1:
+                        return matches[0]
+                    if len(matches) > 1:
+                        exc = AmbiguousName(folder_name, matches)
                 question = "Which destination folder should I use? Say its full path. " + str(exc)
                 error = TaskClarification(question, "folder")
                 error.choices = exc.matches if isinstance(exc, AmbiguousName) else []
@@ -320,10 +424,83 @@ class Actions:
                 raise error from exc
         raise TaskClarification("Name a destination folder or select one in File Explorer.", "folder")
 
+    def _resolve_project(self, name):
+        from .catalog import AmbiguousName
+        matches = self.memory.project_matches(name)
+        if len(matches) > 1:
+            raise AmbiguousName(name, matches)
+        return Path(matches[0]) if matches else self.projects.resolve(name)
+
     def execute(self, command, cancelled=lambda: False):
+        """Audit outer direct commands without duplicating nested task execution."""
+        local = getattr(self, "_learning_local", None)
+        if local is None or getattr(local, "active", False):
+            return self._execute(command, cancelled)
+        local.active = True
+        local.observation = None
+        from .experience_memory import observe_conditions
+        initial_conditions = observe_conditions(self)
+        before = self.task_state.snapshot()
+        result, status = None, "completed"
+        try:
+            result = self._execute(command, cancelled)
+            if cancelled():
+                status = "cancelled"
+            return result
+        except Exception as exc:
+            result, status = str(exc), "cancelled" if cancelled() else "failed"
+            raise
+        finally:
+            local.active = False
+            after = self.task_state.snapshot()
+            # TaskState.finish already recorded a new managed task, including errors.
+            if (after or {}).get("started_at") == (before or {}).get("started_at"):
+                checkpoints = [{"stage": "action_attempted", "action": command.kind,
+                                "target": command.value}]
+                outcome = local.observation
+                if outcome:
+                    checkpoints.append({'stage': 'outcome_observed', 'action': command.kind,
+                                        'source': outcome['source'], 'evidence': outcome['evidence']})
+                    # The named target may differ from the foreground observed before dispatch.
+                    initial_conditions = {**outcome['conditions'],
+                        **({'tool_fingerprint': initial_conditions['tool_fingerprint']}
+                           if initial_conditions.get('tool_fingerprint') else {})}
+                    if outcome.get('verified') and status == 'completed':
+                        checkpoints.append({'stage': 'goal_verified', 'source': outcome['source'],
+                                            'evidence': outcome['evidence']})
+                self.skills.safe_record({"goal": command.kind.replace('_', ' ') + ' ' + command.value,
+                    "kind": command.kind, "status": status, "result": result,
+                    'conditions': initial_conditions, "checkpoints": checkpoints})
+
+    def _execute(self, command, cancelled=lambda: False):
         from .commands import Command
         if cancelled():
             return
+        if command.kind == 'island_choice':
+            from .island_choices import resolve
+            return self.execute(resolve(self, command.extra, int(command.value)), cancelled)
+        if command.kind == 'island_control_choice':
+            from .island_choices import snapshot
+            current = snapshot(self)
+            if not current or current['token']!=command.extra or current['kind']!='control':
+                raise ValueError('Those choices changed or expired. Get a fresh list.')
+            return self._ui().execute(Command('choose_control',str(int(command.value)+1),'island_bound'),cancelled)
+        if command.kind == "open" and command.value.casefold() in {"jarvis browser", "automation browser"}:
+            return str(self._browser().request("reset", cancelled))
+        browser = getattr(self, "browser_automation", None)
+        if browser is not None and command.kind in {"context_search", "media_search", "media_control", "select_context", "click_control"}:
+            handle = self.external_handle() or (self.desktop.user.GetForegroundWindow() if self.desktop else None)
+            if browser.owns_handle(handle) and "youtube.com" in browser.last_url:
+                if command.kind in {"context_search", "media_search"} and (command.kind == "context_search" or command.extra == "youtube"):
+                    return browser.request("search", cancelled, value=command.value)["message"]
+                if command.kind == "select_context":
+                    ordinal, category = command.value.split(":", 1)
+                    if ordinal.isdigit() and category in {"video", "result"}:
+                        return browser.request("select_video", cancelled, value="", position=int(ordinal))["message"]
+                if command.kind == "media_control" and command.extra == "youtube":
+                    return browser.request("control", cancelled, value=command.value)["message"]
+                if command.kind == "click_control" and command.value.casefold() in {"play", "pause", "mute", "unmute"}:
+                    return browser.request("control", cancelled, value=command.value.casefold())["message"]
         if command.kind == "clarification_blocked":
             return command.value
         if command.kind == "clarified_task":
@@ -397,7 +574,12 @@ class Actions:
             self.task_active = True
             try:
                 self.task_state.start(command.value, "task")
-                result = self.brain.run(command.value, cancelled)
+                result = None
+                if self.config.get("agent_runtime", {}).get("fast_workflows", False):
+                    from .fast_workflows import run
+                    result = run(self, command.value, cancelled)
+                if result is None:
+                    result = self.brain.run(command.value, cancelled)
                 paused = result and any(word in result.casefold() for word in
                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
                 self.task_state.finish("paused" if paused else "completed", result)
@@ -418,7 +600,7 @@ class Actions:
                 self.task_active = False
         if command.kind == "code_task":
             from .coder import Coder
-            project = self.projects.resolve(command.extra)
+            project = self._resolve_project(command.extra)
             self.task_active = True
             try:
                 self.task_state.start(command.value, "code_task", project)
@@ -451,9 +633,10 @@ class Actions:
             if root is None:
                 raise ValueError("No configured project folder is available.")
             os.startfile(str(root))
+            self.catalog.folders.record_open(str(root), 'project root')
             return f"Opened {root}"
         if command.kind == "open_project":
-            return self._open_project(self.projects.resolve(command.value), cancelled)
+            return self._open_project(self._resolve_project(command.value), cancelled)
         if command.kind == "gods_eye_view":
             from .browser import browser_args
             from .gods_eye_view import GodsEyeView
@@ -477,6 +660,20 @@ class Actions:
             return self.execute(pending["choices"][index], cancelled)
         self.pending_open = None
         if command.kind in {"click_control", "select_context", "choose_control", "list_controls", "confirm_suggestion", "suggest_control", "forget_ui_memory"}:
+            brain = getattr(self, 'brain', None)
+            fallback = getattr(brain, 'visual_fallback', None)
+            if command.kind == 'click_control' and fallback is not None and fallback.enabled is True:
+                from .targeting import scoped_matches
+                ui = self._ui()
+                # Only a read-only preflight can select the fallback. Never catch an action failure here.
+                try:
+                    handle = ui._handle()
+                    snapshot = ui.runner({'operation': 'list', 'handle': handle, 'owner_pid': os.getpid()}, cancelled)
+                    missing = not scoped_matches(snapshot.get('controls', []), command.value)
+                except ValueError:
+                    missing = True
+                if missing:
+                    return self.execute(Command('task', 'Click ' + command.value), cancelled)
             result = self._ui().execute(command, cancelled)
             if command.kind == "suggest_control" or (command.kind == "confirm_suggestion" and command.value == "no"):
                 self.report("question", result)
@@ -485,7 +682,17 @@ class Actions:
             self.ui_controls.clear_pending()
         if command.kind == "close_app":
             from .desktop_tasks import close_app
-            return close_app(self.desktop, self.apps, command.value, cancelled)
+            from .task_state import TaskState
+            outcome = {}
+            result = close_app(self.desktop, self.apps, command.value, cancelled, observed=outcome.update)
+            if outcome:
+                local = getattr(self, '_learning_local', None)
+                if local is not None:
+                    local.observation = outcome
+                if isinstance(getattr(self, 'task_state', None), TaskState):
+                    self.task_state.checkpoint('outcome_observed', action='close_app',
+                        source=outcome['source'], evidence=outcome['evidence'])
+            return result
         if command.kind == "create_in_folder":
             from .desktop_tasks import write_new_file
             data = json.loads(command.extra)
@@ -544,6 +751,25 @@ class Actions:
         if command.kind == "spotify_control":
             from .spotify import control
             return control(command.value, cancelled)
+        if command.kind == "media_control":
+            from .media_ui import control
+            if command.extra == 'spotify':
+                from .spotify import control as spotify_control, volume
+                if command.value in {'play', 'pause', 'next', 'previous', 'status', 'shuffle_on', 'shuffle_off', 'repeat_off', 'repeat_one', 'repeat_all'} or command.value.startswith('seek_'):
+                    return spotify_control(command.value, cancelled)
+                if command.value in {'mute', 'unmute'} or command.value.startswith('volume_'):
+                    return volume(command.value.removeprefix('volume_'), cancelled)
+            return control(self._ui(), command.extra, command.value, cancelled)
+        if command.kind == 'context_search':
+            from .media_ui import snapshot_for, platform_of
+            platform = None
+            try:
+                _, current = snapshot_for(self._ui(), cancelled)
+                platform = platform_of(current)
+            except ValueError:
+                if cancelled():
+                    return
+            return self.execute(Command('media_search', command.value, platform), cancelled) if platform else self.execute(Command('browser_search', command.value, 'chrome'), cancelled)
         if command.kind == "spotify_volume":
             from .spotify import volume
             return volume(command.value, cancelled)
@@ -551,19 +777,9 @@ class Actions:
             from .spotify import search
             return search(command.value, cancelled)
         if command.kind == "spotify_open_playlist":
-            self.task_active = True
-            try:
-                self.report("state", f"Finding playlist {command.value} on Spotify")
-                return self.brain.run(f"Open playlist {command.value} on Spotify", cancelled)
-            finally:
-                self.task_active = False
+            return self.execute(Command("task", f"Open playlist {command.value} on Spotify"), cancelled)
         if command.kind == "play_media":
-            self.task_active = True
-            try:
-                self.report("state", f"Finding {command.value} on {command.extra}")
-                return self.brain.run(f"Play {command.value} on {command.extra}", cancelled)
-            finally:
-                self.task_active = False
+            return self.execute(Command("task", f"Play {command.value} on {command.extra}"), cancelled)
         if command.kind == "media_search":
             if command.extra == "spotify":
                 from .spotify import search
@@ -572,7 +788,13 @@ class Actions:
                 if self.desktop:
                     self.desktop.target = None
                 return result
+            if self.config.get("agent_runtime", {}).get("dom_browser", False):
+                return self._browser().request("search", cancelled, value=command.value, new_task=True)["message"]
             from .browser import browser_args, music_search_url
+            from .media_ui import search_current
+            current = search_current(self._ui(), 'youtube', command.value, cancelled)
+            if current is not None:
+                return current
             url = music_search_url(command.value, command.extra)
             args = browser_args(self.apps, "chrome")
             if cancelled():
@@ -584,6 +806,10 @@ class Actions:
             return f"Opened {command.extra} search for {command.value}; playback has not started yet."
         if command.kind in {"browse", "browser_search"}:
             from .browser import browser_args, url_for
+            if (command.kind == "browse" and command.value.casefold() == "youtube"
+                    and command.extra in {"", "chrome", "google chrome"}
+                    and self.config.get("agent_runtime", {}).get("dom_browser", False)):
+                return self._browser().request("navigate", cancelled, value="youtube", new_task=True)["message"]
             args = browser_args(self.apps, command.extra or "chrome")
             url = url_for(command.value, command.kind == "browser_search")
             if cancelled():
@@ -640,9 +866,15 @@ class Actions:
             try:
                 if command.kind == "open_folder" and not Path(command.value).is_absolute():
                     try:
-                        path = str(self.projects.resolve(command.value))
+                        path = self.catalog.resolve(command.value, 'folder', prefer_usage=True)
+                    except AmbiguousName:
+                        raise
                     except ValueError:
-                        path = self.catalog.resolve(command.value, "folder")
+                        from .folder_lookup import folder_request
+                        _, drive = folder_request(command.value)
+                        if drive:
+                            raise
+                        path = str(self._resolve_project(command.value))
                 else:
                     path = self.catalog.resolve(command.value, command.kind.removeprefix("open_"))
             except AmbiguousName as exc:
@@ -650,6 +882,8 @@ class Actions:
             if cancelled():
                 return
             os.startfile(path)
+            if command.kind == 'open_folder':
+                self.catalog.folders.record_open(path, command.value)
             self.open_target_pending = True
             self.typing_failed = True
             return f"Opened {path}. Select its text field and say stop dictation before writing."
@@ -657,9 +891,22 @@ class Actions:
             from .names import rank_spelling, common
             from .commands import Command
             from .browser import SITES
-            if common(command.value) in SITES:
+            # Spotify exists in both the app and site catalogs. Prefer its
+            # registered native app; browser requests still use browse.
+            if common(command.value) == 'spotify' and 'spotify' not in self.apps:
+                from .spotify import open_app
+                return open_app(cancelled)
+            if common(command.value) in SITES and common(command.value) != 'spotify':
                 return self.execute(Command("browse", command.value, "chrome"), cancelled)
             aliases = rank_spelling(command.value, self.apps)
+            memory_args = None
+            if not aliases:
+                # Exact saved app names only; a stale path never becomes a guessed command.
+                saved = self.memory.program_matches(command.value)
+                if len(saved) > 1:
+                    raise ValueError('Multiple saved programs match ' + command.value + '; specify its executable path.')
+                if saved:
+                    memory_args = saved[0]['launcher']
             if not aliases:
                 sites = rank_spelling(command.value, SITES)
                 if len(sites) == 1:
@@ -671,7 +918,9 @@ class Actions:
                     unique.append(alias)
             if len(unique) > 1:
                 return self._offer_open([Command("open", alias) for alias in unique[:20]])
-            if unique:
+            if memory_args is not None:
+                pass
+            elif unique:
                 if common(command.value) != common(unique[0]):
                     self.report("state", "Understood '" + command.value + "' as " + unique[0])
                 command = Command("open", unique[0])
@@ -681,12 +930,16 @@ class Actions:
                 choices = []
                 for kind in ("file", "folder"):
                     try:
-                        path = self.catalog.resolve(command.value, kind)
+                        path = self.catalog.resolve(command.value, kind, prefer_usage=kind == 'folder')
                         choices.append(Command("open_" + kind, path))
                     except AmbiguousName as exc:
                         choices.extend(Command("open_" + kind, path) for path in exc.matches[:20])
                     except ValueError:
                         pass
+                for path in self.memory.project_matches(command.value):
+                    choice = Command("open_folder", path)
+                    if choice not in choices:
+                        choices.append(choice)
                 if len(choices) == 1:
                     return self.execute(choices[0], cancelled)
                 if choices:
@@ -694,7 +947,7 @@ class Actions:
                 raise ValueError(f"No matching app, file, or folder for '{command.value}'. Try another word from its name.")
             self.open_target_pending = True
             self.typing_failed = True
-            args = self.apps.get(command.value)
+            args = memory_args if memory_args is not None else self.apps.get(command.value)
             expected = None
             if isinstance(args, dict):
                 if args.get("shortcut"):
@@ -704,6 +957,8 @@ class Actions:
                     expected = Path(args["executable"]).name if args.get("executable") else None
                 elif args.get("shell_id"):
                     subprocess.Popen(["explorer.exe", "shell:AppsFolder\\" + args["shell_id"]], shell=False)
+                    if command.value == 'spotify':
+                        return 'Opened the native Spotify app.'
                 else:
                     raise ValueError("Invalid application catalog entry.")
                 if expected is None:
@@ -781,6 +1036,7 @@ class Actions:
         if cancelled():
             return "Project opening cancelled"
         os.startfile(str(path))
+        self.catalog.folders.record_open(str(path), 'project ' + path.name)
         if cancelled():
             return f"Opened {path} in File Explorer; remaining launches cancelled."
         subprocess.Popen([codex, "app", str(path)], shell=False, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
@@ -800,6 +1056,12 @@ class Actions:
             try:
                 cancelled = lambda: self.closed.is_set() or generation != self.generation
                 if not cancelled():
+                    from .progress import status
+                    phases = {'open': 'Opening', 'open_folder': 'Opening folder', 'open_file': 'Opening file',
+                              'code_task': 'Preparing code', 'task': 'Planning task', 'browse': 'Opening website',
+                              'media_search': 'Searching', 'run_command': 'Running command'}
+                    status(self.report, phases.get(command.kind, 'Working'),
+                           '' if command.kind in {'type', 'dictate', 'run_command'} else command.value)
                     result = self.execute(command, cancelled)
                     if result and not cancelled():
                         self.report("action", result)
@@ -814,5 +1076,7 @@ class Actions:
                 else:
                     self.report("warning", str(exc))
             finally:
+                from .progress import status
+                status(self.report, 'Ready' if generation == self.generation else 'Cancelled', active=False)
                 self.superseded_generations.discard(generation)
                 self.queue.task_done()

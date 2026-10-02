@@ -14,15 +14,21 @@ def main():
     parser.add_argument('--goal')
     parser.add_argument('--session', help='Resume context using a returned session id')
     parser.add_argument('--model', default='qwen3.5:4b')
+    parser.add_argument('--backend', choices=('ollama', 'harness'), default='ollama')
     parser.add_argument('--max-steps', type=int, default=12)
     parser.add_argument('--serve', action='store_true', help='Read JSONL requests: tool.list, session.info, session.fork, turn.run, team.run')
     args = parser.parse_args()
     def emit(row):
         print(json.dumps(row, ensure_ascii=False), flush=True)
     base = Path(__file__).resolve().parent.parent
+    provider = None
     try:
         session = AgentSession(base, args.project, args.session, emit)
-        provider = OllamaProvider(args.model)
+        if args.backend == 'harness':
+            from .harness import HarnessProvider
+            provider = HarnessProvider(base, args.model)
+        else:
+            provider = OllamaProvider(args.model)
         if not args.serve:
             if not args.goal:
                 parser.error('--goal is required unless --serve is used')
@@ -51,6 +57,8 @@ def main():
                 elif method == 'session.fork':
                     result = {'session_id': session.fork(emit).identifier}
                 elif method == 'team.run':
+                    if args.backend == 'harness':
+                        raise ValueError('Harness CLI runs one owned inference worker; use separate CLI sessions for independent research.')
                     result = session.research_parallel(request.get('goals'), provider)
                 else:
                     raise ValueError('Unknown method; use session.info, session.fork, tool.list, turn.run or team.run.')
@@ -68,6 +76,9 @@ def main():
     except KeyboardInterrupt:
         emit({'event': 'cancelled'})
         return 130
+    finally:
+        if provider is not None and hasattr(provider, 'close'):
+            provider.close()
 
 
 if __name__ == '__main__':

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-01",
+  "scope": "Real local planning plus real owned-Chrome actions and deterministic independent result checks. Same public goals, model and executor; excludes STT/TTS. Not standalone Hermes computer_use or full Jarvis vision/replan loop.",
+  "model": "qwen3.5:4b",
+  "hermes_revision": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+  "hermes_context": 64000,
+  "native_context": 16384,
+  "order": "direct then Hermes then native Qwen per case",
+  "runs": [
+    {
+      "case": 1,
+      "route": "direct",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "execution_seconds": 4.609,
+      "success": true,
+      "total_seconds": 4.609,
+      "final_public_page": "https://www.youtube.com/results?search_query=robot+tutorials",
+      "player_diagnostic": null
+    },
+    {
+      "case": 1,
+      "route": "hermes",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": true,
+      "success": false,
+      "error": "The local brain timed out. Try a shorter task.",
+      "total_seconds": 124.406,
+      "final_public_page": "https://www.youtube.com/results?search_query=robot+tutorials",
+      "player_diagnostic": {
+        "paused": true,
+        "ready": 0,
+        "ad": false
+      }
+    },
+    {
+      "case": 1,
+      "route": "native_qwen",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": true,
+      "planning_seconds": 77.36,
+      "success": false,
+      "error": "Planner proposed a step outside the exact public benchmark goal.",
+      "total_seconds": 77.36,
+      "final_public_page": "https://www.youtube.com/results?search_query=robot+tutorials",
+      "player_diagnostic": {
+        "paused": true,
+        "ready": 0,
+        "ad": false
+      }
+    }
+  ]
+}

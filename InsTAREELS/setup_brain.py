@@ -29,9 +29,8 @@ def setup():
     tags.raise_for_status()
     installed = {model["name"] for model in tags.json().get("models", [])}
     configuration = json.loads((BASE / "config.json").read_text(encoding="utf-8"))
-    required = {configuration["brain"]["planner"], configuration["brain"]["decision"],
-                configuration["brain"].get("screen_model", "qwen3-vl:4b"),
-                configuration["knowledge"]["model"], configuration["knowledge"].get("screen_model", "qwen3-vl:4b")}
+    from jarvis.model_selection import required_models
+    required = required_models(configuration)
     for model in sorted(required):
         if model in installed:
             print(model + " is already installed.", flush=True)

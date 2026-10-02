@@ -28,7 +28,7 @@ def _process_path(desktop, hwnd):
         desktop.kernel.CloseHandle(process)
 
 
-def close_app(desktop, apps, requested="", cancelled=lambda: False):
+def close_app(desktop, apps, requested="", cancelled=lambda: False, observed=None):
     uniquely_identified = False
     hwnd = desktop.user.GetForegroundWindow()
     pid = wintypes.DWORD()
@@ -85,15 +85,32 @@ def close_app(desktop, apps, requested="", cancelled=lambda: False):
         desktop.user.GetWindowThreadProcessId(foreground, ctypes.byref(foreground_pid))
         if foreground_pid.value != os.getpid() or (desktop.target != hwnd and not uniquely_identified):
             raise ValueError("The selected window changed; nothing was closed.")
-    desktop.user.PostMessageW(hwnd, 0x0010, 0, 0)  # WM_CLOSE; lets apps show Save prompts.
+    from .experience_memory import observe_conditions
+    from types import SimpleNamespace
+    known = observe_conditions(SimpleNamespace(desktop=desktop), handle=hwnd, tools=[])
+    if not desktop.user.PostMessageW(hwnd, 0x0010, 0, 0):  # WM_CLOSE; lets apps show Save prompts.
+        raise ValueError('Windows did not accept the close request; inspect the current app state.')
+    def report_outcome(state, evidence, verified):
+        if observed is not None:
+            observed({'state': state, 'app_name': actual.name.casefold(),
+                      'source': 'window_state', 'evidence': evidence, 'verified': verified,
+                      'conditions': known})
     for _ in range(15):
         if not desktop.user.IsWindow(hwnd):
             if desktop.target == hwnd:
                 desktop.target = None
-            return f"Closed {actual.name} window"
+            evidence = f'{actual.name} window no longer exists; process exit is not established.'
+            report_outcome('window_destroyed', evidence, True)
+            return f"Closed {actual.name} window; process exit is not established."
+        if not desktop.user.IsWindowVisible(hwnd):
+            evidence = f'{actual.name} window is hidden after Close; tray presence and process exit are not established.'
+            report_outcome('window_hidden', evidence, True)
+            return f'Closed visible {actual.name} window: it became hidden; process exit is not established.'
         if cancelled():
+            report_outcome('close_pending', f'{actual.name} Close was requested; observation stopped before a result was established.', False)
             return "Close requested; check the app for a Save prompt."
         time.sleep(.1)
+    report_outcome('window_still_visible', f'{actual.name} window remained visible after Close; completion is not verified. Check for a Save prompt.', False)
     return f"Close requested for {actual.name}; check the app for a Save prompt."
 
 

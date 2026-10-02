@@ -1,6 +1,11 @@
 {
+  "ui": {
+    "opacity": 0.96
+  },
   "agent_runtime": {
-    "deferred_tools": true
+    "deferred_tools": true,
+    "fast_workflows": true,
+    "dom_browser": true
   },
   "model_path": "models/faster-whisper-medium.en",
   "whisper": {
@@ -613,6 +618,9 @@
     "olk": [
       "C:\\Program Files\\WindowsApps\\Microsoft.OutlookForWindows_1.2026.720.100_x64__8wekyb3d8bbwe\\olk.exe"
     ],
+    "obsidian": [
+      "D:\\OBSIDIAN\\Obsidian.exe"
+    ],
     "ollama": {
       "shortcut": "C:\\Users\\kunal\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Ollama.lnk",
       "executable": "C:\\Users\\kunal\\AppData\\Local\\Programs\\Ollama\\ollama app.exe"
@@ -1187,7 +1195,10 @@
     "dropbox": "C:\\Users\\kunal\\Dropbox",
     "jarvis files": "JarvisFiles",
     "c drive": "C:\\",
-    "d drive": "D:\\"
+    "d drive": "D:\\",
+    "ollama": "D:\\Ollama",
+    "olamind": "D:\\Ollama",
+    "olamide": "D:\\Ollama"
   },
   "files": {},
   "file_catalog": "file_catalog.json",
@@ -1200,23 +1211,57 @@
     "num_gpu": 0,
     "prompt_format": "ollama_chat"
   },
+  "memory": {
+    "enabled": true,
+    "vault": "D:\\Phython Project\\Jarvis_Memory\\Jarvis_Mem",
+    "hermes_skills": true,
+    "experience_learning": {
+      "enabled": true,
+      "max_cases": 300,
+      "max_age_days": 90
+    }
+  },
+  "weather": {
+    "ip_location": true,
+    "fallback_city": "Vadodara"
+  },
   "speech": {
     "enabled": true,
     "language": "en",
     "length_scale": 1.05,
     "noise_scale": 0.667,
     "noise_w_scale": 0.8,
-    "sentence_silence": 0.18
+    "sentence_silence": 0.0,
+    "engine": "kokoro",
+    "voice": "af_heart",
+    "speed": 1.0
   },
   "brain": {
     "enabled": true,
     "trained_pc_checkpoint": "artifacts/qwen-pc-training-20260927T161836Z/round-2",
     "selector": "convaiinnovations/laya",
     "planner": "qwen3.5:4b",
+    "coder": "Qwen3-Coder:latest",
+    "coding_timeout_seconds": 900,
     "decision": "qwen3.5:4b",
     "screen_aware": true,
     "adaptive_planning": true,
     "task_recovery": true,
-    "screen_model": "qwen3-vl:4b"
+    "screen_model": "qwen3-vl:4b",
+    "visual_fallback": {
+      "enabled": true,
+      "minimum_confidence": 0.95
+    },
+    "hermes": {
+      "enabled": false,
+      "model": "qwen3.5:4b",
+      "timeout_seconds": 120
+    },
+    "fast_grounding": true,
+    "harness": {
+      "enabled": true,
+      "model": "qwen3.5:4b",
+      "timeout_seconds": 180
+    }
   }
 }

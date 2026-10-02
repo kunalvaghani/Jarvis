@@ -1,5 +1,9 @@
 # Planning and natural speech integrations
 
+**DeepSeek Harness update (2026-10-02):** General planning/replanning now uses the official SDK and matching Windows runtime with local Qwen. Read-only research has an explicit Harness backend. [How it works, integration boundaries, setup and verification](deepseek-harness.md); [retained MIT license](../integrations/DEEPSEEK-HARNESS-LICENSE).
+
+**Current voice update (2026-10-01):** English now uses Kokoro Heart with a warm worker and continuous reply playback. The Piper implementation below describes the earlier integration and remains available as a fallback; Hindi still uses Piper. See [current voice setup, preview and verification](natural-voice-and-model-repair.md).
+
 ## Microsoft JARVIS
 
 Repository: https://github.com/microsoft/JARVIS

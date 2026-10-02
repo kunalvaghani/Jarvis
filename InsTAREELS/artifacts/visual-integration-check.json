@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-02T14:09:01.324669+00:00",
+  "full_regression": {
+    "passed": true,
+    "tests": 667,
+    "seconds": 35.811
+  },
+  "focused_visual_regression": {
+    "passed": true,
+    "tests": 46,
+    "artifact": "visual-fallback-regression-check.json"
+  },
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "planning_backend": "deepseek-harness",
+    "screen_model": "qwen3-vl:4b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "upstream_parser_function_unchanged": true,
+  "local_model": {
+    "passed": true,
+    "turns": 4,
+    "artifact": "visual-fallback-check.json",
+    "scope": "Rendered synthetic fixture; no desktop input"
+  },
+  "live_interactive_input": {
+    "verified": false,
+    "reason": "Disposable fixture could not acquire foreground; Windows reported foreground handle 0",
+    "failure_artifacts": [
+      "visual-fallback-check-initial-failure.json",
+      "visual-fallback-check-failures.jsonl"
+    ]
+  },
+  "documentation": {
+    "relative_links_checked": 151,
+    "errors": []
+  },
+  "startup_snapshot": {
+    "integration": "atomic complete-copy replacement",
+    "fault_injection": "Previous valid backup preserved after injected partial-copy failure"
+  },
+  "configured_external_vault_written": false
+}

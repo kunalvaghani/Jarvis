@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-01",
+  "kind": "Live local inference with synthetic desktop observations; proposals never executed",
+  "plan": {
+    "elapsed_seconds": 37.09,
+    "result": {
+      "question": "",
+      "steps": [
+        {
+          "action": "open",
+          "value": "calculator",
+          "browser": "chrome",
+          "expected": "Calculator app window opens",
+          "folder": "",
+          "content": "",
+          "platform": ""
+        }
+      ],
+      "model_used": "qwen3.5:4b",
+      "backend": "hermes"
+    }
+  },
+  "replan": {
+    "elapsed_seconds": 16.75,
+    "result": {
+      "question": "",
+      "steps": [],
+      "done": true,
+      "reason": "The Calculator app is already open and visible as confirmed by the screen observation.",
+      "model_used": "qwen3.5:4b",
+      "backend": "hermes"
+    }
+  }
+}

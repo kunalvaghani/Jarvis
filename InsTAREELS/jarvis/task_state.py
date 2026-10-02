@@ -16,7 +16,9 @@ def _now():
 
 
 class TaskState:
-    def __init__(self, base):
+    def __init__(self, base, *, read_only=False):
+        self.on_finish = None
+        self.read_only = read_only
         self.path = Path(base) / "task_state.json"
         self.lock = threading.RLock()
         self.data = self._read()
@@ -40,6 +42,8 @@ class TaskState:
             raise ValueError(f"Cannot read task state in {self.path}; repair or move it before starting Jarvis.")
 
     def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
         self.path.parent.mkdir(parents=True, exist_ok=True)
         temporary = None
         try:
@@ -70,13 +74,13 @@ class TaskState:
                                     "updated_at": timestamp, "checkpoints": [], "result": ""}
             self._write()
 
-    def checkpoint(self, stage, *, action=None, target=None, evidence=None, screen=None):
+    def checkpoint(self, stage, *, action=None, target=None, evidence=None, screen=None, source=None):
         with self.lock:
             current = self.data.get("current")
             if not current or current.get("status") != "running":
                 return
             item = {"at": _now(), "stage": stage}
-            for key, value in (("action", action), ("target", target), ("evidence", evidence), ("screen", screen)):
+            for key, value in (("action", action), ("target", target), ("evidence", evidence), ("screen", screen), ("source", source)):
                 if value is not None:
                     item[key] = str(value)[:500]
             current["stage"] = stage
@@ -95,6 +99,8 @@ class TaskState:
             current["updated_at"] = _now()
             current["result"] = str(result)[:1000]
             self._write()
+            if self.on_finish:
+                self.on_finish(json.loads(json.dumps(current)))
 
     def update_plan(self, remaining, completed, reason=""):
         """Persist planning context only; this must never become a replay queue."""
@@ -128,6 +134,16 @@ class TaskState:
             current = self.data.get("current")
             if current and current.get("status") == "running":
                 current["project"] = str(project)
+                self._write()
+
+    def set_conditions(self, conditions):
+        """Persist bounded initial observations, never reusable control identities."""
+        from .experience_memory import CONDITION_KEYS
+        with self.lock:
+            current = self.data.get('current')
+            if current and current.get('status') == 'running':
+                current['conditions'] = {k: str(v)[:300] for k, v in conditions.items()
+                                         if k in CONDITION_KEYS and isinstance(v, str)}
                 self._write()
 
     def unfinished(self, automatic=False):

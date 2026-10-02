@@ -1,0 +1,16 @@
+# Managed Jarvis planning profile; independent of any standalone Hermes profile.
+model:
+  default: qwen3.5:4b
+  provider: custom
+  context_length: 64000
+  ollama_num_ctx: 64000
+tools:
+  tool_search:
+    enabled: "off"
+compression:
+  enabled: false
+skills:
+  auto_load: []
+auxiliary:
+  background_review:
+    enabled: false

@@ -1,0 +1,207 @@
+[
+  {
+    "name": "Search and empty state recovery",
+    "steps": [
+      {
+        "action": "fill",
+        "role": "textbox",
+        "name": "Search projects",
+        "value": "no-such-project"
+      },
+      {
+        "action": "assert_text",
+        "value": "No matching projects"
+      },
+      {
+        "action": "click",
+        "name": "Clear filters"
+      },
+      {
+        "action": "assert_text",
+        "value": "Studio website"
+      }
+    ]
+  },
+  {
+    "name": "Status filter",
+    "steps": [
+      {
+        "action": "select",
+        "role": "combobox",
+        "name": "Project status",
+        "value": "Done"
+      },
+      {
+        "action": "assert_text",
+        "value": "Brand guidelines"
+      },
+      {
+        "action": "assert_count",
+        "role": "heading",
+        "name": "Studio website",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "Validated create dialog and updated project",
+    "steps": [
+      {
+        "action": "click",
+        "name": "+ New project"
+      },
+      {
+        "action": "click",
+        "name": "Create project"
+      },
+      {
+        "action": "assert_text",
+        "value": "Enter a project name."
+      },
+      {
+        "action": "fill",
+        "role": "textbox",
+        "name": "Project name",
+        "value": "Accessible launch"
+      },
+      {
+        "action": "click",
+        "name": "Create project"
+      },
+      {
+        "action": "assert_text",
+        "value": "Accessible launch created"
+      },
+      {
+        "action": "assert_text",
+        "value": "Accessible launch"
+      }
+    ]
+  },
+  {
+    "name": "Keyboard submit and Escape dialog",
+    "steps": [
+      {
+        "action": "click",
+        "name": "+ New project"
+      },
+      {
+        "action": "press",
+        "value": "Escape"
+      },
+      {
+        "action": "assert_count",
+        "role": "dialog",
+        "name": "Make room for an idea.",
+        "value": 0
+      },
+      {
+        "action": "press",
+        "value": "Enter"
+      },
+      {
+        "action": "assert_count",
+        "role": "dialog",
+        "name": "Make room for an idea.",
+        "value": 1
+      },
+      {
+        "action": "fill",
+        "role": "textbox",
+        "name": "Project name",
+        "value": "Keyboard project"
+      },
+      {
+        "action": "press",
+        "role": "textbox",
+        "name": "Project name",
+        "value": "Enter"
+      },
+      {
+        "action": "assert_text",
+        "value": "Keyboard project created"
+      }
+    ]
+  },
+  {
+    "name": "Complete updates outcome",
+    "steps": [
+      {
+        "action": "click",
+        "name": "Complete Studio website"
+      },
+      {
+        "action": "assert_text",
+        "value": "Studio website completed"
+      },
+      {
+        "action": "select",
+        "role": "combobox",
+        "name": "Project status",
+        "value": "Done"
+      },
+      {
+        "action": "assert_text",
+        "value": "Studio website"
+      }
+    ]
+  },
+  {
+    "name": "Loading and recoverable error",
+    "steps": [
+      {
+        "action": "click",
+        "name": "Simulate offline"
+      },
+      {
+        "action": "assert_text",
+        "value": "Could not load demo data. Your edits are still here."
+      },
+      {
+        "action": "click",
+        "name": "Retry"
+      },
+      {
+        "action": "assert_text",
+        "value": "Loading projects\u2026"
+      },
+      {
+        "action": "assert_text",
+        "value": "Studio website"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "steps": [
+      {
+        "action": "click",
+        "name": "Projects"
+      },
+      {
+        "action": "assert_text",
+        "value": "Ideas, moving forward."
+      },
+      {
+        "action": "click",
+        "name": "Overview"
+      },
+      {
+        "action": "assert_text",
+        "value": "A clear view of what\u2019s next."
+      }
+    ]
+  },
+  {
+    "name": "Motion preference applied",
+    "steps": [
+      {
+        "action": "assert_attribute",
+        "role": "main",
+        "name": "Main workspace",
+        "attribute": "data-motion",
+        "value": "@motion-preference"
+      }
+    ]
+  }
+]

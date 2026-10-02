@@ -1,0 +1,81 @@
+{
+  "at": "2026-10-02T13:55:57.979862+00:00",
+  "scope": "Isolated fixtures only; configured vault is not written",
+  "upstream": "UI-TARS parse_action at 582f3a7ea5d285ee8ed9e2e84048d1ab01453c49",
+  "regression": {
+    "passed": true,
+    "tests": 45
+  },
+  "desktop": {
+    "run": false
+  },
+  "local_model": {
+    "passed": true,
+    "model": "qwen3-vl:4b",
+    "scope": "Real local vision on a rendered synthetic fixture; coordinates parsed but never dispatched; no live third-party app task",
+    "turns": [
+      {
+        "operation": "visual_ground",
+        "requested_content": "",
+        "seconds": 8.781,
+        "passed": true,
+        "response": {
+          "point": [
+            800,
+            780
+          ],
+          "target": "Save",
+          "role": "Button",
+          "confidence": 0.95,
+          "is_dialog": true,
+          "password": false,
+          "reason": "The 'Save' button is visible and labeled, matching the expected action to save the document as 'notes.txt'.",
+          "action": "click(start_box=\"(800,780)\")",
+          "model_used": "qwen3-vl:4b"
+        }
+      },
+      {
+        "operation": "visual_field",
+        "requested_content": "notes.txt",
+        "seconds": 6.313,
+        "passed": true,
+        "response": {
+          "verified": true,
+          "observed_text": "notes.txt",
+          "reason": "The 'File name' textbox contains the exact string 'notes.txt' as requested, matching the expected filename. No truncation or masking is observed.",
+          "model_used": "qwen3-vl:4b"
+        }
+      },
+      {
+        "operation": "visual_dialog",
+        "requested_content": "",
+        "seconds": 43.984,
+        "passed": true,
+        "response": {
+          "kind": "save_as",
+          "confidence": 0.95,
+          "filename_label": "File name:",
+          "confirm_label": "Save",
+          "overwrite_name": "",
+          "reason": "The dialog displays a 'Save As' window with the filename field populated as 'notes.txt' and a 'Save' button. The filename is explicitly shown in the field, confirming the overwrite target. No overwrite confirmation dialog is present, so the overwrite name is directly transcribed from the visible filename.",
+          "model_used": "qwen3-vl:4b"
+        }
+      },
+      {
+        "operation": "visual_field",
+        "requested_content": "wrong.txt",
+        "seconds": 8.953,
+        "passed": true,
+        "response": {
+          "verified": false,
+          "observed_text": "notes.txt",
+          "reason": "The 'File name' field currently contains 'notes.txt', which does not match the requested 'wrong.txt'. The user's goal is to save as 'notes.txt', but the current value is incorrect. The 'Save' button is visible and ready to be clicked once the correct filename is entered.",
+          "model_used": "qwen3-vl:4b"
+        }
+      }
+    ]
+  },
+  "passed": true,
+  "live_interactive_input_verified": false,
+  "status": "requested_model_checks_passed; live interactive input unverified"
+}

@@ -47,6 +47,18 @@ class QuestionClient:
 
     def request(self, request, cancelled):
         import re
+        memory = getattr(self, "memory", None)
+        if memory is not None:
+            profile = memory.profile_text()
+            if profile:
+                request = {**request, "user_profile": profile}
+            observations = memory.recall(request.get("question", ""))
+            if observations:
+                request = {**request, "memory_context": observations}
+            if hasattr(memory, "task_context"):
+                catalogue = memory.task_context(request.get("question", ""))
+                if any(catalogue.get(key) for key in ("projects", "apps", "tools")):
+                    request = {**request, "catalog_context": catalogue}
         if re.search(r'\b(?:my (?:pc|computer|projects?|files?|folders?)|downloads|documents|project.*(?:path|location)|where.*(?:project|folder|file))\b',request.get('question',''),re.I):
             from .pc_context import context
             try:

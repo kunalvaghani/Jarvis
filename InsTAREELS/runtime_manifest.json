@@ -1,6 +1,20 @@
 {
   "version": 1,
   "capabilities": [
+    "interactive_island_cards",
+    "bound_island_choices",
+    "nonblocking_island_approvals",
+    "five_local_island_games",
+    "spotify_island_artwork_transport",
+    "native_dpi_island_rendering",
+    "live_task_file_status",
+    "wake_gated_speech_barge_in",
+    "concurrent_questions_and_tasks",
+    "task_intent_tool_skill_routing",
+    "obsidian_personal_skill_hot_reload",
+    "validated_memory_program_launch",
+    "native_dynamic_island_interface",
+    "obsidian_tool_project_app_catalogue",
     "unified_tools",
     "hierarchical_repository_instructions",
     "explicit_local_skills",
@@ -23,6 +37,7 @@
     "safe_task_resume",
     "silent_recovery",
     "local_experience_recall",
+    "condition_aware_experience_retrieval",
     "verified_coding_lesson_recall",
     "learned_missing_import_check",
     "related_coding_failure_examples",
@@ -48,7 +63,29 @@
     "optional_trained_python_coder",
     "fresh_pc_metadata_context",
     "local_pc_context_weight_training",
-    "validated_trained_pc_resolver"
+    "validated_trained_pc_resolver",
+    "hermes_local_planning",
+    "free_local_kokoro_phrase_speech",
+    "direct_youtube_spotify_controls",
+    "native_spotify_app_preference",
+    "ordinal_media_selection",
+    "warm_uia_worker",
+    "verified_direct_workflows",
+    "owned_playwright_browser",
+    "semantic_target_disambiguation",
+    "indexed_hermes_skill_guidance",
+    "deepseek_harness_local_planning",
+    "deepseek_harness_read_only_research",
+    "ui_tars_visual_fallback",
+    "fresh_visual_target_guards",
+    "independent_application_save_readback",
+    "framework_scoped_development_skills",
+    "staged_web_app_development",
+    "design_before_code",
+    "owned_node_build_preview",
+    "desktop_mobile_browser_verification",
+    "verified_framework_learning",
+    "development_practice_progression"
   ],
   "main_imports": [
     "tkinter",
@@ -58,12 +95,21 @@
     "scipy",
     "faster_whisper",
     "requests",
+    "psutil",
     "pywinauto",
     "send2trash",
     "ddgs",
     "piper",
     "pycaw",
-    "winrt.windows.media.control"
+    "winrt.windows.media.control",
+    "winrt.windows.storage.streams",
+    "kokoro_onnx",
+    "onnxruntime",
+    "espeakng_loader",
+    "playwright",
+    "yaml",
+    "win32gui",
+    "win32process"
   ],
   "brain_imports": [
     "requests",
@@ -72,6 +118,7 @@
     "transformers"
   ],
   "services": [
+    "island_media_observations",
     "interface",
     "ollama",
     "models",
@@ -79,12 +126,16 @@
     "action_worker",
     "question_worker",
     "speech_worker",
+    "kokoro_inference_playback",
+    "ui_automation_worker",
+    "browser_automation_worker",
     "brain_inference",
-    "gods_eye"
+    "hermes_inference",
+    "gods_eye",
+    "harness_inference",
+    "development_preview"
   ],
-  "ui_assets": [
-    "jarvis/assets/jarvis-reference.gif"
-  ],
+  "ui_assets": [],
   "optional_training": {
     "requirements": "requirements-training.txt",
     "environment": ".venv-training",
@@ -97,5 +148,106 @@
       "safetensors"
     ],
     "long_running_service": false
+  },
+  "optional_hermes": {
+    "source": "integrations/hermes-agent",
+    "revision": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+    "requirements": "integrations/hermes-agent/pyproject.toml",
+    "environment": ".venv-hermes",
+    "python": "3.14.7",
+    "imports": [
+      "run_agent",
+      "openai",
+      "tools.registry"
+    ],
+    "setup": "setup_hermes.py",
+    "health_check": [
+      "-m",
+      "jarvis.hermes_worker",
+      "--check"
+    ],
+    "recovery": "bounded inference-only worker retry; no action replay",
+    "skills_catalogue": "integrations/hermes-skills.json"
+  },
+  "voice_assets": [
+    "models/voices/kokoro/kokoro-v1.0.onnx",
+    "models/voices/kokoro/voices-v1.0.bin"
+  ],
+  "experience_learning": {
+    "implementation": "jarvis/experience_memory.py",
+    "design_source": "https://github.com/Memento-Teams/Memento",
+    "reviewed_revision": "42fbbcac63dd58ed6856c0761357345a58e4f032",
+    "integration": "independent standard-library case retrieval; upstream runtime not installed",
+    "license_reference": "integrations/MEMENTO-LICENSE",
+    "configuration": "memory.experience_learning",
+    "long_running_service": false,
+    "automatic_action_replay": false,
+    "model_weight_updates": false
+  },
+  "optional_harness": {
+    "requirements": "requirements-harness.txt",
+    "environment": ".venv-harness",
+    "sdk_version": "0.1.5rc1",
+    "runtime_version": "0.1.5rc1",
+    "source": "https://github.com/deepseek-ai/deepseek-harness",
+    "reviewed_revision": "639ed015397290b3745d163aafe02ffee4aa3f84",
+    "installed_release_tag": "dsh-v0.1.5-rc.1",
+    "profile": "sdk-minimal",
+    "patch": "integrations/harness-inference.patch.yml",
+    "setup": "setup_harness.py --enable",
+    "imports": [
+      "deepseek_harness",
+      "deepseek_harness_runtime",
+      "requests",
+      "yaml"
+    ],
+    "health_check": [
+      "-m",
+      "jarvis.harness_worker",
+      "--check"
+    ],
+    "recovery": "owned Windows job; one inference-only retry after 0.5s cancellable backoff; no action replay"
+  },
+  "visual_interaction": {
+    "configuration": "brain.visual_fallback",
+    "component": "jarvis/_vendor/ui_tars_action_parser.py",
+    "source": "https://github.com/bytedance/UI-TARS",
+    "reviewed_revision": "582f3a7ea5d285ee8ed9e2e84048d1ab01453c49",
+    "component_sha256_lf": "ea08ee34da792f1733dafcb652c09c84879acb98bea6c4d404e0951273f771a8",
+    "license": "integrations/UI-TARS-LICENSE",
+    "notice": "integrations/UI-TARS-NOTICE.md",
+    "model": "brain.screen_model (existing local Qwen3-VL)",
+    "environment": ".venv",
+    "worker": "jarvis.visual_worker",
+    "long_running_service": false,
+    "worker_deadline_seconds": 20,
+    "recovery": "owned one-shot input worker; no automatic action retry; fresh observations before alternate planning",
+    "maximum_capture_age_seconds": 5,
+    "save_verification_max_bytes": 20971520,
+    "upstream_desktop_runtime_installed": false,
+    "generated_code_execution": false
+  },
+  "development": {
+    "node": "Node.js LTS, >=22.12 recommended; verified Node 24.14.0",
+    "python_dependencies": "Existing main Playwright/Pillow/psutil",
+    "stacks": [
+      "React + TypeScript + Vite",
+      "Next App Router",
+      "React + Electron renderer",
+      "React Native + Expo web export"
+    ],
+    "new_project_versions_source": "jarvis.development_projects.VERSIONS and official Expo 57.0.26 bundledNativeModules.json",
+    "knowledge": "jarvis/assets/development-skills.json",
+    "guide_implementation": "Independent Jarvis guides; no copied upstream skill scripts",
+    "batches": 3,
+    "max_project_files": 24,
+    "max_directories": 12,
+    "owned_service": "Development preview",
+    "recovery": "health checked; stop and record after failure; never automatically replay build, npm install or project server",
+    "browser": "main interpreter owned one-shot Chrome/Playwright worker; bounded 120 seconds; loopback-only requests; project-local axe-core",
+    "execution_approval": "After source/brief ready, existing nonblocking island command approval",
+    "native_limitations": "Electron binary/package installation and Android/iOS native toolchains need separate approval and platform checks",
+    "weight_updates": false,
+    "native_tool": "development_native: explicit Electron Windows packaging / Expo Android or iOS local build, readiness + execution approval; no publishing"
   }
 }

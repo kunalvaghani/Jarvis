@@ -105,7 +105,7 @@ def skill_catalog(project):
 
 def selected_skills(project, goal, budget=6000):
     """Load only $name skills explicitly requested in the user's goal."""
-    requested = set(re.findall(r'\$([\w.-]+)', goal))
+    requested = set(re.findall(r'\$(?!(?:hermes|custom):)([\w.-]+)', goal))
     if not requested:
         return []
     catalog = {entry['name']: entry for entry in skill_catalog(project)}
@@ -140,6 +140,13 @@ def repository_map(project, files=None, budget=5000):
                 row += ': ' + ', '.join(symbols[:15]) if symbols else ''
             except (ValueError, OSError, UnicodeError, SyntaxError):
                 pass
+        if Path(name).suffix in {'.js', '.jsx', '.ts', '.tsx'}:
+            try:
+                text = bounded_text(scoped(project, name), 14000)
+                symbols = re.findall(r'(?:export\s+(?:default\s+)?)?(?:async\s+)?(?:function|class|interface|type|const)\s+([A-Za-z_$][\w$]*)', text)
+                row += ': ' + ', '.join(dict.fromkeys(symbols))[:300] if symbols else ''
+            except (ValueError, OSError, UnicodeError):
+                pass
         if used + len(row) + 1 > budget:
             rows.append('[Repository map truncated]')
             break
@@ -149,7 +156,11 @@ def repository_map(project, files=None, budget=5000):
 
 
 def coding_context(project, goal, target=None, files=None):
-    return {'repository_instructions': instruction_context(project, target),
+    from .development_knowledge import context as development_context, detect_stack
+    from .development_learning import recall
+    return {'development_skills': development_context(project, goal, target),
+            'development_lessons': recall(Path(__file__).parent.parent, detect_stack(project, goal), goal) if Path(target or '').suffix != '.py' else [],
+            'repository_instructions': instruction_context(project, target),
             'selected_skills': selected_skills(project, goal),
             'repository_map': repository_map(project, files)}
 

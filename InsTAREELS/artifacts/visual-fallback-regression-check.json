@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-02T14:02:04.344463+00:00",
+  "scope": "Isolated fixtures only; configured vault is not written",
+  "upstream": "UI-TARS parse_action at 582f3a7ea5d285ee8ed9e2e84048d1ab01453c49",
+  "regression": {
+    "passed": true,
+    "tests": 46
+  },
+  "desktop": {
+    "run": false
+  },
+  "local_model": {
+    "run": false
+  },
+  "passed": true
+}

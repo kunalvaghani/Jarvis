@@ -50,6 +50,9 @@ def explicit_desktop_plan(goal):
     match = re.fullmatch(r"(?:choose|click|select) (?:the )?(.+?) (?:in|on) (?:the )?dialog", text, re.I)
     if match:
         return {"steps": [{"action": "handle_dialog", "value": match[1], "expected": "The dialog choice took effect"}]}
+    match = re.fullmatch(r'(?:click|select|choose) (?:the )?(.+)', text, re.I)
+    if match:
+        return {'steps': [{'action': 'select', 'value': match[1], 'expected': 'The requested visible control activated'}]}
     return None
 
 

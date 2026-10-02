@@ -95,7 +95,7 @@ def validate_step(step):
         raise ValueError("Tool value and content must be text; value cannot be empty.")
     if len(step.get("content", "")) > 10000:
         raise ValueError("Tool content exceeds 10,000 characters.")
-    if step['action'] in AGENT_TOOLS and step['action'] not in {'tool_search', 'mcp_status', 'mcp_list_tools', 'mcp_call'}:
+    if step['action'] in AGENT_TOOLS and step['action'] not in {'tool_search', 'runtime_capabilities', 'mcp_status', 'mcp_list_tools', 'mcp_call'}:
         if not isinstance(step.get('folder'), str) or not step['folder'].strip():
             raise ValueError('Agent observations need an explicit project folder.')
     if step["action"] in {"list_files", "read_file", "append_file", "search_files", "query_resource", "knowledge_search"}:

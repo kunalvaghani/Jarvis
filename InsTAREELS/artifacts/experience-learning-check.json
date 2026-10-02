@@ -1,0 +1,115 @@
+{
+  "checked_at": "2026-10-02T12:50:36.354190+00:00",
+  "fixture": "Synthetic Spotify window; no user applications or configured vault accessed.",
+  "external_actions": 0,
+  "model_weights_updated": false,
+  "persist_restart_retrieve": "passed",
+  "changed_conditions": "passed",
+  "cases": [
+    {
+      "id": "fe49c09ca9162e394665",
+      "goal": "Close Spotify",
+      "kind": "task",
+      "project": "",
+      "at": "2026-10-02T12:50:36.397086+00:00",
+      "verified": false,
+      "uncertain": true,
+      "conditions": {
+        "surface": "Spotify",
+        "ui_fingerprint": "dc87003a46d56149736c",
+        "tool_fingerprint": "3af1b9ff37b6a61f9db1"
+      },
+      "verification": [],
+      "failures": [
+        {
+          "action": "close_app",
+          "reason": "Window became hidden after Close; process exit was not established.",
+          "class": "uncertain_effect",
+          "outcome": "uncertain"
+        }
+      ],
+      "observations": [],
+      "recovery": [],
+      "recovered": false,
+      "relevance": 1.0,
+      "conditions_match": true,
+      "changed_conditions": [],
+      "missing_conditions": [],
+      "requires_fresh_inspection": true
+    },
+    {
+      "id": "3c18e52a20a1b75156d0",
+      "goal": "Close Spotify window",
+      "kind": "task",
+      "project": "",
+      "at": "2026-10-02T12:50:36.418674+00:00",
+      "verified": true,
+      "uncertain": false,
+      "conditions": {
+        "surface": "Spotify",
+        "ui_fingerprint": "dc87003a46d56149736c",
+        "tool_fingerprint": "3af1b9ff37b6a61f9db1"
+      },
+      "verification": [
+        {
+          "source": "window_state",
+          "evidence": "Window became hidden after Close; tray presence and process exit are not established."
+        }
+      ],
+      "failures": [],
+      "observations": [
+        {
+          "source": "window_state",
+          "action": "close_app",
+          "evidence": "Window became hidden after Close; tray presence and process exit are not established."
+        }
+      ],
+      "recovery": [],
+      "recovered": false,
+      "relevance": 1.0,
+      "conditions_match": true,
+      "changed_conditions": [],
+      "missing_conditions": [],
+      "requires_fresh_inspection": true
+    }
+  ],
+  "condition_policy": "Fresh inspection required for every case.",
+  "planner_context_delivery": "passed (captured inference boundary; no model call)",
+  "live_inference": {
+    "status": "passed",
+    "seconds": 79.344,
+    "proposal_not_executed": {
+      "question": "",
+      "steps": [
+        {
+          "action": "close_app",
+          "value": "spotify",
+          "browser": "chrome",
+          "expected": "Window hidden",
+          "folder": "",
+          "content": "",
+          "platform": "Windows",
+          "find": "fresh-fixture"
+        }
+      ],
+      "model_used": "qwen3.5:4b",
+      "backend": "deepseek-harness",
+      "harness_session_id": "jarvis-4e0eff85af3e4d838f490ee73205b285",
+      "harness_events": [
+        "agent/inbox/spliced",
+        "turn/start",
+        "agent/inbox/spliced",
+        "step/start",
+        "system/message",
+        "user/message",
+        "request/header",
+        "request/context",
+        "session/title",
+        "assistant/message",
+        "step/end",
+        "turn/end"
+      ]
+    },
+    "scope": "One local Harness/Qwen turn with synthetic state and persisted cases."
+  }
+}

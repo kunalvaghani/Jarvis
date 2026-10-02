@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "typecheck",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.EXE",
+      "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\node_modules\\typescript\\bin\\tsc",
+      "--noEmit"
+    ],
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "phase": "build",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.EXE",
+      "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-next\\node_modules\\next\\dist\\bin\\next",
+      "build"
+    ],
+    "exit_code": 0,
+    "output": "\u25b2 Next.js 16.3.8 (Turbopack)\n\u2713 Running next.config took 35ms\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 771ms\n  Running TypeScript ...\n  Finished TypeScript in 678ms ...\n  Collecting page data using 4 workers ...\n  Generating static pages using 4 workers (0/3) ...\n\u2713 Generating static pages using 4 workers (3/3) in 2.0s\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u2514 \u25cb /_not-found\n\n\n\u25cb  (Static)  prerendered as static content\n\n"
+  }
+]

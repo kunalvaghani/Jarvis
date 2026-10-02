@@ -2,12 +2,14 @@
 import argparse
 import ast
 import json
+import math
 import os
 import re
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 
@@ -54,6 +56,19 @@ BASE = Path(__file__).resolve().parent.parent
 RUNTIME = BASE / ".jarvis-runtime"
 
 
+def source_snapshot(source, saved):
+    """Keep a valid owned backup until a complete new copy can replace it."""
+    saved = Path(saved)
+    saved.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=saved.parent, prefix='.jarvis-snapshot-', delete=False) as output:
+        temporary = Path(output.name)
+    try:
+        shutil.copy2(source, temporary)
+        os.replace(temporary, saved)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def preflight(base=BASE, repair=True):
     base = Path(base)
     runtime = base / ".jarvis-runtime"
@@ -68,6 +83,12 @@ def preflight(base=BASE, repair=True):
             raise ValueError("brain.adaptive_planning must be a boolean")
         if not isinstance(config.get("brain", {}).get("task_recovery", False), bool):
             raise ValueError("brain.task_recovery must be a boolean")
+        visual = config.get('brain', {}).get('visual_fallback', {})
+        if (not isinstance(visual, dict) or not isinstance(visual.get('enabled', False), bool)
+                or type(visual.get('minimum_confidence', .95)) not in (int, float)
+                or not math.isfinite(visual.get('minimum_confidence', .95))
+                or not .95 <= visual.get('minimum_confidence', .95) <= 1):
+            raise ValueError('brain.visual_fallback requires a boolean enabled and minimum_confidence between 0.95 and 1')
     except (ValueError, OSError):
         if not repair or not backup.is_file():
             raise ValueError("config.json is invalid and no last-good configuration is available.")
@@ -76,7 +97,7 @@ def preflight(base=BASE, repair=True):
         shutil.copy2(backup, config_path)
         record(base, "Invalid Jarvis configuration restored from its last-good copy; damaged copy preserved.")
         return preflight(base, repair=False)
-    sources = [base / "main.py", *sorted((base / "jarvis").glob("*.py"))]
+    sources = [base / "main.py", *sorted((base / "jarvis").rglob("*.py"))]
     if (base / "jarvis_bootstrap.py").is_file():
         sources.append(base / "jarvis_bootstrap.py")
     for source in sources:
@@ -93,11 +114,11 @@ def preflight(base=BASE, repair=True):
             shutil.copy2(source, damaged)
             shutil.copy2(saved, source)
             record(base, "Restored invalid Jarvis source " + str(relative) + " from its startup snapshot; damaged copy preserved.")
-    shutil.copy2(config_path, backup)
+    source_snapshot(config_path, backup)
     for source in sources:
         saved = runtime / "sources" / source.relative_to(base)
         saved.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, saved)
+        source_snapshot(source, saved)
     return config
 
 
@@ -180,6 +201,10 @@ def prepare_runtime(config):
             record(BASE, "Whisper model missing; resuming its declared model download.")
             command([str(python), "download_model.py", "--parallel", "4"])
             record(BASE, "Whisper model download repaired.")
+        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
+            if any(not (BASE / path).is_file() for path in manifest.get("voice_assets", [])):
+                record(BASE, "Kokoro voice assets missing; restoring pinned local voice files.")
+                command([str(python), "setup_voice.py"])
         if config.get("brain", {}).get("enabled"):
             brain = BASE / ".venv-brain" / "Scripts" / "python.exe"
             if not brain.is_file():
@@ -293,13 +318,53 @@ def runtime_status(config):
             missing.append(key + ": " + result.stderr.decode(errors="replace").strip().splitlines()[-1])
     if not (BASE / config["model_path"] / "model.bin").is_file():
         missing.append("Whisper checkpoint")
+    if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
+        missing.extend(path for path in manifest.get("voice_assets", []) if not (BASE / path).is_file())
     if config.get("brain", {}).get("enabled") and not (BASE / "models/laya/model.safetensors").is_file():
         missing.append("Laya checkpoint")
+    hermes_enabled = config.get("brain", {}).get("hermes", {}).get("enabled", False)
+    harness_enabled = config.get("brain", {}).get("harness", {}).get("enabled", False)
+    if harness_enabled:
+        from .harness import readiness
+        issue = readiness(BASE)
+        if issue:
+            missing.append(issue)
+        else:
+            try:
+                check = subprocess.run([str(BASE / '.venv-harness/Scripts/python.exe'),
+                    '-m', 'jarvis.harness_worker', '--check'], cwd=BASE, capture_output=True,
+                    timeout=45, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                if check.returncode:
+                    missing.append('Harness runtime/profile check failed; run Setup Jarvis Harness.cmd')
+            except (OSError, subprocess.TimeoutExpired):
+                missing.append('Harness readiness check failed')
+    if hermes_enabled:
+        from .hermes import readiness
+        issue = readiness(BASE)
+        if issue:
+            missing.append(issue)
+        else:
+            try:
+                check = subprocess.run([str(BASE / ".venv-hermes/Scripts/python.exe"),
+                    "-m", "jarvis.hermes_worker", "--check"], cwd=BASE, capture_output=True,
+                    timeout=60, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                if check.returncode:
+                    missing.append("Hermes import/tool isolation check failed; run Setup Jarvis Hermes.cmd")
+            except (OSError, subprocess.TimeoutExpired):
+                missing.append("Hermes readiness check failed")
+    visual_enabled = config.get('brain', {}).get('visual_fallback', {}).get('enabled', False)
+    if visual_enabled:
+        from .visual_fallback import readiness
+        issue = readiness(BASE)
+        if issue:
+            missing.append(issue)
     return {"status": "ready" if not missing else "repair_required", "missing": missing,
             "adaptive_planning": config.get("brain", {}).get("adaptive_planning", False),
             "task_recovery": config.get("brain", {}).get("task_recovery", False),
             "planner": config.get("brain", {}).get("planner"),
-            "screen_model": config.get("brain", {}).get("screen_model")}
+            "planning_backend": "deepseek-harness" if harness_enabled else "hermes" if hermes_enabled else "qwen",
+            "screen_model": config.get("brain", {}).get("screen_model"),
+            "visual_fallback": "ui-tars-parser" if visual_enabled else "disabled"}
 
 
 if __name__ == "__main__":

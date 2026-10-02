@@ -78,6 +78,17 @@ def requested_new_folder(goal):
     return name if name and name.casefold() not in {"and", "with", "in", "inside", "a", "the"} else None
 
 
+def single_python_target(goal):
+    """Infer only a clear single-script target; code still comes from the coder."""
+    if requested_new_folder(goal) or re.search(r'\b(?:and then|scripts|programs|files)\b', goal, re.I):
+        return None
+    match = re.search(r'\b(?:create|make|write|build) (?:a |an |the )?python (?:script|program|file|code) (?:for |called |named )?(?:a |an )?([a-z][a-z0-9 _-]{0,45}?)(?=\s+(?:in|inside)\b|[.!?]|$)', goal, re.I)
+    if not match or re.search(r'\b(?:and|with|then)\b', match[1], re.I):
+        return None
+    name = re.sub(r'[^a-z0-9]+', '_', match[1].casefold()).strip('_')
+    return name + '.py' if name else None
+
+
 def calculator_template(goal, name):
     if name.casefold() not in {"calculator.py", "basic_calculator.py"} or re.search(r"\b(scientific|gui|graphical|advanced)\b", goal, re.I):
         return None
@@ -122,6 +133,9 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
             raise ValueError(f"The selected File Explorer folder is {folder.name}, not {requested_folder}. Open the requested folder first.")
     destination = folder / name
     marker = f"# Jarvis draft: {name}\n# Waiting for generated code.\n"
+    from .code_stream import CodeDraft, owned_draft
+    runtime_base = getattr(actions, 'base', None)
+    runtime_base = runtime_base if isinstance(runtime_base, Path) else folder
     template = calculator_template(goal, name)
     if destination.is_symlink():
         raise ValueError("Jarvis will not edit a linked file.")
@@ -131,8 +145,10 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
         existing = destination.read_text(encoding="utf-8")
         if template is not None and existing == template:
             test_calculator(destination)
+            if isinstance(state, TaskState):
+                state.checkpoint("goal_verified", source='calculator_functional_checks', evidence="Existing calculator matched requested template and four functional checks passed")
             return f"{destination} already has working calculator code; four functional checks passed."
-        if existing != marker:
+        if existing != marker and not owned_draft(runtime_base, destination):
             raise ValueError(f"{name} already exists in {folder}; no file was overwritten.")
         actions.report("action", f"Resuming Jarvis draft {destination}")
     else:
@@ -145,16 +161,20 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
     actions.report("screen", f"Selected File Explorer folder: {folder}")
     actions.report("plan", f"Write Python code into {name}, then test it")
     step = {"path": name, "reason": "Implement the requested Python program in a new file"}
+    stream = CodeDraft(runtime_base, destination, destination.read_bytes(), True, marker, cancelled, actions.report)
     content = template or generate_checked(client, cancelled, destination, goal=goal, project=folder.name,
         path=name, reason=step["reason"], current="", plan=[step], files=[], references={},
-        **coding_context(folder, goal, name))
+        _on_code=stream.write,
+        **{**coding_context(folder, goal, name), "skill_project": str(folder)})
+    from .progress import status
+    status(actions.report, 'Validating code', destination)
     check_content(destination, content)
     if cancelled():
         raise ValueError(f"Coding task cancelled; draft remains at {destination}.")
     if isinstance(state, TaskState):
         state.checkpoint("action_attempted", action="modify_file", target=destination,
                          evidence="Generated draft replacement beginning; inspect disk after interruption")
-    path = modify_text_file(folder, name, marker.replace("\n", os.linesep), content, cancelled)
+    path = modify_text_file(folder, name, stream.expected.decode('utf-8'), content, cancelled)
     if not path or path.read_text(encoding="utf-8") != content:
         raise ValueError(f"The generated Python file could not be verified after writing; inspect {destination}.")
     if isinstance(state, TaskState):
@@ -163,7 +183,16 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
     actions.report("action", f"Wrote code to {path}; testing")
     if template is not None:
         test_calculator(path)
+    if isinstance(state, TaskState):
+        state.checkpoint("goal_verified", source='disk_readback', evidence="Generated file read back; " +
+            ("four calculator functional checks passed" if template is not None else "Python syntax checked; functional behavior not verified"))
     actions.last_created = (path, content)
+    status(actions.report, 'File saved', path, file=str(path), preview=content[:1600], characters=len(content),
+           outcome='Disk readback + calculator checks passed' if template is not None else 'Disk readback + Python syntax checked; behavior not tested')
+    try:
+        stream.complete()
+    except (OSError, ValueError) as exc:
+        actions.report('warning', 'Code was written; streaming metadata needs repair: ' + str(exc))
     return (f"Created and tested {path}: addition, multiplication, division, and division by zero passed."
             if template is not None else f"Created {path} with generated Python code; syntax checked.")
 
@@ -259,7 +288,7 @@ def generate_checked(client, cancelled, file_path, **request):
     trained = (isinstance(options, dict) and options.get('trained_coder_checkpoint') and file_path.suffix.lower() == '.py')
     if trained:
         request.pop('coding_lessons', None)
-    elif isinstance(getattr(client, 'base', None), Path):
+    elif file_path.suffix.lower() == '.py' and isinstance(getattr(client, 'base', None), Path):
         learned_lessons = recall(client.base, request.get('goal', ''), limit=len(LESSONS))
         request.setdefault('coding_lessons', learned_lessons[:5])
     previous, validation_error = "", ""
@@ -304,6 +333,22 @@ class Coder:
         self.actions, self.client = actions, client
 
     def run(self, project, goal, cancelled=lambda: False, selected=False):
+        from .development_projects import requested
+        root = Path(project).resolve(strict=True)
+        if not root.is_dir() or root.parent == root or not isinstance(goal, str) or not goal.strip() or len(goal)>1200:
+            raise ValueError('Name an individual project and a bounded development goal.')
+        if not selected and not (any((root/marker).exists() for marker in MARKERS) or root.parent.name.casefold() == 'phython project'):
+            raise ValueError('Choose an individual project folder with a project marker.')
+        folder_name = named_folder_request(goal)
+        if selected and folder_name and re.sub(r'[^a-z0-9]', '', folder_name.casefold()) != re.sub(r'[^a-z0-9]', '', root.name.casefold()):
+            raise ValueError('The selected folder does not match the requested coding folder.')
+        if requested(root, goal):
+            from .development import run
+            return run(self, root, goal, cancelled, selected)
+        return self._run(root, goal, cancelled, selected)
+
+    def _run(self, project, goal, cancelled=lambda: False, selected=False,
+             plan_override=None, staged=False, development_context=None):
         from .task_state import TaskState
         state = getattr(self.actions, "task_state", None)
         def checkpoint(stage, **details):
@@ -328,6 +373,8 @@ class Coder:
         files = project_files(project)
         if isinstance(state, TaskState):
             state.set_project(project)
+            from .experience_memory import observe_conditions
+            state.set_conditions(observe_conditions(self.actions, project=project))
         checkpoint("inspecting_project", target=project, evidence=f"{len(files)} source files found")
         self.actions.report("screen", f"Open File Explorer folder: {project}; files: "
                             + (", ".join(files[:30]) if files else "no source files"))
@@ -342,20 +389,33 @@ class Coder:
         if explicit_paths:
             existing_named = [name for name in existing_named if name.casefold() in explicit_paths
                               or not any(Path(explicit).name.casefold() == Path(name).name.casefold() for explicit in explicit_paths)]
-        if edit_request and len(named_files) == 1 and not existing_named:
+        if not staged and edit_request and len(named_files) == 1 and not existing_named:
             raise ValueError(f"{next(iter(named_files))} is not in the open folder {project.name}. "
                              "Available source files: " + (", ".join(files[:30]) if files else "none"))
-        if edit_request and len(named_files) == 1 and len(existing_named) > 1:
+        if not staged and edit_request and len(named_files) == 1 and len(existing_named) > 1:
             raise ValueError("That filename appears in multiple subfolders of " + project.name + ": "
                              + ", ".join(existing_named))
         direct_edit = len(named_files) == 1 and len(existing_named) == 1 and edit_request
+        direct_new = single_python_target(goal) if not edit_request else None
+        from .code_stream import CodeDraft, owned_draft
+        runtime_base = getattr(self.actions, 'base', None)
+        runtime_base = runtime_base if isinstance(runtime_base, Path) else project
+        if direct_new and (project / direct_new).exists() and not owned_draft(runtime_base, project / direct_new) and (project / direct_new).read_text(encoding='utf-8').replace('\r\n', '\n') != draft_content(project / direct_new):
+            raise ValueError(f'{direct_new} already exists; ask to edit it instead of creating it again. No existing code was overwritten.')
         context = related_context(project, files, goal, existing_named)
         runtime_context = coding_context(project, goal, files=files)
-        plan = ({"directories": [simple_folder], "files": []} if simple_folder else
-                {"directories": [], "files": [{"path": existing_named[0], "reason": goal[:160]}]}
-                if direct_edit else
-                self.client.request("code_plan", cancelled, goal=goal, project=project.name, files=files,
-                                    prior_task=prior, references=context, **runtime_context))
+        runtime_context["skill_project"] = str(project)
+        runtime_context.update(development_context or {})
+        if plan_override is not None:
+            plan = plan_override
+        else:
+            plan = ({"directories": [simple_folder], "files": []} if simple_folder else
+                    {"directories": [], "files": [{"path": existing_named[0], "reason": goal[:160]}]}
+                    if direct_edit else
+                    {'directories': [], 'files': [{'path': direct_new, 'reason': goal[:160]}]}
+                    if direct_new else
+                    self.client.request("code_plan", cancelled, goal=goal, project=project.name, files=files,
+                                        prior_task=prior, references=context, **runtime_context))
         if isinstance(plan, dict) and isinstance(plan.get("directories", []), list) and isinstance(plan.get("files"), list):
             plan = {**plan, "directories": [strip_project_prefix(name, project) for name in plan.get("directories", [])],
                 "files": [{**step, "path": strip_project_prefix(step.get("path"), project)} if isinstance(step, dict) else step
@@ -365,8 +425,8 @@ class Coder:
         steps = plan.get("files") if isinstance(plan, dict) else None
         directories = plan.get("directories", []) if isinstance(plan, dict) else None
         if (not isinstance(steps, list) or not isinstance(directories, list)
-                or not 1 <= len(steps) + len(directories) <= 6
-                or len(steps) > 3 or len(directories) > 3):
+                or not 1 <= len(steps) + len(directories) <= (15 if staged else 6)
+                or len(steps) > 3 or len(directories) > (12 if staged else 3)):
             raise ValueError("Coding plan must name up to three files and three folders.")
         planned_dirs = []
         for name in directories:
@@ -404,14 +464,14 @@ class Coder:
                 current = original.decode("utf-8") if original is not None else ""
             except UnicodeDecodeError as exc:
                 raise ValueError(f"{path.name} is not UTF-8 text.") from exc
-            if current.replace("\r\n", "\n") == draft_content(path):
+            if current.replace("\r\n", "\n") == draft_content(path) or owned_draft(runtime_base, path):
                 current = ""  # Resume a draft created by Jarvis on an earlier attempt.
             sources.append((step, path, original, current))
         selected_names = {path.name.casefold() for _, path, _, _ in sources}
-        if not named_files <= selected_names:
+        if not staged and not named_files <= selected_names:
             raise ValueError("The coding plan omitted a file you named: " + ", ".join(sorted(named_files - selected_names)))
         # Resolve all target guidance before creating any folders or draft files.
-        target_contexts = {step['path']: coding_context(project, goal, step['path'], files)
+        target_contexts = {step['path']: {**coding_context(project, goal, step['path'], files), **(development_context or {}), "skill_project": str(project)}
                            for step, _, _, _ in sources}
         created_dirs = []
         for folder in planned_dirs:
@@ -427,6 +487,7 @@ class Coder:
                 self.actions.report("action", f"Created folder {folder}")
         refreshed = []
         generated_context = []
+        streams = []
         context = {**context, **{item["path"]: text for item, _, _, text in sources}}
         for step, path, original, current in sources:
             if original is None:
@@ -448,6 +509,9 @@ class Coder:
             if cancelled():
                 raise ValueError("Coding task cancelled.")
             self.actions.report("plan", f"{step['path']}: {step['reason'][:160]}")
+            self.actions.report('brain', 'Qwen3-Coder is generating ' + step['path'] + '; large local CPU models may take several minutes. Stop remains available.')
+            stream = CodeDraft(runtime_base, path, original, not current, draft_content(path), cancelled, self.actions.report)
+            streams.append(stream)
             references = bounded_references(context, step["path"], generated_context)
             known_calculator = (path.name.casefold() == "calculator.py"
                                 and current.replace("\r\n", "\n") == calculator_template("calculator", "calculator.py")
@@ -455,9 +519,14 @@ class Coder:
             content = ((Path(__file__).parent / "templates" / "calculator_gui.py").read_text(encoding="utf-8")
                        if known_calculator else generate_checked(self.client, cancelled, path, goal=goal,
                        project=project.name, path=step["path"], reason=step["reason"], current=current,
+                       _on_code=stream.write,
                        plan=steps, files=files[:100], references=references, prior_task=prior,
                        **target_contexts[step['path']]))
+            from .progress import status
+            status(self.actions.report, 'Validating code', path)
             check_content(path, content)
+            if stream.new_file:
+                original = stream.expected
             generated_context.append((step["path"], content))
             checkpoint("generated_file", target=path, evidence="syntax checked where applicable")
             if current and len(current) > 1000 and len(content) < len(current) * .6 \
@@ -467,6 +536,11 @@ class Coder:
                 continue
             prepared.append((path, original, content))
         if not prepared:
+            for stream in streams:
+                try:
+                    stream.complete()
+                except (OSError, ValueError) as exc:
+                    self.actions.report('warning', 'Streaming metadata needs repair: ' + str(exc))
             return ("Created folders: " + ", ".join(created_dirs) if created_dirs
                     else "The coding model proposed no file changes.")
         if cancelled():
@@ -507,11 +581,19 @@ class Coder:
                 written.append(path.relative_to(project).as_posix())
                 checkpoint("wrote_file", target=path, evidence="atomic write completed")
                 checkpoint("observed_file", target=path, evidence="updated content read back from disk")
+                status(self.actions.report, 'File saved', path, file=str(path), preview=content[:1600], characters=len(content),
+                       outcome='Disk readback; Python/JSON syntax checked where applicable; behavior not tested')
             finally:
                 if temporary is not None:
                     temporary.unlink(missing_ok=True)
         if len(written) != len(prepared):
             return "Coding task stopped after changing: " + ", ".join(written)
         self.actions.report("brain", "Changed " + ", ".join(written))
+        for stream in streams:
+            try:
+                stream.complete()
+            except (OSError, ValueError) as exc:
+                self.actions.report('warning', 'Code was written; streaming metadata needs repair: ' + str(exc))
+        checkpoint("development_batch_saved" if staged else "goal_verified", source='disk_readback', evidence="All proposed file changes read back from disk; Python/JSON syntax checked where applicable. Functional behavior is not verified.")
         made = ("Created folders " + ", ".join(created_dirs) + "; ") if created_dirs else ""
         return f"Updated {project.name}: " + made + ", ".join(written) + ". Python and JSON syntax checked where applicable. Review and run the project's tests."

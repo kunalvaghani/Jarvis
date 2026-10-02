@@ -12,6 +12,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Speech model download failed.' }
 & '.\.venv\Scripts\python.exe' -m piper.download_voices --download-dir models/voices en_GB-alan-medium hi_IN-rohan-medium
 if ($LASTEXITCODE -ne 0) { throw 'Voice download failed.' }
+& '.\.venv\Scripts\python.exe' setup_voice.py
+if ($LASTEXITCODE -ne 0) { throw 'Free Kokoro voice download failed.' }
 & '.\.venv\Scripts\python.exe' verify_whisper.py --audio tests\fixtures\jarvis-command.wav
 if ($LASTEXITCODE -ne 0) { throw 'Whisper GPU verification failed. See the error above.' }
 Write-Host 'Ready. Double-click Start Jarvis.cmd.'

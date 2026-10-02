@@ -1,0 +1,53 @@
+Pulling qwen3-coder:30b (Ollama resumes partial downloads).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 2).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 3).
+Pulling qwen3-coder:30b (Ollama resumes partial downloads).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 2).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 3).
+qwen3-coder:30b: pulling manifest
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 71, in <module>
+    setup()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 64, in setup
+    raise RuntimeError("Could not finish " + model + ". Rerun setup to resume the download.") from None
+RuntimeError: Could not finish qwen3-coder:30b. Rerun setup to resume the download.
+Pulling qwen3-coder:30b (Ollama resumes partial downloads).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 2).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 3).
+qwen3-coder:30b: pulling manifest
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 71, in <module>
+    setup()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 64, in setup
+    raise RuntimeError("Could not finish " + model + ". Rerun setup to resume the download.") from None
+RuntimeError: Could not finish qwen3-coder:30b. Rerun setup to resume the download.
+Pulling qwen3-coder:30b (Ollama resumes partial downloads).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 2).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 3).
+qwen3-coder:30b: pulling manifest
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 71, in <module>
+    setup()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 64, in setup
+    raise RuntimeError("Could not finish " + model + ". Rerun setup to resume the download.") from None
+RuntimeError: Could not finish qwen3-coder:30b. Rerun setup to resume the download.
+Pulling qwen3-coder:30b (Ollama resumes partial downloads).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 2).
+qwen3-coder:30b: pulling manifest
+Retrying resumable download for qwen3-coder:30b (attempt 3).
+qwen3-coder:30b: pulling manifest
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 71, in <module>
+    setup()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 64, in setup
+    raise RuntimeError("Could not finish " + model + ". Rerun setup to resume the download.") from None
+RuntimeError: Could not finish qwen3-coder:30b. Rerun setup to resume the download.

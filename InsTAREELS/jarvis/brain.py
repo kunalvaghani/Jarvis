@@ -37,13 +37,19 @@ def validate_plan(plan, completed=()):
                 or not isinstance(step.get("expected"), str) or not step["expected"]):
             raise ValueError("The planner proposed an unsupported step.")
         validate_desktop_step(step)
+        if step["action"] == "browser_fill" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
+            raise ValueError("Browser text entry needs bounded exact content.")
+        if step["action"] in {"browser_click", "browser_fill"} and (not isinstance(step.get("folder"), str) or not step["folder"].startswith(("https://", "http://"))):
+            raise ValueError("Browser actions need the exact freshly observed page URL.")
+        if step["action"] == "browser_click" and SENSITIVE.search(step["value"]):
+            raise ValueError("This browser action needs an explicit direct command.")
         from .toolkits import validate_step
         validate_step(step)
         if step["action"] in CONTROL_ACTIONS | {"open"} and SENSITIVE.search(step["value"]):
             raise ValueError("That step requires an explicit direct command; the automatic plan was stopped.")
         if step["action"] in {"browse", "browser_search", "media_search"} and step.get("browser", "chrome") not in {"chrome", "edge", "firefox", "google chrome"}:
             raise ValueError("Planner named an unsupported browser.")
-        if step["action"] in {"create_file", "modify_file", "delete_file"}:
+        if step["action"] in {"create_file", "modify_file", "delete_file", "save_file"}:
             if not isinstance(step.get("folder"), str) or not step["folder"].strip():
                 raise ValueError("A file task needs an explicit folder.")
             if step["action"] != "delete_file" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
@@ -52,7 +58,7 @@ def validate_plan(plan, completed=()):
                 raise ValueError("A file edit needs exact text to replace or an explicit full overwrite.")
             if step["action"] == "modify_file" and not step.get("find") and not step.get("content"):
                 raise ValueError("The file edit omitted both the text to find and the new content.")
-        if step["action"] == "media_search" and step.get("platform") not in {"youtube", "spotify"}:
+        if step["action"] in {"media_search", "media_control"} and step.get("platform") not in {"youtube", "spotify"}:
             raise ValueError("A music task needs YouTube or Spotify.")
     return validate_dependencies(steps, completed)
 
@@ -184,6 +190,10 @@ def explicit_command_plan(goal):
 
 
 class BrainClient:
+    worker_module = "jarvis.brain_worker"
+    worker_environment = ".venv-brain"
+    worker_log = "brain-worker.log"
+
     def __init__(self, base, options):
         self.base, self.options = Path(base), options
         self.process = None
@@ -191,6 +201,12 @@ class BrainClient:
         self.log = None
 
     def close(self):
+        harness = getattr(self, "harness", None)
+        if harness is not None:
+            harness.close()
+        hermes = getattr(self, "hermes", None)
+        if hermes is not None:
+            hermes.close()
         process, self.process = self.process, None
         if process:
             if process.poll() is None:
@@ -203,27 +219,81 @@ class BrainClient:
             self.log = None
 
     def request(self, operation, cancelled, **data):
+        memory = getattr(self, "memory", None)
+        if memory is not None and data.get("goal"):
+            if operation in {'code_plan', 'code_edit'}:
+                saved = memory.task_context(data['goal'])
+                data['memory_context'] = {key: saved.get(key, [])[:2] for key in ('projects', 'apps')}
+            else:
+                data["memory_context"] = memory.task_context(data["goal"])
+            skills = getattr(memory, "skills", None)
+            if skills is not None and operation in {"plan", "replan", "code_plan", "code_edit"}:
+                from .experience_memory import observe_conditions
+                provider = getattr(self, 'condition_provider', observe_conditions)
+                current = provider(snapshot=data.get('screen'), project=data.get('skill_project'))
+                data["skill_context"] = skills.context(data["goal"],
+                    "code_task" if operation in {"code_plan", "code_edit"} else "task",
+                    data.get("skill_project"), conditions=current)
+        if data.get('goal') and operation in {'plan', 'replan', 'code_plan', 'code_edit'}:
+            from .capabilities import runtime_context
+            from .skill_memory import SkillMemory
+            skills = getattr(memory, 'skills', None)
+            rows = data.get('tools', [])
+            data['capability_context'] = runtime_context(data['goal'], rows if isinstance(rows, list) else [],
+                skills if isinstance(skills, SkillMemory) else None, data.get('memory_context'),
+                coding=operation in {'code_plan', 'code_edit'})
+        if (self.worker_module == "jarvis.brain_worker" and (operation in {"plan", "replan"} or (operation == "code_plan" and data.get("development") is True))
+                and self.options.get("harness", {}).get("enabled", False)):
+            from .harness import HarnessClient
+            if getattr(self, "harness", None) is None:
+                self.harness = HarnessClient(self.base, self.options)
+            return self.harness.request(operation, cancelled, **data)
+        if (self.worker_module == "jarvis.brain_worker" and operation in {"plan", "replan"}
+                and self.options.get("hermes", {}).get("enabled", False)):
+            from .hermes import HermesClient
+            if getattr(self, "hermes", None) is None:
+                self.hermes = HermesClient(self.base, self.options)
+            return self.hermes.request(operation, cancelled, **data)
         for attempt in range(2):
             try:
                 return self._request_once(operation, cancelled, **data)
             except (OSError, ValueError) as exc:
-                retryable = isinstance(exc, OSError) or "Brain worker stopped" in str(exc)
+                retryable = not data.get('_on_code') and (isinstance(exc, OSError) or "Brain worker stopped" in str(exc))
                 if attempt or not retryable or cancelled():
                     raise
                 self.close()
+                delay = getattr(self, 'retry_delay_seconds', 0)
+                until = time.monotonic() + delay
+                while time.monotonic() < until:
+                    if cancelled():
+                        raise ValueError('Task cancelled during inference recovery.')
+                    time.sleep(min(.05, max(0, until - time.monotonic())))
                 from .recovery import record
                 record(self.base, "Brain inference worker stopped; restarted and retried inference only, without replaying actions.")
 
     def _request_once(self, operation, cancelled, **data):
+        callback = data.pop('_on_code', None)
+        if callback:
+            data['stream_content'] = True
         if cancelled():
             raise ValueError("Task cancelled.")
         if self.process is None or self.process.poll() is not None:
             self.close()
-            executable = self.base / ".venv-brain/Scripts/python.exe"
-            if not executable.is_file() or not (self.base / "models/laya/model.safetensors").is_file():
+            executable = self.base / self.worker_environment / "Scripts/python.exe"
+            if self.worker_module == "jarvis.harness_worker":
+                from .harness import readiness
+                issue = readiness(self.base)
+                if issue:
+                    raise ValueError(issue)
+            elif self.worker_module == "jarvis.hermes_worker":
+                from .hermes import readiness
+                issue = readiness(self.base)
+                if issue:
+                    raise ValueError(issue)
+            elif not executable.is_file() or not (self.base / "models/laya/model.safetensors").is_file():
                 raise ValueError("Brain models are not ready. Run Setup Jarvis Brain.cmd, then restart Jarvis.")
-            self.log = (self.base / "brain-worker.log").open("a", encoding="utf-8")
-            self.process = subprocess.Popen([str(executable), "-u", "-m", "jarvis.brain_worker"],
+            self.log = (self.base / self.worker_log).open("a", encoding="utf-8")
+            self.process = subprocess.Popen([str(executable), "-u", "-m", self.worker_module],
                 cwd=self.base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.log,
                 encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             responses = self.responses = queue.Queue()
@@ -239,20 +309,35 @@ class BrainClient:
             threading.Thread(target=read, daemon=True).start()
         self.process.stdin.write(json.dumps({"operation": operation, "options": self.options, **data}) + "\n")
         self.process.stdin.flush()
-        deadline = time.monotonic() + 150
+        coding = operation in {'code_plan', 'code_edit'}
+        seconds = (min(900, max(120, int(self.options.get('coding_timeout_seconds', 900))))
+                   if coding else getattr(self, 'timeout_seconds', 150))
+        if operation=='tool_text' and data.get('tool')=='test_writer' and data.get('development') is True:
+            seconds=300
+        deadline = time.monotonic() + seconds
         try:
             while True:
                 if cancelled():
                     raise ValueError("Task cancelled.")
                 if time.monotonic() > deadline:
-                    raise ValueError("The local brain timed out. Try a shorter task.")
+                    raise ValueError('Qwen3-Coder exceeded the coding time limit; incomplete output was not written. Any existing draft can be inspected and resumed.'
+                                     if coding else "The local brain timed out. Try a shorter task.")
                 try:
                     line = self.responses.get(timeout=.1)
                 except queue.Empty:
                     continue
                 if line is None:
-                    raise ValueError("Brain worker stopped. See brain-worker.log.")
+                    raise ValueError("Brain worker stopped. See " + self.worker_log + ".")
                 result = json.loads(line)
+                if 'progress' in result:
+                    content = result['progress'].get('content')
+                    if not callback or not isinstance(content, str) or len(content) > 20000:
+                        raise ValueError('Invalid coding stream progress; incomplete draft preserved.')
+                    try:
+                        callback(content)
+                    except OSError as exc:
+                        raise ValueError('Streaming draft write failed; no action replayed: ' + str(exc)) from exc
+                    continue
                 if result.get("error"):
                     raise ValueError(result["error"])
                 return result["result"]
@@ -265,7 +350,12 @@ class Brain:
     def __init__(self, actions, base, options):
         self.actions, self.options = actions, options
         self.client = BrainClient(base, options)
+        self.client.memory = getattr(actions, "memory", None)
+        from .experience_memory import observe_conditions
+        self.client.condition_provider = lambda **kwargs: observe_conditions(actions, **kwargs)
         self.tool_observations = []
+        from .visual_fallback import VisualFallback
+        self.visual_fallback = VisualFallback(self)
 
     def planning_context(self, screen):
         """Pass bounded current-task tool data to inference, without persisting it."""
@@ -298,6 +388,8 @@ class Brain:
         try:
             return ToolRegistry(self.actions).execute(step, cancelled, activate=activate)
         except Exception as exc:
+            if isinstance(exc, TaskFailure):
+                raise  # A guarded worker can establish that it refused before input.
             if cancelled() or not self.options.get("task_recovery", False):
                 raise
             # A tool exception cannot establish whether the external effect happened.
@@ -330,9 +422,12 @@ class Brain:
                 context = self.visual_context(captured)
             steps = self.revise_plan(goal, context, apps, completed, remaining, number, cancelled, failures, recovering=True)
             self.validate_remaining(steps, goal)
-            if steps and steps[0]["action"] in {"create_file", "modify_file", "delete_file", "run_command", "close_app"}:
+            if steps and steps[0]["action"] in {"create_file", "modify_file", "delete_file", "save_file", "run_command", "close_app"}:
                 raise ValueError("Recovery requires a navigation approach before any file, terminal or close action.")
             self.actions.report("repair", "A different approach was planned from the current screen.")
+            self.checkpoint('recovery_planned', source='fresh_plan',
+                evidence='Fresh observation followed by alternative actions: ' +
+                         ', '.join(s['action'] for s in steps))
             return steps, snapshot, captured
         except (ValueError, OSError) as exc:
             raise ValueError("Task paused: no safe alternative recovery plan. " + str(exc)) from exc
@@ -381,12 +476,17 @@ class Brain:
     def validate_remaining(self, steps, goal):
         low_goal = goal.casefold()
         for pending in steps:
+            if pending["action"] == "browser_fill" and pending.get("content", "").casefold() not in low_goal:
+                raise ValueError("Browser typing must use the exact requested text.")
             from .toolkits import TOOLS as toolkit_tools
             if pending["action"] in toolkit_tools and toolkit_tools[pending["action"]][3]:
                 intent = {"github_add_file": r"\b(?:create|add|update|commit|push)\b",
                           "github_delete_file": r"\b(?:delete|remove)\b", "calendar_create": r"\b(?:create|add|schedule)\b",
                           "calendar_delete": r"\b(?:delete|remove|cancel)\b", "jira_create": r"\b(?:create|add)\b",
-                          "jira_edit": r"\b(?:edit|update|modify)\b"}.get(pending["action"], r"\b(?:send|post|publish|tweet)\b")
+                          "jira_edit": r"\b(?:edit|update|modify)\b",
+                          "development_verify": r"\b(?:verify|check|build|test|typecheck|development_verify)\b",
+                          "development_preview": r"\b(?:preview|development_preview)\b",
+                          "development_native": r"\b(?:package|native|android|ios|development_native)\b"}.get(pending["action"], r"\b(?:send|post|publish|tweet)\b")
                 if pending['action'] in {'mcp_list_tools', 'mcp_call'}:
                     intent = r'\bmcp\b'
                 if not re.search(intent, low_goal):
@@ -394,7 +494,9 @@ class Brain:
             if pending["action"] == "append_file":
                 if not re.search(r"\bappend\b", low_goal) or pending.get("content", "").casefold() not in low_goal:
                     raise ValueError("Append needs the user's explicit exact text.")
-            if pending["action"] in {"create_file", "modify_file", "delete_file"}:
+            if pending["action"] in {"create_file", "modify_file", "delete_file", "save_file"}:
+                if pending['action'] == 'save_file' and not re.search(r'\bsave\b', low_goal):
+                    raise ValueError('Saving the application document was not explicitly requested.')
                 if pending["action"] == "delete_file" and not re.search(r"\b(?:delete|remove)\b", low_goal):
                     raise ValueError("File deletion was not requested.")
                 if common(pending["value"]) not in common(goal):
@@ -420,7 +522,14 @@ class Brain:
     def observe(self, cancelled):
         ui = self.actions._ui()
         handle = ui._handle()
-        snapshot = ui.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled)
+        try:
+            snapshot = ui.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled)
+        except ValueError:
+            if not self.visual_fallback.enabled or cancelled():
+                raise
+            frame = self.visual_screen(handle, {'controls': []}, cancelled, strict=True)
+            snapshot = {'title': frame['title'], 'controls': [], 'visual_only': True,
+                        'context': 'visual-window:' + str(frame['pid']), 'signature': '', 'is_dialog': False}
         return handle, snapshot
 
     def observe_after_action(self, before, action, cancelled):
@@ -429,7 +538,7 @@ class Brain:
         A missing or unchanged accessibility tree can still be checked by vision.
         No action is repeated during this wait.
         """
-        file_action = action in {"create_file", "modify_file", "delete_file", "run_command"}
+        file_action = action in {"create_file", "modify_file", "delete_file", "save_file", "run_command"}
         attempts = 1 if file_action else 8
         last_error = None
         for attempt in range(attempts):
@@ -460,7 +569,7 @@ class Brain:
                 "fields": [c["name"] for c in snapshot.get("controls", []) if c["role"] == "Edit" and not c.get("password")][:20],
                 "controls": [c["name"][:80] for c in snapshot.get("controls", [])[:40]]}
 
-    def visual_screen(self, handle, snapshot, cancelled):
+    def visual_screen(self, handle, snapshot, cancelled, strict=False):
         """Capture the actual destination window, with Jarvis hidden during capture."""
         self.actions.report("screen_capture", "")
         process = None
@@ -473,7 +582,7 @@ class Brain:
                 stderr=subprocess.PIPE, encoding="utf-8",
                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             deadline = time.monotonic() + 20
-            payload = json.dumps({"handle": handle})
+            payload = json.dumps({"handle": handle, 'strict': strict})
             first = True
             while True:
                 if cancelled():
@@ -511,6 +620,7 @@ class Brain:
                 "controls": observation.get("controls", [])}
 
     def run(self, goal, cancelled):
+        self.visual_fallback.last_saved = None
         self.tool_observations = []  # Fresh reads are required after restart or task change.
         if not self.options.get("enabled", False):
             raise ValueError("Autonomous brain is disabled. Enable brain.enabled after Setup Jarvis Brain.cmd succeeds.")
@@ -525,7 +635,8 @@ class Brain:
         state = getattr(self.actions, "task_state", None)
         resumed = getattr(self.actions, "resume_source", None)
         prior = resumed if isinstance(resumed, dict) else (state.previous(spoken_goal, "task") if isinstance(state, TaskState) else None)
-        exact_file = explicit_file_plan(goal)
+        from .visual_fallback import save_plan
+        exact_file = save_plan(goal) or explicit_file_plan(goal)
         try:
             inferred_python_name = python_file_request(goal)
         except ValueError as exc:
@@ -549,7 +660,7 @@ class Brain:
                            any(item.get("stage") == "verified" for item in prior.get("checkpoints", []))))
         if exact_file and not has_progress:
             for file_step in exact_file["steps"]:
-                if file_step["action"] in {"create_file", "modify_file", "delete_file"}:
+                if file_step["action"] in {"create_file", "modify_file", "delete_file", "save_file"}:
                     # Read-only destination resolution happens before any launch or write.
                     # Missing/ambiguous folders can therefore ask a question safely.
                     self.actions._task_folder(file_step["folder"], cancelled)
@@ -560,11 +671,22 @@ class Brain:
             handle, snapshot = self.observe(cancelled)
         except ValueError:
             handle, snapshot = 0, {}
+        skills = getattr(self.actions, "skills", None)
+        from .experience_memory import observe_conditions
+        initial_conditions = observe_conditions(self.actions, snapshot=snapshot, handle=handle)
+        state = getattr(self.actions, 'task_state', None)
+        if isinstance(state, TaskState):
+            state.set_conditions(initial_conditions)
+        learned_plan = (skills.proposal(spoken_goal, snapshot.get("title", ""), initial_conditions)
+                        if skills is not None and not has_progress else None)
+        if not isinstance(learned_plan, dict):
+            learned_plan = None
+        self.checkpoint("procedure_surface", screen=snapshot.get("title", ""))
         screen_aware = self.options.get("screen_aware", False)
         adaptive = self.options.get("adaptive_planning", False)
         recovery_enabled = self.options.get("task_recovery", False)
         visual = None
-        if screen_aware and (fixed_media_plan or initial_launch_plan or exact_file):
+        if screen_aware and (fixed_media_plan or initial_launch_plan or exact_file or learned_plan):
             captured = {"title": snapshot.get("title", "Desktop"), "ocr": "", "summary": "",
                         "controls": snapshot.get("controls", [])}
         elif screen_aware:
@@ -577,12 +699,13 @@ class Brain:
             self.actions.report("screen", "Saw " + captured["title"] + ": " + visual["summary"][:200])
         self.actions.report("brain", "Using direct media search plan" if fixed_media_plan else
                             "Opening requested app before planning remaining steps" if initial_launch_plan else
+                            "Using verified navigation proposal with fresh checks" if learned_plan else
                             "Planning with " + self.options["planner"])
         words = set(common(goal).split())
         apps = sorted(self.actions.apps, key=lambda name: (bool(words & set(common(name).split())),
             name in {"chrome", "notepad", "file explorer", "edge", "calculator"}), reverse=True)[:80]
         exact_single_request = None if has_progress else (exact_file or explicit_command_plan(goal) or explicit_desktop_plan(goal))
-        plan = exact_single_request or fixed_media_plan or initial_launch_plan or self.client.request("plan", cancelled, goal=goal,
+        plan = exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan or self.client.request("plan", cancelled, goal=goal,
             screen=self.visual_context(captured) if screen_aware else self.screen(snapshot), apps=apps,
             completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
             experience=state.recall(spoken_goal) if isinstance(state, TaskState) else [])
@@ -607,7 +730,7 @@ class Brain:
         if not initial_launch_plan and re.search(r"\b(?:modify|edit|replace|overwrite)\b.*\bfile\b", low_goal) and not any(s["action"] in {"modify_file", "github_add_file"} for s in coverage):
             raise ValueError("The plan omitted the requested file edit.")
         for step in steps:
-            if step["action"] in {"create_file", "modify_file", "delete_file"}:
+            if step["action"] in {"create_file", "modify_file", "delete_file", "save_file"}:
                 if common(step["value"]) not in common(goal):
                     raise ValueError("The plan chose a filename you did not name.")
                 content = step.get("content", "").strip()
@@ -641,13 +764,14 @@ class Brain:
         number = 0
         failures = list(prior.get("failures", [])) if prior and recovery_enabled else []
         while steps and number < 6:
-            attempted = result_verified = False
+            attempted = result_verified = visual_pending = False
+            visual_outcome = None
             try:
                 number += 1
                 step = steps[0]
                 validate_dependencies([step], completed)
                 self.validate_remaining([step], goal)
-                toolkit_step = step["action"] in ToolRegistry(self.actions).specs and ToolRegistry(self.actions).specs[step["action"]].backend == "toolkit"
+                toolkit_step = step["action"] in ToolRegistry(self.actions).specs and ToolRegistry(self.actions).specs[step["action"]].backend in {"toolkit", "dom"}
                 if recovery_enabled and action_key(step) in {action_key(item) for item in failures}:
                     self.blocked("The plan repeated an unsuccessful action.")
                 self.checkpoint("observing", action=step["action"], target=step["value"])
@@ -664,9 +788,10 @@ class Brain:
                     step_screen = {**self.visual_context(captured),
                         "title": step_screen["title"] or captured.get("title", ""),
                         "controls": step_screen["controls"] if snapshot else captured.get("controls", [])}
-                candidates, suggestion, chosen = [], {}, None
+                candidates, suggestion, chosen, matching = [], {}, None, []
                 if step["action"] in CONTROL_ACTIONS:
                     from .ui_controls import matches, _category
+                    from .targeting import scoped_matches
                     controls = snapshot["controls"]
                     if step["action"] == "fill_text":
                         controls = [c for c in controls if c["role"] == "Edit" and not c.get("password")]
@@ -675,11 +800,13 @@ class Brain:
                     elif step["action"] == "open_menu":
                         controls = [c for c in controls if c["role"] in {"MenuItem", "Button", "SplitButton", "ComboBox"}]
                     elif step["action"] == "handle_dialog":
-                        if not snapshot.get("is_dialog"):
+                        if not snapshot.get("is_dialog") and not self.visual_fallback.enabled:
                             self.blocked("No accessible modal dialog is active. Use select for a normal screen button.")
                         if re.search(r"\b(delete|remove|erase|recycle)\b", snapshot.get("title", ""), re.I):
                             raise ValueError("File deletion must use the named file tool and its approval dialog.")
                         controls = [c for c in controls if c["role"] == "Button"]
+                        if not snapshot.get('is_dialog'):
+                            controls = []  # Visual grounding must establish the dialog before any choice.
                     else:
                         controls = [c for c in controls if c["role"] not in {"Edit", "Pane", "Document"}]
                     if fixed_media_plan and step.get("position"):
@@ -689,18 +816,28 @@ class Brain:
                             self.blocked("Task paused: the requested video is not visible in the search results.")
                         matching = [visible[position]]
                     else:
-                        matching = matches(controls, step["value"])
+                        matching = scoped_matches(controls, step["value"])
+                    visual_pending = self.visual_fallback.enabled and not matching and not step.get('position')
                     ordered = matching or sorted(controls, key=lambda c: SequenceMatcher(None, common(step["value"]), common(c["name"])).ratio(), reverse=True)
                     candidates = [{"key": f"c{i}", "name": c["name"], "role": c["role"], "context": c.get("context", "")} for i, c in enumerate(ordered[:8])]
-                    if not candidates:
+                    if not candidates and not visual_pending:
                         self.blocked("No visible choices. Open the target app or menu first.")
-                    if len(matching) == 1:
+                    if visual_pending:
+                        candidates, suggestion = [], {}
+                    elif len(matching) == 1:
                         suggestion = {"choice": "c0"}
                     else:
                         self.actions.report("brain", "Laya is comparing visible choices")
                         suggestion = self.client.request("choose", cancelled, target=step["value"], goal=goal,
                             screen=step_screen, candidates=candidates)
-                if initial_launch_plan and not executed_steps and step["action"] == "open":
+                from .grounding import direct_decision
+                local_decision = direct_decision(step, goal, matching) if self.options.get("fast_grounding", False) else None
+                if visual_pending and common(step['value']) in common(goal):
+                    local_decision = {'approved': True, 'choice': '',
+                                      'reason': 'Explicit target; fresh visual grounding and independent outcome required'}
+                if local_decision:
+                    decision = local_decision
+                elif initial_launch_plan and not executed_steps and step["action"] == "open":
                     decision = {"approved": True, "choice": "", "reason": "Explicit configured app launch"}
                 elif fixed_media_plan and step["action"] == "media_search":
                     decision = {"approved": True, "choice": "", "reason": "Explicit media search"}
@@ -713,7 +850,15 @@ class Brain:
                     raise ValueError("Task cancelled before action.")
                 if decision.get("approved") is not True:
                     raise ValueError("Task paused: " + str(decision.get("reason", "No clear next action.")))
-                if step["action"] in CONTROL_ACTIONS:
+                if visual_pending:
+                    prepared = self.visual_fallback.prepare(goal, step, handle, snapshot, cancelled)
+                    def visual_activate():
+                        nonlocal visual_outcome
+                        visual_outcome = self.visual_fallback.execute(goal, prepared, cancelled)
+                        return visual_outcome.evidence
+                    attempted = True
+                    result = self.dispatch(step, cancelled, activate=visual_activate).evidence
+                elif step["action"] in CONTROL_ACTIONS:
                     if decision.get("choice") != suggestion.get("choice"):
                         raise ValueError("Laya and the decision model disagree on the control. Say its name or list buttons to choose.")
                     index = next((i for i, c in enumerate(candidates) if c["key"] == decision.get("choice")), None)
@@ -748,7 +893,7 @@ class Brain:
                                     screen=step_screen.get("title"))
                     if toolkit_step:
                         from .toolkits import TOOLS, available
-                        if not available(step["action"]):
+                        if step["action"] in TOOLS and not available(step["action"]):
                             raise ValueError("Configure environment variables for " + step["action"] + ": " +
                                              ", ".join(TOOLS[step["action"]][2]))
                     if step["action"] == "open":
@@ -780,7 +925,9 @@ class Brain:
                 # Every action is followed by a fresh observation before another is planned.
                 # Waiting for a transition never repeats the action.
                 try:
-                    if toolkit_step:
+                    if visual_outcome:
+                        landed_handle, after = visual_outcome.handle, visual_outcome.snapshot
+                    elif toolkit_step:
                         # API/local-tool results do not change the desktop. Inspect their
                         # returned data instead of requiring unrelated screenshot evidence.
                         landed_handle, after = handle, snapshot
@@ -796,7 +943,14 @@ class Brain:
                     if recovery_enabled:
                         raise TaskFailure("Task paused: the command exited with code " + str(self.actions.last_command[1]) + ". Check the command output.", attempted=True)
                     return "Task paused: the command exited with code " + str(self.actions.last_command[1]) + ". Check the command output."
-                if step["action"] == "create_file":
+                if visual_outcome:
+                    verification = {'verified': True, 'reason': visual_outcome.evidence}
+                elif step["action"] == 'save_file':
+                    saved = self.visual_fallback.last_saved
+                    verification = {'verified': bool(saved and self.visual_fallback.file_state(saved['path']) ==
+                        {k: saved[k] for k in ('size', 'mtime_ns', 'sha256')}),
+                        'reason': 'The saved file no longer matches its independent disk readback.'}
+                elif step["action"] == "create_file":
                     created = self.actions.last_created
                     if not created or not created[0].is_file() or created[0].read_text(encoding="utf-8") != step["content"]:
                         raise ValueError("The file could not be verified after writing.")
@@ -823,11 +977,24 @@ class Brain:
                     if recovery_enabled:
                         raise TaskFailure("Task paused: action was attempted, but its result could not be verified. " + str(verification.get("reason", "")), attempted=True)
                     return "Task paused: action was attempted, but its result could not be verified. " + str(verification.get("reason", ""))
-                if toolkit_step:
+                if visual_outcome:
+                    landed, status = visual_outcome.screen, visual_outcome.assessment
+                    captured = landed
+                elif step['action'] == 'save_file':
+                    landed = {'title': after.get('title', ''), 'controls': self.screen(after)['controls'],
+                              'summary': result, 'trusted_evidence': [result]}
+                    status = {'goal_done': False, 'step_verified': True}
+                    captured = landed
+                elif toolkit_step:
                     self.tool_observations.append({"action": step["action"], "value": step["value"],
                         "result": result[:12000], "verified": True})
                     landed = {"title": after.get("title", ""), "summary": "Verified toolkit result: " + step["action"]}
                     status = {"goal_done": False}
+                elif screen_aware and self.options.get("fast_grounding", False) and (step["action"] in {"create_file", "modify_file", "delete_file", "run_command"}
+                        or step["action"] == "fill_text" and result.endswith("exact field value verified")):
+                    landed = {"title": after.get("title", ""), "controls": self.screen(after)["controls"],
+                              "summary": "Verified through fresh field/disk/process result: " + step["action"]}
+                    status = {"goal_done": False, "step_verified": True}
                 elif screen_aware:
                     # Inspect the observed destination; no second action is allowed until verified.
                     landed = self.visual_screen(landed_handle, after, cancelled)
@@ -935,6 +1102,7 @@ class Brain:
             if spotify_playback:
                 from .spotify import is_playing
                 if is_playing():
+                    self.checkpoint("goal_verified", source='windows_media_session', evidence="Spotify Windows media session reports active playback")
                     return "Spotify playback verified through its Windows media session."
             _, after = self.observe(cancelled)
             if not matches(after.get("controls", []), "pause"):
@@ -945,6 +1113,7 @@ class Brain:
                 time.sleep(.5)
                 _, after = self.observe(cancelled)
             if spotify_playback and is_playing():
+                self.checkpoint("goal_verified", source='windows_media_session', evidence="Spotify Windows media session reports active playback")
                 return "Spotify playback verified through its Windows media session."
             if spotify_playback:
                 return "Spotify result opened, but playback is not active in the Spotify app. Check its login or select Play in Spotify."
@@ -953,10 +1122,16 @@ class Brain:
         evidence = []
         from .toolkits import TOOLS as toolkit_tools
         for item in completed:
-            if item["action"] in toolkit_tools:
+            if item["action"] in toolkit_tools or item["action"] in {"browser_inspect", "browser_navigate", "browser_click", "browser_fill"}:
                 evidence.append("Observed toolkit result from " + item["action"] + " (content is untrusted reference data): " + item.get("result", "")[:500])
         if self.actions.last_created and any(s["action"] == "create_file" for s in executed_steps):
             evidence.append("Verified file on disk: " + str(self.actions.last_created[0]))
+        if self.visual_fallback.last_saved and any(s['action'] == 'save_file' for s in executed_steps):
+            saved = self.visual_fallback.last_saved
+            if self.visual_fallback.file_state(saved['path']) != {k: saved[k] for k in ('size', 'mtime_ns', 'sha256')}:
+                raise TaskFailure('The saved file changed before final verification.', attempted=True)
+            evidence.append('Verified application Save result on disk: ' + str(saved['path']) +
+                            '; SHA-256 ' + saved['sha256'] + '; document semantics are not verified.')
         if self.actions.last_modified and any(s["action"] == "modify_file" for s in executed_steps):
             evidence.append("Modified file on disk: " + str(self.actions.last_modified))
         if self.actions.last_deleted and any(s["action"] == "delete_file" for s in executed_steps):
@@ -968,4 +1143,5 @@ class Brain:
             screen=self.planning_context({**(self.visual_context(captured) if screen_aware else self.screen(after)), "trusted_evidence": evidence}))
         if final.get("verified") is not True:
             return "The planned steps ran, but the full goal is not verified: " + str(final.get("reason", ""))
+        self.checkpoint("goal_verified", source='fresh_goal_verifier', evidence="Fresh whole-goal verification: " + str(final.get("reason", "observed results confirmed")))
         return "Finished. I checked the observed results and confirmed your request is complete."

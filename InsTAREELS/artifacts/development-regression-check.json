@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-02",
+  "tests": 719,
+  "passed": true,
+  "seconds": 63.201,
+  "command": "PowerShell: $env:PYTHONPATH=(Resolve-Path tests).Path; .venv/Scripts/python.exe -m unittest discover -s tests -q",
+  "readiness_command": ".venv/Scripts/python.exe -m jarvis.launcher --check",
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "adaptive_planning": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:4b",
+    "planning_backend": "deepseek-harness",
+    "screen_model": "qwen3-vl:4b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "scope": "Regression/readiness checks, including owned process cancellation and pause-on-failure; platform/browser acceptance is recorded separately. Final source includes bounded invalid-test-plan inference correction, constrained scenario schema, fresh accessibility observation before planning and streaming test-writer deadlines. Child media test imports require tests on PYTHONPATH; a run without it failed two isolated child imports before the correctly configured passing run. Historical fixture/model checks retain separate scope."
+}

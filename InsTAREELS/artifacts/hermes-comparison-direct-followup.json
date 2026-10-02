@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-01",
+  "scope": "Real local planning plus real owned-Chrome actions and deterministic independent result checks. Same three public goals, model and executor; excludes STT/TTS. Not standalone Hermes computer_use or full Jarvis vision/replan loop.",
+  "model": "qwen3.5:4b",
+  "hermes_revision": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+  "hermes_context": 64000,
+  "native_context": 16384,
+  "order": "direct then Hermes then native Qwen per case",
+  "runs": [
+    {
+      "case": 1,
+      "route": "direct",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "execution_seconds": 4.313,
+      "success": true,
+      "total_seconds": 4.313,
+      "final_public_page": "https://www.youtube.com/results?search_query=robot+tutorials",
+      "player_diagnostic": null
+    },
+    {
+      "case": 2,
+      "route": "direct",
+      "goal": "search YouTube for Python basics",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "execution_seconds": 0.25,
+      "success": true,
+      "total_seconds": 0.25,
+      "final_public_page": "https://www.youtube.com/results?search_query=Python+basics",
+      "player_diagnostic": null
+    },
+    {
+      "case": 3,
+      "route": "direct",
+      "goal": "open YouTube and search Python tutorial and play first video",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "execution_seconds": 3.266,
+      "success": true,
+      "total_seconds": 3.266,
+      "final_public_page": "https://www.youtube.com/watch?v=UrsmFxEIp5k",
+      "player_diagnostic": {
+        "paused": false,
+        "ready": 4,
+        "ad": false
+      }
+    }
+  ]
+}

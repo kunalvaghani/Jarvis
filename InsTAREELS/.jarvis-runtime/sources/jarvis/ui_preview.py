@@ -3,7 +3,6 @@ from pathlib import Path
 import tkinter.font as tkfont
 from PIL import Image, ImageDraw, ImageFont
 from .interface import BG, CARD, CYAN, TEXT, MUTED, LINE
-from .hud import render_hud
 
 
 def export_preview(app, path):
@@ -32,15 +31,16 @@ def export_preview(app, path):
         width, height = widget.winfo_width(), widget.winfo_height()
         kind = widget.winfo_class()
         font = font_for(widget)
-        if widget == app.panel_logo:
-            image.paste(render_hud(size=app.hud_size), (x, y))
-        elif kind in {"Frame", "Toplevel", "Label", "Text"}:
+        if kind in {"Frame", "Toplevel", "Label", "Text"}:
             try:
                 bg = widget.cget("background")
             except Exception:
                 bg = BG
             draw.rectangle((x, y, x+width, y+height), fill=tuple(value//256 for value in widget.winfo_rgb(str(bg))))
             if kind == "Label":
+                source = getattr(widget,'preview_image',None)
+                if isinstance(source,Image.Image):
+                    image.paste(source,(round(x+(width-source.width)/2),round(y+(height-source.height)/2)))
                 text = widget.cget("text")
                 if widget.cget("textvariable"):
                     text = widget.getvar(widget.cget("textvariable"))
@@ -48,15 +48,17 @@ def export_preview(app, path):
                 if text:
                     pad = int(str(widget.cget("padx")))
                     wrap = int(str(widget.cget("wraplength")))
-                    lines, line = [], ""
-                    for word in str(text).split():
-                        candidate = (line + " " + word).strip()
-                        if wrap and line and font.getlength(candidate) > wrap:
-                            lines.append(line)
-                            line = word
-                        else:
-                            line = candidate
-                    lines.append(line)
+                    lines = []
+                    for paragraph in str(text).split('\n'):
+                        line=''
+                        for word in paragraph.split():
+                            candidate = (line + " " + word).strip()
+                            if wrap and line and font.getlength(candidate) > wrap:
+                                lines.append(line)
+                                line = word
+                            else:
+                                line = candidate
+                        lines.append(line)
                     lines = "\n".join(lines)
                     draw.multiline_text((x+pad, y+int(str(widget.cget("pady")))+2), lines, font=font, fill=color, spacing=4)
             elif kind == "Text":
@@ -64,11 +66,13 @@ def export_preview(app, path):
                 layer = Image.new("RGB", (width, height), CARD)
                 ImageDraw.Draw(layer).multiline_text((14, 12), text[:1800], fill=TEXT, font=font, spacing=5)
                 image.paste(layer, (x, y))
+        elif kind == 'Canvas' and isinstance(getattr(widget,'preview_image',None),Image.Image):
+            image.paste(widget.preview_image.resize((width,height)),(x,y))
         elif kind == "Scrollbar":
             draw.rectangle((x, y, x+width, y+height), fill=BG)
             draw.rounded_rectangle((x+4, y+8, x+width-4, y+height-8), radius=3, fill=LINE)
-        elif kind == "TButton":
-            primary = widget.cget("style") == "Accent.TButton"
+        elif kind in {"TButton","Button"}:
+            primary = kind=='TButton' and widget.cget("style") == "Accent.TButton"
             draw.rounded_rectangle((x, y, x+width-1, y+height-1), radius=4, fill=CYAN if primary else LINE)
             draw.text((x+width/2, y+height/2), widget.cget("text"), anchor="mm", fill=BG if primary else TEXT, font=font)
         elif kind in {"TEntry", "TCombobox"}:

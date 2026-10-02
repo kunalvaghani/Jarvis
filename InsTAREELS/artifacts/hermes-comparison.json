@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-01",
+  "scope": "Real local planning plus real owned-Chrome actions and deterministic independent result checks. Same three public goals, model and executor; excludes STT/TTS. Not standalone Hermes computer_use or full Jarvis vision/replan loop.",
+  "model": "qwen3.5:4b",
+  "hermes_revision": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+  "hermes_context": 64000,
+  "native_context": 16384,
+  "order": "direct then Hermes then native Qwen per case",
+  "runs": [
+    {
+      "case": 1,
+      "route": "direct",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "execution_seconds": 4.844,
+      "success": true,
+      "total_seconds": 4.844
+    },
+    {
+      "case": 1,
+      "route": "hermes",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": true,
+      "success": false,
+      "error": "The local brain timed out. Try a shorter task.",
+      "total_seconds": 124.172
+    },
+    {
+      "case": 1,
+      "route": "native_qwen",
+      "goal": "search YouTube for robot tutorials",
+      "cold_worker": true,
+      "planning_seconds": 118.328,
+      "success": false,
+      "error": "Planner proposed a step outside the exact public benchmark goal.",
+      "total_seconds": 118.328
+    },
+    {
+      "case": 2,
+      "route": "direct",
+      "goal": "search YouTube for Python basics",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "success": false,
+      "error": "Page.bring_to_front: Target page, context or browser has been closed",
+      "total_seconds": 0.015
+    },
+    {
+      "case": 2,
+      "route": "hermes",
+      "goal": "search YouTube for Python basics",
+      "cold_worker": false,
+      "success": false,
+      "error": "The local brain timed out. Try a shorter task.",
+      "total_seconds": 123.329
+    },
+    {
+      "case": 2,
+      "route": "native_qwen",
+      "goal": "search YouTube for Python basics",
+      "cold_worker": false,
+      "success": false,
+      "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=120)",
+      "total_seconds": 120.515
+    },
+    {
+      "case": 3,
+      "route": "direct",
+      "goal": "open YouTube and search Python tutorial and play first video",
+      "cold_worker": false,
+      "planning_seconds": 0.0,
+      "plan_matches_goal": true,
+      "success": false,
+      "error": "Page.wait_for_function: Timeout 12000ms exceeded.",
+      "total_seconds": 17.36
+    },
+    {
+      "case": 3,
+      "route": "hermes",
+      "goal": "open YouTube and search Python tutorial and play first video",
+      "cold_worker": false,
+      "success": false,
+      "error": "The local brain timed out. Try a shorter task.",
+      "total_seconds": 124.234
+    },
+    {
+      "case": 3,
+      "route": "native_qwen",
+      "goal": "open YouTube and search Python tutorial and play first video",
+      "cold_worker": false,
+      "planning_seconds": 139.766,
+      "plan_matches_goal": true,
+      "success": false,
+      "error": "Page.wait_for_function: Timeout 12000ms exceeded.",
+      "total_seconds": 154.469
+    }
+  ]
+}

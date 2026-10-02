@@ -1,0 +1,26 @@
+{
+  "name": "jarvis-project",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "start": "expo start",
+    "build": "expo export --platform web"
+  },
+  "dependencies": {
+    "expo": "57.0.26",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-web": "0.21.3",
+    "react-dom": "19.2.3",
+    "@expo/metro-runtime": "57.0.16"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "axe-core": "4.13.0"
+  },
+  "main": "index.js"
+}

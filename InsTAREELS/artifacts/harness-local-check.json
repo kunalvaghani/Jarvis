@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-02T11:22:43.078527+05:30",
+  "sdk_version": "0.1.5rc1",
+  "scope": "Real upstream SDK and local Qwen inference; synthetic observations, no desktop actions or writes executed.",
+  "checks": [
+    {
+      "operation": "plan",
+      "ok": true,
+      "seconds": 32.344,
+      "result": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator app window opens",
+            "folder": "",
+            "content": "",
+            "platform": ""
+          }
+        ],
+        "model_used": "qwen3.5:4b",
+        "backend": "deepseek-harness",
+        "harness_session_id": "jarvis-8b61a3dcaadd4bb2b6f05552c8b7d41f",
+        "harness_events": [
+          "agent/inbox/spliced",
+          "turn/start",
+          "agent/inbox/spliced",
+          "step/start",
+          "system/message",
+          "user/message",
+          "request/header",
+          "request/context",
+          "session/title",
+          "assistant/message",
+          "step/end",
+          "turn/end"
+        ]
+      }
+    },
+    {
+      "operation": "replan",
+      "ok": true,
+      "seconds": 15.734,
+      "result": {
+        "question": "",
+        "steps": [],
+        "done": true,
+        "reason": "The goal 'Open Calculator' is fully achieved. The observation confirms the Calculator window is visible and trusted evidence states it is open. No further steps are required.",
+        "model_used": "qwen3.5:4b",
+        "backend": "deepseek-harness",
+        "harness_session_id": "jarvis-c0ecf84b43a64f718f1a476c829723e1",
+        "harness_events": [
+          "agent/inbox/spliced",
+          "turn/start",
+          "agent/inbox/spliced",
+          "step/start",
+          "system/message",
+          "user/message",
+          "request/header",
+          "request/context",
+          "session/title",
+          "assistant/message",
+          "step/end",
+          "turn/end"
+        ]
+      }
+    },
+    {
+      "operation": "agent",
+      "ok": true,
+      "seconds": 10.344,
+      "result": {
+        "final": "The code in sample.py prints the result of 2 + 3, which is 5.",
+        "calls": [],
+        "model_used": "qwen3.5:4b",
+        "backend": "deepseek-harness",
+        "harness_session_id": "jarvis-c2b02d9a1f9f479eb532e2235d481826",
+        "harness_events": [
+          "agent/inbox/spliced",
+          "turn/start",
+          "agent/inbox/spliced",
+          "step/start",
+          "system/message",
+          "user/message",
+          "request/header",
+          "request/context",
+          "session/title",
+          "assistant/message",
+          "step/end",
+          "turn/end"
+        ]
+      }
+    }
+  ]
+}

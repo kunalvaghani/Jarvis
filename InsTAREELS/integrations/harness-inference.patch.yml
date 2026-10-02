@@ -1,0 +1,39 @@
+# Jarvis owns all external actions. This profile has NO model-facing tools.
+- id: persistent-bash
+  disabled: true
+- id: persistent-pwsh
+  disabled: true
+- id: terminal-bash
+  disabled: true
+- id: terminal-pwsh
+  disabled: true
+- id: pty
+  disabled: true
+- id: subprocess
+  disabled: true
+- id: sandbox
+  disabled: true
+- id: sandbox-policy
+  disabled: true
+- id: jobs
+  disabled: true
+- id: deepseek-llm-api-extensions
+  disabled: true
+- id: session-log-deepseek
+  disabled: true
+- id: plugin-package-inventory-deepseek
+  disabled: true
+- id: llm-retry
+  disabled: true
+- id: llm-deepseek
+  config:
+    apiKeyEnv: DEEPSEEK_API_KEY
+    thinking: disabled
+    reasoningEffort: off
+    defaultContextWindow: 16384
+    maxTokens: 1600
+    streamIdleTimeoutMs: 180000
+- id: sessions
+  config:
+    root: !!js process.env.JARVIS_HARNESS_SESSIONS
+    compression: none

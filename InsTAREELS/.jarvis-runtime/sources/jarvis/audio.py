@@ -22,6 +22,8 @@ class DecodeJob:
     audio: object
     final: bool = False
     rollover: bool = False
+    playback: bool = False
+    references: tuple = ()
 
 
 class DecodeQueue:
@@ -83,12 +85,16 @@ class TranscriptAssembler:
 
 
 class Listener:
-    def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None):
+    def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None,
+                 playback=None, input_filter=None, references=None):
         self.model_path, self.device = Path(model_path), device
         self.engine, self.report = engine, report
         self.options = options or {}
         self.activate_on_start = activate_on_start
         self.muted = muted or (lambda: False)
+        self.playback = playback or (lambda: False)
+        self.input_filter = input_filter
+        self.references = references or (lambda: ())
         self.stop_event = threading.Event()
         self.audio = queue.Queue(maxsize=100)
         self.overflow = threading.Event()
@@ -134,8 +140,11 @@ class Listener:
                 if self.muted():
                     continue
                 text = assembler.merge(job, words)
-                self.report("final" if job.final else "partial", text)
-                self.engine.feed(command_text(text), final=job.final)
+                accepted = self.input_filter(text, job.playback, job.references) if self.input_filter else command_text(text)
+                if accepted is None:
+                    continue
+                self.report("final" if job.final else "partial", accepted if job.playback else text)
+                self.engine.feed(accepted, final=job.final)
         except Exception as exc:
             self.report("fatal", f"Whisper GPU decoding failed: {exc}")
             self.stop_event.set()
@@ -170,12 +179,14 @@ class Listener:
                 if self.muted():
                     return
                 try:
-                    self.audio.put_nowait(data[:, 0].copy())
+                    self.audio.put_nowait((data[:, 0].copy(), bool(self.playback()), self.references()))
                 except queue.Full:
                     self.overflow.set()
 
             utterance, offset, silent, next_partial = 0, 0.0, 0.0, 0.0
             active = False
+            active_playback = False
+            active_references = ()
             captured = np.empty(0, dtype=np.float32)
             history = np.empty(0, dtype=np.float32)
             interval = float(self.options.get("partial_interval_seconds", 1.0))
@@ -194,7 +205,7 @@ class Listener:
                     if self.overflow.is_set():
                         raise RuntimeError("Microphone overflow; listening stopped. Select another input device and restart.")
                     try:
-                        block = self.audio.get(timeout=0.2)
+                        block, block_playback, block_references = self.audio.get(timeout=0.2)
                     except queue.Empty:
                         continue
                     self.last_audio = time.monotonic()
@@ -214,25 +225,29 @@ class Listener:
                         if not speech:
                             continue
                         active = True
+                        active_playback = block_playback
+                        active_references = tuple(block_references)
                         utterance += 1
                         captured = history.copy()
                         offset, silent, next_partial = 0.0, 0.0, interval
                     else:
                         captured = np.concatenate((captured, block))
+                        active_playback = active_playback or block_playback
+                        active_references = tuple(dict.fromkeys(active_references + tuple(block_references)))[-8:]
                     silent = 0.0 if speech else silent + len(block) / 16000
                     duration = len(captured) / 16000
                     if silent >= silence:
-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True))
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback, references=active_references))
                         active = False
                         captured = np.empty(0, dtype=np.float32)
                         history = np.empty(0, dtype=np.float32)
                     elif duration >= 20.0:
-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True))
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback, references=active_references))
                         captured = captured[16 * 16000:]
                         offset += 16.0
                         next_partial = len(captured) / 16000 + interval
                     elif duration >= next_partial:
-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy()))
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
                         next_partial = duration + interval
         except Exception as exc:
             self.report("fatal", str(exc))

@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-02",
+  "scope": "Actual Jarvis read-only CLI + real Harness/Qwen on a temporary synthetic project; no desktop actions.",
+  "seconds": 40.547,
+  "exit_code": 1,
+  "read_events": 1,
+  "answer": "",
+  "ok": false,
+  "error": "{\"version\": 1, \"at\": \"2026-10-02T05:55:25.019863+00:00\", \"session_id\": \"7aea6b664a014e56aa289c557bcb0d08\", \"event\": \"session.started\", \"project\": \"D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\.jarvis-runtime\\\\harness-research-ajfqpzu3\"}\n{\"version\": 1, \"at\": \"2026-10-02T05:55:25.041210+00:00\", \"session_id\": \"7aea6b664a014e56aa289c557bcb0d08\", \"event\": \"turn.started\", \"goal\": \"Read sample.py and explain what it prints.\"}\n{\"version\": 1, \"at\": \"2026-10-02T05:55:25.042211+00:00\", \"session_id\": \"7aea6b664a014e56aa289c557bcb0d08\", \"event\": \"tool.started\", \"tool\": \"read_file\"}\n{\"version\": 1, \"at\": \"2026-10-02T05:55:25.052927+00:00\", \"session_id\": \"7aea6b664a014e56aa289c557bcb0d08\", \"event\": \"tool.completed\", \"tool\": \"read_file\", \"output_chars\": 14}\n{\"version\": 1, \"at\": \"2026-10-02T05:56:04.839551+00:00\", \"session_id\": \"7aea6b664a014e56aa289c557bcb0d08\", \"event\": \"turn.failed\", \"error_type\": \"ValueError\"}\n{\"event\": \"error\", \"error\": \"Provider must return final and calls fields.\"}\n"
+}

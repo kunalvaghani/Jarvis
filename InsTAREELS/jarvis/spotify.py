@@ -4,6 +4,16 @@ import os
 from urllib.parse import quote
 
 
+def open_app(cancelled=lambda: False):
+    if cancelled():
+        raise ValueError('Spotify launch cancelled.')
+    try:
+        os.startfile('spotify:')
+    except OSError as exc:
+        raise ValueError('The native Spotify app or its URI handler is unavailable. Install Spotify or explicitly request its web player.') from exc
+    return 'Opened the native Spotify app.'
+
+
 def search(query, cancelled=lambda: False):
     query = query.strip()
     if not query or len(query) > 300:
@@ -109,7 +119,15 @@ def volume(action, cancelled=lambda: False):
     """Change only Spotify's Core Audio sessions, never the system or browser level."""
     import comtypes
     from pycaw.pycaw import AudioUtilities
-    comtypes.CoInitialize()
+    initialized = False
+    try:
+        comtypes.CoInitialize()
+        initialized = True
+    except OSError as exc:
+        # An existing MTA apartment is usable for Core Audio too. Do not
+        # uninitialize COM owned by another library on this thread.
+        if getattr(exc, 'winerror', None) != -2147417850:
+            raise
     try:
         sessions = []
         for session in AudioUtilities.GetAllSessions():
@@ -144,4 +162,5 @@ def volume(action, cancelled=lambda: False):
             raise ValueError("Spotify volume change could not be verified.")
         return f"Spotify volume {round(target * 100)} percent."
     finally:
-        comtypes.CoUninitialize()
+        if initialized:
+            comtypes.CoUninitialize()

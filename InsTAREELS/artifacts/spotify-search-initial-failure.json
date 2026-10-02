@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-01",
+  "scope": "Live native Spotify search and row inspection; no playback",
+  "search_fields": [
+    {
+      "label": "xpui.app.spotify.com/index.html",
+      "exact_query_observed": false
+    }
+  ],
+  "track_row_count": 0
+}

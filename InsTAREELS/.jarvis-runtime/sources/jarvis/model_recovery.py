@@ -16,6 +16,7 @@ class ModelRecovery:
         self.next_attempt = 0
         self.last_check = 0
         self.cached = True
+        self.missing = []
 
     def healthy(self):
         if self.closing():
@@ -27,11 +28,9 @@ class ModelRecovery:
             response = self.client.get("http://127.0.0.1:11434/api/tags", timeout=2)
             response.raise_for_status()
             installed = {item["name"] for item in response.json().get("models", [])}
-            required = set()
-            for section, keys in (("brain", ("planner", "decision", "screen_model")), ("knowledge", ("model", "screen_model"))):
-                options = self.config.get(section, {})
-                if options.get("enabled"):
-                    required.update(options[key] for key in keys if options.get(key))
+            from .model_selection import required_models
+            required = required_models(self.config)
+            self.missing = sorted(required - installed)
             self.cached = required <= installed
         except Exception:
             self.cached = True  # Ollama service recovery owns server outages.
@@ -39,12 +38,15 @@ class ModelRecovery:
 
     def repair(self):
         with self.lock:
-            if self.closing() or (self.thread and self.thread.is_alive()) or time.monotonic() < self.next_attempt:
+            if self.closing():
                 return False
+            if (self.thread and self.thread.is_alive()) or time.monotonic() < self.next_attempt:
+                return None
             self.next_attempt = time.monotonic() + 300
             self.thread = threading.Thread(target=self.download, name="jarvis-model-repair", daemon=True)
             self.thread.start()
-        return False
+        self.report("repair", "Missing local models: " + ", ".join(self.missing) + ". Background restoration started; unrelated tasks can continue.")
+        return None
 
     def download(self):
         flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
@@ -66,6 +68,8 @@ class ModelRecovery:
                 self.last_check = 0
                 if not self.closing() and self.process.returncode == 0:
                     self.report("repair", "Declared Ollama models restored. Preferred models are available again.")
+                elif not self.closing():
+                    self.report("repair", "Model restoration failed for " + ", ".join(self.missing) + ". See .jarvis-runtime/models.log; next attempt in 300 seconds. A task needing a missing model pauses at its checkpoint.")
         except Exception:
             if not self.closing():
                 self.report("repair", "Model restoration is incomplete; partial downloads retained for a later retry.")
@@ -74,6 +78,7 @@ class ModelRecovery:
                 if self.process and self.process.poll() is None:
                     self.process.kill()
                 self.process = None
+                self.next_attempt = time.monotonic() + 300
 
     def close(self):
         with self.lock:

@@ -117,7 +117,7 @@ class Engine:
                     command = parse(clause)
                     if self.typed.get(index) and command.kind != "dictate":
                         raise ValueError("Speech changed after dictation began; revised command skipped.")
-                    if not final and (command.kind in {"task", "code_task", "toolkit", "run_command", "modify", "browse", "browser_search", "play_media", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app", "ask", "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls", "confirm_suggestion", "suggest_control", "forget_ui_memory"} or self.pending):
+                    if not final and (command.kind in {"task", "code_task", "toolkit", "run_command", "modify", "browse", "browser_search", "context_search", "media_search", "media_control", "play_media", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app", "ask", "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls", "confirm_suggestion", "suggest_control", "forget_ui_memory"} or self.pending):
                         self.pending[index] = clause
                         continue
                     if command.kind == "dictate":

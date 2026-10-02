@@ -14,6 +14,23 @@ import jarvis.launcher as launcher
 
 
 class RecoveryTests(unittest.TestCase):
+    def test_atomic_source_snapshot_preserves_previous_backup_after_failed_copy(self):
+        from jarvis.launcher import source_snapshot
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)/'current.py'
+            saved = Path(directory)/'saved.py'
+            source.write_text('new = True\n')
+            saved.write_text('known_good = True\n')
+            def incomplete(src,dst):
+                Path(dst).write_text('partial')
+                raise OSError('injected copy failure')
+            with patch('jarvis.launcher.shutil.copy2',side_effect=incomplete):
+                with self.assertRaises(OSError): source_snapshot(source,saved)
+            self.assertEqual(saved.read_text(),'known_good = True\n')
+            self.assertEqual(list(Path(directory).glob('.jarvis-snapshot-*')),[])
+            source_snapshot(source,saved)
+            self.assertEqual(saved.read_text(),source.read_text())
+
     def test_independent_bootstrap_restores_launcher_before_import(self):
         from jarvis_bootstrap import restore_entrypoints
         with tempfile.TemporaryDirectory() as directory:

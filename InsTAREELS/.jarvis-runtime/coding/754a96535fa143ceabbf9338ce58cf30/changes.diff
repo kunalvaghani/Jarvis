@@ -1,0 +1,47 @@
+--- before/alarm.py
++++ after/alarm.py
+@@ -36,8 +36,40 @@
+     
+     root.mainloop()
+ 
++
++def set_alarm_time():
++    """
++    Get the alarm time from user input.
++    """
++    try:
++        # Get time input from user
++        time_input = input("Enter alarm time in HH:MM format (24-hour): ")
++        
++        # Validate time format
++        if len(time_input) != 5 or time_input[2] != ':':
++            raise ValueError("Invalid time format. Please use HH:MM format.")
++        
++        hours, minutes = map(int, time_input.split(':'))
++        
++        # Validate time range
++        if not (0 <= hours <= 23 and 0 <= minutes <= 59):
++            raise ValueError("Invalid time. Hours must be 0-23 and minutes must be 0-59.")
++        
++        return hours, minutes
++    except ValueError as e:
++        print(f"Error: {e}")
++        return None, None
++
+ if __name__ == "__main__":
+-    # Show UI
+-    show_alarm_ui()
+-    # Play alarm sound
+-    alarm(5)
++    # Get alarm time from user
++    hour, minute = set_alarm_time()
++    
++    if hour is not None and minute is not None:
++        print(f"Alarm set for {hour:02d}:{minute:02d}")
++        
++        # Show UI
++        show_alarm_ui()
++        # Play alarm sound
++        alarm(5)
++    else:
++        print("Invalid time entered. Alarm not set.")

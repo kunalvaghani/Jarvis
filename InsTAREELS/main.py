@@ -7,6 +7,9 @@ import queue
 import threading
 import time
 
+from jarvis.display import enable_high_dpi
+enable_high_dpi()  # Must precede Tk/native window creation, including verification entry points.
+
 # Publish actual interpreter identity before loading UI/native dependencies.
 _session = os.environ.get("JARVIS_SESSION_ID")
 if _session:
@@ -15,16 +18,14 @@ if _session:
     (_runtime / ("heartbeat-" + _session + ".json")).write_text(json.dumps({
         "session": _session, "pid": os.getpid(), "at": time.time(), "status": "starting"}), encoding="utf-8")
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
-from PIL import ImageTk
 
 from jarvis.actions import Actions, Desktop
 from jarvis.audio import Listener
 from jarvis.engine import Engine
 from jarvis.commands import Command
 from jarvis.speech import Speech
-from jarvis.hud import render_hud
 from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
 
 BASE = Path(__file__).resolve().parent
@@ -34,6 +35,9 @@ class App:
     def __init__(self, root):
         self.root = root
         self.config = json.loads((BASE / "config.json").read_text(encoding="utf-8"))
+        if os.environ.get("JARVIS_UI_VERIFY") == "1":
+            self.config["memory"] = {"enabled": False}
+            self.config['_ui_verification'] = True
         self.events = queue.Queue()
         self.closing = False
         self.listening_requested = False
@@ -49,18 +53,19 @@ class App:
         self.capture_count = 0
         self.command_window = None
         self.actions.knowledge.screen_handle = lambda: self.external_handle
-        self.orb_phase = 0.0
         from jarvis.interface import build_interface
         build_interface(self)
         self.load_microphones()
         self.actions.approval_handler = self.request_approval
         root.protocol("WM_DELETE_WINDOW", self.close)
         self.panel.withdraw()
-        root.after(40, self.animate_orb)
+        root.after(40, self.animate_island)
         root.after(150, self.exclude_orb_from_capture)
         root.after(300, self.remember_external_window)
         root.after(80, self.drain)
         self.watchdog = Watchdog(self.report)
+        self.watchdog.register('Island media observations',self.desk.media.healthy,self.desk.media.repair,
+            lambda:not self.closing and not self.desk.media.closed)
         self.ollama_service = OllamaService()
         from jarvis.model_recovery import ModelRecovery
         self.model_recovery = ModelRecovery(BASE, self.config, self.report, lambda: self.closing)
@@ -71,12 +76,27 @@ class App:
                 lambda worker=worker, name=name: restart_thread(worker, name), lambda: not self.closing)
         self.watchdog.register("Microphone", self.listener_healthy, self.repair_listener,
             lambda: self.listening_requested and not self.closing)
+        self.watchdog.register("UI Automation worker", self.actions.ui_healthy, self.actions.repair_ui,
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register("Browser automation worker", self.actions.browser_healthy, self.actions.repair_browser,
+            lambda: not self.closing and not self.actions.closed.is_set())
         self.watchdog.register("Configured models", self.model_recovery.healthy, self.model_recovery.repair,
             lambda: not self.closing)
+        from jarvis.harness import healthy as harness_healthy, repair as repair_harness
+        self.watchdog.register("Harness inference", lambda: harness_healthy(self.actions.brain.client),
+            lambda: repair_harness(self.actions.brain.client),
+            lambda: not self.closing and not self.actions.closed.is_set()
+                and self.config.get('brain', {}).get('harness', {}).get('enabled', False))
         self.watchdog.register("God's Eye service", self.gods_eye_healthy, self.repair_gods_eye,
             lambda: not self.closing and self.actions.gods_eye_view is not None)
+        self.watchdog.register('Development preview',
+            lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
+            lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
         self.watchdog.start()
         self.root.after(100, self.runtime_tick)
+        if os.environ.get("JARVIS_RESUME_TASK") != "1" and os.environ.get("JARVIS_UI_VERIFY") != "1":
+            self.root.after(350, self.greet_startup)
         if os.environ.get("JARVIS_AUTOLISTEN") == "1":
             self.root.after(600, self.toggle_listening)
         if os.environ.get("JARVIS_RESUME_TASK") == "1":
@@ -87,6 +107,13 @@ class App:
     def resume_interrupted_task(self):
         if not self.closing and self.actions.generation == 0 and self.actions.queue.empty():
             self.actions.submit(Command("resume_task", extra="automatic"))
+
+    def greet_startup(self):
+        def deliver():
+            greeting = self.actions.knowledge.quick.startup_greeting()
+            if not self.closing:
+                self.report("answer", greeting)
+        threading.Thread(target=deliver, name="jarvis-startup-greeting", daemon=True).start()
 
     def listener_healthy(self):
         if not self.listener or not self.listener.thread.is_alive():
@@ -120,6 +147,9 @@ class App:
     def runtime_tick(self):
         if self.closing:
             return
+        if self.actions.memory.error:
+            self.report("warning", "Obsidian memory stopped: " + self.actions.memory.error)
+            self.actions.memory.error = None
         try:
             runtime = BASE / ".jarvis-runtime"
             runtime.mkdir(exist_ok=True)
@@ -149,35 +179,26 @@ class App:
                 self.root.after(2000, self.runtime_tick)
 
     @ui_loop(40)
-    def animate_orb(self):
-        self.orb_phase += .13
+    def animate_island(self):
         listening = self.listener is not None and self.listener.thread.is_alive()
         speaking = self.speech.speaking.is_set()
-        status = "SPEAKING" if speaking else "WORKING" if self.actions.task_active else "THINKING" if self.ui_activity else "LISTENING" if listening else "STANDBY"
+        status = "WORKING" if self.actions.task_active or self.island.activity.active else "THINKING" if self.ui_activity else "SPEAKING" if speaking else "LISTENING" if listening else "STANDBY"
         self.hud_status.set(status)
-        self.orb_photo = ImageTk.PhotoImage(render_hud(self.orb_phase, listening, speaking, size=128), master=self.root)
-        self.orb.delete("all")
-        self.orb.create_image(69, 68, image=self.orb_photo)
-        self.orb.create_text(69, 144, text=status, fill="#48d9f3", font=("Consolas", 9, "bold"))
-        if self.panel.state() != "withdrawn":
-            self.panel_photo = ImageTk.PhotoImage(render_hud(self.orb_phase, listening, speaking, size=self.hud_size), master=self.root)
-            self.panel_logo.configure(image=self.panel_photo)
-        self.root.after(90, self.animate_orb)
+        self.island.tick(status, self.level["value"], speaking=speaking, listening=listening)
+        self.desk.tick(self.island.expanded and not self.capture_count and self.panel.state()!='withdrawn')
+        self.root.after(33, self.animate_island)
 
     def toggle_panel(self, _event=None):
-        if self.panel.state() == "withdrawn":
+        if not self.island.expanded:
             self.show_panel()
         else:
             self.hide_panel()
 
     def show_panel(self):
-        self.panel.deiconify()
-        self.panel.lift()
-        self.exclude_window_from_capture(self.panel)
-        self.preview.focus_set()
+        self.island.expand(True)
 
     def hide_panel(self):
-        self.panel.withdraw()
+        self.island.expand(False)
 
     def show_menu(self, event):
         self.menu.tk_popup(event.x_root, event.y_root)
@@ -208,11 +229,15 @@ class App:
                     and win32process.GetWindowThreadProcessId(hwnd)[1] != os.getpid()
                     and win32gui.GetWindowText(hwnd).strip()):
                 self.external_handle = hwnd
+                self.actions.memory.observe_window(win32gui.GetWindowText(hwnd),
+                    win32process.GetWindowThreadProcessId(hwnd)[1])
         except Exception:
             pass
         self.root.after(300, self.remember_external_window)
 
     def report(self, kind, message):
+        if kind in {"action", "answer"} and isinstance(message, str):
+            self.actions.memory.record("Jarvis " + kind, message)
         if kind == "state":
             self.actions.suggest_enabled = message.startswith("Awake")
             if self.actions.suggest_enabled:
@@ -241,7 +266,7 @@ class App:
         window.geometry("760x420")
         window.configure(bg="#0d1424")
         window.attributes("-topmost", True)
-        tk.Label(window, text="JARVIS COMMAND PROMPT  ·  working folder: " + str(self.actions.root),
+        tk.Label(window, text="JARVIS COMMAND PROMPT  Â·  working folder: " + str(self.actions.root),
                  bg="#0d1424", fg="#a4eeff", anchor="w").pack(fill="x", padx=12, pady=(12, 6))
         self.command_output = ScrolledText(window, bg="#121e30", fg="#e4edf3", insertbackground="white",
             relief="flat", font=("Consolas", 10), state="disabled")
@@ -271,7 +296,7 @@ class App:
             for index, device in enumerate(devices):
                 if device["max_input_channels"] > 0:
                     self.mic_devices.append(index)
-                    labels.append(f"{device['name']} · {hosts[device['hostapi']]['name']} [{index}]")
+                    labels.append(f"{device['name']} Â· {hosts[device['hostapi']]['name']} [{index}]")
                     if self.config.get("microphone") in (index, device["name"]):
                         selected = len(labels) - 1
             self.mic_choice["values"] = labels
@@ -296,7 +321,13 @@ class App:
                 kind, message = self.events.get_nowait()
             except queue.Empty:
                 break
-            if kind == "partial":
+            self.island.notify(kind, message)
+            self.desk.notify(kind,message)
+            if kind.startswith('island_'):
+                continue
+            if kind == 'task_status':
+                continue  # Live metadata is shown in the header; never log generated code chunks.
+            elif kind == "partial":
                 if message:
                     self.live.set(message)
             elif kind == "state":
@@ -316,27 +347,7 @@ class App:
             elif kind == "screen":
                 self.log_line(kind, message)
             elif kind == "approval":
-                action, detail, answer, ready, cancelled = message
-                if cancelled():
-                    ready.set()
-                    continue
-                if action == "delete":
-                    prompt = "Move this exact file to the Recycle Bin?\n\n" + detail
-                    title = "Approve file deletion"
-                elif action == "command":
-                    prompt = ("Run this exact command? It can change or delete files.\n\n"
-                              "Working folder: " + str(self.actions.root) + "\n\n" + detail)
-                    title = "Approve command execution"
-                else:
-                    prompt = "Approve this exact external action? Review its destination and content.\n\n" + detail
-                    title = "Approve " + action.replace("_", " ")
-                try:
-                    answer["approved"] = messagebox.askyesno(title, prompt, parent=self.command_window
-                        if self.command_window and self.command_window.winfo_exists() else self.root)
-                except tk.TclError as exc:
-                    self.log_line("warning", "Approval dialog could not open: " + str(exc))
-                finally:
-                    ready.set()
+                continue  # Nonblocking explicit approval card owns this decision.
             elif kind == "command_output":
                 if self.command_window and self.command_window.winfo_exists():
                     self.command_output.configure(state="normal")
@@ -396,14 +407,21 @@ class App:
         # Generation check also prevents a stopping recognizer enqueueing new work.
         def submit(command):
             if session == self.session:
+                self.speech.interrupt()
                 self.actions.submit(command)
         engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
+        from jarvis.voice_input import VoiceInput
+        voice_input = VoiceInput(self.speech)
         self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
-                                 muted=self.speech.speaking.is_set)
+                                 playback=self.speech.output_recent, input_filter=voice_input.filter,
+                                 references=self.speech.output_references)
         self.listener.start()
         self.toggle.configure(text="Stop listening")
 
     def stop(self):
+        if getattr(self,'desk',None) is not None:
+            self.desk.cancel_approvals()
+            self.desk.media.repair()  # Cancel only an owned outstanding media child; never replay it.
         self.listening_requested = False
         self.session += 1
         if self.listener:
@@ -411,7 +429,7 @@ class App:
         self.actions.cancel()
         self.speech.cancel()
         self.ui_activity = ""
-        self.state.set("Stopping microphone…")
+        self.state.set("Stopping microphoneâ€¦")
         self.toggle.configure(text="Start listening")
 
     def preview_command(self):
@@ -445,6 +463,7 @@ class App:
 
     def close(self):
         self.closing = True
+        self.desk.close()
         if os.environ.get("JARVIS_SUPERVISED") == "1":
             (BASE / ".jarvis-runtime" / "stop").touch()
         self.watchdog.close()

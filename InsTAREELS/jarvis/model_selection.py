@@ -1,4 +1,17 @@
 """Use configured models when installed, with explicit bounded local fallbacks."""
+def required_models(config):
+    required = set()
+    for section, keys in (("brain", ("planner", "coder", "decision", "screen_model")),
+                          ("knowledge", ("model", "screen_model"))):
+        options = config.get(section, {})
+        if options.get("enabled"):
+            required.update(options[key] for key in keys if options.get(key))
+    hermes = config.get("brain", {}).get("hermes", {})
+    if config.get("brain", {}).get("enabled") and hermes.get("enabled") and hermes.get("model"):
+        required.add(hermes["model"])
+    return required
+
+
 def installed_model(preferred, names, vision=False, allow_fallback=True):
     if preferred in names:
         return preferred

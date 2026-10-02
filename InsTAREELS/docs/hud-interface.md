@@ -1,4 +1,6 @@
-# Modern Jarvis HUD
+# Historical Jarvis HUD
+
+**Replaced at runtime on 2026-09-30.** The following describes the previous interface and its historical verification. The current [Dynamic Island interface](dynamic-island.md) uses native rounded capsules and compact controls; it does not show the circular HUD artwork.
 
 The requested reference repository is a terminal voice assistant, without
 desktop GUI widgets to reuse. Its README links an animated Iron Man HUD with a

@@ -22,8 +22,12 @@ class Catalog:
     def __init__(self, config, base):
         self.config, self.base = config, Path(base)
         self.indexes = {}
+        from .folder_lookup import FolderLookup
+        self.folders = FolderLookup(self)
 
-    def resolve(self, name, kind):
+    def resolve(self, name, kind, *, prefer_usage=False):
+        if kind == 'folder':
+            return self.folders.resolve(name, prefer_usage=prefer_usage)
         # A user-supplied full path does not depend on a potentially stale index.
         if Path(name).is_absolute():
             return self._exists(str(Path(name).resolve()), kind)

@@ -7,6 +7,7 @@ import tkinter as tk
 
 from jarvis.hud import logo_frames, render_hud
 from jarvis.interface import build_interface
+from jarvis.display import window_scale
 
 
 class HudTests(unittest.TestCase):
@@ -76,4 +77,17 @@ class InterfaceTests(unittest.TestCase):
             if button.winfo_ismapped():
                 self.assertLessEqual(button.winfo_rooty() + button.winfo_height(),
                                      self.app.panel.winfo_rooty() + self.app.panel.winfo_height(), button.cget("text"))
+        self.assertTrue(self.app.preview.winfo_ismapped())
+
+    def test_compact_island_controls_fit_with_long_response_and_question(self):
+        scale = window_scale(self.root)
+        self.app.panel.geometry(f"{round(500*scale)}x{round(316*scale)}+20000+20000")
+        self.app.live.set("A long response with project details. " * 50)
+        self.app.question.set("Which project folder do you mean? " * 50)
+        self.app.panel.deiconify()
+        self.root.update()
+        for button in self.buttons(self.app.panel):
+            if button.winfo_ismapped():
+                self.assertLessEqual(button.winfo_rooty()+button.winfo_height(),
+                                     self.app.panel.winfo_rooty()+self.app.panel.winfo_height(),button.cget("text"))
         self.assertTrue(self.app.preview.winfo_ismapped())

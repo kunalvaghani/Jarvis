@@ -76,19 +76,42 @@ def _category(controls, category, title=""):
              "link": {"Hyperlink"}, "option": {"Button", "SplitButton", "MenuItem", "ListItem", "RadioButton", "CheckBox", "ComboBox"},
              "item": {"ListItem", "TreeItem", "TabItem", "MenuItem"},
              "result": {"Hyperlink", "ListItem", "TreeItem"},
-             "video": {"Hyperlink", "ListItem"}}
+             "video": {"Hyperlink", "ListItem", "Button"}}
+    roles['track'] = {'ListItem', 'DataItem'}
     choices = [c for c in controls if c["role"] in roles[category] and _safe(c)]
     if category == "video":
+        choices = [c for c in choices if not re.search(r"\b(?:sponsored|advertisement|advertiser)\b", c.get("context", ""), re.I)]
+        choices = [c for c in choices if not c.get("href") or re.search(r"(?:youtube\.com/(?:watch\?|shorts/)|youtu\.be/)", c["href"], re.I)]
+        choices = [c for c in choices if c['role'] != 'Button' or 'play on google' in label_key(c['name'])]
         choices = [c for c in choices if (len(label_key(c["name"])) >= 8
                    and label_key(c["name"]) not in NAVIGATION
                    and ("video" in label_key(c.get("context", ""))
+                        or "youtube" in label_key(c["name"])
                         or ("youtube" in title.casefold() and c["rect"][0] >= 120)))]
+        # Channel links and player buttons are not video results. Google also
+        # exposes embedded YouTube results as 'Play on Google' buttons.
+        choices = [c for c in choices if not re.match(r'^(?:play|pause|subscribe|like|share|save|next|previous|full screen|mute|unmute)(?:\b|$)', label_key(c['name']))
+                   or 'play on google' in label_key(c['name'])]
+        choices = [c for c in choices if not c['name'].lstrip().startswith('@')
+                   and not re.search(r'\b(?:channel|avatar|profile picture)\b', c.get('context', ''), re.I)]
     if category == "result":
         choices = [c for c in choices if label_key(c["name"]) not in NAVIGATION]
+    if category == 'track':
+        choices = [c for c in choices if not re.search(r'\b(?:your library|music videos|albums|artists|playlists)\b', c.get('context', ''), re.I)
+                   and (re.search(r'\b(?:songs?|tracks?)\b', c.get('context', ''), re.I)
+                        or (label_key(c.get('context', '')) == 'search results' and c.get('metadata', '').startswith('Song'))
+                        or re.search(r'\d+:\d{2}', c['name']))]
+        choices = [c for c in choices if not re.match(r'^(?:play |lyrics match$|more options )', label_key(c['name']))
+                   and not re.match(r'^(?:Song|Track)\s*[•·]', c['name'])]
     seen = set()
     ordered = []
     for control in _ordered(choices):
         key = label_key(control["name"])
+        if category == 'video':
+            key = re.split(r'\bby \S+ on youtube\b|\byoutube\b', key, maxsplit=1)[0].strip()
+            key = re.sub(r'\b\d+[\d\s.]*\s*(?:cr|views|years|year|months|month|days|day)\b.*$', '', key).strip() or label_key(control['name'])
+        if control.get("href"):
+            key = control["href"]
         if key not in seen:
             ordered.append(control)
             seen.add(key)
@@ -146,6 +169,7 @@ class UIControls:
         if cancelled():
             return "UI action cancelled"
         result = self.runner({"operation": "activate", "handle": handle, "owner_pid": os.getpid(),
+            "media_platform": snapshot.get('media_platform'), "foreground_handle": snapshot.get('foreground_handle'),
             "signature": snapshot["signature"], "control": control, "verb": verb}, cancelled)
         self.desktop.target = handle
         if self.memory and not cancelled():
@@ -174,6 +198,15 @@ class UIControls:
             raise ValueError("The options changed since I asked. Say suggest a button again or name your choice.")
         return self._activate(handle, snapshot, offer["control"], offer["verb"], cancelled)
 
+    def _island_focused(self):
+        user = getattr(self.desktop,'user',None)
+        if user is None:
+            return False
+        foreground = user.GetForegroundWindow()
+        pid = wintypes.DWORD()
+        user.GetWindowThreadProcessId(foreground,ctypes.byref(pid))
+        return bool(foreground and pid.value==os.getpid())
+
     def _handle(self):
         foreground = self.desktop.user.GetForegroundWindow()
         pid = wintypes.DWORD()
@@ -187,6 +220,22 @@ class UIControls:
         raise ValueError("Select the destination app first, then say the button or option name.")
 
     def _worker(self, request, cancelled):
+        from .ui_transport import UITransport
+        if getattr(self, "transport", None) is None:
+            self.transport = UITransport()
+        return self.transport.request(request, cancelled)
+
+    def close(self):
+        if getattr(self, "transport", None) is not None:
+            self.transport.close()
+
+    def healthy(self):
+        return getattr(self, "transport", None) is None or self.transport.healthy()
+
+    def repair(self):
+        return getattr(self, "transport", None) is None or self.transport.repair()
+
+    def _one_shot_worker(self, request, cancelled):
         if cancelled():
             raise RuntimeError("UI action cancelled")
         base = Path(__file__).resolve().parent.parent
@@ -231,13 +280,27 @@ class UIControls:
             return "Remembered button choices cleared."
         offer = self.offer
         self.offer = None
-        handle = self._handle()
-        snapshot = self.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled)
+        if command.kind == 'select_context' and command.value.endswith(':track'):
+            from .media_ui import snapshot_for, platform_of
+            handle, snapshot = snapshot_for(self, cancelled, 'spotify')
+            if platform_of(snapshot) != 'spotify':
+                raise ValueError('No native Spotify track list is open.')
+            snapshot['media_platform'] = 'spotify'
+        elif command.kind == 'choose_control' and self.pending and (command.extra=='island_bound' or self._island_focused()):
+            handle = self.pending['handle']
+            snapshot = self.runner({'operation':'list','handle':handle,'owner_pid':os.getpid()},cancelled)
+            if self.pending.get('media_platform'):
+                snapshot['media_platform'] = self.pending['media_platform']
+        else:
+            handle = self._handle()
+            snapshot = self.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled)
         controls = snapshot["controls"]
         verb = command.extra or "select"
         if command.kind == "select_context":
             ordinal, category = command.value.split(":", 1)
-            if category not in {"video", "result", "option", "button", "item", "link"}:
+            if category=='track' and snapshot.get('media_platform')=='spotify':
+                verb = 'play'
+            if category not in {"video", "result", "option", "button", "item", "link", "track"}:
                 raise ValueError("Unknown selection category.")
             pending = self.pending
             current = (pending and time.monotonic() - pending["time"] <= 45
@@ -267,7 +330,8 @@ class UIControls:
                 if len(choices) != 1:
                     if not choices:
                         raise ValueError("No matching visible option. Point to it or say its name.")
-                    self.pending = {"handle": handle, "signature": snapshot["signature"], "time": time.monotonic(), "choices": choices[:40], "verb": verb}
+                    self.pending = {"handle": handle, "signature": snapshot["signature"], "time": time.monotonic(), "choices": choices[:40], "verb": verb,
+                                    'media_platform':snapshot.get('media_platform'),'thumbnails':snapshot.get('thumbnails',{})}
                     return "Point to the option or say select option number: " + choice_text(choices[:40])
             else:
                 index = int(ordinal) - 1
@@ -290,7 +354,8 @@ class UIControls:
         elif command.kind == "list_controls":
             choices = controls[:40]
         else:
-            choices = matches(controls, command.value)
+            from .targeting import scoped_matches
+            choices = scoped_matches(controls, command.value)
         if not choices:
             self.pending = None
             opposite = {"pause": "play", "play": "pause"}.get(label_key(command.value))
@@ -299,7 +364,8 @@ class UIControls:
             raise ValueError("No matching visible, enabled control. Open its menu/dropdown first or say list buttons. Some custom interfaces do not expose named controls.")
         if command.kind == "list_controls" or len(choices) > 1:
             choices = choices[:40]
-            self.pending = {"handle": handle, "signature": snapshot["signature"], "time": time.monotonic(), "choices": choices, "verb": verb}
+            self.pending = {"handle": handle, "signature": snapshot["signature"], "time": time.monotonic(), "choices": choices, "verb": verb,
+                            'media_platform':snapshot.get('media_platform'),'thumbnails':snapshot.get('thumbnails',{})}
             return "Say select option number: " + choice_text(choices)
         self.pending = None
         if command.kind == "click_control" and label_key(command.value) != label_key(choices[0]["name"]):

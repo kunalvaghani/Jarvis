@@ -11,6 +11,29 @@ from jarvis.engine import Engine
 
 
 class PlanTests(unittest.TestCase):
+    def test_configured_coder_handles_project_edits_and_code_drafts(self):
+        models = Models.__new__(Models)
+        models.client = Mock()
+        models.generate = Mock(return_value={"content": "", "explanation": ""})
+        installed = {"models": [{"name": "qwen3.5:4b"}, {"name": "qwen3-coder:30b"}]}
+        options = {"planner": "qwen3.5:4b", "coder": "qwen3-coder:30b"}
+        with patch("jarvis.brain_worker.ensure_server", return_value=installed):
+            models.predict({"operation": "code_edit", "options": options, "path": "app.py"})
+            self.assertEqual(models.generate.call_args.args[0], "qwen3-coder:30b")
+            models.predict({"operation": "tool_text", "options": options, "tool": "write_code"})
+            self.assertEqual(models.generate.call_args.args[0], "qwen3-coder:30b")
+            models.predict({"operation": "tool_text", "options": options, "tool": "think"})
+            self.assertEqual(models.generate.call_args.args[0], "qwen3.5:4b")
+
+    def test_missing_configured_coder_does_not_switch_to_planner(self):
+        models = Models.__new__(Models)
+        models.client = Mock()
+        installed = {"models": [{"name": "qwen3.5:4b"}]}
+        with patch("jarvis.brain_worker.ensure_server", return_value=installed):
+            with self.assertRaisesRegex(ValueError, "qwen3-coder:30b"):
+                models.predict({"operation": "code_plan", "options":
+                    {"planner": "qwen3.5:4b", "coder": "qwen3-coder:30b"}})
+
     def test_planning_schema_allows_only_supplied_configured_tools(self):
         from jarvis.brain_worker import SCHEMAS
         models = Models.__new__(Models)

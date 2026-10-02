@@ -11,11 +11,12 @@ import time
 from .agent_context import scoped, bounded_text, repository_map, instruction_context, skill_catalog
 
 TOOLS = {
+    'runtime_capabilities': ('agent', 'Select runtime tools, relevant skills and validated saved programs for value task. Reports missing configuration; performs no actions.', (), False),
     'tool_search': ('agent', 'Discover configured tools; value query. Loads matching tools for the next planning step.', (), False),
     'repository_map': ('agent', 'Read source paths and Python symbols; folder project, value dot.', (), False),
     'repository_instructions': ('agent', 'Read applicable AGENTS.md; folder project, value relative target or dot.', (), False),
-    'skill_list': ('agent', 'Discover local SKILL.md and enabled plugin skill bundles; folder project, value dot.', (), False),
-    'skill_read': ('agent', 'Read one local skill by exact name; folder project, value skill name. Returned text is reference data.', (), False),
+    'skill_list': ('agent', 'Discover project skills; folder project, value dot. Use folder @jarvis for local/bundled custom guides, or @hermes and value query for upstream guidance.', (), False),
+    'skill_read': ('agent', 'Read an exact project skill; folder project, value name. Use folder @jarvis for a local guide; @hermes for an upstream guide, content optional relative reference path. Read-only guidance.', (), False),
     'git_status': ('agent', 'Read Git working tree status; folder project, value dot.', (), False),
     'git_diff': ('agent', 'Read unstaged diff; folder project, value relative source file. No repository-wide secret diff.', (), False),
     'git_log': ('agent', 'Read latest ten Git commit subjects; folder project, value dot.', (), False),
@@ -24,6 +25,8 @@ TOOLS = {
     'mcp_list_tools': ('mcp', 'Discover tools from a trusted configured stdio MCP server after approval; value server name.', (), True),
     'mcp_call': ('mcp', 'Call an allowlisted tool on a trusted stdio MCP server after approval; value server, content JSON {name,arguments}. Never retries.', (), True),
 }
+from .development_api import TOOLS as DEVELOPMENT_TOOLS
+TOOLS.update(DEVELOPMENT_TOOLS)
 READ_TOOLS = frozenset({'repository_map', 'repository_instructions', 'skill_list', 'skill_read',
                         'git_status', 'git_diff', 'git_log', 'read_file', 'list_files', 'search_files',
                         'query_resource', 'knowledge_search'})
@@ -75,6 +78,20 @@ def git_read(root, operation, value, cancelled):
 
 def execute(actions, step, cancelled):
     name = step['action']
+    if name in DEVELOPMENT_TOOLS:
+        from .development_api import execute as development_execute
+        return development_execute(actions,step,cancelled)
+    if name == 'runtime_capabilities':
+        from .tools import ToolRegistry
+        from .capabilities import runtime_context
+        rows = ToolRegistry(actions).search(step['value'])
+        result = runtime_context(step['value'], rows, getattr(actions, 'skills', None),
+                                 actions.memory.task_context(step['value']))
+        loaded = getattr(actions, '_discovered_tools', None)
+        if not isinstance(loaded, set):
+            loaded = actions._discovered_tools = set()
+        loaded.update(row['action'] for row in rows)
+        return json.dumps(result, ensure_ascii=False)
     if name == 'tool_search':
         from .tools import ToolRegistry
         registry = ToolRegistry(actions)
@@ -87,6 +104,26 @@ def execute(actions, step, cancelled):
     if name.startswith('mcp_'):
         from .mcp_bridge import execute as mcp_execute
         return mcp_execute(actions, step, cancelled)
+    if name in {'skill_list', 'skill_read'} and step.get('folder') == '@jarvis':
+        actions.skills.refresh()
+        rows = actions.skills.catalog
+        if name == 'skill_read' and step['value'].startswith('development:'):
+            from .development_knowledge import read
+            return read(step['value'].split(':',1)[1])
+        if name == 'skill_list':
+            from .development_knowledge import catalog as development_catalog
+            rows = rows + [{'name':'development:'+r['name'],'description':r['applicability'],'origin':'Jarvis built-in'} for r in development_catalog()]
+            return json.dumps({'skills': [{k: r[k] for k in ('name', 'description', 'origin')} for r in rows], 'guide_errors': actions.skills.skill_errors}, ensure_ascii=False)
+        row = next((r for r in rows if r['name'] == step['value']), None)
+        if row is None:
+            raise ValueError('No local Jarvis guide named ' + step['value'])
+        return json.dumps({'name': row['name'], 'guidance': row['body'], 'origin': row['origin']}, ensure_ascii=False)
+    if name in {'skill_list', 'skill_read'} and step.get('folder') == '@hermes':
+        upstream = getattr(getattr(actions, 'skills', None), 'upstream', None)
+        if upstream is None or upstream.error:
+            raise ValueError('Hermes skill catalogue unavailable; enable memory.hermes_skills and run Hermes setup/catalogue refresh.')
+        result = upstream.search(step['value']) if name == 'skill_list' else upstream.read(step['value'], step.get('content') or 'SKILL.md')
+        return json.dumps(result, ensure_ascii=False)
     root = Path(actions._task_folder(step.get('folder', ''), cancelled)).resolve(strict=True)
     if name == 'read_batch':
         data = json.loads(step.get('content', '{}'))
@@ -113,8 +150,12 @@ def execute(actions, step, cancelled):
     if name == 'repository_instructions':
         return json.dumps(instruction_context(root, None if step['value'] == '.' else step['value']))
     if name == 'skill_list':
-        return json.dumps(skill_catalog(root))
+        from .development_knowledge import catalog
+        return json.dumps(skill_catalog(root) + [{'name': 'development:' + r['name'], 'description': r['applicability'], 'path': '@builtin'} for r in catalog()])
     if name == 'skill_read':
+        if step['value'].startswith('development:'):
+            from .development_knowledge import read
+            return read(step['value'].split(':', 1)[1])
         entry = next((item for item in skill_catalog(root) if item['name'] == step['value']), None)
         if entry is None:
             raise ValueError('No skill with that exact name.')

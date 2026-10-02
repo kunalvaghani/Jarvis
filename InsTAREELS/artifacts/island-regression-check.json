@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-02T15:09:06.982748+00:00",
+  "scope": "Regression, hidden UI readiness and read-only native media observation; no live voice or playback transport test",
+  "regression": {
+    "tests": 693,
+    "seconds": 35.33,
+    "passed": true
+  },
+  "launcher": {
+    "status": "ready",
+    "missing": [],
+    "planning_backend": "deepseek-harness",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "hidden_ui_startup_shutdown": true,
+  "background_file_fixture": "island-desk-check.json",
+  "read_only_spotify_observation": "island-spotify-observation-check.json",
+  "earlier_native_fixture_failure": {
+    "tests": 692,
+    "errors": 2,
+    "affected": "Speech tests: ONNX DLL initialization after shared-process WinRT fixtures",
+    "resolution": "Isolate native WinRT fixtures in one-shot children, matching production; final full suite passed"
+  },
+  "live_voice_tested": false,
+  "live_spotify_transport_tested": false,
+  "live_candidate_selection_tested": false
+}

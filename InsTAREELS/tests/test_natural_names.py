@@ -26,7 +26,7 @@ class NaturalNamesTests(unittest.TestCase):
             "open person1 profile": Command("click_control", "open person1 profile", "select"),
             "open d drive": Command("open_drive", "D"),
             "close": Command("close_app", "this app"),
-            "pause video": Command("click_control", "pause", "click"),
+            "pause video": Command("media_control", "pause", "youtube"),
         }
         for text, command in examples.items():
             with self.subTest(text=text):

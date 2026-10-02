@@ -38,10 +38,17 @@ def filename(spoken: str) -> str:
 
 
 def parse(text: str) -> Command:
+    from .island_choices import navigation
+    if navigation(text):
+        return Command('task', text)  # Local view routing preserves background work.
     text = re.sub(r"^(?:but|and|so|okay|ok)\s+(?=(?:why|what|how|who|where|when|is|are|can)\b)", "", text.strip(), flags=re.I)
     text = re.sub(r"^(?:(?:please|can you|could you|would you)\s+)+", "", text.strip(), flags=re.I)
     text = re.sub(r"^(?:i (?:want|need) you to|can you help me|could you help me|help me)\s+", "", text, flags=re.I)
     text = normalize_spoken_code_request(text)
+    if navigation(text):
+        return Command('task',text)
+    if re.match(r'^save (?:the |this |current )?(?:document|file) as\b', text, re.I):
+        return Command('task', text)
     if text.casefold() in {"list toolkits", "toolkit status", "show toolkits"}:
         return Command("toolkit", "toolkit_status", "{}")
     # Do not swallow the next task as a folder name or a GitHub search query.
@@ -80,6 +87,10 @@ def parse(text: str) -> Command:
         return Command("task", text)
     if re.match(r"^(?:do not|don't|never)\b", text, re.I):
         raise ValueError("No action taken for a negated command.")
+    from .media_commands import parse_media
+    media = parse_media(text)
+    if media:
+        return media
     text = re.sub(r"^do\s+(?=(?:open|launch|create|modify|play|search|select|click)\b)", "", text, flags=re.I)
     # Keep a multi-step app workflow intact. Otherwise the generic open rule
     # mistakes 'chrome and search for cats' for an installed application's name.
@@ -220,15 +231,25 @@ def parse(text: str) -> Command:
         return Command("ask", m[1], "web")
     m = re.fullmatch(r"search(?: for)? (.+)", text, re.I)
     if m:
-        return Command("browser_search", m[1], "chrome")
+        return Command("context_search", m[1])
     m = re.fullmatch(r"(?:ask|question|answer this) (.+)", text, re.I)
     if m:
         return Command("ask", m[1])
+    if re.fullmatch(r"(?:hi|hello|hey|good morning|good afternoon|good evening|namaste|नमस्ते|how are you(?: doing)?|how's it going|thanks|thank you|धन्यवाद|time|date|weather|temperature|mausam|मौसम)[?.! ]*", text, re.I):
+        return Command("ask", text)
+    if re.match(r"^(?:today'?s|current|local) (?:weather|temperature|time|date)\b", text, re.I):
+        return Command("ask", text)
+    if re.fullmatch(r"(?:weather|temperature)(?: today| tomorrow)?(?: (?:in|for) [a-z][a-z ,]{1,60})?[?.! ]*", text, re.I):
+        return Command("ask", text)
+    if re.match(r"^(?:convert|multiply|divide|flip a coin|roll a di(?:e|ce)|pick a random number|split a bill|calculate a|find the percentage)\b", text, re.I):
+        return Command("ask", text)
+    if re.match(r"^(?:time in|current exchange rate of)\b", text, re.I):
+        return Command("ask", text)
     if (re.match(r"^(?:mujhe\s+)?(?:batao|samjhao)\b", text, re.I)
             or re.search(r"\b(?:kya|kaise|kyun|kab|kahan|kaun|kitna|kitni|kaisa|kaisi)\b", text, re.I)
             or re.search(r"(?:बताओ|समझाओ|क्या|कैसे|क्यों|कब|कहाँ|कहां|कौन|कितना|कितनी|कैसा|कैसी)", text)):
         return Command("ask", text)
-    if re.match(r"^(?:what|who|when|where|why|how|which|explain|tell me|describe|is|are|does|do|can|should)\b", text, re.I):
+    if re.match(r"^(?:what|who|when|where|why|how|which|explain|tell me|describe|is|are|does|do|can|should|will)\b", text, re.I):
         return Command("ask", text)
     if re.fullmatch(r"(?:list|show)(?: the)? (?:buttons|options|controls)", text, re.I):
         return Command("list_controls")
@@ -236,9 +257,9 @@ def parse(text: str) -> Command:
         "sixth": "6", "seventh": "7", "eighth": "8", "ninth": "9", "tenth": "10",
         "pehla": "1", "pehli": "1", "dusra": "2", "doosra": "2", "dusri": "2",
         "teesra": "3", "teesri": "3"}
-    m = re.fullmatch(r"(?:click|select|choose|open)(?: on)? (?:the )?"
+    m = re.fullmatch(r"(?:click|select|choose|open|play)(?: on)? (?:the )?"
         r"(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|pehla|pehli|dusra|doosra|dusri|teesra|teesri|\d+(?:st|nd|rd|th)?) "
-        r"(video|videos|vido|result|results|option|options|button|buttons|item|items|link|links)", text, re.I)
+        r"(video|videos|vido|result|results|option|options|button|buttons|item|items|link|links)(?: (?:on|in) youtube)?[.!?]*", text, re.I)
     if m:
         number = ordinal_words.get(m[1].lower(), re.match(r"\d+", m[1])[0] if m[1][0].isdigit() else "")
         kind = re.sub(r"s$", "", m[2].lower()).replace("vido", "video")
@@ -249,7 +270,7 @@ def parse(text: str) -> Command:
     m = re.fullmatch(r"(?:yeh|is) (option|button|video|result|item|link) (?:select|click) (?:karo|kar do)", text, re.I)
     if m:
         return Command("select_context", "this:" + m[1].lower(), "select")
-    m = re.fullmatch(r"(?:(?:click|select|choose)(?: on)?(?: the)? )?(?:option|number) (\d+|one|two|three|four|five|six|seven|eight|nine|ten)", text, re.I)
+    m = re.fullmatch(r"(?:(?:click|select|choose)(?: on)?(?: the)? )?(?:option(?: number)?|number) (\d+|one|two|three|four|five|six|seven|eight|nine|ten)[.!?]*", text, re.I)
     if m:
         numbers = "one two three four five six seven eight nine ten".split()
         number = str(numbers.index(m[1].lower()) + 1) if m[1].lower() in numbers else m[1]
@@ -261,8 +282,14 @@ def parse(text: str) -> Command:
             return Command("click_control", label, "select" if m[1].lower() in {"select", "choose"} else "click")
     m = re.fullmatch(r"open (?:the )?(file|folder) (.+)", text, re.I)
     if m:
-        target = re.sub(r"\s+(?:on|from) (?:the )?d drive$", "", m[2], flags=re.I)
+        target = m[2] if m[1].lower() == 'folder' else re.sub(r"\s+(?:on|from) (?:the )?d drive$", "", m[2], flags=re.I)
         return Command("open_" + m[1].lower(), target)
+    m = re.fullmatch(r"(?:open|launch|start) (?:the )?(.+)", text, re.I)
+    if m:
+        from .folder_lookup import folder_request
+        target, drive = folder_request(m[1])
+        if drive or re.search(r"\s+(?:folder|directory)$", m[1], re.I):
+            return Command('open_folder', m[1])
     m = re.fullmatch(r"(?:open|launch|start) (?:the )?(.+?)(?: app)?", text, re.I)
     if m:
         return Command("open", m[1].lower())

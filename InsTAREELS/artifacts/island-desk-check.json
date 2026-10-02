@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-02T14:56:55.728302+00:00",
+  "scope": "Hidden native UI + temporary background file fixture; no model, media playback, desktop capture or real-vault writes",
+  "checks": {
+    "background_file_readback_and_syntax": true,
+    "game_navigation_preserved_generation": true,
+    "game_opened_during_background_work": true,
+    "current_file_received": true,
+    "draft_not_claimed_saved": true,
+    "renders_Flappy": true,
+    "renders_Snake": true,
+    "renders_2048": true,
+    "renders_Tic Tac Toe": true,
+    "renders_Memory": true,
+    "approval_nonblocking": true,
+    "approval_denied": true,
+    "microphone_not_started": true,
+    "real_memory_disabled": true
+  },
+  "live_spotify_playback_tested": false,
+  "live_voice_tested": false
+}

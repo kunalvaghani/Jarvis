@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-02T16:55:52.565930+00:00",
+  "scope": "Real local Qwen functional scenario generation and real browser execution on the authored dashboard; no source changes or autonomous project creation.",
+  "historical_attempt": "Initial real proposal failed semantic-role validation before execution; contract and bounded inference correction subsequently improved.",
+  "planning_seconds": 148.328,
+  "tests": [
+    {
+      "name": "Search outcome",
+      "steps": [
+        {
+          "action": "fill",
+          "role": "textbox",
+          "name": "Search projects",
+          "value": "Studio website"
+        },
+        {
+          "action": "assert_text",
+          "value": "Studio website"
+        }
+      ]
+    },
+    {
+      "name": "Empty state recovery",
+      "steps": [
+        {
+          "action": "fill",
+          "role": "textbox",
+          "name": "Search projects",
+          "value": ""
+        },
+        {
+          "action": "assert_text",
+          "value": "No matching projects"
+        }
+      ]
+    },
+    {
+      "name": "Status filtering",
+      "steps": [
+        {
+          "action": "select",
+          "role": "combobox",
+          "name": "Project status",
+          "value": "Done"
+        },
+        {
+          "action": "assert_text",
+          "value": "Brand guidelines"
+        }
+      ]
+    },
+    {
+      "name": "Keyboard navigation",
+      "steps": [
+        {
+          "action": "press",
+          "value": "Tab"
+        },
+        {
+          "action": "assert_text",
+          "value": "Search projects"
+        }
+      ]
+    },
+    {
+      "name": "Empty state with filters",
+      "steps": [
+        {
+          "action": "fill",
+          "role": "textbox",
+          "name": "Search projects",
+          "value": "Nonexistent"
+        },
+        {
+          "action": "select",
+          "role": "combobox",
+          "name": "Project status",
+          "value": "Planned"
+        },
+        {
+          "action": "assert_text",
+          "value": "No matching projects"
+        }
+      ]
+    }
+  ],
+  "browser": {
+    "source": "playwright_chromium",
+    "url": "http://127.0.0.1:50804",
+    "functional_assertions": 5,
+    "functional_interactions": 6,
+    "views": [
+      {
+        "name": "desktop",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-157ff809885448a998b2f74aab90eb20\\desktop.png",
+        "observation": "- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - text: Studio workspace Personal workspace\n  - paragraph: WORKSPACE\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n  - heading \"A little room to focus.\" [level=3]\n  - paragraph: Bring your ideas together. One good step at a time.\n  - text: Alex Kim Studio owner\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]\n      - text: \"01\"\n      - paragraph: Good work, delivered\n    - article:\n      - heading \"Focus this week\" [level=2]\n      - text: 18.5hrs\n      - paragraph: Hours of thoughtful progress\n  - article:\n    - paragraph: STEADY MOMENTUM\n    - heading \"Your week in focus\" [level=2]\n    - text: This week\n    - 'img \"Demo focus hours: Monday 2, Tuesday 3, Wednesday 2.5, Thursday 4, Friday 3.5, Saturday 2, Sunday 1.5\"': 6h 4h 2h 0h Mon Tue Wed Thu Fri Sat Sun\n  - article:\n    - paragraph: THE BIG PICTURE\n    - heading \"Progress is a practice.\" [level=2]\n    - paragraph: Small steps become great things. You\u2019re building something good.\n    - text: KEEP THE MOMENTUM \u2197\n  - paragraph: FROM IDEA TO REALITY\n  - heading \"Your projects 4\" [level=2]\n  - text: Search projects\n  - textbox \"Search projects\":\n    - /placeholder: Search projects\u2026\n  - text: Project status\n  - combobox \"Project status\":\n    - option \"All projects\" [selected]\n    - option \"In progress\"\n    - option \"Planned\"\n    - option \"Done\"\n  - article:\n    - text: DESIGN \u00b7 WEBSITE In progress\n    - heading \"Studio website\" [level=3]\n    - text: Progress\n    - strong: 72%\n    - progressbar \"Studio website progress\"\n    - text: Amelia\n    - button \"Complete Studio website\": Mark done \u2197\n  - article:\n    - text: PRODUCT \u00b7 MOBILE In progress\n    - heading \"Mobile onboarding\" [level=3]\n    - text: Progress\n    - strong: 48%\n    - progressbar \"Mobile onboarding progress\"\n    - text: Leo\n    - button \"Complete Mobile onboarding\": Mark done \u2197\n  - article:\n    - text: IDENTITY \u00b7 SYSTEM Done\n    - heading \"Brand guidelines\" [level=3]\n    - text: Progress\n    - strong: 100%\n    - progressbar \"Brand guidelines progress\"\n    - text: Sofia\n    - button \"Complete Brand guidelines\" [disabled]: Completed \u2713\n  - article:\n    - text: RESEARCH \u00b7 STRATEGY Planned\n    - heading \"Customer insights\" [level=3]\n    - text: Progress\n    - strong: 15%\n    - progressbar \"Customer insights progress\"\n    - text: Noah\n    - button \"Complete Customer insights\": Mark done \u2197\n  - text: Made for a calmer kind of productivity.\n  - button \"Refresh data\"\n  - button \"Simulate offline\"",
+        "horizontal_overflow": false,
+        "keyboard_focus": true,
+        "console_errors": [],
+        "accessibility_violations": [],
+        "motion": {
+          "preference": false,
+          "activeTransformAnimations": 0
+        },
+        "scenarios": [
+          {
+            "name": "Search outcome",
+            "passed": true
+          },
+          {
+            "name": "Empty state recovery",
+            "passed": false,
+            "error": "Locator expected to be visible\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_be_visible\" get_by_text(\"No matching projects\", exact=True).first with timeout 5000ms\n  - waiting for get_by_text(\"No matching projects\", exact=True).first\n\nAria snapshot:\n- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - text: Studio workspace Personal workspace\n  - paragraph: WORKSPACE\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n  - heading \"A little room to focus.\" [level=3]\n  - paragraph: Bring your ideas together. One good step at a time.\n  - text: Alex Kim Studio owner\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]"
+          },
+          {
+            "name": "Status filtering",
+            "passed": true
+          },
+          {
+            "name": "Keyboard navigation",
+            "passed": true
+          },
+          {
+            "name": "Empty state with filters",
+            "passed": true
+          }
+        ],
+        "headings": [
+          "A little room to focus.",
+          "A clear view of what\u2019s next.",
+          "Active projects",
+          "Completed",
+          "Focus this week",
+          "Your week in focus",
+          "Progress is a practice.",
+          "Your projects 4",
+          "Studio website",
+          "Mobile onboarding",
+          "Brand guidelines",
+          "Customer insights"
+        ]
+      },
+      {
+        "name": "mobile",
+        "viewport": [
+          390,
+          844
+        ],
+        "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-157ff809885448a998b2f74aab90eb20\\mobile.png",
+        "observation": "- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]\n      - text: \"01\"\n      - paragraph: Good work, delivered\n    - article:\n      - heading \"Focus this week\" [level=2]\n      - text: 18.5hrs\n      - paragraph: Hours of thoughtful progress\n  - article:\n    - paragraph: STEADY MOMENTUM\n    - heading \"Your week in focus\" [level=2]\n    - text: This week\n    - 'img \"Demo focus hours: Monday 2, Tuesday 3, Wednesday 2.5, Thursday 4, Friday 3.5, Saturday 2, Sunday 1.5\"': 6h 4h 2h 0h Mon Tue Wed Thu Fri Sat Sun\n  - paragraph: FROM IDEA TO REALITY\n  - heading \"Your projects 4\" [level=2]\n  - text: Search projects\n  - textbox \"Search projects\":\n    - /placeholder: Search projects\u2026\n  - text: Project status\n  - combobox \"Project status\":\n    - option \"All projects\" [selected]\n    - option \"In progress\"\n    - option \"Planned\"\n    - option \"Done\"\n  - article:\n    - text: DESIGN \u00b7 WEBSITE In progress\n    - heading \"Studio website\" [level=3]\n    - text: Progress\n    - strong: 72%\n    - progressbar \"Studio website progress\"\n    - text: Amelia\n    - button \"Complete Studio website\": Mark done \u2197\n  - article:\n    - text: PRODUCT \u00b7 MOBILE In progress\n    - heading \"Mobile onboarding\" [level=3]\n    - text: Progress\n    - strong: 48%\n    - progressbar \"Mobile onboarding progress\"\n    - text: Leo\n    - button \"Complete Mobile onboarding\": Mark done \u2197\n  - article:\n    - text: IDENTITY \u00b7 SYSTEM Done\n    - heading \"Brand guidelines\" [level=3]\n    - text: Progress\n    - strong: 100%\n    - progressbar \"Brand guidelines progress\"\n    - text: Sofia\n    - button \"Complete Brand guidelines\" [disabled]: Completed \u2713\n  - article:\n    - text: RESEARCH \u00b7 STRATEGY Planned\n    - heading \"Customer insights\" [level=3]\n    - text: Progress\n    - strong: 15%\n    - progressbar \"Customer insights progress\"\n    - text: Noah\n    - button \"Complete Customer insights\": Mark done \u2197\n  - text: Made for a calmer kind of productivity.\n  - button \"Refresh data\"\n  - button \"Simulate offline\"",
+        "horizontal_overflow": false,
+        "keyboard_focus": true,
+        "console_errors": [],
+        "accessibility_violations": [],
+        "motion": {
+          "preference": false,
+          "activeTransformAnimations": 0
+        },
+        "scenarios": [
+          {
+            "name": "Search outcome",
+            "passed": true
+          },
+          {
+            "name": "Empty state recovery",
+            "passed": false,
+            "error": "Locator expected to be visible\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_be_visible\" get_by_text(\"No matching projects\", exact=True).first with timeout 5000ms\n  - waiting for get_by_text(\"No matching projects\", exact=True).first\n\nAria snapshot:\n- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]\n      - text: \"01\"\n      - paragraph: Good work, delivered\n    - article:\n      - heading \"Focus this week\" [level=2]\n      - text: 18.5hrs\n      - paragraph: Hours of thoughtful progress\n  - article:\n    - paragraph:"
+          },
+          {
+            "name": "Status filtering",
+            "passed": true
+          },
+          {
+            "name": "Keyboard navigation",
+            "passed": true
+          },
+          {
+            "name": "Empty state with filters",
+            "passed": true
+          }
+        ],
+        "headings": [
+          "A clear view of what\u2019s next.",
+          "Active projects",
+          "Completed",
+          "Focus this week",
+          "Your week in focus",
+          "Your projects 4",
+          "Studio website",
+          "Mobile onboarding",
+          "Brand guidelines",
+          "Customer insights"
+        ]
+      },
+      {
+        "name": "reduced-motion",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "screenshot": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\.jarvis\\development\\run-157ff809885448a998b2f74aab90eb20\\reduced-motion.png",
+        "observation": "- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - text: Studio workspace Personal workspace\n  - paragraph: WORKSPACE\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n  - heading \"A little room to focus.\" [level=3]\n  - paragraph: Bring your ideas together. One good step at a time.\n  - text: Alex Kim Studio owner\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]\n      - text: \"01\"\n      - paragraph: Good work, delivered\n    - article:\n      - heading \"Focus this week\" [level=2]\n      - text: 18.5hrs\n      - paragraph: Hours of thoughtful progress\n  - article:\n    - paragraph: STEADY MOMENTUM\n    - heading \"Your week in focus\" [level=2]\n    - text: This week\n    - 'img \"Demo focus hours: Monday 2, Tuesday 3, Wednesday 2.5, Thursday 4, Friday 3.5, Saturday 2, Sunday 1.5\"': 6h 4h 2h 0h Mon Tue Wed Thu Fri Sat Sun\n  - article:\n    - paragraph: THE BIG PICTURE\n    - heading \"Progress is a practice.\" [level=2]\n    - paragraph: Small steps become great things. You\u2019re building something good.\n    - text: KEEP THE MOMENTUM \u2197\n  - paragraph: FROM IDEA TO REALITY\n  - heading \"Your projects 4\" [level=2]\n  - text: Search projects\n  - textbox \"Search projects\":\n    - /placeholder: Search projects\u2026\n  - text: Project status\n  - combobox \"Project status\":\n    - option \"All projects\" [selected]\n    - option \"In progress\"\n    - option \"Planned\"\n    - option \"Done\"\n  - article:\n    - text: DESIGN \u00b7 WEBSITE In progress\n    - heading \"Studio website\" [level=3]\n    - text: Progress\n    - strong: 72%\n    - progressbar \"Studio website progress\"\n    - text: Amelia\n    - button \"Complete Studio website\": Mark done \u2197\n  - article:\n    - text: PRODUCT \u00b7 MOBILE In progress\n    - heading \"Mobile onboarding\" [level=3]\n    - text: Progress\n    - strong: 48%\n    - progressbar \"Mobile onboarding progress\"\n    - text: Leo\n    - button \"Complete Mobile onboarding\": Mark done \u2197\n  - article:\n    - text: IDENTITY \u00b7 SYSTEM Done\n    - heading \"Brand guidelines\" [level=3]\n    - text: Progress\n    - strong: 100%\n    - progressbar \"Brand guidelines progress\"\n    - text: Sofia\n    - button \"Complete Brand guidelines\" [disabled]: Completed \u2713\n  - article:\n    - text: RESEARCH \u00b7 STRATEGY Planned\n    - heading \"Customer insights\" [level=3]\n    - text: Progress\n    - strong: 15%\n    - progressbar \"Customer insights progress\"\n    - text: Noah\n    - button \"Complete Customer insights\": Mark done \u2197\n  - text: Made for a calmer kind of productivity.\n  - button \"Refresh data\"\n  - button \"Simulate offline\"",
+        "horizontal_overflow": false,
+        "keyboard_focus": true,
+        "console_errors": [],
+        "accessibility_violations": [],
+        "motion": {
+          "preference": true,
+          "activeTransformAnimations": 0
+        },
+        "scenarios": [
+          {
+            "name": "Search outcome",
+            "passed": true
+          },
+          {
+            "name": "Empty state recovery",
+            "passed": false,
+            "error": "Locator expected to be visible\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_be_visible\" get_by_text(\"No matching projects\", exact=True).first with timeout 5000ms\n  - waiting for get_by_text(\"No matching projects\", exact=True).first\n\nAria snapshot:\n- link \"Skip to content\":\n  - /url: \"#main\"\n- complementary \"Workspace navigation\":\n  - link \"fieldnotes YOUR SPACE TO MAKE\":\n    - /url: \"#main\"\n  - text: Studio workspace Personal workspace\n  - paragraph: WORKSPACE\n  - navigation:\n    - button \"Overview\"\n    - button \"Projects\"\n  - heading \"A little room to focus.\" [level=3]\n  - paragraph: Bring your ideas together. One good step at a time.\n  - text: Alex Kim Studio owner\n- main \"Main workspace\":\n  - text: Workspace\n  - strong: Overview\n  - text: LOCAL DEMO DATA\n  - paragraph: MAKE SPACE FOR GOOD WORK\n  - heading \"A clear view of what\u2019s next.\" [level=1]\n  - paragraph: Your projects, your pace. Here\u2019s where things stand.\n  - button \"+ New project\"\n  - status\n  - region \"Project summary\":\n    - article:\n      - heading \"Active projects\" [level=2]\n      - text: \"03\"\n      - paragraph: A few things taking shape\n    - article:\n      - heading \"Completed\" [level=2]"
+          },
+          {
+            "name": "Status filtering",
+            "passed": true
+          },
+          {
+            "name": "Keyboard navigation",
+            "passed": true
+          },
+          {
+            "name": "Empty state with filters",
+            "passed": true
+          }
+        ],
+        "headings": [
+          "A little room to focus.",
+          "A clear view of what\u2019s next.",
+          "Active projects",
+          "Completed",
+          "Focus this week",
+          "Your week in focus",
+          "Progress is a practice.",
+          "Your projects 4",
+          "Studio website",
+          "Mobile onboarding",
+          "Brand guidelines",
+          "Customer insights"
+        ]
+      }
+    ],
+    "screenshots_are_functional_proof": false,
+    "native_platform_verified": false,
+    "checks_passed": false,
+    "goal_verified": false
+  },
+  "passed": false,
+  "historical_attempts": [
+    "Unsupported role rejected before execution.",
+    "Short text-response CPU timeout; bounded streaming enabled.",
+    "Unsupported key rejected after bounded inference correction.",
+    "Constrained proposal omitted required locator roles and asserted a placeholder; browser run failed."
+  ],
+  "assessment": "Final constrained/fresh-observation run: four of five scenarios passed per viewport; empty-state test used a blank search and incorrectly expected no results. Goal was not verified. Authored UI acceptance separately passed a nonmatching search and clear-filter recovery; working UI source was not changed to satisfy the erroneous test."
+}

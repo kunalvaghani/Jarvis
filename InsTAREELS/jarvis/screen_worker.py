@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import time
 
 
 def choose_window(preferred=0):
@@ -33,7 +34,7 @@ def choose_window(preferred=0):
     return candidates[0] if candidates else 0
 
 
-def capture(handle=0):
+def capture(handle=0, strict=False):
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(2)
     except (AttributeError, OSError):
@@ -41,7 +42,10 @@ def capture(handle=0):
     import win32gui
     from PIL import ImageGrab
 
+    captured_at = time.time()
     hwnd = choose_window(handle)
+    if strict and (not handle or hwnd != handle):
+        raise ValueError('The selected visual target is unavailable; no substitute window was captured.')
     if hwnd:
         left, top, right, bottom = win32gui.GetWindowRect(hwnd)
         image = ImageGrab.grab(bbox=(left, top, right, bottom), all_screens=True).convert("RGB")
@@ -54,7 +58,7 @@ def capture(handle=0):
     image.save(encoded, format="JPEG", quality=78, optimize=True)
     ocr = ""
     executable = shutil.which("tesseract") or Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
-    if Path(executable).is_file():
+    if not strict and Path(executable).is_file():
         try:
             result = subprocess.run([str(executable), "stdin", "stdout", "-l", "eng+hin"],
                                     input=encoded.getvalue(), capture_output=True, timeout=12,
@@ -64,14 +68,20 @@ def capture(handle=0):
         except (OSError, subprocess.TimeoutExpired):
             # Vision can still use the valid screenshot if optional OCR is unavailable.
             pass
-    return {"title": title[:250],
-            "ocr": ocr, "image": base64.b64encode(encoded.getvalue()).decode("ascii")}
+    result = {"title": title[:250],
+              "ocr": ocr, "image": base64.b64encode(encoded.getvalue()).decode("ascii")}
+    if hwnd:
+        import win32process
+        result.update(handle=hwnd, pid=win32process.GetWindowThreadProcessId(hwnd)[1],
+                      rect=[left, top, right, bottom], image_size=list(image.size),
+                      captured_at=captured_at)
+    return result
 
 
 if __name__ == "__main__":
     try:
         request = json.load(sys.stdin)
-        result = capture(int(request.get("handle") or 0))
+        result = capture(int(request.get("handle") or 0), strict=request.get('strict') is True)
     except Exception as exc:
         result = {"error": str(exc)}
     print(json.dumps(result, ensure_ascii=True))

@@ -1,0 +1,24 @@
+[
+  {
+    "phase": "typecheck",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.EXE",
+      "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\node_modules\\typescript\\bin\\tsc",
+      "--noEmit"
+    ],
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "phase": "build",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.EXE",
+      "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-expo\\node_modules\\expo\\bin\\cli",
+      "export",
+      "--platform",
+      "web"
+    ],
+    "exit_code": 0,
+    "output": "Starting Metro Bundler\n\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\n| (node:9048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n| (Use `node.EXE --trace-warnings ...` to show where the warning was created)\nWeb Bundled 14593ms index.js (185 modules)\n\n\u203a web bundles (1):\n_expo/static/js/web/index-37889d78d725caf267575caa30babe3e.js (350KB)\n\n\u203a Files (2):\nindex.html (1.2KB)\nmetadata.json (49B)\n\nExported: dist\n"
+  }
+]

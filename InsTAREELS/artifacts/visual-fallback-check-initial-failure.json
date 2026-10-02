@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-02T13:36:51.271396+00:00",
+  "scope": "Isolated fixtures only; configured vault is not written",
+  "upstream": "UI-TARS parse_action at 582f3a7ea5d285ee8ed9e2e84048d1ab01453c49",
+  "regression": {
+    "passed": true,
+    "tests": 36
+  },
+  "desktop": {
+    "passed": false,
+    "error": "(0, 'SetForegroundWindow', 'No error message is available')"
+  },
+  "local_model": {
+    "passed": false,
+    "error": "Visual fallback accepts only click(start_box=\"(x,y)\")."
+  },
+  "passed": false
+}

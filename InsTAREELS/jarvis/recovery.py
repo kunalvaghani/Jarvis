@@ -90,6 +90,10 @@ class Watchdog:
                 repaired = service["repair"]()
                 if self.closed.is_set():
                     return
+                if repaired is None:
+                    # Asynchronous work is pending, not a failed synchronous repair.
+                    service["next"] = self.clock() + self.interval
+                    continue
                 if repaired and service["healthy"]():
                     self.report("repair", name + " was stopped and fixed. No previous actions were replayed.")
                     service.update(failures=0, next=0, warned=False)

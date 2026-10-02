@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-10-01T05:43:58.410482+00:00",
+  "lookup": [
+    {
+      "request": "open Ollama folder in D drive",
+      "seconds": 0.004597,
+      "correct": true,
+      "route": "open_folder"
+    },
+    {
+      "request": "open Ollama in D drive",
+      "seconds": 0.004328,
+      "correct": true,
+      "route": "open_folder"
+    },
+    {
+      "request": "open Olamind D drive",
+      "seconds": 0.004456,
+      "correct": true,
+      "route": "open_folder"
+    },
+    {
+      "request": "open Olamide D drive",
+      "seconds": 0.004893,
+      "correct": true,
+      "route": "open_folder"
+    },
+    {
+      "request": "open Olama in D drive",
+      "seconds": 0.148776,
+      "correct": true,
+      "route": "open_folder"
+    }
+  ],
+  "scope": "Actual folder resolution; excludes speech recognition/output. Live opens once only when requested.",
+  "explorer": {
+    "verified": true,
+    "seconds": 0.881,
+    "evidence": "Fresh Shell.Application Explorer folder path equals requested D:/Ollama."
+  }
+}

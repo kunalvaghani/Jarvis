@@ -8,6 +8,7 @@ import sys
 import threading
 import time
 from .question_client import QuestionClient
+from .quick_answers import QuickAnswers
 
 
 SCREEN_QUERY = re.compile(
@@ -30,6 +31,7 @@ class Knowledge:
         self.closed = threading.Event()
         self.screen_handle = lambda: 0
         self.client = QuestionClient(Path(__file__).resolve().parent.parent, report)
+        self.quick = QuickAnswers()
         self.thread = threading.Thread(target=self._run, daemon=True)
 
     def start(self):
@@ -52,6 +54,9 @@ class Knowledge:
 
     def submit(self, question, web=False, screen=False):
         try:
+            memory = getattr(self, "memory", None)
+            if memory is not None:
+                memory.record("Jarvis question", question)
             handle = self.screen_handle() if screen or wants_screen(question) else 0
             self.queue.put_nowait((self.generation, question, web, bool(screen or wants_screen(question)), handle))
         except queue.Full:
@@ -69,7 +74,11 @@ class Knowledge:
             try:
                 if cancelled():
                     continue
-                self.report("thinking", f"Thinking locally: {question}")
+                direct = None if web or use_screen else self.quick.answer(question)
+                if direct is not None:
+                    result = {"answer": direct}
+                else:
+                    self.report("thinking", f"Thinking locally: {question}")
                 screen = None
                 if use_screen:
                     self.report("screen_capture", "")
@@ -104,8 +113,9 @@ class Knowledge:
                     self.report("screen_capture_done", "")
                     capture_hidden = False
                     self.report("screen", f"Reading visible window: {screen['title']}")
-                result = self.client.request({"question": question, "web": web, "options": self.options,
-                                              "history": self.history, "screen": screen}, cancelled)
+                if direct is None:
+                    result = self.client.request({"question": question, "web": web, "options": self.options,
+                                                  "history": self.history, "screen": screen}, cancelled)
                 if cancelled():
                     continue
                 answer = result["answer"]
