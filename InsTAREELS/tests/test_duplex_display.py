@@ -30,7 +30,7 @@ class DuplexDisplayTests(unittest.TestCase):
     def test_native_resolution_and_transparency_survive_scaling(self):
         image = render_island(580, 64, 'WORKING', detail='Generating alarm.py', scale=2)
         self.assertEqual(image.size, (1160, 128))
-        self.assertEqual(image.getpixel((0, 0)), (255, 0, 255))
+        self.assertEqual(image.getpixel((0, 127)), (255, 0, 255))
         self.assertNotEqual(image.getpixel((600, 64)), (255, 0, 255))
         no_detail = render_island(580, 64, 'WORKING', scale=2)
         self.assertEqual(image.crop((1010, 0, 1160, 128)).tobytes(), no_detail.crop((1010, 0, 1160, 128)).tobytes())

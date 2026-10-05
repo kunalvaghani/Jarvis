@@ -34,7 +34,7 @@ def choose_window(preferred=0):
     return candidates[0] if candidates else 0
 
 
-def capture(handle=0, strict=False):
+def capture(handle=0, strict=False, skip_ocr=False):
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(2)
     except (AttributeError, OSError):
@@ -58,7 +58,7 @@ def capture(handle=0, strict=False):
     image.save(encoded, format="JPEG", quality=78, optimize=True)
     ocr = ""
     executable = shutil.which("tesseract") or Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
-    if not strict and Path(executable).is_file():
+    if not strict and not skip_ocr and Path(executable).is_file():
         try:
             result = subprocess.run([str(executable), "stdin", "stdout", "-l", "eng+hin"],
                                     input=encoded.getvalue(), capture_output=True, timeout=12,
@@ -81,7 +81,8 @@ def capture(handle=0, strict=False):
 if __name__ == "__main__":
     try:
         request = json.load(sys.stdin)
-        result = capture(int(request.get("handle") or 0), strict=request.get('strict') is True)
+        result = capture(int(request.get("handle") or 0), strict=request.get('strict') is True,
+                         skip_ocr=request.get('skip_ocr') is True)
     except Exception as exc:
         result = {"error": str(exc)}
     print(json.dumps(result, ensure_ascii=True))

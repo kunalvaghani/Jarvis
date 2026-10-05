@@ -1,0 +1,237 @@
+<!-- Jarvis draft: index.html. Waiting for generated code. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit Catch</title>
+    <style>
+        :root {
+            --bg-color: #0b0d17;
+            --text-color: #e0e6ed;
+            --accent-color: #4cc9f0;
+            --orb-color: #f72585;
+            --star-color: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--accent-color);
+            letter-spacing: 2px;
+        }
+
+        #game-container {
+            position: relative;
+            width: 90vw;
+            max-width: 800px;
+            height: 60vh;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+            overflow: hidden;
+        }
+
+        #score-board {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 10;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #status {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 10;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #target {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: var(--orb-color);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--orb-color), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: transform 0.1s ease-out;
+            z-index: 5;
+        }
+
+        #target:active {
+            transform: scale(0.9);
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #8ecae6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 201, 240, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #start-btn { background-color: #4cc9f0; }
+        #pause-btn { background-color: #a8dadc; }
+        #reset-btn { background-color: #7209b7; color: white; }
+
+        .star {
+            position: absolute;
+            background-color: var(--star-color);
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .star {
+                animation: none;
+            }
+            #target {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Orbit Catch</h1>
+    <div id="game-container">
+        <div id="score-board">Score: 0</div>
+        <div id="status">Ready</div>
+        <button id="target" style="display:none;">Catch Me!</button>
+    </div>
+    <div class="controls">
+        <button id="start-btn">Start</button>
+        <button id="pause-btn">Pause</button>
+        <button id="reset-btn">Reset</button>
+    </div>
+
+    <script>
+        (function() {
+            const container = document.getElementById('game-container');
+            const target = document.getElementById('target');
+            const scoreBoard = document.getElementById('score-board');
+            const statusDisplay = document.getElementById('status');
+            const startBtn = document.getElementById('start-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const resetBtn = document.getElementById('reset-btn');
+
+            let score = 0;
+            let isPlaying = false;
+            let isPaused = false;
+            let animationFrameId = null;
+            let lastTime = 0;
+            let spawnTimer = 0;
+            let orbSpeed = 3;
+
+            // Create stars
+            function createStars() {
+                const starCount = 50;
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    const size = Math.random() * 3 + 1;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.animationDelay = `${Math.random() * 3}s`;
+                    container.appendChild(star);
+                }
+            }
+
+            function getRandomPosition() {
+                const maxX = container.clientWidth - target.offsetWidth;
+                const maxY = container.clientHeight - target.offsetHeight;
+                return {
+                    x: Math.floor(Math.random() * maxX),
+                    y: Math.floor(Math.random() * maxY)
+                };
+            }
+
+            function moveOrb() {
+                if (!isPlaying || isPaused) return;
+
+                const pos = getRandomPosition();
+                target.style.left = `${pos.x}px`;
+                target.style.top = `${pos.y}px`;
+            }
+
+            function spawnOrb() {
+                if (!isPlaying || isPaused) return;
+                moveOrb();
+                spawnTimer += 1000 / orbSpeed;
+                if (spawnTimer > 500) {
+                    spawnTimer = 0;
+                }
+            }
+
+            function gameLoop(timestamp) {
+                if (!isPlaying || isPaused) return;
+
+                const deltaTime = timestamp - lastTime;
+                lastTime = timestamp;
+
+                // Spawn logic based on speed
+                if (Math.random() < 0.02 * orbSpeed) {
+                    moveOrb();
+                }
+
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+
+            function startGame() {
+                if (isPlaying) return;
+                isPlaying = true;
+                statusDisplay.textContent = 'Playing';
+                target.style.display = 'block';
+                lastTime = performance.now();
+                spawnTimer = 0;

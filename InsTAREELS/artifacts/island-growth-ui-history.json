@@ -1,0 +1,19 @@
+[
+  {
+    "date": "2026-10-04T04:35:50.096496+00:00",
+    "passed": true,
+    "scope": "Authored off-screen streaming fixture, real Tk widgets and animation; no live Ollama or voice claim.",
+    "chunks": 160,
+    "animation_frames": 497,
+    "characters": 7742,
+    "answer_view_unmaps": 0,
+    "stream_relayouts": 0,
+    "widgets_preserved": true,
+    "monotonic_growth": true,
+    "first_height": 50,
+    "final_height": 888,
+    "stays_open_during_pause": true,
+    "median_frame_ms": 12.55,
+    "preview": "artifacts/island-growth-preview.png"
+  }
+]

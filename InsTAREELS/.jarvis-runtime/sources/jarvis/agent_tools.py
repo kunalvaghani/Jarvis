@@ -11,6 +11,10 @@ import time
 from .agent_context import scoped, bounded_text, repository_map, instruction_context, skill_catalog
 
 TOOLS = {
+    'windows_command_search': ('windows', 'Search all 493 imported Windows recipes by exact command ID or task keywords; returns required literal parameters and approval/prerequisites. Does not execute.', (), False),
+    'windows_command': ('windows', 'Execute one pinned Windows recipe; value ID, content JSON literal parameters. Requires the user to request that exact ID or exact recipe name; use windows_command_search first. No arbitrary shell/Python. Effects require fresh target and approvals; result is dispatch evidence, not goal verification.', (), False),
+    'integration_status': ('agent', 'Read registered tool groups, configured app/skill counts, MCP status and missing credential names. Does not start providers or expose secrets.', (), False),
+    'application_search': ('agent', 'Find up to twenty configured desktop app names; value app query, or dot to list the first twenty. Uses the current catalog; does not launch anything.', (), False),
     'runtime_capabilities': ('agent', 'Select runtime tools, relevant skills and validated saved programs for value task. Reports missing configuration; performs no actions.', (), False),
     'tool_search': ('agent', 'Discover configured tools; value query. Loads matching tools for the next planning step.', (), False),
     'repository_map': ('agent', 'Read source paths and Python symbols; folder project, value dot.', (), False),
@@ -77,7 +81,56 @@ def git_read(root, operation, value, cancelled):
 
 
 def execute(actions, step, cancelled):
+    if step['action'] in {'windows_command_search','windows_command'}:
+        from .windows_commands import search, execute as windows_execute, parse as windows_parse
+        if step['action']=='windows_command_search':
+            return json.dumps(search(step['value']),ensure_ascii=False)
+        ident=int(step['value'])
+        task=actions.task_state.snapshot() or {}
+        requested=windows_parse(task.get('goal',''))
+        explicit_ids=json.loads(requested.value) if requested and requested.kind=='windows_command' else []
+        if ident not in explicit_ids:
+            raise ValueError('The planner cannot invent Windows command IDs; the user must request the exact recipe or ID.')
+        params=json.loads(step.get('content') or '{}')
+        given=json.loads(requested.extra or '{}')
+        given=given.get(str(ident),{}) if len(explicit_ids)>1 else given
+        if params!=given:
+            raise ValueError('The planner cannot change the user-bound Windows command parameters.')
+        return windows_execute(actions,[ident],params,cancelled)
     name = step['action']
+    if name == 'application_search':
+        from .names import rank
+        apps = getattr(actions, 'apps', {})
+        names = sorted(apps) if isinstance(apps, dict) else []
+        matched = names if step['value'] == '.' else rank(step['value'], names)
+        return json.dumps({'matches': matched[:20], 'scope': 'Configured names; executable availability is checked when opening.'})
+    if name == 'integration_status':
+        from .tools import ToolRegistry
+        from .toolkits import status
+        from .mcp_bridge import configurations
+        rows = ToolRegistry(actions).catalog()
+        apps = getattr(actions, 'apps', {})
+        skills = getattr(actions, 'skills', None)
+        guides = getattr(skills, 'catalog', [])
+        configs = configurations(actions.base)
+        providers = status()
+        from .execution_adapters import PRIORITY
+        config = getattr(actions, 'config', {})
+        return json.dumps({'registered_tools': len(rows), 'tool_groups': sorted({r['backend'] for r in rows}),
+            'configured_provider_tools': [r['tool'] for r in providers if r['configured']],
+            'missing_provider_tools': [r['tool'] for r in providers if not r['configured']],
+            'required_environment': sorted({key for r in providers if not r['configured'] for key in r['required_environment']}),
+            'configured_app_names': len(apps) if isinstance(apps, dict) else 0,
+            'local_guides': len(guides) if isinstance(guides, list) else 0,
+            'mcp_servers': [{'name': n, 'enabled': c.get('enabled') is True, 'trusted': c.get('trusted') is True,
+                             'allowlisted_tools': len(c.get('allow_tools', []))} for n, c in configs.items()],
+            'codex_plugin_credentials_exported': False,
+            'desktop_execution': {'priority': list(PRIORITY),
+                'direct_execution': bool(config.get('agent_runtime', {}).get('direct_execution', False)),
+                'mode': 'Reviewed primitives/ports in the existing UI worker; full agent frameworks are not installed',
+                'fallback': 'Before dispatch only; uncertain input is never repeated',
+                'source_manifest': 'integrations/execution-primitives/source-manifest.json'},
+            'scope': 'Configuration/discovery only; provider reachability and account access are not established.'})
     if name in DEVELOPMENT_TOOLS:
         from .development_api import execute as development_execute
         return development_execute(actions,step,cancelled)

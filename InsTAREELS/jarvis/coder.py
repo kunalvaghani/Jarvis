@@ -8,14 +8,17 @@ import subprocess
 import sys
 import tempfile
 
-from .projects import MARKERS, SKIP
+from .projects import MARKERS, SKIP, has_project_marker
 from .commands import normalize_spoken_code_request
 from .code_context import related_context, bounded_references, apply_replacements, check_python_interfaces, save_change_review
 from .agent_context import coding_context
+from . import gui_contract
+from .coding_languages import EXTENSIONS, LANGUAGE_PATTERN, context as language_context, check_source, evidence_label
 
 
 SOURCE_EXTENSIONS = {".py", ".js", ".jsx", ".ts", ".tsx", ".json", ".html", ".css", ".md", ".txt", ".yaml", ".yml", ".toml",
                      ".c", ".h", ".cpp", ".hpp", ".go", ".java", ".rs", ".sh", ".ps1", ".sql"}
+SOURCE_EXTENSIONS |= EXTENSIONS
 SOURCE_PATTERN = "|".join(re.escape(extension[1:]) for extension in sorted(SOURCE_EXTENSIONS))
 CODING_PATTERN = "|".join(re.escape(extension[1:]) for extension in sorted(
     SOURCE_EXTENSIONS - {".txt", ".md", ".yaml", ".yml", ".toml"}))
@@ -43,21 +46,92 @@ def python_file_request(goal):
 
 
 def named_folder_request(goal):
+    def scope(value):
+        path=Path(value)
+        return str(path.parent) if path.suffix.lower() in SOURCE_EXTENSIONS and not path.is_dir() else value
+    # A clarification prefix is authoritative, even when the original task
+    # still contains an unavailable named/absolute destination.
     prefix = re.match(r"^(?:in|inside) (?:the )?folder (.+?),\s*", goal, re.I)
     if prefix:
-        return prefix[1].strip()
+        return scope(prefix[1].strip().strip('\"\''))
+    quoted = re.search(r'\b(?:in|inside|to|open)(?: the)?(?: folder)?\s+["\']([a-z]:[\\/][^"\']+)["\']', goal, re.I)
+    if quoted:
+        return scope(quoted[1].strip())
+    absolute = re.search(r'\b(?:in|inside|to)(?: the)?(?: folder)?\s+([a-z]:[\\/].+?)(?=\s+(?:and|with|containing)\b|$)', goal, re.I)
+    if absolute:
+        return scope(absolute[1].strip())
+    # A named absolute source file also supplies its project scope.
+    source = re.search(r'["\']([a-z]:[\\/][^"\']+\.(?:' + SOURCE_PATTERN + r'))["\']', goal, re.I)
+    if not source:
+        source = re.search(r'(?<!\w)([a-z]:[\\/].+?\.(?:' + SOURCE_PATTERN + r'))(?=\s|$)', goal, re.I)
+    if source:
+        return str(Path(source[1]).parent)
     opening = re.match(r"^open (?:the )?folder (.+?)(?:,|\s+(?:and|then)\s+)", goal, re.I)
     if opening:
         return opening[1].strip()
-    match = re.search(r"\b(?:in|inside|to) (?:the )?([a-z0-9][a-z0-9 -]{0,70}?) (?:project )?folder\b", goal, re.I)
-    return match[1].strip() if match else None
+    # Prefer folder-first destinations before suffix syntax: otherwise
+    # "to monitor my health in folder TestCodes" captures the app's purpose.
+    first = re.search(r'\b(?:in|inside|to)\s+(?:the\s+)?(?:project\s+)?folder\s+(?:["\']([^"\']+)["\']|([a-z0-9][a-z0-9 _-]{0,70}?)(?=\s+(?:and|then|with|containing)\b|[,;.!?]|$))', goal, re.I)
+    if first:
+        name = (first[1] or first[2]).strip()
+        return name if first[1] else re.sub(r'\s+(?:project\s+)?folder$', '', name, flags=re.I)
+    match = re.search(r"\b(?:in|inside|to) (?:the )?([a-z0-9](?:(?!\b(?:in|inside|to)\b)[a-z0-9 _-]){0,70}?) (?:project )?folder\b", goal, re.I)
+    if match:
+        name = match[1].strip()
+        return name + ' folder' if name.casefold() in {'this','current','selected','open'} else name
+    return None
+
+
+def folder_matches_request(requested, project):
+    if requested.casefold() in {'this folder','current folder','selected folder','open folder'}:
+        return True
+    if Path(requested).is_absolute():
+        return Path(requested).resolve() == Path(project).resolve()
+    return re.sub(r'[^a-z0-9]', '', requested.casefold()) == re.sub(r'[^a-z0-9]', '', Path(project).name.casefold())
+
+
+def coding_folder(actions, goal, cancelled, prior=None):
+    """Explicit path, then freshly observed open folder, then remembered scope."""
+    requested = named_folder_request(goal)
+    if requested:
+        return actions._task_folder('the open folder' if requested == 'open folder' else requested, cancelled)
+    try:
+        return actions._task_folder('this folder', cancelled)
+    except ValueError:
+        if cancelled():
+            raise ValueError('Coding cancelled before selecting a project.')
+        if isinstance(prior, dict) and prior.get('project') and Path(prior['project']).is_dir():
+            return prior['project']
+        raise
 
 
 def workspace_coding_request(goal):
     goal = normalize_spoken_code_request(goal)
+    # Notes/data workflows remain file operations even when their subject is
+    # called "project". A plain folder scope is not a code-generation request.
+    if (re.search(r'\b[a-z][\w-]*\.(?:txt|csv)\b', goal, re.I)
+            and not re.search(r"\b[a-z][\w-]*\.(?:" + CODING_PATTERN + r")\b", goal, re.I)
+            and not re.search(r'\b(?:python|code|scripts?|programs?|apps?)\b', goal, re.I)
+            and not requested_new_folder(goal)):
+        return False
     return bool(re.search(r"\b(?:create|make|build|add|modify|edit|update|write|fix|refactor)\b", goal, re.I)
-                and (re.search(r"\b(?:folders?|scripts?|programs?|apps?|projects?)\b", goal, re.I)
+                and (re.search(r"\b(?:scripts?|programs?|apps?|projects?|games?|websites?|webpages?)\b", goal, re.I)
+                     or re.search(r'(?<!\w)' + LANGUAGE_PATTERN + r'(?!\w)', goal, re.I)
+                     or simple_folder_request(goal) or requested_new_folder(goal)
+                     or (gui_contract.requested(goal) and re.fullmatch(r'(?:please )?(?:add|fix|update|modify|change)\s+(?:the |a )?(?:ui|gui)(?:\s+(?:to it|again|please))*[.!?]*', goal, re.I))
                      or re.search(r"\b[a-z][\w-]*\.(?:" + CODING_PATTERN + r")\b", goal, re.I)))
+
+
+def explicit_coding_intent(goal):
+    """Code/product intent survives words such as email or GitHub in a spec."""
+    if not workspace_coding_request(goal):
+        return False
+    if re.match(r'(?:please )?(?:write|draft|create|make|update|edit|modify|add)\s+(?:a |an |the )?(?:email|tweet|pull request|github repository|jira issue|calendar event|slack message)\b',goal,re.I):
+        return False
+    return bool(re.search(r'(?<!\w)' + LANGUAGE_PATTERN + r'(?!\w)', goal, re.I)
+                or re.search(r'\b[a-z][\w-]*\.(?:' + CODING_PATTERN + r')\b', goal, re.I)
+                or re.search(r'\b(?:code|scripts?|programs?|ui|gui|components?)\b', goal, re.I)
+                or re.search(r'\b(?:create|make|build|write)\b.*\b(?:games?|apps?|websites?|webpages?)\b', goal, re.I))
 
 
 def simple_folder_request(goal):
@@ -90,7 +164,7 @@ def single_python_target(goal):
 
 
 def calculator_template(goal, name):
-    if name.casefold() not in {"calculator.py", "basic_calculator.py"} or re.search(r"\b(scientific|gui|graphical|advanced)\b", goal, re.I):
+    if name.casefold() not in {"calculator.py", "basic_calculator.py"} or gui_contract.requested(goal) or re.search(r"\b(scientific|advanced)\b", goal, re.I):
         return None
     return (Path(__file__).parent / "templates" / "calculator.py").read_text(encoding="utf-8")
 
@@ -117,20 +191,18 @@ def create_python_from_goal(actions, client, goal, name, cancelled):
     resumed = getattr(actions, "resume_source", None)
     from .clarification import TaskClarification
     try:
-        folder = Path(resumed["project"] if isinstance(resumed, dict) and resumed.get("project") else
-                      actions._task_folder(named_folder_request(goal) or "this folder", cancelled)).resolve(strict=True)
+        folder = Path(coding_folder(actions, goal, cancelled, resumed)).resolve(strict=True)
     except ValueError as exc:
         if isinstance(exc, TaskClarification):
             raise
         raise TaskClarification("Which folder should I create the Python file in? Say a folder name or full path. " + str(exc), "folder") from exc
     if isinstance(state, TaskState):
         state.set_project(folder)
+    if getattr(client, 'options', {}).get('coding_backend') in {'claude-code','codex'}:
+        return Coder(actions, client).run(folder, goal + ' Target source file: ' + name, cancelled, selected=True)
     requested_folder = named_folder_request(goal)
-    if requested_folder:
-        spoken = re.sub(r"[^a-z0-9]", "", requested_folder.casefold())
-        selected = re.sub(r"[^a-z0-9]", "", folder.name.casefold())
-        if spoken != selected:
-            raise ValueError(f"The selected File Explorer folder is {folder.name}, not {requested_folder}. Open the requested folder first.")
+    if requested_folder and not folder_matches_request(requested_folder, folder):
+        raise ValueError(f"The selected File Explorer folder is {folder.name}, not {requested_folder}. Open the requested folder first.")
     destination = folder / name
     marker = f"# Jarvis draft: {name}\n# Waiting for generated code.\n"
     from .code_stream import CodeDraft, owned_draft
@@ -259,12 +331,17 @@ def check_content(path, content):
     if not isinstance(content, str) or not content.strip() or len(content) > 20000 or "\x00" in content:
         raise ValueError("The coding model returned empty or oversized file content.")
     try:
+        content.encode('utf-8')
+    except UnicodeEncodeError as exc:
+        raise ValueError('Generated source contains invalid Unicode; use valid UTF-8 characters.') from exc
+    try:
         if path.suffix.lower() == ".py":
             ast.parse(content, filename=str(path))
         elif path.suffix.lower() == ".json":
             json.loads(content)
     except (SyntaxError, ValueError, MemoryError, RecursionError) as exc:
         raise ValueError(f"Generated {path.name} failed syntax validation: {exc}") from exc
+    check_source(path, content)
 
 
 def comment_markdown_preamble(content):
@@ -284,8 +361,13 @@ def comment_markdown_preamble(content):
 def generate_checked(client, cancelled, file_path, **request):
     from .coding_lessons import recall, LESSONS, check_learned_imports
     learned_lessons = []
+    request['language_context'] = language_context(request.get('goal', ''), file_path)
     options = getattr(client, 'options', getattr(getattr(client, 'brain', None), 'options', {}))
     trained = (isinstance(options, dict) and options.get('trained_coder_checkpoint') and file_path.suffix.lower() == '.py')
+    if file_path.suffix.lower() == '.py' and gui_contract.requested(request.get('goal', '')):
+        request['gui_requirements'] = gui_contract.instructions(request['goal'])
+        request['use_configured_coder'] = True
+        trained = False
     if trained:
         request.pop('coding_lessons', None)
     elif file_path.suffix.lower() == '.py' and isinstance(getattr(client, 'base', None), Path):
@@ -306,6 +388,7 @@ def generate_checked(client, cancelled, file_path, **request):
             check_content(file_path, content)
             if file_path.suffix.lower() == '.py':
                 check_learned_imports(content, learned_lessons)
+                gui_contract.check(content, request.get('goal', ''))
             if file_path.suffix.lower() == ".py" and request.get("current"):
                 check_python_interfaces(request["current"], content, request.get("goal", ""))
             return content
@@ -316,6 +399,7 @@ def generate_checked(client, cancelled, file_path, **request):
                     try:
                         check_content(file_path, commented)
                         check_learned_imports(commented, learned_lessons)
+                        gui_contract.check(commented, request.get('goal', ''))
                         if request.get("current"):
                             check_python_interfaces(request["current"], commented, request.get("goal", ""))
                         return commented
@@ -334,14 +418,23 @@ class Coder:
 
     def run(self, project, goal, cancelled=lambda: False, selected=False):
         from .development_projects import requested
+        from .task_graph import MAX_TASK_GOAL_CHARS
+        backend=getattr(self.client, 'options', {}).get('coding_backend')
+        cli=backend in {'claude-code','codex'}
         root = Path(project).resolve(strict=True)
-        if not root.is_dir() or root.parent == root or not isinstance(goal, str) or not goal.strip() or len(goal)>1200:
+        if not root.is_dir() or root.parent == root or not isinstance(goal, str) or not goal.strip() or len(goal)>(MAX_TASK_GOAL_CHARS if cli else 1200):
             raise ValueError('Name an individual project and a bounded development goal.')
-        if not selected and not (any((root/marker).exists() for marker in MARKERS) or root.parent.name.casefold() == 'phython project'):
+        if not selected and not (has_project_marker(root) or root.parent.name.casefold() == 'phython project'):
             raise ValueError('Choose an individual project folder with a project marker.')
         folder_name = named_folder_request(goal)
-        if selected and folder_name and re.sub(r'[^a-z0-9]', '', folder_name.casefold()) != re.sub(r'[^a-z0-9]', '', root.name.casefold()):
+        if selected and folder_name and not folder_matches_request(folder_name, root):
             raise ValueError('The selected folder does not match the requested coding folder.')
+        if cli and not simple_folder_request(goal):
+            if backend=='codex':
+                from .codex_code import run as codex_run
+                return codex_run(self, root, goal, cancelled)
+            from .claude_code import run as claude_run
+            return claude_run(self, root, goal, cancelled)
         if requested(root, goal):
             from .development import run
             return run(self, root, goal, cancelled, selected)
@@ -361,15 +454,12 @@ class Coder:
         project = Path(project).resolve(strict=True)
         if not project.is_dir() or not goal.strip() or len(goal) > 1200:
             raise ValueError("Name a project and a specific coding goal.")
-        if project.parent == project or (not selected and not (any((project / marker).exists() for marker in MARKERS)
+        if project.parent == project or (not selected and not (has_project_marker(project)
                 or project.parent.name.casefold() == "phython project")):
             raise ValueError("Choose an individual project folder with a project marker; Jarvis will not code in a drive or parent folder.")
         requested_folder = named_folder_request(goal)
-        if selected and requested_folder:
-            spoken = re.sub(r"[^a-z0-9]", "", requested_folder.casefold())
-            actual = re.sub(r"[^a-z0-9]", "", project.name.casefold())
-            if spoken != actual:
-                raise ValueError(f"The selected File Explorer folder is {project.name}, not {requested_folder}.")
+        if selected and requested_folder and not folder_matches_request(requested_folder, project):
+            raise ValueError(f"The selected File Explorer folder is {project.name}, not {requested_folder}.")
         files = project_files(project)
         if isinstance(state, TaskState):
             state.set_project(project)
@@ -384,11 +474,34 @@ class Coder:
             r"\b[a-z][\w-]{0,80}\.(?:" + SOURCE_PATTERN + r")\b", goal, re.I)}
         explicit_paths = {match.group(0).replace("\\", "/").casefold() for match in re.finditer(
             r"\b(?:[a-z0-9_-]+[/\\]){1,3}[a-z][\w-]{0,80}\.(?:" + SOURCE_PATTERN + r")\b", goal, re.I)}
-        edit_request = bool(re.search(r"\b(?:modify|edit|update|fix|refactor|change)\b", goal, re.I))
+        edit_request = bool(re.search(r"\b(?:modify|edit|update|fix|refactor|change|add)\b", goal, re.I))
         existing_named = [name for name in files if Path(name).name.casefold() in named_files]
         if explicit_paths:
             existing_named = [name for name in existing_named if name.casefold() in explicit_paths
                               or not any(Path(explicit).name.casefold() == Path(name).name.casefold() for explicit in explicit_paths)]
+        if edit_request and not named_files and gui_contract.requested(goal):
+            candidates = [name for name in files if name.lower().endswith('.py')]
+            # A follow-up may use the last checked coding target only in this same project.
+            history = state.data.get('history', []) if isinstance(state, TaskState) else []
+            remembered = []
+            for task in reversed(history):
+                if task.get('project') != str(project):
+                    continue
+                for point in task.get('checkpoints', []):
+                    if point.get('stage') in {'wrote_file', 'observed_file', 'generated_file'}:
+                        target = Path(point.get('target', ''))
+                        if target.is_absolute() and target.is_relative_to(project):
+                            relative = target.relative_to(project).as_posix()
+                            if relative in candidates and relative not in remembered:
+                                remembered.append(relative)
+                if remembered:
+                    break
+            chosen = remembered if len(remembered) == 1 else candidates
+            if len(chosen) != 1:
+                from .clarification import TaskClarification
+                raise TaskClarification('Which Python script should get the UI? ' + ', '.join(candidates[:20]), 'file')
+            existing_named = chosen
+            named_files = {Path(chosen[0]).name.casefold()}
         if not staged and edit_request and len(named_files) == 1 and not existing_named:
             raise ValueError(f"{next(iter(named_files))} is not in the open folder {project.name}. "
                              "Available source files: " + (", ".join(files[:30]) if files else "none"))
@@ -457,7 +570,8 @@ class Coder:
             if path in seen:
                 raise ValueError("Coding plan repeated a file.")
             seen.add(path)
-            if path.exists() and (not path.is_file() or path.stat().st_size > 14000):
+            limit = 80000 if owned_draft(runtime_base, path) else 14000
+            if path.exists() and (not path.is_file() or path.stat().st_size > limit):
                 raise ValueError(f"{path.name} is not a small text file that Jarvis can safely edit.")
             original = path.read_bytes() if path.exists() else None
             try:
@@ -509,19 +623,17 @@ class Coder:
             if cancelled():
                 raise ValueError("Coding task cancelled.")
             self.actions.report("plan", f"{step['path']}: {step['reason'][:160]}")
-            self.actions.report('brain', 'Qwen3-Coder is generating ' + step['path'] + '; large local CPU models may take several minutes. Stop remains available.')
+            model_options = getattr(self.client, 'options', {})
+            model_name = model_options.get('coder', model_options.get('planner', 'Local coder')) if isinstance(model_options, dict) else 'Local coder'
+            self.actions.report('brain', str(model_name) + ' is generating ' + step['path'] + '; local inference may take several minutes. Stop remains available.')
             stream = CodeDraft(runtime_base, path, original, not current, draft_content(path), cancelled, self.actions.report)
             streams.append(stream)
             references = bounded_references(context, step["path"], generated_context)
-            known_calculator = (path.name.casefold() == "calculator.py"
-                                and current.replace("\r\n", "\n") == calculator_template("calculator", "calculator.py")
-                                and re.search(r"\b(?:ui|gui|graphical|window|interface)\b", goal, re.I))
-            content = ((Path(__file__).parent / "templates" / "calculator_gui.py").read_text(encoding="utf-8")
-                       if known_calculator else generate_checked(self.client, cancelled, path, goal=goal,
+            content = generate_checked(self.client, cancelled, path, goal=goal,
                        project=project.name, path=step["path"], reason=step["reason"], current=current,
                        _on_code=stream.write,
                        plan=steps, files=files[:100], references=references, prior_task=prior,
-                       **target_contexts[step['path']]))
+                       **target_contexts[step['path']])
             from .progress import status
             status(self.actions.report, 'Validating code', path)
             check_content(path, content)
@@ -582,7 +694,7 @@ class Coder:
                 checkpoint("wrote_file", target=path, evidence="atomic write completed")
                 checkpoint("observed_file", target=path, evidence="updated content read back from disk")
                 status(self.actions.report, 'File saved', path, file=str(path), preview=content[:1600], characters=len(content),
-                       outcome='Disk readback; Python/JSON syntax checked where applicable; behavior not tested')
+                       outcome=evidence_label(path))
             finally:
                 if temporary is not None:
                     temporary.unlink(missing_ok=True)
@@ -596,4 +708,5 @@ class Coder:
                 self.actions.report('warning', 'Code was written; streaming metadata needs repair: ' + str(exc))
         checkpoint("development_batch_saved" if staged else "goal_verified", source='disk_readback', evidence="All proposed file changes read back from disk; Python/JSON syntax checked where applicable. Functional behavior is not verified.")
         made = ("Created folders " + ", ".join(created_dirs) + "; ") if created_dirs else ""
-        return f"Updated {project.name}: " + made + ", ".join(written) + ". Python and JSON syntax checked where applicable. Review and run the project's tests."
+        ui_checked = ' Requested Python GUI structure checked; runtime behavior still needs testing.' if gui_contract.requested(goal) and any(path.suffix.lower() == '.py' for path, _, _ in prepared) else ''
+        return f"Updated {project.name}: " + made + ", ".join(written) + ". Language syntax parsed where supported." + ui_checked + " Build and test the project to verify its behavior."

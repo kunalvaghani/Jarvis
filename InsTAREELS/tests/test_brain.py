@@ -109,7 +109,7 @@ class PlanTests(unittest.TestCase):
 
     def test_bounds_plan_and_handles_clarification(self):
         with self.assertRaises(ValueError):
-            validate_plan({"steps": [{"action": "open", "value": "chrome", "expected": "Chrome"}] * 7})
+            validate_plan({"steps": [{"action": "open", "value": "chrome", "expected": "Chrome"}] * 21})
         with self.assertRaisesRegex(ValueError, "Which profile"):
             validate_plan({"question": "Which profile?", "steps": []})
 
@@ -217,7 +217,7 @@ class LoopTests(unittest.TestCase):
         self.actions = Mock()
         self.actions.apps = {"chrome": ["chrome.exe"]}
         self.actions.pending_open = None
-        self.brain = Brain(self.actions, Path.cwd(), {"enabled": True, "planner": "planner", "decision": "decision"})
+        self.brain = Brain(self.actions, Path.cwd(), {"enabled": True, "planner": "planner", "decision": "decision", 'max_task_actions': 6})
         self.brain.client = Mock()
         self.control = {"name": "Play", "id": [1], "role": "Button", "rect": [0, 0, 10, 10]}
         self.snapshot = {"title": "YouTube", "context": "chrome", "signature": "a", "controls": [self.control]}

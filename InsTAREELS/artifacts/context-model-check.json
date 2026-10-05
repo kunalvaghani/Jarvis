@@ -1,0 +1,273 @@
+{
+  "date": "2026-10-04T05:25:35.732716+00:00",
+  "scope": "Authored text context classification; no private memory, microphone or task execution; nonstream harness with production prompt/schema/options; no proof of full task speed improvement",
+  "results": [
+    {
+      "model": "qwen2.5:0.5b",
+      "correct": 3,
+      "total": 8,
+      "guarded_correct": 6,
+      "warm_median_seconds": 0.625,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "guarded": "a",
+          "guarded_correct": true,
+          "seconds": 0.906,
+          "load_seconds": 0.0204
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "guarded": "b",
+          "guarded_correct": true,
+          "seconds": 0.656,
+          "load_seconds": 0.0153
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "guarded": "c",
+          "guarded_correct": true,
+          "seconds": 0.625,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "c",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 0.61,
+          "load_seconds": 0.0147
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "c",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 0.656,
+          "load_seconds": 0.0147
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "c",
+          "correct": false,
+          "guarded": "none",
+          "guarded_correct": true,
+          "seconds": 0.672,
+          "load_seconds": 0.0143
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "c",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": false,
+          "seconds": 0.625,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "c",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": false,
+          "seconds": 0.609,
+          "load_seconds": 0.0149
+        }
+      ]
+    },
+    {
+      "model": "qwen3.5:0.8b",
+      "correct": 5,
+      "total": 8,
+      "guarded_correct": 8,
+      "warm_median_seconds": 1.984,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "guarded": "a",
+          "guarded_correct": true,
+          "seconds": 1.844,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "guarded": "b",
+          "guarded_correct": true,
+          "seconds": 1.719,
+          "load_seconds": 0.0144
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "guarded": "c",
+          "guarded_correct": true,
+          "seconds": 1.859,
+          "load_seconds": 0.0138
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 1.984,
+          "load_seconds": 0.0147
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "b",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 2.094,
+          "load_seconds": 0.0219
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "b",
+          "correct": false,
+          "guarded": "none",
+          "guarded_correct": true,
+          "seconds": 2.109,
+          "load_seconds": 0.0192
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "guarded": "a",
+          "guarded_correct": true,
+          "seconds": 2.172,
+          "load_seconds": 0.02
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "guarded": "b",
+          "guarded_correct": true,
+          "seconds": 1.922,
+          "load_seconds": 0.021
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:3b-instruct",
+      "correct": 5,
+      "total": 8,
+      "guarded_correct": 8,
+      "warm_median_seconds": 2.0,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "guarded": "a",
+          "guarded_correct": true,
+          "seconds": 2.141,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "guarded": "b",
+          "guarded_correct": true,
+          "seconds": 1.953,
+          "load_seconds": 0.0162
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "guarded": "c",
+          "guarded_correct": true,
+          "seconds": 1.937,
+          "load_seconds": 0.0154
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "b",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 2.0,
+          "load_seconds": 0.0164
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "guarded": "ambiguous",
+          "guarded_correct": true,
+          "seconds": 2.0,
+          "load_seconds": 0.0169
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "a",
+          "correct": false,
+          "guarded": "none",
+          "guarded_correct": true,
+          "seconds": 1.907,
+          "load_seconds": 0.0147
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "guarded": "a",
+          "guarded_correct": true,
+          "seconds": 2.031,
+          "load_seconds": 0.0148
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "guarded": "b",
+          "guarded_correct": true,
+          "seconds": 2.531,
+          "load_seconds": 0.0143
+        }
+      ]
+    }
+  ]
+}

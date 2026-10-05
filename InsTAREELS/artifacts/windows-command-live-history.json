@@ -1,0 +1,108 @@
+[
+  {
+    "date": "2026-10-04T11:08:45.548096+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "FileNotFoundError",
+    "error": "[WinError 206] The filename or extension is too long",
+    "checks": []
+  },
+  {
+    "date": "2026-10-04T11:11:21.965347+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "ValueError",
+    "error": "Windows command stopped/timed out; action may have occurred. Inspect state before retrying.",
+    "checks": [
+      {
+        "name": "238 original PowerShell recipes parse",
+        "passed": true
+      },
+      {
+        "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
+        "tests": 14,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "date": "2026-10-04T11:15:23.048163+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "ValueError",
+    "error": "Command 142 needs parameters path2. Say search windows commands 142 for examples.",
+    "checks": [
+      {
+        "name": "238 original PowerShell recipes parse",
+        "passed": true
+      },
+      {
+        "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
+        "tests": 14,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "date": "2026-10-04T11:17:38.759288+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "ValueError",
+    "error": "Windows command failed; no replay. Get-FileHash : The term 'Get-FileHash' is not recognized as the name of a cmdlet, function, script file, or operable \r\nprogram. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.\r\nAt C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-windows-8h5erw9m\\recipe.ps1:2 char:5\r\n+ . { Get-FileHash 'D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-run ...\r\n+     ~~~~~~~~~~~~\r\n    + CategoryInfo          : ObjectNotFound: (Get-FileHash:String) [], ParentContainsErrorRecordException\r\n    + FullyQualifiedErrorId : CommandNotFoundException\r\n \r\n",
+    "checks": [
+      {
+        "name": "238 original PowerShell recipes parse",
+        "passed": true
+      },
+      {
+        "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
+        "tests": 14,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "date": "2026-10-04T11:20:58.974932+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "PermissionError",
+    "error": "[WinError 5] Access is denied",
+    "checks": [
+      {
+        "name": "238 original PowerShell recipes parse",
+        "passed": true
+      },
+      {
+        "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
+        "tests": 16,
+        "passed": true
+      },
+      {
+        "name": "10 actual file operations and independent disk/hash observations",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "date": "2026-10-04T11:24:22.499463+00:00",
+    "passed": false,
+    "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
+    "error_type": "ValueError",
+    "error": "The requested DOM target must be unique and visible.",
+    "checks": [
+      {
+        "name": "238 original PowerShell recipes parse",
+        "passed": true
+      },
+      {
+        "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
+        "tests": 16,
+        "passed": true
+      },
+      {
+        "name": "10 actual file operations and independent disk/hash observations",
+        "passed": true
+      }
+    ]
+  }
+]

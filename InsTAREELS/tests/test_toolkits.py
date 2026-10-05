@@ -355,7 +355,7 @@ class ToolkitTests(unittest.TestCase):
         self.assertFalse(self.actions.task_state.snapshot().get("failures"))
 
     def test_sixth_tool_can_complete_goal_without_screen_evidence(self):
-        brain = self.planned_brain(adaptive_planning=True)
+        brain = self.planned_brain(adaptive_planning=True, max_task_actions=6)
         count = 0
         def inference(operation, cancelled, **data):
             nonlocal count

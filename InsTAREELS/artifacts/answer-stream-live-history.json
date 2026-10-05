@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2026-10-04T03:46:23.517915+00:00",
+    "passed": false,
+    "scope": "Real Jarvis question-worker inference; no voice, desktop actions, compilation or execution.",
+    "model": "qwen3.5:9b",
+    "progress_events": 31,
+    "preview_characters": 0,
+    "total_seconds": 45.969,
+    "answer_characters": 189,
+    "contains_cpp": false
+  },
+  {
+    "date": "2026-10-04T03:52:24.290357+00:00",
+    "passed": false,
+    "scope": "Real Jarvis question-worker inference; no voice, desktop actions, compilation or execution.",
+    "model": "qwen3.5:9b",
+    "progress_events": 74,
+    "preview_characters": 558,
+    "first_text_seconds": 15.828,
+    "total_seconds": 37.484,
+    "answer_characters": 558,
+    "contains_cpp": false,
+    "diagnostic_reply": "Here is a complete C++ implementation of the Snake and Ladder game using the SFML library for a graphical user interface. This code handles board generation, dice rolling, player movement, and win conditions.\n\nFirst, ensure you have installed SFML (Simple and Fast Multimedia Library) by running `sudo apt install libsfml-dev` on Linux or downloading it from the official website. Save the following code as `snake_ladder.cpp` and compile it with `g++ snake_ladder.cpp -o snake_ladder -lsfml-graphics"
+  }
+]

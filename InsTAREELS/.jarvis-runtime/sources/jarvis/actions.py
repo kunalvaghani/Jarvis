@@ -121,12 +121,22 @@ class Actions:
             self.skills.experiences.safe_record(interrupted)
         self._learning_local = threading.local()
         self.knowledge = Knowledge(config.get("knowledge", {}), report)
+        if not config.get('_ui_verification', False):
+            self.knowledge.attach_conversations(Path(base) / '.jarvis-runtime/conversations.sqlite3',
+                config.get('memory', {}).get('conversation_sessions', {}))
+            self.knowledge.attach_selector(config.get('context_selector', {'enabled': False}))
         self.knowledge.memory = self.memory
         self.knowledge.client.memory = self.memory
         from .quick_answers import QuickAnswers
         self.knowledge.quick = QuickAnswers(self.memory, config.get("weather", {}), settings=config)
         from .brain import Brain
         self.brain = Brain(self, base, config.get("brain", {}))
+        self.brain.client.context_provider = self.knowledge.planning_context
+        from .live_app_context import LiveAppContext
+        self.live_app = LiveAppContext()
+        self.brain.client.app_context_provider = self.live_app.snapshot
+        self.knowledge.app_snapshot_provider = self.live_app.snapshot
+        self.knowledge.live_app_provider = lambda cancelled: self.live_app.refresh(self._ui(),cancelled)
         self.task_active = False
         self.suggest_enabled = False
         self.suggest_until = 0
@@ -146,6 +156,18 @@ class Actions:
         self.approval_handler = None
         self.gods_eye_view = None
         self.thread = threading.Thread(target=self._run, daemon=True)
+        from .anticipation import Anticipation
+        anticipation_options = dict(config.get('anticipation', {}))
+        if config.get('_ui_verification', False):
+            anticipation_options['enabled'] = False
+        self.anticipation = Anticipation(self.base, anticipation_options, report,
+            busy=lambda: (self.closed.is_set() or self.queue.unfinished_tasks > 0
+                or self.knowledge.queue.unfinished_tasks > 0 or self.task_active
+                or self.dictation_active or bool(self.pending_question)
+                or bool(self.pending_open) or bool(self.projects.pending)
+                or bool(self.ui_controls and self.ui_controls.pending)),
+            model=config.get('brain', {}).get('planner', 'qwen3.5:4b'))
+        self.knowledge.on_request = self.anticipation.observe_request
 
     def start(self):
         try:
@@ -166,8 +188,12 @@ class Actions:
             self.report("warning", "Obsidian memory could not start: " + str(exc))
         self.knowledge.start()
         self.thread.start()
+        self.anticipation.start()
 
     def cancel(self):
+        anticipation = getattr(self, 'anticipation', None)
+        if anticipation is not None:
+            anticipation.cancel()
         self.generation += 1
         self.pending_open = None
         self.pending_question = None
@@ -180,6 +206,21 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        anticipation = getattr(self, 'anticipation', None)
+        if anticipation is not None:
+            if command.kind in {'ask', 'task'}:
+                from .anticipation import command as anticipation_command
+                control = anticipation_command(command.value)
+                if control:
+                    from .commands import Command
+                    command = Command('anticipation', control)
+            if command.kind == 'anticipation':
+                message = anticipation.handle(command.value, command.extra)
+                self.report('anticipation_reply', message)
+                if command.value in {'show', 'accept'}:
+                    self.report('island_navigation', ('Prepared', ''))
+                return
+            anticipation.observe_request(command.kind, command.value)
         from .island_choices import navigation, task_answer
         local = navigation(command.value) if command.kind in {'task', 'ask', 'play_media', 'open'} else None
         if local:
@@ -187,8 +228,23 @@ class Actions:
             return  # Games/view changes never supersede a background task.
         answer = task_answer(getattr(self, 'task_state', None), command.value) if command.kind in {'ask','task'} else None
         if answer is not None:
+            if getattr(self, 'knowledge', None) is not None:
+                self.knowledge.record_pair(command.value, answer)
             self.report('answer', answer)
             return
+        if command.kind == 'memory_choice':
+            try:
+                self.knowledge.choose_memory(command.extra, int(command.value))
+            except (ValueError, TypeError) as exc:
+                self.report('question', str(exc))
+            return
+        if getattr(getattr(self, 'knowledge', None), 'pending_memory', None):
+            try:
+                if self.knowledge.memory_reply(command):
+                    return
+            except ValueError as exc:
+                self.report('question', str(exc))
+                return
         if command.kind == 'island_choice' and self.task_active:
             self.report('question', 'The task is still running. Select its option once it pauses for an answer.')
             return
@@ -229,9 +285,11 @@ class Actions:
             return
         if command.kind == "forget_chat":
             self.knowledge.forget()
-            self.report("answer", "Conversation history cleared.")
+            self.report("answer", "New conversation started. Previous sessions remain in saved memory.")
             return
         if command.kind == "sleep":
+            if anticipation is not None:
+                anticipation.handle('pause')
             self.cancel()
             self.report("state", "Listening for Jarvis Â· queued tasks cancelled")
             return
@@ -240,6 +298,8 @@ class Actions:
             self.superseded_generations.add(self.generation)
             self.generation += 1
         try:
+            if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
+                self.knowledge.prepare_context(command.value)
             self.queue.put_nowait((self.generation, command))
         except queue.Full:
             self.cancel()
@@ -274,13 +334,14 @@ class Actions:
                         return Command("clarification_blocked", "That number is not in the list; your choices are still available.")
                     return Command("choose_control", str(index + 1))
         pending = task_pending or self.pending_question
+        folder_reply = bool(pending and pending["slot"] == "folder" and command.kind == "open_folder")
         if pending and time.monotonic() - pending["time"] > 180:
             self.pending_question = None
-            if short_reply(command):
+            if short_reply(command) or folder_reply:
                 self.report("question", "That task question expired. Repeat the original request.")
                 return Command("clarification_blocked", "That task question expired. Repeat the original request.")
             pending = None
-        if pending and short_reply(command):
+        if pending and (short_reply(command) or folder_reply):
             self.pending_question = None
             answer = command.value.strip()
             if command.kind == "confirm_suggestion" and answer == "no":
@@ -292,7 +353,9 @@ class Actions:
                 return Command("clarification_blocked", blocker)
             if pending["slot"] == "folder":
                 # Resolve before generating a new plan; an answer never authorizes a guessed path.
-                answer = answer.removeprefix("use ").removeprefix("in ")
+                import re
+                answer = re.sub(r"^(?:(?:please\s+)?(?:use|in|inside)\s+|(?:the\s+)?folder\s+is\s+)", "", answer, flags=re.I).strip()
+                answer = re.sub(r"^the\s+(?=folder\b|[a-z]:[\\/])", "", answer, flags=re.I).strip().strip('\"\'')
                 choices = pending.get("choices", [])
                 index = choice_index(answer, choices) if choices else None
                 if index is not None:
@@ -302,7 +365,7 @@ class Actions:
                         return Command("clarification_blocked", "That folder number is not in the list.")
                     answer = choices[index]
                 try:
-                    self.catalog.resolve(answer, "folder")
+                    answer = self.catalog.resolve(answer, "folder")
                 except ValueError as exc:
                     self.pending_question = pending
                     self.report("question", "I could not resolve that folder. Say its full path. " + str(exc))
@@ -318,6 +381,9 @@ class Actions:
         return command
 
     def close(self):
+        anticipation = getattr(self, 'anticipation', None)
+        if anticipation is not None:
+            anticipation.close()
         self.skills.close()
         if self.development_tools:
             self.development_tools.close()
@@ -340,6 +406,7 @@ class Actions:
             from .ui_controls import UIControls
             self.ui_controls = UIControls(self.desktop, memory=self.ui_memory,
                 external_handle=lambda: self.external_handle())
+            self.ui_controls.live_app = getattr(self,'live_app',None)
         return self.ui_controls
 
     def ui_healthy(self):
@@ -476,6 +543,13 @@ class Actions:
         from .commands import Command
         if cancelled():
             return
+        if command.kind in {'windows_catalog', 'windows_command'}:
+            from .windows_commands import catalog, search, execute as windows_execute
+            if command.kind == 'windows_catalog':
+                return json.dumps(search(command.value) if command.value != '.' else {
+                    'commands':493, 'categories':sorted({r['category'] for r in catalog()}),
+                    'usage':'search windows commands camera; windows command 1; windows command 137 {"path1":"D:\\notes.txt"}'},ensure_ascii=False)
+            return windows_execute(self,json.loads(command.value),json.loads(command.extra or '{}'),cancelled)
         if command.kind == 'island_choice':
             from .island_choices import resolve
             return self.execute(resolve(self, command.extra, int(command.value)), cancelled)
@@ -487,6 +561,13 @@ class Actions:
             return self._ui().execute(Command('choose_control',str(int(command.value)+1),'island_bound'),cancelled)
         if command.kind == "open" and command.value.casefold() in {"jarvis browser", "automation browser"}:
             return str(self._browser().request("reset", cancelled))
+        if command.kind == 'open':
+            from .windows_commands import match as windows_match, execute as windows_execute
+            ident=windows_match('open '+command.value)
+            if ident and ident<=94 and command.value.casefold() not in self.apps:
+                self.open_target_pending=True
+                self.typing_failed=True
+                return windows_execute(self,[ident],{},cancelled)
         browser = getattr(self, "browser_automation", None)
         if browser is not None and command.kind in {"context_search", "media_search", "media_control", "select_context", "click_control"}:
             handle = self.external_handle() or (self.desktop.user.GetForegroundWindow() if self.desktop else None)
@@ -575,7 +656,10 @@ class Actions:
             try:
                 self.task_state.start(command.value, "task")
                 result = None
-                if self.config.get("agent_runtime", {}).get("fast_workflows", False):
+                if self.config.get('agent_runtime', {}).get('direct_execution', False):
+                    from .direct_execution import run as run_direct
+                    result = run_direct(self, command.value, cancelled)
+                if result is None and self.config.get("agent_runtime", {}).get("fast_workflows", False):
                     from .fast_workflows import run
                     result = run(self, command.value, cancelled)
                 if result is None:
@@ -1058,14 +1142,17 @@ class Actions:
                 if not cancelled():
                     from .progress import status
                     phases = {'open': 'Opening', 'open_folder': 'Opening folder', 'open_file': 'Opening file',
-                              'code_task': 'Preparing code', 'task': 'Planning task', 'browse': 'Opening website',
+                              'code_task': 'Preparing code', 'task': 'Planning task', 'clarified_task': 'Resuming task', 'browse': 'Opening website',
                               'media_search': 'Searching', 'run_command': 'Running command'}
                     status(self.report, phases.get(command.kind, 'Working'),
                            '' if command.kind in {'type', 'dictate', 'run_command'} else command.value)
                     result = self.execute(command, cancelled)
                     if result and not cancelled():
+                        if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
+                            state = self.task_state.snapshot() or {}
+                            self.knowledge.record_pair(state.get('goal') or command.value, str(result))
                         self.report("action", result)
-                        if command.kind in {"task", "code_task", "resume_task", "open", "browse", "browser_search",
+                        if command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",
                                             "create", "create_in_folder", "modify_in_folder", "delete_in_folder",
                                             "play_media", "spotify_control", "spotify_open_playlist", "close_app"}:
                             self.report("spoken_reply", result)

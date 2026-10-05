@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forma Market</title>
+<style>
+:root{--space:.5rem;--surface:#fff;--ink:#172526;--accent:#d97706;--muted:#6b7280;--border:#e5e7eb;--card:#fafafa;--text:#374151}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.5}
+html{scroll-behavior:smooth}
+body{min-height:100vh;background:var(--surface);color:var(--ink);transition:opacity 300ms ease}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto}}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--border);padding:var(--space) 1rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h1{font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
+.nav{display:flex;gap:var(--space);align-items:center}
+input[type="search"]{padding:.5rem .75rem;border:1px solid var(--border);border-radius:.375rem;background:#fff;color:var(--ink)}
+input[type="search"]:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.categories{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;padding:0 1rem}
+.category-btn{padding:.5rem 1rem;border:none;background:#f3f4f6;border-radius:.375rem;color:var(--muted);cursor:pointer;font-size:.875rem}
+.category-btn.active{background:var(--accent);color:#fff}
+.main{max-width:1200px;margin:0 auto;padding:1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.product-card{background:var(--card);border-radius:.75rem;border:1px solid var(--border);overflow:hidden;transition:transform 300ms ease,box-shadow 300ms ease;display:flex;flex-direction:column}
+@media (prefers-reduced-motion:reduce){.product-card{transition:none}}
+.product-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.12)}
+.product-image{aspect-ratio:1/1;background:#f9fafb;display:flex;align-items:center;justify-content:center}
+.product-image img{width:100%;height:100%;object-fit:cover;border-radius:.5rem}
+.product-info{padding:1rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.product-title{font-size:1.125rem;font-weight:600;color:var(--ink)}
+.product-desc{color:var(--muted);font-size:.875rem;flex:1}
+.product-price{font-size:1.25rem;font-weight:700;color:var(--accent)}
+.product-actions{display:flex;gap:.5rem;margin-top:auto}
+.btn-add{padding:.6rem 1rem;border:none;background:var(--accent);color:#fff;border-radius:.375rem;cursor:pointer;font-size:.875rem}
+.btn-remove{padding:.4rem .6rem;border:none;background:#fee2e2;color:#991b1b;border-radius:.25rem;cursor:pointer;font-size:.75rem;margin-top:auto}
+.cart-panel{position:fixed;right:-400px;top:0;height:100%;width:380px;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.15);transition:right 300ms ease;z-index:20;display:flex;flex-direction:column;border-left:1px solid var(--border)}
+@media (prefers-reduced-motion:reduce){.cart-panel{transition:none}}
+.cart-panel.open{right:0}
+.cart-header{padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cart-close{background:transparent;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)}
+.cart-items{flex:1;overflow:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
+.cart-item{display:flex;align-items:center;gap:.75rem;background:#f9fafb;border-radius:.5rem;padding:.5rem;border:1px solid var(--border)}
+.cart-item-info{flex:1;display:flex;flex-direction:column}
+.cart-item-name{font-weight:600;font-size:.9rem}
+.cart-item-price{color:var(--muted);font-size:.8rem}
+.qty-input{width:50px;padding:.3rem;border:1px solid var(--border);border-radius:.25rem;text-align:center;background:#fff}
+.btn-remove-sm{padding:.3rem .6rem;border:none;background:#fee2e2;color:#991b1b;border-radius:.25rem;cursor:pointer;font-size:.75rem}
+.cart-footer{padding:1rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.75rem}
+.total-row{font-weight:700;font-size:1.125rem;justify-content:space-between}
+.btn-checkout{padding:.75rem;background:#374151;color:#fff;border:none;border-radius:.375rem;cursor:pointer;font-size:.9rem;width:100%}
+.cart-empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--muted)}
+.dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:30;opacity:0;visibility:hidden;transition:opacity 200ms ease}
+@media (prefers-reduced-motion:reduce){.dialog-overlay{transition:none}}
+.dialog-overlay.open{opacity:1;visibility:visible}
+.dialog{background:#fff;border-radius:.75rem;padding:1.5rem;width:90%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.dialog h2{margin-bottom:1rem;font-size:1.25rem}
+.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.75rem}
+.form-group label{font-weight:500;font-size:.875rem;color:var(--muted)}
+.form-input{padding:.6rem;border:1px solid var(--border);border-radius:.375rem;background:#fff;font-size:1rem}
+.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(217,119,6,0.2)}
+.form-error{font-size:.8rem;color:#dc2626;min-height:1.25rem}
+.btn-confirm{padding:.75rem;background:var(--accent);color:#fff;border:none;border-radius:.375rem;cursor:pointer;font-size:.9rem;font-weight:600}
+.btn-cancel{padding:.75rem;background:transparent;border:1px solid var(--border);color:var(--ink);border-radius:.375rem;cursor:pointer;font-size:.9rem;margin-top:.5rem;width:100%}
+.order-status{margin-top:1rem;padding:.75rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:.5rem;text-align:center;font-weight:600;color:#166534}
+.fade-in{animation:fadeIn 300ms ease both}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<header><h1>Forma Market</h1><nav class="nav"><input type="search" id="search" placeholder="Search products..."/><div class="categories" id="catContainer"></div></nav></header><main class="main" id="productList"></main><aside class="cart-panel" id="cart">
+<div class="cart-header"><h2>Cart <span id="count">(0)</span></h2><button class="cart-close" id="cartClose">Ã—</button></div>
+<div class="cart-items" id="cartItems"></div>
+<div class="cart-footer"><div class="total-row"><span>Total:</span><span id="total">$0.00</span></div><button class="btn-checkout" id="checkout">Checkout</button></div>
+</aside>
+<div class="dialog-overlay" id="dialogOverlay"></div>
+<div class="dialog" id="orderDialog"><h2>Checkout</h2><form id="orderForm"><div class="form-group"><label for="orderName">Name</label><input type="text" id="orderName" class="form-input" required/></div><div class="form-group"><label for="orderEmail">Email</label><input type="email" id="orderEmail" class="form-input" required/></div><span class="form-error" id="orderError"></span><button class="btn-confirm" id="orderConfirm">Confirm Order</button><button class="btn-cancel" type="button" id="orderCancel">Cancel</button></form><p class="order-status" id="orderStatus"></p></div>
+<script>
+(function(){
+const products=[{id:1,name:"Luna Lamp",price:29,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='30' fill='%23f3f4f6'/%3E%3Cpath d='M50 70 L50 85 A20 20 0 1 0 50 70 Z' fill='%23d97706'/%3E%3Ccircle cx='40' cy='90' r='8' fill='%23e5e7eb'/%3E%3Ccircle cx='60' cy='90' r='8' fill='%23e5e7eb'/%3E%3C/svg%3E",category:"lighting"},{id:2,name:"Moss Vase",price:45,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='35' y='5' width='30' height='90' rx='15' fill='%23f5f5f4'/%3E%3Cpath d='M40 20 Q50 5 60 20' stroke='%23a7f3d0' stroke-width='8' fill='none'/%3E%3Cpath d='M40 90 L60 90 M35 80 L65 80' stroke='%23cbd5e1' stroke-width='3'/%3E%3C/svg%3E",category:"home"},{id:3,name:"Atlas Chair",price:149,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='30' y='70' width='40' height='25' rx='5' fill='%23e5e7eb'/%3E%3Cpath d='M35 70 L65 70 Q65 50 50 35 Q35 50 35 70 Z' fill='%23d1d5db'/%3E%3Crect x='48' y='25' width='4' height='35' fill='%236b7280'/%3E%3Ccircle cx='50' cy='85' r='5' fill='%239ca3af'/%3E%3C/svg%3E",category:"furniture"},{id:4,name:"Ocean Watch",price:189,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='55' r='25' fill='%23f8fafc' stroke='%23cbd5e1' stroke-width='6'/%3E%3Crect x='40' y='40' width='20' height='20' rx='2' fill='%2394a3b8'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23fcd34d' stroke='%23eab308' stroke-width='1'/%3E%3Cline x1='45' y1='55' x2='55' y2='55' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E",category:"accessories"},{id:5,name:"Pine Plant",price:34,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='85' r='20' fill='%23dcfce7'/%3E%3Cpath d='M50 65 L30 80 Q40 95 50 80 T70 80 Q60 65 50 65 Z' fill='%2316a34a'/%3E%3Ccircle cx='35' cy='95' r='10' fill='%23dcfce7'/%3E%3Ccircle cx='65' cy='95' r='10' fill='%23dcfce7'/%3E%3C/svg%3E",category:"plants"},{id:6,name:"Echo Speaker",price:89,image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='35' y='30' width='30' height='40' rx='25' fill='%23f8fafc' stroke='%23cbd5e1' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='8' fill='%23cbd5e1'/%3E%3Cpath d='M45 45 L55 45 M45 55 L55 55' stroke='%2394a3b8' stroke-width='1'/%3E%3Crect x='20' y='60' width='60' height='5' rx='2' fill='%23e2e8f0'/%3E%3C/svg%3E",category:"audio"}];
+let cart=[];const search=document.getElementById("search");const productList=document.getElementById("productList");const catContainer=document.getElementById("catContainer");const categories=["All","lighting","home","furniture","accessories","plants","audio"];const cartPanel=document.getElementById("cart");const cartItems=document.getElementById("cartItems");const countSpan=document.getElementById("count");const totalSpan=document.getElementById("total");const checkoutBtn=document.getElementById("checkout");const dialogOverlay=document.getElementById("dialogOverlay");const orderDialog=document.getElementById("orderDialog");const orderForm=document.getElementById("orderForm");const orderNameInput=document.getElementById("orderName");const orderEmailInput=document.getElementById("orderEmail");const orderError=document.getElementById("orderError");const orderConfirm=document.getElementById("orderConfirm");const orderCancel=document.getElementById("orderCancel");const orderStatus=document.getElementById("orderStatus");const cartClose=document.getElementById("cartClose");
+let selectedCat="All";
+function init(){renderCategories();loadProducts();}
+function renderCategories(){categories.forEach(cat=>{const btn=document.createElement("button");btn.className="category-btn"+(cat===selectedCat?" active":"");btn.textContent=cat;btn.addEventListener("click",()=>selectCategory(cat));catContainer.appendChild(btn);});}
+function selectCategory(cat){categories.forEach(c=>document.querySelector(".category-btn[data-cat="+JSON.stringify(c)+"]")?.classList.remove("active"));const active=document.querySelector(".category-btn.active");if(active)active.dataset.cat=cat;selectedCat=cat;loadProducts();}
+function loadProducts(){let filtered=products;if(selectedCat!=="All"){filtered=products.filter(p=>p.category===selectedCat);}renderList(filtered);}
+function renderList(list){productList.innerHTML="";list.forEach(p=>{const card=document.createElement("article");card.className="product-card fade-in";card.dataset.id=p.id;card.innerHTML='<div class="product-image"><img src="'+p.image+'"></div><div class="product-info"><h3 class="product-title">'+p.name+'</h3><p class="product-desc">Minimalist design for your everyday.</p><span class="product-price">$'+p.price.toFixed(2)+'</span><div class="product-actions"><button class="btn-add" id="add'+p.id+'">Add to Cart</button></div></div>';card.querySelector(".btn-add").addEventListener("click",()=>addToCart(p));productList.appendChild(card);});}
+function addToCart(item){if(cart.find(i=>i.id===item.id))return;cart.push(item);updateCart();animateCartPanel();}
+function removeItem(id){const idx=cart.findIndex(i=>i.id===id);if(idx!==-1)cart.splice(idx,1);updateCart();}
+function updateQty(id,delta){const item=cart.find(i=>i.id===id);if(!item)return;const newQty=item.qty+(delta||0);if(newQty<=0)return removeItem(id);item.qty=newQty;updateCart();}
+function updateCart(){countSpan.textContent="("+cart.length+")";let total=cart.reduce((sum,i)=>sum+i.price*i.qty,0);totalSpan.textContent="$"+total.toFixed(2);renderCartItems();updateCheckoutState();}
+function renderCartItems(){if(cart.length===0){cartItems.innerHTML='<div class="cart-empty">Your cart is empty</div>';return;}cartItems.innerHTML="";cart.forEach(item=>{const div=document.createElement("div");div.className="cart-item fade-in";div.innerHTML='<div class="cart-item-info"><span class="cart-item-name">'+item.name+'</span><span class="cart-item-price">$'+item.price.toFixed(2)+'</span></div><input type="number" class="qty-input" min="1" value="'+item.qty+'" aria-label="Quantity for '+item.name+'"><button class="btn-remove-sm" id="remove'+item.id+'">Remove</button>';div.querySelector(".qty-input").addEventListener("change",e=>{updateQty(item.id,parseInt(e.target.value)-item.qty)});div.querySelector(".btn-remove-sm").addEventListener("click",()=>removeItem(item.id));cartItems.appendChild(div);});}
+function updateCheckoutState(){const btn=checkoutBtn;btn.disabled=cart.length===0;btn.style.opacity=cart.length===0?".5":"1";btn.style.cursor=cart.length===0?"not-allowed":"pointer";}
+function animateCartPanel(){cartPanel.classList.add("open");setTimeout(()=>{cartPanel.classList.remove("open");}, 2400);}
+function openDialog(){dialogOverlay.classList.add("open");orderNameInput.focus();}
+function closeDialog(){dialogOverlay.classList.remove("open");}
+function validateForm(){const name=orderNameInput.value.trim();const email=orderEmailInput.value.trim();if(!name||!email){orderError.textContent="Please fill all fields.";return false;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){orderError.textContent="Invalid email address.";return false;}orderError.textContent="";return true;}
+function placeOrder(){if(!validateForm()){return;}const status="Demo order confirmed for "+cart.length+" item(s)."+(cart.length===1?"":"s");orderStatus.textContent=status;orderDialog.innerHTML='<h2>Order Confirmed</h2><p class="order-status" id="orderStatus">'+status+'</p><button class="btn-confirm" id="resetCart">Close & Reset Cart</button>';document.getElementById("resetCart").addEventListener("click",()=>{cart=[];updateCart();closeDialog();});dialogOverlay.classList.remove("open");}
+checkoutBtn.addEventListener("click",openDialog);orderCancel.addEventListener("click",closeDialog);orderForm.addEventListener("submit",e=>{e.preventDefault();if(validateForm()){placeOrder();}});orderConfirm.addEventListener("click",()=>{if(validateForm()){placeOrder();}});cartClose.addEventListener("click",closeDialog);dialogOverlay.addEventListener("click",e=>{if(e.target===dialogOverlay)closeDialog();});document.onkeydown=e=>{if(e.key==="Escape"&&dialogOverlay.classList.contains("open")){closeDialog();}};search.addEventListener("input",loadProducts);init();
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,17 @@ from jarvis.commands import Command, parse
 from jarvis.engine import Engine
 from jarvis.brain import Brain
 
+UI_SOURCE = '''
+import tkinter as tk
+def launch_ui():
+    root = tk.Tk()
+    tk.Entry(root).pack()
+    tk.Button(root, text="Run", command=lambda: tk.Label(root, text="Done").pack()).pack()
+    root.mainloop()
+if __name__ == "__main__":
+    launch_ui()
+'''
+
 
 class CoderTests(unittest.TestCase):
     def setUp(self):
@@ -91,7 +102,7 @@ class CoderTests(unittest.TestCase):
             self.assertEqual(operation, "code_edit")
             self.assertEqual(kwargs["path"], "calculator.py")
             self.assertEqual(kwargs["current"].replace("\r\n", "\n"), original)
-            return {"content": original + "\ndef launch_ui():\n    pass\n", "explanation": ""}
+            return {"content": original + UI_SOURCE, "explanation": ""}
 
         self.client.request.side_effect = answer
         result = brain.run(sent[0].value, lambda: False)
@@ -99,7 +110,7 @@ class CoderTests(unittest.TestCase):
         self.assertIn("def launch_ui", existing.read_text(encoding="utf-8"))
         self.assertEqual(self.client.request.call_count, 1)
 
-    def test_original_calculator_gets_working_ui_without_model(self):
+    def test_original_calculator_ui_edit_uses_configured_model_and_current_source(self):
         import subprocess
         import sys
         from jarvis.coder import calculator_template
@@ -111,13 +122,18 @@ class CoderTests(unittest.TestCase):
         self.actions._task_folder.return_value = str(selected)
         brain = Brain(self.actions, self.project, {"enabled": True})
         brain.client = self.client
+        generated = (Path(__file__).parents[1] / 'jarvis/templates/calculator_gui.py').read_text(encoding='utf-8')
+        self.client.request.return_value = {'content': generated}
         result = brain.run("ModifyCalculator .py to add UI to it", lambda: False)
         content = file.read_text(encoding="utf-8")
         self.assertIn("calculator.py", result)
         self.assertIn("def launch_ui()", content)
         self.assertIn("ttk.Button", content)
         self.assertIn("def calculate(", content)
-        self.client.request.assert_not_called()
+        self.client.request.assert_called_once()
+        self.assertEqual(self.client.request.call_args.kwargs['current'].replace('\r\n', '\n'),
+                         calculator_template('calculator', 'calculator.py'))
+        self.assertTrue(self.client.request.call_args.kwargs['use_configured_coder'])
         done = subprocess.run([sys.executable, str(file), "multiply", "6", "7"],
                               capture_output=True, text=True, check=False)
         self.assertEqual((done.returncode, done.stdout.strip()), (0, "42"))
@@ -136,7 +152,7 @@ class CoderTests(unittest.TestCase):
             self.assertEqual(operation, "code_edit")
             self.assertEqual(kwargs["path"], "kunal.py")
             self.assertEqual(kwargs["current"].replace("\r\n", "\n"), original)
-            return {"content": original + "\ndef launch_ui():\n    pass\n", "explanation": ""}
+            return {"content": original + UI_SOURCE, "explanation": ""}
 
         self.client.request.side_effect = answer
         brain.run("Modify Kunal .py to add UI to it", lambda: False)
@@ -178,6 +194,25 @@ class CoderTests(unittest.TestCase):
         self.assertEqual(named_folder_request("create python code for calculator in test codes project folder"), "test codes")
         self.assertEqual(python_file_request("Create the Python code for Calculator in TestCodes folder."), "calculator.py")
         self.assertEqual(named_folder_request("Create the Python code for Calculator in TestCodes folder."), "TestCodes")
+
+    def test_folder_first_scope_does_not_capture_app_purpose(self):
+        cases = {
+            'create an app to monitor my health In folder testcodes folder': 'testcodes',
+            'create an app to monitor my health in folder TestCodes': 'TestCodes',
+            'create an app to monitor my health in TestCodes folder': 'TestCodes',
+            'build a game inside the folder Test_Codes folder.': 'Test_Codes',
+            'create a website in folder "Test Codes" with a contact form': 'Test Codes',
+            'create a Python script in TestCodes folder': 'TestCodes',
+        }
+        for goal, expected in cases.items():
+            with self.subTest(goal=goal):
+                self.assertEqual(named_folder_request(goal), expected)
+
+    def test_clarified_folder_overrides_stale_absolute_scope(self):
+        replacement = self.project / 'TestCodes'
+        replacement.mkdir()
+        goal = f'In folder {replacement}, create an app in D:\\missing\\OldProject'
+        self.assertEqual(named_folder_request(goal), str(replacement))
 
     def test_creates_generated_python_in_selected_explorer_folder(self):
         self.actions._task_folder.return_value = str(self.project)

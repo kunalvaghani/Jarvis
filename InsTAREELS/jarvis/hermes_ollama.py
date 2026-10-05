@@ -23,7 +23,7 @@ def completion(payload, schema, model, budget, client, chat_fn, rules):
             messages.append({"role": "user" if row["role"] == "tool" else row["role"], "content": content})
     print("Hermes native inference started.", file=sys.stderr, flush=True)
     generated = chat_fn(client, {"model": model, "num_gpu": 0, "num_ctx": 64000,
-        "num_predict": 1400, "temperature": .1, "think": False,
+        "num_predict": 4000, "temperature": .1, "think": False,
         "timeout_seconds": budget, "format_schema": schema}, messages, structured=True)
     proposal = json.loads(generated)
     print("Hermes native inference completed.", file=sys.stderr, flush=True)

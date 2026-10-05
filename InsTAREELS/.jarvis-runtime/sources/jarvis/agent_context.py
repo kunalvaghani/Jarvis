@@ -156,9 +156,11 @@ def repository_map(project, files=None, budget=5000):
 
 
 def coding_context(project, goal, target=None, files=None):
+    from .coding_languages import context as language_context
     from .development_knowledge import context as development_context, detect_stack
     from .development_learning import recall
-    return {'development_skills': development_context(project, goal, target),
+    return {'language_context': language_context(goal, target),
+            'development_skills': development_context(project, goal, target),
             'development_lessons': recall(Path(__file__).parent.parent, detect_stack(project, goal), goal) if Path(target or '').suffix != '.py' else [],
             'repository_instructions': instruction_context(project, target),
             'selected_skills': selected_skills(project, goal),
@@ -185,7 +187,7 @@ def compact_context(value, limit=24000):
             # Keep exact action identities in all retained completed entries.
             result[key] = [{k: (v[:500] + '[excerpt]' if isinstance(v, str) and len(v) > 500 else v)
                             for k, v in item.items()} if isinstance(item, dict) else str(item)[:500]
-                           for item in data[-12:]]
+                           for item in (data[-40:] if key == 'completed' else data[-12:])]
         elif isinstance(data, dict):
             result[key] = {k: (v[:1200] + '[excerpt]' if isinstance(v, str) and len(v) > 1200 else v)
                            for k, v in data.items()}

@@ -1,0 +1,18 @@
+[
+  {
+    "date": "2026-10-04T07:35:14.708474+00:00",
+    "model": "qwen3.5:9b",
+    "scope": "Real local Qwen generation and authored Tkinter fixture only; no user project executed.",
+    "calls": [
+      "code_edit",
+      "code_edit",
+      "code_edit"
+    ],
+    "exact_current": true,
+    "code_progress_events": 1688,
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Requested graphical UI is missing a reachable window/app launch, event loop, interactive controls or connected callbacks. Preserve current source and implement a working UI, not console code or launch_ui(): pass.",
+    "generation_seconds": 534.781
+  }
+]

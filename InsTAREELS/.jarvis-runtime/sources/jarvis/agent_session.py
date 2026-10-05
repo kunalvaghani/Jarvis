@@ -122,7 +122,7 @@ class AgentSession:
         children = [AgentSession(self.actions.base, self.actions.project, emit=self.emit) for _ in goals]
         # A single CPU Ollama slot queues requests. Its read deadline must cover
         # that queue rather than timing out the third agent during valid work.
-        child_provider = (OllamaProvider(provider.model, min(600, provider.timeout_seconds * len(goals)))
+        child_provider = (OllamaProvider(provider.model, min(600, provider.timeout_seconds * len(goals)), provider.native_tools)
                           if isinstance(provider, OllamaProvider) else provider)
         self._event('team.started', children=[child.identifier for child in children])
         def research(item):
@@ -230,12 +230,13 @@ class AgentSession:
 
 
 class OllamaProvider:
-    """Existing local Ollama model, with structured results and no tool access."""
-    def __init__(self, model='qwen3.5:4b', timeout_seconds=150):
+    """Local Ollama inference proposes read calls; only AgentSession dispatches."""
+    def __init__(self, model='qwen3.5:9b', timeout_seconds=150, native_tools=False):
         if type(timeout_seconds) not in {int, float} or not 1 <= timeout_seconds <= 600:
             raise ValueError('Local inference deadline must be between one and six hundred seconds.')
         self.model = model
         self.timeout_seconds = timeout_seconds
+        self.native_tools = native_tools
 
     def __call__(self, context):
         import requests
@@ -258,6 +259,21 @@ class OllamaProvider:
             'Use existing observations, avoid repeating calls, and cite source paths in the answer.')
         with requests.Session() as client:
             client.trust_env = False
+            if self.native_tools:
+                from .native_tools import plan
+                # Session observations are fresh reads, not resumed action queues.
+                data = dict(context)
+                data['completed'] = [{**item, 'verified': True, 'expected': 'Observed successful scoped read'}
+                                     for item in context.get('observations', [])[-6:]
+                                     if isinstance(item, dict) and item.get('ok') is True]
+                proposed = plan(client, self.model, prompt, data,
+                                {'timeout_seconds': self.timeout_seconds, 'max_final_chars': 10000,
+                                 'num_predict': 1600})
+                if proposed.get('question'):
+                    return {'final': proposed['question'], 'calls': []}
+                if proposed['done']:
+                    return {'final': proposed['reason'], 'calls': []}
+                return {'final': '', 'calls': [{key: proposed['steps'][0][key] for key in ('action', 'value', 'content')}]}
             result = chat(client, {'model': self.model, 'think': False, 'format_schema': schema,
                 'num_gpu': 0, 'num_ctx': 16384, 'num_predict': 1600, 'temperature': .1,
                 'timeout_seconds': self.timeout_seconds},

@@ -1,5 +1,9 @@
 # Interactive Jarvis island
 
+**Current presentation (2026-10-04):** All these features now live inside the
+[single-window glass notch](voiceos-notch.md), including the command console.
+Earlier previews and measurements below retain their original context.
+
 Implemented 2026-10-02. The island now opens cards for outputs, choices, music and five local games. **Now working** stays above every view with the activity, current filename and streamed character count. Overview shows the full target path, recent result and a bounded source preview. Streaming drafts are explicitly incomplete; a **File saved** event requires the existing coder's disk readback and validation. Python/JSON syntax checks do not establish functional behavior.
 
 ![Rendered interactive island widgets with sample content — not desktop screenshots or live Spotify results](../artifacts/island-desk-preview.png)

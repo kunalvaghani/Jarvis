@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-03T17:46:12.629865+00:00",
+  "checks": {
+    "two_frames_maximum": true,
+    "oldest_frame_discarded": true,
+    "scaffold_has_no_future_screen": true,
+    "no_images_after_task": true
+  },
+  "passed": true,
+  "local_model_fixture": {
+    "passed": true,
+    "seconds": 34.125,
+    "under_five_seconds": false,
+    "model": "qwen3-vl:4b",
+    "result": {
+      "question": "",
+      "steps": [
+        {
+          "action": "select",
+          "value": "Advanced",
+          "browser": "chrome",
+          "expected": "Activate the Advanced tab in Notepad",
+          "folder": "",
+          "content": "",
+          "platform": "windows",
+          "find": "Advanced"
+        }
+      ],
+      "done": false,
+      "reason": "The goal is to select the Advanced tab in Notepad. The current screen shows the available tabs: Overview, Advanced, and Help. The 'select' tool is available and can be used to activate the Advanced tab by its visible name. This action directly fulfills the user's request.",
+      "model_used": "qwen3-vl:4b"
+    }
+  },
+  "scope": "Authored pixels and real local inference only; no desktop capture/input, live voice, end-to-end speed or general accuracy evaluation."
+}

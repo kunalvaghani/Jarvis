@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-04T05:45:04.870216+00:00",
+  "scope": "Actual local selector, authored temporary sessions, nonblocking planner consumption; no desktop actions or simultaneous-model throughput claim.",
+  "planner_initial_call_seconds": 0.0,
+  "initial_ready": false,
+  "selector_seconds": 1.437,
+  "model": "qwen3.5:0.8b",
+  "threads": [
+    "Jarvis context selector"
+  ],
+  "events": [],
+  "selected_source": "saved_memory",
+  "remaining_choices": 0,
+  "ready_context": {
+    "status": "selected",
+    "source": "saved_memory",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Python calculator app code"
+      },
+      {
+        "role": "assistant",
+        "content": "Tkinter buttons for addition and multiplication"
+      }
+    ]
+  },
+  "passed": true
+}

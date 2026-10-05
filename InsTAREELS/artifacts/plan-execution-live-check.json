@@ -1,0 +1,1526 @@
+{
+  "date": "2026-10-04T09:56:46.413277+00:00",
+  "live_planner": true,
+  "scope": "Ten authored real file workflows through Brain/ToolRegistry/Actions; fresh disk observations and independent deterministic decision/verification oracles. No microphone, native desktop, or end-to-end model decision claim.",
+  "cases": [
+    {
+      "name": "notes",
+      "plan_lines": 2,
+      "passed": true,
+      "seconds": 101.812,
+      "goal": "Prepare the notes workflow in this folder in this exact order, then finish:\n1. Create notes1.txt containing pending\n2. Read notes1.txt",
+      "planner_calls": 1,
+      "completed_actions": 2,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "notes1.txt",
+              "browser": "chrome",
+              "expected": "File notes1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "notes1.txt",
+              "browser": "chrome",
+              "expected": "File notes1.txt read successfully, content is pending",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "notes1.txt": "pending"
+      },
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "todo",
+      "plan_lines": 3,
+      "passed": true,
+      "seconds": 108.656,
+      "goal": "Prepare the todo workflow in this folder in this exact order, then finish:\n1. Create todo1.txt containing pending\n2. Modify todo1.txt: replace pending with reviewed\n3. Read todo1.txt",
+      "planner_calls": 1,
+      "completed_actions": 3,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "todo1.txt",
+              "browser": "chrome",
+              "expected": "File todo1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "todo1.txt",
+              "browser": "chrome",
+              "expected": "File todo1.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "todo1.txt",
+              "browser": "chrome",
+              "expected": "File todo1.txt read with content reviewed",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "todo1.txt": "reviewed"
+      },
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "inventory",
+      "plan_lines": 4,
+      "passed": true,
+      "seconds": 104.453,
+      "goal": "Prepare the inventory workflow in this folder in this exact order, then finish:\n1. Create inventory1.txt containing pending\n2. Modify inventory1.txt: replace pending with reviewed\n3. Modify inventory1.txt: replace reviewed with complete\n4. Read inventory1.txt",
+      "planner_calls": 1,
+      "completed_actions": 4,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "inventory1.txt",
+              "browser": "chrome",
+              "expected": "File inventory1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "inventory1.txt",
+              "browser": "chrome",
+              "expected": "File inventory1.txt modified, content now reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "inventory1.txt",
+              "browser": "chrome",
+              "expected": "File inventory1.txt modified, content now complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "inventory1.txt",
+              "browser": "chrome",
+              "expected": "File inventory1.txt read, content is complete",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "inventory1.txt": "complete"
+      },
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "journal",
+      "plan_lines": 5,
+      "passed": true,
+      "seconds": 167.75,
+      "goal": "Prepare the journal workflow in this folder in this exact order, then finish:\n1. Create journal1.txt containing pending\n2. Modify journal1.txt: replace pending with reviewed\n3. Modify journal1.txt: replace reviewed with complete\n4. Create journal2.txt containing pending\n5. Read journal2.txt",
+      "planner_calls": 1,
+      "completed_actions": 5,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "journal1.txt",
+              "browser": "chrome",
+              "expected": "journal1.txt created with content 'pending'",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "journal1.txt",
+              "browser": "chrome",
+              "expected": "journal1.txt modified, content changed from 'pending' to 'reviewed'",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "journal1.txt",
+              "browser": "chrome",
+              "expected": "journal1.txt modified, content changed from 'reviewed' to 'complete'",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "journal2.txt",
+              "browser": "chrome",
+              "expected": "journal2.txt created with content 'pending'",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "journal2.txt",
+              "browser": "chrome",
+              "expected": "Content of journal2.txt read successfully, showing 'pending'",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "journal1.txt": "complete",
+        "journal2.txt": "pending"
+      },
+      "dispatched_actions": 5,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "schedule",
+      "plan_lines": 6,
+      "passed": true,
+      "seconds": 159.032,
+      "goal": "Prepare the schedule workflow in this folder in this exact order, then finish:\n1. Create schedule1.txt containing pending\n2. Modify schedule1.txt: replace pending with reviewed\n3. Modify schedule1.txt: replace reviewed with complete\n4. Create schedule2.txt containing pending\n5. Modify schedule2.txt: replace pending with reviewed\n6. Read schedule2.txt",
+      "planner_calls": 1,
+      "completed_actions": 6,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "schedule1.txt",
+              "browser": "chrome",
+              "expected": "schedule1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "schedule1.txt",
+              "browser": "chrome",
+              "expected": "schedule1.txt modified, content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "schedule1.txt",
+              "browser": "chrome",
+              "expected": "schedule1.txt modified, content changed to complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "schedule2.txt",
+              "browser": "chrome",
+              "expected": "schedule2.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "schedule2.txt",
+              "browser": "chrome",
+              "expected": "schedule2.txt modified, content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "schedule2.txt",
+              "browser": "chrome",
+              "expected": "schedule2.txt content read successfully showing reviewed",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "schedule1.txt": "complete",
+        "schedule2.txt": "reviewed"
+      },
+      "dispatched_actions": 6,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "budget",
+      "plan_lines": 8,
+      "passed": true,
+      "seconds": 176.609,
+      "goal": "Prepare the budget workflow in this folder in this exact order, then finish:\n1. Create budget1.txt containing pending\n2. Modify budget1.txt: replace pending with reviewed\n3. Modify budget1.txt: replace reviewed with complete\n4. Create budget2.txt containing pending\n5. Modify budget2.txt: replace pending with reviewed\n6. Modify budget2.txt: replace reviewed with complete\n7. Create budget3.txt containing pending\n8. Read budget3.txt",
+      "planner_calls": 1,
+      "completed_actions": 8,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "budget1.txt",
+              "browser": "chrome",
+              "expected": "budget1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "budget1.txt",
+              "browser": "chrome",
+              "expected": "budget1.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "budget1.txt",
+              "browser": "chrome",
+              "expected": "budget1.txt modified with content complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "budget2.txt",
+              "browser": "chrome",
+              "expected": "budget2.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "budget2.txt",
+              "browser": "chrome",
+              "expected": "budget2.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "budget2.txt",
+              "browser": "chrome",
+              "expected": "budget2.txt modified with content complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "budget3.txt",
+              "browser": "chrome",
+              "expected": "budget3.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "budget3.txt",
+              "browser": "chrome",
+              "expected": "budget3.txt read successfully showing content pending",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "budget1.txt": "complete",
+        "budget2.txt": "complete",
+        "budget3.txt": "pending"
+      },
+      "dispatched_actions": 8,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "release",
+      "plan_lines": 10,
+      "passed": true,
+      "seconds": 241.657,
+      "goal": "Prepare the release workflow in this folder in this exact order, then finish:\n1. Create release1.txt containing pending\n2. Modify release1.txt: replace pending with reviewed\n3. Modify release1.txt: replace reviewed with complete\n4. Create release2.txt containing pending\n5. Modify release2.txt: replace pending with reviewed\n6. Modify release2.txt: replace reviewed with complete\n7. Create release3.txt containing pending\n8. Modify release3.txt: replace pending with reviewed\n9. Modify release3.txt: replace reviewed with complete\n10. Read release3.txt",
+      "planner_calls": 2,
+      "completed_actions": 10,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "Content of release3.txt read successfully",
+              "folder": "",
+              "content": "complete",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        },
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release1.txt",
+              "browser": "chrome",
+              "expected": "File release1.txt modified with content complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release2.txt",
+              "browser": "chrome",
+              "expected": "File release2.txt modified with content complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt modified with content reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "File release3.txt modified with content complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "release3.txt",
+              "browser": "chrome",
+              "expected": "Content of release3.txt read successfully",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "release1.txt": "complete",
+        "release2.txt": "complete",
+        "release3.txt": "complete"
+      },
+      "dispatched_actions": 10,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "travel",
+      "plan_lines": 12,
+      "passed": true,
+      "seconds": 261.672,
+      "goal": "Prepare the travel workflow in this folder in this exact order, then finish:\n1. Create travel1.txt containing pending\n2. Modify travel1.txt: replace pending with reviewed\n3. Modify travel1.txt: replace reviewed with complete\n4. Create travel2.txt containing pending\n5. Modify travel2.txt: replace pending with reviewed\n6. Modify travel2.txt: replace reviewed with complete\n7. Create travel3.txt containing pending\n8. Modify travel3.txt: replace pending with reviewed\n9. Modify travel3.txt: replace reviewed with complete\n10. Create travel4.txt containing pending\n11. Modify travel4.txt: replace pending with reviewed\n12. Read travel4.txt",
+      "planner_calls": 2,
+      "completed_actions": 12,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt modified, content is complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "File travel4.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "File travel4.txt modified, content is reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "Content of travel4.txt read successfully",
+              "folder": "",
+              "content": "complete",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        },
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt modified, content is reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel1.txt",
+              "browser": "chrome",
+              "expected": "File travel1.txt modified, content is complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt modified, content is reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel2.txt",
+              "browser": "chrome",
+              "expected": "File travel2.txt modified, content is complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt modified, content is reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel3.txt",
+              "browser": "chrome",
+              "expected": "File travel3.txt modified, content is complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "File travel4.txt created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "File travel4.txt modified, content is reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "travel4.txt",
+              "browser": "chrome",
+              "expected": "Content of travel4.txt read successfully",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "travel1.txt": "complete",
+        "travel2.txt": "complete",
+        "travel3.txt": "complete",
+        "travel4.txt": "reviewed"
+      },
+      "dispatched_actions": 12,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "project",
+      "plan_lines": 15,
+      "passed": true,
+      "seconds": 284.062,
+      "goal": "Prepare the project workflow in this folder in this exact order, then finish:\n1. Create project1.txt containing pending\n2. Modify project1.txt: replace pending with reviewed\n3. Modify project1.txt: replace reviewed with complete\n4. Create project2.txt containing pending\n5. Modify project2.txt: replace pending with reviewed\n6. Modify project2.txt: replace reviewed with complete\n7. Create project3.txt containing pending\n8. Modify project3.txt: replace pending with reviewed\n9. Modify project3.txt: replace reviewed with complete\n10. Create project4.txt containing pending\n11. Modify project4.txt: replace pending with reviewed\n12. Modify project4.txt: replace reviewed with complete\n13. Create project5.txt containing pending\n14. Modify project5.txt: replace pending with reviewed\n15. Read project5.txt",
+      "planner_calls": 2,
+      "completed_actions": 15,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "File project1.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "File project2.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "File project3.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "File project4.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "File project5.txt created with content pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "File read successfully showing content reviewed",
+              "folder": "",
+              "content": "",
+              "find": "reviewed",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        },
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "File created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project1.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "File created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project2.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "File created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project3.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "File created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project4.txt",
+              "browser": "chrome",
+              "expected": "Content changed to complete",
+              "folder": "this folder",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "File created with content pending",
+              "folder": "this folder",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "Content changed to reviewed",
+              "folder": "this folder",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "project5.txt",
+              "browser": "chrome",
+              "expected": "File content read successfully",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "project1.txt": "complete",
+        "project2.txt": "complete",
+        "project3.txt": "complete",
+        "project4.txt": "complete",
+        "project5.txt": "reviewed"
+      },
+      "dispatched_actions": 15,
+      "retained_from_check": "2026-10-04T09:29:01.773004+00:00"
+    },
+    {
+      "name": "audit",
+      "plan_lines": 20,
+      "passed": true,
+      "seconds": 153.953,
+      "goal": "Prepare the audit workflow in this folder in this exact order, then finish:\n1. Create audit1.txt containing pending\n2. Modify audit1.txt: replace pending with reviewed\n3. Modify audit1.txt: replace reviewed with complete\n4. Create audit2.txt containing pending\n5. Modify audit2.txt: replace pending with reviewed\n6. Modify audit2.txt: replace reviewed with complete\n7. Create audit3.txt containing pending\n8. Modify audit3.txt: replace pending with reviewed\n9. Modify audit3.txt: replace reviewed with complete\n10. Create audit4.txt containing pending\n11. Modify audit4.txt: replace pending with reviewed\n12. Modify audit4.txt: replace reviewed with complete\n13. Create audit5.txt containing pending\n14. Modify audit5.txt: replace pending with reviewed\n15. Modify audit5.txt: replace reviewed with complete\n16. Create audit6.txt containing pending\n17. Modify audit6.txt: replace pending with reviewed\n18. Modify audit6.txt: replace reviewed with complete\n19. Create audit7.txt containing pending\n20. Read audit7.txt",
+      "planner_calls": 1,
+      "completed_actions": 20,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "action": "create_file",
+              "value": "audit1.txt",
+              "browser": "chrome",
+              "expected": "audit1.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit1.txt",
+              "browser": "chrome",
+              "expected": "audit1.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit1.txt",
+              "browser": "chrome",
+              "expected": "audit1.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit2.txt",
+              "browser": "chrome",
+              "expected": "audit2.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit2.txt",
+              "browser": "chrome",
+              "expected": "audit2.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit2.txt",
+              "browser": "chrome",
+              "expected": "audit2.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit3.txt",
+              "browser": "chrome",
+              "expected": "audit3.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit3.txt",
+              "browser": "chrome",
+              "expected": "audit3.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit3.txt",
+              "browser": "chrome",
+              "expected": "audit3.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit4.txt",
+              "browser": "chrome",
+              "expected": "audit4.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit4.txt",
+              "browser": "chrome",
+              "expected": "audit4.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit4.txt",
+              "browser": "chrome",
+              "expected": "audit4.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit5.txt",
+              "browser": "chrome",
+              "expected": "audit5.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit5.txt",
+              "browser": "chrome",
+              "expected": "audit5.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit5.txt",
+              "browser": "chrome",
+              "expected": "audit5.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit6.txt",
+              "browser": "chrome",
+              "expected": "audit6.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit6.txt",
+              "browser": "chrome",
+              "expected": "audit6.txt modified to reviewed",
+              "folder": "",
+              "content": "reviewed",
+              "find": "pending",
+              "platform": ""
+            },
+            {
+              "action": "modify_file",
+              "value": "audit6.txt",
+              "browser": "chrome",
+              "expected": "audit6.txt modified to complete",
+              "folder": "",
+              "content": "complete",
+              "find": "reviewed",
+              "platform": ""
+            },
+            {
+              "action": "create_file",
+              "value": "audit7.txt",
+              "browser": "chrome",
+              "expected": "audit7.txt created with pending",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            },
+            {
+              "action": "read_file",
+              "value": "audit7.txt",
+              "browser": "chrome",
+              "expected": "audit7.txt read successfully",
+              "folder": "",
+              "content": "pending",
+              "find": "",
+              "platform": ""
+            }
+          ],
+          "model_used": "qwen3.5:9b"
+        }
+      ],
+      "final_files": {
+        "audit1.txt": "complete",
+        "audit2.txt": "complete",
+        "audit3.txt": "complete",
+        "audit4.txt": "complete",
+        "audit5.txt": "complete",
+        "audit6.txt": "complete",
+        "audit7.txt": "pending"
+      },
+      "dispatched_actions": 20,
+      "retest_execution_seconds": 1.547,
+      "original_model_check": "2026-10-04T09:56:46.413277+00:00",
+      "planner_mode": "Previously generated actual Qwen proposal; fresh execution retest after read identity correction",
+      "retest_completed_at": "2026-10-04T10:02:58.866035+00:00"
+    }
+  ],
+  "passed": true,
+  "updated_at": "2026-10-04T10:02:58.866035+00:00"
+}

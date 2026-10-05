@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-05T09:35:51.475637+00:00",
+  "scope": "Fresh active-server API visibility and cached base-weight presence; generation and UI are separate checks.",
+  "endpoint": "http://127.0.0.1:11434",
+  "diagnosis": "Port 11434 was forwarded to WSL; that server initially listed only gemma4:e4b while Windows Qwen files were in D:\\Ollama\\models.",
+  "restoration": "Completed model-only setup using existing cached GGUF files and local blob/create APIs; no registry downloads or shared-server restart.",
+  "visible_models": [
+    "gemma4:e4b",
+    "jarvis-codex-qwen3.5:9b",
+    "qwen2.5:0.5b",
+    "qwen3.5:0.8b",
+    "qwen3.5:9b"
+  ],
+  "model_checks": {
+    "qwen3.5:9b": {
+      "status_code": 200,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ]
+    },
+    "jarvis-codex-qwen3.5:9b": {
+      "status_code": 200,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ]
+    },
+    "qwen3.5:0.8b": {
+      "status_code": 200,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ]
+    },
+    "qwen2.5:0.5b": {
+      "status_code": 200,
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    }
+  },
+  "windows_cache": "D:\\Ollama\\models",
+  "server_base_blob_status": 200,
+  "base_weight_sha256": "sha256:dec52a44569a2a25341c4e4d3fee25846eed4f6f0b936278e3a3c900bb99d37c",
+  "base_weight_bytes": 6594462816,
+  "gemma_preserved": true,
+  "passed": true
+}

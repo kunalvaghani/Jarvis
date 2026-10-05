@@ -39,6 +39,10 @@ def main():
             scale = window_scale(root)
             app.panel.geometry(f"{round(500*scale)}x{round(316*scale)}+20000+20000")
             app.panel.deiconify()
+            app.config.setdefault('ui', {})['reduced_motion'] = True
+            app.island.expand(True)
+            app.island.features_open = True
+            app.island.tick('STANDBY')
             app.live.set("Ready when you are. Ask a question or give me a task.")
             app.log.configure(state="normal")
             app.log.delete("1.0", "end")

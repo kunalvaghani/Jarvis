@@ -1,0 +1,12 @@
+{"version": 1, "at": "2026-10-04T09:30:09.270183+00:00", "event": "tool.started", "call_id": "4a6dd31c770841349158778a9b2da879", "tool": "create_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.280233+00:00", "event": "tool.completed", "call_id": "4a6dd31c770841349158778a9b2da879", "tool": "create_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:30:09.345156+00:00", "event": "tool.started", "call_id": "d8df8c1551e3421d94f36114df1a04b2", "tool": "modify_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.357221+00:00", "event": "tool.completed", "call_id": "d8df8c1551e3421d94f36114df1a04b2", "tool": "modify_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:30:09.422601+00:00", "event": "tool.started", "call_id": "2c54b1b7112c4da1bdd8a4f8b49bc162", "tool": "modify_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.434503+00:00", "event": "tool.completed", "call_id": "2c54b1b7112c4da1bdd8a4f8b49bc162", "tool": "modify_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:30:09.506646+00:00", "event": "tool.started", "call_id": "24257197d7e2486788802e1388cc4355", "tool": "create_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.514686+00:00", "event": "tool.completed", "call_id": "24257197d7e2486788802e1388cc4355", "tool": "create_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:30:09.584671+00:00", "event": "tool.started", "call_id": "201943b583324f3c962cd440e385208e", "tool": "modify_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.594728+00:00", "event": "tool.completed", "call_id": "201943b583324f3c962cd440e385208e", "tool": "modify_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:30:09.675966+00:00", "event": "tool.started", "call_id": "ec3fcc026d7744f185262f28fd1c298c", "tool": "read_file"}
+{"version": 1, "at": "2026-10-04T09:30:09.684000+00:00", "event": "tool.completed", "call_id": "ec3fcc026d7744f185262f28fd1c298c", "tool": "read_file", "backend": "toolkit"}

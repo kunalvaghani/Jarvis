@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-04T05:42:18.419865+00:00",
+  "scope": "Actual local selector, authored temporary sessions, nonblocking planner consumption; no desktop actions or simultaneous-model throughput claim.",
+  "planner_initial_call_seconds": 0.0,
+  "initial_ready": false,
+  "selector_seconds": 3.016,
+  "model": "qwen3.5:0.8b",
+  "threads": [
+    "Jarvis context selector"
+  ],
+  "events": [
+    [
+      "repair",
+      "Context selector unavailable; explicit memory choices retained during backoff."
+    ]
+  ],
+  "selected_source": "none",
+  "remaining_choices": 2,
+  "ready_context": {
+    "status": "ambiguous",
+    "note": "Multiple historical sessions match. Do not infer targets or replay actions; ask if needed.",
+    "options": [
+      {
+        "question": "Python calculator app code",
+        "keywords": [
+          "calculator",
+          "multiplication",
+          "python"
+        ]
+      },
+      {
+        "question": "Python snake game app code",
+        "keywords": [
+          "python"
+        ]
+      }
+    ]
+  },
+  "passed": false
+}

@@ -60,7 +60,7 @@ def predict(request):
         enabled_toolsets=["jarvis_planning"], max_iterations=3,
         quiet_mode=True, save_trajectories=False, skip_context_files=True,
         load_soul_identity=False, skip_memory=True, skip_background_review=True,
-        checkpoints_enabled=False, run_budget_seconds=budget, max_tokens=1400,
+        checkpoints_enabled=False, run_budget_seconds=budget, max_tokens=4000,
         reasoning_config={"enabled": False},
         request_overrides={"stream": False},
         ephemeral_system_prompt=RULES + "You are Jarvis's planning engine. Propose supported steps with submit_jarvis_plan. Inspect current failures and observations when replanning; never repeat uncertain actions. Completion is only an assessment for Jarvis to independently verify.")

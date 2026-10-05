@@ -93,3 +93,47 @@
 {"at": 1790961258.381492, "message": "UI Automation worker stopped responding; attempting background recovery."}
 {"at": 1790961258.3829997, "message": "UI Automation worker is not repaired yet; retrying in 10 seconds."}
 {"at": 1790961268.5436819, "message": "UI Automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791035475.6418557, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791035477.5940766, "message": "Ollama stopped responding; attempting background recovery."}
+{"at": 1791035494.584825, "message": "Ollama was stopped and fixed. No previous actions were replayed."}
+{"at": 1791053603.368007, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791055334.4755726, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791055449.507467, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791056660.3128233, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791057753.0071447, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791058292.1044476, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791058607.4396002, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791081102.6785767, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791081177.965127, "message": "Browser automation worker stopped responding; attempting background recovery."}
+{"at": 1791081177.966138, "message": "Browser automation worker is not repaired yet; retrying in 10 seconds."}
+{"at": 1791081188.074661, "message": "Browser automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791083590.89675, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791084521.0138466, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791087459.3049152, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791087969.2302208, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791094417.7705765, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791102089.2854226, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791102260.886136, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791102295.6093068, "message": "Context selector unavailable; explicit memory choices retained during backoff."}
+{"at": 1791102584.3892474, "message": "Browser automation worker stopped responding; attempting background recovery."}
+{"at": 1791102584.3912466, "message": "Browser automation worker is not repaired yet; retrying in 10 seconds."}
+{"at": 1791102589.5462623, "message": "Browser automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791108861.4657283, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791108937.784314, "message": "Microphone stopped responding; attempting background recovery."}
+{"at": 1791108937.794833, "message": "Microphone is not repaired yet; retrying in 10 seconds."}
+{"at": 1791108942.9094954, "message": "Microphone was stopped and fixed. No previous actions were replayed."}
+{"at": 1791108985.0450995, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791114335.4810421, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791114468.783719, "message": "Runtime status update failed; will retry."}
+{"at": 1791115048.799132, "message": "UI Automation worker stopped responding; attempting background recovery."}
+{"at": 1791115048.800131, "message": "UI Automation worker is not repaired yet; retrying in 10 seconds."}
+{"at": 1791115059.49677, "message": "UI Automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791190536.9441092, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791190536.9441092, "message": "Configured models stopped responding; attempting background recovery."}
+{"at": 1791190536.9441092, "message": "Missing local models: jarvis-codex-qwen3.5:9b, qwen2.5:0.5b, qwen3.5:0.8b, qwen3.5:9b. Background restoration started; unrelated tasks can continue."}
+{"at": 1791190550.3639622, "message": "Model restoration failed for jarvis-codex-qwen3.5:9b, qwen2.5:0.5b, qwen3.5:0.8b, qwen3.5:9b. See .jarvis-runtime/models.log; next attempt in 300 seconds. A task needing a missing model pauses at its checkpoint."}
+{"at": 1791193401.6782472, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791193502.7059124, "message": "UI Automation worker stopped responding; attempting background recovery."}
+{"at": 1791193502.7069142, "message": "UI Automation worker is not repaired yet; retrying in 10 seconds."}
+{"at": 1791193512.707184, "message": "UI Automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791194731.6152315, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}

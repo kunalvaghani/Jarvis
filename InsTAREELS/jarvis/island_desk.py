@@ -11,7 +11,7 @@ from PIL import Image, ImageTk
 from .island_games import Game, GAMES, HELP
 from .island_media import MediaJobs
 
-BG, CARD, TEXT, MUTED, ACCENT = '#08080a','#141419','#efeff4','#a2a2b0','#b4a1ff'
+BG, CARD, TEXT, MUTED, ACCENT = '#000000','#151515','#eeeeee','#909090','#b4caff'
 
 
 def text(parent, value='', **kw):
@@ -45,9 +45,14 @@ class IslandDesk:
         self.frame = tk.Frame(parent,bg=BG)
         self.frame.pack(fill='both',expand=True)
         self.view = 'Overview'
+        self.has_reply = False
+        self.answer_phase = ''
         self.work = {'phase':'Ready','active':False,'target':'','file':'','preview':'','outcome':''}
         self.reply = 'Task results and answers appear here. Games run locally while Jarvis works.'
+        self.full_reply = self.reply
         self.pending = None
+        self.prepared = []
+        self.prepared_token = ''
         self.approvals = []
         self.last_poll = self.last_media = self.last_tick = 0.
         self.music = {'error':'Open Spotify and play or request a song to see its verified media session.'}
@@ -57,30 +62,58 @@ class IslandDesk:
         self.focus_until = 0.
         self.media = MediaJobs(app.report,Path(__file__).resolve().parent.parent)
         self.now = tk.StringVar(value='Now working · Ready')
-        text(self.frame,textvariable=self.now,anchor='w',justify='left',font=('Segoe UI',9,'bold'),
-             fg=ACCENT,height=2).pack(fill='x')
-        nav = tk.Frame(self.frame,bg=BG)
+        self.status_label = text(self.frame,textvariable=self.now,anchor='w',justify='left',font=('Segoe UI',9,'bold'),
+             fg=ACCENT,height=2)
+        self.status_label.pack(fill='x')
+        nav = self.nav_frame = tk.Frame(self.frame,bg=BG)
         nav.pack(fill='x',pady=(2,4))
         self.nav = {}
-        for name in ('Overview','Choices','Music','Games','History'):
-            button = ttk.Button(nav,text=name,command=lambda n=name:self.show(n),width=8)
+        for name in ('Overview','Prepared','Choices','Music','Games','History'):
+            button = ttk.Button(nav,text=name,command=lambda n=name:self.show(n,reveal=True),width=7)
             button.pack(side='left',padx=(0,3))
             self.nav[name] = button
         self.content = tk.Frame(self.frame,bg=BG)
         self.content.pack(fill='both',expand=True)
-        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Choices','Music','Games','History','Settings','Approval')}
+        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Prepared','Choices','Music','Games','History','Settings','Approval','Console')}
         self.history, self.settings = self.views['History'],self.views['Settings']
         overview = self.views['Overview']
-        shortcuts = tk.Frame(overview,bg=BG)
+        shortcuts = self.shortcuts = tk.Frame(overview,bg=BG)
         shortcuts.pack(fill='x')
         for caption,question in (("Today's goal","what's my goal today"),('Last task','what was I working on')):
             ttk.Button(shortcuts,text=caption,command=lambda q=question:self.ask(q)).pack(side='left',padx=(0,4))
         self.focus_button = ttk.Button(shortcuts,text='25m focus',command=self.focus)
         self.focus_button.pack(side='right')
-        self.overview = ScrolledText(overview,bg=CARD,fg=TEXT,relief='flat',wrap='word',font=('Segoe UI',10),
-                                     height=3,padx=10,pady=8,state='disabled')
-        self.overview.pack(fill='both',expand=True,pady=(5,0))
+        from .notch_widgets import RoundedCard
+        self.answer_card = RoundedCard(overview, radius=24)
+        self.answer_card.pack(fill='both',expand=True,pady=(8,0))
+        answer_header = tk.Frame(self.answer_card.content,bg=CARD)
+        answer_header.pack(fill='x',pady=(0,8))
+        self.answer_title = text(answer_header,'Jarvis · Answer',bg=CARD,fg=MUTED,anchor='w')
+        self.answer_title.pack(side='left')
+        ttk.Button(answer_header,text='Copy',width=6,command=self.copy_answer,style='Card.TButton').pack(side='right')
+        self.overview = ScrolledText(self.answer_card.content,bg=CARD,fg=TEXT,relief='flat',wrap='word',font=('Segoe UI',11),
+                                     height=3,padx=6,pady=4,state='disabled',borderwidth=0)
+        self.overview.pack(fill='both',expand=True)
+        self.overview.tag_configure('code',font=('Consolas',10),foreground='#c6d7ed')
         self._write(self.overview,self.reply)
+        prepared = self.views['Prepared']
+        self.prepared_hint = text(prepared,'Useful work prepared during idle time. Predictions need review.',
+                                  anchor='w',justify='left',wraplength=450,fg=MUTED)
+        self.prepared_hint.pack(fill='x')
+        self.prepared_choice = ttk.Combobox(prepared,state='readonly')
+        self.prepared_choice.pack(fill='x',pady=4)
+        self.prepared_choice.bind('<<ComboboxSelected>>',lambda _e:self.select_preparation())
+        self.prepared_text = ScrolledText(prepared,bg=CARD,fg=TEXT,relief='flat',wrap='word',
+            font=('Segoe UI',10),height=5,padx=10,pady=8,state='disabled')
+        self.prepared_text.pack(fill='both',expand=True)
+        controls = tk.Frame(prepared,bg=BG)
+        controls.pack(fill='x',pady=4)
+        self.prepared_accept = ttk.Button(controls,text='Accept',command=lambda:self.preparation_action('accept'))
+        self.prepared_accept.pack(side='left',padx=(0,4))
+        self.prepared_dismiss = ttk.Button(controls,text='Dismiss',command=lambda:self.preparation_action('dismiss'))
+        self.prepared_dismiss.pack(side='left',padx=(0,4))
+        ttk.Button(controls,text='Pause anticipation',command=lambda:self.preparation_action('pause')).pack(side='right')
+        self.update_preparations({'preparations':[]})
         choices = self.views['Choices']
         self.choice_hint = text(choices,'No pending choices.',anchor='w',fg=MUTED)
         self.choice_hint.pack(fill='x')
@@ -138,24 +171,81 @@ class IslandDesk:
 
     @staticmethod
     def _write(widget,value):
+        previous = widget.get('1.0','end-1c')
+        if previous == value:
+            return  # Preserve selection and scrolling when only navigation changes.
+        view = widget.yview()
+        follow = view[1] >= .98
+        anchor = widget.index('@0,0')
+        appended = bool(previous and value.startswith(previous))
         widget.configure(state='normal')
-        widget.delete('1.0','end')
-        widget.insert('end',value)
+        if appended:
+            widget.insert('end', value[len(previous):])
+        else:
+            widget.delete('1.0','end')
+            widget.insert('end',value)
         widget.configure(state='disabled')
+        if follow:
+            widget.see('end')
+        elif not appended:
+            widget.yview(anchor)
 
     def ask(self, question):
         from .commands import Command
         self.app.actions.submit(Command('ask',question))
 
+    def update_preparations(self, value):
+        selected = self.prepared_token
+        self.prepared = value.get('preparations', [])
+        self.prepared_choice.configure(values=[row['topic']+' · '+row['status'] for row in self.prepared])
+        index = next((i for i,row in enumerate(self.prepared) if row['id']==selected),
+                     len(self.prepared)-1)
+        if index >= 0:
+            self.prepared_choice.current(index)
+        else:
+            self.prepared_choice.set('No current preparations')
+        self.prepared_hint.configure(text='Anticipation paused.' if value.get('paused') else
+            'Storage needs review.' if value.get('storage_failed') else
+            'Idle preparations · review the evidence and unanswered questions.')
+        self.select_preparation()
+
+    def select_preparation(self):
+        index = self.prepared_choice.current()
+        row = self.prepared[index] if 0 <= index < len(self.prepared) else None
+        self.prepared_token = row['id'] if row else ''
+        for button in (self.prepared_accept,self.prepared_dismiss):
+            button.configure(state='normal' if row and row['status'] in {'suggested','prepared'} else 'disabled')
+        if row:
+            remaining = max(0,int(row['expires']-time.time()))
+            detail = (row['topic']+'\n\nEvidence: '+row['evidence']+'\nMode: '+row['mode']+
+                ' · '+row['status']+f'\nExpires in {remaining//60}m {remaining%60}s\n\n'+
+                (row.get('content') or 'Likely useful next step: prepare a source comparison and research questions.'
+                 if row['kind']=='research' else row.get('content') or
+                 'Likely useful next step: prepare a review checklist. No source will be edited.'))
+        else:
+            detail = ('No current prepared work. Research/search requests can prepare evidence after Jarvis is idle. '
+                      'Inferred browser/editor needs appear here for acceptance. Say "resume anticipation" if paused.')
+        self._write(self.prepared_text,detail)
+
+    def preparation_action(self, action):
+        from .commands import Command
+        if action in {'accept','dismiss'} and not self.prepared_token:
+            return
+        self.app.actions.submit(Command('anticipation',action,self.prepared_token))
+
     def focus(self):
         self.focus_until = 0. if self.focus_until else time.monotonic()+25*60
         self.focus_button.configure(text='Stop focus' if self.focus_until else '25m focus')
 
-    def show(self,name):
+    def show(self,name,reveal=False):
         if name not in self.views:
             return
         if self.approvals:
             name = 'Approval'
+        if reveal or name != 'Overview':
+            self.app.island.features_open = True
+        if name == self.view and self.views[name].winfo_manager() == 'pack':
+            return  # Stream updates change text, never unmount the current view.
         if self.view=='Games' and name!='Games':
             self.suspend_game()
         for frame in self.views.values():
@@ -169,6 +259,23 @@ class IslandDesk:
         if name=='Games':
             self.game_canvas.focus_set()
         self.refresh_overview()
+
+    def copy_answer(self):
+        # Copy the full result, including code whitespace, without opening a reader.
+        self.app.root.clipboard_clear()
+        self.app.root.clipboard_append(self.full_reply)
+
+    def chrome(self, visible):
+        if getattr(self, '_chrome_visible', None) == visible:
+            return
+        self._chrome_visible = visible
+        self.status_label.pack_forget()
+        self.nav_frame.pack_forget()
+        self.shortcuts.pack_forget()
+        if visible:
+            self.status_label.pack(fill='x',before=self.content)
+            self.nav_frame.pack(fill='x',pady=(2,4),before=self.content)
+            self.shortcuts.pack(fill='x',before=self.answer_card)
 
     def select_game(self,name):
         self.game = self.games[name]
@@ -216,19 +323,42 @@ class IslandDesk:
         self.game_canvas.itemconfigure(self.game_item,image=self.game_photo)
 
     def notify(self,kind,value):
-        if kind=='task_status' and isinstance(value,dict):
+        if kind=='anticipation' and isinstance(value,dict):
+            self.update_preparations(value)
+        elif kind=='anticipation_reply' and isinstance(value,str):
+            self._write(self.prepared_text,value)
+        elif kind=='task_status' and isinstance(value,dict):
             if value.get('active') and not self.work['active']:
                 self.work = {'file':'','preview':'','outcome':'','target':'','phase':'','active':True}
+                self.reply = self.full_reply = ''
+                self.has_reply = False
             if value.get('target'):
                 self.work['target'] = value['target']
             for key in ('phase','active','file','preview','characters','outcome'):
                 if key in value:
                     self.work[key] = value[key]
             self.refresh_overview()
-        elif kind in {'answer','spoken_reply','action','warning','command_output'} and isinstance(value,str):
-            self.reply = value[-4000:]
+        elif kind == 'answer_stream' and isinstance(value, dict):
+            self.answer_phase = value.get('phase', 'Generating answer') + (' · incomplete' if value.get('active', True) else '')
+            if 'text' in value:
+                self.reply = value['text'][:64000]
+                self.full_reply = value['text']
+            self.has_reply = True
             self.refresh_overview()
-            if self.view not in {'Games','Approval','Choices','Music'}:
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared'}:
+                self.show('Overview')
+        elif kind == 'answer_error' and isinstance(value, str):
+            self.answer_phase = 'Interrupted · incomplete'
+            self.reply = (self.reply + '\n\n' + value).strip()[:64000]
+            self.has_reply = True
+            self.refresh_overview()
+        elif kind in {'answer','spoken_reply','action','warning','command_output'} and isinstance(value,str):
+            self.answer_phase = ''
+            self.reply = value[:64000]
+            self.full_reply = value
+            self.has_reply = True
+            self.refresh_overview()
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared'}:
                 self.show('Overview')
         elif kind in {'brain','tool','plan'} and isinstance(value,str):
             self.work['activity'] = value[:300]
@@ -266,9 +396,27 @@ class IslandDesk:
     def refresh_overview(self):
         file = self.work.get('file') or self.work.get('target') or 'No file selected'
         result = self.work.get('outcome','')
-        self._write(self.overview,self.reply + '\n\nCURRENT WORK\n' + self.work.get('phase','Ready') +
-                    '\n' + file + ('\n'+self.work['activity'] if self.work.get('activity') else '') +
-                    ('\n'+result if result else '') + ('\n\nOUTPUT PREVIEW\n'+self.work['preview'] if self.work.get('preview') else ''))
+        work = ('CURRENT WORK\n' + self.work.get('phase','Ready') + '\n' + file +
+                ('\n'+self.work['activity'] if self.work.get('activity') else '') +
+                ('\n'+result if result else '') + ('\n\nOUTPUT PREVIEW\n'+self.work['preview'] if self.work.get('preview') else ''))
+        self._write(self.overview,(work+'\n\n'+self.reply).strip() if self.work.get('active') else
+                    self.reply+('\n\n'+work if self.work.get('target') else ''))
+        active = self.work.get('active')
+        title = 'Jarvis · '+(self.answer_phase or ('Working' if active else 'Answer'))
+        if self.answer_title.cget('text') != title:
+            self.answer_title.configure(text=title)
+        content = self.overview.get('1.0','end-1c')
+        # Fenced code keeps its indentation and gets a readable mono face.
+        start, inside = None, False
+        for index, line in enumerate(content.splitlines(), 1):
+            if line.lstrip().startswith('```'):
+                if inside:
+                    self.overview.tag_add('code',start,f'{index}.end')
+                else:
+                    start = f'{index}.0'
+                inside = not inside
+        if inside:
+            self.overview.tag_add('code',start,'end')
 
     def update_choices(self,pending):
         if (pending or {}).get('token') == (self.pending or {}).get('token'):
@@ -284,25 +432,32 @@ class IslandDesk:
         for index,option in enumerate(pending['options']):
             row = tk.Frame(self.choice_rows,bg=CARD)
             row.pack(fill='x',pady=3)
+            header = tk.Frame(row,bg=CARD)
+            header.pack(fill='x')
             photo = self.decode_image(option.get('image',''),(48,48))
             if photo:
                 self.choice_images.append(photo)
-                artwork = text(row,image=photo,bg=CARD)
+                artwork = text(header,image=photo,bg=CARD)
                 artwork.preview_image = photo.preview_image
                 artwork.pack(side='left',padx=5)
             else:
-                text(row,str(index+1),bg=CARD,fg=ACCENT,width=3).pack(side='left')
-            button = tk.Button(row,text=option['label'],bg=CARD,fg=TEXT,relief='flat',anchor='w',
+                text(header,str(index+1),bg=CARD,fg=ACCENT,width=3).pack(side='left')
+            from .glass_ui import GlassButton
+            button = GlassButton(header,text=option['label'],bg=CARD,fg=TEXT,anchor='w',
                 activebackground='#302c49',activeforeground=TEXT,wraplength=380,justify='left',
                 command=lambda i=index,t=pending['token']:self.choose(t,i),font=('Segoe UI',10),padx=7,pady=7)
             button.pack(side='left',fill='x',expand=True)
             self.choice_buttons.append(button)
+            if option.get('context'):
+                text(row,option['context'],bg=CARD,fg=MUTED,anchor='w',justify='left',wraplength=390).pack(
+                    side='bottom',fill='x',padx=10,pady=(0,8))
         self.show('Choices')
         self.app.show_panel()
 
     def choose(self,token,index):
         from .commands import Command
-        self.app.actions.submit(Command('island_choice',str(index),token))
+        kind = 'memory_choice' if self.pending and self.pending.get('kind') == 'memory' else 'island_choice'
+        self.app.actions.submit(Command(kind,str(index),token))
 
     def decode_image(self,encoded,size):
         if not encoded or len(encoded)>400_000:

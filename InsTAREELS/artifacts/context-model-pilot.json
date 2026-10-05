@@ -1,0 +1,222 @@
+{
+  "date": "2026-10-04T05:18:40.888339+00:00",
+  "scope": "Authored text context classification; no private memory, microphone or task execution; nonstream harness with production prompt/schema/options; no proof of full task speed improvement",
+  "results": [
+    {
+      "model": "qwen2.5:0.5b",
+      "correct": 4,
+      "total": 8,
+      "warm_median_seconds": 0.594,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 8.641,
+          "load_seconds": 7.737
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "seconds": 0.578,
+          "load_seconds": 0.0159
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "seconds": 0.594,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "seconds": 0.562,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "seconds": 0.594,
+          "load_seconds": 0.0199
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "a",
+          "correct": false,
+          "seconds": 0.594,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 0.609,
+          "load_seconds": 0.016
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "c",
+          "correct": false,
+          "seconds": 0.563,
+          "load_seconds": 0.0143
+        }
+      ]
+    },
+    {
+      "model": "qwen3.5:0.8b",
+      "correct": 5,
+      "total": 8,
+      "warm_median_seconds": 1.391,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 5.797,
+          "load_seconds": 4.4131
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "seconds": 1.265,
+          "load_seconds": 0.0148
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "seconds": 1.391,
+          "load_seconds": 0.0154
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "seconds": 1.39,
+          "load_seconds": 0.0143
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "a",
+          "correct": false,
+          "seconds": 1.375,
+          "load_seconds": 0.0153
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "b",
+          "correct": false,
+          "seconds": 1.391,
+          "load_seconds": 0.0148
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 1.406,
+          "load_seconds": 0.0143
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "seconds": 1.407,
+          "load_seconds": 0.0143
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:3b-instruct",
+      "correct": 6,
+      "total": 8,
+      "warm_median_seconds": 1.953,
+      "cases": [
+        {
+          "request": "Continue the C++ snake ladder game",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 10.359,
+          "load_seconds": 6.8721
+        },
+        {
+          "request": "Make the Python calculator buttons larger",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "seconds": 1.969,
+          "load_seconds": 0.0148
+        },
+        {
+          "request": "Show playlist song artwork on Spotify",
+          "expected": "c",
+          "chosen": "c",
+          "correct": true,
+          "seconds": 1.937,
+          "load_seconds": 0.0159
+        },
+        {
+          "request": "Improve the app",
+          "expected": "ambiguous",
+          "chosen": "b",
+          "correct": false,
+          "seconds": 1.906,
+          "load_seconds": 0.0144
+        },
+        {
+          "request": "What did we discuss about code?",
+          "expected": "ambiguous",
+          "chosen": "b",
+          "correct": false,
+          "seconds": 1.938,
+          "load_seconds": 0.0149
+        },
+        {
+          "request": "Explain photosynthesis",
+          "expected": "none",
+          "chosen": "none",
+          "correct": true,
+          "seconds": 1.953,
+          "load_seconds": 0.0164
+        },
+        {
+          "request": "Change the Win32 board dice rules",
+          "expected": "a",
+          "chosen": "a",
+          "correct": true,
+          "seconds": 2.281,
+          "load_seconds": 0.0158
+        },
+        {
+          "request": "Fix multiplication in the calculator",
+          "expected": "b",
+          "chosen": "b",
+          "correct": true,
+          "seconds": 2.078,
+          "load_seconds": 0.0161
+        }
+      ]
+    }
+  ]
+}

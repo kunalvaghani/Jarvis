@@ -13,7 +13,8 @@ class Command:
 
 def normalize_spoken_code_request(text: str) -> str:
     """Repair common speech-recognition spacing around source filenames."""
-    extensions = r"py|js|jsx|ts|tsx|json|html|css|md|txt|yaml|yml|toml"
+    from .coding_languages import EXTENSION_PATTERN
+    extensions = r"py|js|jsx|ts|tsx|json|html|css|md|txt|yaml|yml|toml|" + EXTENSION_PATTERN
     text = re.sub(rf"\s*\.\s*(?=(?:{extensions})\b)", ".", text, flags=re.I)
     text = re.sub(
         rf"^(modify|edit|update|fix|refactor|change)([a-z][\w-]*\.(?:{extensions})\b)",
@@ -38,6 +39,10 @@ def filename(spoken: str) -> str:
 
 
 def parse(text: str) -> Command:
+    from .anticipation import command as anticipation_command
+    proactive = anticipation_command(text)
+    if proactive:
+        return Command('anticipation', proactive)
     from .island_choices import navigation
     if navigation(text):
         return Command('task', text)  # Local view routing preserves background work.
@@ -45,6 +50,13 @@ def parse(text: str) -> Command:
     text = re.sub(r"^(?:(?:please|can you|could you|would you)\s+)+", "", text.strip(), flags=re.I)
     text = re.sub(r"^(?:i (?:want|need) you to|can you help me|could you help me|help me)\s+", "", text, flags=re.I)
     text = normalize_spoken_code_request(text)
+    from .windows_commands import parse as windows_parse
+    windows = windows_parse(text)
+    if windows:
+        return windows
+    proactive = anticipation_command(text)
+    if proactive:
+        return Command('anticipation', proactive)
     if navigation(text):
         return Command('task',text)
     if re.match(r'^save (?:the |this |current )?(?:document|file) as\b', text, re.I):
@@ -116,8 +128,8 @@ def parse(text: str) -> Command:
     m = re.fullmatch(r"(?:code|add|change|update|improve|write|implement|build|fix|refactor) (.+?) (?:in|to|for) project (.+)", text, re.I)
     if m:
         return Command("code_task", m[1].strip(), m[2].strip())
-    if (re.match(r"^(?:modify|edit|update|fix|refactor|change)\b", text, re.I)
-            and re.search(r"\b[a-z][\w-]*\.(?:py|js|jsx|ts|tsx|json|html|css)\b", text, re.I)):
+    from .coder import workspace_coding_request
+    if workspace_coding_request(text):
         return Command("task", text)
     if (re.match(r"^(?:create|make|build|add|modify|edit|update)\b", text, re.I)
             and re.search(r"\b(?:folder|script|program|app|project)s?\b", text, re.I)
@@ -232,6 +244,8 @@ def parse(text: str) -> Command:
     m = re.fullmatch(r"search(?: for)? (.+)", text, re.I)
     if m:
         return Command("context_search", m[1])
+    if re.match(r'^(?:give|show|provide)(?: me)? (?:a |the |some )?(?:(?:c\+\+|c#|python|javascript|typescript|java|rust|go|html|css)\s+)?(?:code|source code)\b', text, re.I):
+        return Command('ask', text)
     m = re.fullmatch(r"(?:ask|question|answer this) (.+)", text, re.I)
     if m:
         return Command("ask", m[1])

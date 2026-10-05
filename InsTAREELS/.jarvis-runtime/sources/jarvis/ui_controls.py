@@ -223,7 +223,11 @@ class UIControls:
         from .ui_transport import UITransport
         if getattr(self, "transport", None) is None:
             self.transport = UITransport()
-        return self.transport.request(request, cancelled)
+        result = self.transport.request(request, cancelled)
+        context = getattr(self,'live_app',None)
+        if context is not None and request.get('operation')=='list' and not cancelled():
+            context.record_controls(request['handle'],result)
+        return result
 
     def close(self):
         if getattr(self, "transport", None) is not None:

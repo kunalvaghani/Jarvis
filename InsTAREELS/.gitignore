@@ -38,6 +38,7 @@ task_state.json
 .firecrawl/
 .jarvis-runtime/agent-events.jsonl
 .jarvis-runtime/sessions/
+.jarvis-runtime/conversations.sqlite3*
 .jarvis-runtime/obsidian-vault/
 .jarvis-runtime/memory-index-preview.json
 .jarvis-runtime/sources/
@@ -63,3 +64,12 @@ artifacts/development-*/.jarvis/
 artifacts/development-research/*.tgz
 .jarvis-runtime/development-cases.jsonl
 .jarvis-runtime/development-feedback.jsonl
+.jarvis-runtime/anticipation/
+integrations/execution-upstream/
+.jarvis-runtime/execution-receipts.jsonl
+.jarvis-runtime/execution-fixture/
+.jarvis-runtime/claude-code/
+.jarvis-runtime/claude-code-fixture/
+.jarvis-runtime/codex-code/
+.jarvis-runtime/codex-code-fixture/
+examples/multilingual/*/bundle.js

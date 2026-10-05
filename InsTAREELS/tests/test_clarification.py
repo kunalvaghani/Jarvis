@@ -61,6 +61,105 @@ class ClarificationTests(unittest.TestCase):
         self.assertEqual((self.downloads / "greeting.txt").read_text(), "hello")
         self.assertIsNone(self.actions.pending_question)
 
+    def test_health_app_utterance_reaches_codex_in_named_folder(self):
+        target = self.base / 'TestCodes'
+        target.mkdir()
+        self.actions.config['folders']['testcodes'] = str(target)
+        self.actions.brain.client.options['coding_backend'] = 'codex'
+        self.actions.brain.client.request = Mock(side_effect=AssertionError('Legacy inference must not run'))
+        engine = Engine(self.actions.submit, Mock())
+        with patch('jarvis.codex_code.run', return_value='Codex completed') as codex, patch('jarvis.coder.Coder._run') as legacy:
+            engine.feed('Jarvis create an app to monitor my health In folder testcodes folder', final=True)
+            _, command = self.actions.queue.get_nowait()
+            self.assertEqual(self.actions.execute(command), 'Codex completed')
+        codex.assert_called_once()
+        self.assertEqual(codex.call_args.args[1], target.resolve())
+        self.assertEqual(codex.call_args.args[2], 'create an app to monitor my health In folder testcodes folder')
+        legacy.assert_not_called()
+        self.assertIsNone(self.actions.pending_question)
+        self.assertEqual(list(target.iterdir()), [])
+
+    def test_voice_folder_answer_resumes_worker_and_reports_completion(self):
+        import threading
+        target = self.base / 'TestCodes'
+        target.mkdir()
+        self.actions.config['folders']['testcodes'] = str(target)
+        self.actions.brain.client.options['coding_backend'] = 'codex'
+        self.actions.knowledge.prepare_context = Mock()
+        self.actions.knowledge.record_pair = Mock()
+        goal = 'create an app to monitor my health in folder absent folder'
+        self.actions.execute(Command('task', goal))
+        engine = Engine(self.actions.submit, Mock())
+        with patch('jarvis.codex_code.run', return_value='Codex completed the requested app') as codex, patch('jarvis.actions.os.startfile') as launch:
+            engine.feed('Jarvis open folder TestCodes', final=True)
+            worker = threading.Thread(target=self.actions._run, daemon=True)
+            worker.start()
+            try:
+                self.actions.queue.join()
+            finally:
+                self.actions.closed.set();worker.join(timeout=3)
+            self.assertFalse(worker.is_alive())
+            codex.assert_called_once()
+            self.assertEqual(codex.call_args.args[1], target.resolve())
+            self.assertIn(goal, codex.call_args.args[2])
+            launch.assert_not_called()
+        self.assertIn(('spoken_reply', 'Codex completed the requested app'), self.events)
+        self.assertIn(('action', 'Codex completed the requested app'), self.events)
+        self.assertEqual(list(target.iterdir()), [])
+
+    def test_folder_answers_resume_coding_once_in_confirmed_path(self):
+        target = self.base / 'TestCodes'
+        target.mkdir()
+        self.actions.config['folders']['testcodes'] = str(target)
+        self.actions.brain.client.options['coding_backend'] = 'codex'
+        self.actions.knowledge.submit = Mock()
+        self.actions.knowledge.prepare_context = Mock()
+        self.actions.brain.client.request = Mock(side_effect=AssertionError('Legacy inference must not run'))
+        for reply in (Command('task', str(target)), Command('task', 'Use the folder TestCodes'),
+                      Command('task', 'the folder is TestCodes'), Command('open_folder', 'TestCodes')):
+            with self.subTest(reply=reply), patch('jarvis.codex_code.run', return_value='Codex completed') as codex, patch('jarvis.coder.Coder._run') as legacy, patch('jarvis.actions.os.startfile') as launch:
+                original = 'create an app to monitor my health in folder missing folder'
+                self.assertIn('waiting for your answer', self.actions.execute(Command('task', original)))
+                self.actions.submit(reply)
+                _, resumed = self.actions.queue.get_nowait()
+                self.assertEqual(resumed.kind, 'clarified_task')
+                self.assertEqual(self.actions.execute(resumed), 'Codex completed')
+                codex.assert_called_once()
+                self.assertEqual(codex.call_args.args[1], target.resolve())
+                self.assertEqual(codex.call_args.args[2], f'In folder {target.resolve()}, {original}')
+                self.assertIsNone(self.actions.pending_question)
+                self.assertEqual(self.actions.task_state.snapshot()['status'], 'completed')
+                legacy.assert_not_called(); launch.assert_not_called()
+        self.actions.knowledge.submit.assert_not_called()
+        self.assertEqual(list(target.iterdir()), [])
+
+    def test_invalid_folder_then_valid_answer_preserves_original_coding_goal(self):
+        self.actions.brain.client.options['coding_backend'] = 'codex'
+        goal = 'build an app in folder missing folder'
+        self.actions.execute(Command('task', goal))
+        pending = self.actions.pending_question
+        self.assertEqual(self.actions._resolve_reply(Command('task', 'another missing folder')).kind, 'clarification_blocked')
+        self.assertIs(self.actions.pending_question, pending)
+        with patch('jarvis.codex_code.run', return_value='Codex completed') as codex:
+            resumed = self.actions._resolve_reply(Command('task', str(self.downloads)))
+            self.actions.execute(resumed)
+        codex.assert_called_once()
+        self.assertIn(goal, codex.call_args.args[2])
+
+    def test_expired_folder_launch_answer_cannot_resume_or_launch(self):
+        self.actions.brain.run = Mock(side_effect=TaskClarification('Which folder?', 'folder'))
+        self.actions.execute(Command('task', 'create an app'))
+        self.actions.pending_question['time'] -= 181
+        self.assertEqual(self.actions._resolve_reply(Command('open_folder', 'Downloads')).kind, 'clarification_blocked')
+
+    def test_uncertain_write_still_blocks_folder_launch_answer(self):
+        self.actions.brain.run = Mock(side_effect=TaskClarification('Which folder?', 'folder'))
+        self.actions.execute(Command('task', 'create an app'))
+        self.actions.pending_question['source']['checkpoints'].append({'stage': 'acting'})
+        with patch('jarvis.codex_code.run') as codex:
+            self.assertEqual(self.actions._resolve_reply(Command('open_folder', 'Downloads')).kind, 'clarification_blocked')
+        codex.assert_not_called()
+
     def test_invalid_folder_answer_keeps_question_pending(self):
         self.actions.brain.run = Mock(side_effect=TaskClarification("Which folder?", "folder"))
         self.actions.execute(Command("task", "Create a file called a.txt and write hi"))

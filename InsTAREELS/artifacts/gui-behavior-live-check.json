@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-04T07:48:50.029219+00:00",
+  "scope": "Authored generated Tkinter fixture only; actual controls invoked through Tkinter.",
+  "passed": true,
+  "normal_launch_window": true,
+  "controls": 6,
+  "arithmetic": [
+    {
+      "operation": "add",
+      "visible": "Result: 15.0"
+    },
+    {
+      "operation": "subtract",
+      "visible": "Result: 5.0"
+    },
+    {
+      "operation": "multiply",
+      "visible": "Result: 42.0"
+    },
+    {
+      "operation": "divide",
+      "visible": "Result: 3.0"
+    }
+  ],
+  "division_by_zero": "Error: Cannot divide by zero",
+  "invalid_input": "Error: could not convert string to float: 'bad input'",
+  "image": "qwen-generated-calculator-fixture.png"
+}

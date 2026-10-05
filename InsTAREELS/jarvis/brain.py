@@ -17,20 +17,22 @@ from .task_state import TaskState
 from .task_recovery import TaskFailure, action_key
 from .tools import TOOL_NAMES, ToolRegistry
 from .desktop_actions import CONTROL_ACTIONS, validate_desktop_step, explicit_desktop_plan
-from .task_graph import validate_dependencies
+from .task_graph import validate_dependencies, action_budget, MAX_PLAN_STEPS, MAX_TASK_GOAL_CHARS
 
 ALLOWED = set(TOOL_NAMES)
+FILE_SCOPE_ACTIONS = {'create_file', 'modify_file', 'delete_file', 'save_file', 'list_files',
+                      'read_file', 'append_file', 'search_files', 'query_resource', 'knowledge_search'}
 SENSITIVE = re.compile(r"\b(delete|remove|erase|uninstall|send|submit|publish|post|purchase|buy|pay|checkout|upload|transfer|permission|administrator|terminal|powershell|command prompt)\b", re.I)
 
 
-def validate_plan(plan, completed=()):
+def validate_plan(plan, completed=(), max_steps=20):
     if not isinstance(plan, dict) or not isinstance(plan.get("steps"), list):
         raise ValueError("Planner returned an invalid plan.")
     if plan.get("question"):
         raise TaskClarification(str(plan["question"])[:500])
     steps = plan["steps"]
-    if not 1 <= len(steps) <= 6:
-        raise ValueError("The plan must have one to six steps. Please narrow the task.")
+    if not 1 <= len(steps) <= min(MAX_PLAN_STEPS, max_steps):
+        raise ValueError(f"The plan must have one to {max_steps} steps within the remaining action budget.")
     for step in steps:
         if (not isinstance(step, dict) or step.get("action") not in ALLOWED
                 or not isinstance(step.get("value"), str) or not 0 < len(step["value"]) <= 500
@@ -63,8 +65,12 @@ def validate_plan(plan, completed=()):
     return validate_dependencies(steps, completed)
 
 
-def normalize_plan(steps, goal):
+def normalize_plan(steps, goal, *, complete_music=True):
     """Remove known redundant opens and complete an explicit music request safely."""
+    # Copy a missing edit operand only from the user's explicit literal syntax.
+    # A unique filename and replacement pair is required; never infer old text
+    # from model output, memory or the current file's unrelated contents.
+    edits = re.findall(r"(?:^|\n)\s*(?:\d+[.)]\s*)?Modify\s+([^:\r\n]+):\s*replace\s+([^\r\n]+?)\s+with\s+([^\r\n]+)", goal, re.I)
     normalized = []
     for index, step in enumerate(steps):
         if step["action"] in {"create_file", "modify_file"} and isinstance(step.get("content"), str):
@@ -72,6 +78,12 @@ def normalize_plan(steps, goal):
             trimmed = content.rstrip("\r\n")
             if trimmed and trimmed != content and trimmed.casefold() in goal.casefold():
                 step = {**step, "content": trimmed}
+        if step['action'] == 'modify_file' and not step.get('find'):
+            matches = {old for name, old, new in edits
+                       if name.strip().casefold() == step['value'].strip().casefold()
+                       and new == step.get('content')}
+            if len(matches) == 1:
+                step = {**step, 'find': next(iter(matches))}
         next_step = steps[index + 1] if index + 1 < len(steps) else None
         value = common(step["value"])
         if step["action"] == "open" and next_step and next_step["action"] in {"browse", "browser_search", "media_search"} \
@@ -81,12 +93,56 @@ def normalize_plan(steps, goal):
                 and any(s["action"] == "create_file" and common(s.get("folder", "")) == value for s in steps):
             continue  # The selected Explorer folder is already open.
         normalized.append(step)
-    if re.search(r"\b(?:play|put on|start playing)\b", goal, re.I) and not any(s["action"] == "select" for s in normalized):
+    if complete_music and re.search(r"\b(?:play|put on|start playing)\b", goal, re.I) and not any(s["action"] == "select" for s in normalized):
         media = next((s for s in normalized if s["action"] == "media_search"), None)
-        if media and len(normalized) < 6:
+        if media and len(normalized) < MAX_PLAN_STEPS:
             normalized.append({"action": "select", "value": media["value"] + " result", "browser": media["browser"],
                                "expected": "Music result opened", "folder": "", "content": "", "platform": ""})
     return normalized
+
+
+def ground_file_scope(plan, goal):
+    """Inherit an explicit global destination for a literal multiline file list.
+
+    Only fill omitted operands. Mixed destinations, nonliteral commands and
+    unknown file targets require normal model planning/clarification.
+    """
+    lines = goal.splitlines() if isinstance(goal, str) else []
+    if len(lines) < 2 or not isinstance(plan, dict) or not isinstance(plan.get('steps'), list):
+        return plan
+    scope = re.search(r'\bin\s+(this folder|current folder|the open folder|the selected folder)\b', lines[0], re.I)
+    if not scope:
+        return plan
+    # Require a single destination clause in the header, not a mixed scope.
+    header = lines[0][:scope.start()] + lines[0][scope.end():]
+    if re.search(r'\b(?:folder|directory)\b|[A-Za-z]:[\\/]', header, re.I):
+        return plan
+    if (re.search(r'\b(?:from|into|inside|under|within|to|in)\b', lines[0][:scope.start()], re.I)
+            or re.search(r'\b(?:and|or)\s+(?!(?:then|finish|complete)\b)', lines[0][scope.end():], re.I)):
+        return plan
+    names = set()
+    for line in lines[1:]:
+        line = re.sub(r'^\s*\d+[.)]\s*', '', line).strip()
+        if not line:
+            continue
+        create = re.fullmatch(r'(?:Create|Make)\s+(.+?)\s+(?:containing|with content)\s+.+', line, re.I)
+        modify = re.fullmatch(r'(?:Modify|Edit)\s+(.+?):\s*replace\s+.+?\s+with\s+.+', line, re.I)
+        read = re.fullmatch(r'Read\s+(.+)', line, re.I)
+        matched = create or modify or read
+        if not matched:
+            return plan
+        name = matched[1].strip()
+        if not re.fullmatch(r'[^<>:"/\\|?*]+', name) or re.search(r'\s+(?:in|inside|from|to)\s+', name, re.I):
+            return plan
+        names.add((name.casefold(), 'create_file' if create else 'modify_file' if modify else 'read_file'))
+    folder = scope[1]
+    steps = []
+    for step in plan['steps']:
+        if (isinstance(step, dict) and not step.get('folder') and isinstance(step.get('value'), str)
+                and (step['value'].strip().casefold(), step.get('action')) in names):
+            step = {**step, 'folder': folder}
+        steps.append(step)
+    return {**plan, 'steps': steps}
 
 
 def spotify_media_plan(goal):
@@ -227,14 +283,21 @@ class BrainClient:
             else:
                 data["memory_context"] = memory.task_context(data["goal"])
             skills = getattr(memory, "skills", None)
-            if skills is not None and operation in {"plan", "replan", "code_plan", "code_edit"}:
+            if skills is not None and operation in {"plan", "replan", "next_step", "code_plan", "code_edit"}:
                 from .experience_memory import observe_conditions
                 provider = getattr(self, 'condition_provider', observe_conditions)
                 current = provider(snapshot=data.get('screen'), project=data.get('skill_project'))
                 data["skill_context"] = skills.context(data["goal"],
                     "code_task" if operation in {"code_plan", "code_edit"} else "task",
                     data.get("skill_project"), conditions=current)
-        if data.get('goal') and operation in {'plan', 'replan', 'code_plan', 'code_edit'}:
+        if data.get('goal') and operation in {'plan', 'replan', 'next_step', 'code_plan', 'code_edit'}:
+            app_provider = getattr(self,'app_context_provider',None)
+            if app_provider:
+                data['live_app_context'] = app_provider()
+            provider = getattr(self, 'context_provider', None)
+            conversation = provider(data['goal']) if provider else None
+            if conversation:
+                data['memory_context'] = {**data.get('memory_context', {}), 'conversation': conversation}
             from .capabilities import runtime_context
             from .skill_memory import SkillMemory
             skills = getattr(memory, 'skills', None)
@@ -310,17 +373,22 @@ class BrainClient:
         self.process.stdin.write(json.dumps({"operation": operation, "options": self.options, **data}) + "\n")
         self.process.stdin.flush()
         coding = operation in {'code_plan', 'code_edit'}
-        seconds = (min(900, max(120, int(self.options.get('coding_timeout_seconds', 900))))
-                   if coding else getattr(self, 'timeout_seconds', 150))
+        from .inference_limits import planning_worker_timeout, coding_limits, planning_limits
+        planning = operation in {'plan', 'replan'}
+        idle, total = coding_limits(self.options) if coding else (0, 0)
+        if planning:
+            idle, total = planning_limits(self.options)
+        seconds = idle + 30 if coding else getattr(self, 'timeout_seconds', planning_worker_timeout(self.options))
         if operation=='tool_text' and data.get('tool')=='test_writer' and data.get('development') is True:
-            seconds=300
+            seconds=max(300, seconds)
         deadline = time.monotonic() + seconds
+        total_deadline = time.monotonic() + total if coding or planning else deadline
         try:
             while True:
                 if cancelled():
                     raise ValueError("Task cancelled.")
-                if time.monotonic() > deadline:
-                    raise ValueError('Qwen3-Coder exceeded the coding time limit; incomplete output was not written. Any existing draft can be inspected and resumed.'
+                if time.monotonic() > min(deadline, total_deadline):
+                    raise ValueError('The configured coder exceeded the coding time limit; incomplete output was not written. Any existing draft can be inspected and resumed.'
                                      if coding else "The local brain timed out. Try a shorter task.")
                 try:
                     line = self.responses.get(timeout=.1)
@@ -329,6 +397,16 @@ class BrainClient:
                 if line is None:
                     raise ValueError("Brain worker stopped. See " + self.worker_log + ".")
                 result = json.loads(line)
+                if 'coding_activity' in result:
+                    if not coding or result['coding_activity'] not in {'Generating answer', 'Thinking', 'Finishing answer'}:
+                        raise ValueError('Invalid coding activity event.')
+                    deadline = time.monotonic() + seconds
+                    continue
+                if 'inference_activity' in result:
+                    if not planning or result['inference_activity'] not in {'Generating answer', 'Thinking', 'Finishing answer'}:
+                        raise ValueError('Invalid planning activity event.')
+                    deadline = time.monotonic() + seconds
+                    continue
                 if 'progress' in result:
                     content = result['progress'].get('content')
                     if not callback or not isinstance(content, str) or len(content) > 20000:
@@ -337,6 +415,7 @@ class BrainClient:
                         callback(content)
                     except OSError as exc:
                         raise ValueError('Streaming draft write failed; no action replayed: ' + str(exc)) from exc
+                    deadline = time.monotonic() + seconds
                     continue
                 if result.get("error"):
                     raise ValueError(result["error"])
@@ -356,6 +435,58 @@ class Brain:
         self.tool_observations = []
         from .visual_fallback import VisualFallback
         self.visual_fallback = VisualFallback(self)
+        self.step_session = None
+        self.workflows = None
+        if options.get('incremental_planning', False) and options.get('reuse_navigation_workflows', False):
+            from .step_planning import WorkflowMemory
+            self.workflows = WorkflowMemory(base)
+
+    def planning_request(self, operation, cancelled, **data):
+        data.setdefault('max_task_actions', action_budget(self.options))
+        data.setdefault('steps_left', action_budget(self.options)-len(data.get('completed', [])))
+        session = self.step_session
+        if session is None:
+            data.pop('fresh_image_ready', None)
+            return self.propose_plan(operation, cancelled, **data)
+        fresh_image_ready = data.pop('fresh_image_ready', False)
+        if self.options.get('screen_aware', False) and not fresh_image_ready:
+            handle, snapshot = self.observe(cancelled)
+            frame = self.visual_screen(handle, snapshot, cancelled)
+            data['screen'] = self.planning_context(self.visual_context(frame))
+        data['step_number'] = len(data.get('completed', [])) + 1
+        data['prompt_scaffold'] = session.consume()
+        data['images'] = session.images(recovery=bool(data.get('failures')))
+        started = time.monotonic()
+        try:
+            result = self.propose_plan('next_step', cancelled, **data)
+        finally:
+            session.measure('next_step_inference', started)
+        if cancelled():
+            raise ValueError('Task cancelled before accepting the next step.')
+        if (not isinstance(result, dict) or type(result.get('done')) is not bool or
+                not isinstance(result.get('steps'), list) or len(result['steps']) > 1 or
+                result['done'] and (result['steps'] or result.get('question'))):
+            raise ValueError('The next-step planner must return one action or a completed goal.')
+        return result
+
+    def propose_plan(self, operation, cancelled, **data):
+        """One read-only correction for omitted destinations, before dispatch."""
+        for attempt in range(2):
+            result = self.client.request(operation, cancelled, **data)
+            if cancelled():
+                raise ValueError('Task cancelled before accepting the plan.')
+            result = ground_file_scope(result, data.get('goal', ''))
+            steps = result.get('steps', []) if isinstance(result, dict) else []
+            missing = isinstance(steps, list) and any(isinstance(step, dict)
+                and step.get('action') in FILE_SCOPE_ACTIONS
+                and (not isinstance(step.get('folder'), str) or not step['folder'].strip()) for step in steps)
+            if not missing or attempt:
+                return result  # Normal validation rejects any still-invalid proposal.
+            data['plan_validation_error'] = ('The previous proposal omitted a file destination. No action was executed. '
+                'Return a corrected proposal with the same requested operations and order. '
+                'For every file read/write use the exact destination explicitly supplied by the user; '
+                'if it is genuinely absent or ambiguous, ask a question. Do not invent a destination.')
+            self.actions.report('brain', 'Correcting an omitted file destination before execution')
 
     def planning_context(self, screen):
         """Pass bounded current-task tool data to inference, without persisting it."""
@@ -370,6 +501,8 @@ class Brain:
         return {**screen, "tool_results": list(reversed(rows))} if rows else screen
 
     def checkpoint(self, stage, **details):
+        if self.step_session is not None and stage == 'goal_verified':
+            self.step_session.goal_verified = True
         state = getattr(self.actions, "task_state", None)
         if isinstance(state, TaskState):
             state.checkpoint(stage, **details)
@@ -408,7 +541,7 @@ class Brain:
             raise ValueError("Task cancelled before recovery.")
         if failure.attempted:
             raise ValueError("Task paused: the last action may have taken effect; inspect it before continuing. " + str(failure))
-        if len(failures) > 2 or number >= 6:
+        if len(failures) > 2 or number >= action_budget(self.options):
             raise ValueError("Task paused: recovery limit reached; unsuccessful actions were not repeated.")
         try:
             handle, snapshot = self.observe(cancelled)
@@ -436,10 +569,10 @@ class Brain:
         if cancelled():
             raise ValueError("Task cancelled before replanning.")
         try:
-            revised = self.client.request("replan", cancelled, goal=goal, screen=self.planning_context(screen),
+            revised = self.planning_request("replan", cancelled, goal=goal, screen=self.planning_context(screen),
                 apps=apps, completed=completed, remaining=remaining,
                 last_result=(failures[-1] if failures and (recovering or not completed) else completed[-1]), failures=failures or [],
-                steps_left=6-number, tools=ToolRegistry(self.actions).catalog(goal))
+                steps_left=action_budget(self.options)-number, tools=ToolRegistry(self.actions).catalog(goal))
             if cancelled():
                 raise ValueError("Task cancelled during replanning.")
             if not isinstance(revised, dict) or not isinstance(revised.get("done"), bool):
@@ -451,14 +584,15 @@ class Brain:
                     raise ValueError("Adaptive planner marked done but still proposed actions.")
                 steps = []
             else:
-                steps = normalize_plan(validate_plan(revised, completed), goal)
+                steps = validate_plan(revised, completed, action_budget(self.options)-number)
+                steps = normalize_plan(steps, goal, complete_music=self.step_session is None)
                 if not steps:
                     raise ValueError("Adaptive planner omitted the remaining tasks.")
             # Compare full tool arguments; entering different text is a different task.
             fingerprints = {action_key(item) for item in completed}
             if any(item["action"] != "scroll" and action_key(item) in fingerprints for item in steps):
                 raise ValueError("Adaptive plan repeated an action already completed.")
-            if len(steps) > 6-number:
+            if len(steps) > action_budget(self.options)-number:
                 raise ValueError("Adaptive plan exceeds the remaining action budget.")
             forbidden = {action_key(item) for item in failures or []}
             if any(action_key(item) in forbidden for item in steps):
@@ -530,6 +664,9 @@ class Brain:
             frame = self.visual_screen(handle, {'controls': []}, cancelled, strict=True)
             snapshot = {'title': frame['title'], 'controls': [], 'visual_only': True,
                         'context': 'visual-window:' + str(frame['pid']), 'signature': '', 'is_dialog': False}
+        context=getattr(self.actions,'live_app',None)
+        if context is not None:
+            context.record_controls(handle,snapshot)
         return handle, snapshot
 
     def observe_after_action(self, before, action, cancelled):
@@ -582,7 +719,7 @@ class Brain:
                 stderr=subprocess.PIPE, encoding="utf-8",
                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             deadline = time.monotonic() + 20
-            payload = json.dumps({"handle": handle, 'strict': strict})
+            payload = json.dumps({"handle": handle, 'strict': strict, 'skip_ocr': self.step_session is not None})
             first = True
             while True:
                 if cancelled():
@@ -604,6 +741,8 @@ class Brain:
             captured["controls"] = self.screen(snapshot)["controls"]
             captured["is_dialog"] = snapshot.get("is_dialog", False)
             captured["fields"] = self.screen(snapshot)["fields"]
+            if self.step_session is not None:
+                self.step_session.capture(captured)
             return captured
         finally:
             if process and process.poll() is None:
@@ -620,13 +759,37 @@ class Brain:
                 "controls": observation.get("controls", [])}
 
     def run(self, goal, cancelled):
+        if not self.options.get('incremental_planning', False):
+            return self._run(goal, cancelled)
+        from .step_planning import StepSession, replay
+        session = self.step_session = StepSession()
+        try:
+            if self.workflows is not None and self.options.get('enabled', False) and 0 < len(goal.strip()) <= MAX_TASK_GOAL_CHARS:
+                result = replay(self, goal, cancelled)
+                if result is not None:
+                    return result
+            result = self._run(goal, cancelled)
+            if self.workflows is not None:
+                self.workflows.remember(goal, session)
+            return result
+        finally:
+            session.close()
+            self.step_session = None
+            elapsed = time.monotonic() - session.started
+            self.last_step_timings = {'elapsed_seconds': round(elapsed, 4),
+                'target_seconds': 5, 'target_met': elapsed < 5,
+                'stages': session.timings[-18:], 'retained_images': len(session.frames)}
+            self.checkpoint('planning_timing', source='monotonic_clock',
+                            evidence=json.dumps(self.last_step_timings, separators=(',', ':'))[:500])
+
+    def _run(self, goal, cancelled):
         self.visual_fallback.last_saved = None
         self.tool_observations = []  # Fresh reads are required after restart or task change.
         if not self.options.get("enabled", False):
             raise ValueError("Autonomous brain is disabled. Enable brain.enabled after Setup Jarvis Brain.cmd succeeds.")
-        if not goal.strip() or len(goal) > 1500:
+        if not goal.strip() or len(goal) > MAX_TASK_GOAL_CHARS:
             raise ValueError("Use a short, specific task.")
-        from .coder import Coder, create_python_from_goal, python_file_request, workspace_coding_request
+        from .coder import Coder, create_python_from_goal, python_file_request, workspace_coding_request, explicit_coding_intent
         from .commands import normalize_spoken_code_request
         spoken_goal = goal
         goal = normalize_spoken_code_request(goal)
@@ -643,12 +806,14 @@ class Brain:
             raise TaskClarification(str(exc), "python_purpose") from exc
         toolkit_workflow = bool(re.search(r"\b(?:github|repository|pull request|jira|calendar|email|slack|tweet)\b", goal, re.I)
                                 or re.match(r"(?:draft|write) (?:tests|spec|specification)\b", goal, re.I))
+        if explicit_coding_intent(goal):
+            toolkit_workflow = False
         if inferred_python_name and not toolkit_workflow:
             return create_python_from_goal(self.actions, self.client, goal, inferred_python_name, cancelled)
         if workspace_coding_request(goal) and not toolkit_workflow and not exact_file:
-            from .coder import named_folder_request
+            from .coder import coding_folder
             try:
-                selected_folder = prior["project"] if prior and prior.get("project") else self.actions._task_folder(named_folder_request(goal) or "this folder", cancelled)
+                selected_folder = coding_folder(self.actions, goal, cancelled, prior)
             except ValueError as exc:
                 if isinstance(exc, TaskClarification):
                     raise
@@ -683,7 +848,7 @@ class Brain:
             learned_plan = None
         self.checkpoint("procedure_surface", screen=snapshot.get("title", ""))
         screen_aware = self.options.get("screen_aware", False)
-        adaptive = self.options.get("adaptive_planning", False)
+        adaptive = self.options.get("adaptive_planning", False) or self.step_session is not None
         recovery_enabled = self.options.get("task_recovery", False)
         visual = None
         if screen_aware and (fixed_media_plan or initial_launch_plan or exact_file or learned_plan):
@@ -691,12 +856,15 @@ class Brain:
                         "controls": snapshot.get("controls", [])}
         elif screen_aware:
             captured = self.visual_screen(handle, snapshot, cancelled)
-            visual = self.client.request("visual", cancelled, goal=goal, step=None, completed=[],
-                previous=None, screen=captured)
-            if not isinstance(visual.get("summary"), str):
-                raise ValueError("The screen model returned an invalid observation.")
-            captured["summary"] = visual["summary"]
-            self.actions.report("screen", "Saw " + captured["title"] + ": " + visual["summary"][:200])
+            if self.step_session is not None:
+                captured['summary'] = 'Fresh screenshot supplied directly to the next-step model'
+            else:
+                visual = self.client.request("visual", cancelled, goal=goal, step=None, completed=[],
+                    previous=None, screen=captured)
+                if not isinstance(visual.get("summary"), str):
+                    raise ValueError("The screen model returned an invalid observation.")
+                captured["summary"] = visual["summary"]
+                self.actions.report("screen", "Saw " + captured["title"] + ": " + visual["summary"][:200])
         self.actions.report("brain", "Using direct media search plan" if fixed_media_plan else
                             "Opening requested app before planning remaining steps" if initial_launch_plan else
                             "Using verified navigation proposal with fresh checks" if learned_plan else
@@ -705,29 +873,43 @@ class Brain:
         apps = sorted(self.actions.apps, key=lambda name: (bool(words & set(common(name).split())),
             name in {"chrome", "notepad", "file explorer", "edge", "calculator"}), reverse=True)[:80]
         exact_single_request = None if has_progress else (exact_file or explicit_command_plan(goal) or explicit_desktop_plan(goal))
-        plan = exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan or self.client.request("plan", cancelled, goal=goal,
+        plan = exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan or self.planning_request("plan", cancelled, goal=goal,
             screen=self.visual_context(captured) if screen_aware else self.screen(snapshot), apps=apps,
             completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
+            fresh_image_ready=bool(self.step_session is not None and screen_aware),
             experience=state.recall(spoken_goal) if isinstance(state, TaskState) else [])
         if plan.get("model_used") and plan["model_used"] != self.options["planner"]:
             self.actions.report("brain", "Using installed fallback " + plan["model_used"] + "; preferred model is not installed yet")
-        steps = normalize_plan(validate_plan(plan, resume_completed), goal)
+        incremental_plan = self.step_session is not None and not (exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan)
+        if incremental_plan and plan.get('done'):
+            final = self.client.request('verify', cancelled, goal=goal,
+                step={'action': 'goal', 'value': goal, 'expected': 'The ENTIRE user goal is satisfied: ' + goal},
+                screen=self.planning_context(self.visual_context(captured) if screen_aware else self.screen(snapshot)))
+            if final.get('verified') is not True:
+                return 'Task paused: the current screen does not independently verify the whole goal.'
+            self.checkpoint('goal_verified', source='fresh_goal_verifier', evidence=str(final.get('reason', 'Goal already complete')))
+            return 'Finished. Your goal is already satisfied on the current screen.'
+        limit = action_budget(self.options)
+        steps = validate_plan(plan, resume_completed, limit-len(resume_completed))
+        steps = normalize_plan(steps, goal, complete_music=not incremental_plan)
+        if len(steps) + len(resume_completed) > limit:
+            raise ValueError('The normalized plan exceeds the remaining action budget.')
         if resume_completed and any(action_key(step) in {action_key(item) for item in resume_completed} for step in steps):
             raise ValueError("Task retained: the resume plan repeated an already completed action.")
         coverage = steps + resume_completed
         self.checkpoint("planned", evidence="; ".join(s["action"] + " " + s["value"] for s in steps))
         low_goal = goal.casefold()
-        if not initial_launch_plan and re.search(r"\b(?:create|make)\b.*\bfile\b", low_goal) and not any(s["action"] in {"create_file", "github_add_file"} for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:create|make)\b.*\bfile\b", low_goal) and not any(s["action"] in {"create_file", "github_add_file"} for s in coverage):
             raise ValueError("The plan omitted the requested file creation. Say the folder, filename and content again.")
-        if not initial_launch_plan and re.search(r"\b(?:play|put on|start playing)\b", low_goal) and not any(s["action"] == "select" for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:play|put on|start playing)\b", low_goal) and not any(s["action"] == "select" for s in coverage):
             raise ValueError("The plan found music but did not select anything to play. Name a song or playlist.")
-        if not initial_launch_plan and re.search(r"\b(?:play|put on|start playing)\b.*\b(?:spotify|youtube)\b", low_goal) and not any(s["action"] == "media_search" for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:play|put on|start playing)\b.*\b(?:spotify|youtube)\b", low_goal) and not any(s["action"] == "media_search" for s in coverage):
             raise ValueError("The plan omitted searching the requested music service.")
-        if not initial_launch_plan and re.search(r"\b(?:close|quit|exit)\b", low_goal) and not any(s["action"] == "close_app" for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:close|quit|exit)\b", low_goal) and not any(s["action"] == "close_app" for s in coverage):
             raise ValueError("The plan omitted closing the requested application.")
-        if not initial_launch_plan and re.search(r"\b(?:delete|remove)\b.*\bfile\b", low_goal) and not any(s["action"] in {"delete_file", "github_delete_file"} for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:delete|remove)\b.*\bfile\b", low_goal) and not any(s["action"] in {"delete_file", "github_delete_file"} for s in coverage):
             raise ValueError("The plan omitted the requested file deletion.")
-        if not initial_launch_plan and re.search(r"\b(?:modify|edit|replace|overwrite)\b.*\bfile\b", low_goal) and not any(s["action"] in {"modify_file", "github_add_file"} for s in coverage):
+        if not incremental_plan and not initial_launch_plan and re.search(r"\b(?:modify|edit|replace|overwrite)\b.*\bfile\b", low_goal) and not any(s["action"] in {"modify_file", "github_add_file"} for s in coverage):
             raise ValueError("The plan omitted the requested file edit.")
         for step in steps:
             if step["action"] in {"create_file", "modify_file", "delete_file", "save_file"}:
@@ -761,9 +943,9 @@ class Brain:
         completed = list(resume_completed)
         self.save_plan(steps, completed, "Initial goal breakdown")
         executed_steps = []
-        number = 0
+        number = len(completed)
         failures = list(prior.get("failures", [])) if prior and recovery_enabled else []
-        while steps and number < 6:
+        while steps and number < limit:
             attempted = result_verified = visual_pending = False
             visual_outcome = None
             try:
@@ -850,6 +1032,9 @@ class Brain:
                     raise ValueError("Task cancelled before action.")
                 if decision.get("approved") is not True:
                     raise ValueError("Task paused: " + str(decision.get("reason", "No clear next action.")))
+                if self.step_session is not None:
+                    self.step_session.prepare(goal, completed, step, apps, ToolRegistry(self.actions).catalog(goal))
+                action_started = time.monotonic()
                 if visual_pending:
                     prepared = self.visual_fallback.prepare(goal, step, handle, snapshot, cancelled)
                     def visual_activate():
@@ -919,6 +1104,8 @@ class Brain:
                 if cancelled():
                     raise ValueError("Task cancelled. Check the last action before repeating it.")
                 self.actions.report("action", result)
+                if self.step_session is not None:
+                    self.step_session.measure('action_execution', action_started)
                 recorded_result = ("Command exit code " + str(self.actions.last_command[1])
                                    if step["action"] == "run_command" and self.actions.last_command else result)
                 self.checkpoint("action_attempted", action=step["action"], target=step["value"], evidence=recorded_result)
@@ -1038,6 +1225,8 @@ class Brain:
                     "screen": after.get("title", ""),
                     "observation": landed["summary"][:500] if screen_aware else self.screen(after)})
                 result_verified = True
+                if self.step_session is not None:
+                    self.step_session.record(step, snapshot, after, chosen)
                 self.actions.report("brain", "Verified step " + str(number))
                 self.checkpoint("verified", action=step["action"], target=step["value"],
                                 evidence=recorded_result, screen=after.get("title") if isinstance(after, dict) else None)
@@ -1052,11 +1241,23 @@ class Brain:
                         break
                     if screen_aware and status.get("goal_done") is True and not (fixed_media_plan and len(steps) > 1):
                         self.save_plan([], completed, "Goal ready for final verification")
+                        steps = []
                         break
-                    if number >= 6:
-                        if toolkit_step:
-                            break  # Final evidence check can finish a six-tool task.
-                        return "Task paused after six verified actions; the full goal is still not visible."
+                    if number >= limit:
+                        self.save_plan(steps[1:], completed, 'Action budget reached; remaining work retained')
+                        if steps[1:]:
+                            return f'Task paused after {limit} verified actions; remaining work is retained.'
+                        # A one-step planner gets one final read-only completion
+                        # check, without permission to dispatch another action.
+                        if incremental_plan:
+                            completion = self.planning_request('replan', cancelled, goal=goal,
+                                screen=self.planning_context(self.visual_context(captured) if screen_aware else self.screen(after)),
+                                apps=apps, completed=completed, remaining=[], steps_left=0,
+                                tools=ToolRegistry(self.actions).catalog(goal))
+                            if completion.get('done') is not True:
+                                return f'Task paused after {limit} verified actions; the full goal is not yet verified.'
+                        steps = []
+                        break
                     if fixed_media_plan and not adaptive:
                         steps = steps[1:]
                         if steps:
@@ -1071,7 +1272,7 @@ class Brain:
                         revised = self.client.request("plan", cancelled, goal=goal,
                             screen=self.planning_context(self.visual_context(captured)), apps=apps, completed=completed,
                             tools=ToolRegistry(self.actions).catalog(goal))
-                        steps = normalize_plan(validate_plan(revised, completed), goal)
+                        steps = normalize_plan(validate_plan(revised, completed, limit-number), goal)
                     self.checkpoint("replanned", evidence="; ".join(s["action"] + " " + s["value"] for s in steps))
                     self.validate_remaining(steps, goal)
                     if not adaptive and steps[0]["action"] != "scroll" and (steps[0]["action"], common(steps[0]["value"])) in {
@@ -1096,6 +1297,9 @@ class Brain:
                     self.recover_task(goal, step, TaskFailure(str(exc), attempted=True), failures,
                         completed, steps, apps, number, cancelled)
                 raise
+        if steps:
+            self.save_plan(steps, completed, 'Action budget reached; remaining work retained')
+            return f'Task paused after {limit} actions; remaining work is retained for inspection.'
         if re.search(r"\b(?:play|put on|start playing)\b", goal, re.I) and any(s["action"] == "media_search" for s in executed_steps):
             from .ui_controls import matches
             spotify_playback = any(s["action"] == "media_search" and s["platform"] == "spotify" for s in executed_steps)

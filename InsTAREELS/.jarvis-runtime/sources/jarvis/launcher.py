@@ -81,9 +81,39 @@ def preflight(base=BASE, repair=True):
             raise ValueError("Invalid config")
         if not isinstance(config.get("brain", {}).get("adaptive_planning", False), bool):
             raise ValueError("brain.adaptive_planning must be a boolean")
+        for key in ('incremental_planning', 'reuse_navigation_workflows', 'native_tool_calling', 'allow_model_fallback'):
+            if not isinstance(config.get('brain', {}).get(key, False), bool):
+                raise ValueError('brain.' + key + ' must be a boolean')
+        if config.get('brain', {}).get('coding_backend', 'direct-qwen') not in {'direct-qwen','claude-code','codex'}:
+            raise ValueError('brain.coding_backend must be direct-qwen, claude-code or codex')
+        if config.get('brain', {}).get('coding_backend') == 'codex':
+            from .codex_code import MODEL, executable
+            if config['brain'].get('codex_model', MODEL) not in {MODEL,'qwen3.5:9b'}:
+                raise ValueError('Codex requires local Qwen3.5 9B')
+            executable(config['brain'])
+        if config.get('brain', {}).get('coding_backend') == 'claude-code':
+            from .claude_code import MODEL, executable
+            if config['brain'].get('claude_code_model', MODEL) not in {MODEL,'qwen3.5:9b'}:
+                raise ValueError('Claude Code requires the checked local Qwen3.5 9B model')
+            executable(config['brain'])
         if not isinstance(config.get("brain", {}).get("task_recovery", False), bool):
             raise ValueError("brain.task_recovery must be a boolean")
         visual = config.get('brain', {}).get('visual_fallback', {})
+        from .anticipation import settings as anticipation_settings
+        if not isinstance(config.get('anticipation', {}), dict):
+            raise ValueError('anticipation must be an object')
+        anticipation_settings(config.get('anticipation', {}))
+        from .command_cleanup import settings as cleanup_settings
+        cleanup_settings(config.get('command_cleanup'))
+        from .context_selector import settings as context_settings
+        context_settings(config.get('context_selector'))
+        sessions = config.get('memory', {}).get('conversation_sessions', {})
+        if (not isinstance(sessions, dict) or not isinstance(sessions.get('enabled', False), bool)
+                or type(sessions.get('context_characters', 24000)) is not int
+                or not 2000 <= sessions.get('context_characters', 24000) <= 48000
+                or type(sessions.get('choice_seconds', 300)) is not int
+                or not 30 <= sessions.get('choice_seconds', 300) <= 900):
+            raise ValueError('Invalid memory.conversation_sessions settings')
         if (not isinstance(visual, dict) or not isinstance(visual.get('enabled', False), bool)
                 or type(visual.get('minimum_confidence', .95)) not in (int, float)
                 or not math.isfinite(visual.get('minimum_confidence', .95))
@@ -360,9 +390,12 @@ def runtime_status(config):
             missing.append(issue)
     return {"status": "ready" if not missing else "repair_required", "missing": missing,
             "adaptive_planning": config.get("brain", {}).get("adaptive_planning", False),
+            "incremental_planning": config.get('brain', {}).get('incremental_planning', False),
+            "reuse_navigation_workflows": config.get('brain', {}).get('reuse_navigation_workflows', False),
+            "native_tool_calling": config.get('brain', {}).get('native_tool_calling', False),
             "task_recovery": config.get("brain", {}).get("task_recovery", False),
             "planner": config.get("brain", {}).get("planner"),
-            "planning_backend": "deepseek-harness" if harness_enabled else "hermes" if hermes_enabled else "qwen",
+            "planning_backend": ("qwen-native-tools" if config.get('brain', {}).get('native_tool_calling', False) else "qwen-next-step") if config.get('brain', {}).get('incremental_planning', False) else "deepseek-harness" if harness_enabled else "hermes" if hermes_enabled else "qwen",
             "screen_model": config.get("brain", {}).get("screen_model"),
             "visual_fallback": "ui-tars-parser" if visual_enabled else "disabled"}
 

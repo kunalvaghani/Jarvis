@@ -6,8 +6,8 @@ from pathlib import Path
 import tempfile
 
 
-def content_prefix(text):
-    """Read a partial root content string, ignoring content-like text elsewhere."""
+def content_prefix(text, field='content'):
+    """Read a partial root string field, ignoring similar text elsewhere."""
     decoder = json.JSONDecoder()
     pos = 0
     def space(i):
@@ -30,7 +30,7 @@ def content_prefix(text):
         if pos >= len(text) or text[pos] != ':':
             return None
         pos = space(pos + 1)
-        if name == 'content':
+        if name == field:
             if pos >= len(text) or text[pos] != '"':
                 return None
             start, pos = pos + 1, pos + 1
@@ -97,12 +97,14 @@ class CodeDraft:
         self.new_file, self.header = new_file, header
         self.cancelled, self.report = cancelled, report
         self.started = False
+        self.preview_only = False
         self.last_progress = 0.
         if new_file:
             self.expected = original
         elif self.path.exists():
             if not owned_draft(self.base, self.path, allow_complete=True):
-                raise ValueError('An unowned or changed streaming draft already exists: ' + str(self.path))
+                self.preview_only = True
+                report('warning', 'Existing sidecar is not owned by Jarvis; streaming in the island only.')
             self.expected = self.path.read_bytes()
         else:
             self.expected = None
@@ -114,6 +116,9 @@ class CodeDraft:
             raise ValueError('Coding cancelled; partial draft preserved.')
         if not isinstance(content, str) or len(content) > 20000 or '\x00' in content:
             raise ValueError('Invalid streaming code chunk; draft preserved.')
+        if self.preview_only:
+            self.preview(content)
+            return
         from .agent_context import scoped
         scoped(self.path.parent, self.path.name)
         current = self.path.read_bytes() if self.path.exists() else None
@@ -139,19 +144,34 @@ class CodeDraft:
             if not self.started:
                 self.report('action', 'Streaming code into ' + str(self.path) + ' (incomplete draft; wait for validation).')
                 self.started = True
-            import time
-            now = time.monotonic()
-            if now-self.last_progress >= .25:
-                from .progress import status
-                status(self.report, 'Writing ' + str(len(content)) + ' chars', self.target,
-                       file=str(self.target), preview=content[-1600:], characters=len(content), outcome='Incomplete draft')
-                self.last_progress = now
+            self.preview(content)
+        except OSError as exc:
+            if self.new_file:
+                raise
+            # A preview is optional. Never replay the failed write or touch an
+            # existing script before its complete output passes validation.
+            self.preview_only = True
+            self.report('warning', 'Streaming sidecar unavailable; continuing in the island only: ' + str(exc))
+            self.preview(content)
         finally:
             if temporary is not None:
-                temporary.unlink(missing_ok=True)
+                try:
+                    temporary.unlink(missing_ok=True)
+                except OSError:
+                    if not self.preview_only:
+                        raise
+
+    def preview(self, content):
+        import time
+        now = time.monotonic()
+        if now-self.last_progress >= .25:
+            from .progress import status
+            status(self.report, 'Writing ' + str(len(content)) + ' chars', self.target,
+                   file=str(self.target), preview=content[-1600:], characters=len(content), outcome='Incomplete draft')
+            self.last_progress = now
 
     def complete(self):
-        if not self.started:
+        if not self.started or self.preview_only:
             return
         from .skill_memory import atomic
         atomic(record_path(self.base, self.path), json.dumps({'path': str(self.path.resolve()),

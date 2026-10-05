@@ -1,0 +1,336 @@
+{
+  "at": "2026-10-04T04:50:59.364031+00:00",
+  "scope": "12 authored text fixtures per model; no real audio or execution; unconstrained JSON proposals with production finite-edit guard",
+  "results": [
+    {
+      "model": "qwen2.5:0.5b",
+      "cold_seconds": 1.984,
+      "warm_median_seconds": 0.562,
+      "warm_max_seconds": 0.641,
+      "raw_correct": 0,
+      "guarded_correct": 0,
+      "cases": [
+        {
+          "source": "jarvis um open note pad",
+          "error": "KeyError",
+          "seconds": 1.984
+        },
+        {
+          "source": "jarvis open you tube",
+          "error": "KeyError",
+          "seconds": 0.562
+        },
+        {
+          "source": "jarvis please launch spot ify",
+          "error": "KeyError",
+          "seconds": 0.641
+        },
+        {
+          "source": "jarvis opne calculator",
+          "error": "KeyError",
+          "seconds": 0.563
+        },
+        {
+          "source": "jarvis uh what is gravity",
+          "error": "KeyError",
+          "seconds": 0.625
+        },
+        {
+          "source": "jarvis open chrome",
+          "error": "KeyError",
+          "seconds": 0.406
+        },
+        {
+          "source": "jarvis don't delete notes.txt",
+          "error": "KeyError",
+          "seconds": 0.578
+        },
+        {
+          "source": "jarvis write um open note pad",
+          "error": "KeyError",
+          "seconds": 0.516
+        },
+        {
+          "source": "jarvis set volume to 37",
+          "error": "KeyError",
+          "seconds": 0.562
+        },
+        {
+          "source": "jarvis search for you tube bugs",
+          "error": "KeyError",
+          "seconds": 0.422
+        },
+        {
+          "source": "jarvis open chrome then close spotify",
+          "error": "KeyError",
+          "seconds": 0.422
+        },
+        {
+          "source": "jarvis send Maya 25 dollars",
+          "error": "KeyError",
+          "seconds": 0.437
+        }
+      ]
+    },
+    {
+      "model": "qwen3.5:0.8b",
+      "cold_seconds": 3.047,
+      "warm_median_seconds": 0.937,
+      "warm_max_seconds": 1.0,
+      "raw_correct": 7,
+      "guarded_correct": 8,
+      "cases": [
+        {
+          "source": "jarvis um open note pad",
+          "expected": "jarvis open notepad",
+          "candidate": "jarvis um open note pad",
+          "guarded": "jarvis um open note pad",
+          "seconds": 3.047,
+          "load_seconds": 2.1146,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis open you tube",
+          "expected": "jarvis open youtube",
+          "candidate": "jarvis open youtube",
+          "guarded": "jarvis open youtube",
+          "seconds": 0.86,
+          "load_seconds": 0.0171,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis please launch spot ify",
+          "expected": "jarvis please launch spotify",
+          "candidate": "jarvis please launch spot ify",
+          "guarded": "jarvis please launch spot ify",
+          "seconds": 0.984,
+          "load_seconds": 0.0146,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis opne calculator",
+          "expected": "jarvis open calculator",
+          "candidate": "jarvis opne calculator",
+          "guarded": "jarvis opne calculator",
+          "seconds": 0.875,
+          "load_seconds": 0.0149,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis uh what is gravity",
+          "expected": "jarvis what is gravity",
+          "candidate": "jarvis uh what is gravity",
+          "guarded": "jarvis uh what is gravity",
+          "seconds": 0.937,
+          "load_seconds": 0.0138,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis open chrome",
+          "expected": "jarvis open chrome",
+          "candidate": "jarvis open chrome",
+          "guarded": "jarvis open chrome",
+          "seconds": 0.829,
+          "load_seconds": 0.0138,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis don't delete notes.txt",
+          "expected": "jarvis don't delete notes.txt",
+          "candidate": "jarvis don't delete notes.txt",
+          "guarded": "jarvis don't delete notes.txt",
+          "seconds": 0.937,
+          "load_seconds": 0.0154,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis write um open note pad",
+          "expected": "jarvis write um open note pad",
+          "candidate": "jarvis write um open note pad",
+          "guarded": "jarvis write um open note pad",
+          "seconds": 0.938,
+          "load_seconds": 0.0143,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis set volume to 37",
+          "expected": "jarvis set volume to 37",
+          "candidate": "jarvis set volume to 37",
+          "guarded": "jarvis set volume to 37",
+          "seconds": 1.0,
+          "load_seconds": 0.0138,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis search for you tube bugs",
+          "expected": "jarvis search for you tube bugs",
+          "candidate": "jarvis search for you tube bugs",
+          "guarded": "jarvis search for you tube bugs",
+          "seconds": 0.937,
+          "load_seconds": 0.0138,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis open chrome then close spotify",
+          "expected": "jarvis open chrome then close spotify",
+          "candidate": "jarvis open chrome then close spotify",
+          "guarded": "jarvis open chrome then close spotify",
+          "seconds": 0.922,
+          "load_seconds": 0.0156,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis send Maya 25 dollars",
+          "expected": "jarvis send Maya 25 dollars",
+          "candidate": "jarvis send maya 25 dollars",
+          "guarded": "jarvis send Maya 25 dollars",
+          "seconds": 0.969,
+          "load_seconds": 0.0137,
+          "raw_correct": false,
+          "guarded_correct": true
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:3b-instruct",
+      "cold_seconds": 8.562,
+      "warm_median_seconds": 0.906,
+      "warm_max_seconds": 1.078,
+      "raw_correct": 8,
+      "guarded_correct": 9,
+      "cases": [
+        {
+          "source": "jarvis um open note pad",
+          "expected": "jarvis open notepad",
+          "candidate": "jarvis um open note pad",
+          "guarded": "jarvis um open note pad",
+          "seconds": 8.562,
+          "load_seconds": 6.6139,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis open you tube",
+          "expected": "jarvis open youtube",
+          "candidate": "jarvis open you tube",
+          "guarded": "jarvis open you tube",
+          "seconds": 0.906,
+          "load_seconds": 0.016,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis please launch spot ify",
+          "expected": "jarvis please launch spotify",
+          "candidate": "jarvis please launch spotify",
+          "guarded": "jarvis please launch spotify",
+          "seconds": 0.907,
+          "load_seconds": 0.0159,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis opne calculator",
+          "expected": "jarvis open calculator",
+          "candidate": "jarvis opne calculator",
+          "guarded": "jarvis opne calculator",
+          "seconds": 1.078,
+          "load_seconds": 0.0148,
+          "raw_correct": false,
+          "guarded_correct": false
+        },
+        {
+          "source": "jarvis uh what is gravity",
+          "expected": "jarvis what is gravity",
+          "candidate": "jarvis what is gravity",
+          "guarded": "jarvis what is gravity",
+          "seconds": 0.844,
+          "load_seconds": 0.0143,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis open chrome",
+          "expected": "jarvis open chrome",
+          "candidate": "jarvis open chrome",
+          "guarded": "jarvis open chrome",
+          "seconds": 0.703,
+          "load_seconds": 0.0154,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis don't delete notes.txt",
+          "expected": "jarvis don't delete notes.txt",
+          "candidate": "jarvis don't delete notes.txt",
+          "guarded": "jarvis don't delete notes.txt",
+          "seconds": 0.906,
+          "load_seconds": 0.0149,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis write um open note pad",
+          "expected": "jarvis write um open note pad",
+          "candidate": "jarvis write open note pad",
+          "guarded": "jarvis write um open note pad",
+          "seconds": 0.859,
+          "load_seconds": 0.0137,
+          "raw_correct": false,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis set volume to 37",
+          "expected": "jarvis set volume to 37",
+          "candidate": "jarvis set volume to 37",
+          "guarded": "jarvis set volume to 37",
+          "seconds": 0.969,
+          "load_seconds": 0.0156,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis search for you tube bugs",
+          "expected": "jarvis search for you tube bugs",
+          "candidate": "jarvis search for you tube bugs",
+          "guarded": "jarvis search for you tube bugs",
+          "seconds": 0.906,
+          "load_seconds": 0.0141,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis open chrome then close spotify",
+          "expected": "jarvis open chrome then close spotify",
+          "candidate": "jarvis open chrome then close spotify",
+          "guarded": "jarvis open chrome then close spotify",
+          "seconds": 0.938,
+          "load_seconds": 0.0139,
+          "raw_correct": true,
+          "guarded_correct": true
+        },
+        {
+          "source": "jarvis send Maya 25 dollars",
+          "expected": "jarvis send Maya 25 dollars",
+          "candidate": "jarvis send Maya 25 dollars",
+          "guarded": "jarvis send Maya 25 dollars",
+          "seconds": 0.984,
+          "load_seconds": 0.0151,
+          "raw_correct": true,
+          "guarded_correct": true
+        }
+      ]
+    }
+  ]
+}

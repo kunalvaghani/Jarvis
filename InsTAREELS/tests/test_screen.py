@@ -36,7 +36,7 @@ class ScreenTests(unittest.TestCase):
         worker = Knowledge({}, lambda *args: None)
         worker.screen_handle = lambda: 1234
         worker.submit("What is this?")
-        _, _, _, use_screen, handle = worker.queue.get_nowait()
+        _, _, _, use_screen, handle, _ = worker.queue.get_nowait()
         self.assertTrue(use_screen)
         self.assertEqual(handle, 1234)
 

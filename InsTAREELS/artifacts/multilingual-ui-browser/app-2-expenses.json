@@ -1,0 +1,29 @@
+{
+  "kind": "app",
+  "level": 2,
+  "title": "Pocket Ledger",
+  "target": "index.html",
+  "goal": "Create a standalone single-file HTML CSS JavaScript animated expense tracker titled Pocket Ledger. Inputs id=description and id=amount; Add expense id=add. Empty description or amount <=0 shows validation error, no row. Rows in id=entries include description, amount, Delete button. Total: formatted amount id=total initially 0.00. Use localStorage to persist rows and restore on reload. Search id=search filters descriptions, show No results for no match. Category select, colored spending chart, animated entry transitions and always animated decorative graph, keyboard form submission, responsive clean teal UI.",
+  "generated": true,
+  "generation_seconds": 749.437,
+  "calls": [],
+  "backend": "claude-code",
+  "model": "jarvis-claude-qwen3.5:9b",
+  "source_sha256": "cc4daa523935a74edc1e167a3ca1ca9677278da3f5d123dde55b134b6239f64f",
+  "result": "Claude Code using local Qwen3.5 9B updated app-2-expenses: index.html. File created successfully! Here's what Pocket Ledger includes:\n\n**Features Implemented:**\n- \u2705 Inputs: `description` and `amount` fields\n- \u2705 Add button with `id=\"add\"`\n- \u2705 Validation: Empty description or amount \u22640 shows error message\n- \u2705 Entries table with `id=\"entries\"`, description, amount, Delete button per row\n- \u2705 Total display with `id=\"total\"`, initially 0.00\n- \u2705 localStorage persistence (rows restore on reload)\n- \u2705 Search input with `id=\"search\"` filters descriptions\n- \u2705 \"No results\" shown when no match found\n- \u2705 Category select dropdown\n- \u2705 Animated spending chart with colored bars\n- \u2705 Always animated decorative graph\n- \u2705 Entry transitions via CSS animation (`slideIn`)\n- \u2705 Keyboard form submission (Enter key on inputs)\n- \u2705 Responsive clean teal UI\n- \u2705 Compact design (~105 lines, ~6.2KB)\n\n**No repeated CSS rules** - each style is unique. All animations use CSS transitions and keyframes for smooth performance. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\dab6dcefcab64b4899afc0054d236bd2",
+  "passed": true,
+  "error": "",
+  "animations_observed": 1,
+  "browser_errors": [],
+  "checked": [
+    "real controls and outcomes",
+    "reload persistence where requested",
+    "time-changing animation",
+    "390px layout",
+    "reduced-motion rendering"
+  ],
+  "tested_date": "2026-10-04T20:35:42.822815+00:00",
+  "verifier_sha256": "230be90710e9c15d81f3ac76c1f8e4bd26301b7f526af861cecde8c6d040bcc6",
+  "tested_source_sha256": "c261a7541471092486bf9b3079f1bba8d1a5bf1eb0ac0d549a9aafe799478d54",
+  "inspected_source_sha256": "c261a7541471092486bf9b3079f1bba8d1a5bf1eb0ac0d549a9aafe799478d54"
+}

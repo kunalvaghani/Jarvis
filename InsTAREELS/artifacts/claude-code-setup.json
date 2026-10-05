@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-04T12:48:31.545962+00:00",
+  "model": "jarvis-claude-qwen3.5:9b",
+  "from": "qwen3.5:9b",
+  "same_weights": true,
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 32768,
+  "gpu_layers": 20,
+  "scope": "Alias parameters sized for this 4GB GPU; official docs recommend 64K+ for larger repositories. No weights downloaded or remote model calls."
+}

@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-04T17:43:22.410878+00:00",
+  "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\5568ca32e1bf4e49af64f2ae0532dfca",
+  "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+  "create": "Claude Code using local Qwen3.5 9B updated 5568ca32e1bf4e49af64f2ae0532dfca: main.py. Disk readback and available syntax checks passed; runtime/UI checks were not run by this session.\nCLI report (not independent verification): Created `main.py` with the `add(a, b)` function and `print(add(2, 3))` under the main guard. The file is 6 lines (under 15). No other files were changed.\nReview: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\a829f3b4db6a492dad8d5950dbdebf14",
+  "edit": "Claude Code using local Qwen3.5 9B updated 5568ca32e1bf4e49af64f2ae0532dfca: main.py. Disk readback and available syntax checks passed; runtime/UI checks were not run by this session.\nCLI report (not independent verification): **Changed files:**\n- `main.py` - Added `subtract(a, b)` function returning `a - b` while preserving existing `add` and `main` functions\n\n**Checks still needed:**\n- Verify Python syntax is valid (no import errors)\n- Test that both `add(2, 3)` and `subtract(5, 3)` produce correct results\nReview: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\ce37770c39494338aaad041a2f7dc34e",
+  "passed": true,
+  "source": "def add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n\nif __name__ == \"__main__\":\n    print(add(2, 3))",
+  "progress_events": 219,
+  "runtime_stdout": "5\n",
+  "guard_tools": [
+    "Write",
+    "Edit"
+  ],
+  "adapter_requests": 6,
+  "thinking_disabled": true,
+  "original_backup_verified": true
+}

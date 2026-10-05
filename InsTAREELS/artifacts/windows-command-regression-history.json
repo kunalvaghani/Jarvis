@@ -1,0 +1,53 @@
+[
+  {
+    "date": "2026-10-04T11:24:36.557634+00:00",
+    "regression": {
+      "exit_code": 0,
+      "seconds": 167.906,
+      "stdout": "Fast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\n",
+      "stderr": "Hermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nD:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.venv\\lib\\site-packages\\pywinauto\\__init__.py:80: UserWarning: Revert to STA COM threading mode\n  warnings.warn(\"Revert to STA COM threading mode\", UserWarning)\n----------------------------------------------------------------------\nRan 976 tests in 164.824s\n\nOK\n"
+    },
+    "readiness": {
+      "exit_code": 0,
+      "seconds": 39.406,
+      "stdout": "{\"status\": \"ready\", \"missing\": [], \"adaptive_planning\": true, \"incremental_planning\": true, \"reuse_navigation_workflows\": true, \"native_tool_calling\": true, \"task_recovery\": true, \"planner\": \"qwen3.5:9b\", \"planning_backend\": \"qwen-native-tools\", \"screen_model\": \"qwen3.5:9b\", \"visual_fallback\": \"ui-tars-parser\"}\n",
+      "stderr": ""
+    },
+    "passed": true,
+    "scope": "Regression and launcher readiness only; actual owned file/DOM/native checks have a separate record."
+  },
+  {
+    "date": "2026-10-04T11:33:03.174129+00:00",
+    "regression": {
+      "exit_code": 0,
+      "seconds": 133.25,
+      "stdout": "Fast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\n",
+      "stderr": "Hermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nD:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.venv\\lib\\site-packages\\pywinauto\\__init__.py:80: UserWarning: Revert to STA COM threading mode\n  warnings.warn(\"Revert to STA COM threading mode\", UserWarning)\n----------------------------------------------------------------------\nRan 978 tests in 129.997s\n\nOK\n"
+    },
+    "readiness": {
+      "exit_code": 0,
+      "seconds": 32.078,
+      "stdout": "{\"status\": \"ready\", \"missing\": [], \"adaptive_planning\": true, \"incremental_planning\": true, \"reuse_navigation_workflows\": true, \"native_tool_calling\": true, \"task_recovery\": true, \"planner\": \"qwen3.5:9b\", \"planning_backend\": \"qwen-native-tools\", \"screen_model\": \"qwen3.5:9b\", \"visual_fallback\": \"ui-tars-parser\"}\n",
+      "stderr": ""
+    },
+    "passed": true,
+    "scope": "Regression and launcher readiness only; actual owned file/DOM/native checks have a separate record."
+  },
+  {
+    "date": "2026-10-04T11:37:18.111663+00:00",
+    "regression": {
+      "exit_code": 0,
+      "seconds": 133.0,
+      "stdout": "Fast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\nFast file and folder lookup index ready.\n",
+      "stderr": "Hermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nHermes native inference started.\nHermes native inference completed.\nD:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.venv\\lib\\site-packages\\pywinauto\\__init__.py:80: UserWarning: Revert to STA COM threading mode\n  warnings.warn(\"Revert to STA COM threading mode\", UserWarning)\n----------------------------------------------------------------------\nRan 979 tests in 130.228s\n\nOK\n"
+    },
+    "readiness": {
+      "exit_code": 0,
+      "seconds": 32.0,
+      "stdout": "{\"status\": \"ready\", \"missing\": [], \"adaptive_planning\": true, \"incremental_planning\": true, \"reuse_navigation_workflows\": true, \"native_tool_calling\": true, \"task_recovery\": true, \"planner\": \"qwen3.5:9b\", \"planning_backend\": \"qwen-native-tools\", \"screen_model\": \"qwen3.5:9b\", \"visual_fallback\": \"ui-tars-parser\"}\n",
+      "stderr": ""
+    },
+    "passed": true,
+    "scope": "Regression and launcher readiness only; actual owned file/DOM/native checks have a separate record."
+  }
+]

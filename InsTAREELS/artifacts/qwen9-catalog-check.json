@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-03T18:43:23.290413+00:00",
+  "model": "qwen3.5:9b",
+  "scope": "Real inference over the configured deferred tool catalog. No desktop/API proposal was executed; not a general accuracy benchmark.",
+  "offered_tools": [
+    "open",
+    "browse",
+    "browser_search",
+    "browser_inspect",
+    "browser_navigate",
+    "browser_click",
+    "browser_fill",
+    "media_search",
+    "media_control",
+    "select",
+    "fill_text",
+    "scroll",
+    "shortcut",
+    "open_menu",
+    "handle_dialog",
+    "save_file",
+    "close_app",
+    "create_file",
+    "modify_file",
+    "delete_file",
+    "run_command",
+    "improve_code",
+    "read_file",
+    "github_read_file",
+    "toolkit_status",
+    "integration_status",
+    "application_search",
+    "tool_search",
+    "skill_list",
+    "skill_read",
+    "mcp_status",
+    "mcp_list_tools"
+  ],
+  "passed": true,
+  "proposal": {
+    "done": false,
+    "question": "",
+    "reason": "One native function proposal; fresh runtime checks required",
+    "steps": [
+      {
+        "action": "application_search",
+        "browser": "chrome",
+        "folder": "",
+        "content": "",
+        "find": "",
+        "platform": "",
+        "value": "Notepad",
+        "expected": "find configured app name for Notepad"
+      }
+    ],
+    "model_used": "qwen3.5:9b",
+    "native_tool_calling": true
+  },
+  "seconds": 115.187
+}

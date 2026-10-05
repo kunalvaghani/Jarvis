@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-03T18:37:30.663593+00:00",
+  "model": "qwen3.5:9b",
+  "checks": [
+    {
+      "name": "capabilities",
+      "passed": true,
+      "seconds": 0.0,
+      "detail": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen35",
+          "families": [
+            "qwen35"
+          ],
+          "parameter_size": "9.7B",
+          "quantization_level": "Q4_K_M"
+        },
+        "tags": [
+          {
+            "name": "qwen3.5:9b",
+            "model": "qwen3.5:9b",
+            "modified_at": "2026-10-03T23:52:01.4990895+05:30",
+            "size": 6594474711,
+            "digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "9.7B",
+              "quantization_level": "Q4_K_M",
+              "context_length": 262144,
+              "embedding_length": 4096
+            },
+            "capabilities": [
+              "vision",
+              "completion",
+              "tools",
+              "thinking"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "native_read_and_tool_feedback",
+      "passed": true,
+      "seconds": 68.859,
+      "detail": {
+        "selected": "integration_status",
+        "registered_tools": 82,
+        "feedback_received": true,
+        "final": "The integration_status tool returned a verified result showing 82 registered tools across six tool groups: browser, desktop, dom, files, terminal, and toolkit. The goal to report the count of registered tools is complete."
+      }
+    },
+    {
+      "name": "vision_native_next_action_no_desktop_input",
+      "passed": true,
+      "seconds": 73.75,
+      "detail": {
+        "done": false,
+        "question": "",
+        "reason": "One native function proposal; fresh runtime checks required",
+        "steps": [
+          {
+            "action": "select",
+            "browser": "chrome",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": "",
+            "value": "Advanced",
+            "expected": "Advanced"
+          }
+        ],
+        "model_used": "qwen3.5:9b",
+        "native_tool_calling": true
+      }
+    },
+    {
+      "name": "configured_coder_json_syntax_fixture",
+      "passed": true,
+      "seconds": 31.188,
+      "detail": {
+        "model": "qwen3.5:9b",
+        "source": "def add(a, b):\n    return a + b\n",
+        "scope": "Syntax/function presence only; generated code was not executed or saved as application code."
+      }
+    }
+  ],
+  "passed": true,
+  "scope": "Local fixture inference and one real read-only metadata tool dispatch. No desktop input, live voice or external account actions; not a general accuracy or five-second benchmark."
+}

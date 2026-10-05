@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-03T14:22:09.673164+00:00",
+  "checks": {
+    "real_worker_protocol_offline_outline": true,
+    "waits_for_idle": true,
+    "prepared_artifact_readback": true,
+    "source_attribution_and_questions": true,
+    "no_automatic_speech_or_popup": true,
+    "expired_card_rejected": true,
+    "window_inference_suggests_without_search": true,
+    "accepted_read_only_preparation": true,
+    "shutdown_and_stop_retained": true,
+    "hidden_prepared_widgets_rendered": true,
+    "no_microphone_or_real_vault": true,
+    "anticipation_disabled_in_ui_verification": true
+  },
+  "passed": true,
+  "scope": "Temporary synthetic activity/source fixtures, real offline worker protocol and hidden rendered widgets; not a live anticipation-quality benchmark.",
+  "live_public_search": {
+    "source_count": 3,
+    "passed": true,
+    "scope": "Public search snippets and research questions; no full-page or factual verification",
+    "retrieval_status": "snippets",
+    "limitation": "Search snippets only; no full pages, model synthesis, real user activity or prediction-accuracy evaluation."
+  }
+}

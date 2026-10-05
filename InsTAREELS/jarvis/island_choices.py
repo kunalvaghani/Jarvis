@@ -7,6 +7,11 @@ import time
 
 def snapshot(actions, now=None):
     now = time.monotonic() if now is None else now
+    knowledge = getattr(actions, 'knowledge', None)
+    if knowledge is not None and getattr(knowledge, 'pending_memory', None):
+        card = knowledge.choice_snapshot()
+        if card:
+            return card
     groups = [('open', actions.pending_open, 45), ('project', actions.projects.pending, 180),
               ('control', actions.ui_controls.pending if actions.ui_controls else None, 45),
               ('task', actions.pending_question, 180)]
@@ -33,6 +38,8 @@ def resolve(actions, token, index):
     current = snapshot(actions)
     if not current or current['token'] != token or not 0 <= index < len(current['options']):
         raise ValueError('Those choices changed or expired. Repeat the request for a fresh list.')
+    if current['kind'] == 'memory':
+        return Command('memory_choice', str(index), token)
     if current['kind']=='open':
         selected = actions.pending_open['choices'][index]
         actions.pending_open = None

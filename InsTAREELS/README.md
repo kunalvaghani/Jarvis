@@ -1,5 +1,218 @@
 # Jarvis — local Windows voice assistant
 
+**Coding destination and reply repair (2026-10-05 IST):** `create an app to
+monitor my health in folder TestCodes folder` now resolves `TestCodes` rather
+than treating the app's purpose as its destination. A confirmed folder reply
+resumes the original request once through the configured **Codex/local Qwen**
+executor, with island and spoken completion. Invalid answers retain the question;
+expiry, cancellation and uncertain-write guards remain active. Handoff tests
+use a recording Codex boundary and create no application source. The existing
+catalog resolves the reported request to its real `TestCodes` folder. **1,021
+regression tests passed; launcher readiness is `ready`.** Restart Jarvis
+through Stop/Start to load the fix.
+[Folder syntax, resumption and verification scope](docs/codex-code-local.md).
+
+**Ollama model visibility repair (2026-10-05 IST):** The `/api/show` 404 came
+from a WSL server using a different model store from the existing Windows cache.
+Restored the configured Qwen models from cached files without registry downloads,
+preserving Gemma and the shared server. Setup now checks cache roots, restores
+base models before local aliases, and never pulls Jarvis alias names. Coding
+preflight repairs a missing alias or explains unavailable weights before editing
+files. Actual local script creation/edit and generated counter-app browser
+interaction passed after a Qwen repair of moving controls; **1,013 regression tests passed
+and launcher readiness is `ready`**. Restart Jarvis once to load the recovery
+changes. [Setup and troubleshooting](docs/codex-code-local.md).
+
+**Local Codex coding (2026-10-05 IST):** Jarvis now uses the installed Codex
+CLI with **local Qwen3.5 9B** for coding tasks, replacing the configured Claude
+Code executor. Explicit folder/file paths take priority, followed by the fresh
+File Explorer folder and remembered scope. Visible text, file activity and
+results stream into the existing island. Checked saves preserve originals;
+Stop closes only the owned process tree. Each task uses isolated Codex settings,
+without changing the desktop chat model or requiring paid model API calls.
+Actual local creation/edit and a Python run passed; **1,006 regression tests
+passed and launcher readiness is `ready`**. The island replay passed 90 updates
+without widget rebuilds or completion collapse. All **nine animated UI fixtures**
+passed actual browser checks after reviewed corrections; React fixtures also
+passed strict type checks/builds. Native C/C++/C#/Java compilation remains pending.
+[Setup, behavior and limits](docs/codex-code-local.md),
+[languages and fixture results](docs/multilingual-coding.md).
+Restart through Stop/Start Jarvis to load the new backend.
+
+![Rendered Jarvis island with authored Codex activity; not a desktop screenshot or live inference](artifacts/codex-code-island-preview.png)
+
+**Windows command reference (2026-10-04):** Imported all **493 commands / 21
+categories** from the supplied ZIP with pinned recipes, explicit parameter binding
+and direct matching for app launches, file/host requests and exact command names.
+The island reports execution and retains approvals; recipe voice requests wait
+for the final transcript. Python input checks the current
+app/window; DOM commands use the owned browser; Office recipes use one owned batch.
+Configured launchers preserve typing focus. Added free PyAutoGUI/OpenCV dependencies.
+All IDs are available through command search and explicit requests; optional apps,
+permissions and exact targets remain necessary. Owned file/DOM/native fixtures passed; **980 regression tests passed** and
+launcher readiness is `ready`. Verification results are in the
+[execution guide](docs/windows-commands.md). Restart via Stop/Start Jarvis.
+
+**Longer plan execution (2026-10-04):** The executor now permits twenty actions
+by default, retains the full completion list and checks the entire goal before
+reporting success. Stop and uncertain actions still block further execution.
+Ten actual Qwen-generated file plans spanning **2–20 actions** passed after fixes
+and retests; ten authored plans also passed. A separate owned
+Win32 fixture verified **20 real button activations in 64.953 s**. These checks
+use deterministic decision/verification oracles; the native test uses an authored
+plan. The twenty-step recorded Qwen proposal was retested in a fresh fixture.
+No new dependency or paid API. Restart via Stop/Start
+Jarvis. **960 regression tests passed; launcher readiness is `ready`.**
+[Configuration, live records and scope](docs/plan-execution.md).
+
+**Existing-script GUI edits (2026-10-04):** `add UI to calculator.py` sends the
+exact current source and requested change straight to the configured local Qwen
+coder. GUI requests reject console-only and placeholder output before saving;
+ambiguous follow-up targets require a filename. Locked streaming sidecars switch
+to island-only previews, and active generation renews an idle timeout within a
+separate total limit. Original-source checks and coding reviews protect edits.
+An actual Qwen fixture completed in **189.5 s**, streamed **421** updates, and
+its generated Tkinter window passed six arithmetic/error checks through real
+widget callbacks. These results cover an authored fixture, not arbitrary user
+scripts. **940 regression tests passed; launcher readiness is `ready`.**
+No new dependency or paid API. Restart through Stop/Start Jarvis.
+[Behavior, limits and verification](docs/python-gui-edits.md).
+
+**Session memory, context selector and live app awareness (2026-10-04):**
+Completed questions/answers and managed task replies now extend durable paired
+sessions. Follow-ups prefer the current session, then saved conversations; ambiguous
+matches show dated context choices in the island. Clicking a choice resumes the
+original question once, and dropdown/input focus is preserved. A separate free
+local **Qwen3.5 0.8B** thread selects distinctive context matches and supplies
+ready output to the main planner. It does not rewrite commands or execute tasks.
+The production background fixture selected context in **1.437 s**; cold/busy
+requests retain manual choices within the three-second budget.
+
+The planner also receives checked current/recent app-window status and observed
+accessible buttons/controls. Supported direct commands use coded adapters with
+fresh target validation. An owned native fixture confirmed two clicks, changed
+labels and blocked closed-window/stale-target input with **zero model calls**.
+Saved memory selection and its next follow-up passed actual local answer checks.
+Full text is stored locally; prompts use bounded excerpts. No paid API or new
+Python dependency. **929 regression tests passed; launcher readiness is `ready`.**
+Restart through the normal Stop/Start Jarvis launchers.
+[Behavior, configuration, model comparison, app limitations and dated regression/readiness records](docs/session-context.md).
+
+![Rendered actual island memory-choice widgets with authored examples; not a desktop screenshot or private memory](artifacts/session-memory-choices-preview.png)
+
+**Conservative voice cleanup (2026-10-04):** A separate local **Qwen2.5 0.5B**
+selector now cleans eligible final speech commands. It chooses only between the
+original and a checked surface edit; it cannot add actions or invent targets.
+Dictation, literal payloads, numbers, negation and committed actions are preserved.
+Clear commands bypass inference; timeout falls back unchanged within a two-second
+default budget. This free 398 MB model was fastest among three tested options:
+**0.265 s warm median**, with all 16 constrained text fixtures matched. Live
+production cleanup also matched 16/16 fixtures (seven model calls, nine bypasses).
+This is not a real-microphone accuracy guarantee. **886 regression tests passed;
+launcher readiness is `ready`.** No new Python dependencies.
+Restart through Stop/Start Jarvis. [Research, exact edit scope, setup and separate verification records](docs/command-cleanup.md).
+
+**Smooth long-output growth (2026-10-04):** Streaming updates keep the answer
+view mounted and append text in place. The same island grows to the screen limit,
+then scrolls; token pauses and draft replacement do not collapse it. Unchanged
+placement/rendering is skipped, and scrolling back preserves your reading line.
+A 160-update UI replay recorded **zero view unmounts and zero layout rebuilds**;
+**864 tests passed; launcher readiness is `ready`**. Restart through the normal
+Stop/Start launchers. [Rendered growth stages, behavior and verification scope](docs/smooth-island-growth.md).
+
+![Rendered long-output growth at a common scale — authored fixture, not live model output or a desktop screenshot](artifacts/island-growth-preview.png)
+
+**Streaming island answers (2026-10-04):** Ollama question output now appears
+inside the existing island as it is generated. Actual output resets the silence
+timeout (300 seconds HTTP / 330 seconds worker); the total ceiling is 30 minutes.
+Stop cancels the owned request, and interrupted previews remain marked incomplete.
+Code examples stream plain source; normal questions keep web-verification logic.
+The C++ game question delivered first text in **13.3 seconds**, streamed **7,984
+characters**, and finished in **6 minutes 47 seconds** without the old deadline
+abort. The generated code was not compiled or run. **859 tests passed; launcher
+readiness is `ready`.**
+No new dependencies. [Configuration, rendered preview and separate live/regression evidence](docs/streaming-answers.md).
+Restart Jarvis through its normal Stop/Start launchers to load this change.
+
+![Rendered island with authored partial code — not a desktop screenshot or live answer](artifacts/answer-stream-preview.png)
+
+**Ollama output/timeout repair (2026-10-04):** Restored the missing `qwen3.5:9b`
+tag from identical installed weights. CPU planning now has a bounded 300-second
+HTTP allowance and 330-second worker allowance. Fresh checks returned text in
+8.95 seconds, warm chat in 0.35 seconds and a native proposal in 21.8 seconds;
+the proposal was not executed. Logs also showed server bind conflicts, GPU
+discovery timeouts and cancelled loads. **843 regression tests passed; launcher
+readiness is `ready`.** These checks do not verify the original long C++ request.
+[Diagnosis, changes, measured limits and troubleshooting](docs/ollama-output-timeouts.md).
+Restart Jarvis through its normal launchers.
+
+**Ordered native execution (2026-10-04):** Compatible desktop inputs now use
+reviewed UFO → Windows-MCP → CUA → Open Computer Use → Agent-S primitives in that
+order. Exact supported desktop/file task grammar skips Qwen; other requests keep
+the existing direct workflows and planner. Provider fallback occurs before input;
+uncertain actions pause without replay. No new dependencies or paid APIs.
+**839 regression tests passed; launcher readiness is `ready`.** A real owned
+Windows fixture completed fill → checkbox selection through the persistent worker
+in **0.453 seconds with zero model calls**. This does not establish arbitrary task
+speed. All five repos are indexed (5,700 source files); selected compatible actions
+are adapted, not every framework function activated.
+[Commands, exact integration scope, source inventory, licenses and evidence](docs/execution-providers.md).
+Restart Jarvis through the normal Stop/Start launchers.
+
+**One glass notch (2026-10-04):** Jarvis now expands from the screen edge into one
+surface for typing, scrollable answers/code, tasks, approvals, music, games,
+history, Prepared, settings and the command console. Rounded glass buttons and
+inputs share highlights, borders and hover/focus states. Curved shoulders and
+interruptible 340 ms motion follow the supplied VoiceOS references. **•••** opens
+features inside the notch; **Esc** collapses it. No new dependencies or paid APIs.
+**809 regression tests passed; launcher readiness is `ready`.**
+[Controls, Firecrawl research, architecture and verification limits](docs/voiceos-notch.md).
+Restart Jarvis once through the normal Stop/Start launchers.
+
+![Rendered glass notch widgets with sample content — not desktop screenshots or live task results](artifacts/jarvis-notch-preview.png)
+
+**Qwen3.5:9b primary model (2026-10-04):** The verified 6.6 GB Ollama download now
+supplies questions, vision, planning, decisions and coding. General one-step
+planning uses native function calls with checked execution and verified result
+feedback. All **82 registered tools** have native schemas; relevant configured
+tools are discovered by intent. App/integration discovery and three Firecrawl
+public-read adapters are added. Firecrawl needs `JARVIS_FIRECRAWL_KEY`; account
+services/MCP need their own authorization. Codex plugin logins are not transferred.
+**803 regression tests and launcher readiness passed.** Real native feedback,
+vision, coding and runtime-catalog fixtures passed in **31–115 seconds** on CPU, so the five-second
+target remains unestablished. [Setup, complete tool categories, plugin scope,
+primary sources and measured evidence](docs/qwen35-9b.md). Restart Jarvis once.
+
+**One-step planning and repeat navigation (2026-10-03):** General desktop planning
+now asks for one action from a fresh screenshot, the aim and verified step history.
+A background worker prepares the next prompt during execution; a two-frame ring
+is cleared on task exit. Verified native navigation recipes can skip model calls
+for the same request with fresh control and outcome checks. A real local-model
+fixture returned the correct action in **34.125 seconds**, so universal five-second
+execution is not established. [Behavior, repeat scope, configuration, authored
+fixture and dated verification](docs/step-planning.md). Restart Jarvis once.
+
+Verification on **2026-10-03**: **785 regression tests passed**, including 27
+step-planning checks; launcher readiness reported `ready` with `qwen-next-step`.
+[Dated regression/readiness record](artifacts/step-planning-regression-check.json).
+
+**Idle-time anticipation (2026-10-03):** A separate bounded component uses explicit
+research requests and eligible sustained browser/editor titles to prepare source
+outlines or suggest review checklists. The island's **Prepared** view shows evidence,
+expiry and Accept/Dismiss controls. Public research from inferred browser topics
+requires acceptance or the explicit **always prepare public research** command.
+Feedback reduces unwanted proposals; Stop, cancellation, context changes and expiry
+invalidate work. Optional local synthesis is off by default. [Commands, compute
+limits, rendered sample preview, research attribution and verification
+scope](docs/anticipation.md). Restart Jarvis once. A generic live query retrieved
+three public sources; anticipation usefulness has not been benchmarked.
+
+Verification on **2026-10-03**: **758 regression tests passed**, including 39
+anticipation checks; launcher readiness reported `ready` with no missing components.
+[Dated regression/readiness record](artifacts/anticipation-regression-check.json).
+
+![Rendered Prepared view with sample activity and sources — not a desktop screenshot or live research result](artifacts/anticipation-preview.png)
+
 **Web/app development (2026-10-02):** Jarvis now retrieves its own framework-aware guides, writes a design brief, builds complete projects in three-file batches, runs reviewed Node type/build tooling, inspects owned desktop/mobile previews and retains independently verified framework lessons. Vite, Next.js, Electron renderer and Expo web adapters passed real build/browser checks; native packaging/device behavior needs separate platform verification. DeepSeek Harness can supply scoped development plans; code generation and outcome checking remain Jarvis-owned. [Commands, setup, actual screenshots, sources and measured limits](docs/web-app-development.md). [Sequential acceptance evidence](artifacts/development-acceptance-check.json) · [real local model probe](artifacts/development-model-check.json) · [regression/readiness evidence](artifacts/development-regression-check.json). **719 regression tests passed; launcher readiness is `ready`.** Restart once using the normal Stop/Start launchers.
 
 ![Actual Chrome screenshot of the authored development acceptance dashboard; not an autonomous model-generated project](artifacts/development-previews/vite-desktop.png)
@@ -45,7 +258,7 @@ Verification: **578 tests passed**, hidden UI startup/shutdown and preview expor
 
 A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Kokoro Heart English speech and Piper Hindi speech, and a compact animated Dynamic Island. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
 
-**Documentation updated: 2026-10-02.** The application is in this `InsTAREELS` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
+**Documentation updated: 2026-10-04.** The application is in this `InsTAREELS` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
 
 **Actual Qwen weight training:** Downloaded Qwen2.5-Coder-0.5B-Instruct and completed six local CUDA LoRA gradient rounds: 681 training examples, 171 optimizer steps and 1,081,344 trained adapter parameters. Corrective training uses 86 projects, with 14 excluded from updates. The best checkpoint passed 7/14 validation projects versus 1/14 before training; later rounds regressed. Dedicated adapters and full merged weights are saved locally, with exact resume and optional Jarvis Python-coder integration. Fresh evaluation passed 31/100 projects and 1/10 larger cases; a new invoice task passed 0/10 cases. All 391 regression tests and launcher readiness passed. At the time of this 2026-09-27 evaluation, the existing 4B coder remained selected because this candidate was not ready for promotion. [Setup, evidence and limitations](docs/qwen-weight-training.md).
 
@@ -103,13 +316,14 @@ This older HUD artwork is retained for provenance and historical previews; the c
 | Desktop and browser | App/site launching, searches, exposed control selection, exact text-field filling, scrolling, supported shortcuts, menus, and dialogs. |
 | Files and projects | Scoped file creation/editing, approved deletion, catalog lookup, project discovery, recent-project memory, and Explorer context. |
 | Coding | Related-source context, bounded multi-file work, exact replacements, syntax checks, original-byte backups, diffs, atomic per-file writes, readback, verified failure recall, related examples, and learned missing-import checks. |
-| Task execution | Shared tool registry, dependency checks, independent decisions, observations, verification, adaptive replanning, and bounded safe alternatives. |
+| Task execution | One observed next action for general desktop planning, overlapping prompt preparation, two transient frames, checked repeat navigation, shared tool registry, independent decisions and verification. |
 | Memory | Local Obsidian vault with dated Jarvis interactions and foreground-window intervals, plus durable checkpoints, task summaries, and UI suggestions. |
 | Speech output | Local Kokoro Heart English and Piper Hindi voices, continuous English reply playback, a warm voice worker, interruption, and recognition mute during replies. |
 | Media and globe | Spotify session controls and on-demand God's Eye View browser console. |
 | Tools | 70 registered operations: 16 core, 4 DOM browser tools, 37 earlier toolkit adapters and 13 agent/MCP tools; configuration and runtime approval gates apply. |
 | Agent runtime | Hierarchical repository guidance, explicit skills, deferred tools, source maps, Git observations, read batches, events/deny hooks, approved MCP stdio, and headless read-only sessions/research agents. |
 | Recovery | Hidden single-instance supervisor, worker/service health checks, startup snapshots, bounded retries, and explicit-stop handling. |
+| Anticipation | Separate idle preparation, evidence-bound browser/editor suggestions, scoped research authorization, local feedback, expiring artifacts and Prepared review cards. |
 
 Local models do not make every task reliable. Custom/elevated apps may not expose usable controls; ambiguous targets require clarification. External writes and deletion use the applicable approval flow, and uncertain effects are never automatically replayed.
 
@@ -210,7 +424,7 @@ powershell -ExecutionPolicy Bypass -File .\setup.ps1
 
 Install Ollama before running **Setup Jarvis Brain.cmd** for local questions and screen-aware planning. That setup creates the separate brain environment, installs CPU inference dependencies, downloads the configured planning/vision and Laya models, and verifies them. A fresh installation needs internet access for these downloads. The optional God's Eye console also needs Node 24.14+ and `npm ci` in `integrations/gods-eye-view-src/gods-eye-view-main`.
 
-Then close any older Jarvis window and double-click **Start Jarvis.cmd**. The top-center Dynamic Island expands into compact controls when clicked. Choose your microphone and click **Start listening** if listening is off. Click the launcher or **Hide** to collapse the panel; right-click the launcher for quick controls and Quit. Use Start listening to toggle the microphone; Escape hides the panel, while **Quit Jarvis** actually stops supervision. Windows capture exclusion keeps the launcher and panel out of supported screenshots. Initial setup downloads CUDA libraries and the ~1.53 GB English Whisper model. Core inference subsequently works offline; web research and online services require connectivity. The app verifies CUDA by running inference before starting capture and displays the actual device and precision. It does not silently fall back to CPU. Allow microphone access for desktop apps in Windows Settings if needed.
+Then close any older Jarvis window and double-click **Start Jarvis.cmd**. Click the top-edge notch to open its glass composer; use **Features** inside the island for settings and other views. Choose your microphone and click **Start listening** if listening is off. Click the header or use **Escape** to collapse the notch; right-click the launcher for quick controls and Quit. Use Start listening to toggle the microphone; Escape hides the panel, while **Quit Jarvis** actually stops supervision. Windows capture exclusion keeps the single island window out of supported screenshots. Initial setup downloads CUDA libraries and the ~1.53 GB English Whisper model. Core inference subsequently works offline; web research and online services require connectivity. The app verifies CUDA by running inference before starting capture and displays the actual device and precision. It does not silently fall back to CPU. Allow microphone access for desktop apps in Windows Settings if needed.
 
 The input meter should move when you talk. Choose **Microphone Array (Realtek)** to try the laptop microphone, or your headset explicitly, rather than relying on the Windows default. The selection is saved to `config.json`.
 
@@ -284,7 +498,7 @@ Restart Jarvis after updating. Click the island and **Start listening**, then as
 
 Answers appear in the transcript log, with a short preview above it, and are spoken aloud. **Speak answers** toggles playback; **Stop voice** interrupts it. English uses the user-selected local Kokoro Heart American female voice; Hindi uses the local Piper Rohan voice. Both are installed by `setup.ps1`. Kokoro stays warm between replies and plays each synthesized reply as one continuous buffer. These are assistant-style voices, not an imitation of an actor's voice. The **Answer language** control selects Auto, English, or Hindi. Auto responds in Hindi to Hindi or Hinglish questions and English to English questions. You can type or say questions such as “mujhe batao gravity kya hai” or “पानी क्यों उबलता है”. Hindi answers use Devanagari for accurate Hindi speech. Source URLs stay in the transcript rather than being read aloud. Voice synthesis runs locally. Microphone capture now continues during speech. Say **“Jarvis …”** to interrupt a reply and issue a command; captured playback references reject matching self-echo. This is text-based filtering, not acoustic echo cancellation. **Stop voice** remains available. Questions run in a separate process and queue and no longer supersede a running coding/automation task; voice, questions and the action worker can operate concurrently. **Stop all tasks** cancels pending questions and speech. The last three question/answer pairs stay in session memory for follow-ups; say **“forget conversation”** to clear that short session history. When Obsidian memory is enabled, short question and answer notes remain in its local vault.
 
-The local Ollama model **qwen3.5:4b** provides answers. Jarvis starts the installed Ollama server if necessary; it never downloads models automatically. The standard Ollama chat template is used. `knowledge.num_gpu: 0` keeps the LLM on CPU, leaving GPU memory for Whisper. Responses can take several seconds.
+The local Ollama model **qwen3.5:9b** provides answers. Jarvis starts the installed Ollama server if necessary; it never downloads models automatically. The standard Ollama chat template is used. `knowledge.num_gpu: 0` keeps the LLM on CPU, leaving GPU memory for Whisper. Responses can take several seconds.
 
 ### Jarvis command prompt and file edits
 
@@ -294,7 +508,7 @@ Right-click the island and choose **Command prompt**, or say **“Jarvis open Ja
 
 Jarvis writes the current task and its checkpoints to local `task_state.json`. The record includes the goal, selected project, stages, action targets, window titles, and verification summaries; it does not store screenshots or generated file contents. A crash or restart marks an unfinished task as interrupted. Repeating the same unfinished request gives the planner that history alongside a fresh screen observation, so it can identify what remains. The record never replays old clicks or commands automatically. Only the latest 20 previous tasks and 30 checkpoints per task are retained. Remove `task_state.json` while Jarvis is closed if you want to clear this local history.
 
-Say **“Jarvis code in project Demo: add a greeting function”** or **“Jarvis fix the greeting in project Demo.”** Jarvis finds the named project in `project_roots`, inspects a bounded source file list, plans changes to up to three files, reads those files together for context, and generates complete replacements with the local `brain.coder` model (`qwen3-coder:30b`). It validates Python and JSON syntax, checks for changed files and unexpectedly truncated output, then writes each file. It cannot delete project files through this coding mode. Check the changed files and run the project's tests yourself; syntax checks alone cannot establish that generated code works. Say **“Jarvis open project Demo”** or **“Jarvis list projects”** to find the project name. Run `python verify_coder.py` for a synthetic, no-write model check.
+Say **“Jarvis code in project Demo: add a greeting function”** or **“Jarvis fix the greeting in project Demo.”** Jarvis finds the named project in `project_roots`, inspects a bounded source file list, plans changes to up to three files, reads those files together for context, and generates complete replacements with the local `brain.coder` model (`qwen3.5:9b`). It validates Python and JSON syntax, checks for changed files and unexpectedly truncated output, then writes each file. It cannot delete project files through this coding mode. Check the changed files and run the project's tests yourself; syntax checks alone cannot establish that generated code works. Say **“Jarvis open project Demo”** or **“Jarvis list projects”** to find the project name. Run `python verify_coder.py` for a synthetic, no-write model check.
 
 With the destination folder open in File Explorer, say **“Jarvis modify kunal.py to add a UI”** or **“Jarvis create a tools folder and a Python script.”** You do not need to say the folder name: Jarvis uses the open Explorer folder, reports its source files, and reads the existing file before editing it. If an edit names a file that is missing or appears in multiple subfolders, Jarvis reports the available paths instead of creating a different file. Jarvis can plan up to three new folders and three files inside that folder. It creates folders and draft files first, then generates or edits source. A failed generation leaves a recognizable draft that can be resumed. Existing files are changed only after the generated replacement passes validation. It will not delete files as part of a coding plan. Run `python verify_coder.py --workflow-smoke` to test folder creation, script creation, and a follow-up script edit in a temporary folder.
 
@@ -305,7 +519,7 @@ For a direct text edit in `JarvisFiles`, say **“Jarvis modify file notes dot t
 
 ### Questions about your screen
 
-Open the app you want Jarvis to inspect, then ask **“What is on my screen?”**, **“What does this error mean?”**, or **“Screen pe kya dikh raha hai?”**. You can also click the island, type a question, and press **Ask screen**. Jarvis briefly hides both the controls and island, captures the last active external window, then restores the launcher. It reads visible text with local OCR and sends the screenshot to the local **qwen3-vl:4b** vision model. The screenshot stays in memory and is not sent to a web search service or saved to disk. The window title appears in the action log so you can see which app it read.
+Open the app you want Jarvis to inspect, then ask **“What is on my screen?”**, **“What does this error mean?”**, or **“Screen pe kya dikh raha hai?”**. You can also click the island, type a question, and press **Ask screen**. Jarvis briefly hides both the controls and island, captures the last active external window, then restores the launcher. It reads visible text with local OCR and sends the screenshot to the local **qwen3.5:9b** vision model. The screenshot stays in memory and is not sent to a web search service or saved to disk. The window title appears in the action log so you can see which app it read.
 
 Screen answers describe one frame at question time. They can read visible text and describe images, but cannot reliably infer motion, hidden content, or what happened earlier. Screen content is treated as untrusted input and cannot trigger desktop actions. Run **Setup Jarvis Brain.cmd** if the vision model is missing; it downloads the model configured in `knowledge.screen_model`.
 
@@ -411,7 +625,7 @@ The first command reports counts without writing the vault. The second replaces 
 
 ### Adaptive planning
 
-`brain.adaptive_planning` is enabled in `config.json`. For unified tool tasks, Jarvis breaks the goal into executable tasks, performs one action, observes and verifies its result, then revises the remaining tasks using the original goal, current screen, completed results and action budget. The planner can remove unnecessary tasks, reorder remaining tasks or add a newly needed navigation step. Completion still requires an independent check against the full goal.
+`brain.adaptive_planning` and `brain.incremental_planning` are enabled in `config.json`. General desktop planning requests one next action using a fresh image, the original goal, verified results and the action budget. It prepares a prompt scaffold during execution and clears its two-frame context on exit. Setting incremental planning to false restores the configured multi-step backend. Completion still requires an independent check against the full goal. [Repeat navigation scope, configuration and measured limits](docs/step-planning.md).
 
 Remaining tasks, verified results and bounded revision history are saved in `task_state.json`. After a crash they are context for a fresh observation, never an automatic replay queue. An uncertain result or failed replanning pauses the task; completed actions are not repeated. The existing coding workflow separately validates generated files before committing them. No new model or background service is required: replanning uses the configured Qwen planner inside the existing supervised inference worker. Six external actions per task remain the limit.
 
@@ -488,7 +702,7 @@ Use **“list toolkits”** to inspect required environment variable names befor
 
 Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery receive relevant configured toolkit operations plus previously discovered tools. `tool_search` loads more operations for subsequent steps. Set `agent_runtime.deferred_tools` to false to expose the entire configured catalog. There are **51 operations with no required account environment variables**, and **69 registered in total**. The 18 account-backed operations need their environment variables; MCP wrappers additionally need trusted local server configuration and approval.
 
-Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. Planning and coding use a 16,384-token context for selected tools, guidance and observations.
+Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. Native next-step inference uses an 8,192-token context and at most 450 output tokens; legacy planning and coding can use a 16,384-token context for selected tools, guidance and observations.
 
 Examples:
 
@@ -557,7 +771,8 @@ Jarvis/
 | `interface.py`, `hud.py`, `main.py` | Dock/panel rendering, controls, event handling, and app lifecycle. |
 | `actions.py`, `desktop_actions.py`, `ui_controls.py`, `ui_worker.py`, `browser.py` | Direct actions, accessibility-backed operations, checked destinations, and browser launching. |
 | `brain.py`, `brain_worker.py`, `model_selection.py`, `screen_worker.py` | Planning/decisions, Laya, model availability/fallback, and screen observation. |
-| `tools.py`, `toolkits.py`, `task_graph.py` | Shared tool schemas/routes, provider adapters, and task dependencies. |
+| `step_planning.py` | Task-owned two-frame context, prepared prompts and exact-goal verified native navigation recipes. |
+| `tools.py`, `toolkits.py`, `native_tools.py`, `firecrawl_tools.py`, `task_graph.py` | Registered schemas, native proposals, guarded provider adapters, and task dependencies. |
 | `coder.py`, `code_context.py`, `projects.py`, `catalog.py` | Checked source generation/edits, project context/discovery, and indexed path lookup. |
 | `agent_context.py`, `agent_tools.py`, `agent_events.py`, `mcp_bridge.py` | Repository guidance/skills/maps, scoped reads/batches, metadata events/deny hooks and approved stdio MCP. |
 | `agent_session.py`, `agent_cli.py` | Headless read-only provider loop, JSONL sessions/forks, bounded research agents and stdio API. |
@@ -576,9 +791,9 @@ Jarvis/
 | `folders["jarvis files"]` | Relative `JarvisFiles` alias; follows a future app directory move. |
 | `project_roots` | `D:\Kunals GitHub Repo`, its `Jarvis` directory, existing `D:\Phython Project`, and `D:\`. These are local machine paths. |
 | `microphone`, `wake_timeout_seconds` | Default device (`null`), 90 s wake inactivity timeout. |
-| `knowledge` | Enabled, `qwen3.5:4b`, `qwen3-vl:4b`, English answers, internet enabled, CPU inference (`num_gpu: 0`). |
+| `knowledge` | Enabled, `qwen3.5:9b` for text/vision, English answers, internet enabled, CPU inference (`num_gpu: 0`). |
 | `speech` | Enabled, English, length scale 1.05, noise 0.667/0.8, sentence silence 0.18 s. |
-| `brain` | Enabled, Qwen planner/decision/vision, Laya selector, screen awareness, adaptive planning, and task recovery enabled. |
+| `brain` | Enabled, `qwen3.5:9b` planner/coder/decision/vision, native function calls, no model fallback, Laya selector, adaptive planning/recovery. |
 | `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
 

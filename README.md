@@ -1,5 +1,164 @@
 # Jarvis — local Windows voice assistant
 
+**Coding destination and reply repair (2026-10-05 IST):** Jarvis now extracts
+`TestCodes` from `create an app to monitor my health in folder TestCodes folder`.
+Confirmed folder replies resume the original goal once through **Codex/local
+Qwen**, with island and spoken completion. Handoff tests use a recording Codex
+boundary and create no application source; expiry and uncertain-write guards
+remain active. **1,021 regression tests passed; launcher readiness is `ready`.**
+Restart Jarvis through Stop/Start to load the fix.
+[Folder syntax and verification scope](InsTAREELS/docs/codex-code-local.md).
+
+**Ollama model visibility repair (2026-10-05 IST):** The `/api/show` 404 came
+from a WSL server using a different model store from the existing Windows cache.
+Restored configured Qwen models from cached files without registry downloads,
+preserving Gemma and the shared server. Setup now restores base models before
+local aliases; coding preflight repairs a missing alias or explains unavailable
+weights. Actual local script creation/edit and counter-app browser interaction
+passed after a Qwen repair of moving controls; **1,013 regression tests
+passed and launcher readiness is `ready`**. Restart Jarvis once to load recovery
+changes. [Setup and troubleshooting](InsTAREELS/docs/codex-code-local.md).
+
+**Local Codex coding (2026-10-05 IST):** Jarvis now uses the installed Codex
+CLI with **local Qwen3.5 9B** for coding tasks, replacing the configured Claude
+Code executor. Explicit folder/file paths take priority, followed by the fresh
+File Explorer folder and remembered scope. Visible text, file activity and
+results stream into the existing island. Checked saves preserve originals;
+Stop closes only the owned process tree. Each task uses isolated Codex settings,
+without changing the desktop chat model or requiring paid model API calls.
+Actual local creation/edit and a Python run passed; **1,006 regression tests
+passed and launcher readiness is `ready`**. The island replay passed 90 updates
+without widget rebuilds or completion collapse. All **nine animated UI fixtures**
+passed actual browser checks after reviewed corrections; React fixtures also
+passed strict type checks/builds. Native C/C++/C#/Java compilation remains pending.
+[Setup, behavior and limits](InsTAREELS/docs/codex-code-local.md),
+[languages and fixture results](InsTAREELS/docs/multilingual-coding.md).
+Restart through Stop/Start Jarvis to load the new backend.
+
+**Windows command reference (2026-10-04):** Imported all **493 commands / 21
+categories** from the supplied ZIP with pinned recipes, explicit parameter binding
+and direct matching for app launches, file/host requests and exact command names.
+The island reports execution and retains approvals; recipe voice requests wait
+for the final transcript. Python input checks the current
+app/window; DOM commands use the owned browser; Office recipes use one owned batch.
+Configured launchers preserve typing focus. Added free PyAutoGUI/OpenCV dependencies.
+All IDs are available through command search and explicit requests; optional apps,
+permissions and exact targets remain necessary. Owned file/DOM/native fixtures passed; **980 regression tests passed** and
+launcher readiness is `ready`. Verification results are in the
+[execution guide](InsTAREELS/docs/windows-commands.md). Restart via Stop/Start Jarvis.
+
+**Longer plan execution (2026-10-04):** Fixed the six-action cutoff and lost
+completion context. Jarvis now permits twenty actions by default and retains
+verified progress with Stop and uncertain-action guards. Ten actual Qwen-generated
+file plans spanning **2–20 actions** passed after fixes and retests with deterministic
+decision/verification oracles; ten authored plans also passed. An owned native fixture verified
+**20 real button activations in 64.953 s**. Qwen planning measurements are separate.
+**960 regression tests passed; launcher readiness is `ready`.** Restart via
+Stop/Start Jarvis. [Configuration and verification scope](InsTAREELS/docs/plan-execution.md).
+
+**Python GUI edit fix (2026-10-04):** Named script edits now send current source
+and the UI request directly to the configured Qwen coder, check GUI structure
+before saving, and keep streaming after an optional preview-file lock. Active
+inference uses separate idle and total deadlines. A real local fixture generated
+a working Tkinter calculator in **189.5 s**; its controls passed four arithmetic
+and two error checks. **940 regression tests passed; launcher readiness is
+`ready`.** No new dependency or paid API. Restart via Stop/Start Jarvis.
+[Details and verification limits](InsTAREELS/docs/python-gui-edits.md).
+
+**Session memory and live app context (2026-10-04):** Jarvis now retains paired
+conversation sessions, prefers current-session context, and offers contextual
+memory choices inside the island. A separate free local **Qwen3.5 0.8B** thread
+supplies ready context to the main planner. App/window lifecycle and accessible
+controls are tracked separately from historical conversation; direct commands
+recheck targets before input. Live authored checks verified memory selection and
+its follow-up, background selection in **1.437 s**, and two native clicks followed
+by closed-window guards with zero model calls. No new Python dependencies or paid
+APIs. **929 regression tests passed; launcher readiness is `ready`.**
+Restart through the normal launchers.
+[Configuration, rendered UI, model comparison and verification limits](InsTAREELS/docs/session-context.md).
+
+**Voice-command cleanup (2026-10-04):** Jarvis now uses a separate free local
+Qwen2.5 0.5B selector for checked surface corrections. It preserves original
+intent and bypasses dictation/literal payloads; timeout retains the original words.
+It was fastest among three tested options at **0.265 s warm median** on constrained
+text fixtures. **886 tests passed; launcher readiness is `ready`.**
+Restart through the normal launchers.
+[Model comparison, exact safeguards and verification scope](InsTAREELS/docs/command-cleanup.md).
+
+**Smooth island growth (2026-10-04):** Long answers now extend the existing
+mounted view, then scroll at the screen limit. A 160-update UI replay recorded
+zero view unmounts or layout rebuilds; **864 tests passed and launcher readiness
+is `ready`**. Restart Jarvis through the normal launchers.
+[Rendered growth stages and verification](InsTAREELS/docs/smooth-island-growth.md).
+
+**Streaming island answers (2026-10-04):** Jarvis now shows incremental Ollama
+answer/code output in the existing glass island. Real progress extends the
+inactivity deadline, with a separate 30-minute total ceiling and working Stop.
+Interrupted previews stay marked incomplete. Restart Jarvis through the normal
+launchers. The C++ question streamed first text in **13.3 seconds** and finished
+in **6 minutes 47 seconds**; code execution was not tested. **859 tests passed;
+launcher readiness is `ready`.** [Configuration, rendered preview and verification](InsTAREELS/docs/streaming-answers.md).
+
+**Ollama output/timeout repair (2026-10-04):** Jarvis's missing `qwen3.5:9b` alias
+is restored. Bounded planning deadlines now align at 300 seconds for HTTP and
+330 seconds for its worker. Fresh text, warm chat and native proposal checks
+passed; **843 tests passed and launcher readiness is `ready`**. CPU latency,
+large model loading and logged server/GPU discovery interruptions still affect
+response time. [Diagnosis and evidence](InsTAREELS/docs/ollama-output-timeouts.md).
+Restart Jarvis through its normal launchers.
+
+**Ordered native execution (2026-10-04):** Jarvis uses reviewed desktop primitives
+in the requested order: UFO → Windows-MCP → CUA → Open Computer Use → Agent-S.
+Exact supported task grammar skips Qwen, with provider fallback before input and
+no replay after uncertainty. **839 regression tests passed; launcher readiness is
+`ready`.** A two-step owned Windows fixture passed in **0.453 seconds with zero
+model calls**; arbitrary task speed remains unestablished. The five repos have a
+5,700-file source inventory; only selected compatible actions are activated.
+[Integration, commands, sources, licenses and evidence](InsTAREELS/docs/execution-providers.md).
+Restart Jarvis through the normal launchers.
+
+**One expanding glass notch (2026-10-04):**
+
+Jarvis now keeps typing, answers/code, tasks, approvals, music, games, history,
+Prepared, settings and its console inside one animated top-edge notch. Rounded
+glass buttons and inputs share highlights, borders and interaction states.
+[Controls, VoiceOS/Firecrawl research, rendered previews and limits](InsTAREELS/docs/voiceos-notch.md).
+**809 regression tests passed; launcher readiness is `ready`.** Restart Jarvis once.
+
+![Rendered native notch widgets with sample content — not desktop screenshots](InsTAREELS/artifacts/jarvis-notch-preview.png)
+
+**Qwen3.5:9b primary model (2026-10-04):** The verified Ollama download now supplies
+questions, vision, planning, decisions and coding. One-step planning uses native
+function calls and verified result feedback across the **82 registered tools**;
+configured tools are selected by intent. App/integration discovery and Firecrawl
+search/scrape/map are connected. Firecrawl needs its own Jarvis key; account/MCP
+services need authorization. Codex plugin logins are not automatically transferred.
+**803 regression tests and launcher readiness passed.** Live native/vision/coding
+fixtures passed in **31–115 seconds** on CPU. Restart Jarvis once.
+[Configuration, tool categories, plugin scope and evidence](InsTAREELS/docs/qwen35-9b.md).
+
+**One-step planning (2026-10-03):** Jarvis uses a fresh screenshot, goal and verified
+history to request one next action, prepares the next prompt during execution,
+clears its two-frame context at task end and reuses eligible verified native
+navigation with fresh checks. The real local-model fixture took **34.125 seconds**;
+five-second completion and general accuracy are not guaranteed.
+[Implementation, repeat scope and verification](InsTAREELS/docs/step-planning.md).
+Restart Jarvis once.
+
+**2026-10-03 step-planning verification:** 785 regression tests passed and launcher
+readiness reported `ready`. [Evidence and scope](InsTAREELS/artifacts/step-planning-regression-check.json).
+
+**Idle-time anticipation (2026-10-03):** Jarvis now prepares bounded research
+outlines and proposes editor review checklists from recent requests or eligible
+window titles. The **Prepared** island view shows evidence, expiry and feedback
+controls, with explicit authorization for automatic browser-topic public searches.
+[Usage, rendered sample preview, limits, research sources and verification](InsTAREELS/docs/anticipation.md).
+Restart Jarvis once. One generic live query retrieved three public sources;
+prediction usefulness remains unmeasured.
+
+**2026-10-03 anticipation verification:** 758 regression tests passed and launcher readiness
+reported `ready`. [Evidence and scope](InsTAREELS/artifacts/anticipation-regression-check.json).
+
 **Jarvis web/app development (2026-10-02):** Framework-aware knowledge, design briefs, staged project coding, reviewed Node builds, owned previews, real browser outcome checks and verified learning are integrated into Jarvis. React/Vite, Next.js, Electron renderer and Expo web acceptance passed; native installers/devices remain separate checks. [Usage, setup, actual screenshots and verification limits](InsTAREELS/docs/web-app-development.md) · [acceptance results](InsTAREELS/artifacts/development-acceptance-check.json). **719 regression tests passed; launcher readiness is `ready`.**
 
 
@@ -41,7 +200,7 @@ Verification: **578 tests passed**, hidden UI startup/shutdown and preview expor
 
 A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Kokoro Heart English speech and Piper Hindi speech, and a compact animated Dynamic Island. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
 
-**Documentation updated: 2026-10-02.** The application is in `InsTAREELS/`. All commands below run from that application directory unless stated otherwise.
+**Documentation updated: 2026-10-03.** The application is in `InsTAREELS/`. All commands below run from that application directory unless stated otherwise.
 
 **Actual Qwen weight training:** Downloaded Qwen2.5-Coder-0.5B-Instruct and completed six local CUDA LoRA gradient rounds: 681 training examples, 171 optimizer steps and 1,081,344 trained adapter parameters. Corrective training uses 86 projects, with 14 excluded from updates. The best checkpoint passed 7/14 validation projects versus 1/14 before training; later rounds regressed. Dedicated adapters and full merged weights are saved locally, with exact resume and optional Jarvis Python-coder integration. Fresh evaluation passed 31/100 projects and 1/10 larger cases; a new invoice task passed 0/10 cases. All 391 regression tests and launcher readiness passed. The 4B coder remained selected at the time of that evaluation; the current coding route is described below. [Setup, evidence and limitations](InsTAREELS/docs/qwen-weight-training.md).
 

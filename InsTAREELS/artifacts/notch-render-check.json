@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-04",
+  "scope": "Renderer-only synthetic timing; excludes Tk scheduling, voice, models and desktop interaction. Not live frame-rate measurement.",
+  "samples": 20,
+  "warmup": 5,
+  "logical_width": 614,
+  "scale": 1.25,
+  "states": [
+    {
+      "height": 660,
+      "average_ms": 12.243,
+      "maximum_ms": 12.824
+    },
+    {
+      "height": 96,
+      "average_ms": 6.729,
+      "maximum_ms": 7.188
+    }
+  ]
+}

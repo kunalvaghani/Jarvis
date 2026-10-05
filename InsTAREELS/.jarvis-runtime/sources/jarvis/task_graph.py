@@ -4,6 +4,16 @@
 """Validate task dependencies before any desktop action; never schedule replays."""
 import re
 
+MAX_PLAN_STEPS = 40
+MAX_TASK_GOAL_CHARS = 6000
+
+
+def action_budget(options):
+    value = options.get('max_task_actions', 20)
+    if type(value) is not int or not 1 <= value <= MAX_PLAN_STEPS:
+        raise ValueError('max_task_actions must be an integer between 1 and 40.')
+    return value
+
 
 def resource_dependencies(step):
     """Adapt HuggingGPT's GENERATED reference detection to our flat tool fields."""

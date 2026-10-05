@@ -13,7 +13,7 @@ def main():
     parser.add_argument('--project', required=True)
     parser.add_argument('--goal')
     parser.add_argument('--session', help='Resume context using a returned session id')
-    parser.add_argument('--model', default='qwen3.5:4b')
+    parser.add_argument('--model', help='Defaults to the configured Jarvis planner')
     parser.add_argument('--backend', choices=('ollama', 'harness'), default='ollama')
     parser.add_argument('--max-steps', type=int, default=12)
     parser.add_argument('--serve', action='store_true', help='Read JSONL requests: tool.list, session.info, session.fork, turn.run, team.run')
@@ -23,12 +23,14 @@ def main():
     base = Path(__file__).resolve().parent.parent
     provider = None
     try:
+        config = json.loads((base / 'config.json').read_text(encoding='utf-8'))
+        model = args.model or config.get('brain', {}).get('planner', 'qwen3.5:9b')
         session = AgentSession(base, args.project, args.session, emit)
         if args.backend == 'harness':
             from .harness import HarnessProvider
-            provider = HarnessProvider(base, args.model)
+            provider = HarnessProvider(base, model)
         else:
-            provider = OllamaProvider(args.model)
+            provider = OllamaProvider(model, native_tools=config.get('brain', {}).get('native_tool_calling', False))
         if not args.serve:
             if not args.goal:
                 parser.error('--goal is required unless --serve is used')

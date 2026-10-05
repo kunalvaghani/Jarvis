@@ -1,0 +1,89 @@
+{
+  "repositories": [
+    {
+      "priority": 1,
+      "name": "ufo",
+      "url": "https://github.com/microsoft/ufo",
+      "revision": "a795552d976c4c019d7c2f778a0effb5cef7de6b",
+      "source_files": 529,
+      "symbol_count": 6245,
+      "reviewed_sources": [
+        "ufo/automator/ui_control/controller.py"
+      ],
+      "mode": "reviewed Python adaptation/port",
+      "reviewed_source_hashes": {
+        "ufo/automator/ui_control/controller.py": "18cbb1815f1fc1e06f6cbef2d76516359a002bb56673ed71514d9e7318f97e8a"
+      }
+    },
+    {
+      "priority": 2,
+      "name": "windows-mcp",
+      "url": "https://github.com/cursortouch/windows-mcp",
+      "revision": "f51d6f14da57c290dac44f0f465c37c45ca4f394",
+      "source_files": 140,
+      "symbol_count": 2603,
+      "reviewed_sources": [
+        "src/windows_mcp/uia/patterns.py"
+      ],
+      "mode": "vendored pattern classes",
+      "reviewed_source_hashes": {
+        "src/windows_mcp/uia/patterns.py": "13daa5dc1558d96b85abc2a4ef5c191dbefc4c33aac1720586f9aae3de9677e8"
+      }
+    },
+    {
+      "priority": 3,
+      "name": "cua",
+      "url": "https://github.com/trycua/cua",
+      "revision": "35751f65f121ccb93bf4434bb453b97b58ad4ca7",
+      "source_files": 4824,
+      "symbol_count": 79262,
+      "reviewed_sources": [
+        "libs/cua-driver/rust/crates/platform-windows/src/tools/page_bookmark.rs"
+      ],
+      "mode": "reviewed Python adaptation/port",
+      "reviewed_source_hashes": {
+        "libs/cua-driver/rust/crates/platform-windows/src/tools/page_bookmark.rs": "a0b0b114d52346fce3195cee7062d22402b4ca8e666a72bd3629d9c5af052996"
+      }
+    },
+    {
+      "priority": 4,
+      "name": "open-computer-use",
+      "url": "https://github.com/opensymph/open-computer-use",
+      "revision": "5b433b98019c18201a15d11e8c3cb0010879a3d8",
+      "source_files": 114,
+      "symbol_count": 2147,
+      "reviewed_sources": [
+        "apps/OpenComputerUseWindows/native_actions.go"
+      ],
+      "mode": "reviewed Python adaptation/port",
+      "reviewed_source_hashes": {
+        "apps/OpenComputerUseWindows/native_actions.go": "1759107be190e908968aa6507baa3c7a8ef47860e9ee4978f19cb561ed4650eb"
+      }
+    },
+    {
+      "priority": 5,
+      "name": "agent-s",
+      "url": "https://github.com/simular-ai/Agent-S",
+      "revision": "3aa272d23d2994c7bbde1acbbe0ef8e8d06b8693",
+      "source_files": 93,
+      "symbol_count": 694,
+      "reviewed_sources": [
+        "gui_agents/s1/aci/WindowsOSACI.py"
+      ],
+      "mode": "reviewed Python adaptation/port",
+      "reviewed_source_hashes": {
+        "gui_agents/s1/aci/WindowsOSACI.py": "9c7cbb9cc6ff991f9a7bc48cb3ba6b882102963ce3db87853221c8fe0406baf4"
+      }
+    }
+  ],
+  "runtime": "jarvis.execution_adapters inside existing owned jarvis.ui_worker",
+  "modifications": [
+    "No swallowed action errors or retry after input.",
+    "Fresh identity/focus/read-only/password admission.",
+    "Windows-MCP subset copied without Python 3.14 MCP server dependencies; no telemetry.",
+    "Windows-MCP SelectionContainer and multi-toggle SetToggleState are omitted.",
+    "Cua/OCU primitives ported from Rust/Go; full SDKs are not installed.",
+    "Agent-S centre click adapted to existing pywinauto injector; no exec of generated scripts.",
+    "All original-framework non-Windows/model/server/build code remains source inventory, not enabled runtime."
+  ]
+}

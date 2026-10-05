@@ -1,0 +1,8 @@
+{"version": 1, "at": "2026-10-04T09:01:03.379644+00:00", "event": "tool.started", "call_id": "8a1cd4c9241f4f80bc276c0836f88212", "tool": "create_file"}
+{"version": 1, "at": "2026-10-04T09:01:03.379644+00:00", "event": "tool.completed", "call_id": "8a1cd4c9241f4f80bc276c0836f88212", "tool": "create_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:01:03.417748+00:00", "event": "tool.started", "call_id": "b12f9c174d2e479c84956a20821a09f0", "tool": "modify_file"}
+{"version": 1, "at": "2026-10-04T09:01:03.421525+00:00", "event": "tool.completed", "call_id": "b12f9c174d2e479c84956a20821a09f0", "tool": "modify_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:01:03.458825+00:00", "event": "tool.started", "call_id": "b70ebffa8c7f4cb0923b74926dc7d312", "tool": "modify_file"}
+{"version": 1, "at": "2026-10-04T09:01:03.458825+00:00", "event": "tool.completed", "call_id": "b70ebffa8c7f4cb0923b74926dc7d312", "tool": "modify_file", "backend": "files"}
+{"version": 1, "at": "2026-10-04T09:01:03.506824+00:00", "event": "tool.started", "call_id": "8cff27af3dec474490197eb16aba1e36", "tool": "read_file"}
+{"version": 1, "at": "2026-10-04T09:01:03.510462+00:00", "event": "tool.completed", "call_id": "8cff27af3dec474490197eb16aba1e36", "tool": "read_file", "backend": "toolkit"}

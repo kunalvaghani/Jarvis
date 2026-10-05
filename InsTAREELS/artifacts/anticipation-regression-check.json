@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-03T17:22:28.243106+00:00",
+  "tests": 758,
+  "passed": true,
+  "test_seconds": 80.704,
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "adaptive_planning": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:4b",
+    "planning_backend": "deepseek-harness",
+    "screen_model": "qwen3-vl:4b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "readiness_exit_code": 0,
+  "scope": "Full regression suite and launcher readiness; not an end-to-end anticipation accuracy benchmark"
+}

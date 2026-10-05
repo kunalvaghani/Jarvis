@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbit Catch</title>
+  <style>
+    :root { --space: #0a0a12; --accent: #0d6559; --text: #e0e0e0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body { font-family: system-ui, sans-serif; background: var(--space); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    #game { position: relative; width: min(90vw, 500px); height: min(85vh, 450px); background: radial-gradient(ellipse at center, #1a1a2e 0%, var(--space) 70%); border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px rgba(13,101,89,0.3); }
+    #stars { position: absolute; inset: 0; pointer-events: none; }
+    .star { position: absolute; background: white; border-radius: 50%; opacity: 0.6; animation: twinkle 2s ease-in-out infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    #target { position: absolute; width: 48px; height: 48px; background: radial-gradient(circle, #ff6b6b 0%, #c92a2a 100%); border-radius: 50%; box-shadow: 0 0 20px rgba(255,107,107,0.6), inset 0 0 10px rgba(255,255,255,0.3); cursor: pointer; transition: transform 0.05s linear; will-change: top, left; }
+    #target:hover { transform: scale(1.1); }
+    h1 { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); font-size: 24px; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.5); z-index: 10; pointer-events: none; }
+    #score { position: absolute; top: 16px; right: 20px; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 10; }
+    #status { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); font-size: 20px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 10; opacity: 0; transition: opacity 0.3s ease; }
+    #controls { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+    button { padding: 12px 24px; font-size: 16px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+    button:active { transform: translateY(0); }
+    #start { background: linear-gradient(135deg, var(--accent), #0a9f8f); color: white; }
+    #pause { background: linear-gradient(135deg, #6b6b6b, #4a4a4a); color: white; }
+    #reset { background: linear-gradient(135deg, #8b4a4a, #6b2a2a); color: white; }
+    @media (prefers-reduced-motion: reduce) { .star { animation: none; } #target { transition: none; } #status { transition: none; } button { transition: none; } }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="stars"></div>
+    <h1>Orbit Catch</h1>
+    <button id="target" aria-label="Catch the orb"></button>
+    <div id="score">Score: 0</div>
+    <div id="status"></div>
+  </div>
+  <div id="controls">
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+  </div>
+  <script>
+    const target = document.getElementById('target');
+    const scoreDisplay = document.getElementById('score');
+    const statusDisplay = document.getElementById('status');
+    const startButton = document.getElementById('start');
+    const pauseButton = document.getElementById('pause');
+    const resetButton = document.getElementById('reset');
+    const game = document.getElementById('game');
+    let score = 0;
+    let isPlaying = false;
+    let isPaused = false;
+    let animationId;
+    let lastTime = 0;
+    let orbSpeed = 250;
+    function createStars() {
+      const starCount = Math.min(60, Math.floor((game.offsetWidth * game.offsetHeight) / 4000));
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        game.appendChild(star);
+      }
+    }
+    function randomPosition() {
+      const maxX = game.offsetWidth - 50;
+      const maxY = game.offsetHeight - 50;
+      return { x: Math.max(0, Math.min(maxX, Math.random() * maxX)), y: Math.max(0, Math.min(maxY, Math.random() * maxY)) };
+    }
+    function moveOrb(deltaTime) {
+      if (!isPlaying || isPaused) return;
+      const pos = target.getBoundingClientRect();
+      const gameRect = game.getBoundingClientRect();
+      let newX = pos.left - gameRect.left;
+      let newY = pos.top - gameRect.top;
+      newX += (Math.random() - 0.5) * orbSpeed * deltaTime / 1000;
+      newY += (Math.random() - 0.5) * orbSpeed * deltaTime / 1000;
+      newX = Math.max(0, Math.min(game.offsetWidth - 50, newX));
+      newY = Math.max(0, Math.min(game.offsetHeight - 50, newY));
+      target.style.left = newX + 'px';
+      target.style.top = newY + 'px';
+    }
+    function gameLoop(timestamp) {
+      if (!isPlaying || isPaused) return;
+      const deltaTime = timestamp - lastTime;
+      lastTime = timestamp;
+      moveOrb(deltaTime);
+      animationId = requestAnimationFrame(gameLoop);
+    }
+    function startGame() {
+      if (isPlaying) return;
+      isPlaying = true;
+      isPaused = false;
+      score = 0;
+      scoreDisplay.textContent = 'Score: ' + score;
+      statusDisplay.style.opacity = '0';
+      lastTime = performance.now();
+      animationId = requestAnimationFrame(gameLoop);
+    }
+    function pauseGame() {
+      if (!isPlaying) return;
+      isPaused = true;
+      cancelAnimationFrame(animationId);
+      statusDisplay.textContent = 'Paused';
+      statusDisplay.style.opacity = '1';
+    }
+    function resumeGame() {
+      if (isPaused && isPlaying) {
+        isPaused = false;
+        lastTime = performance.now();
+        animationId = requestAnimationFrame(gameLoop);
+        statusDisplay.textContent = '';
+        statusDisplay.style.opacity = '0';
+      }
+    }
+    function resetGame() {
+      isPlaying = false;
+      isPaused = false;
+      cancelAnimationFrame(animationId);
+      score = 0;
+      scoreDisplay.textContent = 'Score: ' + score;
+      statusDisplay.textContent = '';
+      statusDisplay.style.opacity = '0';
+      const pos = randomPosition();
+      target.style.left = pos.x + 'px';
+      target.style.top = pos.y + 'px';
+    }
+    function catchOrb(e) {
+      if (!isPlaying || isPaused) return;
+      score++;
+      scoreDisplay.textContent = 'Score: ' + score;
+      const pos = randomPosition();
+      target.style.left = pos.x + 'px';
+      target.style.top = pos.y + 'px';
+    }
+    target.addEventListener('click', catchOrb);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === ' ') {
+        e.preventDefault();
+        catchOrb();
+      }
+    });
+    startButton.addEventListener('click', startGame);
+    pauseButton.addEventListener('click', () => {
+      if (isPlaying && !isPaused) {
+        pauseGame();
+        pauseButton.textContent = 'Resume';
+      } else {
+        resumeGame();
+        pauseButton.textContent = 'Pause';
+      }
+    });
+    resetButton.addEventListener('click', resetGame);
+    createStars();
+  </script>
+</body>
+</html>

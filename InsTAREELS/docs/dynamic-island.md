@@ -1,5 +1,14 @@
 # Jarvis Dynamic Island
 
+**Long-output growth fix (2026-10-04):** [Smooth island growth](smooth-island-growth.md)
+documents the stable mounted answer view, continuous expansion, screen-height
+limit, pause/collapse behavior and current rendered growth fixture.
+
+**Current UI (2026-10-04):** The [single-window glass notch](voiceos-notch.md) replaces
+the companion window with embedded content, curved top-edge shoulders, 340 ms
+motion and glass controls. Details below retain the earlier capsule implementation
+and its historical verification context.
+
 **Current cards update (2026-10-02):** [Interactive island](interactive-island.md) documents output/source previews, permanent current-work metadata, bound clickable choices, inline approvals, Spotify artwork, five games and a focus timer, with current rendered images. The expanded size is now bounded to 560 × 660 logical pixels. Earlier screenshots and verification below retain their original implementation context.
 
 Implemented 2026-09-30. Jarvis uses a small black capsule at the top center of the primary Windows screen. The previous circular launcher and large command center have been replaced. Click the island to expand compact controls; drag its header to reposition it, right-click for quick actions, and use Hide or Escape to collapse. Closing the view hides it; Quit Jarvis stops the assistant and supervisor.

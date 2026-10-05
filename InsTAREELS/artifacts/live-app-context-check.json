@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-04T06:02:58.191832+00:00",
+  "scope": "Actual owned Win32 fixture, accessible controls, two direct follow-up tasks and close/stale-target guards. No user-app input, private desktop capture, microphone or model inference.",
+  "passed": true,
+  "initial_controls": [
+    "Search",
+    "Apply",
+    "Enabled",
+    "System",
+    "Minimize",
+    "Maximize",
+    "Close"
+  ],
+  "updated_controls": [
+    "Search",
+    "Applied 1",
+    "Enabled",
+    "System",
+    "Minimize",
+    "Maximize",
+    "Close"
+  ],
+  "followup": "Task paused: Activated Applied 1; input sent once, result not verified. Inspect the result; no action was replayed.",
+  "generic_click_result_scope": "Dispatch recorded; generic label change is not proof of an arbitrary application goal. Independent fixture counter confirms the requested click.",
+  "direct_model_calls": 0,
+  "click_count": 2,
+  "closed_status": "closed",
+  "closed_controls": [],
+  "closed_followup_blocked": true,
+  "stale_target_blocked": true
+}

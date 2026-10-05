@@ -1,0 +1,60 @@
+[
+  {
+    "date": "2026-10-04T02:50:03.171077+00:00",
+    "model": "qwen3.5:9b",
+    "scope": "Synthetic local text inference only; no user task, voice, desktop input or code execution.",
+    "options": {
+      "num_gpu": 0,
+      "num_ctx": 2048,
+      "num_predict": 16,
+      "think": false
+    },
+    "passed": true,
+    "server": {
+      "version": "0.35.1"
+    },
+    "first_content_seconds": 23.162,
+    "reply": "OK",
+    "loaded_models": {
+      "models": [
+        {
+          "name": "qwen3.5:9b",
+          "model": "qwen3.5:9b",
+          "size": 6002395051,
+          "digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-10-04T08:25:26.4859493+05:30",
+          "size_vram": 0,
+          "context_length": 2048
+        }
+      ]
+    },
+    "total_seconds": 23.317
+  },
+  {
+    "date": "2026-10-04T02:57:51.769940+00:00",
+    "model": "qwen3.5:9b",
+    "scope": "Synthetic local text inference only; no user task, voice, desktop input or code execution.",
+    "options": {
+      "num_gpu": 0,
+      "num_ctx": 2048,
+      "num_predict": 16,
+      "think": false
+    },
+    "passed": false,
+    "server": {
+      "version": "0.35.1"
+    },
+    "error": "ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+    "total_seconds": 11.373
+  }
+]

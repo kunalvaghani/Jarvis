@@ -16,9 +16,15 @@ def detect_stack(project, goal=''):
                 return stack
         return 'react' if 'react' in deps else 'node'
     # Never scaffold a different language inside an existing application.
-    if any(scoped(project, p).exists() for p in ('pyproject.toml', 'Cargo.toml', 'go.mod')):
+    if any(scoped(project, p).exists() for p in ('pyproject.toml', 'Cargo.toml', 'go.mod', 'CMakeLists.txt', 'pom.xml', 'build.gradle')):
         return 'existing'
     text = goal.casefold()
+    if any(p.suffix.lower() in {'.csproj', '.sln'} for p in list(Path(project).iterdir())[:200] if p.is_file()):
+        return 'existing'
+    if re.search(r'(?<!\w)(?:c\+\+|c#|c sharp|csharp|c|java|python|rust|go|kotlin|swift|php|ruby)(?!\w)', text):
+        return 'existing'
+    if re.search(r'\b(?:single.file|plain|vanilla|standalone)\b', text) and re.search(r'\b(?:html|javascript|css)\b', text):
+        return 'node'
     if re.search(r'\b(expo|react native|android|ios|mobile app)\b', text):
         return 'expo'
     if re.search(r'\b(electron|desktop app|windows app)\b', text):

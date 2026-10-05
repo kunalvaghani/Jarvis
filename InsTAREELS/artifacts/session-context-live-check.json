@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-04T06:01:46.555643+00:00",
+  "scope": "Authored off-screen native island events, temporary paired sessions and two actual local model answers. No private memory, microphone or external task execution.",
+  "requests": [
+    {
+      "history": [
+        {
+          "role": "user",
+          "content": "Nimbus calculator colors"
+        },
+        {
+          "role": "assistant",
+          "content": "We chose purple buttons for Nimbus calculator."
+        }
+      ],
+      "conversation_context": true,
+      "context_source": "selected_memory"
+    },
+    {
+      "history": [
+        {
+          "role": "user",
+          "content": "Nimbus calculator colors"
+        },
+        {
+          "role": "assistant",
+          "content": "We chose purple buttons for Nimbus calculator."
+        },
+        {
+          "role": "user",
+          "content": "What button color did we choose for Nimbus?"
+        },
+        {
+          "role": "assistant",
+          "content": "We chose purple buttons for the Nimbus calculator."
+        }
+      ],
+      "conversation_context": true,
+      "context_source": "current_session"
+    }
+  ],
+  "sent_context": {
+    "history": [
+      {
+        "role": "user",
+        "content": "Nimbus calculator colors"
+      },
+      {
+        "role": "assistant",
+        "content": "We chose purple buttons for Nimbus calculator."
+      },
+      {
+        "role": "user",
+        "content": "What button color did we choose for Nimbus?"
+      },
+      {
+        "role": "assistant",
+        "content": "We chose purple buttons for the Nimbus calculator."
+      }
+    ],
+    "conversation_context": true,
+    "context_source": "current_session"
+  },
+  "answer": "We chose purple buttons for the Nimbus calculator.",
+  "passed": true,
+  "original_question": "What button color did we choose for Nimbus?",
+  "selected_topic": "Nimbus calculator colors",
+  "answer_seconds": 34.781,
+  "completed_answers": 1,
+  "persisted_pairs": 2,
+  "selected_memory_used": true,
+  "preview": "session-memory-choices-preview.png",
+  "preview_kind": "Rendered actual off-screen widgets with authored content; not a desktop screenshot",
+  "followup_answer": "The button color chosen for the Nimbus calculator is purple.",
+  "followup_source": "current_session"
+}

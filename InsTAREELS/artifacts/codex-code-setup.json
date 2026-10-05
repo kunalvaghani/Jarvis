@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-04T19:23:44.235568+00:00",
+  "model": "jarvis-codex-qwen3.5:9b",
+  "from": "qwen3.5:9b",
+  "same_weights": true,
+  "executable": "C:\\Users\\kunal\\AppData\\Local\\OpenAI\\Codex\\bin\\8aaf1547b825b104\\codex.exe",
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 32768,
+  "gpu_layers": 20,
+  "scope": "32K context for this 4GB GPU; Ollama recommends at least 64K for Codex. No weights downloaded, global Codex settings changed, or remote inference."
+}

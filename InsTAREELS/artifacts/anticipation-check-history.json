@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-03",
+  "scope": "Observed verification attempts; synthetic user activity, public generic query only",
+  "attempts": [
+    {
+      "at": "2026-10-03T14:12:11.393115+00:00",
+      "fixture_passed": false,
+      "issues": ["Fixture runner advanced into a renewed request before testing window inference", "Hidden native widgets were not mapped before export"],
+      "public_source_count": 0
+    },
+    {
+      "at": "2026-10-03T14:14:43.270639+00:00",
+      "fixture_checks_passed": 12,
+      "public_source_count": 0
+    },
+    {
+      "at": "2026-10-03T14:21:14.489082+00:00",
+      "fixture_checks_passed": 12,
+      "public_source_count": 0,
+      "retrieval_status": "unavailable:DDGSException"
+    },
+    {
+      "at": "2026-10-03T14:21:34.617365+00:00",
+      "outside_sandbox": true,
+      "public_search_passed": false,
+      "issue": "UnicodeDecodeError on non-UTF-8 Windows child stdout; parent subsequently received no output",
+      "ui_checked": false
+    },
+    {
+      "at": "2026-10-03T14:22:09.673164+00:00",
+      "outside_sandbox": true,
+      "fixture_checks_passed": 12,
+      "public_source_count": 3,
+      "public_search_passed": true,
+      "fix": "Owned worker uses explicit UTF-8 Python I/O environment"
+    }
+  ],
+  "limits": "No real user activity prediction, live microphone, account write, model synthesis or desktop input was evaluated. Source snippets are not full-page verification."
+}

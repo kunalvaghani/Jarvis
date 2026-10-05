@@ -196,6 +196,11 @@ class Session:
 
     def perform(self, request):
         operation = request["operation"]
+        if operation == 'windows_commands':
+            if self.page is None or self.user_closed or self.page.is_closed():
+                raise ValueError('Open and inspect the Jarvis browser first; closed pages are not restarted.')
+            from .windows_command_browser import perform as windows_perform
+            return windows_perform(request,self.page)
         if operation == "reset" and self.page is not None and not self.page.is_closed():
             self.page.bring_to_front()
             return self.inspect()

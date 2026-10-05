@@ -86,7 +86,7 @@ class TranscriptAssembler:
 
 class Listener:
     def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None,
-                 playback=None, input_filter=None, references=None):
+                 playback=None, input_filter=None, references=None, command_cleanup=None):
         self.model_path, self.device = Path(model_path), device
         self.engine, self.report = engine, report
         self.options = options or {}
@@ -94,6 +94,7 @@ class Listener:
         self.muted = muted or (lambda: False)
         self.playback = playback or (lambda: False)
         self.input_filter = input_filter
+        self.command_cleanup = command_cleanup
         self.references = references or (lambda: ())
         self.stop_event = threading.Event()
         self.audio = queue.Queue(maxsize=100)
@@ -144,6 +145,13 @@ class Listener:
                 if accepted is None:
                     continue
                 self.report("final" if job.final else "partial", accepted if job.playback else text)
+                if job.final and self.command_cleanup:
+                    accepted = self.command_cleanup.clean(accepted, self.engine,
+                        lambda: self.stop_event.is_set() or self.muted())
+                if self.stop_event.is_set():
+                    break
+                if self.muted():
+                    continue
                 self.engine.feed(accepted, final=job.final)
         except Exception as exc:
             self.report("fatal", f"Whisper GPU decoding failed: {exc}")

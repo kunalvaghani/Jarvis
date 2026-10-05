@@ -1,0 +1,67 @@
+[
+  {
+    "date": "2026-10-04T12:41:48.911866+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\acb8b6ddd798473d85ba455189b63fdd",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "create": "Claude Code using local Qwen3.5 9B updated acb8b6ddd798473d85ba455189b63fdd: main.py. Created `main.py` with:\n- `add(a, b)` function returning `a + b`\n- `print(add(2, 3))` under `if __name__ == \"__main__\":` guard\n\nThe file is 6 lines (under 15 lines limit). Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\3050c953d6874ab28e0fb559a328a0a5",
+    "edit": "Claude Code using local Qwen3.5 9B updated acb8b6ddd798473d85ba455189b63fdd: main.py. Done. Added `subtract(a, b)` function that returns `a - b` to `main.py`. The file now has 10 lines (under 20), preserving the existing `add` and `main` blocks. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\e44d487df32a4358b766c85ecea98935",
+    "passed": true,
+    "source": "def add(a, b):\n    return a + b\n\n\ndef subtract(a, b):\n    return a - b\n\n\nif __name__ == \"__main__\":\n    print(add(2, 3))\n",
+    "progress_events": 153,
+    "runtime_stdout": "5\n"
+  },
+  {
+    "date": "2026-10-04T12:47:12.160618+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\760c9d7bd96349268e973857e5c8884f",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "create": "Claude Code using local Qwen3.5 9B updated 760c9d7bd96349268e973857e5c8884f: main.py. Created `main.py` with:\n- `add(a, b)` function that returns `a + b`\n- Prints `add(2, 3)` under the `if __name__ == \"__main__\":` guard\n\nThe file is 6 lines (well under the 15-line limit). Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\1f8222483e1841daad0cd002d4bb90a1",
+    "edit": "Claude Code using local Qwen3.5 9B updated 760c9d7bd96349268e973857e5c8884f: main.py. Done. Added `subtract(a, b)` returning `a - b` to `main.py`. The file now has 10 lines (under 20), preserving the original `add` function and `__main__` block. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\2386ac17f0584e48a71d8392bd2a487c",
+    "passed": false,
+    "error": "Claude file guard hook did not execute"
+  },
+  {
+    "date": "2026-10-04T12:50:29.143907+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\c1028f26f23d478383112cd0c9462c49",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "create": "Claude Code using local Qwen3.5 9B updated c1028f26f23d478383112cd0c9462c49: main.py. Created `main.py` with:\n- `add(a, b)` function that returns `a + b`\n- `print(add(2, 3))` under the `if __name__ == \"__main__\":` guard\n- Total of 6 lines (well under the 15-line limit) Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\ccd41928ee6949b19169bf4631a7f827",
+    "edit": "Claude Code using local Qwen3.5 9B updated c1028f26f23d478383112cd0c9462c49: main.py. Done. Added `subtract(a, b)` that returns `a - b` to `main.py`. The file is now 11 lines (under 20), preserving the original `add` and `main` blocks. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\63b6ca24f8424f61bc0803392dffb281",
+    "passed": false,
+    "error": "Claude file guard hook did not execute"
+  },
+  {
+    "date": "2026-10-04T12:54:23.107668+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\5898926eac4d4f1cb833c4e774cdfbe8",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "passed": false,
+    "error": "Claude Code did not finish: See D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\a1d5a3d11d914ed0a72cf2f705f99164\\events.jsonl"
+  },
+  {
+    "date": "2026-10-04T12:56:17.068778+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\abbd7cc3e0e74135a466fd0ca0731bb2",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "passed": false,
+    "error": "Local file-permission bridge did not start; no coding task will be replayed."
+  },
+  {
+    "date": "2026-10-04T12:57:25.827990+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\fb71077f1b4d4a81a952f4841bf8af60",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "passed": false,
+    "error": "Local file-permission bridge did not start; no coding task will be replayed."
+  },
+  {
+    "date": "2026-10-04T12:58:02.432105+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code-fixture\\8293ca53006148a7879f4a5b03fcfd04",
+    "scope": "Actual installed Claude Code CLI with local Qwen3.5 9B; authored creation/edit fixtures only.",
+    "create": "Claude Code using local Qwen3.5 9B updated 8293ca53006148a7879f4a5b03fcfd04: main.py. Created `main.py` with:\n- `add(a, b)` function returning `a + b`\n- `print(add(2, 3))` call under `if __name__ == \"__main__\":` guard\n\nThe file is 6 lines (under 15 lines). No other files were changed. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\9f18f1020bdb43d0927d98ae18623dc7",
+    "edit": "Claude Code using local Qwen3.5 9B updated 8293ca53006148a7879f4a5b03fcfd04: main.py. Done. Added `subtract(a, b)` returning `a - b` to `main.py`. The file now has 8 lines (under 20), preserving the original `add` and `main` blocks. Build/runtime checks are separate. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\claude-code\\a9c68d6172624b1fb4853aad4ef7c13d",
+    "passed": true,
+    "source": "def add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n\nif __name__ == \"__main__\":\n    print(add(2, 3))\n",
+    "progress_events": 146,
+    "runtime_stdout": "5\n",
+    "guard_tools": [
+      "Write",
+      "Edit"
+    ]
+  }
+]

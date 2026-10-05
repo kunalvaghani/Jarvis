@@ -29,6 +29,15 @@ def collect(window):
             rect = element.rectangle()
             item = {"name": name, "role": info.control_type, "id": identity,
                     "rect": [rect.left, rect.top, rect.right, rect.bottom]}
+            try:
+                item['focused'] = bool(info.element.CurrentHasKeyboardFocus)
+            except Exception:
+                pass
+            if info.control_type == 'TabItem':
+                try:
+                    item['selected'] = bool(element.iface_selection_item.CurrentIsSelected)
+                except Exception:
+                    pass
             if info.control_type == "Edit":
                 item["password"] = bool(getattr(info, "is_password", False))
                 if not item["password"] and name.casefold() in {"search", "search youtube", "search query", "what do you want to play?", "search for songs, artists, or podcasts"}:
@@ -73,6 +82,73 @@ def collect(window):
             continue
     signature = hashlib.sha256(json.dumps(controls, sort_keys=True).encode()).hexdigest()
     return controls, wrappers, signature
+
+
+def routed(request, window, element, control, hwnd):
+    """Admit live targets for every provider; no wrapper survives a request."""
+    import win32gui
+    import win32process
+    from pywinauto.uia_defines import NoPatternInterfaceError
+    from .execution_router import execute, UncertainAction
+    target_pid = win32process.GetWindowThreadProcessId(hwnd)[1]
+
+    def guard():
+        if (not win32gui.IsWindow(hwnd) or win32process.GetWindowThreadProcessId(hwnd)[1] != target_pid
+                or win32gui.GetForegroundWindow() != hwnd):
+            raise ValueError('The destination or focus changed; no further input issued.')
+        if not element.is_visible() or not element.is_enabled():
+            raise ValueError('The chosen control is hidden or disabled; no further input issued.')
+        if control.get('id'):
+            info = element.element_info
+            rect = element.rectangle()
+            name = element.window_text().strip() or str(getattr(info, 'automation_id', '') or '').strip()
+            if (list(info.runtime_id) != control['id'] or info.control_type != control['role']
+                    or [rect.left, rect.top, rect.right, rect.bottom] != control['rect']
+                    or name != control['name']):
+                raise ValueError('The selected accessible control changed; no further input issued.')
+            if request['operation'] == 'fill_text':
+                if bool(getattr(info, 'is_password', False)):
+                    raise ValueError('Password field entry is not supported.')
+                try:
+                    value = element.iface_value
+                except NoPatternInterfaceError:
+                    pass
+                else:
+                    if value.CurrentIsReadOnly:
+                        raise ValueError('The selected field is read-only; no input issued.')
+
+    def observe():
+        # Read-only after dispatch; a closed window is evidence only, never replay.
+        if not win32gui.IsWindow(hwnd):
+            return 'closed'
+        return collect(window)[2]
+
+    def record(receipt):
+        # Metadata only: never write typed text, window titles or screenshots here.
+        try:
+            from datetime import datetime, timezone
+            path = Path(__file__).resolve().parents[1] / '.jarvis-runtime/execution-receipts.jsonl'
+            path.parent.mkdir(exist_ok=True)
+            attempts = receipt.get('attempts', [])
+            dispatch_failed = 'dispatch_error' in receipt
+            receipt = {key: value for key, value in receipt.items() if key not in {'message', 'dispatch_error', 'attempts'}}
+            # Arbitrary provider exception strings could contain field contents.
+            # Retain only fixed state metadata, never those strings on disk.
+            receipt['attempts'] = [{'provider': row['provider'], 'state': row['state'],
+                                    'error_type': row.get('error_type', 'Unsupported')}
+                                   for row in attempts]
+            receipt['dispatch_failed'] = dispatch_failed
+            with path.open('a', encoding='utf-8') as stream:
+                stream.write(json.dumps({'date': datetime.now(timezone.utc).isoformat(), **receipt}) + '\n')
+        except OSError:
+            pass  # Receipt I/O cannot make an external action retriable.
+    try:
+        result = execute(request, element, control, window, guard, observe)
+    except UncertainAction as exc:
+        record(exc.receipt)
+        raise
+    record({key: value for key, value in result.items() if key != 'message'})
+    return result
 
 
 def perform(request):
@@ -129,6 +205,9 @@ def perform(request):
         if win32gui.GetForegroundWindow() != hwnd:
             raise ValueError("The target app did not take focus.")
     controls, wrappers, signature = collect(window)
+    if request['operation'] == 'windows_commands':
+        from .windows_command_desktop import perform as windows_perform
+        return windows_perform(request, window, signature)
     if request['operation'] in {'media_key', 'media_range', 'media_search_field'}:
         import win32api
         from .media_ui import platform_of, key_for, fill_search, set_range
@@ -167,8 +246,7 @@ def perform(request):
             raise ValueError("Focus changed before desktop action.")
         if request["operation"] == "shortcut":
             key = shortcut_key(request["value"])
-            window.type_keys(SHORTCUTS[key], set_foreground=False, pause=.02)
-            return {"message": "Pressed " + key}
+            return routed(request, window, window, {'name': key, 'role': 'Pane'}, hwnd)
         # Resolve the scroll pattern before calling it, never retry after Scroll.
         targets = [window] + [wrappers[tuple(c["id"])] for c in controls if c["role"] in {"Pane", "Document", "ListItem"}]
         for target in targets:
@@ -181,7 +259,7 @@ def perform(request):
                 continue
             if direction in {"left", "right"} and not interface.CurrentHorizontallyScrollable:
                 continue
-            return {"message": apply_control(target, {"name": "window", "role": "Pane"}, "scroll", request["value"].casefold())}
+            return routed(request, window, target, {'name': request['value'], 'role': 'Pane'}, hwnd)
         raise ValueError("This window has no accessible scroll container.")
     if request["operation"] == "list":
         import win32api
@@ -209,6 +287,7 @@ def perform(request):
             except Exception:
                 pass  # Missing artwork never invalidates accessible controls.
         return {"controls": controls, "signature": signature, "context": context, "is_dialog": modal,
+                'target_pid': win32process.GetWindowThreadProcessId(hwnd)[1],
                 'thumbnails':thumbnails,
                 "foreground_handle": win32gui.GetForegroundWindow(),
                 "title": window.window_text()}
@@ -241,35 +320,8 @@ def perform(request):
         from .desktop_actions import apply_control
         if win32gui.GetForegroundWindow() != hwnd:
             raise ValueError("Focus changed before desktop action.")
-        return {"message": apply_control(element, control, request["operation"], request.get("content", ""))}
-    # Resolve a supported pattern BEFORE invoking it. Never retry a failed action
-    # with a second click: the original action may already have taken effect.
-    patterns = ("iface_selection_item", "iface_invoke") if role in {"TabItem", "ListItem", "DataItem", "TreeItem", "RadioButton"} else ("iface_invoke", "iface_selection_item")
-    if role == "ComboBox":
-        patterns = ("iface_expand_collapse",)
-    elif role == "CheckBox":
-        patterns = ("iface_toggle",)
-    pattern, interface = None, None
-    for candidate in patterns:
-        try:
-            interface = getattr(element, candidate)
-            pattern = candidate
-            break
-        except NoPatternInterfaceError:
-            continue
-    if pattern is None:
-        raise ValueError("This control has no supported selection/click pattern. Use the mouse for this control.")
-    if win32gui.GetForegroundWindow() != hwnd:
-        raise ValueError("Focus changed before selection; command cancelled.")
-    if pattern == "iface_invoke":
-        interface.Invoke()
-    elif pattern == "iface_selection_item":
-        interface.Select()
-    elif pattern == "iface_expand_collapse":
-        interface.Expand()
-    elif request.get("verb") != "select" or interface.CurrentToggleState != 1:
-        interface.Toggle()
-    return {"message": f"Activated {control['name']} ({role})"}
+        return routed(request, window, element, control, hwnd)
+    return routed(request, window, element, control, hwnd)
 
 
 def serve():

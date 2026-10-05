@@ -1,0 +1,151 @@
+{
+  "at": "2026-10-04T04:58:25.783437+00:00",
+  "scope": "Live loopback Ollama plus production cleanup/filter on synthetic transcripts; no microphone or task execution",
+  "model": "qwen2.5:0.5b",
+  "requests": 7,
+  "correct": 16,
+  "cases": [
+    {
+      "source": "jarvis um open note pad",
+      "expected": "jarvis open notepad",
+      "result": "jarvis open notepad",
+      "correct": true,
+      "seconds": 0.203
+    },
+    {
+      "source": "jarvis open you tube",
+      "expected": "jarvis open youtube",
+      "result": "jarvis open youtube",
+      "correct": true,
+      "seconds": 0.188
+    },
+    {
+      "source": "jarvis please launch spot ify",
+      "expected": "jarvis please launch spotify",
+      "result": "jarvis please launch spotify",
+      "correct": true,
+      "seconds": 0.265
+    },
+    {
+      "source": "jarvis opne calculator",
+      "expected": "jarvis open calculator",
+      "result": "jarvis open calculator",
+      "correct": true,
+      "seconds": 0.266
+    },
+    {
+      "source": "jarvis uh what is gravity",
+      "expected": "jarvis what is gravity",
+      "result": "jarvis what is gravity",
+      "correct": true,
+      "seconds": 0.266
+    },
+    {
+      "source": "jarvis open chrome",
+      "expected": "jarvis open chrome",
+      "result": "jarvis open chrome",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis don't delete notes.txt",
+      "expected": "jarvis don't delete notes.txt",
+      "result": "jarvis don't delete notes.txt",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis write um open note pad",
+      "expected": "jarvis write um open note pad",
+      "result": "jarvis write um open note pad",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis set volume to 37",
+      "expected": "jarvis set volume to 37",
+      "result": "jarvis set volume to 37",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis search for you tube bugs",
+      "expected": "jarvis search for you tube bugs",
+      "result": "jarvis search for you tube bugs",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis open chrome then close spotify",
+      "expected": "jarvis open chrome then close spotify",
+      "result": "jarvis open chrome then close spotify",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis send Maya 25 dollars",
+      "expected": "jarvis send Maya 25 dollars",
+      "result": "jarvis send Maya 25 dollars",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "hey jarvis erm could you start cal culator",
+      "expected": "hey jarvis could you start calculator",
+      "result": "hey jarvis could you start calculator",
+      "correct": true,
+      "seconds": 0.328
+    },
+    {
+      "source": "jarvis opun chrome",
+      "expected": "jarvis open chrome",
+      "result": "jarvis open chrome",
+      "correct": true,
+      "seconds": 0.234
+    },
+    {
+      "source": "jarvis open Note Pad.txt",
+      "expected": "jarvis open Note Pad.txt",
+      "result": "jarvis open Note Pad.txt",
+      "correct": true,
+      "seconds": 0.0
+    },
+    {
+      "source": "jarvis type you tube and um",
+      "expected": "jarvis type you tube and um",
+      "result": "jarvis type you tube and um",
+      "correct": true,
+      "seconds": 0.0
+    }
+  ],
+  "events": [
+    [
+      "cleanup",
+      "Command cleaned: jarvis open notepad"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: jarvis open youtube"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: jarvis please launch spotify"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: jarvis open calculator"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: jarvis what is gravity"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: hey jarvis could you start calculator"
+    ],
+    [
+      "cleanup",
+      "Command cleaned: jarvis open chrome"
+    ]
+  ]
+}

@@ -6,9 +6,20 @@ import time
 
 from .names import rank
 
-MARKERS = {".git", "pyproject.toml", "package.json", "Cargo.toml", "go.mod", "CMakeLists.txt"}
+MARKERS = {".git", "pyproject.toml", "package.json", "Cargo.toml", "go.mod", "CMakeLists.txt", "pom.xml", "build.gradle", "build.gradle.kts"}
 SKIP = {".git", ".venv", ".venv-brain", ".venv-training", "venv", "node_modules", "__pycache__", "build", "dist", ".next", "target", "models", "cache", ".cache", "artifacts", ".jarvis-runtime"}
 SYSTEM = {"program files", "windowsapps", "xboxgames", "steamLibrary", "epic games", "ollama-models", "ollamamodels", "temp", "tmp", ".pnpm-store"}
+
+
+def has_project_marker(root):
+    root = Path(root)
+    if any((root / marker).exists() for marker in MARKERS):
+        return True
+    try:
+        return any(entry.is_file(follow_symlinks=False) and Path(entry.name).suffix.lower() in {'.csproj', '.sln', '.uproject'}
+                   for entry in list(os.scandir(root))[:200])
+    except OSError:
+        return False
 
 
 def project_paths(roots):
@@ -28,8 +39,8 @@ def project_paths(roots):
             try:
                 if root.drive.upper() == "D:" and root.parent == root and child.name.casefold() == "phython project":
                     continue  # The more specific root scans this once.
-                container = root.parent != root and not any((root/marker).exists() for marker in MARKERS)
-                if container or root.name.casefold() == "phython project" or any((child / marker).exists() for marker in MARKERS) or list(child.glob("*.sln")) or list(child.glob("*.uproject")):
+                container = root.parent != root and not has_project_marker(root)
+                if container or root.name.casefold() == "phython project" or has_project_marker(child):
                     found[str(child.resolve()).casefold()] = child.resolve()
             except OSError:
                 continue

@@ -1,11 +1,38 @@
 {
+  "context_selector": {
+    "enabled": true,
+    "model": "qwen3.5:0.8b",
+    "timeout_seconds": 3.0,
+    "backoff_seconds": 30.0
+  },
+  "command_cleanup": {
+    "enabled": true,
+    "model": "qwen2.5:0.5b",
+    "timeout_seconds": 2.0,
+    "backoff_seconds": 30.0,
+    "max_characters": 240
+  },
+  "anticipation": {
+    "enabled": true,
+    "idle_seconds": 45,
+    "dwell_seconds": 20,
+    "cooldown_seconds": 300,
+    "expiry_seconds": 900,
+    "max_jobs_per_hour": 3,
+    "max_seconds_per_job": 45,
+    "max_seconds_per_hour": 120,
+    "public_search": true,
+    "local_model": false,
+    "model_tokens": 256
+  },
   "ui": {
     "opacity": 0.96
   },
   "agent_runtime": {
     "deferred_tools": true,
     "fast_workflows": true,
-    "dom_browser": true
+    "dom_browser": true,
+    "direct_execution": true
   },
   "model_path": "models/faster-whisper-medium.en",
   "whisper": {
@@ -1204,14 +1231,23 @@
   "file_catalog": "file_catalog.json",
   "knowledge": {
     "enabled": true,
-    "model": "qwen3.5:4b",
-    "screen_model": "qwen3-vl:4b",
+    "model": "qwen3.5:9b",
+    "screen_model": "qwen3.5:9b",
     "answer_language": "en",
     "internet": true,
     "num_gpu": 0,
-    "prompt_format": "ollama_chat"
+    "prompt_format": "ollama_chat",
+    "stream": true,
+    "timeout_seconds": 300,
+    "max_answer_seconds": 1800,
+    "num_predict": 4096
   },
   "memory": {
+    "conversation_sessions": {
+      "enabled": true,
+      "context_characters": 24000,
+      "choice_seconds": 300
+    },
     "enabled": true,
     "vault": "D:\\Phython Project\\Jarvis_Memory\\Jarvis_Mem",
     "hermes_skills": true,
@@ -1240,28 +1276,42 @@
     "enabled": true,
     "trained_pc_checkpoint": "artifacts/qwen-pc-training-20260927T161836Z/round-2",
     "selector": "convaiinnovations/laya",
-    "planner": "qwen3.5:4b",
-    "coder": "Qwen3-Coder:latest",
+    "planner": "qwen3.5:9b",
+    "coder": "qwen3.5:9b",
     "coding_timeout_seconds": 900,
-    "decision": "qwen3.5:4b",
+    "decision": "qwen3.5:9b",
     "screen_aware": true,
     "adaptive_planning": true,
+    "incremental_planning": true,
+    "max_task_actions": 20,
+    "max_planning_seconds": 900,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "allow_model_fallback": false,
     "task_recovery": true,
-    "screen_model": "qwen3-vl:4b",
+    "screen_model": "qwen3.5:9b",
     "visual_fallback": {
       "enabled": true,
       "minimum_confidence": 0.95
     },
     "hermes": {
       "enabled": false,
-      "model": "qwen3.5:4b",
+      "model": "qwen3.5:9b",
       "timeout_seconds": 120
     },
     "fast_grounding": true,
     "harness": {
       "enabled": true,
-      "model": "qwen3.5:4b",
+      "model": "qwen3.5:9b",
       "timeout_seconds": 180
-    }
+    },
+    "timeout_seconds": 300,
+    "max_coding_seconds": 1800,
+    "coding_backend": "codex",
+    "codex_model": "jarvis-codex-qwen3.5:9b",
+    "ollama_cache_roots": [
+      "D:\\Ollama\\models",
+      "D:\\OllamaModels"
+    ]
   }
 }

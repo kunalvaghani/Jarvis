@@ -3,13 +3,16 @@ from pathlib import Path
 import tkinter.font as tkfont
 from PIL import Image, ImageDraw, ImageFont
 from .interface import BG, CARD, CYAN, TEXT, MUTED, LINE
+from .glass_ui import render_glass
+from .display import window_scale
 
 
 def export_preview(app, path):
     panel = app.panel
-    image = Image.new("RGB", (panel.winfo_width(), panel.winfo_height()), BG)
+    source = getattr(app.island, 'preview_image', None)
+    image = source.copy() if isinstance(source, Image.Image) else Image.new("RGB", (app.root.winfo_width(), app.root.winfo_height()), BG)
     draw = ImageDraw.Draw(image)
-    origin = panel.winfo_rootx(), panel.winfo_rooty()
+    origin = app.root.winfo_rootx(), app.root.winfo_rooty()
 
     def font_for(widget):
         try:
@@ -64,21 +67,43 @@ def export_preview(app, path):
             elif kind == "Text":
                 text = widget.get("1.0", "end-1c")
                 layer = Image.new("RGB", (width, height), CARD)
-                ImageDraw.Draw(layer).multiline_text((14, 12), text[:1800], fill=TEXT, font=font, spacing=5)
+                painter = ImageDraw.Draw(layer)
+                cursor = 8
+                for index, paragraph in enumerate(text[:12000].splitlines(), 1):
+                    code = 'code' in widget.tag_names(f'{index}.0')
+                    face = font
+                    if code:
+                        try:
+                            face = ImageFont.truetype('C:/Windows/Fonts/consola.ttf',max(10,round(10*panel.winfo_fpixels('1i')/72)))
+                        except OSError:
+                            pass
+                    lines, line = [], ''
+                    for character in paragraph:
+                        if line and face.getlength(line+character)>width-28:
+                            lines.append(line); line=''
+                        line += character
+                    lines.append(line)
+                    for line in lines:
+                        painter.text((14,cursor),line,fill='#c6d7ed' if code else TEXT,font=face)
+                        cursor += face.getbbox('Ag')[3]+5
                 image.paste(layer, (x, y))
         elif kind == 'Canvas' and isinstance(getattr(widget,'preview_image',None),Image.Image):
-            image.paste(widget.preview_image.resize((width,height)),(x,y))
+            artwork = widget.preview_image.resize((width,height))
+            image.paste(artwork,(x,y),artwork.getchannel('A') if artwork.mode=='RGBA' else None)
         elif kind == "Scrollbar":
             draw.rectangle((x, y, x+width, y+height), fill=BG)
             draw.rounded_rectangle((x+4, y+8, x+width-4, y+height-8), radius=3, fill=LINE)
         elif kind in {"TButton","Button"}:
             primary = kind=='TButton' and widget.cget("style") == "Accent.TButton"
-            draw.rounded_rectangle((x, y, x+width-1, y+height-1), radius=4, fill=CYAN if primary else LINE)
-            draw.text((x+width/2, y+height/2), widget.cget("text"), anchor="mm", fill=BG if primary else TEXT, font=font)
+            glass = render_glass(width,height,scale=window_scale(app.root))
+            image.paste(glass,(x,y),glass.getchannel('A'))
+            draw.text((x+width/2, y+height/2), widget.cget("text"), anchor="mm", fill=CYAN if primary else TEXT, font=font)
         elif kind in {"TEntry", "TCombobox"}:
-            draw.rounded_rectangle((x, y, x+width-1, y+height-1), radius=4, fill=CARD, outline=LINE)
+            glass = render_glass(width,height,field=True,scale=window_scale(app.root))
+            image.paste(glass,(x,y),glass.getchannel('A'))
             text = widget.get()
-            draw.text((x+10, y+height/2), text or "Ask Jarvis anything…", anchor="lm", fill=TEXT if text else MUTED, font=font)
+            if text:
+                draw.text((x+12, y+height/2), text, anchor="lm", fill=TEXT, font=font)
             if kind == "TCombobox":
                 draw.text((x+width-18, y+height/2), "⌄", anchor="mm", fill=CYAN, font=font)
         elif kind == "TCheckbutton":

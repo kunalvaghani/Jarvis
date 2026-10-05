@@ -9,6 +9,7 @@ import tempfile
 import threading
 from datetime import datetime, timezone
 from .experience import recall_tasks
+from .task_graph import MAX_TASK_GOAL_CHARS
 
 
 def _now():
@@ -69,7 +70,7 @@ class TaskState:
                     previous["updated_at"] = _now()
                 self.data["history"] = (self.data["history"] + [previous])[-20:]
             timestamp = _now()
-            self.data["current"] = {"goal": goal[:1500], "kind": kind, "project": str(project) if project else None,
+            self.data["current"] = {"goal": goal[:MAX_TASK_GOAL_CHARS], "kind": kind, "project": str(project) if project else None,
                                     "status": "running", "stage": "started", "started_at": timestamp,
                                     "updated_at": timestamp, "checkpoints": [], "result": ""}
             self._write()
@@ -110,7 +111,7 @@ class TaskState:
                 return
             revision = {"at": _now(), "reason": str(reason)[:500],
                         "remaining": json.loads(json.dumps(remaining)),
-                        "completed": json.loads(json.dumps(completed[-12:]))}
+                        "completed": json.loads(json.dumps(completed[-40:]))}
             current["plan"] = revision
             current["plan_revisions"] = (current.get("plan_revisions", []) + [revision])[-12:]
             current["updated_at"] = revision["at"]
@@ -178,7 +179,7 @@ class TaskState:
             if not history:
                 return None
             task = history[-1]
-            if (task.get("goal") != goal[:1500] or task.get("kind") != kind
+            if (task.get("goal") != goal[:MAX_TASK_GOAL_CHARS] or task.get("kind") != kind
                     or task.get("status") not in {"paused", "failed", "interrupted", "cancelled"}):
                 return None
             return {"status": task["status"], "stage": task.get("stage", ""),

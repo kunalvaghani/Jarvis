@@ -2,6 +2,7 @@
 from pathlib import Path
 
 from .brain import BrainClient, validate_plan
+from .task_graph import MAX_PLAN_STEPS
 
 REVISION = "cbc569e23cb045b58b067f37cf5514feb44e0828"
 
@@ -23,7 +24,7 @@ def validate_proposal(proposal, request):
     if not isinstance(proposal.get("question"), str):
         raise ValueError("Hermes omitted its clarification field.")
     steps = proposal.get("steps")
-    if not isinstance(steps, list) or len(steps) > 6:
+    if not isinstance(steps, list) or len(steps) > MAX_PLAN_STEPS:
         raise ValueError("Hermes proposed an invalid step list.")
     if steps and proposal["question"]:
         raise ValueError("Return either steps with question='' or a clarification with steps=[].")
@@ -32,13 +33,14 @@ def validate_proposal(proposal, request):
             raise ValueError("Hermes omitted replanning status.")
         if proposal["done"] and (steps or proposal["question"]):
             raise ValueError("Hermes claimed completion with remaining work.")
-        if len(steps) > request.get("steps_left", 6):
+        if len(steps) > request.get("steps_left", 20):
             raise ValueError("Hermes exceeded the remaining task budget.")
     if steps:
         allowed = {tool["action"] for tool in request.get("tools", [])}
         if any(step.get("action") not in allowed for step in steps if isinstance(step, dict)):
             raise ValueError("Hermes proposed a tool unavailable for this task.")
-        validate_plan({"steps": steps}, request.get("completed", []))
+        validate_plan({"steps": steps}, request.get("completed", []),
+                      request.get('steps_left', request.get('max_task_actions', 20)))
     elif not proposal["question"] and not proposal.get("done", False):
         raise ValueError("Hermes returned no plan or clarification.")
     return {key: proposal[key] for key in ("question", "steps", "done", "reason") if key in proposal}

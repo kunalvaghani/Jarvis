@@ -62,6 +62,8 @@ TOOLS = {
     "toolkit_status": ("toolkits", "List tools and missing configuration; never displays credentials.", (), False),
 }
 TOOLS.update(AGENT_TOOLS)
+from .firecrawl_tools import TOOLS as FIRECRAWL_TOOLS
+TOOLS.update(FIRECRAWL_TOOLS)
 
 
 def status():
@@ -95,7 +97,7 @@ def validate_step(step):
         raise ValueError("Tool value and content must be text; value cannot be empty.")
     if len(step.get("content", "")) > 10000:
         raise ValueError("Tool content exceeds 10,000 characters.")
-    if step['action'] in AGENT_TOOLS and step['action'] not in {'tool_search', 'runtime_capabilities', 'mcp_status', 'mcp_list_tools', 'mcp_call'}:
+    if step['action'] in AGENT_TOOLS and step['action'] not in {'windows_command', 'windows_command_search', 'tool_search', 'runtime_capabilities', 'mcp_status', 'mcp_list_tools', 'mcp_call', 'integration_status', 'application_search'}:
         if not isinstance(step.get('folder'), str) or not step['folder'].strip():
             raise ValueError('Agent observations need an explicit project folder.')
     if step["action"] in {"list_files", "read_file", "append_file", "search_files", "query_resource", "knowledge_search"}:
@@ -292,7 +294,11 @@ def execute(actions, step, cancelled):
     client = requests.Session()
     client.trust_env = False
     try:
-        result = remote_tool(client, step, cancelled)
+        if name in FIRECRAWL_TOOLS:
+            from .firecrawl_tools import execute as firecrawl_execute
+            result = firecrawl_execute(client, step, cancelled)
+        else:
+            result = remote_tool(client, step, cancelled)
         if data[3] and isinstance(state, TaskState):
             state.checkpoint("observed", action=name, target=step["value"], evidence="service acknowledged request")
         for key, secret in os.environ.items():

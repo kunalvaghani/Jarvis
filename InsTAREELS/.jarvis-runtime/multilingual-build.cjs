@@ -1,0 +1,1 @@
+const esbuild=require("D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\node_modules\\esbuild"); esbuild.buildSync({entryPoints:[process.argv[2]],bundle:true,absWorkingDir:process.cwd(),nodePaths:["D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\artifacts\\development-dashboard\\node_modules"],outfile:process.argv[3],format:"iife",jsx:"automatic"});

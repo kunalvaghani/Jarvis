@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-04",
+  "kind": "off-screen UI regression and rendered fixtures",
+  "live_voice_or_external_actions": false,
+  "views": [
+    {
+      "view": "compose",
+      "size": [
+        768,
+        180
+      ],
+      "single_window": true
+    },
+    {
+      "view": "answer",
+      "size": [
+        768,
+        760
+      ],
+      "single_window": true
+    },
+    {
+      "view": "task",
+      "size": [
+        768,
+        475
+      ],
+      "single_window": true
+    },
+    {
+      "view": "games",
+      "size": [
+        768,
+        825
+      ],
+      "single_window": true
+    },
+    {
+      "view": "settings",
+      "size": [
+        768,
+        825
+      ],
+      "single_window": true
+    },
+    {
+      "view": "console",
+      "size": [
+        768,
+        825
+      ],
+      "single_window": true
+    },
+    {
+      "view": "approval",
+      "size": [
+        768,
+        825
+      ],
+      "single_window": true
+    }
+  ],
+  "native_input_fixture": "Own off-screen window only; authored text",
+  "collapse_safety": true,
+  "passed": true
+}

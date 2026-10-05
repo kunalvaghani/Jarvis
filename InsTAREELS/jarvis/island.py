@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageTk
 from .display import window_scale
 
 KEY = "#ff00ff"
-BLACK = "#08080a"
+BLACK = "#000000"
 ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
 
@@ -56,10 +56,12 @@ def fit_text(draw, value, face, width):
 
 def render_island(width=208, height=52, status="STANDBY", phase=0, message="", level=0, expanded=False,
                   detail='', scale=1.):
-    width, height = max(170, int(width)), max(46, int(height))
+    width, height = max(170, int(width)), max(40, int(height))
     scale = min(3., max(1., float(scale))) if math.isfinite(float(scale)) else 1.
     sampling = scale * 2
-    image = Image.new("RGBA", (round(width*sampling), round(height*sampling)))
+    band_height = min(height, 128)
+    image = Image.new("RGB", (round(width*sampling), round(band_height*sampling)), BLACK)
+    silhouette = Image.new('L',(round(width*sampling),round(height*sampling)))
     draw = ImageDraw.Draw(image)
     def rectangle(bounds, radius, **kwargs):
         if 'width' in kwargs:
@@ -67,34 +69,71 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
         draw.rounded_rectangle(tuple(round(x*sampling) for x in bounds), radius=round(radius*sampling), **kwargs)
     def text(x, y, value, size, color, bold=False):
         draw.text((round(x*sampling), round(y*sampling)), value, font=font(round(size*sampling), bold), fill=color)
-    radius = min(32, (height-8)//2)
-    rectangle((4, 4, width-5, height-5), radius=radius, fill=BLACK, outline="#29292f", width=1)
+    # Concave shoulders attach to the screen edge; only the bottom is convex.
+    shoulder, radius = 32, min(32, height/2)
+    points = [(0, 0), (width, 0)]
+    for i in range(1, 25):
+        angle = i*math.pi/48
+        points.append((width-shoulder*math.sin(angle), radius*(1-math.cos(angle))))
+    points.append((width-shoulder, height-radius))
+    for i in range(1, 25):
+        angle = i*math.pi/48
+        points.append((width-shoulder-radius+radius*math.cos(angle), height-radius+radius*math.sin(angle)))
+    points.append((shoulder+radius, height))
+    for i in range(1, 25):
+        angle = i*math.pi/48
+        points.append((shoulder+radius-radius*math.sin(angle), height-radius+radius*math.cos(angle)))
+    points.append((shoulder, radius))
+    for i in range(24, -1, -1):
+        angle = i*math.pi/48
+        points.append((shoulder*math.sin(angle), radius*(1-math.cos(angle))))
+    ImageDraw.Draw(silhouette).polygon([(round(x*sampling),round(y*sampling)) for x,y in points], fill=255)
     color = ACCENTS.get(status, ACCENTS["STANDBY"])
-    y = 28 if height > 74 else height // 2
-    # A quiet monogram replaces the constantly animated circular emblem.
-    text(23, y-13, 'J', 19, '#f4f4f7', True)
-    text(48, y-10, 'Jarvis', 14, '#f4f4f7', True)
+    y = 21
+    rectangle((47, 10, 69, 32), radius=11, fill='#1d3e66')
+    rectangle((49, 11, 67, 29), radius=9, fill='#729fcb')
+    text(54, 10, 'J', 12, '#ffffff', True)
+    text(79, y-10, 'Jarvis', 12, '#e8e8e8', True)
     if width > 265:
-        text(115, y-9, status.capitalize(), 13, color)
+        text(145, y-9, status.capitalize(), 11, color)
     if detail and width > 330:
         text(200, y-9, '·', 13, '#62626f')
         face = font(round(13*sampling))
         text(215, y-9, fit_text(draw, detail, face, (width-292)*sampling), 13, '#dedee6')
     active = status != "STANDBY"
-    for i in range(9):
+    for i in range(9 if active else 0):
         amplitude = (2 + (5 + min(100, max(0, float(level)))*.055) *
                      abs(math.sin(phase * 2.8 + i*.65))) if active else 2
-        x = width-64+i*4
+        x = width-116+i*4
         rectangle((x, y-amplitude, x+2, y+amplitude), radius=1, fill=color)
+    if expanded:
+        rectangle((width-79, 7, width-51, 35), radius=14, fill='#24252a',outline='#44464e',width=1)
+        rectangle((width-69, 17, width-61, 25), radius=1, fill='#d8d8d8')
+        rectangle((width-50, 9, width-34, 33),radius=8,fill='#202126',outline='#35363d',width=1)
+        draw.line([(round(x*sampling), round(y*sampling)) for x,y in
+                   ((width-47,24),(width-43,20),(width-39,24))], fill='#aaaaaa', width=max(1,round(sampling)))
     if height > 82 and not expanded:
         # Content appears immediately; decorative motion never delays an answer.
         for i, line in enumerate(wrap(draw, message, font(round(14*sampling)), (width-48)*sampling, 3)):
             text(24, 56+i*21, line, 14, '#dedee6')
-    image = image.resize((round(width*scale), round(height*scale)), Image.Resampling.LANCZOS)
+    pixels_w,pixels_h = round(width*scale),round(height*scale)
+    band = image.resize((pixels_w,round(band_height*scale)), Image.Resampling.LANCZOS)
+    image = Image.new('RGB',(pixels_w,pixels_h),BLACK)
+    image.paste(band,(0,0))
     # Color-key transparency cannot represent fractional edge alpha; avoid pink fringes.
     output = Image.new('RGB', image.size, KEY)
-    mask = image.getchannel('A').point(lambda alpha: 255 if alpha >= 128 else 0)
-    output.paste(image.convert('RGB'), (0, 0), mask)
+    # Straight walls need no resampling. Only the four curved regions do.
+    mask = Image.new('L',image.size)
+    edge,corner = round(shoulder*scale),round(radius*scale)
+    ImageDraw.Draw(mask).rectangle((edge,0,pixels_w-edge,pixels_h-1),fill=255)
+    regions = ((0,0,edge,edge),(pixels_w-edge,0,pixels_w,edge),
+               (edge,pixels_h-corner,edge+corner,pixels_h),
+               (pixels_w-edge-corner,pixels_h-corner,pixels_w-edge,pixels_h))
+    for x1,y1,x2,y2 in regions:
+        patch = silhouette.crop((x1*2,y1*2,x2*2,y2*2)).resize((x2-x1,y2-y1),Image.Resampling.LANCZOS)
+        mask.paste(patch,(x1,y1))
+    mask = mask.point(lambda alpha: 255 if alpha >= 128 else 0)
+    output.paste(image, (0, 0), mask)
     return output
 
 
@@ -107,7 +146,14 @@ class Activity:
 
     def notify(self, kind, value, now=None):
         now = time.monotonic() if now is None else now
-        if kind == 'task_status' and isinstance(value, dict):
+        if kind == 'answer_stream' and isinstance(value, dict):
+            self.detail = value.get('phase', '')[:100]
+            self.active = value.get('active', True)
+            self.updated = now
+        elif kind in {'answer', 'answer_error'}:
+            self.active = False
+            self.detail = ''
+        elif kind == 'task_status' and isinstance(value, dict):
             from pathlib import PureWindowsPath
             from .obsidian_memory import clean
             phase = clean(value.get('phase', ''), 40)
@@ -138,7 +184,7 @@ class Activity:
 
 class Morph:
     def __init__(self):
-        self.size = (208., 52.)
+        self.size = (402., 40.)
         self.origin = self.target = self.size
         self.started = 0.
 
@@ -149,7 +195,7 @@ class Morph:
             self.started = now
 
     def sample(self, now, reduced=False):
-        p = 1 if reduced else min(1, max(0, (now-self.started)/.42))
+        p = 1 if reduced else min(1, max(0, (now-self.started)/.34))
         eased = 1-(1-p)**4
         self.size = tuple(a+(b-a)*eased for a, b in zip(self.origin, self.target))
         return self.size
@@ -165,13 +211,22 @@ class Island:
         self.message_until = 0.
         self.attention_until = 0.
         self.anchor_x = app.root.winfo_screenwidth() // 2
-        self.top = 12
+        self.top = 0
         self.drag = None
         self.moved = False
         self.last_frame = None
         self.last_geometry = None
         self.last_size = None
+        self.background_key = None
+        self.surface_open = False
+        self.features_open = False
+        self.focus_pending = False
+        self.stream_active = False
+        self.stream_hidden = False
+        self.stream_height = 0
+        self.work_completion_pending = False
         self.item = canvas.create_image(0, 0, anchor="nw")
+        self.header_item = canvas.create_image(0, 0, anchor='nw')
         canvas.bind("<Enter>", lambda _e: self.set_hover(True))
         canvas.bind("<Leave>", lambda _e: self.set_hover(False))
         canvas.bind("<Button-1>", self.press)
@@ -192,23 +247,62 @@ class Island:
             if abs(event.x_root-x)+abs(event.y_root-y) > 5:
                 self.moved = True
                 self.anchor_x = anchor+event.x_root-x
-                self.top = max(0, top+event.y_root-y)
+                self.top = 0  # The notch stays attached even when moved horizontally.
 
     def release(self, event):
         if self.drag and not self.moved:
-            self.app.toggle_panel(event)
+            scale = window_scale(self.app.root)
+            x = event.x/scale
+            width = self.motion.size[0]
+            if self.surface_open and width-79 <= x <= width-51:
+                self.app.stop()
+            elif self.surface_open and x > width-51:
+                self.app.hide_panel()
+            else:
+                self.app.toggle_panel(event)
         self.drag = None
 
     def expand(self, value):
-        self.expanded = value
-        self.app.panel.withdraw()
+        self.stream_hidden = not value
         if not value:
+            self.stream_height = 0
+        if value == self.expanded:
+            return
+        self.expanded = value
+        self.focus_pending = value
+        if not value:
+            self.app.panel.withdraw()
+            self.features_open = False
             self.message_until = self.attention_until = 0.
         self.last_frame = None
 
     def notify(self, kind, message):
         self.activity.notify(kind, message)
-        if kind in {"answer", "spoken_reply", "question", "warning", "fatal"} and message:
+        if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):
+            # Reveal once at task start without taking typing focus. Subsequent
+            # stream updates respect a user's deliberate collapse.
+            self.expanded = True
+            self.stream_hidden = False
+            self.stream_height = 0
+            self.focus_pending = False
+            self.work_completion_pending = True
+            self.last_frame = None
+        if kind == 'answer_stream' and isinstance(message, dict):
+            active = message.get('active', True)
+            if active and not self.stream_active:
+                self.stream_hidden = False
+                self.stream_height = 0
+                self.work_completion_pending = False
+            self.stream_active = active
+            self.message = (message.get('text') or message.get('phase', 'Generating answer'))[:450]
+            self.message_until = time.monotonic()+12
+        elif kind in {"answer", "answer_error", "spoken_reply", "question", "warning", "fatal", "action", "command_output"} and message:
+            if kind in {'answer', 'answer_error'}:
+                if not self.stream_active and not getattr(self,'work_completion_pending',False):
+                    self.stream_height = 0
+                    self.stream_hidden = False  # A fresh non-streamed answer may reveal itself normally.
+                self.stream_active = False
+                self.work_completion_pending = False
             self.message = str(message)[:450]
             self.message_until = time.monotonic()+12
             if kind in {"warning", "fatal", "question"}:
@@ -217,25 +311,47 @@ class Island:
             self.message = str(message)[:450]
             self.message_until = time.monotonic()+3
 
+    def layout_target(self, message, detail, status, max_width, max_height):
+        desk = self.app.desk
+        workspace = self.features_open or desk.view != 'Overview' or desk.has_reply or desk.work['active'] or getattr(self,'work_completion_pending',False)
+        opened = self.expanded or (not self.stream_hidden and (bool(message) or self.stream_active))
+        if opened:
+            if workspace:
+                content = desk.reply + desk.work.get('preview', '')
+                lines = sum(max(1, math.ceil(len(line)/60)) for line in content.splitlines())
+                height = 660 if self.features_open or desk.view != 'Overview' else min(710, max(380, 230+lines*18))
+                if not self.features_open and desk.view == 'Overview':
+                    # Draft replacement, token gaps and final formatting never collapse a live answer.
+                    height = max(height, self.stream_height)
+                    if self.stream_active or desk.work.get('active'):
+                        self.stream_height = height
+            else:
+                height = 144
+            return (min(614, max_width), min(height, max_height)), workspace, opened
+        return (min(614 if detail else 434 if self.hover or status != 'STANDBY' else 402, max_width),
+                64 if detail else 44 if self.hover or status != 'STANDBY' else 40), False, False
+
     def tick(self, status, level=0, speaking=False, listening=False):
         app, root = self.app, self.app.root
         now = time.monotonic()
+        if self.surface_open and self.hover and not self.expanded and self.message_until:
+            self.message_until = max(self.message_until, now+12)
         if now < self.attention_until and status == "STANDBY":
             status = "ATTENTION"
         message = self.message if now < self.message_until else ""
         scale = window_scale(root)
         detail = self.activity.caption(status, now, speaking, listening)
-        max_width = max(170, root.winfo_screenwidth()/scale-20)
-        max_height = max(180, root.winfo_screenheight()/scale-32)
-        target = (min(560, max_width), min(660, max_height)) if self.expanded else (
-            (min(600, max_width), 140) if message else (min(580, max_width), 64) if detail else (320, 60) if status != "STANDBY" else
-            (260, 54) if self.hover else (208, 52))
+        max_width = max(170, root.winfo_screenwidth()/scale-12)
+        max_height = max(180, root.winfo_screenheight()/scale-70)
+        target, workspace, self.surface_open = self.layout_target(message, detail, status, max_width, max_height)
         self.motion.set_target(target, now)
         reduced = bool(app.config.get("ui", {}).get("reduced_motion", False))
         width, height = (round(value) for value in self.motion.sample(now, reduced))
         pixels_w, pixels_h = round(width*scale), round(height*scale)
         left = max(0, min(root.winfo_screenwidth()-pixels_w, round(self.anchor_x-pixels_w/2)))
-        top = max(0, min(root.winfo_screenheight()-pixels_h, self.top))
+        top = 0
+        if app.config.get('_ui_verification', False):
+            left = top = 20000
         geometry = f"{pixels_w}x{pixels_h}+{left}+{top}"
         if geometry != self.last_geometry:
             root.geometry(geometry)
@@ -245,21 +361,48 @@ class Island:
             self.last_size = (pixels_w, pixels_h)
         settled = abs(width-target[0])+abs(height-target[1]) <= 2
         phase = 0 if reduced or status == "STANDBY" else now
-        frame_key = (width, height, status, message, detail, scale, round(phase*24), round(float(level)), self.expanded)
+        frame_key = (width, height, status, message, detail, scale, round(phase*24), round(float(level)), self.surface_open)
         if frame_key != self.last_frame:
-            self.photo = ImageTk.PhotoImage(render_island(width, height, status, phase, message, level, self.expanded, detail, scale), master=root)
-            self.canvas.itemconfigure(self.item, image=self.photo)
+            geometry_key = (width,height,scale,self.surface_open)
+            if height <= 96 or geometry_key != self.background_key:
+                self.preview_image = render_island(width, height, status, phase, '', level, self.surface_open, detail, scale)
+                self.background_image = self.preview_image.copy()
+                self.photo = ImageTk.PhotoImage(self.preview_image, master=root)
+                self.canvas.itemconfigure(self.item, image=self.photo)
+                self.canvas.itemconfigure(self.header_item,image='')
+                self.background_key = geometry_key
+            else:
+                # A settled tall shell is static; redraw only its live top band.
+                header = render_island(width,96,status,phase,'',level,self.surface_open,detail,scale).crop(
+                    (0,0,pixels_w,round(44*scale)))
+                self.header_photo = ImageTk.PhotoImage(header,master=root)
+                self.canvas.itemconfigure(self.header_item,image=self.header_photo)
+                self.preview_image = self.background_image.copy()
+                self.preview_image.paste(header,(0,0))
+            self.canvas.preview_image = self.preview_image
             self.last_frame = frame_key
-        if self.expanded and settled and not getattr(app, "capture_count", 0) and root.state() != "withdrawn":
-            app.panel.geometry(f"{round((width-40)*scale)}x{round((height-76)*scale)}+{left+round(20*scale)}+{top+round(56*scale)}")
+        if self.surface_open and height >= 135 and not getattr(app, "capture_count", 0) and root.state() != "withdrawn":
+            app.panel.present(width, height, workspace)
             if app.panel.state() == "withdrawn":
                 app.panel.deiconify()
                 app.panel.lift()
-                app.exclude_window_from_capture(app.panel)
+            if self.focus_pending and settled:
+                grab = root.grab_current()
+                focus = root.focus_get()
+                interactive = focus is not None and focus.winfo_class() in {'TCombobox', 'Entry', 'TEntry', 'Text', 'Button', 'TButton'}
+                if grab is not None:
+                    return  # Preserve native combobox/menu selection until its grab ends.
+                self.focus_pending = False
+                if interactive:
+                    return
                 if getattr(getattr(app,'desk',None),'view',None)=='Games':
                     app.desk.game_canvas.focus_set()
+                elif app.desk.view == 'Console':
+                    app.command_entry.focus_set()
                 else:
                     app.preview.focus_set()
+        else:
+            app.panel.withdraw()
 
 
 def export_preview(path):

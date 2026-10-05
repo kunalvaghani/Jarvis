@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pocket Ledger</title>
+<style>
+:root{--bg:#f0fdfa;--card:#ffffff;--text:#064e43;--accent:#0d9488;--danger:#dc2626;--success:#059669;--border:#99f6e4;--shadow:0 2px 8px rgba(13,148,136,0.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:2rem}
+.container{max-width:600px;width:100%;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:1.5rem;border:1px solid var(--border)}
+h1{text-align:center;margin-bottom:1.25rem;font-size:1.75rem;color:var(--accent)}
+.form{display:grid;gap:.75rem;margin-bottom:1rem}
+.input-group{display:flex;flex-direction:column;gap:.5rem}
+label{font-weight:600;font-size:.85rem}
+input,select{padding:.75rem;border:2px solid var(--border);border-radius:8px;font-size:1rem;background:#fff;color:var(--text);transition:border-color .2s}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(13,148,136,.2)}
+button{padding:.75rem 1.25rem;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:transform .2s,background .2s}
+button:active{transform:scale(.98)}
+#add{background:var(--accent);color:#fff}
+#search{background:transparent;border:none;font-size:1rem;width:100%}
+.entries{max-height:300px;overflow-y:auto;margin-bottom:1rem}
+.row{display:flex;align-items:center;gap:.75rem;padding:.6rem;background:#f8fffe;border-radius:8px;margin-bottom:.5rem;animation:slideIn .3s ease;transition:opacity .2s}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.row input{flex:1;border-color:#cbd5e1}
+.delete{background:var(--danger);color:#fff;padding:.4rem .7rem;font-size:.8rem}
+.total{text-align:center;padding:.75rem;background:#ecfdf5;border-radius:8px;font-weight:700;font-size:1.25rem;color:var(--accent)}
+.chart{display:flex;justify-content:center;align-items:flex-end;gap:.5rem;margin-bottom:1rem;padding:1rem;background:#f0fdfa;border-radius:12px}
+.bar-container{flex:1;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.bar{width:100%;height:40px;background:var(--accent);border-radius:6px;transition:width .6s ease,transform .6s ease;transform-origin:left}
+.bar-label{text-align:center;font-size:.75rem;color:#64748b}
+.category-select{margin-bottom:1rem}
+.error{color:var(--danger);font-size:.85rem;text-align:center;display:none;margin-bottom:-.25rem;padding:.25rem;background:#fef2f2;border-radius:6px}
+.container{animation:ambient 6s ease-in-out infinite}.row{flex-wrap:wrap}.row input{min-width:0}.bar-label{overflow-wrap:anywhere}@keyframes ambient{50%{box-shadow:0 8px 30px #0d948833}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media (max-width:400px){h1{font-size:1.5rem}.container{padding:1rem}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Pocket Ledger</h1>
+<div class="form">
+<label for="description">Description</label>
+<input type="text" id="description" placeholder="e.g., Groceries, Coffee" maxlength="40">
+<label for="amount">Amount ($)</label>
+<input type="number" id="amount" placeholder="Enter amount" min="0.01" step="0.01">
+<div class="category-select">
+<label for="category">Category</label>
+<select id="category"><option value="Food">Food</option><option value="Transport">Transport</option><option value="Entertainment">Entertainment</option><option value="Utilities">Utilities</option><option value="Shopping">Shopping</option></select>
+</div>
+<button id="add">Add Expense</button>
+<div class="error" id="error"></div>
+</div>
+<input type="text" id="search" placeholder="Search expenses..." aria-label="Search expenses">
+<div class="chart" id="chart"></div>
+<div class="entries" id="entries"></div>
+<div class="total"><span id="total">0.00</span></div>
+</div>
+<script>
+const desc=document.getElementById('description'),amt=document.getElementById('amount'),cat=document.getElementById('category'),btn=document.getElementById('add'),search=document.getElementById('search'),entries=document.getElementById('entries'),totalEl=document.getElementById('total'),chart=document.getElementById('chart'),error=document.getElementById('error');
+let expenses=[];const categories=['Food','Transport','Entertainment','Utilities','Shopping'];
+function load(){try{const saved=JSON.parse(localStorage.getItem('pocketLedger')||'[]');expenses=Array.isArray(saved)?saved.filter(e=>typeof e.description==='string'&&Number.isFinite(e.amount)&&e.amount>0):[]}catch{expenses=[];error.style.display='block';error.textContent='Saved expenses could not be loaded'}render();}
+function save(){try{localStorage.setItem('pocketLedger',JSON.stringify(expenses))}catch{error.style.display='block';error.textContent='Storage unavailable; keep this tab open'}}
+function validate(){const d=desc.value.trim(),a=parseFloat(amt.value);if(!d||isNaN(a)||a<=0){error.style.display='block';error.textContent='Please enter a valid description and amount > 0';return false}error.style.display='none';return true}
+function render(){entries.innerHTML='';let t=0,colors=['#0d9488','#f59e0b','#ec4899','#3b82f6','#10b981'];expenses.forEach((e,i)=>{t+=parseFloat(e.amount);const row=document.createElement('div');row.className='row';const input=document.createElement('input');input.type='text';input.value=e.description;const sel=document.createElement('select');categories.forEach(c=>{const o=document.createElement('option');o.value=o.textContent=c;sel.append(o)});sel.value=e.category;sel.addEventListener('change',()=>{e.category=sel.value;save();render()});input.addEventListener('change',()=>{const value=input.value.trim();if(value){e.description=value;save();render()}else input.value=e.description});const label=document.createElement('div');label.className='bar-label';label.textContent=e.description+' '+e.category;const del=document.createElement('button');del.className='delete';del.textContent='Delete';del.addEventListener('click',()=>deleteExpense(e.id));const span=document.createElement('span');span.textContent='$'+parseFloat(e.amount).toFixed(2);row.appendChild(input);row.appendChild(sel);row.appendChild(label);row.appendChild(del);row.appendChild(span);entries.appendChild(row);});totalEl.textContent=t.toFixed(2);updateChart(t,colors);}
+function updateChart(t,colors){chart.replaceChildren();categories.forEach((category,i)=>{const sum=expenses.filter(e=>e.category===category).reduce((a,e)=>a+e.amount,0),column=document.createElement('div'),bar=document.createElement('div'),label=document.createElement('div');column.className='bar-container';bar.className='bar';bar.style.height=(10+(t?sum/t:0)*90)+'px';bar.style.background=colors[i];bar.title=category+': $'+sum.toFixed(2);label.className='bar-label';label.textContent=category+' $'+sum.toFixed(2);column.append(bar,label);chart.append(column)})}
+
+function addExpense(){if(!validate())return;expenses.push({description:desc.value.trim(),amount:parseFloat(amt.value),category:cat.value,id:crypto.randomUUID()});save();render();desc.value='';amt.value='';}
+function deleteExpense(id){expenses=expenses.filter(e=>e.id!==id);save();render();}
+function filter(){const q=search.value.toLowerCase();if(!q){render();return}const filtered=expenses.filter(e=>e.description.toLowerCase().includes(q));entries.innerHTML='';let t=0,colors=['#0d9488','#f59e0b','#ec4899','#3b82f6','#10b981'];filtered.forEach((e,i)=>{t+=parseFloat(e.amount);const row=document.createElement('div');row.className='row';const input=document.createElement('input');input.type='text';input.value=e.description;const sel=document.createElement('select');categories.forEach(c=>{const o=document.createElement('option');o.value=o.textContent=c;sel.append(o)});sel.value=e.category;sel.addEventListener('change',()=>{e.category=sel.value;save();render()});input.addEventListener('change',()=>{const value=input.value.trim();if(value){e.description=value;save();render()}else input.value=e.description});const label=document.createElement('div');label.className='bar-label';label.textContent=e.description+' '+e.category;const del=document.createElement('button');del.className='delete';del.textContent='Delete';del.addEventListener('click',()=>deleteExpense(e.id));const span=document.createElement('span');span.textContent='$'+parseFloat(e.amount).toFixed(2);row.appendChild(input);row.appendChild(sel);row.appendChild(label);row.appendChild(del);row.appendChild(span);entries.appendChild(row);});totalEl.textContent=t.toFixed(2);if(filtered.length===0){entries.innerHTML='<div style="text-align:center;color:#64748b;padding:1rem;">No results</div>';totalEl.textContent='0.00';chart.innerHTML=''}}
+btn.addEventListener('click',addExpense);desc.addEventListener('keydown',e=>{if(e.key==='Enter')addExpense()});amt.addEventListener('keydown',e=>{if(e.key==='Enter')addExpense()});search.addEventListener('input',filter);load();
+</script>
+</body>
+</html>

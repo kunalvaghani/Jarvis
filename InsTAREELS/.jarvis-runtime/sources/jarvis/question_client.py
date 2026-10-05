@@ -9,7 +9,7 @@ import time
 
 
 class QuestionClient:
-    def __init__(self, base, report, timeout=180):
+    def __init__(self, base, report, timeout=None):
         self.base, self.report, self.timeout = Path(base), report, timeout
         self.process = self.responses = self.log = None
 
@@ -52,7 +52,7 @@ class QuestionClient:
             profile = memory.profile_text()
             if profile:
                 request = {**request, "user_profile": profile}
-            observations = memory.recall(request.get("question", ""))
+            observations = [] if request.get('conversation_context') or request.get('memory_retrieval_done') else memory.recall(request.get("question", ""))
             if observations:
                 request = {**request, "memory_context": observations}
             if hasattr(memory, "task_context"):
@@ -66,18 +66,27 @@ class QuestionClient:
             except (OSError,ValueError):
                 pass
         for attempt in range(2):
+            streamed = False
             if cancelled():
                 raise ValueError("Question cancelled.")
             try:
                 self._start()
                 self.process.stdin.write(json.dumps(request) + "\n")
                 self.process.stdin.flush()
-                deadline = time.monotonic() + self.timeout
+                from .inference_limits import question_limits
+                idle, total = question_limits(request.get('options', {}))
+                # Allow startup and transport outside HTTP. Explicit test/caller overrides win.
+                silence = idle + 30 if self.timeout is None else self.timeout
+                started = last_activity = time.monotonic()
+                streamed = False
                 while True:
                     if cancelled():
                         raise ValueError("Question cancelled.")
-                    if time.monotonic() >= deadline:
-                        raise TimeoutError("The local LLM took too long. Try a shorter question.")
+                    now = time.monotonic()
+                    if now-started >= total:
+                        raise TimeoutError('Ollama reached the maximum answer duration; partial output is incomplete.')
+                    if now-last_activity >= silence:
+                        raise TimeoutError('Ollama stopped producing output or is still loading; partial output is incomplete.')
                     try:
                         line = self.responses.get(timeout=.1)
                     except queue.Empty:
@@ -85,6 +94,18 @@ class QuestionClient:
                     if line is None:
                         raise BrokenPipeError("Question worker stopped.")
                     result = json.loads(line)
+                    if 'answer_progress' in result:
+                        event = result['answer_progress']
+                        if (not request.get('stream_answer') or not isinstance(event, dict)
+                                or not isinstance(event.get('phase'), str) or len(event['phase']) > 100
+                                or ('text' in event and (not isinstance(event['text'], str) or len(event['text']) > 100000))):
+                            raise ValueError('Invalid answer stream progress.')
+                        if cancelled():
+                            raise ValueError('Question cancelled.')
+                        last_activity = time.monotonic()
+                        streamed = True
+                        self.report('answer_stream', event)
+                        continue
                     if result.get("error"):
                         raise ValueError(result["error"])
                     if not isinstance(result.get("answer"), str) or not result["answer"].strip():
@@ -93,7 +114,7 @@ class QuestionClient:
             except Exception as exc:
                 self.close()
                 # Only a stopped worker permits one read-only inference retry.
-                if not isinstance(exc, (BrokenPipeError, OSError)) or isinstance(exc, TimeoutError) or attempt or cancelled():
+                if not isinstance(exc, (BrokenPipeError, OSError)) or isinstance(exc, TimeoutError) or attempt or cancelled() or streamed:
                     raise
                 from .recovery import record
                 message = "Question worker stopped; retrying read-only inference after backoff."
