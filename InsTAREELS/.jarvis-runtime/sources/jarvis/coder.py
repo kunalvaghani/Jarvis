@@ -431,6 +431,9 @@ class Coder:
             raise ValueError('The selected folder does not match the requested coding folder.')
         if cli and not simple_folder_request(goal):
             if backend=='codex':
+                if getattr(self.client,'options',{}).get('codex_workload_enabled',False):
+                    from .codex_workload import run as workload_run
+                    return workload_run(self,root,goal,cancelled)
                 from .codex_code import run as codex_run
                 return codex_run(self, root, goal, cancelled)
             from .claude_code import run as claude_run

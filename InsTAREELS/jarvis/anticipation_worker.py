@@ -34,6 +34,8 @@ def synthesize(topic, sources, options):
     import requests
     from .knowledge_worker import chat
     with requests.Session() as client:
+        from .gpu_scheduler import install
+        install(client,'background')
         return chat(client, dict(model=options['model'], num_ctx=2048,
             num_predict=options['model_tokens'], num_gpu=0, think=False,
             timeout_seconds=15), [dict(role='system', content=

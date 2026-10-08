@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-07T16:08:01.468440+00:00",
+  "scope": "Complete Jarvis unittest discovery in a normal local Windows environment, including controlled fault injection and owned fixtures; not every user app/account or model workflow.",
+  "passed": true,
+  "tests": 1132,
+  "seconds": 293.133,
+  "source_log": "audit-final-tests.log",
+  "localgithub": {
+    "tests": 31,
+    "passed": true,
+    "seconds": 117.43,
+    "warnings": [
+      "Starlette testclient httpx deprecation"
+    ],
+    "scope": "Complete installed LocalGithub pytest suite; no user repository pushes"
+  }
+}

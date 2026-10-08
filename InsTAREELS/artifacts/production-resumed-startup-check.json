@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-08T06:21:39.555885+00:00",
+  "scope": "Normal supervised Jarvis startup, operational heartbeat only. No fresh spoken question claimed without operator confirmation. Production window intentionally excluded from screenshot capture.",
+  "status": "running",
+  "listening_requested": true,
+  "health": {
+    "audio": {
+      "requested": true,
+      "phase": "listening",
+      "capture_alive": true,
+      "decoder_alive": true,
+      "last_block_age_seconds": 0.031,
+      "final_segments": 0
+    },
+    "answer": {
+      "phase": "completed",
+      "active_seconds": null,
+      "last_duration_seconds": null
+    },
+    "workers": {
+      "actions": true,
+      "questions": true,
+      "speech": true
+    }
+  },
+  "heartbeat_age_seconds": 1.43
+}

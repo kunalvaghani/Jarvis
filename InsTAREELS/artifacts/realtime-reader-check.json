@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07T07:42:17.964168+00:00",
+  "scope": "Actual idle small-model read of live weather and NOAA observations; no synthetic hazard notification. CPU-only one thread and keep_alive=0. Foreground models never unloaded by verifier.",
+  "source_statuses": [
+    {
+      "provider": "weather",
+      "status": "ok"
+    },
+    {
+      "provider": "space_weather",
+      "status": "ok"
+    }
+  ],
+  "reader": {
+    "status": "ok",
+    "summary": "These excerpts provide insufficient evidence.",
+    "seconds": 5.968,
+    "model": "qwen2.5:0.5b",
+    "keep_alive": 0,
+    "num_thread": 1,
+    "num_gpu": 0
+  }
+}

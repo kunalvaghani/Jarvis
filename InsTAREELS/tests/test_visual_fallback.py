@@ -172,7 +172,7 @@ class VisualWorkerTests(unittest.TestCase):
         self.assertEqual(emitted[2][1], emitted[3][1])
 
     def test_partial_windows_batch_only_releases_accepted_downs(self):
-        for operation in ('shortcut','click','unicode'):
+        for operation in ('shortcut','unicode'):
             backend = WindowsInput.__new__(WindowsInput)
             backend.user = Mock()
             calls = []
@@ -182,10 +182,15 @@ class VisualWorkerTests(unittest.TestCase):
             backend.user.SendInput.side_effect = send
             with self.subTest(operation=operation), self.assertRaises(OSError):
                 if operation=='shortcut': backend.shortcut('ctrl+shift+s')
-                elif operation=='click': backend.inputs(click=True)
                 else: backend.type('a')
             self.assertEqual(len(calls),2)
-            self.assertEqual(calls[1], [(0,4)] if operation=='click' else [(1,6 if operation=='unicode' else 2)])
+            self.assertEqual(calls[1], [(1,6 if operation=='unicode' else 2)])
+
+    def test_physical_mouse_injection_is_rejected_before_input(self):
+        backend=WindowsInput.__new__(WindowsInput);backend.user=Mock()
+        with self.assertRaisesRegex(ValueError,'Physical mouse injection'):
+            backend.inputs(click=True)
+        backend.user.SendInput.assert_not_called()
 
 
 class VisualControllerTests(unittest.TestCase):

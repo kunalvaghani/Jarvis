@@ -1,0 +1,176 @@
+[
+  {
+    "date": "2026-10-06T06:05:44.767109+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1060,
+        "seconds": 165.267
+      },
+      "focused": {
+        "passed": true,
+        "tests": 46,
+        "seconds": 42.089
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  },
+  {
+    "date": "2026-10-06T06:18:28.275250+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1062,
+        "seconds": 167.99
+      },
+      "focused": {
+        "passed": true,
+        "tests": 48,
+        "seconds": 61.341
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  },
+  {
+    "date": "2026-10-06T07:52:06.125271+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1064,
+        "seconds": 242.791
+      },
+      "focused": {
+        "passed": true,
+        "tests": 50,
+        "seconds": 110.083
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  },
+  {
+    "date": "2026-10-06T08:06:02.566732+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1065,
+        "seconds": 218.47
+      },
+      "focused": {
+        "passed": true,
+        "tests": 51,
+        "seconds": 113.859
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  },
+  {
+    "date": "2026-10-07T05:48:48.748968+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1066,
+        "seconds": 211.148
+      },
+      "focused": {
+        "passed": true,
+        "tests": 52,
+        "seconds": 129.945
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  },
+  {
+    "date": "2026-10-07T06:11:45.472272+00:00",
+    "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+    "checks": {
+      "regression": {
+        "passed": true,
+        "tests": 1067,
+        "seconds": 250.729
+      },
+      "focused": {
+        "passed": true,
+        "tests": 53,
+        "seconds": 138.121
+      },
+      "readiness": {
+        "status": "ready",
+        "missing": [],
+        "adaptive_planning": true,
+        "incremental_planning": true,
+        "reuse_navigation_workflows": true,
+        "native_tool_calling": true,
+        "task_recovery": true,
+        "planner": "qwen3.5:9b",
+        "planning_backend": "qwen-native-tools",
+        "screen_model": "qwen3.5:9b",
+        "visual_fallback": "ui-tars-parser"
+      }
+    }
+  }
+]

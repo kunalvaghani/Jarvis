@@ -48,7 +48,7 @@ def select_payload(goal, candidates, options):
 
 
 def select(goal, candidates, options, cancelled=lambda: False):
-    result = stream_json(select_payload(goal, candidates, options), options['timeout_seconds'], cancelled)
+    result = stream_json(select_payload(goal, candidates, options), options['timeout_seconds'], cancelled, role='context')
     # UUIDs cost many output tokens. Only compact labels cross the model wire;
     # map a validated label back to its original immutable stored identity.
     identities = {chr(97+index): row['id'] for index,row in enumerate(candidates[:8])}

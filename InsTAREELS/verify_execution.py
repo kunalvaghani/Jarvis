@@ -143,6 +143,11 @@ def main():
             result['fixture_stderr'] = process.stderr.read().decode(errors='replace')[-1000:]
             process.stderr.close()
         destination = BASE / 'artifacts/execution-native-check.json'
+        if destination.exists():
+            history = destination.with_name('execution-native-history.json')
+            rows = json.loads(history.read_text(encoding='utf-8')) if history.exists() else []
+            rows.append(json.loads(destination.read_text(encoding='utf-8')))
+            history.write_text(json.dumps(rows, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
         destination.write_text(json.dumps(result, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
     print(json.dumps(result, indent=2, ensure_ascii=True))
     return 0 if result['passed'] else 1

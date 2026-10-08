@@ -12,7 +12,7 @@ enable_high_dpi()  # Must precede Tk/native window creation, including verificat
 
 # Publish actual interpreter identity before loading UI/native dependencies.
 _session = os.environ.get("JARVIS_SESSION_ID")
-if _session:
+if _session and os.environ.get("JARVIS_UI_VERIFY") != "1":
     _runtime = Path(__file__).resolve().parent / ".jarvis-runtime"
     _runtime.mkdir(exist_ok=True)
     (_runtime / ("heartbeat-" + _session + ".json")).write_text(json.dumps({
@@ -42,6 +42,8 @@ class App:
         self.closing = False
         self.listening_requested = False
         self.repair_offset = 0
+        from jarvis.runtime_health import RuntimeHealth
+        self.runtime_health = RuntimeHealth()
         self.speech = Speech(self.config.setdefault("speech", {"enabled": True, "language": "auto"}), self.report)
         self.speech.start()
         self.listener = None
@@ -77,6 +79,11 @@ class App:
                 and self.actions.anticipation.options['enabled']
                 and not self.actions.anticipation.paused
                 and not self.actions.anticipation.microphone_stopped)
+        self.watchdog.register('Realtime observations', self.actions.realtime.healthy,
+            self.actions.realtime.repair,
+            lambda: not self.closing and self.actions.realtime.options['enabled']
+                and not self.actions.realtime.closed.is_set() and not self.actions.realtime.paused
+                and not self.actions.realtime.microphone_stopped and not self.actions.realtime.storage_failed)
         self.watchdog.register('Island media observations',self.desk.media.healthy,self.desk.media.repair,
             lambda:not self.closing and not self.desk.media.closed)
         self.ollama_service = OllamaService()
@@ -108,15 +115,16 @@ class App:
             lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
             lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
             lambda: not self.closing and not self.actions.closed.is_set())
-        self.watchdog.start()
-        self.root.after(100, self.runtime_tick)
+        if not self.config.get('_ui_verification', False):
+            self.watchdog.start()
+            self.root.after(100, self.runtime_tick)
         if os.environ.get("JARVIS_RESUME_TASK") != "1" and os.environ.get("JARVIS_UI_VERIFY") != "1":
             self.root.after(350, self.greet_startup)
-        if os.environ.get("JARVIS_AUTOLISTEN") == "1":
+        if os.environ.get("JARVIS_AUTOLISTEN") == "1" and not self.config.get('_ui_verification', False):
             self.root.after(600, self.toggle_listening)
-        if os.environ.get("JARVIS_RESUME_TASK") == "1":
+        if os.environ.get("JARVIS_RESUME_TASK") == "1" and not self.config.get('_ui_verification', False):
             self.root.after(1200, self.resume_interrupted_task)
-        elif self.actions.task_state.unfinished():
+        elif not self.config.get('_ui_verification', False) and self.actions.task_state.unfinished():
             self.report("repair", "Unfinished task retained. Say resume last task to inspect and continue it.")
 
     def resume_interrupted_task(self):
@@ -160,7 +168,7 @@ class App:
         return self.gods_eye_healthy()
 
     def runtime_tick(self):
-        if self.closing:
+        if self.closing or self.config.get('_ui_verification', False):
             return
         if self.actions.memory.error:
             self.report("warning", "Obsidian memory stopped: " + self.actions.memory.error)
@@ -175,7 +183,8 @@ class App:
             if session:
                 temporary = runtime / ("heartbeat-" + session + ".tmp")
                 temporary.write_text(json.dumps({"session": session, "pid": os.getpid(), "at": time.time(),
-                    "status": "running", "listening_requested": self.listening_requested}), encoding="utf-8")
+                    "status": "running", "listening_requested": self.listening_requested,
+                    "health": self.runtime_health.snapshot(self)}), encoding="utf-8")
                 os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
             repairs = runtime / "repairs.jsonl"
             if repairs.is_file():
@@ -259,8 +268,11 @@ class App:
         self.root.after(300, self.remember_external_window)
 
     def report(self, kind, message):
+        if getattr(self, 'runtime_health', None) is not None:
+            self.runtime_health.observe(kind, message)
         if kind in {'partial', 'final'} and message and getattr(self, 'actions', None) is not None:
             self.actions.anticipation.cancel()
+            self.actions.realtime.cancel()
         if kind in {"action", "answer"} and isinstance(message, str):
             self.actions.memory.record("Jarvis " + kind, message)
         if kind == "state":
@@ -326,6 +338,14 @@ class App:
                 kind, message = self.events.get_nowait()
             except queue.Empty:
                 break
+            if kind == 'realtime_alert':
+                text = message['message'] + ' Source: ' + message['reference']
+                self.log_line('warning', text)
+                if not self.actions.anticipation.busy() and not self.actions.realtime.microphone_stopped:
+                    self.live.set(message['message'][:450])
+                    self.island.notify('warning', message['message'])
+                    self.speech.say(message['message'])
+                continue
             self.island.notify(kind, message)
             self.desk.notify(kind,message)
             if kind == 'anticipation':
@@ -405,12 +425,15 @@ class App:
         self.root.after(80, self.drain)
 
     def toggle_listening(self):
+        if self.config.get('_ui_verification', False):
+            return
         if self.listener and self.listener.thread.is_alive():
             self.stop()
             return
         self.session += 1
         self.listening_requested = True
         self.actions.anticipation.microphone_started()
+        self.actions.realtime.microphone_started()
         session = self.session
         self.config["microphone"] = self.mic_devices[self.mic_choice.current()]
         (BASE / "config.json").write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
@@ -436,6 +459,9 @@ class App:
         self.toggle.configure(text="Stop listening")
 
     def stop(self):
+        realtime = getattr(getattr(self, 'actions', None), 'realtime', None)
+        if realtime is not None:
+            realtime.cancel(microphone=True)
         anticipation = getattr(getattr(self, 'actions', None), 'anticipation', None)
         if anticipation is not None:
             anticipation.cancel(microphone=True)
@@ -486,7 +512,7 @@ class App:
     def close(self):
         self.closing = True
         self.desk.close()
-        if os.environ.get("JARVIS_SUPERVISED") == "1":
+        if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):
             (BASE / ".jarvis-runtime" / "stop").touch()
         self.watchdog.close()
         self.model_recovery.close()
@@ -502,7 +528,8 @@ class App:
         language = {"Auto": "auto", "English": "en", "Hindi": "hi"}[self.answer_language.get()]
         self.speech.options["language"] = language
         self.config["knowledge"]["answer_language"] = language
-        (BASE / "config.json").write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
+        if not self.config.get('_ui_verification', False):
+            (BASE / "config.json").write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ import io
 from pathlib import Path
 import sys
 from jarvis.brain import BrainClient, validate_plan
+from jarvis.tools import SPECS
 
 BASE = Path(__file__).resolve().parent
 
@@ -23,14 +24,15 @@ def main():
                 raise ValueError("Laya did not choose the expected profile. Do not trust it without the decision checker.")
             return
         goal = "Open YouTube in Chrome"
-        plan = client.request("plan", lambda: False, goal=goal, screen={"title": "Desktop", "controls": []}, apps=["chrome", "notepad"])
+        tools=lambda names:[{'action':spec.name,'description':spec.description} for spec in SPECS if spec.name in names]
+        plan = client.request("plan", lambda: False, goal=goal, screen={"title": "Desktop", "controls": []}, apps=["chrome", "notepad"], tools=tools({'browse'}))
         steps = validate_plan(plan)
         print("Planner:", json.dumps(plan), flush=True)
         if not any(step["action"] == "browse" and "youtube" in step["value"].lower() for step in steps):
             raise ValueError("Planner did not cover the full YouTube goal.")
         file_goal = "Open folder Downloads and create a file called ideas.txt there and write hello Kunal in it"
         file_plan = client.request("plan", lambda: False, goal=file_goal,
-            screen={"title": "Desktop", "controls": []}, apps=["chrome", "file explorer"])
+            screen={"title": "Desktop", "controls": []}, apps=["chrome", "file explorer"], tools=tools({'open','create_file'}))
         print("File plan:", json.dumps(file_plan), flush=True)
         file_steps = validate_plan(file_plan)
         if not any(step["action"] == "create_file" and step["value"].lower() == "ideas.txt"
@@ -39,7 +41,7 @@ def main():
             raise ValueError("Planner did not preserve the file destination and exact content.")
         music_goal = "Play jazz on YouTube"
         music_plan = client.request("plan", lambda: False, goal=music_goal,
-            screen={"title": "Desktop", "controls": []}, apps=["chrome"])
+            screen={"title": "Desktop", "controls": []}, apps=["chrome"], tools=tools({'media_search','select'}))
         print("Music plan:", json.dumps(music_plan), flush=True)
         music_steps = validate_plan(music_plan)
         if not any(step["action"] == "media_search" and step["platform"] == "youtube" for step in music_steps) or not any(step["action"] == "select" for step in music_steps):

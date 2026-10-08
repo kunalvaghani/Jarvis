@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07T16:12:49.225206+00:00",
+  "scope": "Actual post-fix exclusive replan schema through installed Harness SDK and local Qwen3.5 9B, with synthetic completed-state evidence; no desktop actions",
+  "passed": true,
+  "result": {
+    "question": "",
+    "steps": [],
+    "done": true,
+    "reason": "The goal 'Open Calculator' is fully achieved. The completed action list shows 'open calculator' with verified=true, and the current screen observation confirms the 'Calculator' window is visible as trusted evidence. No further steps are required.",
+    "model_used": "qwen3.5:9b",
+    "backend": "deepseek-harness",
+    "harness_session_id": "jarvis-2ca86e88228d484ea9acff286de5875b",
+    "harness_events": [
+      "agent/inbox/spliced",
+      "turn/start",
+      "agent/inbox/spliced",
+      "step/start",
+      "system/message",
+      "user/message",
+      "request/header",
+      "request/context",
+      "session/title",
+      "assistant/message",
+      "step/end",
+      "turn/end"
+    ]
+  },
+  "seconds": 53.985
+}

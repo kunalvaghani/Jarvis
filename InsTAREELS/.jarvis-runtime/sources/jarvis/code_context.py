@@ -149,9 +149,16 @@ def check_python_interfaces(current, content, goal):
     missing = names(before) - names(after)
     if not missing:
         return
-    if re.search(r"\b(?:rewrite|replace entire|remove most)\b", goal, re.I):
+    def affirmative(pattern):
+        for match in re.finditer(pattern, goal, re.I):
+            prefix=re.split(r'[.;\n]',goal[:match.start()])[-1]
+            if not re.search(r"\b(?:not|never|avoid|without)\b|\bdon['’]t\b",prefix,re.I):
+                return True
+        return False
+    if affirmative(r"\b(?:rewrite|replace entire|remove most)\b"):
         return
-    if re.search(r"\b(?:remove|delete|rename)\b", goal, re.I):
-        missing = {name for name in missing if not re.search(r"\b"+re.escape(name)+r"\b", goal, re.I)}
+    missing={name for name in missing if not affirmative(
+        r"\b(?:remove|delete|rename)\s+(?:(?:the|existing|old|function|class|method)\s+)*[\"'`]?"
+        +re.escape(name)+r"\b")}
     if missing:
         raise ValueError("Generated edit removed existing functions/classes: " + ", ".join(sorted(missing)) + ". Preserve unrelated interfaces.")

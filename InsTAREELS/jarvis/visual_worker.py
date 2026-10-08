@@ -79,6 +79,8 @@ class WindowsInput:
         return self.user.GetAncestor(child, 2) if child else 0  # GA_ROOT
 
     def inputs(self, keys=None, text=None, click=False):
+        if click:
+            raise ValueError('Physical mouse injection is disabled; Jarvis uses its independent cursor and accessible controls.')
         class KEYBDINPUT(ctypes.Structure):
             _fields_ = [('wVk', wintypes.WORD), ('wScan', wintypes.WORD), ('dwFlags', wintypes.DWORD),
                         ('time', wintypes.DWORD), ('dwExtraInfo', ctypes.c_size_t)]
@@ -125,9 +127,8 @@ class WindowsInput:
             raise OSError('Windows blocked or partially accepted visual input; inspect the result, do not retry.')
 
     def click(self, x, y):
-        if not self.user.SetCursorPos(x, y):
-            raise OSError('Windows did not allow positioning the pointer.')
-        self.inputs(click=True)
+        from .independent_cursor import activate_point
+        return activate_point(x,y,self.foreground()[0])
 
     def shortcut(self, name):
         self.inputs(keys=name.split('+'))  # Tokens are a list: never split a key into characters.

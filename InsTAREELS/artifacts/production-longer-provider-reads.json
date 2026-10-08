@@ -1,0 +1,20 @@
+{
+  "scope": "Supplemental public GETs with a 15-second socket budget; no production timeout change or replacement provider.",
+  "seconds": 7.328,
+  "checks": [
+    {
+      "provider": "arxiv",
+      "status": "ok",
+      "detail": null,
+      "fetched_utc": "2026-10-07T16:46:57.290373+00:00",
+      "reference": "https://info.arxiv.org/help/api/user-manual.html"
+    },
+    {
+      "provider": "gdelt",
+      "status": "unavailable",
+      "detail": "Provider request timed out within the bounded read",
+      "fetched_utc": null,
+      "reference": "https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/"
+    }
+  ]
+}

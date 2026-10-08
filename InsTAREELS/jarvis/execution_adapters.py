@@ -207,33 +207,17 @@ class OpenComputerUse:
 
 
 class AgentS:
-    """WindowsACI.click centre grounding, with live bounds/hit-test admission.
+    """Accessible selection adaptation; physical WindowsACI centre clicks are excluded.
 
-    Adapted from its generated pyautogui click string to pywinauto's existing
-    input injector. No eval/exec, OCR service, generated scripts or new dependency.
+    Jarvis's independent cursor cannot dispatch through the shared mouse.
+    Missing patterns therefore remain an unsupported preparation, before input.
     """
     name = 'agent-s'
 
     def prepare(self, element, control, request, window):
         if request['operation'] != 'activate' or control['role'] not in {'Button', 'Hyperlink', 'MenuItem', 'SplitButton', 'TabItem', 'ListItem', 'DataItem', 'TreeItem'}:
-            raise Unsupported('Agent-S centre click is limited to explicit accessible actions')
-        import win32gui
-        rect = element.rectangle()
-        bounds = [rect.left, rect.top, rect.right, rect.bottom]
-        if bounds != control['rect'] or rect.width() <= 0 or rect.height() <= 0:
-            raise ValueError('The control geometry changed; no click was issued.')
-        x, y = int(rect.left + rect.width() // 2), int(rect.top + rect.height() // 2)
-        hit = win32gui.WindowFromPoint((x, y))
-        hwnd = request['handle']
-        if hit != hwnd and not win32gui.IsChild(hwnd, hit):
-            raise Unsupported('The accessible control is occluded; centre click not admitted')
-        def click():
-            # Recheck occlusion at dispatch, after the router's final focus guard.
-            hit = win32gui.WindowFromPoint((x, y))
-            if hit != hwnd and not win32gui.IsChild(hwnd, hit):
-                raise ValueError('The accessible control became occluded; no click issued.')
-            return element.click_input(coords=(x - rect.left, y - rect.top))
-        return Prepared(click)
+            raise Unsupported('Agent-S activation is limited to explicit accessible actions')
+        return selection(element,control,request.get('verb','click'))
 
 
 PROVIDERS = (UFO, WindowsMCP, CUA, OpenComputerUse, AgentS)

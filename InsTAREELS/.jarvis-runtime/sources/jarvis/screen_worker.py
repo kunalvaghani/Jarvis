@@ -11,14 +11,18 @@ import sys
 import time
 
 
-def choose_window(preferred=0):
+def choose_window(preferred=0, owner_pid=None):
     import win32gui
     import win32process
+
+    if owner_pid is not None and (type(owner_pid) is not int or owner_pid <= 0):
+        raise ValueError('Screen capture owner must be a positive process ID.')
+    excluded = {os.getpid(), os.getppid(), owner_pid}
 
     def usable(hwnd, require_title=False):
         if not hwnd or not win32gui.IsWindow(hwnd) or not win32gui.IsWindowVisible(hwnd):
             return False
-        if win32process.GetWindowThreadProcessId(hwnd)[1] == os.getppid():
+        if win32process.GetWindowThreadProcessId(hwnd)[1] in excluded:
             return False
         left, top, right, bottom = win32gui.GetWindowRect(hwnd)
         return (right - left >= 250 and bottom - top >= 150
@@ -34,7 +38,7 @@ def choose_window(preferred=0):
     return candidates[0] if candidates else 0
 
 
-def capture(handle=0, strict=False, skip_ocr=False):
+def capture(handle=0, strict=False, skip_ocr=False, owner_pid=None):
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(2)
     except (AttributeError, OSError):
@@ -43,7 +47,7 @@ def capture(handle=0, strict=False, skip_ocr=False):
     from PIL import ImageGrab
 
     captured_at = time.time()
-    hwnd = choose_window(handle)
+    hwnd = choose_window(handle, owner_pid=owner_pid)
     if strict and (not handle or hwnd != handle):
         raise ValueError('The selected visual target is unavailable; no substitute window was captured.')
     if hwnd:
@@ -82,7 +86,7 @@ if __name__ == "__main__":
     try:
         request = json.load(sys.stdin)
         result = capture(int(request.get("handle") or 0), strict=request.get('strict') is True,
-                         skip_ocr=request.get('skip_ocr') is True)
+                         skip_ocr=request.get('skip_ocr') is True, owner_pid=request.get('owner_pid'))
     except Exception as exc:
         result = {"error": str(exc)}
     print(json.dumps(result, ensure_ascii=True))

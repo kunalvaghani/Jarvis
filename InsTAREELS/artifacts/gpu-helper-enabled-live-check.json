@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-08T08:39:17.636961+00:00",
+  "scope": "Actual native planning proposal, execution/question inference, local Codex Responses GPU turn and helper stream. Synthetic inputs only; no desktop action/file write is dispatched. CLI coding is tested separately.",
+  "before": {
+    "healthy_microphone": true,
+    "last_audio_age_seconds": 0.047
+  },
+  "phases": [
+    {
+      "role": "planner",
+      "seconds": 14.656,
+      "proposal_only": true,
+      "valid": true,
+      "microphone": {
+        "healthy_microphone": true,
+        "last_audio_age_seconds": 0.078
+      }
+    },
+    {
+      "role": "execution",
+      "seconds": 10.281,
+      "valid": true,
+      "microphone": {
+        "healthy_microphone": true,
+        "last_audio_age_seconds": 0.047
+      }
+    },
+    {
+      "role": "question",
+      "seconds": 1.079,
+      "valid": true,
+      "microphone": {
+        "healthy_microphone": true,
+        "last_audio_age_seconds": 0.047
+      }
+    },
+    {
+      "role": "coding",
+      "seconds": 8.031,
+      "valid": true,
+      "microphone": {
+        "healthy_microphone": true,
+        "last_audio_age_seconds": 0.11
+      }
+    },
+    {
+      "role": "context",
+      "seconds": 11.985,
+      "valid": true,
+      "microphone": {
+        "healthy_microphone": true,
+        "last_audio_age_seconds": 0.109
+      }
+    }
+  ],
+  "after": {
+    "healthy_microphone": true,
+    "last_audio_age_seconds": 0.109
+  },
+  "max_observed_gpu_used_mb": 3392,
+  "gpu_total_mb": 4096,
+  "resident_models": [
+    {
+      "model": "jarvis-codex-qwen3.5:9b",
+      "max_size_vram": 2282812864,
+      "contexts": [
+        32768
+      ]
+    },
+    {
+      "model": "qwen3.5:0.8b",
+      "max_size_vram": 554203871,
+      "contexts": [
+        2048
+      ]
+    },
+    {
+      "model": "qwen3.5:9b",
+      "max_size_vram": 2372287855,
+      "contexts": [
+        16384
+      ]
+    }
+  ],
+  "scheduler_events": [
+    {
+      "at": 1791448757.6822643,
+      "stage": "admitted",
+      "role": "planner",
+      "model": "qwen3.5:9b",
+      "wait_seconds": 0.016
+    },
+    {
+      "at": 1791448757.8034286,
+      "stage": "dispatch",
+      "role": "planner",
+      "model": "qwen3.5:9b",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "at": 1791448772.2881541,
+      "stage": "released",
+      "role": "planner",
+      "model": "qwen3.5:9b"
+    },
+    {
+      "at": 1791448772.3847482,
+      "stage": "admitted",
+      "role": "execution",
+      "model": "qwen3.5:9b",
+      "wait_seconds": 0.0
+    },
+    {
+      "at": 1791448772.4853568,
+      "stage": "dispatch",
+      "role": "execution",
+      "model": "qwen3.5:9b",
+      "num_gpu": 10,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "at": 1791448782.5738504,
+      "stage": "released",
+      "role": "execution",
+      "model": "qwen3.5:9b"
+    },
+    {
+      "at": 1791448782.583532,
+      "stage": "admitted",
+      "role": "question",
+      "model": "qwen3.5:9b",
+      "wait_seconds": 0.016
+    },
+    {
+      "at": 1791448782.6958232,
+      "stage": "dispatch",
+      "role": "question",
+      "model": "qwen3.5:9b",
+      "num_gpu": 10,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "at": 1791448783.6543672,
+      "stage": "released",
+      "role": "question",
+      "model": "qwen3.5:9b"
+    },
+    {
+      "at": 1791448783.6659544,
+      "stage": "admitted",
+      "role": "coding",
+      "model": "jarvis-codex-qwen3.5:9b",
+      "wait_seconds": 0.0
+    },
+    {
+      "at": 1791448783.8244743,
+      "stage": "handoff",
+      "role": "coding",
+      "model": "jarvis-codex-qwen3.5:9b",
+      "previous_model": "qwen3.5:9b"
+    },
+    {
+      "at": 1791448783.950135,
+      "stage": "dispatch",
+      "role": "coding",
+      "model": "jarvis-codex-qwen3.5:9b",
+      "num_gpu": 9,
+      "context_tokens": 32768,
+      "gpu_slot": true
+    },
+    {
+      "at": 1791448791.6963685,
+      "stage": "released",
+      "role": "coding",
+      "model": "jarvis-codex-qwen3.5:9b"
+    },
+    {
+      "at": 1791448822.053984,
+      "stage": "admitted",
+      "role": "context",
+      "model": "qwen3.5:0.8b",
+      "wait_seconds": 0.016
+    },
+    {
+      "at": 1791448822.1579332,
+      "stage": "dispatch",
+      "role": "context",
+      "model": "qwen3.5:0.8b",
+      "num_gpu": -1,
+      "gpu_slot": true
+    }
+  ],
+  "passed": true
+}

@@ -77,6 +77,8 @@ def preflight(base=BASE, repair=True):
     backup = runtime / "config.last-good.json"
     try:
         config = json.loads(config_path.read_text(encoding="utf-8"))
+        from .gpu_scheduler import settings as gpu_settings
+        gpu_settings(config.get('gpu_scheduler'))
         if not isinstance(config.get("apps"), dict) or not isinstance(config.get("whisper"), dict) or not config.get("model_path"):
             raise ValueError("Invalid config")
         if not isinstance(config.get("brain", {}).get("adaptive_planning", False), bool):
@@ -103,6 +105,8 @@ def preflight(base=BASE, repair=True):
         if not isinstance(config.get('anticipation', {}), dict):
             raise ValueError('anticipation must be an object')
         anticipation_settings(config.get('anticipation', {}))
+        from .realtime import settings as realtime_settings
+        realtime_settings(config.get('realtime'))
         from .command_cleanup import settings as cleanup_settings
         cleanup_settings(config.get('command_cleanup'))
         from .context_selector import settings as context_settings
@@ -328,9 +332,27 @@ def run():
         lock.close()
 
 
-def runtime_status(config):
+def check_imports(python, modules, timeout=60):
+    """Close the whole owned import tree, including Windows venv redirector children."""
+    from .harness_process import OwnedJob, hidden_spawn
+    argv = [str(python), '-c', 'import ' + ','.join(modules)]
+    job = OwnedJob(); process = None
+    try:
+        process = hidden_spawn(job, subprocess.Popen)(argv, cwd=BASE,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, error = process.communicate(timeout=timeout)
+        return subprocess.CompletedProcess(argv, process.returncode, output, error)
+    finally:
+        job.close()
+        if process and process.poll() is None:
+            process.kill()
+            process.wait(timeout=5)
+
+
+def runtime_status(config, check_services=True):
     manifest = json.loads((BASE / "runtime_manifest.json").read_text(encoding="utf-8"))
     missing = []
+    incomplete = []
     for folder, key in ((".venv", "main_imports"), (".venv-brain", "brain_imports")):
         if folder == ".venv-brain" and not config.get("brain", {}).get("enabled"):
             continue
@@ -341,11 +363,14 @@ def runtime_status(config):
         if not python.is_file():
             missing.append(folder)
             continue
-        result = subprocess.run([str(python), "-c", "import " + ",".join(modules)],
-            cwd=BASE, capture_output=True, timeout=60,
-            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        try:
+            result = check_imports(python, modules)
+        except (OSError, subprocess.TimeoutExpired) as error:
+            incomplete.append({'component': key, 'error_type': type(error).__name__})
+            continue
         if result.returncode:
-            missing.append(key + ": " + result.stderr.decode(errors="replace").strip().splitlines()[-1])
+            lines = result.stderr.decode(errors="replace").strip().splitlines()
+            missing.append(key + ": " + (lines[-1] if lines else 'Import process exited with code ' + str(result.returncode)))
     if not (BASE / config["model_path"] / "model.bin").is_file():
         missing.append("Whisper checkpoint")
     if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
@@ -388,7 +413,17 @@ def runtime_status(config):
         issue = readiness(BASE)
         if issue:
             missing.append(issue)
-    return {"status": "ready" if not missing else "repair_required", "missing": missing,
+    from .diagnostics import service_status
+    services = service_status(config, BASE) if check_services else {}
+    for name, state in services.items():
+        if state['status'] == 'missing':
+            missing.append(name + ': missing configured models: ' + ', '.join(state['missing_models']))
+        elif state['status'] == 'unavailable':
+            missing.append(name + ': unavailable (' + state['error_type'] + ')')
+    return {"status": "repair_required" if missing else "check_incomplete" if incomplete else "ready" if check_services else "dependencies_ready", "missing": missing,
+            "incomplete": incomplete,
+            "scope": "dependencies_and_configured_services" if check_services else "installed_dependencies_only",
+            "services": services,
             "adaptive_planning": config.get("brain", {}).get("adaptive_planning", False),
             "incremental_planning": config.get('brain', {}).get('incremental_planning', False),
             "reuse_navigation_workflows": config.get('brain', {}).get('reuse_navigation_workflows', False),
@@ -403,15 +438,16 @@ def runtime_status(config):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--offline-check", action="store_true", help="Check installed components without querying local services.")
     parser.add_argument("--stop", action="store_true")
     args = parser.parse_args()
     if args.stop:
         RUNTIME.mkdir(exist_ok=True)
         (RUNTIME / "stop").touch()
-    elif args.check:
+    elif args.check or args.offline_check:
         config = preflight(repair=False)
-        status = runtime_status(config)
+        status = runtime_status(config, check_services=not args.offline_check)
         print(json.dumps(status))
-        sys.exit(0 if status["status"] == "ready" else 1)
+        sys.exit(0 if status["status"] in {"ready", "dependencies_ready"} else 1)
     else:
         run()

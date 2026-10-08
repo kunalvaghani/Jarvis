@@ -53,6 +53,7 @@ def start_provider(schema, model, budget, rules):
                 return
             payload = json.loads(self.rfile.read(size))
             client = session()
+            client.gpu_role='planner'
             try:
                 if self.path == "/api/show":
                     data = client.post("http://127.0.0.1:11434/api/show", json={"model": model}, timeout=5).json()

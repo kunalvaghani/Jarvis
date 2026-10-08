@@ -1,0 +1,21 @@
+{
+  "scope": "Actual configured local model inference and optional Harness/Hermes workers with synthetic observations; no desktop actions or microphone capture",
+  "date": "2026-10-07T21:22:24.8664048+05:30",
+  "checks": [
+    {
+      "exit_code": 0,
+      "script": "verify_harness.py",
+      "log": "artifacts/audit-harness-live.log"
+    },
+    {
+      "exit_code": 0,
+      "script": "verify_hermes.py",
+      "log": "artifacts/audit-hermes-live.log"
+    },
+    {
+      "exit_code": 1,
+      "script": "verify_brain.py",
+      "log": "artifacts/audit-brain-live.log"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import tempfile
 import threading
+import time
 from datetime import datetime, timezone
 from .experience import recall_tasks
 from .task_graph import MAX_TASK_GOAL_CHARS
@@ -47,18 +48,31 @@ class TaskState:
             return  # Hidden UI verification must not mark a real running task interrupted.
         self.path.parent.mkdir(parents=True, exist_ok=True)
         temporary = None
-        try:
-            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
                                              prefix=".jarvis-task-", delete=False) as output:
-                temporary = Path(output.name)
-                json.dump(self.data, output, ensure_ascii=False, indent=2)
-                output.write("\n")
-                output.flush()
-                os.fsync(output.fileno())
-            os.replace(temporary, self.path)
-        finally:
-            if temporary is not None:
-                temporary.unlink(missing_ok=True)
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+                os.replace(temporary, self.path)
+                return
+            except PermissionError as exc:
+                if getattr(exc, 'winerror', None) not in {5, 32, 33} or attempt == 3:
+                    raise
+                if not temporary.is_file():
+                    raise
+                current = self.path.read_bytes() if self.path.exists() else None
+                if current != previous:
+                    raise
+                time.sleep(.05 * (attempt + 1))
 
     def start(self, goal, kind, project=None):
         with self.lock:

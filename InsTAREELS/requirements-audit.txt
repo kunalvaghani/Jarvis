@@ -1,0 +1,2 @@
+# Optional source analysis; install into .jarvis-runtime/audit-tools, not .venv.
+pyflakes==3.4.0

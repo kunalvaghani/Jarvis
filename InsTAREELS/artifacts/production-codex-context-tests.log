@@ -1,0 +1,18 @@
+test_coder_routes_codex_with_exact_long_goal (tests.test_codex_code.CodexCode) ... ok
+test_compact_component_context_preserves_guidance_repair_and_paired_source_history (tests.test_codex_code.CodexCode) ... ok
+test_completed_peer_css_requires_confirmed_validation_hash (tests.test_codex_code.CodexCode) ... ok
+test_current_read_backups_exact_edits_and_uncertain_replay (tests.test_codex_code.CodexCode) ... ok
+test_full_project_repair_preserves_authorized_context_and_tool_pairs (tests.test_codex_code.CodexCode) ... ok
+test_isolated_settings_and_credential_scrub (tests.test_codex_code.CodexCode) ... ok
+test_namespace_flattening_only_local_file_tools (tests.test_codex_code.CodexCode) ... ok
+test_only_applied_source_readback_credited (tests.test_codex_code.CodexCode) ... ok
+test_registered_partition_hands_off_to_checks_without_waiting_for_final_report (tests.test_codex_code.CodexCode) ... ok
+test_rejected_saves_handoff_only_after_confirmed_mutation_state (tests.test_codex_code.CodexCode) ... ok
+test_stop_bridge_failure_and_deadline_close_owned_children (tests.test_codex_code.CodexCode) ... ok
+test_visible_stream_progress_not_reasoning (tests.test_codex_code.CodexCode) ... ok
+test_worker_schema_moves_from_missing_test_to_assigned_source (tests.test_codex_code.CodexCode) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.341s
+
+OK

@@ -77,6 +77,15 @@ class HarnessTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'unavailable'):
                 client.request('plan', lambda: False, tools=[{'action': 'browse'}])
 
+    def test_mixed_clarification_and_steps_remain_rejected_by_runtime(self):
+        client=HarnessClient(Path.cwd(),{})
+        value={**self.proposal(),'question':'Which unrelated folder?'}
+        with patch.object(BrainClient,'_request_once',return_value=value) as inference:
+            with self.assertRaisesRegex(ValueError,'either steps'):
+                client.request('plan',lambda:False,tools=[{'action':'open'}])
+            inference.assert_called_once()
+            self.assertIsNone(client.process)
+
     def test_replan_cannot_repeat_completed_action(self):
         client = HarnessClient(Path.cwd(), {})
         proposal = {**self.proposal(), 'done': False, 'reason': 'continue'}

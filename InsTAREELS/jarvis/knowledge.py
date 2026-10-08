@@ -308,7 +308,9 @@ class Knowledge:
                             continue
                         if context:
                             self.context_seed = context
-                direct = None if web or use_screen else self.quick.answer(question)
+                realtime = getattr(self, 'realtime', None)
+                realtime_context = realtime.context(question, cancelled) if realtime and not use_screen else None
+                direct = None if web or use_screen or realtime_context else self.quick.answer(question)
                 if context:
                     direct = None  # A follow-up must use its chosen conversation context.
                 if direct is not None:
@@ -328,7 +330,8 @@ class Knowledge:
                         cwd=Path(__file__).resolve().parent.parent, stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8",
                         creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-                    payload = json.dumps({"handle": handle})
+                    import os
+                    payload = json.dumps({"handle": handle, "owner_pid": os.getpid()})
                     deadline = time.monotonic() + 20
                     first = True
                     while True:
@@ -357,6 +360,7 @@ class Knowledge:
                     if app_provider and re.search(r'\b(app|window|buttons?|controls?|opened|closed|it|that|this)\b',question,re.I):
                         app_context=app_provider(cancelled)
                     result = self.client.request({"question": question, "web": web, "options": self.options,
+                                                  "realtime_context": realtime_context,
                                                   "live_app_context": app_context,
                                                   "history": context, "screen": screen,
                                                   "conversation_context": bool(context),

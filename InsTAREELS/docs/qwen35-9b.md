@@ -1,5 +1,10 @@
 # Qwen3.5:9b primary model and native tools
 
+**2026-10-08 current allocation:** primary roles now use priority-managed partial
+GPU offload with speech reservation; local Codex uses nine GPU layers. The CPU
+rollout and October 7 alias settings below are historical. [Current policy and
+simultaneous Whisper checks](gpu-priority.md).
+
 Updated **2026-10-04, Asia/Kolkata**. Restart once through the normal Stop/Start
 Jarvis launchers. No model-weight training or new Python dependency was required.
 
@@ -29,9 +34,17 @@ optional PC resolver retain their specialist roles. Old downloaded models remain
 
 `brain.allow_model_fallback: false` prevents silent older-model selection for
 missing planner/vision models; questions and coding check their exact configured
-model too. Inference remains on CPU (`num_gpu: 0`) to preserve the RTX 3050's
+model too. The original rollout kept inference on CPU (`num_gpu: 0`) to preserve the RTX 3050's
 4 GB for Whisper. It fits the observed approximately 32 GB system RAM, with
 substantial inference latency.
+
+**2026-10-07 audit clarification:** These CPU settings describe the base-model
+planning roles. Following the authorized live test, questions use 12 GPU layers;
+the [measured comparison and live receipt](production-validation.md) retain CPU
+and partial-GPU timings and memory limits. The later Codex coding alias separately uses
+`num_gpu: 20` and 32,768-token context at that checkpoint; coding can use partial GPU
+offload alongside Whisper. Smaller worker contexts can override that default.
+The [system audit](system-audit.md) does not certify simultaneous-load latency.
 
 ## Native proposals and execution
 

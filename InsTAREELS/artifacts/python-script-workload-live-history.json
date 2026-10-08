@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2026-10-08T10:02:34.178688+00:00",
+    "scope": "Exact reported unnamed circle-script request through actual Jarvis workload planner and installed local Codex in an isolated TestCodes fixture. The user project and failed checkpoint are untouched.",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Requested single Python script needs one Python source-and-tests workload; do not replace it with HTML/CSS/JavaScript, browser checks or split workers. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\fd165232eb6748c4b113ae5a2939d41f"
+  },
+  {
+    "date": "2026-10-08T10:07:51.737094+00:00",
+    "scope": "Exact reported unnamed circle-script request through actual Jarvis workload planner and installed local Codex in an isolated TestCodes fixture. The user project and failed checkpoint are untouched.",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Codex failed: stream disconnected before completion: error sending request Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\b9a94f6704ce4132a254e000baa1fc77 Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\46379e739bd3449d968961f76857a2e6"
+  },
+  {
+    "date": "2026-10-08T10:22:05.806563+00:00",
+    "scope": "Exact reported unnamed circle-script request through actual Jarvis workload planner and installed local Codex in an isolated TestCodes fixture. The user project and failed checkpoint are untouched.",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Codex reached its total coding limit; partial files retained, no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\8c8cf725fa7d494fb2d64940d99b6fb4"
+  },
+  {
+    "date": "2026-10-08T10:38:13.388253+00:00",
+    "scope": "Exact reported unnamed circle-script request through actual Jarvis workload planner and installed local Codex in an isolated TestCodes fixture. The user project and failed checkpoint are untouched.",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Codex reached its total coding limit; partial files retained, no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\709d5f7a4a574ae4a852719355998404"
+  }
+]

@@ -63,3 +63,16 @@ Traceback (most recent call last):
   File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 62, in setup
     raise RuntimeError("Could not finish " + model + ". Rerun setup to resume the download.") from None
 RuntimeError: Could not finish jarvis-codex-qwen3.5:9b. Rerun setup to resume the download.
+qwen3.5:9b is already installed.
+jarvis-codex-qwen3.5:9b is already installed.
+qwen2.5:0.5b is already installed.
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 81, in <module>
+    setup()
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\setup_brain.py", line 47, in setup
+    if restore_cached(session,model,cache_roots(configuration),endpoint,report=lambda message:print(message,flush=True)):
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\jarvis\ollama_models.py", line 120, in restore_cached
+    cached=cached_payload(root,model)
+  File "D:\Kunals GitHub Repo\Jarvis\InsTAREELS\jarvis\ollama_models.py", line 89, in cached_payload
+    raise ValueError('Cached model layer is missing or incomplete: '+model)
+ValueError: Cached model layer is missing or incomplete: qwen3.5:0.8b

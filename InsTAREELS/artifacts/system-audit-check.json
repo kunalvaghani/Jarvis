@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-07T16:17:01.468820+00:00",
+  "scope": "Verified local regressions, readiness and authored/owned live fixtures; no universal production certification",
+  "checks": {
+    "launcher": true,
+    "regression": true,
+    "codex": true,
+    "brain": true,
+    "harness_replan_after_fix": true,
+    "questions_cleanup": true,
+    "context_selector": true,
+    "localgithub_service_lifecycle": true,
+    "schema_fault_cases": true
+  },
+  "all_listed_checks_passed": true,
+  "tests": 1132,
+  "public_api_probe": {
+    "needs_configuration": 6,
+    "ok": 66,
+    "unavailable": 10
+  },
+  "retained_intentional_stop": true,
+  "cleanup": [
+    "jarvis/orb.py",
+    ".jarvis-runtime/sources/jarvis/orb.py",
+    "jarvis/__pycache__/orb.cpython-310.pyc"
+  ],
+  "remaining_limits": [
+    "External provider errors/rate limits and six required endpoint/feed/key configurations",
+    "Live microphone/echo and real logged-in third-party apps/accounts not certified",
+    "Broader generated app correctness, all native toolchains and simultaneous model-load performance not certified",
+    "Unused-import/local-variable static warnings retained for manual review"
+  ],
+  "inventory": {
+    "files": 502,
+    "python_files_checked": 332,
+    "static_errors": 0,
+    "static_warnings": 79,
+    "relative_document_targets_checked": 686,
+    "missing_document_targets": 0
+  }
+}

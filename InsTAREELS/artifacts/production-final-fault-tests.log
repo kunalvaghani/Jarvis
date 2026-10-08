@@ -1,0 +1,10 @@
+test_timed_out_import_tree_is_closed (tests.test_launcher_readiness.LauncherReadinessTests) ... ok
+test_timeout_is_reported_as_incomplete_not_missing_dependencies (tests.test_launcher_readiness.LauncherReadinessTests) ... ok
+test_health_reports_capture_and_answer_latency_without_content (tests.test_runtime_health.RuntimeHealthTests) ... ok
+test_off_and_unstarted_workers_remain_explicit (tests.test_runtime_health.RuntimeHealthTests) ... ok
+test_unknown_remote_phases_and_errors_never_enter_metadata (tests.test_runtime_health.RuntimeHealthTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.270s
+
+OK

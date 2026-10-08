@@ -11,6 +11,7 @@ import threading
 import time
 
 from PIL import Image
+from .harness_process import OwnedJob, hidden_spawn
 
 TRANSPORT = {'play','pause','next','previous','shuffle_on','shuffle_off','repeat_off','repeat_one','repeat_all'}
 
@@ -67,6 +68,7 @@ class MediaJobs:
         self.report, self.base = report, Path(base)
         self.lock = threading.Lock()
         self.process = None
+        self.job = None
         self.busy = self.closed = False
         self.started = 0.
 
@@ -81,12 +83,13 @@ class MediaJobs:
         return True
 
     def _run(self, action):
-        process = None
+        process = job = None
         try:
             with self.lock:
                 if self.closed:
                     return
-                process = self.process = subprocess.Popen([sys.executable,'-m','jarvis.island_media',action],
+                job = self.job = OwnedJob()
+                process = self.process = hidden_spawn(job, subprocess.Popen)([sys.executable,'-m','jarvis.island_media',action],
                     cwd=self.base, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
                     encoding='utf-8', creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             output,_ = process.communicate(timeout=8)
@@ -96,6 +99,8 @@ class MediaJobs:
             if not self.closed:
                 self.report('island_media',result)
         except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+            if job:
+                job.close()
             if process and process.poll() is None:
                 process.kill()
                 process.communicate(timeout=2)
@@ -103,8 +108,10 @@ class MediaJobs:
                 self.report('island_media',{'error': str(exc) if action=='observe' else
                     'Spotify request could not be verified. Check playback before repeating; no retry was sent.'})
         finally:
+            if job:
+                job.close()
             with self.lock:
-                self.process, self.busy = None, False
+                self.process, self.job, self.busy = None, None, False
 
     def healthy(self):
         return not self.closed and (not self.busy or time.monotonic()-self.started < 12)
@@ -112,12 +119,16 @@ class MediaJobs:
     def repair(self):
         # Cancel a stuck observation; mutations are never restarted by recovery.
         with self.lock:
+            if self.job:
+                self.job.close()
             if self.process and self.process.poll() is None:
                 self.process.kill()
 
     def close(self):
         with self.lock:
             self.closed = True
+            if self.job:
+                self.job.close()
             if self.process and self.process.poll() is None:
                 self.process.kill()
 

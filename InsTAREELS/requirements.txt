@@ -4,6 +4,7 @@ huggingface-hub>=0.24,<1
 numpy>=1.26,<3
 requests>=2.32,<3
 psutil>=6,<8
+websocket-client>=1.8,<2
 ddgs==9.16.0
 scipy>=1.10,<2
 nvidia-cublas-cu12>=12.4,<13; sys_platform == 'win32'

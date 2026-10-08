@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-07T16:10:03.136690+00:00",
+  "scope": "Actual configured local question/cleanup transports; authored text only, no command execution, private memory, mic capture or speaker playback. Cleanup warmup is fixture-only and excluded from reported call latency. All four cleanup cases called the actual proposal transport, including unchanged-text choices.",
+  "passed": true,
+  "checks": [
+    {
+      "feature": "configured_question_worker",
+      "seconds": 16.328,
+      "answer": "Two plus two equals four.",
+      "passed": true,
+      "sources": 0
+    },
+    {
+      "feature": "command_cleanup",
+      "original": "jarvis um open note pad",
+      "allowed_alternative": "jarvis open notepad",
+      "result": "jarvis open notepad",
+      "seconds": 0.953,
+      "passed": true,
+      "model_requested": true
+    },
+    {
+      "feature": "command_cleanup",
+      "original": "jarvis opne calculator",
+      "allowed_alternative": "jarvis open calculator",
+      "result": "jarvis open calculator",
+      "seconds": 0.282,
+      "passed": true,
+      "model_requested": true
+    },
+    {
+      "feature": "command_cleanup",
+      "original": "jarvis don't delete notes.txt",
+      "allowed_alternative": "jarvis don't delete notes.txt",
+      "result": "jarvis don't delete notes.txt",
+      "seconds": 0.312,
+      "passed": true,
+      "model_requested": true
+    },
+    {
+      "feature": "command_cleanup",
+      "original": "jarvis write um open note pad",
+      "allowed_alternative": "jarvis write um open note pad",
+      "result": "jarvis write um open note pad",
+      "seconds": 0.328,
+      "passed": true,
+      "model_requested": true
+    }
+  ]
+}

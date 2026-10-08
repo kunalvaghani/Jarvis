@@ -1,0 +1,7 @@
+test_claude_timeout_closes_connection_without_replay (test_coding_proxy_faults.CodingProxyFaults) ... ok
+test_codex_timeout_closes_connection_without_replay (test_coding_proxy_faults.CodingProxyFaults) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.473s
+
+OK

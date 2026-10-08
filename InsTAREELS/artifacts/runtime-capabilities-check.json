@@ -1,5 +1,5 @@
 {
-  "at_utc": "2026-10-01T07:00:05+00:00",
+  "at_utc": "2026-10-07T15:32:24+00:00",
   "kind": "live configured memory/registry routing; no task execution or model inference",
   "cases": [
     {
@@ -13,6 +13,7 @@
         "repository_map",
         "skill_list",
         "skill_read",
+        "windows_command",
         "write_code",
         "write_tests"
       ],
@@ -43,6 +44,7 @@
     {
       "goal": "Search YouTube for jazz and play first video",
       "selected_tools": [
+        "application_search",
         "browser_inspect",
         "browser_search",
         "github_search",
@@ -50,10 +52,10 @@
         "media_control",
         "media_search",
         "open",
+        "realtime_query",
+        "save_file",
         "search_files",
-        "select",
-        "tool_search",
-        "web_search"
+        "select"
       ],
       "selected_local_guides": [
         "youtube-media"
@@ -66,6 +68,7 @@
     {
       "goal": "Search Spotify for jazz",
       "selected_tools": [
+        "application_search",
         "browser_search",
         "fill_text",
         "github_search",
@@ -83,7 +86,7 @@
       ],
       "required_tools_found": true,
       "expected_guide_found": true,
-      "program_reference_count": 2,
+      "program_reference_count": 3,
       "launchable_program_reference_count": 2
     },
     {
@@ -91,12 +94,12 @@
       "selected_tools": [
         "append_file",
         "create_file",
-        "git_diff",
         "list_files",
         "modify_file",
         "open",
         "read_file",
         "runtime_capabilities",
+        "save_file",
         "scroll",
         "search_files",
         "select",
@@ -118,10 +121,10 @@
         "browser_fill",
         "browser_inspect",
         "browser_navigate",
+        "integration_status",
         "mcp_call",
         "mcp_list_tools",
         "mcp_status",
-        "open",
         "runtime_capabilities",
         "skill_list",
         "skill_read",
@@ -138,6 +141,7 @@
     {
       "goal": "Open Obsidian",
       "selected_tools": [
+        "application_search",
         "browse",
         "browser_navigate",
         "close_app",
@@ -163,11 +167,11 @@
   "all_checks_passed": true,
   "lookup_ms": {
     "samples": 70,
-    "median": 21.861,
-    "max": 54.9
+    "median": 73.085,
+    "max": 262.231
   },
-  "registered_tools": 70,
-  "configured_tools": 52,
+  "registered_tools": 85,
+  "configured_tools": 64,
   "local_guides": 9,
   "hermes_reference_guides": 210,
   "guide_errors": 0,

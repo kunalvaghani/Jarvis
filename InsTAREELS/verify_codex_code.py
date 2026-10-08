@@ -24,9 +24,9 @@ def verify():
     result={'date':datetime.now(timezone.utc).isoformat(),'project':str(project),
         'scope':'Actual installed Codex CLI with local Qwen3.5 9B; authored source creation/edit and Python runtime fixtures.'}
     try:
-        result['create']=coder.run(project,'Create main.py with add(a,b) returning a+b and print(add(2,3)) under the main guard. Use the Jarvis Write tool. Keep below 15 lines.',selected=True)
+        result['create']=coder.run(project,'Create main.py with add(a,b) returning a+b and print(add(2,3)) under the main guard. Use the Jarvis Write tool. Keep below 15 lines. Running main.py must print exactly one line: 5. Behavioral unittests must check add and this exact CLI output.',selected=True)
         original=(project/'main.py').read_bytes();assert b'def add' in original
-        result['edit']=coder.run(project,'Modify main.py: preserve add and main; add subtract(a,b) returning a-b. Read the current source first; use the Jarvis Edit tool. Keep below 20 lines.',selected=True)
+        result['edit']=coder.run(project,'Modify main.py: preserve add and the main guard unchanged; add subtract(a,b) returning a-b. Read the current source first; use the Jarvis Edit tool. Keep below 20 lines. Running main.py must still print exactly one line: 5. Do not add a subtract print/demo. Update behavioral unittests to check add, subtract and the unchanged exact CLI output.',selected=True)
         source=(project/'main.py').read_text();assert 'def add' in source and 'def subtract' in source
         guards=[];adapters=[];backups=[]
         for request in (BASE/'.jarvis-runtime/codex-code').glob('*/request.json'):
@@ -40,7 +40,7 @@ def verify():
         assert original in backups,'Original source was not backed up'
         assert adapters and all(e.get('thinking') is False for e in adapters if e['stage']=='completed')
         check=subprocess.run([sys.executable,str(project/'main.py')],capture_output=True,text=True,timeout=10)
-        assert check.returncode==0 and check.stdout.strip()=='5',check.stderr
+        assert check.returncode==0 and check.stdout.strip()=='5',{'stdout':check.stdout,'stderr':check.stderr,'exit_code':check.returncode}
         result.update(passed=True,source=source,guard_tools=[e['tool'] for e in applied],
             adapter_requests=sum(e['stage']=='completed' for e in adapters),thinking_disabled=True,
             original_backup_verified=True,progress_events=sum(k=='task_status' for k,v in events),runtime_stdout=check.stdout)

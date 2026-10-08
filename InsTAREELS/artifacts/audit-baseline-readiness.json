@@ -1,0 +1,1 @@
+{"status": "ready", "missing": [], "adaptive_planning": true, "incremental_planning": true, "reuse_navigation_workflows": true, "native_tool_calling": true, "task_recovery": true, "planner": "qwen3.5:9b", "planning_backend": "qwen-native-tools", "screen_model": "qwen3.5:9b", "visual_fallback": "ui-tars-parser"}

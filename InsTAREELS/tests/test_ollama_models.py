@@ -100,5 +100,46 @@ class OllamaModels(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'incomplete'):cached_payload(root,BASE)
             self.assertIsNone(cached_payload(root,'..:..'))
 
+    def test_partial_cache_does_not_block_another_complete_store_or_setup_pull(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            partial, complete = root/'partial', root/'complete'
+            partial.mkdir(); complete.mkdir()
+            self.fixture(partial); self.fixture(complete)
+            weight = next(p for p in (partial/'blobs').iterdir() if p.read_bytes().startswith(b'GGUF'))
+            weight.write_bytes(b'GGUFpartial')
+            client = Mock()
+            report = Mock()
+            self.assertFalse(restore_cached(client, BASE, [partial], report=report))
+            client.head.assert_not_called(); client.post.assert_not_called()
+            self.assertTrue(weight.exists())
+            report.assert_called_once()
+            client.head.return_value = response({}, 200)
+            client.post.return_value = response({'status': 'success'})
+            client.get.return_value = response({'models': [{'name': BASE}]})
+            self.assertTrue(restore_cached(client, BASE, [partial, complete], report=report))
+            self.assertEqual(client.post.call_count, 1)
+            self.assertEqual(weight.read_bytes(), b'GGUFpartial')
+
+    def test_current_ollama_manifest_anchors_are_checked_metadata_not_imported_weights(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory); self.fixture(root)
+            path=root/'manifests/registry.ollama.ai/library/qwen3.5/9b'
+            manifest=json.loads(path.read_text())
+            for kind in ('application/vnd.ollama.manifest.list.v2+json',
+                         'application/vnd.docker.distribution.manifest.v2+json'):
+                raw=json.dumps({'schemaVersion':2,'mediaType':kind}).encode()
+                digest='sha256:'+hashlib.sha256(raw).hexdigest()
+                (root/'blobs'/digest.replace(':','-')).write_bytes(raw)
+                manifest['layers'].append({'mediaType':kind,'digest':digest,'size':len(raw)})
+            path.write_text(json.dumps(manifest))
+            payload,weights=cached_payload(root,BASE)
+            self.assertEqual(len(weights),1)
+            self.assertEqual(payload['parameters'],{'temperature':1})
+            self.assertEqual(set(payload['files']),{'qwen3.5.gguf'})
+            anchor=root/'blobs'/digest.replace(':','-')
+            anchor.write_bytes(b'X'*len(raw))
+            with self.assertRaisesRegex(ValueError,'checksum'):cached_payload(root,BASE)
+
 
 if __name__=='__main__':unittest.main()

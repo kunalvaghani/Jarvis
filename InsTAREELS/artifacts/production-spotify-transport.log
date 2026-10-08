@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-07T17:25:37.786877+00:00",
+  "live": true,
+  "scope": "Native Spotify source-scoped transport; no track or account metadata.",
+  "initial_status": "paused",
+  "action": "play",
+  "response": "Spotify playing.",
+  "status_observations": [
+    "playing"
+  ],
+  "observed_status": "playing",
+  "fresh_status_before_restore": "playing",
+  "restore_response": "Spotify paused.",
+  "final_status": "paused",
+  "passed": true
+}

@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-08T06:12:15.773255+00:00",
+  "scope": "Computer Use against actual Jarvis widgets in the isolated opaque fixture; microphone, inference, media polling and real memory writes disabled.",
+  "checks": {
+    "overview_rendered": true,
+    "games_navigation": true,
+    "flappy_canvas_click_started_play": true,
+    "snake_selected_and_rendered": true,
+    "tic_tac_toe_click_observed_x_and_opponent_o": true,
+    "matching_game_card_revealed": true,
+    "music_view_rendered_without_transport": true,
+    "prepare_empty_state": true,
+    "choices_empty_state": true,
+    "history_empty_with_memory_disabled": true,
+    "quit_button_used": true,
+    "fixture_closed_observed": true
+  },
+  "earlier_2048_and_pause_checks": "artifacts/production-interactive-ui-check.json",
+  "full_gameplay_completion_claimed": false
+}

@@ -1,9 +1,15 @@
 .venv/
+# Runtime configuration backups, process state and all per-user trials stay local.
+.jarvis-runtime/
+question-worker.log
+ui-worker.log
+context-worker.log
 .venv-brain/
 .venv-training/
 .venv-hermes/
 .venv-harness/
 .jarvis-runtime/harness-home/
+.jarvis-runtime/audit-tools/
 harness-worker.log
 .venv-hermes-bootstrap/
 integrations/hermes-agent/
@@ -72,4 +78,12 @@ integrations/execution-upstream/
 .jarvis-runtime/claude-code-fixture/
 .jarvis-runtime/codex-code/
 .jarvis-runtime/codex-code-fixture/
+.jarvis-runtime/codex-workloads/
+.jarvis-runtime/codex-workload-fixture/
+.jarvis-runtime/workload-*.log
+.jarvis-runtime/workload-*.py
+.jarvis-runtime/stop-outdated-workload-trial.py
+.jarvis-runtime/realtime-*.log
+.jarvis-runtime/realtime-alerts.json
+.jarvis-runtime/realtime-alerts.tmp
 examples/multilingual/*/bundle.js

@@ -1,0 +1,8 @@
+{
+  "scope": "Owned generated fixture, two read-only HTTP connections; no counter mutations or user app actions.",
+  "homepage_status": 200,
+  "homepage_has_local_counter": true,
+  "independent_read_error_type": "ReadTimeout",
+  "source_uses_single_threaded_httpserver": true,
+  "source_uses_http_1_1": true
+}

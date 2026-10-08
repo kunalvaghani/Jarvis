@@ -168,6 +168,14 @@ class Actions:
                 or bool(self.ui_controls and self.ui_controls.pending)),
             model=config.get('brain', {}).get('planner', 'qwen3.5:4b'))
         self.knowledge.on_request = self.anticipation.observe_request
+        from .realtime import Realtime
+        realtime_options = dict(config.get('realtime', {}))
+        if config.get('_ui_verification', False):
+            realtime_options['enabled'] = False
+        self.realtime = Realtime(self.base, realtime_options, report,
+            busy=lambda: self.anticipation.busy())
+        self.knowledge.realtime = self.realtime
+        self.brain.client.realtime_provider = lambda goal, cancelled: self.realtime.context(goal, cancelled, refresh=False)
 
     def start(self):
         try:
@@ -189,8 +197,12 @@ class Actions:
         self.knowledge.start()
         self.thread.start()
         self.anticipation.start()
+        self.realtime.start()
 
     def cancel(self):
+        realtime = getattr(self, 'realtime', None)
+        if realtime is not None:
+            realtime.cancel()
         anticipation = getattr(self, 'anticipation', None)
         if anticipation is not None:
             anticipation.cancel()
@@ -206,6 +218,14 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        realtime = getattr(self, 'realtime', None)
+        if realtime is not None:
+            realtime.cancel()
+            if command.kind in {'ask', 'task', 'realtime'}:
+                reply = realtime.controls(command.value)
+                if reply is not None:
+                    self.report('answer', reply)
+                    return
         anticipation = getattr(self, 'anticipation', None)
         if anticipation is not None:
             if command.kind in {'ask', 'task'}:
@@ -381,6 +401,9 @@ class Actions:
         return command
 
     def close(self):
+        realtime = getattr(self, 'realtime', None)
+        if realtime is not None:
+            realtime.close()
         anticipation = getattr(self, 'anticipation', None)
         if anticipation is not None:
             anticipation.close()

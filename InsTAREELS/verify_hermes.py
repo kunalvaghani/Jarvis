@@ -5,8 +5,9 @@ from pathlib import Path
 import time
 from jarvis.hermes import HermesClient
 
-client = HermesClient(Path(__file__).resolve().parent,
-                      {"planner": "qwen3.5:4b", "hermes": {"timeout_seconds": 120}})
+base=Path(__file__).resolve().parent
+options=json.loads((base/'config.json').read_text(encoding='utf-8'))['brain']
+client = HermesClient(base, {**options, "hermes": {**options.get('hermes',{}), "timeout_seconds": 120}})
 started = time.monotonic()
 try:
     result = client.request("plan", lambda: False, goal="Open Calculator",

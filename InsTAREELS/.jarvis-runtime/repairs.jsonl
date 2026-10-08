@@ -137,3 +137,36 @@
 {"at": 1791193502.7069142, "message": "UI Automation worker is not repaired yet; retrying in 10 seconds."}
 {"at": 1791193512.707184, "message": "UI Automation worker was stopped and fixed. No previous actions were replayed."}
 {"at": 1791194731.6152315, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791226055.4985578, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791227306.990794, "message": "Microphone stopped responding; attempting background recovery."}
+{"at": 1791227307.2775626, "message": "Microphone is not repaired yet; retrying in 10 seconds."}
+{"at": 1791227312.040701, "message": "Microphone was stopped and fixed. No previous actions were replayed."}
+{"at": 1791364249.7185462, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791364250.3106008, "message": "Configured models stopped responding; attempting background recovery."}
+{"at": 1791364250.3106008, "message": "Missing local models: qwen3.5:0.8b. Background restoration started; unrelated tasks can continue."}
+{"at": 1791364253.3957446, "message": "Model restoration failed for qwen3.5:0.8b. See .jarvis-runtime/models.log; next attempt in 300 seconds. A task needing a missing model pauses at its checkpoint."}
+{"at": 1791364272.3463402, "message": "Context selector unavailable; explicit memory choices retained during backoff."}
+{"at": 1791390485.2694116, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791390525.310409, "message": "Microphone stopped responding; attempting background recovery."}
+{"at": 1791390525.4004033, "message": "Microphone is not repaired yet; retrying in 10 seconds."}
+{"at": 1791390530.779, "message": "Microphone was stopped and fixed. No previous actions were replayed."}
+{"at": 1791390599.1067102, "message": "Ollama stopped responding; attempting background recovery."}
+{"at": 1791390603.6324718, "message": "Ollama is not repaired yet; retrying in 10 seconds."}
+{"at": 1791390609.6465182, "message": "Ollama was stopped and fixed. No previous actions were replayed."}
+{"at": 1791390616.746877, "message": "Ollama stopped responding; attempting background recovery."}
+{"at": 1791390620.346977, "message": "Ollama is not repaired yet; retrying in 10 seconds."}
+{"at": 1791390627.541829, "message": "Ollama was stopped and fixed. No previous actions were replayed."}
+{"at": 1791391258.7161896, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791440386.9668381, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791440732.640004, "message": "Context selector unavailable; explicit memory choices retained during backoff."}
+{"at": 1791446258.2484741, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791448039.5388165, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791449303.0802794, "message": "Ollama stopped responding; attempting background recovery."}
+{"at": 1791449306.3271055, "message": "Ollama was stopped and fixed. No previous actions were replayed."}
+{"at": 1791450535.308865, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791452484.5424545, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}
+{"at": 1791452549.740471, "message": "UI Automation worker stopped responding; attempting background recovery."}
+{"at": 1791452549.7410035, "message": "UI Automation worker is not repaired yet; retrying in 10 seconds."}
+{"at": 1791452560.6816401, "message": "UI Automation worker was stopped and fixed. No previous actions were replayed."}
+{"at": 1791452826.215914, "message": "Context selector unavailable; explicit memory choices retained during backoff."}
+{"at": 1791457313.5946083, "message": "Unfinished task retained. Say resume last task to inspect and continue it."}

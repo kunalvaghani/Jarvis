@@ -1,0 +1,17 @@
+test_draw_circle_creates_canvas (test_main.TestCircleDrawing)
+Test that draw_circle creates a canvas with correct dimensions. ... ok
+test_draw_circle_creates_oval (test_main.TestCircleDrawing)
+Test that draw_circle creates an oval (circle) with correct coordinates. ... ok
+test_draw_circle_with_custom_parameters (test_main.TestCircleDrawing)
+Test draw_circle with custom center and radius. ... ok
+test_main_function_exists (test_main.TestCircleDrawing)
+Test that main function exists and is callable. ... ok
+test_main_module_has_draw_circle_function (test_main.TestCircleDrawing)
+Verify that main.py exports a draw_circle function. ... ok
+test_main_module_has_main_function (test_main.TestCircleDrawing)
+Verify that main.py exports a main function. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.230s
+
+OK

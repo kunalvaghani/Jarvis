@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-08T09:03:51.436122+00:00",
+  "scope": "Actual Qwen vision inference on a generated digit fixture; no real desktop capture or action.",
+  "before": {
+    "healthy_microphone": true,
+    "last_audio_age_seconds": 0
+  },
+  "models": [
+    {
+      "name": "qwen3.5:9b",
+      "context_length": 16384,
+      "size_vram": 2372287855
+    }
+  ],
+  "passed": true,
+  "seconds": 9.984,
+  "recognized_digit": 4,
+  "after": {
+    "healthy_microphone": true,
+    "last_audio_age_seconds": 0.063
+  },
+  "peak_gpu_used_mb": 3388
+}

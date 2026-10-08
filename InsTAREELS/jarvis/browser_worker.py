@@ -7,6 +7,7 @@ import time
 from urllib.parse import urlsplit, parse_qs
 
 from .browser import music_search_url, url_for
+from .browser_cursor import click as cursor_click
 from .ui_controls import label_key, UNSAFE_INFERRED
 
 
@@ -114,7 +115,7 @@ class Session:
         element = link.element_handle()  # Bound live element, never a stored index.
         if element is None:
             raise ValueError("The selected video disappeared before action.")
-        element.click(timeout=5000)
+        cursor_click(element,page,timeout=5000)
         page.wait_for_url(lambda url: parse_qs(parsed(url).query).get("v") == [video_id], timeout=10000)
         page.wait_for_function("() => {const v=document.querySelector('video');return v && !v.paused && v.readyState>=2 && !document.querySelector('.ad-showing')}", timeout=12000)
         return {**self.inspect(), "verified": True, "message": "Selected video identity and active playback verified: " + title[:160]}
@@ -152,19 +153,19 @@ class Session:
             if action in {"fullscreen", "exit_fullscreen"}:
                 desired = action == "fullscreen"
                 if bool(page.evaluate("!!document.fullscreenElement")) != desired:
-                    page.locator(".ytp-fullscreen-button:visible").click()
+                    cursor_click(page.locator(".ytp-fullscreen-button:visible"),page)
                 page.wait_for_function("p => !!document.fullscreenElement === p", arg=desired)
             elif action in {"theater", "default_view"}:
                 desired = action == "theater"
                 if (page.locator("ytd-watch-flexy").get_attribute("theater") is not None) != desired:
-                    page.locator(".ytp-size-button:visible").click()
+                    cursor_click(page.locator(".ytp-size-button:visible"),page)
                 page.wait_for_function("p => document.querySelector('ytd-watch-flexy')?.hasAttribute('theater') === p", arg=desired)
             else:
-                page.locator(".ytp-miniplayer-button:visible").click()
+                cursor_click(page.locator(".ytp-miniplayer-button:visible"),page)
                 page.locator("ytd-miniplayer[active]").wait_for(state="visible")
         elif action in {"next", "previous"}:
             old = page.url
-            page.locator(".ytp-next-button:visible" if action == "next" else ".ytp-prev-button:visible").click()
+            cursor_click(page.locator(".ytp-next-button:visible" if action == "next" else ".ytp-prev-button:visible"),page)
             page.wait_for_url(lambda url: parsed(url).geturl() != old)
         elif action in {"next_frame", "previous_frame"}:
             if not video.evaluate("v => v.paused"):
@@ -176,7 +177,7 @@ class Session:
                 raise ValueError("No unique captions control is available.")
             old = button.get_attribute("aria-pressed") == "true"
             if action == "captions" or old != (action == "captions_on"):
-                button.click()
+                cursor_click(button,page)
             new = button.get_attribute("aria-pressed") == "true"
             if new != ((not old) if action == "captions" else action == "captions_on"):
                 raise ValueError("Captions change was sent but not verified.")
@@ -236,7 +237,7 @@ class Session:
             if locator.count() != 1:
                 raise ValueError("The named browser target is not unique; specify its context.")
             if operation == "click":
-                locator.click()
+                cursor_click(locator,self.page)
                 return {**self.inspect(), "verified": False, "message": "Clicked exact visible browser target once; goal needs fresh verification."}
             if locator.evaluate("e => e.type === 'password' || /password/i.test(e.getAttribute('autocomplete')||'')"):
                 raise ValueError("Password fields are excluded from generic browser filling.")

@@ -1,0 +1,126 @@
+{
+  "assembled_at": "2026-10-08T07:57:33.729190+00:00",
+  "scope": "Aggregate of separately dated checks of actual Jarvis workers. This is not a single all-green trial or universal application certification.",
+  "native": {
+    "date": "2026-10-08T07:40:25.831923+00:00",
+    "cue_noactivate": true,
+    "cue_clickthrough": true,
+    "cue_visible": true,
+    "cue_kept_foreground": true,
+    "cue_did_not_move_mouse": true,
+    "cue_disposed": true,
+    "native_activated_once": true,
+    "native_pointer_unchanged": true,
+    "provider": "ufo",
+    "grounded_activated_once": true,
+    "grounded_pointer_unchanged": true,
+    "blocked_callback_cue_expired": true,
+    "passed": true
+  },
+  "owned_dom_fixture": {
+    "date": "2026-10-08T07:24:15.559982+00:00",
+    "site": "owned DOM fixture",
+    "activated_once": true,
+    "cursor_removed": true,
+    "system_pointer_unchanged": true
+  },
+  "public_sites": [
+    {
+      "date": "2026-10-08T07:28:33.843366+00:00",
+      "site": "YouTube",
+      "passed": true,
+      "control": "Guide",
+      "dispatched_once": true,
+      "system_pointer_unchanged": true,
+      "cursor_removed": true,
+      "dom_changed": true,
+      "url_path": "/",
+      "downstream_verified": false,
+      "postcondition": {
+        "before": false,
+        "after": true,
+        "changed": true
+      }
+    },
+    {
+      "date": "2026-10-08T07:28:33.843366+00:00",
+      "site": "GitHub",
+      "passed": true,
+      "control": "Platform",
+      "dispatched_once": true,
+      "system_pointer_unchanged": true,
+      "cursor_removed": true,
+      "dom_changed": true,
+      "url_path": "/python/cpython",
+      "downstream_verified": false,
+      "postcondition": {
+        "before": "false",
+        "after": "true",
+        "changed": true
+      }
+    },
+    {
+      "date": "2026-10-08T07:28:33.843366+00:00",
+      "site": "Spotify web",
+      "passed": true,
+      "control": "Browse",
+      "dispatched_once": true,
+      "system_pointer_unchanged": true,
+      "cursor_removed": true,
+      "dom_changed": true,
+      "url_path": "/search",
+      "downstream_verified": false,
+      "postcondition": {
+        "before": {
+          "path": "/",
+          "expanded": null
+        },
+        "after": {
+          "path": "/search",
+          "expanded": null
+        },
+        "changed": true
+      }
+    }
+  ],
+  "camera": {
+    "date": "2026-10-08T07:34:49.117211+00:00",
+    "app": "camera",
+    "control": "Switch to video mode",
+    "dispatched_once": true,
+    "system_pointer_unchanged": true,
+    "postcondition_changed": true,
+    "provider": "ufo",
+    "scope": "Navigation/mode controls only. No camera photo/video recording, account write or privacy change.",
+    "original_mode_restored": true,
+    "restore_pointer_unchanged": true,
+    "passed": true
+  },
+  "spotify_desktop": {
+    "date": "2026-10-08T07:36:05.476206+00:00",
+    "app": "spotify",
+    "control": "Search",
+    "dispatched_once": true,
+    "system_pointer_unchanged": true,
+    "postcondition_changed": true,
+    "provider": "ufo",
+    "scope": "Navigation/mode controls only. No camera photo/video recording, account write or privacy change.",
+    "passed": true,
+    "observation_date": "2026-10-08T07:40:25.603363+00:00",
+    "verification_note": "Fresh read-only follow-up observed the focused search ComboBox. The original checker incorrectly required Edit. No activation was repeated.",
+    "observed_control": {
+      "name": "What do you want to play?",
+      "role": "ComboBox",
+      "focused": true
+    }
+  },
+  "regression": {
+    "date": "2026-10-08",
+    "tests": 1165,
+    "seconds": 216.872,
+    "status": "passed",
+    "log": "cursor-final-regression-tests.log"
+  },
+  "history_note": "Original live-history records retain earlier paint/Trusted Types failures, ambiguous target refusal, and runs with changed global pointer readings. Those readings cannot establish who moved the pointer. Clean native and site checks are separate dated observations. Spotify focus was checked read-only after correcting an Edit-only observer; the activation was not repeated.",
+  "passed_for_listed_checks": true
+}

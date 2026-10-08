@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2026-10-07T07:38:20.154989+00:00",
+    "scope": "Actual idle small-model read of live weather and NOAA observations; no synthetic hazard notification. CPU-only one thread and keep_alive=0. Foreground models never unloaded by verifier.",
+    "source_statuses": [
+      {
+        "provider": "weather",
+        "status": "ok"
+      },
+      {
+        "provider": "space_weather",
+        "status": "ok"
+      }
+    ],
+    "reader": {
+      "status": "unavailable",
+      "error": "JSONDecodeError: Unterminated string starting at: line 6 column 15 (char 108)"
+    }
+  }
+]

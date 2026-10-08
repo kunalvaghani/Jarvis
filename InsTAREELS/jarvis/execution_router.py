@@ -1,5 +1,6 @@
 """Ordered preflight fallback; one external action, followed by observations only."""
 import time
+from contextlib import nullcontext
 from .execution_adapters import PROVIDERS, Unsupported
 
 
@@ -26,7 +27,7 @@ class UncertainAction(ValueError):
 
 
 def execute(request, element, control, window, guard, observe=None,
-            providers=None, clock=time.monotonic, sleep=time.sleep):
+            providers=None, clock=time.monotonic, sleep=time.sleep, cue=None):
     """Preparation failures may fall through; dispatch/verification failures never do.
 
     guard is called before each provider and immediately before dispatch. It must
@@ -53,11 +54,15 @@ def execute(request, element, control, window, guard, observe=None,
                    'attempts': attempts, 'dispatched': not prepared.no_op, 'verified': False}
         error = None
         if not prepared.no_op:
-            try:
-                if prepared.call() is False:
-                    error = 'The input method reported failure after dispatch.'
-            except Exception as exc:
-                error = type(exc).__name__ + ': ' + str(exc)[:180]
+            # Animation is preparation: re-admit the target after it, before any
+            # mutation. Cue failure/focus changes cannot enter a dispatch retry.
+            with cue(control) if cue else nullcontext():
+                guard()
+                try:
+                    if prepared.call() is False:
+                        error = 'The input method reported failure after dispatch.'
+                except Exception as exc:
+                    error = type(exc).__name__ + ': ' + str(exc)[:180]
         # Once input was entered, inspect even on exception. Never try the next provider.
         deadline = clock() + 1.0
         while True:

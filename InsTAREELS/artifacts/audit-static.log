@@ -1,0 +1,80 @@
+jarvis\brain.py:1307:13: redefinition of unused 'matches' from line 978
+jarvis\browser_worker.py:6:1: 'time' imported but unused
+jarvis\coder.py:11:1: '.projects.MARKERS' imported but unused
+jarvis\coding_curriculum.py:6:1: 'base64' imported but unused
+jarvis\coding_curriculum.py:8:1: 'collections.Counter' imported but unused
+jarvis\coding_curriculum.py:9:1: 'csv' imported but unused
+jarvis\coding_curriculum.py:11:1: 'hashlib' imported but unused
+jarvis\coding_curriculum.py:13:1: 'io' imported but unused
+jarvis\coding_curriculum.py:17:1: 're' imported but unused
+jarvis\coding_curriculum.py:18:1: 'statistics' imported but unused
+jarvis\development.py:129:5: local variable 'created' is assigned to but never used
+jarvis\development_api.py:15:5: '.development.functional_tests' imported but unused
+jarvis\development_api.py:18:5: '.agent_context.bounded_text' imported but unused
+jarvis\development_design.py:3:1: 'pathlib.Path' imported but unused
+jarvis\execution_router.py:3:1: '.execution_adapters.Unsupported' imported but unused
+jarvis\fast_workflows.py:3:1: 'os' imported but unused
+jarvis\island_media.py:6:1: 'os' imported but unused
+jarvis\knowledge.py:84:9: '.conversation_memory.messages' imported but unused
+jarvis\media_ui.py:134:9: local variable 'readable' is assigned to but never used
+jarvis\notch_widgets.py:5:1: 'PIL.Image' imported but unused
+jarvis\notch_widgets.py:5:1: 'PIL.ImageDraw' imported but unused
+jarvis\realtime.py:6:1: 'collections.deque' imported but unused
+jarvis\recovery.py:3:1: 'os' imported but unused
+jarvis\recovery.py:102:13: local variable 'exc' is assigned to but never used
+jarvis\toolkits.py:308:5: local variable 'exc' is assigned to but never used
+jarvis\tools.py:4:1: 're' imported but unused
+jarvis\ui_worker.py:242:9: '.desktop_actions.SHORTCUTS' imported but unused
+jarvis\ui_worker.py:320:9: redefinition of unused 'apply_control' from line 242
+jarvis\ui_worker.py:320:9: '.desktop_actions.apply_control' imported but unused
+jarvis\upstream_windows_patterns.py:10:1: 'typing.List' imported but unused
+jarvis\upstream_windows_patterns.py:10:1: 'typing.TYPE_CHECKING' imported but unused
+jarvis\visual_fallback.py:16:1: '.task_state.TaskState' imported but unused
+jarvis\visual_worker.py:8:1: 'os' imported but unused
+jarvis\voice_input.py:3:1: 're' imported but unused
+jarvis\windows_commands.py:3:1: 'base64' imported but unused
+jarvis\windows_commands.py:169:32: local variable 'workbook' is assigned to but never used
+jarvis\windows_command_desktop.py:2:1: 'os' imported but unused
+tests\test_agent_runtime.py:11:1: 'jarvis.agent_context.scoped' imported but unused
+tests\test_anticipation.py:1:1: 'json' imported but unused
+tests\test_anticipation.py:2:1: 'pathlib.Path' imported but unused
+tests\test_codex_workload.py:1:1: 'hashlib' imported but unused
+tests\test_code_stream.py:7:1: 'unittest.mock.patch' imported but unused
+tests\test_coding_workflow.py:8:1: 'jarvis.coder.generate_checked' imported but unused
+tests\test_conversation_context.py:1:1: 'concurrent.futures.Future' imported but unused
+tests\test_conversation_context.py:12:1: 'jarvis.conversation_memory.messages' imported but unused
+tests\test_conversation_context.py:17:1: 'jarvis.island_choices.snapshot' imported but unused
+tests\test_development_learning.py:1:1: 'json' imported but unused
+tests\test_duplex_display.py:16:1: 'jarvis.progress.status' imported but unused
+tests\test_everyday_runtime.py:10:1: 'jarvis.everyday_runtime.EverydayRuntime' imported but unused
+tests\test_everyday_runtime.py:13:1: 'jarvis.quick_answers.WeatherService' imported but unused
+tests\test_execution_router.py:2:1: 'pathlib.Path' imported but unused
+tests\test_execution_router.py:7:1: 'jarvis.execution_adapters.CUA' imported but unused
+tests\test_jarvis.py:1:1: 'pathlib.Path' imported but unused
+tests\test_media_routes.py:2:1: 'pathlib.Path' imported but unused
+tests\test_model_recovery.py:3:1: 'threading' imported but unused
+tests\test_native_tools.py:9:1: 'jarvis.brain.Brain' imported but unused
+tests\test_natural_names.py:8:1: 'jarvis.browser.browser_args' imported but unused
+tests\test_notch.py:3:1: 'types.SimpleNamespace' imported but unused
+tests\test_ollama_models.py:8:1: 'jarvis.ollama_models.ALIASES' imported but unused
+tests\test_realtime.py:5:1: 'time' imported but unused
+tests\test_realtime.py:9:1: 'jarvis.realtime.distance' imported but unused
+tests\test_recovery.py:7:1: 'time' imported but unused
+tests\test_toolkits.py:5:1: 'socket' imported but unused
+tests\test_visual_fallback.py:4:1: 'os' imported but unused
+tests\test_windows_commands.py:1:1: 'ast' imported but unused
+main.py:21:1: 'tkinter.ttk' imported but unused
+main.py:22:1: 'tkinter.scrolledtext.ScrolledText' imported but unused
+setup_brain.py:7:1: 'subprocess' imported but unused
+setup_brain.py:8:1: 'shutil' imported but unused
+setup_brain.py:72:13: local variable 'exc' is assigned to but never used
+verify_gui_behavior.py:25:13: local variable 'namespace' is assigned to but never used
+verify_multilingual_completion.py:9:1: 'pathlib.Path' imported but unused
+verify_multilingual_ui.py:19:1: 'types.SimpleNamespace' imported but unused
+verify_notch.py:6:1: 'time' imported but unused
+verify_pc_qwen.py:5:1: 'jarvis.pc_context.canonical_resolution' imported but unused
+verify_plan_native.py:5:1: 'os' imported but unused
+verify_windows_commands.py:6:1: 'os' imported but unused
+verify_windows_commands.py:13:1: 'jarvis.windows_commands.prepare' imported but unused
+verify_windows_commands.py:13:1: 'jarvis.windows_commands.powershell' imported but unused
+Checked 333 Python files; findings: 79

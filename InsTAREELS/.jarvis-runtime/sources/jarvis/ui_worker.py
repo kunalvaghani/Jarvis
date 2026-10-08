@@ -143,7 +143,9 @@ def routed(request, window, element, control, hwnd):
         except OSError:
             pass  # Receipt I/O cannot make an external action retriable.
     try:
-        result = execute(request, element, control, window, guard, observe)
+        from .independent_cursor import CursorCue
+        cue = (lambda chosen: CursorCue(chosen['rect'],hwnd)) if request['operation'] in {'activate','open_menu'} else None
+        result = execute(request, element, control, window, guard, observe, cue=cue)
     except UncertainAction as exc:
         record(exc.receipt)
         raise
@@ -306,15 +308,14 @@ def perform(request):
         if win32gui.GetForegroundWindow() != hwnd:
             raise ValueError('Focus changed before playing the selected track.')
         if buttons:
-            interface = buttons[0].iface_invoke
-            interface.Invoke()
+            button = buttons[0]
+            rect = button.rectangle()
+            chosen = {'name':button.window_text().strip(),'role':'Button',
+                      'id':list(button.element_info.runtime_id),
+                      'rect':[rect.left,rect.top,rect.right,rect.bottom]}
+            routed(request,window,button,chosen,hwnd)
         else:
-            # Spotify rows use native double-click playback when no Play pattern
-            # is exposed. Coordinates come from this freshly verified UIA row.
-            rect = element.rectangle()
-            if [rect.left, rect.top, rect.right, rect.bottom] != control['rect'] or rect.width() <= 0 or rect.height() <= 0:
-                raise ValueError('Track geometry changed; no action taken.')
-            element.double_click_input()
+            raise ValueError('This Spotify row exposes no accessible Play button. Jarvis kept your pointer untouched; choose a visible Play control.')
         return {'message': 'Requested playback of the selected Spotify track; playback state is not yet verified.'}
     if request["operation"] in {"fill_text", "open_menu"}:
         from .desktop_actions import apply_control

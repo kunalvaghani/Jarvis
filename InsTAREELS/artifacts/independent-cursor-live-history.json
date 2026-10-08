@@ -1,0 +1,411 @@
+[
+  {
+    "date": "2026-10-08T06:49:11.863975+00:00",
+    "scope": "Actual Jarvis pointer-free workers, owned native/DOM fixtures and requested public sites in a fresh separate Chrome profile. DOM changes are observations, not complete task verification.",
+    "native": {
+      "cue_noactivate": true,
+      "cue_clickthrough": true,
+      "cue_visible": 1,
+      "cue_kept_foreground": true,
+      "cue_did_not_move_mouse": true,
+      "cue_disposed": true,
+      "native_activated_once": true,
+      "native_pointer_unchanged": true,
+      "provider": "ufo",
+      "grounded_activated_once": true,
+      "grounded_pointer_unchanged": true,
+      "blocked_callback_cue_expired": true,
+      "passed": false
+    },
+    "web": [
+      {
+        "site": "owned DOM fixture",
+        "activated_once": true,
+        "cursor_removed": true,
+        "system_pointer_unchanged": true
+      },
+      {
+        "site": "YouTube",
+        "passed": false,
+        "available_buttons": [
+          "Guide",
+          "Skip navigation",
+          "Search",
+          "Search with your voice",
+          "Settings",
+          ""
+        ],
+        "error_type": "Error"
+      },
+      {
+        "site": "GitHub",
+        "passed": false,
+        "available_buttons": [
+          "Platform",
+          "Solutions",
+          "Resources",
+          "Open Source",
+          "Enterprise",
+          "Search or jump to, type / to search",
+          "",
+          "Sponsor python/cpython",
+          "main branch",
+          "Code",
+          ""
+        ],
+        "error_type": "ValueError"
+      },
+      {
+        "site": "Spotify web",
+        "passed": true,
+        "available_buttons": [
+          "Home",
+          "Search",
+          "Browse",
+          "Premium",
+          "Support",
+          "Download",
+          "Sign up",
+          "Log in",
+          "Create",
+          "Create playlist",
+          "English",
+          "Sign up free",
+          "Enable shuffle",
+          "Search",
+          "Show Now Playing view"
+        ],
+        "control": "Search",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/",
+        "downstream_verified": false
+      }
+    ],
+    "passed": false
+  },
+  {
+    "date": "2026-10-08T06:50:52.592169+00:00",
+    "scope": "Actual Jarvis pointer-free workers, owned native/DOM fixtures and requested public sites in a fresh separate Chrome profile. DOM changes are observations, not complete task verification.",
+    "native": {
+      "cue_noactivate": true,
+      "cue_clickthrough": true,
+      "cue_visible": true,
+      "cue_kept_foreground": true,
+      "cue_did_not_move_mouse": true,
+      "cue_disposed": true,
+      "native_activated_once": true,
+      "native_pointer_unchanged": true,
+      "provider": "ufo",
+      "grounded_activated_once": true,
+      "grounded_pointer_unchanged": true,
+      "blocked_callback_cue_expired": true,
+      "passed": true
+    },
+    "web": [
+      {
+        "site": "owned DOM fixture",
+        "activated_once": true,
+        "cursor_removed": true,
+        "system_pointer_unchanged": false
+      },
+      {
+        "site": "YouTube",
+        "passed": false,
+        "available_buttons": [
+          "Guide",
+          "Skip navigation",
+          "Search",
+          "Search with your voice",
+          "Settings",
+          ""
+        ],
+        "error_type": "Error",
+        "error": "Page.evaluate: TypeError: Failed to set the 'innerHTML' property on 'Element': This document requires 'TrustedHTML' assignment.\n    at eval (eval at evaluate (:311:30), <anonymous>:8:13)\n    at UtilityScript.evaluate (<anonymous>:318:18)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "site": "GitHub",
+        "passed": false,
+        "available_buttons": [
+          "Platform",
+          "Solutions",
+          "Resources",
+          "Open Source",
+          "Enterprise",
+          "Search or jump to, type / to search",
+          "",
+          "Sponsor python/cpython",
+          "main branch",
+          "Code",
+          ""
+        ],
+        "error_type": "ValueError",
+        "error": "The named browser target is not unique; specify its context."
+      },
+      {
+        "site": "Spotify web",
+        "passed": true,
+        "available_buttons": [
+          "Home",
+          "Search",
+          "Browse",
+          "Premium",
+          "Support",
+          "Download",
+          "Sign up",
+          "Log in",
+          "Create",
+          "Create playlist",
+          "English",
+          "Sign up free",
+          "Enable shuffle",
+          "Search",
+          "Show Now Playing view"
+        ],
+        "control": "Search",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/",
+        "downstream_verified": false
+      }
+    ],
+    "passed": true
+  },
+  {
+    "date": "2026-10-08T07:24:15.559982+00:00",
+    "scope": "Actual Jarvis pointer-free workers, owned native/DOM fixtures and requested public sites in a fresh separate Chrome profile. DOM changes are observations, not complete task verification.",
+    "native": {
+      "cue_noactivate": true,
+      "cue_clickthrough": true,
+      "cue_visible": true,
+      "cue_kept_foreground": true,
+      "cue_did_not_move_mouse": true,
+      "cue_disposed": true,
+      "native_activated_once": true,
+      "native_pointer_unchanged": true,
+      "provider": "ufo",
+      "grounded_activated_once": true,
+      "grounded_pointer_unchanged": true,
+      "blocked_callback_cue_expired": true,
+      "passed": true
+    },
+    "web": [
+      {
+        "site": "owned DOM fixture",
+        "activated_once": true,
+        "cursor_removed": true,
+        "system_pointer_unchanged": true
+      },
+      {
+        "site": "YouTube",
+        "passed": true,
+        "available_buttons": [
+          "Guide",
+          "Skip navigation",
+          "Search",
+          "Search with your voice",
+          "Settings",
+          ""
+        ],
+        "control": "Guide",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": false,
+          "after": true,
+          "changed": true
+        }
+      },
+      {
+        "site": "GitHub",
+        "passed": true,
+        "available_buttons": [
+          "Platform",
+          "Solutions",
+          "Resources",
+          "Open Source",
+          "Enterprise",
+          "Search or jump to, type / to search",
+          "",
+          "Sponsor python/cpython",
+          "main branch",
+          "Code",
+          ""
+        ],
+        "control": "Platform",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/python/cpython",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": "false",
+          "after": "true",
+          "changed": true
+        }
+      },
+      {
+        "site": "Spotify web",
+        "passed": false,
+        "available_buttons": [
+          "Home",
+          "Search",
+          "Browse",
+          "Premium",
+          "Support",
+          "Download",
+          "Sign up",
+          "Log in",
+          "Create",
+          "Create playlist",
+          "English",
+          "Sign up free",
+          "Enable shuffle",
+          "Search",
+          "Show Now Playing view"
+        ],
+        "control": "Search",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": false,
+          "after": false,
+          "changed": false
+        }
+      }
+    ],
+    "passed": false
+  },
+  {
+    "date": "2026-10-08T07:28:33.843366+00:00",
+    "scope": "Actual Jarvis pointer-free workers, owned native/DOM fixtures and requested public sites in a fresh separate Chrome profile. DOM changes are observations, not complete task verification.",
+    "native": {
+      "cue_noactivate": true,
+      "cue_clickthrough": true,
+      "cue_visible": true,
+      "cue_kept_foreground": true,
+      "cue_did_not_move_mouse": false,
+      "cue_disposed": true,
+      "native_activated_once": true,
+      "native_pointer_unchanged": false,
+      "provider": "ufo",
+      "grounded_activated_once": true,
+      "grounded_pointer_unchanged": false,
+      "blocked_callback_cue_expired": true,
+      "passed": false
+    },
+    "web": [
+      {
+        "site": "owned DOM fixture",
+        "activated_once": true,
+        "cursor_removed": true,
+        "system_pointer_unchanged": false
+      },
+      {
+        "site": "YouTube",
+        "passed": true,
+        "available_buttons": [
+          "Guide",
+          "Skip navigation",
+          "Search",
+          "Search with your voice",
+          "Settings",
+          ""
+        ],
+        "control": "Guide",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": false,
+          "after": true,
+          "changed": true
+        }
+      },
+      {
+        "site": "GitHub",
+        "passed": true,
+        "available_buttons": [
+          "Platform",
+          "Solutions",
+          "Resources",
+          "Open Source",
+          "Enterprise",
+          "Search or jump to, type / to search",
+          "",
+          "Sponsor python/cpython",
+          "main branch",
+          "Code",
+          ""
+        ],
+        "control": "Platform",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/python/cpython",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": "false",
+          "after": "true",
+          "changed": true
+        }
+      },
+      {
+        "site": "Spotify web",
+        "passed": true,
+        "available_buttons": [
+          "Home",
+          "Search",
+          "Browse",
+          "Premium",
+          "Support",
+          "Download",
+          "Sign up",
+          "Log in",
+          "Create",
+          "Create playlist",
+          "English",
+          "Sign up free",
+          "Enable shuffle",
+          "Show Now Playing view"
+        ],
+        "control": "Browse",
+        "dispatched_once": true,
+        "system_pointer_unchanged": true,
+        "cursor_removed": true,
+        "dom_changed": true,
+        "url_path": "/search",
+        "downstream_verified": false,
+        "postcondition": {
+          "before": {
+            "path": "/",
+            "expanded": null
+          },
+          "after": {
+            "path": "/search",
+            "expanded": null
+          },
+          "changed": true
+        }
+      }
+    ],
+    "passed": false
+  }
+]

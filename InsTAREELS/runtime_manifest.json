@@ -1,6 +1,19 @@
 {
   "version": 1,
   "capabilities": [
+    "single_python_language_preserving_workload",
+    "process_shared_priority_gpu_inference_handoff",
+    "speech_reserved_partial_gpu_offload",
+    "identity_checked_warm_model_reuse",
+    "disposable_independent_jarvis_cursor",
+    "pointer_preserving_accessibility_and_browser_activation",
+    "read_only_configured_service_readiness",
+    "owned_media_helper_tree_cleanup",
+    "bounded_unchanged_checkpoint_commit_backoff",
+    "negative_instruction_python_interface_preservation",
+    "explicit_game_pause_button_focus",
+    "green_public_api_context_and_idle_serious_alerts",
+    "localgithub_tested_codex_workload_assembly",
     "local_qwen_codex_file_execution",
     "streamed_codex_island_activity",
     "multilingual_coding_guidance_and_source_checks",
@@ -115,6 +128,11 @@
     "development_practice_progression"
   ],
   "main_imports": [
+    "jarvis.gpu_scheduler",
+    "jarvis.independent_cursor",
+    "jarvis.browser_cursor",
+    "jarvis.runtime_health",
+    "jarvis.diagnostics",
     "tkinter",
     "PIL",
     "sounddevice",
@@ -122,6 +140,10 @@
     "scipy",
     "faster_whisper",
     "requests",
+    "websocket",
+    "jarvis.realtime",
+    "jarvis.realtime_sources",
+    "jarvis.realtime_catalog",
     "psutil",
     "pywinauto",
     "send2trash",
@@ -149,6 +171,9 @@
     "jarvis.gui_contract",
     "jarvis.coding_languages",
     "jarvis.codex_code",
+    "jarvis.codex_workload",
+    "jarvis.codex_validation",
+    "jarvis.codex_browser_check",
     "jarvis.codex_files",
     "jarvis.codex_proxy",
     "jarvis.ollama_models",
@@ -166,6 +191,7 @@
     "transformers"
   ],
   "services": [
+    "realtime_observations",
     "context_selector",
     "anticipation",
     "island_media_observations",
@@ -186,6 +212,12 @@
     "development_preview"
   ],
   "ui_assets": [],
+  "optional_audit": {
+    "requirements": "requirements-audit.txt",
+    "target": ".jarvis-runtime/audit-tools",
+    "imports": ["pyflakes"],
+    "long_running_service": false
+  },
   "optional_training": {
     "requirements": "requirements-training.txt",
     "environment": ".venv-training",
@@ -294,7 +326,7 @@
     "configuration": "brain.native_tool_calling; brain.allow_model_fallback",
     "primary_model": "qwen3.5:9b",
     "model_digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7",
-    "inference": "existing owned brain worker, loopback Ollama /api/chat; CPU, thinking disabled, 4096..16384 token context",
+    "inference": "existing owned brain worker, loopback Ollama /api/chat; priority-managed partial GPU with CPU fallback, thinking disabled, 16384-token primary context",
     "execution": "one schema-validated proposal through the existing registry; scope, approvals and verification preserved",
     "feedback": "bounded verified current-task results as tool messages; no action replay",
     "firecrawl": "optional public v2 search/scrape/map; JARVIS_FIRECRAWL_KEY; no Codex auth export",
@@ -325,6 +357,41 @@
     "weight_updates": false,
     "native_tool": "development_native: explicit Electron Windows packaging / Expo Android or iOS local build, readiness + execution approval; no publishing"
   },
+  "python_script_workloads": {
+    "module": "jarvis.codex_workload",
+    "scope": "Named or unnamed single Python script/program requests without a requested multi-file/web/package stack",
+    "planning": "One Python implementation and executable Python behavioral tests in one worker; Python-only file/check schema and nonempty worker check_indices",
+    "validation": "Reject language drift and split script/test plans before writes; report every worker's missing/invalid check indices together; existing file ownership, cancellation and no-replay guards remain",
+    "graphical_checks": "Graphical/on-screen Python requests use behavioral python_tests; persistent GUI mainloops are not scheduled as one-shot python_script checks",
+    "worker_context": "Accepted single-Python tasks retain original task, contract, repository guidance, fresh diagnostic evidence and paired source-tool history in compact context; Tkinter tests must exercise the actual patched Canvas dependency and its drawing calls",
+    "verification": "verify_python_script_workload.py: isolated exact-request local Codex fixture and bounded owned Tkinter Canvas observation",
+    "new_dependencies": []
+  },
+  "gpu_scheduler": {
+    "module": "jarvis.gpu_scheduler",
+    "configuration": "gpu_scheduler in config.json",
+    "priority": ["planner", "execution/coding", "question", "cleanup", "context", "research", "background"],
+    "lifecycle": "No extra server/process; atomic local state with short OS lock, PID creation-time ownership, bounded queue and cancellation/dead-owner cleanup",
+    "health": "Metadata-only gpu status in existing operational heartbeat; admission/handoff/dispatch/release events under .jarvis-runtime/gpu",
+    "memory": "Conservative partial-layer envelope, 1024 MiB speech floor and 512 MiB additional headroom; actual external usage read from nvidia-smi",
+    "cache": "Same primary model uses 16384-token context and a 30-second warm cache; different-model handoff unloads only a freshly matched owned cache once",
+    "coding": "Local Codex Responses model alias: 9 GPU layers, 32768-token context; preserved tool protocol and no CLI/global-home changes; observed successful coding cache gets a 30-second timer and identity-checked handoff",
+    "coding_completion": "Finalize inference lease/cache before forwarding terminal Responses completion, so Codex job shutdown cannot orphan bookkeeping; retain observed cache identity if its timer update is unconfirmed",
+    "limits": "Nonpreemptive current inference; external GPU clients are not scheduled or killed. Native low-memory inference falls back to CPU; coding refuses before inference if its reserved alias footprint cannot fit. Helpers default to CPU after measured cold-start comparison; optional helper_gpu only admits idle GPU work.",
+    "recovery": "Existing owned worker shutdown; abandoned leases reaped by PID birth identity, no task/action replay; corrupt state fails closed and is preserved",
+    "new_dependencies": []
+  },
+  "independent_cursor": {
+    "native_module": "jarvis.independent_cursor",
+    "browser_module": "jarvis.browser_cursor",
+    "appearance": "Disposable cyan J cue approaches the freshly selected control, then disappears",
+    "input": "Native accessibility patterns or owned-browser Playwright/CDP; never move, hide or inject the system mouse",
+    "lifecycle": "Ephemeral window/thread inside existing bounded owned worker; native expiry 0.95 seconds even if action blocks; browser removal after click with 1.2 second fallback timer",
+    "health": "Preparation/arrival checked before dispatch; original target and focus readmitted after animation; cleanup failure never replays an action",
+    "recovery": "Existing worker ownership, timeouts and source snapshots; no new long-running service or automatic input replay",
+    "limitations": "Shared application focus and keyboard remain; physical-only controls, mouse move/drag/right/double-click recipes refuse; direct media APIs and text assignment do not need a cursor cue",
+    "new_dependencies": []
+  },
   "execution_providers": {
     "priority": [
       "ufo",
@@ -353,7 +420,7 @@
     "completed_action_history": 40,
     "maximum_task_goal_characters": 6000,
     "maximum_planning_http_seconds": 600,
-    "cpu_inference": true,
+    "cpu_inference": "Fallback/CPU helpers; primary turns use reserved partial GPU when admitted",
     "automatic_action_replay": false,
     "question_stream": true,
     "question_http_idle_seconds": 300,
@@ -373,7 +440,8 @@
     "model": "jarvis-claude-qwen3.5:9b, alias of installed qwen3.5:9b; same weights",
     "endpoint": "http://127.0.0.1:11434",
     "context_tokens": 32768,
-    "gpu_layers": 20,
+    "gpu_layers": 9,
+    "gpu_policy": "Current owned-alias preflight setting; legacy Claude adapter not live validated in the October 8 GPU update",
     "tools": [
       "Read",
       "Glob",
@@ -406,24 +474,26 @@
     "endpoint": "http://127.0.0.1:11434/v1/responses",
     "isolated_configuration": ".jarvis-runtime/codex-code/<run>/home/config.toml; global Codex home untouched",
     "context_tokens": 32768,
-    "gpu_layers": 20,
+    "gpu_layers": 9,
     "tools": [
       "Read",
       "Glob",
       "Grep",
       "Write",
-      "Edit"
+      "Edit",
+      "Plan"
     ],
-    "file_tools": "required task-owned stdio MCP jarvis.codex_files; current-read hashes, originals, syntax, exact edits, atomic save/readback",
+    "plan_tool": "Plan expected file paths, roles, purposes and executable checks; source writes blocked until declared",
+    "file_tools": "required task-owned stdio MCP jarvis.codex_files; Plan gate, current-read hashes, originals, syntax, exact edits, atomic save/readback",
     "owned_service": "task-owned native Codex CLI, source MCP and loopback Responses relay inside existing action worker; bounded startup and Stop cleanup",
-    "health": "local model/tools preflight, required MCP initialization, relay readiness, stream and final exit/result checks",
+    "health": "bounded existing loopback service startup, cancellation before local model/tools preflight, required MCP initialization, relay readiness, stream and final exit/result checks",
     "thinking": false,
-    "recovery": "Stop closes owned Windows job; partial files and receipts retained; inference retries disabled; no mutation replay or executor fallback",
+    "recovery": "Stop closes owned Windows job; partial files and receipts retained; inference retries disabled; three consecutive confirmed rejected saves hand off to fresh diagnosis; unconfirmed mutation halts; no mutation replay or executor fallback",
     "source_limit_characters": 20000,
     "response_token_limit": 6000,
     "stream_watchdog_ms": 1800000,
     "new_python_dependencies": [],
     "cloud_fallback": false,
-    "functional_verification": "Independent runtime/UI checks separate from model report"
+    "functional_verification": "Plan expected files/purposes/checks before writes; missing/empty/stub/resource checks; owned Python/Node/package/browser checks; full-stack browser exercises GET / with real successful backend requests; frozen checks and fresh source attachments to configured bounded Codex repair turns (currently three, maximum three); repair context retains original task, repository guidance and paired tool history; single shared deadline; no uncertain mutation replay"
   }
 }

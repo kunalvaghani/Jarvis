@@ -1,0 +1,1267 @@
+{
+  "guides": 210,
+  "error": null,
+  "resources": 1090,
+  "checks": [
+    {
+      "name": "apple-notes",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "apple-reminders",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "findmy",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "imessage",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "claude-code",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "codex",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "computer-use",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "hermes-agent",
+      "status": "verified",
+      "resources": 22,
+      "windows_supported": true
+    },
+    {
+      "name": "opencode",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "architecture-diagram",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "ascii-video",
+      "status": "verified",
+      "resources": 10,
+      "windows_supported": true
+    },
+    {
+      "name": "baoyu-infographic",
+      "status": "verified",
+      "resources": 47,
+      "windows_supported": true
+    },
+    {
+      "name": "claude-design",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "design-md",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "humanizer",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "manim-video",
+      "status": "verified",
+      "resources": 17,
+      "windows_supported": true
+    },
+    {
+      "name": "p5js",
+      "status": "verified",
+      "resources": 17,
+      "windows_supported": true
+    },
+    {
+      "name": "popular-web-designs",
+      "status": "verified",
+      "resources": 55,
+      "windows_supported": true
+    },
+    {
+      "name": "songwriting-and-ai-music",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "sdlc-review",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "email-inbox-triage",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "himalaya",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "gif-search",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "songsee",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "youtube-content",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "obsidian",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "airtable",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "box",
+      "status": "verified",
+      "resources": 11,
+      "windows_supported": true
+    },
+    {
+      "name": "document-to-action-items",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "docx",
+      "status": "verified",
+      "resources": 12,
+      "windows_supported": true
+    },
+    {
+      "name": "google-workspace",
+      "status": "verified",
+      "resources": 7,
+      "windows_supported": true
+    },
+    {
+      "name": "maps",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "meeting-action-items",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "notion",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "pdf",
+      "status": "verified",
+      "resources": 21,
+      "windows_supported": true
+    },
+    {
+      "name": "powerpoint",
+      "status": "verified",
+      "resources": 8,
+      "windows_supported": true
+    },
+    {
+      "name": "product-price-monitor",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "teams-meeting-pipeline",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "weekly-review-planning",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "xlsx",
+      "status": "verified",
+      "resources": 11,
+      "windows_supported": true
+    },
+    {
+      "name": "arxiv",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "competitor-news-monitor",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "grounded-citations",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "llm-wiki",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "xurl",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "codebase-inspection",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "dogfood",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "github",
+      "status": "verified",
+      "resources": 17,
+      "windows_supported": true
+    },
+    {
+      "name": "hermes-agent-skill-authoring",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "inspecting-hermes-desktop-dom",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "node-inspect-debugger",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "python-debugpy",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "requesting-code-review",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "simplify-code",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "spike",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "systematic-debugging",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "test-driven-development",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "blocked-page-recovery",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "agent-merge-conflict-arbiter",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "antigravity-cli",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "blackbox",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "dynamic-workflow",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "grok",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "honcho",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "openhands",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "evm",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "hyperliquid",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "solana",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "one-three-one-rule",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "ai-presenter-video",
+      "status": "verified",
+      "resources": 9,
+      "windows_supported": false
+    },
+    {
+      "name": "archify",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "ascii-art",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "audiocraft-audio-generation",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "auteur",
+      "status": "verified",
+      "resources": 27,
+      "windows_supported": true
+    },
+    {
+      "name": "baoyu-article-illustrator",
+      "status": "verified",
+      "resources": 35,
+      "windows_supported": true
+    },
+    {
+      "name": "baoyu-comic",
+      "status": "verified",
+      "resources": 35,
+      "windows_supported": true
+    },
+    {
+      "name": "brag",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "brag-slim",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "comfyui",
+      "status": "verified",
+      "resources": 33,
+      "windows_supported": true
+    },
+    {
+      "name": "concept-diagrams",
+      "status": "verified",
+      "resources": 20,
+      "windows_supported": true
+    },
+    {
+      "name": "creative-ideation",
+      "status": "verified",
+      "resources": 28,
+      "windows_supported": true
+    },
+    {
+      "name": "draw-your-font",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "dream-loop",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": false
+    },
+    {
+      "name": "excalidraw",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "heartmula",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "hyperframes",
+      "status": "verified",
+      "resources": 8,
+      "windows_supported": true
+    },
+    {
+      "name": "impeccable",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "ip-as-logo",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "kanban-video-orchestrator",
+      "status": "verified",
+      "resources": 12,
+      "windows_supported": true
+    },
+    {
+      "name": "meme-generation",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "mono-color",
+      "status": "verified",
+      "resources": 11,
+      "windows_supported": true
+    },
+    {
+      "name": "pixel-art",
+      "status": "verified",
+      "resources": 7,
+      "windows_supported": true
+    },
+    {
+      "name": "pretext",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "simple-english",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "sketch",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "social-media-content-calendar",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "system-atlas",
+      "status": "verified",
+      "resources": 7,
+      "windows_supported": false
+    },
+    {
+      "name": "tldraw-offline",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "unreal-mcp",
+      "status": "verified",
+      "resources": 6,
+      "windows_supported": true
+    },
+    {
+      "name": "jupyter-notebook",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "actual-setup",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "docker-management",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "hermes-s6-container-supervision",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "inference-sh-cli",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "pinggy-tunnel",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "setup-wizard-generator",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": false
+    },
+    {
+      "name": "watchers",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "adversarial-ux-test",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "agentmail",
+      "status": "verified",
+      "resources": 6,
+      "windows_supported": true
+    },
+    {
+      "name": "3-statement-model",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "comps-analysis",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "dcf-model",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "excel-author",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "lbo-model",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "merger-model",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "polymarket",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "pptx-author",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "stocks",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "minecraft-modpack-server",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "pokemon-player",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "fitness-nutrition",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "neuroskill-bci",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "fastmcp",
+      "status": "verified",
+      "resources": 6,
+      "windows_supported": true
+    },
+    {
+      "name": "mcp-oauth-remote-gateway",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "mcporter",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "openclaw-migration",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "accelerate",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "chroma",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "clip",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "evaluating-llms-harness",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "weights-and-biases",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "faiss",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": false
+    },
+    {
+      "name": "flash-attention",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "guidance",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "huggingface-tokenizers",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "llama-cpp",
+      "status": "verified",
+      "resources": 7,
+      "windows_supported": true
+    },
+    {
+      "name": "outlines",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "serving-llms-vllm",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "instructor",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "lambda-labs",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "llava",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "modal",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "huggingface-hub",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "segment-anything-model",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "nemo-curator",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "obliteratus",
+      "status": "verified",
+      "resources": 6,
+      "windows_supported": false
+    },
+    {
+      "name": "peft",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "pinecone",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "pytorch-fsdp",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": false
+    },
+    {
+      "name": "pytorch-lightning",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "qdrant",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "dspy",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "saelens",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "simpo",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "slime",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "stable-diffusion",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "tensorrt-llm",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": false
+    },
+    {
+      "name": "torchtitan",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "axolotl",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "trl-fine-tuning",
+      "status": "verified",
+      "resources": 7,
+      "windows_supported": true
+    },
+    {
+      "name": "unsloth",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "whisper",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": false
+    },
+    {
+      "name": "mpp-agent",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "stripe-link-cli",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "stripe-projects",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "canvas",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "decision-questionnaire",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "here-now",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "live-dashboard",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "memento-flashcards",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": false
+    },
+    {
+      "name": "property-listings",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "shop",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "shopify",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "siyuan",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "telephony",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "bioinformatics",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "blogwatcher",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "darwinian-evolver",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": false
+    },
+    {
+      "name": "domain-intel",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "drug-discovery",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "duckduckgo-search",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "gitnexus-explorer",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "osint-investigation",
+      "status": "verified",
+      "resources": 29,
+      "windows_supported": true
+    },
+    {
+      "name": "parallel-cli",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "pinecone-research",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "qmd",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": false
+    },
+    {
+      "name": "research-paper-writing",
+      "status": "verified",
+      "resources": 56,
+      "windows_supported": false
+    },
+    {
+      "name": "rss-feeds",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "scrapling",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "searxng-search",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": false
+    },
+    {
+      "name": "1password",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "godmode",
+      "status": "verified",
+      "resources": 9,
+      "windows_supported": true
+    },
+    {
+      "name": "oss-forensics",
+      "status": "verified",
+      "resources": 8,
+      "windows_supported": true
+    },
+    {
+      "name": "sherlock",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "unbroker",
+      "status": "verified",
+      "resources": 56,
+      "windows_supported": true
+    },
+    {
+      "name": "web-pentest",
+      "status": "verified",
+      "resources": 9,
+      "windows_supported": false
+    },
+    {
+      "name": "openhue",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "reddit-reading",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "ast-grep",
+      "status": "verified",
+      "resources": 14,
+      "windows_supported": true
+    },
+    {
+      "name": "code-wiki",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": true
+    },
+    {
+      "name": "grill-me",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "pr-lens",
+      "status": "verified",
+      "resources": 5,
+      "windows_supported": false
+    },
+    {
+      "name": "rest-graphql-debug",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "subagent-driven-development",
+      "status": "verified",
+      "resources": 3,
+      "windows_supported": true
+    },
+    {
+      "name": "cloudflare-temporary-deploy",
+      "status": "verified",
+      "resources": 2,
+      "windows_supported": true
+    },
+    {
+      "name": "har-derived-api-client",
+      "status": "verified",
+      "resources": 4,
+      "windows_supported": true
+    },
+    {
+      "name": "page-agent",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "publish-site",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    },
+    {
+      "name": "scrollcraft",
+      "status": "verified",
+      "resources": 22,
+      "windows_supported": true
+    },
+    {
+      "name": "yuanbao",
+      "status": "verified",
+      "resources": 1,
+      "windows_supported": true
+    }
+  ]
+}

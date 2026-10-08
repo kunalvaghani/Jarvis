@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-08T06:18:52.678105+00:00",
+  "scope": "Independent reinitialization check against the unchanged native Codex-generated backend, using a fresh temporary SQLite database. Generated tests still contain seven cases.",
+  "passed": true,
+  "count_before_reinitialization": 2,
+  "count_after_reinitialization": 2,
+  "server_sha256": "429a8232ab9079a4f4026d39f1e1a8befb2a1e4ceb369467916c8ccaf4c762cb"
+}

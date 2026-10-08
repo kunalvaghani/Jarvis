@@ -25,7 +25,12 @@ def perform(request, page):
                 if name in {'fill','press','select_option','check','uncheck','click'}:
                     if self.locator.evaluate("e => e.type==='password' || /password/i.test(e.getAttribute('autocomplete')||'')"):
                         raise ValueError('Password fields are excluded.')
-                result=method(*args,**kwargs)
+                if name=='click':
+                    from .browser_cursor import click
+                    if args: raise ValueError('Browser clicks require named options.')
+                    result=click(self.locator,page,**kwargs)
+                else:
+                    result=method(*args,**kwargs)
                 expected[0]=page.url  # Accept navigation caused by this one explicit action only.
                 return result
             return call

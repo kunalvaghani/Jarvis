@@ -1,0 +1,32 @@
+test_actual_browser_component_checks_and_final_unsuppressed_assembly (test_codex_workload.Workloads) ... ok
+test_backend_worker_can_test_part_while_final_contract_requires_both_layers (test_codex_workload.Workloads) ... ok
+test_coder_dispatch_preserves_disabled_single_session (test_codex_workload.Workloads) ... ok
+test_dependency_worker_sees_tested_predecessor (test_codex_workload.Workloads) ... ok
+test_destination_drift_blocks_all_promotion_and_preserves_originals (test_codex_workload.Workloads) ... ok
+test_diagnostics_report_all_workers_with_empty_or_invalid_check_indices (test_codex_workload.Workloads) ... ok
+test_explicit_requested_browser_sequence_is_preserved (test_codex_workload.Workloads) ... ok
+test_failed_worker_cancels_peers_without_promotion_or_replay (test_codex_workload.Workloads) ... ok
+test_false_rendered_animation_fails_real_browser_check (test_codex_workload.Workloads) ... ok
+test_file_tools_enforce_assignment_before_saves (test_codex_workload.Workloads) ... ok
+test_graph_ownership_cycles_checks_and_estimates (test_codex_workload.Workloads) ... ok
+test_html_parser_ignored_tokens_are_valid_while_empty_tests_and_logic_fail (test_codex_workload.Workloads) ... ok
+test_model_markup_property_mismatch_is_rejected_before_save (test_codex_workload.Workloads) ... ok
+test_new_plain_website_assigns_source_and_tests_without_authoring_code (test_codex_workload.Workloads) ... ok
+test_ownership_completion_never_redistributes_or_adds_undeclared_files (test_codex_workload.Workloads) ... ok
+test_partial_references_deferred_only_for_declared_other_workers (test_codex_workload.Workloads) ... ok
+test_partition_requires_missing_behavioral_test_before_implementation (test_codex_workload.Workloads) ... ok
+test_planner_diagnostics_report_missing_test_owners_together (test_codex_workload.Workloads) ... ok
+test_python_implementation_role_and_gui_check_faults_fail_before_writes (test_codex_workload.Workloads) ... ok
+test_raw_template_planner_uses_roles_and_structured_schema (test_codex_workload.Workloads) ... ok
+test_read_only_planner_stop_is_prompt_during_model_prefill (test_codex_workload.Workloads) ... ok
+test_real_worktrees_parallel_workers_and_combined_runtime_checks (test_codex_workload.Workloads) ... ok
+test_registered_worker_plan_cannot_be_replaced_or_broadened (test_codex_workload.Workloads) ... ok
+test_single_python_module_planner_keeps_tests_in_same_worker_schema (test_codex_workload.Workloads) ... ok
+test_single_worker_declared_test_ownership_is_completed_without_source_or_plan_mutation (test_codex_workload.Workloads) ... ok
+test_unnamed_python_script_rejects_language_drift_and_split_workers_before_writes (test_codex_workload.Workloads) ... ok
+test_website_planner_delivers_separate_feature_briefs_without_whole_task (test_codex_workload.Workloads) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 109.613s
+
+OK

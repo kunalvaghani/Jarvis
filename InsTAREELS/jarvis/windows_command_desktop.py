@@ -43,10 +43,21 @@ def perform(request, window, signature):
     held_keys=set(); held_buttons=set()
     class BoundMouse:
         def __getattr__(self,name):
+            if name in {'rightClick','doubleClick','middleClick','tripleClick','moveTo','moveRel','dragTo','dragRel','mouseDown','mouseUp','scroll','hscroll','vscroll'}:
+                raise ValueError('This recipe requires the shared mouse. Jarvis kept your pointer untouched; use a named accessible control.')
             target=getattr(pg,name)
             def call(*args,**kwargs):
                 guard(prepared[current[0]][0])
                 rect=window.rectangle()
+                if name=='click':
+                    if kwargs.get('button','left')!='left' or kwargs.get('clicks',1)!=1:
+                        raise ValueError('Only a single accessible activation is supported without your mouse.')
+                    point=args[0] if len(args)==1 else args[:2]
+                    if not args: point=(kwargs.get('x'),kwargs.get('y'))
+                    if len(point)!=2 or any(type(n) is not int for n in point) or not(rect.left<=point[0]<rect.right and rect.top<=point[1]<rect.bottom):
+                        raise ValueError('An accessible click requires explicit current-window coordinates; your mouse position is not borrowed.')
+                    from .independent_cursor import activate_point
+                    return activate_point(*point,hwnd)
                 if name in {'click','rightClick','doubleClick','middleClick','tripleClick','moveTo','dragTo','pixel','pixelMatchesColor'} and args:
                     point=args[0] if len(args)==1 else args[:2]
                     if len(point)!=2 or any(type(n) is not int for n in point) or not (rect.left<=point[0]<rect.right and rect.top<=point[1]<rect.bottom):
@@ -79,6 +90,20 @@ def perform(request, window, signature):
         def __init__(self,wrapper):self.wrapper=wrapper
         def __getattr__(self,name):
             if getattr(self.wrapper.element_info,'is_password',False):raise ValueError('Password controls are excluded.')
+            if name=='click_input':
+                def activate(*args,**kwargs):
+                    guard(prepared[current[0]][0])
+                    if args or kwargs.get('button','left')!='left' or kwargs.get('double',False):
+                        raise ValueError('This control needs a single accessible activation.')
+                    rect=self.wrapper.rectangle()
+                    coords=kwargs.get('coords',(rect.width()//2,rect.height()//2))
+                    if not isinstance(coords,(tuple,list)) or len(coords)!=2 or any(type(v) is not int for v in coords):
+                        raise ValueError('Use a current relative control point.')
+                    x,y=rect.left+coords[0],rect.top+coords[1]
+                    if not(rect.left<=x<rect.right and rect.top<=y<rect.bottom):raise ValueError('The point leaves the selected control.')
+                    from .independent_cursor import activate_point
+                    return activate_point(x,y,hwnd)
+                return activate
             if name=='child_window':
                 def child(**kwargs):
                     # Resolve a unique fresh child, never choose the first Edit or Save by default.

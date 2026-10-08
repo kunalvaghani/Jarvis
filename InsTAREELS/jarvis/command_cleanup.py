@@ -93,7 +93,26 @@ def propose(text, alternative, options, cancelled=lambda: False):
         raise
 
 
-def stream_json(payload, timeout_seconds, cancelled=lambda: False):
+def stream_json(payload, timeout_seconds, cancelled=lambda: False, role='cleanup'):
+    from .gpu_scheduler import configured, Lease, allocation, memory
+    policy=configured()
+    if not policy['enabled']:return _stream_json(payload,timeout_seconds,cancelled)
+    started=time.monotonic()
+    lease=Lease(role,payload['model'],{**policy,'wait_seconds':max(1,min(policy['wait_seconds'],int(timeout_seconds)))},cancelled=cancelled)
+    admitted=lease.acquire()
+    try:
+        options=payload.get('options',{})
+        layers=allocation(payload['model'],options.get('num_ctx',2048),policy,memory()) if admitted else 0
+        lease.registry.event(stage='dispatch',role=role,model=payload['model'],num_gpu=layers,gpu_slot=admitted)
+        remaining=timeout_seconds-(time.monotonic()-started)
+        if remaining<=0:raise TimeoutError('Selection budget elapsed before inference.')
+        return _stream_json({**payload,'keep_alive':0,'options':{**options,'num_gpu':layers}},
+                            remaining,cancelled)
+    finally:
+        if admitted:lease.close()
+
+
+def _stream_json(payload, timeout_seconds, cancelled=lambda: False):
     """One loopback request with a wall-clock budget, no retries or tool calls.
 
     Socket reads use the remaining budget. Byte-sized reads also bound a server

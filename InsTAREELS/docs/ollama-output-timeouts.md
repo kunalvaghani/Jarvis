@@ -1,5 +1,10 @@
 # Ollama output and Jarvis timeouts
 
+**Current follow-up (2026-10-08):** primary inference now uses
+[priority-managed partial GPU allocation](gpu-priority.md), with speech
+reservation and nine layers for the local Codex alias. CPU observations below
+describe the October 4 repair and retain that historical context.
+
 **Later follow-up on 2026-10-04:** the independent question worker still used
 non-streaming inference and a 180-second process deadline after this planning
 repair. [Streaming island answers](streaming-answers.md) replaces that question

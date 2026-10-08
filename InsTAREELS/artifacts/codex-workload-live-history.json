@@ -1,0 +1,128 @@
+[
+  {
+    "date": "2026-10-06T05:06:34.885997+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\af1e515f18144824bca6e558fe90ba35",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "passed": false,
+    "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=15) Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\54ac9676ce3b4ca5a89a683d1a3cb556",
+    "seconds": 15.422,
+    "progress_events": 2
+  },
+  {
+    "date": "2026-10-06T05:07:41.087934+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\4c3814d00b424d348b5f4208fecacdf6",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "passed": false,
+    "error": "Declare each checked entry/test file in the file list. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\d826de58b035470588cc0ebc520213e5",
+    "seconds": 379.75,
+    "progress_events": 96
+  },
+  {
+    "date": "2026-10-06T05:14:12.640103+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\808fd5704ce449089a0d1e2184f89b94",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "passed": false,
+    "error": "Browser check needs its real frontend HTML entry. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\7b60137e600d4e0ea31b025ebeb5a852",
+    "seconds": 390.188,
+    "progress_events": 14
+  },
+  {
+    "date": "2026-10-06T05:21:05.384966+00:00",
+    "scope": "Interrupted actual local planning/Codex workload trial, no application generation verified.",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\5ac8d5ef1573439f9e0b350918fc81fb",
+    "passed": false,
+    "interrupted": true,
+    "error": "Owned trial stopped to load corrected registered-worker instructions; observed no attempted or applied source writes. Worktrees retained; no same-task replay.",
+    "review": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\0ca279cd390145d79618afbf2372d0f8",
+    "destination_files": []
+  },
+  {
+    "date": "2026-10-06T05:29:04.435099+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\8154b4ae0166463e965a7934d4e7de7b",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\8154b4ae0166463e965a7934d4e7de7b-stop.json",
+    "passed": false,
+    "error": "Codex stopped; partial files retained. Inspect before continuing; no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\f351f87971b44b84ac328c294d0b7eeb Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\de2d7976350d46e39bf52b3748c8df21",
+    "seconds": 974.218,
+    "progress_events": 828
+  },
+  {
+    "date": "2026-10-06T05:46:57.925009+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\06de55ce0c344248973014e17c090857",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\06de55ce0c344248973014e17c090857-stop.json",
+    "passed": false,
+    "error": "Codex stopped; partial files retained. Inspect before continuing; no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\86fa2343021a459187fb0768640d28a0 Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\f4afe0c5406b4da29f80230a5cf19a2b",
+    "seconds": 726.765,
+    "progress_events": 672
+  },
+  {
+    "date": "2026-10-06T06:00:51.078780+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\040cdb66a80044008edfc5907687e0c1",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\040cdb66a80044008edfc5907687e0c1-stop.json",
+    "passed": false,
+    "error": "Workload stopped; partial worktrees retained without replay. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\8c52f46a8a9f4073bc08a1180ddfe84e",
+    "seconds": 743.187,
+    "progress_events": 939
+  },
+  {
+    "date": "2026-10-06T06:13:22.075602+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\a15ca6b6e57c4f1bbd8131525e9f8731",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\a15ca6b6e57c4f1bbd8131525e9f8731-stop.json",
+    "passed": false,
+    "error": "Codex stopped; partial files retained. Inspect before continuing; no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\83fd598ff95f42d4849eb5773e297670 Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\5ed1a765fbdc47e7ad1fc26736fa1584",
+    "seconds": 2043.969,
+    "progress_events": 3028
+  },
+  {
+    "date": "2026-10-06T07:04:02.148064+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\18f7dd703ae84b188242a7bb9a067245",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\18f7dd703ae84b188242a7bb9a067245-stop.json",
+    "passed": false,
+    "error": "Project verification failed after 2 repair turns: index.html: Browser step failed: {\"action\": \"text\", \"selector\": \"#count\", \"value\": \"0\"}; Locator expected to have text '0'\r\nActual value:  \r\nCall log:\r\n  - Expect \"to_have_text\" locator(\"#count\") with timeout 5000ms\r\n  - waiting for locator(\"#count\")\r\n    14 \ufffd locator resolved to <input readonly value=\"0\" id=\"count\" type=\"text\"/>\r\n       - unexpected value \"\"\r\n\r\nAria snapshot:\r\n- textbox \"Count:\": \"0\"; observed runtime/HTTP errors: []. Partial files retained. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\807e1b499f794186a994ddda9d75b918 Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\de7985d4254d4b8fa56307b0b39019d9",
+    "seconds": 1018.594,
+    "progress_events": 6604
+  },
+  {
+    "date": "2026-10-06T07:45:38.874008+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\02ee8024797943ceabc8fb5c07c120b1",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\02ee8024797943ceabc8fb5c07c120b1-stop.json",
+    "passed": false,
+    "error": "Codex stopped; partial files retained. Inspect before continuing; no task replayed. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\b9e30c19cdb6410e96d956d10662fe48 Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\76ff77c7f3644b3aad3be869842dba7b",
+    "seconds": 854.297,
+    "progress_events": 994
+  },
+  {
+    "date": "2026-10-06T08:00:30.647330+00:00",
+    "client_inspection_date": "2026-10-07",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\9259deac77c14666aa789db22561832e",
+    "passed": false,
+    "status": "interrupted",
+    "review": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\d659c773745d47feb01601d878df41dc",
+    "scope": "Fresh inspection of interrupted live animated landing-page trial. Tested Codex markup retained; CSS/JS never confirmed any saves; destination empty.",
+    "completed_workers": [
+      "markup"
+    ],
+    "evidence": {
+      "task_owned_processes_observed": 0,
+      "pending_worker_save_journals": 0,
+      "destination_files": 0
+    },
+    "error": "Execution interrupted after markup passed and was committed, before CSS/JS saves or combined validation. No uncertain mutations replayed."
+  },
+  {
+    "date": "2026-10-07T05:42:53.464602+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\fea5ef431228414d8a018d5e48140db8",
+    "scope": "Actual Jarvis workload planner, separate Codex/local Qwen sessions, LocalGithub Git assembly, per-worker tests and final animated browser interaction. No manually authored application source.",
+    "client_date": "2026-10-07",
+    "stop_file": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\fea5ef431228414d8a018d5e48140db8-stop.json",
+    "passed": false,
+    "error": "Project verification failed after 2 repair turns: app.js: Browser step failed: {\"action\": \"text\", \"selector\": \"#theme\", \"value\": \"Dark mode\"}; Locator expected to have text 'Dark mode'\r\nActual value: Light mode \r\nCall log:\r\n  - Expect \"to_have_text\" locator(\"#theme\") with timeout 5000ms\r\n  - waiting for locator(\"#theme\")\r\n    14 \ufffd locator resolved to <button id=\"theme\">Light mode</button>\r\n       - unexpected value \"Light mode\"\r\n\r\nAria snapshot:\r\n- button \"Light mode\"; observed runtime/HTTP errors: [\"themeButton is not defined\"]. Partial files retained. Review: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-code\\d4659258b7ee47b080e9be3dd039f19f Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workloads\\f7ef551455b44c8aa71f338facb57cd0",
+    "seconds": 785.219,
+    "progress_events": 664
+  }
+]

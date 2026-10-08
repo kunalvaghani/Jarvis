@@ -1,0 +1,14 @@
+test_action_task_records_failure_and_success (tests.test_task_state.TaskStateTests) ... ok
+test_actual_windows_reader_lock_releases_before_checkpoint_commit_deadline (tests.test_task_state.TaskStateTests) ... ok
+test_completed_task_emits_spoken_reply_and_keeps_action_transcript (tests.test_task_state.TaskStateTests) ... ok
+test_failed_checkpoint_preserves_pending_file_and_never_overwrites_other_writer (tests.test_task_state.TaskStateTests) ... ok
+test_known_failed_checkpoint_commit_retries_without_rewriting_task (tests.test_task_state.TaskStateTests) ... ok
+test_plan_revisions_survive_restart_as_context_not_replay (tests.test_task_state.TaskStateTests) ... ok
+test_previous_context_only_for_same_unfinished_goal (tests.test_task_state.TaskStateTests) ... ok
+test_restart_marks_unfinished_task_and_preserves_checkpoints (tests.test_task_state.TaskStateTests) ... ok
+test_unclassified_commit_failure_is_not_retried (tests.test_task_state.TaskStateTests) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.113s
+
+OK

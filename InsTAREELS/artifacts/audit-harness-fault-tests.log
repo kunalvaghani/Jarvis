@@ -1,0 +1,21 @@
+test_cancellation_during_recovery_prevents_retry (test_harness.HarnessTests) ... ok
+test_cancelled_request_does_not_start_worker (test_harness.HarnessTests) ... ok
+test_disabled_tool_does_not_join_profile (test_harness.HarnessTests) ... ok
+test_hidden_spawn_attaches_only_created_process (test_harness.HarnessTests) ... ok
+test_invalid_proposal_cannot_reach_execution (test_harness.HarnessTests) ... ok
+test_job_close_reaps_owned_child_and_leaves_unowned_child (test_harness.HarnessTests) ... ok
+test_local_schema_advertises_only_current_read_tools (test_harness.HarnessTests) ... ok
+test_missing_environment_has_setup_instruction (test_harness.HarnessTests) ... ok
+test_mixed_clarification_and_steps_remain_rejected_by_runtime (test_harness.HarnessTests) ... ok
+test_profile_rejects_shell_and_unknown_active_plugins (test_harness.HarnessTests) ... ok
+test_replan_cannot_repeat_completed_action (test_harness.HarnessTests) ... ok
+test_research_provider_preserves_strict_session_response_contract (test_harness.HarnessTests) ... ok
+test_routing_preserves_memory_and_other_inference_routes (test_harness.HarnessTests) ... ok
+test_scoped_development_plan_routing_and_path_validation (test_harness.HarnessTests) ... ok
+test_watchdog_clears_dead_worker_without_running_inference (test_harness.HarnessTests) ... ok
+test_worker_loss_has_bounded_inference_retry_and_backoff (test_harness.HarnessTests) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.964s
+
+OK

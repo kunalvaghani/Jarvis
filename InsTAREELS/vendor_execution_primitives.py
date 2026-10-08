@@ -77,7 +77,7 @@ OPERATION_WAIT_TIME = 0
                           'Windows-MCP subset copied without Python 3.14 MCP server dependencies; no telemetry.',
                           'Windows-MCP SelectionContainer and multi-toggle SetToggleState are omitted.',
                           'Cua/OCU primitives ported from Rust/Go; full SDKs are not installed.',
-                          'Agent-S centre click adapted to existing pywinauto injector; no exec of generated scripts.',
+                          'Agent-S ordered accessible-target adaptation uses Jarvis role-aware native patterns; earlier centre mouse click removed on 2026-10-08; no exec of generated scripts.',
                           'All original-framework non-Windows/model/server/build code remains source inventory, not enabled runtime.']}, indent=2) + '\n', encoding='utf-8')
     print('Vendored six UIA pattern classes and six license notices.')
 

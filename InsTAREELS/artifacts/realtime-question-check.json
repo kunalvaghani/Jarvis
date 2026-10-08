@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-07T07:59:58.379161+00:00",
+  "scope": "Actual foreground question-model answer grounded in a live green API reference-rate record; no spoken output or desktop action.",
+  "provider": "frankfurter",
+  "expected_rate": 96.42,
+  "observation_date": "2026-10-06",
+  "source_url": "https://api.frankfurter.dev/v1/latest",
+  "answer": "The USD to INR reference rate is 96.42 for the date 2026-10-06, according to Frankfurter (https://frankfurter.dev/).",
+  "passed": true,
+  "seconds": 38.547
+}

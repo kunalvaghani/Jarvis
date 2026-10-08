@@ -6,9 +6,24 @@ from pathlib import Path
 import sys
 import tempfile
 
-from .claude_code_guard import decide, gui_script_target
+from .claude_code_guard import decide
 
 READS = {}
+
+
+def check_component_markup(content, plan):
+    """Reject a provable DOM property mismatch before applying model source."""
+    from html.parser import HTMLParser
+    import re
+    text_ids={s['selector'][1:] for c in plan.get('checks',[]) for s in c.get('steps',[])
+              if s.get('action')=='text' and re.fullmatch(r'#[A-Za-z][\w-]*',s.get('selector',''))}
+    class Tags(HTMLParser):
+        def handle_starttag(self,tag,attrs):
+            name=dict(attrs).get('id')
+            if tag in {'input','textarea'} and name in text_ids:
+                raise ValueError('Registered text assertion for #'+name+' requires a text-bearing element, not '+tag+
+                    '. Render visible textContent and preserve the browser check. No source was saved.')
+    Tags().feed(content)
 
 
 def digest(path):
@@ -18,12 +33,66 @@ def digest(path):
 def execute(tool, args):
     root = Path(os.environ['JARVIS_CODEX_PROJECT']).resolve(strict=True)
     run = Path(os.environ['JARVIS_CODEX_RUN']).resolve(strict=True)
-    path, content = decide(root, tool, args)
+    request_data=json.loads((run/'request.json').read_text(encoding='utf-8'))
+    if tool=='Edit' and request_data.get('platform_component') and request_data.get('repair_diagnostics'):
+        plan=json.loads((run/'validation-contract.json').read_text(encoding='utf-8'))
+        if len(plan.get('files',[]))==1:
+            raise ValueError('One-file component repair requires Read then Write of the complete corrected file addressing all observed failures. Partial Edit was not applied.')
+    if tool=='Plan':
+        from .codex_validation import declare
+        return declare(root,run,args)
+    if tool in {'Write','Edit'} and json.loads((run/'request.json').read_text(encoding='utf-8')).get('require_validation') and not (run/'validation-contract.json').exists():
+        raise ValueError('Call Plan before writing. Declare all files and tests, e.g. files=[{path:"main.py",role:"logic",purpose:"Implement requested logic"},{path:"test_main.py",role:"test",purpose:"Assert requested behavior"}], checks=[{kind:"python_tests",path:"test_main.py"}]. Then implement both files. For UI use a browser check with actual interaction/assertion steps.')
+    try:path, content = decide(root, tool, args)
+    except ValueError as error:
+        # Rejected proposals never became disk files. Preserve syntax evidence
+        # separately from attempted/applied mutations for the next repair turn.
+        if tool=='Write' and isinstance(args.get('content'),str):
+            import ast
+            rejected_js=None
+            try:
+                raw=Path(args.get('file_path',''))
+                relative=(raw if raw.is_absolute() else root/raw).relative_to(root).as_posix()
+                from .codex_validation import source_path
+                source_path(root,relative)
+                if Path(relative).suffix.lower()=='.py':ast.parse(args['content'])
+                elif Path(relative).suffix.lower() in {'.js','.mjs','.cjs'} and 'Generated JavaScript failed node --check' in str(error):
+                    import re
+                    match=re.search(r'source\.(?:mjs|js|cjs):(\d+)',str(error))
+                    number=int(match[1]) if match else 1
+                    lines=args['content'].splitlines()
+                    excerpt='\n'.join(str(i+1)+': '+lines[i] for i in range(max(0,number-5),min(len(lines),number+3)))
+                    message=str(error)+'\nRejected source near the error:\n'+excerpt
+                    with (run/'file-events.jsonl').open('a',encoding='utf-8') as output:
+                        output.write(json.dumps({'stage':'rejected','path':relative,'error':message,'proposed_source':args['content'][:20000]})+'\n')
+                    rejected_js=message
+            except SyntaxError as syntax:
+                lines=args['content'].splitlines();line=syntax.lineno or 1
+                excerpt='\n'.join(str(i+1)+': '+lines[i] for i in range(max(0,line-6),min(len(lines),line+3)))
+                hint=' A preceding try needs a matching except/finally; finish its handler or remove the unnecessary try.' if "expected 'except' or 'finally'" in str(syntax) else ''
+                message=str(error)+hint+'\nRejected source near the error:\n'+excerpt
+                with (run/'file-events.jsonl').open('a',encoding='utf-8') as output:
+                    output.write(json.dumps({'stage':'rejected','path':relative,'error':message,'proposed_source':args['content'][:20000]})+'\n')
+                raise ValueError(message) from error
+            except (ValueError,OSError,TypeError):pass
+            if rejected_js:raise ValueError(rejected_js) from error
+        raise
     # Reject all linked ancestors, including links that resolve inside the root.
     for parent in [path, *path.parents]:
         if parent == root: break
         if parent.is_symlink(): raise ValueError('Linked source paths are outside the editable scope.')
     path = path.resolve()
+    allowed=request_data.get('allowed_paths')
+    if tool in {'Write','Edit'} and allowed is not None and path.relative_to(root).as_posix().casefold() not in {n.casefold() for n in allowed}:
+        raise ValueError('This file belongs to another worker; writes are limited to the assigned exact paths.')
+    if tool in {'Write','Edit'} and request_data.get('test_first'):
+        contract_path=run/'validation-contract.json'
+        plan=json.loads(contract_path.read_text(encoding='utf-8'))
+        tests=[f['path'] for f in plan['files'] if f['role']=='test']
+        relative=path.relative_to(root).as_posix()
+        missing=[name for name in tests if not (root/name).is_file()]
+        if missing and relative not in tests:
+            raise ValueError('Save the assigned behavioral test first: '+', '.join(missing)+'. Then implement your assigned source. No implementation write was applied.')
     if tool == 'Read':
         source = path.read_text(encoding='utf-8')
         READS[str(path)] = digest(path)
@@ -51,11 +120,24 @@ def execute(tool, args):
     observed = digest(path)
     if path.exists() and READS.get(str(path)) != observed:
         raise ValueError('Read the current file before modifying it; its bytes may have changed.')
+    if path.exists() and path.read_text(encoding='utf-8')==content:
+        raise ValueError('The proposed source is unchanged. Diagnose the observed failing assertion and make a real source correction; no save was applied.')
+    if request_data.get('platform_component'):
+        if path.suffix.lower() in {'.html','.htm'}:
+            check_component_markup(content,json.loads((run/'validation-contract.json').read_text(encoding='utf-8')))
     goal = json.loads((run/'request.json').read_text(encoding='utf-8'))['goal']
     if path.suffix.lower() == '.py':
         from .code_context import check_python_interfaces
-        if path.exists(): check_python_interfaces(path.read_text(encoding='utf-8'), content, goal)
-        if tool == 'Write' and gui_script_target(goal, path):
+        contract_path=run/'validation-contract.json'
+        plan=json.loads(contract_path.read_text(encoding='utf-8')) if contract_path.exists() else None
+        interface_goal=goal
+        if any(f['path']==path.relative_to(root).as_posix() and f['role']=='test' for f in (plan or {}).get('files',[])):
+            import re
+            if re.search(r'\b(?:convert|rewrite|replace)\b.{0,60}\b'+re.escape(path.name)+r'\b',goal,re.I) and re.search(r'\b(?:unittest|test cases|test assertions|test harness|test suite)\b',goal,re.I):
+                interface_goal+=' rewrite the explicitly selected test harness'
+        if path.exists(): check_python_interfaces(path.read_text(encoding='utf-8'), content, interface_goal)
+        from .codex_validation import desktop_gui_target
+        if tool == 'Write' and desktop_gui_target(root,path,goal,plan):
             from .gui_contract import check
             check(content, goal)
     signature = hashlib.sha256(json.dumps({'tool':tool,'path':str(path),'args':args},sort_keys=True).encode()).hexdigest()
@@ -103,6 +185,14 @@ def tool_specs():
             'Glob':'List supported source files within this project by relative wildcard.',
             'Grep':'Find literal text in bounded supported project source files.'}[name]
         specs.append({'name':name,'description':description,'inputSchema':{'type':'object','properties':props,'required':required,'additionalProperties':False}})
+    specs.append({'name':'Plan','description':'Declare every expected file with its purpose and role, and real executable checks before writing code. During repair, empty arguments retrieve the existing validated Plan read-only. Preserve recorded files/checks. Browser backend must accept --port N --data-dir PATH and serve its frontend plus API on 127.0.0.1.',
+        'inputSchema':{'type':'object','properties':{
+            'files':{'type':'array','items':{'type':'object','properties':{'path':{'type':'string'},'role':{'type':'string','enum':['frontend','backend','entrypoint','logic','test','configuration','documentation']},'purpose':{'type':'string'}},'required':['path','role','purpose'],'additionalProperties':False}},
+            'checks':{'type':'array','items':{'type':'object','properties':{'kind':{'type':'string','enum':['python_tests','node_tests','python_script','node_script','browser','npm_build','npm_test','npm_typecheck']},'path':{'type':'string'},'animation_selectors':{'type':'array','items':{'type':'string'}},'server':{'type':'object','properties':{'kind':{'type':'string','enum':['python','node']},'path':{'type':'string'}},'required':['kind','path'],'additionalProperties':False},'steps':{'type':'array','items':{'type':'object','properties':{'action':{'type':'string','enum':['click','fill','text','value','reload']},'selector':{'type':'string'},'value':{'type':'string'}},'required':['action'],'additionalProperties':False}}},'required':['kind','path'],'additionalProperties':False}}},'additionalProperties':False}})
+    properties=specs[-1]['inputSchema']['properties']['checks']['items']['properties']
+    properties['kind']['enum'].append('browser_component')
+    properties.update(entry={'type':'string'},component={'type':'string','enum':['markup','styles','logic']},
+                      suppress_resources={'type':'array','items':{'type':'string'}},required_selectors={'type':'array','items':{'type':'string'}})
     return specs
 
 

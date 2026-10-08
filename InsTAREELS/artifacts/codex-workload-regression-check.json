@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07T06:27:47.676503+00:00",
+  "scope": "Authored regression tests and readiness checks; separate from actual model-generated website trials. Includes real Git worktree/dependency/promotion tests and Chrome checks rejecting static/no-op animation.",
+  "checks": {
+    "regression": {
+      "passed": true,
+      "tests": 1067,
+      "seconds": 139.85
+    },
+    "focused": {
+      "passed": true,
+      "tests": 53,
+      "seconds": 81.744
+    },
+    "readiness": {
+      "status": "ready",
+      "missing": [],
+      "adaptive_planning": true,
+      "incremental_planning": true,
+      "reuse_navigation_workflows": true,
+      "native_tool_calling": true,
+      "task_recovery": true,
+      "planner": "qwen3.5:9b",
+      "planning_backend": "qwen-native-tools",
+      "screen_model": "qwen3.5:9b",
+      "visual_fallback": "ui-tars-parser"
+    }
+  }
+}

@@ -33,6 +33,7 @@ def prepare(path, payload):
 
 def serve(run):
     import requests
+    from .knowledge_worker import session
     run=Path(run).resolve(strict=True)
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args):pass
@@ -44,8 +45,9 @@ def serve(run):
             except (ValueError,TypeError) as exc:
                 self.send_error(400,str(exc));return
             try:
-                with requests.Session() as client:
+                with session() as client:
                     client.trust_env=False
+                    client.gpu_role='coding'
                     # Forward no provider credentials or user-selected hosts.
                     with client.post(ORIGIN+route,json=payload,stream=True,timeout=(3,900),
                         headers={'anthropic-version':'2023-06-01','x-api-key':'ollama'}) as response:

@@ -1,5 +1,10 @@
 # Ordered Windows execution providers
 
+**2026-10-08 update:** Native activation now displays Jarvis's disposable cyan J
+cursor and uses accessibility patterns throughout the provider chain. The final
+Agent-S adaptation refuses a missing pattern instead of moving/clicking the
+system mouse. [Behavior, live checks and limits](independent-cursor.md).
+
 Implemented and checked on **2026-10-04**. Jarvis now routes compatible native
 desktop inputs through reviewed primitives in this order: **UFO → Windows-MCP →
 CUA → Open Computer Use → Agent-S**. Exact supported task grammar executes
@@ -58,7 +63,7 @@ of every file or expose all its functions as task tools.
 | Windows-MCP | [UIA pattern classes](https://github.com/cursortouch/windows-mcp/blob/f51d6f14da57c290dac44f0f465c37c45ca4f394/src/windows_mcp/uia/patterns.py) | Vendor six classes: Value, Invoke, SelectionItem, Toggle, ExpandCollapse and Scroll. Use exact text assignment, role-aware activation, menu expansion and directional scroll readback. |
 | Cua Driver | [Windows bookmark helpers](https://github.com/trycua/cua/blob/35751f65f121ccb93bf4434bb453b97b58ad4ca7/libs/cua-driver/rust/crates/platform-windows/src/tools/page_bookmark.rs) | Port Rust `set_value` and `invoke_element` to Python COM: resolve the admitted element's current pattern, query the interface, then dispatch once. The browser bookmark-editing workflow itself is not added. |
 | Open Computer Use | [Windows native actions](https://github.com/opensymph/open-computer-use/blob/5b433b98019c18201a15d11e8c3cb0010879a3d8/apps/OpenComputerUseWindows/native_actions.go) | Port native Value assignment and preferred accessibility click. Resolve Invoke, SelectionItem or Toggle before dispatch, retaining role-specific postconditions where available. |
-| Agent-S | [WindowsOSACI](https://github.com/simular-ai/Agent-S/blob/3aa272d23d2994c7bbde1acbbe0ef8e8d06b8693/gui_agents/s1/aci/WindowsOSACI.py) | Adapt the accessible element's centre calculation for a final explicit click. Recheck live bounds, focus and native HWND hit test. Use existing pywinauto input; do not execute generated Python strings. |
+| Agent-S | [WindowsOSACI](https://github.com/simular-ai/Agent-S/blob/3aa272d23d2994c7bbde1acbbe0ef8e8d06b8693/gui_agents/s1/aci/WindowsOSACI.py) | Retain the ordered Windows accessible-target adaptation, with Jarvis's role-aware native patterns replacing the earlier centre mouse click on October 8. Missing patterns refuse before dispatch; no generated Python execution. |
 
 [execution_adapters.py](../jarvis/execution_adapters.py) contains the adaptations;
 [execution_router.py](../jarvis/execution_router.py) owns ordering and receipts.

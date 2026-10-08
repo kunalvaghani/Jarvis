@@ -1,5 +1,13 @@
 # Imported Windows command execution
 
+**2026-10-08 mouse update:** The original 493-entry catalog remains available as
+reference. Runtime single-click commands now require an accessible target and
+display the [independent Jarvis cursor](independent-cursor.md). Mouse move, drag,
+button-down/up, wheel, right/middle/double/triple-click recipes refuse before
+physical input; they are not currently runnable commands. Native accessibility
+scroll and browser DOM actions remain separate supported paths. The system
+pointer stays under the user's control; keyboard and app focus remain shared.
+
 Updated 2026-10-04. Jarvis retains **all 493 entries in 21 categories**, including
 238 PowerShell, 241 Python/UIA and 14 Playwright examples, from the user-provided
 ZIP. [Original Markdown](../integrations/windows-command-reference/Jarvis_Windows_11_Commands.md),

@@ -16,7 +16,7 @@ class ToolTests(unittest.TestCase):
         catalog = ToolRegistry(Mock()).catalog()
         self.assertEqual({item["action"] for item in catalog}, ALLOWED)
         self.assertEqual(set(SCHEMAS["plan"]["properties"]["steps"]["items"]["properties"]["action"]["enum"]), set(TOOL_NAMES))
-        self.assertEqual({item["backend"] for item in catalog}, {"files", "terminal", "browser", "desktop", "toolkit", "dom"})
+        self.assertEqual({item["backend"] for item in catalog}, {"files", "terminal", "browser", "desktop", "toolkit", "dom", "realtime"})
         self.assertTrue({"delete_file", "run_command", "send_email", "github_delete_file", "slack_send", "calendar_delete"}
                         <= {item["action"] for item in catalog if item["approval"] == "user"})
 

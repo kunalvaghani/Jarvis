@@ -70,6 +70,34 @@ class CodingWorkflowTests(unittest.TestCase):
         self.assertEqual(file.read_text(encoding="utf-8"), original)
         self.assertEqual(self.client.request.call_count, 3)
 
+    def test_negative_removal_and_rewrite_instructions_preserve_interfaces(self):
+        from jarvis.code_context import check_python_interfaces
+        before='def run():\n    return 1\n'
+        after='def replacement():\n    return 2\n'
+        for goal in ('Preserve run(). Do not remove features.', 'Do not remove run.',
+                     "Don't delete the function run", 'Never rewrite this file; fix run.',
+                     'Avoid rewrite; preserve run', 'Without removing run, fix the API.'):
+            with self.subTest(goal=goal),self.assertRaisesRegex(ValueError,'removed existing functions'):
+                check_python_interfaces(before,after,goal)
+
+    def test_explicit_removal_names_only_the_requested_interface(self):
+        from jarvis.code_context import check_python_interfaces
+        before='def obsolete():\n    return 1\ndef run():\n    return 2\n'
+        after='def run():\n    return 2\n'
+        check_python_interfaces(before,after,'Remove the old function obsolete. Preserve run.')
+        with self.assertRaisesRegex(ValueError,'run'):
+            check_python_interfaces(before,'value=2\n','Remove obsolete. Preserve run.')
+        check_python_interfaces(before,'value=2\n','Rewrite the entire application with a new interface.')
+
+    def test_negative_removal_is_blocked_before_actual_source_save(self):
+        file=self.project/'app.py'
+        original='def run():\n    return 1\n'
+        file.write_text(original)
+        self.client.request.return_value={'content':'def replacement():\n    return 2\n'}
+        with self.assertRaisesRegex(ValueError,'removed existing functions'):
+            self.coder.run(self.project,'Preserve run. Do not remove features; fix app.py.',lambda:False)
+        self.assertEqual(file.read_text(),original)
+
     def test_explicit_subfolder_disambiguates_duplicate_basename(self):
         for sub in ("one", "two"):
             (self.project / sub).mkdir()

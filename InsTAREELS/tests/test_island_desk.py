@@ -308,9 +308,11 @@ class ApprovalAndMediaTests(unittest.TestCase):
         process.poll.return_value=None
         import subprocess
         process.communicate.side_effect=[subprocess.TimeoutExpired('observe',8),('','')]
-        with patch('jarvis.island_media.subprocess.Popen',return_value=process) as launch:
+        with patch('jarvis.island_media.subprocess.Popen',return_value=process) as launch, patch('jarvis.island_media.OwnedJob') as owned:
             jobs._run('pause')
             self.assertEqual(launch.call_count,1)
+            owned.return_value.attach.assert_called_once_with(process)
+            self.assertGreaterEqual(owned.return_value.close.call_count,1)
             process.kill.assert_called_once()
             self.assertIn('no retry',jobs.report.call_args[0][1]['error'].lower())
         jobs.process=process
@@ -376,6 +378,24 @@ class DeskWidgetTests(unittest.TestCase):
         desk.close()
         self.assertTrue(ready.is_set())
         self.assertFalse(answer['approved'])
+
+    def test_pause_button_focus_does_not_invert_one_explicit_click(self):
+        desk = self.app.desk
+        desk.show('Games')
+        with patch.object(self.root, 'focus_get', return_value=desk.pause_button):
+            desk.pause_if_unfocused()
+        self.assertFalse(desk.game.paused)
+        desk.pause_button.invoke()
+        self.assertTrue(desk.game.paused)
+        self.assertEqual(desk.pause_button.cget('text'), 'Resume')
+        with patch.object(self.root, 'focus_get', return_value=desk.pause_button):
+            desk.pause_if_unfocused()
+        desk.pause_button.invoke()
+        self.assertFalse(desk.game.paused)
+        with patch.object(self.root, 'focus_get', return_value=None):
+            desk.pause_if_unfocused()
+        self.assertTrue(desk.game.paused)
+        self.app.actions.submit.assert_not_called()
 
     def test_actual_game_widgets_pause_restart_and_keep_task_queue_independent(self):
         desk=self.app.desk

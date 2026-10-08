@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-07T16:03:16.478814+00:00",
+  "scope": "Independent already installed JSON Schema validator; twelve positive/negative proposal cases, no model inference/actions or new runtime dependency",
+  "validator": {
+    "name": "jsonschema",
+    "version": "4.26.0"
+  },
+  "passed": true,
+  "base_schemas_unchanged": true,
+  "checks": [
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ]
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "Which app?",
+        "steps": []
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "Which app?",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ]
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    },
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "",
+        "steps": []
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    },
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "",
+        "steps": []
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    },
+    {
+      "operation": "plan",
+      "proposal": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ]
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ],
+        "done": false,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "Which app?",
+        "steps": [],
+        "done": false,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "Which app?",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ],
+        "done": false,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "",
+        "steps": [],
+        "done": false,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "",
+        "steps": [],
+        "done": true,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": true,
+      "actual_valid": true
+    },
+    {
+      "operation": "replan",
+      "proposal": {
+        "question": "",
+        "steps": [
+          {
+            "action": "open",
+            "value": "calculator",
+            "browser": "chrome",
+            "expected": "Calculator opens",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": ""
+          }
+        ],
+        "done": true,
+        "reason": "Observed fixture"
+      },
+      "expected_valid": false,
+      "actual_valid": false
+    }
+  ]
+}

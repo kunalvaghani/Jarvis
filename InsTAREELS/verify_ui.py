@@ -4,9 +4,6 @@ import argparse
 import os
 from pathlib import Path
 
-from main import App
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--preview", type=Path, help="Render the test widget layout to PNG without screen capture.")
@@ -14,12 +11,14 @@ def main():
     parser.add_argument("--animation", type=Path, help="Export a labelled GIF using the runtime island morph/renderer.")
     parser.add_argument('--hd-preview', type=Path, help='Render Full HD native-DPI states with live task captions.')
     args = parser.parse_args()
-    root = tk.Tk()
-    root.withdraw()
     app = None
+    root = None
     previous = os.environ.get("JARVIS_UI_VERIFY")
     os.environ["JARVIS_UI_VERIFY"] = "1"
     try:
+        from main import App
+        root = tk.Tk()
+        root.withdraw()
         app = App(root)
         root.update_idletasks()
         root.after(250, root.quit)
@@ -28,6 +27,8 @@ def main():
             raise ValueError("Jarvis control panel was unexpectedly visible.")
         if app.listener is not None:
             raise ValueError("UI verification unexpectedly started microphone capture.")
+        if app.watchdog.thread.is_alive() or app.model_recovery.thread is not None:
+            raise ValueError("UI verification unexpectedly started service/model recovery.")
         print("Dynamic Island initialized without starting microphone capture.")
         if args.preview:
             from jarvis.island import export_preview
@@ -64,7 +65,7 @@ def main():
     finally:
         if app is not None:
             app.close()
-        else:
+        elif root is not None:
             root.destroy()
         if previous is None:
             os.environ.pop("JARVIS_UI_VERIFY", None)

@@ -275,6 +275,9 @@ class BrainClient:
             self.log = None
 
     def request(self, operation, cancelled, **data):
+        provider = getattr(self, 'realtime_provider', None)
+        if provider and data.get('goal') and operation in {'plan', 'replan', 'next_step'}:
+            data['realtime_context'] = provider(data['goal'], cancelled)
         memory = getattr(self, "memory", None)
         if memory is not None and data.get("goal"):
             if operation in {'code_plan', 'code_edit'}:
@@ -719,7 +722,8 @@ class Brain:
                 stderr=subprocess.PIPE, encoding="utf-8",
                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             deadline = time.monotonic() + 20
-            payload = json.dumps({"handle": handle, 'strict': strict, 'skip_ocr': self.step_session is not None})
+            payload = json.dumps({"handle": handle, 'owner_pid': os.getpid(),
+                                  'strict': strict, 'skip_ocr': self.step_session is not None})
             first = True
             while True:
                 if cancelled():

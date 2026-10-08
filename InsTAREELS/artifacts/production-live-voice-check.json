@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-07T16:42:54.105210+00:00",
+  "scope": "Authorized live Jarvis startup and microphone/voice test. Operator reported faster and audible arithmetic answer after partial GPU configuration; health metadata contains no speech, prompts or answers.",
+  "operator_feedback": "Faster and audible",
+  "health": {
+    "audio": {
+      "requested": true,
+      "phase": "listening",
+      "capture_alive": true,
+      "decoder_alive": true,
+      "last_block_age_seconds": 0.078,
+      "final_segments": 1
+    },
+    "answer": {
+      "phase": "completed",
+      "active_seconds": null,
+      "last_duration_seconds": 6.859
+    },
+    "workers": {
+      "actions": true,
+      "questions": true,
+      "speech": true
+    }
+  },
+  "listening_requested": true
+}

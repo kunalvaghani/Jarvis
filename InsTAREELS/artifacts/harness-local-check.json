@@ -1,12 +1,12 @@
 {
-  "date": "2026-10-02T11:22:43.078527+05:30",
+  "date": "2026-10-07T21:19:27.187841+05:30",
   "sdk_version": "0.1.5rc1",
   "scope": "Real upstream SDK and local Qwen inference; synthetic observations, no desktop actions or writes executed.",
   "checks": [
     {
       "operation": "plan",
       "ok": true,
-      "seconds": 32.344,
+      "seconds": 64.547,
       "result": {
         "question": "",
         "steps": [
@@ -14,15 +14,17 @@
             "action": "open",
             "value": "calculator",
             "browser": "chrome",
-            "expected": "Calculator app window opens",
+            "expected": "Calculator app opens on the desktop.",
             "folder": "",
             "content": "",
-            "platform": ""
+            "find": "",
+            "platform": "windows",
+            "id": 1
           }
         ],
-        "model_used": "qwen3.5:4b",
+        "model_used": "qwen3.5:9b",
         "backend": "deepseek-harness",
-        "harness_session_id": "jarvis-8b61a3dcaadd4bb2b6f05552c8b7d41f",
+        "harness_session_id": "jarvis-645f2141069544c490c4fa22bc36a15f",
         "harness_events": [
           "agent/inbox/spliced",
           "turn/start",
@@ -42,15 +44,15 @@
     {
       "operation": "replan",
       "ok": true,
-      "seconds": 15.734,
+      "seconds": 47.64,
       "result": {
         "question": "",
         "steps": [],
         "done": true,
-        "reason": "The goal 'Open Calculator' is fully achieved. The observation confirms the Calculator window is visible and trusted evidence states it is open. No further steps are required.",
-        "model_used": "qwen3.5:4b",
+        "reason": "The goal 'Open Calculator' is fully achieved. The completed action history confirms the calculator was opened and verified ('verified': true). The current screen observation explicitly states 'Calculator' as the title with trusted evidence that the window is visible. All conditions for setting done=true are met: fresh evidence confirms the entire goal, steps list is empty, and no further actions are required.",
+        "model_used": "qwen3.5:9b",
         "backend": "deepseek-harness",
-        "harness_session_id": "jarvis-c0ecf84b43a64f718f1a476c829723e1",
+        "harness_session_id": "jarvis-c7fd327644e943b8bf2511955474b7bb",
         "harness_events": [
           "agent/inbox/spliced",
           "turn/start",
@@ -70,13 +72,13 @@
     {
       "operation": "agent",
       "ok": true,
-      "seconds": 10.344,
+      "seconds": 27.5,
       "result": {
-        "final": "The code in sample.py prints the result of 2 + 3, which is 5.",
+        "final": "The code in sample.py is `print(2 + 3)`. This Python statement adds the integers 2 and 3 to get 5, then prints the result. The output of running this script will be: 5",
         "calls": [],
-        "model_used": "qwen3.5:4b",
+        "model_used": "qwen3.5:9b",
         "backend": "deepseek-harness",
-        "harness_session_id": "jarvis-c2b02d9a1f9f479eb532e2235d481826",
+        "harness_session_id": "jarvis-aded1f6b6fd9439aadb5500aeba80af7",
         "harness_events": [
           "agent/inbox/spliced",
           "turn/start",

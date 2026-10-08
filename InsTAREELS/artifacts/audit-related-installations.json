@@ -1,0 +1,241 @@
+{
+  "date": "2026-10-07T15:38:32.193522+00:00",
+  "scope": "Related installation metadata only; no private LocalGithub runtime/configuration or packaged VoiceOS source extraction. Existing private/user data retained.",
+  "localgithub": {
+    "source_files": [
+      {
+        "path": "src/local_github/__init__.py",
+        "bytes": 44,
+        "sha256": "c9cdd66f0dfabb1be0b21e957d3b42717c737586354a4130033070b58438f713",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/api.py",
+        "bytes": 9278,
+        "sha256": "bf0e8258ee68804999fd6c9df83489346d3436aa1d7c36e45bc8d7df9631de1f",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/bootstrap.py",
+        "bytes": 11288,
+        "sha256": "9a19d624b38628510c29958f13b9c2a7de654de69c56d55c690a53254bb59fb2",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/cli.py",
+        "bytes": 3060,
+        "sha256": "d300b7db8b754bdd1f7ccb48dcb05d3aeefe6e08f708b751125669874dc1ff4c",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/config.py",
+        "bytes": 1165,
+        "sha256": "8fd254d8bf541cf7accf2a4617f7efb4f4de898b50224b6a33f4296a54182bf2",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/controller.py",
+        "bytes": 15195,
+        "sha256": "0d1bc1e9fce768d9e1cb270458349877dbebe2eb7d29bba9d5e644e3998b11b6",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/gitea.py",
+        "bytes": 3081,
+        "sha256": "a652c5e5c80afbe6b70dadb576e32ab513924afd3178e07dd64f1c46d6faa123",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/gitops.py",
+        "bytes": 2324,
+        "sha256": "6f411c6c41e68abd1f424f7026ad02b96b90ff3db98a40983b52ed6a18d9ddcb",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/mcp_server.py",
+        "bytes": 3003,
+        "sha256": "c3f2adb1a0ab2d303bfbc1a34dd4a0bba1233986807e9ec702853fa440e0702e",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/models.py",
+        "bytes": 12627,
+        "sha256": "ea8473a06e23c286655f47070769cc3273e57996c295238818b9842e93330263",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/operations.py",
+        "bytes": 24518,
+        "sha256": "de3acfe0dba7bc00e55a4700f3a757754bae79ee6fe812d3f5f4958ffe1c38df",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/process.py",
+        "bytes": 1087,
+        "sha256": "8894e4849e6314fa2de2dcd8b45ae268832e7fa13189357c4f2377a7a67fec27",
+        "syntax": "valid"
+      },
+      {
+        "path": "src/local_github/store.py",
+        "bytes": 2173,
+        "sha256": "6fcab15c209de3cd9ff4664f05648ad45afd95a184961bb9ba02f86664f53cf6",
+        "syntax": "valid"
+      },
+      {
+        "path": "tests/conftest.py",
+        "bytes": 2257,
+        "sha256": "286117261b99e0df6af0eb81409a55e7de23e2f0adfdac4eb9a425e8b2273aa7",
+        "syntax": "valid"
+      },
+      {
+        "path": "tests/test_api_models.py",
+        "bytes": 2685,
+        "sha256": "6703faa504537640c29e8363abc58fe6dba9eeaf1efa96d4662a697566fd9df0",
+        "syntax": "valid"
+      },
+      {
+        "path": "tests/test_controller.py",
+        "bytes": 6091,
+        "sha256": "43cf02f637058a46c6c7b44a327ff895d304024ff2779fe50fc2ce2b5465fbea",
+        "syntax": "valid"
+      },
+      {
+        "path": "tests/test_existing_models.py",
+        "bytes": 1586,
+        "sha256": "42e0d55e0868a4564690616fb23b20c7878343990383178323dbd11599a57e2a",
+        "syntax": "valid"
+      },
+      {
+        "path": "tests/test_queue_and_repairs.py",
+        "bytes": 2978,
+        "sha256": "bee215fbddda842dda80ee6be8818110dcfdfd596f99b11e8cdb6a683f6f4d85",
+        "syntax": "valid"
+      },
+      {
+        "path": "scripts/Health.ps1",
+        "bytes": 152,
+        "sha256": "8889d1e8e4b5d8d2a84bea7e302be6ce848cdac8d44226077f720941eb7bd216"
+      },
+      {
+        "path": "scripts/Setup.ps1",
+        "bytes": 810,
+        "sha256": "5745c93368d3062af82608f55a9d9fd50be3bd43b9ce678e853b27d7c7f43743"
+      },
+      {
+        "path": "scripts/SmokeMcp.py",
+        "bytes": 1550,
+        "sha256": "83ea861b210dc29f6e06a94e493c2a1b53aa8a8d8c3b888cb1fc70c9bf960367",
+        "syntax": "valid"
+      },
+      {
+        "path": "scripts/Start.ps1",
+        "bytes": 220,
+        "sha256": "593092124db16777678fd2402d4a80d282b888b1731573a68f2ea977ef6efbfe"
+      },
+      {
+        "path": "scripts/Stop.ps1",
+        "bytes": 193,
+        "sha256": "c8464d19763d37f195a3dd1e0007f39ae6ec9cd004360dc2fd5a3c39b0c084a9"
+      },
+      {
+        "path": "docs/AI-ONBOARDING.md",
+        "bytes": 2895,
+        "sha256": "907f136edf09537b9a37214e03c76909bd70981e84187c53010f5e110639b034"
+      },
+      {
+        "path": "docs/OPERATIONS.md",
+        "bytes": 5985,
+        "sha256": "8b0afd157c28895b151016c19e0d35f8d24501d105eb8ca2d2d5e6c5c33f5bd4"
+      },
+      {
+        "path": "docs/VALIDATION.md",
+        "bytes": 3260,
+        "sha256": "9b3ad9eed943caf57697738d3c352dfb2b28737d34dac6bbf02afa9769cfea7a"
+      }
+    ],
+    "python_files": 19,
+    "syntax_errors": []
+  },
+  "voiceos": {
+    "kind": "Installed Electron application and Jarvis UI reference; not Jarvis runtime",
+    "top_level_files": [
+      {
+        "name": "chrome_100_percent.pak",
+        "bytes": 167282
+      },
+      {
+        "name": "chrome_200_percent.pak",
+        "bytes": 258304
+      },
+      {
+        "name": "d3dcompiler_47.dll",
+        "bytes": 4916728
+      },
+      {
+        "name": "dxcompiler.dll",
+        "bytes": 25894912
+      },
+      {
+        "name": "dxil.dll",
+        "bytes": 1502800
+      },
+      {
+        "name": "ffmpeg.dll",
+        "bytes": 3039232
+      },
+      {
+        "name": "icudtl.dat",
+        "bytes": 10467680
+      },
+      {
+        "name": "libEGL.dll",
+        "bytes": 505344
+      },
+      {
+        "name": "libGLESv2.dll",
+        "bytes": 8049664
+      },
+      {
+        "name": "LICENSE.electron.txt",
+        "bytes": 1096
+      },
+      {
+        "name": "LICENSES.chromium.html",
+        "bytes": 15271935
+      },
+      {
+        "name": "resources.pak",
+        "bytes": 6038515
+      },
+      {
+        "name": "snapshot_blob.bin",
+        "bytes": 321542
+      },
+      {
+        "name": "Uninstall VoiceOS.exe",
+        "bytes": 527368
+      },
+      {
+        "name": "v8_context_snapshot.bin",
+        "bytes": 699577
+      },
+      {
+        "name": "vk_swiftshader.dll",
+        "bytes": 5530624
+      },
+      {
+        "name": "vk_swiftshader_icd.json",
+        "bytes": 106
+      },
+      {
+        "name": "VoiceOS.exe",
+        "bytes": 204861720
+      },
+      {
+        "name": "vulkan-1.dll",
+        "bytes": 922112
+      }
+    ],
+    "retained": "Executable, uninstall entry, Chromium/Electron DLLs, resources and licenses are connected installation files; no removal."
+  }
+}

@@ -129,6 +129,12 @@ class CleanupTests(unittest.TestCase):
 
 
 class CleanupTransportTests(unittest.TestCase):
+    def setUp(self):
+        # These checks isolate HTTP framing/deadlines. GPU admission has its own
+        # process/fault suite and must not consume this transport's fake clock.
+        disabled=patch('jarvis.gpu_scheduler.configured',return_value={'enabled':False})
+        disabled.start();self.addCleanup(disabled.stop)
+
     def connection(self, events):
         connection = Mock()
         response = connection.getresponse.return_value

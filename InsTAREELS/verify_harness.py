@@ -10,7 +10,8 @@ BASE = Path(__file__).resolve().parent
 
 
 def main():
-    client = HarnessClient(BASE, {'planner': 'qwen3.5:4b', 'harness': {'timeout_seconds': 180}})
+    options=json.loads((BASE/'config.json').read_text(encoding='utf-8'))['brain']
+    client = HarnessClient(BASE, {**options, 'harness': {**options.get('harness',{}), 'timeout_seconds': 180}})
     tools = [{'action': 'open', 'description': 'Open an explicitly named configured app.'}]
     rows = []
     scenarios = [

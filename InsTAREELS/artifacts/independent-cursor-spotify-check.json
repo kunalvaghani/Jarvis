@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-08T07:36:05.476206+00:00",
+  "app": "spotify",
+  "control": "Search",
+  "dispatched_once": true,
+  "system_pointer_unchanged": true,
+  "postcondition_changed": true,
+  "provider": "ufo",
+  "scope": "Navigation/mode controls only. No camera photo/video recording, account write or privacy change.",
+  "passed": true,
+  "observation_date": "2026-10-08T07:40:25.603363+00:00",
+  "verification_note": "Fresh read-only follow-up observed the focused search ComboBox. The original checker incorrectly required Edit. No activation was repeated.",
+  "observed_control": {
+    "name": "What do you want to play?",
+    "role": "ComboBox",
+    "focused": true
+  }
+}

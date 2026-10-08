@@ -1,0 +1,32 @@
+{
+  "device": "cuda",
+  "compute_type": "int8_float16",
+  "audio_seconds": 6.22,
+  "decode_seconds": 0.66,
+  "text": "Hey Jarvis, open Notepad. Then create a file called notes.txt.",
+  "planned_only": [
+    {
+      "kind": "open",
+      "value": "notepad",
+      "extra": ""
+    },
+    {
+      "kind": "create",
+      "value": "notes.txt",
+      "extra": ""
+    }
+  ],
+  "stream_planned_only": [
+    {
+      "kind": "open",
+      "value": "notepad",
+      "extra": ""
+    },
+    {
+      "kind": "create",
+      "value": "notes.txt",
+      "extra": ""
+    }
+  ],
+  "stream_matches_final": true
+}

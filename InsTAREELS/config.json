@@ -1,4 +1,30 @@
 {
+  "gpu_scheduler": {
+    "enabled": true,
+    "helper_gpu": false,
+    "primary_layers": 12,
+    "codex_layers": 9,
+    "speech_reserve_mb": 1024,
+    "reserve_mb": 512,
+    "wait_seconds": 120,
+    "warm_seconds": 30
+  },
+  "realtime": {
+    "enabled": true,
+    "alerts": true,
+    "model_enabled": true,
+    "model": "qwen2.5:0.5b",
+    "idle_seconds": 60,
+    "model_interval_seconds": 600,
+    "min_available_mb": 4096,
+    "max_model_bytes": 600000000,
+    "max_cpu_percent": 35,
+    "location_refresh_seconds": 3600,
+    "auto_location": true,
+    "location": null,
+    "contact": "https://github.com/kunalvaghani/Jarvis",
+    "endpoints": {}
+  },
   "context_selector": {
     "enabled": true,
     "model": "qwen3.5:0.8b",
@@ -1235,7 +1261,7 @@
     "screen_model": "qwen3.5:9b",
     "answer_language": "en",
     "internet": true,
-    "num_gpu": 0,
+    "num_gpu": 12,
     "prompt_format": "ollama_chat",
     "stream": true,
     "timeout_seconds": 300,
@@ -1309,6 +1335,10 @@
     "max_coding_seconds": 1800,
     "coding_backend": "codex",
     "codex_model": "jarvis-codex-qwen3.5:9b",
+    "codex_max_repairs": 3,
+    "codex_workload_enabled": true,
+    "codex_max_workers": 2,
+    "localgithub_path": "D:\\Kunals GitHub Repo\\LocalGithub",
     "ollama_cache_roots": [
       "D:\\Ollama\\models",
       "D:\\OllamaModels"

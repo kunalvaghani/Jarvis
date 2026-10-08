@@ -1,0 +1,8 @@
+test_health_reports_capture_and_answer_latency_without_content (test_runtime_health.RuntimeHealthTests) ... ok
+test_off_and_unstarted_workers_remain_explicit (test_runtime_health.RuntimeHealthTests) ... ok
+test_unknown_remote_phases_and_errors_never_enter_metadata (test_runtime_health.RuntimeHealthTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK

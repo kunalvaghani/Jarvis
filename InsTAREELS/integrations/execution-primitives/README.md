@@ -9,7 +9,7 @@ the user's requested order. [Integration, behavior and evidence](../../docs/exec
 | 2 | CursorTouch Windows-MCP | [MIT](licenses/Windows-MCP-MIT.txt) and [Apache 2.0](licenses/UIAutomation-Apache-2.0.txt) | Six selected UIA pattern classes; original UIAutomation author **yinkaisheng** |
 | 3 | Cua Driver | [MIT](licenses/CUA-MIT.txt) and [driver notices](licenses/CUA-Driver-THIRD-PARTY-NOTICES.md) | Python ports of Windows Value/Invoke pattern resolution |
 | 4 | Open Computer Use | [MIT](licenses/Open-Computer-Use-MIT.txt) | Python ports of Windows native Value/preferred accessibility click |
-| 5 | Simular Agent-S | [Apache 2.0](licenses/Agent-S-Apache-2.0.txt) | Adapted WindowsACI centre calculation, using existing guarded input |
+| 5 | Simular Agent-S | [Apache 2.0](licenses/Agent-S-Apache-2.0.txt) | Ordered Windows accessible-target adaptation; October 8 native patterns replace the earlier centre mouse click |
 
 Copyright and permission notices are retained in these linked files. Cua's driver
 notices include Interface-Agent, trope-cua and yabai attribution; their unrelated

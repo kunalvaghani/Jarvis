@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-07T06:19:29.190961+00:00",
+  "client_date": "2026-10-07",
+  "scope": "Fresh read-only post-promotion validation of actual Codex-generated source; no application edits.",
+  "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\codex-workload-fixture\\bdc56bb8bec047b188f22931175fc37b",
+  "passed": true,
+  "source_unchanged": true,
+  "validation": {
+    "date": "2026-10-07T06:19:12.946450+00:00",
+    "errors": [],
+    "checks": [
+      {
+        "exit_code": 0,
+        "output": "{\"browser_passed\": true, \"component\": \"markup\", \"steps\": 1, \"runtime_errors\": [], \"backend_requests\": 0, \"mobile_width\": 390, \"desktop_width\": 1280, \"tested_widths\": [320, 390, 768, 1280, 1920], \"advancing_animations\": []}\r\n",
+        "seconds": 3.734,
+        "kind": "browser_component",
+        "path": "index.html"
+      },
+      {
+        "exit_code": 0,
+        "output": "{\"browser_passed\": true, \"component\": \"styles\", \"steps\": 1, \"runtime_errors\": [], \"backend_requests\": 0, \"mobile_width\": 390, \"desktop_width\": 1280, \"tested_widths\": [320, 390, 768, 1280, 1920], \"advancing_animations\": [\".orb\"]}\r\n",
+        "seconds": 3.828,
+        "kind": "browser_component",
+        "path": "styles.css"
+      },
+      {
+        "exit_code": 0,
+        "output": "{\"browser_passed\": true, \"component\": \"logic\", \"steps\": 5, \"runtime_errors\": [], \"backend_requests\": 0, \"mobile_width\": 390, \"desktop_width\": 1280, \"tested_widths\": [320, 390, 768, 1280, 1920], \"advancing_animations\": []}\r\n",
+        "seconds": 3.954,
+        "kind": "browser_component",
+        "path": "app.js"
+      },
+      {
+        "exit_code": 0,
+        "output": "{\"browser_passed\": true, \"component\": null, \"steps\": 5, \"runtime_errors\": [], \"backend_requests\": 0, \"mobile_width\": 390, \"desktop_width\": 1280, \"tested_widths\": [320, 390, 768, 1280, 1920], \"advancing_animations\": [\".orb\"]}\r\n",
+        "seconds": 4.5,
+        "kind": "browser",
+        "path": "index.html"
+      }
+    ],
+    "passed": true,
+    "runtime_verified": true,
+    "rejected_tools": [],
+    "hashes": {
+      "index.html": "9cafa5e782b5c5f4775fdbae88bba1941d318f87cec77bdd3514aa3234e65808",
+      "styles.css": "a4f1f8375569676f51b3c4bee2c207bf8c2013797cba78512925703b8a8ee30a",
+      "app.js": "051ca5469e3b98600da7d37705d141d1f7bc9cb2c28d603bb7aa201daf0207d6"
+    }
+  },
+  "additional_ui_checks": {
+    "passed": true,
+    "viewports": [
+      {
+        "width": 320,
+        "clicks": 50,
+        "keyboard_toggles": 2,
+        "actual_theme_style_change": true,
+        "visible_cards": 3
+      },
+      {
+        "width": 390,
+        "clicks": 50,
+        "keyboard_toggles": 2,
+        "actual_theme_style_change": true,
+        "visible_cards": 3
+      },
+      {
+        "width": 768,
+        "clicks": 50,
+        "keyboard_toggles": 2,
+        "actual_theme_style_change": true,
+        "visible_cards": 3
+      },
+      {
+        "width": 1280,
+        "clicks": 50,
+        "keyboard_toggles": 2,
+        "actual_theme_style_change": true,
+        "visible_cards": 3
+      },
+      {
+        "width": 1920,
+        "clicks": 50,
+        "keyboard_toggles": 2,
+        "actual_theme_style_change": true,
+        "visible_cards": 3
+      }
+    ],
+    "runtime_errors": [],
+    "interactions": 260
+  }
+}

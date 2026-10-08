@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-07T08:04:25.232791+00:00",
+  "scope": "Final automated regression and launcher readiness; live provider and model checks are separate receipts.",
+  "full_suite": {
+    "tests": 1117,
+    "seconds": 143.861,
+    "status": "passed"
+  },
+  "focused_realtime_suite": {
+    "tests": 50,
+    "seconds": 0.305,
+    "status": "passed"
+  },
+  "launcher": {
+    "status": "ready",
+    "missing": [],
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "related_receipts": [
+    "realtime-live-check.json",
+    "realtime-reader-check.json",
+    "realtime-question-check.json"
+  ]
+}

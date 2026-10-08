@@ -17,6 +17,7 @@ class ToolSpec:
 
 
 SPECS = (
+    ToolSpec('realtime_query', 'realtime', 'Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}. No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provider; self-hosted sources require configured endpoints.'),
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
     ToolSpec("browse", "browser", "Open a website URL in an installed browser."),
     ToolSpec("browser_search", "browser", "Search the web using the exact query."),
@@ -120,6 +121,10 @@ class ToolRegistry:
             raise ValueError("Unsupported tool: " + str(name))
         if cancelled():
             raise ValueError("Task cancelled before tool execution.")
+        if name == 'realtime_query':
+            params = json.loads(step.get('content') or '{}')
+            result = self.actions.realtime.query(step.get('value',''), params, cancelled)
+            return ToolResult(name, 'realtime', json.dumps(result, ensure_ascii=False))
         if name in {"browser_inspect", "browser_navigate", "browser_click", "browser_fill"}:
             if name == "browser_fill" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
                 raise ValueError("Browser filling requires bounded exact content.")

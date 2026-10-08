@@ -21,6 +21,10 @@ def required_models(config):
     selector = context_settings(config.get('context_selector'))
     if selector['enabled']:
         required.add(selector['model'])
+    from .realtime import settings as realtime_settings
+    realtime = realtime_settings(config.get('realtime'))
+    if realtime['enabled'] and realtime['model_enabled']:
+        required.add(realtime['model'])
     return required
 
 

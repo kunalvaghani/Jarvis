@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-07T17:32:52.632022+00:00",
+  "scope": "Live own Win32 fixture only; independent native text/counter readback. No user app automation, microphone, Qwen, clipboard or network. Timing is warm action/observation latency, not arbitrary task latency.",
+  "provider_checks": [
+    {
+      "provider": "ufo",
+      "fill_seconds": 0.078,
+      "fill_receipt": {
+        "message": "Filled Search; exact field value verified",
+        "provider": "ufo",
+        "operation": "fill_text",
+        "attempts": [],
+        "dispatched": true,
+        "verified": true,
+        "evidence": "Fresh native postcondition matched.",
+        "execution_ms": 32.0
+      },
+      "fill_readback": true,
+      "click_seconds": 0.203,
+      "click_receipt": {
+        "message": "Activated Apply; input sent once, result not verified",
+        "provider": "ufo",
+        "operation": "activate",
+        "attempts": [],
+        "dispatched": true,
+        "verified": false,
+        "observed_change": true,
+        "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
+        "execution_ms": 156.0
+      },
+      "clicked_once": true
+    },
+    {
+      "provider": "windows-mcp",
+      "fill_seconds": 0.078,
+      "fill_receipt": {
+        "message": "Filled Search; exact field value verified",
+        "provider": "windows-mcp",
+        "operation": "fill_text",
+        "attempts": [],
+        "dispatched": true,
+        "verified": true,
+        "evidence": "Fresh native postcondition matched.",
+        "execution_ms": 16.0
+      },
+      "fill_readback": true,
+      "click_seconds": 0.219,
+      "click_receipt": {
+        "message": "Activated Applied 1; input sent once, result not verified",
+        "provider": "windows-mcp",
+        "operation": "activate",
+        "attempts": [],
+        "dispatched": true,
+        "verified": false,
+        "observed_change": true,
+        "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
+        "execution_ms": 157.0
+      },
+      "clicked_once": true
+    },
+    {
+      "provider": "cua",
+      "fill_seconds": 0.079,
+      "fill_receipt": {
+        "message": "Filled Search; exact field value verified",
+        "provider": "cua",
+        "operation": "fill_text",
+        "attempts": [],
+        "dispatched": true,
+        "verified": true,
+        "evidence": "Fresh native postcondition matched.",
+        "execution_ms": 16.0
+      },
+      "fill_readback": true,
+      "click_seconds": 0.219,
+      "click_receipt": {
+        "message": "Activated Applied 2; input sent once, result not verified",
+        "provider": "cua",
+        "operation": "activate",
+        "attempts": [],
+        "dispatched": true,
+        "verified": false,
+        "observed_change": true,
+        "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
+        "execution_ms": 156.0
+      },
+      "clicked_once": true
+    },
+    {
+      "provider": "open-computer-use",
+      "fill_seconds": 0.078,
+      "fill_receipt": {
+        "message": "Filled Search; exact field value verified",
+        "provider": "open-computer-use",
+        "operation": "fill_text",
+        "attempts": [],
+        "dispatched": true,
+        "verified": true,
+        "evidence": "Fresh native postcondition matched.",
+        "execution_ms": 31.0
+      },
+      "fill_readback": true,
+      "click_seconds": 0.203,
+      "click_receipt": {
+        "message": "Activated Applied 3; input sent once, result not verified",
+        "provider": "open-computer-use",
+        "operation": "activate",
+        "attempts": [],
+        "dispatched": true,
+        "verified": false,
+        "observed_change": true,
+        "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
+        "execution_ms": 141.0
+      },
+      "clicked_once": true
+    },
+    {
+      "provider": "agent-s",
+      "fill_unavailable": "No compatible executor could prepare this action. No input issued. agent-s: Agent-S centre click is limited to explicit accessible actions",
+      "click_seconds": 0.265,
+      "click_receipt": {
+        "message": "Activated Applied 4; input sent once, result not verified",
+        "provider": "agent-s",
+        "operation": "activate",
+        "attempts": [],
+        "dispatched": true,
+        "verified": false,
+        "observed_change": true,
+        "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
+        "execution_ms": 234.0
+      },
+      "clicked_once": true
+    }
+  ],
+  "direct_workflow": {
+    "message": "Finished 2 explicit desktop action(s) in 0.33 seconds; no model calls.",
+    "seconds": 0.703,
+    "model_calls": 0,
+    "text_readback": true,
+    "checkbox_readback": true,
+    "stage": "goal_verified"
+  },
+  "passed": true,
+  "fixture_controls": [
+    {
+      "name": "Search",
+      "role": "Edit"
+    },
+    {
+      "name": "Apply",
+      "role": "Button"
+    },
+    {
+      "name": "Enabled",
+      "role": "CheckBox"
+    },
+    {
+      "name": "System",
+      "role": "MenuItem"
+    },
+    {
+      "name": "Minimize",
+      "role": "Button"
+    },
+    {
+      "name": "Maximize",
+      "role": "Button"
+    },
+    {
+      "name": "Close",
+      "role": "Button"
+    }
+  ],
+  "worker": {
+    "ping_ready": true,
+    "startup_seconds": 0.3629,
+    "same_process_reused": true,
+    "cancel_before_dispatch": true,
+    "closed": true
+  },
+  "fixture_stderr": ""
+}

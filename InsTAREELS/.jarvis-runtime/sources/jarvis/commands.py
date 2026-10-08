@@ -39,6 +39,10 @@ def filename(spoken: str) -> str:
 
 
 def parse(text: str) -> Command:
+    from .realtime import command as realtime_command
+    realtime = realtime_command(text)
+    if realtime:
+        return Command('realtime', realtime)
     from .anticipation import command as anticipation_command
     proactive = anticipation_command(text)
     if proactive:

@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07T18:09:02.790651+00:00",
+  "scope": "Computer Use clicks against actual Jarvis widgets in an isolated decorated fixture. No live microphone, inference, external media polling or real memory writes.",
+  "checks": {
+    "games_navigation_observed": true,
+    "one_pause_click_observed_paused": true,
+    "one_resume_click_observed_unpaused": true,
+    "second_pause_observed_paused": true,
+    "game_selector_2048_observed": true,
+    "keyboard_merge_observed_score_four": true,
+    "restart_observed_zero": true
+  },
+  "final_state": {
+    "fixture": true,
+    "view": "Games",
+    "game": "2048",
+    "score": 0,
+    "paused": false,
+    "microphone_started": false,
+    "memory_enabled": false
+  },
+  "screenshot": "artifacts/production-game-pause-fixture.jpg"
+}

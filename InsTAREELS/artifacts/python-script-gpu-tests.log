@@ -1,0 +1,31 @@
+test_actual_crashed_owner_is_reaped_without_replaying_work (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_busy_helper_runs_on_cpu_without_taking_foreground_slot (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_cancelled_waiter_leaves_active_owner_untouched (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_changed_cache_identity_never_unloads_the_shared_model (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_codex_failed_or_absent_cache_never_preloads_a_model_after_close (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_codex_refuses_low_vram_before_any_inference (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_codex_retains_api_body_and_limits_only_its_model_cache_after_turn (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_coding_cache_identity_survives_uncertain_duration_update (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_corrupt_heartbeat_state_does_not_repair_or_block_ui (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_corrupt_state_is_preserved_and_fails_closed (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_default_idle_helper_never_takes_foreground_slot (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_explicit_cpu_coding_bounds_observed_alias_cache (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_heartbeat_excludes_private_request_content (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_invalid_policy_is_rejected (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_malformed_context_never_takes_a_slot (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_model_handoff_unloads_identified_cache_before_codex_once (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_permanent_atomic_promotion_failure_is_bounded_and_preserves_state (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_priority_is_shared_across_actual_processes (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_queue_deadline_does_not_dispatch_or_clear_active_work (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_reserves_speech_and_shrinks_layers_for_context (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_response_close_failure_still_releases_slot (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_same_model_reuses_owned_warm_gpu_cache (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_small_models_use_gpu_only_with_reserved_capacity (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_stream_retains_slot_until_close_then_releases_once (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_transient_atomic_promotion_lock_retries_only_local_state (test_gpu_scheduler.GPUSchedulerTests) ... ok
+test_transport_failure_releases_without_retry (test_gpu_scheduler.GPUSchedulerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 3.330s
+
+OK

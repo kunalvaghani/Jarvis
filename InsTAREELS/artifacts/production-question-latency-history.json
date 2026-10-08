@@ -1,0 +1,117 @@
+[
+  {
+    "date": "2026-10-07T16:38:02.749801+00:00",
+    "scope": "Four sequential actual configured 9B question calls, CPU vs partial GPU; configured Whisper resident. No live mic or concurrent tasks. Cold/load and repeated timings retained.",
+    "whisper_device": "cuda",
+    "checks": [
+      {
+        "num_gpu": 0,
+        "repetition": 1,
+        "seconds": 14.375,
+        "first_answer_seconds": 12.281,
+        "correct": true,
+        "phases": [
+          "Loading model / preparing prompt",
+          "Generating answer",
+          "Finishing answer"
+        ],
+        "model_metrics": {
+          "load_duration": 5761493200,
+          "prompt_eval_count": 218,
+          "prompt_eval_duration": 5250537000,
+          "eval_count": 23,
+          "eval_duration": 3279937000
+        },
+        "gpu_total_used_mib": "4096, 1029",
+        "resident": [
+          {
+            "name": "qwen3.5:9b",
+            "size": 6071601067,
+            "size_vram": 0
+          }
+        ]
+      },
+      {
+        "num_gpu": 0,
+        "repetition": 2,
+        "seconds": 3.781,
+        "first_answer_seconds": 1.562,
+        "correct": true,
+        "phases": [
+          "Loading model / preparing prompt",
+          "Generating answer",
+          "Finishing answer"
+        ],
+        "model_metrics": {
+          "load_duration": 95865100,
+          "prompt_eval_count": 218,
+          "prompt_eval_duration": 223864000,
+          "eval_count": 23,
+          "eval_duration": 3461597000
+        },
+        "gpu_total_used_mib": "4096, 1029",
+        "resident": [
+          {
+            "name": "qwen3.5:9b",
+            "size": 6071601067,
+            "size_vram": 0
+          }
+        ]
+      },
+      {
+        "num_gpu": 20,
+        "repetition": 1,
+        "seconds": 10.375,
+        "first_answer_seconds": 9.156,
+        "correct": true,
+        "phases": [
+          "Loading model / preparing prompt",
+          "Generating answer"
+        ],
+        "model_metrics": {
+          "load_duration": 5208890900,
+          "prompt_eval_count": 218,
+          "prompt_eval_duration": 3094542000,
+          "eval_count": 23,
+          "eval_duration": 2060380000
+        },
+        "gpu_total_used_mib": "4096, 3894",
+        "resident": [
+          {
+            "name": "qwen3.5:9b",
+            "size": 6123065177,
+            "size_vram": 3384803327
+          }
+        ]
+      },
+      {
+        "num_gpu": 20,
+        "repetition": 2,
+        "seconds": 3.422,
+        "first_answer_seconds": 1.125,
+        "correct": true,
+        "phases": [
+          "Loading model / preparing prompt",
+          "Generating answer",
+          "Finishing answer"
+        ],
+        "model_metrics": {
+          "load_duration": 98666500,
+          "prompt_eval_count": 218,
+          "prompt_eval_duration": 216600000,
+          "eval_count": 23,
+          "eval_duration": 3111866000
+        },
+        "gpu_total_used_mib": "4096, 3894",
+        "resident": [
+          {
+            "name": "qwen3.5:9b",
+            "size": 6123065177,
+            "size_vram": 3384803327
+          }
+        ]
+      }
+    ],
+    "passed": true
+  }
+]

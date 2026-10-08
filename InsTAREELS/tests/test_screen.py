@@ -13,6 +13,22 @@ from jarvis.knowledge_worker import answer_from_screen
 
 
 class ScreenTests(unittest.TestCase):
+    def test_capture_excludes_actual_jarvis_owner_across_venv_redirector(self):
+        from jarvis.screen_worker import choose_window
+        with patch('win32gui.IsWindow', return_value=True), \
+                patch('win32gui.IsWindowVisible', return_value=True), \
+                patch('win32gui.GetWindowRect', return_value=(0, 0, 600, 400)), \
+                patch('win32gui.GetWindowText', return_value='Visible window'), \
+                patch('win32gui.GetForegroundWindow', return_value=10), \
+                patch('win32process.GetWindowThreadProcessId', side_effect=lambda hwnd: (1, {10: 100, 20: 200}[hwnd])), \
+                patch('win32gui.EnumWindows', side_effect=lambda callback, arg: callback(20, arg)), \
+                patch('jarvis.screen_worker.os.getpid', return_value=300), \
+                patch('jarvis.screen_worker.os.getppid', return_value=400):
+            self.assertEqual(choose_window(preferred=10, owner_pid=100), 20)
+            self.assertEqual(choose_window(preferred=20, owner_pid=100), 20)
+            with self.assertRaisesRegex(ValueError, 'positive process ID'):
+                choose_window(owner_pid='100')
+
     def test_optional_ocr_failure_preserves_image_for_vision(self):
         from PIL import Image
         from jarvis.screen_worker import capture

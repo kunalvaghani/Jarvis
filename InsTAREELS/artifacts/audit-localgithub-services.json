@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-07T15:23:45.825476+00:00",
+  "scope": "Installed LocalGithub local service start/health/stop only; no tasks, agent identities, credentials or repository writes.",
+  "start": {
+    "exit_code": 0,
+    "output": ""
+  },
+  "health": {
+    "exit_code": 0,
+    "output": "gitea: healthy\ncontroller: healthy\nollama: healthy"
+  },
+  "stop": {
+    "exit_code": 0
+  },
+  "passed": true
+}

@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-04T11:27:38.114457+00:00",
+  "date": "2026-10-07T17:33:33.142257+00:00",
   "passed": true,
   "scope": "All 493 recipe compilation checks, owned ASCII files, headless DOM and owned Win32 fixture. No emails, system shutdowns, user files, installed Office/apps or microphone tasks tested.",
   "checks": [
@@ -9,7 +9,7 @@
     },
     {
       "name": "493 recipe coverage plus parameter/Stop/uncertainty unit tests",
-      "tests": 16,
+      "tests": 20,
       "passed": true
     },
     {

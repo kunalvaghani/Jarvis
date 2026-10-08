@@ -296,7 +296,10 @@ class IslandDesk:
         self.pause_button.configure(text='Resume')
 
     def pause_if_unfocused(self):
-        if self.view=='Games' and self.app.root.focus_get()!=self.game_canvas:
+        # A mouse press focuses Pause before its release invokes pause_game.
+        # Auto-pausing there would make that one click toggle straight back to
+        # running. Keep the explicit transport button in the game focus group.
+        if self.view=='Games' and self.app.root.focus_get() not in (self.game_canvas, self.pause_button):
             self.suspend_game()
 
     def pause_game(self):

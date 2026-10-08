@@ -7,9 +7,13 @@ import re
 from urllib.parse import urlsplit
 
 ENDPOINT = 'http://127.0.0.1:11434'
-ALIAS_PARAMETERS = {'num_ctx':32768, 'num_gpu':20, 'temperature':0.2, 'num_predict':6000}
+ALIAS_PARAMETERS = {'num_ctx':32768, 'num_gpu':9, 'temperature':0.2, 'num_predict':6000}
 ALIASES = {'jarvis-codex-qwen3.5:9b':'qwen3.5:9b',
            'jarvis-claude-qwen3.5:9b':'qwen3.5:9b'}
+
+
+class IncompleteCache(ValueError):
+    """A resumable cache has metadata but is missing complete layer files."""
 
 
 def local_endpoint(endpoint):
@@ -35,8 +39,12 @@ def model_plan(required):
 def create_alias(client, model, endpoint=ENDPOINT):
     local_endpoint(endpoint)
     if model not in ALIASES:raise ValueError('Unknown local Jarvis model alias.')
+    parameters=dict(ALIAS_PARAMETERS)
+    from .gpu_scheduler import configured
+    policy=configured()
+    if policy['enabled']:parameters['num_gpu']=policy['codex_layers']
     response=client.post(endpoint+'/api/create',json={'model':model,'from':ALIASES[model],
-        'parameters':dict(ALIAS_PARAMETERS),'stream':False},timeout=(3,60))
+        'parameters':parameters,'stream':False},timeout=(3,60))
     response.raise_for_status()
     if response.json().get('status')!='success':raise ValueError('Local alias creation was not confirmed; inspect model visibility before continuing.')
 
@@ -59,6 +67,15 @@ def coding_model(client, model, endpoint=ENDPOINT):
                 'Run Setup Jarvis Brain.cmd to restore cached models, then retry. No project files were changed.')
     response.raise_for_status()
     data=response.json()
+    if model in ALIASES and isinstance(data.get('parameters'),str):
+        from .gpu_scheduler import configured
+        policy=configured()
+        wanted=policy['codex_layers'] if policy['enabled'] else ALIAS_PARAMETERS['num_gpu']
+        current=re.search(r'^num_gpu\s+(-?\d+)\s*$',data['parameters'],re.M)
+        if current is None or int(current[1])!=wanted:
+            create_alias(client,model,endpoint)
+            response=client.post(endpoint+'/api/show',json={'model':model},timeout=(3,10))
+            response.raise_for_status();data=response.json()
     if 'tools' not in data.get('capabilities',[]):raise ValueError('Local Qwen model is missing tool support.')
     return data
 
@@ -86,7 +103,7 @@ def cached_payload(root, model):
             raise ValueError('Invalid cached model layer descriptor.')
         blob=(root/'blobs'/digest.replace(':','-')).resolve()
         if not blob.is_relative_to(root/'blobs') or not blob.is_file() or blob.stat().st_size!=size:
-            raise ValueError('Cached model layer is missing or incomplete: '+model)
+            raise IncompleteCache('Cached model layer is missing or incomplete: '+model)
         if kind=='application/vnd.ollama.image.model':
             with blob.open('rb') as source:
                 if source.read(4)!=b'GGUF':raise ValueError('Cached weights are not GGUF.')
@@ -104,6 +121,16 @@ def cached_payload(root, model):
             elif kind=='application/vnd.ollama.image.license':licenses.append(text)
             elif kind=='application/vnd.ollama.image.system':payload['system']=text
             elif kind=='application/vnd.ollama.image.template':payload['template']=text
+            elif kind in {'application/vnd.ollama.manifest.list.v2+json',
+                           'application/vnd.docker.distribution.manifest.v2+json'}:
+                # Ollama's WriteLegacyAnchor appends manifest blobs only for
+                # downgrade garbage-collection retention. They are not model
+                # parameters or weights. Verify bounded metadata, never select
+                # an alternate runner/projector or follow its references.
+                metadata=json.loads(text)
+                if (not isinstance(metadata,dict) or metadata.get('schemaVersion')!=2
+                        or metadata.get('mediaType')!=kind):
+                    raise ValueError('Invalid cached manifest anchor metadata.')
             else:raise ValueError('Unsupported cached model layer: '+kind)
     # Multi-part/projector models need their original filenames, which a registry
     # manifest does not retain. Do not guess them or silently omit a layer.
@@ -117,7 +144,14 @@ def restore_cached(client, model, roots, endpoint=ENDPOINT, report=print):
     """Explicit setup/background recovery: copy cache over loopback, no download."""
     local_endpoint(endpoint)
     for root in roots:
-        cached=cached_payload(root,model)
+        try:
+            cached=cached_payload(root,model)
+        except IncompleteCache:
+            # A partial cache is not a usable import. Preserve it and inspect
+            # the next store; explicit setup can resume the normal pull if none
+            # is complete. Invalid descriptors/checksums still fail closed.
+            report('Incomplete cached layers for '+model+'; preserved for resumable setup. Checking the next cache.')
+            continue
         if cached is None:continue
         payload,weights=cached
         report('Restoring '+model+' from local cache '+str(root)+' into '+endpoint+'. No registry download.')

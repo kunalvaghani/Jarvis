@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-04T02:20:22.275310+00:00",
+  "date": "2026-10-08T06:38:24.010345+00:00",
   "scope": "Live own Win32 fixture only; independent native text/counter readback. No user app automation, microphone, Qwen, clipboard or network. Timing is warm action/observation latency, not arbitrary task latency.",
   "provider_checks": [
     {
       "provider": "ufo",
-      "fill_seconds": 0.031,
+      "fill_seconds": 0.094,
       "fill_receipt": {
         "message": "Filled Search; exact field value verified",
         "provider": "ufo",
@@ -16,7 +16,7 @@
         "execution_ms": 15.0
       },
       "fill_readback": true,
-      "click_seconds": 0.094,
+      "click_seconds": 0.406,
       "click_receipt": {
         "message": "Activated Apply; input sent once, result not verified",
         "provider": "ufo",
@@ -26,7 +26,7 @@
         "verified": false,
         "observed_change": true,
         "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
-        "execution_ms": 63.0
+        "execution_ms": 390.0
       },
       "clicked_once": true
     },
@@ -41,10 +41,10 @@
         "dispatched": true,
         "verified": true,
         "evidence": "Fresh native postcondition matched.",
-        "execution_ms": 16.0
+        "execution_ms": 15.0
       },
       "fill_readback": true,
-      "click_seconds": 0.094,
+      "click_seconds": 0.422,
       "click_receipt": {
         "message": "Activated Applied 1; input sent once, result not verified",
         "provider": "windows-mcp",
@@ -54,7 +54,7 @@
         "verified": false,
         "observed_change": true,
         "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
-        "execution_ms": 63.0
+        "execution_ms": 391.0
       },
       "clicked_once": true
     },
@@ -72,7 +72,7 @@
         "execution_ms": 16.0
       },
       "fill_readback": true,
-      "click_seconds": 0.109,
+      "click_seconds": 0.422,
       "click_receipt": {
         "message": "Activated Applied 2; input sent once, result not verified",
         "provider": "cua",
@@ -82,7 +82,7 @@
         "verified": false,
         "observed_change": true,
         "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
-        "execution_ms": 63.0
+        "execution_ms": 407.0
       },
       "clicked_once": true
     },
@@ -97,10 +97,10 @@
         "dispatched": true,
         "verified": true,
         "evidence": "Fresh native postcondition matched.",
-        "execution_ms": 16.0
+        "execution_ms": 0.0
       },
       "fill_readback": true,
-      "click_seconds": 0.109,
+      "click_seconds": 0.437,
       "click_receipt": {
         "message": "Activated Applied 3; input sent once, result not verified",
         "provider": "open-computer-use",
@@ -110,14 +110,14 @@
         "verified": false,
         "observed_change": true,
         "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
-        "execution_ms": 62.0
+        "execution_ms": 406.0
       },
       "clicked_once": true
     },
     {
       "provider": "agent-s",
       "fill_unavailable": "No compatible executor could prepare this action. No input issued. agent-s: Agent-S centre click is limited to explicit accessible actions",
-      "click_seconds": 0.203,
+      "click_seconds": 0.485,
       "click_receipt": {
         "message": "Activated Applied 4; input sent once, result not verified",
         "provider": "agent-s",
@@ -127,14 +127,14 @@
         "verified": false,
         "observed_change": true,
         "evidence": "Fresh accessible state changed after one dispatch; downstream application outcome is not established.",
-        "execution_ms": 172.0
+        "execution_ms": 422.0
       },
       "clicked_once": true
     }
   ],
   "direct_workflow": {
-    "message": "Finished 2 explicit desktop action(s) in 0.23 seconds; no model calls.",
-    "seconds": 0.453,
+    "message": "Finished 2 explicit desktop action(s) in 0.64 seconds; no model calls.",
+    "seconds": 0.953,
     "model_calls": 0,
     "text_readback": true,
     "checkbox_readback": true,
@@ -173,7 +173,7 @@
   ],
   "worker": {
     "ping_ready": true,
-    "startup_seconds": 0.1984,
+    "startup_seconds": 0.3097,
     "same_process_reused": true,
     "cancel_before_dispatch": true,
     "closed": true

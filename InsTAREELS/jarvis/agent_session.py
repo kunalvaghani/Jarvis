@@ -258,6 +258,8 @@ class OllamaProvider:
             'You cannot write files, run commands or access accounts. Never claim edits or tests were performed. '
             'Use existing observations, avoid repeating calls, and cite source paths in the answer.')
         with requests.Session() as client:
+            from .gpu_scheduler import install
+            install(client,'research')
             client.trust_env = False
             if self.native_tools:
                 from .native_tools import plan
