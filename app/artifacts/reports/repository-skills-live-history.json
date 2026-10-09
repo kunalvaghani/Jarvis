@@ -1,0 +1,888 @@
+[
+  {
+    "date": "2026-10-08T19:34:01.935924+00:00",
+    "passed": false,
+    "scope": "Actual Actions command routing and ToolRegistry dispatch; three real pinned public repositories, hardened container execution, reconstructed registries and real local Qwen tool proposals. No microphone or user project controlled.",
+    "approval_scope": "Explicit human implementation task authorizes only these three public repository trials; production per-call UI approval remains required.",
+    "repositories": [
+      {
+        "url": "https://github.com/mahmoud/boltons",
+        "passed": true,
+        "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+        "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+        "candidates": 508,
+        "supported_candidates": 450,
+        "files_scanned": 33,
+        "skill_id": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+        "capability": "boltons.iterutils.chunked",
+        "validation": {
+          "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+          "state": "VALIDATED",
+          "value": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ],
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:34:06.208652+00:00",
+            "image_id": "sha256:197bd9188595b8f02b272407ac0295300fa0f5beaea0c7dd78a546a058fd3d06",
+            "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+            "arguments_hash": "febfd4293b60ebe568c4555bb1c84e94a6fb59de6224395b749e482877e03d20"
+          }
+        },
+        "actual_result": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ],
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ]
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true
+      },
+      {
+        "url": "https://github.com/pypa/packaging",
+        "passed": true,
+        "commit": "ea25b7d2befd0068fb3d46b375f6f926f4473472",
+        "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+        "candidates": 177,
+        "supported_candidates": 95,
+        "files_scanned": 37,
+        "skill_id": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+        "capability": "packaging.specifiers.SpecifierSet.contains",
+        "validation": {
+          "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+          "state": "VALIDATED",
+          "value": true,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:34:59.544873+00:00",
+            "image_id": "sha256:197bd9188595b8f02b272407ac0295300fa0f5beaea0c7dd78a546a058fd3d06",
+            "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+            "arguments_hash": "28da7bfdaa0fb91dfdcd7b0bb4733ba2ef59aba1dfdcfe18511736474e39598b"
+          }
+        },
+        "actual_result": true,
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": true
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true
+      },
+      {
+        "url": "https://github.com/agronholm/anyio",
+        "passed": false,
+        "commit": "159ffdffa5888831b0758bc2a656ff76480a77ca",
+        "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+        "candidates": 763,
+        "supported_candidates": 531,
+        "files_scanned": 46,
+        "skill_id": "rs_464b3b4383_70137e80408bf739cf9994b9",
+        "capability": "anyio._core._eventloop.sleep",
+        "error_type": "ValueError",
+        "error": "Isolated skill failed: ImportError: cannot import name 'sentinel' from 'typing_extensions' (/usr/local/lib/python3.13/site-packages/typing_extensions.py)"
+      }
+    ],
+    "persistent_memory_answer": "Repository capabilities (persistent metadata; no model retraining): anyio.abc._eventloop.AsyncBackend.wait_readable [ANALYZED], anyio.abc._subprocesses.Process.stderr [QUARANTINED], anyio._core._futures.Future.status [QUARANTINED], anyio.abc._eventloop.AsyncBackend.create_test_runner [ANALYZED], anyio.abc._eventloop.AsyncBackend.check_cancelled [ANALYZED], anyio._core._fileio.Path.is_symlink [ANALYZED], anyio.streams.buffered.BufferedByteStream.send [ANALYZED], anyio._backends._asyncio.UNIXSocketListener.aclose [ANALYZED], anyio._core._synchronization.CapacityLimiter.release [QUARANTINED], anyio._backends._trio.CancelScope.cancelled_caught [QUARANTINED], anyio._core._fileio.Path.replace [ANALYZED], anyio._backends._asyncio.Event.statistics [ANALYZED]. Only ACTIVE approved skills may run in the configured isolated runtime.",
+    "memory_outcome_notes": true,
+    "approvals": [
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      }
+    ],
+    "seconds": 84.609
+  },
+  {
+    "date": "2026-10-08T19:38:51.758896+00:00",
+    "passed": true,
+    "scope": "Actual Actions command routing and ToolRegistry dispatch; three real pinned public repositories, hardened container execution, reconstructed registries and real local Qwen tool proposals. No microphone or user project controlled.",
+    "approval_scope": "Explicit human implementation task authorizes only these three public repository trials; production per-call UI approval remains required.",
+    "repositories": [
+      {
+        "url": "https://github.com/mahmoud/boltons",
+        "passed": true,
+        "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+        "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+        "candidates": 508,
+        "supported_candidates": 450,
+        "files_scanned": 33,
+        "skill_id": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+        "capability": "boltons.iterutils.chunked",
+        "validation": {
+          "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+          "state": "VALIDATED",
+          "value": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ],
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:38:55.539094+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "c302425719a2d921e695dfe3028e8e949c43dc925613ac0d330f7f06dc288c04",
+            "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+            "arguments_hash": "febfd4293b60ebe568c4555bb1c84e94a6fb59de6224395b749e482877e03d20"
+          }
+        },
+        "actual_result": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ],
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ]
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/pypa/packaging",
+        "passed": true,
+        "commit": "ea25b7d2befd0068fb3d46b375f6f926f4473472",
+        "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+        "candidates": 177,
+        "supported_candidates": 95,
+        "files_scanned": 37,
+        "skill_id": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+        "capability": "packaging.specifiers.SpecifierSet.contains",
+        "validation": {
+          "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+          "state": "VALIDATED",
+          "value": true,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:39:28.744870+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "c302425719a2d921e695dfe3028e8e949c43dc925613ac0d330f7f06dc288c04",
+            "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+            "arguments_hash": "28da7bfdaa0fb91dfdcd7b0bb4733ba2ef59aba1dfdcfe18511736474e39598b"
+          }
+        },
+        "actual_result": true,
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": true
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/agronholm/anyio",
+        "passed": true,
+        "commit": "159ffdffa5888831b0758bc2a656ff76480a77ca",
+        "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+        "candidates": 763,
+        "supported_candidates": 531,
+        "files_scanned": 46,
+        "skill_id": "rs_464b3b4383_70137e80408bf739cf9994b9",
+        "capability": "anyio._core._eventloop.sleep",
+        "validation": {
+          "skill": "rs_464b3b4383_70137e80408bf739cf9994b9",
+          "state": "VALIDATED",
+          "value": null,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:39:57.835397+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "c302425719a2d921e695dfe3028e8e949c43dc925613ac0d330f7f06dc288c04",
+            "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+            "arguments_hash": "70cca9a8847bdf21bb7d62106b715705c34cb87530ed6eafa8516b407a3473fb"
+          }
+        },
+        "actual_result": null,
+        "async": true,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": null
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      }
+    ],
+    "persistent_memory_answer": "Repository capabilities (persistent metadata; no model retraining): anyio.abc._eventloop.AsyncBackend.wait_readable [ANALYZED], anyio.abc._subprocesses.Process.stderr [QUARANTINED], anyio._core._futures.Future.status [QUARANTINED], anyio.abc._eventloop.AsyncBackend.create_test_runner [ANALYZED], anyio.abc._eventloop.AsyncBackend.check_cancelled [ANALYZED], anyio._core._fileio.Path.is_symlink [ANALYZED], anyio.streams.buffered.BufferedByteStream.send [ANALYZED], anyio._backends._asyncio.UNIXSocketListener.aclose [ANALYZED], anyio._core._synchronization.CapacityLimiter.release [QUARANTINED], anyio._backends._trio.CancelScope.cancelled_caught [QUARANTINED], anyio._core._fileio.Path.replace [ANALYZED], anyio._backends._asyncio.Event.statistics [ANALYZED]. Only ACTIVE approved skills may run in the configured isolated runtime.",
+    "memory_outcome_notes": true,
+    "approvals": [
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      }
+    ],
+    "seconds": 88.297
+  },
+  {
+    "date": "2026-10-08T19:46:04.956537+00:00",
+    "passed": true,
+    "scope": "Actual Actions command routing and ToolRegistry dispatch; three real pinned public repositories, hardened container execution, reconstructed registries and real local Qwen tool proposals. No microphone or user project controlled.",
+    "approval_scope": "Explicit human implementation task authorizes only these three public repository trials; production per-call UI approval remains required.",
+    "repositories": [
+      {
+        "url": "https://github.com/mahmoud/boltons",
+        "passed": true,
+        "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+        "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+        "candidates": 508,
+        "supported_candidates": 450,
+        "files_scanned": 33,
+        "skill_id": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+        "capability": "boltons.iterutils.chunked",
+        "validation": {
+          "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+          "state": "VALIDATED",
+          "value": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ],
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:46:08.825263+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "bfdf1f56791b06dc5bcfb9983c33ea029d340db776029b9ec48aee18f03b30dd",
+            "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+            "arguments_hash": "febfd4293b60ebe568c4555bb1c84e94a6fb59de6224395b749e482877e03d20"
+          }
+        },
+        "actual_result": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ],
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ]
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/pypa/packaging",
+        "passed": true,
+        "commit": "ea25b7d2befd0068fb3d46b375f6f926f4473472",
+        "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+        "candidates": 177,
+        "supported_candidates": 95,
+        "files_scanned": 37,
+        "skill_id": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+        "capability": "packaging.specifiers.SpecifierSet.contains",
+        "validation": {
+          "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+          "state": "VALIDATED",
+          "value": true,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:46:43.584086+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "bfdf1f56791b06dc5bcfb9983c33ea029d340db776029b9ec48aee18f03b30dd",
+            "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+            "arguments_hash": "28da7bfdaa0fb91dfdcd7b0bb4733ba2ef59aba1dfdcfe18511736474e39598b"
+          }
+        },
+        "actual_result": true,
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": true
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/agronholm/anyio",
+        "passed": true,
+        "commit": "159ffdffa5888831b0758bc2a656ff76480a77ca",
+        "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+        "candidates": 763,
+        "supported_candidates": 531,
+        "files_scanned": 46,
+        "skill_id": "rs_464b3b4383_70137e80408bf739cf9994b9",
+        "capability": "anyio._core._eventloop.sleep",
+        "validation": {
+          "skill": "rs_464b3b4383_70137e80408bf739cf9994b9",
+          "state": "VALIDATED",
+          "value": null,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:47:14.744351+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "bfdf1f56791b06dc5bcfb9983c33ea029d340db776029b9ec48aee18f03b30dd",
+            "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+            "arguments_hash": "70cca9a8847bdf21bb7d62106b715705c34cb87530ed6eafa8516b407a3473fb"
+          }
+        },
+        "actual_result": null,
+        "async": true,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": null
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      }
+    ],
+    "persistent_memory_answer": "Repository capabilities (persistent metadata; no model retraining): anyio.abc._eventloop.AsyncBackend.wait_readable [ANALYZED], anyio.abc._subprocesses.Process.stderr [QUARANTINED], anyio._core._futures.Future.status [QUARANTINED], anyio.abc._eventloop.AsyncBackend.create_test_runner [ANALYZED], anyio.abc._eventloop.AsyncBackend.check_cancelled [ANALYZED], anyio._core._fileio.Path.is_symlink [ANALYZED], anyio.streams.buffered.BufferedByteStream.send [ANALYZED], anyio._backends._asyncio.UNIXSocketListener.aclose [ANALYZED], anyio._core._synchronization.CapacityLimiter.release [QUARANTINED], anyio._backends._trio.CancelScope.cancelled_caught [QUARANTINED], anyio._core._fileio.Path.replace [ANALYZED], anyio._backends._asyncio.Event.statistics [ANALYZED]. Only ACTIVE approved skills may run in the configured isolated runtime.",
+    "memory_outcome_notes": true,
+    "approvals": [
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      }
+    ],
+    "seconds": 93.718
+  },
+  {
+    "date": "2026-10-08T19:48:22.913906+00:00",
+    "passed": true,
+    "scope": "Actual Actions command routing and ToolRegistry dispatch; three real pinned public repositories, hardened container execution, reconstructed registries and real local Qwen tool proposals. No microphone or user project controlled.",
+    "approval_scope": "Explicit human implementation task authorizes only these three public repository trials; production per-call UI approval remains required.",
+    "repositories": [
+      {
+        "url": "https://github.com/mahmoud/boltons",
+        "passed": true,
+        "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+        "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+        "candidates": 508,
+        "supported_candidates": 450,
+        "files_scanned": 33,
+        "skill_id": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+        "capability": "boltons.iterutils.chunked",
+        "validation": {
+          "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+          "state": "VALIDATED",
+          "value": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ],
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:48:27.218091+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+            "revision": "999a020778448477852f03f239a56f7e4fcdf6716e468c8b77f716dd890b67e2",
+            "arguments_hash": "febfd4293b60ebe568c4555bb1c84e94a6fb59de6224395b749e482877e03d20"
+          }
+        },
+        "actual_result": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ],
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5
+            ]
+          ]
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/pypa/packaging",
+        "passed": true,
+        "commit": "ea25b7d2befd0068fb3d46b375f6f926f4473472",
+        "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+        "candidates": 177,
+        "supported_candidates": 95,
+        "files_scanned": 37,
+        "skill_id": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+        "capability": "packaging.specifiers.SpecifierSet.contains",
+        "validation": {
+          "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+          "state": "VALIDATED",
+          "value": true,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:49:07.974509+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+            "revision": "2f825766ba97c0c7710bdba845c18ef5a439ce29bfa2017c2ee9bf8e5371efda",
+            "arguments_hash": "28da7bfdaa0fb91dfdcd7b0bb4733ba2ef59aba1dfdcfe18511736474e39598b"
+          }
+        },
+        "actual_result": true,
+        "async": false,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": true
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      },
+      {
+        "url": "https://github.com/agronholm/anyio",
+        "passed": true,
+        "commit": "159ffdffa5888831b0758bc2a656ff76480a77ca",
+        "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+        "candidates": 763,
+        "supported_candidates": 531,
+        "files_scanned": 46,
+        "skill_id": "rs_464b3b4383_70137e80408bf739cf9994b9",
+        "capability": "anyio._core._eventloop.sleep",
+        "validation": {
+          "skill": "rs_464b3b4383_70137e80408bf739cf9994b9",
+          "state": "VALIDATED",
+          "value": null,
+          "validation": {
+            "passed": true,
+            "at": "2026-10-08T19:49:39.826684+00:00",
+            "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+            "runner_hash": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+            "revision": "9a718489d75f97d32785716474c7faf323be2b1390b6331587d49c82c212e481",
+            "arguments_hash": "70cca9a8847bdf21bb7d62106b715705c34cb87530ed6eafa8516b407a3473fb"
+          }
+        },
+        "actual_result": null,
+        "async": true,
+        "llm_to_dispatcher": {
+          "passed": true,
+          "model": "qwen3.5:9b",
+          "native_tool_calling": true,
+          "actual_result": null
+        },
+        "restart_registry_passed": true,
+        "disabled_execution_blocked": true,
+        "final_state": "ACTIVE"
+      }
+    ],
+    "persistent_memory_answer": "Repository capabilities (persistent metadata; no model retraining): anyio.abc._eventloop.AsyncBackend.wait_readable [ANALYZED], anyio.abc._subprocesses.Process.stderr [QUARANTINED], anyio._core._futures.Future.status [QUARANTINED], anyio.abc._eventloop.AsyncBackend.create_test_runner [ANALYZED], anyio.abc._eventloop.AsyncBackend.check_cancelled [ANALYZED], anyio._core._fileio.Path.is_symlink [ANALYZED], anyio.streams.buffered.BufferedByteStream.send [ANALYZED], anyio._backends._asyncio.UNIXSocketListener.aclose [ANALYZED], anyio._core._synchronization.CapacityLimiter.release [QUARANTINED], anyio._backends._trio.CancelScope.cancelled_caught [QUARANTINED], anyio._core._fileio.Path.replace [ANALYZED], anyio._backends._asyncio.Event.statistics [ANALYZED]. Only ACTIVE approved skills may run in the configured isolated runtime.",
+    "memory_outcome_notes": true,
+    "approvals": [
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_8f0aa88c45_23ca7f6ee1769069281148e4"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_execution",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_validation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      },
+      {
+        "kind": "repository_skill_activation",
+        "skill": "rs_464b3b4383_70137e80408bf739cf9994b9"
+      }
+    ],
+    "seconds": 100.922
+  }
+]

@@ -1,0 +1,29 @@
+faster-whisper==1.2.1
+ctranslate2==4.6.0
+huggingface-hub>=0.24,<1
+numpy>=1.26,<3
+requests>=2.32,<3
+psutil>=6,<8
+websocket-client>=1.8,<2
+ddgs==9.16.0
+scipy>=1.10,<2
+nvidia-cublas-cu12>=12.4,<13; sys_platform == 'win32'
+nvidia-cudnn-cu12>=9,<10; sys_platform == 'win32'
+nvidia-cuda-runtime-cu12>=12.4,<13; sys_platform == 'win32'
+sounddevice>=0.5,<0.6
+piper-tts==1.8.0
+kokoro-onnx==0.4.9
+Pillow>=11,<13
+PyAutoGUI==0.9.54; sys_platform == 'win32'
+opencv-python>=4.10,<5; sys_platform == 'win32'
+Send2Trash>=1.8,<2
+pywinauto==0.6.9; sys_platform == 'win32'
+pywin32==312; sys_platform == 'win32'
+winrt-Windows.Foundation==3.2.1; sys_platform == 'win32'
+winrt-Windows.Foundation.Collections==3.2.1; sys_platform == 'win32'
+winrt-Windows.Media==3.2.1; sys_platform == 'win32'
+winrt-Windows.Media.Control==3.2.1; sys_platform == 'win32'
+winrt-Windows.Storage.Streams==3.2.1; sys_platform == 'win32'
+pycaw==20260921; sys_platform == 'win32'
+playwright==1.63.0
+PyYAML==6.0.3

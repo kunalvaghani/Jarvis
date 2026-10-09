@@ -1,0 +1,50 @@
+{
+  "application": {
+    "listening": true,
+    "status": "running",
+    "health": {
+      "audio": {
+        "requested": true,
+        "phase": "listening",
+        "capture_alive": true,
+        "decoder_alive": true,
+        "last_block_age_seconds": 0.062,
+        "final_segments": 0
+      },
+      "answer": {
+        "phase": "completed",
+        "active_seconds": null,
+        "last_duration_seconds": null
+      },
+      "workers": {
+        "actions": true,
+        "questions": true,
+        "speech": true
+      },
+      "gpu": {
+        "status": "idle",
+        "active_role": null,
+        "active_model": null,
+        "pending": 0,
+        "warm_model": null
+      }
+    }
+  },
+  "regression": {
+    "passed": true,
+    "seconds": 227.003,
+    "tests": 1241
+  },
+  "links": {
+    "missing": [],
+    "checked": 240
+  },
+  "live_repositories": 3,
+  "date_ist": "2026-10-09T01:33:03.0362279+05:30",
+  "persistent_restart_calls": 3,
+  "scope": "Repository engine delivery; no new live voice task or universal repository validation claim",
+  "source_snapshots": {
+    "mismatches": [],
+    "checked": 159
+  }
+}

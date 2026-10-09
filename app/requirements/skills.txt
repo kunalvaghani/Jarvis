@@ -1,0 +1,21 @@
+# Separate vetted utility runtime; never installs into the speech environment.
+black==26.1.0
+cryptography>=46,<48
+pymongo>=4.13,<5
+redis>=6,<8
+feedparser==6.0.12
+Markdown>=3.8,<4
+reportlab>=4.4,<5
+bandit>=1.8,<2
+pandas>=2.3,<3
+pyarrow>=21,<24
+nbformat>=5.10,<6
+nbclient>=0.10,<1
+ipykernel>=6.30,<8
+pytesseract==0.3.13
+mss>=10,<12
+imageio-ffmpeg>=0.6,<1
+Pillow>=11,<13
+requests>=2.32,<3
+psutil>=6,<8
+PyYAML==6.0.3

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Pairs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden; }
+        .container { text-align: center; padding: 20px; animation: pulse 8s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.95; } }
+        h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 10px; font-size: 2em; }
+        #instructions { color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); margin-bottom: 20px; font-size: 1.1em; max-width: 400px; }
+        .card-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .card { width: 90px; height: 130px; perspective: 1000px; cursor: pointer; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .card-front, .card-back { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 2.5em; font-weight: bold; }
+        .card-front { background: linear-gradient(135deg, #ff6b6b, #feca57); color: #fff; transform: rotateY(0deg); }
+        .card-back { background: linear-gradient(135deg, #4834d4, #686de0); color: #fff; transform: rotateY(180deg); }
+        .card.flipped { transform: rotateY(180deg); }
+        .card.matched { pointer-events: none; box-shadow: 0 0 30px rgba(255,215,0,0.6); }
+        #status { color: #ffd700; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); font-size: 1.8em; margin-bottom: 10px; min-height: 42px; }
+        #reset { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: #fff; border: none; padding: 12px 30px; font-size: 1.1em; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s, box-shadow 0.3s; margin-top: 10px; }
+        #reset:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        #reset:active { transform: translateY(0); }
+        @media (max-width: 500px) { .card { width: 70px; height: 100px; font-size: 2em; } h1 { font-size: 1.5em; } #instructions { font-size: 0.9em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prism Pairs</h1>
+        <div id="pairs">Pairs: 0</div>
+        <div id="status"></div>
+        <div id="instructions">Click or press keys A-F on two matching cards. Press R to restart.</div>
+        <div class="card-grid">
+            <button class="card" id="card0" aria-label="Card A, face down" tabindex="0" onclick="flipCard(0)" onkeydown="handleKey(event, 0)"><div class="card-inner"><div class="card-front">A</div><div class="card-back"></div></div></button>
+            <button class="card" id="card1" aria-label="Card A, face down" tabindex="0" onclick="flipCard(1)" onkeydown="handleKey(event, 1)"><div class="card-inner"><div class="card-front">A</div><div class="card-back"></div></div></button>
+            <button class="card" id="card2" aria-label="Card B, face down" tabindex="0" onclick="flipCard(2)" onkeydown="handleKey(event, 2)"><div class="card-inner"><div class="card-front">B</div><div class="card-back"></div></div></button>
+            <button class="card" id="card3" aria-label="Card B, face down" tabindex="0" onclick="flipCard(3)" onkeydown="handleKey(event, 3)"><div class="card-inner"><div class="card-front">B</div><div class="card-back"></div></div></button>
+            <button class="card" id="card4" aria-label="Card C, face down" tabindex="0" onclick="flipCard(4)" onkeydown="handleKey(event, 4)"><div class="card-inner"><div class="card-front">C</div><div class="card-back"></div></div></button>
+            <button class="card" id="card5" aria-label="Card C, face down" tabindex="0" onclick="flipCard(5)" onkeydown="handleKey(event, 5)"><div class="card-inner"><div class="card-front">C</div><div class="card-back"></div></div></button>
+        </div>
+        <button id="reset" onclick="resetGame()" aria-label="Restart game">Restart</button>
+    </div>
+    <script>
+        let pairs = 0, flippedCards = [], isFlipping = false;
+        const cardLabels = ['A', 'A', 'B', 'B', 'C', 'C'];
+        function flipCard(index) { if (isFlipping || document.getElementById('card' + index).classList.contains('flipped')) return; const card = document.getElementById('card' + index); card.classList.add('flipped'); flippedCards.push(index); if (flippedCards.length === 2) { isFlipping = true; setTimeout(() => { const [i1, i2] = flippedCards; const v1 = cardLabels[i1], v2 = cardLabels[i2]; if (v1 === v2) { document.getElementById('card' + i1).classList.add('matched'), document.getElementById('card' + i2).classList.add('matched'); pairs++; document.getElementById('pairs').innerText = 'Pairs: ' + pairs; if (pairs === 3) document.getElementById('status').innerText = 'You won!'; } else { flippedCards.forEach(i => document.getElementById('card' + i).classList.remove('flipped')); } flippedCards = []; isFlipping = false; }, 700); } }
+        function handleKey(event, index) { if (event.key && event.key.length === 1) { const key = event.key.toLowerCase(); if (key >= 'a' && key <= 'f') flipCard(parseInt(key) - 97); } else if (event.key === 'r' || event.key === 'R') resetGame(); }
+        function resetGame() { pairs = 0; document.getElementById('pairs').innerText = 'Pairs: 0'; document.querySelectorAll('.card').forEach((card, i) => card.classList.remove('flipped', 'matched')); flippedCards = []; isFlipping = false; }
+    </script>
+</body>
+</html>

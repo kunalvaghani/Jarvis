@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-08T20:01:21.669772+00:00",
+  "passed": true,
+  "scope": "Fresh Actions/ToolRegistry execution after actual supervised Jarvis restart; production process heartbeat checked. No re-learning, revalidation or activation in this check; per-call trial approval remains scoped.",
+  "approval_scope": "Explicit human implementation task authorizes only these three public repository trials; production per-call UI approval remains required.",
+  "repositories": [
+    {
+      "url": "https://github.com/mahmoud/boltons",
+      "skill_id": "rs_fe65cdfddc_fd05074f1ef5233aa2ad9774",
+      "discoverable": true,
+      "actual_result": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "url": "https://github.com/pypa/packaging",
+      "skill_id": "rs_8f0aa88c45_23ca7f6ee1769069281148e4",
+      "discoverable": true,
+      "actual_result": true,
+      "passed": true
+    },
+    {
+      "url": "https://github.com/agronholm/anyio",
+      "skill_id": "rs_464b3b4383_70137e80408bf739cf9994b9",
+      "discoverable": true,
+      "actual_result": null,
+      "passed": true
+    }
+  ],
+  "application_heartbeat": {
+    "pid": 38748,
+    "session": "fdecd4002acd4ff28d9206af2c72b8cb",
+    "at": 1791489681.2632563
+  },
+  "application_health": {
+    "audio": {
+      "requested": true,
+      "phase": "loading_model",
+      "capture_alive": true,
+      "decoder_alive": false,
+      "last_block_age_seconds": 5.921,
+      "final_segments": 0
+    },
+    "answer": {
+      "phase": "completed",
+      "active_seconds": null,
+      "last_duration_seconds": null
+    },
+    "workers": {
+      "actions": true,
+      "questions": true,
+      "speech": true
+    },
+    "gpu": {
+      "status": "idle",
+      "active_role": null,
+      "active_model": null,
+      "pending": 0,
+      "warm_model": null
+    }
+  },
+  "seconds": 13.047
+}

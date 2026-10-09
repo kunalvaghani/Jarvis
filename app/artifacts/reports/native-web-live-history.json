@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2026-10-08T17:57:09.401600+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-web-live\\29946760ae604faca1bd476a9d0ab19d",
+    "passed": false,
+    "scope": "Actual native Qwen plain-website generation in owned fixture; fixed independent browser oracle, no user project or account changed.",
+    "error_type": "ValueError",
+    "error": "Shared interface mismatch: markup brief must use exact shared selector #increment. Do not rename or omit it. markup brief must use exact shared selector #count. Do not rename or omit it. logic brief must use exact shared selector #count. Do not rename or omit it. logic brief must use exact shared selector #increment. Do not rename or omit it. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-workloads\\a034b7a78efe4dac88223b93448e9256",
+    "seconds": 158.016
+  },
+  {
+    "date": "2026-10-08T18:04:07.253795+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-web-live\\aecfa9f9163d41658feb34316169e3ab",
+    "passed": false,
+    "scope": "Actual native Qwen plain-website generation in owned fixture; fixed independent browser oracle, no user project or account changed.",
+    "error_type": "ValueError",
+    "error": "Browser check must assert visible results, not just click. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-workloads\\32241edc9dd7402887785536f68ccaf5",
+    "seconds": 274.0
+  },
+  {
+    "date": "2026-10-08T18:09:31.888511+00:00",
+    "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-web-live\\af527466c8e346328681ba93ddcaf57e",
+    "passed": false,
+    "scope": "Actual native Qwen plain-website generation in owned fixture; fixed independent browser oracle, no user project or account changed.",
+    "error_type": "ValueError",
+    "error": "GPU inference queue deadline reached; no request issued. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-workloads\\3abc6beff13c4a30818c3f803030f705",
+    "seconds": 270.297
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Jarvis Gmail Draft Adapter",
+  "version": "1.0.0",
+  "description": "User-requested Gmail draft operations in the existing Chrome profile. No sending or credentials.",
+  "permissions": ["scripting", "tabs", "storage"],
+  "host_permissions": ["https://mail.google.com/*", "http://127.0.0.1/*"],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Enable Jarvis Gmail draft connection"},
+  "content_scripts": [{"matches": ["https://mail.google.com/*"], "js": ["keepalive.js"]}]
+}

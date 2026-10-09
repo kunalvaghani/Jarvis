@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Focus Flow - Timer App</title>
+<style>
+:root{--dark:#2a243e;--lavender:#4b3d6c;--accent:#9d7cc8;--text:#f0ebf5;--error:#d94c68;--success:#5bd15d}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{min-height:100vh;background:linear-gradient(135deg,var(--dark),var(--lavender));display:flex;justify-content:center;align-items:center;padding:2rem;color:var(--text);gap:2rem}
+.container{max-width:600px;width:100%;background:rgba(75,61,108,0.6);border-radius:16px;padding:2rem;margin:auto;border:1px solid var(--accent);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.container{animation:glow 5s ease-in-out infinite alternate}
+@keyframes glow{from{box-shadow:0 8px 32px #0006}to{box-shadow:0 8px 48px #9d7cc855}}
+@media(max-width:480px){body{padding:1rem}.container{padding:1.25rem}.container .grid{grid-template-columns:1fr}}
+h1{text-align:center;margin-bottom:1.5rem;font-size:2rem;letter-spacing:0.05em;color:#e8dcf0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:1.5rem;margin-bottom:1.5rem}
+label{display:block;margin-bottom:0.25rem;font-size:0.9rem;color:#d4c3e8}
+input[type="text"],input[type="number"]{width:100%;padding:0.75rem;border:2px solid var(--accent);border-radius:8px;background:rgba(255,255,255,0.08);color:var(--text);font-size:1rem;font-family:inherit}
+input:focus{outline:3px solid var(--accent);outline-offset:2px;border-color:#bfa3d9}
+.buttons{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem}
+button{min-width:80px;padding:0.75rem 1rem;border:none;border-radius:8px;background:var(--accent);color:var(--text);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+button:hover{background:#bfa3d9;transform:translateY(-1px)}
+button:focus-visible{outline:3px solid var(--success);outline-offset:2px}
+button.secondary{background:#6e5a8c;border-color:#6e5a8c}
+button.small{padding:0.5rem 0.75rem;font-size:0.9rem}
+.timer-display{text-align:center;margin-top:1rem;padding:1.5rem;background:rgba(0,0,0,0.2);border-radius:12px}
+.status{font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;color:var(--accent)}
+.progress-ring{width:120px;height:120px;margin:0 auto;border-radius:50%;background:conic-gradient(var(--success) 0deg,var(--dark) 0deg);display:flex;justify-content:center;align-items:center;position:relative}
+.progress-circle{position:absolute;width:80px;height:80px;background:var(--lavender);border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:1.5rem;font-weight:bold;color:var(--text)}
+input[invalid]{border-color:var(--error);animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none;transition:none}}
+.error-message{color:var(--error);text-align:center;font-size:1rem;padding:0.75rem;background:rgba(217,76,104,0.2);border-radius:8px;margin-top:0.5rem;display:block;min-height:5rem;visibility:hidden}
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Focus Flow</h1>
+
+<div class="grid">
+<div>
+<label for="duration">Duration (seconds): <span id="duration-display">5</span></label>
+<input type="number" id="duration" name="duration" min="1" max="3600" value="5" aria-label="Timer duration in seconds" />
+<span class="error-message" id="error" role="alert">Use a whole number from 1 to 3600 seconds.</span>
+</div>
+<div>
+<label for="note">Task note:</label>
+<input type="text" id="note" name="note" placeholder="Focus on this task..." />
+</div>
+</div>
+
+<div class="timer-display">
+<div class="status" id="status">Ready</div>
+<div class="progress-ring" aria-label="Progress ring showing remaining time">
+<div class="progress-circle" id="time" aria-live="polite"></div>
+</div>
+</div>
+
+<div class="buttons">
+<button id="start" type="button">Start</button>
+<button id="pause" type="button" class="secondary">Pause</button>
+<button id="reset" type="button" class="secondary">Reset</button>
+</div>
+</div>
+
+<script>
+let duration = 5;
+let remaining = 5;
+let interval = null;
+let isRunning = false;
+let isPaused = false;
+let deadline = 0;
+let pausedMilliseconds = 0;
+
+const durationInput = document.getElementById('duration');
+const durationDisplay = document.getElementById('duration-display');
+const timeDisplay = document.getElementById('time');
+const statusDisplay = document.getElementById('status');
+const startBtn = document.getElementById('start');
+const pauseBtn = document.getElementById('pause');
+const resetBtn = document.getElementById('reset');
+const noteInput = document.getElementById('note');
+const errorDisplay = document.getElementById('error');
+const ring = document.querySelector('.progress-ring');
+
+function updateDurationDisplay() {
+  durationDisplay.textContent = duration;
+}
+
+function validateDuration(value) {
+  const num = Number(value);
+  if (!Number.isInteger(num) || num < 1 || num > 3600) {
+    errorDisplay.style.visibility = 'visible';
+    durationInput.setAttribute('invalid', '');
+    return false;
+  }
+  errorDisplay.style.visibility = 'hidden';
+  durationInput.removeAttribute('invalid');
+  return true;
+}
+
+function updateUI() {
+  if (isRunning) {
+    remaining = Math.max(0, Math.ceil((deadline - performance.now()) / 1000));
+  }
+  timeDisplay.textContent = remaining;
+  const fraction = isRunning ? Math.max(0, deadline - performance.now()) / (duration * 1000) : remaining / duration;
+  ring.style.background = `conic-gradient(var(--success) ${Math.min(1,fraction)*360}deg,var(--dark) 0deg)`;
+  if (isRunning && remaining === 0) {
+    clearInterval(interval);
+    isRunning = false;
+    isPaused = false;
+    pauseBtn.textContent = 'Pause';
+    statusDisplay.textContent = 'Complete';
+    statusDisplay.style.color = 'var(--success)';
+  }
+}
+
+function startTimer() {
+  if (!validateDuration(durationInput.value)) return;
+  
+  duration = Number(durationInput.value);
+  remaining = duration;
+  isRunning = true;
+  isPaused = false;
+  
+  deadline = performance.now() + duration * 1000;
+  pauseBtn.textContent = 'Pause';
+  statusDisplay.textContent = 'Running';
+  statusDisplay.style.color = 'var(--accent)';
+  
+  updateDurationDisplay();
+  clearInterval(interval);
+  updateUI();
+  interval = setInterval(updateUI, 50);
+}
+
+function pauseTimer() {
+  if (isRunning) {
+    pausedMilliseconds = Math.max(0, deadline - performance.now());
+    clearInterval(interval);
+    isPaused = true;
+    isRunning = false;
+    statusDisplay.textContent = 'Paused';
+    statusDisplay.style.color = '#d4a5ff';
+    pauseBtn.textContent = 'Resume';
+  }
+}
+
+function resumeTimer() {
+  if (isPaused) {
+    isPaused = false;
+    isRunning = true;
+    deadline = performance.now() + pausedMilliseconds;
+    clearInterval(interval);
+    interval = setInterval(updateUI, 50);
+    pauseBtn.textContent = 'Pause';
+    statusDisplay.textContent = 'Running';
+    statusDisplay.style.color = 'var(--accent)';
+  }
+}
+
+function resetTimer() {
+  clearInterval(interval);
+  if (validateDuration(durationInput.value)) duration = Number(durationInput.value);
+  remaining = duration;
+  isRunning = false;
+  isPaused = false;
+  
+  pauseBtn.textContent = 'Pause';
+  updateDurationDisplay();
+  updateUI();
+  statusDisplay.textContent = 'Ready';
+  statusDisplay.style.color = 'var(--accent)';
+}
+
+startBtn.addEventListener('click', startTimer);
+pauseBtn.addEventListener('click', () => {
+  isRunning ? pauseTimer() : resumeTimer();
+});
+resetBtn.addEventListener('click', resetTimer);
+durationInput.addEventListener('change', () => {
+  if (!validateDuration(durationInput.value)) return;
+  if (isRunning || isPaused) return;
+  duration = Number(durationInput.value);
+  updateDurationDisplay();
+  remaining = duration;
+  updateUI();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+    e.preventDefault();
+    durationInput.blur();
+  }
+});
+
+updateDurationDisplay();
+updateUI();
+</script>
+</body>
+</html>

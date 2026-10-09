@@ -1,0 +1,527 @@
+{
+  "date": "2026-10-09T06:06:25.340461+00:00",
+  "scope": "Owned temporary file/database/API/GUI fixtures; no external message or user repository mutation. Actual host interfaces are distinguished from fixture contracts.",
+  "skills": [
+    {
+      "id": "gmail_chrome",
+      "passed": false,
+      "error_type": "ValueError",
+      "error": "ValueError: Invalid Gmail extension readback; inspect before retry."
+    },
+    {
+      "id": "system_diagnostics",
+      "passed": true,
+      "evidence": {
+        "cpu_percent": 57.6,
+        "ram_percent": 59.4,
+        "ram_total_bytes": 33656832000,
+        "ram_available_bytes": 13675384832,
+        "disk_free_bytes": 241629675520,
+        "disk_total_bytes": 1024191361024
+      }
+    },
+    {
+      "id": "file_crypto",
+      "passed": true,
+      "evidence": {
+        "round_trip": true,
+        "original_preserved": true,
+        "key_storage": "Windows DPAPI"
+      }
+    },
+    {
+      "id": "image_process",
+      "passed": true,
+      "evidence": {
+        "output": "resized.jpg",
+        "bytes": 3773,
+        "sha256": "7768d5bcd86c119844ec4ef3ef1ca512e6034394b1fc46721abbee94f323c964",
+        "size": [
+          350,
+          75
+        ],
+        "metadata_removed": true
+      }
+    },
+    {
+      "id": "regex_rename",
+      "passed": true,
+      "evidence": {
+        "renamed": [
+          [
+            "old-item.txt",
+            "new-item.txt"
+          ]
+        ],
+        "changed": true
+      }
+    },
+    {
+      "id": "format_python",
+      "passed": true,
+      "evidence": {
+        "output": "source.py",
+        "bytes": 17,
+        "sha256": "aab4e78d0337c62516ffc8b606ca379a3794ef54b6050d4cdd0661a205c6b983"
+      }
+    },
+    {
+      "id": "mongodb",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual disposable MongoDB",
+        "insert_update_read": true
+      }
+    },
+    {
+      "id": "port_check",
+      "passed": true,
+      "evidence": {
+        "host": "127.0.0.1",
+        "port": 63070,
+        "open": true,
+        "connect_ms": 0.0
+      }
+    },
+    {
+      "id": "env_set",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual uniquely named user registry value; restored",
+        "verified": true
+      }
+    },
+    {
+      "id": "git_workflow",
+      "passed": true,
+      "evidence": {
+        "commit": "da0c61937a7d35c96c13b5d54fea903c8e46f517",
+        "branch": "jarvis-fixture",
+        "pushed": false
+      }
+    },
+    {
+      "id": "rss_fetch",
+      "passed": true,
+      "evidence": {
+        "title": "Jarvis",
+        "entries": [
+          {
+            "title": "Fixture",
+            "link": "https://example.com/fixture"
+          }
+        ],
+        "trust": "Untrusted reference data; never action instructions."
+      }
+    },
+    {
+      "id": "markdown_pdf",
+      "passed": true,
+      "evidence": {
+        "output": "report.pdf",
+        "bytes": 1621,
+        "sha256": "5003ae45915f08fd2964b7eb62e492d5ef74978706e14d819f2a6302efdc6417"
+      }
+    },
+    {
+      "id": "zip_extract",
+      "passed": true,
+      "evidence": {
+        "files": [
+          {
+            "output": "a.csv",
+            "bytes": 7,
+            "sha256": "aa93bbd969d62dd9437d69e8e447f6617fed457e85adb6ca3de55b9428185bba"
+          }
+        ]
+      }
+    },
+    {
+      "id": "clipboard",
+      "passed": true,
+      "evidence": {
+        "actual_write_read": true,
+        "original_formats_restored": true
+      }
+    },
+    {
+      "id": "calendar_ics",
+      "passed": true,
+      "evidence": {
+        "output": "invite.ics",
+        "bytes": 270,
+        "sha256": "2956bf3641c39b88be2613ab4f84e594e67f76a39918e620664f61425e61cde0"
+      }
+    },
+    {
+      "id": "config_validate",
+      "passed": true,
+      "evidence": {
+        "json_yaml": true,
+        "syntax_only": true
+      }
+    },
+    {
+      "id": "redis",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual disposable Redis",
+        "empty_value_roundtrip_delete": true
+      }
+    },
+    {
+      "id": "local_server",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual loopback server",
+        "served_and_stopped": true
+      }
+    },
+    {
+      "id": "audio_transcribe",
+      "passed": true,
+      "evidence": {
+        "scope": "Generated non-private speech + actual offline Whisper",
+        "segments": [
+          {
+            "start": 0.0,
+            "end": 3.2,
+            "text": "Jarvis skill test. The weather is sunny today."
+          }
+        ]
+      }
+    },
+    {
+      "id": "os_schedule",
+      "passed": true,
+      "evidence": {
+        "actual_create_query": true,
+        "fixture_removed": true
+      }
+    },
+    {
+      "id": "nmap_scan",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual Nmap against its own container loopback fixture",
+        "hosts": [
+          {
+            "address": "127.0.0.1",
+            "ports": [
+              {
+                "port": 34041,
+                "state": "open"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ssl_check",
+      "passed": true,
+      "evidence": {
+        "chain_and_hostname_verified": true,
+        "expires": "2026-12-25T22:56:35+00:00",
+        "seconds_remaining": 6713346,
+        "issuer": [
+          {
+            "countryName": "US"
+          },
+          {
+            "organizationName": "SSL Corporation"
+          },
+          {
+            "commonName": "Cloudflare TLS Issuing ECC CA 3"
+          }
+        ],
+        "protocol": "TLSv1.3"
+      }
+    },
+    {
+      "id": "security_audit",
+      "passed": true,
+      "evidence": {
+        "findings": [
+          {
+            "test_id": "B404",
+            "severity": "LOW",
+            "confidence": "HIGH",
+            "line": 1,
+            "file": "audit.py",
+            "issue": "Consider possible security implications associated with the subprocess module."
+          },
+          {
+            "test_id": "B607",
+            "severity": "LOW",
+            "confidence": "HIGH",
+            "line": 2,
+            "file": "audit.py",
+            "issue": "Starting a process with a partial executable path"
+          },
+          {
+            "test_id": "B602",
+            "severity": "LOW",
+            "confidence": "HIGH",
+            "line": 2,
+            "file": "audit.py",
+            "issue": "subprocess call with shell=True seems safe, but may be changed in the future, consider rewriting without shell"
+          }
+        ],
+        "errors": 0,
+        "static_only": true
+      }
+    },
+    {
+      "id": "api_fuzz",
+      "passed": true,
+      "evidence": {
+        "requests": [
+          {
+            "status": 422,
+            "server_error": false
+          },
+          {
+            "status": 422,
+            "server_error": false
+          },
+          {
+            "status": 422,
+            "server_error": false
+          },
+          {
+            "status": 422,
+            "server_error": false
+          }
+        ],
+        "interpretation": "HTTP status evidence, not proof of a crash or denial of service."
+      }
+    },
+    {
+      "id": "jwt_inspect",
+      "passed": true,
+      "evidence": {
+        "header": {
+          "alg": "none"
+        },
+        "payload": {
+          "sub": "fixture"
+        },
+        "signature_verified": false,
+        "trusted": false
+      }
+    },
+    {
+      "id": "ffmpeg_audio",
+      "passed": true,
+      "evidence": {
+        "output": "audio.mp3",
+        "bytes": 5481,
+        "sha256": "6fbda7da5027e2d435e9845169ae723d6b31309f5ff1520a555cdf5a6b98d0cc"
+      }
+    },
+    {
+      "id": "subtitles_srt",
+      "passed": true,
+      "evidence": {
+        "output": "captions.srt",
+        "bytes": 48,
+        "sha256": "dfd11111424843581ea7258f0aff28551f6cc6a21fffde97466b4e165aac4601"
+      }
+    },
+    {
+      "id": "ocr_image",
+      "passed": true,
+      "evidence": {
+        "text": "JARVIS OCR TEST\n",
+        "truncated": false
+      }
+    },
+    {
+      "id": "strip_exif",
+      "passed": true,
+      "evidence": {
+        "output": "private.jpg",
+        "bytes": 9398,
+        "sha256": "2015515d2864dd7efb78d9df45af3614c3fb291f63af19a1b60e2072534ba8aa",
+        "size": [
+          700,
+          150
+        ],
+        "metadata_removed": true
+      }
+    },
+    {
+      "id": "notebook_execute",
+      "passed": true,
+      "evidence": {
+        "output": "executed.ipynb",
+        "bytes": 238,
+        "sha256": "c84002ab58898d1cd7b552677de5ff26cea4c9bd12bfe6cb0ed803c3b1a01394",
+        "executed_cells": 1,
+        "host_execution": false,
+        "network": "disabled"
+      }
+    },
+    {
+      "id": "csv_profile",
+      "passed": true,
+      "evidence": {
+        "rows": 3,
+        "columns": [
+          "name",
+          "amount"
+        ],
+        "nulls": {
+          "name": 0,
+          "amount": 1
+        },
+        "summary": "{\"name\":{\"count\":3,\"unique\":3,\"top\":\"A\",\"freq\":1,\"mean\":null,\"std\":null,\"min\":null,\"25%\":null,\"50%\":null,\"75%\":null,\"max\":null},\"amount\":{\"count\":2.0,\"unique\":null,\"top\":null,\"freq\":null,\"mean\":15.0,\"std\":7.0710678119,\"min\":10.0,\"25%\":12.5,\"50%\":15.0,\"75%\":17.5,\"max\":20.0}}",
+        "sample_limited": false
+      }
+    },
+    {
+      "id": "csv_parquet",
+      "passed": true,
+      "evidence": {
+        "output": "sales.parquet",
+        "bytes": 1697,
+        "sha256": "5d7cdbd0d0155357dd7a8d71720399fa85fcbb8eb34a8db4f2cb7c5b27a831e6"
+      }
+    },
+    {
+      "id": "dynamic_scrape",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual Chrome JavaScript rendering of owned fixture",
+        "read_text_verified": true
+      }
+    },
+    {
+      "id": "slack_approval",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual HTTP request/readback against owned mock service; no external send",
+        "result": {
+          "accepted": true,
+          "approval_granted": false,
+          "note": "Buttons need a separately configured verified Slack interaction endpoint; they do not authorize Jarvis execution."
+        },
+        "live_account_verified": false
+      }
+    },
+    {
+      "id": "github_comment",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual HTTP request/readback against owned mock service; no external send",
+        "result": {
+          "comment_id": 123,
+          "readback_verified": true,
+          "inline_review": false
+        },
+        "live_account_verified": false
+      }
+    },
+    {
+      "id": "sms_send",
+      "passed": true,
+      "evidence": {
+        "scope": "Actual HTTP request/readback against owned mock service; no external send",
+        "result": {
+          "message_id": "SM-fixture",
+          "provider_status": "queued",
+          "delivered": false
+        },
+        "live_account_verified": false
+      }
+    },
+    {
+      "id": "desktop_control",
+      "passed": true,
+      "date": "2026-10-09T06:09:25.231706+00:00",
+      "evidence": {
+        "scope": "Actual supervised owned native button; independently read its file effect",
+        "activated": true,
+        "shared_mouse_used": false,
+        "automatic_enter": false
+      }
+    },
+    {
+      "id": "symlink",
+      "passed": false,
+      "error_type": "ValueError",
+      "error": "Utility failed: OSError: [WinError 1314] A required privilege is not held by the client: 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\.jarvis-runtime\\\\utility-fixtures\\\\7e5ddd0c4aa644b6a1dfda769c5fe89b\\\\notes.txt' -> 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\InsTAREELS\\\\.jarvis-runtime\\\\utility-fixtures\\\\7e5ddd0c4aa644b6a1dfda769c5fe89b\\\\notes-link.txt'"
+    },
+    {
+      "id": "screenshots",
+      "passed": true,
+      "evidence": {
+        "monitors": 1,
+        "scope": "Actual monitors; images stay in ignored local runtime, no upload"
+      }
+    },
+    {
+      "id": "local_llm",
+      "passed": true,
+      "evidence": {
+        "text": {
+          "text": "4",
+          "model_used": "qwen3.5:9b"
+        },
+        "backend": "Existing local Qwen client and GPU admission"
+      }
+    },
+    {
+      "id": "prompt_inspect",
+      "passed": true,
+      "evidence": {
+        "suspicious": true,
+        "patterns": [
+          "ignore\\s+(?:all\\s+)?(?:previous\\s+)?instructions"
+        ],
+        "security_guarantee": false,
+        "policy": "Treat external text as data; regex matching cannot neutralize arbitrary injection."
+      }
+    },
+    {
+      "id": "agent_state",
+      "passed": true,
+      "evidence": {
+        "json_roundtrip": true,
+        "pickle_loaded": false
+      }
+    }
+  ],
+  "seconds": 126.328,
+  "passed": false,
+  "source_hashes": {
+    "utility_core": "c6367b0e4802287b14335d2f901d98dc3f9f98274a5f03e8966daea3456cd826",
+    "utility_worker": "1a8740825a9b6f46a91c785b36487297e5f31bd0ac1c16c81fa116284a58c1f6",
+    "utility_services": "536fe4273bdaad5412e4bc09cc54c2cb19fafa4adb9abfa726c9888c05b4f4b9",
+    "utility_service_transport": "cd279bb938f1b5aeb08f0281b11cd58cc13efc8dcc66ef74b8ab90dc307b441c",
+    "utility_container_runner": "d667ca069d8594d0f5d65b6b43660097b76b5c9e7272a8ecd292c6a119fcefd2",
+    "utility_isolation": "64351d2f8d6ad96d3ae9d658f63c51d8a959e9995836daef0e72f704d792d383",
+    "utility_host": "a1cacc09dd5081dc5f5735f76b12d4baa15d7f6e1fef01543cab4ab2c140c09d",
+    "utility_tools": "d6b1320e90e603a69ddc8a2262cd5f2fb21028c1484e1b255eef6a39cb17be3b",
+    "utility_profiles": "1603fd5dc06905a1aec04886ebe71bd509c6c0d5746c6d24cb37da2657edaef0",
+    "utility_audio_worker": "4e4b0b5f7d2a95c481fa594c2999b54eb5fc02c2e35200a1f399bf7b776bd5ef",
+    "gmail_chrome_worker": "81524392faaf98b1144a04dd176ade805116d51dd406a75a285891dbffa3d67a",
+    "gmail_bridge": "782e7235ce7dd2e516f7ce3dee5f0c4ce11e3312d76157f5e0deabe1cb39716f",
+    "native_tools": "66e87d57d5e7cd08796bfa9c6d87f43e19c8c98f750b37b656a8024ded096753",
+    "tools": "67263b28e199a439938b230cede08438c02a39e40ae33d9f75edfea7abdaad28",
+    "toolkits": "8b7d1cb406962b748c4ccfac9fe7349df07d65821b86e05f808617830894a117",
+    "agent_context": "703f933c7cdf83d035cda5a731c1fe586b3232dbb105a6897fe722463b8dba95",
+    "repo_analysis": "a4aedd102ac8983ad12e749fb9a1c3e2cbc17d130fd8d1cb658747138234c3dc",
+    "ui_transport": "08ca567dca1950a93af9340e234115d1e1dae82e5cdbdc91f7b1f8e78fe8b838",
+    "ui_worker": "ac6ff5f9f90f6a1192375204d81acdab10690f70edaed7ad874108ef2cf81da2",
+    "ui_controls": "bdd7f12fd5fdf1979be5e7a2bc36746b61670f9bfdf5fb23e7d59f784b7ad4fd",
+    "execution_adapters": "3c88c05a640a67d5208f46bc0e14b05e94d23290e240e41b1e1000ede66260d2",
+    "independent_cursor": "19d5de5c628d30c81f8175e3ad3bd9f44cc310533a48e694104a78212f262cf4",
+    "gmail-extension/manifest.json": "15d5f1482128e13fe91118102c3f272c11127bcb7c78c46216db4fef0e63b512",
+    "gmail-extension/background.js": "5020e1a29de37208089ffefd68d327b3ec3969e4006ea4ce0b6fcf5f07cf7c26",
+    "gmail-extension/gmail-content.js": "48d37cf54b8aed55915030594b97f1e5385dd588694cca26329fb814b9eff759",
+    "gmail-extension/keepalive.js": "70f3e70b109130012e612a01bba832cbfda51af3d31e85a3866036a9ecf3f94f"
+  },
+  "source_changed_during_validation": false
+}

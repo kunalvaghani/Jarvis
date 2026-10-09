@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-09T02:51:21.713207+00:00",
+  "scope": "Actual restarted Jarvis session, microphone/worker health, source snapshots and active source-bound utility catalogue; not a new spoken end-to-end task",
+  "old_pid": 38748,
+  "new_pid": 44916,
+  "session": "8e1d58247123430b9266aa7f83e69547",
+  "status": "running",
+  "health": {
+    "audio": {
+      "requested": true,
+      "phase": "listening",
+      "capture_alive": true,
+      "decoder_alive": true,
+      "last_block_age_seconds": 0.016,
+      "final_segments": 0
+    },
+    "answer": {
+      "phase": "completed",
+      "active_seconds": null,
+      "last_duration_seconds": null
+    },
+    "workers": {
+      "actions": true,
+      "questions": true,
+      "speech": true
+    },
+    "gpu": {
+      "status": "idle",
+      "active_role": null,
+      "active_model": null,
+      "pending": 0,
+      "warm_model": null
+    }
+  },
+  "active_local_utility_skills": 37,
+  "source_snapshots_current": true,
+  "stop_marker_absent": true
+}

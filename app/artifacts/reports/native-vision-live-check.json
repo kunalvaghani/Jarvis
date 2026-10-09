@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-08T18:39:01.985152+00:00",
+  "scope": "Synthetic blue circle only; local image inference, no user photo/desktop/account data.",
+  "passed": true,
+  "response": {
+    "description": "blue"
+  },
+  "gpu": [
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    }
+  ],
+  "seconds": 11.344
+}

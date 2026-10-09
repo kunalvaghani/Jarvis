@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-09T16:46:18.652385+00:00",
+  "passed": true,
+  "scope": "Exact reported task through command parsing, Actions task handling, Brain.run and standard dispatcher; live Gmail metadata only. Separate real Qwen proposal also checked. No mailbox write, screen or microphone.",
+  "direct_task_passed": true,
+  "direct_seconds": 2.953,
+  "metadata_only": true,
+  "task_state_preserved": true,
+  "mailbox_write_dispatched": false,
+  "screen_or_model_used_for_exact_task": false,
+  "qwen_filtered_search_proposal_passed": true,
+  "qwen_seconds": 38.579
+}

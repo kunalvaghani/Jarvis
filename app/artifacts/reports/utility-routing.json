@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-09T02:34:32.178538+00:00",
+  "scope": "Actual Qwen native proposals over the normal discovered catalogue, Jarvis Brain dispatcher, independent data/file oracles, then completion proposals. No voice/UI end-to-end claim.",
+  "cases": [
+    {
+      "goal": "Check whether this machine has available memory and disk space for a build. Project folder: <owned project>",
+      "passed": true,
+      "independent_oracle_passed": true,
+      "completion_proposed": true,
+      "chosen": [
+        "skill_system_diagnostics"
+      ],
+      "seconds": 107.25
+    },
+    {
+      "goal": "Check sales.csv for missing data in folder <owned project>",
+      "passed": true,
+      "independent_oracle_passed": true,
+      "completion_proposed": true,
+      "chosen": [
+        "skill_csv_profile"
+      ],
+      "seconds": 50.141
+    },
+    {
+      "goal": "Check whether settings.yaml has valid syntax in folder <owned project>",
+      "passed": true,
+      "independent_oracle_passed": true,
+      "completion_proposed": true,
+      "chosen": [
+        "skill_config_validate"
+      ],
+      "seconds": 42.109
+    },
+    {
+      "goal": "Prepare image.png as a smaller JPEG named small.jpg, 350 pixels wide, in folder <owned project>",
+      "passed": true,
+      "independent_oracle_passed": true,
+      "completion_proposed": true,
+      "chosen": [
+        "skill_image_process"
+      ],
+      "seconds": 71.125
+    }
+  ],
+  "passed": true
+}

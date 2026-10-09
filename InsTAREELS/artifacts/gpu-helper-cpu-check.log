@@ -1,1 +1,0 @@
-{"date": "2026-10-08T08:46:44.864979+00:00", "model": "qwen3.5:0.8b", "num_gpu": 0, "seconds": 4.172, "valid": true, "scope": "Same helper prompt as GPU live check, on the actual CPU-while-foreground-busy path. The held slot is a fixture; no external action is dispatched."}

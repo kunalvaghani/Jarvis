@@ -1,4 +1,0 @@
-{"version": 1, "at": "2026-10-04T09:01:53.401681+00:00", "event": "tool.started", "call_id": "703b744b20bb4f77a2d71045f491a762", "tool": "create_file"}
-{"version": 1, "at": "2026-10-04T09:01:53.408226+00:00", "event": "tool.completed", "call_id": "703b744b20bb4f77a2d71045f491a762", "tool": "create_file", "backend": "files"}
-{"version": 1, "at": "2026-10-04T09:01:53.441609+00:00", "event": "tool.started", "call_id": "55309149db6f41b78f513c7a8d6c0f91", "tool": "read_file"}
-{"version": 1, "at": "2026-10-04T09:01:53.441609+00:00", "event": "tool.completed", "call_id": "55309149db6f41b78f513c7a8d6c0f91", "tool": "read_file", "backend": "toolkit"}

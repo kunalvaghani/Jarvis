@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-08T18:18:42.446738+00:00",
+  "project": "D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-web-live\\549d82b404cf4ff5b9bb01cc07c3b1d2",
+  "passed": true,
+  "scope": "Actual native Qwen plain-website generation in owned fixture; fixed independent browser oracle, no user project or account changed.",
+  "answer": "Jarvis planned 3 Jarvis workloads, tested each part and combined them with LocalGithub. Combined checks passed; updated 549d82b404cf4ff5b9bb01cc07c3b1d2: app.js, index.html, style.css.\nReview: D:\\Kunals GitHub Repo\\Jarvis\\InsTAREELS\\.jarvis-runtime\\native-workloads\\211b55c8f90f44809d3477c69793ccc7",
+  "independent_validation": {
+    "date": "2026-10-08T18:34:06.152226+00:00",
+    "errors": [],
+    "checks": [
+      {
+        "exit_code": 0,
+        "output": "{\"browser_passed\": true, \"entry_route\": \"/index.html\", \"component\": null, \"steps\": 5, \"runtime_errors\": [], \"backend_requests\": 0, \"mobile_width\": 390, \"desktop_width\": 1280, \"tested_widths\": [320, 390, 768, 1280, 1920], \"advancing_animations\": []}\r\n",
+        "seconds": 19.844,
+        "kind": "browser",
+        "path": "index.html"
+      }
+    ],
+    "passed": true,
+    "runtime_verified": true,
+    "rejected_tools": [],
+    "hashes": {
+      "index.html": "3f636d1ff02620b2e5da66b703d017867e60403ec470edb9cfc20a3c44fe122e",
+      "style.css": "1cda4f121a088f676bae469636c75bd7530219affcda89ac644a28bbe9395f12",
+      "app.js": "7f09c3edb6b416cfee1720bc5bae672a3197123009c608a3bf882ec3a798dcef"
+    }
+  },
+  "gpu_dispatches": [
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    },
+    {
+      "role": "coding",
+      "num_gpu": 11,
+      "context_tokens": 16384,
+      "gpu_slot": true
+    }
+  ],
+  "seconds": 943.766
+}

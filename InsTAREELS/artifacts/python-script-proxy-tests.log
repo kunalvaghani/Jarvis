@@ -1,8 +1,0 @@
-test_claude_timeout_closes_connection_without_replay (test_coding_proxy_faults.CodingProxyFaults) ... ok
-test_codex_completion_waits_for_lease_cleanup_before_client_can_exit (test_coding_proxy_faults.CodingProxyFaults) ... ok
-test_codex_timeout_closes_connection_without_replay (test_coding_proxy_faults.CodingProxyFaults) ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.672s
-
-OK

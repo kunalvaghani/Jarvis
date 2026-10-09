@@ -1,0 +1,325 @@
+PAGE 1
+Autonom ous Agent Com m and Reference
+A com prehensive guide to the term inal com m ands, text parsing utilities, and execution strategies used by
+autonom ous coding agents (like Codex, SW E-agent, and O penHands) to navigate ﬁlesystem s, edit code, and
+m anage local environm ents seam lessly.
+1. Core Inspection & File Slicing
+Agents avoid loading m assive ﬁles into token context by reading precise byte/line windows using native shell
+utilities.
+Read File Constraints (PowerShell)
+# Read first 82 lines (Head)
+Get-Content jarvis/gui_contract.py -TotalCount 82
+# Read last 9 lines / stream live logs (Tail)
+Get-Content artifacts/tests.log -Tail 9
+# Slice window (Skip 199 lines, read next 32)
+Get-Content tests/test_workload.py | Select-Object -Skip 199 -First 32
+Fast Regex Search (Ripgrep / rg)
+# Search patterns across multiple manifest/docs files
+rg -n 'workload|ownership_completion' config/runtime_manifest.json docs/
+# Search case-insensitively across all Python files
+rg -i 'def draw_circle' . --type py
+# List file paths matching a string without printing lines
+rg -l 'claude_code_guard' .
+Native Code Search (PowerShell)
+# Regex search within a fixture file
+Select-String -Path .jarvis-runtime/fixture/*.py -Pattern 'tkinter|gui'
+# Find all python test files recursively
+Get-ChildItem -Path . -Recurse -Filter "test_*.py" | Select-Object FullName
+2. Native File Creation & Deletion
+Creating and cleaning interm ediate states, log caches, and test scripts.
+# Create file and nested directories
+New-Item -ItemType Directory -Path "artifacts/tests" -Force
+New-Item -ItemType File -Path "artifacts/tests/mock.py" -Value "# init"
+# Clean caches recursively
+Get-ChildItem -Path . -Recurse -Directory -Filter "__pycache__" | Remove-Item -Recurse -Force
+3. Com m and Execution & State Binding
+# Run tests using a local virtual environment binary
+venv/Scripts/pythonexe-munittestdiscover-stests-ptestworkloadpy-v>outputlog
+Autonom ous Agent Com m and Reference Page 1 of 6
+
+PAGE 2
+4. Cross-Platform  Cheatsheet: File & Text O perations
+Task Bash / L inux /
+M ac
+PowerShell / W indows
+Create
+em pty ﬁle
+touch
+main.py
+New-Item main.py -Type File
+W rite ﬁle
+content
+echo "import
+os" > main.py
+Set-Content main.py -Value "import os"
+M ake
+directories
+mkdir -p
+src/utils/ui
+New-Item src/utils/ui -Type Directory -Force
+Read
+entire ﬁle
+cat
+config/config.json
+Get-Content config/config.json -Raw
+Read ﬁle
+Head (50l)
+head -n 50
+index.js
+Get-Content index.js -TotalCount 50
+Read ﬁle
+Tail (50l)
+tail -n 50
+error.log
+Get-Content error.log -Tail 50
+Slice
+speciﬁc
+window
+sed -n
+'10,20p'
+file.txt
+(Get-Content file.txt)[9..19]
+Copy
+recursively
+cp -r src/
+dist/
+Copy-Item src\* -Destination dist -Recurse
+Delete
+recursively
+rm -rf
+.cache/
+Remove-Item .cache/ -Recurse -Force
+Find &
+replace
+text
+sed -i
+'s/old/new/g'
+script.py
+(gc script.py) -replace 'old','new' | sc script.py
+Prepend
+line
+echo "hi" |
+cat - app.py
+> tmp && mv
+tmp app.py
+$c = gc app.py; @("hi", $c) | sc app.py
+Append
+line
+echo "done"
+>> app.py
+Add-Content app.py -Value "done"
+Parse
+JSO N ﬁeld
+jq '.version'
+package.json
+(gc package.json | ConvertFrom-Json).version
+Base64
+encode
+base64
+image.png >
+img.b64
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('image.png'))
+Extract
+archive
+tar -xzf
+app.tar.gz -C
+./dist
+tar -xzf app.tar.gz -C ./dist
+Generate
+diﬀ patch
+diff -u
+old.py new.py
+> ch.patch
+git diff --no-index old.py new.py > ch.patch
+Applydiﬀ patch gitapplychpatch
+Autonom ous Agent Com m and Reference Page 2 of 6
+
+PAGE 3
+6. L anguage Scaﬀolding & Initialization (Part 1)
+Com m ands to instantly create project structures and dependencies for various ecosystem s.
+Python
+# Initialize isolated environment and structure
+python -m venv .venv
+source .venv/bin/activate  # (Use .\.venv\Scripts\Activate.ps1 on Windows)
+mkdir src tests
+echo 'print("Hello World")' > src/main.py
+echo 'pytest' > requirements/runtime.txt
+pip install -r requirements/runtime.txt
+JavaScript (Node.js)
+# Scaffold project and dependencies
+mkdir node_project && cd node_project
+npm init -y
+mkdir src
+echo 'console.log("Hello World");' > src/index.js
+npm install dotenv
+TypeScript
+# Setup TS environment and configuration
+mkdir ts_project && cd ts_project
+npm init -y
+npm install typescript @types/node --save-dev
+npx tsc --init
+mkdir src
+echo 'const msg: string = "Hello"; console.log(msg);' > src/index.ts
+npx tsc
+React (via Vite)
+# Scaffold a React TypeScript project quickly
+npm create vite@latest my-react-app -- --template react-ts
+cd my-react-app
+npm install
+npm run dev
+HTM L  / CSS / Vanilla JS
+# Create standard web trio structure
+mkdir web_app && cd web_app && mkdir css js assets
+echo '<!DOCTYPE html><html><head><link rel="stylesheet" href="css/style.css"></head><body>
+<script src="js/app.js"></script></body></html>' > index.html
+echo 'body { background-color: #f4f4f4; }' > css/style.css
+echo 'console.log("Loaded");' > js/app.js
+C# / .NET
+# Scaffold a new console application
+dotnet new console -n MyCSharpApp
+cd MyCSharpApp
+dotnet add package Newtonsoft.Json
+dotnet run
+Autonom ous Agent Com m and Reference Page 3 of 6
+
+PAGE 4
+7. L anguage Scaﬀolding & Initialization (Part 2)
+Rust
+# Cargo initializes folder, git, Cargo.toml, and src/main.rs automatically
+cargo new my_rust_app --bin
+cd my_rust_app
+cargo run
+Java (M aven)
+# Scaffold standard Java structure via archetype
+mvn archetype:generate -DgroupId=com.example -DartifactId=my-java-app \
+  -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+cd my-java-app
+mvn clean install
+C / C++ (CM ake)
+# Setup C++ project with build configuration
+mkdir cpp_app && cd cpp_app && mkdir src build
+echo -e '#include <iostream>\nint main() { std::cout << "Hi" << std::endl; return 0; }' > 
+src/main.cpp
+echo -e 'cmake_minimum_required(VERSION 3.10)\nproject(MyApp)\nadd_executable(MyApp 
+src/main.cpp)' > CMakeLists.txt
+cd build && cmake .. && cmake --build .
+Go
+# Initialize module and entry point
+mkdir go_app && cd go_app
+go mod init github.com/user/go_app
+echo -e 'package main\nimport "fmt"\nfunc main() { fmt.Println("Hi") }' > main.go
+go run main.go
+SQL  / SQL ite
+# Create a database file, initialize table, and seed data
+sqlite3 app.db "CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT NOT NULL);"
+echo "INSERT INTO users (username) VALUES ('admin');" > seed.sql
+sqlite3 app.db < seed.sql
+PHP & Ruby
+# PHP
+echo '<?php echo "Hello"; ?>' > index.php
+php -S localhost:8000
+# Ruby
+bundle init
+echo "puts 'Hello World'" > main.rb
+ruby main.rb
+Autonom ous Agent Com m and Reference Page 4 of 6
+
+PAGE 5
+8. In-File Code M anipulation (Part 1)
+U sing echo and stream  editors (sed) to inject, m odify, and delete code logic directly from  the term inal
+without graphical editors.
+Python
+# 1. Add function
+echo -e "\ndef greet(name):\n    return f'Hello {name}'" >> main.py
+# 2. Call function
+echo "print(greet('Agent'))" >> main.py
+# 3. Edit function logic
+sed -i 's/Hello/Welcome/g' main.py
+# 4. Delete specific line
+sed -i '/print(greet/d' main.py
+JavaScript (Node.js)
+# 1. Add function
+echo -e "\nfunction calc(r) {\n  return Math.PI * r;\n}" >> index.js
+# 2. Call function
+echo "console.log(calc(5));" >> index.js
+# 3. Edit logic
+sed -i 's/Math.PI \* r/Math.PI \* r \* r/g' index.js
+# 4. Delete block (from function declaration to closing brace)
+sed -i '/function calc/,/}/d' index.js
+TypeScript
+# 1. Add typed arrow function
+echo -e "\nconst multiply = (a: number, b: number): number => a * b;" >> index.ts
+# 2. Call function
+echo "console.log(multiply(10, 5));" >> index.ts
+# 3. Edit logic (multiply to divide)
+sed -i 's/a \* b/a \/ b/g' index.ts
+# 4. Delete execution line
+sed -i '/console.log(multiply/d' index.ts
+React (JSX)
+# 1. Add component
+echo -e "\nexport const ActionBtn = () => <button>Click</button>;" >> App.jsx
+# 2. Inject component inside existing structure before closing div
+sed -i 's/<\/div>/  <ActionBtn \/>\n<\/div>/' App.jsx
+# 3. Edit component string
+sed -i 's/Click/Submit/g' App.jsx
+# 4. Delete component usage
+sed -i '/<ActionBtn \/>/d' App.jsx
+Rust
+# 1. Add function outside main
+echo -e "\nfn alert() {\n    println!(\"System ready.\");\n}" >> src/main.rs
+# 2. Inject call immediately after fn main() {
+sed -i '/fn main() {/a \    alert();' src/main.rs
+# 3. Edit string
+sed -i 's/"System ready."/"Agent online."/' src/main.rs
+# 4. Delete call
+sed -i '/alert();/d' src/main.rs
+Autonom ous Agent Com m and Reference Page 5 of 6
+
+PAGE 6
+9. In-File Code M anipulation (Part 2)
+C / C++
+# 1. Insert function at line 1 (avoiding header prototype issues)
+sed -i '1i void init() { printf("Init\\n"); }' src/main.cpp
+# 2. Inject right after int main() {
+sed -i '/int main/a \    init();' src/main.cpp
+# 3. Edit string
+sed -i 's/"Init\\n"/"Boot\\n"/' src/main.cpp
+# 4. Delete definition entirely
+sed -i '/void init()/,/}/d' src/main.cpp
+Java
+# 1. Add method before the final closing brace (^)
+sed -i '/^}$/i \    public static void ping() { System.out.println("Pong"); }' App.java
+# 2. Inject right after public static void main
+sed -i '/public static void main/a \        ping();' App.java
+# 3. Edit print statement
+sed -i 's/"Pong"/"Connected"/' App.java
+# 4. Delete execution line
+sed -i '/ping();/d' App.java
+C# (.NET Top-L evel Statem ents)
+# 1. Add local function
+echo -e "\nstring GetStatus(int c) => c == 200 ? \"OK\" : \"Err\";" >> Program.cs
+# 2. Call function
+echo "Console.WriteLine(GetStatus(200));" >> Program.cs
+# 3. Edit ternary return
+sed -i 's/"OK"/"Success"/' Program.cs
+# 4. Delete usage
+sed -i '/Console.WriteLine(GetStatus/d' Program.cs
+Go
+# 1. Add function
+echo -e "\nfunc cleanup() {\n\tfmt.Println(\"Clean\")\n}" >> main.go
+# 2. Match 'func main', skip to closing '}', insert before it
+sed -i '/func main()/,/^}/ s/^}/\tcleanup()\n}/' main.go
+# 3. Edit string
+sed -i 's/"Clean"/"Wipe"/g' main.go
+# 4. Delete call
+sed -i '/cleanup()/d' main.go
+PowerShell Native Code M anipulation (W indows)
+W hen running natively on W indows without Git Bash/W SL , agents use PowerShell's pipeline instead of sed.
+# Add code
+Add-Content src/main.py -Value "`ndef test():`n    pass"
+# Edit code via Regex Replace
+(Get-Content src/main.py) -replace 'test\(\)', 'run_test()' | Set-Content src/main.py
+# Delete specific line (Filter out match)
+Get-Content src/main.py | Where-Object { $_ -notmatch 'run_test\(\)' } | Set-Content 
+src/main.py
+Autonom ous Agent Com m and Reference Page 6 of 6

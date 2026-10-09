@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-09T06:31:23.947891+00:00",
+  "passed": true,
+  "scope": "Actual Qwen native next-step and regular Jarvis dispatcher. Gmail API search for the approved test subject only; no mailbox write.",
+  "proposal": {
+    "done": false,
+    "question": "",
+    "reason": "One native function proposal; fresh runtime checks required",
+    "steps": [
+      {
+        "action": "gmail_api_list",
+        "browser": "chrome",
+        "folder": "",
+        "content": "{\"query\":\"in:drafts subject:\\\"Jarvis skill test\\\"\", \"limit\":10}",
+        "find": "",
+        "platform": "",
+        "expected": "message IDs for drafts with subject Jarvis skill test",
+        "value": "in:drafts subject:\"Jarvis skill test\""
+      }
+    ],
+    "model_used": "qwen3.5:9b",
+    "native_tool_calling": true
+  },
+  "chosen": "gmail_api_list",
+  "matching_message_found": true,
+  "write_dispatched": false,
+  "seconds": 39.922
+}

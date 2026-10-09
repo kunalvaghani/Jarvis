@@ -1,0 +1,354 @@
+{
+  "date": "2026-10-09 IST",
+  "scope": "Actual local executable discovery; availability alone is not a functional validation or dependency installation.",
+  "programs": [
+    {
+      "program": "python",
+      "available": true,
+      "purpose": "Python scripts, unittest, pytest and syntax checks",
+      "example_arguments": "-m unittest discover -v"
+    },
+    {
+      "program": "node",
+      "available": true,
+      "purpose": "JavaScript scripts, node:test and syntax checks",
+      "example_arguments": "--test test_main.mjs"
+    },
+    {
+      "program": "rg",
+      "available": true,
+      "purpose": "Literal/regex repository searches and file discovery",
+      "example_arguments": "--files"
+    },
+    {
+      "program": "git",
+      "available": true,
+      "purpose": "Repository observations; assembly writes belong to LocalGithub",
+      "example_arguments": "diff --stat"
+    },
+    {
+      "program": "pwsh",
+      "available": true,
+      "purpose": "PowerShell versions; use checked file tools for source edits",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "powershell",
+      "available": true,
+      "purpose": "Windows PowerShell version discovery; translated to a fixed version query",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "cmd",
+      "available": true,
+      "purpose": "Windows version discovery; manual commands use the separate explicit approval flow",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "npm",
+      "available": true,
+      "purpose": "Existing project scripts; no dependency installation",
+      "example_arguments": "run build"
+    },
+    {
+      "program": "npx",
+      "available": true,
+      "purpose": "Discovery only; network package execution disabled",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "pnpm",
+      "available": true,
+      "purpose": "Existing project scripts",
+      "example_arguments": "run test"
+    },
+    {
+      "program": "yarn",
+      "available": false,
+      "purpose": "Existing project scripts",
+      "example_arguments": "run test"
+    },
+    {
+      "program": "uv",
+      "available": false,
+      "purpose": "Discovery only; use configured Python runtime",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "pip",
+      "available": true,
+      "purpose": "Discovery only; installs require dependency workflow",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "pytest",
+      "available": true,
+      "purpose": "Python behavioral tests",
+      "example_arguments": "-q"
+    },
+    {
+      "program": "ruff",
+      "available": true,
+      "purpose": "Python lint checks",
+      "example_arguments": "check ."
+    },
+    {
+      "program": "black",
+      "available": true,
+      "purpose": "Python formatting checks",
+      "example_arguments": "--check ."
+    },
+    {
+      "program": "mypy",
+      "available": false,
+      "purpose": "Python type checks",
+      "example_arguments": "."
+    },
+    {
+      "program": "tsc",
+      "available": false,
+      "purpose": "TypeScript type checking",
+      "example_arguments": "--noEmit"
+    },
+    {
+      "program": "eslint",
+      "available": false,
+      "purpose": "JavaScript lint checks",
+      "example_arguments": "."
+    },
+    {
+      "program": "prettier",
+      "available": false,
+      "purpose": "Formatting checks",
+      "example_arguments": "--check ."
+    },
+    {
+      "program": "go",
+      "available": false,
+      "purpose": "Go project tests/build",
+      "example_arguments": "test ./..."
+    },
+    {
+      "program": "cargo",
+      "available": false,
+      "purpose": "Rust project tests/build/check",
+      "example_arguments": "test --offline"
+    },
+    {
+      "program": "rustc",
+      "available": false,
+      "purpose": "Rust compiler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "dotnet",
+      "available": true,
+      "purpose": ".NET project tests/build",
+      "example_arguments": "test --no-restore"
+    },
+    {
+      "program": "java",
+      "available": true,
+      "purpose": "Java runtime",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "javac",
+      "available": false,
+      "purpose": "Java compiler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "gcc",
+      "available": false,
+      "purpose": "C compiler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "g++",
+      "available": false,
+      "purpose": "C++ compiler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "clang",
+      "available": false,
+      "purpose": "C/C++ compiler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "cmake",
+      "available": true,
+      "purpose": "CMake build tools",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "make",
+      "available": false,
+      "purpose": "Existing build recipes",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "deno",
+      "available": false,
+      "purpose": "Deno tests/checks",
+      "example_arguments": "test --no-prompt"
+    },
+    {
+      "program": "bun",
+      "available": false,
+      "purpose": "Bun tests",
+      "example_arguments": "test"
+    },
+    {
+      "program": "ruby",
+      "available": false,
+      "purpose": "Ruby scripts",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "php",
+      "available": false,
+      "purpose": "PHP syntax checks",
+      "example_arguments": "-l main.php"
+    },
+    {
+      "program": "perl",
+      "available": false,
+      "purpose": "Perl syntax checks",
+      "example_arguments": "-c main.pl"
+    },
+    {
+      "program": "lua",
+      "available": false,
+      "purpose": "Lua scripts",
+      "example_arguments": "-v"
+    },
+    {
+      "program": "Rscript",
+      "available": false,
+      "purpose": "R scripts",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "julia",
+      "available": false,
+      "purpose": "Julia scripts",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "swift",
+      "available": false,
+      "purpose": "Swift tests",
+      "example_arguments": "test"
+    },
+    {
+      "program": "kotlinc",
+      "available": false,
+      "purpose": "Kotlin compiler",
+      "example_arguments": "-version"
+    },
+    {
+      "program": "scalac",
+      "available": false,
+      "purpose": "Scala compiler",
+      "example_arguments": "-version"
+    },
+    {
+      "program": "docker",
+      "available": true,
+      "purpose": "Discovery only; containers require explicit workflow",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "adb",
+      "available": false,
+      "purpose": "Discovery only; device mutations require explicit workflow",
+      "example_arguments": "version"
+    },
+    {
+      "program": "ffmpeg",
+      "available": false,
+      "purpose": "Discovery only; media uses existing Jarvis tools",
+      "example_arguments": "-version"
+    },
+    {
+      "program": "magick",
+      "available": false,
+      "purpose": "Discovery only; image operations use existing Jarvis tools",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "ollama",
+      "available": true,
+      "purpose": "Local inference managed by the shared GPU scheduler",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "gh",
+      "available": false,
+      "purpose": "Discovery only; external GitHub actions require explicit authorization",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "codex",
+      "available": true,
+      "purpose": "Optional legacy backend; never launched by native coding",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "mvn",
+      "available": false,
+      "purpose": "Maven discovery; archetypes/dependency installation need setup approval",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "sqlite3",
+      "available": false,
+      "purpose": "SQLite discovery; user database writes need explicit workflow",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "bundle",
+      "available": false,
+      "purpose": "Bundler discovery; gem installation needs dependency workflow",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "bash",
+      "available": true,
+      "purpose": "Bash reference commands translate to native typed tools",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "sh",
+      "available": false,
+      "purpose": "Shell reference commands translate to native typed tools",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "sed",
+      "available": false,
+      "purpose": "Source replacements use guarded Edit/apply_patch",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "jq",
+      "available": false,
+      "purpose": "JSON field lookup uses parse_json",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "tar",
+      "available": true,
+      "purpose": "Extraction requires reviewed destination/member validation",
+      "example_arguments": "--version"
+    },
+    {
+      "program": "base64",
+      "available": false,
+      "purpose": "Source encoding uses encode_base64",
+      "example_arguments": "--version"
+    }
+  ]
+}

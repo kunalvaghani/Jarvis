@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-09T16:54:26.864729+00:00",
+  "scope": "Approved restart; owned application heartbeat and local API configuration, not a new spoken email task",
+  "running": true,
+  "listening": true,
+  "capture_alive": true,
+  "decoder_alive": true,
+  "workers": {
+    "actions": true,
+    "questions": true,
+    "speech": true
+  },
+  "gmail_connected": true,
+  "stop_marker_present": false,
+  "passed": true
+}

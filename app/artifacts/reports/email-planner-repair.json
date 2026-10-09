@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-09T04:41:18.635963+00:00",
+  "scope": "Normal next-step worker; email readiness guard and actual Qwen app-opening proposal. No actions dispatched or email transmitted.",
+  "cases": [
+    {
+      "goal": "draft an email about me",
+      "passed": true,
+      "proposal": {
+        "done": false,
+        "steps": [],
+        "question": "Gmail in your logged-in Chrome session is not currently validated. No email was drafted or sent. Please expand the existing New Message test draft and say \"draft expanded\" so its controls can be checked.",
+        "reason": "Required Gmail adapter unavailable",
+        "source": "gmail_readiness",
+        "native_tool_calling": true
+      },
+      "seconds": 1.329
+    },
+    {
+      "goal": "open chrome",
+      "passed": true,
+      "proposal": {
+        "done": false,
+        "question": "",
+        "reason": "One native function proposal; fresh runtime checks required",
+        "steps": [
+          {
+            "action": "open",
+            "browser": "chrome",
+            "folder": "",
+            "content": "",
+            "find": "",
+            "platform": "",
+            "value": "chrome",
+            "expected": "Chrome browser window opened"
+          }
+        ],
+        "model_used": "qwen3.5:9b",
+        "native_tool_calling": true
+      },
+      "seconds": 26.906
+    }
+  ],
+  "passed": true
+}

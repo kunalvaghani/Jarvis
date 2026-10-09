@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "web-foundations",
+      "stacks": [
+        "vite",
+        "react",
+        "next",
+        "electron",
+        "node"
+      ],
+      "applicability": "Modern browsers; HTML/CSS/JavaScript",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://developer.mozilla.org/en-US/curriculum/core/"
+      ],
+      "guide": "Use semantic headings, landmarks, buttons and labeled inputs. CSS grid/flex with minmax(0,1fr), wrapping and fluid padding prevents narrow-screen overflow. Use a single source of truth for state. Await async results and expose loading, empty, error and retry states. Abort stale requests on unmount; never put secrets in browser bundles. Test at 390px and desktop, with keyboard and real controls.",
+      "example": "<label htmlFor=\"query\">Search</label><input id=\"query\" value={query} onChange={e => setQuery(e.target.value)} />",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "react-typescript",
+      "stacks": [
+        "vite",
+        "react",
+        "next",
+        "electron",
+        "node",
+        "expo"
+      ],
+      "applicability": "React 19.2.3 (Expo) / 19.3.0, TypeScript 7.0.2 verified; adapt to installed versions",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://react.dev/learn",
+        "https://react.dev/learn/build-a-react-app-from-scratch",
+        "https://github.com/vercel-labs/agent-skills"
+      ],
+      "guide": "Use typed props and state, stable list keys and functional state updates. Call hooks unconditionally at component top level. Derive filtered lists from state rather than duplicating them. Effects synchronize external systems, not computed values. Distinguish controlled inputs, onSubmit validation, component imports and named/default exports. Vite is a client build tool; Next provides server/client boundaries. Respect existing router and dependencies. Verify tsc and bundler; JSX is not Python syntax.",
+      "example": "type Item = { id: string; title: string }; const [items, setItems] = useState<Item[]>([]); const add = (item: Item) => setItems(old => [...old, item]);",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "interface-design",
+      "stacks": [
+        "vite",
+        "react",
+        "next",
+        "electron",
+        "node",
+        "expo"
+      ],
+      "applicability": "Responsive web / native platform conventions",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://github.com/vercel-labs/web-interface-guidelines",
+        "https://github.com/anthropics/skills/tree/main/skills/frontend-design",
+        "https://ui.shadcn.com/docs"
+      ],
+      "guide": "Produce a design brief before code: audience, primary task, hierarchy, layout, type, palette, spacing, states and motion. Choose a specific identity and consistent tokens. Use one primary action, clear focus rings, readable contrast and meaningful whitespace. Native dialog or focus-managed dialog needs labeled title, Escape, focus return and validation. Icon-only controls need accessible names. shadcn components are editable source, not a substitute for design. Upstream material is a source reference; no upstream skill code or proprietary artwork is copied.",
+      "example": ":root { --space: .5rem; --surface: #fff; --ink: #172526; --accent: #0d6559; } button:focus-visible { outline: 3px solid #0d6559; outline-offset: 3px; }",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "animation",
+      "stacks": [
+        "vite",
+        "react",
+        "next",
+        "electron",
+        "node"
+      ],
+      "applicability": "Motion React 14 API (checked in real build/browser); GSAP 3 reference only",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://motion.dev/docs/react",
+        "https://motion.dev/docs/react-accessibility",
+        "https://gsap.com/docs/v3/"
+      ],
+      "guide": "Use CSS for simple hover/opacity transitions. Motion from motion/react handles React entry/layout interactions. Set MotionConfig reducedMotion=\"user\" and useReducedMotion for custom transform effects; disable large movement with reduced motion. CSS prefers-reduced-motion should remove nonessential animation. GSAP timelines require cleanup via context.revert on unmount. Avoid infinite decorative animations and layout thrashing. Verify reduced motion in browser, not merely source presence.",
+      "example": "import { motion, useReducedMotion } from \"motion/react\"; const reduce = useReducedMotion(); <motion.section initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} />",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "next-server",
+      "stacks": [
+        "next"
+      ],
+      "applicability": "Next App Router 16; Node >=20.9",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://nextjs.org/docs/app/getting-started/installation"
+      ],
+      "guide": "Server components by default; use client boundaries for state, event handlers and browser APIs. Keep secrets in server code. App layout owns html/body; pages and route handlers use framework conventions. Use loading/error/not-found boundaries, validate incoming data, and distinguish cached/server data from client-local state. Run tsc and next build, then inspect owned loopback preview. Never claim a mocked endpoint is live integration.",
+      "example": "'use client';\nimport { useState } from 'react';\nexport default function Counter() { const [n,setN]=useState(0); return <button onClick={()=>setN(n+1)}>Count {n}</button>; }",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "electron-platform",
+      "stacks": [
+        "electron"
+      ],
+      "applicability": "Electron current supported release; React renderer",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://www.electronjs.org/docs/latest/tutorial/security",
+        "https://www.electronjs.org/docs/latest/tutorial/tutorial-prerequisites"
+      ],
+      "guide": "Keep renderer sandboxed with contextIsolation true, nodeIntegration false, sandbox true. Use narrow validated preload IPC if necessary; never expose generic shell or file execution. Load packaged local renderer, deny external window opens and permissions by default. Manage ready/window-all-closed lifecycle. Build renderer before launching or packaging. Browser renderer evidence does not verify installer, OS permissions or desktop lifecycle.",
+      "example": "new BrowserWindow({ webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true } });",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    },
+    {
+      "name": "expo-platform",
+      "stacks": [
+        "expo"
+      ],
+      "applicability": "Expo SDK dependency-compatible React Native",
+      "reviewed": "2026-10-02",
+      "sources": [
+        "https://docs.expo.dev/tutorial/introduction/",
+        "https://docs.expo.dev/get-started/create-a-project/"
+      ],
+      "guide": "Use View/Text/Pressable/TextInput/StyleSheet rather than HTML/CSS. Keep dependency versions matched to installed Expo SDK; never combine arbitrary React Native latest versions. Handle safe area, touch targets, keyboard avoidance, navigation, loading/errors and app lifecycle. Ask for OS permission only when needed; store secrets with platform secure storage. Web export is useful but does not establish Android/iOS behavior. Android native needs SDK/toolchain; local iOS build needs macOS. Do not auto-publish EAS builds.",
+      "example": "<Pressable accessibilityRole=\"button\" onPress={() => setCount(n => n+1)}><Text>Count {count}</Text></Pressable>",
+      "contract": "Independent Jarvis guide; reference only. Preserve user intent, repository instructions and current tool authorization. No implicit execution permission."
+    }
+  ]
+}
