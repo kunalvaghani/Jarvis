@@ -36,6 +36,11 @@ AREAS = [
      "papers, maps and routes, flights, space and sports.",
      ["bitcoin price", "USD to INR", "latest news about India", "route from Vadodara to Ahmedabad"],
      "Use for anything current; I cite the source and time."),
+    ("Learning code from GitHub", "Before a coding task I look for a public repository that fits, learn its structure, "
+     "functions and patterns, and code with that knowledge; repositories you keep open in the browser are learned in the "
+     "background and saved to memory for next time.", ["learn this repo", "what is this repo about", "what repos have you learned",
+                                                        "build a snake game in javascript"],
+     "Runs by itself; the island shows what I'm learning and when it's saved."),
     ("Files, folders and coding", "Open, create, rename and delete files and folders (deletes go to the Recycle "
      "Bin after approval), and build or edit code in your projects with checks.",
      ["open my downloads", "create a file notes.txt", "fix the bug in my jarvis project"],

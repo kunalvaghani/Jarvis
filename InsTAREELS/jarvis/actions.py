@@ -168,6 +168,12 @@ class Actions:
         self.memory.curator = self.curator
         self.knowledge.curator = self.curator
         self.weather_watch = None
+        from .repo_learning import RepoLearner, REGISTRY
+        self.repo_learner = RepoLearner(self, config.get("repo_learning", {}))
+        self.repo_learner.enabled = bool(self.repo_learner.enabled and self.memory.enabled)
+        REGISTRY["learner"] = self.repo_learner
+        from .context_hub import prompt_block
+        self.memory.situation = lambda question="": prompt_block(self, question)  # Several live contexts at once.
         from .quick_answers import QuickAnswers
         self.knowledge.quick = QuickAnswers(self.memory, config.get("weather", {}), settings=config)
         from .brain import Brain
@@ -590,6 +596,9 @@ class Actions:
         weather = getattr(self, 'weather_watch', None)
         if weather is not None:
             weather.close()
+        learner = getattr(self, 'repo_learner', None)
+        if learner is not None:
+            learner.close()
         curator = getattr(self, 'curator', None)
         if curator is not None and curator.thread is not None:
             # Summarise the open conversation into Obsidian, bounded so shutdown never hangs.
@@ -689,9 +698,11 @@ class Actions:
             raise ValueError("Action cancelled; approval was not given.")
 
     def start_background_memory(self):
-        """Long-term memory curator and bad-weather watch (both off the response path)."""
+        """Long-term memory curator, repository learning and bad-weather watch (all off the response path)."""
         if self.curator.enabled:
             self.curator.start()
+        if self.repo_learner.enabled:
+            self.repo_learner.start()
         settings = self.config.get("weather_alerts", {})
         if settings.get("enabled", True):
             from .weather_watch import WeatherWatch
@@ -950,7 +961,14 @@ class Actions:
             self.task_active = True
             try:
                 self.task_state.start(command.value, "code_task", project)
-                result = Coder(self, self.brain.client).run(project, command.value, cancelled, selected=selected)
+                coder = Coder(self, self.brain.client)
+                # Learned repositories for this kind of task: saved memory first, otherwise GitHub (then saved).
+                try:
+                    coder.reference_repositories = self.repo_learner.prepare(command.value, cancelled)
+                except Exception as exc:
+                    coder.reference_repositories = []
+                    self.report("warning", "Coding without repository references: " + str(exc)[:160])
+                result = coder.run(project, command.value, cancelled, selected=selected)
                 self.task_state.finish("paused" if result and "stopped" in result.casefold() else "completed", result)
                 return result
             except Exception as exc:
@@ -1140,6 +1158,9 @@ class Actions:
                 if basics:
                     answer = "From your profile: " + "; ".join(basics) + ". " + answer
             return answer
+        if command.kind in {"repo_learn", "repo_list", "repo_explain", "repo_forget"}:
+            from .repo_learning import execute as repo_execute
+            return repo_execute(self, command, cancelled)
         if command.kind == "api_health":
             from .capability_guide import check_apis
             return check_apis(self, cancelled)

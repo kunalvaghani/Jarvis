@@ -1304,6 +1304,17 @@
     "ip_location": true,
     "fallback_city": "Vadodara"
   },
+  "repo_learning": {
+    "enabled": true,
+    "auto_learn_browsing": true,
+    "search_for_coding": true,
+    "repos_per_task": 1,
+    "min_stars": 20,
+    "dwell_seconds": 8,
+    "refresh_days": 30,
+    "max_zip_mb": 40,
+    "model": "qwen3.5:9b"
+  },
   "weather_alerts": {
     "enabled": true,
     "interval_minutes": 30,

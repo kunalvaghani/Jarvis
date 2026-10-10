@@ -164,7 +164,17 @@ def coding_context(project, goal, target=None, files=None):
             'development_lessons': recall(Path(__file__).parent.parent, detect_stack(project, goal), goal) if Path(target or '').suffix != '.py' else [],
             'repository_instructions': instruction_context(project, target),
             'selected_skills': selected_skills(project, goal),
-            'repository_map': repository_map(project, files)}
+            'repository_map': repository_map(project, files),
+            'reference_repositories': learned_references(goal)}
+
+
+def learned_references(goal):
+    """Saved knowledge of public repositories that fit the goal (offline; see repo_learning)."""
+    try:
+        from .repo_learning import reference_for
+        return reference_for(goal)
+    except Exception:
+        return []
 
 
 def compact_context(value, limit=24000):

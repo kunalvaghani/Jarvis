@@ -162,7 +162,8 @@ def _parse(text: str) -> Command:
     from .memory_curator import parse_command as memory_command
     from .capability_guide import parse_command as capability_command
     from .weather_watch import parse_command as weather_command
-    for special in (memory_command, capability_command, weather_command):
+    from .repo_learning import parse_command as repo_command
+    for special in (memory_command, capability_command, weather_command, repo_command):
         found = special(text)
         if found:
             return found  # "remember that ...", "check your APIs", "is bad weather coming".

@@ -278,6 +278,13 @@ class App:
                 self.actions.memory.observe_window(win32gui.GetWindowText(hwnd),
                     win32process.GetWindowThreadProcessId(hwnd)[1])
                 self.actions.anticipation.observe_window(win32gui.GetWindowText(hwnd), hwnd)
+                title = win32gui.GetWindowText(hwnd)
+                if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
+                    import psutil
+                    self.actions.repo_learner.observe_title(title, psutil.Process(
+                        win32process.GetWindowThreadProcessId(hwnd)[1]).name())
+                else:
+                    self.actions.repo_learner.observe_title('', '')
             elif not hwnd or not win32gui.IsWindowVisible(hwnd) or not win32gui.GetWindowText(hwnd).strip():
                 self.actions.anticipation.observe_window('', 0)
         except Exception:

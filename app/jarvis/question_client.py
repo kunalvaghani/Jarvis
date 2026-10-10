@@ -57,6 +57,14 @@ class QuestionClient:
             observations = [] if request.get('conversation_context') or request.get('memory_retrieval_done') else memory.recall(request.get("question", ""))
             if observations:
                 request = {**request, "memory_context": observations}
+            situation = getattr(memory, "situation", None)
+            if callable(situation):
+                try:
+                    block = situation(request.get("question", ""))
+                except Exception:
+                    block = ""
+                if block:
+                    request = {**request, "situation": block}
             curator = getattr(memory, "curator", None)
             if curator is not None and getattr(curator, "enabled", False):
                 block = curator.context(request.get("question", ""))

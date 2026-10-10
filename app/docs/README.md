@@ -24,6 +24,7 @@ Start with the [application guide](../README.md) and [project structure](project
 - [Historical Jarvis HUD](hud-interface.md)
 - [Jarvis's own cursor and physical clicks](independent-cursor.md)
 - [Interactive Jarvis island](interactive-island.md)
+- [Learning GitHub repositories for coding, and multi-context awareness (2026-10-11)](repo-learning.md)
 - [Long-term memory, API repair and bad-weather alerts (2026-10-10)](memory-apis-alerts.md)
 - [WhatsApp automation, incoming calls and voice approvals (2026-10-10)](whatsapp.md)
 - [Full YouTube and Spotify control with the island media card (2026-10-10)](media-player.md)

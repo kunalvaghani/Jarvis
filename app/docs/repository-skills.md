@@ -1,5 +1,9 @@
 # Repository-derived skills
 
+For learning repositories as coding knowledge (GitHub search for coding tasks, background learning while browsing,
+`Jarvis Repos/` memory), see [repo-learning.md](repo-learning.md) (2026-10-11). This page covers sandboxed execution
+of Python repository functions, which is unchanged.
+
 Architecture inspection and implementation work started 2026-10-09 IST.
 The requested `Pasted markdown(20261008-184924).md` was not found in the workspace.
 The second user-provided pasted attachment supplies the original implementation

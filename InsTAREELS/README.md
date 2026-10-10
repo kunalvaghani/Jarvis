@@ -26,6 +26,24 @@ environments resolve correctly, and recovery snapshots match the final source.
 These are relocation/regression checks; historical live feature measurements
 retain their original dates. Jarvis remains deliberately stopped.
 
+**Learning GitHub repositories for coding, and multi-context awareness (2026-10-11 IST):** Before a coding task,
+Jarvis reuses a repository it already learned for that kind of work. If none fits, it searches GitHub, lets the
+local model pick the repository that truly fits, and learns its structure, entry points, functions and classes
+(across languages) and README. The model summarises the architecture and reusable patterns, and the planner and
+coding workers get that reference with short code excerpts. GitHub repositories you keep open in the browser for 8
+seconds are learned in the background. The island shows "Learning owner/repo — keep Jarvis open" and then what
+was learned and saved. Everything is saved to `Jarvis Repos/` in Obsidian, so similar tasks reuse it offline.
+Questions and task plans now also get a live situation snapshot (screen, repository being viewed, running and
+queued tasks, pending questions, media, recent topics), so "this repo" or "is that done yet" resolve on their own.
+Live: a pomodoro task learned a matching repository, and the same kind of task then reused memory in 0.0 s.
+Browsing learned `sindresorhus/is` in the background. A snake-game coding task reused the learned repository's
+patterns, but that multi-file task still didn't pass Jarvis's own validation in three attempts. Two coding-loop failures
+found on the way were fixed (one-file-per-worker plans, cut-off replies); the local model's check design remains the limit.
+Regression: 1,468 tests passed with one skip; readiness `ready`. [How it works, commands, settings and
+results](docs/repo-learning.md).
+
+![Rendered island GitHub learning cards with sample text — not a desktop screenshot](artifacts/media/island-repo-card-preview.png)
+
 **Long-term memory, API repair and bad-weather alerts (2026-10-10 IST):** Jarvis now builds its own memory in
 the Obsidian vault. It learns facts about you from conversation (preferences, people, plans with real dates)
 using the local Qwen 9B model in the background. It also saves "remember that …" immediately, forgets on request,
@@ -1188,6 +1206,7 @@ Jarvis/
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
 | `gpu_scheduler.py` | Process-shared inference priority, speech reservation, partial offload, bounded cache handoff and metadata health. |
 | `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+| `repo_learning.py`, `context_hub.py` | Learning public GitHub repositories (search, pick, multi-language analysis, summary, Obsidian notes, references for coding, background learning from the browser) and the live situation snapshot for multi-context awareness. |
 | `memory_curator.py`, `capability_guide.py`, `weather_watch.py` | Long-term memory (learned facts, "remember/forget", conversation summaries, prompt context), capability and API answers with a live API check, and bad-weather/emergency alerts. |
 | `whatsapp.py`, `messengers.py` | WhatsApp Desktop through its accessibility tree (search, choose, draft, preview/approve, send and verify, replies, message/call watcher) and other messaging apps. |
 | `media_player.py` | Play by name on YouTube (Data API v3 or keyless search) and Spotify (app search, accessibility read, pointer click, media-session check), service resolution and island media cards. |
@@ -1208,6 +1227,7 @@ Jarvis/
 | `brain` | Enabled, `qwen3.5:9b` planner/coder/decision/vision, native function calls, no model fallback, Laya selector, adaptive planning/recovery. |
 | `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
+| `repo_learning` | Search GitHub for coding tasks (1 repository per task), learn repositories viewed in the browser after 8 s, re-learn after 30 days, `qwen3.5:9b`. See [settings](docs/repo-learning.md#settings-configconfigjson--repo_learning). |
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |
 | `media.default_service` | `youtube`; where "play X" goes when no service is named and Jarvis has not played anything yet. The optional YouTube Data API v3 key goes in gitignored `secrets/youtube.json` (`{"api_key": "..."}`) or `JARVIS_YOUTUBE_API_KEY`, never here. |

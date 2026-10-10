@@ -62,6 +62,14 @@ class ObsidianMemory:
             facts = [f["text"] for f in curator.relevant(goal, 5)]
             if facts:
                 data = {**data, "memory_facts": facts}  # e.g. "Kunal prefers Arijit Singh songs".
+        situation = getattr(self, "situation", None)
+        if callable(situation) and isinstance(data, dict):
+            try:
+                block = situation(goal)
+                if block:
+                    data = {**data, "situation": block}
+            except Exception:
+                pass
         return data
 
     def program_matches(self, name):
