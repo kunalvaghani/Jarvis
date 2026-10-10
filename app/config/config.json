@@ -1286,6 +1286,14 @@
     "enabled": true,
     "vault": "D:\\Phython Project\\Jarvis_Memory\\Jarvis_Mem",
     "hermes_skills": true,
+    "long_term": {
+      "enabled": true,
+      "learn_facts": true,
+      "summarize_conversations": true,
+      "model": "qwen3.5:9b",
+      "summary_idle_minutes": 15,
+      "max_facts": 500
+    },
     "experience_learning": {
       "enabled": true,
       "max_cases": 300,
@@ -1295,6 +1303,11 @@
   "weather": {
     "ip_location": true,
     "fallback_city": "Vadodara"
+  },
+  "weather_alerts": {
+    "enabled": true,
+    "interval_minutes": 30,
+    "min_level": "warning"
   },
   "whatsapp": {
     "enabled": true,

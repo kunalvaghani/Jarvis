@@ -1,5 +1,11 @@
 # Jarvis Dynamic Island
 
+**UI finish (2026-10-10 IST):** [Edge blending and frame pacing](ui-smoothness.md)
+preserve the current notch design and animations while removing side seams and
+reducing redraw work. It includes current renderer fixtures and measured callback
+rates with their limits. Earlier implementation notes and measurements below remain
+historical.
+
 **Long-output growth fix (2026-10-04):** [Smooth island growth](smooth-island-growth.md)
 documents the stable mounted answer view, continuous expansion, screen-height
 limit, pause/collapse behavior and current rendered growth fixture.

@@ -59,7 +59,64 @@ YouTube commands use Jarvis's own Chrome page directly whenever YouTube is the s
 | Spotify only | `shuffle on/off`; `repeat this song`; `repeat all`; `repeat off` |
 | Status | `what's playing` (spoken answer with title and position) |
 
-For Spotify, "previous song" checks that the track actually changed. Spotify's first "previous" restarts the current song, so Jarvis presses it once more only when the same song is back at 0:00.
+For Spotify, "previous song" checks that the track actually changed. When the song
+was more than 2.5 seconds in, Spotify's first "previous" can restart it. Jarvis sends
+one more press only after observing the same song return below 2.5 seconds. Near the
+start, it sends only one press, even if track metadata is slow to update.
+
+## Spotify control follow-up repair (2026-10-10 IST)
+
+The earlier live checkpoint below preceded a report of intermittent pause/resume
+and failed next/previous/volume in ordinary use. Playback-by-name was still working.
+The follow-up change addresses the difference between a standalone test and a
+desktop worker whose libraries have initialized Windows COM as STA:
+
+- Transport runs on a fresh thread explicitly initialized as MTA, with a six-second
+  bound and balanced apartment cleanup. Both ordinary voice actions and the island
+  transport helper use this path. Metadata reads also explicitly initialize MTA.
+- Cancellation and timeout fence late dispatch; no uncertain command is retried.
+  The optional second previous-track press requires an observed restart and respects
+  cancellation. Repeated play/pause returns the already-current state without sending
+  another command that Spotify may reject as disabled.
+- Volume enumerates audio sessions across all active render devices, so a separate
+  Spotify headset/output in Windows is included. Only `Spotify.exe` sessions change;
+  system and browser levels are untouched. This is Windows's Spotify app mixer level,
+  which can differ from the slider inside Spotify.
+- An active Spotify session is recognised when its window is hidden in the tray.
+  When neither player is playing, a closed last-used player no longer overrides the
+  remaining paused player. Existing explicit service commands keep their scope.
+- Volume also accepts `increase Spotify volume`, `raise volume`, `lower volume on
+  Spotify`, `reduce volume`, and `turn down the volume`.
+
+Fresh live checks used the native session functions from a caller that had imported
+`comtypes` (STA). Spotify exposed enabled next/previous controls and an audio session.
+Pause and resume were confirmed from playback status, next and previous from changed
+track metadata, and volume 40%, up, down and 50% from audio-session read-back. The
+original playing state and 50% volume were restored. This is a native-session live
+check. A separate live check passed text through the real `Engine.feed(...,
+final=True)` → `Actions.execute` → Spotify path using a temporary workspace with
+memory disabled and COM initialized as STA. It dispatched pause Spotify, bare play,
+next song, previous song, set volume 40%, increase volume, lower volume and restore
+50% exactly once each; audio volume and mute read-back matched their original values.
+Microphone recognition and speech output were not tested. Tray routing,
+non-default-output enumeration, cancellation and timeout are covered with controlled
+regressions; a real alternate output was not selected during this check.
+
+No dependencies or long-running services were added. Jarvis was already stopped;
+use [Start Jarvis.cmd](<../Start Jarvis.cmd>) to load the repaired source. Startup,
+shutdown and recovery continue through the existing supervisor.
+
+Final regression/readiness on 2026-10-10 IST: **1,455 tests ran successfully with
+one skip** (`python -m unittest discover -s tests -v`), all 15 focused Spotify tests
+passed, and `python -m jarvis.launcher --check` returned `ready` with empty missing
+and incomplete lists. Tests cover MTA thread initialization/cleanup, late-dispatch
+fencing, cancellation before sending and before a second previous press,
+idempotent pause/play, stale track metadata near the start, alternate-output
+enumeration, source-scoped volume, tray routing and a closed former player.
+The existing COM ownership test now mocks the all-output audio lookup; no live
+audio is touched by that fixture. Regression logs are retained locally under the
+ignored `.jarvis-runtime/` folder. These results are separate from the live checks
+described above and the earlier historical checkpoint below.
 
 ## Island media card
 

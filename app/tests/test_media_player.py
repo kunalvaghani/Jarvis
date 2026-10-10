@@ -205,6 +205,21 @@ class ResolveTests(unittest.TestCase):
         self.assertEqual(self.resolve(Command("spotify_control", "shuffle_on", "auto"), youtube={"paused": False}),
                          Command("spotify_control", "shuffle_on", ""))
 
+    def test_paused_spotify_is_selected_when_last_youtube_page_is_closed(self):
+        self.assertEqual(self.resolve(Command("spotify_control", "play", "auto"),
+                                      spotify={"status": "paused"}, last="youtube"),
+                         Command("spotify_control", "play", ""))
+
+    def test_spotify_session_still_controls_when_app_is_in_tray(self):
+        actions = SimpleNamespace(last_media="youtube")
+        with patch.object(media_player, "spotify_window", return_value=None), \
+                patch.object(media_player, "spotify_now", return_value={"status": "playing"}), \
+                patch.object(media_player, "youtube_state", return_value={}):
+            self.assertEqual(media_player.resolve(actions, Command("spotify_control", "next", "auto")),
+                             Command("spotify_control", "next", ""))
+            from jarvis.actions import media_session_open
+            self.assertTrue(media_session_open(actions))
+
     def test_unscoped_phrases_are_marked_auto(self):
         self.assertEqual(parse("volume up"), Command("spotify_volume", "up", "auto"))
         self.assertEqual(parse("spotify volume up"), Command("spotify_volume", "up", ""))
@@ -236,7 +251,7 @@ class SpotifyTrackTests(unittest.TestCase):
             def get_playback_info(self):
                 return SimpleNamespace(playback_status=SimpleNamespace(name="PLAYING"))
             def get_timeline_properties(self):
-                return SimpleNamespace(position=SimpleNamespace(total_seconds=lambda: 0.4))
+                return SimpleNamespace(position=SimpleNamespace(total_seconds=lambda: 0.4 if self.calls else 25))
             async def try_get_media_properties_async(self):
                 return Media(self.track)
             try_play_async = try_pause_async = try_skip_next_async = None

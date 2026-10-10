@@ -563,8 +563,9 @@ class IslandDesk:
                 question = (self.pending.get('question','')+'\n') if self.pending.get('kind')=='whatsapp' else ''
                 self.choice_hint.configure(text=question+f'Click or say the name / number · {max(0,int(self.pending["expires"]-now))}s remaining')
         if visible and self.view=='Games':
-            self.game.tick(dt)
-            self.draw_game()
+            if self.game.started and not self.game.paused and not self.game.over:
+                self.game.tick(dt)
+                self.draw_game()
         if visible and self.view=='Music' and now-self.last_media>=5 and not self.app.config.get('_ui_verification',False):
             if self.media.start():
                 self.last_media = now

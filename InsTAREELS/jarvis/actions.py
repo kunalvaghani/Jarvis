@@ -103,12 +103,18 @@ class Desktop:
             time.sleep(TYPING_INTERVAL)
 
 
+# Player controls and answers to prompts are not worth remembering as conversation turns.
+QUIET_KINDS = {"media_control", "spotify_control", "spotify_volume", "click_control", "choose_control",
+               "confirm_suggestion", "select_context", "island_choice", "approval_answer", "cancel_current",
+               "queue_status", "memory_list", "memory_conversations", "list_controls", "ask"}
+
+
 def media_session_open(actions):
     """Whether a bare "pause"/"play" belongs to Spotify or Jarvis's YouTube rather than a visible button."""
     if getattr(actions, "last_media", None):
         return True
-    from .media_player import spotify_now, spotify_window, youtube_state
-    return bool((spotify_window() and spotify_now()) or youtube_state(actions))
+    from .media_player import spotify_now, youtube_state
+    return bool(spotify_now() or youtube_state(actions))
 
 
 class Actions:
@@ -155,6 +161,13 @@ class Actions:
             self.knowledge.attach_selector(config.get('context_selector', {'enabled': False}))
         self.knowledge.memory = self.memory
         self.knowledge.client.memory = self.memory
+        from .memory_curator import MemoryCurator
+        long_term = dict(config.get("memory", {}).get("long_term", {}))
+        long_term["enabled"] = bool(self.memory.enabled and long_term.get("enabled", True))
+        self.curator = MemoryCurator(self.memory.vault, long_term)
+        self.memory.curator = self.curator
+        self.knowledge.curator = self.curator
+        self.weather_watch = None
         from .quick_answers import QuickAnswers
         self.knowledge.quick = QuickAnswers(self.memory, config.get("weather", {}), settings=config)
         from .brain import Brain
@@ -574,6 +587,15 @@ class Actions:
         watcher = getattr(self, 'whatsapp_watcher', None)
         if watcher is not None:
             watcher.close()
+        weather = getattr(self, 'weather_watch', None)
+        if weather is not None:
+            weather.close()
+        curator = getattr(self, 'curator', None)
+        if curator is not None and curator.thread is not None:
+            # Summarise the open conversation into Obsidian, bounded so shutdown never hangs.
+            closing = threading.Thread(target=curator.close, name='Jarvis memory close', daemon=True)
+            closing.start()
+            closing.join(45)
         utility_server=getattr(self,'utility_server',None)
         if isinstance(utility_server,OwnedServer):utility_server.close();self.utility_server=None
         realtime = getattr(self, 'realtime', None)
@@ -665,6 +687,15 @@ class Actions:
             self.approvals_waiting -= 1
         if not approved:
             raise ValueError("Action cancelled; approval was not given.")
+
+    def start_background_memory(self):
+        """Long-term memory curator and bad-weather watch (both off the response path)."""
+        if self.curator.enabled:
+            self.curator.start()
+        settings = self.config.get("weather_alerts", {})
+        if settings.get("enabled", True):
+            from .weather_watch import WeatherWatch
+            self.weather_watch = WeatherWatch(self, settings).start()
 
     def start_whatsapp_watch(self):
         """New-message and incoming-call watcher (config whatsapp.watch_messages / watch_calls)."""
@@ -1100,6 +1131,22 @@ class Actions:
             except whatsapp.WhatsAppError as exc:
                 self.report("media_card", whatsapp.card("error", command.value or "WhatsApp", str(exc)[:90]))
                 raise
+        if command.kind in {"memory_save", "memory_forget", "memory_list", "memory_conversations"}:
+            from .memory_curator import execute as memory_execute
+            answer = memory_execute(self, command)
+            if command.kind == "memory_list" and not command.value:
+                profile = self.memory.profile_text()
+                basics = [line[2:] for line in profile.splitlines() if line.startswith("- ")][:6]
+                if basics:
+                    answer = "From your profile: " + "; ".join(basics) + ". " + answer
+            return answer
+        if command.kind == "api_health":
+            from .capability_guide import check_apis
+            return check_apis(self, cancelled)
+        if command.kind == "weather_alerts":
+            from .weather_watch import WeatherWatch
+            watch = self.weather_watch or WeatherWatch(self, self.config.get("weather_alerts", {}))
+            return watch.summary()
         if command.kind == "messenger_send":
             from .messengers import send
             return send(self, command.value, json.loads(command.extra or "{}"), cancelled)
@@ -1401,7 +1448,10 @@ class Actions:
                     if result and not cancelled():
                         if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                             state = self.task_state.snapshot() or {}
-                            self.knowledge.record_pair(state.get('goal') or command.value, str(result))
+                            self.knowledge.record_pair(state.get('goal') or command.value, str(result), kind='task')
+                        elif command.kind not in QUIET_KINDS:
+                            from .memory_curator import describe
+                            self.knowledge.record_pair(describe(command), str(result), kind='task')
                         self.report("action", result)
                         if command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",
                                             "create", "create_in_folder", "modify_in_folder", "delete_in_folder",

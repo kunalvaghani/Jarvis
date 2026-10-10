@@ -56,7 +56,13 @@ class ObsidianMemory:
 
     def task_context(self, goal):
         from .memory_index import context
-        return context(self._index(), goal)
+        data = context(self._index(), goal)
+        curator = getattr(self, "curator", None)
+        if curator is not None and curator.enabled and isinstance(data, dict):
+            facts = [f["text"] for f in curator.relevant(goal, 5)]
+            if facts:
+                data = {**data, "memory_facts": facts}  # e.g. "Kunal prefers Arijit Singh songs".
+        return data
 
     def program_matches(self, name):
         from .capabilities import program_matches
@@ -64,6 +70,10 @@ class ObsidianMemory:
 
     def catalogue_answer(self, question):
         from .memory_index import catalogue_answer
+        from .capability_guide import answer as capability_answer
+        capability = capability_answer(question, self.base)
+        if capability:
+            return capability
         repositories=getattr(self,'repository_skills',None)
         if repositories is not None and re.search(r'\b(?:repository skills|learned abilities|new abilities)\b',question,re.I):
             rows=repositories.search('.',12)
@@ -260,6 +270,10 @@ class ObsidianMemory:
         if skills is not None and (RECALL.search(question) or re.search(r"\bsteps\b", question, re.I)):
             for procedure in skills.context(question).get("procedures", [])[:3]:
                 results.append({"source": "Jarvis Procedures.md", "observation": str(procedure)[:1800]})
+        curator = getattr(self, "curator", None)
+        if curator is not None and curator.enabled:
+            for fact in curator.relevant(question, 4):
+                results.append({"source": "Jarvis Memory.md", "observation": fact["text"]})
         if PERSONAL.search(question):
             profile = self.vault / "Kunal Vaghani.md"
             source = self.profile_text()

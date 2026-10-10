@@ -241,7 +241,7 @@ class MediaRoutesTests(unittest.TestCase):
         from jarvis import spotify
         error = OSError('COM mode already set')
         error.winerror = -2147417850
-        with patch('comtypes.CoInitialize', side_effect=error), patch('comtypes.CoUninitialize') as uninit, patch('pycaw.pycaw.AudioUtilities.GetAllSessions', return_value=[]):
+        with patch('comtypes.CoInitialize', side_effect=error), patch('comtypes.CoUninitialize') as uninit, patch.object(spotify, '_audio_sessions', return_value=[]):
             with self.assertRaisesRegex(ValueError, 'audio session'):
                 spotify.volume('50')
         uninit.assert_not_called()

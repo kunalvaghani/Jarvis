@@ -174,7 +174,7 @@ class RealtimeTests(unittest.TestCase):
 
     def test_selfhost_and_contact_requirements_no_public_substitution(self):
         http=Mock(); source=Sources(transport=http,clock=lambda:NOW)
-        for key in ('searxng','rsshub','osrm','opentripplanner','gbfs','met','musicbrainz'):
+        for key in ('searxng','rsshub','opentripplanner','gbfs','met','musicbrainz'):  # OSRM has a public default.
             with self.subTest(key=key): self.assertEqual(source.fetch(key)['status'],'needs_configuration')
         http.get.assert_not_called()
 
@@ -418,10 +418,14 @@ class RealtimeTests(unittest.TestCase):
 
     def test_country_free_key_is_explicit_and_never_in_url_or_receipt(self):
         http=Mock(); http.get.return_value=Response({'data':{'objects':[{'names':{'common':'India'}}]}})
+        keyless=Mock(); keyless.get.return_value=Response([{'page':1},[{'id':'IND','iso2Code':'IN','name':'India','capitalCity':'New Delhi'},
+                                                                     {'id':'USA','iso2Code':'US','name':'United States'}]])
         with tempfile.TemporaryDirectory() as directory, patch.dict('os.environ',{},clear=True):
-            source=Sources(transport=http,clock=lambda:NOW,credential_base=directory)
-            self.assertEqual(source.fetch('countries',{'id':'India'})['status'],'needs_configuration')
-            http.get.assert_not_called()
+            source=Sources(transport=keyless,clock=lambda:NOW,credential_base=directory)
+            row=source.fetch('countries',{'id':'India'})
+            self.assertEqual(row['status'],'ok'); self.assertEqual(row['data'][0]['capitalCity'],'New Delhi')
+            self.assertEqual(keyless.get.call_args.args[0],'https://api.worldbank.org/v2/country')
+            self.assertNotIn('Authorization',keyless.get.call_args.kwargs['headers'])
         with patch.dict('os.environ',{'JARVIS_REALTIME_COUNTRIES_KEY':'fixture-secret'}):
             source=Sources(transport=http,clock=lambda:NOW)
             row=source.fetch('countries',{'id':'India'})

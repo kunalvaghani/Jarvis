@@ -139,8 +139,8 @@ def main():
         if action=='observe':
             result = asyncio.run(asyncio.wait_for(metadata(),6))
         elif action in TRANSPORT:
-            from .spotify import _control
-            message = asyncio.run(asyncio.wait_for(_control(action,lambda:False),6))
+            from .spotify import control
+            message = control(action)
             result = {'transport_message': message}
         else:
             raise ValueError('Unsupported island transport')

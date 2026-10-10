@@ -159,6 +159,13 @@ def _parse(text: str) -> Command:
         return Command("cancel_task", "last")  # Drops the most recent request (or the running one).
     if re.match(r"^(?:do not|don't|never)\b", text, re.I) and not re.match(r"^(?:never ?mind|don'?t do|do not do)\b", text, re.I):
         raise ValueError("No action taken for a negated command.")
+    from .memory_curator import parse_command as memory_command
+    from .capability_guide import parse_command as capability_command
+    from .weather_watch import parse_command as weather_command
+    for special in (memory_command, capability_command, weather_command):
+        found = special(text)
+        if found:
+            return found  # "remember that ...", "check your APIs", "is bad weather coming".
     from .whatsapp import parse_command as whatsapp_command
     whatsapp = whatsapp_command(text)
     if whatsapp:
@@ -293,6 +300,9 @@ def _parse(text: str) -> Command:
     m = re.fullmatch(r"(?:turn )?(?:spotify )?volume (up|down)(?: (?:on|in|for) spotify)?", text, re.I)
     if m:
         return Command("spotify_volume", m[1].lower())
+    m = re.fullmatch(r"(increase|raise|decrease|lower|reduce|turn up|turn down) (?:the )?(?:spotify )?volume(?: (?:on|in|for) spotify)?", text, re.I)
+    if m:
+        return Command("spotify_volume", "up" if m[1].lower() in {"increase", "raise", "turn up"} else "down")
     m = re.fullmatch(r"(mute|unmute)(?: (?:the )?(?:music|audio))?(?: (?:on|in) spotify| spotify)?", text, re.I)
     if m and ("spotify" in text.lower() or "music" in text.lower()):
         return Command("spotify_volume", m[1].lower())

@@ -4,6 +4,20 @@ Jarvis combines local voice input, Qwen planning and answers, guarded desktop an
 browser actions, native coding, repository skills and configured integrations.
 The application lives in [`app/`](app/).
 
+The [UI finish update](app/docs/ui-smoothness.md) preserves the island design and
+animations while removing side seams, blending the outer curves and using cached
+rendering with monitor-paced frame deadlines. The guide includes a labelled renderer
+preview and off-screen measurements; these do not claim constant on-screen FPS.
+The final 2026-10-10 IST UI check measured 99–119 callback fps; **1,459 regression
+tests ran successfully with one skip**, and launcher readiness reported **`ready`**.
+
+The [Spotify control repair](app/docs/media-player.md#spotify-control-follow-up-repair-2026-10-10-ist)
+fixes pause/resume, next/previous and volume after Windows desktop/COM initialization,
+and supports Spotify audio routed to another active output. Live native-session
+checks and text-command dispatch passed on 2026-10-10 IST; microphone recognition
+was not tested. Final regression ran **1,455 tests successfully with one skip**,
+and launcher readiness reported **`ready`**.
+
 ## Start and stop
 
 Use [Start Jarvis.cmd](<app/Start Jarvis.cmd>) for supervised hidden startup and
@@ -48,7 +62,8 @@ a background task queue, natural phrasing and faster step-by-step planning; see
 [fast planning, task queue and natural conversation](app/docs/fast-conversation.md). Also on that date: [writing by voice and push-to-write](app/docs/push-to-write.md) and a
 [natural male voice with smooth long speech](app/docs/natural-male-voice.md), and
 [full YouTube and Spotify control with an island media card](app/docs/media-player.md), and
-[WhatsApp automation with previews, approvals and call handling](app/docs/whatsapp.md). The [previous repository overview](app/docs/repository-overview-history.md)
+[WhatsApp automation with previews, approvals and call handling](app/docs/whatsapp.md), and
+[long-term memory, API repair and bad-weather alerts](app/docs/memory-apis-alerts.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

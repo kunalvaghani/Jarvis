@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-10T22:29:12.454333+05:30",
+  "scope": "Off-screen authored fixtures, real Tk callbacks and native alpha layer; no desktop capture, microphone or live model.",
+  "stages": {
+    "compact": {
+      "frames": 216,
+      "target_fps": 144,
+      "callback_fps": 118.7,
+      "interval_p50_ms": 8.11,
+      "interval_p95_ms": 14.22,
+      "render_p50_ms": 1.02,
+      "render_p95_ms": 6.55
+    },
+    "expanded": {
+      "frames": 179,
+      "target_fps": 144,
+      "callback_fps": 98.5,
+      "interval_p50_ms": 8.15,
+      "interval_p95_ms": 28.08,
+      "render_p50_ms": 0.92,
+      "render_p95_ms": 12.45
+    },
+    "media": {
+      "frames": 189,
+      "target_fps": 144,
+      "callback_fps": 103.6,
+      "interval_p50_ms": 8.42,
+      "interval_p95_ms": 18.66,
+      "render_p50_ms": 2.37,
+      "render_p95_ms": 13.55
+    }
+  },
+  "native_edge_active": true,
+  "edge_input_transparent": true,
+  "compositor_failure_cleanup_passed": true,
+  "fallback_render_passed": true,
+  "preview": "artifacts/media/island-smoothness-preview.png",
+  "passed": true
+}

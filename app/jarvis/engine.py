@@ -17,7 +17,8 @@ AND_WRITE = re.compile(r"\s+and\s+(?=(?:please\s+)?(?:write|type|click|select|ch
 STOP = re.compile(r"\b(?:go to sleep|stop listening|cancel|stop all tasks)\b", re.I)
 # Kept whole (never split on "then") and run only from final speech.
 WHOLE = {"ask", "task", "code_task", "toolkit", "anticipation", "realtime", "windows_command", "windows_catalog",
-         "write_text", "compose_text", "whatsapp_send", "whatsapp_reply", "messenger_send"}
+         "write_text", "compose_text", "whatsapp_send", "whatsapp_reply", "messenger_send", "memory_save",
+         "memory_forget", "memory_list", "memory_conversations"}
 FINAL_ONLY = WHOLE | {"run_command", "modify", "browse", "browser_search", "context_search", "media_search",
     "media_control", "play_media", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app",
     "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls",

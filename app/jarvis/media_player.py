@@ -263,10 +263,17 @@ def spotify_now(cancelled=lambda: False, timeout=3.):
     found = {}
 
     def read():
+        initialized = False
         try:
-            found["info"] = asyncio.run(metadata())
+            from winrt.runtime import ApartmentType, init_apartment, uninit_apartment
+            init_apartment(ApartmentType.MULTI_THREADED)
+            initialized = True
+            found["info"] = asyncio.run(asyncio.wait_for(metadata(), timeout))
         except Exception:
             pass
+        finally:
+            if initialized:
+                uninit_apartment()
     # A fresh thread: WinRT awaits deadlock on a thread that COM (e.g. the volume API) made single-threaded.
     worker = threading.Thread(target=read, daemon=True, name="jarvis-media-session")
     worker.start()
@@ -398,13 +405,16 @@ def youtube_state(actions):
 
 def active_service(actions):
     """The service that is playing now; otherwise the one Jarvis used last; otherwise Spotify."""
-    spotify = spotify_now() if spotify_window() else None
+    spotify = spotify_now()
     youtube = youtube_state(actions)
     playing = [name for name, ok in (("spotify", bool(spotify and spotify.get("status") == "playing")),
                                      ("youtube", bool(youtube and youtube.get("paused") is False))) if ok]
     last = getattr(actions, "last_media", None)
-    if last in playing or not playing:  # Both playing: the one Jarvis started last.
-        return last or ("youtube" if youtube else "spotify")
+    if not playing:
+        available = (["spotify"] if spotify else []) + (["youtube"] if youtube else [])
+        return last if last in available else (available[0] if available else last or "spotify")
+    if last in playing:  # Both playing: the one Jarvis started last.
+        return last
     return playing[0]
 
 

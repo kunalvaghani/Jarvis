@@ -1,11 +1,44 @@
 import unittest
 from unittest.mock import Mock
 from types import SimpleNamespace
+from PIL import Image
 
-from jarvis.island import Morph, Island, render_island
+from jarvis.island import Morph, Island, FrameClock, contour_mask, render_island
 
 
 class IslandTests(unittest.TestCase):
+    def test_lower_curves_have_no_vertical_tail_at_any_dpi(self):
+        for scale in (1., 1.25, 1.5, 2., 3.):
+            for height in (40, 64, 126, 660):
+                width, pixels_h = round(614*scale), round(height*scale)
+                edge, radius = round(32*scale), round(min(32,height/2)*scale)
+                mask = contour_mask(width, pixels_h, edge, radius)
+                for x in (edge, width-edge-1, width-edge):
+                    self.assertEqual(mask.getpixel((x,pixels_h-1)), 0)
+                self.assertEqual(mask.getpixel((width//2,pixels_h-1)),255)
+                self.assertEqual(mask.tobytes(),mask.transpose(Image.Transpose.FLIP_LEFT_RIGHT).tobytes())
+
+    def test_alpha_edges_blend_without_key_color_and_keep_fractional_coverage(self):
+        image = render_island(614, 126, 'WORKING', 1., smooth_edges=True, scale=1.25)
+        self.assertEqual(image.mode,'RGBA')
+        self.assertTrue(any(0 < alpha < 255 for alpha in image.getchannel('A').tobytes()))
+        self.assertEqual(image.getpixel((0,image.height-1))[3],0)
+        self.assertFalse(any(pixel[:3] == (255,0,255) for pixel in image.get_flattened_data()))
+
+    def test_deadline_pacing_includes_render_cost_and_drops_missed_frames(self):
+        clock = FrameClock()
+        self.assertEqual(clock.delay(0., .005, 60),12)
+        self.assertEqual(clock.delay(.017, .022, 60),12)
+        # A stall skips elapsed slots and schedules one future frame, never a burst.
+        delay = clock.delay(.034,.205,60)
+        self.assertGreater(delay,0)
+        self.assertLessEqual(delay,17)
+        self.assertEqual(clock.delay(.206,.211,20),45)
+
+    def test_fractional_morph_uses_physical_pixel_size_without_logical_snapping(self):
+        image = render_island(402.6,40.6,scale=1.5)
+        self.assertEqual(image.size,(604,61))
+
     def test_interrupted_morph_starts_at_current_size_and_settles(self):
         morph = Morph()
         morph.set_target((540,392), 10)

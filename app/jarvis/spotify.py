@@ -1,6 +1,8 @@
 """Spotify app navigation and source-scoped Windows media transport controls."""
 import asyncio
 import os
+import threading
+import time
 from urllib.parse import quote
 
 
@@ -51,6 +53,9 @@ async def _control(action, cancelled):
         artist = media.artist or "Unknown artist"
         return f"Spotify is {status}: {title} by {artist}."
 
+    if action in {"play", "pause"} and status == ("playing" if action == "play" else "paused"):
+        return f"Spotify {status}."
+
     methods = {
         "play": session.try_play_async,
         "pause": session.try_pause_async,
@@ -58,6 +63,10 @@ async def _control(action, cancelled):
         "previous": session.try_skip_previous_async,
     }
     track = await _track(session) if action in {"next", "previous"} else None
+    previous_position = (session.get_timeline_properties().position.total_seconds()
+                         if action == "previous" and track else None)
+    if cancelled():
+        raise ValueError("Spotify action cancelled before sending.")
     if action in methods:
         accepted = await methods[action]()
     elif action in {"shuffle_on", "shuffle_off"}:
@@ -73,6 +82,8 @@ async def _control(action, cancelled):
         timeline = session.get_timeline_properties()
         position = timeline.position + timedelta(seconds=seconds)
         position = max(timedelta(), min(position, timeline.end_time))
+        if cancelled():
+            raise ValueError("Spotify action cancelled before sending.")
         accepted = await session.try_change_playback_position_async(int(position.total_seconds() * 10_000_000))
     else:
         raise ValueError("Unknown Spotify action.")
@@ -84,15 +95,20 @@ async def _control(action, cancelled):
     if track:
         # Confirm the track really changed. Spotify's "previous" first restarts the current song, so when the
         # title stays the same and the song is back at the start, one more "previous" reaches the earlier track.
-        again = action == "previous"
+        again = action == "previous" and previous_position is not None and previous_position > 2.5
         for _ in range(12):
             await asyncio.sleep(.15)
+            if cancelled():
+                raise ValueError("Spotify action cancelled after sending; check the app before repeating it.")
             now = await _track(session)
             if now and now != track:
                 return f"Now playing {now[0]} by {now[1]}."
             if again and now == track and session.get_timeline_properties().position.total_seconds() < 2.5:
                 again = False
-                await session.try_skip_previous_async()
+                if cancelled():
+                    raise ValueError("Spotify action cancelled after sending; check the app before repeating it.")
+                if not await session.try_skip_previous_async():
+                    return "Spotify restarted the current song but did not accept previous track."
         return f"Spotify accepted {action}, but the track change could not be verified."
 
     # Windows acknowledges a transport request before the app updates its state.
@@ -121,8 +137,50 @@ async def _track(session):
         return None
 
 
+def _on_media_thread(operation, cancelled, timeout=6.):
+    """WinRT needs MTA; desktop libraries initialize the caller as STA.
+
+    Fence late dispatch after timeout/cancellation, and never retry mutations.
+    The async timeout also bounds read-back after an accepted command.
+    """
+    if cancelled():
+        raise ValueError("Spotify action cancelled before sending.")
+    stopped = threading.Event()
+    deadline = time.monotonic() + timeout
+    result = {}
+
+    def abort():
+        return stopped.is_set() or time.monotonic() >= deadline or cancelled()
+
+    def run():
+        initialized = False
+        try:
+            from winrt.runtime import ApartmentType, init_apartment, uninit_apartment
+            init_apartment(ApartmentType.MULTI_THREADED)
+            initialized = True
+            if abort():
+                raise ValueError("Spotify action cancelled before sending.")
+            result["value"] = asyncio.run(asyncio.wait_for(operation(abort), timeout))
+        except Exception as exc:
+            result["error"] = exc
+        finally:
+            if initialized:
+                uninit_apartment()
+
+    worker = threading.Thread(target=run, daemon=True, name="jarvis-spotify-control")
+    worker.start()
+    while worker.is_alive() and not abort():
+        worker.join(.05)
+    if worker.is_alive() or isinstance(result.get("error"), (TimeoutError, asyncio.TimeoutError)):
+        stopped.set()
+        raise ValueError("Spotify request could not be verified. Check playback before repeating; no retry was sent.")
+    if "error" in result:
+        raise result["error"]
+    return result["value"]
+
+
 def control(action, cancelled=lambda: False):
-    return asyncio.run(_control(action, cancelled))
+    return _on_media_thread(lambda abort: _control(action, abort), cancelled)
 
 
 async def _is_playing():
@@ -136,13 +194,33 @@ async def _is_playing():
 
 
 def is_playing():
-    return asyncio.run(_is_playing())
+    return _on_media_thread(lambda abort: _is_playing(), lambda: False)
+
+
+def _audio_sessions():
+    """Include Spotify routed to a non-default speaker/headset in Windows."""
+    from pycaw.pycaw import AudioUtilities, AudioSession, IAudioSessionControl2, EDataFlow, DEVICE_STATE
+    from comtypes import COMError
+    sessions = []
+    for device in AudioUtilities.GetAllDevices(EDataFlow.eRender.value, DEVICE_STATE.ACTIVE.value):
+        try:
+            manager = device.AudioSessionManager
+            if manager is None:
+                continue
+            enumerator = manager.GetSessionEnumerator()
+            for index in range(enumerator.GetCount()):
+                control = enumerator.GetSession(index)
+                if control is not None:
+                    sessions.append(AudioSession(control.QueryInterface(IAudioSessionControl2)))
+        except (OSError, COMError):
+            # An endpoint can disconnect during enumeration; other outputs remain usable.
+            continue
+    return sessions
 
 
 def volume(action, cancelled=lambda: False):
     """Change only Spotify's Core Audio sessions, never the system or browser level."""
     import comtypes
-    from pycaw.pycaw import AudioUtilities
     initialized = False
     try:
         comtypes.CoInitialize()
@@ -154,9 +232,9 @@ def volume(action, cancelled=lambda: False):
             raise
     try:
         sessions = []
-        for session in AudioUtilities.GetAllSessions():
-            process = session.Process
+        for session in _audio_sessions():
             try:
+                process = session.Process
                 name = process.name().casefold() if process else ""
             except Exception:  # A process can exit while audio sessions are enumerated.
                 continue
@@ -169,6 +247,8 @@ def volume(action, cancelled=lambda: False):
         if action in {"mute", "unmute"}:
             muted = action == "mute"
             for level in sessions:
+                if cancelled():
+                    raise ValueError("Spotify volume action cancelled; check the app before repeating it.")
                 level.SetMute(int(muted), None)
             if not all(bool(level.GetMute()) == muted for level in sessions):
                 raise ValueError("Spotify mute change could not be verified.")
@@ -181,6 +261,8 @@ def volume(action, cancelled=lambda: False):
             if not 0 <= target <= 1:
                 raise ValueError("Choose a Spotify volume between 0 and 100 percent.")
         for level in sessions:
+            if cancelled():
+                raise ValueError("Spotify volume action cancelled; check the app before repeating it.")
             level.SetMasterVolume(target, None)
         if not all(abs(level.GetMasterVolume() - target) <= .01 for level in sessions):
             raise ValueError("Spotify volume change could not be verified.")

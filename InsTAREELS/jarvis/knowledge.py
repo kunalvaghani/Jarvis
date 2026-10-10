@@ -179,12 +179,15 @@ class Knowledge:
                 self.report('repair', 'Conversation storage needs review; RAM context retained: '+type(exc).__name__)
             return None
 
-    def record_pair(self, question, answer, turn=None):
+    def record_pair(self, question, answer, turn=None, kind='conversation'):
         with self.context_lock:
             turn = turn or self._saved('begin', self.session_id, question)
             if turn:
                 self._saved('finish', turn, answer)
             self.history.extend([{'role': 'user', 'content': question}, {'role': 'assistant', 'content': answer}])
+        curator = getattr(self, 'curator', None)
+        if curator is not None:
+            curator.observe(question, answer, kind)  # Learns facts and builds conversation summaries.
 
     def choice_snapshot(self):
         with self.context_lock:

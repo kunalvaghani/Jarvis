@@ -35,3 +35,14 @@ def window_scale(root):
         return min(3., max(1., dpi / 96.)) if dpi else 1.
     except (AttributeError, OSError, TypeError, ctypes.ArgumentError):
         return 1.
+
+
+def refresh_rate(root):
+    """Follow the island's monitor; bound software rendering to 60–144 fps."""
+    try:
+        import win32api
+        monitor = win32api.MonitorFromWindow(root.winfo_id(), 2)
+        device = win32api.GetMonitorInfo(monitor)['Device']
+        return min(144, max(60, win32api.EnumDisplaySettings(device, -1).DisplayFrequency))
+    except (ImportError, OSError, TypeError, AttributeError):
+        return 60

@@ -240,6 +240,10 @@ class Realtime:
         if self.thread: self.thread.join(timeout=4)
 
     def detect_location(self, cancelled):
+        with self.lock:  # Parallel first queries share one lookup instead of seeing a half-set location.
+            return self._detect_location(cancelled)
+
+    def _detect_location(self, cancelled):
         if self.options['location'] is not None: return self.location
         if not self.options['auto_location']: return None
         if self.clock()<self.location_due: return self.location

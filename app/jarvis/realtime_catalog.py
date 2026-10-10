@@ -33,7 +33,7 @@ gdelt|GDELT|news|https://api.gdeltproject.org/api/v2/doc/doc|https://blog.gdeltp
 hacker_news|Hacker News|news|https://hacker-news.firebaseio.com/v0/topstories.json|https://github.com/HackerNews/API|300|json|
 google_news|Google News RSS|news|https://news.google.com/rss/search|https://news.google.com/|900|xml|
 bbc|BBC News RSS|news|https://feeds.bbci.co.uk/news/world/rss.xml|https://www.bbc.co.uk/news/10628494|900|xml|
-bluesky|Bluesky Public API|news|https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts|https://docs.bsky.app/docs/api/app-bsky-feed-search-posts|60|json|
+bluesky|Bluesky Public API|news|https://api.bsky.app/xrpc/app.bsky.feed.searchPosts|https://docs.bsky.app/docs/api/app-bsky-feed-search-posts|60|json|
 jetstream|Bluesky Jetstream|news|wss://jetstream2.us-east.bsky.network/subscribe|https://github.com/bluesky-social/jetstream|300|ws|
 wikimedia_events|Wikimedia EventStreams|news|https://stream.wikimedia.org/v2/stream/recentchange|https://wikitech.wikimedia.org/wiki/Event_Platform/EventStreams|300|sse|
 rsshub|RSSHub|news||https://docs.rsshub.app/deploy/|900|xml|self-host
@@ -93,7 +93,7 @@ open_notify|Open Notify ISS|space|http://api.open-notify.org/iss-now.json|http:/
 whereiss|WhereTheISS|space|https://api.wheretheiss.at/v1/satellites/25544|https://wheretheiss.at/w/developer|60|json|
 celestrak|CelesTrak|space|https://celestrak.org/NORAD/elements/gp.php|https://celestrak.org/NORAD/documentation/gp-data-formats.php|7200|json|
 spaceflight_news|Spaceflight News|space|https://api.spaceflightnewsapi.net/v4/articles/|https://api.spaceflightnewsapi.net/v4/docs/|900|json|
-spacex|SpaceX API|space|https://api.spacexdata.com/v4/launches/latest|https://github.com/r-spacex/SpaceX-API|3600|json|
+spacex|Launch Library 2 (SpaceX and all launches)|space|https://ll.thespacedevs.com/2.2.0/launch/upcoming/|https://thespacedevs.com/llapi|3600|json|
 tvmaze|TVmaze|media|https://api.tvmaze.com/search/shows|https://www.tvmaze.com/api|300|json|
 itunes|iTunes Search|media|https://itunes.apple.com/search|https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/|300|json|
 musicbrainz|MusicBrainz|media|https://musicbrainz.org/ws/2/artist/|https://musicbrainz.org/doc/MusicBrainz_API|2|json|contact

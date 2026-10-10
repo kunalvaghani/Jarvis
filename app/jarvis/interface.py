@@ -32,7 +32,8 @@ def build_interface(app):
     except tk.TclError:
         root.configure(bg=BG)
     root.geometry(f'{round(402*scale)}x{round(40*scale)}+{(root.winfo_screenwidth()-round(402*scale))//2}+0')
-    app.island_canvas = tk.Canvas(root, width=208, height=52, bg=KEY, highlightthickness=0, cursor='hand2', takefocus=True)
+    app.island_canvas = tk.Canvas(root, width=208, height=52, bg=KEY, highlightthickness=0, borderwidth=0,
+                                  relief='flat', cursor='hand2', takefocus=True)
     app.island_canvas.pack(fill='both', expand=True)
     app.island = Island(app, app.island_canvas)
     app.island_canvas.bind('<Return>', app.toggle_panel)

@@ -18,11 +18,13 @@ Start with the [application guide](../README.md) and [project structure](project
 
 ## Voice and interface
 
+- [UI edge finish and animation pacing — 2026-10-10 IST](ui-smoothness.md)
 - [Jarvis Dynamic Island](dynamic-island.md)
 - [Sharp display, live progress and commands during speech](hd-display-and-voice-input.md)
 - [Historical Jarvis HUD](hud-interface.md)
 - [Jarvis's own cursor and physical clicks](independent-cursor.md)
 - [Interactive Jarvis island](interactive-island.md)
+- [Long-term memory, API repair and bad-weather alerts (2026-10-10)](memory-apis-alerts.md)
 - [WhatsApp automation, incoming calls and voice approvals (2026-10-10)](whatsapp.md)
 - [Full YouTube and Spotify control with the island media card (2026-10-10)](media-player.md)
 - [YouTube and native Spotify controls](media-controls.md)

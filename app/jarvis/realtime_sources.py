@@ -16,6 +16,14 @@ import requests
 from .realtime_catalog import CATALOG
 
 MAX_BYTES = 1024 * 1024
+# Stable public instances used when no self-hosted endpoint is configured (OSRM's demo server).
+PUBLIC_DEFAULTS = {'osrm': 'https://router.project-osrm.org'}
+# Slow but healthy providers get a longer bounded read (seconds).
+SLOW = {'overpass': 18, 'gdelt': 15, 'listenbrainz': 12, 'cover_art': 12, 'dbpedia': 10, 'semantic_scholar': 8,
+        'worldbank': 10, 'countries': 10, 'epic': 10, 'power': 12, 'spacex': 10}
+# When a provider is down or rate limited, an equivalent public source answers instead (labelled as such).
+FALLBACK = {'worldtime': 'timeapi', 'semantic_scholar': 'openalex', 'gdelt': 'google_news', 'bluesky': 'google_news',
+            'listenbrainz': 'musicbrainz'}
 USER_AGENT = 'JarvisPersonalRealtime/1.0 (local personal assistant)'
 
 
@@ -80,7 +88,7 @@ def endpoint(provider, args, options, credential_base=None):
         raise ValueError('Invalid market symbol')
     params, headers, subscription = {}, {}, None
     if provider.requirement in {'self-host', 'feed'}:
-        url = options.get('endpoints', {}).get(key, '')
+        url = options.get('endpoints', {}).get(key, '') or PUBLIC_DEFAULTS.get(key, '')
         parts = urlsplit(url)
         if not url or parts.scheme not in {'http', 'https'} or not parts.hostname or parts.username or parts.password:
             raise ValueError('Configure realtime.endpoints.' + key + ' for your own service/feed')
@@ -105,8 +113,12 @@ def endpoint(provider, args, options, credential_base=None):
         raise ValueError('Configure realtime.contact with your application contact for this provider')
     if provider.requirement == 'free-key':
         token=countries_key(credential_base)
-        if not token: raise ValueError('REST Countries v5 needs a key in ignored secrets/realtime.json (countries_api_key) or JARVIS_REALTIME_COUNTRIES_KEY. No account is created or paid access used.')
-        headers['Authorization']='Bearer '+token
+        if token:
+            headers['Authorization']='Bearer '+token
+        else:
+            # Keyless: the World Bank country list (name, capital, region, income level, coordinates).
+            if not identity: raise ValueError('Country name required')
+            return 'https://api.worldbank.org/v2/country', {'format': 'json', 'per_page': 400}, headers, None
     if key in {'weather', 'air', 'marine', 'flood', 'met', 'nws', 'sunrise', 'power', 'adsblol', 'overpass'}:
         lat, lon = coordinates(args)
         if key == 'met': params = {'lat': round(lat, 4), 'lon': round(lon, 4)}
@@ -191,6 +203,7 @@ def endpoint(provider, args, options, credential_base=None):
         lat, lon = coordinates(args)
         params = {'lamin': max(-90, lat-1), 'lamax': min(90, lat+1), 'lomin': max(-180, lon-1), 'lomax': min(180, lon+1)}
     elif key == 'mbta': params = {'page[limit]': 5}
+    elif key == 'spacex': params = {'limit': 5, 'mode': 'list', **({'search': q} if q and q != 'climate' else {})}
     elif key == 'eonet': params = {'status': 'open', 'days': 7, 'limit': 30}
     elif key == 'celestrak': params = {'GROUP': 'stations', 'FORMAT': 'json'}
     elif key == 'spaceflight_news': params = {'limit': 5, **({'search': q} if q else {})}
@@ -254,6 +267,16 @@ class Sources:
         self.lock = threading.RLock()
 
     def fetch(self, key, args=None, cancelled=lambda: False):
+        row = self._fetch(key, args, cancelled)
+        backup = FALLBACK.get(key)
+        if row.get('status') == 'unavailable' and backup and not cancelled():
+            alternative = self._fetch(backup, args, cancelled)
+            if alternative.get('status') == 'ok':
+                return {**alternative, 'fallback_for': key,
+                        'fallback_reason': row.get('detail', '') or 'primary provider unavailable'}
+        return row
+
+    def _fetch(self, key, args=None, cancelled=lambda: False):
         if key not in CATALOG: raise ValueError('Only registered green providers are allowed')
         args = args or {}
         if not isinstance(args, dict) or len(json.dumps(args)) > 2000: raise ValueError('Invalid bounded API arguments')
@@ -279,7 +302,13 @@ class Sources:
             if cancelled(): return self.failure(provider, 'cancelled')
             if isinstance(data,dict) and (data.get('error') or data.get('errors') or data.get('success') is False or (provider.key=='food' and data.get('status')==0)):
                 raise ValueError('Provider reports an error or no matching record')
-            if provider.key == 'countries':
+            if provider.key == 'countries' and isinstance(data, list) and len(data) == 2 and isinstance(data[1], list):
+                wanted = str(args.get('id', args.get('query', ''))).strip().casefold()
+                data = [row for row in data[1] if isinstance(row, dict) and wanted and
+                        (wanted == str(row.get('name', '')).casefold() or wanted in {str(row.get('iso2Code', '')).casefold(),
+                                                                                      str(row.get('id', '')).casefold()})][:5]
+                if not data: raise ValueError('No matching country')
+            elif provider.key == 'countries':
                 payload = data.get('data') if isinstance(data, dict) else None
                 objects = payload.get('objects') if isinstance(payload, dict) else None
                 if not isinstance(objects, list) or not all(isinstance(x, dict) for x in objects):
@@ -299,9 +328,44 @@ class Sources:
                 while len(self.cache) > 96: self.cache.popitem(last=False)
             return row
         except Exception as exc:
+            if getattr(getattr(exc, 'response', None), 'status_code', None) == 404:
+                # The service answered; it just has no record for this lookup (e.g. an unknown word).
+                return self.failure(provider, 'not_found', 'No matching record')
             failure = self.failure(provider, 'unavailable', read_error(exc))
             if cached: failure.update(data=cached['data'], fetched_at=cached['fetched_at'], stale=True)
             return failure
+
+    def _get(self, provider, url, params, headers, read_seconds, cancelled):
+        """One GET, retried once after a dropped connection, a 5xx, or a 429 asking for at most 6 seconds."""
+        for attempt in range(2):
+            try:
+                response = self.http.get(url, params=params, headers=headers, timeout=(3, read_seconds), stream=True,
+                                         allow_redirects=False)
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt or cancelled():
+                    raise
+                time.sleep(1)
+                continue
+            status = getattr(response, 'status_code', 200)
+            if attempt == 0 and not cancelled() and isinstance(status, int):
+                wait = None
+                if status in {500, 502, 503, 504, 525}:
+                    wait = 1.
+                elif status == 429:
+                    try:
+                        asked = float((getattr(response, 'headers', {}) or {}).get('Retry-After', 'x'))
+                    except (TypeError, ValueError):
+                        asked = None
+                    if asked is None and provider.key == 'gdelt':
+                        asked = 5.5  # GDELT asks for one request every 5 seconds in its body.
+                    if asked is not None and 0 <= asked <= 6:
+                        wait = asked
+                if wait is not None:
+                    response.close()
+                    time.sleep(wait)
+                    continue
+            return response
+        return response
 
     def failure(self, provider, status, detail=''):
         return {'provider':provider.key, 'name':provider.name, 'status':status, 'detail':detail,
@@ -312,12 +376,15 @@ class Sources:
             import websocket
             from urllib.parse import urlencode
             target = url + ('?'+urlencode(params) if params else '')
-            connection = websocket.create_connection(target, timeout=2)
+            connection = websocket.create_connection(target, timeout=5)
             try:
                 if subscription: connection.send(json.dumps(subscription))
-                samples, deadline = [], time.monotonic()+5
+                samples, deadline = [], time.monotonic()+8
                 while not cancelled() and time.monotonic() < deadline and len(samples) < 3:
-                    payload = connection.recv()
+                    try:
+                        payload = connection.recv()
+                    except websocket.WebSocketTimeoutException:
+                        continue
                     if len(payload) > 64000: raise ValueError('Stream message exceeded limit')
                     message = json.loads(payload)
                     # Subscription acknowledgements and heartbeats aren't market data.
@@ -329,14 +396,15 @@ class Sources:
         # A few providers redirect official reads to canonical feed/data hosts.
         # Each hop is bounded and checked; arbitrary redirects are never followed.
         allowed = {
-            'countries': {'api.restcountries.com'},
+            'countries': {'api.restcountries.com', 'api.worldbank.org'},
             'cover_art': {'coverartarchive.org','archive.org'},
             'google_news': {'news.google.com'},
             'wikipedia': {'en.wikipedia.org'},
         }.get(provider.key, {urlsplit(url).hostname})
         response = None
+        read_seconds = SLOW.get(provider.key, 5)
         for hop in range(3):
-            response = self.http.get(url, params=params, headers=headers, timeout=(3,5), stream=True, allow_redirects=False)
+            response = self._get(provider, url, params, headers, read_seconds, cancelled)
             if response.status_code not in {301,302,303,307,308}: break
             target=urljoin(url,response.headers.get('Location','')); parsed=urlsplit(target)
             response.close()
@@ -360,7 +428,7 @@ class Sources:
                     self.next[provider.key] = self.clock()+max(provider.interval, min(3600, max(0, retry_after)))
             response.raise_for_status()
             if response.status_code != 200: raise ValueError('Unexpected response/redirect: '+str(response.status_code))
-            raw, deadline = bytearray(), time.monotonic()+8
+            raw, deadline = bytearray(), time.monotonic()+max(8, read_seconds+3)
             if provider.mode == 'sse':
                 events = []
                 for line in response.iter_lines(chunk_size=256):

@@ -57,6 +57,11 @@ class QuestionClient:
             observations = [] if request.get('conversation_context') or request.get('memory_retrieval_done') else memory.recall(request.get("question", ""))
             if observations:
                 request = {**request, "memory_context": observations}
+            curator = getattr(memory, "curator", None)
+            if curator is not None and getattr(curator, "enabled", False):
+                block = curator.context(request.get("question", ""))
+                if block:
+                    request = {**request, "memory_facts": block}
             if hasattr(memory, "task_context"):
                 catalogue = memory.task_context(request.get("question", ""))
                 if any(catalogue.get(key) for key in ("projects", "apps", "tools")):

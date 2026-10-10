@@ -66,6 +66,7 @@ class App:
         self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
         if not self.config.get('_ui_verification', False):
             self.actions.start_whatsapp_watch()
+            self.actions.start_background_memory()
         root.protocol("WM_DELETE_WINDOW", self.close)
         self.panel.withdraw()
         root.after(40, self.animate_island)
@@ -208,14 +209,26 @@ class App:
 
     @ui_loop(40)
     def animate_island(self):
+        started = time.monotonic()
         listening = self.listener is not None and self.listener.thread.is_alive()
         speaking = self.speech.speaking.is_set()
         status = "WORKING" if self.actions.task_active or self.island.activity.active else "THINKING" if self.ui_activity else "SPEAKING" if speaking else "LISTENING" if listening else "STANDBY"
-        self.hud_status.set(status)
+        if self.hud_status.get() != status:
+            self.hud_status.set(status)
         self.island.tick(status, self.level["value"], speaking=speaking, listening=listening)
         self.desk.tick(self.island.surface_open and not self.capture_count and self.panel.state()!='withdrawn')
         moving = any(abs(a-b) > .5 for a,b in zip(self.island.motion.size,self.island.motion.target))
-        self.root.after(16 if moving else 33, self.animate_island)
+        from jarvis.island import FrameClock
+        if not hasattr(self, 'frame_clock'):
+            self.frame_clock = FrameClock()
+            from jarvis.display import refresh_rate
+            self.animation_fps = refresh_rate(self.root)
+        reduced = bool(self.config.get('ui', {}).get('reduced_motion', False))
+        media_active = self.island.media is not None and started < self.island.media_until
+        animated = not reduced and (moving or status != 'STANDBY' or media_active or
+            (self.island.surface_open and self.desk.view == 'Games'))
+        fps = self.animation_fps if animated else 20
+        self.root.after(self.frame_clock.delay(started, time.monotonic(), fps), self.animate_island)
 
     def toggle_panel(self, _event=None):
         if not self.island.expanded:
@@ -554,6 +567,7 @@ class App:
 
     def close(self):
         self.closing = True
+        self.island.close()
         self.desk.close()
         if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):
             (BASE / ".jarvis-runtime" / "stop").touch()

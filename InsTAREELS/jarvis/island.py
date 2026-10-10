@@ -12,13 +12,14 @@ KEY = "#ff00ff"
 BLACK = "#000000"
 ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
-SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp")}
+SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp"),
+           "weather": ("#f5a623", "Weather")}
 WORKING = {"searching", "loading", "drafting", "sending", "choose"}  # Shimmer bar and pulsing meter.
 MEDIA_HEIGHT = 126
 MEDIA_PHASES = {"searching": "Searching", "loading": "Starting", "playing": "Playing", "paused": "Paused",
                 "error": "Couldn't play", "control": "", "choose": "Choose who you mean", "drafting": "Drafting",
                 "preview": "Waiting for your approval", "sending": "Sending", "sent": "Done", "call": "Incoming call",
-                "message": "New message"}
+                "message": "New message", "alert": "Weather alert", "notice": "Heads up"}
 
 
 def clock_text(seconds):
@@ -76,54 +77,148 @@ def wrap(draw, text, face, width, lines=3):
 
 def fit_text(draw, value, face, width):
     value = ' '.join(str(value).split())[:200]
+    return _fit_text(value, face, width)
+
+
+@lru_cache(maxsize=256)
+def _fit_text(value, face, width):
     if width <= 0:
         return ''
-    if draw.textlength(value, font=face) <= width:
+    if face.getlength(value) <= width:
         return value
     low, high, best = 0, len(value), 0
     while low <= high:
         middle = (low+high)//2
-        if draw.textlength(value[:middle] + '…', font=face) <= width:
+        if face.getlength(value[:middle] + '…') <= width:
             best, low = middle, middle+1
         else:
             high = middle-1
     return value[:best].rstrip() + '…' if best else ''
 
 
+@lru_cache(maxsize=256)
+def _text_tile(value, size, color, bold):
+    face = font(size, bold)
+    bounds = face.getbbox(value)
+    tile = Image.new('RGBA', (max(1, math.ceil(face.getlength(value)) + 4), max(1, bounds[3] + 4)))
+    ImageDraw.Draw(tile).text((0, 0), value, font=face, fill=color)
+    return tile
+
+
+@lru_cache(maxsize=64)
+def _curve_tiles(shoulder, radius):
+    """Only supersample the small curves, never the full tall workspace."""
+    factor = 4
+    def tile(width, points):
+        result = Image.new('L', (width * factor, radius * factor))
+        ImageDraw.Draw(result).polygon([(round(x * factor), round(y * factor)) for x, y in points], fill=255)
+        return result.resize((width, radius), Image.Resampling.LANCZOS)
+    angles = [i * math.pi / 128 for i in range(65)]
+    top = tile(shoulder, [(0, 0), (shoulder, 0), (shoulder, radius)] +
+               [(shoulder * math.sin(a), radius * (1 - math.cos(a))) for a in reversed(angles)])
+    bottom = tile(radius, [(0, 0), (radius, 0), (radius, radius)] +
+                  [(radius - radius * math.cos(a), radius * math.sin(a)) for a in reversed(angles)])
+    return top, top.transpose(Image.Transpose.FLIP_LEFT_RIGHT), bottom, bottom.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+
+
+@lru_cache(maxsize=8)
+def contour_mask(pixels_w, pixels_h, shoulder, radius):
+    mask = Image.new('L', (pixels_w, pixels_h))
+    draw = ImageDraw.Draw(mask)
+    # Exclusive right/bottom bounds: an inclusive wall used to leave a 1px tail.
+    draw.rectangle((shoulder, 0, pixels_w - shoulder - 1, pixels_h - radius - 1), fill=255)
+    draw.rectangle((shoulder + radius, pixels_h - radius, pixels_w - shoulder - radius - 1, pixels_h - 1), fill=255)
+    top_left, top_right, bottom_left, bottom_right = _curve_tiles(shoulder, radius)
+    mask.paste(top_left, (0, 0))
+    mask.paste(top_right, (pixels_w - shoulder, 0))
+    mask.paste(bottom_left, (shoulder, pixels_h - radius))
+    mask.paste(bottom_right, (pixels_w - shoulder - radius, pixels_h - radius))
+    return mask
+
+
+def status_amplitude(phase, index, level):
+    return 2 + (5 + min(100, max(0, float(level)))*.055) * abs(math.sin(phase*2.8 + index*.65))
+
+
+def media_amplitude(state, phase, index):
+    if state in {'playing','call','alert'}:
+        return 3 + 9*abs(math.sin(phase*3.1 + index*1.3))*(.6 + .4*abs(math.sin(phase*1.7 + index)))
+    if state in {'preview','message'}:
+        return 2 + 3*(.5 + .5*math.sin(phase*2.2 - index*.7))
+    if state in WORKING:
+        return 3 + 4*(.5 + .5*math.sin(phase*5 - index*.9))
+    return 2
+
+
+def animate_frame(base, width, height, status, phase, level, scale, media=None):
+    """Redraw the small moving regions; reuse all text, artwork and static glass."""
+    image = base.copy()
+    sampling = scale*2
+    def patch(bounds, fill, paint):
+        left, top, right, bottom = bounds
+        pixels = tuple(round(value*scale) for value in bounds)
+        tile = Image.new('RGB', (round((right-left)*sampling), round((bottom-top)*sampling)), fill)
+        draw = ImageDraw.Draw(tile)
+        def rectangle(box, radius, color):
+            draw.rounded_rectangle(tuple(round(value*sampling) for value in box),radius=round(radius*sampling),fill=color)
+        paint(rectangle, left, top)
+        tile = tile.resize((pixels[2]-pixels[0],pixels[3]-pixels[1]),Image.Resampling.LANCZOS)
+        image.paste(tile,(pixels[0],pixels[1]))
+    if status != 'STANDBY':
+        color = ACCENTS.get(status,ACCENTS['STANDBY'])
+        def header(rectangle,left,top):
+            for index in range(9):
+                amplitude = status_amplitude(phase,index,level)
+                x = width-116+index*4-left
+                rectangle((x,21-amplitude-top,x+2,21+amplitude-top),1,color)
+        patch((width-118,5,width-80,37),BLACK,header)
+    if media:
+        state = media.get('phase','playing')
+        accent = SERVICE.get(media.get('service'),('#b9c9ff','Media'))[0]
+        right, top, bottom = width-44,46,height-10
+        meter_x = right-58
+        def meter(rectangle,left,y):
+            for index in range(5):
+                amplitude = media_amplitude(state,phase,index)
+                x = meter_x+8+index*8-left
+                rectangle((x,top+28-amplitude-y,x+4,top+28+amplitude-y),2,accent)
+        patch((meter_x+6,top+14,right-12,top+42),'#111216',meter)
+        bar_x1, bar_x2, bar_y = 44+10+54+14,right-14,bottom-10
+        def progress(rectangle,left,y):
+            rectangle((bar_x1-left,bar_y-y,bar_x2-left,bar_y+4-y),2,'#2a2b32')
+            if state in WORKING:
+                sweep = (phase*.6)%1.4-.2
+                start = bar_x1+(bar_x2-bar_x1)*max(0.,sweep)
+                end = bar_x1+(bar_x2-bar_x1)*min(1.,sweep+.25)
+                if end>start:
+                    rectangle((start-left,bar_y-y,end-left,bar_y+4-y),2,accent)
+            else:
+                position,duration = media_progress(media)
+                if duration:
+                    fill = bar_x1+(bar_x2-bar_x1)*min(1.,position/duration)
+                    rectangle((bar_x1-left,bar_y-y,max(bar_x1+4,fill)-left,bar_y+4-y),2,accent)
+                    rectangle((fill-4-left,bar_y-2-y,fill+4-left,bar_y+6-y),4,'#ffffff')
+        patch((bar_x1-5,bar_y-3,bar_x2+5,bar_y+7),'#111216',progress)
+    return image
+
+
 def render_island(width=208, height=52, status="STANDBY", phase=0, message="", level=0, expanded=False,
-                  detail='', scale=1., media=None):
-    width, height = max(170, int(width)), max(40, int(height))
+                  detail='', scale=1., media=None, smooth_edges=False, edge_threshold=128):
+    width, height = max(170, float(width)), max(40, float(height))
     scale = min(3., max(1., float(scale))) if math.isfinite(float(scale)) else 1.
     sampling = scale * 2
     band_height = min(height, 128)
     image = Image.new("RGB", (round(width*sampling), round(band_height*sampling)), BLACK)
-    silhouette = Image.new('L',(round(width*sampling),round(height*sampling)))
     draw = ImageDraw.Draw(image)
     def rectangle(bounds, radius, **kwargs):
         if 'width' in kwargs:
             kwargs['width'] = max(1, round(kwargs['width'] * sampling))
         draw.rounded_rectangle(tuple(round(x*sampling) for x in bounds), radius=round(radius*sampling), **kwargs)
     def text(x, y, value, size, color, bold=False):
-        draw.text((round(x*sampling), round(y*sampling)), value, font=font(round(size*sampling), bold), fill=color)
+        tile = _text_tile(str(value), round(size*sampling), color, bold)
+        image.paste(tile, (round(x*sampling), round(y*sampling)), tile)
     # Concave shoulders attach to the screen edge; only the bottom is convex.
     shoulder, radius = 32, min(32, height/2)
-    points = [(0, 0), (width, 0)]
-    for i in range(1, 25):
-        angle = i*math.pi/48
-        points.append((width-shoulder*math.sin(angle), radius*(1-math.cos(angle))))
-    points.append((width-shoulder, height-radius))
-    for i in range(1, 25):
-        angle = i*math.pi/48
-        points.append((width-shoulder-radius+radius*math.cos(angle), height-radius+radius*math.sin(angle)))
-    points.append((shoulder+radius, height))
-    for i in range(1, 25):
-        angle = i*math.pi/48
-        points.append((shoulder+radius-radius*math.sin(angle), height-radius+radius*math.cos(angle)))
-    points.append((shoulder, radius))
-    for i in range(24, -1, -1):
-        angle = i*math.pi/48
-        points.append((shoulder*math.sin(angle), radius*(1-math.cos(angle))))
-    ImageDraw.Draw(silhouette).polygon([(round(x*sampling),round(y*sampling)) for x,y in points], fill=255)
     color = ACCENTS.get(status, ACCENTS["STANDBY"])
     y = 21
     rectangle((47, 10, 69, 32), radius=11, fill='#1d3e66')
@@ -135,11 +230,10 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
     if detail and width > 330:
         text(200, y-9, '·', 13, '#62626f')
         face = font(round(13*sampling))
-        text(215, y-9, fit_text(draw, detail, face, (width-292)*sampling), 13, '#dedee6')
+        text(215, y-9, fit_text(draw, detail, face, (width-340)*sampling), 13, '#dedee6')
     active = status != "STANDBY"
     for i in range(9 if active else 0):
-        amplitude = (2 + (5 + min(100, max(0, float(level)))*.055) *
-                     abs(math.sin(phase * 2.8 + i*.65))) if active else 2
+        amplitude = status_amplitude(phase,i,level)
         x = width-116+i*4
         rectangle((x, y-amplitude, x+2, y+amplitude), radius=1, fill=color)
     if expanded:
@@ -158,6 +252,14 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
         art = artwork(media.get("image", ""), round(side * sampling)) if media.get("image") else None
         if art:
             image.paste(art[0], (round(art_x * sampling), round(art_y * sampling)), art[1])
+        elif media.get("service") == "weather":
+            # Pulsing warning triangle.
+            glow = 2 * abs(math.sin(phase * 3))
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill="#3a2a10")
+            points = ((art_x + side / 2, art_y + 9 - glow), (art_x + side - 8 + glow, art_y + side - 11 + glow / 2),
+                      (art_x + 8 - glow, art_y + side - 11 + glow / 2))
+            draw.polygon([tuple(round(v * sampling) for v in p) for p in points], fill=accent)
+            text(art_x + side / 2 - 3, art_y + side / 2 - 11, "!", 20, "#2a1a00", True)
         elif media.get("service") == "whatsapp":
             # Contact avatar: initials on a soft green tile; it pulses while a call rings.
             ring = 3 * abs(math.sin(phase * 4)) if media.get("phase") == "call" else 0
@@ -174,7 +276,9 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
         # Service badge on the artwork corner.
         bx, by = art_x + side - 16, art_y + side - 16
-        if media.get("service") == "whatsapp":
+        if media.get("service") == "weather":
+            pass  # The triangle is the badge.
+        elif media.get("service") == "whatsapp":
             # Speech bubble with a handset, drawn as simple shapes.
             rectangle((bx, by, bx + 20, by + 20), radius=10, fill=accent)
             draw.polygon([tuple(round(v * sampling) for v in point) for point in
@@ -207,14 +311,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
              "#ff8a80" if state == "error" else accent)
         # Equalizer: live bars while playing, a gentle pulse while searching, flat when paused.
         for i in range(5):
-            if state in {"playing", "call"}:
-                amplitude = 3 + 9 * abs(math.sin(phase * 3.1 + i * 1.3)) * (0.6 + 0.4 * abs(math.sin(phase * 1.7 + i)))
-            elif state in {"preview", "message"}:
-                amplitude = 2 + 3 * (0.5 + 0.5 * math.sin(phase * 2.2 - i * 0.7))
-            elif state in WORKING:
-                amplitude = 3 + 4 * (0.5 + 0.5 * math.sin(phase * 5 - i * 0.9))
-            else:
-                amplitude = 2
+            amplitude = media_amplitude(state,phase,i)
             x = meter_x + 8 + i * 8
             rectangle((x, top + 28 - amplitude, x + 4, top + 28 + amplitude), radius=2, fill=accent)
         # Progress bar (or a moving shimmer while searching).
@@ -243,19 +340,15 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
     band = image.resize((pixels_w,round(band_height*scale)), Image.Resampling.LANCZOS)
     image = Image.new('RGB',(pixels_w,pixels_h),BLACK)
     image.paste(band,(0,0))
-    # Color-key transparency cannot represent fractional edge alpha; avoid pink fringes.
+    mask = contour_mask(pixels_w, pixels_h, round(shoulder*scale), round(radius*scale))
+    if smooth_edges:
+        output = image.convert('RGBA')
+        output.putalpha(mask)
+        return output
+    # With the native edge layer, only fully covered pixels belong to Tk. Other
+    # platforms retain the thresholded color-key fallback with the corrected shape.
     output = Image.new('RGB', image.size, KEY)
-    # Straight walls need no resampling. Only the four curved regions do.
-    mask = Image.new('L',image.size)
-    edge,corner = round(shoulder*scale),round(radius*scale)
-    ImageDraw.Draw(mask).rectangle((edge,0,pixels_w-edge,pixels_h-1),fill=255)
-    regions = ((0,0,edge,edge),(pixels_w-edge,0,pixels_w,edge),
-               (edge,pixels_h-corner,edge+corner,pixels_h),
-               (pixels_w-edge-corner,pixels_h-corner,pixels_w-edge,pixels_h))
-    for x1,y1,x2,y2 in regions:
-        patch = silhouette.crop((x1*2,y1*2,x2*2,y2*2)).resize((x2-x1,y2-y1),Image.Resampling.LANCZOS)
-        mask.paste(patch,(x1,y1))
-    mask = mask.point(lambda alpha: 255 if alpha >= 128 else 0)
+    mask = mask.point(lambda alpha: 255 if alpha >= edge_threshold else 0)
     output.paste(image, (0, 0), mask)
     return output
 
@@ -324,6 +417,24 @@ class Morph:
         return self.size
 
 
+class FrameClock:
+    """Deadline pacing: render cost is inside the frame budget, no catch-up bursts."""
+    def __init__(self):
+        self.deadline = None
+        self.period = None
+
+    def delay(self, started, finished, fps):
+        period = 1. / max(1., fps)
+        if self.deadline is None or self.period != period:
+            self.deadline = started + period
+            self.period = period
+        else:
+            self.deadline += period
+        if self.deadline <= finished:
+            self.deadline += (math.floor((finished - self.deadline) / period) + 1) * period
+        return max(1, math.ceil((self.deadline - finished) * 1000 - 1e-7))
+
+
 class Island:
     def __init__(self, app, canvas):
         self.app, self.canvas = app, canvas
@@ -342,6 +453,7 @@ class Island:
         self.last_geometry = None
         self.last_size = None
         self.background_key = None
+        self.static_key = None
         self.surface_open = False
         self.features_open = False
         self.focus_pending = False
@@ -349,6 +461,9 @@ class Island:
         self.stream_hidden = False
         self.stream_height = 0
         self.work_completion_pending = False
+        from .island_surface import EdgeSurface, AnimationTimer
+        self.edges = EdgeSurface(app.root)
+        self.animation_timer = AnimationTimer() if isinstance(app.root.winfo_id(), int) else None
         self.item = canvas.create_image(0, 0, anchor="nw")
         self.header_item = canvas.create_image(0, 0, anchor='nw')
         canvas.bind("<Enter>", lambda _e: self.set_hover(True))
@@ -408,7 +523,7 @@ class Island:
             self.media_until = time.monotonic() + {'searching': 40, 'loading': 40, 'playing': 10, 'paused': 6,
                                                    'control': 6, 'choose': 120, 'drafting': 90, 'preview': 180,
                                                    'sending': 30, 'sent': 8, 'call': 45, 'message': 15,
-                                                   'error': 8}.get(message.get('phase'), 6)
+                                                   'error': 8, 'alert': 45, 'notice': 20}.get(message.get('phase'), 6)
             self.last_frame = None
             return
         if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):
@@ -482,7 +597,7 @@ class Island:
         target, workspace, self.surface_open = self.layout_target(message, detail, status, max_width, max_height)
         self.motion.set_target(target, now)
         reduced = bool(app.config.get("ui", {}).get("reduced_motion", False))
-        width, height = (round(value) for value in self.motion.sample(now, reduced))
+        width, height = self.motion.sample(now, reduced)
         pixels_w, pixels_h = round(width*scale), round(height*scale)
         left = max(0, min(root.winfo_screenwidth()-pixels_w, round(self.anchor_x-pixels_w/2)))
         top = 0
@@ -500,27 +615,42 @@ class Island:
         media = self.media if self.media and now < self.media_until and height >= MEDIA_HEIGHT - 4 and not self.surface_open else None
         if media:
             phase = 0 if reduced else now  # The card animates even while Jarvis is otherwise idle.
-        frame_key = (width, height, status, message, detail, scale, round(phase*24), round(float(level)), self.surface_open,
-                     id(media), round(time.time()) if media else 0)
+        frame_key = (pixels_w, pixels_h, status, message, detail, scale, phase, round(float(level)), self.surface_open,
+                     id(media), round(time.time()) if media else 0, self.edges.active)
         if frame_key != self.last_frame:
-            geometry_key = (width,height,scale,self.surface_open)
+            geometry_key = (pixels_w,pixels_h,scale,self.surface_open,self.edges.active)
+            static_key = (geometry_key,status,detail,id(media),int(time.time()) if media else 0)
+            complex_art = bool(media and (media.get('service')=='weather' or
+                (media.get('service')=='whatsapp' and media.get('phase')=='call')))
+            compact = height <= 96 or bool(media)
             if height <= 96 or geometry_key != self.background_key or media:
-                self.preview_image = render_island(width, height, status, phase, '', level, self.surface_open, detail, scale, media)
-                self.background_image = self.preview_image.copy()
+                if static_key != self.static_key or complex_art:
+                    self.static_image = render_island(width,height,status,phase if complex_art else 0,'',
+                        level,self.surface_open,detail,scale,media,edge_threshold=255 if self.edges.active else 128)
+                    self.static_key = static_key
+                self.preview_image = (animate_frame(self.static_image,width,height,status,phase,level,scale,media)
+                                      if not complex_art else self.static_image)
+                self.background_image = self.preview_image
                 self.photo = ImageTk.PhotoImage(self.preview_image, master=root)
                 self.canvas.itemconfigure(self.item, image=self.photo)
                 self.canvas.itemconfigure(self.header_item,image='')
                 self.background_key = geometry_key
             else:
                 # A settled tall shell is static; redraw only its live top band.
-                header = render_island(width,96,status,phase,'',level,self.surface_open,detail,scale).crop(
-                    (0,0,pixels_w,round(44*scale)))
+                if static_key != self.static_key or self.static_image.height != round(44*scale):
+                    self.static_image = render_island(width,96,status,0,'',level,self.surface_open,detail,scale,
+                        edge_threshold=255 if self.edges.active else 128).crop((0,0,pixels_w,round(44*scale)))
+                    self.static_key = static_key
+                header = animate_frame(self.static_image,width,96,status,phase,level,scale)
                 self.header_photo = ImageTk.PhotoImage(header,master=root)
                 self.canvas.itemconfigure(self.header_item,image=self.header_photo)
-                self.preview_image = self.background_image.copy()
+                self.preview_image = self.background_image
                 self.preview_image.paste(header,(0,0))
             self.canvas.preview_image = self.preview_image
             self.last_frame = frame_key
+        mask = contour_mask(pixels_w, pixels_h, round(32*scale), round(min(32, height/2)*scale))
+        self.edges.present(mask, left, top, float(app.config.get('ui', {}).get('opacity', 1.)),
+                           root.state() != 'withdrawn' and not getattr(app, 'capture_count', 0))
         if self.surface_open and height >= 135 and not getattr(app, "capture_count", 0) and root.state() != "withdrawn":
             app.panel.present(width, height, workspace)
             if app.panel.state() == "withdrawn":
@@ -543,6 +673,11 @@ class Island:
                     app.preview.focus_set()
         else:
             app.panel.withdraw()
+
+    def close(self):
+        self.edges.close()
+        if self.animation_timer:
+            self.animation_timer.close()
 
 
 def export_preview(path):
