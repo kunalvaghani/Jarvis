@@ -259,6 +259,8 @@ class Models:
         if operation == 'gmail_request':
             return self.generate(options['planner'],
                 'Interpret only this user Gmail request. No tools, screenshots or external actions. '
+                'If the goal contains "Clarification question:" and "Your answer:", the answer completes the original '
+                'request: combine them (recipient, topic, wording) and do not ask the same question again. '
                 'Return the requested JSON. operation list searches message metadata; read reads bodies; '
                 'list_drafts searches drafts; read_draft reads a draft; draft creates a draft; update_draft edits an existing draft. '
                 'speak reads emails aloud; send sends a new email; send_draft sends an existing draft; delete_draft deletes a draft; '
@@ -364,7 +366,7 @@ class Models:
                 return plan(self.client, model, RULES.replace('Return only JSON.', '') + NATIVE_NEXT_PROMPT,
                     {k: request.get(k) for k in ('goal', 'screen', 'apps', 'completed', 'prior_task', 'tools',
                         'last_result', 'steps_left', 'failures', 'step_number', 'prompt_scaffold', 'images', 'plan_validation_error',
-                        'memory_context', 'live_app_context', 'skill_context', 'capability_context', 'realtime_context')}, options)
+                        'memory_context', 'live_app_context', 'skill_context', 'capability_context', 'realtime_context', 'conversation')}, options)
             return self.generate(model, prompt,
                 {k: request.get(k) for k in ('goal', 'screen', 'apps', 'completed', 'prior_task', 'tools',
                     'last_result', 'steps_left', 'failures', 'step_number', 'prompt_scaffold', 'images', 'plan_validation_error',

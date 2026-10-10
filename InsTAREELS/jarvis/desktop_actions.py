@@ -24,6 +24,9 @@ def validate_desktop_step(step):
     action = step["action"]
     if action == "fill_text" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
         raise ValueError("Text field entry requires exact text up to 10,000 characters.")
+    if action == "type_text" and (not isinstance(step.get("content"), str) or not step["content"].strip()
+                                  or len(step["content"]) > 10000):
+        raise ValueError("Typing requires the exact text, up to 10,000 characters.")
     if action == "shortcut":
         shortcut_key(step["value"])
     if action == "scroll" and step["value"].casefold() not in {"up", "down", "left", "right"}:

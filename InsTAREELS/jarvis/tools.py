@@ -28,7 +28,8 @@ SPECS = (
     ToolSpec("media_search", "browser", "Search YouTube or the native Spotify app; does not start playback."),
     ToolSpec("media_control", "desktop", "Control foreground YouTube or native Spotify using fresh accessible controls. Set platform youtube or spotify. YouTube: play, pause, mute, unmute, fullscreen, exit_fullscreen, captions, captions_on/off, seek_10/-10, position_0..100, volume_0..100/up/down, next/previous, speed_up/down, next/previous_chapter, next/previous_frame (paused), restart, theater, miniplayer, status. Spotify: play/pause/next/previous/status, seek_seconds, shuffle_on/off, repeat_one/all/off, volume_0..100/up/down, mute/unmute; UI: queue, library, playlists, artists, albums, podcasts, home, now_playing, liked_songs, lyrics, like, add_queue. Named menus/select/fill_text cover other exposed controls."),
     ToolSpec("select", "desktop", "Activate a currently visible enabled control after checking its identity."),
-    ToolSpec("fill_text", "desktop", "Replace a named visible Edit field with exact content; does not submit."),
+    ToolSpec("fill_text", "desktop", "Replace a named visible Edit field with exact content; does not submit. value = the field's visible name exactly as listed in screen fields (for example Search), content = the exact text to enter."),
+    ToolSpec("type_text", "desktop", "Type the user's exact words with the keyboard into the focused window, for editors whose text area is not a listed field (for example Notepad or Word). value = the window title, content = the exact text from the request. Does not save."),
     ToolSpec("scroll", "desktop", "Scroll the current accessible window one page up, down, left or right."),
     ToolSpec("shortcut", "desktop", "Press an allowed shortcut in the current checked window."),
     ToolSpec("open_menu", "desktop", "Expand or invoke a named visible menu or dropdown, then observe its items."),
@@ -76,6 +77,9 @@ class ToolRegistry:
             loaded = loaded if isinstance(loaded, set) else set()
             selected = {row['action'] for row in self.search(goal)} | loaded | {'tool_search', 'toolkit_status'}
             rows=[row for row in rows if row['action'] not in KIT_TOOLS or row['action'] in selected]
+            from .capabilities import relevant_tool
+            # Tools the ranking chose for this request (including skill-guided ones) always stay.
+            rows=[row for row in rows if row['action'] in selected or relevant_tool(row['action'], goal)]
         from .repo_tools import definitions
         from .utility_profiles import decorate
         return decorate(rows)+definitions(self.actions,goal or '.',6)
@@ -151,7 +155,7 @@ class ToolRegistry:
         elif name in KIT_TOOLS:
             from .toolkits import execute
             evidence = execute(self.actions, step, cancelled)
-        elif name in CONTROL_ACTIONS or name in {"shortcut", "scroll"}:
+        elif name in CONTROL_ACTIONS or name in {"shortcut", "scroll", "type_text"}:
             if activate is None:
                 raise ValueError("Selection requires a freshly checked visible control.")
             evidence = activate()

@@ -26,7 +26,8 @@ def parse_media(text):
         if match:
             platform, phrase = match.groups()
         else:
-            platform, phrase = ('youtube', low) if re.search(r'\bvideo\b', low) else ('', '')
+            # Only the YouTube player has captions.
+            platform, phrase = ('youtube', low) if re.search(r'\bvideo\b|caption|subtitle', low) else ('', '')
     else:
         phrase, platform = match.groups()
     phrase = re.sub(r'\b(?:the |video |video$)', '', phrase).strip()

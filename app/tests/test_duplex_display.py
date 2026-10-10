@@ -138,7 +138,7 @@ class DuplexDisplayTests(unittest.TestCase):
         self.assertEqual(sent, [])
         speech.process.kill.assert_not_called()
 
-    def test_question_does_not_supersede_running_task_but_new_task_does(self):
+    def test_question_and_new_task_never_supersede_running_task(self):
         with tempfile.TemporaryDirectory() as tmp:
             actions = Actions({'files_root': 'files', 'apps': {}}, tmp, Mock())
             actions.task_active = True
@@ -149,8 +149,9 @@ class DuplexDisplayTests(unittest.TestCase):
                 self.assertFalse(actions.superseded_generations)
                 actions.knowledge.submit.assert_called_once_with('what time is it', False)
                 actions.submit(Command('task', 'open calculator'))
-                self.assertEqual(actions.generation, 1)
-                self.assertIn(0, actions.superseded_generations)
+                self.assertEqual(actions.generation, 0)  # Queued behind the running task.
+                self.assertFalse(actions.superseded_generations)
+                self.assertEqual([c.value for _, c in actions.pending_tasks], ['open calculator'])
             finally:
                 actions.close()
 

@@ -170,7 +170,7 @@ class CommandCleanup:
     def clean(self, text, engine, cancelled=lambda: False):
         if (not self.options["enabled"] or cancelled() or not text
                 or len(text) > self.options["max_characters"] or STOP.search(text)
-                or engine.dictating or engine.done or engine.typed or engine.started_dictation
+                or engine.done
                 or engine.suppressed or (not engine.active and not WAKE.search(text))):
             return text
         alternative = allowed_edit(text)

@@ -15,6 +15,32 @@ def parsed(url):
     return url if hasattr(url, "scheme") and hasattr(url, "path") else urlsplit(str(url))
 
 
+def player_message(action, state):
+    """Short, speakable summary of the verified player state."""
+    def clock(seconds):
+        seconds = int(seconds or 0)
+        return "%d:%02d" % (seconds // 60, seconds % 60)
+    title = state.get("title") or "the video"
+    where = clock(state.get("position")) + " of " + clock(state.get("duration"))
+    if action == "status":
+        return ("Paused: " if state.get("paused") else "Playing: ") + title + ", at " + where + " on YouTube."
+    words = {"play": "Resumed", "pause": "Paused", "mute": "Muted", "unmute": "Unmuted", "restart": "Restarted",
+             "next": "Next video:", "previous": "Previous video:"}
+    if action in {"next", "previous"}:
+        return words[action] + " " + title + "."
+    if action.startswith("volume") or action.startswith("speed"):
+        return "YouTube volume %d%%, speed %gx." % (round((state.get("volume") or 0) * 100), state.get("speed") or 1)
+    return words.get(action, "Done") + " on YouTube."
+
+
+def reveal_controls(page):
+    """YouTube hides its control bar until the pointer moves over the player."""
+    try:
+        page.locator("#movie_player").hover(timeout=2000)
+    except Exception:
+        pass
+
+
 class Session:
     def __init__(self):
         self.driver = self.context = self.page = None
@@ -120,6 +146,39 @@ class Session:
         page.wait_for_function("() => {const v=document.querySelector('video');return v && !v.paused && v.readyState>=2 && !document.querySelector('.ad-showing')}", timeout=12000)
         return {**self.inspect(), "verified": True, "message": "Selected video identity and active playback verified: " + title[:160]}
 
+    def play_video(self, video_id):
+        """Open one exact video and verify real playback; skippable ads are skipped once each."""
+        if not isinstance(video_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
+            raise ValueError("A YouTube video ID is required.")
+        page = self.page
+        page.goto("https://www.youtube.com/watch?v=" + video_id, wait_until="domcontentloaded")
+        page.wait_for_url(lambda url: parse_qs(parsed(url).query).get("v") == [video_id], timeout=10000)
+        page.locator("video").first.wait_for(state="attached", timeout=15000)
+        deadline, skipped, nudged, state = time.monotonic() + 35, False, False, None
+        started = time.monotonic()
+        while time.monotonic() < deadline:
+            state = page.evaluate("""() => {const v=document.querySelector('video');
+                return v ? {playing: !v.paused && v.readyState >= 2, ad: !!document.querySelector('.ad-showing'),
+                            position: v.currentTime, duration: v.duration, paused: v.paused} : null}""")
+            if state and state["playing"] and not state["ad"]:
+                break
+            if state and state["ad"]:
+                skip = page.locator(".ytp-skip-ad-button:visible, .ytp-ad-skip-button-modern:visible, .ytp-ad-skip-button:visible")
+                if skip.count():
+                    cursor_click(skip.first, page)
+                    skipped = True
+            elif state and state["paused"] and not nudged and time.monotonic() - started > 3:
+                # Autoplay can be held back by the page; one play request is the user's intent.
+                page.locator("video").first.evaluate("async v => { try { await v.play() } catch (e) {} }")
+                nudged = True
+            time.sleep(.4)
+        else:
+            raise ValueError("The video opened but playback did not start" +
+                             (" (an unskippable ad is still playing)" if state and state.get("ad") else "") + "; nothing was replayed.")
+        title = page.title().removesuffix(" - YouTube")
+        return {**self.inspect(), "verified": True, "video_id": video_id, "state": state, "ad_skipped": skipped,
+                "message": "Playing " + title[:160] + " (video identity and playback verified)."}
+
     def control(self, action):
         page = self.page
         if urlsplit(page.url).hostname not in {"youtube.com", "www.youtube.com"}:
@@ -150,6 +209,7 @@ class Session:
             expected["volume" if prop == "volume" else "speed"] = target
             video.evaluate("(v,p) => v." + prop + "=p", target)
         elif action in {"fullscreen", "exit_fullscreen", "theater", "default_view", "miniplayer"}:
+            reveal_controls(page)
             if action in {"fullscreen", "exit_fullscreen"}:
                 desired = action == "fullscreen"
                 if bool(page.evaluate("!!document.fullscreenElement")) != desired:
@@ -164,14 +224,31 @@ class Session:
                 cursor_click(page.locator(".ytp-miniplayer-button:visible"),page)
                 page.locator("ytd-miniplayer[active]").wait_for(state="visible")
         elif action in {"next", "previous"}:
-            old = page.url
-            cursor_click(page.locator(".ytp-next-button:visible" if action == "next" else ".ytp-prev-button:visible"),page)
-            page.wait_for_url(lambda url: parsed(url).geturl() != old)
+            old, old_title = page.url, page.title()
+            reveal_controls(page)
+            button = page.locator(".ytp-next-button:visible" if action == "next" else ".ytp-prev-button:visible")
+            if button.count():
+                cursor_click(button.first, page)
+            elif action == "next":
+                page.keyboard.press("Shift+N")  # YouTube's own "next video" shortcut.
+            else:
+                # Outside a playlist YouTube's "previous" is the previous watched video.
+                page.go_back(wait_until="domcontentloaded")
+                if "/watch" not in page.url:
+                    page.go_forward(wait_until="domcontentloaded")
+                    raise ValueError("There is no previous video in this session.")
+            page.wait_for_url(lambda url: parsed(url).geturl() != old, timeout=10000)
+            # YouTube swaps videos in place; wait for the new title and metadata before reading state.
+            page.wait_for_function("t => document.title && document.title !== t", arg=old_title, timeout=10000)
+            page.wait_for_function("() => { const v = document.querySelector('video'); return v && v.readyState >= 1 }",
+                                   timeout=10000)
+            video = page.locator("video").first
         elif action in {"next_frame", "previous_frame"}:
             if not video.evaluate("v => v.paused"):
                 raise ValueError("Frame stepping requires a paused video.")
             video.press("." if action == "next_frame" else ",")
         elif action in {"captions", "captions_on", "captions_off"}:
+            reveal_controls(page)
             button = page.locator(".ytp-subtitles-button:visible")
             if button.count() != 1:
                 raise ValueError("No unique captions control is available.")
@@ -193,7 +270,10 @@ class Session:
                 raise ValueError("Player change was sent but its requested value was not verified.")
         if action in {"next_frame", "previous_frame"} and current["position"] == before["position"]:
             raise ValueError("Frame action was sent but position change was not observed.")
-        return {"verified": True, "state": current, "message": "YouTube player state observed: " + json.dumps(current)}
+        title = page.title()
+        if isinstance(title, str):  # Shown on the island media card.
+            current["title"] = re.sub(r"^\(\d+\) |\s*-\s*YouTube$", "", title)[:300]
+        return {"verified": True, "state": current, "message": player_message(action, current)}
 
     def perform(self, request):
         operation = request["operation"]
@@ -205,7 +285,7 @@ class Session:
         if operation == "reset" and self.page is not None and not self.page.is_closed():
             self.page.bring_to_front()
             return self.inspect()
-        if (request.get("new_task") and operation in {"navigate", "search"} and self.page is not None
+        if (request.get("new_task") and operation in {"navigate", "search", "play_video"} and self.page is not None
                 and (self.user_closed or self.page.is_closed()
                      or self.context and self.context.browser and not self.context.browser.is_connected())):
             self.close()
@@ -226,6 +306,9 @@ class Session:
             return {**self.inspect(), "message": "Opened requested website in Jarvis browser."}
         if operation == "search":
             return self.search(request["value"])
+        if operation == "play_video":
+            self.page.bring_to_front()
+            return self.play_video(request.get("video_id"))
         if operation == "select_video":
             return self.select_video(request["value"], request.get("position"))
         if operation == "control":

@@ -35,7 +35,7 @@ class ClarificationTests(unittest.TestCase):
         engine = Engine(self.actions.submit, Mock())
         with patch("jarvis.actions.os.startfile") as launch, patch("jarvis.coder.Coder.run") as coder, patch("jarvis.brain.time.sleep"):
             engine.feed(spoken, final=True)
-            _, command = self.actions.queue.get_nowait()
+            _, command, _ = self.actions.queue.get_nowait()
             result = self.actions.execute(command)
         self.assertIn("Finished", result)
         self.assertEqual((self.downloads / "JarvisTest.txt").read_text(), "hello kunal")
@@ -54,7 +54,7 @@ class ClarificationTests(unittest.TestCase):
         self.assertEqual(self.actions.task_state.snapshot()["status"], "paused")
         self.actions.submit(Command("ask", "Downloads"))
         self.actions.knowledge.cancel()  # No answer is sent to the knowledge worker.
-        _, reply = self.actions.queue.get_nowait()
+        _, reply, _ = self.actions.queue.get_nowait()
         self.assertEqual(reply.kind, "clarified_task")
         with patch("jarvis.brain.time.sleep"):
             self.actions.execute(reply)
@@ -70,7 +70,7 @@ class ClarificationTests(unittest.TestCase):
         engine = Engine(self.actions.submit, Mock())
         with patch('jarvis.codex_code.run', return_value='Codex completed') as codex, patch('jarvis.coder.Coder._run') as legacy:
             engine.feed('Jarvis create an app to monitor my health In folder testcodes folder', final=True)
-            _, command = self.actions.queue.get_nowait()
+            _, command, _ = self.actions.queue.get_nowait()
             self.assertEqual(self.actions.execute(command), 'Codex completed')
         codex.assert_called_once()
         self.assertEqual(codex.call_args.args[1], target.resolve())
@@ -121,7 +121,7 @@ class ClarificationTests(unittest.TestCase):
                 original = 'create an app to monitor my health in folder missing folder'
                 self.assertIn('waiting for your answer', self.actions.execute(Command('task', original)))
                 self.actions.submit(reply)
-                _, resumed = self.actions.queue.get_nowait()
+                _, resumed, _ = self.actions.queue.get_nowait()
                 self.assertEqual(resumed.kind, 'clarified_task')
                 self.assertEqual(self.actions.execute(resumed), 'Codex completed')
                 codex.assert_called_once()

@@ -1,5 +1,50 @@
 # Jarvis's independent cursor
 
+## Update — real clicks with Jarvis's own pointer (2026-10-10 IST)
+
+Jarvis now **physically clicks** wherever a task needs a click: buttons in apps, links and buttons in your own
+browser, custom controls and canvases. The cyan **J** cursor moves to the target and Jarvis taps it with its own
+pointer ([jarvis_pointer.py](../jarvis/jarvis_pointer.py)), using Windows touch injection, a separate input
+device. Your mouse buttons are never used.
+
+- **First choice for every click.** The pointer is the first click method for buttons, links, menus, tabs, list
+  items, check boxes and similar controls ([execution_adapters.py](../jarvis/execution_adapters.py)). Before
+  tapping, Jarvis checks that the control's centre point really belongs to that control in that window and is not
+  covered by another window. If not (covered, off-screen, too small), it falls back to the accessibility actions
+  described below, before any input.
+- **Targets without accessibility.** A point found by visual grounding with no accessible control (a canvas, a
+  game-like surface, an unlabeled image) is now tapped instead of refused
+  ([independent_cursor.py](../jarvis/independent_cursor.py)).
+- **Your mouse.** For compatibility with mouse-only apps, Windows moves its hidden mouse position to the tap.
+  Jarvis puts your pointer back where it was right after the tap (about 0.1 s) and keeps it visible. If you are
+  moving the mouse or holding a mouse button, Jarvis waits up to 1.5 s for a pause, and otherwise does not click.
+  The earlier statement below that the system pointer is "never moved" no longer holds for this path.
+- **Jarvis's own browser** keeps its existing Playwright clicks: real browser-level mouse events inside its own
+  Chrome profile, with the in-page cue. They never touch your pointer.
+- **Off switch.** `cursor.physical_clicks` in [config/config.json](../config/config.json) (default `true`).
+  Setting it to `false` restores the accessibility-only behaviour described below.
+- Clicks are never retried automatically after an uncertain outcome.
+
+### Live checks — 2026-10-10 IST
+
+- A custom web button (a plain element that only reacts to real clicks) in the user's regular Chrome was clicked
+  through Jarvis's real UI path by the `jarvis-pointer` provider: the page counted one click, and the mouse stayed at
+  the same position before and after.
+- A canvas with no accessible control was clicked through the visual-point path: one click counted, and the mouse
+  position was unchanged.
+- During development, a raw tap moved the hidden mouse position to the target; restoring it and a one-pixel nudge
+  returned the pointer to its exact position in a visible state. That restore is part of every tap.
+
+Regression on 2026-10-10 IST: **1,387 tests ran in 210.844 s, OK with one skipped class** (Docker's Linux
+engine unavailable) ([log](../artifacts/logs/pointer-regression.log)); `python -m jarvis.launcher --check`
+reports `ready`. Pointer and task-cancelling fixtures: [test_jarvis_pointer.py](../tests/test_jarvis_pointer.py).
+
+These checks covered the listed targets, not every app, game or account action. Apps running as administrator do
+not accept input from a normal-user Jarvis.
+
+---
+
+
 Implemented and checked **2026-10-08 IST**. When Jarvis activates a supported
 control, a cyan arrow marked **J** approaches it, activates it once, and disappears.
 The user's system pointer is never moved, hidden, restored or borrowed by this

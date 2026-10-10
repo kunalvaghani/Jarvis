@@ -69,7 +69,7 @@ class SpotifyTests(unittest.TestCase):
         }
         for spoken, action in expected.items():
             with self.subTest(spoken=spoken):
-                self.assertEqual(parse(spoken), Command("spotify_control", action))
+                self.assertEqual(parse(spoken), Command("spotify_control", action, "" if "spotify" in spoken.lower() else "auto"))
         self.assertEqual(parse("open playlist Focus on Spotify"), Command("spotify_open_playlist", "Focus"))
         self.assertEqual(parse("play what makes you beautiful on Spotify"),
                          Command("play_media", "what makes you beautiful", "spotify"))

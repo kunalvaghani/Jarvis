@@ -324,11 +324,13 @@ class LoopTests(unittest.TestCase):
             if operation == 'next_step':
                 self.assertEqual(data['step_number'], len(self.dispatched) + 1)
                 self.assertEqual(data['images'], [self.frames[-1]['image']])
-                if self.dispatched:
+                if len(self.dispatched) == 1:
                     self.assertEqual(data['prompt_scaffold']['last_dispatched']['value'], 'Settings')
+                if len(self.dispatched) == 2:
+                    # Fused verification: the planner judges the fresh state and finishes.
+                    self.assertTrue(data['last_result']['confirmed'])
+                    return {'done': True, 'question': '', 'steps': []}
                 return {'done': False, 'question': '', 'steps': [step('Settings' if not self.dispatched else 'General')]}
-            if operation == 'visual':
-                return {'summary': 'Fresh result', 'step_verified': True, 'goal_done': len(self.dispatched) == 2}
             if operation == 'verify':
                 return {'verified': True, 'reason': 'General settings visible'}
             self.fail('Unexpected operation: ' + operation)
@@ -357,13 +359,12 @@ class LoopTests(unittest.TestCase):
         self.assertTrue(all('image' not in frame for frame in self.frames))
         self.assertIsNone(self.brain.step_session)
 
-    def test_uncertain_action_does_not_plan_or_repeat_another_action(self):
-        self.brain.client.request.return_value = {'done': False, 'steps': [step()]}
+    def test_uncertain_click_is_replanned_but_never_repeated(self):
+        self.brain.client.request.return_value = {'done': False, 'steps': [step()], 'summary': 'Settings visible'}
         self.brain.dispatch.side_effect = TaskFailure('uncertain result', attempted=True)
-        with self.assertRaisesRegex(ValueError, 'last action may have taken effect'):
+        with self.assertRaisesRegex(ValueError, 'already failed'):
             self.brain.run('Show general settings in Notepad', lambda: False)
         self.assertEqual(self.brain.dispatch.call_count, 1)
-        self.assertEqual(self.brain.client.request.call_count, 1)
         self.assertEqual(self.brain.workflows.rows, {})
         self.assertIsNone(self.brain.step_session)
 

@@ -241,7 +241,7 @@ class DiscoveryTests(unittest.TestCase):
             self.assertEqual(result['configured_app_names'], 2)
             self.assertFalse(result['codex_plugin_credentials_exported'])
             self.assertEqual(result['desktop_execution']['priority'],
-                             ['ufo', 'windows-mcp', 'cua', 'open-computer-use', 'agent-s'])
+                             ['jarvis-pointer', 'ufo', 'windows-mcp', 'cua', 'open-computer-use', 'agent-s'])
             self.assertFalse(result['desktop_execution']['direct_execution'])
             actions._approve.assert_not_called()
             actions.execute.assert_not_called()

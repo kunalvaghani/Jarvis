@@ -24,6 +24,8 @@ class DecodeJob:
     rollover: bool = False
     playback: bool = False
     references: tuple = ()
+    write: bool = False  # Spoken while the push-to-write keys were held: typed, not a command.
+    session: int = 0
 
 
 class DecodeQueue:
@@ -86,7 +88,8 @@ class TranscriptAssembler:
 
 class Listener:
     def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None,
-                 playback=None, input_filter=None, references=None, command_cleanup=None):
+                 playback=None, input_filter=None, references=None, command_cleanup=None,
+                 push_to_write=None, writer=None):
         self.model_path, self.device = Path(model_path), device
         self.engine, self.report = engine, report
         self.options = options or {}
@@ -95,6 +98,7 @@ class Listener:
         self.playback = playback or (lambda: False)
         self.input_filter = input_filter
         self.command_cleanup = command_cleanup
+        self.push_to_write, self.writer = push_to_write, writer
         self.references = references or (lambda: ())
         self.stop_event = threading.Event()
         self.audio = queue.Queue(maxsize=100)
@@ -141,6 +145,12 @@ class Listener:
                 if self.muted():
                     continue
                 text = assembler.merge(job, words)
+                if job.write:
+                    discarded = getattr(self.push_to_write, 'discarded', ())
+                    if job.final and text.strip() and self.writer and job.session not in discarded:
+                        self.report("final", text.strip())
+                        self.writer(text.strip(), job.session)
+                    continue
                 accepted = self.input_filter(text, job.playback, job.references) if self.input_filter else command_text(text)
                 if accepted is None:
                     continue
@@ -152,7 +162,7 @@ class Listener:
                     break
                 if self.muted():
                     continue
-                self.engine.feed(accepted, final=job.final)
+                self.engine.feed(accepted, final=job.final, raw=text)
         except Exception as exc:
             self.report("fatal", f"Whisper GPU decoding failed: {exc}")
             self.stop_event.set()
@@ -193,6 +203,7 @@ class Listener:
 
             utterance, offset, silent, next_partial = 0, 0.0, 0.0, 0.0
             active = False
+            writing, was_held, session = False, False, 0
             active_playback = False
             active_references = ()
             captured = np.empty(0, dtype=np.float32)
@@ -223,6 +234,19 @@ class Listener:
                         history = np.empty(0, dtype=np.float32)
                         continue
                     self.report("level", min(100.0, float(np.sqrt(np.mean(block ** 2))) * 500))
+                    held = bool(self.push_to_write is not None and self.push_to_write.active.is_set())
+                    if held:
+                        session = self.push_to_write.session
+                    if was_held and not held and active and writing:
+                        # Keys released mid-sentence: type what was said so far right away.
+                        self.jobs.put(DecodeJob(utterance, offset, np.concatenate((captured, block)), final=True,
+                                                write=True, session=session))
+                        active = writing = False
+                        captured = np.empty(0, dtype=np.float32)
+                        history = np.empty(0, dtype=np.float32)
+                        was_held = held
+                        continue
+                    was_held = held
                     if rate != 16000:
                         block = resample_poly(block, 16000 // divisor, rate // divisor).astype(np.float32)
                     history = np.concatenate((history, block))[-16384:]
@@ -233,6 +257,7 @@ class Listener:
                         if not speech:
                             continue
                         active = True
+                        writing = held
                         active_playback = block_playback
                         active_references = tuple(block_references)
                         utterance += 1
@@ -240,21 +265,25 @@ class Listener:
                         offset, silent, next_partial = 0.0, 0.0, interval
                     else:
                         captured = np.concatenate((captured, block))
+                        writing = writing or held
                         active_playback = active_playback or block_playback
                         active_references = tuple(dict.fromkeys(active_references + tuple(block_references)))[-8:]
                     silent = 0.0 if speech else silent + len(block) / 16000
                     duration = len(captured) / 16000
                     if silent >= silence:
-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback, references=active_references))
-                        active = False
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback,
+                                                references=active_references, write=writing, session=session))
+                        active = writing = False
                         captured = np.empty(0, dtype=np.float32)
                         history = np.empty(0, dtype=np.float32)
                     elif duration >= 20.0:
-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback, references=active_references))
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback,
+                                                references=active_references, write=writing, session=session))
                         captured = captured[16 * 16000:]
                         offset += 16.0
                         next_partial = len(captured) / 16000 + interval
-                    elif duration >= next_partial:
+                    elif duration >= next_partial and not writing:
+                        # No partial decoding while writing: only finished phrases are typed.
                         self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
                         next_partial = duration + interval
         except Exception as exc:

@@ -85,11 +85,23 @@ class HermesSkills:
                 "contract": CONTRACT, "prerequisites": row.get('prerequisites'), "conditions": row.get('conditions'),
                 "resources": [r['path'] for r in row['files'] if r['path'] != resource]}
 
+    def overlap(self, goal, item):
+        """Distinct meaningful goal words shared with a skill; one shared word is coincidence."""
+        from .skill_memory import words
+        row = next((r for r in self.rows if r['name'] == item.get('name')), None)
+        if row is None:
+            return 0
+        tokens = words(goal.replace('-', ' ')) - {'search', 'find', 'open', 'use', 'create', 'make', 'check', 'help',
+                                                  'go', 'show', 'get', 'the', 'and', 'about'}
+        text = words(' '.join([row['name'].replace('-', ' '), row['description'], ' '.join(row.get('tags', []))]))
+        return len(tokens & text)
+
     def context(self, goal):
         selected = []
         explicit = re.findall(r"(?:\$hermes:|/hermes-)([a-z0-9-]+)", goal)
         remaining = 12000 if explicit else 4000
-        candidates = [{"name": name} for name in explicit[:2]] or self.search(goal, limit=2)
+        candidates = [{"name": name} for name in explicit[:2]] or [
+            item for item in self.search(goal, limit=2) if self.overlap(goal, item) >= 2]
         for item in candidates:
             row = next((r for r in self.rows if r['name'] == item['name']), None)
             if row is None or not self.compatible(row):

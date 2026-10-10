@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-10T03:08:22.528158+00:00",
+  "text": "Oh, nice, that worked on the first try! Honestly, that almost never happens, so let's enjoy it while it lasts. Here's the plan for today. First we'll tidy up the notes, then we'll look at that flaky login test.\n\nI'm sorry the build took so long earlier. Anyway, what would you like to tackle next?",
+  "samples": [
+    {
+      "voice": "am_michael",
+      "file": "artifacts/media/voice-samples/am_michael.wav",
+      "audio_seconds": 20.2,
+      "synthesis_seconds": 6.26,
+      "real_time_factor": 0.31,
+      "word_error_rate": 0.036
+    },
+    {
+      "voice": "am_fenrir",
+      "file": "artifacts/media/voice-samples/am_fenrir.wav",
+      "audio_seconds": 18.17,
+      "synthesis_seconds": 5.01,
+      "real_time_factor": 0.28,
+      "word_error_rate": 0.0
+    },
+    {
+      "voice": "am_puck",
+      "file": "artifacts/media/voice-samples/am_puck.wav",
+      "audio_seconds": 17.63,
+      "synthesis_seconds": 5.31,
+      "real_time_factor": 0.3,
+      "word_error_rate": 0.0
+    },
+    {
+      "voice": "bm_george",
+      "file": "artifacts/media/voice-samples/bm_george.wav",
+      "audio_seconds": 21.82,
+      "synthesis_seconds": 7.97,
+      "real_time_factor": 0.37,
+      "word_error_rate": 0.0
+    },
+    {
+      "voice": "am_michael:60,am_fenrir:40",
+      "file": "artifacts/media/voice-samples/am_michael60+am_fenrir40.wav",
+      "audio_seconds": 19.38,
+      "synthesis_seconds": 5.78,
+      "real_time_factor": 0.3,
+      "word_error_rate": 0.0
+    },
+    {
+      "voice": "am_michael:50,am_puck:50",
+      "file": "artifacts/media/voice-samples/am_michael50+am_puck50.wav",
+      "audio_seconds": 18.42,
+      "synthesis_seconds": 6.03,
+      "real_time_factor": 0.33,
+      "word_error_rate": 0.036
+    },
+    {
+      "voice": "am_fenrir:50,am_puck:50",
+      "file": "artifacts/media/voice-samples/am_fenrir50+am_puck50.wav",
+      "audio_seconds": 17.76,
+      "synthesis_seconds": 6.16,
+      "real_time_factor": 0.35,
+      "word_error_rate": 0.0
+    }
+  ],
+  "note": "Intelligibility by local Whisper medium.en; naturalness needs a human listener."
+}

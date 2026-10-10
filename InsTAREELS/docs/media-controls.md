@@ -1,6 +1,6 @@
 # YouTube and native Spotify controls
 
-Updated 2026-10-01. The later [automation upgrade](automation-upgrade.md) adds the owned Chrome DOM route and live YouTube/native Spotify playback verification. Research used Firecrawl and the official [YouTube shortcuts](https://support.google.com/youtube/answer/7631406?hl=en) and [Spotify shortcuts](https://support.spotify.com/us/article/keyboard-shortcuts/) pages. Windows media-session and audio-session controls use the existing local dependencies; no Spotify Web API key or paid integration is required.
+Updated 2026-10-01. For playing by name, unscoped controls ("pause", "next song") and the island media card, see the newer [full YouTube and Spotify control](media-player.md) page (2026-10-10). The later [automation upgrade](automation-upgrade.md) adds the owned Chrome DOM route and live YouTube/native Spotify playback verification. Research used Firecrawl and the official [YouTube shortcuts](https://support.google.com/youtube/answer/7631406?hl=en) and [Spotify shortcuts](https://support.spotify.com/us/article/keyboard-shortcuts/) pages. Windows media-session and audio-session controls use the existing local dependencies; no Spotify Web API key or paid integration is required.
 
 ## Why the reported commands failed
 

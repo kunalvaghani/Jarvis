@@ -63,6 +63,9 @@ class App:
         build_interface(self)
         self.load_microphones()
         self.actions.approval_handler = self.request_approval
+        self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
+        if not self.config.get('_ui_verification', False):
+            self.actions.start_whatsapp_watch()
         root.protocol("WM_DELETE_WINDOW", self.close)
         self.panel.withdraw()
         root.after(40, self.animate_island)
@@ -279,9 +282,9 @@ class App:
         if kind == "state":
             self.actions.suggest_enabled = message.startswith("Awake")
             if self.actions.suggest_enabled:
-                self.actions.suggest_until = time.monotonic() + self.config.get("wake_timeout_seconds", 90)
+                self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         elif kind in {"partial", "final"} and self.actions.suggest_enabled:
-            self.actions.suggest_until = time.monotonic() + self.config.get("wake_timeout_seconds", 90)
+            self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         self.events.put((kind, message))
 
     def request_approval(self, kind, detail, cancelled):
@@ -367,7 +370,11 @@ class App:
                 continue  # Live metadata is shown in the header; never log generated code chunks.
             elif kind == 'answer_stream':
                 self.ui_activity = 'thinking' if message.get('active', True) else ''
-                continue  # UI-thread preview only; never speak/log/store every partial token.
+                # Finished sentences are spoken while the rest is still being written; the
+                # final answer then adds only what was not spoken yet. Never logged per token.
+                if 'text' in message:  # Phase-only updates carry no text and change nothing spoken.
+                    self.speech.stream(message['text'] or '', message.get('active', True))
+                continue
             elif kind == 'answer_error':
                 self.ui_activity = ''
                 self.log_line('warning', message)
@@ -431,6 +438,8 @@ class App:
                     self.toggle_listening()
             elif kind == "repair":
                 record(BASE, message)
+            elif kind == "media_card":
+                continue  # The island draws the animated YouTube/Spotify card; not a transcript line.
             else:
                 self.log_line(kind, message)
         self.root.after(80, self.drain)
@@ -462,10 +471,29 @@ class App:
         from jarvis.voice_input import VoiceInput
         from jarvis.command_cleanup import CommandCleanup
         voice_input = VoiceInput(self.speech)
+        push_to_write = writer = None
+        if self.config.get("push_to_write", {}).get("enabled", True):
+            # Hold Left Ctrl + Left Alt: what you say is typed at the cursor until you let go.
+            from jarvis.push_to_write import PushToWrite
+            from jarvis.writing import SpokenWriter
+            writer = SpokenWriter(self.report)
+            def writing_changed(active, discarded):
+                self.actions.dictation_active = active  # Pauses on-screen suggestions while writing.
+                if active:
+                    self.speech.interrupt()
+                    self.report("state", "Writing what you say · let go of Left Ctrl + Left Alt to stop")
+                else:
+                    self.report("state", "Awake · ready for commands" if not discarded else
+                                "Push-to-write cancelled (another key was pressed)")
+            push_to_write = PushToWrite(writing_changed,
+                                        self.config.get("push_to_write", {}).get("hold_seconds", 0.2))
+            push_to_write.start()
+        self.push_to_write, self.spoken_writer = push_to_write, writer
         self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
                                  playback=self.speech.output_recent, input_filter=voice_input.filter,
                                  references=self.speech.output_references,
-                                 command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report))
+                                 command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report),
+                                 push_to_write=push_to_write, writer=writer)
         self.listener.start()
         self.toggle.configure(text="Stop listening")
 
@@ -481,6 +509,10 @@ class App:
             self.desk.media.repair()  # Cancel only an owned outstanding media child; never replay it.
         self.listening_requested = False
         self.session += 1
+        for owned in (getattr(self, 'push_to_write', None), getattr(self, 'spoken_writer', None)):
+            if owned is not None:
+                owned.stop() if hasattr(owned, 'stop') else owned.close()
+        self.push_to_write = self.spoken_writer = None
         if self.listener:
             self.listener.stop()
         self.actions.cancel()
@@ -508,7 +540,7 @@ class App:
             from jarvis.audio import command_text
             engine = Engine(self.actions.submit, self.report)
             engine.activate()
-            engine.feed(command_text(text), final=True)
+            engine.feed(command_text(text), final=True, raw=text)
 
     def ask_screen(self):
         text = self.preview.get().strip() or "What is visible in this window?"

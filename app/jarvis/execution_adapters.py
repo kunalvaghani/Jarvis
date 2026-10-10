@@ -220,5 +220,53 @@ class AgentS:
         return selection(element,control,request.get('verb','click'))
 
 
-PROVIDERS = (UFO, WindowsMCP, CUA, OpenComputerUse, AgentS)
+class JarvisPointer:
+    """A real click with Jarvis's own touch pointer at the control's centre (first choice).
+
+    Admitted only when the centre point hit-tests to this exact control in this
+    window, so the tap cannot land on something else. Toggle/selection state is
+    read back when the control exposes it. If the point is covered, off-screen or
+    too small, preparation fails before input and the accessibility providers follow.
+    """
+    name = 'jarvis-pointer'
+    ROLES = {'Button', 'Hyperlink', 'MenuItem', 'SplitButton', 'CheckBox', 'RadioButton', 'TabItem', 'ListItem',
+             'DataItem', 'TreeItem', 'ComboBox', 'Image', 'Text', 'Group', 'Custom', 'Pane'}
+
+    def prepare(self, element, control, request, window):
+        from .jarvis_pointer import enabled, tap
+        if request['operation'] not in {'activate', 'open_menu'} or not enabled():
+            raise Unsupported('Physical pointer not requested for ' + request['operation'])
+        if control.get('password') or control.get('role') not in self.ROLES:
+            raise Unsupported('Jarvis pointer is not used for this control type')
+        if not type(element).__module__.startswith('pywinauto'):
+            raise Unsupported('Not a live accessible control')
+        try:
+            import win32gui
+            from pywinauto import Desktop
+            rect = element.rectangle()
+            if rect.width() < 4 or rect.height() < 4:
+                raise Unsupported('Control is too small to tap safely')
+            x, y = (rect.left + rect.right) // 2, (rect.top + rect.bottom) // 2
+            if win32gui.GetAncestor(win32gui.WindowFromPoint((x, y)), 2) != window.handle:
+                raise Unsupported('Another window covers the control')
+            target = list(element.element_info.runtime_id)
+            hit = Desktop(backend='uia').from_point(x, y)
+            for _ in range(8):  # The point may land on a child (an icon or label inside the button).
+                if hit is None or list(hit.element_info.runtime_id) == target:
+                    break
+                hit = hit.parent()
+            if hit is None or list(hit.element_info.runtime_id) != target:
+                raise Unsupported('The control centre belongs to a different element')
+        except Unsupported:
+            raise
+        except Exception as exc:
+            raise Unsupported('Jarvis pointer could not admit this control: ' + type(exc).__name__) from exc
+        try:
+            state = selection(element, control, request.get('verb', 'click'))
+        except Unsupported:
+            state = Prepared(None)
+        return Prepared(lambda: tap(x, y), state.read, state.expected, state.before, state.no_op)
+
+
+PROVIDERS = (JarvisPointer, UFO, WindowsMCP, CUA, OpenComputerUse, AgentS)
 PRIORITY = tuple(provider.name for provider in PROVIDERS)

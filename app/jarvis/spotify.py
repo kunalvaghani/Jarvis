@@ -57,6 +57,7 @@ async def _control(action, cancelled):
         "next": session.try_skip_next_async,
         "previous": session.try_skip_previous_async,
     }
+    track = await _track(session) if action in {"next", "previous"} else None
     if action in methods:
         accepted = await methods[action]()
     elif action in {"shuffle_on", "shuffle_off"}:
@@ -80,9 +81,23 @@ async def _control(action, cancelled):
     if cancelled():
         raise ValueError("Spotify action cancelled after sending; check the app before repeating it.")
 
+    if track:
+        # Confirm the track really changed. Spotify's "previous" first restarts the current song, so when the
+        # title stays the same and the song is back at the start, one more "previous" reaches the earlier track.
+        again = action == "previous"
+        for _ in range(12):
+            await asyncio.sleep(.15)
+            now = await _track(session)
+            if now and now != track:
+                return f"Now playing {now[0]} by {now[1]}."
+            if again and now == track and session.get_timeline_properties().position.total_seconds() < 2.5:
+                again = False
+                await session.try_skip_previous_async()
+        return f"Spotify accepted {action}, but the track change could not be verified."
+
     # Windows acknowledges a transport request before the app updates its state.
     if action in {"play", "pause", "shuffle_on", "shuffle_off", "repeat_off", "repeat_one", "repeat_all"}:
-        for _ in range(5):
+        for _ in range(10):
             await asyncio.sleep(.15)
             if cancelled():
                 raise ValueError("Spotify action cancelled after sending; check the app before repeating it.")
@@ -95,6 +110,15 @@ async def _control(action, cancelled):
                 return f"Spotify repeat {action.removeprefix('repeat_')}."
         return f"Spotify accepted {action.replace('_', ' ')}, but its updated state could not be verified."
     return f"Spotify accepted {action.replace('_', ' ')}."
+
+
+async def _track(session):
+    """(title, artist) of the current Spotify track, or None when it cannot be read."""
+    try:
+        media = await session.try_get_media_properties_async()
+        return (media.title, media.artist) if media and media.title else None
+    except Exception:
+        return None
 
 
 def control(action, cancelled=lambda: False):

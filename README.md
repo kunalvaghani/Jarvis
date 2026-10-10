@@ -43,7 +43,12 @@ deliberately stopped; Ollama was briefly restarted with approval and retained al
 desktop or model-training validation.
 
 The [application guide](app/README.md) retains dated feature verification and
-limitations. The [previous repository overview](app/docs/repository-overview-history.md)
+limitations. Latest feature update (**2026-10-10 IST**): call-style conversation with
+a background task queue, natural phrasing and faster step-by-step planning; see
+[fast planning, task queue and natural conversation](app/docs/fast-conversation.md). Also on that date: [writing by voice and push-to-write](app/docs/push-to-write.md) and a
+[natural male voice with smooth long speech](app/docs/natural-male-voice.md), and
+[full YouTube and Spotify control with an island media card](app/docs/media-player.md), and
+[WhatsApp automation with previews, approvals and call handling](app/docs/whatsapp.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

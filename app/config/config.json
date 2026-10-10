@@ -7,7 +7,8 @@
     "speech_reserve_mb": 1024,
     "reserve_mb": 512,
     "wait_seconds": 120,
-    "warm_seconds": 30
+    "warm_seconds": 1800,
+    "cpu_threads": 12
   },
   "realtime": {
     "enabled": true,
@@ -79,7 +80,15 @@
     "D:\\"
   ],
   "microphone": null,
-  "wake_timeout_seconds": 90,
+  "wake_timeout_seconds": 600,
+  "cursor": {
+    "physical_clicks": true
+  },
+  "push_to_write": {
+    "enabled": true,
+    "keys": "left_ctrl+left_alt",
+    "hold_seconds": 0.2
+  },
   "apps": {
     "3d viewer": {
       "shell_id": "Microsoft.Microsoft3DViewer_8wekyb3d8bbwe!Microsoft.Microsoft3DViewer"
@@ -1287,6 +1296,19 @@
     "ip_location": true,
     "fallback_city": "Vadodara"
   },
+  "whatsapp": {
+    "enabled": true,
+    "watch_messages": true,
+    "auto_draft_replies": true,
+    "watch_calls": true,
+    "include_groups": false,
+    "include_muted": false,
+    "max_replies": 5,
+    "poll_seconds": 2
+  },
+  "media": {
+    "default_service": "youtube"
+  },
   "speech": {
     "enabled": true,
     "language": "en",
@@ -1295,8 +1317,12 @@
     "noise_w_scale": 0.8,
     "sentence_silence": 0.0,
     "engine": "kokoro",
-    "voice": "af_heart",
-    "speed": 1.0
+    "voice": "am_michael:60,am_fenrir:40",
+    "speed": 1.0,
+    "natural": true,
+    "breaths": true,
+    "breath_level": 0.012,
+    "stream_answers": true
   },
   "brain": {
     "enabled": true,

@@ -18,7 +18,10 @@ PRIORITIES = {'planner':100, 'execution':90, 'coding':90, 'question':80,
               'cleanup':60, 'context':40, 'research':30, 'background':10}
 HELPERS = {'cleanup', 'context', 'background'}
 DEFAULTS = {'enabled':False, 'helper_gpu':False, 'primary_layers':12, 'codex_layers':9,
-            'speech_reserve_mb':1024, 'reserve_mb':512, 'wait_seconds':120, 'warm_seconds':30}
+            'speech_reserve_mb':1024, 'reserve_mb':512, 'wait_seconds':120, 'warm_seconds':30,
+            'cpu_threads':0}
+# Models split across GPU and CPU; their CPU layers use the configured thread count.
+PRIMARY = {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}
 _threads = threading.RLock()
 
 
@@ -41,7 +44,8 @@ def settings(options=None):
     for name in ('enabled','helper_gpu'):
         if type(value[name]) is not bool:raise ValueError('GPU '+name+' must be boolean.')
     for name,low,high in [('primary_layers',0,33),('codex_layers',0,33),
-                          ('speech_reserve_mb',0,8192),('reserve_mb',128,8192),('wait_seconds',1,300),('warm_seconds',0,120)]:
+                          ('speech_reserve_mb',0,8192),('reserve_mb',128,8192),('wait_seconds',1,300),('warm_seconds',0,3600),
+                          ('cpu_threads',0,64)]:
         if type(value[name]) is not int or not low<=value[name]<=high:
             raise ValueError('Invalid GPU setting: '+name)
     return value
@@ -264,7 +268,9 @@ def install(client,role='question'):
                     raise ValueError('Insufficient reserved VRAM for local Codex; inference was not issued. Free GPU memory or configure CPU coding.')
             else:
                 keep=policy['warm_seconds'] if admitted and layers>0 and model=='qwen3.5:9b' else 0
-                kwargs['json']={**payload,'keep_alive':keep,'options':{**payload.get('options',{}),'num_ctx':context,'num_gpu':layers}}
+                options={**payload.get('options',{}),'num_ctx':context,'num_gpu':layers}
+                if policy['cpu_threads'] and model in PRIMARY:options['num_thread']=policy['cpu_threads']
+                kwargs['json']={**payload,'keep_alive':keep,'options':options}
             lease.registry.event(stage='dispatch',role=role,model=model,num_gpu=layers,
                 context_tokens=context,gpu_slot=admitted)
             response=original(url,**kwargs)

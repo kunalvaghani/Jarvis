@@ -127,7 +127,7 @@ class KnowledgeContextTests(unittest.TestCase):
         self.saved('snake game','Python implementation')
         self.saved('snake game','C++ implementation')
         self.worker.start()
-        self.worker.submit('Explain the snake game')
+        self.worker.submit('Remember the snake game we discussed? Explain it')
         wait_until(self,lambda:self.worker.pending_memory is not None)
         card=self.worker.choice_snapshot()
         self.worker.client.request.assert_not_called()
@@ -142,7 +142,7 @@ class KnowledgeContextTests(unittest.TestCase):
         payload=self.worker.client.request.call_args.args[0]
         self.assertIn(chosen,json.dumps(payload['history']))
         self.assertNotIn(other,json.dumps(payload['history']))
-        self.assertEqual(payload['question'],'Explain the snake game')
+        self.assertEqual(payload['question'],'Remember the snake game we discussed? Explain it')
         wait_until(self,lambda:len(self.worker.history)==2)
         self.worker.submit('Explain it more')
         wait_until(self,lambda:self.worker.client.request.call_count==2)
@@ -159,11 +159,20 @@ class KnowledgeContextTests(unittest.TestCase):
         self.worker.choose_memory.assert_called_once_with('token',1)
         actions.report.assert_not_called()
 
+    def test_new_topic_in_conversation_answers_without_choice_card(self):
+        # A live conversation never stops a fresh question to ask which old talk to reuse.
+        self.saved('snake game','Python implementation')
+        self.saved('snake game','C++ implementation')
+        self.worker.start()
+        self.worker.submit('Explain the snake game')
+        wait_until(self,lambda:self.worker.client.request.called)
+        self.assertIsNone(self.worker.pending_memory)
+
     def test_spoken_selection_and_stale_click(self):
         self.saved('snake game','Python')
         self.saved('snake game','C++')
         self.worker.start()
-        self.worker.submit('snake game details')
+        self.worker.submit('Remember the snake game details from before')
         wait_until(self,lambda:self.worker.pending_memory is not None)
         self.assertTrue(self.worker.memory_reply(Command('select_context','2:option')))
         wait_until(self,lambda:self.worker.client.request.called)
@@ -175,7 +184,7 @@ class KnowledgeContextTests(unittest.TestCase):
             if not worker.thread.is_alive(): worker.start()
             self.saved('snake game','Python')
             self.saved('snake game','C++')
-            worker.submit('snake game details')
+            worker.submit('Remember the snake game details from before')
             wait_until(self,lambda:worker.pending_memory is not None)
             token=worker.pending_memory['token']
             if mode=='cancel': worker.cancel()
@@ -226,7 +235,7 @@ class KnowledgeContextTests(unittest.TestCase):
         self.worker.memory.recall.return_value=[{'date_utc':'2026-10-01','observation':'snake python context'},
                                                {'date_utc':'2026-10-02','observation':'snake cpp context'}]
         self.worker.start()
-        self.worker.submit('snake details')
+        self.worker.submit('Remember the snake details from before')
         wait_until(self,lambda:self.worker.pending_memory is not None)
         self.worker.choose_memory(self.worker.pending_memory['token'],0)
         wait_until(self,lambda:self.worker.client.request.called)

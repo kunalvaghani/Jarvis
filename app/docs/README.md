@@ -4,6 +4,9 @@ Start with the [application guide](../README.md) and [project structure](project
 
 ## Project and runtime
 
+- [Fast planning, task queue and natural conversation — 2026-10-10 IST](fast-conversation.md)
+- [Writing by voice and push-to-write — 2026-10-10 IST](push-to-write.md)
+- [Natural male voice and smooth long speech — 2026-10-10 IST](natural-male-voice.md)
 - [Crash recovery](CRASH_RECOVERY.md)
 - [GPU allocation by inference phase](gpu-priority.md)
 - [Free natural speech and configured-model recovery](natural-voice-and-model-repair.md)
@@ -18,8 +21,10 @@ Start with the [application guide](../README.md) and [project structure](project
 - [Jarvis Dynamic Island](dynamic-island.md)
 - [Sharp display, live progress and commands during speech](hd-display-and-voice-input.md)
 - [Historical Jarvis HUD](hud-interface.md)
-- [Jarvis's independent cursor](independent-cursor.md)
+- [Jarvis's own cursor and physical clicks](independent-cursor.md)
 - [Interactive Jarvis island](interactive-island.md)
+- [WhatsApp automation, incoming calls and voice approvals (2026-10-10)](whatsapp.md)
+- [Full YouTube and Spotify control with the island media card (2026-10-10)](media-player.md)
 - [YouTube and native Spotify controls](media-controls.md)
 - [Smooth island growth during long output](smooth-island-growth.md)
 - [Streaming Ollama answers in the island](streaming-answers.md)

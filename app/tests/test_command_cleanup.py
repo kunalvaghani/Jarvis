@@ -71,8 +71,7 @@ class CleanupTests(unittest.TestCase):
         self.request.assert_not_called()
 
     def test_committed_or_dictation_state_never_rewrites(self):
-        for field, value in (("dictating", True), ("done", {0: "open chrome"}), ("typed", {0: ["hello"]}),
-                             ("started_dictation", {0}), ("suppressed", True)):
+        for field, value in (("done", {0: "open chrome"}), ("suppressed", True)):
             old = getattr(self.engine, field)
             setattr(self.engine, field, value)
             self.assertEqual(self.cleanup.clean("open note pad", self.engine), "open note pad")

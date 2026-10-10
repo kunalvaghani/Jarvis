@@ -219,7 +219,17 @@
     "jarvis.gmail_bridge",
     "jarvis.gmail_api",
     "jarvis.gmail_workflows",
-    "jarvis.gmail_writes"
+    "jarvis.gmail_writes",
+    "jarvis.media_player",
+    "jarvis.whatsapp",
+    "jarvis.messengers",
+    "jarvis.conversation_intent",
+    "jarvis.window_focus",
+    "jarvis.writing",
+    "jarvis.push_to_write",
+    "jarvis.natural_voice",
+    "jarvis.jarvis_pointer",
+    "jarvis.task_queue"
   ],
   "brain_imports": [
     "requests",
@@ -600,5 +610,34 @@
     "dependencies": "Reviewed dependency-only Docker image; no new host Python dependency or always-running Jarvis service",
     "security": "Fail closed when isolation/image/source/approval/validation is missing or stale; no host or venv fallback",
     "status": "2026-10-09 IST: three actual public repository capabilities passed static analysis, permission-aware isolated execution, local Qwen selection, registry reload, disable and revalidation. Full regression/readiness and actual app restart evidence: docs/repository-skills.md. Other discovered candidates remain unvalidated."
+  },
+  "fast_planning": {
+    "modules": [
+      "jarvis.brain",
+      "jarvis.native_tools",
+      "jarvis.step_planning",
+      "jarvis.gpu_scheduler",
+      "jarvis.window_focus"
+    ],
+    "configuration": "gpu_scheduler.warm_seconds and cpu_threads; brain.planner_images (auto|always|never), brain.fused_verification, brain.max_recoveries",
+    "inference": "Primary model stays loaded for warm_seconds and uses cpu_threads for its CPU layers; each task's next-step calls form one growing conversation so the hybrid model reuses its cache (measured prompt reading 1.2-5.5 s instead of 18-24 s)",
+    "screenshots": "Sent to the planner only for recovery, unconfirmed outcomes or windows with fewer than six readable controls; planner copies are downscaled to 1024 px",
+    "verification": "Incremental tasks check the window change and let the next planning call judge the outcome; navigation and read-only tools skip the extra decision call; the planner's finish after a confirmed step is the goal check",
+    "recovery": "Navigation/click failures are re-planned from fresh observation up to max_recoveries (default 5); a failed or completed action is never repeated; uncertain writes (files, commands, typing, closing apps, approval tools) still pause",
+    "lifecycle": "No new process or service; no automatic replay of any action"
+  },
+  "conversation_and_queue": {
+    "modules": [
+      "jarvis.actions",
+      "jarvis.engine",
+      "jarvis.commands",
+      "jarvis.conversation_intent",
+      "jarvis.knowledge",
+      "jarvis.knowledge_worker"
+    ],
+    "configuration": "wake_timeout_seconds (call-mode listening window, default 600); suggestion_seconds (UI suggestions, default 90); context_selector.model for chat-vs-task classification",
+    "queue": "New requests wait behind running work with a spoken acknowledgement; per-task cancel tokens; cancel this task / stop all tasks / what's in the queue",
+    "conversation": "Ending a conversation (goodbye, go to sleep) stops listening without cancelling queued tasks; unrecognised speech is classified as chat or task by rules then qwen3.5:0.8b on CPU; small talk never triggers web search; saved-conversation choices only for explicit references to the past",
+    "lifecycle": "Uses the existing action and knowledge workers; the classifier runs on a short daemon thread per unrecognised utterance"
   }
 }

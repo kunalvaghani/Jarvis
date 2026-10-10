@@ -1,7 +1,8 @@
-"""Jarvis's disposable visual pointer. Never positions or injects the user's mouse.
+"""Jarvis's visible pointer (the cyan J) and its clicks.
 
-The cue illustrates an accessibility/DOM action, not a second Windows input
-device. Unsupported physical-only targets must stop before dispatch.
+The cue shows where Jarvis acts. Clicks use Jarvis's own touch pointer
+(jarvis_pointer.py): a real tap that never uses your mouse buttons and returns
+your pointer to where it was. Accessibility actions remain the fallback.
 """
 import math
 import threading
@@ -152,7 +153,7 @@ def at_point(x,y,hwnd):
                 break
         element = element.parent()
     if candidate is None:
-        raise ValueError('This target requires the shared mouse. Jarvis kept your pointer untouched; use an accessible control or Jarvis browser.')
+        return physical_point(x, y, hwnd, pid)
     element,action,identity,bounds,role,name = candidate
     def guard():
         rect = element.rectangle()
@@ -168,6 +169,23 @@ def at_point(x,y,hwnd):
             raise ValueError('The accessible target changed; no control action issued.')
     guard()
     return action,bounds,guard
+
+
+def physical_point(x, y, hwnd, pid):
+    """A grounded point with no accessible control: a real tap with Jarvis's own pointer."""
+    from .jarvis_pointer import enabled, tap
+    from .execution_adapters import Prepared
+    import win32gui
+    import win32process
+    if not enabled():
+        raise ValueError('This target has no accessible control and physical clicks are turned off (cursor.physical_clicks).')
+    def guard():
+        hit = win32gui.WindowFromPoint((x, y))
+        if (not win32gui.IsWindow(hwnd) or win32gui.GetForegroundWindow() != hwnd
+                or win32process.GetWindowThreadProcessId(hwnd)[1] != pid or win32gui.GetAncestor(hit, 2) != hwnd):
+            raise ValueError('The target window changed or is covered; no click was sent.')
+    guard()
+    return Prepared(lambda: tap(x, y)), [x - 12, y - 12, x + 12, y + 12], guard
 
 
 def activate_point(x,y,hwnd):

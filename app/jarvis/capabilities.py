@@ -64,6 +64,31 @@ def tokens(text):
     return result
 
 
+# Topic-specific core tools are offered to the planner only when the request is about
+# that topic. Fewer, relevant tool definitions mean a shorter prompt (each one costs
+# hundreds of tokens) and fewer wrong choices; tool_search still discovers anything else.
+TOPICAL_TOOLS = {
+    re.compile(r'\b(?:files?|folders?|director(?:y|ies)|documents?|save|saved|notes?|txt|csv|pdf|docx?|xlsx?|json|code|script|\w+\.[a-z0-9]{1,5})\b', re.I):
+        ('create_file', 'modify_file', 'delete_file', 'save_file', 'append_file', 'read_file', 'list_files', 'search_files'),
+    re.compile(r'\b(?:run|execute|command|terminal|powershell|cmd|script|tests?)\b', re.I): ('run_command',),
+    re.compile(r'\b(?:play|playing|music|songs?|videos?|youtube|spotify|playlists?|pause|resume|volume|watch|listen|skip|track)\b', re.I):
+        ('media_search', 'media_control'),
+    re.compile(r'\b(?:weather|forecast|news|prices?|stocks?|scores?|exchange|rates?|crypto|bitcoin|flights?|traffic|earthquakes?|time in|holidays?)\b', re.I):
+        ('realtime_query',),
+    re.compile(r'\b(?:close|quit|exit)\b', re.I): ('close_app',),
+    re.compile(r'\b(?:installed|programs?|applications?|apps?|capabilit(?:y|ies)|tools?|integrations?|toolkits?)\b', re.I):
+        ('application_search', 'runtime_capabilities', 'toolkit_status', 'integration_status'),
+}
+TOPICAL = {name for names in TOPICAL_TOOLS.values() for name in names}
+
+
+def relevant_tool(name, goal):
+    """False only for a topic-specific tool unrelated to this request."""
+    if name not in TOPICAL:
+        return True
+    return any(name in names and pattern.search(str(goal)) for pattern, names in TOPICAL_TOOLS.items())
+
+
 def intents(goal):
     return [name for name, (pattern, _, _) in ROUTES.items() if re.search(pattern, str(goal), re.I)]
 

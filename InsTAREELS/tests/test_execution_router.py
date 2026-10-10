@@ -27,7 +27,8 @@ class RoutingTests(unittest.TestCase):
                        providers=providers, clock=timer, sleep=timer.sleep, **kwargs)
 
     def test_requested_order_is_fixed(self):
-        self.assertEqual(PRIORITY, ('ufo', 'windows-mcp', 'cua', 'open-computer-use', 'agent-s'))
+        # Jarvis's own physical pointer first; accessibility providers follow as fallback.
+        self.assertEqual(PRIORITY, ('jarvis-pointer', 'ufo', 'windows-mcp', 'cua', 'open-computer-use', 'agent-s'))
 
     def test_only_preflight_failures_fall_through(self):
         first = SimpleNamespace(name='ufo', prepare=Mock(side_effect=Unsupported('missing pattern')))

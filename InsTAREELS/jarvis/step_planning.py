@@ -51,6 +51,38 @@ NATIVE_NEXT_PROMPT = (
 )
 
 
+def compact_image(encoded, longest=1024):
+    """The planner's copy of a screenshot at most 1024 px (about half the prompt tokens).
+
+    Visual grounding keeps its own full-resolution capture; this only shrinks what
+    the planning model reads. Anything that is not a decodable image passes through.
+    """
+    try:
+        import base64, io
+        from PIL import Image
+        image = Image.open(io.BytesIO(base64.b64decode(encoded, validate=True)))
+        if max(image.size) <= longest:
+            return encoded
+        image.thumbnail((longest, longest))
+        output = io.BytesIO()
+        image.convert('RGB').save(output, format='JPEG', quality=80)
+        return base64.b64encode(output.getvalue()).decode()
+    except Exception:
+        return encoded
+
+
+def wants_image(screen, failures, mode='auto'):
+    """Screenshots only for recovery or windows whose controls are not readable."""
+    if mode == 'always':
+        return True
+    if mode == 'never':
+        return False
+    if failures:
+        return True
+    controls = (screen or {}).get('controls') if isinstance(screen, dict) else None
+    return not isinstance(controls, list) or len([c for c in controls if c]) < 6
+
+
 class StepSession:
     """One task, one bounded prompt job, at most current and previous image."""
     def __init__(self, clock=time.monotonic):
@@ -61,6 +93,7 @@ class StepSession:
         self.pool = None
         self.future = None
         self.closed = False
+        self.conversation = None  # The task's growing planner conversation (cache reuse).
 
     def capture(self, frame):
         if self.closed:
@@ -124,6 +157,7 @@ class StepSession:
         for item in self.frames:
             item.pop('image', None)
         self.frames.clear()
+        self.conversation = None  # Screenshots may live in it; never retained past the task.
 
 
 FORBIDDEN = re.compile(r'\b(delete|remove|erase|save|send|submit|publish|post|buy|pay|install|'

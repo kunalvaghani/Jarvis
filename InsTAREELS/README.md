@@ -11,6 +11,89 @@ environments resolve correctly, and recovery snapshots match the final source.
 These are relocation/regression checks; historical live feature measurements
 retain their original dates. Jarvis remains deliberately stopped.
 
+**WhatsApp automation, incoming calls, voice approvals, and the "play/pause answered as chat" fix (2026-10-10 IST):**
+"send a WhatsApp message to Jay saying I'll be late" opens WhatsApp Desktop and finds the person. A first name
+alone lists everyone with that name as island choices; answer by name, number or click. Jarvis then drafts the
+message, or uses your exact words with "saying exactly", and shows it on the island. It sends only after you say
+"approve"/"send it" or click, and you can say what to change first. The chat header must confirm the right person,
+and the sent message must appear in the chat. Nothing is resent if that can't be confirmed. "Reply to my WhatsApp
+messages" drafts replies to unread chats. A watcher drafts a reply when a new message arrives and asks before
+answering or declining incoming calls. Telegram is recognised (not signed in on this PC); Discord, Teams and others
+say they aren't automated yet. Separately, "Pause." / "Play." with Whisper's punctuation now control the player
+instead of reaching the chat model. Live on this PC (sent only to the account's own chat): send with a voice edit in
+17.9 s, first-name choice plus verbatim send in 10.7 s, automatic reply in 12.6 s; calls are not yet tested live.
+Regression: 1,429 tests passed with one skip; readiness `ready`. [How it works, commands, settings and limits](docs/whatsapp.md).
+
+![Rendered island WhatsApp cards with made-up names — not a desktop screenshot](artifacts/media/island-whatsapp-card-preview.png)
+
+**Full YouTube and Spotify control, with an animated island card (2026-10-10 IST):** "play nadan parinde",
+"open YouTube and play X" and "play X on Spotify" now search, pick the clearly matching song or video, play it and
+verify playback directly, without the planner. A split utterance ("open YouTube" … "and play X") no longer ends up in
+chat. YouTube search uses the YouTube Data API v3 when a key is saved in `secrets/youtube.json`, otherwise a keyless
+search. Spotify uses the desktop app's search, its accessibility tree, a click with Jarvis's pointer, and Windows
+media-session verification. Words like "pause", "next song", "volume up", "go back 10 seconds", "mute" and "play it
+again" control whichever player is actually playing. Starting one service pauses the other. The island shows a red
+YouTube or green Spotify card with artwork, title, live equalizer and progress for every media command. Live on this
+PC: YouTube played in 5.2 s and Spotify in 7.7 s, and every listed control passed on both. Regression: 1,412 tests
+passed with one skip; launcher readiness `ready`. [Commands, API key setup,
+live results and limits](docs/media-player.md).
+
+![Rendered island media cards with sample titles and generated artwork — not a desktop screenshot](artifacts/media/island-media-card-preview.png)
+
+**Jarvis's own pointer clicks, and cancelling specific tasks (2026-10-10 IST):** Every click a task needs
+(app buttons, links and buttons in your own browser, custom controls, canvases) is now a real tap with Jarvis's
+own pointer while the cyan J cursor shows where it acts. Your mouse buttons are never used. Windows briefly moves
+its hidden mouse position for older apps, and Jarvis restores your pointer right away; it waits if you are using
+the mouse. Targets without accessibility support, which were refused before, are now clicked; accessibility
+actions remain the fallback. Turn it off with `cursor.physical_clicks`. Live: a custom web button in your Chrome
+and a canvas were each clicked once, with the mouse position unchanged. You can also cancel one queued task by
+describing it: "cancel the YouTube one", "never mind the email", "remove number 2" (the queue status is now
+numbered), "never mind" for your latest request, or "cancel everything except the email". Ties are never
+guessed. Live: in a spoken session, "cancel the YouTube one" and "never mind" removed exactly those requests
+while the running task finished. [Pointer details](docs/independent-cursor.md) ·
+[queue commands](docs/fast-conversation.md#try-it).
+
+**Natural male voice and smooth long speech (2026-10-10 IST):** Jarvis now speaks with a man's voice
+(Kokoro `am_michael` + `am_fenrir` blend) and a human delivery: varied pauses, a longer pause between
+paragraphs, soft breaths before some longer sentences, slight pace changes, and emotion from the words
+(quicker when excited, slower when sorry). Answers are written like a warm, witty friend on a call, with an
+occasional light joke when the mood fits. Speech is one continuous stream with no 2,500-character cut or
+240-second limit, starts while the answer is still being written, and stops instantly when interrupted
+without reloading the model. Live: a 4.5-minute reply was synthesized at 0.30× real time idle and 0.60×
+while the planner generated (both ahead of playback); speech started 1.47 s after a reply and 0.83 s after
+an interruption. Listening quality has not yet been judged by a person; samples of seven male voices are in
+`artifacts/media/voice-samples/`. [Voice, settings and measurements](docs/natural-male-voice.md).
+
+**Writing by voice and push-to-write (2026-10-10 IST):** Dictation mode is gone. “Write a short
+thank-you note here” has the local model compose the text and types it into the current window as it is
+generated; “write exactly …” (or “word for word”, or quoted text) types your words verbatim, keeping capitals
+and punctuation; “in Notepad” targets an app, and “open Notepad and write …” always writes into Notepad.
+Holding **Left Ctrl + Left Alt** types everything you say at the cursor until you let go, with no wake word.
+A keyboard hook replaces only the final Alt release with a harmless mask key so Notepad/Office never fall
+into menu-shortcut mode. Other key combinations are left alone. Line breaks are Shift+Enter, and terminals
+never receive line breaks. Live: a composed 26-word note began typing in Notepad after 11.8 s; exact text kept
+“PASSED at 5:30 PM!”; the hook's release handling held in both release orders. A hands-on push-to-write
+session with the physical keys and microphone is not yet verified.
+[Commands, hotkey details and limits](docs/push-to-write.md).
+
+**Fast planning, task queue and natural conversation (2026-10-10 IST):** Say "Jarvis" once and
+talk like a call; it keeps listening until 10 minutes of silence or "goodbye". Tasks you give during
+the conversation queue up and run in the background ("Okay, I'll do that next") while questions are
+answered; "what's in the queue", "cancel this task" and "stop all tasks" control them. Natural
+phrasing works ("let's make an email", "let's watch a video about cats on YouTube"), and ordinary
+talk gets a reply instead of becoming a task. Planning executes each step as soon as it is planned
+and sends a failed or ineffective step back to the planner, which tries a different approach from
+that point (up to five), never repeating a failed action; uncertain writes still pause. Speed comes
+from measured fixes on this RTX 3050 (4 GB): the split CPU+GPU model stays loaded with 12 CPU
+threads, each task's planning calls reuse the model cache (next-step prompt reading 1.2–5.5 s
+instead of 18–24 s), screenshots are sent only when needed, and redundant model checks and
+irrelevant tools were removed. Live tests: the Wikipedia task finished in 68.5 s (previously failed
+after 209 s), "open Notepad and type …" works (new `type_text` tool, window focus and typing-speed
+fixes), and conversational answers start in 4–6 s (previously 40 s, or no answer). Regression:
+1,358 tests OK with one Docker-dependent skip; launcher readiness `ready`. The call was simulated
+through the real voice engine; no live microphone session is claimed.
+[Usage, configuration, measurements and limits](docs/fast-conversation.md).
+
 **Gmail full voice automation (2026-10-10 IST):** Jarvis can now send emails,
 send or delete drafts, move emails to Trash and restore them, apply and create
 labels, move, archive, mark read/unread/starred, group emails by sender and read
@@ -521,7 +604,7 @@ Verification: **578 tests passed**, hidden UI startup/shutdown and preview expor
 
 **Hermes Agent integration (2026-10-01):** The free MIT Hermes Agent is installed in an isolated Python 3.14 runtime and enabled for model-based task planning/replanning with local Qwen. It receives relevant Obsidian memory and the current tool catalogue. Jarvis retains action execution, approvals and independent verification. The native Ollama adapter handles this PC's raw Qwen template. Live inference checks passed with synthetic observations: 37.09 seconds for planning and 16.75 seconds for replanning; neither proposal was executed. These are not live desktop success or five-second latency benchmarks. [Installation, configuration, attribution and limits](docs/hermes-agent.md).
 
-A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, live dictation, local Qwen planning and vision, Kokoro Heart English speech and Piper Hindi speech, and a compact animated Dynamic Island. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
+A local Windows assistant using **English-only Whisper medium.en on NVIDIA CUDA**, wake-word activation, concurrent desktop actions, voice writing with push-to-write, local Qwen planning and vision, a natural Kokoro male English voice and Piper Hindi speech, and a compact animated Dynamic Island. The faster-whisper runtime uses `int8_float16` and was verified on the RTX 3050's 4 GB of VRAM. Core local inference needs no API key and does not upload microphone audio or save microphone recordings. Web tools and optional account services use network requests and may require credentials.
 
 **Documentation updated: 2026-10-04.** The application is in this `app` directory, inside the parent Jarvis repository. All commands below run from this directory unless stated otherwise.
 
@@ -547,7 +630,7 @@ The current UI is a small black island at the top of the screen. It morphs for l
 
 This older HUD artwork is retained for provenance and historical previews; the current island does not display its circular logo. It is third-party artwork; see [asset provenance](jarvis/assets/README.md). A [static reference image](artifacts/media/reference-logo.png), [earlier reference UI](integrations/references/jarvis-ui/reference-jarvis-ui.png), and [reference cover](integrations/references/jarvis-ui/reference-jarvis-cover.jpg) are also retained; they are reference material rather than screenshots of the current Jarvis panel.
 
-[Listen to the current Heart English voice preview](artifacts/media/jarvis-heart-preview.wav). The sample uses local Kokoro Heart and is generated speech, not a microphone recording.
+[Listen to the current male voice](artifacts/media/voice-samples/am_michael60+am_fenrir40.wav) (generated speech from the local Kokoro blend, not a microphone recording; other male voices are in the same folder). The [earlier Heart voice preview](artifacts/media/jarvis-heart-preview.wav) is kept for reference.
 
 ## Contents
 
@@ -556,7 +639,7 @@ This older HUD artwork is retained for provenance and historical previews; the c
 - [Capabilities](#capabilities-at-a-glance)
 - [Setup and launch](#start)
 - [Speech recognition settings](#whisper-settings)
-- [Voice commands and dictation](#talk-while-it-works)
+- [Voice commands and writing](#talk-while-it-works)
 - [Desktop, files, questions, and coding](#desktop-and-files)
 - [God's Eye View](#gods-eye-view)
 - [Recovery and adaptive planning](#silent-startup-and-recovery)
@@ -575,7 +658,7 @@ This older HUD artwork is retained for provenance and historical previews; the c
 
 | Area | Current behavior |
 | --- | --- |
-| Voice input | English Whisper on CUDA, wake gating, Silero VAD, overlapping transcription, live dictation, and cancellation. |
+| Voice input | English Whisper on CUDA, wake gating, Silero VAD, overlapping transcription, write commands, push-to-write, and cancellation. |
 | Interface | Compact Dynamic Island, smooth state transitions, temporary reply cards, conversation/input controls, and settings on demand. |
 | Questions and screen understanding | Direct local greetings/time/date, bounded live weather lookup, local Qwen for broader answers, optional web research, and local screen vision. |
 | Desktop and browser | App/site launching, searches, exposed control selection, exact text-field filling, scrolling, supported shortcuts, menus, and dialogs. |
@@ -583,7 +666,7 @@ This older HUD artwork is retained for provenance and historical previews; the c
 | Coding | Related-source context, bounded multi-file work, exact replacements, syntax checks, original-byte backups, diffs, atomic per-file writes, readback, verified failure recall, related examples, and learned missing-import checks. |
 | Task execution | One observed next action for general desktop planning, overlapping prompt preparation, two transient frames, checked repeat navigation, shared tool registry, independent decisions and verification. |
 | Memory | Local Obsidian vault with dated Jarvis interactions and foreground-window intervals, plus durable checkpoints, task summaries, and UI suggestions. |
-| Speech output | Local Kokoro Heart English and Piper Hindi voices, continuous English reply playback, a warm voice worker, interruption, and recognition mute during replies. |
+| Speech output | Natural local Kokoro male English voice (pauses, breaths, pace and emotion) and Piper Hindi voice; one continuous stream with no length limit, answers spoken while written, instant interruption without reloading, and recognition mute during replies. |
 | Media and globe | Spotify session controls and on-demand God's Eye View browser console. |
 | Tools | 70 registered operations: 16 core, 4 DOM browser tools, 37 earlier toolkit adapters and 13 agent/MCP tools; configuration and runtime approval gates apply. |
 | Agent runtime | Hierarchical repository guidance, explicit skills, deferred tools, source maps, Git observations, read batches, events/deny hooks, approved MCP stdio, and headless read-only sessions/research agents. |
@@ -711,18 +794,18 @@ Whisper is not a native streaming recognizer. This app continuously captures aud
 
 ## Talk while it works
 
-- “Hey Jarvis open notepad then write here are my ideas for today”
-- “Open notepad and write my name is Kunal” — both actions run in order; “and type” also works.
-- Keep speaking; stable words stream into the focused destination app, with three words held back for recognition corrections.
-- “Stop dictation then create a file called ideas dot txt containing buy milk”
+- “Hey Jarvis open notepad and write a short list of ideas for today” — the local model writes it into Notepad
+- “Open notepad and write exactly my name is Kunal” — typed word for word; “type exactly” also works
+- Hold **Left Ctrl + Left Alt** and speak to type everything you say at the cursor; let go to stop
+- “Create a file called ideas dot txt containing buy milk”
 - “Rename file ideas dot txt to shopping dot txt”
 - “Delete file shopping dot txt”
 - “Jarvis open calculator then open paint”
-- “Go to sleep” cancels queued tasks and returns to wake-word listening.
+- “Go to sleep” or “goodbye” returns to wake-word listening; queued tasks keep running. “Stop all tasks” cancels them.
 
-Say **then**, **and then**, or **next command** between tasks to execute completed clauses without ending your speech. Without a separator, a command waits for the speech recognizer's natural endpoint. Dictation streams partial results without requiring a pause. “Stop dictation then …” ends dictation before the next command. Control phrases and “then” are reserved; they cannot be dictated literally in this version. Commands before a spoken separator can already have run, so later corrections cannot undo them.
+Say **then**, **and then**, or **next command** between tasks to execute completed clauses without ending your speech. Without a separator, a command waits for the speech recognizer's natural endpoint. Commands before a spoken separator can already have run, so later corrections cannot undo them.
 
-After an app-opening command, **and write**, **and type**, and **and dictate** also start dictation, including when recognition splits the sentence into separate segments. Ordinary “and” inside dictated text stays literal.
+There is no dictation mode (2026-10-10). After an app-opening command, **and write** / **and type** write into that app, including when recognition splits the sentence into separate segments; a “then” inside a write command is part of the text. See [writing by voice and push-to-write](docs/push-to-write.md).
 
 Deletion and renaming wait for a finalized speech segment, even when “then” is spoken; subsequent tasks stay behind them. Each deletion now needs a separate approval dialog showing the exact file path. Approved files go to the Windows Recycle Bin. Silence for 90 seconds returns to wake-word mode. The microphone remains active for wake detection until you click Stop listening, Stop all tasks, or close the window. No background Windows service or startup registration is installed.
 
@@ -759,9 +842,9 @@ Sources: [Laya model and limitations](https://huggingface.co/convaiinnovations/l
 
 ### General questions and internet knowledge
 
-Restart Jarvis after updating. Click the island and **Start listening**, then ask **“Jarvis why is the sky blue?”**, **“explain photosynthesis”**, or **“search the internet for today's technology news”**. Use **“ask …”** for anything that does not begin with a question word. You can also type a question in the panel and click **Ask**; the right-click menu’s **Preview typed command** remains a preview only. Stop dictation before asking a question.
+Restart Jarvis after updating. Click the island and **Start listening**, then ask **“Jarvis why is the sky blue?”**, **“explain photosynthesis”**, or **“search the internet for today's technology news”**. Use **“ask …”** for anything that does not begin with a question word. You can also type a question in the panel and click **Ask**; the right-click menu’s **Preview typed command** remains a preview only.
 
-Answers appear in the transcript log, with a short preview above it, and are spoken aloud. **Speak answers** toggles playback; **Stop voice** interrupts it. English uses the user-selected local Kokoro Heart American female voice; Hindi uses the local Piper Rohan voice. Both are installed by `scripts/setup/setup.ps1`. Kokoro stays warm between replies and plays each synthesized reply as one continuous buffer. These are assistant-style voices, not an imitation of an actor's voice. The **Answer language** control selects Auto, English, or Hindi. Auto responds in Hindi to Hindi or Hinglish questions and English to English questions. You can type or say questions such as “mujhe batao gravity kya hai” or “पानी क्यों उबलता है”. Hindi answers use Devanagari for accurate Hindi speech. Source URLs stay in the transcript rather than being read aloud. Voice synthesis runs locally. Microphone capture now continues during speech. Say **“Jarvis …”** to interrupt a reply and issue a command; captured playback references reject matching self-echo. This is text-based filtering, not acoustic echo cancellation. **Stop voice** remains available. Questions run in a separate process and queue and no longer supersede a running coding/automation task; voice, questions and the action worker can operate concurrently. **Stop all tasks** cancels pending questions and speech. The last three question/answer pairs stay in session memory for follow-ups; say **“forget conversation”** to clear that short session history. When Obsidian memory is enabled, short question and answer notes remain in its local vault.
+Answers appear in the transcript log, with a short preview above it, and are spoken aloud. **Speak answers** toggles playback; **Stop voice** interrupts it. English uses a local Kokoro male voice blend (`am_michael` + `am_fenrir`) with natural pauses and breathing; Hindi uses the local Piper Rohan voice. Both are installed by `scripts/setup/setup.ps1`. Kokoro stays warm between replies and plays one continuous stream, starting before the whole reply is synthesized ([details](docs/natural-male-voice.md)). These are assistant-style voices, not an imitation of an actor's voice. The **Answer language** control selects Auto, English, or Hindi. Auto responds in Hindi to Hindi or Hinglish questions and English to English questions. You can type or say questions such as “mujhe batao gravity kya hai” or “पानी क्यों उबलता है”. Hindi answers use Devanagari for accurate Hindi speech. Source URLs stay in the transcript rather than being read aloud. Voice synthesis runs locally. Microphone capture now continues during speech. Say **“Jarvis …”** to interrupt a reply and issue a command; captured playback references reject matching self-echo. This is text-based filtering, not acoustic echo cancellation. **Stop voice** remains available. Questions run in a separate process and queue and no longer supersede a running coding/automation task; voice, questions and the action worker can operate concurrently. **Stop all tasks** cancels pending questions and speech. The last three question/answer pairs stay in session memory for follow-ups; say **“forget conversation”** to clear that short session history. When Obsidian memory is enabled, short question and answer notes remain in its local vault.
 
 The local Ollama model **qwen3.5:9b** provides answers. Jarvis starts the installed Ollama server if necessary. The supervised model-recovery path can restore missing declared models in the background; partial downloads are retained for bounded later attempts. The standard Ollama chat template is used. The enabled `gpu_scheduler` controls actual GPU allocation; set `gpu_scheduler.primary_layers: 0` for CPU primary inference. `knowledge.num_gpu` remains the scheduler-disabled fallback. Responses can take several seconds, especially with model loading or long context. [Current GPU settings](docs/gpu-priority.md) and [earlier measured voice latency](docs/production-validation.md).
 
@@ -821,7 +904,7 @@ App matching accepts common aliases, spacing differences, partial names, and clo
 
 Jarvis uses Windows UI Automation names, not guessed screen coordinates. Keep the destination app in front; if Jarvis itself is in front, it can use the last window it targeted. Controls must be visible, enabled, and exposed by the app's accessibility interface. Hidden dropdown items require opening the dropdown first. Custom canvases and some browser controls may not expose names; the action log explains when no match is available.
 
-Exact labels win over longer labels. Multiple matches produce numbered choices in the action log. Choices expire after 45 seconds and are invalidated when the window or available controls change. Clicking waits for finalized speech. UI calls run in an isolated worker with cancellation and a timeout so a stuck app cannot block microphone capture. If dictating, say “stop dictation” before giving a selection command.
+Exact labels win over longer labels. Multiple matches produce numbered choices in the action log. Choices expire after 45 seconds and are invalidated when the window or available controls change. Clicking waits for finalized speech. UI calls run in an isolated worker with cancellation and a timeout so a stuck app cannot block microphone capture.
 Ordinal and pointer-based choices rely on visible accessibility controls. Jarvis avoids destructive controls in inferred selections; name a control explicitly when that is your intent. If a video page does not expose usable video links, Jarvis asks you to choose another way.
 
 ### PC catalog
@@ -832,13 +915,13 @@ Examples: **“open chrome”**, **“open blender”**, **“open visual studio
 
 Double-click **launchers/Refresh PC Catalog.cmd** after installing apps or moving files, then restart Jarvis. The scan reads names and paths, not document contents. It skips Windows internals, AppData, ProgramData, dependency/cache folders, and reparse points/junctions, and records permission-denied locations. It does not claim to index every protected or cached file. Direct file creation, rename, edit, and deletion use `files_root`; a multi-step task can create, edit, or request deletion of a single file in a named folder. Deletion always opens an approval dialog. File edits require UTF-8 text and either one exact snippet to replace or an explicit full overwrite.
 
-Some packaged apps launch through Windows shell IDs. For those apps, select the text field and say “stop dictation, then write …” before dictating; their actual destination process cannot reliably be inferred from the launcher.
+Some packaged apps launch through Windows shell IDs. For those apps, click the text field and say “write … here”; their actual destination process cannot reliably be inferred from the launcher.
 
 Notepad, Calculator, Paint, and File Explorer are configured. Add apps as executable argument arrays in `config/config.json`, for example `"my editor": ["C:\\Path\\Editor.exe"]`. Commands never become shell scripts.
 
-Click the app's text field before saying “Jarvis write …”, or open Notepad by voice first. Typing is bound to the initial foreground window and stops if focus changes. After a typing error, say “stop dictation”, select the destination, and restart. Moving the pointer to a screen corner triggers the typing fail-safe. Some elevated or custom apps reject simulated typing.
+Click the app's text field before saying “Jarvis write … here”, or name the app (“write … in Notepad”). Typing is bound to that window and stops if focus changes; nothing more is typed after an error. Moving the pointer to a screen corner triggers the typing fail-safe. Some elevated or custom apps reject simulated typing.
 
-Each fresh dictation command selects the currently focused app, except when it follows an app-open command: that sequence retains the verified opened window. To switch apps during ongoing dictation, say “stop dictation”, click the new text field, and say “write …”.
+Each write command targets the window you were in when you asked, except when it follows an app-open command or names an app: then it writes into that app. Push-to-write follows the cursor phrase by phrase.
 
 File operations are restricted to the configured `files_root` (default `JarvisFiles`). They target single filenames, never folders. “Dot txt” becomes `.txt`; a missing extension defaults to `.txt`. Creation and rename never overwrite existing files. To choose another folder, edit `files_root` in `config/config.json`. Voice cannot expand that scope.
 
@@ -1058,6 +1141,8 @@ Jarvis/
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
 | `gpu_scheduler.py` | Process-shared inference priority, speech reservation, partial offload, bounded cache handoff and metadata health. |
 | `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+| `whatsapp.py`, `messengers.py` | WhatsApp Desktop through its accessibility tree (search, choose, draft, preview/approve, send and verify, replies, message/call watcher) and other messaging apps. |
+| `media_player.py` | Play by name on YouTube (Data API v3 or keyless search) and Spotify (app search, accessibility read, pointer click, media-session check), service resolution and island media cards. |
 
 ## Configuration and relocation
 
@@ -1075,6 +1160,8 @@ Jarvis/
 | `brain` | Enabled, `qwen3.5:9b` planner/coder/decision/vision, native function calls, no model fallback, Laya selector, adaptive planning/recovery. |
 | `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
+| `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |
+| `media.default_service` | `youtube`; where "play X" goes when no service is named and Jarvis has not played anything yet. The optional YouTube Data API v3 key goes in gitignored `secrets/youtube.json` (`{"api_key": "..."}`) or `JARVIS_YOUTUBE_API_KEY`, never here. |
 
 Current application location: `D:\Kunals GitHub Repo\Jarvis\app`. Launchers use their own directory; application/model paths derive from source locations. Run commands from the app directory so Python resolves the `jarvis` package. The **open project folder** command uses the first existing non-drive-root entry in `project_roots`, rather than relying on the old folder name.
 
@@ -1091,7 +1178,7 @@ Runtime records under `.jarvis-runtime/state/` include `.jarvis-runtime/state/ta
 | GPU speech check fails | Confirm NVIDIA driver/GPU availability and inspect `scripts/verification/verify_whisper.py` output. This configuration does not silently use CPU Whisper. |
 | No recognized speech | Check Windows microphone access, the selected device and input meter, listening state, and whether reply playback is muting recognition. |
 | Answers/planning unavailable | Install/start Ollama, complete brain setup, and inspect the configured model names and worker logs. |
-| Jarvis ignores a spoken selection | Stop dictation, keep the destination visible, list exposed controls, and name an unambiguous current label. Choices expire after 45 s. |
+| Jarvis ignores a spoken selection | Keep the destination visible, list exposed controls, and name an unambiguous current label. Choices expire after 45 s. |
 | File lookup fails after a move | Check aliases and run **launchers/Refresh PC Catalog.cmd**; restart Jarvis. An outdated SQLite index is rejected rather than guessed. |
 | Project folder opens the wrong location | Reorder/update `project_roots` in `config/config.json`; the first existing non-drive root is used for the generic project-folder command. |
 | Toolkit is unavailable | Use **list toolkits**, set the required provider environment variables before startup, and review provider scopes in the toolkit guide. |

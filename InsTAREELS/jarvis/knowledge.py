@@ -22,6 +22,10 @@ def wants_screen(question):
     return bool(SCREEN_QUERY.search(question))
 
 
+
+PAST_REFERENCE = re.compile(r"\b(?:remember|recall|last time|yesterday|earlier|previous(?:ly)?|before|we (?:talked|discussed|spoke|said)|"
+                            r"you (?:said|told|mentioned)|our (?:last|previous|earlier) (?:chat|conversation|talk)|that conversation)\b", re.I)
+
 class Knowledge:
     def __init__(self, options, report):
         self.options, self.report = options, report
@@ -295,7 +299,9 @@ class Knowledge:
                         self.context_seed = selected
                     elif not current_found and not use_screen:
                         matches = resolved['matches']
-                        if len(matches) > 1:
+                        # In a live conversation a new topic is just answered; only an explicit
+                        # reference to the past ("remember when...") asks which saved talk to use.
+                        if len(matches) > 1 and PAST_REFERENCE.search(question):
                             import uuid
                             options = [{'label': row['created'][:16].replace('T',' ')+' UTC · '+row['question'][:100],
                                         'context': 'Matched: '+', '.join(row['keywords'])+'\nQ: '+row['question'][:200]+

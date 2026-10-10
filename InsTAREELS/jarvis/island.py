@@ -1,6 +1,7 @@
 """Native Dynamic Island layout, rendering and cancellable display-only motion."""
 from functools import lru_cache
 import math
+import re
 from pathlib import Path
 import time
 
@@ -11,6 +12,41 @@ KEY = "#ff00ff"
 BLACK = "#000000"
 ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
+SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp")}
+WORKING = {"searching", "loading", "drafting", "sending", "choose"}  # Shimmer bar and pulsing meter.
+MEDIA_HEIGHT = 126
+MEDIA_PHASES = {"searching": "Searching", "loading": "Starting", "playing": "Playing", "paused": "Paused",
+                "error": "Couldn't play", "control": "", "choose": "Choose who you mean", "drafting": "Drafting",
+                "preview": "Waiting for your approval", "sending": "Sending", "sent": "Done", "call": "Incoming call",
+                "message": "New message"}
+
+
+def clock_text(seconds):
+    seconds = max(0, int(seconds or 0))
+    return (f"{seconds // 3600}:{seconds % 3600 // 60:02d}:{seconds % 60:02d}" if seconds >= 3600
+            else f"{seconds // 60}:{seconds % 60:02d}")
+
+
+@lru_cache(maxsize=16)
+def artwork(encoded, side):
+    """Rounded square artwork from a base64 JPEG/PNG (cached per frame size)."""
+    import base64
+    import io
+    try:
+        image = Image.open(io.BytesIO(base64.b64decode(encoded))).convert("RGB").resize((side, side), Image.Resampling.LANCZOS)
+    except Exception:
+        return None
+    mask = Image.new("L", (side, side), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, side - 1, side - 1), radius=max(2, side // 7), fill=255)
+    return image, mask
+
+
+def media_progress(media, now=None):
+    """Position advanced locally while playing, so the bar moves between updates."""
+    position, duration = float(media.get("position") or 0), float(media.get("duration") or 0)
+    if media.get("phase") == "playing":
+        position += max(0., (time.time() if now is None else now) - float(media.get("at") or 0))
+    return (min(position, duration) if duration else position), duration
 
 
 @lru_cache(maxsize=64)
@@ -55,7 +91,7 @@ def fit_text(draw, value, face, width):
 
 
 def render_island(width=208, height=52, status="STANDBY", phase=0, message="", level=0, expanded=False,
-                  detail='', scale=1.):
+                  detail='', scale=1., media=None):
     width, height = max(170, int(width)), max(40, int(height))
     scale = min(3., max(1., float(scale))) if math.isfinite(float(scale)) else 1.
     sampling = scale * 2
@@ -112,7 +148,94 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
         rectangle((width-50, 9, width-34, 33),radius=8,fill='#202126',outline='#35363d',width=1)
         draw.line([(round(x*sampling), round(y*sampling)) for x,y in
                    ((width-47,24),(width-43,20),(width-39,24))], fill='#aaaaaa', width=max(1,round(sampling)))
-    if height > 82 and not expanded:
+    if media and height >= MEDIA_HEIGHT - 4:
+        # Animated YouTube/Spotify card: artwork, title, artist, live progress and equalizer.
+        accent, label = SERVICE.get(media.get("service"), ("#b9c9ff", "Media"))
+        left, top, right, bottom = 44, 46, width - 44, height - 10
+        rectangle((left, top, right, bottom), radius=16, fill="#111216", outline=accent, width=1)
+        side = 54
+        art_x, art_y = left + 10, top + 8
+        art = artwork(media.get("image", ""), round(side * sampling)) if media.get("image") else None
+        if art:
+            image.paste(art[0], (round(art_x * sampling), round(art_y * sampling)), art[1])
+        elif media.get("service") == "whatsapp":
+            # Contact avatar: initials on a soft green tile; it pulses while a call rings.
+            ring = 3 * abs(math.sin(phase * 4)) if media.get("phase") == "call" else 0
+            if ring:
+                rectangle((art_x - ring, art_y - ring, art_x + side + ring, art_y + side + ring), radius=10 + ring,
+                          fill=None, outline=accent, width=2)
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill="#17392a")
+            initials = "".join(w[0] for w in re.findall(r"[^\W\d_]+", media.get("title") or "")[:2]).upper() or "W"
+            initials = "?" if media.get("phase") == "choose" else initials
+            face_initials = font(round(20 * sampling), True)
+            width_initials = draw.textlength(initials, font=face_initials) / sampling
+            text(art_x + (side - width_initials) / 2, art_y + side / 2 - 13, initials, 20, "#b8f5cf", True)
+        else:
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
+        # Service badge on the artwork corner.
+        bx, by = art_x + side - 16, art_y + side - 16
+        if media.get("service") == "whatsapp":
+            # Speech bubble with a handset, drawn as simple shapes.
+            rectangle((bx, by, bx + 20, by + 20), radius=10, fill=accent)
+            draw.polygon([tuple(round(v * sampling) for v in point) for point in
+                          ((bx + 2, by + 19), (bx + 4, by + 13), (bx + 8, by + 17))], fill=accent)
+            draw.ellipse(tuple(round(v * sampling) for v in (bx + 4, by + 4, bx + 16, by + 16)),
+                         outline="#ffffff", width=max(1, round(1.4 * sampling)))
+            draw.arc(tuple(round(v * sampling) for v in (bx + 7, by + 7, bx + 13, by + 13)), 100, 260,
+                     fill="#ffffff", width=max(1, round(1.6 * sampling)))
+        elif media.get("service") == "spotify":
+            rectangle((bx, by, bx + 20, by + 20), radius=10, fill=accent)
+            for i, (w, t) in enumerate(((12, 1.6), (10, 1.4), (7, 1.2))):
+                y0 = by + 6 + i * 3.6
+                draw.arc(tuple(round(v * sampling) for v in (bx + 10 - w / 2, y0, bx + 10 + w / 2, y0 + 7)),
+                         200, 340, fill="#0b0b0b", width=max(1, round(t * sampling)))
+        else:
+            rectangle((bx - 3, by + 2, bx + 23, by + 19), radius=6, fill=accent)
+            draw.polygon([tuple(round(v * sampling) for v in point) for point in
+                          ((bx + 7, by + 6), (bx + 7, by + 15), (bx + 15, by + 10.5))], fill="#ffffff")
+        text_x = art_x + side + 14
+        meter_x = right - 58
+        face_title, face_sub = font(round(13 * sampling), True), font(round(11 * sampling))
+        text(text_x, top + 3, fit_text(draw, media.get("title") or label, face_title, (meter_x - text_x - 6) * sampling),
+             13, "#f2f2f6", True)
+        text(text_x, top + 21, fit_text(draw, media.get("subtitle", ""), face_sub, (meter_x - text_x - 6) * sampling),
+             11, "#a7a8b3")
+        state = media.get("phase", "playing")
+        caption = media.get("detail") or MEDIA_PHASES.get(state, "")
+        caption = (caption + " on " + label) if state in {"searching", "loading"} and media.get("service") != "whatsapp" else caption
+        text(text_x, top + 37, fit_text(draw, caption, face_sub, (meter_x - text_x - 6) * sampling), 11,
+             "#ff8a80" if state == "error" else accent)
+        # Equalizer: live bars while playing, a gentle pulse while searching, flat when paused.
+        for i in range(5):
+            if state in {"playing", "call"}:
+                amplitude = 3 + 9 * abs(math.sin(phase * 3.1 + i * 1.3)) * (0.6 + 0.4 * abs(math.sin(phase * 1.7 + i)))
+            elif state in {"preview", "message"}:
+                amplitude = 2 + 3 * (0.5 + 0.5 * math.sin(phase * 2.2 - i * 0.7))
+            elif state in WORKING:
+                amplitude = 3 + 4 * (0.5 + 0.5 * math.sin(phase * 5 - i * 0.9))
+            else:
+                amplitude = 2
+            x = meter_x + 8 + i * 8
+            rectangle((x, top + 28 - amplitude, x + 4, top + 28 + amplitude), radius=2, fill=accent)
+        # Progress bar (or a moving shimmer while searching).
+        bar_y, bar_x1, bar_x2 = bottom - 10, text_x, right - 14
+        rectangle((bar_x1, bar_y, bar_x2, bar_y + 4), radius=2, fill="#2a2b32")
+        if state in WORKING:
+            sweep = (phase * 0.6) % 1.4 - 0.2
+            start = bar_x1 + (bar_x2 - bar_x1) * max(0., sweep)
+            end = bar_x1 + (bar_x2 - bar_x1) * min(1., sweep + 0.25)
+            if end > start:
+                rectangle((start, bar_y, end, bar_y + 4), radius=2, fill=accent)
+        else:
+            position, duration = media_progress(media)
+            if duration:
+                fill = bar_x1 + (bar_x2 - bar_x1) * min(1., position / duration)
+                rectangle((bar_x1, bar_y, max(bar_x1 + 4, fill), bar_y + 4), radius=2, fill=accent)
+                rectangle((fill - 4, bar_y - 2, fill + 4, bar_y + 6), radius=4, fill="#ffffff")
+                stamp = clock_text(position) + " / " + clock_text(duration)
+                face_time = font(round(9 * sampling))
+                text(bar_x2 - draw.textlength(stamp, font=face_time) / sampling, top + 39, stamp, 9, "#8e8f9a")
+    if height > 82 and not expanded and not media:
         # Content appears immediately; decorative motion never delays an answer.
         for i, line in enumerate(wrap(draw, message, font(round(14*sampling)), (width-48)*sampling, 3)):
             text(24, 56+i*21, line, 14, '#dedee6')
@@ -206,6 +329,7 @@ class Island:
         self.app, self.canvas = app, canvas
         self.motion = Morph()
         self.expanded = self.hover = False
+        self.media, self.media_until = None, 0.
         self.message = ""
         self.activity = Activity()
         self.message_until = 0.
@@ -278,6 +402,15 @@ class Island:
 
     def notify(self, kind, message):
         self.activity.notify(kind, message)
+        if kind == 'media_card' and isinstance(message, dict):
+            # Shown while a media command runs and briefly after; never blocks other content.
+            self.media = message
+            self.media_until = time.monotonic() + {'searching': 40, 'loading': 40, 'playing': 10, 'paused': 6,
+                                                   'control': 6, 'choose': 120, 'drafting': 90, 'preview': 180,
+                                                   'sending': 30, 'sent': 8, 'call': 45, 'message': 15,
+                                                   'error': 8}.get(message.get('phase'), 6)
+            self.last_frame = None
+            return
         if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):
             # Reveal once at task start without taking typing focus. Subsequent
             # stream updates respect a user's deliberate collapse.
@@ -313,6 +446,9 @@ class Island:
 
     def layout_target(self, message, detail, status, max_width, max_height):
         desk = self.app.desk
+        if (self.media and time.monotonic() < self.media_until and not self.expanded and not self.features_open
+                and desk.view == 'Overview' and not desk.work.get('active') and not self.stream_active):
+            return (min(560, max_width), MEDIA_HEIGHT), False, False
         workspace = self.features_open or desk.view != 'Overview' or desk.has_reply or desk.work['active'] or getattr(self,'work_completion_pending',False)
         opened = self.expanded or (not self.stream_hidden and (bool(message) or self.stream_active))
         if opened:
@@ -361,11 +497,15 @@ class Island:
             self.last_size = (pixels_w, pixels_h)
         settled = abs(width-target[0])+abs(height-target[1]) <= 2
         phase = 0 if reduced or status == "STANDBY" else now
-        frame_key = (width, height, status, message, detail, scale, round(phase*24), round(float(level)), self.surface_open)
+        media = self.media if self.media and now < self.media_until and height >= MEDIA_HEIGHT - 4 and not self.surface_open else None
+        if media:
+            phase = 0 if reduced else now  # The card animates even while Jarvis is otherwise idle.
+        frame_key = (width, height, status, message, detail, scale, round(phase*24), round(float(level)), self.surface_open,
+                     id(media), round(time.time()) if media else 0)
         if frame_key != self.last_frame:
             geometry_key = (width,height,scale,self.surface_open)
-            if height <= 96 or geometry_key != self.background_key:
-                self.preview_image = render_island(width, height, status, phase, '', level, self.surface_open, detail, scale)
+            if height <= 96 or geometry_key != self.background_key or media:
+                self.preview_image = render_island(width, height, status, phase, '', level, self.surface_open, detail, scale, media)
                 self.background_image = self.preview_image.copy()
                 self.photo = ImageTk.PhotoImage(self.preview_image, master=root)
                 self.canvas.itemconfigure(self.item, image=self.photo)

@@ -429,7 +429,9 @@ class IslandDesk:
             child.destroy()
         self.choice_images = []
         self.choice_buttons = []
-        self.choice_hint.configure(text='Click or say the option name / number. Choices expire.' if pending else 'No pending choices. Ask for a fresh list.')
+        self.choice_hint.configure(text=((pending.get('question','')+'\n') if pending and pending.get('kind')=='whatsapp' else '')+
+                                   ('Click or say the option name / number. Choices expire.' if pending else 'No pending choices. Ask for a fresh list.'),
+                                   wraplength=420,justify='left')
         if not pending:
             return
         for index,option in enumerate(pending['options']):
@@ -558,7 +560,8 @@ class IslandDesk:
                     self.app.report('answer','Your 25-minute focus timer is complete.')
             self.now.set(caption)
             if 'expires' in (self.pending or {}):
-                self.choice_hint.configure(text=f'Click or say the name / number · {max(0,int(self.pending["expires"]-now))}s remaining')
+                question = (self.pending.get('question','')+'\n') if self.pending.get('kind')=='whatsapp' else ''
+                self.choice_hint.configure(text=question+f'Click or say the name / number · {max(0,int(self.pending["expires"]-now))}s remaining')
         if visible and self.view=='Games':
             self.game.tick(dt)
             self.draw_game()

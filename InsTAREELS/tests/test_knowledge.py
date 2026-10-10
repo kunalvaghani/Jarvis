@@ -87,12 +87,12 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(sent, [Command("ask", "why is the sky blue then red at sunset")])
         self.assertEqual(parse("search the internet for python"), Command("ask", "python", "web"))
 
-    def test_question_while_dictating_is_only_text(self):
+    def test_question_inside_a_write_command_is_only_text(self):
         sent = []
         engine = Engine(sent.append, lambda *args: None)
         engine.activate()
-        engine.feed("write what is the weather", final=True)
-        self.assertEqual([c.kind for c in sent], ["begin_dictation", "type"])
+        engine.feed("write exactly what is the weather", final=True)
+        self.assertEqual([(c.kind, c.value) for c in sent], [("write_text", "what is the weather")])
 
     def test_known_answer_stays_local(self):
         search = unittest.mock.Mock(side_effect=AssertionError("Unexpected network"))

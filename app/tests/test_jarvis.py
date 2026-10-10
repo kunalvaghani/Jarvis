@@ -7,6 +7,9 @@ from jarvis.commands import Command, filename, parse
 from jarvis.engine import Engine
 from jarvis.actions import Actions, Desktop
 
+NOTEPAD = '{"target": "notepad", "tail": ""}'
+NONE = '{"target": "", "tail": ""}'
+
 
 class EngineTests(unittest.TestCase):
     def setUp(self):
@@ -31,7 +34,7 @@ class EngineTests(unittest.TestCase):
         self.engine.activate(now=10)
         self.feed("go to sleep", True, now=11)
         self.feed("open notepad", True, now=12)
-        self.assertEqual(self.sent, [Command("sleep")])
+        self.assertEqual(self.sent, [Command("end_conversation")])  # Ends listening; queued tasks continue.
         self.assertTrue(any(kind == "ignored" for kind, _ in self.events))
         self.feed("jarvis open notepad", True, now=13)
         self.assertEqual(self.sent[-1], Command("open", "notepad"))
@@ -69,48 +72,53 @@ class EngineTests(unittest.TestCase):
         self.feed("jarvis open notepad")
         self.assertEqual(self.sent, [])
 
-    def test_streaming_dictation_without_pause(self):
+    def test_write_waits_for_final_speech_and_never_starts_dictation(self):
         self.feed("jarvis write one two three four five")
         self.feed("jarvis write one two three four five six")
-        self.assertEqual(self.sent, [Command("begin_dictation"), Command("type", "one two three ")])
+        self.assertEqual(self.sent, [])  # Nothing is typed from a revisable partial.
         self.feed("jarvis write one two three four five six", True)
-        self.assertEqual("".join(c.value for c in self.sent), "one two three four five six ")
-        self.feed("seven eight", True)
-        self.assertEqual(self.sent[-1], Command("type", "seven eight "))
+        self.assertEqual(self.sent, [Command("compose_text", "one two three four five six", NONE)])
+        self.feed("seven eight", True)  # Plain speech afterwards is not typed.
+        self.assertEqual(self.sent[-1], Command("task", "seven eight", "unparsed"))
 
-    def test_stop_dictation_then_command(self):
-        self.feed("jarvis write hello", True)
-        self.feed("world stop dictation then open paint", True)
-        self.assertEqual(self.sent, [Command("begin_dictation"), Command("type", "hello "), Command("type", "world "), Command("stop_dictation"), Command("open", "paint")])
+    def test_dictation_phrases_explain_push_to_write(self):
+        self.feed("jarvis start dictation", True)
+        self.feed("stop dictation", True)
+        self.assertEqual(self.sent, [Command("write_help"), Command("write_help")])
 
-    def test_stop_in_initial_dictation(self):
-        self.feed("jarvis write hello stop dictation then open paint", True)
-        self.assertEqual(self.sent, [Command("begin_dictation"), Command("type", "hello "), Command("stop_dictation"), Command("open", "paint")])
+    def test_exact_write_keeps_then_inside_the_text(self):
+        self.feed("jarvis write exactly hello then open paint", True)
+        self.assertEqual(self.sent, [Command("write_text", "hello then open paint", NONE)])
 
     def test_open_and_write_in_one_sentence(self):
-        self.feed("jarvis open notepad and write my name is kunal", True)
-        self.assertEqual(self.sent, [Command("open", "notepad"), Command("begin_dictation"), Command("type", "my name is kunal ")])
+        self.feed("jarvis open notepad and write exactly my name is kunal", True)
+        self.assertEqual(self.sent, [Command("open", "notepad"), Command("write_text", "my name is kunal", NOTEPAD)])
 
-    def test_partial_and_write_does_not_repeat_open_or_dictation(self):
+    def test_partial_and_write_does_not_repeat_open_or_write(self):
         self.feed("jarvis open notepad and write my name")
         self.feed("jarvis open notepad and write my name is kunal")
         self.feed("jarvis open notepad and write my name is kunal", True)
         self.assertEqual(sum(c.kind == "open" for c in self.sent), 1)
-        self.assertEqual(sum(c.kind == "begin_dictation" for c in self.sent), 1)
-        self.assertEqual("".join(c.value for c in self.sent if c.kind == "type"), "my name is kunal ")
+        self.assertEqual([c for c in self.sent if c.kind == "compose_text"],
+                         [Command("compose_text", "my name is kunal", NOTEPAD)])
 
     def test_and_write_inside_prose_remains_literal(self):
-        self.feed("jarvis write i read and write every day", True)
-        self.assertEqual(self.sent[-1], Command("type", "i read and write every day "))
+        self.feed("jarvis write exactly i read and write every day", True)
+        self.assertEqual(self.sent[-1], Command("write_text", "i read and write every day", NONE))
 
     def test_and_write_across_recognizer_endpoints(self):
         self.feed("jarvis open notepad", True)
-        self.feed("and write my name is kunal", True)
-        self.assertEqual(self.sent, [Command("open", "notepad"), Command("begin_dictation"), Command("type", "my name is kunal ")])
+        self.feed("and write exactly my name is kunal", True)
+        self.assertEqual(self.sent, [Command("open", "notepad"), Command("write_text", "my name is kunal", NOTEPAD)])
+
+    def test_original_case_and_punctuation_reach_exact_writes(self):
+        raw = "Jarvis, write exactly Hello, World! See you at 5 PM."
+        self.engine.feed("jarvis write exactly hello world see you at 5 pm", final=True, raw=raw)
+        self.assertEqual(self.sent[-1].value, "Hello, World! See you at 5 PM.")
 
     def test_sleep_suppresses_remainder(self):
         self.feed("jarvis go to sleep then open paint", True)
-        self.assertEqual(self.sent, [Command("sleep")])
+        self.assertEqual(self.sent, [Command("end_conversation")])  # Ends listening; queued tasks continue.
         self.feed("open paint", True)
         self.assertEqual(len(self.sent), 1)
 

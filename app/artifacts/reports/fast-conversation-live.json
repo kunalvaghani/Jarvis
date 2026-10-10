@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-09T22:37:59.480207+00:00",
+  "passed": true,
+  "tasks": {
+    "wikipedia": {
+      "finished": true,
+      "seconds": 68.5,
+      "model_call_seconds": [
+        23.9,
+        27.2
+      ],
+      "planner_calls": [
+        {
+          "prompt_tokens": 6977,
+          "prompt_s": 15.35,
+          "output_tokens": 53,
+          "output_s": 8.28,
+          "images": 0,
+          "continued": false
+        },
+        {
+          "prompt_tokens": 8625,
+          "prompt_s": 4.49,
+          "output_tokens": 118,
+          "output_s": 22.52,
+          "images": 0,
+          "continued": true
+        }
+      ]
+    },
+    "notepad_typing": {
+      "finished": true,
+      "seconds": 58.6,
+      "model_call_seconds": [
+        26.7,
+        7.9,
+        7.3
+      ],
+      "planner_calls": [
+        {
+          "prompt_tokens": 7388,
+          "prompt_s": 16.37,
+          "output_tokens": 60,
+          "output_s": 9.98,
+          "images": 0,
+          "continued": false
+        },
+        {
+          "prompt_tokens": 7659,
+          "prompt_s": 1.37,
+          "output_tokens": 41,
+          "output_s": 6.31,
+          "images": 0,
+          "continued": true
+        }
+      ]
+    }
+  },
+  "scope": "Real Actions/Brain dispatch on the desktop and a simulated spoken call through the real Engine, action queue and knowledge worker. Approvals refused; flags and timings only.",
+  "call": {
+    "queued_acknowledged": true,
+    "tasks_finished": 2,
+    "task_finish_seconds": [
+      3.0,
+      53.7
+    ],
+    "question_answered_during_task": true,
+    "queue_status_reported": true,
+    "chat_answers": 2,
+    "answer_seconds": [
+      4.1,
+      39.6
+    ],
+    "statement_classified_as_chat": true,
+    "warnings": 0
+  },
+  "approval_requests_refused": 0
+}

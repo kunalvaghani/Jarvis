@@ -7,6 +7,10 @@ import time
 
 def snapshot(actions, now=None):
     now = time.monotonic() if now is None else now
+    from .whatsapp import snapshot as whatsapp_snapshot
+    waiting = whatsapp_snapshot(actions)
+    if waiting:
+        return waiting  # A paused WhatsApp step (contact choice, message preview, incoming call).
     knowledge = getattr(actions, 'knowledge', None)
     if knowledge is not None and getattr(knowledge, 'pending_memory', None):
         card = knowledge.choice_snapshot()

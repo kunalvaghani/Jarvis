@@ -14,6 +14,11 @@ import requests
 
 ENDPOINT = "http://127.0.0.1:11434"
 CURRENT = re.compile(r"\b(latest|current|currently|today|yesterday|tomorrow|news|weather|price|prices|stock|score|president|prime minister|ceo|recent|now|aaj|abhi|mausam|khabar)\b|(?:आज|अभी|मौसम|खबर|ताज़ा|ताजा)", re.I)
+# Greetings, feelings and talk about Jarvis itself never need a web search ("how are you today?").
+SMALL_TALK = re.compile(r"^(?:hi|hello|hey|yo|namaste|good (?:morning|afternoon|evening|night)|how (?:are|r) (?:you|u)|"
+                        r"how(?:'s| is) (?:it going|your day|life|everything)|what'?s up|thanks|thank you|nice to (?:meet|talk)|"
+                        r"who are you|what(?:'s| is) your name|what can you do|tell me about yourself|i'?m (?:feeling|so|really|very|a bit|tired|happy|sad|bored|good|fine|ok)|"
+                        r"i feel|i am (?:feeling|so|really|very|tired|happy|sad|bored|good|fine))\b", re.I)
 ANSWER_SCHEMA = {"type": "object", "additionalProperties": False,
     "required": ["answer", "needs_web"], "properties": {
         "answer": {"type": "string"}, "needs_web": {"type": "boolean"}}}
@@ -228,8 +233,14 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
         "You only answer questions; you cannot operate this PC, execute code, or claim actions were done. "
         "Be honest about uncertainty. Do not invent facts or sources. "
         "Use the configured answer language consistently. ")
-    system += ("Speak like a calm, friendly assistant having a conversation. Lead with the answer. "
-               "Use short, natural sentences and everyday words. Usually use two or three sentences, "
+    system += ("Talk like a warm, witty friend on a phone call, not a formal assistant. Lead with the answer. "
+               "Use contractions, everyday words and natural spoken reactions when they fit (for example "
+               "'Oh, nice!', 'Hmm, good question.', 'Honestly,'), and vary how you start sentences. Show real "
+               "emotion in the words: pleased about good news, gentle and sympathetic about bad news. "
+               "When the mood is light, sometimes add one short, friendly joke or playful remark, roughly one "
+               "reply in four and never forced; never joke about serious, sad, medical, financial or urgent matters. "
+               "Never use emoji, markdown symbols or bullet lists in spoken answers. "
+               "Use short, natural sentences. Usually use two or three sentences, "
                "but give more detail when requested. Avoid ritual greetings and repeated offers of help. "
                "Write the answer in plain prose suitable for speaking aloud; keep code or tables only "
                "when the user needs them. These style rules apply to answer text, not the required JSON envelope. ")
@@ -304,7 +315,8 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
                                   and re.search(r"(?i)\b(my|pc|computer|installed|projects?|path|location|where is|where are)\b", question))
     local_app_question = bool(request.get('live_app_context') and re.search(
         r'(?i)\b(?:buttons?|controls?|opened|closed|(?:this|that|current|active|open) (?:app|window))\b',question))
-    needs_web = False if pc_context or memory_question or local_catalog_question or local_app_question else (request.get("web", False) or bool(CURRENT.search(question)))
+    small_talk = bool(SMALL_TALK.search(question.strip())) and not request.get("web", False)
+    needs_web = False if pc_context or memory_question or local_catalog_question or local_app_question or small_talk else (request.get("web", False) or bool(CURRENT.search(question)))
     if code_example and not needs_web:
         if streaming:
             def code_chunk(chunk):
@@ -343,7 +355,7 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
             draft = parsed.get("answer")
             if not isinstance(draft, str) or not isinstance(parsed.get("needs_web"), bool):
                 raise ValueError("Invalid answer format")
-            needs_web = parsed["needs_web"] and not (pc_context or memory_question or local_catalog_question or local_app_question)
+            needs_web = parsed["needs_web"] and not (pc_context or memory_question or local_catalog_question or local_app_question or small_talk)
         except (ValueError, AttributeError):
             needs_web = True
     if not needs_web:

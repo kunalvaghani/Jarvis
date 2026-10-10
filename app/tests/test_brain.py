@@ -120,7 +120,7 @@ class PlanTests(unittest.TestCase):
         engine.feed("find a repair shop video")
         self.assertEqual(sent, [])
         engine.feed("find a repair shop video", final=True)
-        self.assertEqual(sent, [Command("task", "find a repair shop video")])
+        self.assertEqual(sent, [Command("task", "find a repair shop video", "unparsed")])
 
     def test_explicit_task_keeps_all_clauses_for_planner(self):
         sent = []
@@ -129,12 +129,27 @@ class PlanTests(unittest.TestCase):
         engine.feed("task open youtube then find repair shops", final=True)
         self.assertEqual(sent, [Command("task", "open youtube then find repair shops")])
 
-    def test_new_instruction_cancels_existing_task(self):
+    def test_new_instruction_queues_behind_running_task(self):
+        import threading
         with tempfile.TemporaryDirectory() as directory:
-            actions = Actions({"files_root": "files", "apps": {}}, directory, lambda *args: None)
+            events = []
+            actions = Actions({"files_root": "files", "apps": {}}, directory, lambda *args: events.append(args))
+            running = threading.Event()
             actions.task_active = True
+            actions.current_item = (running, Command("task", "open wikipedia"))
             old_generation = actions.generation
             actions.submit(Command("open", "chrome"))
+            self.assertEqual(actions.generation, old_generation)  # The running task is not replaced.
+            self.assertFalse(running.is_set())
+            self.assertEqual([command for _, command in actions.pending_tasks], [Command("open", "chrome")])
+            self.assertIn(("spoken_reply", "Okay, I'll do that next."), events)
+            actions.submit(Command("queue_status"))
+            self.assertIn("Working on: open wikipedia. Waiting: 1, chrome.", events[-1][1])
+            actions.submit(Command("cancel_current"))
+            self.assertTrue(running.is_set())
+            self.assertEqual(len(actions.pending_tasks), 1)  # Only the current task stops.
+            actions.submit(Command("cancel_all"))
+            self.assertEqual(actions.pending_tasks, [])
             self.assertGreater(actions.generation, old_generation)
             actions.close()
 

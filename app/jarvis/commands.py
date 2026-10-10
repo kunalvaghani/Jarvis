@@ -38,7 +38,48 @@ def filename(spoken: str) -> str:
     return name
 
 
+def spoken_clean(text: str) -> str:
+    """Speech-to-text extras that hide a plain command: "Pause.", "Jarvis, pause please", "hit play"."""
+    text = re.sub(r"[.!?,;:]+", " ", text).strip().lower()
+    text = re.sub(r"^(?:(?:hey |ok |okay )?jarvis |please |can you |could you |would you |will you |just |hit |press |click )+", "", text)
+    text = re.sub(r"(?: please| for me| now| right now| jarvis)+$", "", text).strip()
+    text = re.sub(r"^stop (the )?(video|song|music|track|playback)$", r"pause \1\2", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+NOW_PLAYING = {"what's playing", "what is playing", "what song is this", "which song is this", "what's this song",
+               "what song is playing", "which song is playing", "what video is this", "what's playing now"}
+
+
+APPROVE_WORDS = re.compile(r"(?:approve(?:d| it| that| the message)?|send it|send that|send the message|yes,? send it|"
+                           r"go ahead and send(?: it)?|pick up|pick it up|pick up the call|answer the call|accept the call)", re.I)
+REJECT_WORDS = re.compile(r"(?:don'?t send(?: it| that)?|do not send(?: it| that)?|reject(?: it)?|decline(?: it| the call)?|"
+                          r"don'?t pick up|do not pick up|ignore the call|hang up|cut the call)", re.I)
+
+
 def parse(text: str) -> Command:
+    cleaned_words = spoken_clean(text)
+    if APPROVE_WORDS.fullmatch(cleaned_words):
+        return Command("approval_answer", "yes")  # A waiting preview, call or approval card takes it.
+    if REJECT_WORDS.fullmatch(cleaned_words):
+        return Command("approval_answer", "no")
+    if spoken_clean(text) in NOW_PLAYING:
+        return Command("spotify_control", "status", "auto")  # Answered by whichever player is in use.
+    try:
+        command = _parse(text)
+    except ValueError:
+        cleaned = spoken_clean(text)
+        if not cleaned or cleaned == text.strip().lower():
+            raise
+        command = _parse(cleaned)  # Second attempt only; a matched command is never reinterpreted.
+    if (command.kind in {"spotify_control", "spotify_volume"} and not command.extra
+            and not re.search(r"spotify|\u0938\u094d\u092a\u0949\u091f\u093f\u092b\u093e\u0908", text, re.I)):
+        # "next song", "volume up": no service named, so it follows whatever is playing (see media_player.resolve).
+        return Command(command.kind, command.value, "auto")
+    return command
+
+
+def _parse(text: str) -> Command:
     from .repo_tools import command as repository_command
     repository=repository_command(text)
     if repository:return repository
@@ -56,6 +97,13 @@ def parse(text: str) -> Command:
     text = re.sub(r"^(?:but|and|so|okay|ok)\s+(?=(?:why|what|how|who|where|when|is|are|can)\b)", "", text.strip(), flags=re.I)
     text = re.sub(r"^(?:(?:please|can you|could you|would you)\s+)+", "", text.strip(), flags=re.I)
     text = re.sub(r"^(?:i (?:want|need) you to|can you help me|could you help me|help me)\s+", "", text, flags=re.I)
+    from .conversation_intent import normalize as natural
+    text = natural(text)  # "let's make an email", "let's watch a video on YouTube"
+    # "open YouTube and play X" / "go to Spotify and play X": one fast command, no planning.
+    m = re.fullmatch(r"(?:open|launch|start|go to|go on) (youtube|spotify)(?: app)?,?(?: and(?: then)?| then) "
+                     r"(?:play|put on|start playing|search for and play|find and play) (.+?)(?: (?:on|in) (?:it|there))?[.!]*", text, re.I)
+    if m:
+        return Command("play_media", m[2].strip(), m[1].lower())
     text = normalize_spoken_code_request(text)
     from .gmail_workflows import gmail_request
     if gmail_request(text):
@@ -107,8 +155,18 @@ def parse(text: str) -> Command:
             or re.match(r"^open .+? (?:menu|dropdown) and\b", text, re.I)
             or re.fullmatch(r"(?:choose|click|select) .+ (?:in|on) (?:the )?dialog", text, re.I)):
         return Command("task", text)
-    if re.match(r"^(?:do not|don't|never)\b", text, re.I):
+    if re.fullmatch(r"(?:never ?mind|forget it|scratch that|don'?t do that|do not do that|cancel that)[.!]*", text, re.I):
+        return Command("cancel_task", "last")  # Drops the most recent request (or the running one).
+    if re.match(r"^(?:do not|don't|never)\b", text, re.I) and not re.match(r"^(?:never ?mind|don'?t do|do not do)\b", text, re.I):
         raise ValueError("No action taken for a negated command.")
+    from .whatsapp import parse_command as whatsapp_command
+    whatsapp = whatsapp_command(text)
+    if whatsapp:
+        return whatsapp
+    from .messengers import parse_command as messenger_command
+    messenger = messenger_command(text)
+    if messenger:
+        return messenger
     from .media_commands import parse_media
     media = parse_media(text)
     if media:
@@ -162,14 +220,37 @@ def parse(text: str) -> Command:
         return Command("task", text)
     if re.search(r"\bopen\s+(?:(?:the|this)\s+)?folder\b.*\b(?:and|then)\s+(?:create|make)\b", text, re.I):
         return Command("task", text)
-    if re.fullmatch(r"(?:go to sleep|stop listening|cancel|stop all tasks)", text, re.I):
-        return Command("sleep")
+    if re.fullmatch(r"(?:go to sleep|stop listening|good ?bye|bye(?: jarvis)?|bye bye|that'?s all(?: for now)?|that is all|"
+                    r"end (?:the |this )?call|talk (?:to you )?later|see you(?: later)?)[.!]*", text, re.I):
+        return Command("end_conversation")  # Queued tasks keep running in the background.
+    if re.fullmatch(r"(?:stop|cancel) (?:all|every) tasks?|cancel everything|stop everything|clear the (?:task )?queue|"
+                    r"(?:stop|cancel|remove|delete|clear|drop|discontinue|forget)(?: all| every)?(?: of)? (?:the |my )?"
+                    r"(?:previous|earlier|older|pending|queued|waiting|other|remaining|old) (?:tasks|requests|jobs)"
+                    r"(?: (?:from|in) (?:the |my )?queue)?[.!]*", text, re.I):
+        return Command("cancel_all")
+    m = re.fullmatch(r"(?:stop|cancel|remove|delete|drop|discontinue|clear)(?: all| everything)?(?: tasks?)? "
+                     r"(?:except|but|other than|apart from) (?:the |my )?(.+?)(?: task| one| request)?[.!]*", text, re.I)
+    if m:
+        return Command("cancel_task", m[1], "except")
+    cancel = (r"(?:stop|cancel|discontinue|remove|delete|drop|skip|forget(?: about)?|scrap|abort|kill|"
+              r"don'?t do|do not do|never ?mind(?: about)?|no need (?:for|to do))")
+    m = (re.fullmatch(cancel + r" (?:the |that |my |this )?(.+?) (?:task|one|request|job|thing)"
+                      r"(?: (?:from|in) (?:the |my )?queue)?(?: anymore| any more| please)?[.!]*", text, re.I)
+         or re.fullmatch(cancel + r" (?:the |that |my )?(.+?) (?:from|in|out of) (?:the |my )?(?:task )?queue[.!]*", text, re.I)
+         or re.fullmatch(r"(?:discontinue|never ?mind(?: about)?|forget about|don'?t do|do not do|no need (?:for|to do)) "
+                         r"(?:the |that |my )?(.+?)(?: anymore| any more)?[.!]*", text, re.I)
+         or re.fullmatch(r"(?:cancel|remove|delete|drop|skip) (?:task )?(?:number |no\.? |#)(\d{1,2})[.!]*", text, re.I))
+    if m and not re.fullmatch(r"(?:this|that|the current|current|it)", m[1].strip(), re.I):
+        return Command("cancel_task", m[1].strip())  # A specific queued or running task, by description or position.
+    if re.fullmatch(r"(?:cancel|stop|skip)(?: (?:this|that|the current|current) task| it| that)?[.!]*", text, re.I):
+        return Command("cancel_current")
+    if re.fullmatch(r"(?:what'?s|what is|show(?: me)?|list) (?:in )?(?:the |my )?(?:task )?queue|what are you (?:working on|doing)|"
+                    r"(?:task|queue) status|what tasks are (?:left|pending|queued)[?.]*", text, re.I):
+        return Command("queue_status")
     if re.fullmatch(r"(?:resume|continue|finish) (?:the |my )?(?:last |unfinished |interrupted )?task|continue where (?:you|we) left off", text, re.I):
         return Command("resume_task")
-    if re.fullmatch(r"(?:stop dictation|stop writing|stop typing)", text, re.I):
-        return Command("stop_dictation")
-    if re.fullmatch(r"(?:start dictation|start typing|start writing)", text, re.I):
-        return Command("dictate")
+    if re.fullmatch(r"(?:start|stop|begin|end|enter|exit)(?: the)? (?:dictation|typing|writing)(?: mode)?|dictation(?: mode)?", text, re.I):
+        return Command("write_help")  # No dictation mode; push-to-write or a write command instead.
     if re.fullmatch(r"(?:yes|yes please|yeah|yep|do it|no|no thanks|nope)", text, re.I):
         return Command("confirm_suggestion", "no" if text.lower().startswith("no") else "yes")
     if re.fullmatch(r"(?:suggest a button|suggest an option|what do i usually choose)", text, re.I):
@@ -244,8 +325,29 @@ def parse(text: str) -> Command:
     m = re.fullmatch(r"(?:close|quit|exit) (.+?)(?: app| application| window)?", text, re.I)
     if m:
         return Command("close_app", m[1])
+    m = re.fullmatch(r"(?:skip|fast forward|go forward|jump ahead|skip ahead|forward)(?: by)? (\d{1,4}) seconds?", text, re.I)
+    if m:
+        return Command("spotify_control", "seek_" + m[1])
+    m = re.fullmatch(r"(?:rewind|go back|jump back|back)(?: by)? (\d{1,4}) seconds?", text, re.I)
+    if m:
+        return Command("spotify_control", "seek_-" + m[1])
+    m = re.fullmatch(r"(mute|unmute)(?: (?:it|that|this|the sound|sound))?", text, re.I)
+    if m:
+        return Command("spotify_volume", m[1].lower())
+    if re.fullmatch(r"(?:skip|next)(?: (?:this|the))? (?:song|track|one)", text, re.I):
+        return Command("spotify_control", "next")
+    if re.fullmatch(r"(?:repeat|loop) (?:this|the) (?:song|track)", text, re.I):
+        return Command("spotify_control", "repeat_one")
+    if re.fullmatch(r"(?:pause|stop|resume|continue|play) (?:it|that|this|the song|the music|the track|playback)", text, re.I):
+        return Command("click_control", "pause" if text.lower().startswith(("pause", "stop")) else "play", "click")
     if re.fullmatch(r"(?:pause|play|resume)(?: (?:the )?(?:video|button))?", text, re.I):
         return Command("click_control", "play" if text.lower().startswith("resume") else text.split()[0].lower(), "click")
+    if re.fullmatch(r"(?:play (?:it|that|this|the song|the video) again|replay(?: it| that| this)?|start (?:it |the song |the video )?over)[.!]*", text, re.I):
+        return Command("media_control", "restart", "")  # Whatever is playing on the service in use.
+    m = re.fullmatch(r"(?:play|put on|start playing)(?: me)? (?:the song |the track |the video |song |music |some )?(.{2,120}?)[.!]*", text, re.I)
+    if m and not re.fullmatch(r"(?:(?:it|that|this)(?: again| back)?|again|music|something|anything|the (?:first|second|third|next|previous) .+|"
+                              r"(?:first|second|third|next|previous) .+|\d+(?:st|nd|rd|th)? .+)", m[1].strip(), re.I):
+        return Command("play_media", m[1].strip(), "")  # Service: the one just used/opened, else the default.
     if re.fullmatch(r"(?:button|buttons|option|options|control|controls) list", text, re.I):
         return Command("list_controls")
     m = re.fullmatch(r"(?:search (?:the )?(?:web|internet)(?: for)?|look up) (.+)", text, re.I)
@@ -317,9 +419,10 @@ def parse(text: str) -> Command:
     m = re.fullmatch(r"(?:open|launch|start) (?:the )?(.+?)(?: app)?", text, re.I)
     if m:
         return Command("open", m[1].lower())
-    m = re.fullmatch(r"(?:write|type|dictate)(?: (.+))?", text, re.I)
-    if m:
-        return Command("dictate", m[1] or "")
+    from .writing import parse_write
+    written = parse_write(text)  # "write a note here" (composed) or "write exactly ..." (verbatim)
+    if written:
+        return written
     m = re.fullmatch(r"(?:create|make)(?: a| the)? file (?:called |named )?(.+?)(?: (?:containing|with content) (.+))?", text, re.I)
     if m:
         return Command("create", filename(m[1]), m[2] or "")

@@ -22,7 +22,7 @@ class TaskRoutingTests(unittest.TestCase):
         self.assertEqual(steps[1]["position"], 1)
 
     def test_polite_actions_and_questions_are_distinct(self):
-        self.assertEqual(parse("Can you help me open Spotify and play jazz").kind, "task")
+        self.assertEqual(parse("Can you help me open Spotify and play jazz"), Command("play_media", "jazz", "spotify"))
         self.assertEqual(parse("do open calculator"), Command("open", "calculator"))
         self.assertEqual(parse("How do robots work?").kind, "ask")
         self.assertEqual(parse("Do you know how robots work?").kind, "ask")

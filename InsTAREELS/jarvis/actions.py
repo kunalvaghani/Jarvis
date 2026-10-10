@@ -11,6 +11,16 @@ import threading
 import time
 
 
+# Requests worth a spoken "queued" acknowledgement (not keystrokes or UI clicks).
+QUEUED_ANNOUNCED = {'task', 'code_task', 'clarified_task', 'resume_task', 'open', 'browse', 'browser_search',
+                    'compose_text', 'write_text',
+                    'play_media', 'media_search', 'open_folder', 'open_file', 'open_project', 'toolkit',
+                    'windows_command', 'run_command', 'create', 'create_in_folder', 'modify_in_folder', 'delete_in_folder'}
+
+
+TYPING_INTERVAL = 0.01  # Seconds between typed characters.
+
+
 class Desktop:
     """Unicode typing without touching the clipboard, bound to one window."""
     def __init__(self):
@@ -35,7 +45,7 @@ class Desktop:
         pid = wintypes.DWORD()
         self.user.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
         if not hwnd or pid.value == os.getpid():
-            raise ValueError("Click the destination app before dictating.")
+            raise ValueError("Click the app you want me to write in first.")
         if expected:
             handle = self.kernel.OpenProcess(0x1000, False, pid.value)
             if not handle:
@@ -67,7 +77,7 @@ class Desktop:
         class INPUT(ctypes.Structure):
             _fields_ = [("type", wintypes.DWORD), ("u", UNION)]
 
-        encoded = text.encode("utf-16-le")
+        encoded = text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-16-le")
         for offset in range(0, len(encoded), 2):
             if cancelled():
                 return
@@ -77,11 +87,28 @@ class Desktop:
                 if pointer.x in (0, right) and pointer.y in (0, bottom):
                     raise ValueError("Typing halted: mouse is in a screen corner.")
             if self.user.GetForegroundWindow() != self.target:
-                raise ValueError("Destination window changed. Dictation stopped; say stop dictation before restarting.")
+                raise ValueError("The window changed while typing, so typing stopped. Nothing more was typed.")
             code = int.from_bytes(encoded[offset:offset + 2], "little")
-            events = (INPUT * 2)(INPUT(1, UNION(ki=KEYBDINPUT(0, code, 4, 0, 0))), INPUT(1, UNION(ki=KEYBDINPUT(0, code, 6, 0, 0))))
-            if self.user.SendInput(2, events, ctypes.sizeof(INPUT)) != 2:
+            if code == 10:
+                # Shift+Enter: a new line in editors, email bodies and chat boxes, where a
+                # plain Enter would send the message or submit the form.
+                events = (INPUT * 4)(INPUT(1, UNION(ki=KEYBDINPUT(0x10, 0, 0, 0, 0))), INPUT(1, UNION(ki=KEYBDINPUT(0x0D, 0, 0, 0, 0))),
+                                     INPUT(1, UNION(ki=KEYBDINPUT(0x0D, 0, 2, 0, 0))), INPUT(1, UNION(ki=KEYBDINPUT(0x10, 0, 2, 0, 0))))
+            else:
+                events = (INPUT * 2)(INPUT(1, UNION(ki=KEYBDINPUT(0, code, 4, 0, 0))), INPUT(1, UNION(ki=KEYBDINPUT(0, code, 6, 0, 0))))
+            if self.user.SendInput(len(events), events, ctypes.sizeof(INPUT)) != len(events):
                 raise RuntimeError("Windows blocked typing. Select a normal, non-administrator app.")
+            # Windows 11 Notepad (WinUI) drops or repeats characters that arrive with no gap
+            # ("abc jarvis" became "abc zzzzz"); 10 ms per character typed it exactly.
+            time.sleep(TYPING_INTERVAL)
+
+
+def media_session_open(actions):
+    """Whether a bare "pause"/"play" belongs to Spotify or Jarvis's YouTube rather than a visible button."""
+    if getattr(actions, "last_media", None):
+        return True
+    from .media_player import spotify_now, spotify_window, youtube_state
+    return bool((spotify_window() and spotify_now()) or youtube_state(actions))
 
 
 class Actions:
@@ -145,6 +172,15 @@ class Actions:
         self.next_suggestion = 0
         self.recycler = recycler
         self.queue = queue.Queue(maxsize=128)
+        # Tasks wait in order; each has its own cancel token so one can be skipped.
+        self.queue_lock = threading.Lock()
+        self.pending_tasks = []
+        self.current_item = None
+        self.last_media = None  # "youtube" or "spotify": where an unqualified "play X" goes.
+        self.whatsapp_prompts = []  # Questions a WhatsApp step is waiting on (contact choice, preview, call).
+        self.approvals_waiting = 0
+        self.decision_handler = None  # Set by the app: answers the island approval card by voice.
+        self.whatsapp_watcher = None
         self.generation = 0
         self.superseded_generations = set()
         self.closed = threading.Event()
@@ -207,7 +243,11 @@ class Actions:
         anticipation = getattr(self, 'anticipation', None)
         if anticipation is not None:
             anticipation.cancel()
-        self.generation += 1
+        self.generation += 1  # Running and queued work all belong to older generations.
+        lock = getattr(self, 'queue_lock', None)
+        if lock is not None:
+            with lock:
+                self.pending_tasks.clear()
         self.pending_open = None
         self.pending_question = None
         self.knowledge.cancel()
@@ -219,6 +259,34 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        from .whatsapp import answer_prompt
+        if answer_prompt(self, command):
+            return  # A reply to a waiting WhatsApp question (contact choice, preview approval, call).
+        if command.kind in {'approval_answer', 'whatsapp_answer'}:
+            if self.approvals_waiting and self.decision_handler:
+                self.decision_handler(command.value == 'yes')
+            else:
+                self.report('spoken_reply', 'Nothing is waiting for your approval right now.')
+            return
+        if command.kind == 'task' and command.extra == 'unparsed':
+            from .commands import Command
+            if self.pending_question or self.pending_open:
+                command = Command('task', command.value)  # Likely an answer; keep the reply path.
+            else:
+                # Conversation or task? Decide off the audio thread; a tiny model may be needed.
+                threading.Thread(target=self._route_unparsed, args=(command.value,),
+                                 name='Jarvis intent', daemon=True).start()
+                return
+        if command.kind == 'cancel_task':
+            # Matching may consult a tiny model; keep it off the audio thread.
+            threading.Thread(target=lambda: self.report('spoken_reply', self._cancel_task(command)),
+                             name='Jarvis cancel task', daemon=True).start()
+            return
+        if command.kind in {'end_conversation', 'cancel_current', 'cancel_all', 'queue_status'}:
+            self.report('spoken_reply', self._queue_control(command.kind))
+            if command.kind == 'end_conversation':
+                self.report('state', 'Listening for Jarvis')
+            return
         realtime = getattr(self, 'realtime', None)
         if realtime is not None:
             realtime.cancel()
@@ -314,17 +382,117 @@ class Actions:
             self.cancel()
             self.report("state", "Listening for Jarvis Ã‚Â· queued tasks cancelled")
             return
-        if self.task_active:
-            # Mutating task requests retain single-owner desktop execution; questions run independently.
-            self.superseded_generations.add(self.generation)
-            self.generation += 1
+        if command.kind in {'write_text', 'compose_text'}:
+            command = self._with_write_target(command)
+        # A new request never replaces running work: it waits its turn while questions
+        # and conversation continue on their own worker.
+        token = threading.Event()
+        with self.queue_lock:
+            ahead = len(self.pending_tasks) + (self.current_item is not None)
+            self.pending_tasks.append((token, command))
         try:
             if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                 self.knowledge.prepare_context(command.value)
-            self.queue.put_nowait((self.generation, command))
+            self.queue.put_nowait((self.generation, command, token))
         except queue.Full:
+            with self.queue_lock:
+                self.pending_tasks = [item for item in self.pending_tasks if item[0] is not token]
+            self.report("warning", "The task queue is full; that request was not added.")
+            return
+        if ahead and command.kind in QUEUED_ANNOUNCED:
+            self.report("spoken_reply", "Okay, I'll do that next." if ahead == 1 else
+                        "Okay, that's queued. " + str(ahead) + " tasks are ahead of it.")
+
+    def _with_write_target(self, command):
+        """Remember the window the user was in when asking; a queued write still lands there."""
+        from .commands import Command
+        data = json.loads(command.extra or '{}')
+        if not data.get('target') and self.desktop is not None:
+            try:
+                hwnd = self.desktop.user.GetForegroundWindow()
+                pid = ctypes.c_ulong()
+                self.desktop.user.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+                if hwnd and pid.value != os.getpid():
+                    data['hwnd'] = int(hwnd)
+            except (AttributeError, OSError):
+                pass
+        return Command(command.kind, command.value, json.dumps(data))
+
+    def _route_unparsed(self, text):
+        from .commands import Command
+        from .conversation_intent import quick_kind, model_kind
+        kind = quick_kind(text)
+        if kind is None:
+            options = {'model': self.config.get('context_selector', {}).get('model', 'qwen3.5:0.8b'), 'timeout_seconds': 3.0}
+            kind = model_kind(text, options, self.closed.is_set)
+        if not self.closed.is_set():
+            self.submit(Command('ask' if kind == 'chat' else 'task', text))
+
+    def _cancel_task(self, command):
+        """Cancel the queued or running task the user described; never guess between ties."""
+        from .task_queue import match, describe, model_choice
+        with self.queue_lock:
+            current, pending = self.current_item, list(self.pending_tasks)
+        items = ([current] if current else []) + pending
+        if not items:
+            return "There are no tasks to cancel."
+        options = {'model': self.config.get('context_selector', {}).get('model', 'qwen3.5:0.8b'), 'timeout_seconds': 3.0}
+        verdict, found = match(command.value, current[1] if current else None, [c for _, c in pending], model_choice(options))
+        if verdict == 'ambiguous':
+            return ("I'm not sure which one you mean: " + "; or ".join(describe(items[i][1]) for i in found[:3]) +
+                    ". Say a bit more, or its number from the queue.")
+        if verdict == 'none':
+            return "I couldn't find a task matching " + command.value[:60] + ". Say \"what's in the queue\" to hear them."
+        chosen = items[found]
+        if command.extra == 'except':
+            keep = chosen[0]
+            stopped = [item for item in items if item[0] is not keep]
+        else:
+            stopped = [chosen]
+        with self.queue_lock:
+            for token, _ in stopped:
+                token.set()  # A waiting task is skipped when reached; the running one stops.
+            self.pending_tasks = [item for item in self.pending_tasks if item[0] not in {t for t, _ in stopped}]
+        if command.extra == 'except':
+            return ("Okay, I cancelled everything except " + describe(chosen[1]) + "." if stopped
+                    else "That is the only task, so nothing else was cancelled.")
+        running = current is not None and chosen[0] is current[0]
+        return ("Stopped " if running else "Removed ") + describe(chosen[1]) + (
+            "." if running else " from the queue.")
+
+    def _queue_control(self, kind):
+        """Spoken queue controls: cancel one task, cancel all, report, or end the call."""
+        def describe(command):
+            return (command.value or command.kind.replace('_', ' ')).splitlines()[0][:80]
+        with self.queue_lock:
+            current, pending = self.current_item, list(self.pending_tasks)
+        if kind == 'queue_status':
+            if not current and not pending:
+                return "Nothing is running and the queue is empty."
+            parts = (["Working on: " + describe(current[1]) + "."] if current else [])
+            if pending:
+                # Numbered so "remove number 2" refers to what was heard.
+                parts.append("Waiting: " + "; ".join(str(i) + ", " + describe(command) for i, (_, command)
+                                                    in enumerate(pending[:5], 1)) +
+                             ("; and " + str(len(pending) - 5) + " more." if len(pending) > 5 else "."))
+            return " ".join(parts)
+        if kind == 'cancel_current':
+            if not current:
+                return "Nothing is running right now."
+            current[0].set()
+            return "Stopped " + describe(current[1]) + "." + (" Moving on to the next task." if pending else "")
+        if kind == 'cancel_all':
             self.cancel()
-            self.report("warning", "Action queue full; queued tasks cancelled.")
+            with self.queue_lock:
+                for token, _ in self.pending_tasks:
+                    token.set()
+                self.pending_tasks.clear()
+                if self.current_item:
+                    self.current_item[0].set()
+            return "Stopped all tasks and cleared the queue." if current or pending else "There were no tasks to stop."
+        count = len(pending) + (current is not None)
+        return "Okay, talk to you later." + (
+            " I'll keep working on " + str(count) + (" task" if count == 1 else " tasks") + " in the background." if count else "")
 
     def _resolve_reply(self, command, task_pending=None):
         """Route answers before the general-question worker can consume them."""
@@ -403,6 +571,9 @@ class Actions:
 
     def close(self):
         from .utility_host import OwnedServer
+        watcher = getattr(self, 'whatsapp_watcher', None)
+        if watcher is not None:
+            watcher.close()
         utility_server=getattr(self,'utility_server',None)
         if isinstance(utility_server,OwnedServer):utility_server.close();self.utility_server=None
         realtime = getattr(self, 'realtime', None)
@@ -487,8 +658,20 @@ class Actions:
     def _approve(self, kind, detail, cancelled):
         if self.approval_handler is None:
             raise ValueError("Open the Jarvis app to approve this action.")
-        if cancelled() or not self.approval_handler(kind, detail, cancelled) or cancelled():
+        self.approvals_waiting += 1  # "approve" / "don't send" by voice answers the card too.
+        try:
+            approved = not cancelled() and self.approval_handler(kind, detail, cancelled) and not cancelled()
+        finally:
+            self.approvals_waiting -= 1
+        if not approved:
             raise ValueError("Action cancelled; approval was not given.")
+
+    def start_whatsapp_watch(self):
+        """New-message and incoming-call watcher (config whatsapp.watch_messages / watch_calls)."""
+        settings = self.config.get("whatsapp", {})
+        if settings.get("enabled", True) and (settings.get("watch_messages", True) or settings.get("watch_calls", True)):
+            from .whatsapp import Watcher
+            self.whatsapp_watcher = Watcher(self, float(settings.get("poll_seconds", 2))).start()
 
     def _task_folder(self, folder_name, cancelled):
         from .clarification import TaskClarification
@@ -570,6 +753,23 @@ class Actions:
         from .commands import Command
         if cancelled():
             return
+        if (command.kind in {"spotify_control", "spotify_volume"} and command.extra == "auto") or (
+                command.kind == "click_control" and command.extra == "click" and command.value in {"play", "pause"}
+                and media_session_open(self)):
+            # No service named: control whichever of Spotify/YouTube is actually playing.
+            from .media_player import resolve
+            command = resolve(self, command)
+            self.media_resolved = command  # The island card shows the service that was actually controlled.
+        if command.kind == "media_control" and not command.extra:
+            # "pause", "next", "play it again": whichever service is playing (or Jarvis last played on).
+            from .media_player import active_service
+            if active_service(self) == "spotify":
+                from .spotify import control
+                if command.value == "restart":
+                    control("seek_-36000", cancelled)
+                    return "Playing it again from the start on Spotify."
+                return control(command.value, cancelled)
+            command = Command("media_control", command.value, "youtube")
         if command.kind in {'windows_catalog', 'windows_command'}:
             from .windows_commands import catalog, search, execute as windows_execute
             if command.kind == 'windows_catalog':
@@ -598,7 +798,9 @@ class Actions:
         browser = getattr(self, "browser_automation", None)
         if browser is not None and command.kind in {"context_search", "media_search", "media_control", "select_context", "click_control"}:
             handle = self.external_handle() or (self.desktop.user.GetForegroundWindow() if self.desktop else None)
-            if browser.owns_handle(handle) and "youtube.com" in browser.last_url:
+            owned_player = (command.kind == "media_control" and command.extra == "youtube"
+                            and getattr(self, "last_media", None) == "youtube" and "youtube.com/watch" in browser.last_url)
+            if (owned_player or browser.owns_handle(handle)) and "youtube.com" in browser.last_url:
                 if command.kind in {"context_search", "media_search"} and (command.kind == "context_search" or command.extra == "youtube"):
                     return browser.request("search", cancelled, value=command.value)["message"]
                 if command.kind == "select_context":
@@ -885,8 +1087,26 @@ class Actions:
             return search(command.value, cancelled)
         if command.kind == "spotify_open_playlist":
             return self.execute(Command("task", f"Open playlist {command.value} on Spotify"), cancelled)
+        if command.kind in {"whatsapp_send", "whatsapp_reply"}:
+            from . import whatsapp
+            data = json.loads(command.extra or "{}")
+            self.task_state.start(command.kind.replace("_", " ") + " " + command.value, command.kind)
+            try:
+                if command.kind == "whatsapp_send":
+                    return whatsapp.send_message(self, command.value, data.get("instruction", ""), bool(data.get("verbatim")), cancelled)
+                if data.get("auto"):
+                    return whatsapp.auto_reply(self, command.value, data.get("preview", ""), cancelled)
+                return whatsapp.reply_unread(self, command.value, data.get("instruction", ""), cancelled)
+            except whatsapp.WhatsAppError as exc:
+                self.report("media_card", whatsapp.card("error", command.value or "WhatsApp", str(exc)[:90]))
+                raise
+        if command.kind == "messenger_send":
+            from .messengers import send
+            return send(self, command.value, json.loads(command.extra or "{}"), cancelled)
         if command.kind == "play_media":
-            return self.execute(Command("task", f"Play {command.value} on {command.extra}"), cancelled)
+            # Search, choose, play and verify directly (no planning model); see media_player.py.
+            from .media_player import play
+            return play(self, command.value, command.extra or None, cancelled)
         if command.kind == "media_search":
             if command.extra == "spotify":
                 from .spotify import search
@@ -916,6 +1136,7 @@ class Actions:
             if (command.kind == "browse" and command.value.casefold() == "youtube"
                     and command.extra in {"", "chrome", "google chrome"}
                     and self.config.get("agent_runtime", {}).get("dom_browser", False)):
+                self.last_media = "youtube"
                 return self._browser().request("navigate", cancelled, value="youtube", new_task=True)["message"]
             args = browser_args(self.apps, command.extra or "chrome")
             url = url_for(command.value, command.kind == "browser_search")
@@ -925,6 +1146,13 @@ class Actions:
             self.open_target_pending = self.typing_failed = True
             if self.desktop:
                 self.desktop.target = None
+                # Focus the browser so the next observation inspects the page, not the old window.
+                from urllib.parse import urlsplit
+                from .window_focus import focus_app
+                host = (urlsplit(url).hostname or '').removeprefix('www.').split('.')[0]
+                hwnd = focus_app(Path(args[0]).name, host, cancelled=cancelled)
+                if hwnd:
+                    self.desktop.target = hwnd
             return f"Opened {url} in {command.extra or 'chrome'}"
         if command.kind == "open_drive":
             if len(command.value) != 1 or not command.value.isalpha():
@@ -993,7 +1221,7 @@ class Actions:
                 self.catalog.folders.record_open(path, command.value)
             self.open_target_pending = True
             self.typing_failed = True
-            return f"Opened {path}. Select its text field and say stop dictation before writing."
+            return f"Opened {path}."
         if command.kind == "open":
             from .names import rank_spelling, common
             from .commands import Command
@@ -1002,10 +1230,13 @@ class Actions:
             # registered native app; browser requests still use browse.
             if common(command.value) == 'spotify' and 'spotify' not in self.apps:
                 from .spotify import open_app
+                self.last_media = "spotify"
                 return open_app(cancelled)
             if common(command.value) in SITES and common(command.value) != 'spotify':
                 return self.execute(Command("browse", command.value, "chrome"), cancelled)
             aliases = rank_spelling(command.value, self.apps)
+            # An exact configured name ('chrome') wins over longer matches ('google chrome').
+            aliases = [alias for alias in aliases if common(alias) == common(command.value)][:1] or aliases
             memory_args = None
             if not aliases:
                 # Exact saved app names only; a stale path never becomes a guessed command.
@@ -1069,16 +1300,22 @@ class Actions:
                 else:
                     raise ValueError("Invalid application catalog entry.")
                 if expected is None:
-                    return f"Launched {command.value}. For typing, click its text field and say stop dictation, then write."
+                    return f"Launched {command.value}."
             else:
                 if not isinstance(args, list) or not args or not all(isinstance(x, str) for x in args):
                     raise ValueError(f"Unknown app '{command.value}'. Add its executable to config/config.json or run scan_pc.ps1.")
                 subprocess.Popen(args, shell=False)
                 expected = Path(args[0]).name
             # Give the new app a chance to take focus. Never type into the old one.
-            for _ in range(50):
+            for attempt in range(50):
                 if cancelled():
                     return
+                if attempt in {8, 25}:
+                    # Focus-stealing prevention can leave the old window in front.
+                    from .window_focus import windows, focus
+                    rows = windows(expected)
+                    if rows:
+                        focus(rows[0][0])
                 try:
                     self.desktop.capture(expected=expected)
                     # The app can own the foreground before its editor is ready.
@@ -1090,37 +1327,19 @@ class Actions:
                     pass
                 time.sleep(0.1)
             self.typing_failed = True
-            return f"Opened {command.value}; focus was not detected. Click the app, say stop dictation, then write."
-        if command.kind == "begin_dictation":
-            self.dictation_active = True
-            if self.open_target_pending:
-                self.open_target_pending = False
-                if self.typing_failed:
-                    raise ValueError("The requested app did not take focus. Click its text area, then say stop dictation and write again.")
-            else:
-                # A new 'write' command targets the currently selected app.
-                self.desktop.target = None
-                self.typing_failed = False
-                try:
-                    self.desktop.capture()
-                except Exception:
-                    self.typing_failed = True
-                    raise
-            return "Dictation ready in the selected app"
-        if command.kind == "stop_dictation":
-            self.dictation_active = False
+            return f"Opened {command.value}; it has not come to the front yet."
+        if command.kind == "write_help":
+            from .writing import HELP
+            return HELP
+        if command.kind in {"write_text", "compose_text"}:
+            # No dictation mode: one composed or verbatim piece of text, then back to normal.
+            from .writing import write_exact, compose
             self.open_target_pending = False
-            self.desktop.target = None
             self.typing_failed = False
-            return "Dictation stopped"
+            self.desktop.target = None
+            return (write_exact if command.kind == "write_text" else compose)(self, command, cancelled)
         if command.kind == "type":
-            if self.typing_failed:
-                raise ValueError("Typing paused. Say stop dictation, select the app, then say write.")
-            try:
-                self.desktop.type(command.value, cancelled)
-            except Exception:
-                self.typing_failed = True
-                raise
+            self.desktop.type(command.value, cancelled)
             return f"Typed {len(command.value.split())} words"
         raise ValueError(f"Unsupported action: {command.kind}")
 
@@ -1156,12 +1375,15 @@ class Actions:
     def _run(self):
         while not self.closed.is_set():
             try:
-                generation, command = self.queue.get(timeout=0.2)
+                generation, command, token = self.queue.get(timeout=0.2)
             except queue.Empty:
                 self._suggest()
                 continue
+            with self.queue_lock:
+                self.pending_tasks = [item for item in self.pending_tasks if item[0] is not token]
+                self.current_item = (token, command)
             try:
-                cancelled = lambda: self.closed.is_set() or generation != self.generation
+                cancelled = lambda: self.closed.is_set() or generation != self.generation or token.is_set()
                 if not cancelled():
                     from .progress import status
                     phases = {'open': 'Opening', 'open_folder': 'Opening folder', 'open_file': 'Opening file',
@@ -1170,6 +1392,12 @@ class Actions:
                     status(self.report, phases.get(command.kind, 'Working'),
                            '' if command.kind in {'type', 'dictate', 'run_command'} else command.value)
                     result = self.execute(command, cancelled)
+                    if result and not cancelled() and (command.kind in {"media_control", "spotify_control", "spotify_volume"} or (
+                            command.kind == "click_control" and command.value in {"play", "pause"}
+                            and getattr(self, "media_resolved", None))):
+                        from .media_player import control_card
+                        threading.Thread(target=control_card, args=(self, command), daemon=True,
+                                         name="jarvis-media-card").start()
                     if result and not cancelled():
                         if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                             state = self.task_state.snapshot() or {}
@@ -1177,16 +1405,27 @@ class Actions:
                         self.report("action", result)
                         if command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",
                                             "create", "create_in_folder", "modify_in_folder", "delete_in_folder",
-                                            "play_media", "spotify_control", "spotify_open_playlist", "close_app"}:
-                            self.report("spoken_reply", result)
+                                            "play_media", "spotify_control", "spotify_open_playlist", "close_app",
+                                            "write_help", "write_text", "compose_text"} or (
+                                command.kind == "media_control" and command.value == "status"):
+                            if not str(result).startswith("Task paused, waiting for your answer"):
+                                self.report("spoken_reply", result)  # The question itself was already spoken.
             except Exception as exc:
                 if generation in self.superseded_generations and generation != self.generation:
                     self.report("state", "Previous task replaced by your newer request.")
                     self.superseded_generations.discard(generation)
+                elif token.is_set() or generation != self.generation:
+                    self.report("state", "Task cancelled.")
                 else:
                     self.report("warning", str(exc))
+                    if command.kind in QUEUED_ANNOUNCED:
+                        # In a spoken conversation an unexplained silence is a failure too.
+                        title = (command.value or "that").splitlines()[0][:80]
+                        self.report("spoken_reply", "I couldn't finish " + title + ". " + str(exc)[:200])
             finally:
                 from .progress import status
-                status(self.report, 'Ready' if generation == self.generation else 'Cancelled', active=False)
+                with self.queue_lock:
+                    self.current_item = None
+                status(self.report, 'Ready' if generation == self.generation and not token.is_set() else 'Cancelled', active=False)
                 self.superseded_generations.discard(generation)
                 self.queue.task_done()
