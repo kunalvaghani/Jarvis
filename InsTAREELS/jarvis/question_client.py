@@ -49,6 +49,9 @@ class QuestionClient:
 
     def request(self, request, cancelled):
         import re
+        style = getattr(self, "answer_style", None)
+        if style:
+            request = {**request, "answer_style": list(style)}  # "Keep it short", "be serious" for this session.
         memory = getattr(self, "memory", None)
         if memory is not None:
             profile = memory.profile_text()

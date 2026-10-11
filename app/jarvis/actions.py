@@ -131,7 +131,22 @@ class Actions:
         self.projects = Projects(base, config.get("project_roots", [r"D:\Phython Project", "D:\\"]))
         from .task_state import TaskState
         self.task_state = TaskState(base, read_only=bool(config.get('_ui_verification', False)))
-        self.report = report
+        from collections import deque
+        from .intent_handlers import filter_report
+        def filtered(kind, message=""):
+            kind, message = filter_report(self, kind, message)  # Quiet/private modes.
+            if kind in {"spoken_reply", "answer"} and isinstance(message, str) and message.strip():
+                self.last_spoken = message  # "Say that again".
+            report(kind, message)
+        self.report = filtered
+        self.session_style = {}  # "short", "simple", "serious" answers asked for in this session.
+        self.task_history = deque(maxlen=40)  # Finished/failed queued work, for "what did you do while I was away".
+        self.command_history = deque(maxlen=20)
+        self.last_spoken = ""  # Set by the app for "say that again".
+        self.last_typed = ""
+        self.chat_only_until = 0.  # "I'm just thinking aloud": unrecognised speech is conversation until then.
+        self.quiet_alerts = False
+        self.private_mode = False
         self.desktop = desktop
         self.ui_controls = None
         self.browser_automation = None
@@ -172,6 +187,8 @@ class Actions:
         self.repo_learner = RepoLearner(self, config.get("repo_learning", {}))
         self.repo_learner.enabled = bool(self.repo_learner.enabled and self.memory.enabled)
         REGISTRY["learner"] = self.repo_learner
+        from .gods_eye import GodsEye
+        self.gods_eye = GodsEye(self, config.get("gods_eye", {}))
         from .context_hub import prompt_block
         self.memory.situation = lambda question="": prompt_block(self, question)  # Several live contexts at once.
         from .quick_answers import QuickAnswers
@@ -287,9 +304,34 @@ class Actions:
             else:
                 self.report('spoken_reply', 'Nothing is waiting for your approval right now.')
             return
+        from .intent_handlers import IMMEDIATE, STATUS, execute as intent_execute
+        if command.kind not in {'island_choice', 'memory_choice'} and hasattr(self, 'command_history'):
+            self.command_history.append((command.value or command.kind.replace('_', ' ')).splitlines()[0][:120] if command.value or command.kind else '')
+        if command.kind == 'stop_speaking':
+            self.report('stop_speech', '')
+            self.report('state', 'Listening; go ahead.')
+            return
+        if command.kind in IMMEDIATE:
+            try:
+                reply = intent_execute(self, command)
+            except ValueError as exc:
+                reply = str(exc)
+            if reply:
+                self.report('spoken_reply', reply)
+            return
+        if command.kind in STATUS:
+            def status_answer():
+                try:
+                    self.report('spoken_reply', intent_execute(self, command))
+                except Exception as exc:
+                    self.report('spoken_reply', "I couldn't check that: " + str(exc)[:160])
+            threading.Thread(target=status_answer, name='Jarvis status answer', daemon=True).start()
+            return
         if command.kind == 'task' and command.extra == 'unparsed':
             from .commands import Command
-            if self.pending_question or self.pending_open:
+            if time.monotonic() < getattr(self, 'chat_only_until', 0.):
+                command = Command('ask', command.value)  # "I'm just thinking aloud": conversation, never a task.
+            elif self.pending_question or self.pending_open:
                 command = Command('task', command.value)  # Likely an answer; keep the reply path.
             else:
                 # Conversation or task? Decide off the audio thread; a tiny model may be needed.
@@ -599,6 +641,9 @@ class Actions:
         learner = getattr(self, 'repo_learner', None)
         if learner is not None:
             learner.close()
+        eye = getattr(self, 'gods_eye', None)
+        if eye is not None:
+            eye.close()
         curator = getattr(self, 'curator', None)
         if curator is not None and curator.thread is not None:
             # Summarise the open conversation into Obsidian, bounded so shutdown never hangs.
@@ -703,6 +748,8 @@ class Actions:
             self.curator.start()
         if self.repo_learner.enabled:
             self.repo_learner.start()
+        if self.gods_eye.enabled:
+            self.gods_eye.start()  # God's Eye server plus the 25-mile side-thread feed and its alerts.
         settings = self.config.get("weather_alerts", {})
         if settings.get("enabled", True):
             from .weather_watch import WeatherWatch
@@ -1158,6 +1205,13 @@ class Actions:
                 if basics:
                     answer = "From your profile: " + "; ".join(basics) + ". " + answer
             return answer
+        from .intent_handlers import QUEUED as INTENT_QUEUED
+        if command.kind in INTENT_QUEUED:
+            from .intent_handlers import execute as intent_execute
+            return intent_execute(self, command, cancelled)
+        if command.kind in {"gods_eye_show", "gods_eye_explain", "gods_eye_status", "gods_eye_update", "gods_eye_cameras"}:
+            from .gods_eye import execute as gods_eye_execute
+            return gods_eye_execute(self, command, cancelled)
         if command.kind in {"repo_learn", "repo_list", "repo_explain", "repo_forget"}:
             from .repo_learning import execute as repo_execute
             return repo_execute(self, command, cancelled)
@@ -1474,7 +1528,19 @@ class Actions:
                             from .memory_curator import describe
                             self.knowledge.record_pair(describe(command), str(result), kind='task')
                         self.report("action", result)
-                        if command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",
+                        getattr(self, "task_history", []).append({"what": (command.value or command.kind).splitlines()[0][:80] if command.kind not in {
+                            "gods_eye_show", "gods_eye_camera"} else command.kind.replace("_", " "), "status": "done",
+                                                  "result": str(result)[:400], "at": time.time()})
+                        if command.kind == "write_text":
+                            self.last_typed = command.value
+                        from .intent_handlers import SPOKEN as INTENT_SPOKEN
+                        if command.kind in INTENT_SPOKEN or command.kind in {"gods_eye_show", "gods_eye_explain", "gods_eye_status",
+                                                                              "gods_eye_update", "gods_eye_cameras", "memory_save", "memory_forget", "memory_list",
+                                                                              "memory_conversations", "repo_learn", "repo_list", "repo_explain",
+                                                                              "repo_forget", "api_health", "weather_alerts", "whatsapp_send",
+                                                                              "whatsapp_reply", "messenger_send", "media_search"}:
+                            self.report("spoken_reply", str(result)[:600])
+                        elif command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",
                                             "create", "create_in_folder", "modify_in_folder", "delete_in_folder",
                                             "play_media", "spotify_control", "spotify_open_playlist", "close_app",
                                             "write_help", "write_text", "compose_text"} or (
@@ -1489,6 +1555,8 @@ class Actions:
                     self.report("state", "Task cancelled.")
                 else:
                     self.report("warning", str(exc))
+                    getattr(self, "task_history", []).append({"what": (command.value or command.kind).splitlines()[0][:80], "status": "failed",
+                                              "result": str(exc)[:400], "at": time.time()})
                     if command.kind in QUEUED_ANNOUNCED:
                         # In a spoken conversation an unexplained silence is a failure too.
                         title = (command.value or "that").splitlines()[0][:80]

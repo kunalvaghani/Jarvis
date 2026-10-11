@@ -299,6 +299,8 @@ class App:
             self.actions.realtime.cancel()
         if kind in {"action", "answer"} and isinstance(message, str):
             self.actions.memory.record("Jarvis " + kind, message)
+        if kind in {"answer", "spoken_reply"} and isinstance(message, str) and message.strip():
+            self.actions.last_spoken = message  # "Say that again" repeats it.
         if kind == "state":
             self.actions.suggest_enabled = message.startswith("Awake")
             if self.actions.suggest_enabled:
@@ -438,6 +440,8 @@ class App:
                 if kind == "answer":
                     self.live.set(message[:450])
                     self.speech.say(message)
+            elif kind == "stop_speech":
+                self.speech.cancel()  # "Stop talking; I have a question": silence now, keep listening.
             elif kind == "spoken_reply":
                 self.ui_activity = ""
                 self.live.set(message[:450])

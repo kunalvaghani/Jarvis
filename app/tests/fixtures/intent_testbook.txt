@@ -1,0 +1,803 @@
+# Jarvis natural-language intent testbook: 800 scenarios x 3 phrasings (direct | polite | everyday).
+# Source: Jarvis_800_Natural_Language_Tasks_and_Questions.pdf supplied by the user on 2026-10-11.
+# The everyday column keeps the book's wording, including its awkward machine paraphrases.
+001|Start a conversation without making me repeat your name.|Could you start a conversation without making me repeat your name?|Please start a conversation without making me repeat your name.
+002|Keep listening while we talk for a while.|Could you keep listening while we talk for a while?|Leave listening while we talk for a while.
+003|Answer me even if I don't phrase it like a command.|Could you answer me even if I don't phrase it like a command?|Respond to me even if I don't phrase it like a command.
+004|How are you doing today?|Hey Jarvis, how are you doing today?|Tell me one thing: how are you doing today?
+005|What were we just talking about?|Hey Jarvis, what were we just talking about?|Quick question: what were we just talking about?
+006|Can we pick up where we left off?|Could we pick up where we left off?|Hey, can we pick up where we left off?
+007|Don't treat this as a task; I'm just thinking aloud.|Please do not treat this as a task; I'm just thinking aloud.|Make sure you do not treat this as a task; I'm just thinking aloud.
+008|I'm feeling tired. What should we chat about?|Could you i'm feeling tired. What should we chat about?|When you're ready, i'm feeling tired. What should we chat about.
+009|Give me a quick joke.|Could you give me a quick joke?|Please give me a quick joke.
+010|Be serious for this next answer.|Could you be serious for this next answer?|I need you to be serious for this next answer.
+011|Speak a little more slowly.|Could you speak a little more slowly?|Go ahead and speak a little more slowly.
+012|Can you sound less robotic?|Would you be able to sound less robotic?|Tell me one thing: can you sound less robotic?
+013|Say that again, please.|Could you say that again, please?|Please say that again, please.
+014|Repeat only the last sentence.|Could you repeat only the last sentence?|I need you to repeat only the last sentence.
+015|Stop talking; I have a question.|Could you stop talking; I have a question?|Be quiet for a second; I have a question.
+016|Let me interrupt without restarting the conversation.|Could you let me interrupt without restarting the conversation?|I'd like you to let me interrupt without restarting the conversation.
+017|Keep your answer short this time.|Could you keep your answer short this time?|Leave your answer short this time.
+018|Walk me through that in more detail.|Could you walk me through that in more detail?|I need you to walk me through that in more detail.
+019|Don't interrupt me while I'm speaking.|Please do not interrupt me while I'm speaking.|Make sure you do not interrupt me while I'm speaking.
+020|Have we been talking for long?|Hey Jarvis, have we been talking for long?|Tell me one thing: have we been talking for long?
+021|Continue the conversation after a short pause.|Could you continue the conversation after a short pause?|Please continue the conversation after a short pause.
+022|I'm still here; don't go to sleep.|Could you i'm still here; don't go to sleep?|I mean, i'm still here; don't go to sleep.
+023|Goodbye for now.|Could you goodbye for now?|Go ahead and goodbye for now.
+024|Go to sleep but keep my queued work running.|Could you go to sleep but keep my queued work running?|End our conversation, but let the queued jobs finish.
+025|Wake up and tell me what happened while I was away.|Could you wake up and tell me what happened while I was away?|Please wake up and tell me what happened while I was away.
+026|I didn't mean that as an instruction.|Hey Jarvis, I didn't mean that as an instruction.|One thing: I didn't mean that as an instruction.
+027|That was a joke, not something to execute.|Could you that was a joke, not something to execute?|Go ahead and that was a joke, not something to execute.
+028|Why did you answer like that?|Hey Jarvis, why did you answer like that?|Tell me one thing: why did you answer like that?
+029|What did you mean by the last part?|Hey Jarvis, what did you mean by the last part?|Quick question: what did you mean by the last part?
+030|Give me the simple version.|Could you give me the simple version?|I need you to give me the simple version.
+031|Can you remember the tone I asked for during this conversation?|Would you be able to remember the tone I asked for during this conversation?|Just checking - can you remember the tone I asked for during this conversation?
+032|Don't make a joke about this serious topic.|Please do not make a joke about this serious topic.|Make sure you do not make a joke about this serious topic.
+033|Open Notepad.|Could you open Notepad?|Bring up Notepad.
+034|Launch Google Chrome.|Could you launch Google Chrome?|Start Google Chrome.
+035|Bring Spotify to the front.|Could you bring Spotify to the front?|Put the Spotify window on top.
+036|Switch back to my previous window.|Could you switch back to my previous window?|Change back to my previous window.
+037|Show me all open windows.|Could you show me all open windows?|Pull up me all open windows.
+038|Minimize the current app.|Could you minimize the current app?|I need you to minimize the current app.
+039|Maximize this window.|Could you maximize this window?|Go ahead and maximize this window.
+040|Close this tab, not the entire browser.|Could you close this tab, not the entire browser?|I want you to close this tab, not the entire browser.
+041|Open the Windows settings app.|Could you open the Windows settings app?|Bring up the Windows settings app.
+042|Find the Camera app installed on this PC.|Could you find the Camera app installed on this PC?|Look for the Camera app installed on this PC.
+043|Start Calculator.|Could you start Calculator?|Go ahead and start Calculator.
+044|Open the Downloads folder.|Could you open the Downloads folder?|Bring up the Downloads folder.
+045|Show me my desktop.|Could you show me my desktop?|Pull up me my desktop.
+046|Find the file I downloaded earlier.|Could you find the file I downloaded earlier?|Look for the file I downloaded earlier.
+047|Open a folder I mention by its name.|Could you open a folder I mention by its name?|Bring up a folder I mention by its name.
+048|Tell me what programs are currently running.|Could you tell me what programs are currently running?|Let me know what programs are currently running.
+049|Close Notepad without deleting unsaved notes.|Could you close Notepad without deleting unsaved notes?|Please close Notepad without deleting unsaved notes.
+050|Tell me whether Chrome is already running.|Could you tell me whether Chrome is already running?|Let me know whether Chrome is already running.
+051|Show me how much CPU I'm using.|Could you show me how much CPU I'm using?|Pull up me how much CPU I'm using.
+052|How much memory is free right now?|Hey Jarvis, how much memory is free right now?|Tell me one thing: how much memory is free right now?
+053|Check the GPU model and VRAM.|Could you check the GPU model and VRAM?|Take a look at the GPU model and VRAM.
+054|What's my Windows version?|Hey Jarvis, what's my Windows version?|Do you know what's my Windows version?
+055|Show me the active services.|Could you show me the active services?|Pull up me the active services.
+056|Find the app whose window is hidden.|Could you find the app whose window is hidden?|Look for the app whose window is hidden.
+057|Bring WhatsApp back from the taskbar.|Could you bring WhatsApp back from the taskbar?|Pull WhatsApp back from the taskbar.
+058|Switch to the right Chrome tab.|Could you switch to the right Chrome tab?|Change to the right Chrome tab.
+059|Move this window to the other monitor.|Could you move this window to the other monitor?|Shift this window to the other monitor.
+060|Open the program I used a moment ago.|Could you open the program I used a moment ago?|Bring up the program I used a moment ago.
+061|Show me which process is slowing the machine.|Could you show me which process is slowing the machine?|Pull up me which process is slowing the machine.
+062|Check whether an application stopped responding.|Could you check whether an application stopped responding?|Take a look at whether an application stopped responding.
+063|Restart only the frozen application after asking me.|Could you restart only the frozen application after asking me?|Start over only the frozen application after asking me.
+064|Tell me what you changed on my desktop just now.|Could you tell me what you changed on my desktop just now?|Let me know what you changed on my desktop just now.
+065|Click the blue button on this page.|Could you click the blue button on this page?|Press the blue button on this page.
+066|Press the play icon I am pointing at.|Could you press the play icon I am pointing at?|Tap the play icon I am pointing at.
+067|Select the second search result.|Could you select the second search result?|Choose the second search result.
+068|Click the checkbox beside the top item.|Could you click the checkbox beside the top item?|Press the checkbox beside the top item.
+069|Scroll down until you see the pricing section.|Could you scroll down until you see the pricing section?|Move down down until you see the pricing section.
+070|Scroll back to the heading we were reading.|Could you scroll back to the heading we were reading?|Move down back to the heading we were reading.
+071|Open the drop-down and choose English.|Could you open the drop-down and choose English?|Bring up the drop-down and choose English.
+072|Click outside the dialog to dismiss it.|Could you click outside the dialog to dismiss it?|Press outside the dialog to dismiss it.
+073|Drag that window to the left.|Could you drag that window to the left?|Move that window to the left.
+074|Select all the text in this field.|Could you select all the text in this field?|Choose all the text in this field.
+075|Focus the search box and type my query.|Could you focus the search box and type my query?|Select the search box and type my query.
+076|Find the Save button even if it has no accessible label.|Could you find the Save button even if it has no accessible label?|Look for the Save button even if it has no accessible label.
+077|Click the button beneath the video.|Could you click the button beneath the video?|Press the button beneath the video.
+078|Move your own cursor over that control.|Could you move your own cursor over that control?|Shift your own cursor over that control.
+079|Use your pointer without stealing my mouse.|Could you use your pointer without stealing my mouse?|Work with your pointer without stealing my mouse.
+080|Wait until I stop moving my mouse before clicking.|Could you wait until I stop moving my mouse before clicking?|I want you to wait until I stop moving my mouse before clicking.
+081|Tell me what button is under my cursor.|Could you tell me what button is under my cursor?|Let me know what button is under my cursor.
+082|Which application currently has keyboard focus?|Hey Jarvis, which application currently has keyboard focus?|Could you tell me which application currently has keyboard focus?
+083|Read the warning on the screen before proceeding.|Could you read the warning on the screen before proceeding?|Go through the warning on the screen before proceeding.
+084|I can't see the Continue button; find it.|Hey Jarvis, I can't see the Continue button; find it.|By the way, I can't see the Continue button; find it.
+085|Don't click if another window covers the target.|Please do not click if another window covers the target.|Make sure you do not click if another window covers the target.
+086|Click only once and verify the page changed.|Could you click only once and verify the page changed?|Press only once and verify the page changed.
+087|The button did nothing; try another safe way.|Hey Jarvis, the button did nothing; try another safe way.|Go ahead and the button did nothing; try another safe way.
+088|Go back to the last page.|Could you go back to the last page?|Head back to the last page.
+089|Scroll within this dialog, not the whole webpage.|Could you scroll within this dialog, not the whole webpage?|Move down within this dialog, not the whole webpage.
+090|Right-click this file and show the menu.|Could you right-click this file and show the menu?|I need you to right-click this file and show the menu.
+091|Hover over the video player to reveal its controls.|Could you hover over the video player to reveal its controls?|Go ahead and hover over the video player to reveal its controls.
+092|Find the option called Advanced settings.|Could you find the option called Advanced settings?|Look for the option called Advanced settings.
+093|Choose the first option from these three.|Could you choose the first option from these three?|Please choose the first option from these three.
+094|Don't touch my keyboard while I type.|Please do not touch my keyboard while I type.|Make sure you do not touch my keyboard while I type.
+095|What is this icon supposed to do?|Hey Jarvis, what is this icon supposed to do?|What's this icon supposed to do?
+096|Tell me what changed on screen after your click.|Could you tell me what changed on screen after your click?|Let me know what changed on screen after your click.
+097|Write a short thank-you note in Notepad.|Could you write a short thank-you note in Notepad?|Put together a short thank-you note in Notepad.
+098|Write exactly: The build PASSED at 5:30 PM.|Could you write exactly: The build PASSED at 5:30 PM?|Type these exact words: The build PASSED at 5:30 PM.
+099|Write a polite reply in the field where my cursor is.|Could you write a polite reply in the field where my cursor is?|Put together a polite reply in the field where my cursor is.
+100|Type this sentence word for word in Word.|Could you type this sentence word for word in Word?|Enter this sentence word for word in Word.
+101|Compose a concise meeting summary in this app.|Could you compose a concise meeting summary in this app?|Draft a concise meeting summary in this app.
+102|Open Notepad and write a to-do list.|Could you open Notepad and write a to-do list?|Bring up Notepad and write a to-do list.
+103|Use the local model to improve this sentence before typing it.|Could you use the local model to improve this sentence before typing it?|Work with the local model to improve this sentence before typing it.
+104|Fix the grammar in the highlighted paragraph.|Could you fix the grammar in the highlighted paragraph?|Repair the grammar in the highlighted paragraph.
+105|Make the text you just wrote shorter.|Could you make the text you just wrote shorter?|Please make the text you just wrote shorter.
+106|Expand that answer into two paragraphs here.|Could you expand that answer into two paragraphs here?|Add more detail to that answer into two paragraphs here.
+107|Write this in a professional tone.|Could you write this in a professional tone?|Put together this in a professional tone.
+108|Write the same idea in casual English.|Could you write the same idea in casual English?|Put together the same idea in casual English.
+109|Put this exact title at the top of the page.|Could you put this exact title at the top of the page?|Place this exact title at the top of the page.
+110|Start a new paragraph after the next sentence.|Could you start a new paragraph after the next sentence?|I need you to start a new paragraph after the next sentence.
+111|Insert a new line, not a space.|Could you insert a new line, not a space?|Go ahead and insert a new line, not a space.
+112|Type quotation marks around that phrase.|Could you type quotation marks around that phrase?|Enter quotation marks around that phrase.
+113|Don't change my punctuation when I say exactly.|Please do not change my punctuation when I say exactly.|Make sure you do not change my punctuation when I say exactly.
+114|Write into the current window, not the previous one.|Could you write into the current window, not the previous one?|Put together into the current window, not the previous one.
+115|Open Word first, then type the draft there.|Could you open Word first, then type the draft there?|Bring up Word first, then type the draft there.
+116|Do not enter any text until the right window is focused.|Please do not enter any text until the right window is focused.|Tell me one thing: do not enter any text until the right window is focused.
+117|Hold left Control and left Alt to start push-to-write.|Could you hold left Control and left Alt to start push-to-write?|I want push-to-write to work while I'm holding left Ctrl and left Alt.
+118|Stop typing as soon as I release those keys.|Could you stop typing as soon as I release those keys?|When I let go, stop writing immediately.
+119|While I hold the shortcut, type only what I say.|Hey Jarvis, While I hold the shortcut, type only what I say.|During that key hold, just transcribe my speech.
+120|Ignore voice commands during push-to-write.|Could you ignore voice commands during push-to-write?|I want you to ignore voice commands during push-to-write.
+121|Cancel the unfinished phrase if I press another key.|Could you cancel the unfinished phrase if I press another key?|Drop the unfinished phrase if I press another key.
+122|Go back to normal listening after push-to-write.|Could you go back to normal listening after push-to-write?|Head back to normal listening after push-to-write.
+123|Write a file called notes.txt in Downloads.|Could you write a file called notes.txt in Downloads?|Put together a file called notes.txt in Downloads.
+124|Before overwriting that file, show me the changes.|Could you before overwriting that file, show me the changes?|Remember, before overwriting that file, show me the changes.
+125|Copy the paragraph we drafted to the clipboard.|Could you copy the paragraph we drafted to the clipboard?|Please copy the paragraph we drafted to the clipboard.
+126|Place the drafted message into the active chat box.|Could you place the drafted message into the active chat box?|I need you to place the drafted message into the active chat box.
+127|The text went to the wrong app; stop and show me where.|Hey Jarvis, the text went to the wrong app; stop and show me where.|Go ahead and the text went to the wrong app; stop and show me where.
+128|Read back the exact text you entered.|Could you read back the exact text you entered?|Go through back the exact text you entered.
+129|Tell me how many unread emails I have.|Could you tell me how many unread emails I have?|Let me know how many unread emails I have.
+130|Read the newest unread message aloud.|Could you read the newest unread message aloud?|What does my newest unread message say?
+131|Who sent my most recent email?|Hey Jarvis, who sent my most recent email?|Just checking - who sent my most recent email?
+132|What is the subject of my latest email?|Hey Jarvis, what is the subject of my latest email?|What's the subject of my latest email?
+133|Show emails from my manager.|Could you show emails from my manager?|Pull up emails from my manager.
+134|Find the message about tomorrow's meeting.|Could you find the message about tomorrow's meeting?|Look for the message about tomorrow's meeting.
+135|Search my inbox for the word invoice.|Could you search my inbox for the word invoice?|Look up my inbox for the word invoice.
+136|Read the first email in those results.|Could you read the first email in those results?|Go through the first email in those results.
+137|Summarize the three newest unread emails.|Could you summarize the three newest unread emails?|Give me the gist of the three newest unread emails.
+138|Read the body without repeating quoted reply history.|Could you read the body without repeating quoted reply history?|Go through the body without repeating quoted reply history.
+139|Show only emails with attachments.|Could you show only emails with attachments?|Pull up only emails with attachments.
+140|Find the email I got yesterday afternoon.|Could you find the email I got yesterday afternoon?|Look for the email I got yesterday afternoon.
+141|Did I receive a confirmation email?|Hey Jarvis, did I receive a confirmation email?|Quick question: did I receive a confirmation email?
+142|Who replied to the thread we were discussing?|Hey Jarvis, who replied to the thread we were discussing?|Hey, who replied to the thread we were discussing?
+143|Find the email with the subject Lunch.|Could you find the email with the subject Lunch?|Look for the email with the subject Lunch.
+144|List messages from the same sender.|Could you list messages from the same sender?|Show messages from the same sender.
+145|Group my inbox by sender.|Could you group my inbox by sender?|Organize my inbox by sender.
+146|Group the unread messages by subject.|Could you group the unread messages by subject?|Organize the unread messages by subject.
+147|Find all emails about a receipt.|Could you find all emails about a receipt?|Look for all emails about a receipt.
+148|Search my Sent folder for a recent message.|Could you search my Sent folder for a recent message?|Look up my Sent folder for a recent message.
+149|Tell me whether that email has been read.|Could you tell me whether that email has been read?|Let me know whether that email has been read.
+150|Read the second message, not the first.|Could you read the second message, not the first?|Go through the second message, not the first.
+151|Show the attachments in this email.|Could you show the attachments in this email?|Pull up the attachments in this email.
+152|Find the sender's email address.|Could you find the sender's email address?|Look for the sender's email address.
+153|Search for a message older than one week.|Could you search for a message older than one week?|Look up for a message older than one week.
+154|Tell me when the latest reply arrived.|Could you tell me when the latest reply arrived?|Let me know when the latest reply arrived.
+155|What's the main action item in this email?|Hey Jarvis, what's the main action item in this email?|Do you know what's the main action item in this email?
+156|Is there a deadline mentioned in this message?|Hey Jarvis, is there a deadline mentioned in this message?|Tell me one thing: is there a deadline mentioned in this message?
+157|Read just the newest part of the thread.|Could you read just the newest part of the thread?|Go through just the newest part of the thread.
+158|Summarize that thread in two sentences.|Could you summarize that thread in two sentences?|Give me the gist of that thread in two sentences.
+159|I meant the other email from the same person.|Hey Jarvis, I meant the other email from the same person.|For now, I meant the other email from the same person.
+160|What were we looking for in Gmail earlier?|Hey Jarvis, what were we looking for in Gmail earlier?|Tell me one thing: what were we looking for in Gmail earlier?
+161|Draft an email asking about lunch tomorrow.|Could you draft an email asking about lunch tomorrow?|Prepare an email asking about lunch tomorrow.
+162|Write an email to a contact with the subject Project update.|Could you write an email to a contact with the subject Project update?|Put together an email to a contact with the subject Project update.
+163|Send an email to the address I spell out aloud.|Could you send an email to the address I spell out aloud?|Go ahead and send an email to the address I spell out aloud.
+164|Show the email draft before sending it.|Could you show the email draft before sending it?|Pull up the email draft before sending it.
+165|Change the subject of the draft to Follow-up.|Could you change the subject of the draft to Follow-up?|Adjust the subject of the draft to Follow-up.
+166|Make the body friendlier but still professional.|Could you make the body friendlier but still professional?|I need you to make the body friendlier but still professional.
+167|Add a recipient in CC.|Could you add a recipient in CC?|Put a recipient in CC.
+168|Remove that person from the recipients.|Could you remove that person from the recipients?|Take away that person from the recipients.
+169|Save this email as a draft.|Could you save this email as a draft?|Keep this email as a draft.
+170|Send the draft titled Lunch after I approve.|Could you send the draft titled Lunch after I approve?|I need you to send the draft titled Lunch after I approve.
+171|Cancel the send; keep the draft.|Could you cancel the send; keep the draft?|Drop the send; keep the draft.
+172|Delete the draft with the subject Old plan.|Could you delete the draft with the subject Old plan?|Remove the draft with the subject Old plan.
+173|Move the latest message into Trash after approval.|Could you move the latest message into Trash after approval?|Shift the latest message into Trash after approval.
+174|Restore the email we just trashed.|Could you restore the email we just trashed?|Bring back the email we just trashed.
+175|Delete all messages from a sender after showing the count.|Could you delete all messages from a sender after showing the count?|Remove all messages from a sender after showing the count.
+176|Archive the latest email.|Could you archive the latest email?|File away the latest email.
+177|Unarchive the message we were looking at.|Could you unarchive the message we were looking at?|Restore the message we were looking at.
+178|Star the second email.|Could you star the second email?|Favorite the second email.
+179|Remove the star from this email.|Could you remove the star from this email?|Take away the star from this email.
+180|Mark the latest message as read.|Could you mark the latest message as read?|Flag the latest message as read.
+181|Mark this thread as unread.|Could you mark this thread as unread?|Flag this thread as unread.
+182|Create a label called Receipts.|Could you create a label called Receipts?|Make a label called Receipts.
+183|Apply the Receipts label to the latest email.|Could you apply the Receipts label to the latest email?|Use the Receipts label to the latest email.
+184|Move the first message to Work.|Could you move the first message to Work?|Shift the first message to Work.
+185|List all my Gmail labels.|Could you list all my Gmail labels?|Show all my Gmail labels.
+186|Tell me what approval you're waiting for.|Could you tell me what approval you're waiting for?|Let me know what approval you're waiting for.
+187|Approve only this Gmail action.|Could you approve only this Gmail action?|Go ahead and approve only this Gmail action.
+188|Don't send it; revise the greeting first.|Please do not send it; revise the greeting first.|Make sure you do not send it; revise the greeting first.
+189|Reply to the newest email if you support replies.|Could you reply to the newest email if you support replies?|Please reply to the newest email if you support replies.
+190|Forward this email if forwarding is available.|Could you forward this email if forwarding is available?|I need you to forward this email if forwarding is available.
+191|Check that the email was actually sent.|Could you check that the email was actually sent?|Take a look at that the email was actually sent.
+192|Explain why Gmail needs me to sign in again.|Could you explain why Gmail needs me to sign in again?|Walk me through why Gmail needs me to sign in again.
+193|Open WhatsApp Desktop.|Could you open WhatsApp Desktop?|Bring up WhatsApp Desktop.
+194|Find the chat with Alex.|Could you find the chat with Alex?|Look for the chat with Alex.
+195|Look for everyone whose first name is Rahul.|Could you look for everyone whose first name is Rahul?|Have a look at for everyone whose first name is Rahul.
+196|Ask me which Rahul if more than one matches.|Could you ask me which Rahul if more than one matches?|If there are two Rahuls, give me their full names to choose.
+197|Show the full names of the matching contacts.|Could you show the full names of the matching contacts?|Pull up the full names of the matching contacts.
+198|Open the chat I selected from the options.|Could you open the chat I selected from the options?|Bring up the chat I selected from the options.
+199|Read the latest message from that person.|Could you read the latest message from that person?|Go through the latest message from that person.
+200|Tell me if there are unread WhatsApp messages.|Could you tell me if there are unread WhatsApp messages?|Let me know if there are unread WhatsApp messages.
+201|Summarize the unread messages from this chat.|Could you summarize the unread messages from this chat?|Give me the gist of the unread messages from this chat.
+202|Draft a reply to the last WhatsApp message.|Could you draft a reply to the last WhatsApp message?|Prepare a reply to the last WhatsApp message.
+203|Write a WhatsApp message asking if they're free tonight.|Could you write a WhatsApp message asking if they're free tonight?|Put together a WhatsApp message asking if they're free tonight.
+204|Send the exact message I dictate to this contact.|Could you send the exact message I dictate to this contact?|I want you to send the exact message I dictate to this contact.
+205|Make that draft shorter.|Could you make that draft shorter?|Please make that draft shorter.
+206|Make the reply warmer.|Could you make the reply warmer?|I need you to make the reply warmer.
+207|Show the message preview on the dynamic island.|Could you show the message preview on the dynamic island?|Pull up the message preview on the dynamic island.
+208|Read the preview to me before I approve.|Could you read the preview to me before I approve?|Go through the preview to me before I approve.
+209|Approve and send only the previewed message.|Could you approve and send only the previewed message?|Please approve and send only the previewed message.
+210|Don't send; I changed my mind.|Please do not send; I changed my mind.|Never mind, leave it as a draft.
+211|Change the recipient before sending.|Could you change the recipient before sending?|Adjust the recipient before sending.
+212|Use the other contact with that first name.|Could you use the other contact with that first name?|Work with the other contact with that first name.
+213|Search contacts by nickname if the name is unclear.|Could you search contacts by nickname if the name is unclear?|Look up contacts by nickname if the name is unclear.
+214|Tell me which chat is currently open.|Could you tell me which chat is currently open?|Let me know which chat is currently open.
+215|Don't assume the first contact is the right one.|Please do not assume the first contact is the right one.|Make sure you do not assume the first contact is the right one.
+216|Verify the selected chat before typing.|Could you verify the selected chat before typing?|I want you to verify the selected chat before typing.
+217|Send a message to myself as a test.|Could you send a message to myself as a test?|Please send a message to myself as a test.
+218|Check whether the message was delivered.|Could you check whether the message was delivered?|Take a look at whether the message was delivered.
+219|Draft a reply to the newest unseen message.|Could you draft a reply to the newest unseen message?|Prepare a reply to the newest unseen message.
+220|Ask for approval before sending your suggested reply.|Could you ask for approval before sending your suggested reply?|Check with for approval before sending your suggested reply.
+221|Open that person's earlier messages for context.|Could you open that person's earlier messages for context?|Bring up that person's earlier messages for context.
+222|Explain why the WhatsApp search isn't showing results.|Could you explain why the WhatsApp search isn't showing results?|Walk me through why the WhatsApp search isn't showing results.
+223|Do not send anything if focus moves to another app.|Please do not send anything if focus moves to another app.|Just checking - do not send anything if focus moves to another app.
+224|What was the last message you prepared for me?|Hey Jarvis, what was the last message you prepared for me?|Tell me one thing: what was the last message you prepared for me?
+225|Tell me when a WhatsApp call starts ringing.|Could you tell me when a WhatsApp call starts ringing?|Let me know when a WhatsApp call starts ringing.
+226|Who is calling on WhatsApp?|Hey Jarvis, who is calling on WhatsApp?|Who's calling on WhatsApp?
+227|Answer the incoming WhatsApp call if I approve.|Could you answer the incoming WhatsApp call if I approve?|Respond to the incoming WhatsApp call if I approve.
+228|Decline that call when I say no.|Could you decline that call when I say no?|I want you to decline that call when I say no.
+229|Don't accept a call automatically.|Please do not accept a call automatically.|Make sure you do not accept a call automatically.
+230|Show the incoming call on the island.|Could you show the incoming call on the island?|Pull up the incoming call on the island.
+231|Ask me whether to pick up a call.|Could you ask me whether to pick up a call?|Check with me whether to pick up a call.
+232|I said yes to the call, not the message.|Hey Jarvis, I said yes to the call, not the message.|By the way, I said yes to the call, not the message.
+233|End the current WhatsApp call.|Could you end the current WhatsApp call?|Finish the current WhatsApp call.
+234|Mute my microphone during the call if supported.|Could you mute my microphone during the call if supported?|Silence my microphone during the call if supported.
+235|Tell me whether the call is still active.|Could you tell me whether the call is still active?|Let me know whether the call is still active.
+236|Go back to our conversation after the call.|Could you go back to our conversation after the call?|Head back to our conversation after the call.
+237|Open Telegram Desktop.|Could you open Telegram Desktop?|Bring up Telegram Desktop.
+238|Search Telegram for a chat with Sam.|Could you search Telegram for a chat with Sam?|Look up Telegram for a chat with Sam.
+239|Draft a Telegram message if the app is available.|Could you draft a Telegram message if the app is available?|Prepare a Telegram message if the app is available.
+240|Ask before sending a Telegram message.|Could you ask before sending a Telegram message?|Check with before sending a Telegram message.
+241|Open Discord.|Could you open Discord?|Bring up Discord.
+242|Find the server I was looking at.|Could you find the server I was looking at?|Look for the server I was looking at.
+243|Show new messages in the selected channel.|Could you show new messages in the selected channel?|Pull up new messages in the selected channel.
+244|Write a reply in that channel without sending.|Could you write a reply in that channel without sending?|Put together a reply in that channel without sending.
+245|Switch to the messaging app that's already open.|Could you switch to the messaging app that's already open?|Change to the messaging app that's already open.
+246|Which messenger has unread messages?|Hey Jarvis, which messenger has unread messages?|Could you tell me which messenger has unread messages?
+247|Send that draft on WhatsApp, not Telegram.|Could you send that draft on WhatsApp, not Telegram?|Go ahead and send that draft on WhatsApp, not Telegram.
+248|No, I meant the person on Telegram.|Actually, I meant the person on Telegram.|Not quite - I meant the person on Telegram.
+249|Do not read private chats out loud right now.|Please do not read private chats out loud right now.|Quick question: do not read private chats out loud right now.
+250|Turn off spoken notifications during the meeting.|Could you turn off spoken notifications during the meeting?|Disable spoken notifications during the meeting.
+251|Resume message alerts after the call.|Could you resume message alerts after the call?|Continue message alerts after the call.
+252|Summarize incoming notifications without opening chats.|Could you summarize incoming notifications without opening chats?|Give me the gist of incoming notifications without opening chats.
+253|Don't claim a messenger is connected unless it is.|Please do not claim a messenger is connected unless it is.|Make sure you do not claim a messenger is connected unless it is.
+254|Tell me what permissions that app needs.|Could you tell me what permissions that app needs?|Let me know what permissions that app needs.
+255|Stop monitoring this messenger for now.|Could you stop monitoring this messenger for now?|Discontinue monitoring this messenger for now.
+256|Which messaging actions can you actually perform?|Hey Jarvis, which messaging actions can you actually perform?|What can you really do in these chat apps?
+257|Open YouTube.|Could you open YouTube?|Bring up YouTube.
+258|Search YouTube for Nadaan Parindey.|Could you search YouTube for Nadaan Parindey?|Look up YouTube for Nadaan Parindey.
+259|Play the official version of Nadaan Parindey.|Could you play the official version of Nadaan Parindey?|Put on the official version of Nadaan Parindey.
+260|Play the first relevant video from the results.|Could you play the first relevant video from the results?|Put on the first relevant video from the results.
+261|Skip covers and remixes unless I request them.|Could you skip covers and remixes unless I request them?|Jump covers and remixes unless I request them.
+262|Find a live performance of this song.|Could you find a live performance of this song?|Look for a live performance of this song.
+263|Play a video explaining black holes.|Could you play a video explaining black holes?|Put on a video explaining black holes.
+264|Find a beginner tutorial for Python on YouTube.|Could you find a beginner tutorial for Python on YouTube?|Look for a beginner tutorial for Python on YouTube.
+265|Open the most recent video from that channel.|Could you open the most recent video from that channel?|Bring up the most recent video from that channel.
+266|Show videos by the creator we were watching.|Could you show videos by the creator we were watching?|Pull up videos by the creator we were watching.
+267|Search for a longer explanation of the same topic.|Could you search for a longer explanation of the same topic?|Look up for a longer explanation of the same topic.
+268|Play the video I selected from the results.|Could you play the video I selected from the results?|Put on the video I selected from the results.
+269|Pause the YouTube video.|Could you pause the YouTube video?|Hold the YouTube video.
+270|Resume the paused video.|Could you resume the paused video?|Continue the paused video.
+271|Restart this video from the beginning.|Could you restart this video from the beginning?|Start over this video from the beginning.
+272|Skip forward ten seconds.|Could you skip forward ten seconds?|Jump forward ten seconds.
+273|Go back thirty seconds.|Could you go back thirty seconds?|Head back thirty seconds.
+274|Set the video volume to 40 percent.|Could you set the video volume to 40 percent?|Adjust the video volume to 40 percent.
+275|Mute the YouTube tab.|Could you mute the YouTube tab?|Silence the YouTube tab.
+276|Unmute the video.|Could you unmute the video?|Bring the sound back on for the video.
+277|Turn captions on.|Could you turn captions on?|Switch captions on.
+278|Turn captions off.|Could you turn captions off?|Switch captions off.
+279|Change playback speed to 1.5 times.|Could you change playback speed to 1.5 times?|Adjust playback speed to 1.5 times.
+280|Switch back to normal speed.|Could you switch back to normal speed?|Change back to normal speed.
+281|Put the video in full screen.|Could you put the video in full screen?|Place the video in full screen.
+282|Leave full screen without closing the video.|Could you leave full screen without closing the video?|I need you to leave full screen without closing the video.
+283|Play the next suggested video.|Could you play the next suggested video?|Put on the next suggested video.
+284|Go back to the previous video.|Could you go back to the previous video?|Head back to the previous video.
+285|What video is playing right now?|Hey Jarvis, what video is playing right now?|Quick question: what video is playing right now?
+286|Tell me the video title and channel.|Could you tell me the video title and channel?|Let me know the video title and channel.
+287|The video is still loading; wait and verify playback.|Hey Jarvis, the video is still loading; wait and verify playback.|Go ahead and the video is still loading; wait and verify playback.
+288|I opened YouTube first; now play Nadaan Parindey.|Hey Jarvis, I opened YouTube first; now play Nadaan Parindey.|By the way, I opened YouTube first; now play Nadaan Parindey.
+289|Open Spotify.|Could you open Spotify?|Bring up Spotify.
+290|Search Spotify for Kun Faya Kun.|Could you search Spotify for Kun Faya Kun?|Look up Spotify for Kun Faya Kun.
+291|Play Kun Faya Kun by the correct artist.|Could you play Kun Faya Kun by the correct artist?|Put on Kun Faya Kun by the correct artist.
+292|Play Nadaan Parindey on Spotify.|Could you play Nadaan Parindey on Spotify?|Put on Nadaan Parindey on Spotify.
+293|Find the original track, not a cover.|Could you find the original track, not a cover?|Look for the original track, not a cover.
+294|Play a calm playlist while I study.|Could you play a calm playlist while I study?|Put on a calm playlist while I study.
+295|Put on some instrumental music.|Could you put on some instrumental music?|Place on some instrumental music.
+296|Play something by Arijit Singh.|Could you play something by Arijit Singh?|Put on something by Arijit Singh.
+297|Find another song by this artist.|Could you find another song by this artist?|Look for another song by this artist.
+298|Play the album we were looking at.|Could you play the album we were looking at?|Put on the album we were looking at.
+299|Pause the Spotify track.|Could you pause the Spotify track?|Hold the Spotify track.
+300|Resume the music.|Could you resume the music?|Continue the music.
+301|Skip to the next track.|Could you skip to the next track?|Jump to the next track.
+302|Go back to the previous track.|Could you go back to the previous track?|Head back to the previous track.
+303|Restart the current song.|Could you restart the current song?|Start over the current song.
+304|Seek to the middle of the song.|Could you seek to the middle of the song?|I want you to seek to the middle of the song.
+305|Jump back fifteen seconds.|Could you jump back fifteen seconds?|Please jump back fifteen seconds.
+306|Turn shuffle on.|Could you turn shuffle on?|Switch shuffle on.
+307|Turn shuffle off.|Could you turn shuffle off?|Switch shuffle off.
+308|Repeat this track.|Could you repeat this track?|I want you to repeat this track.
+309|Stop repeating the track.|Could you stop repeating the track?|Discontinue repeating the track.
+310|Set Spotify volume to 50 percent.|Could you set Spotify volume to 50 percent?|Adjust Spotify volume to 50 percent.
+311|Turn the music up a little.|Could you turn the music up a little?|Switch the music up a little.
+312|Mute Spotify.|Could you mute Spotify?|Silence Spotify.
+313|Unmute Spotify.|Could you unmute Spotify?|Bring the sound back on for Spotify.
+314|What's playing on Spotify?|Hey Jarvis, what's playing on Spotify?|What's that Spotify track called?
+315|Who is singing this song?|Hey Jarvis, who is singing this song?|Who's singing this song?
+316|Show the track artwork on the island.|Could you show the track artwork on the island?|Pull up the track artwork on the island.
+317|Tell me how far through the track we are.|Could you tell me how far through the track we are?|Let me know how far through the track we are.
+318|Switch from YouTube to Spotify for this song.|Could you switch from YouTube to Spotify for this song?|Change from YouTube to Spotify for this song.
+319|Stop YouTube when Spotify starts playing.|Could you stop YouTube when Spotify starts playing?|Discontinue YouTube when Spotify starts playing.
+320|I just said play; use the music app that's active.|Hey Jarvis, I just said play; use the music app that's active.|Play it on whichever player I was using.
+321|Pause whatever is playing.|Could you pause whatever is playing?|Hold whatever is playing.
+322|Resume the thing I paused.|Could you resume the thing I paused?|Continue the thing I paused.
+323|Play the last song again.|Could you play the last song again?|Put on the last song again.
+324|Which player is making sound right now?|Hey Jarvis, which player is making sound right now?|Could you tell me which player is making sound right now?
+325|Use YouTube for videos and Spotify for songs.|Could you use YouTube for videos and Spotify for songs?|Work with YouTube for videos and Spotify for songs.
+326|Keep playing on the service I used last.|Could you keep playing on the service I used last?|Leave playing on the service I used last.
+327|Don't start two players at the same time.|Please do not start two players at the same time.|Make sure you do not start two players at the same time.
+328|Turn the active player's volume down.|Could you turn the active player's volume down?|Switch the active player's volume down.
+329|Mute only the active player.|Could you mute only the active player?|Silence only the active player.
+330|What did I last listen to?|Hey Jarvis, what did I last listen to?|Hey, what did I last listen to?
+331|What did I last watch?|Hey Jarvis, what did I last watch?|Just checking - what did I last watch?
+332|Show me the current media card.|Could you show me the current media card?|Pull up me the current media card.
+333|Display album art on the dynamic island.|Could you display album art on the dynamic island?|Show album art on the dynamic island.
+334|Show the YouTube video's progress on the island.|Could you show the YouTube video's progress on the island?|Pull up the YouTube video's progress on the island.
+335|Show the track title without covering my screen.|Could you show the track title without covering my screen?|Pull up the track title without covering my screen.
+336|Hide the media island for a moment.|Could you hide the media island for a moment?|Turn off the media island for a moment.
+337|Bring the island back when playback changes.|Could you bring the island back when playback changes?|Pull the island back when playback changes.
+338|Show that you're searching for the song.|Could you show that you're searching for the song?|Put the searching indicator on the island while you find the song.
+339|Confirm that playback actually started.|Could you confirm that playback actually started?|Go ahead and confirm that playback actually started.
+340|Tell me if the requested version couldn't be found.|Could you tell me if the requested version couldn't be found?|Let me know if the requested version couldn't be found.
+341|Don't silently choose a different remix.|Please do not silently choose a different remix.|If the original isn't there, ask before playing a remix.
+342|Pick up the song from where it stopped.|Could you pick up the song from where it stopped?|I need you to pick up the song from where it stopped.
+343|The last command was for Spotify, not YouTube.|Hey Jarvis, the last command was for Spotify, not YouTube.|Go ahead and the last command was for Spotify, not YouTube.
+344|Actually, play it as a YouTube video instead.|Could you actually, play it as a YouTube video instead?|When you're ready, actually, play it as a YouTube video instead.
+345|I said next, so skip the track, not the playlist.|Hey Jarvis, I said next, so skip the track, not the playlist.|Just to clarify, I said next, so skip the track, not the playlist.
+346|Keep the media running while you answer my question.|Could you keep the media running while you answer my question?|Leave the media running while you answer my question.
+347|Lower the music while you're speaking.|Could you lower the music while you're speaking?|Turn down the music while you're speaking.
+348|Tell me whether the video is paused.|Could you tell me whether the video is paused?|Let me know whether the video is paused.
+349|The play button didn't work; verify the actual state.|Hey Jarvis, the play button didn't work; verify the actual state.|That didn't start; check if it's really playing.
+350|Retry the safe search if the first result is stale.|Could you retry the safe search if the first result is stale?|I need you to retry the safe search if the first result is stale.
+351|Don't say you can't control playback when you can.|Please do not say you can't control playback when you can.|Make sure you do not say you can't control playback when you can.
+352|What media commands do you support right now?|Hey Jarvis, what media commands do you support right now?|Tell me one thing: what media commands do you support right now?
+353|What tasks are running right now?|Hey Jarvis, what tasks are running right now?|Quick question: what tasks are running right now?
+354|What's waiting in the queue?|Hey Jarvis, what's waiting in the queue?|What have you got lined up next?
+355|Add opening Notepad to the task queue.|Could you add opening Notepad to the task queue?|Put opening Notepad to the task queue.
+356|Queue playing a song after the current task.|Could you queue playing a song after the current task?|I want you to queue playing a song after the current task.
+357|Start the next queued task when this one finishes.|Could you start the next queued task when this one finishes?|Please start the next queued task when this one finishes.
+358|Don't interrupt the task that's already running.|Please do not interrupt the task that's already running.|Make sure you do not interrupt the task that's already running.
+359|Answer this quick question while the task continues.|Could you answer this quick question while the task continues?|Respond to this quick question while the task continues.
+360|Tell me the progress of the first task.|Could you tell me the progress of the first task?|Let me know the progress of the first task.
+361|Which task is second in the queue?|Hey Jarvis, which task is second in the queue?|Could you tell me which task is second in the queue?
+362|Cancel the YouTube task only.|Could you cancel the YouTube task only?|Drop the YouTube task only.
+363|Remove task number two.|Could you remove task number two?|Take away task number two.
+364|Scratch the last request I made.|Could you scratch the last request I made?|I want you to scratch the last request I made.
+365|Stop the task you're doing now.|Could you stop the task you're doing now?|Discontinue the task you're doing now.
+366|Cancel everything in the queue.|Could you cancel everything in the queue?|Drop everything in the queue.
+367|Cancel everything except the email draft.|Could you cancel everything except the email draft?|Drop everything except the email draft.
+368|Keep the code task but drop the music task.|Could you keep the code task but drop the music task?|Leave the code task but drop the music task.
+369|Don't cancel the tasks when I say goodbye.|Please do not cancel the tasks when I say goodbye.|Make sure you do not cancel the tasks when I say goodbye.
+370|Reorder the queue to handle Gmail first.|Could you reorder the queue to handle Gmail first?|Change the order of the queue to handle Gmail first.
+371|Put this urgent task ahead of the other ones.|Could you put this urgent task ahead of the other ones?|Place this urgent task ahead of the other ones.
+372|Pause the queued task until I say resume.|Could you pause the queued task until I say resume?|Hold the queued task until I say resume.
+373|What task failed most recently?|Hey Jarvis, what task failed most recently?|Quick question: what task failed most recently?
+374|Tell me which steps of that task already completed.|Could you tell me which steps of that task already completed?|Let me know which steps of that task already completed.
+375|Do not repeat a side effect when retrying.|Please do not repeat a side effect when retrying.|Just checking - do not repeat a side effect when retrying.
+376|I meant cancel the old email task, not the new one.|Hey Jarvis, I meant cancel the old email task, not the new one.|By the way, I meant cancel the old email task, not the new one.
+377|Which of the two search tasks are you cancelling?|Hey Jarvis, which of the two search tasks are you cancelling?|Could you tell me which of the two search tasks are you cancelling?
+378|Never mind; leave the current work untouched.|Please never mind; leave the current work untouched.|Under no circumstances mind; leave the current work untouched.
+379|Show me the pending approvals separately from the queue.|Could you show me the pending approvals separately from the queue?|Pull up me the pending approvals separately from the queue.
+380|Resume a task that was waiting for my answer.|Could you resume a task that was waiting for my answer?|Continue a task that was waiting for my answer.
+381|Do the three tasks one after another.|Hey Jarvis, do the three tasks one after another.|Quick question: do the three tasks one after another.
+382|Can we keep talking while you work?|Could we keep talking while you work?|Hey, can we keep talking while you work?
+383|What was the result of the task from earlier?|Hey Jarvis, what was the result of the task from earlier?|Just checking - what was the result of the task from earlier?
+384|Report only the tasks that are still unfinished.|Could you report only the tasks that are still unfinished?|I want you to report only the tasks that are still unfinished.
+385|Plan the task before changing anything.|Could you plan the task before changing anything?|Please plan the task before changing anything.
+386|Start executing each step as soon as it's ready.|Could you start executing each step as soon as it's ready?|I need you to start executing each step as soon as it's ready.
+387|Use only the tools relevant to this request.|Could you use only the tools relevant to this request?|Work with only the tools relevant to this request.
+388|Tell me which skill you're using for this job.|Could you tell me which skill you're using for this job?|Let me know which skill you're using for this job.
+389|Why did you choose that tool instead of another?|Hey Jarvis, why did you choose that tool instead of another?|Quick question: why did you choose that tool instead of another?
+390|Break this complicated job into smaller steps.|Could you break this complicated job into smaller steps?|I need you to break this complicated job into smaller steps.
+391|Show me the next step you're about to run.|Could you show me the next step you're about to run?|Pull up me the next step you're about to run.
+392|Check whether the last step worked as intended.|Could you check whether the last step worked as intended?|Take a look at whether the last step worked as intended.
+393|The click failed; replan only from that point.|Hey Jarvis, the click failed; replan only from that point.|Please the click failed; replan only from that point.
+394|Don't restart the whole task after a minor failure.|Please do not restart the whole task after a minor failure.|Make sure you do not restart the whole task after a minor failure.
+395|Try an alternative safe method if the first one fails.|Could you try an alternative safe method if the first one fails?|Go ahead and try an alternative safe method if the first one fails.
+396|Stop and ask if you can't confirm a file write.|Could you stop and ask if you can't confirm a file write?|Discontinue and ask if you can't confirm a file write.
+397|Don't resend an email when the result is uncertain.|Please do not resend an email when the result is uncertain.|Make sure you do not resend an email when the result is uncertain.
+398|Don't click twice if the first click may have worked.|Please do not click twice if the first click may have worked.|Make sure you do not click twice if the first click may have worked.
+399|Report the exact blocker instead of pretending success.|Could you report the exact blocker instead of pretending success?|Go ahead and report the exact blocker instead of pretending success.
+400|Use your CPU and GPU efficiently for this task.|Could you use your CPU and GPU efficiently for this task?|Work with your CPU and GPU efficiently for this task.
+401|Tell me why the planner is taking so long.|Could you tell me why the planner is taking so long?|Let me know why the planner is taking so long.
+402|Prefer the fast direct command path where possible.|Could you prefer the fast direct command path where possible?|I need you to prefer the fast direct command path where possible.
+403|Keep the language model warm between related steps.|Could you keep the language model warm between related steps?|Leave the language model warm between related steps.
+404|Use the screen only when the task really needs vision.|Could you use the screen only when the task really needs vision?|Work with the screen only when the task really needs vision.
+405|Don't send screenshots to the planner unnecessarily.|Please do not send screenshots to the planner unnecessarily.|Make sure you do not send screenshots to the planner unnecessarily.
+406|Reuse the same task context across planning steps.|Could you reuse the same task context across planning steps?|I need you to reuse the same task context across planning steps.
+407|Give me an estimated set of steps, not an invented completion time.|Could you give me an estimated set of steps, not an invented completion time?|Go ahead and give me an estimated set of steps, not an invented completion time.
+408|Identify tools and APIs required by the plan.|Could you identify tools and APIs required by the plan?|Pinpoint tools and APIs required by the plan.
+409|Use a free service when an API is optional.|Could you use a free service when an API is optional?|Work with a free service when an API is optional.
+410|Don't use a paid API without telling me.|Please do not use a paid API without telling me.|Make sure you do not use a paid API without telling me.
+411|Explain which step caused the failure.|Could you explain which step caused the failure?|Walk me through which step caused the failure.
+412|Check the final result in the app, not just in logs.|Could you check the final result in the app, not just in logs?|Take a look at the final result in the app, not just in logs.
+413|Run the relevant tests before you report success.|Could you run the relevant tests before you report success?|Execute the relevant tests before you report success.
+414|Summarize what changed and what remains broken.|Could you summarize what changed and what remains broken?|Give me the gist of what changed and what remains broken.
+415|Tell me what still needs manual approval.|Could you tell me what still needs manual approval?|Let me know what still needs manual approval.
+416|Which part of this request is unsupported today?|Hey Jarvis, which part of this request is unsupported today?|Could you tell me which part of this request is unsupported today?
+417|Remember that I prefer instrumental music while studying.|Could you remember that I prefer instrumental music while studying?|Keep in mind that I prefer instrumental music while studying.
+418|What preferences have you saved about me?|Hey Jarvis, what preferences have you saved about me?|Hey, what preferences have you saved about me?
+419|What do you remember about my coding projects?|Hey Jarvis, what do you remember about my coding projects?|Just checking - what do you remember about my coding projects?
+420|Remember that this project is called Jarvis.|Could you remember that this project is called Jarvis?|Keep in mind that this project is called Jarvis.
+421|What did we discuss yesterday?|Hey Jarvis, what did we discuss yesterday?|Quick question: what did we discuss yesterday?
+422|Find the conversation where we fixed Gmail.|Could you find the conversation where we fixed Gmail?|Look for the conversation where we fixed Gmail.
+423|What tasks did you finish earlier today?|Hey Jarvis, what tasks did you finish earlier today?|Just checking - what tasks did you finish earlier today?
+424|What was the last command I gave you?|Hey Jarvis, what was the last command I gave you?|What did I ask you to do most recently?
+425|Remind me what I told you about this project.|Could you remind me what I told you about this project?|Please remind me what I told you about this project.
+426|Remember the deadline I mention in this sentence.|Could you remember the deadline I mention in this sentence?|Keep in mind the deadline I mention in this sentence.
+427|Convert that relative date into a real date in the note.|Could you convert that relative date into a real date in the note?|Go ahead and convert that relative date into a real date in the note.
+428|Summarize our conversation into my Obsidian vault.|Could you summarize our conversation into my Obsidian vault?|Give me the gist of our conversation into my Obsidian vault.
+429|Show the latest Jarvis Conversations note.|Could you show the latest Jarvis Conversations note?|Pull up the latest Jarvis Conversations note.
+430|What did you learn from the last session?|Hey Jarvis, what did you learn from the last session?|Hey, what did you learn from the last session?
+431|Don't store my password or one-time code.|Please do not store my password or one-time code.|Make sure you do not store my password or one-time code.
+432|Forget the preference I just mentioned.|Could you forget the preference I just mentioned?|Stop remembering the preference I just mentioned.
+433|Forget only the fact about my old music taste.|Could you forget only the fact about my old music taste?|Stop remembering only the fact about my old music taste.
+434|Tell me whether you saved that detail.|Could you tell me whether you saved that detail?|Let me know whether you saved that detail.
+435|Where did you store the memory of this repo?|Hey Jarvis, where did you store the memory of this repo?|Just checking - where did you store the memory of this repo?
+436|Open the relevant memory note.|Could you open the relevant memory note?|Bring up the relevant memory note.
+437|Use what you remember when answering this question.|Could you use what you remember when answering this question?|Work with what you remember when answering this question.
+438|Don't invent a memory if there's no record.|Please do not invent a memory if there's no record.|Make sure you do not invent a memory if there's no record.
+439|Distinguish a saved fact from an assumption.|Could you distinguish a saved fact from an assumption?|Go ahead and distinguish a saved fact from an assumption.
+440|Tell me when that saved preference was last updated.|Could you tell me when that saved preference was last updated?|Let me know when that saved preference was last updated.
+441|Update the old preference with this new one.|Could you update the old preference with this new one?|Refresh the old preference with this new one.
+442|Keep the project preference separate from my personal preference.|Could you keep the project preference separate from my personal preference?|Leave the project preference separate from my personal preference.
+443|What do you remember about the person we discussed?|Hey Jarvis, what do you remember about the person we discussed?|Just checking - what do you remember about the person we discussed?
+444|Show a short summary rather than the entire vault.|Could you show a short summary rather than the entire vault?|Pull up a short summary rather than the entire vault.
+445|What tools and APIs do you know you have?|Hey Jarvis, what tools and APIs do you know you have?|Quick question: what tools and APIs do you know you have?
+446|Which memory helped you choose that response?|Hey Jarvis, which memory helped you choose that response?|Could you tell me which memory helped you choose that response?
+447|Don't confuse a fictional example with a fact about me.|Please do not confuse a fictional example with a fact about me.|Make sure you do not confuse a fictional example with a fact about me.
+448|Keep this detail only for the current conversation.|Could you keep this detail only for the current conversation?|Leave this detail only for the current conversation.
+449|What is this repository about?|Hey Jarvis, what is this repository about?|What's this GitHub project doing?
+450|Can you explain the tab I am looking at?|Would you be able to explain the tab I am looking at?|Hey, can you explain the tab I am looking at?
+451|What is the name of the current project?|Hey Jarvis, what is the name of the current project?|What's the name of the current project?
+452|Is that task done yet?|Hey Jarvis, is that task done yet?|Did you finish the thing I asked for?
+453|Go back to the email thing.|Could you go back to the email thing?|Can we return to that Gmail job?
+454|Do the same thing with the second result.|Hey Jarvis, do the same thing with the second result.|Now do it for result number two.
+455|Open the one we looked at earlier.|Could you open the one we looked at earlier?|Bring up the one we looked at earlier.
+456|No, I meant the other one.|Actually, I meant the other one.|Not that one - the other result.
+457|Use the same contact as before.|Could you use the same contact as before?|Work with the same contact as before.
+458|Send it to her instead.|Could you send it to her instead?|I need you to send it to her instead.
+459|Make that shorter.|Could you make that shorter?|Go ahead and make that shorter.
+460|Expand the last point you made.|Could you expand the last point you made?|Add more detail to the last point you made.
+461|What happened to the first task?|Hey Jarvis, what happened to the first task?|Quick question: what happened to the first task?
+462|Which video did we just play?|Hey Jarvis, which video did we just play?|Could you tell me which video did we just play?
+463|Pause it.|Could you pause it?|Hold on, stop that playback.
+464|Resume that one, not the newer one.|Could you resume that one, not the newer one?|Continue that one, not the newer one.
+465|Use this window as the target.|Could you use this window as the target?|Work with this window as the target.
+466|Open that file from yesterday.|Could you open that file from yesterday?|Bring up that file from yesterday.
+467|Don't mix up the two projects.|Please do not mix up the two projects.|Make sure you do not mix up the two projects.
+468|I meant the GitHub repo, not the local folder.|Hey Jarvis, I meant the GitHub repo, not the local folder.|By the way, I meant the GitHub repo, not the local folder.
+469|This time do it in Spotify.|Hey Jarvis, this time do it in Spotify.|Please this time do it in Spotify.
+470|The second Rahul, not the first.|Hey Jarvis, the second Rahul, not the first.|I need you to the second Rahul, not the first.
+471|What were you waiting for me to approve?|Hey Jarvis, what were you waiting for me to approve?|Just checking - what were you waiting for me to approve?
+472|Yes, approve only the message preview.|Could you yes, approve only the message preview?|When you're ready, yes, approve only the message preview.
+473|No, that was an answer to your question.|Actually, that was an answer to your question.|Not quite - that was an answer to your question.
+474|Actually, change the location to London.|Could you actually, change the location to London?|I mean, actually, change the location to London.
+475|Keep the military layer but remove the cameras.|Could you keep the military layer but remove the cameras?|Leave the military layer but remove the cameras.
+476|Earlier I asked for a short answer; do that again.|Could you earlier I asked for a short answer; do that again?|Remember, earlier I asked for a short answer; do that again.
+477|Which source did you use for that claim?|Hey Jarvis, which source did you use for that claim?|Could you tell me which source did you use for that claim?
+478|What did you learn while I was browsing?|Hey Jarvis, what did you learn while I was browsing?|Hey, what did you learn while I was browsing?
+479|I changed windows; which one are we talking about?|Hey Jarvis, I changed windows; which one are we talking about?|For now, I changed windows; which one are we talking about?
+480|Ask me if you can't confidently resolve that reference.|Could you ask me if you can't confidently resolve that reference?|Check with me if you can't confidently resolve that reference.
+481|Learn the GitHub repository in my current tab.|Could you learn the GitHub repository in my current tab?|Please learn the GitHub repository in my current tab.
+482|What is this repository for?|Hey Jarvis, what is this repository for?|What's the point of this repo?
+483|Find GitHub projects relevant to building a task scheduler.|Could you find GitHub projects relevant to building a task scheduler?|Look for GitHub projects relevant to building a task scheduler.
+484|Search for an example repo before writing code.|Could you search for an example repo before writing code?|Look up for an example repo before writing code.
+485|Learn the repository psf/requests.|Could you learn the repository psf/requests?|Please learn the repository psf/requests.
+486|Explore the file structure of this repository.|Could you explore the file structure of this repository?|I need you to explore the file structure of this repository.
+487|Find where the main application starts.|Could you find where the main application starts?|Look for where the main application starts.
+488|Explain the important modules in this codebase.|Could you explain the important modules in this codebase?|Walk me through the important modules in this codebase.
+489|Show how the functions call each other.|Could you show how the functions call each other?|Pull up how the functions call each other.
+490|Identify the dependencies this project needs.|Could you identify the dependencies this project needs?|Pinpoint the dependencies this project needs.
+491|Read the repository README and setup instructions.|Could you read the repository README and setup instructions?|Go through the repository README and setup instructions.
+492|Find the test suite in this repo.|Could you find the test suite in this repo?|Look for the test suite in this repo.
+493|Explain the build process used here.|Could you explain the build process used here?|Walk me through the build process used here.
+494|What license does this repository use?|Hey Jarvis, what license does this repository use?|Hey, what license does this repository use?
+495|Don't copy code from a project without checking its license.|Please do not copy code from a project without checking its license.|Make sure you do not copy code from a project without checking its license.
+496|Identify reusable ideas, not copyrighted code to paste.|Could you identify reusable ideas, not copyrighted code to paste?|Pinpoint reusable ideas, not copyrighted code to paste.
+497|Remember what you learned about this repository.|Could you remember what you learned about this repository?|Keep in mind what you learned about this repository.
+498|Where are the repo notes stored in Obsidian?|Hey Jarvis, where are the repo notes stored in Obsidian?|Hey, where are the repo notes stored in Obsidian?
+499|Which repos have you already studied?|Hey Jarvis, which repos have you already studied?|Could you tell me which repos have you already studied?
+500|Is this repository in your learned index?|Hey Jarvis, is this repository in your learned index?|Tell me one thing: is this repository in your learned index?
+501|What did you learn from the repo I browsed yesterday?|Hey Jarvis, what did you learn from the repo I browsed yesterday?|Quick question: what did you learn from the repo I browsed yesterday?
+502|Compare this repository to the one we saw before.|Could you compare this repository to the one we saw before?|Contrast this repository to the one we saw before.
+503|Use your cached notes before downloading it again.|Could you use your cached notes before downloading it again?|Work with your cached notes before downloading it again.
+504|Refresh the repo knowledge if the code changed.|Could you refresh the repo knowledge if the code changed?|Update the repo knowledge if the code changed.
+505|Forget what you learned about that repo.|Could you forget what you learned about that repo?|Stop remembering what you learned about that repo.
+506|Stop learning the repo in the background.|Could you stop learning the repo in the background?|Quit the background GitHub analysis for now.
+507|Show a learning status on the dynamic island.|Could you show a learning status on the dynamic island?|Pull up a learning status on the dynamic island.
+508|Tell me when background learning finishes.|Could you tell me when background learning finishes?|Let me know when background learning finishes.
+509|Keep repository learning low priority while I work.|Could you keep repository learning low priority while I work?|Learn quietly in the background; don't slow me down.
+510|Don't exhaust the free GitHub API quota.|Please do not exhaust the free GitHub API quota.|Make sure you do not exhaust the free GitHub API quota.
+511|Tell me if the repo is private or inaccessible.|Could you tell me if the repo is private or inaccessible?|Let me know if the repo is private or inaccessible.
+512|Show which coding task used this repository as a reference.|Could you show which coding task used this repository as a reference?|Pull up which coding task used this repository as a reference.
+513|Create a small Python script that renames files safely.|Could you create a small Python script that renames files safely?|Make a small Python script that renames files safely.
+514|Make a simple JavaScript snake game.|Could you make a simple JavaScript snake game?|I need you to make a simple JavaScript snake game.
+515|Explain why the last coding attempt failed.|Could you explain why the last coding attempt failed?|Walk me through why the last coding attempt failed.
+516|Find an open-source example before implementing the feature.|Could you find an open-source example before implementing the feature?|Look for an open-source example before implementing the feature.
+517|Use the repo knowledge you saved for this task.|Could you use the repo knowledge you saved for this task?|Work with the repo knowledge you saved for this task.
+518|Create a new branch before editing the project.|Could you create a new branch before editing the project?|Make a new branch before editing the project.
+519|Show which files you intend to change.|Could you show which files you intend to change?|Pull up which files you intend to change.
+520|Add a function without breaking existing callers.|Could you add a function without breaking existing callers?|Put a function without breaking existing callers.
+521|Write unit tests for the new function.|Could you write unit tests for the new function?|Put together unit tests for the new function.
+522|Run the relevant tests after the change.|Could you run the relevant tests after the change?|Execute the relevant tests after the change.
+523|Run the entire test suite before finishing.|Could you run the entire test suite before finishing?|Execute the entire test suite before finishing.
+524|Tell me which tests were skipped.|Could you tell me which tests were skipped?|Let me know which tests were skipped.
+525|Check whether the application still starts.|Could you check whether the application still starts?|Take a look at whether the application still starts.
+526|Don't claim the tests passed unless you ran them.|Please do not claim the tests passed unless you ran them.|Only tell me it passed after checking the tests.
+527|Fix the import error you just introduced.|Could you fix the import error you just introduced?|Repair the import error you just introduced.
+528|Inspect the traceback and identify the cause.|Could you inspect the traceback and identify the cause?|Examine the traceback and identify the cause.
+529|Reproduce the failing behavior first.|Could you reproduce the failing behavior first?|Please reproduce the failing behavior first.
+530|Compare the result to the requested behavior.|Could you compare the result to the requested behavior?|Contrast the result to the requested behavior.
+531|Create a backup before overwriting the source.|Could you create a backup before overwriting the source?|Make a backup before overwriting the source.
+532|Explain the difference between two implementations.|Could you explain the difference between two implementations?|Walk me through the difference between two implementations.
+533|Keep the change local; don't commit it.|Could you keep the change local; don't commit it?|Leave the change local; don't commit it.
+534|Show the Git diff of your edits.|Could you show the Git diff of your edits?|Pull up the Git diff of your edits.
+535|Commit only the files I name.|Could you commit only the files I name?|Go ahead and commit only the files I name.
+536|Create a pull request draft for the branch.|Could you create a pull request draft for the branch?|Make a pull request draft for the branch.
+537|Check for merge conflicts before integrating changes.|Could you check for merge conflicts before integrating changes?|Take a look at for merge conflicts before integrating changes.
+538|Use separate worktrees for independent agents.|Could you use separate worktrees for independent agents?|Work with separate worktrees for independent agents.
+539|Don't have two agents edit the same file simultaneously.|Please do not have two agents edit the same file simultaneously.|Make sure you do not have two agents edit the same file simultaneously.
+540|Have a merge agent review the changes.|Hey Jarvis, have a merge agent review the changes.|Tell me one thing: have a merge agent review the changes.
+541|Run integration tests on the merged version.|Could you run integration tests on the merged version?|Execute integration tests on the merged version.
+542|Stop after a verified successful result.|Could you stop after a verified successful result?|Discontinue after a verified successful result.
+543|Tell me what still doesn't work in the generated project.|Could you tell me what still doesn't work in the generated project?|Let me know what still doesn't work in the generated project.
+544|Explain which repo ideas influenced the design.|Could you explain which repo ideas influenced the design?|Walk me through which repo ideas influenced the design.
+545|Which local model is answering me right now?|Hey Jarvis, which local model is answering me right now?|Could you tell me which local model is answering me right now?
+546|Which model does the planner use?|Hey Jarvis, which model does the planner use?|Could you tell me which model does the planner use?
+547|Which model powers your voice?|Hey Jarvis, which model powers your voice?|Could you tell me which model powers your voice?
+548|Tell me if a model is running on CPU or GPU.|Could you tell me if a model is running on CPU or GPU?|Let me know if a model is running on CPU or GPU.
+549|How much VRAM is available for inference?|Hey Jarvis, how much VRAM is available for inference?|Quick question: how much VRAM is available for inference?
+550|Why is my first answer slower than the next one?|Hey Jarvis, why is my first answer slower than the next one?|Hey, why is my first answer slower than the next one?
+551|Show the model cache status if available.|Could you show the model cache status if available?|Pull up the model cache status if available.
+552|Which tools can you execute without a model call?|Hey Jarvis, which tools can you execute without a model call?|Could you tell me which tools can you execute without a model call?
+553|List the skills you have installed.|Could you list the skills you have installed?|Show the skills you have installed.
+554|Which APIs are connected to Jarvis?|Hey Jarvis, which APIs are connected to Jarvis?|Could you tell me which APIs are connected to Jarvis?
+555|Check whether all configured APIs respond.|Could you check whether all configured APIs respond?|Take a look at whether all configured APIs respond.
+556|Which public endpoints are failing right now?|Hey Jarvis, which public endpoints are failing right now?|Could you tell me which public endpoints are failing right now?
+557|Tell me which API fallback was used.|Could you tell me which API fallback was used?|Let me know which API fallback was used.
+558|Is Gmail still authenticated?|Hey Jarvis, is Gmail still authenticated?|Hey, is Gmail still authenticated?
+559|Do you have a YouTube API key configured?|Hey Jarvis, do you have a YouTube API key configured?|Just checking - do you have a YouTube API key configured?
+560|How many GitHub requests are left if known?|Hey Jarvis, how many GitHub requests are left if known?|Tell me one thing: how many GitHub requests are left if known?
+561|Check whether the God's Eye server is running.|Could you check whether the God's Eye server is running?|Take a look at whether the God's Eye server is running.
+562|Tell me whether the weather watcher is active.|Could you tell me whether the weather watcher is active?|Let me know whether the weather watcher is active.
+563|Show the last startup readiness result.|Could you show the last startup readiness result?|Pull up the last startup readiness result.
+564|Run the launcher health check.|Could you run the launcher health check?|Execute the launcher health check.
+565|Inspect the current task log.|Could you inspect the current task log?|Examine the current task log.
+566|Tell me why speech is stuttering.|Could you tell me why speech is stuttering?|Let me know why speech is stuttering.
+567|Which process is monopolizing the GPU?|Hey Jarvis, which process is monopolizing the GPU?|Could you tell me which process is monopolizing the GPU?
+568|Show the active speech recognition backend.|Could you show the active speech recognition backend?|Pull up the active speech recognition backend.
+569|Can you answer this without using the web?|Would you be able to answer this without using the web?|Quick question: can you answer this without using the web?
+570|Can you do this entirely offline?|Would you be able to do this entirely offline?|Hey, can you do this entirely offline?
+571|Which capabilities require cloud credentials?|Hey Jarvis, which capabilities require cloud credentials?|Could you tell me which capabilities require cloud credentials?
+572|Which features require extra local hardware?|Hey Jarvis, which features require extra local hardware?|Could you tell me which features require extra local hardware?
+573|Tell me about the last error you recovered from.|Could you tell me about the last error you recovered from?|Let me know about the last error you recovered from.
+574|What parts of Jarvis are not working yet?|Hey Jarvis, what parts of Jarvis are not working yet?|Hey, what parts of Jarvis are not working yet?
+575|Show the configuration setting for the island UI.|Could you show the configuration setting for the island UI?|Pull up the configuration setting for the island UI.
+576|Tell me what changed since the last update.|Could you tell me what changed since the last update?|Let me know what changed since the last update.
+577|Open God's Eye.|Could you open God's Eye?|Bring up God's Eye.
+578|Show me the Eiffel Tower in satellite view.|Could you show me the Eiffel Tower in satellite view?|Pull up me the Eiffel Tower in satellite view.
+579|Fly the globe to the Statue of Liberty.|Could you fly the globe to the Statue of Liberty?|Move the globe camera the globe to the Statue of Liberty.
+580|Take me to central London.|Could you take me to central London?|I'd like you to take me to central London.
+581|Show me New York from above.|Could you show me New York from above?|Pull up me New York from above.
+582|Center the globe on Vadodara.|Could you center the globe on Vadodara?|Focus the globe on Vadodara.
+583|Show Ahmedabad from the air.|Could you show Ahmedabad from the air?|Pull up Ahmedabad from the air.
+584|Take me to Tokyo and zoom in.|Could you take me to Tokyo and zoom in?|I'd like you to take me to Tokyo and zoom in.
+585|Fly out to see the whole Persian Gulf.|Could you fly out to see the whole Persian Gulf?|Move the globe camera out to see the whole Persian Gulf.
+586|Show a close-up of this landmark.|Could you show a close-up of this landmark?|Pull up a close-up of this landmark.
+587|Zoom out until the whole city is visible.|Could you zoom out until the whole city is visible?|Can you zoom out until the whole city is visible a bit?
+588|Rotate the camera around this area.|Could you rotate the camera around this area?|Turn the camera around this area.
+589|Tilt the camera to a more overhead view.|Could you tilt the camera to a more overhead view?|Angle the camera to a more overhead view.
+590|Frame this area directly from above.|Could you frame this area directly from above?|I need you to frame this area directly from above.
+591|Return to the previous camera position.|Could you return to the previous camera position?|Go ahead and return to the previous camera position.
+592|Show the same place from a higher altitude.|Could you show the same place from a higher altitude?|Pull up the same place from a higher altitude.
+593|Keep this location but change the visual style.|Could you keep this location but change the visual style?|Leave this location but change the visual style.
+594|Go to my approximate current location.|Could you go to my approximate current location?|Put the globe over where I am, roughly.
+595|Find the correct place, not a similarly named business.|Could you find the correct place, not a similarly named business?|Look for the correct place, not a similarly named business.
+596|Show where this region is on the globe.|Could you show where this region is on the globe?|Pull up where this region is on the globe.
+597|Label the place you're showing me.|Could you label the place you're showing me?|Please label the place you're showing me.
+598|What location is God's Eye currently centered on?|Hey Jarvis, what location is God's Eye currently centered on?|Hey, what location is God's Eye currently centered on?
+599|Move the view a little north.|Could you move the view a little north?|Shift the view a little north.
+600|Pan east without changing the zoom.|Could you pan east without changing the zoom?|Shift east without changing the zoom.
+601|Show the coastline around this point.|Could you show the coastline around this point?|Pull up the coastline around this point.
+602|Switch from the normal map to satellite imagery.|Could you switch from the normal map to satellite imagery?|Change from the normal map to satellite imagery.
+603|Use a wider regional view for this request.|Could you use a wider regional view for this request?|Work with a wider regional view for this request.
+604|Fly to the place I just mentioned.|Could you fly to the place I just mentioned?|Move the globe camera to the place I just mentioned.
+605|No, I said the Persian Gulf, not the restaurant.|Actually, I said the Persian Gulf, not the restaurant.|I meant the actual Gulf, not a business with that name.
+606|Open the map and point out where that is.|Could you open the map and point out where that is?|Bring up the map and point out where that is.
+607|Refresh God's Eye to the latest installed version.|Could you refresh God's Eye to the latest installed version?|Update God's Eye to the latest installed version.
+608|What version of God's Eye is installed?|Hey Jarvis, what version of God's Eye is installed?|Tell me one thing: what version of God's Eye is installed?
+609|Show live flights above me.|Could you show live flights above me?|Pull up live flights above me.
+610|What plane is flying overhead right now?|Hey Jarvis, what plane is flying overhead right now?|Any idea what aircraft that is above us?
+611|Show the nearest aircraft to my area.|Could you show the nearest aircraft to my area?|Pull up the nearest aircraft to my area.
+612|Is there a helicopter nearby?|Hey Jarvis, is there a helicopter nearby?|Tell me one thing: is there a helicopter nearby?
+613|Show aircraft around Ahmedabad.|Could you show aircraft around Ahmedabad?|Pull up aircraft around Ahmedabad.
+614|Show flights over London.|Could you show flights over London?|Pull up flights over London.
+615|Show military flights in the Persian Gulf.|Could you show military flights in the Persian Gulf?|Pull up military flights in the Persian Gulf.
+616|Show military aircraft near my location.|Could you show military aircraft near my location?|Pull up military aircraft near my location.
+617|Show both military planes and mapped bases.|Could you show both military planes and mapped bases?|Pull up both military planes and mapped bases.
+618|Hide the civilian aircraft for now.|Could you hide the civilian aircraft for now?|Turn off the civilian aircraft for now.
+619|Turn on the military installations layer.|Could you turn on the military installations layer?|Enable the military installations layer.
+620|Show airports and heliports in this region.|Could you show airports and heliports in this region?|Pull up airports and heliports in this region.
+621|Tell me the nearest aircraft's callsign if available.|Could you tell me the nearest aircraft's callsign if available?|Let me know the nearest aircraft's callsign if available.
+622|How far away is that aircraft?|Hey Jarvis, how far away is that aircraft?|Hey, how far away is that aircraft?
+623|What's its reported altitude?|Hey Jarvis, what's its reported altitude?|Do you know what's its reported altitude?
+624|Which direction is that plane moving?|Hey Jarvis, which direction is that plane moving?|Could you tell me which direction is that plane moving?
+625|Tell me whether the live flight feed is fresh.|Could you tell me whether the live flight feed is fresh?|How current are those flight positions?
+626|Are there any aircraft with an emergency squawk?|Hey Jarvis, are there any aircraft with an emergency squawk?|Hey, are there any aircraft with an emergency squawk?
+627|Alert me if a 7700 emergency appears nearby.|Could you alert me if a 7700 emergency appears nearby?|Let me know me if a 7700 emergency appears nearby.
+628|What does squawk 7600 mean?|Hey Jarvis, what does squawk 7600 mean?|Tell me one thing: what does squawk 7600 mean?
+629|Flag any 7500 aircraft alert carefully.|Could you flag any 7500 aircraft alert carefully?|Please flag any 7500 aircraft alert carefully.
+630|Don't identify a flight if the feed is uncertain.|Please do not identify a flight if the feed is uncertain.|Make sure you do not identify a flight if the feed is uncertain.
+631|Show me aircraft positions, not predicted identities.|Could you show me aircraft positions, not predicted identities?|Pull up me aircraft positions, not predicted identities.
+632|Turn on my local ADS-B receiver layer.|Could you turn on my local ADS-B receiver layer?|Enable my local ADS-B receiver layer.
+633|Why is the local radio-receiver layer empty?|Hey Jarvis, why is the local radio-receiver layer empty?|Quick question: why is the local radio-receiver layer empty?
+634|Check whether an RTL-SDR is configured.|Could you check whether an RTL-SDR is configured?|Take a look at whether an RTL-SDR is configured.
+635|Show me aircraft around the last place we viewed.|Could you show me aircraft around the last place we viewed?|Pull up me aircraft around the last place we viewed.
+636|What made that loud noise outside?|Hey Jarvis, what made that loud noise outside?|Tell me one thing: what made that loud noise outside?
+637|Could those sirens be related to something nearby?|Hey Jarvis, Could those sirens be related to something nearby?|Quick question: could those sirens be related to something nearby?
+638|Is any unusual aircraft activity reported around me?|Hey Jarvis, is any unusual aircraft activity reported around me?|Hey, is any unusual aircraft activity reported around me?
+639|Summarize the last local aircraft update.|Could you summarize the last local aircraft update?|Give me the gist of the last local aircraft update.
+640|Show the military layer but keep the camera where it is.|Could you show the military layer but keep the camera where it is?|Pull up the military layer but keep the camera where it is.
+641|Show the weather over my area.|Could you show the weather over my area?|Pull up the weather over my area.
+642|Turn on the rain radar layer.|Could you turn on the rain radar layer?|Enable the rain radar layer.
+643|Show lightning activity around Mumbai.|Could you show lightning activity around Mumbai?|Pull up lightning activity around Mumbai.
+644|Show clouds above Vadodara.|Could you show clouds above Vadodara?|Pull up clouds above Vadodara.
+645|Show the latest weather near London.|Could you show the latest weather near London?|Pull up the latest weather near London.
+646|Display the cyclone tracks God's Eye has.|Could you display the cyclone tracks God's Eye has?|Show the cyclone tracks God's Eye has.
+647|Which regions does the cyclone feed cover?|Hey Jarvis, which regions does the cyclone feed cover?|Could you tell me which regions does the cyclone feed cover?
+648|Show a wider view of the storm.|Could you show a wider view of the storm?|Pull up a wider view of the storm.
+649|Check for nearby earthquakes.|Could you check for nearby earthquakes?|Take a look at for nearby earthquakes.
+650|Plot recent earthquakes around Japan.|Could you plot recent earthquakes around Japan?|Map recent earthquakes around Japan.
+651|Show the active fire layer near me.|Could you show the active fire layer near me?|Pull up the active fire layer near me.
+652|Tell me whether the fire data requires a key.|Could you tell me whether the fire data requires a key?|Let me know whether the fire data requires a key.
+653|Show wildfire perimeters in California.|Could you show wildfire perimeters in California?|Pull up wildfire perimeters in California.
+654|Is there a reported wildfire near this location?|Hey Jarvis, is there a reported wildfire near this location?|Hey, is there a reported wildfire near this location?
+655|Show the last storm alert in my area.|Could you show the last storm alert in my area?|Pull up the last storm alert in my area.
+656|What severe weather is expected in the next day?|Hey Jarvis, what severe weather is expected in the next day?|Tell me one thing: what severe weather is expected in the next day?
+657|Tell me if there's heavy rain coming.|Could you tell me if there's heavy rain coming?|Let me know if there's heavy rain coming.
+658|Warn me when the forecast becomes more dangerous.|Could you warn me when the forecast becomes more dangerous?|Give me a heads-up me when the forecast becomes more dangerous.
+659|Don't repeat the same weather warning unnecessarily.|Please do not repeat the same weather warning unnecessarily.|Make sure you do not repeat the same weather warning unnecessarily.
+660|Tell me what triggered that warning.|Could you tell me what triggered that warning?|Let me know what triggered that warning.
+661|Show the location associated with the alert.|Could you show the location associated with the alert?|Pull up the location associated with the alert.
+662|Compare current conditions with the earlier update.|Could you compare current conditions with the earlier update?|Contrast current conditions with the earlier update.
+663|How old is that weather observation?|Hey Jarvis, how old is that weather observation?|Just checking - how old is that weather observation?
+664|Show only hazard layers on the globe.|Could you show only hazard layers on the globe?|Pull up only hazard layers on the globe.
+665|Hide the radar but leave lightning visible.|Could you hide the radar but leave lightning visible?|Turn off the radar but leave lightning visible.
+666|What is happening around my location right now?|Hey Jarvis, what is happening around my location right now?|What's happening around my location right now?
+667|Did the background watcher spot anything unusual?|Hey Jarvis, did the background watcher spot anything unusual?|Just checking - did the background watcher spot anything unusual?
+668|Tell me when the last God's Eye poll succeeded.|Could you tell me when the last God's Eye poll succeeded?|Let me know when the last God's Eye poll succeeded.
+669|What radius are you monitoring around me?|Hey Jarvis, what radius are you monitoring around me?|Quick question: what radius are you monitoring around me?
+670|Check whether the alert is inside that radius.|Could you check whether the alert is inside that radius?|Take a look at whether the alert is inside that radius.
+671|Explain the gaps in Indian Ocean cyclone coverage.|Could you explain the gaps in Indian Ocean cyclone coverage?|Walk me through the gaps in Indian Ocean cyclone coverage.
+672|Don't say there's no storm when the source lacks coverage.|Please do not say there's no storm when the source lacks coverage.|If the feed doesn't cover here, say you don't know.
+673|Show traffic cameras in London.|Could you show traffic cameras in London?|Pull up traffic cameras in London.
+674|Open the nearest available CCTV camera feed.|Could you open the nearest available CCTV camera feed?|Bring up the nearest available CCTV camera feed.
+675|Show the camera's viewing direction on the map.|Could you show the camera's viewing direction on the map?|Pull up the camera's viewing direction on the map.
+676|Find cameras near New York.|Could you find cameras near New York?|Look for cameras near New York.
+677|Show all available camera locations around this city.|Could you show all available camera locations around this city?|Pull up all available camera locations around this city.
+678|Tell me when a camera feed is unavailable.|Could you tell me when a camera feed is unavailable?|Let me know when a camera feed is unavailable.
+679|Turn on mapped license plate reader locations where covered.|Could you turn on mapped license plate reader locations where covered?|Enable mapped license plate reader locations where covered.
+680|Show the mapped data centers near the city.|Could you show the mapped data centers near the city?|Pull up the mapped data centers near the city.
+681|Find large dams in this region.|Could you find large dams in this region?|Look for large dams in this region.
+682|Show submarine cables near Mumbai.|Could you show submarine cables near Mumbai?|Pull up submarine cables near Mumbai.
+683|Plot major undersea cables in the Indian Ocean.|Could you plot major undersea cables in the Indian Ocean?|Map major undersea cables in the Indian Ocean.
+684|Show ports and ships near the coast.|Could you show ports and ships near the coast?|Pull up ports and ships near the coast.
+685|Show satellite tracks over this region.|Could you show satellite tracks over this region?|Pull up satellite tracks over this region.
+686|Show recent rocket launches.|Could you show recent rocket launches?|Pull up recent rocket launches.
+687|Display nearby military installations on the map.|Could you display nearby military installations on the map?|Show nearby military installations on the map.
+688|Show public transit routes if this feed covers the city.|Could you show public transit routes if this feed covers the city?|Pull up public transit routes if this feed covers the city.
+689|Show road traffic in London if a key is configured.|Could you show road traffic in London if a key is configured?|Pull up road traffic in London if a key is configured.
+690|Tell me why the live traffic overlay is unavailable.|Could you tell me why the live traffic overlay is unavailable?|Let me know why the live traffic overlay is unavailable.
+691|Draw a driving route from Vadodara to Ahmedabad.|Could you draw a driving route from Vadodara to Ahmedabad?|Sketch a driving route from Vadodara to Ahmedabad.
+692|Fly the camera along the route you drew.|Could you fly the camera along the route you drew?|Move the globe camera the camera along the route you drew.
+693|Annotate this map location with a label.|Could you annotate this map location with a label?|Label this map location with a label.
+694|Remove the annotation you just added.|Could you remove the annotation you just added?|Take away the annotation you just added.
+695|Switch to the thermal visual style.|Could you switch to the thermal visual style?|Change to the thermal visual style.
+696|Apply the night-vision look.|Could you apply the night-vision look?|Use the night-vision look.
+697|Use the cyber radar interface.|Could you use the cyber radar interface?|Work with the cyber radar interface.
+698|Switch to the tactical HUD.|Could you switch to the tactical HUD?|Change to the tactical HUD.
+699|Switch to the noir style.|Could you switch to the noir style?|Change to the noir style.
+700|Go back to the normal visual style.|Could you go back to the normal visual style?|Head back to the normal visual style.
+701|Hide every layer you turned on for the last request.|Could you hide every layer you turned on for the last request?|Turn off every layer you turned on for the last request.
+702|Keep the layers I switched on manually.|Could you keep the layers I switched on manually?|Leave the layers I switched on manually.
+703|Can you show recent imagery for this area?|Would you be able to show recent imagery for this area?|Just checking - can you show recent imagery for this area?
+704|Explain which advanced God's Eye controls aren't voice-integrated.|Could you explain which advanced God's Eye controls aren't voice-integrated?|Walk me through which advanced God's Eye controls aren't voice-integrated.
+705|Will bad weather hit my area in the next 36 hours?|Hey Jarvis, will bad weather hit my area in the next 36 hours?|Quick question: will bad weather hit my area in the next 36 hours?
+706|Check the current temperature where I am.|Could you check the current temperature where I am?|Take a look at the current temperature where I am.
+707|Tell me if rain is likely this evening.|Could you tell me if rain is likely this evening?|Let me know if rain is likely this evening.
+708|Warn me if strong winds are forecast.|Could you warn me if strong winds are forecast?|Give me a heads-up me if strong winds are forecast.
+709|Check for thunderstorms and hail.|Could you check for thunderstorms and hail?|Take a look at for thunderstorms and hail.
+710|Is the air quality unhealthy near me?|Hey Jarvis, is the air quality unhealthy near me?|Hey, is the air quality unhealthy near me?
+711|Tell me about nearby flood alerts.|Could you tell me about nearby flood alerts?|Let me know about nearby flood alerts.
+712|Look for earthquake alerts near my city.|Could you look for earthquake alerts near my city?|Have a look at for earthquake alerts near my city.
+713|Show public disaster reports from GDACS.|Could you show public disaster reports from GDACS?|Pull up public disaster reports from GDACS.
+714|Check for new NASA wildfire reports.|Could you check for new NASA wildfire reports?|Take a look at for new NASA wildfire reports.
+715|Why did the weather alert appear on my island?|Hey Jarvis, why did the weather alert appear on my island?|Just checking - why did the weather alert appear on my island?
+716|Is the last alert still active?|Hey Jarvis, is the last alert still active?|Tell me one thing: is the last alert still active?
+717|Don't announce the same storm twice unless it worsens.|Please do not announce the same storm twice unless it worsens.|Make sure you do not announce the same storm twice unless it worsens.
+718|Tell me the forecast source used for this warning.|Could you tell me the forecast source used for this warning?|Let me know the forecast source used for this warning.
+719|Is that an official government warning?|Hey Jarvis, is that an official government warning?|Just checking - is that an official government warning?
+720|Refresh the alert feed now.|Could you refresh the alert feed now?|Update the alert feed now.
+721|What was the last successful weather update?|Hey Jarvis, what was the last successful weather update?|Quick question: what was the last successful weather update?
+722|Can you explain the difference between forecast and observed weather?|Would you be able to explain the difference between forecast and observed weather?|Hey, can you explain the difference between forecast and observed weather?
+723|Check the time using an available free time API.|Could you check the time using an available free time API?|Take a look at the time using an available free time API.
+724|Look up a country's basic facts with a public source.|Could you look up a country's basic facts with a public source?|Have a look at up a country's basic facts with a public source.
+725|Find current information using an accessible news source.|Could you find current information using an accessible news source?|Look for current information using an accessible news source.
+726|Search for a research paper using a scholarly API.|Could you search for a research paper using a scholarly API?|Look up for a research paper using a scholarly API.
+727|Use an alternate research API if the first fails.|Could you use an alternate research API if the first fails?|Work with an alternate research API if the first fails.
+728|Find a public launch schedule.|Could you find a public launch schedule?|Look for a public launch schedule.
+729|Get recent earthquakes from a public feed.|Could you get recent earthquakes from a public feed?|Please get recent earthquakes from a public feed.
+730|Tell me if the live flight endpoint is unavailable.|Could you tell me if the live flight endpoint is unavailable?|Let me know if the live flight endpoint is unavailable.
+731|Use cached data only if you label it as cached.|Could you use cached data only if you label it as cached?|Work with cached data only if you label it as cached.
+732|Verify that this answer is still current.|Could you verify that this answer is still current?|I want you to verify that this answer is still current.
+733|Which free API answered that question?|Hey Jarvis, which free API answered that question?|Could you tell me which free API answered that question?
+734|Explain why an API is rate-limited.|Could you explain why an API is rate-limited?|Walk me through why an API is rate-limited.
+735|Use the safe fallback rather than guessing.|Could you use the safe fallback rather than guessing?|Work with the safe fallback rather than guessing.
+736|Show live information without opening a dozen tabs.|Could you show live information without opening a dozen tabs?|Pull up live information without opening a dozen tabs.
+737|Show me the message before you send it.|Could you show me the message before you send it?|Pull up me the message before you send it.
+738|Ask me to confirm before deleting an email.|Could you ask me to confirm before deleting an email?|Check with me to confirm before deleting an email.
+739|Do not send anything when I say only draft.|Please do not send anything when I say only draft.|Just checking - do not send anything when I say only draft.
+740|Never use an approval from an earlier message.|Please never use an approval from an earlier message.|Under no circumstances use an approval from an earlier message.
+741|Tell me exactly what an approval will authorize.|Could you tell me exactly what an approval will authorize?|Let me know exactly what an approval will authorize.
+742|I said cancel, so do not execute the pending action.|Hey Jarvis, I said cancel, so do not execute the pending action.|One thing: I said cancel, so do not execute the pending action.
+743|Ask which contact I mean when names match.|Could you ask which contact I mean when names match?|Check with which contact I mean when names match.
+744|Do not guess a recipient based on first name alone.|Please do not guess a recipient based on first name alone.|Tell me one thing: do not guess a recipient based on first name alone.
+745|Confirm the target window before typing private text.|Could you confirm the target window before typing private text?|Please confirm the target window before typing private text.
+746|Don't read personal messages aloud with others nearby.|Please do not read personal messages aloud with others nearby.|Make sure you do not read personal messages aloud with others nearby.
+747|Don't store passwords in long-term memory.|Please do not store passwords in long-term memory.|Make sure you do not store passwords in long-term memory.
+748|Never put API keys in a public repository.|Please never put API keys in a public repository.|Under no circumstances put API keys in a public repository.
+749|Explain what permission this API needs.|Could you explain what permission this API needs?|Walk me through what permission this API needs.
+750|Tell me if the API session has expired.|Could you tell me if the API session has expired?|Let me know if the API session has expired.
+751|Don't claim an action succeeded without verification.|Please do not claim an action succeeded without verification.|Make sure you do not claim an action succeeded without verification.
+752|Show me the last known state when the app disconnects.|Could you show me the last known state when the app disconnects?|Pull up me the last known state when the app disconnects.
+753|Tell me what you cannot verify right now.|Could you tell me what you cannot verify right now?|Let me know what you cannot verify right now.
+754|Do not turn stale flight data into a real-time claim.|Please do not turn stale flight data into a real-time claim.|Hey, do not turn stale flight data into a real-time claim.
+755|Don't mistake a map layer for a live video feed.|Please do not mistake a map layer for a live video feed.|Make sure you do not mistake a map layer for a live video feed.
+756|Do not promise access to a camera that isn't in the catalog.|Please do not promise access to a camera that isn't in the catalog.|Tell me one thing: do not promise access to a camera that isn't in the catalog.
+757|Warn me if a requested function needs a paid key.|Could you warn me if a requested function needs a paid key?|Give me a heads-up me if a requested function needs a paid key.
+758|Tell me if a local receiver has not been installed.|Could you tell me if a local receiver has not been installed?|Let me know if a local receiver has not been installed.
+759|Stop a risky step instead of guessing the next click.|Could you stop a risky step instead of guessing the next click?|Discontinue a risky step instead of guessing the next click.
+760|Ask me before overwriting an existing project file.|Could you ask me before overwriting an existing project file?|Check with me before overwriting an existing project file.
+761|Preserve the original data while attempting recovery.|Could you preserve the original data while attempting recovery?|Please preserve the original data while attempting recovery.
+762|Don't repeat an irreversible operation automatically.|Please do not repeat an irreversible operation automatically.|Make sure you do not repeat an irreversible operation automatically.
+763|Keep the old God's Eye source as a backup during update.|Could you keep the old God's Eye source as a backup during update?|Leave the old God's Eye source as a backup during update.
+764|Explain the license before reusing repository code.|Could you explain the license before reusing repository code?|Walk me through the license before reusing repository code.
+765|Don't expose personal coordinates in screenshots or logs.|Please do not expose personal coordinates in screenshots or logs.|Make sure you do not expose personal coordinates in screenshots or logs.
+766|Use the least privileged tool that can perform the job.|Could you use the least privileged tool that can perform the job?|Work with the least privileged tool that can perform the job.
+767|Tell me whether a result came from memory or a live API.|Could you tell me whether a result came from memory or a live API?|Let me know whether a result came from memory or a live API.
+768|Say plainly when a capability isn't implemented.|Could you say plainly when a capability isn't implemented?|I want you to say plainly when a capability isn't implemented.
+769|Open YouTube, find Nadaan Parindey and play the official video.|Could you open YouTube, find Nadaan Parindey and play the official video?|Bring up YouTube, find Nadaan Parindey and play the official video.
+770|Search Spotify for Kun Faya Kun, play it and show the island card.|Could you search Spotify for Kun Faya Kun, play it and show the island card?|Look up Spotify for Kun Faya Kun, play it and show the island card.
+771|Read my newest Gmail message and draft a reply without sending.|Could you read my newest Gmail message and draft a reply without sending?|Go through my newest Gmail message and draft a reply without sending.
+772|Find the email about a meeting and write a reminder in Notepad.|Could you find the email about a meeting and write a reminder in Notepad?|Look for the email about a meeting and write a reminder in Notepad.
+773|Look up a GitHub repo, learn its structure and summarize it.|Could you look up a GitHub repo, learn its structure and summarize it?|Have a look at up a GitHub repo, learn its structure and summarize it.
+774|Find a coding example, build a small prototype and run tests.|Could you find a coding example, build a small prototype and run tests?|Look for a coding example, build a small prototype and run tests.
+775|Open a project, show the Git diff and explain every change.|Could you open a project, show the Git diff and explain every change?|Bring up a project, show the Git diff and explain every change.
+776|Queue a coding task, then play music while it works.|Could you queue a coding task, then play music while it works?|I want you to queue a coding task, then play music while it works.
+777|Answer my question now and leave the queued tasks alone.|Could you answer my question now and leave the queued tasks alone?|Respond to my question now and leave the queued tasks alone.
+778|Prepare a WhatsApp reply and wait for my approval.|Could you prepare a WhatsApp reply and wait for my approval?|I need you to prepare a WhatsApp reply and wait for my approval.
+779|Find the right Rahul, draft the message and show me the preview.|Could you find the right Rahul, draft the message and show me the preview?|Look for the right Rahul, draft the message and show me the preview.
+780|Read an unread chat, draft a contextual reply and ask to send.|Could you read an unread chat, draft a contextual reply and ask to send?|Go through an unread chat, draft a contextual reply and ask to send.
+781|When WhatsApp rings, show who called and ask me what to do.|Hey Jarvis, when WhatsApp rings, show who called and ask me what to do.|Quick question: when WhatsApp rings, show who called and ask me what to do.
+782|Open the Eiffel Tower in God's Eye and show cameras nearby.|Could you open the Eiffel Tower in God's Eye and show cameras nearby?|Bring up the Eiffel Tower in God's Eye and show cameras nearby.
+783|Show military activity over the Gulf and summarize the visible feeds.|Could you show military activity over the Gulf and summarize the visible feeds?|Pull up military activity over the Gulf and summarize the visible feeds.
+784|Show flights overhead and tell me what data source they come from.|Could you show flights overhead and tell me what data source they come from?|Pull up flights overhead and tell me what data source they come from.
+785|Use local flight information to answer why it's noisy outside.|Could you use local flight information to answer why it's noisy outside?|Work with local flight information to answer why it's noisy outside.
+786|Check the weather and open the relevant area in God's Eye.|Could you check the weather and open the relevant area in God's Eye?|Take a look at the weather and open the relevant area in God's Eye.
+787|Find the latest earthquake feed and plot the relevant region.|Could you find the latest earthquake feed and plot the relevant region?|Look for the latest earthquake feed and plot the relevant region.
+788|Draw a route from Vadodara to Ahmedabad and fly along it.|Could you draw a route from Vadodara to Ahmedabad and fly along it?|Sketch a route from Vadodara to Ahmedabad and fly along it.
+789|Switch God's Eye to thermal and keep the current location.|Could you switch God's Eye to thermal and keep the current location?|Change God's Eye to thermal and keep the current location.
+790|Explain this repository and remember the parts useful for coding.|Could you explain this repository and remember the parts useful for coding?|Walk me through this repository and remember the parts useful for coding.
+791|Save our discussion as a conversation note and summarize it.|Could you save our discussion as a conversation note and summarize it?|Keep our discussion as a conversation note and summarize it.
+792|Check all connected APIs and report only the ones failing.|Could you check all connected APIs and report only the ones failing?|Take a look at all connected APIs and report only the ones failing.
+793|Read my latest email, then tell me which task is still running.|Could you read my latest email, then tell me which task is still running?|Go through my latest email, then tell me which task is still running.
+794|While the song plays, show me the Windows processes using GPU.|Hey Jarvis, While the song plays, show me the Windows processes using GPU.|One more thing: while the song plays, show me the Windows processes using GPU.
+795|Open Chrome, find a tutorial and write notes in Notepad.|Could you open Chrome, find a tutorial and write notes in Notepad?|Bring up Chrome, find a tutorial and write notes in Notepad.
+796|Draft an email, revise the subject and show the final preview.|Could you draft an email, revise the subject and show the final preview?|Prepare an email, revise the subject and show the final preview.
+797|Start two independent tasks but run their UI actions in order.|Could you start two independent tasks but run their UI actions in order?|Please start two independent tasks but run their UI actions in order.
+798|Cancel only the video task and continue the background repo learning.|Could you cancel only the video task and continue the background repo learning?|Drop only the video task and continue the background repo learning.
+799|If the first search fails, retry safely and tell me what changed.|Hey Jarvis, If the first search fails, retry safely and tell me what changed.|Just to clarify, if the first search fails, retry safely and tell me what changed.
+800|After the workflow finishes, explain what succeeded and what needs approval.|Please after the workflow finishes, explain what succeeded and what needs approval.|Remember, after the workflow finishes, explain what succeeded and what needs approval.

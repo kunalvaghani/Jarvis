@@ -1304,6 +1304,12 @@
     "ip_location": true,
     "fallback_city": "Vadodara"
   },
+  "gods_eye": {
+    "enabled": true,
+    "autostart": true,
+    "radius_km": 40,
+    "poll_seconds": 60
+  },
   "repo_learning": {
     "enabled": true,
     "auto_learn_browsing": true,

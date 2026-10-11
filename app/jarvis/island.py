@@ -13,14 +13,14 @@ BLACK = "#000000"
 ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
 SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp"),
-           "weather": ("#f5a623", "Weather"), "github": ("#a371f7", "GitHub")}
-WORKING = {"searching", "loading", "drafting", "sending", "choose", "learning"}  # Shimmer bar and pulsing meter.
+           "weather": ("#f5a623", "Weather"), "github": ("#a371f7", "GitHub"), "godseye": ("#ff9f1c", "God's Eye")}
+WORKING = {"searching", "loading", "drafting", "sending", "choose", "learning", "opening"}  # Shimmer bar and pulsing meter.
 MEDIA_HEIGHT = 126
 MEDIA_PHASES = {"searching": "Searching", "loading": "Starting", "playing": "Playing", "paused": "Paused",
                 "error": "Couldn't play", "control": "", "choose": "Choose who you mean", "drafting": "Drafting",
                 "preview": "Waiting for your approval", "sending": "Sending", "sent": "Done", "call": "Incoming call",
                 "message": "New message", "alert": "Weather alert", "notice": "Heads up", "learning": "Learning",
-                "learned": "Learned and saved"}
+                "learned": "Learned and saved", "opening": "Opening", "showing": "On screen"}
 
 
 def clock_text(seconds):
@@ -261,6 +261,19 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
                       (art_x + 8 - glow, art_y + side - 11 + glow / 2))
             draw.polygon([tuple(round(v * sampling) for v in p) for p in points], fill=accent)
             text(art_x + side / 2 - 3, art_y + side / 2 - 11, "!", 20, "#2a1a00", True)
+        elif media.get("service") == "godseye":
+            # Radar scope with a sweeping beam.
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill="#2a1a06")
+            cx, cy, r = art_x + side / 2, art_y + side / 2, side / 2 - 7
+            for k in (1, .62, .3):
+                draw.ellipse(tuple(round(v * sampling) for v in (cx - r * k, cy - r * k, cx + r * k, cy + r * k)),
+                             outline=accent, width=max(1, round(1.2 * sampling)))
+            angle = phase * 2.4
+            draw.line([tuple(round(v * sampling) for v in (cx, cy)),
+                       tuple(round(v * sampling) for v in (cx + r * math.cos(angle), cy + r * math.sin(angle)))],
+                      fill="#ffe0a8", width=max(1, round(2 * sampling)))
+            blip = (cx + r * .55 * math.cos(1.1), cy + r * .55 * math.sin(1.1))
+            rectangle((blip[0] - 2, blip[1] - 2, blip[0] + 2, blip[1] + 2), radius=2, fill="#ffffff")
         elif media.get("service") == "github":
             # Code tile: angle brackets that pulse while learning.
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill="#241a3a")
@@ -284,7 +297,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
         # Service badge on the artwork corner.
         bx, by = art_x + side - 16, art_y + side - 16
-        if media.get("service") in {"weather", "github"}:
+        if media.get("service") in {"weather", "github", "godseye"}:
             pass  # The tile itself is the badge.
         elif media.get("service") == "whatsapp":
             # Speech bubble with a handset, drawn as simple shapes.
@@ -532,7 +545,7 @@ class Island:
                                                    'control': 6, 'choose': 120, 'drafting': 90, 'preview': 180,
                                                    'sending': 30, 'sent': 8, 'call': 45, 'message': 15,
                                                    'error': 8, 'alert': 45, 'notice': 20, 'learning': 900,
-                                                   'learned': 20}.get(message.get('phase'), 6)
+                                                   'learned': 20, 'opening': 60, 'showing': 12}.get(message.get('phase'), 6)
             self.last_frame = None
             return
         if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):

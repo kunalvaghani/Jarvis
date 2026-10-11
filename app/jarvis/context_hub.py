@@ -78,6 +78,11 @@ def situation(actions, question=""):
         if curator.summaries:
             last = curator.summaries[-1]
             found["last_conversation"] = last["date"] + " " + last["time"] + " — " + last["title"]
+    eye = getattr(actions, "gods_eye", None)
+    if eye is not None and eye.enabled:
+        summary = eye.summary()
+        if summary:
+            found["gods_eye_area"] = summary  # Aircraft, military and alerts within 25 miles (side-thread cache).
     weather = getattr(actions, "weather_watch", None)
     if weather is not None and weather.last and weather.last.get("hazards"):
         found["weather_alerts"] = [h["message"][:140] for h in weather.last["hazards"][:2]]

@@ -748,6 +748,33 @@ def execute(actions, command, cancelled):
             learner.start()
             return "I haven't learned " + name + " yet" + (" — learning it now in the background." if queued else ".")
         s = data["summary"]
+        aspect = command.extra
+        if aspect == "structure":
+            return (data["full_name"] + " has " + str(data.get("files_total", "?")) + " files in " +
+                    ", ".join(list(data.get("languages", {}))[:4]) + ". Top level: " + "; ".join(data.get("tree", [])[:12]) + ".")
+        if aspect == "entry":
+            entries = data.get("entry_points") or []
+            return (data["full_name"] + " starts from " + ", ".join(entries[:5]) + ".") if entries else \
+                "I didn't find a clear entry point in " + data["full_name"] + ". " + (s.get("how_to_run") or "")
+        if aspect == "modules":
+            return data["full_name"] + " key modules: " + "; ".join(m["path"] + " (" + m["role"] + ")" for m in s.get("key_modules", [])[:8]) + "."
+        if aspect == "dependencies":
+            manifests = data.get("manifests") or []
+            return (data["full_name"] + " declares its dependencies in " + ", ".join(str(m) for m in manifests[:6]) + "."
+                    if manifests else "I didn't find a dependency manifest in " + data["full_name"] + ".")
+        if aspect == "setup":
+            return data["full_name"] + ": " + (s.get("how_to_run") or "The README doesn't give run or build steps.")
+        if aspect == "tests":
+            tests = [t for t in data.get("tree", []) if re.search(r"\btests?\b|spec", t, re.I)]
+            return (data["full_name"] + " has tests" + (": " + ", ".join(tests[:5]) if tests else "") + "." if data.get("has_tests")
+                    else "I didn't find a test suite in " + data["full_name"] + ".")
+        if aspect == "license":
+            return (data["full_name"] + " uses the " + data["license"] + " licence. Check its terms before reusing code."
+                    if data.get("license") else data["full_name"] + " doesn't declare a licence, so its code isn't licensed for reuse.")
+        if aspect == "used_for":
+            used = (learner.index.get(data["full_name"]) or {}).get("used_for") or []
+            return ("Coding tasks that used " + data["full_name"] + ": " + "; ".join(str(u)[:80] for u in used[-5:]) + "."
+                    if used else "No coding task has used " + data["full_name"] + " as a reference yet.")
         return (data["full_name"] + ": " + s.get("purpose", "") + " " + s.get("architecture", "") + " Key parts: " +
                 "; ".join(m["path"] + " (" + m["role"] + ")" for m in s.get("key_modules", [])[:5]) + ". " +
                 ("Run it with: " + s["how_to_run"] if s.get("how_to_run") and s["how_to_run"].casefold() != "unknown" else ""))

@@ -58,6 +58,8 @@ REJECT_WORDS = re.compile(r"(?:don'?t send(?: it| that)?|do not send(?: it| that
 
 
 def parse(text: str) -> Command:
+    from .phrasing import canonical
+    text = canonical(text)  # "Could you pull up my desktop?" -> "show me my desktop".
     cleaned_words = spoken_clean(text)
     if APPROVE_WORDS.fullmatch(cleaned_words):
         return Command("approval_answer", "yes")  # A waiting preview, call or approval card takes it.
@@ -80,6 +82,10 @@ def parse(text: str) -> Command:
 
 
 def _parse(text: str) -> Command:
+    from .intent_catalog import match as catalog_match
+    known = catalog_match(text)
+    if known:
+        return known  # Everyday phrasings with an honest, specific handler (intent_catalog.py).
     from .repo_tools import command as repository_command
     repository=repository_command(text)
     if repository:return repository
@@ -163,7 +169,8 @@ def _parse(text: str) -> Command:
     from .capability_guide import parse_command as capability_command
     from .weather_watch import parse_command as weather_command
     from .repo_learning import parse_command as repo_command
-    for special in (memory_command, capability_command, weather_command, repo_command):
+    from .gods_eye import parse_command as gods_eye_command
+    for special in (memory_command, capability_command, weather_command, repo_command, gods_eye_command):
         found = special(text)
         if found:
             return found  # "remember that ...", "check your APIs", "is bad weather coming".

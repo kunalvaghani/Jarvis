@@ -64,7 +64,9 @@ a background task queue, natural phrasing and faster step-by-step planning; see
 [full YouTube and Spotify control with an island media card](app/docs/media-player.md), and
 [WhatsApp automation with previews, approvals and call handling](app/docs/whatsapp.md), and
 [long-term memory, API repair and bad-weather alerts](app/docs/memory-apis-alerts.md), and
-[learning GitHub repositories for coding with multi-context awareness](app/docs/repo-learning.md). The [previous repository overview](app/docs/repository-overview-history.md)
+[learning GitHub repositories for coding with multi-context awareness](app/docs/repo-learning.md), and
+[God's Eye View driven by voice with live area alerts](app/docs/gods-eye.md), and
+[understanding everyday phrasing across the 800-scenario testbook](app/docs/natural-language.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

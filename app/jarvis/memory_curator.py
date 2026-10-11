@@ -208,8 +208,8 @@ class MemoryCurator:
     # --- learning ---------------------------------------------------------------------------------------------
     def observe(self, question, answer, kind="conversation"):
         """Called after every completed turn (question/answer or command/result). Never blocks the caller."""
-        if not self.enabled or not question:
-            return
+        if not self.enabled or not question or getattr(self, "paused", False):
+            return  # Paused: "keep this only for the current conversation".
         question, answer = safe(question)[:2000], safe(answer)[:2000]
         with self.lock:
             if self.turns and self.clock() - self.last_turn_at > self.idle_minutes * 60:
@@ -222,6 +222,17 @@ class MemoryCurator:
             self.last_turn_at = self.clock()
         if self.learn and kind == "conversation" and question and CUES.search(question):
             self._queue(("facts", question, answer))
+
+    def save_now(self):
+        """Summarise the open conversation into Jarvis Conversations now; returns the number of turns queued."""
+        with self.lock:
+            turns, self.turns = list(self.turns), []
+        if len(turns) >= 2:
+            self._queue(("summary", turns))
+        else:
+            with self.lock:
+                self.turns = turns + self.turns
+        return len(turns)
 
     def _queue(self, job):
         try:

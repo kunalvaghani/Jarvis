@@ -41,6 +41,9 @@ def reveal_controls(page):
         pass
 
 
+GODS_EYE_URL = "http://127.0.0.1:4173/"
+
+
 class Session:
     def __init__(self):
         self.driver = self.context = self.page = None
@@ -179,6 +182,94 @@ class Session:
         return {**self.inspect(), "verified": True, "video_id": video_id, "state": state, "ad_skipped": skipped,
                 "message": "Playing " + title[:160] + " (video identity and playback verified)."}
 
+    def gods_eye(self, actions, timeout=90, view=None):
+        """Run God's Eye View's own voice actions (fly_to_location, set_layer_visibility, ...) in its page.
+
+        God's Eye runs on its local Vite server, which serves the app's source modules, so the page can import
+        the same action runner its voice agent uses and drive it with the objects the app publishes on
+        window.__godsEyeView. Only the fixed local URL is ever opened here.
+        """
+        if not isinstance(actions, list) or len(actions) > 12 or not all(
+                isinstance(a, dict) and re.fullmatch(r"[a-z_]{3,40}", str(a.get("name", ""))) for a in actions):
+            raise ValueError("God's Eye actions must be a short list of named actions.")
+        page = self.page
+        target = None
+        if isinstance(view, dict):
+            target = (float(view["latitude"]), float(view["longitude"]), float(view.get("altitude", 6000)))
+            if not (-90 <= target[0] <= 90 and -180 <= target[1] <= 180 and 50 <= target[2] <= 20_000_000):
+                raise ValueError("God's Eye view is out of range.")
+        if not page.url.startswith(GODS_EYE_URL):
+            # A first open starts straight at the place (the app restores its view from the URL).
+            # A URL start position (#lat=..) left the globe imagery blank on cold starts; open normally, then fly.
+            start = GODS_EYE_URL
+            page.goto(start, wait_until="domcontentloaded", timeout=60000)
+        page.wait_for_function("() => !!(window.__godsEyeView && window.__godsEyeView.viewer && window.__godsEyeView.dataManager)"
+                               " && (!document.getElementById('loading-screen') || document.getElementById('loading-screen').classList.contains('hidden'))",
+                               timeout=int(timeout * 1000))
+        page.wait_for_timeout(1200)  # The startup camera hand-off settles after the loading screen fades.
+        try:
+            welcome = page.get_by_text("Explore manually", exact=False)
+            if welcome.count() and welcome.first.is_visible():
+                welcome.first.click(timeout=3000)  # First-run "Choose your first view" dialog: a clean globe.
+                page.wait_for_timeout(600)
+        except Exception:
+            pass
+        results = page.evaluate("""async (actions) => {
+            if (!window.__jarvisGev) {
+                const module = await import('/src/voice/gevActions.js');
+                const app = window.__godsEyeView;
+                window.__jarvisGev = module.createGevActionRunner({
+                    viewer: app.viewer, styleManager: app.styleManager, dataManager: app.dataManager,
+                    sceneDirector: app.sceneDirector, annotations: app.annotations,
+                    ...(app.surfaceServices && app.surfaceServices.groundFloor ? {floorServices: app.surfaceServices.groundFloor} : {}),
+                });
+            }
+            const plain = (value) => JSON.parse(JSON.stringify(value === undefined ? null : value,
+                (key, item) => (typeof item === 'function' || (item && item.constructor && /Cesium|Entity|Viewer/.test(item.constructor.name))) ? undefined : item));
+            const out = [];
+            for (const action of actions) {
+                try {
+                    const result = await window.__jarvisGev(action.name, action.args || {});
+                    if (action.name === 'get_current_view_state' && result && result.ok !== false) {
+                        // The camera sits behind and above a tilted view; report the ground point at the screen centre too.
+                        const viewer = window.__godsEyeView.viewer, canvas = viewer.scene.canvas;
+                        const point = viewer.camera.pickEllipsoid({x: canvas.clientWidth / 2, y: canvas.clientHeight / 2},
+                                                                  viewer.scene.globe.ellipsoid);
+                        if (point) {
+                            const ground = viewer.scene.globe.ellipsoid.cartesianToCartographic(point);
+                            result.center = {latitude: ground.latitude * 180 / Math.PI, longitude: ground.longitude * 180 / Math.PI};
+                        }
+                    }
+                    out.push({name: action.name, ok: !(result && result.ok === false), result: plain(result)});
+                } catch (error) {
+                    out.push({name: action.name, ok: false, error: String(error && error.message || error).slice(0, 300)});
+                }
+            }
+            return out;
+        }""", actions)
+        if target:
+            # Confirm the camera really arrived (a long flight takes several seconds; a late startup hand-off can
+            # pull it back once). The re-fly keeps the requested range, so a region never becomes a street close-up.
+            def where():
+                return page.evaluate("() => { const c = window.__godsEyeView.viewer.camera.positionCartographic;"
+                                     " return {lat: c.latitude * 180 / Math.PI, lon: c.longitude * 180 / Math.PI, height: c.height}; }")
+
+            def arrived(camera):
+                close = abs(camera["lat"] - target[0]) < 0.5 + target[2] / 400000 and abs(camera["lon"] - target[1]) < 0.5 + target[2] / 400000
+                return close and target[2] / 4 <= camera["height"] <= target[2] * 4
+            camera = where()
+            for attempt in range(3):
+                page.wait_for_timeout(2500)
+                camera = where()
+                if arrived(camera):
+                    break
+                if attempt == 1:
+                    page.evaluate("(t) => window.__jarvisGev('fly_to_location', {latitude: t[0], longitude: t[1], viewMode: 'overview', rangeM: t[2]})",
+                                  list(target))
+            results.append({"name": "camera_check", "ok": arrived(camera), "result": camera})
+        return {**self.inspect(), "results": results, "message": "God's Eye actions ran: " +
+                ", ".join(r["name"] + ("" if r.get("ok") else " (failed)") for r in results)}
+
     def control(self, action):
         page = self.page
         if urlsplit(page.url).hostname not in {"youtube.com", "www.youtube.com"}:
@@ -201,6 +292,12 @@ class Session:
                 raise ValueError("Media percentage must be between 0 and 100.")
             expected["volume" if action.startswith("volume_") else "position"] = value / 100 if action.startswith("volume_") else before["duration"] * value / 100
             video.evaluate("(v,p) => " + ("v.volume=p/100" if action.startswith("volume_") else "v.currentTime=v.duration*p/100"), value)
+        elif re.fullmatch(r"speed_\d(?:\.\d{1,2})?", action):
+            rate = float(action[6:])
+            if not .25 <= rate <= 2:
+                raise ValueError("YouTube playback speed must be between 0.25 and 2.")
+            expected["speed"] = rate
+            video.evaluate("(v,p) => v.playbackRate=p", rate)
         elif action in {"volume_up", "volume_down", "speed_up", "speed_down"}:
             prop = "volume" if action.startswith("volume") else "playbackRate"
             old = video.evaluate("v => v." + prop)
@@ -285,7 +382,7 @@ class Session:
         if operation == "reset" and self.page is not None and not self.page.is_closed():
             self.page.bring_to_front()
             return self.inspect()
-        if (request.get("new_task") and operation in {"navigate", "search", "play_video"} and self.page is not None
+        if (request.get("new_task") and operation in {"navigate", "search", "play_video", "gods_eye"} and self.page is not None
                 and (self.user_closed or self.page.is_closed()
                      or self.context and self.context.browser and not self.context.browser.is_connected())):
             self.close()
@@ -309,6 +406,14 @@ class Session:
         if operation == "play_video":
             self.page.bring_to_front()
             return self.play_video(request.get("video_id"))
+        if operation == "gods_eye":
+            self.page.bring_to_front()
+            result = self.gods_eye(request.get("actions") or [], request.get("timeout", 90), request.get("view"))
+            shot = request.get("screenshot")
+            if isinstance(shot, str) and shot.endswith(".png"):
+                self.page.wait_for_timeout(int(request.get("settle_ms", 6000)))
+                self.page.screenshot(path=shot)  # Verification/documentation of the God's Eye page only.
+            return result
         if operation == "select_video":
             return self.select_video(request["value"], request.get("position"))
         if operation == "control":

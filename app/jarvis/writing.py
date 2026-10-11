@@ -17,11 +17,16 @@ EXACT_TAIL = re.compile(r"^(.+?)[,\s]+(?:exactly|word for word|verbatim)(?: as I
 QUOTED = re.compile(r'^["\'‘“](.+)["\'’”]$', re.S)
 # Explicit targets are always removed; a bare trailing "here" only for composed text,
 # because "write exactly I am here" must keep its words.
-HERE = re.compile(r"[\s,]+(?:(?:in|into|on|over)\s+(?:here|this (?:app|window|field|box|document|doc|page|chat|email|message|tab|text box)|"
+HERE = re.compile(r"[\s,]+(?:(?:in|into|on|over)\s+(?:here|(?:this|that) (?:app|window|field|box|document|doc|page|chat|email|message|tab|text box|channel)|"
+                  r"the field where my cursor is|where my cursor is|the active chat box|"
                   r"the (?:current|active|open|selected) (?:app|window|field|box|document))|right here|over here)[.!?]*$", re.I)
 BARE_HERE = re.compile(r"[\s,]+here[.!?]*$", re.I)
 FILE = re.compile(r"\b[\w-]+\.[a-z0-9]{1,5}\b|\b(?:to|into|in) (?:a |the |new )?(?:text )?file\b", re.I)
-APP = re.compile(r"[\s,]+(?:in|into|inside)\s+(?:the\s+)?([a-z0-9][\w .+&-]{0,40}?)(?:\s+(?:app|window|application))?[.!?]*$", re.I)
+# "in a professional tone", "in casual English", "in two paragraphs" describe the text, not a window.
+TONE = re.compile(r"(?:a |an )?(?:[\w-]+ )?(?:tone|style|voice|register|manner)|(?:casual|formal|plain|simple|british|american|"
+                  r"proper) english|english|hindi|hinglish|(?:one|two|three|four|five|\d+) (?:paragraphs?|sentences?|lines?|words|bullet points)|"
+                  r"bullet points|full ?screen", re.I)
+APP = re.compile(r"[\s,]+(?:in|into|inside)\s+(?:the\s+)?([a-z0-9][\w .+&-]{0,40}?)(?:\s+(?:app|window|application))?(?:,?\s+please)?[.!?]*$", re.I)
 HELP = ("There is no dictation mode now. Say 'write' and what you want, for example 'write a short "
         "thank-you note here', or 'write exactly' followed by the words. To type everything you say, hold "
         "Left Ctrl and Left Alt while you speak and let go to stop.")
@@ -45,7 +50,7 @@ def parse_write(text):
         body = body[:here.start()].strip()
     else:
         app = APP.search(body)
-        if app:
+        if app and not TONE.fullmatch(app[1].strip()):
             # Resolved against installed apps at execution; otherwise it stays part of the text.
             target, tail = app[1].strip(), app[0]
             body = body[:app.start()].strip()

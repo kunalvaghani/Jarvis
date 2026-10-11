@@ -26,6 +26,33 @@ environments resolve correctly, and recovery snapshots match the final source.
 These are relocation/regression checks; historical live feature measurements
 retain their original dates. Jarvis remains deliberately stopped.
 
+**Everyday phrasing understood (2026-10-11 IST):** Requests and questions now reach the right action however they're
+phrased: politely, casually, as a question, or as a standing instruction. Coverage is checked against the 800-scenario
+natural-language testbook. Before, 1,438 of its 2,400 phrasings weren't understood and 98 were dropped as negated commands.
+Now all 2,400 reach a reviewed intent, all three phrasings of every scenario agree, and 18,714 generated permutations agree
+too. Standing instructions get honest answers about what Jarvis does or doesn't support. Live PC, Jarvis, WhatsApp and
+media status is answered immediately. New God's Eye camera controls cover zoom, orbit, pan, overhead, back, labels and
+"what are you looking at". Six phrasings that used to trigger the wrong action are fixed. Regression: 1,493 tests passed
+with one skip; readiness `ready`. [How it works, what isn't supported and live results](docs/natural-language.md).
+
+**Toronto traffic cameras in God's Eye (2026-10-11 IST):** God's Eye had no cameras in Toronto, Mississauga or Brampton,
+because Ontario 511 now requires a developer key. Jarvis adds City of Toronto's 336 open-data cameras (keyless, live
+frames verified). With your free Ontario 511 key in `secrets/ontario511.json`, it also adds the Ontario 511 highway cameras for
+Mississauga and Brampton. India has no open live camera source. [Details](docs/gods-eye.md#live-cameras-toronto-mississauga-brampton-and-india).
+
+**God's Eye View integrated (2026-10-11 IST):** The bundled God's Eye View was updated from the 2026-09-24 snapshot
+to upstream `591f299d` (2026-10-10). It now starts with Jarvis, and Jarvis drives it by voice through God's Eye's own
+action runner, with no OpenAI key. "Show me the Eiffel Tower", "show flights near me", "show military over the Persian
+Gulf", "what's the weather doing", "show cameras in London", "show me the route from Vadodara to Ahmedabad" and "switch
+to thermal" fly the globe and switch layers in Jarvis's browser. A side thread polls God's Eye every minute for 25 miles
+around you (aircraft, emergency squawks, military, local SDR, cyclones, fires, weather, earthquakes). It speaks alerts
+and answers "why is it so loud outside?" or "why am I hearing sirens?" from that data before any web search. Without
+keys, photoreal 3D, TomTom traffic and NASA FIRMS stay off, and cyclones, fire perimeters and radar have the coverage
+limits listed in the doc. Regression: 1,477 tests passed with one skip; readiness `ready`. [Commands, data, alerts,
+limits and live results](docs/gods-eye.md).
+
+![Live God's Eye views opened by Jarvis — Persian Gulf military layers, Statue of Liberty, a London traffic camera, the Eiffel Tower](artifacts/media/gods-eye-jarvis-live-2026-10-11.jpg)
+
 **Learning GitHub repositories for coding, and multi-context awareness (2026-10-11 IST):** Before a coding task,
 Jarvis reuses a repository it already learned for that kind of work. If none fits, it searches GitHub, lets the
 local model pick the repository that truly fits, and learns its structure, entry points, functions and classes
@@ -1206,6 +1233,9 @@ Jarvis/
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
 | `gpu_scheduler.py` | Process-shared inference priority, speech reservation, partial offload, bounded cache handoff and metadata health. |
 | `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+| `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
+| `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
+| `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |
 | `repo_learning.py`, `context_hub.py` | Learning public GitHub repositories (search, pick, multi-language analysis, summary, Obsidian notes, references for coding, background learning from the browser) and the live situation snapshot for multi-context awareness. |
 | `memory_curator.py`, `capability_guide.py`, `weather_watch.py` | Long-term memory (learned facts, "remember/forget", conversation summaries, prompt context), capability and API answers with a live API check, and bad-weather/emergency alerts. |
 | `whatsapp.py`, `messengers.py` | WhatsApp Desktop through its accessibility tree (search, choose, draft, preview/approve, send and verify, replies, message/call watcher) and other messaging apps. |
@@ -1227,6 +1257,7 @@ Jarvis/
 | `brain` | Enabled, `qwen3.5:9b` planner/coder/decision/vision, native function calls, no model fallback, Laya selector, adaptive planning/recovery. |
 | `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
+| `gods_eye` | Enabled; start the God's Eye server with Jarvis; watch a 40 km (25-mile) radius every 60 s. See [settings](docs/gods-eye.md#settings-configconfigjson--gods_eye). |
 | `repo_learning` | Search GitHub for coding tasks (1 repository per task), learn repositories viewed in the browser after 8 s, re-learn after 30 days, `qwen3.5:9b`. See [settings](docs/repo-learning.md#settings-configconfigjson--repo_learning). |
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |

@@ -18,7 +18,10 @@ STOP = re.compile(r"\b(?:go to sleep|stop listening|cancel|stop all tasks)\b", r
 # Kept whole (never split on "then") and run only from final speech.
 WHOLE = {"ask", "task", "code_task", "toolkit", "anticipation", "realtime", "windows_command", "windows_catalog",
          "write_text", "compose_text", "whatsapp_send", "whatsapp_reply", "messenger_send", "memory_save",
-         "memory_forget", "memory_list", "memory_conversations"}
+         "memory_forget", "memory_list", "memory_conversations",
+         # Everyday phrasings from intent_catalog.py describe one request even when they say "then".
+         "behavior", "conversation_style", "jarvis_status", "system_info", "whatsapp_read", "media_related",
+         "memory_summarize", "messenger_focus", "gods_eye_show", "gods_eye_camera", "gods_eye_explain", "gods_eye_cameras"}
 FINAL_ONLY = WHOLE | {"run_command", "modify", "browse", "browser_search", "context_search", "media_search",
     "media_control", "play_media", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app",
     "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls",
