@@ -25,7 +25,7 @@ Before a coding task that builds or adds something ("create a snake game in Java
    - imports.
 
    The local Qwen 9B model then writes the purpose, architecture, how to run it, key modules and their roles, patterns worth reusing, when to use it, and keywords.
-4. **Code with it.** The task's planner gets the repository's purpose, architecture, key modules and patterns. The coding worker also gets the functions most relevant to the task and up to three short code excerpts from the main files, with an instruction to reuse proven structure but write original code that fits the project. The same references reach every coding path through `coding_context()`.
+4. **Code with it.** The task's planner gets the repository's purpose, architecture, key modules and patterns. The coding worker also gets the functions most relevant to the task and up to three short code excerpts from the main files, with an instruction to reuse proven structure but write original code that fits the project. The same references reach every coding path through `coding_context()`. Abilities you approved that fit the task are added there too, as tested code, and native workers can run them ([abilities in coding](repo-abilities.md#abilities-in-coding-tasks-2026-10-12-ist)).
 5. **Saved for next time.** The task is recorded under the repository's `used_for`; a similar task later reuses it from memory.
 
 Edit-only tasks ("fix the typo", "rename…") skip this. By default one repository is learned per task (`repos_per_task`).

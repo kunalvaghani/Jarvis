@@ -165,7 +165,17 @@ def coding_context(project, goal, target=None, files=None):
             'repository_instructions': instruction_context(project, target),
             'selected_skills': selected_skills(project, goal),
             'repository_map': repository_map(project, files),
-            'reference_repositories': learned_references(goal)}
+            'reference_repositories': learned_references(goal),
+            'learned_abilities': learned_abilities(goal)}
+
+
+def learned_abilities(goal):
+    """Tested abilities the user approved that fit the goal (offline; see repo_abilities)."""
+    try:
+        from .repo_abilities import references_for
+        return references_for(goal)
+    except Exception:
+        return []
 
 
 def learned_references(goal):

@@ -279,7 +279,7 @@ class AbilityForge:
         self._busy_checked = (0.0, False)
         self.model_chat = model_chat
         self.clock = clock
-        self.base = Path(actions.base)
+        self.base = Path(actions.base).resolve()  # The runner starts inside the run folder, so paths must be absolute.
         self.root = self.base / ".jarvis-runtime" / "abilities"
         files_root = getattr(actions, "root", None)
         self.outputs = Path(files_root) / "Abilities" if files_root else self.root / "outputs"
@@ -1309,6 +1309,72 @@ class AbilityForge:
         """New abilities and updates that wait for the user's OK."""
         return [a for a in self.abilities() if a.get("state") == "awaiting_approval" or a.get("candidate")]
 
+    # --- abilities in coding ---------------------------------------------------------------------------------------
+    def relevant(self, goal, limit=2):
+        """Approved abilities that fit a coding goal, best first (word overlap with name, purpose, plan, commands)."""
+        from .repo_learning import words
+
+        def stems(text):  # "summarizes", "summarize" and "summary" all match "summar"; "tasks" matches "task".
+            return {(w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w)[:6] for w in words(text)}
+        want = stems(goal)
+        scored = []
+        for row in self.abilities("active"):
+            text = " ".join([row["name"], row.get("summary", ""), row.get("plan", ""), " ".join(row.get("triggers", [])),
+                             row.get("repo", "").replace("/", " "), " ".join(p["pip"] for p in row.get("packages", []))])
+            hits = len(want & stems(text))
+            name = stems(row["name"])
+            covered = len(want & name) / max(1, len(name))  # The goal names what the ability is for.
+            if hits >= 2 or covered >= .5 or (hits and hits / max(1, min(len(want), 6)) >= .34):
+                scored.append((hits, row.get("runs", 0), row))
+        scored.sort(key=lambda x: (-x[0], -x[1]))
+        return [row for _, _, row in scored[:limit]]
+
+    def coding_reference(self, row, budget=3500):
+        """A tested, user-approved ability as reference code for a coding task."""
+        try:
+            code = (self.root / row["folder"] / "ability.py").read_text(encoding="utf-8")
+        except (OSError, KeyError):
+            code = ""
+        return {"ability": row["name"], "what_it_does": row.get("summary", ""),
+                "command": [SLOT.sub(lambda m: "<" + m[1] + ">", t) for t in row.get("triggers", [])][:3] or [self.example(row)],
+                "inputs": row.get("inputs", []), "uses": [p["pip"] for p in row.get("packages", [])] or ["standard library"],
+                "learned_from": row.get("repo"), "license": row.get("license") or "none declared",
+                "tested": (row.get("last_test") or "")[:200],
+                "code": code[:budget] + ("\n# … truncated" if len(code) > budget else ""),
+                "how_to_use": ("Working code Jarvis tested and the user approved. Reuse its approach or functions where they fit "
+                               "the task, adapted to this project (declare the same packages if you use them, respect the "
+                               "license). Native coding can also run it with learned_ability_run.")}
+
+    def coding_tool(self, project, name, args, cancelled=lambda: False):
+        """Native coding tools: learned_ability_search, learned_ability_read, learned_ability_run."""
+        if name == "learned_ability_search":
+            query = str(args.get("query", "")).strip()
+            rows = self.relevant(query, 5) if query not in {"", "."} else self.abilities("active")[:8]
+            return {"abilities": [{"name": r["name"], "what_it_does": r.get("summary", ""), "inputs": r.get("inputs", []),
+                                   "command": self.example(r)} for r in rows]}
+        row = self.find(args.get("name", ""))
+        if not row or row.get("state") != "active":
+            raise ValueError("No approved ability called " + str(args.get("name", ""))[:60] + "; use learned_ability_search.")
+        if name == "learned_ability_read":
+            return self.coding_reference(row, 12000)
+        if name != "learned_ability_run":
+            raise ValueError("Unknown learned ability tool.")
+        try:
+            inputs = json.loads(args.get("content") or "{}")
+        except ValueError:
+            raise ValueError("content must be a JSON object of inputs, e.g. {\"file\": \"README.md\"}.") from None
+        if not isinstance(inputs, dict):
+            raise ValueError("content must be a JSON object of inputs.")
+        root = Path(project).resolve()
+        kinds = {i["name"]: i["type"] for i in row.get("inputs", [])}
+        for key, value in list(inputs.items()):
+            if kinds.get(key) == "file":
+                path = (root / str(value)).resolve()
+                if root not in path.parents or not path.is_file():
+                    raise ValueError("File inputs must be existing files inside this project: " + str(value)[:120])
+                inputs[key] = str(path)  # The ability gets a copy; the project file is never changed.
+        return {"ability": row["name"], "result": self.invoke(row["id"], inputs, cancelled)}
+
     def summary(self):
         """Compact list for the situation snapshot and capability answers."""
         return [{"ability": a["name"], "say": self.example(a), "from": a["repo"]} for a in self.abilities("active")][:8]
@@ -1327,6 +1393,17 @@ class suppressed:
 
 
 REGISTRY = {"forge": None}
+
+
+def references_for(goal):
+    """Approved abilities relevant to a coding goal, for coding_context() (offline; never raises)."""
+    forge = REGISTRY["forge"]
+    if forge is None or not forge.enabled:
+        return []
+    try:
+        return [forge.coding_reference(row) for row in forge.relevant(goal)]
+    except Exception:
+        return []
 
 
 # --- spoken commands -----------------------------------------------------------------------------------------------

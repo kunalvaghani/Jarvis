@@ -94,6 +94,42 @@ the approval card. At the end it shows **Added: … Say "…"** and "you can clo
 OK**, or **No new ability from …** with the reason. If you ask "what abilities did you get from repos" mid-build,
 it also tells you to keep it open.
 
+## Abilities in coding tasks (2026-10-12 IST)
+
+Approved abilities are also used when Jarvis codes, if they fit the task:
+
+- **As tested reference code.** `coding_context()` now carries `learned_abilities`: up to two active abilities that
+  match the coding goal. Each comes with what it does, its command, its packages, the repository it came from and its
+  license, its last test result, and its code (about 3.5 KB). Every coding path receives this context: Jarvis's
+  native workers, the workload planner (as a short summary), Codex and Claude Code. The worker is told to reuse the
+  approach where it fits, adapted to the project, declaring the same packages and respecting the license.
+- **As tools while coding.** The native coding worker has three new tools:
+  - `learned_ability_search`: finds approved abilities by purpose.
+  - `learned_ability_read`: returns one ability's full tested code.
+  - `learned_ability_run`: runs an ability on a project file or on text, e.g. "summarize file" on the project's
+    notes. File inputs must be existing files inside the project. The ability gets a copy and runs in its usual
+    guarded process, so project files are never changed. Its outputs go to `JarvisFiles/Abilities/`.
+
+Only abilities you approved and that are active are used; disabled, denied, failed or waiting ones never are. A goal
+matches an ability when half the words of its name appear in the goal, or enough of its purpose and commands do. Word
+forms and plurals count as the same word ("summarizes" matches "summarize file", "tasks" matches "extract task list").
+
+**Checked live (2026-10-12 IST), with this PC's real approved abilities:**
+
+| Coding goal | Abilities supplied |
+| --- | --- |
+| "add a function that summarizes a markdown file into a short paragraph" | summarize file, summarize text |
+| "write a python script that summarizes a text file into bullet points" | summarize file, summarize text |
+| "make a todo app that extracts tasks from my notes" | extract task list |
+| snake game, React login page, CSV-to-JSON converter, upload button, README typo | none |
+
+`learned_ability_run` ran the real "summarize file" ability on a copy of `repo-learning.md` inside a test project in
+0.3 s. The project file was unchanged, and the summary was saved under `Abilities/summarize-file/`. That ability's
+output is weak: its "key topics" were "the, and, repository, with, task", so the 9B-written code needs improvement,
+and its reference value for coding is limited to the same degree. A full live coding task using an ability was not run
+(about 30 minutes of model time while Jarvis was in use). The routing and tools are covered by
+`tests/test_repo_abilities.py`.
+
 ## Using abilities
 
 | Say | Does |

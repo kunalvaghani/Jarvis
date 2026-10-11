@@ -81,7 +81,7 @@ atomic registry write. Jarvis's own code is never edited, a failed build or upda
 quit mid-build resumes on the next start. The island says "keep Jarvis open" while it builds, and every finished
 ability opens an approval card with its name, what it does, the command to say, what it uses, its test result and
 its full code. Approve keeps it for good; Deny discards it and the next one is built; no answer leaves it pending.
-Large repositories are read from their key files instead of being refused, and learning failures are reported.
+Large repositories are read from their key files instead of being refused, and learning failures are reported. Approved abilities that fit a coding task are given to every coding path as tested reference code, and native coding workers can search, read and run them on project files (2026-10-12).
 Built-in commands always win over learned phrases. Live on this PC (on the 9B fallback, because the 30B model
 didn't fit): `trentm/python-markdown2` became "convert notes.md to html" and "extract headings from notes.md",
 which ran in about 0.3 s each after approval. The first attempt was rejected, which revealed two routing gaps that

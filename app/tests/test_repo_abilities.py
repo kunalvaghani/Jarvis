@@ -349,6 +349,42 @@ class Building(unittest.TestCase):
         self.assertIn("paused_for_user", (instance.root / "builds.jsonl").read_text(encoding="utf-8"))
         self.assertEqual(priority, [True, False])  # Ollama's runner yields the CPU only during each call.
 
+    def test_coding_uses_relevant_approved_abilities(self):
+        instance, actions, _ = forge([GOOD])
+        instance.build_repo("demo/wordcount")
+        from jarvis.agent_context import coding_context
+        context = coding_context(Path(actions.root), "write a python tool that counts the words in a text file")
+        refs = context["learned_abilities"]
+        self.assertEqual(refs[0]["ability"], "word counter")
+        self.assertIn("def run(inputs, workdir):", refs[0]["code"])
+        self.assertEqual((refs[0]["learned_from"], refs[0]["uses"]), ("demo/wordcount", ["standard library"]))
+        self.assertEqual(ra.references_for("build a snake game in javascript"), [])  # Unrelated goals get nothing.
+        # Live 2026-10-12: "summarizes" missed "summarize file"; word forms and plurals now match.
+        self.assertEqual([r["ability"] for r in ra.references_for("add a function that counts words in a short paragraph")],
+                         ["word counter"])
+        instance.registry["abilities"]["word-counter"]["state"] = "disabled"
+        self.assertEqual(ra.references_for("count the words in a text file"), [])  # Only approved, active abilities.
+
+    def test_native_coding_tools_run_abilities_on_project_files_only(self):
+        instance, actions, _ = forge([GOOD])
+        instance.build_repo("demo/wordcount")
+        project = Path(tempfile.mkdtemp())
+        (project / "notes.txt").write_text("one two three", encoding="utf-8")
+        found = instance.coding_tool(project, "learned_ability_search", {"query": "count words"})
+        self.assertEqual(found["abilities"][0]["name"], "word counter")
+        self.assertIn("def sample_inputs", instance.coding_tool(project, "learned_ability_read", {"name": "word counter"})["code"])
+        result = instance.coding_tool(project, "learned_ability_run", {"name": "word counter", "content": '{"file": "notes.txt"}'})
+        self.assertIn("3 words", result["result"])
+        self.assertEqual((project / "notes.txt").read_text(encoding="utf-8"), "one two three")  # Project file untouched.
+        outside = Path(actions.base) / "private.txt"
+        outside.write_text("secret", encoding="utf-8")
+        for value in ("../private.txt", str(outside)):
+            with self.assertRaises(ValueError):
+                instance.coding_tool(project, "learned_ability_run", {"name": "word counter", "content": json.dumps({"file": value})})
+        from jarvis.native_coding import EXTRA, SCHEMA
+        self.assertTrue({"learned_ability_search", "learned_ability_read", "learned_ability_run"} <= set(EXTRA))
+        self.assertIn("learned_ability_run", SCHEMA["properties"]["tool"]["enum"])
+
     def test_management_phrases(self):
         self.assertEqual(parse("build abilities from psf/requests").kind, "ability_build")
         self.assertEqual(parse("build abilities from psf/requests").value, "psf/requests")
