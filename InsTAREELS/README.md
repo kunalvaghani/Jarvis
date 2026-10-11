@@ -26,6 +26,15 @@ environments resolve correctly, and recovery snapshots match the final source.
 These are relocation/regression checks; historical live feature measurements
 retain their original dates. Jarvis remains deliberately stopped.
 
+**Cognitive architecture (2026-10-11 IST):** Jarvis now runs as one perceive → remember → reason → decide → act → learn
+loop, organised as the six modules of the "Blueprint for Building J.A.R.V.I.S." diagram. Its existing tools, APIs, skills, memories and coding
+agents are wired into the module they belong to. Before an action runs, a world model predicts its effects, whether it
+can be undone, whether it needs approval, how long it takes and how often it works. The executive asks before sending to
+a "him" or "her" it can't resolve, and learns from outcomes and from your corrections. Repeated failures become lessons
+in the Obsidian vault. New phrasings: "what are you thinking?", "what would happen if you …?", "what have you learned
+from your mistakes?" and "show your mind" (a live **Mind** view on the island). Regression passed and readiness is `ready`;
+live results are dated in the doc. [How it works, limits and live results](docs/cognitive-architecture.md).
+
 **Everyday phrasing understood (2026-10-11 IST):** Requests and questions now reach the right action however they're
 phrased: politely, casually, as a question, or as a standing instruction. Coverage is checked against the 800-scenario
 natural-language testbook. Before, 1,438 of its 2,400 phrasings weren't understood and 98 were dropped as negated commands.
@@ -1233,6 +1242,7 @@ Jarvis/
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
 | `gpu_scheduler.py` | Process-shared inference priority, speech reservation, partial offload, bounded cache handoff and metadata health. |
 | `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+| `cognition.py`, `island_mind.py` | The cognitive loop: perception, working memory, long-term recall, the world model's predictions, executive control and learning from outcomes, plus the island's live **Mind** view. |
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
 | `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |

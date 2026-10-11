@@ -137,6 +137,10 @@ class Actions:
             kind, message = filter_report(self, kind, message)  # Quiet/private modes.
             if kind in {"spoken_reply", "answer"} and isinstance(message, str) and message.strip():
                 self.last_spoken = message  # "Say that again".
+            cognition = getattr(self, "cognition", None)
+            if cognition is not None and isinstance(message, str) and message and (
+                    "alert" in kind or kind in {"warning", "repair", "whatsapp_message", "incoming_call"}):
+                cognition.perceive(kind, "sensor", message, .7)  # Background sensors -> perception.
             report(kind, message)
         self.report = filtered
         self.session_style = {}  # "short", "simple", "serious" answers asked for in this session.
@@ -189,6 +193,8 @@ class Actions:
         REGISTRY["learner"] = self.repo_learner
         from .gods_eye import GodsEye
         self.gods_eye = GodsEye(self, config.get("gods_eye", {}))
+        from .cognition import Cognition
+        self.cognition = Cognition(self, config.get("cognition", {}))  # Perceive -> remember -> reason -> act -> learn.
         from .context_hub import prompt_block
         self.memory.situation = lambda question="": prompt_block(self, question)  # Several live contexts at once.
         from .quick_answers import QuickAnswers
@@ -307,6 +313,9 @@ class Actions:
         from .intent_handlers import IMMEDIATE, STATUS, execute as intent_execute
         if command.kind not in {'island_choice', 'memory_choice'} and hasattr(self, 'command_history'):
             self.command_history.append((command.value or command.kind.replace('_', ' ')).splitlines()[0][:120] if command.value or command.kind else '')
+        cognition = getattr(self, 'cognition', None)
+        if cognition is not None:
+            cognition.perceive_command(command)
         if command.kind == 'stop_speaking':
             self.report('stop_speech', '')
             self.report('state', 'Listening; go ahead.')
@@ -338,6 +347,10 @@ class Actions:
                 threading.Thread(target=self._route_unparsed, args=(command.value,),
                                  name='Jarvis intent', daemon=True).start()
                 return
+        question = cognition.deliberate(command) if cognition is not None and command.kind in {'whatsapp_send', 'messenger_send'} else None
+        if question:
+            self.report('spoken_reply', question)  # Executive control: never guess who a message goes to.
+            return
         if command.kind == 'cancel_task':
             # Matching may consult a tiny model; keep it off the audio thread.
             threading.Thread(target=lambda: self.report('spoken_reply', self._cancel_task(command)),
@@ -644,6 +657,9 @@ class Actions:
         eye = getattr(self, 'gods_eye', None)
         if eye is not None:
             eye.close()
+        cognition = getattr(self, 'cognition', None)
+        if cognition is not None:
+            cognition.close()
         curator = getattr(self, 'curator', None)
         if curator is not None and curator.thread is not None:
             # Summarise the open conversation into Obsidian, bounded so shutdown never hangs.
@@ -750,6 +766,7 @@ class Actions:
             self.repo_learner.start()
         if self.gods_eye.enabled:
             self.gods_eye.start()  # God's Eye server plus the 25-mile side-thread feed and its alerts.
+        self.cognition.start()  # The cognitive loop (docs/cognitive-architecture.md).
         settings = self.config.get("weather_alerts", {})
         if settings.get("enabled", True):
             from .weather_watch import WeatherWatch
@@ -808,8 +825,10 @@ class Actions:
         initial_conditions = observe_conditions(self)
         before = self.task_state.snapshot()
         result, status = None, "completed"
+        cognition = getattr(self, "cognition", None)
         try:
-            result = self._execute(command, cancelled)
+            run = lambda: self._execute(command, cancelled)
+            result = cognition.act(command, run) if cognition is not None else run()  # Predict, act, evaluate, feed back.
             if cancelled():
                 status = "cancelled"
             return result

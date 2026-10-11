@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-IMMEDIATE = {"behavior", "conversation_style", "repeat_last", "stop_speaking"}  # Answered at once, never queued.
+IMMEDIATE = {"behavior", "conversation_style", "repeat_last", "stop_speaking", "cognition_predict"}  # Answered at once, never queued.
 STATUS = {"jarvis_status", "system_info"}  # Read-only; answered off the queue so a running task never delays them.
 QUEUED = {"whatsapp_read", "gods_eye_camera", "media_related", "memory_summarize", "messenger_focus"}  # Touch apps.
 SPOKEN = IMMEDIATE | STATUS | QUEUED
@@ -28,6 +28,12 @@ BEHAVIOR = {
     "barge_in": "You can talk over me: when you start speaking I stop and listen, and the conversation carries on.",
     "final_only": "I wait until you've finished: I act only on your completed sentence, never on a half-heard one.",
     "still_here": "I'm here and listening.",
+    "architecture": ("I work as one loop of six parts. Perception takes in your voice, the window in front of you and my "
+                     "background sensors. Working memory holds the current goal, focus and what needs attention. Long-term "
+                     "memory recalls past conversations, facts and how tasks went before. My reasoning and world model plan "
+                     "the steps and predict what an action will do before I take it. Executive control decides whether to go "
+                     "ahead or ask you, and learns from how things turn out. Then I act through my tools, and the result feeds "
+                     "back into perception. Say 'show your mind' to watch it live on the island."),
     # Desktop and pointer.
     "other_monitor": "Moving a window to another monitor isn't supported yet. I can snap it left or right, or maximise or minimise it.",
     "open_folder_usage": "Say 'open folder' and its name, for example 'open folder Projects', or 'open the Downloads folder'.",
@@ -191,7 +197,7 @@ BEHAVIOR = {
 
 
 def behavior(actions, key):
-    config = actions.config
+    config = getattr(actions, "config", {})
     return BEHAVIOR.get(key, "I'm not sure how to help with that yet.").format(
         wake=config.get("wake_timeout_seconds", 90), warm=int(config.get("gpu_scheduler", {}).get("warm_seconds", 1800) / 60),
         weather=config.get("weather_alerts", {}).get("interval_minutes", 30))
@@ -289,7 +295,7 @@ def _ollama(path):
 
 
 def jarvis_status(actions, topic):
-    config = actions.config
+    config = getattr(actions, "config", {})
     if topic == "uptime":
         import psutil
         started = psutil.Process(os.getpid()).create_time()
@@ -432,7 +438,30 @@ def jarvis_status(actions, topic):
             return "God's Eye View commit " + str(marker.get("commit", ""))[:8] + " from " + str(marker.get("date", ""))[:10] + "."
         except (OSError, ValueError):
             return "I don't have a version marker for God's Eye; say 'update God's Eye' to install the latest."
+    if topic in {"cognition", "lessons"}:
+        cognition = getattr(actions, "cognition", None)
+        if cognition is None or not cognition.enabled:
+            return "My cognitive loop is switched off (config cognition.enabled)."
+        if topic == "cognition":
+            return cognition.status_text()
+        lessons = list(cognition.lessons)[-4:]
+        return ("Lessons I've learned: " + " | ".join(lesson[17:] for lesson in lessons) + "."
+                if lessons else "No lessons yet: nothing has failed repeatedly and you haven't corrected me this session.")
     raise ValueError("Unknown status topic " + topic)
+
+
+def cognition_predict(actions, text):
+    """'What would happen if you ...': run the world model on the command without executing it."""
+    from .commands import Command, parse
+    cognition = getattr(actions, "cognition", None)
+    if cognition is None or not cognition.enabled:
+        return "My world model is switched off (config cognition.enabled)."
+    try:
+        command = parse(text)
+    except ValueError:
+        command = Command("task", text)
+    prediction = cognition.predict(command)
+    return "If I " + text.rstrip("?.! ") + ": " + cognition.explain(prediction) + " I haven't done anything yet."
 
 
 # --- this PC ---------------------------------------------------------------------------------------------------------------
@@ -668,6 +697,8 @@ def execute(actions, command, cancelled=lambda: False):
         return conversation_style(actions, command.value, command.extra)
     if kind == "repeat_last":
         return repeat_last(actions, command.value)
+    if kind == "cognition_predict":
+        return cognition_predict(actions, command.value)
     if kind == "jarvis_status":
         return jarvis_status(actions, command.value)
     if kind == "system_info":

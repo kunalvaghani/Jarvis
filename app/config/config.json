@@ -1304,6 +1304,10 @@
     "ip_location": true,
     "fallback_city": "Vadodara"
   },
+  "cognition": {
+    "enabled": true,
+    "cycle_hz": 4
+  },
   "gods_eye": {
     "enabled": true,
     "autostart": true,

@@ -86,6 +86,16 @@ def situation(actions, question=""):
     weather = getattr(actions, "weather_watch", None)
     if weather is not None and weather.last and weather.last.get("hazards"):
         found["weather_alerts"] = [h["message"][:140] for h in weather.last["hazards"][:2]]
+    cognition = getattr(actions, "cognition", None)
+    if cognition is not None and cognition.enabled:
+        workspace = cognition.working_memory()
+        keep = {k: workspace[k] for k in ("goal", "last_action", "attention") if workspace.get(k)}
+        if keep:
+            keep["attention"] = keep.get("attention", [])[:4]
+            found["working_memory"] = keep
+        lessons = cognition.relevant_lessons(question)
+        if lessons:
+            found["lessons_learned"] = lessons  # Executive consolidation: what failed before and why.
     if question and re.search(r"(?i)\b(?:this|that|it|the) (?:repo|repository|project|code)\b", question):
         found.setdefault("note", "The user may mean the repository or project shown above.")
     return found

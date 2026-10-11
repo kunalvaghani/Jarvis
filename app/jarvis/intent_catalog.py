@@ -94,6 +94,20 @@ RULES = [
     (r"repeat (?:only |just )?(?:the |your )?last (?:sentence|line|part)", lambda m: C("repeat_last", "sentence")),
     (r"(?:stop|quit) talking.*|be quiet.*|shut up.*|hush.*|stop speaking.*", lambda m: C("stop_speaking", "")),
     (r"let me interrupt.*|(?:can|may) i interrupt.*", lambda m: C("behavior", "barge_in")),
+    # Cognitive architecture (cognition.py): working memory, world-model predictions, lessons.
+    (r"(?:what(?:'s| is) (?:in )?|show (?:me )?|tell me (?:what'?s in )?)?your working memory|what are you (?:thinking|focus(?:s)?ing) (?:about|on)(?: right now)?|"
+     r"what are you thinking(?: right now)?|(?:what(?:'s| is) (?:your )?)?cogniti(?:on|ve) (?:status|loop|state)|"
+     r"how(?:'s| is) your (?:mind|brain|cognitive loop)(?: doing)?|what(?:'s| is) on your mind",
+     lambda m: C("jarvis_status", "cognition")),
+    (r"what (?:have you|did you) learn(?:ed|t)? from (?:your |the )?(?:mistakes|failures|corrections|last (?:tasks|actions))|"
+     r"(?:show|tell me|list) (?:me )?(?:your |the )?lessons(?: (?:you'?ve |you have )?learned)?|what lessons have you learned",
+     lambda m: C("jarvis_status", "lessons")),
+    (r"(?:what would|what will|what'?d) happen if (?:you|i (?:asked|told) you to|we) (.+)|"
+     r"(?:predict|simulate) what (?:would happen|happens|will happen) if (?:you|i (?:asked|told) you to) (.+)|"
+     r"before you do it,? (?:tell me )?what would happen if you (.+)",
+     lambda m: C("cognition_predict", next(g for g in m.groups() if g))),
+    (r"(?:explain|describe|tell me about) (?:your|the jarvis) (?:cognitive )?architecture|how do you think|how does your (?:mind|brain) work",
+     lambda m: C("behavior", "architecture")),
     (r"(?:keep|make) (?:your |the )?(?:answers?|replies|responses?) (?:short|brief|concise)(?: .*)?|"
      r"(?:short|brief) answers?(?: please)?|earlier i asked for a short answer.*", lambda m: C("conversation_style", "short")),
     (r"(?:give me|explain|say) (?:it |that )?(?:the |a )?simple(?:r)? (?:version|way|terms)|(?:explain|say) (?:it|that) simply|"

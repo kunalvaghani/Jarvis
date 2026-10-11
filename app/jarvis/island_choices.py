@@ -70,7 +70,11 @@ def navigation(text):
     if match and match[1] in aliases:
         return ('Games',aliases[match[1]])
     match = re.fullmatch(r'(?:show|open) (?:the )?(games|music|choices|overview|history|settings)(?: (?:in|on) (?:the )?island)?',text)
-    return (match[1].title(),'') if match else None
+    if match:
+        return (match[1].title(),'')
+    match = re.fullmatch(r"(?:show|open)(?: me)? (?:your|the|jarvis'?s?) (?:mind|brain|cognitive architecture|architecture|mind view|"
+                         r"cognitive loop|thinking)(?: view)?(?: (?:in|on) (?:the )?island)?", text)
+    return ('Mind','') if match else None
 
 
 def task_answer(state, text):

@@ -279,6 +279,7 @@ class App:
                     win32process.GetWindowThreadProcessId(hwnd)[1])
                 self.actions.anticipation.observe_window(win32gui.GetWindowText(hwnd), hwnd)
                 title = win32gui.GetWindowText(hwnd)
+                self.actions.cognition.perceive_window(title)  # Vision: what's in front of you.
                 if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
                     import psutil
                     self.actions.repo_learner.observe_title(title, psutil.Process(

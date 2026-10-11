@@ -68,13 +68,16 @@ class IslandDesk:
         nav = self.nav_frame = tk.Frame(self.frame,bg=BG)
         nav.pack(fill='x',pady=(2,4))
         self.nav = {}
-        for name in ('Overview','Prepared','Choices','Music','Games','History'):
-            button = ttk.Button(nav,text=name,command=lambda n=name:self.show(n,reveal=True),width=7)
+        for name in ('Overview','Prepared','Choices','Music','Games','History','Mind'):
+            button = ttk.Button(nav,text=name,command=lambda n=name:self.show(n,reveal=True),width=7 if name!='Mind' else 5)
             button.pack(side='left',padx=(0,3))
             self.nav[name] = button
         self.content = tk.Frame(self.frame,bg=BG)
         self.content.pack(fill='both',expand=True)
-        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Prepared','Choices','Music','Games','History','Settings','Approval','Console')}
+        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Prepared','Choices','Music','Games','History','Mind','Settings','Approval','Console')}
+        from .island_mind import MindView
+        self.mind = MindView(self.views['Mind'],app)  # The cognitive architecture, live.
+        self.last_mind = 0.
         self.history, self.settings = self.views['History'],self.views['Settings']
         overview = self.views['Overview']
         shortcuts = self.shortcuts = tk.Frame(overview,bg=BG)
@@ -348,7 +351,7 @@ class IslandDesk:
                 self.full_reply = value['text']
             self.has_reply = True
             self.refresh_overview()
-            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared'}:
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind'}:
                 self.show('Overview')
         elif kind == 'answer_error' and isinstance(value, str):
             self.answer_phase = 'Interrupted · incomplete'
@@ -361,7 +364,7 @@ class IslandDesk:
             self.full_reply = value
             self.has_reply = True
             self.refresh_overview()
-            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared'}:
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind'}:
                 self.show('Overview')
         elif kind in {'brain','tool','plan'} and isinstance(value,str):
             self.work['activity'] = value[:300]
@@ -566,6 +569,9 @@ class IslandDesk:
             if self.game.started and not self.game.paused and not self.game.over:
                 self.game.tick(dt)
                 self.draw_game()
+        if visible and self.view=='Mind' and now-getattr(self,'last_mind',0.)>=.1:
+            self.last_mind = now
+            self.mind.refresh()
         if visible and self.view=='Music' and now-self.last_media>=5 and not self.app.config.get('_ui_verification',False):
             if self.media.start():
                 self.last_media = now
