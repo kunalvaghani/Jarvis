@@ -1408,6 +1408,20 @@
     "native_max_workers": 2,
     "native_predict": 4000
   },
+  "repo_abilities": {
+    "enabled": true,
+    "auto_build": true,
+    "model": "qwen3-coder:30b",
+    "fallback_model": "qwen3.5:9b",
+    "memory_margin_gb": 4,
+    "max_repairs": 2,
+    "max_builds_per_day": 4,
+    "test_timeout_seconds": 120,
+    "run_timeout_seconds": 180,
+    "max_memory_mb": 2048,
+    "install_timeout_seconds": 900,
+    "max_input_mb": 200
+  },
   "repository_skills": {
     "enabled": true,
     "image": "jarvis-repository-runtime:1"

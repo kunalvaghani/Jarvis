@@ -83,6 +83,12 @@ def preflight(base=BASE, repair=True):
         repository_options=config.get('repository_skills',{})
         if not isinstance(repository_options,dict) or set(repository_options)-{'enabled','image'} or type(repository_options.get('enabled',True)) is not bool:
             raise ValueError('Invalid repository_skills configuration.')
+        abilities = config.get('repo_abilities', {})
+        if not isinstance(abilities, dict) or any(type(abilities.get(k, True)) is not bool for k in ('enabled', 'auto_build')) or any(
+                type(abilities.get(k, 1)) not in {int, float} or abilities.get(k, 1) < 0 for k in (
+                    'max_repairs', 'max_builds_per_day', 'run_timeout_seconds', 'test_timeout_seconds', 'max_memory_mb',
+                    'install_timeout_seconds', 'max_input_mb', 'memory_margin_gb', 'idle_seconds')):
+            raise ValueError('Invalid repo_abilities configuration.')
         from .repo_sandbox import RepositorySandbox
         RepositorySandbox(repository_options.get('image','jarvis-repository-runtime:1'))
         if not isinstance(config.get("apps"), dict) or not isinstance(config.get("whisper"), dict) or not config.get("model_path"):
@@ -288,11 +294,13 @@ def run():
                     child = subprocess.Popen([str(python), str(BASE / "main.py")], cwd=BASE, env=env,
                         stdout=output, stderr=subprocess.STDOUT, creationflags=flags)
                     started = time.time()
+                    seen = None  # Last time this session's heartbeat was read successfully.
                     owned = OwnedApplication(child)
                     try:
                         while child.poll() is None and not stop.exists():
                             state = heartbeat_state(beat)
                             if session_heartbeat(state, session):
+                                seen = time.time()
                                 owned.attach(state["pid"])
                                 listen = state.get("listening_requested", listen)
                                 limit = 120 if state.get("status") == "starting" else 90
@@ -300,8 +308,13 @@ def run():
                                     record(BASE, "Jarvis interface stopped responding; restarting its owned process. Task checkpoints retained.")
                                     owned.terminate()
                                     break
-                            elif time.time() - started > 120:
+                            elif seen is None and time.time() - started > 120:
                                 record(BASE, "Jarvis startup did not become responsive; restarting its owned process.")
+                                owned.terminate()
+                                break
+                            elif seen is not None and time.time() - seen > 90:
+                                # A file being replaced can be briefly unreadable on Windows; only a lasting gap counts.
+                                record(BASE, "Jarvis interface stopped responding; restarting its owned process. Task checkpoints retained.")
                                 owned.terminate()
                                 break
                             time.sleep(2)

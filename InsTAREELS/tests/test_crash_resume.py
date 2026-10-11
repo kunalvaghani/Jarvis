@@ -108,6 +108,40 @@ class CrashResumeTests(unittest.TestCase):
                 owned.return_value.terminate.assert_not_called()
                 self.assertEqual(spawn.call_args_list[1].kwargs['env']['JARVIS_RESUME_TASK'], '1')
 
+    def test_briefly_unreadable_heartbeat_is_not_a_failed_startup(self):
+        # Live 2026-10-11 23:31: one unreadable read (file being replaced) restarted a healthy Jarvis.
+        for gap, restarted in ((20, False), (120, True)):
+            with tempfile.TemporaryDirectory() as directory:
+                runtime = Path(directory)
+                clock = [0]
+                child = Mock(pid=100)
+                child.poll.side_effect = lambda: None if clock[0] < 400 else 0
+                child.wait.return_value = 0
+
+                def heartbeat(path):
+                    if 200 <= clock[0] < 200 + gap:
+                        return {}  # Injected fault: the file is unreadable for a while.
+                    if clock[0] >= 399:
+                        (runtime / 'stop').touch()
+                    return {'session': path.stem.removeprefix('heartbeat-'), 'pid': 200, 'at': clock[0], 'status': 'running'}
+
+                def sleep(seconds):
+                    clock[0] += seconds
+                with patch.object(launcher, 'RUNTIME', runtime), patch.object(launcher, 'BASE', runtime), \
+                        patch.object(launcher, 'singleton', return_value=Mock()), \
+                        patch.object(launcher, 'preflight', return_value={}), \
+                        patch.object(launcher, 'prepare_runtime', return_value='pythonw.exe'), \
+                        patch.object(launcher, 'heartbeat_state', side_effect=heartbeat), \
+                        patch.object(launcher, 'OwnedApplication') as owned, \
+                        patch.object(launcher.subprocess, 'Popen', return_value=child), \
+                        patch.object(launcher.time, 'time', side_effect=lambda: clock[0]), \
+                        patch.object(launcher.time, 'sleep', side_effect=sleep), \
+                        patch.object(launcher, 'record') as record:
+                    launcher.run()
+                    messages = [c.args[1] for c in record.call_args_list]
+                    self.assertFalse(any('did not become responsive' in m for m in messages), gap)
+                    self.assertEqual(any('stopped responding' in m for m in messages), restarted, gap)
+
     def test_monitor_fault_cleans_owned_process_and_stop_prevents_retry(self):
         with tempfile.TemporaryDirectory() as directory:
             runtime = Path(directory)

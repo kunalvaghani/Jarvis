@@ -193,7 +193,14 @@ class App:
                 temporary.write_text(json.dumps({"session": session, "pid": os.getpid(), "at": time.time(),
                     "status": "running", "listening_requested": self.listening_requested,
                     "health": self.runtime_health.snapshot(self)}), encoding="utf-8")
-                os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
+                for attempt in range(10):  # A reader can briefly hold the file open on Windows.
+                    try:
+                        os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
+                        break
+                    except PermissionError:
+                        if attempt == 9:
+                            raise
+                        time.sleep(.02)
             repairs = runtime / "repairs.jsonl"
             if repairs.is_file():
                 with repairs.open("r", encoding="utf-8") as source:

@@ -72,6 +72,22 @@ limits and live results](docs/gods-eye.md).
 
 ![Live God's Eye views opened by Jarvis — Persian Gulf military layers, Statue of Liberty, a London traffic camera, the Eiffel Tower](artifacts/media/gods-eye-jarvis-live-2026-10-11.jpg)
 
+**Turning learned repositories into new abilities (2026-10-11 IST):** After Jarvis learns a repository, it now
+also breaks it into new spoken commands that do what the repository does. A local coding model (`qwen3-coder:30b`
+when it fits in free RAM, else `qwen3.5:9b`) proposes up to two abilities and writes their code. The code is
+statically checked, then tested in its own process and environment behind guard rails (no processes, confined
+reads and writes, network only if approved, time and memory limits), repaired up to twice, and merged with one
+atomic registry write. Jarvis's own code is never edited, a failed build or update leaves Jarvis unchanged, and a
+quit mid-build resumes on the next start. The island says "keep Jarvis open" while it builds, and every finished
+ability opens an approval card with its name, what it does, the command to say, what it uses, its test result and
+its full code. Approve keeps it for good; Deny discards it and the next one is built; no answer leaves it pending.
+Large repositories are read from their key files instead of being refused, and learning failures are reported.
+Built-in commands always win over learned phrases. Live on this PC (on the 9B fallback, because the 30B model
+didn't fit): `trentm/python-markdown2` became "convert notes.md to html" and "extract headings from notes.md",
+which ran in about 0.3 s each after approval. The first attempt was rejected, which revealed two routing gaps that
+are now fixed. Regression: 1,550 tests passed with one skip; readiness `ready`. [How it works, commands, settings,
+results and limits](docs/repo-abilities.md).
+
 **Learning GitHub repositories for coding, and multi-context awareness (2026-10-11 IST):** Before a coding task,
 Jarvis reuses a repository it already learned for that kind of work. If none fits, it searches GitHub, lets the
 local model pick the repository that truly fits, and learns its structure, entry points, functions and classes
@@ -1257,6 +1273,7 @@ Jarvis/
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
 | `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |
+| `repo_abilities.py`, `ability_runner.py` | Turning learned repositories into new abilities: a coding model breaks the repository into spoken commands, writes `ability.py`, which is statically checked and tested in its own guarded process and environment, then merged atomically. Also approvals, routing after built-in commands, and running with copied inputs and no-clobber outputs. |
 | `repo_learning.py`, `context_hub.py` | Learning public GitHub repositories (search, pick, multi-language analysis, summary, Obsidian notes, references for coding, background learning from the browser) and the live situation snapshot for multi-context awareness. |
 | `memory_curator.py`, `capability_guide.py`, `weather_watch.py` | Long-term memory (learned facts, "remember/forget", conversation summaries, prompt context), capability and API answers with a live API check, and bad-weather/emergency alerts. |
 | `whatsapp.py`, `messengers.py` | WhatsApp Desktop through its accessibility tree (search, choose, draft, preview/approve, send and verify, replies, message/call watcher) and other messaging apps. |
@@ -1280,6 +1297,7 @@ Jarvis/
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
 | `gods_eye` | Enabled; start the God's Eye server with Jarvis; watch a 40 km (25-mile) radius every 60 s. See [settings](docs/gods-eye.md#settings-configconfigjson--gods_eye). |
 | `repo_learning` | Search GitHub for coding tasks (1 repository per task), learn repositories viewed in the browser after 8 s, re-learn after 30 days, `qwen3.5:9b`. See [settings](docs/repo-learning.md#settings-configconfigjson--repo_learning). |
+| `repo_abilities` | Build abilities after learning a repository, `qwen3-coder:30b` when it fits in free RAM, else `qwen3.5:9b`; 2 repairs, 4 automatic builds a day, 120 s test / 180 s run limits, 2 GB memory limit. See [settings](docs/repo-abilities.md#settings-configconfigjson--repo_abilities). |
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |
 | `media.default_service` | `youtube`; where "play X" goes when no service is named and Jarvis has not played anything yet. The optional YouTube Data API v3 key goes in gitignored `secrets/youtube.json` (`{"api_key": "..."}`) or `JARVIS_YOUTUBE_API_KEY`, never here. |

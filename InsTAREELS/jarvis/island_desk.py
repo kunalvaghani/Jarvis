@@ -38,6 +38,11 @@ class Approval:
     def expired(self, now):
         return self.cancelled() or now-self.created >= 180
 
+    def lapse(self):
+        """No answer in time, or Jarvis closing: not the same as Deny (a learned ability then stays pending)."""
+        self.answer['expired'] = not self.done
+        return self.decide(False)
+
 
 class IslandDesk:
     def __init__(self, app, parent):
@@ -513,7 +518,7 @@ class IslandDesk:
     def add_approval(self,payload):
         approval = Approval(payload)
         if approval.expired(time.monotonic()):
-            approval.decide(False)
+            approval.lapse()
             return
         self.approvals.append(approval)
         self.render_approval()
@@ -524,7 +529,9 @@ class IslandDesk:
             self.show('Overview')
             return
         approval = self.approvals[0]
-        prompt = ('Move this exact file to the Recycle Bin?' if approval.kind=='delete' else
+        prompt = ('Review the new ability below. Approve adds it to Jarvis permanently; Deny discards it.'
+                  if approval.kind=='learned_ability' else
+                  'Move this exact file to the Recycle Bin?' if approval.kind=='delete' else
                   'Run this exact command? It can change or delete files.\nWorking folder: '+str(self.app.actions.root)
                   if approval.kind=='command' else 'Approve this exact external action? Review its destination and content.')
         self.approval_title.configure(text='Approval required · '+approval.kind.replace('_',' '))
@@ -542,7 +549,7 @@ class IslandDesk:
         self.last_tick = now
         for approval in self.approvals[:]:
             if approval.expired(now):
-                approval.decide(False)
+                approval.lapse()
                 self.approvals.remove(approval)
                 self.render_approval()
         if now-self.last_poll >= .3:
@@ -578,7 +585,7 @@ class IslandDesk:
 
     def cancel_approvals(self):
         for approval in self.approvals:
-            approval.decide(False)
+            approval.lapse()
         self.approvals.clear()
         if self.view=='Approval':
             self.show('Overview')

@@ -28,6 +28,7 @@ Start with the [application guide](../README.md) and [project structure](project
 - [Cognitive architecture: perceive, remember, reason, decide, act, learn (2026-10-11)](cognitive-architecture.md)
 - [Understanding everyday phrasing: the 800-scenario testbook (2026-10-11)](natural-language.md)
 - [God's Eye View integration: voice-driven globe, live area data and alerts (2026-10-11)](gods-eye.md)
+- [Turning learned repositories into new Jarvis abilities (2026-10-11)](repo-abilities.md)
 - [Learning GitHub repositories for coding, and multi-context awareness (2026-10-11)](repo-learning.md)
 - [Long-term memory, API repair and bad-weather alerts (2026-10-10)](memory-apis-alerts.md)
 - [WhatsApp automation, incoming calls and voice approvals (2026-10-10)](whatsapp.md)

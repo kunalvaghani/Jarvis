@@ -117,6 +117,49 @@ class LearningTests(unittest.TestCase):
         self.assertEqual((phases[0], phases[-1]), ("learning", "learned"))
         self.assertTrue(all(a[1]["service"] == "github" for a in reports if a[0] == "media_card"))
 
+    def test_large_repository_is_learned_from_its_key_files(self):
+        # Live 2026-10-11: deepseek-ai/deepseek-harness (273 MB) was refused as "too large", so nothing was learned.
+        info = dict(self.INFO, full_name="big/harness", size=280_000)
+        files = {"README.md": b"# Harness\nRuns agents.", "pyproject.toml": b"[project]\nname='harness'",
+                 "harness/cli.py": b"def main(argv=None):\n    return 0\n", "tests/test_cli.py": b"def test():\n    pass\n",
+                 "assets/logo.png": b"\x89PNG"}
+        fetched = []
+        http = Mock()
+
+        def get(url, params=None, headers=None, timeout=None, stream=False):
+            response = Mock(status_code=200)
+            response.raise_for_status = lambda: None
+            if "codeload" in url:
+                raise AssertionError("A large repository is never downloaded whole.")
+            if "/git/trees/" in url:
+                response.json = lambda: {"tree": [{"type": "blob", "path": p, "size": len(b)} for p, b in files.items()]}
+            elif "raw.githubusercontent.com" in url:
+                path = url.split("/main/", 1)[1]
+                fetched.append(path)
+                response.content = files[path]
+            else:
+                response.json = lambda: info
+            return response
+        http.get.side_effect = get
+        instance, reports = learner(http=http)
+        row = instance.learn("big/harness", "you viewed it")
+        self.assertTrue(row["purpose"])
+        self.assertIn("harness/cli.py", fetched)
+        self.assertNotIn("assets/logo.png", fetched)
+        data = instance.knowledge("big/harness")
+        self.assertEqual(data["files_total"], 5)  # Every path is listed, even the ones not downloaded.
+        self.assertIn("harness/cli.py", [m["path"] for m in data["modules"]])
+        self.assertTrue(any("reading its key files" in str(r) for r in reports))
+
+    def test_failed_learning_is_remembered(self):
+        http = Mock()
+        http.get.side_effect = rl.requests.ConnectionError("offline")
+        instance, reports = learner(http=http)
+        with self.assertRaises(rl.LearningError):
+            instance.learn("demo/snake", "you asked")
+        self.assertIn("offline", instance.failures["demo/snake"]["error"])
+        self.assertEqual(reports[-1][1]["phase"], "error")
+
     def test_prepare_searches_then_reuses_memory(self):
         chat = Summary()
         http = self.http_for(self.INFO)

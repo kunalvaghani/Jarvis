@@ -191,6 +191,10 @@ class Actions:
         self.repo_learner = RepoLearner(self, config.get("repo_learning", {}))
         self.repo_learner.enabled = bool(self.repo_learner.enabled and self.memory.enabled)
         REGISTRY["learner"] = self.repo_learner
+        from .repo_abilities import AbilityForge, REGISTRY as ABILITIES
+        self.ability_forge = AbilityForge(self, config.get("repo_abilities", {}))  # Learned repos become new commands.
+        self.ability_forge.enabled = bool(self.ability_forge.enabled and self.repo_learner.enabled)
+        ABILITIES["forge"] = self.ability_forge
         from .gods_eye import GodsEye
         self.gods_eye = GodsEye(self, config.get("gods_eye", {}))
         from .cognition import Cognition
@@ -317,6 +321,7 @@ class Actions:
                 self.report('spoken_reply', 'Nothing is waiting for your approval right now.')
             return
         from .intent_handlers import IMMEDIATE, STATUS, execute as intent_execute
+        self.last_command_at = time.monotonic()  # Background ability building waits until the user is idle.
         if command.kind not in {'island_choice', 'memory_choice'} and hasattr(self, 'command_history'):
             self.command_history.append((command.value or command.kind.replace('_', ' ')).splitlines()[0][:120] if command.value or command.kind else '')
         cognition = getattr(self, 'cognition', None)
@@ -662,6 +667,9 @@ class Actions:
         learner = getattr(self, 'repo_learner', None)
         if learner is not None:
             learner.close()
+        forge = getattr(self, 'ability_forge', None)
+        if forge is not None:
+            forge.close()  # Stops the builder and its child process; an unfinished build is simply not merged.
         eye = getattr(self, 'gods_eye', None)
         if eye is not None:
             eye.close()
@@ -772,6 +780,8 @@ class Actions:
             self.curator.start()
         if self.repo_learner.enabled:
             self.repo_learner.start()
+        if self.ability_forge.enabled:
+            self.ability_forge.start()  # Resumes builds a quit interrupted.
         if self.gods_eye.enabled:
             self.gods_eye.start()  # God's Eye server plus the 25-mile side-thread feed and its alerts.
         self.cognition.start()  # The cognitive loop (docs/cognitive-architecture.md).
@@ -1242,6 +1252,10 @@ class Actions:
         if command.kind in {"repo_learn", "repo_list", "repo_explain", "repo_forget"}:
             from .repo_learning import execute as repo_execute
             return repo_execute(self, command, cancelled)
+        from .repo_abilities import KINDS as ABILITY_KINDS
+        if command.kind in ABILITY_KINDS:
+            from .repo_abilities import execute as ability_execute
+            return ability_execute(self, command, cancelled)
         if command.kind == "api_health":
             from .capability_guide import check_apis
             return check_apis(self, cancelled)
@@ -1575,6 +1589,8 @@ class Actions:
                                                                               "gods_eye_update", "gods_eye_cameras", "memory_save", "memory_forget", "memory_list",
                                                                               "memory_conversations", "repo_learn", "repo_list", "repo_explain",
                                                                               "repo_forget", "api_health", "weather_alerts", "whatsapp_send",
+                                                                              "ability_run", "ability_list", "ability_approve", "ability_disable", "ability_deny", "ability_review",
+                                                                              "ability_enable", "ability_forget", "ability_build", "ability_help",
                                                                               "whatsapp_reply", "messenger_send", "media_search"}:
                             self.report("spoken_reply", str(result)[:600])
                         elif command.kind in {"task", "code_task", "clarified_task", "resume_task", "open", "browse", "browser_search",

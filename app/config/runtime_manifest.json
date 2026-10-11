@@ -227,6 +227,8 @@
     "jarvis.weather_watch",
     "jarvis.capability_guide",
     "jarvis.repo_learning",
+    "jarvis.repo_abilities",
+    "jarvis.ability_runner",
     "jarvis.context_hub",
     "jarvis.gods_eye",
     "jarvis.gods_eye_update",
@@ -606,6 +608,19 @@
     "new_python_dependencies": [],
     "limitations": "not an OS filesystem sandbox; only installed toolchains, existing dependencies and authorized operations; hosted connectors and proprietary Codex internals are not copied",
     "verification": "2026-10-08 IST: actual single/two-worker Qwen Python and LocalGithub trials passed. 2026-10-09 IST: actual three-worker website generation and independent Chrome oracle, native synthetic-image vision, component-completion and GPU-queue regressions passed. See docs/native-coding.md for dated timings, full regression status and limits."
+  },
+  "repo_abilities": {
+    "modules": ["jarvis.repo_abilities", "jarvis.ability_runner"],
+    "configuration": "repo_abilities in config/config.json",
+    "trigger": "After repo_learning saves a repository (asked or browsed; coding-reference learning excluded), or 'build abilities from owner/repo'",
+    "model": "qwen3-coder:30b when its size plus memory_margin_gb fits in free RAM, else fallback_model (qwen3.5:9b); background GPU priority; coder model unloaded after each build",
+    "store": ".jarvis-runtime/abilities/registry.json (atomic), <ability>/v<N>/ability.py, builds.jsonl; outputs JarvisFiles/Abilities/<ability>/ (no-clobber)",
+    "execution": "Separate process per call: own venv (shared stdlib-only _base-env or per-ability env), python -I -B, cleared environment, hidden window, audit-hook guard rails (no processes, writes only in run folder and ability home, reads limited, registry writes and network blocked unless approved), time and process-tree memory limits",
+    "approval": "Standalone standard-library abilities activate after passing their self-test; third-party binary wheels, repository code or network wait for 'approve ability <name>'",
+    "jarvis_source_changes": false,
+    "routing": "Management phrases in commands special parsers; learned trigger phrases checked last in commands._parse so built-in commands win; phrases built-ins already claim are dropped at activation",
+    "long_running_service": false,
+    "automatic_action_replay": false
   },
   "repository_skills": {
     "configuration": "repository_skills.enabled/image",

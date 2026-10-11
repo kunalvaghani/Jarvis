@@ -74,6 +74,12 @@ def parse(text: str) -> Command:
         if not cleaned or cleaned == text.strip().lower():
             raise
         command = _parse(cleaned)  # Second attempt only; a matched command is never reinterpreted.
+    if command.kind == "ask" and command.extra != "web":
+        # A general question is the catch-all; a phrase learned from a repository is more specific.
+        from .repo_abilities import parse_learned
+        learned = parse_learned(text) or parse_learned(spoken_clean(text))
+        if learned:
+            return learned
     if (command.kind in {"spotify_control", "spotify_volume"} and not command.extra
             and not re.search(r"spotify|\u0938\u094d\u092a\u0949\u091f\u093f\u092b\u093e\u0908", text, re.I)):
         # "next song", "volume up": no service named, so it follows whatever is playing (see media_player.resolve).
@@ -170,7 +176,8 @@ def _parse(text: str) -> Command:
     from .weather_watch import parse_command as weather_command
     from .repo_learning import parse_command as repo_command
     from .gods_eye import parse_command as gods_eye_command
-    for special in (memory_command, capability_command, weather_command, repo_command, gods_eye_command):
+    from .repo_abilities import parse_command as ability_command
+    for special in (memory_command, capability_command, weather_command, repo_command, gods_eye_command, ability_command):
         found = special(text)
         if found:
             return found  # "remember that ...", "check your APIs", "is bad weather coming".
@@ -458,4 +465,8 @@ def _parse(text: str) -> Command:
     m = re.fullmatch(r"delete(?: the)? file (.+)", text, re.I)
     if m:
         return Command("delete", filename(m[1]))
+    from .repo_abilities import parse_learned
+    learned = parse_learned(text)  # Commands learned from repositories; checked last so built-in commands win.
+    if learned:
+        return learned
     raise ValueError(f"Command not understood: {text}")

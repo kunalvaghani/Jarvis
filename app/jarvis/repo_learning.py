@@ -90,6 +90,10 @@ class LearningError(ValueError):
     pass
 
 
+class TooLarge(LearningError):
+    """The full source download is over the size limit (large repositories are then read file by file)."""
+
+
 def words(text):
     return {w for w in WORDS.findall(str(text or "").casefold()) if w not in STOP}
 
@@ -251,6 +255,7 @@ class RepoLearner:
         self.current = None          # full_name being learned now
         self.viewing = None          # {"full_name", "since", "learned"}
         self.checked = {}            # title candidate -> (verified full_name or "", at)
+        self.failures = {}           # full_name -> {"at", "error"} for the last failed learning
         self.stop = threading.Event()
         self.thread = None
 
@@ -311,7 +316,7 @@ class RepoLearner:
         for chunk in response.iter_content(65536):
             data.extend(chunk)
             if len(data) > self.max_zip:
-                raise LearningError("Repository download is larger than " + str(self.max_zip // 1_000_000) + " MB; skipped.")
+                raise TooLarge("Repository download is larger than " + str(self.max_zip // 1_000_000) + " MB.")
         return bytes(data)
 
     def info(self, full_name):
@@ -403,16 +408,26 @@ class RepoLearner:
             if not info:
                 raise LearningError(full_name + " was not found on GitHub (or it is private).")
             full_name = info["full_name"]
-            if info.get("size", 0) * 1024 > self.max_zip * 3:
-                raise LearningError(full_name + " is too large to learn (" + str(info["size"] // 1024) + " MB).")
             branch = info.get("default_branch") or "main"
-            self.card("learning", full_name, "Learning in the background — keep Jarvis open", "Downloading source")
-            raw = self.get("https://codeload.github.com/" + full_name + "/zip/refs/heads/" + branch, timeout=60, raw=True)
-            if raw is None:
-                raise LearningError("GitHub did not provide the source of " + full_name + ".")
+            large = info.get("size", 0) * 1024 > self.max_zip * 3
+            raw = None
+            if not large:
+                self.card("learning", full_name, "Learning in the background — keep Jarvis open", "Downloading source")
+                try:
+                    raw = self.get("https://codeload.github.com/" + full_name + "/zip/refs/heads/" + branch, timeout=60, raw=True)
+                except TooLarge:
+                    large = True
+                if raw is None and not large:
+                    raise LearningError("GitHub did not provide the source of " + full_name + ".")
+            if large:
+                # Too big to download whole: read the file list, README, manifests and the key source files instead.
+                self.card("learning", full_name, "Large repository — reading its key files", "Downloading key files")
+                raw = self.light_source(full_name, branch, cancelled)
             if cancelled():
                 raise LearningError("Learning cancelled.")
             facts = analyze_zip(raw)
+            facts["modules"] = [m for m in facts["modules"] if m["_text"].strip()]  # Files listed but not fetched.
+            facts["entry_points"] = [m["path"] for m in facts["modules"] if m["entry"]][:10]
             self.card("learning", full_name, "Read " + str(facts["files_total"]) + " files, " + str(len(facts["modules"])) +
                       " source modules", "Understanding the code")
             ranked = sorted(facts["modules"], key=importance, reverse=True)
@@ -442,16 +457,84 @@ class RepoLearner:
             memory = getattr(self.actions, "memory", None)
             if memory is not None:
                 memory.record("Learned repository", full_name + ": " + row["purpose"])
+            self.failures.pop(full_name, None)
+            forge = getattr(self.actions, "ability_forge", None)
+            if forge is not None:
+                forge.on_learned(full_name, reason)  # Breaks it into new abilities in the background (repo_abilities.py).
             return row
         except LearningError as exc:
-            self.card("error", full_name, str(exc)[:120], "Not learned")
+            self._failed(full_name, str(exc), reason)
             raise
         except (requests.RequestException, zipfile.BadZipFile, ValueError) as exc:
-            self.card("error", full_name, str(exc)[:120], "Not learned")
+            self._failed(full_name, str(exc), reason)
             raise LearningError("Could not learn " + full_name + ": " + str(exc)[:200]) from exc
         finally:
             with self.lock:
                 self.current = None
+
+    def _failed(self, full_name, error, reason):
+        """Keep the reason, so "list your abilities" and "repo status" can say why (the card alone is brief)."""
+        self.failures[full_name] = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "error": error[:300]}
+        self.card("error", full_name, error[:120], "Not learned")
+        forge = getattr(self.actions, "ability_forge", None)
+        if forge is not None:
+            forge.on_learn_failed(full_name, error, reason)
+
+    def light_source(self, full_name, branch, cancelled=lambda: False, limit=45, budget=2_500_000):
+        """A large repository as a small zip: every path from one tree API call, with the README, manifests and the
+        most important source files fetched from raw.githubusercontent.com (no API quota). analyze_zip reads it."""
+        from concurrent.futures import ThreadPoolExecutor
+        from urllib.parse import quote
+        tree = self.get(API + "/repos/" + full_name + "/git/trees/" + quote(branch, safe=""), {"recursive": "1"}, timeout=30)
+        items = [t for t in (tree or {}).get("tree", []) if t.get("type") == "blob" and t.get("path")]
+        if not items:
+            raise LearningError("GitHub did not list the files of " + full_name + ".")
+
+        def visible(path):
+            parts = path.split("/")
+            return not any(p in SKIP_DIRS or (p.startswith(".") and p != ".github") for p in parts[:-1])
+
+        def score(item):
+            path, size = item["path"], item.get("size", 0)
+            name, suffix, depth = Path(path).name, Path(path).suffix.casefold(), path.count("/")
+            if re.fullmatch(r"(?i)readme(\.\w+)?", name) and not depth:
+                return 1000
+            if name in MANIFESTS and depth <= 1:
+                return 500 - depth
+            if suffix not in CODE or suffix in {".html", ".css", ".scss", ".sql"} or size > 150_000:
+                return -1
+            test = re.search(r"(?i)(?:^|/)(?:tests?|spec|__tests__|examples?|docs?|benchmarks?)/|_test\.|\.test\.|test_", path)
+            return 50 + (40 if ENTRY.search(path) else 0) - 8 * depth - (60 if test else 0) + min(size, 40_000) / 4000
+
+        items = [t for t in items if visible(t["path"])][:20000]
+        chosen, used = [], 0
+        for item in sorted(items, key=score, reverse=True):
+            if score(item) < 0 or len(chosen) >= limit:
+                break
+            if used + item.get("size", 0) <= budget:
+                chosen.append(item["path"])
+                used += item.get("size", 0)
+
+        def fetch(path):
+            if cancelled():
+                return path, b""
+            try:
+                response = self.http.get("https://raw.githubusercontent.com/" + full_name + "/" + quote(branch, safe="") + "/" +
+                                         quote(path), headers={"User-Agent": HEADERS["User-Agent"]}, timeout=(5, 30))
+                return path, response.content[:400_000] if response.status_code == 200 else b""
+            except requests.RequestException:
+                return path, b""
+
+        with ThreadPoolExecutor(6) as pool:
+            fetched = dict(pool.map(fetch, chosen))
+        if not any(fetched.values()):
+            raise LearningError("Could not download any files of " + full_name + ".")
+        buffer = io.BytesIO()
+        prefix = full_name.split("/")[1] + "-" + re.sub(r"[^A-Za-z0-9._-]", "_", branch) + "/"
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+            for item in items:
+                archive.writestr(prefix + item["path"], fetched.get(item["path"], b""))
+        return buffer.getvalue()
 
     def _save(self, full_name, info, facts, ranked, summary, reason):
         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -664,6 +747,9 @@ class RepoLearner:
         self.viewing["queued"] = True
         if self.known(candidate):
             self.viewing["learned"] = True
+            forge = getattr(self.actions, "ability_forge", None)
+            if forge is not None:
+                forge.on_viewed(candidate)  # Learned before abilities existed: build them now.
             return
         threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
 
@@ -675,6 +761,9 @@ class RepoLearner:
             try:
                 info = self.info(candidate)
             except Exception:
+                if self.viewing and self.viewing["candidate"] == candidate:
+                    self.viewing["queued"] = False  # Rate limit or network: try again while it stays open.
+                    self.viewing["since"] = self.clock() + 60
                 return
             full_name = info["full_name"] if info else ""
             self.checked[candidate] = (full_name, self.clock())
@@ -698,7 +787,8 @@ def parse_command(text):
                          r"([A-Za-z0-9-]{1,39}/[A-Za-z0-9._-]{1,100})/?", clean, re.I)
     if match:
         return Command("repo_learn", match[1])
-    if re.fullmatch(r"(?:learn|study|understand|read)(?: this| the current)? (?:repo(?:sitory)?|project on github|github repo)", clean, re.I):
+    if (re.fullmatch(r"(?:learn|study|understand|read)(?: this| the current)? (?:repo(?:sitory)?|project on github|github repo)", clean, re.I)
+            or re.fullmatch(r"(?:learn|study) (?:this|it|this one|that)(?: one| too| now)?", clean, re.I)):
         return Command("repo_learn", "")
     if re.fullmatch(r"(?:what|which) (?:repos|repositories|projects) (?:have you|did you) (?:learned|learn|studied|saved)|"
                     r"(?:list|show)(?: me)? (?:your |the )?learned (?:repos|repositories)|repo learning status", clean, re.I):

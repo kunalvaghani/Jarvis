@@ -6,6 +6,9 @@ Updated 2026-10-10 IST. Jarvis now learns public GitHub repositories and codes w
 
 *Rendered preview (2026-10-10) with sample text.*
 
+Each learned repository can also become new spoken commands that do what the repository does; see
+[turning learned repositories into new Jarvis abilities](repo-abilities.md).
+
 ## What existed before
 
 `repository_skills.py` (with `repo_acquisition.py` and `repo_analysis.py`) takes a pinned snapshot of a Python repository, analyses its functions statically, and lets approved functions run as sandboxed "skills" in Docker. That pipeline is unchanged. It is Python-only and built for execution, though. Its knowledge never reached coding tasks, nothing searched GitHub for a task, and nothing watched what you browse.
@@ -16,7 +19,7 @@ Before a coding task that builds or adds something ("create a snake game in Java
 
 1. **Memory first.** Repositories already learned are matched against the task by keywords. A good match (at least half of the task's key words) is used directly, with no internet and no delay.
 2. **Otherwise search GitHub.** The local model turns the task into a short search query and language. The public GitHub API returns candidates, filtered to not archived, not forks, not huge, and at least half the query words in the name, description or topics. The model then reads the top candidates' names and descriptions and keeps only those whose main purpose fits. For example, it rejected a "convert CSV/HTML/Markdown to SQLite" tool for a markdown-to-HTML task.
-3. **Learn it.** The source zip comes from codeload.github.com (no API quota), up to 40 MB, and is read as text only: never executed, imported or installed. Vendor and build folders are skipped. Jarvis records:
+3. **Learn it.** The source zip comes from codeload.github.com (no API quota), up to 40 MB, and is read as text only: never executed, imported or installed. Larger repositories (since 2026-10-11) are read from one file-list API call plus the README, manifests and up to 45 key source files from raw.githubusercontent.com, instead of being refused. Vendor and build folders are skipped. Jarvis records:
    - languages, the folder structure, manifests (package.json, pyproject, Cargo.toml, go.mod, …), the README and entry points;
    - functions and classes per file: Python through its syntax tree; JavaScript/TypeScript, Go, Rust, Java/Kotlin/C#, C/C++, Ruby and PHP through declaration patterns;
    - imports.
@@ -49,7 +52,7 @@ Your browser is never touched and nothing extra is opened. The island shows **Le
 
 | Say | Does |
 | --- | --- |
-| "learn this repo" | Learns the repository open in the browser now. |
+| "learn this repo" / "learn this" | Learns the repository open in the browser now. |
 | "learn psf/requests" / "learn https://github.com/psf/requests" | Learns that repository in the background. |
 | "what is this repo about" / "what did you learn about psf/requests" | Answers from memory (or starts learning it). |
 | "what repos have you learned" | Lists them, plus anything learning now or waiting. |

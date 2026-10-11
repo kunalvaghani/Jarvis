@@ -42,6 +42,19 @@ def situation(actions, question=""):
             found["viewing_repository"] = entry
         if status.get("learning_now") or status.get("queued"):
             found["background_learning"] = {"now": status.get("learning_now"), "waiting": status.get("queued", [])[:4]}
+    forge = getattr(actions, "ability_forge", None)
+    if forge is not None and forge.enabled:
+        try:
+            learned = forge.summary()
+            if learned:
+                found["abilities_from_repos"] = learned  # Commands Jarvis built from repositories it learned.
+            building = forge.status()
+            if building.get("building"):
+                found["building_ability"] = building["building"]
+            if building.get("awaiting_approval"):
+                found["abilities_waiting_for_approval"] = building["awaiting_approval"][:4]
+        except Exception:
+            pass
     state = getattr(actions, "task_state", None)
     snapshot = state.snapshot() if state is not None else None
     if snapshot and snapshot.get("status") in {"running", "paused"}:
