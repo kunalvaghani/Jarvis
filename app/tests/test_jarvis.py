@@ -84,7 +84,7 @@ class EngineTests(unittest.TestCase):
     def test_dictation_phrases_explain_push_to_write(self):
         self.feed("jarvis start dictation", True)
         self.feed("stop dictation", True)
-        self.assertEqual(self.sent, [Command("write_help"), Command("write_help")])
+        self.assertEqual(self.sent, [Command("write_help", "start"), Command("write_help", "stop")])  # Hands-free writing.
 
     def test_exact_write_keeps_then_inside_the_text(self):
         self.feed("jarvis write exactly hello then open paint", True)

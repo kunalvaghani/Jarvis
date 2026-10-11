@@ -35,11 +35,11 @@ MODULES = ("perception", "working_memory", "long_term_memory", "reasoning", "exe
 READ_ONLY = {"ask", "queue_status", "jarvis_status", "system_info", "behavior", "memory_list", "memory_conversations",
              "repo_list", "repo_explain", "api_health", "weather_alerts", "gods_eye_explain", "gods_eye_status",
              "repeat_last", "project_recent", "project_list", "windows_catalog", "context_search", "list_controls",
-             "whatsapp_read", "cognition_predict", "realtime"}
+             "whatsapp_read", "cognition_predict", "realtime", "screen_info"}
 SENDS = {"whatsapp_send", "whatsapp_reply", "messenger_send"}
 WRITES = {"create", "modify", "delete", "rename", "create_in_folder", "modify_in_folder", "delete_in_folder",
           "write_text", "compose_text", "type", "dictate", "memory_save", "memory_forget", "code_task", "run_command"}
-UI = {"click_control", "choose_control", "select_context", "windows_command", "close_app"}
+UI = {"click_control", "choose_control", "select_context", "windows_command", "close_app", "screen_act"}
 MEDIA = {"play_media", "media_search", "media_control", "spotify_control", "spotify_volume", "spotify_search",
          "spotify_open_playlist", "media_related"}
 VIEW = {"gods_eye_show", "gods_eye_camera", "gods_eye_view", "gods_eye_cameras", "open", "open_folder", "open_file",

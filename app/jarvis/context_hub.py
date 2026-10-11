@@ -86,6 +86,10 @@ def situation(actions, question=""):
     weather = getattr(actions, "weather_watch", None)
     if weather is not None and weather.last and weather.last.get("hazards"):
         found["weather_alerts"] = [h["message"][:140] for h in weather.last["hazards"][:2]]
+    screen = getattr(actions, "screen", None)
+    focus = screen.current() if screen is not None else None
+    if focus and focus.get("exe"):
+        found["app_in_front"] = screen.knowledge.describe(focus["exe"], focus["title"], focus["class"])  # What it does, its buttons.
     cognition = getattr(actions, "cognition", None)
     if cognition is not None and cognition.enabled:
         workspace = cognition.working_memory()

@@ -67,7 +67,8 @@ a background task queue, natural phrasing and faster step-by-step planning; see
 [learning GitHub repositories for coding with multi-context awareness](app/docs/repo-learning.md), and
 [God's Eye View driven by voice with live area alerts](app/docs/gods-eye.md), and
 [understanding everyday phrasing across the 800-scenario testbook](app/docs/natural-language.md), and
-[a six-module cognitive architecture with a world model, learning and a live Mind view](app/docs/cognitive-architecture.md). The [previous repository overview](app/docs/repository-overview-history.md)
+[a six-module cognitive architecture with a world model, learning and a live Mind view](app/docs/cognitive-architecture.md), and
+[screen pre-awareness that offers help for the app in front, opens YouTube videos by a title word and writes what you dictate](app/docs/screen-awareness.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

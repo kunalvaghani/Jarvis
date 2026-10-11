@@ -195,6 +195,9 @@ class Actions:
         self.gods_eye = GodsEye(self, config.get("gods_eye", {}))
         from .cognition import Cognition
         self.cognition = Cognition(self, config.get("cognition", {}))  # Perceive -> remember -> reason -> act -> learn.
+        from .screen_awareness import ScreenAwareness
+        self.screen = ScreenAwareness(self, config.get("screen_awareness", {}))  # Offers help for the app in front.
+        self.hands_free = self.hands_free_state = None  # Set by the app while the microphone is on.
         from .context_hub import prompt_block
         self.memory.situation = lambda question="": prompt_block(self, question)  # Several live contexts at once.
         from .quick_answers import QuickAnswers
@@ -304,6 +307,9 @@ class Actions:
         from .whatsapp import answer_prompt
         if answer_prompt(self, command):
             return  # A reply to a waiting WhatsApp question (contact choice, preview approval, call).
+        screen = getattr(self, 'screen', None)
+        if screen is not None and command.kind != 'screen_act' and screen.answer(command):
+            return  # A reply to a screen offer ("yes", "no", or the detail such as a word from a video title).
         if command.kind in {'approval_answer', 'whatsapp_answer'}:
             if self.approvals_waiting and self.decision_handler:
                 self.decision_handler(command.value == 'yes')
@@ -331,7 +337,9 @@ class Actions:
         if command.kind in STATUS:
             def status_answer():
                 try:
-                    self.report('spoken_reply', intent_execute(self, command))
+                    reply = intent_execute(self, command)
+                    if reply:
+                        self.report('spoken_reply', reply)
                 except Exception as exc:
                     self.report('spoken_reply', "I couldn't check that: " + str(exc)[:160])
             threading.Thread(target=status_answer, name='Jarvis status answer', daemon=True).start()
@@ -1471,6 +1479,14 @@ class Actions:
             return f"Opened {command.value}; it has not come to the front yet."
         if command.kind == "write_help":
             from .writing import HELP
+            if command.value == "start" and getattr(self, "hands_free", None) is not None:
+                return self.screen.command("dictate")  # Hands-free writing into the app in front.
+            if command.value == "stop":
+                state = getattr(self, "hands_free_state", None)
+                if state is not None and state() is not None:
+                    self.hands_free(False)
+                    return "Stopped writing."
+                return "I'm not writing anything right now."
             return HELP
         if command.kind in {"write_text", "compose_text"}:
             # No dictation mode: one composed or verbatim piece of text, then back to normal.
@@ -1553,7 +1569,9 @@ class Actions:
                         if command.kind == "write_text":
                             self.last_typed = command.value
                         from .intent_handlers import SPOKEN as INTENT_SPOKEN
-                        if command.kind in INTENT_SPOKEN or command.kind in {"gods_eye_show", "gods_eye_explain", "gods_eye_status",
+                        if (command.kind in INTENT_SPOKEN and not result) or command.kind == "write_help" and not result:
+                            pass  # Nothing to say (the action already spoke, or asked a follow-up).
+                        elif command.kind in INTENT_SPOKEN or command.kind in {"gods_eye_show", "gods_eye_explain", "gods_eye_status",
                                                                               "gods_eye_update", "gods_eye_cameras", "memory_save", "memory_forget", "memory_list",
                                                                               "memory_conversations", "repo_learn", "repo_list", "repo_explain",
                                                                               "repo_forget", "api_health", "weather_alerts", "whatsapp_send",

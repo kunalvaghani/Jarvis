@@ -13,6 +13,9 @@ import threading
 import time
 
 ASR_PROMPT = "Jarvis, Spotify, YouTube, Notepad, Calculator, File Explorer, Python."
+# Ends hands-free writing; matched alone or at the end of a phrase ("... see you tomorrow. Stop writing.").
+STOP_WRITING = re.compile(r"(?:^|[\s,.!?]+)(?:(?:hey |ok |okay )?jarvis[, ]+)?(?:stop|end|finish|quit) (?:writing|dictating|dictation|typing)"
+                          r"(?: now| please| jarvis)?[.!?]*$|^(?:that'?s all|i'?m done|done writing)[.!?]*$", re.I)
 
 
 @dataclass
@@ -148,8 +151,21 @@ class Listener:
                 if job.write:
                     discarded = getattr(self.push_to_write, 'discarded', ())
                     if job.final and text.strip() and self.writer and job.session not in discarded:
-                        self.report("final", text.strip())
-                        self.writer(text.strip(), job.session)
+                        text = text.strip()
+                        if getattr(self.push_to_write, 'latched', False):
+                            # Hands-free writing: "stop writing" (alone or at the end) ends it and isn't typed.
+                            stop = STOP_WRITING.search(text)
+                            if stop:
+                                text = text[:stop.start()].rstrip(' ,')
+                            self.push_to_write.last_write = time.monotonic()
+                            if text:
+                                self.report("final", text)
+                                self.writer(text, job.session)
+                            if stop:
+                                self.push_to_write.latch(False)
+                            continue
+                        self.report("final", text)
+                        self.writer(text, job.session)
                     continue
                 accepted = self.input_filter(text, job.playback, job.references) if self.input_filter else command_text(text)
                 if accepted is None:

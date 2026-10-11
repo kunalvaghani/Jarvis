@@ -23,7 +23,11 @@ Jarvis no longer has a dictation mode. There are three ways to put text where yo
 - Line breaks are typed as Shift+Enter: a new line in editors, email bodies and chat boxes, where a plain Enter
   would send. In terminals (Command Prompt, PowerShell, Windows Terminal, WSL) line breaks become spaces, so
   typed text never runs a command.
-- `start dictation`, `stop dictation` and a bare `write` explain these options instead of starting a mode.
+- `start dictation`, `stop dictation` and a bare `write` explained these options instead of starting a mode (2026-10-10).
+  Since 2026-10-11, `start dictation` (or "take dictation", or "yes" to "do you have something in mind to write?")
+  starts **hands-free writing**: push-to-write stays on without holding the keys until you say "stop writing",
+  press Esc, or stay quiet for two minutes. See [screen pre-awareness](screen-awareness.md). A bare `write` still
+  explains the options.
 
 ## Push-to-write
 
@@ -34,6 +38,10 @@ Jarvis to normal. Phrases follow your cursor, so you can click into another fiel
 
 Shortcuts are not hijacked: pressing any other key while holding Ctrl+Alt (Ctrl+Alt+Del, Ctrl+Alt+T …) cancels
 push-to-write, and the half-spoken phrase is dropped. Right Alt (AltGr) does not trigger it.
+
+Fixed 2026-10-11: the writer could drop a character near the start of a phrase in Windows 11 Notepad ("Hello from"
+became "Hello rrom") because its typing helper was created lazily on its background thread. It's now created up front;
+live re-checks typed the phrase exactly.
 
 Implementation: [push_to_write.py](../jarvis/push_to_write.py) (keyboard hook),
 [audio.py](../jarvis/audio.py) (marks speech spoken while the keys are held),

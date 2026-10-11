@@ -5,6 +5,10 @@ Alt release, which is re-sent after a harmless unassigned key (0xE8), because a 
 Alt release puts Notepad, Office and similar apps into menu-shortcut mode, where the
 next typed letters would run menu commands. Holding the keys alone activates writing;
 pressing any other key during the hold (Ctrl+Alt+Del, Ctrl+Alt+T ...) cancels it.
+
+Hands-free writing (latch): after "yes" to "do you have something in mind to write?", or
+"start dictation", writing stays on without holding keys until you say "stop writing",
+press Esc, or stay quiet for two minutes.
 """
 import ctypes
 from ctypes import wintypes
@@ -31,6 +35,8 @@ class PushToWrite:
         self.session = 0
         self.discarded = set()  # Holds cancelled by another key: their speech is not typed.
         self.ctrl = self.alt = self.other = self.combo = False
+        self.latched = False  # Hands-free writing: on without holding the keys.
+        self.last_write = 0.
         self.lock = threading.Lock()
         self.thread = None
         self.thread_id = None
@@ -42,6 +48,10 @@ class PushToWrite:
         if injected:
             return False  # Jarvis's own typing and the mask key pass through untouched.
         block = False
+        if self.latched:
+            if vk == 0x1B and down:  # Esc ends hands-free writing.
+                self.latch(False)
+            return False
         with self.lock:
             if vk == VK_LCONTROL:
                 self.ctrl = down
@@ -62,6 +72,19 @@ class PushToWrite:
         if stop:
             self._set(False, discard=self.other)
         return block
+
+    def latch(self, on=True):
+        """Start or stop hands-free writing."""
+        with self.lock:
+            changed = self.latched != on
+            self.latched = on
+            self.last_write = self.clock()
+        if changed:
+            self._set(on)
+
+    def latched_since(self):
+        """When hands-free writing last typed something (None when it's off)."""
+        return max(self.last_write, 0.) if self.latched else None
 
     def _arm(self, started):
         while self.clock() - started < self.hold_seconds:

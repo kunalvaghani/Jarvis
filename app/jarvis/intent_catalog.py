@@ -94,6 +94,21 @@ RULES = [
     (r"repeat (?:only |just )?(?:the |your )?last (?:sentence|line|part)", lambda m: C("repeat_last", "sentence")),
     (r"(?:stop|quit) talking.*|be quiet.*|shut up.*|hush.*|stop speaking.*", lambda m: C("stop_speaking", "")),
     (r"let me interrupt.*|(?:can|may) i interrupt.*", lambda m: C("behavior", "barge_in")),
+    # Screen pre-awareness and app knowledge (screen_awareness.py, app_knowledge.py).
+    (r"(?:what|which) apps (?:do i have|have i got|are (?:installed|on (?:my|this) (?:pc|computer|laptop)))|list (?:all )?(?:of )?my (?:apps|programs|applications)|"
+     r"what (?:apps|programs|software) (?:do i have|are installed)(?: on (?:my|this) (?:pc|computer|laptop))?",
+     lambda m: C("screen_info", "apps")),
+    (r"what (?:does|can) this (?:app|program|application) do|what is this (?:app|program|application)|what can (?:you|i) do (?:in|with) this (?:app|program)|"
+     r"what are (?:the )?features of this (?:app|program)", lambda m: C("screen_info", "this_app")),
+    (r"what buttons (?:are there|are on (?:the )?screen|does this app have|can you see|are here)(?: here| on screen)?|(?:list|show|tell me) the buttons (?:on (?:the )?screen|here|in this app)",
+     lambda m: C("screen_info", "buttons")),
+    (r"(?:stop|don'?t keep) asking (?:me )?about (?:this app|this screen|what'?s on (?:the )?screen)|don'?t ask (?:me )?about this app(?: again)?",
+     lambda m: C("screen_info", "mute_app")),
+    (r"(?:pause|stop|turn off|disable|switch off) (?:the )?screen (?:suggestions|awareness|questions|offers)|stop asking (?:me )?(?:questions )?about (?:my|the) screen",
+     lambda m: C("screen_info", "pause")),
+    (r"(?:resume|start|turn on|enable|switch on) (?:the )?screen (?:suggestions|awareness|questions|offers)", lambda m: C("screen_info", "resume")),
+    (r"what can you do (?:here|on this screen|for me here|in this window)|help me with (?:this|what'?s on (?:the|my)) (?:app|screen|window)|"
+     r"any suggestions (?:here|for (?:this|my) screen)|what would you suggest here", lambda m: C("screen_info", "offer_now")),
     # Cognitive architecture (cognition.py): working memory, world-model predictions, lessons.
     (r"(?:what(?:'s| is) (?:in )?|show (?:me )?|tell me (?:what'?s in )?)?your working memory|what are you (?:thinking|focus(?:s)?ing) (?:about|on)(?: right now)?|"
      r"what are you thinking(?: right now)?|(?:what(?:'s| is) (?:your )?)?cogniti(?:on|ve) (?:status|loop|state)|"

@@ -26,6 +26,16 @@ environments resolve correctly, and recovery snapshots match the final source.
 These are relocation/regression checks; historical live feature measurements
 retain their original dates. Jarvis remains deliberately stopped.
 
+**Screen pre-awareness (2026-10-11 IST):** Jarvis notices the app in front of you and, after a few seconds, offers the
+one thing you most likely want there. On YouTube: "Want me to open one of the videos on screen? Just say a word from its
+title". It reads the titles on screen and opens the matching video. In Notepad and other notes apps: "Do you have something
+in mind to write?" A yes puts the cursor in the note and types what you say until "stop writing". Other apps get a question
+that fits what they do. First, Jarvis took stock of the 333 apps on this PC: it sorted them into categories, wrote 34 app
+profiles, and now learns each app's button names live while that app is in front. Private windows never get questions.
+"Start dictation" now starts hands-free writing. A push-to-write bug that dropped a character in Notepad is fixed. Live
+Notepad and YouTube checks passed; regression passed and readiness is `ready`. [How it works, apps covered, safety and live
+results](docs/screen-awareness.md).
+
 **Cognitive architecture (2026-10-11 IST):** Jarvis now runs as one perceive → remember → reason → decide → act → learn
 loop, organised as the six modules of the "Blueprint for Building J.A.R.V.I.S." diagram. Its existing tools, APIs, skills, memories and coding
 agents are wired into the module they belong to. Before an action runs, a world model predicts its effects, whether it
@@ -906,7 +916,7 @@ Whisper is not a native streaming recognizer. This app continuously captures aud
 
 Say **then**, **and then**, or **next command** between tasks to execute completed clauses without ending your speech. Without a separator, a command waits for the speech recognizer's natural endpoint. Commands before a spoken separator can already have run, so later corrections cannot undo them.
 
-There is no dictation mode (2026-10-10). After an app-opening command, **and write** / **and type** write into that app, including when recognition splits the sentence into separate segments; a “then” inside a write command is part of the text. See [writing by voice and push-to-write](docs/push-to-write.md).
+There was no dictation mode as of 2026-10-10. Since 2026-10-11, "start dictation" starts hands-free writing until "stop writing" (see [screen pre-awareness](docs/screen-awareness.md)). After an app-opening command, **and write** / **and type** write into that app, including when recognition splits the sentence into separate segments; a “then” inside a write command is part of the text. See [writing by voice and push-to-write](docs/push-to-write.md).
 
 Deletion and renaming wait for a finalized speech segment, even when “then” is spoken; subsequent tasks stay behind them. Each deletion now needs a separate approval dialog showing the exact file path. Approved files go to the Windows Recycle Bin. Silence for 90 seconds returns to wake-word mode. The microphone remains active for wake detection until you click Stop listening, Stop all tasks, or close the window. No background Windows service or startup registration is installed.
 
@@ -1242,6 +1252,7 @@ Jarvis/
 | `launcher.py`, `recovery.py`, `model_recovery.py` | Process ownership, startup readiness, health checks, and bounded silent repair. |
 | `gpu_scheduler.py` | Process-shared inference priority, speech reservation, partial offload, bounded cache handoff and metadata health. |
 | `spotify.py`, `gods_eye_view.py` | Spotify-specific sessions and owned globe server lifecycle. |
+| `screen_awareness.py`, `app_knowledge.py` | Screen pre-awareness: watches the app in front, asks its question, and acts on yes (open a video by a word of its title, hands-free writing, press a named button, screen answers). Also the inventory of installed apps, 34 app profiles, and button names learned live. |
 | `cognition.py`, `island_mind.py` | The cognitive loop: perception, working memory, long-term recall, the world model's predictions, executive control and learning from outcomes, plus the island's live **Mind** view. |
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |

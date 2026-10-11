@@ -64,6 +64,9 @@ class App:
         self.load_microphones()
         self.actions.approval_handler = self.request_approval
         self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
+        # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
+        self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
+            getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
         if not self.config.get('_ui_verification', False):
             self.actions.start_whatsapp_watch()
             self.actions.start_background_memory()
@@ -280,6 +283,10 @@ class App:
                 self.actions.anticipation.observe_window(win32gui.GetWindowText(hwnd), hwnd)
                 title = win32gui.GetWindowText(hwnd)
                 self.actions.cognition.perceive_window(title)  # Vision: what's in front of you.
+                screen = getattr(self.actions, 'screen', None)
+                if screen is not None:
+                    info = self.actions.live_app.windows.get(hwnd) or {}
+                    screen.observe(hwnd, title, info.get('executable', ''), info.get('window_class', ''))
                 if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
                     import psutil
                     self.actions.repo_learner.observe_title(title, psutil.Process(
@@ -290,6 +297,12 @@ class App:
                 self.actions.anticipation.observe_window('', 0)
         except Exception:
             pass
+        screen = getattr(getattr(self, 'actions', None), 'screen', None)
+        if screen is not None:
+            try:
+                screen.tick()
+            except Exception:
+                pass
         self.root.after(300, self.remember_external_window)
 
     def report(self, kind, message):
@@ -447,6 +460,14 @@ class App:
                 self.ui_activity = ""
                 self.live.set(message[:450])
                 self.speech.say(message)
+            elif kind == "screen_offer":
+                self.question.set(message[:700])  # Screen pre-awareness: answer with yes, no, or the detail.
+                self.live.set(message[:450])
+                self.log_line("question", message)
+                self.speech.say(message)
+                engine = getattr(self, 'engine', None)
+                if engine is not None and not engine.active:
+                    engine.activate()
             elif kind == "level":
                 self.level["value"] = message
             elif kind == "backend":
@@ -493,6 +514,7 @@ class App:
                 self.speech.interrupt()
                 self.actions.submit(command)
         engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
+        self.engine = engine  # Screen offers wake it so a bare "yes" is heard.
         from jarvis.voice_input import VoiceInput
         from jarvis.command_cleanup import CommandCleanup
         voice_input = VoiceInput(self.speech)
@@ -506,13 +528,16 @@ class App:
                 self.actions.dictation_active = active  # Pauses on-screen suggestions while writing.
                 if active:
                     self.speech.interrupt()
-                    self.report("state", "Writing what you say · let go of Left Ctrl + Left Alt to stop")
+                    self.report("state", "Writing what you say · say 'stop writing' or press Esc to stop"
+                                if push_to_write.latched else "Writing what you say · let go of Left Ctrl + Left Alt to stop")
                 else:
                     self.report("state", "Awake · ready for commands" if not discarded else
                                 "Push-to-write cancelled (another key was pressed)")
             push_to_write = PushToWrite(writing_changed,
                                         self.config.get("push_to_write", {}).get("hold_seconds", 0.2))
             push_to_write.start()
+            self.actions.hands_free = push_to_write.latch  # Hands-free writing ("yes" in Notepad, "start dictation").
+            self.actions.hands_free_state = push_to_write.latched_since
         self.push_to_write, self.spoken_writer = push_to_write, writer
         self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
                                  playback=self.speech.output_recent, input_filter=voice_input.filter,
@@ -534,6 +559,7 @@ class App:
             self.desk.media.repair()  # Cancel only an owned outstanding media child; never replay it.
         self.listening_requested = False
         self.session += 1
+        self.actions.hands_free = self.actions.hands_free_state = None
         for owned in (getattr(self, 'push_to_write', None), getattr(self, 'spoken_writer', None)):
             if owned is not None:
                 owned.stop() if hasattr(owned, 'stop') else owned.close()

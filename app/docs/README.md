@@ -24,6 +24,7 @@ Start with the [application guide](../README.md) and [project structure](project
 - [Historical Jarvis HUD](hud-interface.md)
 - [Jarvis's own cursor and physical clicks](independent-cursor.md)
 - [Interactive Jarvis island](interactive-island.md)
+- [Screen pre-awareness: offers for the app in front, YouTube by title word, hands-free writing (2026-10-11)](screen-awareness.md)
 - [Cognitive architecture: perceive, remember, reason, decide, act, learn (2026-10-11)](cognitive-architecture.md)
 - [Understanding everyday phrasing: the 800-scenario testbook (2026-10-11)](natural-language.md)
 - [God's Eye View integration: voice-driven globe, live area data and alerts (2026-10-11)](gods-eye.md)

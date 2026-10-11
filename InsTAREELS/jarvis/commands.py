@@ -264,8 +264,10 @@ def _parse(text: str) -> Command:
         return Command("queue_status")
     if re.fullmatch(r"(?:resume|continue|finish) (?:the |my )?(?:last |unfinished |interrupted )?task|continue where (?:you|we) left off", text, re.I):
         return Command("resume_task")
-    if re.fullmatch(r"(?:start|stop|begin|end|enter|exit)(?: the)? (?:dictation|typing|writing)(?: mode)?|dictation(?: mode)?", text, re.I):
-        return Command("write_help")  # No dictation mode; push-to-write or a write command instead.
+    if re.fullmatch(r"(?:start|stop|begin|end|enter|exit)(?: the)? (?:dictation|typing|writing)(?: mode)?|dictation(?: mode)?|"
+                    r"take (?:a )?dictation|(?:start )?writing what i say|(?:i want to|let me) dictate(?: something)?", text, re.I):
+        # Hands-free writing (typed into the app in front until "stop writing"); help when the microphone is off.
+        return Command("write_help", "stop" if re.match(r"(?:stop|end|exit)\b", text, re.I) else "start")
     if re.fullmatch(r"(?:yes|yes please|yeah|yep|do it|no|no thanks|nope)", text, re.I):
         return Command("confirm_suggestion", "no" if text.lower().startswith("no") else "yes")
     if re.fullmatch(r"(?:suggest a button|suggest an option|what do i usually choose)", text, re.I):

@@ -164,6 +164,14 @@ class SpokenWriter:
         import queue
         import threading
         self.report = report
+        if desktop is None:
+            # Create the typing helper here, not lazily on the writer thread: built there, Windows 11 Notepad
+            # dropped a character early in a phrase ("Hello from" became "Hello rrom"; measured 2026-10-11).
+            try:
+                from .actions import Desktop
+                desktop = Desktop()
+            except (RuntimeError, OSError):
+                desktop = None
         self.desktop = desktop
         self.queue = queue.Queue(maxsize=50)
         self.last = (None, None)  # (session, window) of the previous phrase.

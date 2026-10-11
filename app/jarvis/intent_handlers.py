@@ -14,8 +14,8 @@ from datetime import datetime
 from pathlib import Path
 
 IMMEDIATE = {"behavior", "conversation_style", "repeat_last", "stop_speaking", "cognition_predict"}  # Answered at once, never queued.
-STATUS = {"jarvis_status", "system_info"}  # Read-only; answered off the queue so a running task never delays them.
-QUEUED = {"whatsapp_read", "gods_eye_camera", "media_related", "memory_summarize", "messenger_focus"}  # Touch apps.
+STATUS = {"jarvis_status", "system_info", "screen_info"}  # Read-only; answered off the queue so a running task never delays them.
+QUEUED = {"whatsapp_read", "gods_eye_camera", "media_related", "memory_summarize", "messenger_focus", "screen_act"}  # Touch apps.
 SPOKEN = IMMEDIATE | STATUS | QUEUED
 
 BEHAVIOR = {
@@ -699,6 +699,10 @@ def execute(actions, command, cancelled=lambda: False):
         return repeat_last(actions, command.value)
     if kind == "cognition_predict":
         return cognition_predict(actions, command.value)
+    if kind == "screen_info":
+        return actions.screen.command(command.value)
+    if kind == "screen_act":
+        return actions.screen.act(json.loads(command.value), cancelled)
     if kind == "jarvis_status":
         return jarvis_status(actions, command.value)
     if kind == "system_info":
