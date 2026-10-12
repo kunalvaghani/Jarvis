@@ -72,6 +72,15 @@ limits and live results](docs/gods-eye.md).
 
 ![Live God's Eye views opened by Jarvis — Persian Gulf military layers, Statue of Liberty, a London traffic camera, the Eiffel Tower](artifacts/media/gods-eye-jarvis-live-2026-10-11.jpg)
 
+**Pip is fully interactive (2026-10-12 IST):** 35 emotions, each with its own animation, on a shaded 3D-style
+marshmallow with sphere eyes that follow your mouse, badges, particles and outfits. It reacts to your clicks (boop,
+love, dizzy, ouch), drags, hovering and file drops. It reacts to what Jarvis does (listening, talking, thinking,
+working, approvals, questions, errors, finished tasks, WhatsApp, repository learning, music) and to what you're doing
+(coding, video, chat, documents, idle, back from a break). It also has its own energy, affection and boredom, with
+random fidgets. Regression: 1,595 tests passed with one skip; readiness `ready`. [Emotions and triggers](docs/file-buddy.md#pip-fully-interactive-since-2026-10-12).
+
+![All of Pip's emotions, rendered from the island's drawing code — not a screenshot](artifacts/media/pip-emotions.png)
+
 **Pip, and files dropped on the island (2026-10-12 IST):**
 
 - **Pip.** The island has a little animated friend in place of the "J" badge. Pip blinks, looks around, gets hungry
@@ -1296,7 +1305,8 @@ Jarvis/
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
 | `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |
-| `island_buddy.py`, `file_drop.py`, `documents.py` | Pip, the island's animated friend, and its moods. Files dropped on the island: drop target, the ask / WhatsApp / email flow, and the LightRAG- or GraphRAG-style document index with session and long-term memory. |
+| `buddy_engine.py` | Pip's brain: emotion priorities from clicks, drops, Jarvis's state and events, the app in front, your idle time, and its own energy, affection and boredom. |
+| `island_buddy.py`, `file_drop.py`, `documents.py` | Pip's look and its 35 animated emotions. Files dropped on the island: drop target, the ask / WhatsApp / email flow, and the LightRAG- or GraphRAG-style document index with session and long-term memory. |
 | `repo_abilities.py`, `ability_runner.py` | Turning learned repositories into new abilities: a coding model breaks the repository into spoken commands, writes `ability.py`, which is statically checked and tested in its own guarded process and environment, then merged atomically. Also approvals, routing after built-in commands, and running with copied inputs and no-clobber outputs. |
 | `repo_learning.py`, `context_hub.py` | Learning public GitHub repositories (search, pick, multi-language analysis, summary, Obsidian notes, references for coding, background learning from the browser) and the live situation snapshot for multi-context awareness. |
 | `memory_curator.py`, `capability_guide.py`, `weather_watch.py` | Long-term memory (learned facts, "remember/forget", conversation summaries, prompt context), capability and API answers with a live API check, and bad-weather/emergency alerts. |

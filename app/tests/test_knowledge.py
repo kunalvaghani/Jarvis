@@ -4,7 +4,7 @@ import tempfile
 import threading
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from jarvis.commands import Command, parse
 from jarvis.engine import Engine
@@ -76,6 +76,29 @@ class KnowledgeTests(unittest.TestCase):
             finally:
                 worker.close()
                 worker.thread.join(2)
+
+    def test_a_slow_context_step_still_answers(self):
+        # 2026-10-12: on Python 3.10 a future's timeout is concurrent.futures.TimeoutError, not the built-in one, so a
+        # cold context model (over 3 s) made every question fail with "Could not finish answer".
+        from concurrent.futures import Future, TimeoutError as FutureTimeout
+        events = []
+        worker = Knowledge({}, lambda *event: events.append(event))
+        slow = Future()
+        slow.result = Mock(side_effect=FutureTimeout())
+        worker.prepare_context = lambda question: slow
+        worker.client.request = Mock(return_value={"answer": "It is ten past ten."})
+        worker.start()
+        try:
+            worker.submit("what time is it")
+            deadline = time.monotonic() + 5
+            while time.monotonic() < deadline and not any(kind in {"answer", "answer_error"} for kind, _ in events):
+                time.sleep(.05)
+            kinds = [kind for kind, _ in events]
+            self.assertIn("answer", kinds, events)
+            self.assertNotIn("answer_error", kinds)
+        finally:
+            worker.close()
+            worker.thread.join(2)
 
     def test_question_routing_and_final_only(self):
         sent = []

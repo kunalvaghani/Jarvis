@@ -1,4 +1,5 @@
 """Independent, cancellable question worker; never dispatches desktop actions."""
+from concurrent.futures import TimeoutError as FutureTimeout
 import json
 from pathlib import Path
 import queue
@@ -286,8 +287,8 @@ class Knowledge:
                 if future and len(job) <= 6:
                     try:
                         prepared = future.result(timeout=3)
-                    except TimeoutError:
-                        pass
+                    except (TimeoutError, FutureTimeout):
+                        pass  # On Python 3.10 a future's timeout is not the built-in TimeoutError; answer without it.
                     if cancelled():
                         continue
                 with self.context_lock:

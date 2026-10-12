@@ -169,12 +169,15 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None, 
         paint(ImageDraw.Draw(tile), left, top)
         image.paste(tile.resize((pixels[2]-pixels[0],pixels[3]-pixels[1]),Image.Resampling.LANCZOS),(pixels[0],pixels[1]))
     from .island_buddy import draw_buddy, mood_for
+    pose = buddy if isinstance(buddy, dict) else None
     if buddy:
-        sketch((44,4,72,38),BLACK,lambda draw,left,top:draw_buddy(draw,58-left,21-top,20,buddy,phase,sampling))
+        # Pip lives in its own tile in the bar (drawn only here, so particles never leave stale marks).
+        sketch((38,0,80,40),BLACK,lambda draw,left,top:draw_buddy(draw,59-left,21-top,26,
+            buddy if isinstance(buddy,str) else 'idle',phase,sampling,pose=pose))
     if media and media.get('service') == 'buddy':
         art_x, art_y = 44+10, 46+8
         sketch((art_x,art_y,art_x+54,art_y+54),'#1f1a24',lambda draw,left,top:draw_buddy(
-            draw,art_x+27-left,art_y+30-top,40,mood_for(media.get('phase')),phase,sampling))
+            draw,art_x+27-left,art_y+30-top,40,mood_for(media.get('phase')),phase,sampling,pose=pose))
     def patch(bounds, fill, paint):
         left, top, right, bottom = bounds
         pixels = tuple(round(value*scale) for value in bounds)
@@ -243,8 +246,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
     color = ACCENTS.get(status, ACCENTS["STANDBY"])
     y = 21
     if buddy:
-        from .island_buddy import draw_buddy
-        draw_buddy(draw, 58, 21, 20, buddy, phase, sampling)  # Pip, Jarvis's little friend (animated per frame).
+        pass  # Pip, Jarvis's little friend, is drawn every frame by animate_frame (buddy_engine.py decides how).
     else:
         rectangle((47, 10, 69, 32), radius=11, fill='#1d3e66')
         rectangle((49, 11, 67, 29), radius=9, fill='#729fcb')
@@ -307,9 +309,10 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             text(art_x + side / 2 - 4, art_y + side / 2 - 14, "/", 22, "#e6dcff", True)
         elif media.get("service") == "buddy":
             from .island_buddy import draw_buddy, mood_for
-            # Drawn on its own tile so a falling page or a heart never paints outside it.
+            # The tile; Pip on it is drawn every frame by animate_frame.
             tile = Image.new("RGB", (round(side * sampling), round(side * sampling)), "#1f1a24")
-            draw_buddy(ImageDraw.Draw(tile), side / 2, side / 2 + 3, 40, mood_for(media.get("phase")), phase, sampling)
+            if not buddy:
+                draw_buddy(ImageDraw.Draw(tile), side / 2, side / 2 + 3, 40, mood_for(media.get("phase")), phase, sampling)
             image.paste(tile, (round(art_x * sampling), round(art_y * sampling)))
         elif media.get("service") == "whatsapp":
             # Contact avatar: initials on a soft green tile; it pulses while a call rings.
@@ -514,6 +517,14 @@ class Island:
         self.work_completion_pending = False
         self.buddy = bool(app.config.get("ui", {}).get("buddy", True))  # Pip lives in the island.
         self.hungry_until = 0.
+        self.pip = None
+        if self.buddy:
+            try:
+                from .buddy_engine import Buddy
+                self.pip = Buddy(app.config.get("buddy", {}), sense=app.config.get("_ui_verification", False) is not True)
+            except Exception:
+                self.pip = None  # Pip must never stop the island from starting.
+        self.emotion = "idle"
         self.last_active = time.monotonic()
         self.drop_target = None
         from .island_surface import EdgeSurface, AnimationTimer
@@ -527,9 +538,30 @@ class Island:
         canvas.bind("<B1-Motion>", self.move)
         canvas.bind("<ButtonRelease-1>", self.release)
         canvas.bind("<Button-3>", app.show_menu)
+        canvas.bind("<Double-Button-1>", self.double_click)
+        canvas.bind("<Motion>", self.pointer)
 
     def set_hover(self, value):
         self.hover = value
+
+    def on_pip(self, event):
+        """Is the pointer on Pip (in the bar, or on its card)?"""
+        if self.pip is None:
+            return False
+        scale = window_scale(self.app.root)
+        x, y = event.x / scale, event.y / scale
+        if 38 <= x <= 80 and y <= 40:
+            return True
+        media = self.media if self.media and time.monotonic() < self.media_until else None
+        return bool(media and media.get('service') == 'buddy' and 54 <= x <= 108 and 54 <= y <= 108)
+
+    def pointer(self, event):
+        if self.on_pip(event):
+            self.pip.hover()
+
+    def double_click(self, event):
+        if self.on_pip(event):
+            self.pip.pet()
 
     def press(self, event):
         self.drag = (event.x_root, event.y_root, self.anchor_x, self.top)
@@ -540,6 +572,8 @@ class Island:
             x, y, anchor, top = self.drag
             if abs(event.x_root-x)+abs(event.y_root-y) > 5:
                 self.moved = True
+                if self.pip is not None:
+                    self.pip.drag()  # Whee!
                 self.anchor_x = anchor+event.x_root-x
                 self.top = 0  # The notch stays attached even when moved horizontally.
 
@@ -552,6 +586,8 @@ class Island:
                 self.app.stop()
             elif self.surface_open and x > width-51:
                 self.app.hide_panel()
+            elif self.on_pip(event):
+                self.pip.poke()  # Boop! (Clicking anywhere else on the island still opens the panel.)
             else:
                 self.app.toggle_panel(event)
         self.drag = None
@@ -572,6 +608,8 @@ class Island:
 
     def notify(self, kind, message):
         self.activity.notify(kind, message)
+        if self.pip is not None:
+            self.pip.event(kind, message)  # Pip reacts to what Jarvis does.
         if kind == 'media_card' and isinstance(message, dict):
             # Shown while a media command runs and briefly after; never blocks other content.
             self.media = message
@@ -678,11 +716,11 @@ class Island:
         media = self.media if self.media and now < self.media_until and height >= MEDIA_HEIGHT - 4 and not self.surface_open else None
         if media:
             phase = 0 if reduced else now  # The card animates even while Jarvis is otherwise idle.
-        mood = self.mood(status, now) if self.buddy else None
+        mood = self.buddy_pose(now, status, speaking, listening) if self.pip is not None else None
         if mood and not reduced and phase == 0:
-            phase = round(now * 15) / 15  # Pip keeps blinking and bobbing in standby, at about 15 frames a second.
+            phase = round(now * 15) / 15  # Pip keeps moving in standby, at about 15 frames a second.
         frame_key = (pixels_w, pixels_h, status, message, detail, scale, phase, round(float(level)), self.surface_open,
-                     id(media), round(time.time()) if media else 0, self.edges.active, mood)
+                     id(media), round(time.time()) if media else 0, self.edges.active, self.emotion if mood else None)
         if frame_key != self.last_frame:
             geometry_key = (pixels_w,pixels_h,scale,self.surface_open,self.edges.active)
             static_key = (geometry_key,status,detail,id(media),int(time.time()) if media else 0)
@@ -740,17 +778,28 @@ class Island:
         else:
             app.panel.withdraw()
 
-    def mood(self, status, now):
-        """Pip's mood in the compact bar."""
-        if now < self.hungry_until:
-            return "hungry"
-        if status in {"THINKING", "WORKING"}:
-            return "thinking"
-        if status in {"LISTENING", "ATTENTION"}:
-            return "ready"
-        if now - self.last_active > 600 and status == "STANDBY":
-            return "sleepy"
-        return "idle"
+    def buddy_pose(self, now, status, speaking, listening):
+        """Ask Pip's brain (buddy_engine.py) for this frame's emotion and pose; its eyes follow the pointer."""
+        look = None
+        try:
+            import win32api
+            root = self.app.root
+            scale = window_scale(root)
+            cursor = win32api.GetCursorPos()
+            from .buddy_engine import look_at
+            look = look_at(cursor, (root.winfo_rootx() + 59 * scale, root.winfo_rooty() + 21 * scale))
+        except Exception:
+            pass
+        media = self.media if self.media and now < self.media_until else None
+        card_phase = media.get('phase') if media and media.get('service') == 'buddy' else None
+        actions = getattr(self.app, 'actions', None)
+        question = bool(getattr(actions, 'whatsapp_prompts', None))
+        approval = bool(getattr(getattr(self.app, 'desk', None), 'approvals', None))
+        try:
+            self.emotion, pose = self.pip.update(now, status, speaking, listening, card_phase, question, approval, look)
+        except Exception:
+            self.emotion, pose = 'idle', None  # Pip must never take the island down.
+        return pose or 'idle'
 
     def watch_drag(self, now):
         """A file dragged over the island (left button held, pointer over it, drag started elsewhere): Pip gets hungry.
@@ -766,6 +815,8 @@ class Island:
             left, top = root.winfo_rootx(), root.winfo_rooty()
             if left <= x <= left + root.winfo_width() and top <= y <= top + root.winfo_height() + 30:
                 self.last_active = now
+                if self.pip is not None:
+                    self.pip.file_over(now)
                 if now >= self.hungry_until:
                     from .media_player import card
                     self.notify('media_card', card('buddy', 'hungry', 'Feed me a file!',

@@ -42,6 +42,8 @@ def build_interface(app):
             from .file_drop import DropTarget, card, start
 
             def dropped(paths):
+                if app.island.pip is not None:
+                    app.island.pip.dropped()  # Pip eats it.
                 app.island.notify('media_card', card('eating', ', '.join(os.path.basename(p) for p in paths[:3]), 'Nom nom…'))
                 start(app.actions, paths)
             app.island.drop_target = DropTarget(root, [app.island_canvas], dropped)

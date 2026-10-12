@@ -331,7 +331,7 @@ class PipRendering(unittest.TestCase):
             for moment in (0, .7, 2.3):
                 draw_buddy(ImageDraw.Draw(canvas), 60, 60, 50, mood, moment, 1)
         self.assertEqual(mood_for("eating"), "eating")
-        self.assertEqual(mood_for("sent"), "happy")
+        self.assertEqual(mood_for("sent"), "finished")
         for phase in ("hungry", "eating", "ready", "indexing", "thinking", "happy", "sad"):
             media = {"service": "buddy", "phase": phase, "title": "brief.pdf", "subtitle": "", "detail": "", "image": "",
                      "position": 0, "duration": 0, "at": 0}

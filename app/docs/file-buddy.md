@@ -9,24 +9,91 @@ WhatsApp, or send it by email.
 *Rendered preview (2026-10-12) from the island's own drawing code, with sample text: the compact bar, then the
 hungry, eating, ready, thinking and done cards. Not a screenshot.*
 
-## Pip
+## Pip (fully interactive since 2026-10-12)
 
-Pip is drawn by [island_buddy.py](../jarvis/island_buddy.py): a soft white marshmallow with big eyes, blush and
-little arms. It is animated every frame, at about 15 frames a second even when Jarvis is idle.
+![All 35 of Pip's emotions, rendered from the island's drawing code — not a screenshot](../artifacts/media/pip-emotions.png)
 
-| Mood | When |
+*Rendered preview (2026-10-12) of every emotion at one moment of its animation. Each one moves differently.*
+
+**How Pip is drawn** ([island_buddy.py](../jarvis/island_buddy.py)):
+
+- **Body:** a superellipse marshmallow, |x/rx|^2.7 + |y/ry|^2.7 = 1. It's shaded with light from the top left, a
+  specular highlight, a rim shadow and a soft floor shadow, and tinted for each emotion.
+- **Eyes:** glossy and placed on a sphere, so looking left, right, up or down moves them as if Pip turned its head.
+- **Details:** eyelids, mouths, blush, little arms and a status badge (… ? ! ♥ ♪ ✓ ✕ ⌕).
+- **Particles:** hearts, sparks, zzz, notes, sweat, tears, confetti, steam, orbiting stars and a falling page.
+- **Outfits:** glasses, sunglasses, headphones, beanie, santa hat, witch hat, party hat, crown and bow.
+
+Every emotion is its own animation: hops, shakes, sways, squashes, spins, waves and blinks. Colours blend smoothly
+from one emotion to the next. One Pip costs about 3 ms to draw.
+
+**What Pip feels, and why** ([buddy_engine.py](../jarvis/buddy_engine.py)): the emotion is chosen every frame.
+Higher rows win.
+
+| Trigger | Emotion |
 | --- | --- |
-| idle | Bobs, blinks (sometimes twice) and glances around. |
-| ready | Jarvis is listening, or a question waits for you: arms wave. |
-| thinking | Jarvis is working or answering: eyes up, with "…" dots. |
-| hungry | A file is dragged over the island: big eyes and an open mouth, and the island says "Feed me a file!". |
-| eating | A file was dropped: a little page falls into its mouth, followed by chomping. |
-| reading | Building the document's knowledge graph: puffed cheeks, half-closed eyes. |
-| happy | Done or sent: ^ ^ eyes and floating hearts. |
-| sad | Something went wrong: worried brows and a tear. |
-| sleepy | No activity for 10 minutes: closed eyes and a "z". |
+| You click Pip | Boop: surprised, then laughing. Clicking anywhere else on the island still opens the panel. |
+| You double-click Pip | Love: heart eyes, floating hearts. |
+| 4 quick clicks, then 7 | Dizzy (spiral eyes, wobble), then ouch (squashed by a slap, stars). |
+| You drag the island | Whee. |
+| You hover over Pip | Curious: head tilt, looks at you. |
+| A file is dragged over the island | Hungry: Pip turns into a box with an open lid. |
+| A file is dropped | Eating: chomps as a page falls in. Then the drop card's steps: reading, question, sending, finished, sad. |
+| An approval card or a question waits | Approval (amber, "!") or question (cyan, "?"). |
+| Jarvis speaks | Talking, with the mouth moving. |
+| You speak | Listening, cyan, leaning in. |
+| Jarvis thinks or works | Thinking (purple, "…") or working (blue, "…"). |
+| Errors, finished actions | Error (red, shake, x eyes) or finished (green, sparks). |
+| A WhatsApp message or call | Surprised, or excited. |
+| Repository learning | Searching, then proud (with a crown). |
+| Weather alerts | Sad. |
+| Music playing (Spotify or YouTube card, or Spotify in front) | Dancing with headphones and notes. |
+| The app in front (checked every 2 s) | Code or terminal: focused, with glasses. Video: watching. Chat apps: chatty. Documents: reading. |
+| No keyboard or mouse for 5 minutes, then 15 | Bored, then sleeping. Late at night it falls asleep sooner, in a beanie. |
+| You come back after a break | Greeting: waves both arms. |
+| Its own mood | Energy drains while awake and refills while asleep. Affection grows with boops and pets and fades slowly. Boredom builds when nothing happens. These make Pip sleepy, bored or shy, and a random fidget (wink, curious look, yawn, little dance, laugh, shy) plays every 15–40 seconds. |
 
-Set `ui.buddy` to `false` in `config/config.json` to bring back the old "J" badge.
+Its eyes follow your mouse pointer anywhere on the screen. Outfits also follow the date: a witch hat from 25 October,
+a santa hat in December, a party hat on 1 January.
+
+Settings: `ui.buddy` (false brings back the "J" badge); `buddy.bored_after_seconds` (300) and
+`buddy.sleep_after_seconds` (900). Pip can never stop the island from starting: if its brain fails, the island runs
+without it.
+
+**Checked (2026-10-12 IST, `tests/test_buddy.py`, 15 tests):**
+
+- All 35 emotions render.
+- Every pair of emotions looks different.
+- Every emotion moves over time.
+- Each outfit changes the picture, and the eyes follow the pointer.
+- The brain's reactions and priorities (boop, love, dizzy, ouch, whee, hungry, eating, the card steps, approval,
+  question, talking, thinking, working, error, finished, WhatsApp, repository learning, music) are tested.
+- The app categories, boredom, sleep and the welcome back are tested, as are fidgets, shyness and the date outfits.
+- On the real `Island` class: clicking Pip boops it without opening the panel, clicking elsewhere still opens the
+  panel, a double-click pets it, and Jarvis's warnings reach it.
+- Drawing a frame costs about 0.5 ms in the bar and 12 ms on a card.
+- Full suite: 1,595 tests passed with one skip (`artifacts/logs/pip-regression-2026-10-12.log`); readiness `ready`.
+- Jarvis was restarted with it at 09:57 IST and stayed healthy.
+
+Like the island itself, Pip is excluded from screen capture, so there is no live screenshot.
+
+**Typed and spoken requests failing, fixed (2026-10-12, 10:34 IST).** After the 09:57 restart, questions failed with
+"Could not finish answer", and a request was left pending until Jarvis was stopped at 10:10. Windows logged no
+crash.
+
+- **Cause.** The question worker waits up to 3 seconds for its context step. A cold context model takes longer than
+  that right after a restart. The wait caught `TimeoutError`, but on Python 3.10 a future raises
+  `concurrent.futures.TimeoutError`, which is a different class until Python 3.11. So the timeout ended the whole
+  answer. This code predates Pip; restarts simply made it show.
+- **Fix.** [knowledge.py](../jarvis/knowledge.py) catches both, and answers without the extra context.
+- **Kept as a test.** `tests/test_knowledge.py` covers it; the test fails without the fix.
+- **Checked:**
+  - Through the real actions: questions ("what time is it", "hello", sums, a joke) and tasks (create a file, list
+    abilities, list documents, the queue) all worked.
+  - Through the real hidden UI (`send_input`, typed): the island ran at 20 fps idle and up to 122 fps while busy,
+    with no hidden Tk callback errors.
+  - In full normal mode, with the drop target and Pip's screen sensing on: Pip showed working, then talking.
+- **Regression:** 1,596 tests passed with one skip; readiness `ready`.
 
 ## Dropping a file
 
