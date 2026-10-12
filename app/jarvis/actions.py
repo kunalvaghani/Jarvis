@@ -191,6 +191,10 @@ class Actions:
         self.repo_learner = RepoLearner(self, config.get("repo_learning", {}))
         self.repo_learner.enabled = bool(self.repo_learner.enabled and self.memory.enabled)
         REGISTRY["learner"] = self.repo_learner
+        from .documents import Library, REGISTRY as DOCUMENTS
+        self.documents = Library(self, config.get("documents", {}))  # Files dropped on the island (file_drop.py).
+        DOCUMENTS["library"] = self.documents
+        self.closing = False
         from .repo_abilities import AbilityForge, REGISTRY as ABILITIES
         self.ability_forge = AbilityForge(self, config.get("repo_abilities", {}))  # Learned repos become new commands.
         self.ability_forge.enabled = bool(self.ability_forge.enabled and self.repo_learner.enabled)
@@ -457,6 +461,13 @@ class Actions:
             if self.ui_controls:
                 self.ui_controls.clear_pending()
             self.report("question", "")
+            documents = getattr(self, "documents", None)
+            document = documents.wants(command.value) if documents is not None and command.extra != "web" else None
+            if document is not None:
+                # A question about the file dropped on the island (session memory; see documents.py).
+                threading.Thread(target=self._answer_document, args=(document, command.value), daemon=True,
+                                 name="Jarvis document answer").start()
+                return
             self.knowledge.submit(command.value, command.extra == "web")
             return
         if command.kind == "forget_chat":
@@ -670,6 +681,9 @@ class Actions:
         forge = getattr(self, 'ability_forge', None)
         if forge is not None:
             forge.close()  # Stops the builder and its child process; an unfinished build is simply not merged.
+        documents = getattr(self, 'documents', None)
+        if documents is not None:
+            documents.close()  # The session ends: documents asked about are saved to long-term memory.
         eye = getattr(self, 'gods_eye', None)
         if eye is not None:
             eye.close()
@@ -762,6 +776,17 @@ class Actions:
         if path.is_symlink() or path.resolve().parent != self.root:
             raise ValueError("File must be directly inside the configured JarvisFiles folder.")
         return path
+
+    def _answer_document(self, document, question):
+        from .file_drop import card
+        self.report("media_card", card("thinking", document.name, question[:110]))
+        try:
+            reply = self.documents.answer(question, document)
+            self.report("answer", reply)
+            self.report("media_card", card("happy", document.name, question[:110], "Answered from the document"))
+        except Exception as exc:
+            self.report("answer_error", "I couldn't answer from " + document.name + ": " + str(exc)[:200])
+            self.report("media_card", card("sad", document.name, str(exc)[:110]))
 
     def _approve(self, kind, detail, cancelled):
         if self.approval_handler is None:
@@ -1252,6 +1277,14 @@ class Actions:
         if command.kind in {"repo_learn", "repo_list", "repo_explain", "repo_forget"}:
             from .repo_learning import execute as repo_execute
             return repo_execute(self, command, cancelled)
+        from .documents import KINDS as DOCUMENT_KINDS
+        if command.kind in DOCUMENT_KINDS:
+            from .documents import execute as document_execute
+            return document_execute(self, command, cancelled)
+        if command.kind == "file_drop":
+            from .file_drop import parse_paths, start
+            start(self, parse_paths(command.value))
+            return ""
         from .repo_abilities import KINDS as ABILITY_KINDS
         if command.kind in ABILITY_KINDS:
             from .repo_abilities import execute as ability_execute
@@ -1589,7 +1622,8 @@ class Actions:
                                                                               "gods_eye_update", "gods_eye_cameras", "memory_save", "memory_forget", "memory_list",
                                                                               "memory_conversations", "repo_learn", "repo_list", "repo_explain",
                                                                               "repo_forget", "api_health", "weather_alerts", "whatsapp_send",
-                                                                              "ability_run", "ability_list", "ability_approve", "ability_disable", "ability_deny", "ability_review",
+                                                                              "ability_run", "ability_list", "ability_approve", "ability_disable", "ability_deny", "ability_review", "ability_repo",
+                                                                              "doc_ask", "doc_end", "doc_list", "doc_open",
                                                                               "ability_enable", "ability_forget", "ability_build", "ability_help",
                                                                               "whatsapp_reply", "messenger_send", "media_search"}:
                             self.report("spoken_reply", str(result)[:600])

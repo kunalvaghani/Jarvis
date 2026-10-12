@@ -521,6 +521,8 @@ class App:
                 self.speech.interrupt()
                 self.actions.submit(command)
         engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
+        engine.free_text = lambda: bool(getattr(self.actions, "whatsapp_prompts", None)) and \
+            bool(self.actions.whatsapp_prompts[-1].free_text)  # Dictated names, addresses and messages.
         self.engine = engine  # Screen offers wake it so a bare "yes" is heard.
         from jarvis.voice_input import VoiceInput
         from jarvis.command_cleanup import CommandCleanup
@@ -612,6 +614,10 @@ class App:
 
     def close(self):
         self.closing = True
+        self.actions.closing = True
+        target = getattr(self.island, 'drop_target', None)
+        if target is not None:
+            target.close()
         self.island.close()
         self.desk.close()
         if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):

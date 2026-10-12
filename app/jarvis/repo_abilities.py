@@ -288,6 +288,7 @@ class AbilityForge:
         self.jobs = queue.Queue(maxsize=30)
         self.queued = set()
         self.wanted = set()           # Repositories the user asked to build once they are learned
+        self.announced = {}           # repository (casefold) -> when the island last said what Jarvis has from it
         self.current = None           # {"repo", "step", "ability"} while building
         self.process = None           # Running child process (killed on close/cancel)
         self.stop = threading.Event()
@@ -295,6 +296,7 @@ class AbilityForge:
         self.used_model = None
         self.decider = None           # Tests: callable(row, detail) -> True / False / None instead of the island card
         self.next_review = float("inf")
+        self.next_resume = float("inf")
         self.registry = self._load()
         self._patterns = None
 
@@ -342,14 +344,77 @@ class AbilityForge:
         except Exception:
             pass
 
-    def on_viewed(self, full_name):
-        """A learned repository is open in the browser: build its abilities if that never happened. Never raises."""
+    def repo_report(self, full_name):
+        """What Jarvis has from one repository: its abilities by state, and the last build note."""
+        key = full_name.casefold()
+        rows = [a for a in self.abilities() if a.get("repo", "").casefold() == key and a.get("state") != "removed"]
+        groups = {"active": [], "waiting": [], "building": [], "failed": [], "denied": [], "disabled": []}
+        for row in rows:
+            state = row.get("state")
+            if row.get("candidate") or state == "awaiting_approval":
+                groups["waiting"].append(row["name"])
+                if state == "active":
+                    groups["active"].append(row["name"])
+            elif state in {"building", "queued"}:
+                if self.current and str(self.current.get("repo", "")).casefold() == key:
+                    groups["building"].append(row["name"])  # Only while it really is being built.
+            elif state in groups:
+                groups[state].append(row["name"])
+        repo = next((r for n, r in self.registry["repos"].items() if n.casefold() == key), {})
+        building = bool(self.current and str(self.current.get("repo", "")).casefold() == key) or \
+            any(n.casefold() == key for n, _ in self.queued)
+        return {"repository": full_name, "abilities": groups, "build_state": repo.get("state"), "note": repo.get("note", ""),
+                "building_now": building}
+
+    @staticmethod
+    def names(items, limit=3):
+        return ", ".join(items[:limit]) + (" +" + str(len(items) - limit) + " more" if len(items) > limit else "")
+
+    def describe_repo(self, full_name, spoken=False):
+        """One line about a repository's abilities, for the island and for spoken answers."""
+        report = self.repo_report(full_name)
+        groups = report["abilities"]
+        parts = []
+        if groups["active"]:
+            parts.append(("I already have " if spoken else "") + str(len(groups["active"])) + " abilit" +
+                         ("y" if len(groups["active"]) == 1 else "ies") + " from it: " + self.names(groups["active"], 6 if spoken else 3))
+        for key, label in (("waiting", "waiting for your OK"), ("building", "being built"), ("failed", "failed testing"),
+                           ("denied", "denied"), ("disabled", "turned off")):
+            if groups[key]:
+                parts.append(label + ": " + self.names(groups[key], 4 if spoken else 2))
+        if report["building_now"] and not groups["building"]:
+            parts.append("building its abilities now")
+        if not parts:
+            state = report["build_state"]
+            parts.append("no abilities from it" + (" (" + report["note"][:80] + ")" if report["note"] else "") if state in {
+                "no_ability", "built", "failed", "learn_failed"} else "no abilities from it yet")
+        return report, "; ".join(parts)
+
+    def on_viewed(self, full_name, learned=True):
+        """A repository Jarvis knows is open in the browser: say on the island which abilities it already has from
+        it (at most every 10 minutes per repository), and build them if that never happened. Never raises."""
         try:
-            if self.enabled and self.auto_build and full_name not in self.registry["repos"] and \
-                    not any(n.casefold() == full_name.casefold() for n in self.registry["repos"]):
+            if not self.enabled:
+                return None
+            key = full_name.casefold()
+            known_here = any(n.casefold() == key for n in self.registry["repos"]) or \
+                any(a.get("repo", "").casefold() == key for a in self.abilities())
+            if learned and self.auto_build and not known_here:
                 self.enqueue(full_name, "auto")
+            if not (learned or known_here):
+                return None
+            if self.clock() - self.announced.get(key, -1e9) < 600:
+                return None
+            self.announced[key] = self.clock()
+            report, line = self.describe_repo(full_name)
+            active = report["abilities"]["active"]
+            title = ("Already have abilities from " if active else "Already learned ") + full_name
+            detail = ("Say \"" + self.example(self.find(active[0])) + "\"" if active else
+                      "Say \"show pending abilities\"" if report["abilities"]["waiting"] else "Say \"list your abilities\"")
+            self.card("learned", title, line[:118], detail)
+            return line
         except Exception:
-            pass
+            return None
 
     def on_learn_failed(self, full_name, error, reason):
         """Learning failed: keep the reason for "list your abilities", and tell the user if they asked for it."""
@@ -363,7 +428,7 @@ class AbilityForge:
         except Exception:
             pass
 
-    def enqueue(self, full_name, why="asked", ability_id=None):
+    def enqueue(self, full_name, why="asked", ability_id=None, start=True):
         key = (full_name.casefold(), ability_id)
         with self.lock:
             if key in self.queued:
@@ -375,22 +440,39 @@ class AbilityForge:
             with self.lock:
                 self.queued.discard(key)
             return False
-        self.start()
+        if start:
+            self.start()
         return True
 
     def start(self):
         if self.enabled and not self.thread:
-            for ability in self.abilities("building"):  # Interrupted by a quit: build it again from the start.
-                ability["state"] = "queued"
-            for full_name, row in list(self.registry["repos"].items()):
-                if row.get("state") == "building":
-                    row["state"] = "queued"
-                    self.jobs.put_nowait((full_name, "resume", None))
+            for ability in self.abilities():
+                if ability.get("state") in {"building", "queued"}:
+                    # Interrupted by a quit (2026-10-11: such rows looked "being built" forever). An ability that
+                    # had been written waits for approval again (it was never tested in its environment);
+                    # otherwise its repository is rebuilt from the start. A live ability never leaves "active".
+                    ability["state"] = "awaiting_approval" if ability.get("folder") else "interrupted"
+                    ability["rebuilding"] = False
+            self._save()
+            self.resume_queued()
             self.next_review = self.clock() + 90  # Abilities still waiting for an answer are shown again soon after start.
+            self.next_resume = self.clock() + 3600
             self.runner_priority(False)  # A crash mid-build must not leave Ollama's runner at low priority.
             self.thread = threading.Thread(target=self.run, name="Jarvis ability builder", daemon=True)
             self.thread.start()
         return self
+
+    def resume_queued(self):
+        """Repositories whose build was interrupted or held by the daily limit are built again (resume counts
+        against the daily limit, so a held repository waits for the next day)."""
+        if self._builds_today() >= self.max_builds_per_day:
+            return 0
+        resumed = 0
+        for full_name, row in list(self.registry["repos"].items()):
+            if row.get("state") in {"building", "queued"} and not any(n.casefold() == full_name.casefold() for n, _ in self.queued):
+                if self.enqueue(full_name, "resume", start=False):
+                    resumed += 1
+        return resumed
 
     def close(self):
         self.stop.set()
@@ -404,6 +486,9 @@ class AbilityForge:
             try:
                 full_name, why, ability_id = self.jobs.get(timeout=1)
             except queue.Empty:
+                if self.clock() >= self.next_resume:
+                    self.next_resume = self.clock() + 3600  # Hourly: picks up repositories held by the daily limit.
+                    self.resume_queued()
                 if self.clock() >= self.next_review:
                     self.next_review = self.clock() + 1200
                     try:
@@ -1443,6 +1528,13 @@ def parse_command(text):
     if match:
         name = (match["name"] or match["name2"] or "").strip()
         return Command("ability_build", "" if name.casefold().startswith(("this", "it")) else name)
+    match = re.fullmatch(r"(?:what|which) abilities (?:do you have|did you get|have you got|did you learn|have you learned|"
+                         r"did you build) from (?:this|that|the) (?:repo(?:sitory)?|project)|"
+                         r"(?:what|which) abilities (?:do you have|did you get|have you got|did you learn|have you learned) from "
+                         r"(?P<name>[A-Za-z0-9-]{1,39}/[A-Za-z0-9._-]{1,100})|do you already have (?:abilities|this repo(?:sitory)?)",
+                         clean, re.I)
+    if match:
+        return Command("ability_repo", (match.groupdict().get("name") or "").strip())
     match = re.fullmatch(r"how do i use (?:the )?(?P<name>.+?)(?: ability)?", clean, re.I)
     forge = REGISTRY["forge"]
     if match and forge is not None and forge.find(match["name"]):
@@ -1483,7 +1575,7 @@ def parse_learned(text):
 
 
 KINDS = {"ability_run", "ability_list", "ability_approve", "ability_disable", "ability_enable", "ability_forget",
-         "ability_build", "ability_help", "ability_deny", "ability_review"}
+         "ability_build", "ability_help", "ability_deny", "ability_review", "ability_repo"}
 PLACEHOLDER_OWNERS = {"owner", "user", "username", "someone", "author"}
 PLACEHOLDER_NAMES = {"repo", "repository", "project", "name", "repo-name", "reponame"}
 
@@ -1552,6 +1644,21 @@ def _execute(actions, forge, command, cancelled):
         learner = getattr(actions, "repo_learner", None)
         if getattr(learner, "current", None):
             text += " I'm learning " + learner.current + " right now."
+        return text
+    if kind == "ability_repo":
+        learner = getattr(actions, "repo_learner", None)
+        name = command.value or ((learner.viewing or {}).get("full_name") if learner is not None else "") or ""
+        if not name:
+            return "Which repository? Open it in the browser, or say its owner and name."
+        learned = bool(learner is not None and (learner.known(name) or learner.knowledge(name)))
+        report, line = forge.describe_repo(name, spoken=True)
+        groups = report["abilities"]
+        if not learned and not any(groups.values()):
+            return "I haven't learned " + name + " yet. Say 'learn this' and I'll learn it and build its abilities."
+        text = name + ": " + line[0].upper() + line[1:] + "."
+        if groups["active"]:
+            row = forge.find(groups["active"][0])
+            text += " Try: '" + forge.example(row) + "'."
         return text
     if kind == "ability_review":
         if not forge.waiting():

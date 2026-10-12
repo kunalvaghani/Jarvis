@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 import shutil
 import tempfile
@@ -384,6 +385,60 @@ class Building(unittest.TestCase):
         from jarvis.native_coding import EXTRA, SCHEMA
         self.assertTrue({"learned_ability_search", "learned_ability_read", "learned_ability_run"} <= set(EXTRA))
         self.assertIn("learned_ability_run", SCHEMA["properties"]["tool"]["enum"])
+
+    def test_opening_a_known_repository_shows_its_abilities_on_the_island(self):
+        from datetime import datetime, timezone
+        from jarvis import repo_learning as rl
+        instance, actions, reports = forge([GOOD, GOOD], [SPEC, {**SPEC, "name": "line counter", "triggers": ["count the lines in {file}"]}],
+                                           decision=lambda row, detail: row["name"] == "word counter" or None)
+        instance.build_repo("demo/wordcount")
+        clock = [0.0]
+        learner = rl.RepoLearner(SimpleNamespace(base=actions.base, report=actions.report, ability_forge=instance,
+                                                 memory=SimpleNamespace(vault=tempfile.mkdtemp(), record=lambda *a: None)),
+                                 {"dwell_seconds": 8}, clock=lambda: clock[0])
+        learner.index["demo/wordcount"] = {"learned_at": datetime.now(timezone.utc).isoformat()}
+        actions.repo_learner = learner
+        instance.clock = lambda: clock[0]
+        reports.clear()
+        title = "GitHub - demo/wordcount: Count words - Google Chrome"
+        for moment in (0, 1, 2, 3.5, 5, 9):
+            clock[0] = moment
+            learner.observe_title(title, "chrome.exe")
+        cards = [r[1] for r in reports if r[0] == "media_card"]
+        self.assertEqual(len(cards), 1)  # Once, about 3 seconds after opening it (not the 8-second learning dwell).
+        self.assertEqual(cards[0]["title"], "Already have abilities from demo/wordcount")
+        self.assertIn("1 ability from it: word counter", cards[0]["subtitle"])
+        self.assertIn("waiting for your OK: line counter", cards[0]["subtitle"])
+        self.assertEqual(cards[0]["detail"], 'Say "count the words in <file>"')
+        learner.viewing = None
+        clock[0] = 100  # Reopened soon after: no repeat within 10 minutes.
+        self.assertIsNone(instance.on_viewed("demo/wordcount"))
+        clock[0] = 700
+        self.assertIn("word counter", instance.on_viewed("demo/wordcount"))
+        learner.viewing = {"full_name": "demo/wordcount", "candidate": "demo/wordcount"}
+        answer = ra.execute(actions, parse("what abilities do you have from this repo"), lambda: False)
+        self.assertIn("I already have 1 ability from it: word counter", answer)
+        self.assertIn("waiting for your OK: line counter", answer)
+        self.assertIn("haven't learned other/thing", ra.execute(actions, parse("what abilities did you get from other/thing"), lambda: False))
+
+    def test_interrupted_rows_are_cleaned_up_and_held_repositories_resume(self):
+        instance, _, _ = forge([GOOD])
+        instance.build_repo("demo/wordcount")
+        instance.registry["abilities"]["half-built"] = {"id": "half-built", "name": "half built", "state": "queued",
+                                                        "repo": "demo/wordcount", "inputs": []}
+        instance.registry["abilities"]["half-installed"] = {"id": "half-installed", "name": "half installed", "state": "building",
+                                                            "repo": "demo/wordcount", "inputs": [], "folder": "x/v1"}
+        instance.registry["repos"]["demo/wordcount"] = {"state": "queued", "note": "daily build limit"}
+        instance.stop.set()
+        instance.start()
+        self.assertEqual(instance.registry["abilities"]["half-built"]["state"], "interrupted")
+        self.assertEqual(instance.registry["abilities"]["half-installed"]["state"], "awaiting_approval")
+        self.assertEqual(instance.registry["abilities"]["word-counter"]["state"], "active")
+        self.assertEqual(instance.jobs.get_nowait()[:2], ("demo/wordcount", "resume"))
+        self.assertTrue(instance.jobs.empty())
+        self.assertEqual(len([t for t in threading.enumerate() if t is instance.thread]), 1 if instance.thread.is_alive() else 0)
+        self.assertNotIn("half built", instance.describe_repo("demo/wordcount")[1])  # Never shown as "being built".
+        instance.close()
 
     def test_management_phrases(self):
         self.assertEqual(parse("build abilities from psf/requests").kind, "ability_build")

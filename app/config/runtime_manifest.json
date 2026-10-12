@@ -229,6 +229,10 @@
     "jarvis.repo_learning",
     "jarvis.repo_abilities",
     "jarvis.ability_runner",
+    "jarvis.documents",
+    "jarvis.file_drop",
+    "jarvis.island_buddy",
+    "pypdf",
     "jarvis.context_hub",
     "jarvis.gods_eye",
     "jarvis.gods_eye_update",
@@ -608,6 +612,17 @@
     "new_python_dependencies": [],
     "limitations": "not an OS filesystem sandbox; only installed toolchains, existing dependencies and authorized operations; hosted connectors and proprietary Codex internals are not copied",
     "verification": "2026-10-08 IST: actual single/two-worker Qwen Python and LocalGithub trials passed. 2026-10-09 IST: actual three-worker website generation and independent Chrome oracle, native synthetic-image vision, component-completion and GPU-queue regressions passed. See docs/native-coding.md for dated timings, full regression status and limits."
+  },
+  "documents": {
+    "modules": ["jarvis.documents", "jarvis.file_drop", "jarvis.island_buddy"],
+    "configuration": "documents in config/config.json; ui.buddy",
+    "dependency": "pypdf==6.20.0 (requirements/runtime.txt), pure Python PDF text extraction",
+    "drop_target": "WM_DROPFILES on the island canvas and its top-level window (pywin32 window-procedure subclass); restored on close",
+    "indexing": "light (LightRAG-style: BM25 + co-occurrence graph, no model) or graph (GraphRAG-style: light first, then local qwen3.5:9b entity/relation extraction at research priority) by size and named-entity density; Jarvis's own implementations, not the upstream libraries",
+    "memory": "session in memory with crash-safe spills under .jarvis-runtime/documents/session; saved to .jarvis-runtime/documents/<id>/index.json and the vault's Jarvis Documents on 'done with the pdf', 30 min idle or Jarvis closing; spills of a crashed session are saved at next start",
+    "sending": "WhatsApp: preview and explicit approval, clipboard CF_HDROP paste into the open chat, Enter once, confirmation read-back, no resend. Email: Gmail draft with attachments (never sent), subject read-back",
+    "long_running_service": false,
+    "automatic_action_replay": false
   },
   "repo_abilities": {
     "modules": ["jarvis.repo_abilities", "jarvis.ability_runner"],

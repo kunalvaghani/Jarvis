@@ -7,6 +7,7 @@ types with real keystrokes, and verifies every step from fresh state. Nothing is
 user's explicit approval of the exact text, and an uncertain send is never repeated.
 """
 import ctypes
+from pathlib import Path
 import json
 import os
 import re
@@ -622,7 +623,7 @@ def snapshot(actions):
         return None
     prompt = stack[-1]
     return {"token": prompt.token, "kind": "whatsapp", "expires": prompt.created + prompt.lifetime,
-            "question": prompt.question,
+            "question": prompt.question, "free_text": bool(prompt.free_text),
             "options": [{"label": str(o.get("label", ""))[:500] if isinstance(o, dict) else str(o)[:500],
                          "context": str(o.get("context", ""))[:1200] if isinstance(o, dict) else "", "image": ""}
                         for o in prompt.options]}
@@ -711,6 +712,116 @@ def send_message(actions, query, instruction, verbatim=False, cancelled=lambda: 
             actions.report(CARD, card("drafting", contact, "Writing your message"))
             text = draft(actions, contact, instruction, history, "write")
         return approve_and_send(actions, handle, contact, text, history, cancelled, instruction)
+
+
+def clipboard_files(paths):
+    """Put files on the clipboard (CF_HDROP), as Explorer's Copy does. Returns the previous text to restore."""
+    import struct
+    import win32clipboard
+    import win32con
+    previous = None
+    win32clipboard.OpenClipboard()
+    try:
+        try:
+            previous = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        except (TypeError, win32clipboard.error):
+            previous = None
+        names = ("\0".join(str(Path(p).resolve()) for p in paths) + "\0\0").encode("utf-16-le")
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_HDROP, struct.pack("<IiiII", 20, 0, 0, 0, 1) + names)
+    finally:
+        win32clipboard.CloseClipboard()
+    return previous
+
+
+def restore_clipboard(text):
+    import win32clipboard
+    import win32con
+    try:
+        win32clipboard.OpenClipboard()
+        try:
+            win32clipboard.EmptyClipboard()
+            if text:
+                win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text)
+        finally:
+            win32clipboard.CloseClipboard()
+    except Exception:
+        pass
+
+
+def send_files(actions, query, paths, caption="", cancelled=lambda: False, sleep=time.sleep):
+    """Send files (with an optional message) to one contact: find, preview, approve, paste, send once, confirm."""
+    from .jarvis_pointer import tap
+    from .window_focus import focus
+    names = ", ".join(Path(p).name for p in paths)
+    with physical():
+        handle = ensure_window(cancelled)
+        row = find_contact(actions, handle, query, cancelled)
+        contact = open_row(handle, row, cancelled)
+        clear_search(handle)
+        for _ in range(6):
+            shown = names + (' + "' + caption + '"' if caption else "")
+            actions.report(CARD, card("preview", contact, shown, "Waiting for your approval"))
+            prompt = Prompt("Send " + names + " to " + contact + "?",
+                            [{"label": "Approve and send", "context": caption or "(no message)"}, {"label": "Cancel"}],
+                            "confirm", free_text=True)
+            answer = ask(actions, prompt, cancelled, "Send " + names + " to " + contact +
+                         (" with the message: " + sentence(caption) if caption else "") +
+                         " Should I send it? You can also tell me a different message.")
+            if answer == 0:
+                break
+            if answer in {None, "no", 1}:
+                actions.report(CARD, card("error", contact, "Not sent"))
+                return "Okay, I didn't send it."
+            caption = answer  # A new message, exactly as said or typed.
+        else:
+            return "Too many changes; nothing was sent."
+        if cancelled():
+            return "Cancelled; nothing was sent."
+        doc = document(handle)
+        items = read(doc)
+        if not is_open(items, contact):
+            raise WhatsAppError("The open chat changed before attaching; nothing was sent.")
+        box = compose_box(items)
+        if box is None:
+            raise WhatsAppError("I couldn't find the message box in " + contact + "'s chat; nothing was sent.")
+        if normalized(compose_value(box)):
+            raise WhatsAppError("There is already unsent text in " + contact + "'s chat. I left it untouched; clear it and ask again.")
+        before = [m for m in messages(items) if m["outgoing"]]
+        actions.report(CARD, card("sending", contact, names, "Attaching and sending"))
+        focus(handle)
+        left, top, right, bottom = box["rect"]
+        tap((left + right) // 2, (top + bottom) // 2)
+        sleep(.3)
+        if ctypes.windll.user32.GetForegroundWindow() != handle:
+            raise WhatsAppError("WhatsApp lost focus before attaching; nothing was sent.")
+        previous = clipboard_files(paths)
+        try:
+            keys((0x11, 0), (0x56, 0), (0x56, 1), (0x11, 1))  # Ctrl+V: WhatsApp opens its attachment preview.
+            sleep(2.)
+            if ctypes.windll.user32.GetForegroundWindow() != handle:
+                raise WhatsAppError("WhatsApp lost focus in the attachment preview; check it before sending again.")
+            if caption:
+                desktop = actions.desktop
+                old = desktop.target
+                desktop.target = handle
+                try:
+                    desktop.type(caption, cancelled)
+                finally:
+                    desktop.target = old
+                sleep(.4)
+            keys((0x0D, 0), (0x0D, 1))  # Enter once sends the files and the caption.
+        finally:
+            restore_clipboard(previous)
+        deadline = time.monotonic() + 25
+        while time.monotonic() < deadline:
+            sleep(.6)
+            mine = [m for m in messages(read(doc)) if m["outgoing"]]
+            if len(mine) > len(before) or (mine and before and mine[-1] != before[-1]):
+                actions.report(CARD, card("sent", contact, names, "Sent " + mine[-1].get("time", "")))
+                return "Sent " + names + " to " + contact + " on WhatsApp" + (" with your message." if caption else ".")
+        raise WhatsAppError("I pressed Enter once to send " + names + " to " + contact + ", but couldn't confirm it in the chat. "
+                            "Check WhatsApp before sending again.")
 
 
 def unread_chats(handle, include_groups=False, include_muted=False):

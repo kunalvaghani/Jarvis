@@ -139,6 +139,49 @@ def raw_message(args, send=False):
     return base64.urlsafe_b64encode(message.as_bytes()).decode()
 
 
+def attachment_message(to, subject, body, paths, limit=24 * 2 ** 20):
+    """An email with files attached (Gmail's limit is 25 MB including encoding)."""
+    import mimetypes
+    message = EmailMessage(); message['Subject'] = str(subject)[:200].replace('\n', ' ').replace('\r', ' ')
+    if to:message['To'] = recipients(to)
+    message.set_content(str(body)[:10000])
+    total = 0
+    for path in paths:
+        path = Path(path)
+        data = path.read_bytes()
+        total += len(data)
+        if total > limit:raise ValueError('The attachments are larger than Gmail allows (25 MB).')
+        kind, _ = mimetypes.guess_type(path.name)
+        main, sub = (kind or 'application/octet-stream').split('/', 1)
+        message.add_attachment(data, maintype=main, subtype=sub, filename=path.name)
+    return message.as_bytes()
+
+
+def draft_with_attachments(base, to, subject, body, paths, api=None):
+    """Save one Gmail draft with the files attached (never sends). Returns the draft ID after a read-back."""
+    raw = attachment_message(to, subject, body, paths)
+    api = api or API(base)
+    try:
+        if len(raw) < 3_500_000:
+            result = api.call('POST', 'drafts', json={'message': {'raw': base64.urlsafe_b64encode(raw).decode()}})
+        else:
+            # Large messages go through Gmail's media upload endpoint.
+            response = api.session.post('https://gmail.googleapis.com/upload/gmail/v1/users/me/drafts?uploadType=media',
+                                        data=raw, headers={'Content-Type': 'message/rfc822'}, timeout=(5, 120))
+            if not 200 <= response.status_code < 300:
+                raise ValueError('Gmail API returned HTTP ' + str(response.status_code) + '; inspect drafts before repeating.')
+            result = response.json()
+        draft_id = identity(result['id'])
+        check = api.call('GET', 'drafts/' + draft_id, params={'format': 'metadata', 'metadataHeaders': ['Subject']})
+        headers = {str(h.get('name', '')).casefold(): str(h.get('value', '')) for h in
+                   check.get('message', {}).get('payload', {}).get('headers', [])}
+        if headers.get('subject', '') != str(subject)[:200].replace('\n', ' ').replace('\r', ' '):
+            raise ValueError('The draft was saved but its read-back differs; check Gmail drafts before repeating.')
+        return draft_id
+    finally:
+        api.close()
+
+
 def decode(raw):
     content = base64.urlsafe_b64decode(raw + '=' * (-len(raw) % 4))
     if len(content)>1_000_000:raise ValueError('Email exceeds the local size budget.')

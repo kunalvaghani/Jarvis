@@ -36,6 +36,17 @@ def build_interface(app):
                                   relief='flat', cursor='hand2', takefocus=True)
     app.island_canvas.pack(fill='both', expand=True)
     app.island = Island(app, app.island_canvas)
+    if os.name == 'nt' and not app.config.get('_ui_verification', False) and app.config.get('documents', {}).get('enabled', True):
+        try:
+            # Drop files on the island: Pip eats them and asks what to do (file_drop.py).
+            from .file_drop import DropTarget, card, start
+
+            def dropped(paths):
+                app.island.notify('media_card', card('eating', ', '.join(os.path.basename(p) for p in paths[:3]), 'Nom nom…'))
+                start(app.actions, paths)
+            app.island.drop_target = DropTarget(root, [app.island_canvas], dropped)
+        except Exception:
+            app.island.drop_target = None  # Without pywin32 the island still works; only dropping is unavailable.
     app.island_canvas.bind('<Return>', app.toggle_panel)
     app.island_canvas.bind('<space>', app.toggle_panel)
     app.menu = tk.Menu(root, tearoff=False, bg=CARD, fg=TEXT, activebackground=LINE, activeforeground=CYAN)

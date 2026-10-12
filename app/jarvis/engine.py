@@ -89,6 +89,13 @@ class Engine:
             return
         if text or wake:
             self.last_speech = now
+        free_text = getattr(self, 'free_text', None)
+        if final and text and free_text is not None and free_text() and not STOP.search(text):
+            # A question is waiting for words (a name, an email address, a message): pass them through whole,
+            # never reinterpreted as a command. "Cancel" / "stop" still go through normal parsing.
+            self._dispatch(Command("whatsapp_answer", text))
+            self._reset_segment()
+            return
         # Whisper may finalize 'open notepad' before the next 'and write ...'.
         continued = bool(re.match(r"^and\s+(?=(?:please\s+)?(?:write|type)\b)", text, re.I))
         text = re.sub(r"^and\s+(?=(?:please\s+)?(?:write|type|click|select|choose)\b)", "", text, flags=re.I)

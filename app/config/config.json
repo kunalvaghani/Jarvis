@@ -53,7 +53,8 @@
     "model_tokens": 256
   },
   "ui": {
-    "opacity": 0.96
+    "opacity": 0.96,
+    "buddy": true
   },
   "agent_runtime": {
     "deferred_tools": true,
@@ -1407,6 +1408,13 @@
     "native_max_repairs": 3,
     "native_max_workers": 2,
     "native_predict": 4000
+  },
+  "documents": {
+    "enabled": true,
+    "model": "qwen3.5:9b",
+    "graph_threshold_chars": 40000,
+    "graph_max_chunks": 12,
+    "focus_minutes": 30
   },
   "repo_abilities": {
     "enabled": true,

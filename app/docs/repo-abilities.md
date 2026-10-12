@@ -94,6 +94,38 @@ the approval card. At the end it shows **Added: … Say "…"** and "you can clo
 OK**, or **No new ability from …** with the reason. If you ask "what abilities did you get from repos" mid-build,
 it also tells you to keep it open.
 
+## Opening a repository Jarvis already knows (2026-10-12 IST)
+
+When a repository Jarvis has already learned, or has abilities from, stays open in the browser for about 3 seconds
+(new repositories still wait 8 seconds before learning), the island says what Jarvis already has from it. It does
+this at most once every 10 minutes per repository:
+
+| Island card | When |
+| --- | --- |
+| **Already have abilities from owner/repo** · "2 abilities from it: summarize text, summarize file; failed testing: summarize document" · *Say "summarize the text in <text>"* | It has active abilities from that repository. |
+| **Already learned owner/repo** · "waiting for your OK: …" · *Say "show pending abilities"* | Abilities from it still wait for your answer. |
+| **Already learned owner/repo** · "building its abilities now" | It was learned before abilities existed, so they are built now. |
+| **Already learned owner/repo** · "no abilities from it (reason)" | Its build found nothing suitable. |
+
+Ask "what abilities do you have from this repo" (or "… from owner/repo") to hear the same by voice. The situation
+snapshot also lists them under the repository on screen, so questions about "this repo" know about them.
+
+**Fixed along the way**, found in this PC's registry:
+
+- Abilities whose build was interrupted by a restart were left "queued" and looked "being built" forever. On start
+  they are now marked "interrupted" (not shown); the repository is built again. An interrupted install that had
+  already written its code goes back to waiting for approval.
+- A repository held by the daily automatic-build limit (`cocoindex-io/cocoindex`, "daily build limit") was never
+  picked up again. Held and interrupted repositories now resume at start and are rechecked hourly. They still count
+  against the daily limit.
+
+Checked with this PC's real data (2026-10-12 IST, simulated browser titles; the cards were printed, not shown):
+
+- cocoindex: "Already have abilities from cocoindex-io/cocoindex | 2 abilities from it: summarize text, summarize
+  file; failed testing: summarize document".
+- agenttrail: "… 1 ability from it: extract task list; failed testing: visualize project activity".
+- SwiftUI-Agent-Skill: "Already learned … no abilities from it yet".
+
 ## Abilities in coding tasks (2026-10-12 IST)
 
 Approved abilities are also used when Jarvis codes, if they fit the task:
@@ -136,6 +168,7 @@ and its reference value for coding is limited to the same degree. A full live co
 | --- | --- |
 | *a learned phrase*, e.g. "convert notes.md to html" | Runs the ability. Files are found by full path, or by name in JarvisFiles, Downloads, Desktop or Documents. |
 | "use markdown to html on notes.md" | Runs an ability by name; the input type is inferred (file, link, number or text). |
+| "what abilities do you have from this repo" / "… from owner/repo" | What Jarvis already has from that repository (also shown on the island when you open it). |
 | "list your abilities" / "what abilities did you get from repos" | Active abilities with an example phrase, plus what is waiting, building or failed. |
 | "show pending abilities" | Shows every waiting ability on the island again, one card at a time. |
 | "approve ability markdown to html" / "approve new abilities" | Approves by voice, without the card: installs, tests and adds it. |

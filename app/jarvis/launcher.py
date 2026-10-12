@@ -89,6 +89,11 @@ def preflight(base=BASE, repair=True):
                     'max_repairs', 'max_builds_per_day', 'run_timeout_seconds', 'test_timeout_seconds', 'max_memory_mb',
                     'install_timeout_seconds', 'max_input_mb', 'memory_margin_gb', 'idle_seconds')):
             raise ValueError('Invalid repo_abilities configuration.')
+        documents = config.get('documents', {})
+        if not isinstance(documents, dict) or type(documents.get('enabled', True)) is not bool or any(
+                type(documents.get(k, 1)) not in {int, float} or documents.get(k, 1) <= 0 for k in (
+                    'graph_threshold_chars', 'graph_max_chunks', 'focus_minutes')):
+            raise ValueError('Invalid documents configuration.')
         from .repo_sandbox import RepositorySandbox
         RepositorySandbox(repository_options.get('image','jarvis-repository-runtime:1'))
         if not isinstance(config.get("apps"), dict) or not isinstance(config.get("whisper"), dict) or not config.get("model_path"):

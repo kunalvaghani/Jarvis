@@ -72,6 +72,29 @@ limits and live results](docs/gods-eye.md).
 
 ![Live God's Eye views opened by Jarvis — Persian Gulf military layers, Statue of Liberty, a London traffic camera, the Eiffel Tower](artifacts/media/gods-eye-jarvis-live-2026-10-11.jpg)
 
+**Pip, and files dropped on the island (2026-10-12 IST):**
+
+- **Pip.** The island has a little animated friend in place of the "J" badge. Pip blinks, looks around, gets hungry
+  when you drag a file over the island, eats what you drop, thinks while it answers, and shows hearts when done.
+- **The drop flow.** Drop a PDF, Word, text or code file and Pip asks what to do with it. You answer by click, voice,
+  or the new answer box:
+  - **Ask questions:** the file is indexed LightRAG-style (short documents) or GraphRAG-style (long or name-heavy
+    ones, with a knowledge graph built by the local model in the background). Questions about it are then answered
+    with page citations for the whole session. The index is then saved to memory and to an Obsidian note, so the same
+    file reconnects later.
+  - **WhatsApp:** asks to whom and for an optional typed or dictated message, previews it, then sends both.
+  - **Email:** asks for a recipient, or none, and writes the body from what you say. The result is a Gmail draft with
+    the file attached.
+- **Live check.** Real model answers on a 15-page paper were correct and cited. The graph extraction failed silently
+  at first; that's fixed and re-verified.
+- **Not tested live:** a WhatsApp file send and a Gmail draft, which need your OK because they act on your accounts.
+  A drag from Explorer onto the running island needs a person.
+- **Regression:** 1,579 tests passed with one skip; readiness `ready`.
+
+[How it works, commands, memory and results](docs/file-buddy.md).
+
+![Rendered island frames with Pip and sample text — not a desktop screenshot](artifacts/media/island-pip-preview.png)
+
 **Turning learned repositories into new abilities (2026-10-11 IST):** After Jarvis learns a repository, it now
 also breaks it into new spoken commands that do what the repository does. A local coding model (`qwen3-coder:30b`
 when it fits in free RAM, else `qwen3.5:9b`) proposes up to two abilities and writes their code. The code is
@@ -81,7 +104,7 @@ atomic registry write. Jarvis's own code is never edited, a failed build or upda
 quit mid-build resumes on the next start. The island says "keep Jarvis open" while it builds, and every finished
 ability opens an approval card with its name, what it does, the command to say, what it uses, its test result and
 its full code. Approve keeps it for good; Deny discards it and the next one is built; no answer leaves it pending.
-Large repositories are read from their key files instead of being refused, and learning failures are reported. Approved abilities that fit a coding task are given to every coding path as tested reference code, and native coding workers can search, read and run them on project files (2026-10-12).
+Large repositories are read from their key files instead of being refused, and learning failures are reported. Approved abilities that fit a coding task are given to every coding path as tested reference code, and native coding workers can search, read and run them on project files (2026-10-12). Opening a repository Jarvis already knows shows on the island which abilities it already has from it (2026-10-12).
 Built-in commands always win over learned phrases. Live on this PC (on the 9B fallback, because the 30B model
 didn't fit): `trentm/python-markdown2` became "convert notes.md to html" and "extract headings from notes.md",
 which ran in about 0.3 s each after approval. The first attempt was rejected, which revealed two routing gaps that
@@ -1273,6 +1296,7 @@ Jarvis/
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
 | `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |
+| `island_buddy.py`, `file_drop.py`, `documents.py` | Pip, the island's animated friend, and its moods. Files dropped on the island: drop target, the ask / WhatsApp / email flow, and the LightRAG- or GraphRAG-style document index with session and long-term memory. |
 | `repo_abilities.py`, `ability_runner.py` | Turning learned repositories into new abilities: a coding model breaks the repository into spoken commands, writes `ability.py`, which is statically checked and tested in its own guarded process and environment, then merged atomically. Also approvals, routing after built-in commands, and running with copied inputs and no-clobber outputs. |
 | `repo_learning.py`, `context_hub.py` | Learning public GitHub repositories (search, pick, multi-language analysis, summary, Obsidian notes, references for coding, background learning from the browser) and the live situation snapshot for multi-context awareness. |
 | `memory_curator.py`, `capability_guide.py`, `weather_watch.py` | Long-term memory (learned facts, "remember/forget", conversation summaries, prompt context), capability and API answers with a live API check, and bad-weather/emergency alerts. |
@@ -1297,6 +1321,7 @@ Jarvis/
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
 | `gods_eye` | Enabled; start the God's Eye server with Jarvis; watch a 40 km (25-mile) radius every 60 s. See [settings](docs/gods-eye.md#settings-configconfigjson--gods_eye). |
 | `repo_learning` | Search GitHub for coding tasks (1 repository per task), learn repositories viewed in the browser after 8 s, re-learn after 30 days, `qwen3.5:9b`. See [settings](docs/repo-learning.md#settings-configconfigjson--repo_learning). |
+| `documents`, `ui.buddy` | Dropped files and document questions (`qwen3.5:9b`, GraphRAG-style above 40,000 characters, 12 chunks read by the model, 30-minute focus); Pip in the island. See [settings](docs/file-buddy.md#settings). |
 | `repo_abilities` | Build abilities after learning a repository, `qwen3-coder:30b` when it fits in free RAM, else `qwen3.5:9b`; 2 repairs, 4 automatic builds a day, 120 s test / 180 s run limits, 2 GB memory limit. See [settings](docs/repo-abilities.md#settings-configconfigjson--repo_abilities). |
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |

@@ -13,14 +13,20 @@ BLACK = "#000000"
 ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
 SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp"),
-           "weather": ("#f5a623", "Weather"), "github": ("#a371f7", "GitHub"), "godseye": ("#ff9f1c", "God's Eye")}
-WORKING = {"searching", "loading", "drafting", "sending", "choose", "learning", "opening"}  # Shimmer bar and pulsing meter.
+           "weather": ("#f5a623", "Weather"), "github": ("#a371f7", "GitHub"), "godseye": ("#ff9f1c", "God's Eye"),
+           "buddy": ("#ff9ecb", "Pip")}
+WORKING = {"searching", "loading", "drafting", "sending", "choose", "learning", "opening", "eating", "reading", "indexing",
+           "thinking"}  # Shimmer bar and pulsing meter.
 MEDIA_HEIGHT = 126
 MEDIA_PHASES = {"searching": "Searching", "loading": "Starting", "playing": "Playing", "paused": "Paused",
                 "error": "Couldn't play", "control": "", "choose": "Choose who you mean", "drafting": "Drafting",
                 "preview": "Waiting for your approval", "sending": "Sending", "sent": "Done", "call": "Incoming call",
                 "message": "New message", "alert": "Weather alert", "notice": "Heads up", "learning": "Learning",
-                "learned": "Learned and saved", "opening": "Opening", "showing": "On screen"}
+                "learned": "Learned and saved", "opening": "Opening", "showing": "On screen",
+                "hungry": "Drop it here — I'll eat it!", "eating": "Nom nom…", "reading": "Reading it",
+                "indexing": "Building its knowledge graph", "ready": "What should I do with it?", "thinking": "Thinking",
+                "happy": "Done!", "sad": "Oops"}
+BUDDY_TILE = (54, 54 + 54)  # Pip's square on the left of a card (x0, x1), top at card top + 8.
 
 
 def clock_text(seconds):
@@ -151,10 +157,24 @@ def media_amplitude(state, phase, index):
     return 2
 
 
-def animate_frame(base, width, height, status, phase, level, scale, media=None):
+def animate_frame(base, width, height, status, phase, level, scale, media=None, buddy=None):
     """Redraw the small moving regions; reuse all text, artwork and static glass."""
     image = base.copy()
     sampling = scale*2
+    def sketch(bounds, fill, paint):
+        """Like patch(), for free drawing (Pip)."""
+        left, top, right, bottom = bounds
+        pixels = tuple(round(value*scale) for value in bounds)
+        tile = Image.new('RGB', (round((right-left)*sampling), round((bottom-top)*sampling)), fill)
+        paint(ImageDraw.Draw(tile), left, top)
+        image.paste(tile.resize((pixels[2]-pixels[0],pixels[3]-pixels[1]),Image.Resampling.LANCZOS),(pixels[0],pixels[1]))
+    from .island_buddy import draw_buddy, mood_for
+    if buddy:
+        sketch((44,4,72,38),BLACK,lambda draw,left,top:draw_buddy(draw,58-left,21-top,20,buddy,phase,sampling))
+    if media and media.get('service') == 'buddy':
+        art_x, art_y = 44+10, 46+8
+        sketch((art_x,art_y,art_x+54,art_y+54),'#1f1a24',lambda draw,left,top:draw_buddy(
+            draw,art_x+27-left,art_y+30-top,40,mood_for(media.get('phase')),phase,sampling))
     def patch(bounds, fill, paint):
         left, top, right, bottom = bounds
         pixels = tuple(round(value*scale) for value in bounds)
@@ -179,7 +199,7 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None):
         right, top, bottom = width-44,46,height-10
         meter_x = right-58
         def meter(rectangle,left,y):
-            for index in range(5):
+            for index in range(5 if media.get('service') != 'buddy' else 0):
                 amplitude = media_amplitude(state,phase,index)
                 x = meter_x+8+index*8-left
                 rectangle((x,top+28-amplitude-y,x+4,top+28+amplitude-y),2,accent)
@@ -204,7 +224,7 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None):
 
 
 def render_island(width=208, height=52, status="STANDBY", phase=0, message="", level=0, expanded=False,
-                  detail='', scale=1., media=None, smooth_edges=False, edge_threshold=128):
+                  detail='', scale=1., media=None, smooth_edges=False, edge_threshold=128, buddy=None):
     width, height = max(170, float(width)), max(40, float(height))
     scale = min(3., max(1., float(scale))) if math.isfinite(float(scale)) else 1.
     sampling = scale * 2
@@ -222,9 +242,13 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
     shoulder, radius = 32, min(32, height/2)
     color = ACCENTS.get(status, ACCENTS["STANDBY"])
     y = 21
-    rectangle((47, 10, 69, 32), radius=11, fill='#1d3e66')
-    rectangle((49, 11, 67, 29), radius=9, fill='#729fcb')
-    text(54, 10, 'J', 12, '#ffffff', True)
+    if buddy:
+        from .island_buddy import draw_buddy
+        draw_buddy(draw, 58, 21, 20, buddy, phase, sampling)  # Pip, Jarvis's little friend (animated per frame).
+    else:
+        rectangle((47, 10, 69, 32), radius=11, fill='#1d3e66')
+        rectangle((49, 11, 67, 29), radius=9, fill='#729fcb')
+        text(54, 10, 'J', 12, '#ffffff', True)
     text(79, y-10, 'Jarvis', 12, '#e8e8e8', True)
     if width > 265:
         text(145, y-9, status.capitalize(), 11, color)
@@ -281,6 +305,12 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             text(art_x + 9 - spread, art_y + side / 2 - 14, "<", 22, accent, True)
             text(art_x + side - 21 + spread, art_y + side / 2 - 14, ">", 22, accent, True)
             text(art_x + side / 2 - 4, art_y + side / 2 - 14, "/", 22, "#e6dcff", True)
+        elif media.get("service") == "buddy":
+            from .island_buddy import draw_buddy, mood_for
+            # Drawn on its own tile so a falling page or a heart never paints outside it.
+            tile = Image.new("RGB", (round(side * sampling), round(side * sampling)), "#1f1a24")
+            draw_buddy(ImageDraw.Draw(tile), side / 2, side / 2 + 3, 40, mood_for(media.get("phase")), phase, sampling)
+            image.paste(tile, (round(art_x * sampling), round(art_y * sampling)))
         elif media.get("service") == "whatsapp":
             # Contact avatar: initials on a soft green tile; it pulses while a call rings.
             ring = 3 * abs(math.sin(phase * 4)) if media.get("phase") == "call" else 0
@@ -297,7 +327,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
         # Service badge on the artwork corner.
         bx, by = art_x + side - 16, art_y + side - 16
-        if media.get("service") in {"weather", "github", "godseye"}:
+        if media.get("service") in {"weather", "github", "godseye", "buddy"}:
             pass  # The tile itself is the badge.
         elif media.get("service") == "whatsapp":
             # Speech bubble with a handset, drawn as simple shapes.
@@ -330,8 +360,8 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
         caption = (caption + " on " + label) if state in {"searching", "loading"} and media.get("service") != "whatsapp" else caption
         text(text_x, top + 37, fit_text(draw, caption, face_sub, (meter_x - text_x - 6) * sampling), 11,
              "#ff8a80" if state == "error" else accent)
-        # Equalizer: live bars while playing, a gentle pulse while searching, flat when paused.
-        for i in range(5):
+        # Equalizer: live bars while playing, a gentle pulse while searching, flat when paused (not on Pip's cards).
+        for i in range(5 if media.get("service") != "buddy" else 0):
             amplitude = media_amplitude(state,phase,i)
             x = meter_x + 8 + i * 8
             rectangle((x, top + 28 - amplitude, x + 4, top + 28 + amplitude), radius=2, fill=accent)
@@ -482,6 +512,10 @@ class Island:
         self.stream_hidden = False
         self.stream_height = 0
         self.work_completion_pending = False
+        self.buddy = bool(app.config.get("ui", {}).get("buddy", True))  # Pip lives in the island.
+        self.hungry_until = 0.
+        self.last_active = time.monotonic()
+        self.drop_target = None
         from .island_surface import EdgeSurface, AnimationTimer
         self.edges = EdgeSurface(app.root)
         self.animation_timer = AnimationTimer() if isinstance(app.root.winfo_id(), int) else None
@@ -545,7 +579,9 @@ class Island:
                                                    'control': 6, 'choose': 120, 'drafting': 90, 'preview': 180,
                                                    'sending': 30, 'sent': 8, 'call': 45, 'message': 15,
                                                    'error': 8, 'alert': 45, 'notice': 20, 'learning': 900,
-                                                   'learned': 20, 'opening': 60, 'showing': 12}.get(message.get('phase'), 6)
+                                                   'learned': 20, 'opening': 60, 'showing': 12, 'hungry': 1.2,
+                                                   'eating': 60, 'reading': 120, 'indexing': 600, 'ready': 180,
+                                                   'thinking': 120, 'happy': 10, 'sad': 10}.get(message.get('phase'), 6)
             self.last_frame = None
             return
         if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):
@@ -611,6 +647,11 @@ class Island:
             self.message_until = max(self.message_until, now+12)
         if now < self.attention_until and status == "STANDBY":
             status = "ATTENTION"
+        if status != "STANDBY":
+            self.last_active = now
+        if self.drop_target is not None:
+            self.drop_target.poll()  # Files dropped on the island, handed over safely on the Tk loop.
+        self.watch_drag(now)
         message = self.message if now < self.message_until else ""
         scale = window_scale(root)
         detail = self.activity.caption(status, now, speaking, listening)
@@ -637,8 +678,11 @@ class Island:
         media = self.media if self.media and now < self.media_until and height >= MEDIA_HEIGHT - 4 and not self.surface_open else None
         if media:
             phase = 0 if reduced else now  # The card animates even while Jarvis is otherwise idle.
+        mood = self.mood(status, now) if self.buddy else None
+        if mood and not reduced and phase == 0:
+            phase = round(now * 15) / 15  # Pip keeps blinking and bobbing in standby, at about 15 frames a second.
         frame_key = (pixels_w, pixels_h, status, message, detail, scale, phase, round(float(level)), self.surface_open,
-                     id(media), round(time.time()) if media else 0, self.edges.active)
+                     id(media), round(time.time()) if media else 0, self.edges.active, mood)
         if frame_key != self.last_frame:
             geometry_key = (pixels_w,pixels_h,scale,self.surface_open,self.edges.active)
             static_key = (geometry_key,status,detail,id(media),int(time.time()) if media else 0)
@@ -648,9 +692,9 @@ class Island:
             if height <= 96 or geometry_key != self.background_key or media:
                 if static_key != self.static_key or complex_art:
                     self.static_image = render_island(width,height,status,phase if complex_art else 0,'',
-                        level,self.surface_open,detail,scale,media,edge_threshold=255 if self.edges.active else 128)
+                        level,self.surface_open,detail,scale,media,edge_threshold=255 if self.edges.active else 128,buddy=mood)
                     self.static_key = static_key
-                self.preview_image = (animate_frame(self.static_image,width,height,status,phase,level,scale,media)
+                self.preview_image = (animate_frame(self.static_image,width,height,status,phase,level,scale,media,mood)
                                       if not complex_art else self.static_image)
                 self.background_image = self.preview_image
                 self.photo = ImageTk.PhotoImage(self.preview_image, master=root)
@@ -661,9 +705,9 @@ class Island:
                 # A settled tall shell is static; redraw only its live top band.
                 if static_key != self.static_key or self.static_image.height != round(44*scale):
                     self.static_image = render_island(width,96,status,0,'',level,self.surface_open,detail,scale,
-                        edge_threshold=255 if self.edges.active else 128).crop((0,0,pixels_w,round(44*scale)))
+                        edge_threshold=255 if self.edges.active else 128,buddy=mood).crop((0,0,pixels_w,round(44*scale)))
                     self.static_key = static_key
-                header = animate_frame(self.static_image,width,96,status,phase,level,scale)
+                header = animate_frame(self.static_image,width,96,status,phase,level,scale,buddy=mood)
                 self.header_photo = ImageTk.PhotoImage(header,master=root)
                 self.canvas.itemconfigure(self.header_item,image=self.header_photo)
                 self.preview_image = self.background_image
@@ -695,6 +739,41 @@ class Island:
                     app.preview.focus_set()
         else:
             app.panel.withdraw()
+
+    def mood(self, status, now):
+        """Pip's mood in the compact bar."""
+        if now < self.hungry_until:
+            return "hungry"
+        if status in {"THINKING", "WORKING"}:
+            return "thinking"
+        if status in {"LISTENING", "ATTENTION"}:
+            return "ready"
+        if now - self.last_active > 600 and status == "STANDBY":
+            return "sleepy"
+        return "idle"
+
+    def watch_drag(self, now):
+        """A file dragged over the island (left button held, pointer over it, drag started elsewhere): Pip gets hungry.
+        Windows only reports the drop itself, so this is how Pip knows to open its mouth."""
+        if not self.buddy or self.drag is not None or self.drop_target is None:
+            return
+        try:
+            import win32api
+            if not win32api.GetAsyncKeyState(0x01) & 0x8000:
+                return
+            x, y = win32api.GetCursorPos()
+            root = self.app.root
+            left, top = root.winfo_rootx(), root.winfo_rooty()
+            if left <= x <= left + root.winfo_width() and top <= y <= top + root.winfo_height() + 30:
+                self.last_active = now
+                if now >= self.hungry_until:
+                    from .media_player import card
+                    self.notify('media_card', card('buddy', 'hungry', 'Feed me a file!',
+                                                   'PDF, Word, text or code — then tell me what to do with it', '', 0, 0, ''))
+                self.hungry_until = now + .6
+                self.media_until = max(self.media_until, now + .6)
+        except Exception:
+            pass
 
     def close(self):
         self.edges.close()

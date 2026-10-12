@@ -464,6 +464,22 @@ class IslandDesk:
             if option.get('context'):
                 text(row,option['context'],bg=CARD,fg=MUTED,anchor='w',justify='left',wraplength=390).pack(
                     side='bottom',fill='x',padx=10,pady=(0,8))
+        if pending.get('free_text'):
+            # Type the answer (a name, an email address, a message) instead of saying it.
+            bar = tk.Frame(self.choice_rows,bg=CARD)
+            bar.pack(fill='x',pady=(6,3))
+            entry = tk.Entry(bar,bg='#1d1d22',fg=TEXT,insertbackground=TEXT,relief='flat',font=('Segoe UI',10))
+            entry.pack(side='left',fill='x',expand=True,padx=(6,4),ipady=6)
+            def send(_event=None,token=pending['token']):
+                value = entry.get().strip()
+                if value and (self.pending or {}).get('token') == token:
+                    from .commands import Command
+                    self.app.actions.submit(Command('whatsapp_answer',value))
+                    entry.delete(0,'end')
+            entry.bind('<Return>',send)
+            from .glass_ui import GlassButton
+            GlassButton(bar,text='Send',bg=CARD,fg=TEXT,command=send,font=('Segoe UI',10),padx=10,pady=5).pack(side='left',padx=(0,6))
+            self.app.root.after(150,entry.focus_set)
         self.show('Choices')
         self.app.show_panel()
 

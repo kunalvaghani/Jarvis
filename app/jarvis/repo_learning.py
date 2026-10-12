@@ -742,15 +742,19 @@ class RepoLearner:
             self.viewing = {"candidate": candidate, "full_name": candidate, "since": now, "learned": bool(self.known(candidate)),
                             "queued": False}
             return
-        if self.viewing["queued"] or now - self.viewing["since"] < self.dwell:
+        # A repository Jarvis already knows is announced sooner; a new one waits the full dwell before learning.
+        if self.viewing["queued"] or now - self.viewing["since"] < (min(self.dwell, 3) if self.viewing["learned"] else self.dwell):
             return
         self.viewing["queued"] = True
+        forge = getattr(self.actions, "ability_forge", None)
         if self.known(candidate):
             self.viewing["learned"] = True
-            forge = getattr(self.actions, "ability_forge", None)
             if forge is not None:
-                forge.on_viewed(candidate)  # Learned before abilities existed: build them now.
+                forge.on_viewed(candidate)  # "Already have abilities from it: …" on the island; builds them if never built.
             return
+        if forge is not None:
+            forge.on_viewed(candidate, learned=False)  # Learned long ago (being refreshed) but abilities already exist.
+        threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
         threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
 
     def _verify_and_queue(self, candidate):

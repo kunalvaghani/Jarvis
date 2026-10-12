@@ -39,6 +39,15 @@ def situation(actions, question=""):
             row = learner.known(status["viewing"]) if entry["learned"] else None
             if row:
                 entry["purpose"] = row.get("purpose", "")[:300]
+            forge = getattr(actions, "ability_forge", None)
+            if forge is not None and forge.enabled:
+                try:
+                    groups = forge.repo_report(status["viewing"])["abilities"]
+                    have = {k: v[:5] for k, v in groups.items() if v}
+                    if have:
+                        entry["abilities_from_it"] = have  # Abilities Jarvis already built from the repository on screen.
+                except Exception:
+                    pass
             found["viewing_repository"] = entry
         if status.get("learning_now") or status.get("queued"):
             found["background_learning"] = {"now": status.get("learning_now"), "waiting": status.get("queued", [])[:4]}
