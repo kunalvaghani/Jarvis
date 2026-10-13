@@ -14,7 +14,7 @@ ACCENTS = {"STANDBY": "#b1b1bc", "LISTENING": "#8bdda8", "THINKING": "#b4a1ff",
            "WORKING": "#b4a1ff", "SPEAKING": "#b9c9ff", "ATTENTION": "#f1c580"}
 SERVICE = {"youtube": ("#ff3b3b", "YouTube"), "spotify": ("#1ed760", "Spotify"), "whatsapp": ("#25d366", "WhatsApp"),
            "weather": ("#f5a623", "Weather"), "github": ("#a371f7", "GitHub"), "godseye": ("#ff9f1c", "God's Eye"),
-           "buddy": ("#ff9ecb", "Pip")}
+           "buddy": ("#ff9ecb", "Pip"), "evolve": ("#5fd3bf", "Learning")}
 WORKING = {"searching", "loading", "drafting", "sending", "choose", "learning", "opening", "eating", "reading", "indexing",
            "thinking"}  # Shimmer bar and pulsing meter.
 MEDIA_HEIGHT = 126
@@ -307,6 +307,18 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             text(art_x + 9 - spread, art_y + side / 2 - 14, "<", 22, accent, True)
             text(art_x + side - 21 + spread, art_y + side / 2 - 14, ">", 22, accent, True)
             text(art_x + side / 2 - 4, art_y + side / 2 - 14, "/", 22, "#e6dcff", True)
+        elif media.get("service") == "evolve":
+            # Learning tile: a central node with spokes that pulse outward while Jarvis studies.
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill="#10241f")
+            cx, cy = art_x + side / 2, art_y + side / 2
+            pulse = 1 + (.5 * abs(math.sin(phase * 3)) if media.get("phase") == "learning" else 0)
+            for i in range(6):
+                a = phase * .8 + i * math.pi / 3
+                ex, ey = cx + 13 * pulse * math.cos(a), cy + 13 * pulse * math.sin(a)
+                draw.line([tuple(round(v * sampling) for v in (cx, cy)), tuple(round(v * sampling) for v in (ex, ey))],
+                          fill=accent, width=max(1, round(1.4 * sampling)))
+                draw.ellipse(tuple(round(v * sampling) for v in (ex - 2, ey - 2, ex + 2, ey + 2)), fill="#d7fff4")
+            draw.ellipse(tuple(round(v * sampling) for v in (cx - 5, cy - 5, cx + 5, cy + 5)), fill=accent)
         elif media.get("service") == "buddy":
             from .island_buddy import draw_buddy, mood_for
             # The tile; Pip on it is drawn every frame by animate_frame.
@@ -330,7 +342,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
         # Service badge on the artwork corner.
         bx, by = art_x + side - 16, art_y + side - 16
-        if media.get("service") in {"weather", "github", "godseye", "buddy"}:
+        if media.get("service") in {"weather", "github", "godseye", "buddy", "evolve"}:
             pass  # The tile itself is the badge.
         elif media.get("service") == "whatsapp":
             # Speech bubble with a handset, drawn as simple shapes.

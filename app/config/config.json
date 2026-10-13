@@ -1445,5 +1445,29 @@
     ],
     "analysis_timeout_seconds": 600,
     "max_input_mb": 200
+  },
+  "deliberation": {
+    "enabled": true,
+    "assertiveness": "when_it_matters",
+    "voice_confidence_threshold": 0.6,
+    "ask_min_risk": "high",
+    "max_alternatives": 3,
+    "ledger_max": 500,
+    "timeout_seconds": 20
+  },
+  "self_evolution": {
+    "enabled": true,
+    "idle_seconds": 90,
+    "poll_seconds": 5.0,
+    "cooldown_seconds": 600,
+    "max_jobs_per_day": 4,
+    "max_backlog": 200,
+    "min_available_mb": 3072,
+    "max_cpu_percent": 55,
+    "explore": true,
+    "self_modification": {
+      "enabled": true,
+      "auto_deploy": false
+    }
   }
 }

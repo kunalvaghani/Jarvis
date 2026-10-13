@@ -32,7 +32,7 @@ class SkillMemoryTests(unittest.TestCase):
                     *([{ "stage": "goal_verified", "evidence": "Current search results confirmed"}] if verified else [])]}
 
     def test_sync_and_relevance(self):
-        self.assertEqual(len(list(self.memory.vault.glob("Jarvis Skills/Builtins/*/SKILL.md"))), 9)
+        self.assertEqual(len(list(self.memory.vault.glob("Jarvis Skills/Builtins/*/SKILL.md"))), 10)
         context = self.skills.context("Search YouTube videos")
         self.assertIn("youtube-media", [s["name"] for s in context["skills"]])
         self.assertLessEqual(len(context["skills"]), 2)

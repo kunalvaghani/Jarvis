@@ -2,7 +2,9 @@
 
 Jarvis combines local voice input, Qwen planning and answers, guarded desktop and
 browser actions, native coding, repository skills, reverse-engineer-and-clone of
-apps/websites/binaries, and configured integrations. The application lives in [`app/`](app/).
+apps/websites/binaries, a deliberation layer that forms its own evidence-based opinions
+and recommends better approaches, an idle-only self-evolution engine that learns new capabilities from
+GitHub over time, and configured integrations. The application lives in [`app/`](app/).
 
 The [UI finish update](app/docs/ui-smoothness.md) preserves the island design and
 animations while removing side seams, blending the outer curves and using cached
@@ -71,7 +73,9 @@ a background task queue, natural phrasing and faster step-by-step planning; see
 [understanding everyday phrasing across the 800-scenario testbook](app/docs/natural-language.md), and
 [a six-module cognitive architecture with a world model, learning and a live Mind view](app/docs/cognitive-architecture.md), and
 [screen pre-awareness that offers help for the app in front, opens YouTube videos by a title word and writes what you dictate](app/docs/screen-awareness.md), and
-[reverse-engineering a target app, website or binary with REA and building a best-effort functional clone you can then modify](app/docs/rea-reverse-engineer-clone.md). The [previous repository overview](app/docs/repository-overview-history.md)
+[reverse-engineering a target app, website or binary with REA and building a best-effort functional clone you can then modify](app/docs/rea-reverse-engineer-clone.md), and
+[a deliberation engine that forms its own evidence-based opinions, recommends better or safer approaches, decides when to proceed, ask or disagree, and keeps a traceable decision ledger](app/docs/deliberation-engine.md), and
+[an idle-only self-evolution engine that detects its own capability gaps, learns relevant GitHub repositories into tested commands, remembers them, resumes crash-safely, and can patch its own source under strict approval gates](app/docs/self-evolution.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

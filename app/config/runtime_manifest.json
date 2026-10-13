@@ -135,7 +135,9 @@
     "isolated_approved_repository_skill_dispatch",
     "persistent_versioned_repository_skill_registry",
     "repository_skill_emergency_disable",
-    "on_demand_rea_reverse_engineer_and_best_effort_clone"
+    "on_demand_rea_reverse_engineer_and_best_effort_clone",
+    "shared_deliberation_opinion_and_decision_layer_at_task_choke_point",
+    "idle_only_self_evolution_capability_gap_backlog_and_gated_self_modification"
   ],
   "main_imports": [
     "jarvis.native_coding",
@@ -638,6 +640,37 @@
     "routing": "Management phrases in commands special parsers; learned trigger phrases checked last in commands._parse so built-in commands win; phrases built-ins already claim are dropped at activation",
     "long_running_service": false,
     "automatic_action_replay": false
+  },
+  "self_evolution": {
+    "configuration": "self_evolution.enabled/idle_seconds/poll_seconds/cooldown_seconds/max_jobs_per_day/max_backlog/min_available_mb/max_cpu_percent/self_modification",
+    "module": "jarvis/self_evolution.py (CapabilityGapDetector + SelfEvolution orchestrator + SafeEvolutionManager); instantiated and started in actions.py beside anticipation/realtime, fed user activity from actions.submit, closed on shutdown.",
+    "purpose": "Autonomous idle-only capability expansion. Closes the discover->learn->integrate->remember->repeat loop over EXISTING subsystems rather than reimplementing them.",
+    "reuses": "repo_learning.py (RepoLearner.search/learn + Obsidian Jarvis Repos + offline cache), repo_abilities.py (AbilityForge auto-builds abilities from a learned repo, sandboxed/validated/registered, stdlib auto-activates and third-party needs approval), repo_analysis.py, anticipation.py idle style + gpu_scheduler admission, experience/cognition stats and the deliberation ledger for gap evidence, island media_card notifications, obsidian_memory for the Improvement Backlog note.",
+    "adds": "CapabilityGapDetector (mines cognition reliability stats, deliberation failed outcomes and repeated user requests into evidence-backed gaps), a persistent scored crash-safe Improvement Backlog (.jarvis-runtime/self-evolution/backlog.json with atomic writes and dedup against learned repos), an owned idle orchestrator thread that drives discovery->learn with per-step checkpoints, and SafeEvolutionManager for gated core self-modification.",
+    "idle_only": "Runs only when idle_seconds have elapsed since the last user command and anticipation is not busy and RAM/CPU are within limits; any user command calls note_activity() which preempts and interrupts the in-flight step. Active user tasks always win.",
+    "resource_release": "Heavy work (download/analysis/ability build) runs in the existing out-of-process workers which clean up; the orchestrator thread itself is lightweight and holds no model in memory. psutil gates RAM/CPU when available.",
+    "crash_safety": "Backlog and a per-job checkpoint are durable and atomic; on restart the backlog is restored and an interrupted job resumes from pending on the next idle tick. Uncertain learning writes are never replayed; the learner/forge own their own idempotent resume.",
+    "self_modification": "Opt-in and gated. propose -> isolate git worktree -> run the test suite -> require Actions._approve -> deploy with a kept backup -> auto-rollback on regression. Never edits security/permission/approval source (PROTECTED pattern), never auto-deploys (auto_deploy=false), never disables its own checks.",
+    "activation_policy": "Unchanged from AbilityForge: verified stdlib-only abilities activate automatically during idle; third-party/network abilities and all core-source patches require approval.",
+    "new_python_dependencies": [],
+    "long_running_service": "Owned idle daemon thread inside the main process (not a separate always-on service); started/stopped with Jarvis.",
+    "automatic_action_replay": false,
+    "status": "2026-10-13 IST: gap detection, scored crash-safe backlog, idle orchestration wiring and SafeEvolutionManager added and unit-tested (backlog persistence/resume, dedup, pause-on-activity, worktree test gate, approval-required deploy, rollback, protected-file refusal). `python -m jarvis.launcher --offline-check` passed with no new dependency. Live autonomous idle cycle driven end-to-end 2026-10-13 against real GitHub + the local model: detected a gap, discovered real repos, learned/understood one (17 modules, Obsidian note written), auto-triggered the forge which designed a concrete new ability ('generate slug') into the registry; the forge's code-gen + sandbox-test + activation did not finish within the ~7-minute bounded run (state 'building'), that final stage being the existing AbilityForge pipeline covered by tests.test_repo_abilities. See README dated results."
+  },
+  "deliberation": {
+    "configuration": "deliberation.enabled/assertiveness/voice_confidence_threshold/ask_min_risk/max_alternatives/ledger_max/timeout_seconds",
+    "module": "jarvis/deliberation.py; wired at the task choke point in actions.execute and the feedback hook in actions.submit, with a new bounded 'deliberate' inference op in brain_worker.py and an optional approach hint threaded through brain.run",
+    "purpose": "Shared reasoning/opinion/decision layer: forms evidence-based opinions over existing systems (cognition memory/reliability, skills, capability routing), classifies risk, estimates confidence, and decides to proceed, note a recommendation, or propose-and-wait. Interprets conversational approval/rejection/delegation and keeps a traceable decision ledger.",
+    "choke_points": "Non-trivial free-form tasks only (trivial imperatives and explicit commands stay fast); not a duplicated decision loop, and all high-risk actions still funnel through the single existing Actions._approve.",
+    "risk_tiers": "low = reads/research/drafts/reversible; moderate = file/memory writes, edits, installs with backups; high = destructive/irreversible/financial/external/credential/deploy or any APPROVAL_KINDS action. Single source of truth in deliberation.classify_risk, reusing cognition.effect_of.",
+    "autonomy": "Default assertiveness 'when_it_matters': silent on simple/agreed low-risk work; voices a brief recommendation or proposes-and-waits only on genuine disagreement, ambiguity, or high risk. No new background acting; nothing executes without the existing approvals.",
+    "store": ".jarvis-runtime/deliberation/decisions.jsonl (append-only, rotated at ledger_max). Outcomes recorded from the real task result and from user approval/rejection.",
+    "fallback": "Every model call is bounded and falls back to a heuristic opinion from learned reliability and skills; deliberation never blocks or delays a turn on inference failure.",
+    "honesty": "Model claims are typed fact/assumption/prediction/preference; unknown preferences are never asserted as fact; confidence is an estimate, not proof. Uncertain actions are never replayed; recovery offers an alternative for approval rather than re-running.",
+    "new_python_dependencies": [],
+    "long_running_service": false,
+    "automatic_action_replay": false,
+    "status": "2026-10-13 IST: engine, risk classification, confidence calibration, decision/feedback logic, ledger round-trip and the task/feedback wiring added and unit-tested; `python -m jarvis.launcher --offline-check` passed with no new dependency. Live end-to-end deliberation with the local qwen3.5:9b model: see README dated results."
   },
   "rea": {
     "configuration": "rea.enabled/node_path/entry/allow_commands/analysis_timeout_seconds/max_input_mb",

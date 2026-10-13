@@ -1428,6 +1428,61 @@ References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-
 
 ## Current validation and update history
 
+**2026-10-13 self-evolution engine (autonomous idle learning & capability expansion):** added
+`jarvis/self_evolution.py` — a `CapabilityGapDetector`, a persistent scored crash-safe improvement
+backlog, an owned idle orchestrator, and a `SafeEvolutionManager` — wired into `actions.py`
+(instantiate/start, activity-fed preemption from `submit`, shutdown close), plus `self_evolution`
+config and runtime-manifest blocks. **This reuses — not rebuilds — the ~13 existing components** the
+request describes: discovery/analysis (`repo_learning.py`/`repo_analysis.py`), sandboxed capability
+generation and activation (`repo_abilities.py` `AbilityForge`), the idle style (`anticipation.py`),
+Obsidian memory, the Dynamic Island, and the deliberation ledger. New capability: while idle (and not
+busy, within RAM/CPU limits), Jarvis mines its own weaknesses (unreliable action kinds, failed
+deliberated strategies, repeated requests) into a scored backlog, learns a relevant repository, lets
+the forge turn it into a tested command, records it, and shows a small animated **Learning** card on
+the Dynamic Island (service `evolve`) that says it is learning **and what** (`Learning: <skill>` →
+`Learned: <skill>` → `Learning paused` when you return) — preempting instantly on any user command and
+resuming crash-safely from a durable checkpoint. Opt-in gated
+self-modification can patch Jarvis's own source only via propose → isolated git worktree → tests →
+**explicit approval** → deploy-with-backup → rollback, refusing security/permission files and never
+auto-deploying. **13 new unit tests**; the **full suite of 1,635 tests passes (one skip)** and
+`python -m jarvis.launcher --offline-check` reports `dependencies_ready` with no new dependency.
+**Live (2026-10-13):** the full autonomous idle cycle was driven end-to-end against real GitHub and
+the local model. From a seeded capability gap it detected gaps, discovered real repositories
+(`un33k/python-slugify` and others via `RepoLearner.search`), **learned and understood one** (17
+source modules; the Obsidian `Jarvis Repos/` note and index were written), auto-triggered the ability
+forge, and the forge's local model **designed a concrete new capability** ("generate slug": inputs
+text/file → output text) recorded in the abilities registry. The forge's subsequent code-generation +
+sandboxed test + activation did not finish within the ~7-minute bounded run (the ability reached state
+`building`, no activated command yet); that final stage is the existing `AbilityForge` pipeline,
+covered separately by `tests.test_repo_abilities`. The **gated self-modification** pipeline was also
+exercised end-to-end against the real git repo on a throwaway module (propose → isolated-worktree test
+→ approval asked → deploy changed the value → rollback restored it). No microphone or desktop actions
+were live-tested; a longer idle window is needed to observe a fully activated forged command. See the
+[self-evolution guide](docs/self-evolution.md).
+
+**2026-10-13 deliberation engine (reasoning, opinions, decisions):** added a shared
+decision layer (`jarvis/deliberation.py`, a bounded `deliberate` inference op in
+`brain_worker.py`, an optional approach hint in `brain.run`, and wiring at the task choke
+point and feedback hook in `actions.py`, plus `deliberation` config and runtime-manifest
+blocks). For a non-trivial task Jarvis now forms an evidence-based opinion over its existing
+systems (cognition memory/reliability, skills), classifies risk (low/moderate/high),
+estimates confidence, and — with the default **"speak up only when it matters"** — proceeds
+silently, notes a recommendation, or proposes-and-waits only on genuine disagreement or real
+ambiguity. It interprets "go ahead / no, try something else / you decide", offers an
+alternative on failure without replaying uncertain actions, and records a traceable decision
+ledger. High-risk actions still funnel through the single existing approval gate (no
+duplicated approvals). **16 new unit tests** cover risk tiers, opinion formation, the
+disagreement/ambiguity/agreement decisions, feedback verdicts, heuristic fallback, confidence
+calibration and ledger round-trip/rotation; the **full suite of 1,622 tests passes (one
+skip)** and `python -m jarvis.launcher --offline-check` reports `dependencies_ready` with no
+new dependency. **Live:** the `deliberate` op was driven against the local `qwen3.5:9b` model
+and returned well-formed opinions (recommendation, three real alternatives, typed
+fact/assumption/prediction claims, confidence ~0.95). Measured latency on this CPU-bound
+machine was ~90–108 s per opinion, which exceeds the bounded 20 s task timeout, so in the
+live task path here the fast heuristic fallback is used; full model opinions land when
+inference is faster (GPU offload) or `deliberation.timeout_seconds` is raised. Microphone and
+desktop actions were not live-tested. See the [deliberation guide](docs/deliberation-engine.md).
+
 **2026-10-12 REA reverse-engineer-and-clone bridge:** added an on-demand bridge
 (`jarvis/rea_tools.py`, skill `reverse-engineer-clone`, `rea` config and runtime-manifest
 blocks, `reverse_engineer` routing and natural-language commands) that ingests a validated

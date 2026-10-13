@@ -30,6 +30,8 @@ Start with the [application guide](../README.md) and [project structure](project
 - [God's Eye View integration: voice-driven globe, live area data and alerts (2026-10-11)](gods-eye.md)
 - [Pip: drop a file on the island, then ask about it, WhatsApp it or email it (2026-10-12)](file-buddy.md)
 - [REA reverse-engineer-and-clone: ingest a target, analyze it, build a best-effort clone, then iterate (2026-10-12)](rea-reverse-engineer-clone.md)
+- [Deliberation engine: evidence-based opinions, recommendations, risk-tiered decisions and a decision ledger (2026-10-13)](deliberation-engine.md)
+- [Self-evolution engine: idle-only capability-gap detection, GitHub learning backlog, crash-safe resume and gated self-modification (2026-10-13)](self-evolution.md)
 - [Turning learned repositories into new Jarvis abilities (2026-10-11)](repo-abilities.md)
 - [Learning GitHub repositories for coding, and multi-context awareness (2026-10-11)](repo-learning.md)
 - [Long-term memory, API repair and bad-weather alerts (2026-10-10)](memory-apis-alerts.md)

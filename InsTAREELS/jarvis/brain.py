@@ -902,7 +902,11 @@ class Brain:
                 "fields": observation.get("fields", []),
                 "controls": observation.get("controls", [])}
 
-    def run(self, goal, cancelled):
+    def run(self, goal, cancelled, approach=None):
+        if approach:
+            # The user already agreed to this approach during deliberation; the goal stays
+            # authoritative and this is an additional, non-overriding planning hint.
+            goal = goal.rstrip() + "\n\n(Agreed approach to follow: " + str(approach).strip()[:300] + ")"
         if not self.options.get('incremental_planning', False):
             return self._run(goal, cancelled)
         from .step_planning import StepSession, replay

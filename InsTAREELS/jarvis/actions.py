@@ -203,6 +203,9 @@ class Actions:
         self.gods_eye = GodsEye(self, config.get("gods_eye", {}))
         from .cognition import Cognition
         self.cognition = Cognition(self, config.get("cognition", {}))  # Perceive -> remember -> reason -> act -> learn.
+        from .deliberation import Deliberation
+        self.deliberation = Deliberation(self, config.get("deliberation", {}))  # Opinion, recommendation, decision layer.
+        self.pending_opinion = None  # A recommendation voiced and awaiting the user's go-ahead/rejection.
         from .screen_awareness import ScreenAwareness
         self.screen = ScreenAwareness(self, config.get("screen_awareness", {}))  # Offers help for the app in front.
         self.hands_free = self.hands_free_state = None  # Set by the app while the microphone is on.
@@ -266,6 +269,13 @@ class Actions:
             busy=lambda: self.anticipation.busy())
         self.knowledge.realtime = self.realtime
         self.brain.client.realtime_provider = lambda goal, cancelled: self.realtime.context(goal, cancelled, refresh=False)
+        from .self_evolution import SelfEvolution
+        self_evolution_options = dict(config.get('self_evolution', {}))
+        if config.get('_ui_verification', False):
+            self_evolution_options['enabled'] = False
+        self.self_evolution = SelfEvolution(self, self_evolution_options,
+            notify=lambda kind, message: report(kind, message),
+            busy=lambda: self.anticipation.busy())  # Idle-only capability expansion (docs/self-evolution.md).
 
     def start(self):
         try:
@@ -288,6 +298,7 @@ class Actions:
         self.thread.start()
         self.anticipation.start()
         self.realtime.start()
+        self.self_evolution.start()
 
     def cancel(self):
         realtime = getattr(self, 'realtime', None)
@@ -331,6 +342,12 @@ class Actions:
         cognition = getattr(self, 'cognition', None)
         if cognition is not None:
             cognition.perceive_command(command)
+        evolution = getattr(self, 'self_evolution', None)
+        if evolution is not None:
+            evolution.note_activity()  # Any user command preempts idle learning immediately.
+        if getattr(self, 'pending_opinion', None) and command.kind in {'task', 'ask'} and command.extra != 'approved_plan':
+            if self._handle_opinion_feedback(command):
+                return  # A reply to a recommendation Jarvis is waiting on (go ahead / no / you decide).
         if command.kind == 'stop_speaking':
             self.report('stop_speech', '')
             self.report('state', 'Listening; go ahead.')
@@ -526,6 +543,111 @@ class Actions:
         if not self.closed.is_set():
             self.submit(Command('ask' if kind == 'chat' else 'task', text))
 
+    def _handle_opinion_feedback(self, command):
+        """Interpret a reply to a pending recommendation; returns True if it consumed the turn."""
+        from .commands import Command
+        pending = self.pending_opinion
+        engine = getattr(self, 'deliberation', None)
+        if pending is None or engine is None:
+            return False
+        verdict = engine.interpret_feedback(command.value or '')['verdict']
+        goal, opinion = pending['goal'], pending['opinion']
+        if verdict == 'approve':
+            self.pending_opinion = None
+            self._agreed_approach = opinion.get('recommendation') or ''
+            self._agreed_decision_id = pending.get('decision_id')  # The real outcome is recorded when the task finishes.
+            self.submit(Command('task', goal, 'approved_plan'))
+            return True
+        if verdict == 'vague':
+            if engine._risk_rank(opinion.get('risk')) >= engine._risk_rank(engine.ask_min_risk):
+                self.report('spoken_reply', "This one is consequential, so I'd rather you confirm: "
+                            + (opinion.get('recommendation') or goal).rstrip('.') + ". Go ahead?")
+                return True  # Keep pending; wait for an explicit yes/no on a high-risk action.
+            self.pending_opinion = None
+            self._agreed_approach = opinion.get('recommendation') or ''
+            self._agreed_decision_id = pending.get('decision_id')
+            self.report('spoken_reply', "I'll go with "
+                        + (opinion.get('recommendation') or 'the approach I recommended').rstrip('.') + ".")
+            self.submit(Command('task', goal, 'approved_plan'))
+            return True
+        refine_hint = command.value if verdict in {'reject', 'refine'} else ''
+        looks_like_feedback = verdict == 'reject' or re.search(r'\b(instead|rather|use|try|prefer|without|not)\b',
+                                                               command.value or '', re.I)
+        if verdict == 'refine' and not looks_like_feedback:
+            self.pending_opinion = None  # A brand-new request, not feedback; let normal routing handle it.
+            return False
+        engine.record_outcome(pending.get('decision_id'), False, 'user rejected: ' + (command.value or '')[:120])
+        self.report('state', 'Rethinking the approach...')
+        threading.Thread(target=self._repropose, args=(goal, opinion, refine_hint),
+                         name='Jarvis repropose', daemon=True).start()
+        return True
+
+    def _repropose(self, goal, prior_opinion, refine_hint):
+        """Generate a meaningfully different alternative after a rejection, off the audio thread."""
+        from .commands import Command
+        engine = self.deliberation
+        exclude = [prior_opinion.get('recommendation', '')] + [a.get('approach', '')
+                   for a in prior_opinion.get('alternatives', [])]
+        goal_for_model = goal + ("\n\nUser feedback on the previous idea: " + refine_hint if refine_hint else "")
+        opinion = engine.form_opinion(goal_for_model, Command('task', goal), self.closed.is_set, exclude=exclude)
+        decision = engine.decide(opinion)
+        if not opinion.get('recommendation'):
+            self.pending_opinion = None
+            self.report('spoken_reply', "I don't have a meaningfully different approach yet. "
+                        "Tell me what you'd prefer and I'll work from that.")
+            return
+        decision_id = engine.record(opinion, decision, opinion.get('recommendation'), 'proposed')
+        self.pending_opinion = {'goal': goal, 'opinion': opinion, 'decision_id': decision_id}
+        self.report('spoken_reply', decision.get('message') or
+                    ("I'd try instead: " + opinion['recommendation'].rstrip('.') + ". Go ahead?"))
+
+    def _should_deliberate(self, goal):
+        """Only deliberate on non-trivial, free-form tasks; simple imperatives stay fast."""
+        from .deliberation import TRIVIAL_TASK
+        goal = (goal or '').strip()
+        return len(goal) >= 12 and not TRIVIAL_TASK.match(goal)
+
+    def _form_task_opinion(self, command, cancelled):
+        """Form an opinion before a task. Returns a message to wait on, or None to proceed."""
+        engine = self.deliberation
+        try:
+            opinion = engine.form_opinion(command.value, command, cancelled)
+            decision = engine.decide(opinion)
+        except Exception:
+            self._agreed_approach = None
+            return None  # Deliberation never blocks a task; proceed normally on any error.
+        if decision['propose']:
+            decision_id = engine.record(opinion, decision, opinion.get('recommendation'), 'proposed')
+            self.pending_opinion = {'goal': command.value, 'opinion': opinion, 'decision_id': decision_id}
+            message = decision['message'] or "Want me to go ahead with that?"
+            self.report('spoken_reply', message)
+            return message
+        if decision['note']:
+            engine.record(opinion, decision, opinion.get('recommendation'), 'auto_proceed_with_note')
+            self.report('spoken_reply', decision['message'])
+            self._agreed_approach = decision.get('chosen') or None
+        else:
+            self._agreed_approach = None
+        return None
+
+    def _suggest_recovery(self, goal, result, cancelled):
+        """On a failed/paused task, offer one alternative approach without replaying anything."""
+        engine = self.deliberation
+        from .commands import Command
+        try:
+            opinion = engine.form_opinion(goal + "\n\n(The previous attempt did not succeed.)",
+                                          Command('task', goal), cancelled)
+        except Exception:
+            return result
+        recommendation = opinion.get('recommendation')
+        if not recommendation:
+            return result
+        decision_id = engine.record(opinion, {'risk': opinion.get('risk')}, recommendation, 'recovery_proposed')
+        self.pending_opinion = {'goal': goal, 'opinion': opinion, 'decision_id': decision_id}
+        offer = " I can try a different approach: " + recommendation.rstrip('.') + ". Want me to?"
+        self.report('spoken_reply', offer.strip())
+        return (result or "") + offer
+
     def _cancel_task(self, command):
         """Cancel the queued or running task the user described; never guess between ties."""
         from .task_queue import match, describe, model_choice
@@ -704,6 +826,9 @@ class Actions:
         anticipation = getattr(self, 'anticipation', None)
         if anticipation is not None:
             anticipation.close()
+        evolution = getattr(self, 'self_evolution', None)
+        if evolution is not None:
+            evolution.close()
         self.skills.close()
         if self.development_tools:
             self.development_tools.close()
@@ -1023,6 +1148,21 @@ class Actions:
             finally:
                 self.resume_source = None
         if command.kind == "task":
+            engine = getattr(self, 'deliberation', None)
+            approach = None
+            decision_id = None
+            if command.extra == 'approved_plan':
+                approach = getattr(self, '_agreed_approach', None)
+                decision_id = getattr(self, '_agreed_decision_id', None)
+                self._agreed_approach = None
+                self._agreed_decision_id = None
+            elif (engine is not None and getattr(engine, 'enabled', False) and not self.pending_question
+                  and not getattr(self, 'resume_source', None) and self._should_deliberate(command.value)):
+                proposal = self._form_task_opinion(command, cancelled)
+                if proposal is not None:
+                    return proposal  # Recommendation voiced; waiting for the user's go-ahead before acting.
+                approach = getattr(self, '_agreed_approach', None)
+                self._agreed_approach = None
             self.pending_open = None
             self.projects.pending = None
             self.last_created = None
@@ -1043,11 +1183,16 @@ class Actions:
                     from .fast_workflows import run
                     result = run(self, command.value, cancelled)
                 if result is None:
-                    result = self.brain.run(command.value, cancelled)
+                    result = (self.brain.run(command.value, cancelled, approach=approach) if approach
+                              else self.brain.run(command.value, cancelled))
                 from .gmail_workflows import UnreadSearchResult
                 paused = result and not isinstance(result, UnreadSearchResult) and any(word in result.casefold() for word in
                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
                 self.task_state.finish("paused" if paused else "completed", result)
+                if decision_id is not None and engine is not None:
+                    engine.record_outcome(decision_id, not paused, (result or "")[:160])
+                if paused and engine is not None and getattr(engine, 'enabled', False) and command.extra != 'approved_plan' and not cancelled():
+                    result = self._suggest_recovery(command.value, result, cancelled)
                 return result
             except Exception as exc:
                 from .clarification import TaskClarification
