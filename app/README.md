@@ -850,8 +850,9 @@ The 2026-09-27 comparison found all three installed vision candidates passed two
 
 ## Agent runtime and project research
 
-Jarvis now has **69 registered operations**: 16 core tools, 4 DOM browser tools,
-37 existing toolkit adapters and 12 agent/MCP operations. Coding tasks read applicable `AGENTS.md`,
+Jarvis now has **74 registered operations**: 16 core tools, 4 DOM browser tools,
+37 existing toolkit adapters, 12 agent/MCP operations and 5 REA reverse-engineering
+tools. Coding tasks read applicable `AGENTS.md`,
 explicitly selected `$name` skills and a bounded repository symbol map. Local
 plugin bundles can contribute declarative skills. Planning uses deferred toolkit
 discovery (`agent_runtime.deferred_tools: true`) with `tool_search`; configured
@@ -1192,6 +1193,16 @@ search, coding drafts, GitHub, research and credential-gated account services.
 Say **“list toolkits”** to see configuration requirements. See
 [toolkit integration and command examples](docs/superagi-toolkits.md).
 
+A REA reverse-engineer-and-clone bridge wires the external [REA framework](https://github.com/morluto/rea)
+(MIT) into the planner. Say **“reverse engineer the app D:/apps/example”** to
+register a target, then let Jarvis analyze it with REA and reconstruct a
+best-effort functional clone through the existing project-coding workflow,
+applying your follow-up changes on request. REA runs locally as a caller-supplied
+Node program and returns untrusted analysis evidence; Jarvis performs no analysis
+on ingest, requires approval for each analysis run, and never claims a guaranteed
+1:1 clone. See the [reverse-engineer-and-clone guide](docs/rea-reverse-engineer-clone.md)
+for setup (Node and external engines), the four-phase workflow, and limitations.
+
 | Integration | What Jarvis uses | Reference and attribution |
 | --- | --- | --- |
 | Ultron | Adapted time-decay ranking and compact recall of verified task summaries; no upstream server at runtime. | [Memory adaptation](docs/ultron-integration.md), retained Apache-2.0 license. |
@@ -1202,6 +1213,7 @@ Say **“list toolkits”** to see configuration requirements. See
 | General-Agent-Runtime | Reusable hidden question worker and removal of duplicate model discovery overhead. | [Response speed measurements](docs/gar-response-speed.md); configured models unchanged. |
 | SuperAGI | Independently implemented file/resource/coding/web/GitHub/account adapters. | [Toolkit guide](docs/superagi-toolkits.md), retained MIT reference license. |
 | God's Eye View | Separate on-demand local 3D Earth console. | [Installed source](integrations/gods-eye-view-src/gods-eye-view-main/README.md), MIT code and separate data/asset terms. |
+| REA (Reverse Engineer Anything) | On-demand ingest → reverse-engineer → best-effort clone → iterate bridge over REA's bounded `--json` CLI; source not vendored. | [Reverse-engineer-and-clone guide](docs/rea-reverse-engineer-clone.md), [attribution](integrations/rea-upstream/source-manifest.json), retained MIT license. |
 
 Toolkit groups include file listing/reading/appending/search, local resource and knowledge search, thinking/specification/test/code drafts, public web search/static scraping, GitHub reads/reviews/approved writes, email, Google Calendar, Jira, Apollo, Slack, and X. Of the 37 added operations, 19 require no account credentials and 18 need environment configuration. No-credential web operations still need network access. Coding drafts are returned for review; the project coding workflow performs checked writes.
 
@@ -1209,7 +1221,7 @@ Use **“list toolkits”** to inspect required environment variable names befor
 
 ## Autonomous toolkit use
 
-Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery receive relevant configured toolkit operations plus previously discovered tools. `tool_search` loads more operations for subsequent steps. Set `agent_runtime.deferred_tools` to false to expose the entire configured catalog. There are **51 operations with no required account environment variables**, and **69 registered in total**. The 18 account-backed operations need their environment variables; MCP wrappers additionally need trusted local server configuration and approval.
+Jarvis chooses and combines toolkit operations from the given goal; you do not need to specify tool names. Initial planning, adaptive replanning and recovery receive relevant configured toolkit operations plus previously discovered tools. `tool_search` loads more operations for subsequent steps. Set `agent_runtime.deferred_tools` to false to expose the entire configured catalog. There are **55 operations with no required account environment variables**, and **76 registered in total**. The 18 account-backed operations need their environment variables; MCP wrappers additionally need trusted local server configuration and approval.
 
 Verified tool results feed the next decision, remaining plan and final goal check. File/API/draft results are checked directly instead of requiring a desktop screenshot. Unknown URLs, IDs, SHAs or source text should be discovered by a prerequisite read, followed by replanning. Full result context stays in current-task memory with bounded/truncated input; durable checkpoint summaries stay compact. Native next-step inference uses an 8,192-token context and at most 450 output tokens; legacy planning and coding can use a 16,384-token context for selected tools, guidance and observations.
 
@@ -1220,6 +1232,7 @@ Examples:
 - `task check my upcoming calendar meetings and draft a preparation checklist`
 - `task review pull request 12 in GitHub repository owner/repository`
 - `task research Python asyncio and email a summary to recipient@example.com`
+- `reverse engineer the app D:/apps/example` then `analyze it with REA` and `clone its search feature, then rename the button to Find`
 
 External messages and remote changes require the appropriate account configuration and visible approval of the destination and exact payload. Drafting does not save or execute code. Every initial and revised plan checks write intent, while failure/cancellation blocks dependent actions and uncertain effects are never replayed. The configured task budget applies, 20 by default (1–40). See [autonomous toolkit details](docs/superagi-toolkits.md#autonomous-planning-and-chaining).
 
@@ -1414,6 +1427,28 @@ The **Preview text command** box accepts a full “Jarvis …” sentence and di
 References: [faster-whisper GPU requirements](https://github.com/SYSTRAN/faster-whisper#gpu), [English-only medium.en conversion used here](https://huggingface.co/Systran/faster-whisper-medium.en), and [Silero integration](https://github.com/SYSTRAN/faster-whisper/blob/v1.2.1/faster_whisper/vad.py). Desktop control uses the Windows API directly.
 
 ## Current validation and update history
+
+**2026-10-12 REA reverse-engineer-and-clone bridge:** added an on-demand bridge
+(`jarvis/rea_tools.py`, skill `reverse-engineer-clone`, `rea` config and runtime-manifest
+blocks, `reverse_engineer` routing and natural-language commands) that ingests a validated
+target, runs allowlisted REA CLI analysis under approval, records a reconstruction ledger,
+and hands off to the existing project-coding pipeline for a best-effort functional clone
+and follow-up edits. **9 new unit tests** cover tool registration, readiness reporting,
+target validation (relative/private/runtime-internal rejection), session/ledger lifecycle,
+fail-closed analysis without Node/entry, non-allowlisted command rejection, and the
+natural-language commands; the touched `tests.test_toolkits`, `tests.test_capabilities`
+and `tests.test_tools` suites pass (**59 tests** in the combined run). `python -m jarvis.launcher
+--offline-check` reported `dependencies_ready` with an empty missing list and no new Python
+dependency. **Live verification:** REA 6.4.0 was installed globally (`npm install --global rea-agents`,
+Node v24.14.0), `rea` was configured with the real `node.exe` and `scripts/rea.mjs` paths, and a
+full end-to-end run through the bridge (`rea_status` ready → `rea_ingest` → approved `rea_analyze`)
+statically analyzed a sample JavaScript application in **~3.8s**, returning **~73 KB of valid REA
+JSON evidence** (`predicate rea.javascript-application-analysis`, a 7-node module graph) stored in
+the session and reconstruction ledger. A pipe-buffer deadlock in the subprocess runner (large REA
+stdout filling the OS pipe) was found and fixed by streaming stdout to a temp-file sink. Native,
+Android and website targets still require REA's own external engines (Hopper/Ghidra/IDA, JADX, a
+browser), which were not exercised. Both README files, the integration table, the new
+[guide](docs/rea-reverse-engineer-clone.md) and attribution (`integrations/rea-upstream/`) were updated.
 
 **2026-09-27 coding curriculum:** completed [100 standalone Python CLI projects](docs/coding-curriculum.md)
 with real local inference and executable checks: **69/100 passed**, including

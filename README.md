@@ -1,8 +1,8 @@
 # Jarvis — local Windows voice assistant
 
 Jarvis combines local voice input, Qwen planning and answers, guarded desktop and
-browser actions, native coding, repository skills and configured integrations.
-The application lives in [`app/`](app/).
+browser actions, native coding, repository skills, reverse-engineer-and-clone of
+apps/websites/binaries, and configured integrations. The application lives in [`app/`](app/).
 
 The [UI finish update](app/docs/ui-smoothness.md) preserves the island design and
 animations while removing side seams, blending the outer curves and using cached
@@ -70,7 +70,8 @@ a background task queue, natural phrasing and faster step-by-step planning; see
 [God's Eye View driven by voice with live area alerts](app/docs/gods-eye.md), and
 [understanding everyday phrasing across the 800-scenario testbook](app/docs/natural-language.md), and
 [a six-module cognitive architecture with a world model, learning and a live Mind view](app/docs/cognitive-architecture.md), and
-[screen pre-awareness that offers help for the app in front, opens YouTube videos by a title word and writes what you dictate](app/docs/screen-awareness.md). The [previous repository overview](app/docs/repository-overview-history.md)
+[screen pre-awareness that offers help for the app in front, opens YouTube videos by a title word and writes what you dictate](app/docs/screen-awareness.md), and
+[reverse-engineering a target app, website or binary with REA and building a best-effort functional clone you can then modify](app/docs/rea-reverse-engineer-clone.md). The [previous repository overview](app/docs/repository-overview-history.md)
 is preserved with its historical measurements and updated relative links.
 
 ## Maintenance and attribution

@@ -1433,5 +1433,17 @@
   "repository_skills": {
     "enabled": true,
     "image": "jarvis-repository-runtime:1"
+  },
+  "rea": {
+    "enabled": true,
+    "node_path": "C:\\Program Files\\nodejs\\node.exe",
+    "entry": "C:\\Users\\kunal\\AppData\\Roaming\\npm\\node_modules\\rea-agents\\scripts\\rea.mjs",
+    "allow_commands": [
+      "analyze",
+      "analyze-javascript-application",
+      "analyze-web-bundle"
+    ],
+    "analysis_timeout_seconds": 600,
+    "max_input_mb": 200
   }
 }

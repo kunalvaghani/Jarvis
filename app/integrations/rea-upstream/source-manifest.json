@@ -1,0 +1,28 @@
+{
+  "repository": {
+    "name": "rea-agents",
+    "project": "REA: Reverse Engineer Anything",
+    "url": "https://github.com/morluto/rea",
+    "website": "https://rea.tools/",
+    "npm": "rea-agents",
+    "reviewed_revision": "d96550f2f61647ffa150597de73363fa90c4e169",
+    "reviewed_revision_date": "2026-10-13T01:02:35+08:00",
+    "reviewed_package_version": "6.4.0",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "disclaimer_file": "DISCLAIMER.md",
+    "mode": "external program invoked through its bounded --json CLI; source NOT vendored",
+    "runtime_requirement": "Node.js ^22.19.0 || ^24.11.0 || >=26.0.0 plus npm",
+    "cli_entry": "scripts/rea.mjs (published package also exposes dist/mcp/main.js for the MCP runtime)",
+    "integration": {
+      "jarvis_module": "jarvis/rea_tools.py",
+      "configuration": "config.json rea.* and config/runtime_manifest.json rea block",
+      "skill": "skills/reverse-engineer-clone/SKILL.md",
+      "default_allow_commands": ["analyze-javascript-application"],
+      "invocation": "node <absolute rea entry> <allowlisted-command> <session target> --json"
+    },
+    "external_engine_requirements": "Native binaries need Hopper, Ghidra or IDA; Android APK decompilation needs headless JADX and a JDK; website analysis needs a Chrome-family browser. REA grants no license, key or activation for any commercial tool; obtain and use them lawfully under their own terms.",
+    "attribution_notice": "REA-authored code is MIT (c) 2026 morluto. Third-party material inside REA retains its own licenses; see the upstream THIRD_PARTY_NOTICES.md. This directory records attribution and reviewed revision only; it does not redistribute the REA source tree.",
+    "responsible_use": "REA is for lawful research, education, interoperability, software preservation and analysis of software you own or are authorized to examine. Jarvis performs no analysis on ingest and requires explicit per-analysis approval."
+  }
+}

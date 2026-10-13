@@ -134,7 +134,8 @@
     "static_repository_capability_discovery",
     "isolated_approved_repository_skill_dispatch",
     "persistent_versioned_repository_skill_registry",
-    "repository_skill_emergency_disable"
+    "repository_skill_emergency_disable",
+    "on_demand_rea_reverse_engineer_and_best_effort_clone"
   ],
   "main_imports": [
     "jarvis.native_coding",
@@ -637,6 +638,22 @@
     "routing": "Management phrases in commands special parsers; learned trigger phrases checked last in commands._parse so built-in commands win; phrases built-ins already claim are dropped at activation",
     "long_running_service": false,
     "automatic_action_replay": false
+  },
+  "rea": {
+    "configuration": "rea.enabled/node_path/entry/allow_commands/analysis_timeout_seconds/max_input_mb",
+    "module": "jarvis/rea_tools.py; routed via capabilities.reverse_engineer and commands.rea_command",
+    "upstream": "morluto/rea (REA: Reverse Engineer Anything), MIT; integrations/rea-upstream/source-manifest.json records the reviewed revision and attribution. REA source is not vendored; it is invoked as an external Node program.",
+    "runtime": "Caller-supplied Node.js 22.19+/24.11+/26+ plus an installed REA CLI entry (scripts/rea.mjs or published dist). Native, Android and website targets additionally need REA's own engines (Hopper/Ghidra/IDA, JADX, a Chrome-family browser); REA installs or licenses none of them.",
+    "store": ".jarvis-runtime/rea/<session>/ with session.json, ledger.md and evidence/*.json",
+    "ingest": "One validated target per session: an absolute local directory, an absolute local file within the configured size limit, or a public HTTPS URL. Private/loopback/reserved/credentialed destinations and symlinked or runtime-internal paths are refused. Ingest performs no fetch or analysis.",
+    "execution": "rea_analyze spawns the configured absolute Node executable (shell=False, CREATE_NO_WINDOW, cleared environment, telemetry disabled, bounded stdout, 10-3600s deadline) with one allowlisted REA subcommand and the session target; output is stored as untrusted evidence. No MCP protocol coupling; shim executables (.cmd/.bat/.ps1/.sh) are refused.",
+    "approval": "rea_analyze uses Actions._approve for the exact program and call; REA output never waives approval or authorizes further actions. No unattended analysis.",
+    "clone": "Best-effort functional reconstruction by the existing project-coding / LocalGithub Qwen pipeline from the ledger, proven with real tests. No byte-exact or guaranteed 1:1 clone is implied or claimed.",
+    "recovery": "On-demand only; not a long-running owned service and not auto-restarted. Uncertain analysis failures are never replayed; the session is inspected first.",
+    "dependencies": "No new Jarvis Python dependency; uses the standard library and the existing requests-based toolkit. Node and REA are caller-supplied and unmanaged by Jarvis.",
+    "automatic_action_replay": false,
+    "long_running_service": false,
+    "status": "2026-10-12 IST: bridge wiring, session/ledger lifecycle, target validation and routing added and unit-tested; `python -m jarvis.launcher --offline-check` passed. REA 6.4.0 was installed globally (npm, Node v24.14.0) and a live end-to-end run through the bridge (rea_status ready -> rea_ingest -> approved rea_analyze) statically analyzed a sample JavaScript application in ~3.8s, returning ~73KB of valid REA JSON evidence (predicate rea.javascript-application-analysis) stored in the session and ledger. A pipe-buffer deadlock in the subprocess runner was fixed by streaming stdout to a temp-file sink. Native, Android and website targets still need REA's own external engines, which were not exercised."
   },
   "repository_skills": {
     "configuration": "repository_skills.enabled/image",

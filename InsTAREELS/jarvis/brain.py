@@ -762,6 +762,8 @@ class Brain:
                           "development_native": r"\b(?:package|native|android|ios|development_native)\b"}.get(pending["action"], r"\b(?:send|post|publish|tweet)\b")
                 if pending['action'] in {'repository_skill_validate','repository_skill_activate','repository_skill_run'}:
                     intent = r'\b(?:validate|test|activate|enable|run|execute|use|repository_skill_validate|repository_skill_activate|repository_skill_run)\b'
+                if pending['action'] == 'rea_analyze':
+                    intent = r'\b(?:analy[sz]e|reverse[- ]engineer|decompile|deconstruct|inspect|clone|rea_analyze)\b'
                 if pending['action'] in {'mcp_list_tools', 'mcp_call'}:
                     intent = r'\bmcp\b'
                 if not re.search(intent, low_goal):

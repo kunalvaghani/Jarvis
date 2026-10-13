@@ -66,6 +66,8 @@ from .firecrawl_tools import TOOLS as FIRECRAWL_TOOLS
 TOOLS.update(FIRECRAWL_TOOLS)
 from .repo_tools import TOOLS as REPOSITORY_TOOLS
 TOOLS.update(REPOSITORY_TOOLS)
+from .rea_tools import TOOLS as REA_TOOLS
+TOOLS.update(REA_TOOLS)
 from .utility_tools import TOOLS as UTILITY_TOOLS
 TOOLS.update(UTILITY_TOOLS)
 from .gmail_api import TOOLS as GMAIL_API_TOOLS
@@ -286,6 +288,9 @@ def execute(actions, step, cancelled):
     if name in REPOSITORY_TOOLS:
         from .repo_tools import execute as repository_execute
         return repository_execute(actions,step,cancelled)
+    if name in REA_TOOLS:
+        from .rea_tools import execute as rea_execute
+        return rea_execute(actions,step,cancelled)
     if name in AGENT_TOOLS:
         from .agent_tools import execute as agent_execute
         return agent_execute(actions, step, cancelled)

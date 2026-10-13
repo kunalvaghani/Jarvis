@@ -95,6 +95,9 @@ def _parse(text: str) -> Command:
     from .repo_tools import command as repository_command
     repository=repository_command(text)
     if repository:return repository
+    from .rea_tools import command as rea_command
+    rea=rea_command(text)
+    if rea:return rea
     from .realtime import command as realtime_command
     realtime = realtime_command(text)
     if realtime:

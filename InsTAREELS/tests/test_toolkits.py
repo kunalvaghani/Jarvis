@@ -285,6 +285,7 @@ class ToolkitTests(unittest.TestCase):
                    "send_email": "send an email", "slack_send": "send a Slack message",
                    "twitter_send": "publish a tweet", "append_file": "append hello to notes.txt in project",
                    "mcp_list_tools": "List MCP tools", "mcp_call": "Call MCP tool",
+                   "rea_analyze": "reverse engineer and analyze the target with REA",
                    "development_verify": "Verify the development project", "development_preview": "Start the development preview", "development_native": "Package the native app"}
         with patch.dict(os.environ, variables, clear=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
             for name in TOOLS:
