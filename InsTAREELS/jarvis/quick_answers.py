@@ -149,19 +149,7 @@ class QuickAnswers:
         return f"Current weather {location}: {current['temperature']}°C and {current['condition']}."
 
     def startup_greeting(self):
-        name = self.name()
-        address = f", {name} sir" if name else ""
-        current = self.weather.current()
-        weather = self._weather_text(current)
-        offset = current.get("utc_offset_seconds") if current else None
-        if isinstance(offset, (int, float)):
-            local = datetime.now(timezone.utc) + timedelta(seconds=offset)
-            time_label = f"The time near {current['city']} is {local.strftime('%I:%M %p').lstrip('0')}"
-            greeting = self.salutation(local.hour)
-        else:
-            time_label = f"The local PC time is {self.time_text()}"
-            greeting = self.salutation()
-        return f"{greeting}{address}. {weather} {time_label}."
+        return None  # Startup is quiet; the user leads the conversation.
 
     def answer(self, question):
         question = question.strip().replace("’", "'")
@@ -170,13 +158,11 @@ class QuickAnswers:
             if isinstance(catalogue, str) and catalogue:
                 return catalogue
         if HELLO.fullmatch(question):
-            name = self.name()
-            return f"{self.salutation()}, {name} sir. I'm ready." if name else f"{self.salutation()}. I'm ready."
+            return None
         if WELLBEING.fullmatch(question):
-            name = self.name()
-            return f"I'm doing well, {name} sir. How can I help?" if name else "I'm doing well. How can I help?"
+            return None
         if THANKS.fullmatch(question):
-            return "You're welcome."
+            return None
         if TIME.fullmatch(question):
             return f"The local time is {self.time_text()}."
         if DATE.fullmatch(question):

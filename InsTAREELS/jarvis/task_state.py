@@ -142,6 +142,34 @@ class TaskState:
             current["updated_at"] = _now()
             self._write()
 
+    def update_dag(self, graph, steps, fingerprint, timings):
+        """Task-owned DAG checkpoint, never an automatic effect replay queue."""
+        with self.lock:
+            current = self.data.get('current')
+            if not current or current.get('status') != 'running':
+                return
+            payload = {'version': 1, 'graph': graph, 'steps': steps,
+                       'fingerprint': fingerprint, 'timings': timings}
+            encoded = json.dumps(payload, allow_nan=False)
+            if len(encoded) > 1100000:
+                raise ValueError('DAG checkpoint exceeds its bounded state budget.')
+            current['dag'] = json.loads(encoded)
+            current['stage'] = 'dag_execution'
+            current['updated_at'] = _now()
+            self._write()
+
+    def update_learning(self, payload):
+        """Acquisition participates in the current task, not a separate state DB."""
+        encoded = json.dumps(payload, allow_nan=False)
+        if len(encoded) > 100000:
+            raise ValueError('Learning checkpoint exceeds task budget.')
+        with self.lock:
+            current = self.data.get('current')
+            if current and current.get('status') == 'running':
+                current['learning'] = json.loads(encoded)
+                current['updated_at'] = _now()
+                self._write()
+
     def snapshot(self):
         with self.lock:
             return json.loads(json.dumps(self.data.get("current")))
@@ -175,6 +203,12 @@ class TaskState:
 
     @staticmethod
     def resume_blocker(task):
+        dag = task.get('dag', {})
+        if any(row.get('effect') and row.get('status') != 'succeeded'
+               for row in dag.get('steps', {}).values()):
+            return 'A DAG effect has an uncertain result. Inspect it before continuing; it cannot be replayed.'
+        if any(row.get('effect') for row in dag.get('steps', {}).values()):
+            return 'DAG effects were already dispatched. Inspect their current state and request only remaining work.'
         if any(item.get("attempted") for item in task.get("failures", [])):
             return "A previous action has an uncertain result. Inspect it before issuing the remaining task."
         uncertain = False

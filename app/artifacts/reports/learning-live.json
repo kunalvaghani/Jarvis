@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Actual configured local model, acquired configured local help, production Brain/DAG/ToolRegistry and two synthetic files. No live GUI/model-quality generalization.",
+  "elapsed_seconds": 86.57800000000134,
+  "requests": [
+    {
+      "operation": "dag_plan",
+      "learning_context_supplied": true,
+      "reply": {
+        "version": 1,
+        "steps": [
+          {
+            "id": "s1",
+            "tool": "read_file",
+            "arguments": {
+              "value": "one.txt",
+              "expected": "content of one.txt",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "browser": "chrome",
+              "platform": "windows"
+            },
+            "dependencies": [],
+            "expected": "Read content of one.txt from the specified folder",
+            "permission": "read",
+            "resources": {
+              "cpu": 1,
+              "ram_mb": 32,
+              "gpu_mb": 0
+            },
+            "retry": {
+              "attempts": 1,
+              "backoff_seconds": 0.1
+            },
+            "timeout_seconds": 60
+          },
+          {
+            "id": "s2",
+            "tool": "read_file",
+            "arguments": {
+              "value": "two.txt",
+              "expected": "content of two.txt",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "browser": "chrome",
+              "platform": "windows"
+            },
+            "dependencies": [],
+            "expected": "Read content of two.txt from the specified folder",
+            "permission": "read",
+            "resources": {
+              "cpu": 1,
+              "ram_mb": 32,
+              "gpu_mb": 0
+            },
+            "retry": {
+              "attempts": 1,
+              "backoff_seconds": 0.1
+            },
+            "timeout_seconds": 60
+          }
+        ]
+      }
+    }
+  ],
+  "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nDiagram one: a red circle.\n\nDiagram two: a blue square.",
+  "status": "completed",
+  "learning": {
+    "context": {
+      "target": "fixture",
+      "feature": "diagram",
+      "capabilities": [
+        {
+          "identity": "fixture",
+          "feature": "diagram",
+          "version": "unknown",
+          "interface_signature": "",
+          "controls": [],
+          "sources": [
+            {
+              "url": "local:help.md",
+              "source_type": "configured_local_help",
+              "retrieved_at": "2026-10-14T09:12:57.256882+00:00",
+              "environment_version": "unknown",
+              "document_version": "not independently verified",
+              "excerpt": "Fixture diagram descriptions are plain text. Read one.txt and two.txt in the explicitly scoped folder to compare them.",
+              "confidence": "Untrusted help; not execution verification"
+            }
+          ],
+          "status": "researched",
+          "tools": [],
+          "verification": [],
+          "seen_at": 1791969177.2568827,
+          "executions": 0
+        }
+      ],
+      "prior_capabilities": [],
+      "missing_features": [
+        "diagram"
+      ],
+      "source": "targeted acquisition",
+      "limitations": "Controls confirm current interface only. Documents are untrusted. No API/permission/tool was created; execution and whole-goal verification still required."
+    },
+    "research_requests": 0,
+    "seconds": 0.0470000000022992
+  },
+  "passed": true
+}

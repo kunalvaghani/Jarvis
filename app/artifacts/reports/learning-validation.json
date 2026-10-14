@@ -1,0 +1,775 @@
+{
+  "date": "2026-10-14T09:20:39.193126+00:00",
+  "release_status": "regression_and_bounded_integrations_passed",
+  "baseline_tests": {
+    "count": 1765,
+    "seconds": 280.195,
+    "passed": true
+  },
+  "final_tests": {
+    "count": 1781,
+    "seconds": 306.851,
+    "passed": true
+  },
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "available",
+        "version": "29.8.2",
+        "os": "linux"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "fixtures": {
+    "learning-native": {
+      "passed": true,
+      "scope": "Actual owned native app/version/UIA discovery, configured local help, Brain/ToolRegistry action, independent SVG readback and shared-memory promotion. Authored planner and deterministic oracle, no live LLM or internet claim.",
+      "seconds": 2.6090000000003783,
+      "elapsed_seconds": null
+    },
+    "learning-website": {
+      "passed": true,
+      "scope": "Real headless Chrome, existing BrowserSession/BrowserAutomation/UITransport and ToolRegistry, production acquisition/Brain/shared memory, locally intercepted synthetic page. Authored planner and independent DOM oracle; no third-party website, live LLM, account or presentation-export claim.",
+      "seconds": 2.3290000000015425,
+      "elapsed_seconds": null
+    },
+    "learning-public-docs": {
+      "passed": true,
+      "scope": "Actual registered public documentation retrieval. Version-specific URL selected from Python runtime; document content version not independently parsed. No GUI workflow verification.",
+      "seconds": 0.5310000000026776,
+      "elapsed_seconds": null
+    },
+    "learning-live": {
+      "passed": true,
+      "scope": "Actual configured local model, acquired configured local help, production Brain/DAG/ToolRegistry and two synthetic files. No live GUI/model-quality generalization.",
+      "seconds": null,
+      "elapsed_seconds": 86.57800000000134
+    }
+  },
+  "benchmarks": {
+    "baseline": {
+      "date": "2026-10-14T08:27:23.437336+00:00",
+      "mode": "baseline",
+      "scope": "400 real parser calls; 100 app-memory lookups; upgraded deterministic assessment without web/model/GUI activity. Not a production latency distribution.",
+      "routing_median_ms": 2.37474999994447,
+      "routing_p95_ms": 2.855499998986488,
+      "routing_p99_ms": 8.577900000091176,
+      "memory_lookup_median_ms": 0.012399999832268804,
+      "gap_assessment_median_ms": "Unsupported automatic task acquisition path",
+      "unknown_app_end_to_end": "Not measured",
+      "unknown_website_end_to_end": "Not measured",
+      "planner_latency": "Not measured",
+      "peak_vram": "Not measured",
+      "background_overhead": "Not measured",
+      "peak_working_set_mb": 36.83984375
+    },
+    "upgraded": {
+      "date": "2026-10-14T09:05:53.841002+00:00",
+      "mode": "upgraded",
+      "scope": "400 real parser calls; 100 app-memory lookups; upgraded deterministic assessment without web/model/GUI activity. Not a production latency distribution.",
+      "routing_median_ms": 2.4311500001203967,
+      "routing_p95_ms": 3.0689000013808254,
+      "routing_p99_ms": 9.132999999565072,
+      "memory_lookup_median_ms": 0.014599998394260183,
+      "gap_assessment_median_ms": 0.0017999991541728377,
+      "unknown_app_end_to_end": "Not measured",
+      "unknown_website_end_to_end": "Not measured",
+      "planner_latency": "Not measured",
+      "peak_vram": "Not measured",
+      "background_overhead": "Not measured",
+      "peak_working_set_mb": 37.14453125
+    },
+    "scope": "Single controlled parser/memory samples, upgraded sample concurrent with tests; no speedup claim or two-second complex-task guarantee."
+  },
+  "changed_firstparty_source_since_learning_baseline": [
+    {
+      "path": "jarvis/actions.py",
+      "sha256": "552127bf2d2425bfd890a51bfd725c10adc044085430e6cf1f6774a71dea58f9",
+      "lines": 1832,
+      "classes": [
+        "Desktop",
+        "Actions"
+      ],
+      "functions": [
+        "media_session_open"
+      ],
+      "imports": [
+        "",
+        "agent_events",
+        "anticipation",
+        "brain",
+        "browser",
+        "browser_automation",
+        "capability_guide",
+        "catalog",
+        "clarification",
+        "coder",
+        "coding_processes",
+        "cognition",
+        "collections",
+        "commands",
+        "context_hub",
+        "conversation_intent",
+        "ctypes",
+        "deliberation",
+        "desktop_tasks",
+        "direct_execution",
+        "documents",
+        "experience_memory",
+        "fast_workflows",
+        "file_drop",
+        "folder_lookup",
+        "gmail_workflows",
+        "gods_eye",
+        "gods_eye_view",
+        "hybrid_inference",
+        "intent_handlers",
+        "island_choices",
+        "island_media",
+        "json",
+        "knowledge",
+        "knowledge_acquisition",
+        "live_app_context",
+        "media_player",
+        "media_ui",
+        "memory_curator",
+        "memory_index",
+        "messengers",
+        "names",
+        "obsidian_memory",
+        "os",
+        "pathlib",
+        "paths",
+        "progress",
+        "projects",
+        "queue",
+        "quick_answers",
+        "re",
+        "realtime",
+        "repo_abilities",
+        "repo_learning",
+        "screen_awareness",
+        "self_evolution",
+        "send2trash",
+        "shutil",
+        "skill_memory",
+        "spotify",
+        "subprocess",
+        "targeting",
+        "task_queue",
+        "task_state",
+        "tempfile",
+        "threading",
+        "time",
+        "tools",
+        "ui_controls",
+        "ui_memory",
+        "urllib.parse",
+        "utility_host",
+        "uuid",
+        "weather_watch",
+        "whatsapp",
+        "window_focus",
+        "windows_commands",
+        "writing"
+      ]
+    },
+    {
+      "path": "jarvis/app_knowledge.py",
+      "sha256": "c9761b37b2bc30b05e80f7f8fe74567e315e6571f6a20807e6b9aef171131603",
+      "lines": 437,
+      "classes": [
+        "AppKnowledge"
+      ],
+      "functions": [
+        "_exe_name",
+        "profile_for",
+        "category_of",
+        "_executable",
+        "inventory"
+      ],
+      "imports": [
+        "json",
+        "pathlib",
+        "re",
+        "skill_memory",
+        "threading",
+        "time"
+      ]
+    },
+    {
+      "path": "jarvis/application_discovery.py",
+      "sha256": "67d13f27a31aa8ee8547dec60c5a7c6278d0a551f132c7f59b09d0bb3130915f",
+      "lines": 38,
+      "classes": [],
+      "functions": [
+        "inspect"
+      ],
+      "imports": [
+        "knowledge_acquisition",
+        "os",
+        "pathlib",
+        "psutil",
+        "win32api",
+        "win32process"
+      ]
+    },
+    {
+      "path": "jarvis/brain.py",
+      "sha256": "714ffd1dd98326cd1b9dd047c024ede87a810e5834a5bb5841a4a5f13113e3b1",
+      "lines": 1534,
+      "classes": [
+        "RepeatedAction",
+        "BrainClient",
+        "Brain"
+      ],
+      "functions": [
+        "navigation_step",
+        "replannable",
+        "validate_plan",
+        "normalize_plan",
+        "ground_file_scope",
+        "spotify_media_plan",
+        "youtube_search_plan",
+        "explicit_app_launch_plan",
+        "explicit_file_plan",
+        "explicit_command_plan"
+      ],
+      "imports": [
+        "capabilities",
+        "catalog",
+        "clarification",
+        "coder",
+        "commands",
+        "desktop_actions",
+        "difflib",
+        "experience_memory",
+        "gmail_workflows",
+        "grounding",
+        "harness",
+        "hermes",
+        "hierarchical",
+        "inference_limits",
+        "json",
+        "names",
+        "os",
+        "pathlib",
+        "queue",
+        "re",
+        "recovery",
+        "skill_memory",
+        "spotify",
+        "step_planning",
+        "subprocess",
+        "sys",
+        "targeting",
+        "task_graph",
+        "task_recovery",
+        "task_state",
+        "threading",
+        "time",
+        "toolkits",
+        "tools",
+        "ui_controls",
+        "visual_fallback"
+      ]
+    },
+    {
+      "path": "jarvis/brain_worker.py",
+      "sha256": "7388ad8b8e19b5e69ad770b5dc38d611b880d4bb01881445c64e19fc4942786f",
+      "lines": 668,
+      "classes": [
+        "Models"
+      ],
+      "functions": [],
+      "imports": [
+        "agent_context",
+        "capabilities",
+        "code_stream",
+        "contextlib",
+        "copy",
+        "development_browser",
+        "hierarchical",
+        "inference_limits",
+        "json",
+        "knowledge_worker",
+        "laya",
+        "math",
+        "model_selection",
+        "native_tools",
+        "os",
+        "pathlib",
+        "pc_context",
+        "re",
+        "step_planning",
+        "subprocess",
+        "sys",
+        "time",
+        "tools",
+        "torch",
+        "trained_coder",
+        "trained_pc"
+      ]
+    },
+    {
+      "path": "jarvis/hierarchical.py",
+      "sha256": "fd66e1c5c53faa6336a4b716ef15924ba1995ef977ba8e6d5f16a954a194cb82",
+      "lines": 332,
+      "classes": [
+        "MacroMemory"
+      ],
+      "functions": [
+        "settings",
+        "eligible",
+        "schema",
+        "literal_reads",
+        "legacy_step",
+        "adapters",
+        "fingerprint",
+        "run"
+      ],
+      "imports": [
+        "agent_context",
+        "agent_events",
+        "brain",
+        "contextlib",
+        "dag_execution",
+        "dataclasses",
+        "hashlib",
+        "json",
+        "pathlib",
+        "psutil",
+        "re",
+        "sqlite3",
+        "time",
+        "toolkits",
+        "tools"
+      ]
+    },
+    {
+      "path": "jarvis/knowledge_acquisition.py",
+      "sha256": "c62868de0027eb95d4939909cba218ec92f16ded509f7bdbaa7b99efad0ed053",
+      "lines": 320,
+      "classes": [
+        "Acquisition"
+      ],
+      "functions": [
+        "settings",
+        "interface_signature",
+        "safe_controls"
+      ],
+      "imports": [
+        "agent_events",
+        "app_knowledge",
+        "dag_execution",
+        "datetime",
+        "hashlib",
+        "ipaddress",
+        "json",
+        "pathlib",
+        "re",
+        "time",
+        "toolkits",
+        "tools",
+        "urllib.parse"
+      ]
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "sha256": "c424d3c466e5a1994a07eef2c58ee0f6bad792a4cc7106fec5217f23c1479601",
+      "lines": 527,
+      "classes": [
+        "OwnedApplication"
+      ],
+      "functions": [
+        "session_heartbeat",
+        "source_snapshot",
+        "preflight",
+        "singleton",
+        "heartbeat_state",
+        "supervised_restart",
+        "runtime_command",
+        "prepare_runtime",
+        "run",
+        "check_imports",
+        "runtime_status"
+      ],
+      "imports": [
+        "anticipation",
+        "argparse",
+        "ast",
+        "claude_code",
+        "cloud_policy",
+        "codex_code",
+        "command_cleanup",
+        "context_selector",
+        "ctypes",
+        "diagnostics",
+        "docker_runtime",
+        "f5_speech",
+        "gpu_scheduler",
+        "harness",
+        "harness_process",
+        "hermes",
+        "hierarchical",
+        "json",
+        "knowledge_acquisition",
+        "math",
+        "msvcrt",
+        "os",
+        "pathlib",
+        "paths",
+        "re",
+        "realtime",
+        "recovery",
+        "repo_sandbox",
+        "shutil",
+        "subprocess",
+        "sys",
+        "tempfile",
+        "time",
+        "uuid",
+        "visual_fallback"
+      ]
+    },
+    {
+      "path": "jarvis/native_tools.py",
+      "sha256": "666a457c733979333b1fe23f2643554134e24dc642029ba777c30ae8fe24472c",
+      "lines": 252,
+      "classes": [],
+      "functions": [
+        "parameter_fields",
+        "functions",
+        "parse",
+        "estimate_tokens",
+        "conversation_key",
+        "step_update",
+        "plan"
+      ],
+      "imports": [
+        "agent_context",
+        "hashlib",
+        "inference_limits",
+        "json",
+        "knowledge_worker",
+        "re",
+        "repo_analysis",
+        "time"
+      ]
+    },
+    {
+      "path": "jarvis/self_evolution.py",
+      "sha256": "f67a3277ecf3ea5249988e639196ce0135c0fa02fdac5b52369b049fc26cbd3c",
+      "lines": 618,
+      "classes": [
+        "CapabilityGapDetector",
+        "SelfEvolution",
+        "SafeEvolutionManager"
+      ],
+      "functions": [
+        "_now",
+        "_settings",
+        "_signature"
+      ],
+      "imports": [
+        "datetime",
+        "json",
+        "knowledge_acquisition",
+        "media_player",
+        "os",
+        "pathlib",
+        "psutil",
+        "re",
+        "shutil",
+        "subprocess",
+        "sys",
+        "threading",
+        "time"
+      ]
+    },
+    {
+      "path": "jarvis/skill_memory.py",
+      "sha256": "0fa33a3fd537c4f89c9fe654dd812e962c66680cab100689985e3baf213845cb",
+      "lines": 350,
+      "classes": [
+        "SkillMemory"
+      ],
+      "functions": [
+        "words",
+        "atomic",
+        "linked"
+      ],
+      "imports": [
+        "capabilities",
+        "datetime",
+        "experience_memory",
+        "fast_workflows",
+        "hashlib",
+        "hermes_skills",
+        "json",
+        "obsidian_memory",
+        "os",
+        "pathlib",
+        "re",
+        "stat",
+        "tempfile",
+        "threading"
+      ]
+    },
+    {
+      "path": "jarvis/task_state.py",
+      "sha256": "59d3e61bb03e263e63cef8ccd392e1f49fd5fe7711c9d8c15e088ac7b4378623",
+      "lines": 244,
+      "classes": [
+        "TaskState"
+      ],
+      "functions": [
+        "_now"
+      ],
+      "imports": [
+        "datetime",
+        "experience",
+        "experience_memory",
+        "json",
+        "os",
+        "pathlib",
+        "paths",
+        "task_graph",
+        "tempfile",
+        "threading",
+        "time"
+      ]
+    },
+    {
+      "path": "jarvis/tools.py",
+      "sha256": "acadf808b667cb75f3357bd201207fee80340081cb362fb77a2ffd336763a50d",
+      "lines": 185,
+      "classes": [
+        "ToolSpec",
+        "ToolResult",
+        "ToolRegistry"
+      ],
+      "functions": [],
+      "imports": [
+        "agent_events",
+        "application_discovery",
+        "capabilities",
+        "commands",
+        "dataclasses",
+        "desktop_actions",
+        "json",
+        "re",
+        "repo_tools",
+        "skill_memory",
+        "task_state",
+        "toolkits",
+        "utility_profiles"
+      ]
+    },
+    {
+      "path": "scripts/verification/finalize_learning_report.py",
+      "sha256": "10cb01bd11716a45fe7435e7a072b71a25221a93742413713e865c555e658ea5",
+      "lines": 53,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "scripts.verification.verify_hierarchical"
+      ]
+    },
+    {
+      "path": "scripts/verification/learning_browser_worker.py",
+      "sha256": "5a593f79f7e81001951dde9a808b771b4872a5ca0c8e3bc6df81ccdc9597e7c0",
+      "lines": 41,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "jarvis.browser",
+        "jarvis.browser_worker",
+        "json",
+        "pathlib",
+        "playwright.sync_api",
+        "sys",
+        "time"
+      ]
+    },
+    {
+      "path": "scripts/verification/learning_native_fixture.py",
+      "sha256": "475b955dd5016a5b82544803e41e0d4a02cfbbb4be6f8fa24110fe54d85fa402",
+      "lines": 42,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "json",
+        "pathlib",
+        "sys",
+        "win32api",
+        "win32con",
+        "win32gui"
+      ]
+    },
+    {
+      "path": "scripts/verification/verify_learning_live.py",
+      "sha256": "8032cafaa7676ec0e223126f20d53eb78eb1c59fbd0598bad9de0d3f7f4e32a8",
+      "lines": 55,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "jarvis.actions",
+        "jarvis.brain",
+        "jarvis.commands",
+        "jarvis.task_state",
+        "json",
+        "pathlib",
+        "time"
+      ]
+    },
+    {
+      "path": "scripts/verification/verify_learning_native.py",
+      "sha256": "db4209d22feb49847dab32dccd6ef418e90f6f8310fbcb4567aa74b7c98ce19e",
+      "lines": 89,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "ctypes",
+        "jarvis.actions",
+        "jarvis.commands",
+        "jarvis.ui_controls",
+        "json",
+        "os",
+        "pathlib",
+        "psutil",
+        "subprocess",
+        "sys",
+        "time",
+        "types",
+        "win32api",
+        "win32con",
+        "win32gui",
+        "win32process"
+      ]
+    },
+    {
+      "path": "scripts/verification/verify_learning_public.py",
+      "sha256": "d621cea571f4e3b2509d755fa6da4492dbc756505c8ffc80200b7dc86a3a7e49",
+      "lines": 32,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "jarvis.actions",
+        "json",
+        "pathlib",
+        "sys",
+        "time"
+      ]
+    },
+    {
+      "path": "scripts/verification/verify_learning_website.py",
+      "sha256": "9fd22f5f3653ed052d5fae14cc149453f215270dfdcdecd217552f3744b214f4",
+      "lines": 59,
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "hashlib",
+        "jarvis.actions",
+        "jarvis.browser_automation",
+        "jarvis.commands",
+        "jarvis.ui_transport",
+        "json",
+        "pathlib",
+        "time"
+      ]
+    },
+    {
+      "path": "tests/test_knowledge_acquisition.py",
+      "sha256": "794a7be3f323edc930232a57cebd17e53180b8ff3e238e6303a0210f630d4952",
+      "lines": 196,
+      "classes": [
+        "AcquisitionTests"
+      ],
+      "functions": [],
+      "imports": [
+        "jarvis.actions",
+        "jarvis.app_knowledge",
+        "jarvis.knowledge_acquisition",
+        "jarvis.native_tools",
+        "jarvis.obsidian_memory",
+        "jarvis.skill_memory",
+        "jarvis.task_state",
+        "jarvis.tools",
+        "json",
+        "pathlib",
+        "sys",
+        "tempfile",
+        "threading",
+        "unittest",
+        "unittest.mock"
+      ]
+    }
+  ],
+  "configuration_sha256": {
+    "config/config.json": "689334f601b0fbff26fbb076364bb8bf55f8d526b8bde658c031813cd45cc104",
+    "config/runtime_manifest.json": "c7895952099082a2cf3a521837b2100d2abf70d653cf5701d68cfd6dabdeb043"
+  },
+  "limitations": [
+    "Not universal application/website control",
+    "No Blender/Unreal/third-party export acceptance test",
+    "Native/browser fixture planners were authored; actual model test covers acquired-help file reads",
+    "No speaker/listening, microphone, long-running soak, full production VRAM or background-load benchmark",
+    "Optional cloud/hosted integrations not live checked",
+    "Feature vocabulary and configured-app/explicit-public-URL detection are bounded",
+    "Document version and semantic task correctness remain separately uncertain"
+  ],
+  "rollback": "Set knowledge_acquisition.enabled=false and restart with existing launchers; online/background_refresh independently configurable."
+}

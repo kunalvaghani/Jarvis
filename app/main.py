@@ -147,11 +147,8 @@ class App:
             self.actions.submit(Command("resume_task", extra="automatic"))
 
     def greet_startup(self):
-        def deliver():
-            greeting = self.actions.knowledge.quick.startup_greeting()
-            if not self.closing:
-                self.report("answer", greeting)
-        threading.Thread(target=deliver, name="jarvis-startup-greeting", daemon=True).start()
+        # Let the user lead; no unsolicited scripted greeting or weather monologue.
+        return
 
     def listener_healthy(self):
         if not self.listener or not self.listener.thread.is_alive():
@@ -423,10 +420,12 @@ class App:
                 # Finished sentences are spoken while the rest is still being written; the
                 # final answer then adds only what was not spoken yet. Never logged per token.
                 if 'text' in message:  # Phase-only updates carry no text and change nothing spoken.
-                    self.speech.stream(message['text'] or '', message.get('active', True))
+                    self.speech.stream(message['text'] or '', message.get('active', True), phase=message.get('phase'))
                 continue
             elif kind == 'answer_error':
                 self.ui_activity = ''
+                if self.speech.streamed is not None:
+                    self.speech.cancel()
                 self.log_line('warning', message)
                 continue
             elif kind == "partial":

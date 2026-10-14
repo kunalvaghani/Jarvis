@@ -117,10 +117,19 @@ class Speech:
         if content:
             self._enqueue(content)
 
-    def stream(self, text, active=True):
+    def stream(self, text, active=True, phase=None):
         """Speak complete sentences of an answer while it is still being generated."""
         if (self.closed.is_set() or not self.options.get("enabled", True)
-                or not self.options.get("stream_answers", True) or self.options.get("engine") == "f5"):
+                or not self.options.get("stream_answers", True)):
+            return
+        if not active:
+            self.cancel()
+            return
+        f5 = self.options.get('engine') == 'f5'
+        if f5 and phase not in {None, 'Conversing', 'Groq public answer', 'Generating verified answer'}:
+            # Keep research drafts on the island until verification selects an answer.
+            if not text and self.streamed:
+                self.cancel()
             return
         content = spoken_text(text or "")
         with self.lock:
@@ -135,6 +144,19 @@ class Speech:
                 self.cancel()
                 return
             boundary = max(content.rfind(mark, len(spoken)) for mark in (". ", "! ", "? ", "\n\n"))
+            if f5:
+                # A sentence can finish at the stream edge before another token arrives.
+                ends = [match.end() for match in re.finditer(r'[.!?](?=\s|$)', content)
+                        if match.end() > len(spoken) and match.end()-len(spoken) >= 24]
+                if ends:
+                    boundary = ends[0]-1
+                if boundary+1-len(spoken) < 24:
+                    boundary = -1
+                if boundary < 0:
+                    clauses = [match.end() for match in re.finditer(r'[,;:](?=\s)', content)
+                               if match.end() > len(spoken) and 32 <= match.end()-len(spoken) <= 120]
+                    if clauses:
+                        boundary = clauses[0]-1
             if boundary < 0 or (boundary + 1 - len(spoken) < 25 and spoken):
                 self.streamed = spoken
                 return

@@ -71,7 +71,7 @@ class QuestionClient:
             if observations:
                 request = {**request, "memory_context": observations}
             situation = getattr(memory, "situation", None)
-            if callable(situation):
+            if callable(situation) and not request.get('_natural_chat'):
                 try:
                     block = situation(request.get("question", ""))
                 except Exception:
@@ -79,11 +79,11 @@ class QuestionClient:
                 if block:
                     request = {**request, "situation": block}
             curator = getattr(memory, "curator", None)
-            if curator is not None and getattr(curator, "enabled", False):
+            if curator is not None and getattr(curator, "enabled", False) and not request.get('_natural_chat'):
                 block = curator.context(request.get("question", ""))
                 if block:
                     request = {**request, "memory_facts": block}
-            if not fresh_public and hasattr(memory, "task_context"):
+            if not request.get('_natural_chat') and not fresh_public and hasattr(memory, "task_context"):
                 catalogue = memory.task_context(request.get("question", ""))
                 if any(catalogue.get(key) for key in ("projects", "apps", "tools")):
                     request = {**request, "catalog_context": catalogue}

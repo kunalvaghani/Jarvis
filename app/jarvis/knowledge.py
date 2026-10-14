@@ -135,6 +135,9 @@ class Knowledge:
         return messages(rows[max(0,anchor-3):anchor+4], self.context_budget)
 
     def prepare_context(self, question):
+        from .natural_conversation import eligible
+        if eligible(question, self.options, time.monotonic()-getattr(self, 'natural_last', -1000) < 120):
+            return None
         from .hybrid_inference import standalone_public
         if standalone_public(self.client.base, {'question': question}):
             return None
@@ -270,7 +273,22 @@ class Knowledge:
                 self._saved('finish', turn, status='rejected')
             self.report("warning", "Question queue full. Wait for an answer or press Stop all tasks.")
 
+    def submit_natural(self, question, grounded=''):
+        try:
+            with self.context_lock:
+                turn = self._saved('begin', self.session_id, question)
+            self.queue.put_nowait((self.generation, question, False, False, 0, turn, None, {'grounded_reply': grounded}))
+        except queue.Full:
+            if turn:
+                self._saved('finish', turn, status='rejected')
+            self.report('warning', 'Conversation queue is full.')
+
     def _run(self):
+        if self.options.get('natural_conversation', {}).get('enabled', False):
+            try:
+                self.client._start()
+            except (OSError, ValueError):
+                pass
         while not self.closed.is_set():
             try:
                 job = self.queue.get(timeout=.2)
@@ -286,6 +304,23 @@ class Knowledge:
                 if cancelled():
                     continue
                 from .hybrid_inference import standalone_public
+                from .natural_conversation import eligible
+                forced = job[7] if len(job) > 7 else None
+                recent = time.monotonic()-getattr(self, 'natural_last', -1000) < 120
+                if (forced is not None or eligible(question, self.options, recent)) and not web and not use_screen and (len(job) <= 6 or forced is not None):
+                    with self.context_lock:
+                        history = list(self.history[-6:])
+                    result = self.client.request({'question': question, 'options': self.options,
+                        '_natural_chat': True, 'history': history, 'memory_retrieval_done': True,
+                        'stream_answer': self.options.get('stream', True), **(forced or {})}, cancelled)
+                    if not cancelled():
+                        with self.context_lock:
+                            if not cancelled():
+                                self.record_pair(question, result['answer'], turn)
+                                self.natural_last = time.monotonic()
+                                self.report('answer', result['answer'])
+                                completed = True
+                    continue
                 fresh_public = len(job) <= 6 and standalone_public(self.client.base,
                     {'question': question, 'web': web, 'screen': use_screen})
                 future = None if fresh_public else self.prepare_context(question)
@@ -328,10 +363,15 @@ class Knowledge:
                 realtime = getattr(self, 'realtime', None)
                 realtime_context = realtime.context(question, cancelled) if realtime and not use_screen else None
                 direct = None if web or use_screen or realtime_context else self.quick.answer(question)
-                if context:
+                if context and not self.options.get('natural_conversation', {}).get('enabled', False):
                     direct = None  # A follow-up must use its chosen conversation context.
                 if direct is not None:
-                    result = {"answer": direct}
+                    if self.options.get('natural_conversation', {}).get('enabled', False):
+                        result = self.client.request({'question': question, 'options': self.options,
+                            '_natural_chat': True, 'grounded_reply': direct, 'history': context,
+                            'memory_retrieval_done': True, 'stream_answer': self.options.get('stream', True)}, cancelled)
+                    else:
+                        result = {"answer": direct}
                 else:
                     self.report("thinking", f"Preparing answer: {question}")
                     if self.options.get('stream', True):
@@ -387,6 +427,7 @@ class Knowledge:
                 if cancelled():
                     continue
                 answer = result["answer"]
+                self.natural_last = -1000
                 if cancelled():
                     continue
                 with self.context_lock:

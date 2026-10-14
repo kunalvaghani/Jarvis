@@ -35,10 +35,27 @@ The adapter preserves the model's own breaths and punctuation pauses, without
 adding the Kokoro planner's synthetic breaths or sentence silences. The adapter
 bounds text chunks by the reference duration and transcript, prefers punctuation
 boundaries, generates them sequentially to avoid unbounded concurrent GPU
-inference, and crossfades their joins. Each complete reply is synthesized before playback so
-generation cannot cause gaps inside that reply. This increases first-audio
-latency. F5 skips draft sentence streaming and speaks the final answer; separate
-replies can still have gaps if synthesis is slower than playback.
+inference, and crossfades their joins. Completed sentences or substantial opening
+clauses from conversation, Groq public answers and verified research answers are
+sent to the voice worker while the island continues receiving text. Unverified
+research drafts wait for the final answer. The final delivery adds only the words
+that were not already queued; replaced drafts and failed answers cancel speech.
+
+The worker plays each synthesized chunk immediately while generating the next,
+retaining just the crossfade tail. Pending text fragments are combined in order
+(at most eight requests and 1,000 characters per batch), reducing repeated
+reference-processing overhead. Stop invalidates the batch and clears playback;
+cancelled text is never replayed. `first_chunk_characters: 80` bounds the opening
+chunk of long text; already short sentences stay together. `warm_synthesis: true`
+silently primes CUDA synthesis during background worker startup. This extends
+initial loading but produces no spoken greeting. Neither setting reduces the
+32 inference steps or changes the configured reference, CFG or crossfade.
+
+Streaming removes the wait for the entire reply, but F5 still finishes each text
+chunk before producing its audio. Fast text generation can finish before the
+first audio is ready. Gaps remain possible when synthesis is slower than playback.
+Chunk boundaries and per-chunk level normalization can affect prosody; unchanged
+inference settings do not establish acoustically identical output.
 
 `speech.f5.auto_emotion: true` uses word cues to choose neutral, serious,
 playful or excited style and applies small speed changes. For stronger emotional
@@ -83,6 +100,41 @@ data. Preserve those terms when using/distributing the models.
 
 ## Verification
 
+**Incremental playback, 2026-10-14 IST:** 161 selected speech, answer-stream,
+Groq, conversation, question-speed, launcher, recovery and GPU regression tests
+passed. They cover early chunk delivery, crossfade sample counts, final-text
+deduplication, draft filtering, batch ordering/EOF and Stop. These are regression
+checks, not listening-quality measurements.
+
+The real CUDA worker also passed ordered/coalesced replies, malformed-Unicode
+input, Stop acknowledgement, cancelled-reply disposal and a new reply in the
+same warm process (`verify_f5_worker --unicode`, without speaker playback).
+Full `python -m jarvis.launcher --check` reported `ready` after the changes;
+this checks dependencies and configured services, not acoustic playback or live
+Groq inference. Regression/readiness runs used the unrestricted environment
+because sandbox temporary-file and local-service access are limited.
+
+Real isolated CUDA synthesis at the unchanged 32 steps generated a long reply
+in 19.657 s, with first audio at 5.079 s rather than waiting for the entire
+reply; it produced 20.841 s of audio in three pieces. Model loading including
+silent priming took 25.078 s; peak reserved VRAM was 854 MiB. Local Whisper
+transcribed the generated words. These are single-run component measurements.
+
+`python -m scripts.verification.verify_f5_island_stream` exercises the actual
+Speech queue and CUDA worker using synthetic text arriving every 0.1 s per word,
+without a Groq request, island rendering or speaker playback. The final run
+queued the opening clause at 0.703 s, produced first audio at 5.312 s, and finished
+receiving text at 7.219 s; synthesis completed at 28.078 s. Every word was queued
+once. Earlier runs produced first audio at 7.047 and 7.266 s, and one finished
+receiving text before audio was ready. Overlap is workload-dependent. Human
+listening, speaker underruns and microphone-to-speaker latency remain unmeasured.
+
+Firecrawl retrieved the official [F5 inference implementation](https://github.com/SWivid/F5-TTS/blob/main/src/f5_tts/infer/utils_infer.py).
+Its streaming mode emits audio after each text chunk's inference completes. The
+Jarvis adapter keeps sequential GPU inference and bounded crossfades without
+using the upstream unbounded parallel chunk path. Evidence and recordings stay
+in ignored `.jarvis-runtime/`.
+
 **Unicode speech repair, 2026-10-14 IST:** Lone surrogate characters (including
 the reported `\udc81`) are converted to spacing in speech input; valid surrogate
 pairs are repaired and Unicode compatibility forms become ordinary letters.
@@ -98,7 +150,7 @@ completed the next queued answer, acknowledged Stop and completed a new answer
 without restarting the model. Full launcher readiness reported `ready`. This
 checks real synthesis and worker protocol; acoustic speaker playback was not tested.
 
-2026-10-14 IST: 80 selected offline voice/launcher/recovery/GPU scheduling regression tests passed, including
+Historical initial integration, 2026-10-14 IST: 80 selected offline voice/launcher/recovery/GPU scheduling regression tests passed, including
 F5 cancellation during inference, full-reply buffering, invalid audio rejection,
 bounded settings and warm-worker stop behavior. These use a mocked model and
 do not establish live synthesis quality. Two initial recovery tests hit sandbox
@@ -123,7 +175,7 @@ multiple chunks. Generated samples and measurement JSON remain local in
 `.jarvis-runtime/`. The isolated environment's `pip check` passed after the
 compatibility pins were applied.
 
-The final punctuation-aware, sequential three-chunk CUDA run generated 20.852
+Before incremental playback, a punctuation-aware, sequential three-chunk CUDA run generated 20.852
 seconds of speech in 21.719 seconds, with a 34.656-second model load, 798 MiB
 peak allocated VRAM and 846 MiB peak reserved VRAM. Full-reply buffering means
 that reply waits for synthesis before it begins playing. Warm model reuse removes

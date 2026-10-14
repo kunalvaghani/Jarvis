@@ -125,11 +125,13 @@ def step_update(data, previous_call):
     """The newest outcome and fresh screen, appended as the reply to the previous call."""
     feedback = data.get('plan_validation_error')
     if feedback:
-        return {'not_executed': True, 'feedback': str(feedback)[:1000], 'steps_left': data.get('steps_left')}
+        return {'not_executed': True, 'feedback': str(feedback)[:1000], 'steps_left': data.get('steps_left'),
+                'learning_context': data.get('learning_context', {})}
     last = data.get('last_result') if isinstance(data.get('last_result'), dict) else {}
     screen = data.get('screen') if isinstance(data.get('screen'), dict) else {}
     controls = [c.get('name', '') if isinstance(c, dict) else str(c) for c in screen.get('controls', []) or []]
     update = {'step_number': data.get('step_number'), 'steps_left': data.get('steps_left'),
+              'learning_context': data.get('learning_context', {}),
               'screen': {'title': str(screen.get('title', ''))[:200], 'is_dialog': bool(screen.get('is_dialog')),
                          'fields': list(screen.get('fields', []) or [])[:20],
                          'controls': [c[:80] for c in controls if c][:60]}}

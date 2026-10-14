@@ -218,6 +218,7 @@ class SkillMemory:
                     self.upstream_error = str(exc)
                     upstream = {"error": "Hermes guidance unavailable; native skills remain usable."}
             return {"skills": selected, "upstream_skills": upstream, "procedures": routes,
+                    "acquired_knowledge": self.memory.app_knowledge.acquired_context(goal) if getattr(self.memory, 'app_knowledge', None) is not None else [],
                     "experience_context": self.experiences.context(goal, kind or 'task', project, conditions),
                     "contract": "Historical reference only. Adapt targets, queries and paths to this request and fresh observations. Never reuse IDs, coordinates, approvals or verification. Never replay uncertain actions. Verify the whole goal before success."}
 

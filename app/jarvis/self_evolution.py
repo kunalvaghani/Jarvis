@@ -238,6 +238,24 @@ class SelfEvolution:
         """Fold freshly detected gaps into the persistent backlog, deduped and scored."""
         with self.lock:
             existing = {i["signature"]: i for i in self.backlog}
+            acquisition = getattr(self.actions, 'acquisition', None)
+            if acquisition is not None and acquisition.options['enabled'] and acquisition.options['background_refresh']:
+                for key, app in list(acquisition.memory.learned.items())[:1000]:
+                    if not key.startswith('capability:') or not isinstance(app, dict):
+                        continue
+                    for capability in list(app.get('capabilities', {}).values())[:24]:
+                        if time.time()-capability.get('seen_at', 0) <= acquisition.options['ttl_seconds']:
+                            continue
+                        subject = capability.get('identity', '')
+                        feature = capability.get('feature', '')
+                        sig = _signature('knowledge_refresh', subject+' '+feature)
+                        if sig not in existing:
+                            row = {'signature': sig, 'kind': 'knowledge_refresh', 'subject': subject, 'feature': feature,
+                                'summary': 'Refresh outdated capability evidence', 'evidence': ['Stored evidence exceeded its validity window'],
+                                'status': 'pending', 'created': _now(), 'attempts': 0, 'usefulness': 1, 'reuse': 1,
+                                'relevance': 1, 'performance': 1, 'cost': .2, 'risk': 0, 'outcome': None}
+                            self.backlog.append(row)
+                            existing[sig] = row
             for gap in self.detector.detect():
                 sig = gap["signature"]
                 row = existing.get(sig)
@@ -315,6 +333,9 @@ class SelfEvolution:
                 return False
             if psutil.cpu_percent(interval=None) > self.options["max_cpu_percent"]:
                 return False
+            battery = psutil.sensors_battery()
+            if battery and not battery.power_plugged and battery.percent < 20:
+                return False
         except Exception:
             return True
         return True
@@ -373,6 +394,18 @@ class SelfEvolution:
             self._save()
         try:
             self._write_checkpoint(item, "discover")
+            if item.get('kind') == 'knowledge_refresh':
+                from .knowledge_acquisition import Acquisition
+                acquisition = Acquisition(self.actions)  # Task-owned context, same stores/dispatcher.
+                if not acquisition.options['background_refresh']:
+                    return self._finish(item, 'skipped', 'Background documentation refresh disabled', None)
+                goal = 'Learn '+item['subject']+' '+item['feature']
+                context = acquisition.prepare(goal, self._cancelled, force=True, background=True)
+                if self._cancelled():
+                    return self._pause(item, 'knowledge_refresh')
+                refreshed = any(row.get('sources') for row in context.get('capabilities', []))
+                return self._finish(item, 'researched' if refreshed else 'failed',
+                    'Documentation refreshed; no application action or plugin activated' if refreshed else 'No documentation available for refresh', None)
             what = self._what(item)
             self._card("learning", "Learning: " + what, item["summary"][:96], "Finding a skill to learn")
             learner = getattr(self.actions, "repo_learner", None)

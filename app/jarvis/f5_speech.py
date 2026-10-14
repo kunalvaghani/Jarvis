@@ -2,6 +2,7 @@
 import json
 import math
 import os
+import threading
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1]
@@ -59,19 +60,26 @@ def load_voice():
                   ckpt_file=options.get("checkpoint", ""),
                   hf_cache_dir=str(BASE / "models/voices/f5/cache"))
     voice.jarvis_options = options
+    if voice.device == 'cuda' and options.get('warm_synthesis', True):
+        # Prime CUDA kernels quietly during startup, without speaker playback.
+        for _ in render(voice, {'text': 'The voice system is ready for a natural conversation.'}, threading.Event()):
+            pass
     return voice
 
 
-def chunks(text, path, transcript, pacing):
+def chunks(text, path, transcript, pacing, first_limit=80):
     """Keep each API call to one bounded chunk, avoiding upstream unbounded futures."""
     import wave
     with wave.open(str(path), 'rb') as audio:
         duration = audio.getnframes() / audio.getframerate() + .1
     maximum = max(1, int(len(transcript.encode('utf-8')) / duration * (22-duration) * pacing * .8))
+    if len(text.encode('utf-8')) <= maximum:
+        return [text]  # Do not split an already short sentence just to make a smaller head.
     rows, words, size = [], [], 0
     for word in text.split():
         count = len(word.encode('utf-8')) + 1
-        if words and size + count > maximum:
+        limit = min(maximum, first_limit) if not rows else maximum
+        if words and size + count > limit:
             boundaries = [index+1 for index, value in enumerate(words)
                           if value.endswith(('.', ',', ';', ':', '!', '?')) and index >= len(words)//2]
             cut = boundaries[-1] if boundaries else len(words)
@@ -97,8 +105,10 @@ def render(voice, request, stop, emit_progress=lambda index: None, rng=None):
     if options.get("auto_emotion", True):
         pacing *= {"serious": .97, "playful": 1.02, "excited": 1.03}.get(style, 1.)
     crossfade = number(options, "cross_fade_duration", .15, 0., .3)
-    pieces = []
-    for index, text_chunk in enumerate(chunks(text, path, transcript, pacing)):
+    text_chunks = chunks(text, path, transcript, pacing,
+                         int(number(options, 'first_chunk_characters', 80, 40, 200)))
+    tail = None
+    for index, text_chunk in enumerate(text_chunks):
         if stop.is_set():
             return
         audio, rate, _ = voice.infer(ref_file=str(path), ref_text=transcript, gen_text=text_chunk,
@@ -110,21 +120,21 @@ def render(voice, request, stop, emit_progress=lambda index: None, rng=None):
         audio = np.asarray(audio, dtype=np.float32)
         if not audio.size or not np.isfinite(audio).all() or rate != 24000:
             raise ValueError("F5-TTS returned invalid audio or sample rate.")
-        pieces.append(audio)
-    if not pieces:
-        return
-    audio = pieces[0]
-    for piece in pieces[1:]:
-        overlap = min(int(24000*crossfade), len(audio), len(piece))
-        if overlap:
+        if stop.is_set():
+            return
+        audio = finish(audio, rate)
+        if tail is not None:
+            overlap = min(len(tail), len(audio))
             fade = np.linspace(0, 1, overlap, dtype=np.float32)
-            audio = np.concatenate((audio[:-overlap], audio[-overlap:]*(1-fade) + piece[:overlap]*fade, piece[overlap:]))
-        else:
-            audio = np.concatenate((audio, piece))
-    if not stop.is_set():
-        # Enqueue the crossfaded complete reply to prevent underruns.
-        # Preserve its pauses and breaths rather than injecting synthetic ones.
-        yield finish(audio, rate), rate
+            audio = np.concatenate((tail[:-overlap] if overlap else tail,
+                tail[-overlap:]*(1-fade) + audio[:overlap]*fade if overlap else audio[:0],
+                audio[overlap:]))
+        hold = min(int(rate*crossfade), len(audio)) if index < len(text_chunks)-1 else 0
+        tail = audio[-hold:].copy() if hold else None
+        ready = audio[:-hold] if hold else audio
+        if ready.size:
+            # Play this chunk while the next one synthesizes; retain only the join tail.
+            yield ready, rate
 
 
 if __name__ == "__main__":
@@ -140,4 +150,4 @@ if __name__ == "__main__":
         sys.exit(1 if issue else 0)
     else:
         from .kokoro_speech import serve
-        serve(load_voice, render)
+        serve(load_voice, render, coalesce=True)

@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-14T09:49:12.433472+00:00",
+  "cause": "Implicit current-app sphere goal omitted configured app name; no acquisition was triggered. Object/control names were then proposed as application_inspect targets.",
+  "fix": "Resolve current through registered read-only observation with exact configured executable/explicit GUI aliases; pre-dispatch rejection and one bounded correction for invalid app targets; retain learning context during native corrections; display sanitized search queries.",
+  "full_regression": {
+    "passed": true,
+    "tests": 1785,
+    "seconds": 295.241
+  },
+  "fixtures": {
+    "learning-native-current": {
+      "scope": "Actual owned native app/version/UIA discovery, configured local help, Brain/ToolRegistry action, independent SVG readback and shared-memory promotion. Authored planner and deterministic oracle, no live LLM or internet claim.",
+      "passed": true,
+      "seconds": 2.514999999999418,
+      "implicit_current_app": true
+    },
+    "learning-search-repair": {
+      "scope": "Real public search/scrape through Jarvis ToolRegistry for Blender sphere workflow; no scene actions or model execution. Implicit current-app discovery separately regression tested.",
+      "seconds": 2.8280000000013388,
+      "passed": true
+    },
+    "learning-search-versioned": {
+      "scope": "Actual configured executable version, public web search and scrapes through ToolRegistry. Desktop input disabled, no user scene mutation or completion claim.",
+      "seconds": 3.561999999998079,
+      "passed": true
+    }
+  },
+  "source_sha256": {
+    "jarvis/knowledge_acquisition.py": "3c7b638e5befd6c3ddf460d74bc27adc3e3f4c5174032b5986143469738fa71d",
+    "jarvis/application_discovery.py": "a495921a2ceb5ff958f8ae049ac31b9386679acdc5f9fdec17595e8a6b31bfd2",
+    "jarvis/brain.py": "c02209082f7ec0598f3fc15ff1f2233034e26c1d977d4010b9afba75212be474",
+    "jarvis/native_tools.py": "fac0aeeea2332ef318c34c50a8b8232dcc5f3e3dd21bc3282a94d422c44856d2",
+    "jarvis/tools.py": "076492a4da70e1f3aa40edf5fb2e420a8def53ebd8050def15565343deac1d2f",
+    "config/config.json": "2dddbac3b83f60b32268007bbe2ba6738342d9906a74987396b2168499915507",
+    "config/runtime_manifest.json": "4650c8b7a633fffe67a4837cf40c1511a45e0f6ee7d95e97753b02cf20e33ea5"
+  },
+  "limits": [
+    "No user Blender scene modification or conversion verification",
+    "Implicit current app tested through real owned native fixture with authored planner",
+    "Public pages are untrusted and may have different versions or incomplete task coverage",
+    "Restart running Jarvis to load repaired code"
+  ],
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "available",
+        "version": "29.8.2",
+        "os": "linux"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  }
+}

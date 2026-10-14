@@ -77,11 +77,13 @@ def local_prompt_format(client, model):
 
 def chat(client, options, messages, structured=False):
     payload = {"model": options.get("model", "qwen3:4b"), "messages": messages,
-        "stream": bool(options.get('stream', False)), "think": options.get("think", False), "keep_alive": "5m",
+        "stream": bool(options.get('stream', False)), "think": options.get("think", False), "keep_alive": options.get('keep_alive', '5m'),
         "options": {"num_ctx": options.get("num_ctx", 4096),
                     "num_predict": options.get("num_predict", 600),
                     "temperature": options.get("temperature", .2),
                     "num_gpu": options.get("num_gpu", 0)}}
+    if 'num_thread' in options:
+        payload['options']['num_thread'] = options['num_thread']
     if structured:
         payload["format"] = options.get("format_schema", "json")
     endpoint = "/api/chat"
@@ -211,7 +213,7 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
             nonlocal preview
             from .code_stream import content_prefix
             preview += chunk
-            emit('Generating answer', content_prefix(preview, 'answer'))
+            emit('Conversing' if small_talk else 'Generating answer', content_prefix(preview, 'answer'))
         options['on_activity'] = activity
         progress({'phase': 'Loading model / preparing prompt', 'text': ''})
     if not options.get("enabled", True):
@@ -233,6 +235,8 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
         "You only answer questions; you cannot operate this PC, execute code, or claim actions were done. "
         "Be honest about uncertainty. Do not invent facts or sources. "
         "Use the configured answer language consistently. ")
+    from .natural_conversation import SYSTEM
+    system += SYSTEM + ' '
     system += ("Talk like a warm, witty friend on a phone call, not a formal assistant. Lead with the answer. "
                "Use contractions, everyday words and natural spoken reactions when they fit (for example "
                "'Oh, nice!', 'Hmm, good question.', 'Honestly,'), and vary how you start sentences. Show real "
@@ -407,6 +411,9 @@ def handle_request(request, client):
     """Check current availability without changing the requested model."""
     try:
         progress = (lambda event: print(json.dumps({'answer_progress': event}, ensure_ascii=True), flush=True)) if request.get('stream_answer') else None
+        if request.get('_natural_chat'):
+            from .natural_conversation import generate
+            return generate(request, chat, progress)
         from .hybrid_inference import maybe_answer, policy, BASE
         result = maybe_answer(request, progress)
         if result is not None:
@@ -439,6 +446,19 @@ def main():
     client = session()
     try:
         if "--serve" in sys.argv[1:]:
+            try:
+                config = json.loads((Path(__file__).resolve().parents[1]/'config/config.json').read_text(encoding='utf-8'))
+                natural = config.get('knowledge', {}).get('natural_conversation', {})
+                if natural.get('enabled'):
+                    from .natural_conversation import SYSTEM
+                    with requests.Session() as warm:
+                        warm.trust_env = False
+                        # Prime the stable prompt too; no user answer is emitted.
+                        chat(warm, {'model': natural.get('model', 'qwen3.5:0.8b'), 'think': False,
+                            'keep_alive': '30m', 'num_gpu': 0, 'num_ctx': 2048, 'num_thread': 6,
+                            'num_predict': 1, 'timeout_seconds': 20}, [{'role': 'system', 'content': SYSTEM+' Answer in English.'}])
+            except (OSError, ValueError, requests.RequestException):
+                pass
             for line in sys.stdin:
                 try:
                     result = handle_request(json.loads(line), client)

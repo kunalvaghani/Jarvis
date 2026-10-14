@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Actual configured local model, Brain, DAG, ToolRegistry and two synthetic local files; no microphone, external services, desktop automation or general planning accuracy claim.",
+  "elapsed_seconds": 94.81200000000172,
+  "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nFirst fixture: dependency scheduling.\n\nSecond fixture: bounded parallel reads.",
+  "status": "completed",
+  "dag": {
+    "version": 1,
+    "graph": {
+      "version": 1,
+      "steps": [
+        {
+          "id": "s1",
+          "tool": "read_file",
+          "arguments": {
+            "value": "one.txt",
+            "expected": "Content of one.txt",
+            "folder": "this folder",
+            "content": "",
+            "find": "",
+            "browser": "chrome",
+            "platform": "windows"
+          },
+          "dependencies": [],
+          "expected": "Reads content of one.txt from the specified folder",
+          "permission": "read",
+          "resources": {
+            "cpu": 1,
+            "ram_mb": 32,
+            "gpu_mb": 0
+          },
+          "retry": {
+            "attempts": 1,
+            "backoff_seconds": 0.1
+          },
+          "timeout_seconds": 60
+        },
+        {
+          "id": "s2",
+          "tool": "read_file",
+          "arguments": {
+            "value": "two.txt",
+            "expected": "Content of two.txt",
+            "folder": "this folder",
+            "content": "",
+            "find": "",
+            "browser": "chrome",
+            "platform": "windows"
+          },
+          "dependencies": [],
+          "expected": "Reads content of two.txt from the specified folder",
+          "permission": "read",
+          "resources": {
+            "cpu": 1,
+            "ram_mb": 32,
+            "gpu_mb": 0
+          },
+          "retry": {
+            "attempts": 1,
+            "backoff_seconds": 0.1
+          },
+          "timeout_seconds": 60
+        }
+      ]
+    },
+    "steps": {
+      "s1": {
+        "status": "succeeded",
+        "attempts": 1,
+        "queue_seconds": 0.0,
+        "effect": false,
+        "result": {
+          "tool": "read_file",
+          "backend": "toolkit",
+          "evidence": "First fixture: dependency scheduling."
+        },
+        "execution_seconds": 0.014999999999417923,
+        "verification_seconds": 0.0
+      },
+      "s2": {
+        "status": "succeeded",
+        "attempts": 1,
+        "queue_seconds": 0.030999999999039574,
+        "effect": false,
+        "result": {
+          "tool": "read_file",
+          "backend": "toolkit",
+          "evidence": "Second fixture: bounded parallel reads."
+        },
+        "execution_seconds": 0.01599999999962165,
+        "verification_seconds": 0.0
+      }
+    },
+    "fingerprint": "3ad351a6e208d7b06047dfa09b2313d693a54b90c376b5babbb2bef7cbb6593b",
+    "timings": {
+      "planning_seconds": 94.7029999999977,
+      "cache_hit": false,
+      "planner_model": "qwen3.5:9b",
+      "elapsed_seconds": 94.76599999999962
+    }
+  },
+  "proposals": [
+    {
+      "version": 1,
+      "steps": [
+        {
+          "id": "s1",
+          "tool": "read_file",
+          "arguments": {
+            "value": "one.txt",
+            "expected": "Content of one.txt",
+            "folder": "this folder",
+            "content": "",
+            "find": "",
+            "browser": "chrome",
+            "platform": "windows"
+          },
+          "dependencies": [],
+          "expected": "Reads content of one.txt from the specified folder",
+          "permission": "read",
+          "resources": {
+            "cpu": 1,
+            "ram_mb": 32,
+            "gpu_mb": 0
+          },
+          "retry": {
+            "attempts": 1,
+            "backoff_seconds": 0.1
+          },
+          "timeout_seconds": 60
+        },
+        {
+          "id": "s2",
+          "tool": "read_file",
+          "arguments": {
+            "value": "two.txt",
+            "expected": "Content of two.txt",
+            "folder": "this folder",
+            "content": "",
+            "find": "",
+            "browser": "chrome",
+            "platform": "windows"
+          },
+          "dependencies": [],
+          "expected": "Reads content of two.txt from the specified folder",
+          "permission": "read",
+          "resources": {
+            "cpu": 1,
+            "ram_mb": 32,
+            "gpu_mb": 0
+          },
+          "retry": {
+            "attempts": 1,
+            "backoff_seconds": 0.1
+          },
+          "timeout_seconds": 60
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

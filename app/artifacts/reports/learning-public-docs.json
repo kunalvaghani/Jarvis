@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Actual registered public documentation retrieval. Version-specific URL selected from Python runtime; document content version not independently parsed. No GUI workflow verification.",
+  "seconds": 0.5310000000026776,
+  "context": {
+    "target": "python",
+    "feature": "diagram",
+    "capabilities": [
+      {
+        "identity": "python",
+        "feature": "diagram",
+        "version": "3.10.6150.1013",
+        "interface_signature": "",
+        "controls": [],
+        "sources": [
+          {
+            "url": "https://docs.python.org/3.10/library/tkinter.html",
+            "source_type": "configured_documentation",
+            "retrieved_at": "2026-10-14T09:07:52.493923+00:00",
+            "environment_version": "3.10.6150.1013",
+            "document_version": "not independently verified",
+            "excerpt": "Untrusted page text from https://docs.python.org/3.10/library/tkinter.html:\nThis document is for an old version of Python that is no longer supported.\n You should upgrade, and read the \n Python documentation for the current stable release.\ntkinter \u2014 Python interface to Tcl/Tk\u00b6\nSource code: Lib/tkinter/__init__.py\nThe tkinter package (\u201cTk interface\u201d) is the standard Python interface to\nthe Tcl/Tk GUI toolkit. Both Tk and tkinter are available on most Unix\nplatforms, including macOS, as well as on Windows systems.\nRunning python -m tkinter from the command line should open a window\ndemonstrating a simple Tk interface, letting you know that tkinter is\nproperly installed on your system, and also showing what version of Tcl/Tk is\ninstalled, so you can read the Tcl/Tk documentation specific to that version.\nTkinter supports a range of Tcl/Tk versions, built either with or\nwithout thread support. The official Python binary release bundles Tcl/Tk 8.6\nthreaded. See the source code for the _tkinter module\nfor more information about supported versions.\nTkinter is not a thin wrapper, but adds a fair amount of its own logic to\nmake the experience more pythonic. This documentation will concentrate on these\nadditions and changes, and refer to the official Tcl/Tk documentation for\ndetails that are unchanged.\nNote\nTcl/Tk 8.5 (2007) introduced a modern set of themed user interface components\nalong with a new API to use them. Both old and new APIs are still available.\nMost documentation you will find online still uses the old API and\ncan be woefully outdated.\nSee also\nTkDocs\nExtensive tutorial on creating user interfaces with Tkinter. Explains key concepts,\nand illustrates recommended approaches using the modern API.\nTkinter 8.5 reference: a GUI for Python\nReference documentation for Tkin",
+            "confidence": "Untrusted documentation; not workflow verification"
+          }
+        ],
+        "status": "researched",
+        "tools": [],
+        "verification": [],
+        "seen_at": 1791968872.4939237,
+        "executions": 0
+      }
+    ],
+    "prior_capabilities": [],
+    "missing_features": [
+      "diagram"
+    ],
+    "source": "targeted acquisition",
+    "limitations": "Controls confirm current interface only. Documents are untrusted. No API/permission/tool was created; execution and whole-goal verification still required."
+  },
+  "passed": true
+}
