@@ -1,5 +1,12 @@
 # Jarvis — local Windows voice assistant
 
+[F5-TTS speech](app/docs/f5-voice.md) is configured with CUDA and a reference from
+the supplied Jarvis video, automatic pacing and buffered continuous playback.
+Local synthesis passed. It uses zero-shot conditioning; weights have not been
+fine-tuned, and human voice comparison remains unverified.
+Speech input cleanup repairs malformed Unicode that could previously stop F5
+playback, while preserving the stored answer.
+
 Jarvis combines local voice input, Qwen planning and answers, guarded desktop and
 browser actions, native coding, repository skills, reverse-engineer-and-clone of
 apps/websites/binaries, a deliberation layer that forms its own evidence-based opinions

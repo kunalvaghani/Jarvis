@@ -265,6 +265,19 @@ def prepare_runtime(config):
             if any(not (BASE / path).is_file() for path in manifest.get("voice_assets", [])):
                 record(BASE, "Kokoro voice assets missing; restoring pinned local voice files.")
                 command([str(python), '-m', 'scripts.setup.setup_voice'])
+        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "f5":
+            f5_python = BASE / '.venv-f5/Scripts/python.exe'
+            if not f5_python.is_file():
+                record(BASE, 'Creating declared F5-TTS environment.')
+                command([str(python), '-m', 'venv', str(BASE / '.venv-f5')])
+            if runtime_command([str(f5_python), '-c', imports_for('f5_imports')], log, timeout=60):
+                record(BASE, 'Repairing declared F5-TTS dependencies.')
+                command([str(f5_python), '-m', 'pip', '--isolated', 'install', '-r', 'requirements/f5.txt'])
+                command([str(f5_python), '-c', imports_for('f5_imports')], timeout=60)
+            if config['speech'].get('f5', {}).get('device') == 'cuda':
+                if runtime_command([str(f5_python), '-c', 'import torch; assert torch.cuda.is_available()'], log, timeout=60):
+                    record(BASE, 'Repairing declared CUDA-enabled F5-TTS dependencies.')
+                    command([str(f5_python), '-m', 'pip', '--isolated', 'install', 'torch==2.6.0+cu124', 'torchaudio==2.6.0+cu124', '--index-url', 'https://download.pytorch.org/whl/cu124'])
         if config.get("brain", {}).get("enabled"):
             brain = BASE / ".venv-brain" / "Scripts" / "python.exe"
             if not brain.is_file():
@@ -416,6 +429,22 @@ def runtime_status(config, check_services=True):
         missing.append("Whisper checkpoint")
     if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
         missing.extend(path for path in manifest.get("voice_assets", []) if not (BASE / path).is_file())
+    if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "f5":
+        from .f5_speech import readiness
+        issue = readiness(config["speech"].get("f5", {}))
+        if issue:
+            missing.append(issue)
+        else:
+            try:
+                if check_imports(BASE / '.venv-f5/Scripts/python.exe', manifest['f5_imports']).returncode:
+                    missing.append('F5-TTS dependency imports')
+                else:
+                    result = subprocess.run([str(BASE / '.venv-f5/Scripts/python.exe'), '-m', 'jarvis.f5_speech', '--check'],
+                        cwd=BASE, capture_output=True, timeout=60, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                    if result.returncode:
+                        missing.append('F5-TTS configured device/reference readiness')
+            except (OSError, subprocess.TimeoutExpired) as error:
+                incomplete.append({'component': 'f5_speech', 'error_type': type(error).__name__})
     if config.get("brain", {}).get("enabled") and not (BASE / "models/laya/model.safetensors").is_file():
         missing.append("Laya checkpoint")
     hermes_enabled = config.get("brain", {}).get("hermes", {}).get("enabled", False)

@@ -1,5 +1,16 @@
 # Jarvis — local Windows voice assistant
 
+**Speech Unicode repair (2026-10-14 IST):** Speech now repairs malformed Unicode
+such as lone `\udc81` surrogate escapes before worker transport and synthesis.
+Valid surrogate pairs are reconstructed, styled letters become ordinary letters,
+and invalid characters become spacing while the stored answer stays unchanged.
+This prevents F5's UTF-8 byte counters from aborting a reply. Reference transcripts
+use the same cleanup. 126 selected voice, Groq, launcher, recovery and GPU
+regression tests passed outside the sandbox; initial sandbox fixture runs hit
+file-permission and local-network restrictions. The real CUDA worker completed
+malformed-Unicode and subsequent replies, and Stop still worked. Launcher readiness
+was `ready`; speaker playback was not tested. See [F5 verification](docs/f5-voice.md).
+
 **Cloud stream cutoff repair (2026-10-14 IST):** A reported partial cloud answer
 ended at 30.06 seconds, matching the configured deadline. Groq now defaults to a
 bounded 90-second request budget. SSE input uses 512-byte reads rather than
@@ -1682,3 +1693,18 @@ Reference repositories, retained licenses, and pinned revisions are documented u
 **2026-09-29 everyday bank runtime update:** The project `.venv` regression suite passed 420 tests and launcher readiness reported `ready`. Mocked-service tests covered live-field weather and AQI requests, city time offset, currency rate/date/cache, profile/date/math calculations, and explicit offline behavior. A computed question reached the answer event without Ollama in under one second in an automated worker test. A separate warm direct Ollama API sample (`qwen3.5:4b`, CPU, `think: false`, 80-token cap) took 3.67 seconds; this is one model measurement, not full voice latency. The local environment's proxy rejected live Open-Meteo and Frankfurter requests, so those integrations were not verified live. The five-second target remains unverified for the entire bank.
 
 **Dynamic Island UI (2026-09-30):** Replaced the circular HUD and large command center with a compact black island, 420 ms size transitions, active status bars and temporary answer cards. Clicking opens compact controls with settings on demand. Firecrawl research covered the requested MacDynamic-Island repository, React Bits, SmoothUI and Motion; the native Tk implementation adds no React/Electron dependency and copies no upstream component code. All 432 regression tests passed; hidden UI startup/shutdown and rendered preview generation passed without microphone capture, startup speech or vault writes. Launcher readiness reported `ready`. Animation frame rate and live voice/tasks were not benchmarked. [Design, controls, sources and previews](docs/dynamic-island.md).
+## F5-TTS voice (2026-10-14 IST)
+
+An [F5-TTS integration](docs/f5-voice.md) adds reference-conditioned English speech,
+automatic reference-style selection, native crossfades and complete-reply audio
+buffering through the existing cancellable player. Setup uses a separate environment.
+A 9.85-second reference from the user-supplied YouTube source is configured and
+agrees with local Whisper transcription. F5 with CUDA is now selected; restart
+Jarvis to apply it. One GPU sample generated 3.861 seconds of audio in 6.218 seconds
+at 32 steps and peaked at 814 MiB reserved VRAM. Complete-reply buffering prevents
+synthesis gaps inside a reply but delays its first audio. Automatic pacing is
+enabled; stronger emotional delivery needs additional style references. 80 selected
+voice, launcher, recovery and GPU scheduler regression tests passed. Full launcher
+readiness was `ready`, and real warm-worker queue/Stop checks passed without speaker
+playback. This uses zero-shot conditioning; weights have not been fine-tuned.
+Human listening comparison and full microphone-to-output latency remain unverified.

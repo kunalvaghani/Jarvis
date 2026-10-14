@@ -11,6 +11,21 @@ from jarvis.piper_speech import play_reply
 
 
 class SpeechTests(unittest.TestCase):
+    def test_invalid_unicode_does_not_break_voice_or_alter_answer(self):
+        answer = 'Gravity\udc81 pulls objects. Caf\u00e9, \u03b1 and \u4e2d\u6587 remain.'
+        cleaned = spoken_text(answer)
+        self.assertEqual(cleaned, 'Gravity pulls objects. Caf\u00e9, \u03b1 and \u4e2d\u6587 remain.')
+        cleaned.encode('utf-8')
+        self.assertIn('\udc81', answer)
+        speech = Speech({'engine': 'f5'}, Mock())
+        speech.say(answer)
+        self.assertEqual(speech.queue.get_nowait()[1], cleaned)
+
+    def test_surrogate_pairs_and_styled_letters_are_repaired_for_speech(self):
+        from jarvis.natural_voice import speech_unicode, tts_text
+        self.assertEqual(speech_unicode('\ud835\udc81'), 'Z')
+        self.assertEqual(tts_text('\U0001d401old \udc81 text \ud83d\ude80. Next sentence.'), 'Bold text . Next sentence.')
+
     def test_hinglish_and_hindi_questions_route_to_answers(self):
         self.assertEqual(parse("mujhe batao gravity kya hai"),
                          Command("ask", "mujhe batao gravity kya hai"))

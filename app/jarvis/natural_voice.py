@@ -9,6 +9,7 @@ longer sentences, slight pace variation, and emotional colour from the words
 from dataclasses import dataclass
 import random
 import re
+import unicodedata
 
 EXCITED = re.compile(r"\b(?:great|awesome|amazing|fantastic|wow|yay|congrat\w*|nice|brilliant|perfect|love|excited|woohoo|cool)\b", re.I)
 SOMBRE = re.compile(r"\b(?:sorry|unfortunately|sadly|condolences|loss|passed away|careful|warning|danger|serious|failed|"
@@ -26,8 +27,21 @@ class Phrase:
     gain: float = 1.0
 
 
+def speech_unicode(text):
+    """Make speech input scalar Unicode without changing the stored answer.
+
+    JSON can contain lone surrogate escapes. Repair paired escapes and separate
+    words around unpaired ones; UTF-8 byte counters and native tokenizers must
+    never receive surrogate code points. Compatibility forms (styled letters,
+    full-width punctuation) become ordinary spoken text.
+    """
+    text = text.encode('utf-16-le', errors='surrogatepass').decode('utf-16-le', errors='replace')
+    return unicodedata.normalize('NFKC', text.replace('\ufffd', ' '))
+
+
 def tts_text(text):
     """Clean text so Kokoro reads it like a person would say it."""
+    text = speech_unicode(text)
     text = re.sub(r"[\U0001F300-\U0001FAFF☀-➿]", "", text)  # Emoji are not spoken.
     text = re.sub(r"\b(?:lol|lmao)\b", "haha", text, flags=re.I)
     text = re.sub(r"\b(ha)(?:ha)+\b", lambda m: "ha ha" + ("!" if not m.string[m.end():m.end() + 1] in "!.?" else ""), text, flags=re.I)

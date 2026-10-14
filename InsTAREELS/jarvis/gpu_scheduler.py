@@ -53,7 +53,11 @@ def settings(options=None):
 
 def configured():
     data=json.loads((BASE/'config/config.json').read_text(encoding='utf-8'))
-    return settings(data.get('gpu_scheduler'))
+    policy = settings(data.get('gpu_scheduler'))
+    speech = data.get('speech', {})
+    if speech.get('enabled', True) and speech.get('engine') == 'f5' and speech.get('f5', {}).get('device') == 'cuda':
+        policy['speech_reserve_mb'] = max(policy['speech_reserve_mb'], 2048)
+    return policy
 
 
 def memory():

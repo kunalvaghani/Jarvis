@@ -12,6 +12,8 @@ import time
 
 def spoken_text(answer):
     """Turn transcript formatting into prose while retaining words and pauses."""
+    from .natural_voice import speech_unicode
+    answer = speech_unicode(answer)
     answer = re.split(r"\n\s*Sources:\s*\n", answer, maxsplit=1, flags=re.I)[0]
     answer = re.sub(r"```[\s\S]*?```", " The code is in the transcript. ", answer)
     answer = re.sub(r"!?\[([^\]]+)\]\([^\n)]+\)", r"\1", answer)
@@ -118,7 +120,7 @@ class Speech:
     def stream(self, text, active=True):
         """Speak complete sentences of an answer while it is still being generated."""
         if (self.closed.is_set() or not self.options.get("enabled", True)
-                or not self.options.get("stream_answers", True)):
+                or not self.options.get("stream_answers", True) or self.options.get("engine") == "f5"):
             return
         content = spoken_text(text or "")
         with self.lock:
@@ -145,7 +147,7 @@ class Speech:
         with self.lock:
             self.generation += 1
             if self.process and self.process.poll() is None:
-                if self.options.get("engine") == "kokoro" and self.process.stdin:
+                if self.options.get("engine") in {"kokoro", "f5"} and self.process.stdin:
                     try:
                         # Stop playback and pending synthesis; the warm model stays loaded.
                         self.process.stdin.write(json.dumps({"stop": True}) + "\n")
@@ -231,7 +233,10 @@ class Speech:
             directory = base / ".jarvis-runtime"
             directory.mkdir(exist_ok=True)
             self.voice_log = (directory / "speech.log").open("a", encoding="utf-8")
-            self.process = subprocess.Popen([sys.executable, "-u", "-m", "jarvis.kokoro_speech", "--serve"],
+            f5 = self.options.get("engine") == "f5"
+            executable = str(base / ".venv-f5/Scripts/python.exe") if f5 else sys.executable
+            module = "jarvis.f5_speech" if f5 else "jarvis.kokoro_speech"
+            self.process = subprocess.Popen([executable, "-u", "-m", module, "--serve"],
                 cwd=base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.voice_log,
                 encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             responses = self.responses = queue.Queue()
@@ -258,6 +263,8 @@ class Speech:
             self.last_progress = time.monotonic()
             request = row.get("id")
             if row.get("error"):
+                if request is None and self.options.get("engine") == "f5" and not self.closed.is_set():
+                    self.report("warning", str(row["error"])[:300])
                 if request in self.outstanding and self.outstanding[request] == self.generation and not self.closed.is_set():
                     self.report("warning", "Voice playback failed: " + str(row["error"])[:300])
                 self.outstanding.pop(request, None)
@@ -270,7 +277,8 @@ class Speech:
         while not self.closed.is_set():
             time.sleep(1)
             with self.lock:
-                stuck = self.outstanding and time.monotonic() - self.last_progress > self.STALL_SECONDS
+                limit = 600 if self.options.get("engine") == "f5" else self.STALL_SECONDS
+                stuck = self.outstanding and time.monotonic() - self.last_progress > limit
             if stuck:
                 self.report("repair", "Voice worker stopped making progress and was restarted; the answer remains in the transcript.")
                 self._dispose_voice()
@@ -294,9 +302,14 @@ class Speech:
 
     def _serve_queue(self):
         # Warm the selected local model in a hidden owned child, without speaking.
-        if self.options.get("engine") == "kokoro" and self.options.get("enabled", True):
+        if self.options.get("engine") in {"kokoro", "f5"} and self.options.get("enabled", True):
             try:
-                self._ensure_kokoro(self.generation)
+                if self.options.get("engine") != "f5":
+                    self._ensure_kokoro(self.generation)
+                else:
+                    from .f5_speech import readiness
+                    if not readiness(self.options.get("f5", {})):
+                        self._ensure_kokoro(self.generation)
             except Exception:
                 self._dispose_voice()
         while not self.closed.is_set():
@@ -308,6 +321,14 @@ class Speech:
                 if generation != self.generation or self.closed.is_set() or not self.options.get("enabled", True):
                     continue
                 language = speech_language(content, self.options.get("language", "auto"))
+                if language == "en" and self.options.get("engine") == "f5":
+                    from .f5_speech import readiness
+                    issue = readiness(self.options.get("f5", {}))
+                    if issue:
+                        self.report("warning", issue)
+                        continue
+                    self._kokoro_send(generation, {"text": content}, content)
+                    continue
                 name = "hi_IN-rohan-medium" if language == "hi" else "en_GB-alan-medium"
                 base = Path(__file__).resolve().parent.parent
                 kokoro = language == "en" and self.options.get("engine") == "kokoro"

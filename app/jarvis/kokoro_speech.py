@@ -177,7 +177,7 @@ def raise_priority():
         pass
 
 
-def serve():
+def serve(loader=None, renderer=None):
     import contextlib
     protocol = sys.stdout
     base = Path(__file__).resolve().parent.parent
@@ -204,7 +204,7 @@ def serve():
     try:
         raise_priority()
         with contextlib.redirect_stdout(sys.stderr):
-            voice = load_voice(base / "models/voices/kokoro/kokoro-v1.0.onnx", base / "models/voices/kokoro/voices-v1.0.bin")
+            voice = loader() if loader else load_voice(base / "models/voices/kokoro/kokoro-v1.0.onnx", base / "models/voices/kokoro/voices-v1.0.bin")
         player = Player(24000, events) if "--no-playback" not in sys.argv else None
         events.put({"ready": True})
 
@@ -220,7 +220,7 @@ def serve():
                 try:
                     started = time.monotonic()
                     with contextlib.redirect_stdout(sys.stderr):
-                        for audio, rate in render(voice, request, stale,
+                        for audio, rate in (renderer or render)(voice, request, stale,
                                                   lambda index: events.put({"id": request["id"], "progress": index})):
                             if stale.is_set():
                                 break

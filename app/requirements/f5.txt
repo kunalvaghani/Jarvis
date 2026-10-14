@@ -1,0 +1,7 @@
+# Separate environment: keep PyTorch and F5 dependencies out of the main runtime.
+f5-tts==1.1.21
+torch==2.6.0
+torchaudio==2.6.0
+transformers==4.44.2
+gradio==6.16.0
+sounddevice>=0.5,<0.6

@@ -1,6 +1,21 @@
 {
   "version": 1,
+  "f5_imports": ["f5_tts.api", "soundfile", "sounddevice"],
+  "f5_speech": {
+    "requirements": "requirements/f5.txt",
+    "cuda_requirements": "torch==2.6.0+cu124 and torchaudio==2.6.0+cu124 from official PyTorch cu124 index; setup_f5.ps1 -Cuda",
+    "environment": ".venv-f5",
+    "worker": "jarvis.f5_speech",
+    "ownership": "Speech owns the hidden child; existing progress watchdog disposes stalled workers without replaying replies; stop clears buffered audio; close kills the child",
+    "gpu_policy": "When selected F5 uses CUDA, the Qwen scheduler reserves at least 2048 MiB for speech plus its existing 512 MiB headroom; Qwen uses fewer GPU layers on the measured 4 GB GPU",
+    "activation": "Selected engine f5 with CUDA and a 9.85-second local WAV reference from user-supplied YouTube video 9hhIc8iWUx4; exact transcript agrees with local Whisper",
+    "limitations": "Full reply buffering increases first-audio latency; F5 skips draft sentence streaming; separate replies may still have gaps; no real-time, perfect-cloning or fine-tuning claim"
+  },
   "capabilities": [
+    "f5_reference_conditioned_cuda_speech",
+    "unicode_safe_spoken_reply_and_reference_text",
+    "bounded_sequential_crossfaded_voice_chunks",
+    "automatic_reference_style_and_pacing_selection",
     "optional_groq_public_question_inference",
     "durable_cross_process_free_quota_reservations",
     "privacy_first_local_cloud_question_routing",

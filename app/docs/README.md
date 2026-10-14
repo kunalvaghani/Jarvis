@@ -25,6 +25,8 @@ Start with the [application guide](../README.md) and [project structure](project
 
 ## Voice and interface
 
+- [F5-TTS reference voice, CUDA setup and measured limits — 2026-10-14 IST](f5-voice.md)
+
 - [UI edge finish and animation pacing — 2026-10-10 IST](ui-smoothness.md)
 - [Jarvis Dynamic Island](dynamic-island.md)
 - [Sharp display, live progress and commands during speech](hd-display-and-voice-input.md)
