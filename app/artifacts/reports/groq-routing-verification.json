@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-14 IST",
+  "cases": 232,
+  "passed": 232,
+  "failures": [],
+  "dataset_scope": "150 existing independently written action scenarios plus public/privacy/quota/offline cases. Constraint acceptance, not model answer accuracy or general semantic routing accuracy.",
+  "samples_per_stage": 1200,
+  "privacy": {
+    "p50_ms": 0.0096,
+    "p95_ms": 0.0263,
+    "p99_ms": 0.0308
+  },
+  "quota_snapshot": {
+    "p50_ms": 0.0089,
+    "p95_ms": 0.0152,
+    "p99_ms": 0.0231
+  },
+  "route": {
+    "p50_ms": 0.0101,
+    "p95_ms": 0.132,
+    "p99_ms": 0.1582
+  },
+  "cold_quota_initialization_ms": 14.092,
+  "gateway_init_rss_delta_bytes": 684032,
+  "atomic_reservation": {
+    "p50_ms": 5.989,
+    "p95_ms": 8.3189,
+    "p99_ms": 9.5217
+  },
+  "atomic_reservation_samples": 120,
+  "fake_http_stream_ttft": {
+    "p50_ms": 8.8661,
+    "p95_ms": 19.7751,
+    "p99_ms": 34.4808
+  },
+  "fake_http_end_to_end": {
+    "p50_ms": 15.8885,
+    "p95_ms": 26.2515,
+    "p99_ms": 42.0748
+  },
+  "fake_http_calls": 100,
+  "resource_scope": "Current Python process RSS delta after imports; no real cloud call, GPU allocation, model load/unload or tiny classifier added.",
+  "live_groq_calls": 0,
+  "live_model_switch_ms": null,
+  "live_cloud_ttft_ms": null
+}

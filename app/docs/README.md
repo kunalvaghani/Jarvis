@@ -4,6 +4,13 @@ Start with the [application guide](../README.md) and [project structure](project
 
 ## Project and runtime
 
+- [Optional Groq hybrid inference, quota protection and offline verification — 2026-10-14 IST](groq-hybrid.md)
+- [Pre-implementation hybrid architecture map — 2026-10-14 IST](groq-architecture.md)
+
+- [DeerFlow Docker sandbox, free media and live verification — 2026-10-14 IST](deerflow-sandbox.md)
+
+- [DeerFlow integration, local harness and measured source research — 2026-10-13–14 IST](deerflow.md)
+
 - [Fast planning, task queue and natural conversation — 2026-10-10 IST](fast-conversation.md)
 - [Writing by voice and push-to-write — 2026-10-10 IST](push-to-write.md)
 - [Natural male voice and smooth long speech — 2026-10-10 IST](natural-male-voice.md)

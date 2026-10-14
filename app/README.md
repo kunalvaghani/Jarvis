@@ -1,5 +1,96 @@
 # Jarvis — local Windows voice assistant
 
+**Cloud stream cutoff repair (2026-10-14 IST):** A reported partial cloud answer
+ended at 30.06 seconds, matching the configured deadline. Groq now defaults to a
+bounded 90-second request budget. SSE input uses 512-byte reads rather than
+one-byte reads, and cancellation polls local policy at most every 100 ms while
+still checking service closure immediately. Interrupted streams preserve their
+specific cause; output-token exhaustion is distinguished from transport failure.
+No partial answer is replayed automatically, and token/privacy limits remain enforced.
+Verification: 495 selected offline tests passed in 54.612 seconds on rerun;
+the first run hit a Windows temporary-file lock in an unrelated GPU scheduler test.
+Readiness was `ready`. Simulated Unicode streaming and partial token exhaustion
+passed; live cloud completion and latency remain unverified.
+
+**Public-question routing repair (2026-10-14 IST):** With cloud routing enabled,
+self-contained complex public questions such as “Explain quantum computing” use
+fresh question context instead of automatically inheriting old answers or local
+catalogue entries. Follow-ups, explicitly supplied context, screen/web requests
+and manual offline mode retain local context handling. The first eligible cloud
+request waits up to eight seconds for model metadata instead of immediately
+falling back while the check runs. The initial UI label now says “Preparing answer.”
+Verification: 493 selected offline tests passed in 54.793 seconds; startup
+readiness was `ready`. A live metadata-only check confirmed model availability.
+No real cloud answer or production latency was measured.
+
+**Typed cloud controls repair (2026-10-14 IST):** “Enable cloud AI for public
+tasks.” now saves the public-routing preference directly through Ask, Do task,
+Enter and final voice commands. The parser recognizes both “enable” and its
+normalized “turn on” wording. Explicit cloud controls bypass chat generation and
+busy action queues; public-cloud eligibility checks still apply. See the
+[cloud controls guide](docs/groq-hybrid.md).
+Verification: 489 selected offline regression tests passed in 54.620 seconds;
+startup readiness was `ready`. Four new checks cover normalized commands, typed
+preference persistence without inference, quoted/explanatory text and final-only
+voice dispatch. Real Groq inference and GUI interaction were not tested.
+
+**Docker startup popup repair (2026-10-14 IST):** Fixed the Desktop launch environment
+so Windows profile paths are retained without forwarding API-key variables. A
+shared startup lock prevents concurrent supervisor/watchdog launches. This addresses
+the reported empty-path launcher-lock error; Docker data and shared containers are
+preserved. Docker/Ollama were available in the repair's read-only readiness check.
+The expanded offline regression passed 485 tests; no cold shared-engine restart
+or real Groq inference was performed.
+See [startup repair and validation scope](docs/deerflow-sandbox.md).
+
+**Optional Groq hybrid inference (2026-10-14 IST):** Public complex questions can
+use `qwen/qwen3.8-27b` through the existing question worker, with privacy screening,
+shared durable quota reservations, streaming and local fallback. Groq is disabled
+by default; no real cloud tokens were used for development. Local model configuration,
+tiny helper roles, GPU scheduling and guarded automation are preserved. Voice/CLI
+controls include immediate offline selection and explicit answer feedback. All 232
+route constraints passed; warm route p95 measured 0.132 ms, while authoritative
+durable reservations measured 8.3189 ms. These measure policy/overhead, not answer
+accuracy or real cloud speed. Initial integration regression passed 477 tests and
+readiness was `ready` at that check, with Groq `disabled` and live inference unchecked.
+See [setup, security, verification and limitations](docs/groq-hybrid.md).
+
+**Groq daily recovery follow-up (2026-10-14 IST):** Quota exhaustion is temporary;
+eligible requests reconsider cloud automatically as provider restrictions and the
+rolling 24-hour usage window expire. A token-estimation overrun no longer leaves
+a permanent offline hold. Manual offline mode remains respected. Recovery checks
+use simulated time and provider metadata, with no real Groq inference.
+The follow-up regression passed 480 tests, including recovery after a new day,
+restart and provider-header expiry. That follow-up's read-only readiness check reported
+`repair_required`: Docker and Ollama were unavailable; LocalGithub was available.
+Those services were not started by this quota-only follow-up.
+
+**Offline sandbox and free media (2026-10-14 IST):** Jarvis now uses DeerFlow and
+local Qwen for confined Docker coding/data tasks, with read-only input copies,
+saved artifacts and no uncertain command replay. Startup and the runtime watchdog
+start Docker silently when unavailable, respect Stop/Quit and preserve shared
+containers. Seven offline renderers create charts, posters, PDFs, PPTX, text-card
+video, procedural music and natural Kokoro narration without API keys. All seven
+recipes, input isolation and an owned-container fault check passed. A million-row
+deterministic fixture processed in 3.203 seconds; the actual model-driven JSON/chart
+task passed in 364.562 seconds. These are different workloads, not a general speed
+or intelligence score. The final selected regression suite passed 209 tests and
+launcher readiness reported `ready`; full GUI/microphone startup was not tested.
+Account setup is deferred. See
+[setup, isolation, evidence and limits](docs/deerflow-sandbox.md).
+
+**DeerFlow integration (2026-10-13–14 IST):** The full upstream repository is
+downloaded and its harness installed in an isolated Python 3.12 environment.
+Jarvis discovers scoped DeerFlow source research, guarded public-web research
+and all 23 public skill guides through its existing tool and skill mechanisms.
+Upstream receipt parsing and reference sanitization are reused. Source sessions
+now pass observations consistently to the model and reject invalid receipt
+citations. On three synthetic source-reading tasks, the original Jarvis scored
+0/3; updated Jarvis scored 3/3 then 2/3 on a repeat, and the integrated DeerFlow
+harness scored 3/3. This small check does not establish general accuracy or AGI.
+173 relevant regression tests passed and launcher readiness was `ready`.
+See [setup, architecture, measurements and limits](docs/deerflow.md).
+
 **UI edge finish and smoother animation (2026-10-10 IST):** The existing island design,
 glass controls and animations are retained. Fixed the one-pixel side tails, added
 fractional-alpha blending around the outer curves, and removed the 24–30 fps animation

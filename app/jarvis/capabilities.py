@@ -6,6 +6,13 @@ import re
 
 # These are runtime associations, not saved actions or provider-specific tool names.
 ROUTES = {
+    'deerflow': (r'\b(deerflow|deer[- ]flow)\b',
+                 ('deerflow_status', 'deerflow_skill_search', 'deerflow_skill_read', 'deerflow_research', 'deerflow_web_research', 'deerflow_sandbox_task', 'deerflow_free_media'), ('web-research', 'project-coding')),
+    'sandbox': (r'\b(sandbox|isolated|offline media|free media)\b', ('deerflow_sandbox_task', 'deerflow_status'), ('project-coding',)),
+    'free_media': (r'\b(?:create|generate|render|make)\b.*\b(?:chart|slides|pptx|pdf|poster|slideshow|narration|podcast|free music)\b',
+                   ('deerflow_free_media', 'deerflow_sandbox_task'), ()),
+    'source_research': (r'\b(?:research|investigate|analy[sz]e|review|understand|explain)\b.*\b(?:codebase|repository|repo|project)\b',
+                        ('repository_map', 'read_file', 'deerflow_research'), ('project-coding',)),
     'windows_commands': (r'\b(windows commands?|command reference|cpu details|battery report|network adapters)\b',
                          ('windows_command_search','windows_command'), ('app-navigation',)),
     'coding': (r'\b(code|coding|script|python|debug|refactor|bug|implementation|programming|unit tests?|fix.*project)\b',

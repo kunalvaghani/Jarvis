@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-14 IST",
+  "installed": [
+    {
+      "name": "qwen3.5:4b",
+      "size_bytes": 3389983735,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "4.7B"
+    },
+    {
+      "name": "qwen3.5:4b",
+      "size_bytes": 3397841620,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "4.7B"
+    },
+    {
+      "name": "llamacpp:96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+      "size_bytes": 3397841620,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "4.7B"
+    },
+    {
+      "name": "jarvis-codex-qwen3.5:9b",
+      "size_bytes": 6603314917,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "9.7B"
+    },
+    {
+      "name": "qwen3.5:0.8b",
+      "size_bytes": 1322069277,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "752.39M"
+    },
+    {
+      "name": "qwen2.5:0.5b",
+      "size_bytes": 397821319,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "qwen2",
+      "parameter_size": "494.03M"
+    },
+    {
+      "name": "qwen3.5:9b",
+      "size_bytes": 6594474711,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "9.7B"
+    },
+    {
+      "name": "qwen3.5:9b",
+      "size_bytes": 6603314868,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "9.7B"
+    },
+    {
+      "name": "llamacpp:c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+      "size_bytes": 6603314868,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "9.7B"
+    },
+    {
+      "name": "qwen3-coder:latest",
+      "size_bytes": 18556700761,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "qwen3moe",
+      "parameter_size": "30.5B"
+    },
+    {
+      "name": "qwen3-vl:2b",
+      "size_bytes": 1889519687,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen3vl",
+      "parameter_size": "2.1B"
+    },
+    {
+      "name": "qwen3-vl:4b",
+      "size_bytes": 3295636135,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen3vl",
+      "parameter_size": "4.4B"
+    },
+    {
+      "name": "qwen3-coder:30b",
+      "size_bytes": 18556700761,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "qwen3moe",
+      "parameter_size": "30.5B"
+    },
+    {
+      "name": "qwen3.5:latest",
+      "size_bytes": 6594474711,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "family": "qwen35",
+      "parameter_size": "9.7B"
+    },
+    {
+      "name": "llama3.2:latest",
+      "size_bytes": 2019393189,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "llama",
+      "parameter_size": "3.2B"
+    },
+    {
+      "name": "llama3.2:3b",
+      "size_bytes": 2019393189,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "llama",
+      "parameter_size": "3.2B"
+    },
+    {
+      "name": "qwen2.5:3b-instruct",
+      "size_bytes": 1929912432,
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "family": "qwen2",
+      "parameter_size": "3.1B"
+    }
+  ],
+  "loaded": {
+    "models": []
+  },
+  "scope": "Read-only local Ollama metadata; no models loaded or unloaded."
+}

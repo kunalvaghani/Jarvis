@@ -1,4 +1,23 @@
 {
+  "groq": {
+    "enabled": true,
+    "model": "qwen/qwen3.8-27b",
+    "free_only": true,
+    "account_plan": "free",
+    "free_tier_confirmed": true,
+    "dedicated_quota_confirmed": true,
+    "max_daily_requests": 1000,
+    "max_daily_tokens": 200000,
+    "max_minute_requests": 30,
+    "max_minute_tokens": 8000,
+    "timeout_seconds": 90,
+    "allow_sensitive_data": false,
+    "live_tests_enabled": false,
+    "safety_margin": 0.1,
+    "max_output_tokens": 1536,
+    "metadata_ttl_seconds": 300,
+    "routing": "auto"
+  },
   "gpu_scheduler": {
     "enabled": true,
     "helper_gpu": false,
@@ -1469,5 +1488,10 @@
       "enabled": true,
       "auto_deploy": false
     }
+  },
+  "docker_runtime": {
+    "enabled": true,
+    "recovery": "start_only",
+    "leave_shared_engine_running_on_quit": true
   }
 }

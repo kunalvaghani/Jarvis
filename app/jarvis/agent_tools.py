@@ -19,8 +19,8 @@ TOOLS = {
     'tool_search': ('agent', 'Discover configured tools; value query. Loads matching tools for the next planning step.', (), False),
     'repository_map': ('agent', 'Read source paths and Python symbols; folder project, value dot.', (), False),
     'repository_instructions': ('agent', 'Read applicable AGENTS.md; folder project, value relative target or dot.', (), False),
-    'skill_list': ('agent', 'Discover project skills; folder project, value dot. Use folder @jarvis for local/bundled custom guides, or @hermes and value query for upstream guidance.', (), False),
-    'skill_read': ('agent', 'Read an exact project skill; folder project, value name. Use folder @jarvis for a local guide; @hermes for an upstream guide, content optional relative reference path. Read-only guidance.', (), False),
+    'skill_list': ('agent', 'Discover project skills; folder project, value dot. Use @jarvis for local guides, @hermes or @deerflow and value query for upstream guidance.', (), False),
+    'skill_read': ('agent', 'Read an exact project skill; folder project, value name. Use @jarvis for local guides, @deerflow for a DeerFlow public guide, @hermes for a Hermes guide with optional content reference path. Read-only guidance.', (), False),
     'git_status': ('agent', 'Read Git working tree status; folder project, value dot.', (), False),
     'git_diff': ('agent', 'Read unstaged diff; folder project, value relative source file. No repository-wide secret diff.', (), False),
     'git_log': ('agent', 'Read latest ten Git commit subjects; folder project, value dot.', (), False),
@@ -171,6 +171,13 @@ def execute(actions, step, cancelled):
         if row is None:
             raise ValueError('No local Jarvis guide named ' + step['value'])
         return json.dumps({'name': row['name'], 'guidance': row['body'], 'origin': row['origin']}, ensure_ascii=False)
+    if name in {'skill_list', 'skill_read'} and step.get('folder') == '@deerflow':
+        from .deerflow import search_skills, read_skill
+        if step.get('content'):
+            raise ValueError('DeerFlow guide access does not execute scripts or load arbitrary references.')
+        result = search_skills(actions.base, step['value']) if name == 'skill_list' else {
+            'name': step['value'], 'guidance': read_skill(actions.base, step['value']), 'origin': 'DeerFlow public guide'}
+        return json.dumps(result, ensure_ascii=False)
     if name in {'skill_list', 'skill_read'} and step.get('folder') == '@hermes':
         upstream = getattr(getattr(actions, 'skills', None), 'upstream', None)
         if upstream is None or upstream.error:

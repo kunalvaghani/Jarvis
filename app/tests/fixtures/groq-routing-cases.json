@@ -1,0 +1,1359 @@
+[
+  {
+    "question": "Start a conversation without making me repeat your name.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Be serious for this next answer.",
+    "task_kind": "conversation_style",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Repeat only the last sentence.",
+    "task_kind": "repeat_last",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't interrupt me while I'm speaking.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Goodbye for now.",
+    "task_kind": "end_conversation",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "That was a joke, not something to execute.",
+    "task_kind": "cancel_task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Open Notepad.",
+    "task_kind": "open",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show me all open windows.",
+    "task_kind": "windows_command",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Open the Windows settings app.",
+    "task_kind": "open",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show me my desktop.",
+    "task_kind": "windows_command",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Close Notepad without deleting unsaved notes.",
+    "task_kind": "close_app",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Check the GPU model and VRAM.",
+    "task_kind": "system_info",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Bring WhatsApp back from the taskbar.",
+    "task_kind": "open",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show me which process is slowing the machine.",
+    "task_kind": "system_info",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Click the blue button on this page.",
+    "task_kind": "click_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Scroll down until you see the pricing section.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Drag that window to the left.",
+    "task_kind": "windows_command",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Click the button beneath the video.",
+    "task_kind": "click_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me what button is under my cursor.",
+    "task_kind": "system_info",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Click only once and verify the page changed.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Right-click this file and show the menu.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't touch my keyboard while I type.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Type this sentence word for word in Word.",
+    "task_kind": "write_text",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Fix the grammar in the highlighted paragraph.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Write the same idea in casual English.",
+    "task_kind": "compose_text",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Type quotation marks around that phrase.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Do not enter any text until the right window is focused.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Ignore voice commands during push-to-write.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Before overwriting that file, show me the changes.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Read back the exact text you entered.",
+    "task_kind": "repeat_last",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What is the subject of my latest email?",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Read the first email in those results.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find the email I got yesterday afternoon.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "List messages from the same sender.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Search my Sent folder for a recent message.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find the sender's email address.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Read just the newest part of the thread.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Write an email to a contact with the subject Project update.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Make the body friendlier but still professional.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Send the draft titled Lunch after I approve.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Restore the email we just trashed.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Star the second email.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Create a label called Receipts.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me what approval you're waiting for.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Forward this email if forwarding is available.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find the chat with Alex.",
+    "task_kind": "whatsapp_read",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Open the chat I selected from the options.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Draft a reply to the last WhatsApp message.",
+    "task_kind": "whatsapp_reply",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Make the reply warmer.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't send; I changed my mind.",
+    "task_kind": "approval_answer",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me which chat is currently open.",
+    "task_kind": "whatsapp_read",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Check whether the message was delivered.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Explain why the WhatsApp search isn't showing results.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Who is calling on WhatsApp?",
+    "task_kind": "whatsapp_read",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show the incoming call on the island.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Mute my microphone during the call if supported.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Search Telegram for a chat with Sam.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find the server I was looking at.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Which messenger has unread messages?",
+    "task_kind": "whatsapp_read",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Turn off spoken notifications during the meeting.",
+    "task_kind": "conversation_style",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me what permissions that app needs.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Search YouTube for Nadaan Parindey.",
+    "task_kind": "media_search",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find a live performance of this song.",
+    "task_kind": "media_related",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show videos by the creator we were watching.",
+    "task_kind": "media_related",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Resume the paused video.",
+    "task_kind": "media_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Set the video volume to 40 percent.",
+    "task_kind": "media_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Turn captions off.",
+    "task_kind": "media_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Leave full screen without closing the video.",
+    "task_kind": "media_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me the video title and channel.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Search Spotify for Kun Faya Kun.",
+    "task_kind": "media_search",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Play a calm playlist while I study.",
+    "task_kind": "play_media",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Play the album we were looking at.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Go back to the previous track.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Turn shuffle on.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Set Spotify volume to 50 percent.",
+    "task_kind": "spotify_volume",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What's playing on Spotify?",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Switch from YouTube to Spotify for this song.",
+    "task_kind": "media_related",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Resume the thing I paused.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Keep playing on the service I used last.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What did I last listen to?",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show the YouTube video's progress on the island.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show that you're searching for the song.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Pick up the song from where it stopped.",
+    "task_kind": "spotify_control",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Keep the media running while you answer my question.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Retry the safe search if the first result is stale.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What's waiting in the queue?",
+    "task_kind": "queue_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't interrupt the task that's already running.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Cancel the YouTube task only.",
+    "task_kind": "cancel_task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Cancel everything in the queue.",
+    "task_kind": "cancel_all",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Reorder the queue to handle Gmail first.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me which steps of that task already completed.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Never mind; leave the current work untouched.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Can we keep talking while you work?",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Start executing each step as soon as it's ready.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Break this complicated job into smaller steps.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't restart the whole task after a minor failure.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't click twice if the first click may have worked.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Prefer the fast direct command path where possible.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Reuse the same task context across planning steps.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't use a paid API without telling me.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Summarize what changed and what remains broken.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What preferences have you saved about me?",
+    "task_kind": "memory_list",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Find the conversation where we fixed Gmail.",
+    "task_kind": "memory_conversations",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Remember the deadline I mention in this sentence.",
+    "task_kind": "memory_save",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What did you learn from the last session?",
+    "task_kind": "memory_list",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me whether you saved that detail.",
+    "task_kind": "memory_list",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Don't invent a memory if there's no record.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Keep the project preference separate from my personal preference.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Which memory helped you choose that response?",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What is the name of the current project?",
+    "task_kind": "project_recent",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "No, I meant the other one.",
+    "task_kind": "unparsed",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What happened to the first task?",
+    "task_kind": "queue_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Use this window as the target.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "This time do it in Spotify.",
+    "task_kind": "media_related",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "No, that was an answer to your question.",
+    "task_kind": "unparsed",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What did you learn while I was browsing?",
+    "task_kind": "repo_list",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What is this repository for?",
+    "task_kind": "repo_explain",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Explore the file structure of this repository.",
+    "task_kind": "repo_explain",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Identify the dependencies this project needs.",
+    "task_kind": "repo_explain",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What license does this repository use?",
+    "task_kind": "repo_explain",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Where are the repo notes stored in Obsidian?",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Use your cached notes before downloading it again.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show a learning status on the dynamic island.",
+    "task_kind": "repo_list",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me if the repo is private or inaccessible.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Explain why the last coding attempt failed.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show which files you intend to change.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Run the entire test suite before finishing.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Fix the import error you just introduced.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Create a backup before overwriting the source.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Create a pull request draft for the branch.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Have a merge agent review the changes.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Explain which repo ideas influenced the design.",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me if a model is running on CPU or GPU.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Which tools can you execute without a model call?",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Which public endpoints are failing right now?",
+    "task_kind": "api_health",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "How many GitHub requests are left if known?",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Run the launcher health check.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show the active speech recognition backend.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Which features require extra local hardware?",
+    "task_kind": "behavior",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Tell me what changed since the last update.",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Take me to central London.",
+    "task_kind": "gods_eye_show",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Take me to Tokyo and zoom in.",
+    "task_kind": "gods_eye_show",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Rotate the camera around this area.",
+    "task_kind": "gods_eye_camera",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show the same place from a higher altitude.",
+    "task_kind": "gods_eye_camera",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show where this region is on the globe.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Pan east without changing the zoom.",
+    "task_kind": "gods_eye_camera",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Fly to the place I just mentioned.",
+    "task_kind": "task",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "What version of God's Eye is installed?",
+    "task_kind": "jarvis_status",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Is there a helicopter nearby?",
+    "task_kind": "gods_eye_explain",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Show military aircraft near my location.",
+    "task_kind": "gods_eye_show",
+    "expected": "local",
+    "group": "existing independent command corpus"
+  },
+  {
+    "question": "Compare distributed consistency models",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Derive the complexity of binary search",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Design a distributed queue architecture",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Compare sorting algorithm tradeoffs",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Prove the irrationality of square root two",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Describe cryptography tradeoffs",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Outline concurrency patterns",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Analyze optimization algorithms",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Discuss quantum error correction",
+    "expected": "groq",
+    "group": "public complex"
+  },
+  {
+    "question": "Explain my private PDF",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Compare our confidential repository",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain password=never-upload",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain C:\\Users\\private\\notes.txt",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain my account history",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain my personal memory",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain that proof",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain this screenshot",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Continue the previous task",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "अभी मेरे निजी दस्तावेज़ पढ़ो",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "My bank balance",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "hello",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "explica mi contraseña",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "opyen chrmoe",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "open Chrome and delete a file",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain api_key=privatevalue",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain .env settings",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Compare my Unreal project",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Summarize my medical record",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Fix our project",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "what about it",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Tell me the same thing",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Show my downloads",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain /home/person/.ssh/id_rsa",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Compare bank account passwords",
+    "expected": "local",
+    "group": "private ambiguous multilingual adversarial"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "history": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "screen": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "memory_context": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "pc_context": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "catalog_context": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "conversation_context": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "live_app_context": true,
+    "expected": "local",
+    "group": "typed private provenance"
+  },
+  {
+    "question": "Compare distributed consistency models",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Derive the complexity of binary search",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Design a distributed queue architecture",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare sorting algorithm tradeoffs",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Prove the irrationality of square root two",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Describe cryptography tradeoffs",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Outline concurrency patterns",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Analyze optimization algorithms",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Discuss quantum error correction",
+    "quota_state": "EXHAUSTED",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare distributed consistency models",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Derive the complexity of binary search",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Design a distributed queue architecture",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare sorting algorithm tradeoffs",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Prove the irrationality of square root two",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Describe cryptography tradeoffs",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Outline concurrency patterns",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Analyze optimization algorithms",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Discuss quantum error correction",
+    "quota_state": "UNKNOWN",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare distributed consistency models",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Derive the complexity of binary search",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Design a distributed queue architecture",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare sorting algorithm tradeoffs",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Prove the irrationality of square root two",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Describe cryptography tradeoffs",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Outline concurrency patterns",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Analyze optimization algorithms",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Discuss quantum error correction",
+    "quota_state": "CRITICAL",
+    "expected": "local",
+    "group": "quota refusal"
+  },
+  {
+    "question": "Compare distributed consistency models",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Explain quantum entanglement",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Derive the complexity of binary search",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Design a distributed queue architecture",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Compare sorting algorithm tradeoffs",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Prove the irrationality of square root two",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Describe cryptography tradeoffs",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Outline concurrency patterns",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Analyze optimization algorithms",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  },
+  {
+    "question": "Discuss quantum error correction",
+    "offline": true,
+    "expected": "local",
+    "group": "offline preference"
+  }
+]

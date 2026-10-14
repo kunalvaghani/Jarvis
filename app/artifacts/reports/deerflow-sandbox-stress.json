@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "result": {
+    "rows": 1000000,
+    "sum_squares": 333332833333500000,
+    "sql_verified": true,
+    "held_out_accuracy": 0.9985,
+    "artifacts_verified": [
+      "groups.csv",
+      "chart.png",
+      "report.pdf",
+      "slides.pptx",
+      "melody.wav",
+      "narration.wav",
+      "video.mp4"
+    ],
+    "phases": {
+      "million_row_analysis_seconds": 0.099,
+      "held_out_ml_seconds": 0.027,
+      "chart_pdf_slides_seconds": 0.616,
+      "speech_melody_video_seconds": 2.461
+    },
+    "seconds": 3.203,
+    "python_peak_rss_mib": 273.6,
+    "memory_scope": "Linux ru_maxrss for fixture Python process; excludes total host/container/child peak.",
+    "media_scope": "Chart/document generation, procedural instrumental melody, eSpeak narration and FFmpeg still-image video; no diffusion image/video or commercial music API."
+  },
+  "job_id": "6ebf9d771ca743d6abb3ad439f308a02",
+  "artifacts": [
+    {
+      "path": "workspace/stress.py",
+      "bytes": 5651
+    },
+    {
+      "path": "outputs/chart.png",
+      "bytes": 21238
+    },
+    {
+      "path": "outputs/groups.csv",
+      "bytes": 3109
+    },
+    {
+      "path": "outputs/melody.wav",
+      "bytes": 384044
+    },
+    {
+      "path": "outputs/narration.wav",
+      "bytes": 167784
+    },
+    {
+      "path": "outputs/report.pdf",
+      "bytes": 42813
+    },
+    {
+      "path": "outputs/slides.pptx",
+      "bytes": 48254
+    },
+    {
+      "path": "outputs/validation.json",
+      "bytes": 782
+    },
+    {
+      "path": "outputs/video.mp4",
+      "bytes": 72966
+    }
+  ],
+  "image_id": "sha256:a4c73320afe95e338763d445a38b719f56d52c4d9da69c61f3487be81ea6a39e",
+  "verification_mode": "Saved completed-job artifact readback; no command replay.",
+  "date": "2026-10-14T01:20:21.307936+05:30",
+  "wall_seconds": 0.062,
+  "scope": "Trusted synthetic load fixture through production offline Docker adapter; separate from model accuracy and live account/API tests. 2 CPUs, 2 GB RAM, no network or credentials.",
+  "original_fixture_wall_seconds": 8.86,
+  "original_execution_report": "deerflow-sandbox-stress-first-check.json",
+  "readback_note": "Initial mixed stdout/stderr JSON parsing failed after the fixture completed; later artifact readback verified the same job without replay."
+}

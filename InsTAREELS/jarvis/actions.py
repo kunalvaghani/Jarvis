@@ -323,6 +323,19 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command):
+        if command.kind in {'ask', 'task'} and not command.extra:
+            from .commands import cloud_command
+            command = cloud_command(command.value) or command
+        if command.kind == 'cloud_control':
+            from .hybrid_inference import control
+            if command.value == 'offline':
+                self.knowledge.cancel()
+            try:
+                reply = control(self.base, command.value)
+            except ValueError as exc:
+                reply = str(exc)
+            self.report('answer', reply)
+            return  # Explicit settings bypass chat, pending replies and busy action queues.
         from .whatsapp import answer_prompt
         if answer_prompt(self, command):
             return  # A reply to a waiting WhatsApp question (contact choice, preview approval, call).
@@ -1029,6 +1042,10 @@ class Actions:
         from .commands import Command
         if cancelled():
             return
+        if command.kind == 'cloud_control':
+            from .hybrid_inference import control
+            if command.value == 'offline': self.knowledge.cancel()
+            return control(self.base, command.value)
         if (command.kind in {"spotify_control", "spotify_volume"} and command.extra == "auto") or (
                 command.kind == "click_control" and command.extra == "click" and command.value in {"play", "pause"}
                 and media_session_open(self)):

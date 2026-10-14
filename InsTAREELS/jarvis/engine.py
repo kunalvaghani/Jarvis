@@ -23,7 +23,7 @@ WHOLE = {"ask", "task", "code_task", "toolkit", "anticipation", "realtime", "win
          "behavior", "conversation_style", "jarvis_status", "system_info", "whatsapp_read", "media_related",
          "memory_summarize", "messenger_focus", "gods_eye_show", "gods_eye_camera", "gods_eye_explain", "gods_eye_cameras",
          "cognition_predict", "screen_info"}
-FINAL_ONLY = WHOLE | {"run_command", "modify", "browse", "browser_search", "context_search", "media_search",
+FINAL_ONLY = WHOLE | {"cloud_control", "run_command", "modify", "browse", "browser_search", "context_search", "media_search",
     "media_control", "play_media", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app",
     "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls",
     "confirm_suggestion", "suggest_control", "forget_ui_memory", "cancel_task"}

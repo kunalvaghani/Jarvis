@@ -1,6 +1,9 @@
 {
   "version": 1,
   "capabilities": [
+    "optional_groq_public_question_inference",
+    "durable_cross_process_free_quota_reservations",
+    "privacy_first_local_cloud_question_routing",
     "native_local_qwen_coding_without_codex",
     "fixed_tests_implementation_only_repairs",
     "typed_pdf_command_reference",
@@ -137,9 +140,21 @@
     "repository_skill_emergency_disable",
     "on_demand_rea_reverse_engineer_and_best_effort_clone",
     "shared_deliberation_opinion_and_decision_layer_at_task_choke_point",
-    "idle_only_self_evolution_capability_gap_backlog_and_gated_self_modification"
+    "idle_only_self_evolution_capability_gap_backlog_and_gated_self_modification",
+    "deerflow_scoped_local_research",
+    "deerflow_public_skill_guidance",
+    "source_receipt_citation_checks",
+    "deerflow_public_web_research",
+    "offline_deerflow_sandbox_tasks",
+    "free_local_media_and_document_generation",
+    "hidden_docker_start_and_bounded_recovery"
   ],
   "main_imports": [
+    "jarvis.cloud_policy",
+    "jarvis.cloud_quota",
+    "jarvis.groq_adapter",
+    "jarvis.hybrid_inference",
+    "jarvis.model_performance",
     "jarvis.native_coding",
     "jarvis.coding_files",
     "jarvis.coding_processes",
@@ -246,7 +261,10 @@
     "jarvis.push_to_write",
     "jarvis.natural_voice",
     "jarvis.jarvis_pointer",
-    "jarvis.task_queue"
+    "jarvis.task_queue",
+    "jarvis.docker_runtime",
+    "jarvis.deerflow_sandbox",
+    "jarvis.deerflow_media"
   ],
   "brain_imports": [
     "requests",
@@ -255,12 +273,36 @@
     "transformers",
     "psutil"
   ],
-  "utility_imports": ["black", "cryptography", "pymongo", "redis", "feedparser", "reportlab", "bandit", "pandas", "pyarrow", "nbformat", "nbclient", "ipykernel", "pytesseract", "mss", "imageio_ffmpeg", "PIL", "requests", "psutil", "yaml"],
+  "utility_imports": [
+    "black",
+    "cryptography",
+    "pymongo",
+    "redis",
+    "feedparser",
+    "reportlab",
+    "bandit",
+    "pandas",
+    "pyarrow",
+    "nbformat",
+    "nbclient",
+    "ipykernel",
+    "pytesseract",
+    "mss",
+    "imageio_ffmpeg",
+    "PIL",
+    "requests",
+    "psutil",
+    "yaml"
+  ],
   "gmail_api": {
     "module": "jarvis.gmail_api",
     "dependencies": "Optional requirements/gmail.txt installed into .venv by launchers/Connect Jarvis Gmail API.cmd; google.auth and google_auth_oauthlib are loaded only during account setup/use.",
     "credentials": "Desktop OAuth client JSON stays at user's local path; tokens encrypted using Windows DPAPI in ignored .jarvis-runtime/gmail-api/token.dpapi; no cookies or account passwords.",
-    "scopes": ["https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose", "https://www.googleapis.com/auth/gmail.modify"],
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/gmail.compose",
+      "https://www.googleapis.com/auth/gmail.modify"
+    ],
     "lifecycle": "Explicit interactive OAuth loopback listener for at most 300 seconds; closes after consent. Per-call HTTP session closes in finally, bounded requests, no automatic mailbox write retry.",
     "activation": "Local OAuth profile check and current gmail_api.py source hash; actual account consent, approved recipient-free draft create/update/readback and search/read passed on 2026-10-09. Reviewed source changes require explicit reconnection or --verify-existing profile check with encrypted credentials; no automatic credential or write replay.",
     "operations": "Direct API domain workflows for search/list, selected message text reads, draft read/create/update; literal commands bypass inference, natural composition uses scoped text-only Qwen. Official draft query filtering, unchanged MIME/field preservation, expected raw hash, exact readback and durable uncertain-write journal. Sending, deletion and file attachment downloads are not exposed."
@@ -295,7 +337,8 @@
     "hermes_inference",
     "gods_eye",
     "harness_inference",
-    "development_preview"
+    "development_preview",
+    "docker_linux_engine"
   ],
   "ui_assets": [],
   "optional_audit": {
@@ -618,7 +661,11 @@
     "verification": "2026-10-08 IST: actual single/two-worker Qwen Python and LocalGithub trials passed. 2026-10-09 IST: actual three-worker website generation and independent Chrome oracle, native synthetic-image vision, component-completion and GPU-queue regressions passed. See docs/native-coding.md for dated timings, full regression status and limits."
   },
   "documents": {
-    "modules": ["jarvis.documents", "jarvis.file_drop", "jarvis.island_buddy"],
+    "modules": [
+      "jarvis.documents",
+      "jarvis.file_drop",
+      "jarvis.island_buddy"
+    ],
     "configuration": "documents in config/config.json; ui.buddy",
     "dependency": "pypdf==6.20.0 (requirements/runtime.txt), pure Python PDF text extraction",
     "drop_target": "WM_DROPFILES on the island canvas and its top-level window (pywin32 window-procedure subclass); restored on close",
@@ -629,7 +676,10 @@
     "automatic_action_replay": false
   },
   "repo_abilities": {
-    "modules": ["jarvis.repo_abilities", "jarvis.ability_runner"],
+    "modules": [
+      "jarvis.repo_abilities",
+      "jarvis.ability_runner"
+    ],
     "configuration": "repo_abilities in config/config.json",
     "trigger": "After repo_learning saves a repository (asked or browsed; coding-reference learning excluded), or 'build abilities from owner/repo'",
     "model": "qwen3-coder:30b when its size plus memory_margin_gb fits in free RAM, else fallback_model (qwen3.5:9b); background GPU priority; coder model unloaded after each build",
@@ -727,5 +777,45 @@
     "queue": "New requests wait behind running work with a spoken acknowledgement; per-task cancel tokens; cancel this task / stop all tasks / what's in the queue",
     "conversation": "Ending a conversation (goodbye, go to sleep) stops listening without cancelling queued tasks; unrecognised speech is classified as chat or task by rules then qwen3.5:0.8b on CPU; small talk never triggers web search; saved-conversation choices only for explicit references to the past",
     "lifecycle": "Uses the existing action and knowledge workers; the classifier runs on a short daemon thread per unrecognised utterance"
+  },
+  "optional_groq": {
+    "module": "jarvis.hybrid_inference",
+    "configuration": "groq.* or corresponding GROQ_* environment overrides; default disabled, free_only, no sensitive data or live tests",
+    "model": "qwen/qwen3.8-27b",
+    "endpoint": "https://api.groq.com/openai/v1",
+    "credentials": "GROQ_API_KEY or ignored secrets/groq.json; never in tracked config",
+    "new_dependencies": [],
+    "runtime": "Existing question-only worker; background bounded metadata refresh and per-call cancellation/deadline monitor; no new GPU model or persistent service",
+    "store": ".jarvis-runtime/cloud/{quota.sqlite3,performance.sqlite3,policy.json,last-route.json}",
+    "privacy": "Self-contained public questions only; cloud payload excludes private profile/situation enrichment. Context, screenshots, account/PC operations and ambiguity stay local.",
+    "quota": "SQLite atomic reservations, conservative UTF-8 byte estimate plus output allowance, 10 percent margin, rolling 24h/60s limits, provider daily-request and minute-token feedback, no paid route or uncertain replay",
+    "verification": "Offline mocks and loopback fake provider only; real Groq inference requires separate explicit authorization and remains untested."
+  },
+  "optional_deerflow": {
+    "environment": ".venv-deerflow",
+    "python": ">=3.12",
+    "requirements": "requirements/deerflow.txt",
+    "imports": [
+      "deerflow.client",
+      "jarvis.deerflow_model",
+      "psutil"
+    ],
+    "revision": "a5e71751d7a9f8f4a71ca458da3984fc1284d098",
+    "owned_process": "one-shot jarvis.deerflow_worker in Windows OwnedJob; bounded I/O, cancellation and deadline; no service, automatic restart or action replay",
+    "source_manifest": "integrations/deerflow/source-manifest.json",
+    "main_environment_dependencies": [],
+    "sandbox": {
+      "image": "jarvis-deerflow-runtime:1",
+      "dockerfile": "integrations/deerflow/runtime/Dockerfile",
+      "dependencies": "integrations/deerflow/runtime/requirements.txt",
+      "isolation": "no network, non-root, read-only root, no capabilities/socket/credentials, only owned workspace mounts; 2 CPUs/2 GB/128 PIDs",
+      "recovery": "Docker engine start only, no shell or write replay; Desktop retains required Windows profile paths and supervisor/UI launches share an OS startup lock",
+      "resolved_dependencies": "integrations/deerflow/runtime/resolved-requirements.txt",
+      "tested_image_id": "sha256:4e3f9488164e389e24bb969c6eccb99b59d81ebd32ceffa0aea038f127832bf8",
+      "model_mounts": "Only the two existing Kokoro voice-model files, read-only; no account tokens or host project mounts.",
+      "inputs": "Up to ten explicit scoped files copied read-only, 64 MB total; hidden/credential names and links excluded.",
+      "storage": "64 MB per-file ulimit, 128 open files, 256 MB tmpfs; parent polling guard stops owned container above 256 MB workspace/output or 1000 files, may overshoot.",
+      "free_media": "chart, poster, PDF, PPTX, text-card MP4, procedural melody WAV, existing local Kokoro narration; no paid API/account publishing"
+    }
   }
 }

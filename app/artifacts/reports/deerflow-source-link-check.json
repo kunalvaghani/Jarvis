@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Deterministic postprocessing on saved real dynamic response; no new inference or source fetch",
+  "original_report": "deerflow-dynamic-read.json",
+  "normalized_answer": "The Python module `sample.py` contains the literal number **314159** passed to the `print()` function.\n\nCitation: [sample.py](sample.py)",
+  "ok": true
+}

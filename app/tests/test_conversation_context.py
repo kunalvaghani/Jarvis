@@ -102,6 +102,20 @@ class KnowledgeContextTests(unittest.TestCase):
         store.finish(turn,reply)
         return session
 
+    def test_cloud_eligible_complex_question_does_not_inherit_old_answer(self):
+        self.saved('Explain quantum computing','Private historical context')
+        self.worker.record_pair('Explain quantum computing','Old answer')
+        with patch('jarvis.hybrid_inference.configured',return_value={'enabled':True,'routing':'auto'}), \
+                patch.object(self.worker,'_context') as recall:
+            self.worker.start()
+            self.worker.submit('Explain quantum computing')
+            wait_until(self,lambda:self.worker.client.request.called)
+            payload=self.worker.client.request.call_args.args[0]
+            self.assertEqual(payload['history'],[])
+            self.assertFalse(payload['conversation_context'])
+            self.assertEqual(payload['context_source'],'none')
+            recall.assert_not_called()
+
     def test_current_session_has_priority_over_conflicting_old_memory(self):
         self.saved('snake game','Old Python implementation')
         self.worker.record_pair('snake game','Current C++ Win32 implementation')

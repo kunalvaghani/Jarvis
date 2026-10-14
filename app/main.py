@@ -77,6 +77,13 @@ class App:
         root.after(300, self.remember_external_window)
         root.after(80, self.drain)
         self.watchdog = Watchdog(self.report)
+        from jarvis.docker_runtime import DockerService
+        self.docker_service = DockerService(BASE, self.report, lambda: self.closing)
+        self.watchdog.register('Docker Linux engine', self.docker_service.healthy, self.docker_service.repair,
+            lambda: not self.closing and self.config.get('docker_runtime', {}).get('enabled', False)
+                and not self.config.get('_ui_verification', False))
+        if self.config.get('docker_runtime', {}).get('enabled', False) and not self.config.get('_ui_verification', False):
+            self.docker_service.repair()
         selector = self.actions.knowledge.context_selector
         if selector:
             self.watchdog.register('Context selector', selector.healthy, selector.repair,
@@ -623,6 +630,7 @@ class App:
         if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):
             (BASE / ".jarvis-runtime" / "stop").touch()
         self.watchdog.close()
+        self.docker_service.close()
         self.model_recovery.close()
         self.stop()
         self.speech.close()

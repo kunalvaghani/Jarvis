@@ -27,7 +27,7 @@ SENSITIVE = re.compile(r"\b(delete|remove|erase|uninstall|send|submit|publish|po
 NAVIGATION_ACTIONS = {'browse', 'browser_search', 'open', 'media_search', 'open_folder', 'open_file'}
 # Effects that cannot be safely re-planned around after an uncertain outcome.
 WRITE_ACTIONS = {'create_file', 'modify_file', 'delete_file', 'save_file', 'append_file',
-                 'run_command', 'close_app', 'type_text'}
+                 'run_command', 'close_app', 'type_text', 'deerflow_sandbox_task', 'deerflow_free_media'}
 
 
 class RepeatedAction(ValueError):

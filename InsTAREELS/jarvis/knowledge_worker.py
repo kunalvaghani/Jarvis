@@ -406,10 +406,24 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
 def handle_request(request, client):
     """Check current availability without changing the requested model."""
     try:
+        progress = (lambda event: print(json.dumps({'answer_progress': event}, ensure_ascii=True), flush=True)) if request.get('stream_answer') else None
+        from .hybrid_inference import maybe_answer, policy, BASE
+        result = maybe_answer(request, progress)
+        if result is not None:
+            return result
+        try: preference = policy(BASE).get('local_model')
+        except (OSError, ValueError): preference = None
+        if preference:
+            request = {**request, 'options': {**request.get('options', {}), 'model': preference}}
         models = ensure_server(client)
         name = request.get("options", {}).get("model", "qwen3:4b")
         if name not in [model["name"] for model in models.get("models", [])]:
-            raise ValueError(f"Local model {name} is missing. In a terminal run: ollama pull {name}")
+            if not request.get('_hybrid_enabled') or preference:
+                raise ValueError(f"Local model {name} is missing. In a terminal run: ollama pull {name}")
+            from .model_selection import installed_model
+            try: selected = installed_model(name, {model['name'] for model in models.get('models', [])})
+            except ValueError: raise ValueError(f"Local model {name} is missing. In a terminal run: ollama pull {name}") from None
+            request = {**request, 'options': {**request.get('options', {}), 'model': selected}}
         if request.get("screen"):
             vision = request.get("options", {}).get("screen_model", "qwen3-vl:4b")
             if vision not in [model["name"] for model in models.get("models", [])]:

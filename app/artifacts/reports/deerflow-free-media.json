@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-14T01:38:38.204488+05:30",
+  "passed": 7,
+  "total": 7,
+  "cases": [
+    {
+      "kind": "chart",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/chart.png",
+          "bytes": 11880
+        }
+      ],
+      "job_id": "b2e85a70ff5f47d0a2644eedd7f5ef47",
+      "seconds": 2.985
+    },
+    {
+      "kind": "poster",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/poster.png",
+          "bytes": 15466
+        }
+      ],
+      "job_id": "142e2dfdad0b47509c91a3c65dff5153",
+      "seconds": 1.812
+    },
+    {
+      "kind": "pdf",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/report.pdf",
+          "bytes": 1579
+        }
+      ],
+      "job_id": "8abf4844758a40a1bed4e542bc5f322a",
+      "seconds": 1.766
+    },
+    {
+      "kind": "slides",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/slides.pptx",
+          "bytes": 29155
+        }
+      ],
+      "job_id": "e3c4b326dad84cc29187762eb450f39b",
+      "seconds": 1.922
+    },
+    {
+      "kind": "video",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/poster.png",
+          "bytes": 15370
+        },
+        {
+          "path": "outputs/video.mp4",
+          "bytes": 11260
+        }
+      ],
+      "job_id": "64cb152b968744159f517725665672df",
+      "seconds": 2.781
+    },
+    {
+      "kind": "music",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/melody.wav",
+          "bytes": 144044
+        }
+      ],
+      "job_id": "84d3513467874488bd1215b61e93d8d0",
+      "seconds": 1.703
+    },
+    {
+      "kind": "narration",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/narration.wav",
+          "bytes": 195628
+        }
+      ],
+      "job_id": "4f510e67fa6f4771afe21a34545ef76d",
+      "seconds": 7.719
+    }
+  ],
+  "scope": "Actual production registry -> offline Docker -> literal-spec recipes; file type and nonempty output checked independently. No paid API, account, public upload or photoreal diffusion."
+}

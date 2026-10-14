@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "answer": "The official Python documentation is hosted at **https://docs.python.org/** (specifically https://docs.python.org/3/ for Python 3.x).\n\nThis was identified from the fallback page at https://www.python.org/doc/, which lists \"Browse the docs online\" and provides a direct link to the modern documentation site.\n\n**Sources**\n- [Python.org Docs Fallback Page](https://www.python.org/doc/) - The page displayed a fallback message indicating interactive scripts failed, but clearly listed the official documentation structure including \"Browse Python 3.15.0 Documentation\" and links to https://docs.python.org/3/\n",
+  "receipts": [
+    {
+      "id": "r1",
+      "action": "scrape_web",
+      "value": "https://www.python.org/doc/",
+      "ok": true
+    }
+  ],
+  "date": "2026-10-14T00:22:48.171155+05:30",
+  "seconds": 96.454,
+  "scope": "One live official public page through ToolRegistry -> DeerFlow -> Jarvis public fetch; no local source, account, upload, shell or desktop access."
+}

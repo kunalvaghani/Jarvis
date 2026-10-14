@@ -1,0 +1,14 @@
+numpy>=2.2,<3
+pandas>=2.2,<4
+matplotlib>=3.10,<4
+Pillow>=11,<13
+python-pptx==1.0.2
+reportlab>=4.2,<5
+openpyxl>=3.1,<4
+scipy>=1.16,<2
+scikit-learn>=1.7,<2
+sympy==1.14.0
+duckdb==1.5.6
+kokoro-onnx==0.4.9
+onnxruntime>=1.20,<2
+soundfile>=0.13,<1

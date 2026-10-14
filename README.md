@@ -6,6 +6,34 @@ apps/websites/binaries, a deliberation layer that forms its own evidence-based o
 and recommends better approaches, an idle-only self-evolution engine that learns new capabilities from
 GitHub over time, and configured integrations. The application lives in [`app/`](app/).
 
+The [DeerFlow integration](app/docs/deerflow.md) adds its real embedded research
+harness, public skill guidance and source receipt checks while retaining Jarvis's
+guarded execution. The full upstream source is downloaded locally; the guide
+distinguishes integrated capabilities, live model measurements and remaining limits.
+
+The [sandbox and free-media extension](app/docs/deerflow-sandbox.md) adds confined
+offline Docker tasks, read-only input copies and seven local artifact renderers.
+Jarvis starts Docker silently when unavailable and monitors it during use, while
+preserving shared workloads and refusing uncertain command replay. Account/provider
+setup is deferred; this extension needs no paid API keys.
+Docker Desktop startup preserves its Windows profile paths and coalesces duplicate
+supervisor/watchdog starts, addressing the reported launcher-lock popup without
+resetting Docker data or restarting shared containers.
+
+The [optional Groq integration](app/docs/groq-hybrid.md) adds public-question
+cloud inference, deterministic privacy routing and shared quota reservations to
+the existing worker. It is disabled by default and tested with a local fake
+provider using zero real cloud tokens. Local models and guarded PC workflows
+remain available; real account/model behavior is explicitly unverified.
+Quota exhaustion causes temporary local fallback; eligible requests automatically
+reconsider cloud after reset/window recovery, while manual offline mode stays set.
+Explicit cloud controls work through typed Ask/Do task, Enter and final voice
+commands, saving routing preferences directly without generating a chat answer.
+Standalone complex public questions avoid automatic private memory enrichment;
+first-request metadata checks finish within a bounded wait before local fallback.
+Cloud streaming batches input, bounds policy polling and uses a 90-second default
+deadline; partial failures retain their cause and are never automatically replayed.
+
 The [UI finish update](app/docs/ui-smoothness.md) preserves the island design and
 animations while removing side seams, blending the outer curves and using cached
 rendering with monitor-paced frame deadlines. The guide includes a labelled renderer

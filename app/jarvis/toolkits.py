@@ -16,7 +16,7 @@ import smtplib
 import socket
 import ssl
 import tempfile
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlsplit, urljoin
 
 import requests
 from .agent_tools import TOOLS as AGENT_TOOLS
@@ -64,6 +64,8 @@ TOOLS = {
 TOOLS.update(AGENT_TOOLS)
 from .firecrawl_tools import TOOLS as FIRECRAWL_TOOLS
 TOOLS.update(FIRECRAWL_TOOLS)
+from .deerflow import TOOLS as DEERFLOW_TOOLS
+TOOLS.update(DEERFLOW_TOOLS)
 from .repo_tools import TOOLS as REPOSITORY_TOOLS
 TOOLS.update(REPOSITORY_TOOLS)
 from .rea_tools import TOOLS as REA_TOOLS
@@ -222,6 +224,7 @@ class PageText(HTMLParser):
         super().__init__()
         self.stack = []
         self.parts = []
+        self.links = []
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         hidden = (bool(self.stack and self.stack[-1][1])
@@ -230,6 +233,10 @@ class PageText(HTMLParser):
                   or 'hidden' in attrs)
         if not hidden and tag in self.BLOCKS:
             self.parts.append('\n')
+        if not hidden and tag == 'a' and isinstance(attrs.get('href'), str) and len(self.links) < 100:
+            href = attrs['href']
+            if not href.startswith('#') and href not in self.links:
+                self.links.append(href[:1000])
         if tag not in {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}:
             self.stack.append((tag, hidden))
     def handle_endtag(self, tag):
@@ -273,6 +280,9 @@ def execute(actions, step, cancelled):
     validate_step(step)
     if name not in TOOLS:
         raise ValueError("Unknown toolkit tool.")
+    if name in DEERFLOW_TOOLS:
+        from .deerflow import execute as deerflow_execute
+        return deerflow_execute(actions, step, cancelled)
     data = TOOLS[name]
     missing = [key for key in data[2] if not os.environ.get(key)]
     if missing:
@@ -359,8 +369,17 @@ def remote_tool(client, step, cancelled):
                 return 'Untrusted page text from ' + value + ':\nNo literal match for ' + query
             start = max(0, index - 800)
         excerpt = plain[start:start + 10000]
+        links = []
+        for href in parser.links:
+            target = urljoin(value, href)
+            parsed = urlsplit(target)
+            if parsed.scheme in {'http', 'https'} and parsed.hostname and not parsed.username and not parsed.password:
+                links.append(target[:300])
+            if len(links) == 20:
+                break
+        link_text = '\nObserved page links (untrusted; not followed):\n' + '\n'.join(links) if links else ''
         return ('Untrusted page text from ' + value + ':\n' + ('[Earlier page text omitted]\n' if start else '')
-                + excerpt + ('\n[Page text truncated]' if start + len(excerpt) < len(plain) else ''))
+                + excerpt + ('\n[Page text truncated]' if start + len(excerpt) < len(plain) else '') + link_text)
     if name.startswith("github_"):
         headers = {"Accept": "application/vnd.github+json", "User-Agent": "Jarvis-toolkit"}
         if env.get("JARVIS_GITHUB_TOKEN"):

@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-14 IST",
+  "offline_regression": {
+    "tests": 495,
+    "passed": true,
+    "seconds": 55.211,
+    "skipped": 0,
+    "failure_ids": [],
+    "modules": [
+      "groq",
+      "model_selection",
+      "knowledge",
+      "question_speed",
+      "gpu_scheduler",
+      "model_recovery",
+      "fast_conversation",
+      "conversation_context",
+      "docker_sandbox",
+      "deerflow",
+      "recovery",
+      "task_recovery",
+      "launcher_readiness",
+      "diagnostics",
+      "agent_runtime",
+      "capabilities",
+      "task_graph",
+      "task_state",
+      "native_tools",
+      "step_planning",
+      "harness",
+      "toolkits",
+      "windows_commands",
+      "intent_testbook",
+      "command_cleanup",
+      "tools",
+      "brain",
+      "inference_limits",
+      "ollama_models"
+    ]
+  },
+  "groq_live_inference_calls": 0,
+  "groq_live_tests_enabled": false,
+  "scope": "Explicit offline/mocked modules and loopback fake provider. Cloud disabled in this runner regardless of configured account.",
+  "routing_report": "groq-routing-verification.json",
+  "local_model_inventory": "groq-local-model-inventory.json",
+  "unverified": [
+    "real Groq entitlement/billing",
+    "real Groq answer quality or latency",
+    "full GUI/microphone startup",
+    "live local model switching latency"
+  ],
+  "stream_cutoff_repair": {
+    "prior_recorded_cloud_ms": 30055.7832,
+    "prior_configured_deadline_seconds": 30,
+    "current_configured_deadline_seconds": 90,
+    "sse_read_bytes": 512,
+    "policy_poll_seconds": 0.1,
+    "new_tests": 2,
+    "simulated_unicode_sse_events": 2000,
+    "policy_reads_asserted_below": 50,
+    "initial_regression": {
+      "tests": 495,
+      "passed": false,
+      "cause": "Windows temporary file lock in GPU scheduler test"
+    },
+    "real_inference_executed": false
+  },
+  "startup_readiness": {
+    "status": "ready",
+    "groq": "optional_not_live_checked",
+    "docker": "available",
+    "ollama": "available",
+    "localgithub": "available"
+  }
+}

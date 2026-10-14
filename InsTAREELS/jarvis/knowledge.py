@@ -135,6 +135,9 @@ class Knowledge:
         return messages(rows[max(0,anchor-3):anchor+4], self.context_budget)
 
     def prepare_context(self, question):
+        from .hybrid_inference import standalone_public
+        if standalone_public(self.client.base, {'question': question}):
+            return None
         if self.context_selector is None or not self.context_selector.options['enabled']:
             return None
         with self.context_lock:
@@ -282,7 +285,10 @@ class Knowledge:
             try:
                 if cancelled():
                     continue
-                future = self.prepare_context(question)
+                from .hybrid_inference import standalone_public
+                fresh_public = len(job) <= 6 and standalone_public(self.client.base,
+                    {'question': question, 'web': web, 'screen': use_screen})
+                future = None if fresh_public else self.prepare_context(question)
                 prepared = None
                 if future and len(job) <= 6:
                     try:
@@ -294,7 +300,8 @@ class Knowledge:
                 with self.context_lock:
                     selected = job[6] if len(job) > 6 else None
                     app_provider=getattr(self,'app_snapshot_provider',None)
-                    resolved = prepared or self._context(question, self.context_seed+self.history, self.session_id,
+                    resolved = {'history': [], 'source': 'none', 'matches': []} if fresh_public else prepared or self._context(
+                        question, self.context_seed+self.history, self.session_id,
                         app_context=app_provider() if app_provider else None)
                     context = resolved['history']
                     current_found = resolved['source'] == 'current_session'
@@ -326,7 +333,7 @@ class Knowledge:
                 if direct is not None:
                     result = {"answer": direct}
                 else:
-                    self.report("thinking", f"Thinking locally: {question}")
+                    self.report("thinking", f"Preparing answer: {question}")
                     if self.options.get('stream', True):
                         self.report('answer_stream', {'phase': 'Preparing answer', 'text': ''})
                 screen = None

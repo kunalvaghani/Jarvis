@@ -58,6 +58,9 @@ REJECT_WORDS = re.compile(r"(?:don'?t send(?: it| that)?|do not send(?: it| that
 
 
 def parse(text: str) -> Command:
+    cloud = cloud_command(text)
+    if cloud:
+        return cloud
     from .phrasing import canonical
     text = canonical(text)  # "Could you pull up my desktop?" -> "show me my desktop".
     cleaned_words = spoken_clean(text)
@@ -87,7 +90,28 @@ def parse(text: str) -> Command:
     return command
 
 
+def cloud_command(text: str) -> Command | None:
+    """Recognize explicit routing controls, including input from the Ask button."""
+    normalized = spoken_clean(text)
+    cloud_controls = {'turn off cloud ai':'offline','use only offline models':'offline','use offline ai':'offline',
+        'enable cloud ai for public tasks':'enable','turn on cloud ai for public tasks':'enable',
+        'use automatic model routing':'auto',
+        'which model are you using':'status','how many groq tokens are left today':'status',
+        'how many requests did groq use':'status','why did you choose this model':'status',
+        'why are you using local ai':'status','how much time did the last model take':'status',
+        'which model is performing better':'status','how much groq quota did we save':'status',
+        'last model answer was correct':'correct','last model answer was wrong':'incorrect',
+        'reset model routing preferences':'reset_feedback'}
+    if normalized in cloud_controls: return Command('cloud_control',cloud_controls[normalized])
+    manual = re.fullmatch(r'use local model ([\w./:-]{1,150})',text.strip(),re.I)
+    if manual: return Command('cloud_control','local:'+manual[1])
+    return None
+
+
 def _parse(text: str) -> Command:
+    cloud = cloud_command(text)
+    if cloud:
+        return cloud
     from .intent_catalog import match as catalog_match
     known = catalog_match(text)
     if known:

@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-14 IST",
+  "fix": "Desktop-only Windows profile environment and process-shared startup lock",
+  "regression": {
+    "tests": 485,
+    "passed": true,
+    "scope": "Explicit offline modules; fake cloud provider only"
+  },
+  "readiness": {
+    "status": "ready",
+    "docker": "available",
+    "ollama": "available",
+    "groq": "optional_not_live_checked"
+  },
+  "live_cold_desktop_boot_tested": false,
+  "shared_engine_restarted": false,
+  "docker_files_deleted": false,
+  "real_groq_inference_calls": 0,
+  "guide_open_requested": "docs/groq-hybrid.md without filename fragment"
+}

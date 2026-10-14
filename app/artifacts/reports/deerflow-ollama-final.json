@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-14T00:11:32.937998+05:30",
+  "backend": "ollama",
+  "label": "final",
+  "model": "qwen3.5:4b",
+  "scope": "Three synthetic source-reading tasks, one trial each, real local inference; source bodies read through Jarvis. No web, desktop, writing, speech or general intelligence evaluation.",
+  "grading": "Required exact answer substring, source citation, successful source read and exit code. Heuristic grading; inspect saved answers.",
+  "passed": 2,
+  "total": 3,
+  "mean_seconds": 56.682,
+  "cases": [
+    {
+      "case": "arithmetic",
+      "ok": false,
+      "answer": "sample.py prints 39 (12+18+7). Verified by read_file observation.",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 84.672
+    },
+    {
+      "case": "filter",
+      "ok": true,
+      "answer": "sample.py prints [0, 2, 4] - even numbers from 0 to 5. Verified by direct file read.",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 43.422
+    },
+    {
+      "case": "failure",
+      "ok": true,
+      "answer": "sample.py contains print(10/0) which raises ZeroDivisionError. Cited sample.py via r1.",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 41.953
+    }
+  ]
+}

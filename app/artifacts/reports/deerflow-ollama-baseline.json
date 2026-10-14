@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-13T23:49:30.558452+05:30",
+  "backend": "ollama",
+  "label": "baseline",
+  "model": "qwen3.5:4b",
+  "scope": "Three synthetic source-reading tasks, one trial each, real local inference; source bodies read through Jarvis. No web, desktop, writing, speech or general intelligence evaluation.",
+  "grading": "Required exact answer substring, source citation, successful source read and exit code. Heuristic grading; inspect saved answers.",
+  "passed": 0,
+  "total": 3,
+  "mean_seconds": 101.896,
+  "cases": [
+    {
+      "case": "arithmetic",
+      "ok": false,
+      "answer": "",
+      "source_read": true,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "Repeated tool call blocked; inspect existing observations."
+        }
+      ],
+      "seconds": 131.468
+    },
+    {
+      "case": "filter",
+      "ok": false,
+      "answer": "",
+      "source_read": true,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "Repeated tool call blocked; inspect existing observations."
+        }
+      ],
+      "seconds": 87.454
+    },
+    {
+      "case": "failure",
+      "ok": false,
+      "answer": "",
+      "source_read": true,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "Repeated tool call blocked; inspect existing observations."
+        }
+      ],
+      "seconds": 86.765
+    }
+  ]
+}

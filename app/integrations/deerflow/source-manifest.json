@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/bytedance/deer-flow",
+  "revision": "a5e71751d7a9f8f4a71ca458da3984fc1284d098",
+  "downloaded": "2026-10-13 IST",
+  "license": "MIT",
+  "checkout": "integrations/deer-flow-upstream",
+  "harness_package": "backend/packages/harness",
+  "extension_contract_package": "backend/packages/extension-api",
+  "public_skills": "skills/public",
+  "ported_sources": [
+    "backend/packages/harness/deerflow/agents/middlewares/input_sanitization_middleware.py",
+    "backend/packages/harness/deerflow/agents/middlewares/tool_receipt.py"
+  ],
+  "ports": "Pure tag-neutralization and receipt-citation helpers extracted into jarvis/_vendor/deerflow_contracts.py; no LangChain imports in Jarvis's main environment.",
+  "integration": "Real embedded DeerFlowClient with local Ollama via Jarvis compatibility, scoped reads, public web research and confined offline Docker execution; public guides through shared skill tools. Seven offline local media/document recipes and read-only copied inputs. Full source retained; upstream frontend, unrestricted host execution, external media providers and account tools are not exposed.",
+  "sandbox_extension": "2026-10-14 IST; docs/deerflow-sandbox.md; custom Jarvis-owned Docker runtime, no network or credentials. Media uses Matplotlib, Pillow, ReportLab, python-pptx, FFmpeg, procedural audio and kokoro-onnx with existing local voice assets."
+}

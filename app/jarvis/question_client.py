@@ -49,6 +49,16 @@ class QuestionClient:
 
     def request(self, request, cancelled):
         import re
+        # Stable across the existing worker-recovery attempt. An uncertain cloud
+        # reservation is never dispatched twice after worker death.
+        from .hybrid_inference import configured, standalone_public
+        fresh_public = standalone_public(self.base, request)
+        try:
+            if configured(self.base)['enabled']:
+                import uuid
+                request = {**request, '_cloud_request_id': uuid.uuid4().hex}
+        except (OSError, ValueError):
+            pass
         style = getattr(self, "answer_style", None)
         if style:
             request = {**request, "answer_style": list(style)}  # "Keep it short", "be serious" for this session.
@@ -57,7 +67,7 @@ class QuestionClient:
             profile = memory.profile_text()
             if profile:
                 request = {**request, "user_profile": profile}
-            observations = [] if request.get('conversation_context') or request.get('memory_retrieval_done') else memory.recall(request.get("question", ""))
+            observations = [] if fresh_public or request.get('conversation_context') or request.get('memory_retrieval_done') else memory.recall(request.get("question", ""))
             if observations:
                 request = {**request, "memory_context": observations}
             situation = getattr(memory, "situation", None)
@@ -73,7 +83,7 @@ class QuestionClient:
                 block = curator.context(request.get("question", ""))
                 if block:
                     request = {**request, "memory_facts": block}
-            if hasattr(memory, "task_context"):
+            if not fresh_public and hasattr(memory, "task_context"):
                 catalogue = memory.task_context(request.get("question", ""))
                 if any(catalogue.get(key) for key in ("projects", "apps", "tools")):
                     request = {**request, "catalog_context": catalogue}

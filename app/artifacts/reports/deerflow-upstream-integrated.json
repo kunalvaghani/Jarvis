@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-14T00:08:04.608634+05:30",
+  "backend": "upstream",
+  "label": "integrated",
+  "model": "qwen3.5:4b",
+  "scope": "Three synthetic source-reading tasks, one trial each, real local inference; source bodies read through Jarvis. No web, desktop, writing, speech or general intelligence evaluation.",
+  "grading": "Required exact answer substring, source citation, successful source read and exit code. Heuristic grading; inspect saved answers.",
+  "passed": 3,
+  "total": 3,
+  "mean_seconds": 75.99,
+  "cases": [
+    {
+      "case": "arithmetic",
+      "ok": true,
+      "answer": "The file `sample.py` prints the integer **37**.\n\nThis is calculated by summing the list `[12, 18, 7]`: $12 + 18 + 7 = 37$.\n\nCitation: The content of `sample.py` was read directly from the project observations.\n",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 76.032
+    },
+    {
+      "case": "filter",
+      "ok": true,
+      "answer": "The file `sample.py` prints the list `[0, 2, 4]`.\n\nThis is determined by the code in `sample.py`: `print([n for n in range(6) if n % 2 == 0])`. The list comprehension iterates through numbers 0 to 5 and includes only those where the number modulo 2 equals 0 (i.e., even numbers).\n\n**Citation:**\n- `sample.py`: Contains the code `print([n for n in range(6) if n % 2 == 0])` which outputs `[0, 2, 4]`.\n",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 79.375
+    },
+    {
+      "case": "failure",
+      "ok": true,
+      "answer": "The exception raised in sample.py is a ZeroDivisionError.\n\nThis is determined by the code `print(10 / 0)`, which attempts to divide an integer by zero, triggering Python's built-in division-by-zero exception [citation:sample.py](file:///mnt/user-data/workspace/sample.py).",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 72.562
+    }
+  ]
+}

@@ -80,6 +80,10 @@ def preflight(base=BASE, repair=True):
         config = json.loads(config_path.read_text(encoding="utf-8"))
         from .gpu_scheduler import settings as gpu_settings
         gpu_settings(config.get('gpu_scheduler'))
+        from .docker_runtime import settings as docker_settings
+        docker_settings(config.get('docker_runtime'))
+        from .cloud_policy import settings as groq_settings
+        groq_settings(config.get('groq'))
         repository_options=config.get('repository_skills',{})
         if not isinstance(repository_options,dict) or set(repository_options)-{'enabled','image'} or type(repository_options.get('enabled',True)) is not bool:
             raise ValueError('Invalid repository_skills configuration.')
@@ -290,6 +294,10 @@ def run():
         while not stop.exists():
             try:
                 config = preflight()
+                from .docker_runtime import start_background
+                if 'docker_start' in locals() and docker_start is not None:
+                    docker_start.close()
+                docker_start = start_background(BASE, config, lambda: stop.exists())
                 python = prepare_runtime(config)
                 session = uuid.uuid4().hex
                 beat = RUNTIME / ("heartbeat-" + session + ".json")
@@ -358,6 +366,8 @@ def run():
                     break
                 time.sleep(1)
     finally:
+        if 'docker_start' in locals() and docker_start is not None:
+            docker_start.close()
         lock.close()
 
 

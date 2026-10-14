@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-14 IST",
+  "regression": {
+    "tests": 209,
+    "passed": true,
+    "seconds": 21.284,
+    "scope": "Explicit mock-based regression modules; no unrestricted discovery or live account/desktop actions"
+  },
+  "readiness": {
+    "status": "ready",
+    "scope": "Dependencies and configured services; not GUI/microphone startup"
+  },
+  "live_inputs": "deerflow-sandbox-inputs.json",
+  "live_media": "deerflow-free-media.json",
+  "live_fault": "deerflow-sandbox-fault.json",
+  "live_model": "deerflow-sandbox-live.json",
+  "stress": "deerflow-sandbox-stress.json"
+}

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-13T23:59:58.336990+05:30",
+  "backend": "upstream",
+  "label": "scoped",
+  "model": "qwen3.5:4b",
+  "scope": "Three synthetic source-reading tasks, one trial each, real local inference; source bodies read through Jarvis. No web, desktop, writing, speech or general intelligence evaluation.",
+  "grading": "Required exact answer substring, source citation, successful source read and exit code. Heuristic grading; inspect saved answers.",
+  "passed": 0,
+  "total": 3,
+  "mean_seconds": 10.766,
+  "cases": [
+    {
+      "case": "arithmetic",
+      "ok": false,
+      "answer": "",
+      "source_read": false,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "DeerFlow failed: GraphRecursionError"
+        }
+      ],
+      "diagnostic": "",
+      "seconds": 13.25
+    },
+    {
+      "case": "filter",
+      "ok": false,
+      "answer": "",
+      "source_read": false,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "DeerFlow failed: GraphRecursionError"
+        }
+      ],
+      "diagnostic": "",
+      "seconds": 9.172
+    },
+    {
+      "case": "failure",
+      "ok": false,
+      "answer": "",
+      "source_read": false,
+      "exit_code": 1,
+      "errors": [
+        {
+          "event": "error",
+          "error": "DeerFlow failed: GraphRecursionError"
+        }
+      ],
+      "diagnostic": "",
+      "seconds": 9.875
+    }
+  ]
+}

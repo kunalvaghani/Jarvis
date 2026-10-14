@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "state": "uncertain",
+  "replay_blocked": true,
+  "marker": "executed once",
+  "recorded_dispatches": 1,
+  "docker_engine": "available",
+  "job_id": "3b00dad02c4f417ba19fb379240b3380",
+  "date": "2026-10-14T01:33:08.945691+05:30",
+  "scope": "Live deliberate stop of one attested Jarvis-owned test container during a command; shared Docker engine and unrelated containers left running. No command was repeated."
+}

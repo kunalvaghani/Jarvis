@@ -105,3 +105,7 @@ artifacts/**/.jarvis/
 artifacts/**/dist/
 artifacts/**/.next/
 artifacts/**/.expo/
+
+# Reviewed DeerFlow manifest and MIT ports are tracked; source checkouts stay local.
+integrations/deer-flow-upstream/
+integrations/deer-flow/

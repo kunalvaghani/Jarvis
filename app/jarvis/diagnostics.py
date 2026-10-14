@@ -7,6 +7,13 @@ def service_status(config, base):
     from .knowledge_worker import session
     required = required_models(config)
     rows = {}
+    from .cloud_policy import settings as groq_settings
+    cloud = groq_settings(config.get('groq'))
+    rows['groq'] = {'status':'optional_not_live_checked' if cloud['enabled'] else 'disabled',
+        'model':cloud['model'], 'live_inference_checked':False, 'free_account_confirmed':cloud['account_plan']=='free' and cloud['free_tier_confirmed']}
+    if config.get('docker_runtime', {}).get('enabled', False):
+        from .docker_runtime import engine_status
+        rows['docker'] = engine_status()
     if required:
         client = session()
         try:

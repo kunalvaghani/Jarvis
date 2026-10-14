@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-14T01:33:13.345702+05:30",
+  "passed": 6,
+  "total": 7,
+  "cases": [
+    {
+      "kind": "chart",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/chart.png",
+          "bytes": 11880
+        }
+      ],
+      "job_id": "2302405c5bec43ee8fffacefb858ea72",
+      "seconds": 3.125
+    },
+    {
+      "kind": "poster",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/poster.png",
+          "bytes": 15466
+        }
+      ],
+      "job_id": "d90140d437074cb096e7d0a6882a3c21",
+      "seconds": 1.922
+    },
+    {
+      "kind": "pdf",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/report.pdf",
+          "bytes": 1579
+        }
+      ],
+      "job_id": "78538cd8a79d4fa7a7d7a12d55be04c5",
+      "seconds": 2.218
+    },
+    {
+      "kind": "slides",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/slides.pptx",
+          "bytes": 29155
+        }
+      ],
+      "job_id": "3519153986b144a7b18b021204dafc88",
+      "seconds": 2.235
+    },
+    {
+      "kind": "video",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/poster.png",
+          "bytes": 15370
+        },
+        {
+          "path": "outputs/video.mp4",
+          "bytes": 11260
+        }
+      ],
+      "job_id": "27909825b1814392a1aa8eeb535760e8",
+      "seconds": 3.031
+    },
+    {
+      "kind": "music",
+      "ok": true,
+      "artifacts": [
+        {
+          "path": "outputs/melody.wav",
+          "bytes": 144044
+        }
+      ],
+      "job_id": "d10bd567d4964109bb309704726d92e6",
+      "seconds": 1.844
+    },
+    {
+      "kind": "narration",
+      "ok": false,
+      "error_type": "ValueError",
+      "diagnostic": "Sandbox command failed or became uncertain; inspect outputs, no automatic replay.",
+      "seconds": 7.343
+    }
+  ],
+  "scope": "Actual production registry -> offline Docker -> literal-spec recipes; file type and nonempty output checked independently. No paid API, account, public upload or photoreal diffusion."
+}

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-14T00:03:12.108334+05:30",
+  "backend": "upstream",
+  "label": "final",
+  "model": "qwen3.5:4b",
+  "scope": "Three synthetic source-reading tasks, one trial each, real local inference; source bodies read through Jarvis. No web, desktop, writing, speech or general intelligence evaluation.",
+  "grading": "Required exact answer substring, source citation, successful source read and exit code. Heuristic grading; inspect saved answers.",
+  "passed": 0,
+  "total": 3,
+  "mean_seconds": 9.604,
+  "cases": [
+    {
+      "case": "arithmetic",
+      "ok": false,
+      "answer": "LLM request failed: No module named 'psutil'",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 9.687
+    },
+    {
+      "case": "filter",
+      "ok": false,
+      "answer": "LLM request failed: No module named 'psutil'",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 9.422
+    },
+    {
+      "case": "failure",
+      "ok": false,
+      "answer": "LLM request failed: No module named 'psutil'",
+      "source_read": true,
+      "exit_code": 0,
+      "errors": [],
+      "diagnostic": "",
+      "seconds": 9.703
+    }
+  ]
+}
