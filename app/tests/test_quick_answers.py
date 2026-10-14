@@ -35,11 +35,10 @@ class QuickAnswerTests(unittest.TestCase):
             "condition": "clear", "source": "saved city"}
         quick = QuickAnswers(self.memory, weather=weather,
             clock=lambda: datetime(2026, 9, 29, 9, 4))
-        self.assertEqual(quick.answer("hello"), "Good morning, Kunal sir. I'm ready.")
+        self.assertIsNone(quick.answer("hello"))
         self.assertEqual(quick.answer("what time is it?"), "The local time is 9:04 AM.")
         self.assertEqual(quick.answer("what is the date?"), "Today is Tuesday, 29 September 2026.")
-        self.assertIn("Kunal sir. Current weather in Vadodara", quick.startup_greeting())
-        self.assertIn("The local PC time is 9:04 AM", quick.startup_greeting())
+        self.assertIsNone(quick.startup_greeting())
         self.assertIsNone(quick.answer("Why does weather change?"))
 
     def test_weather_uses_ip_location_and_reuses_result(self):
@@ -101,7 +100,7 @@ class QuickAnswerTests(unittest.TestCase):
         self.assertTrue(any("daily" in (params or {}) for _, params in calls))
         self.assertTrue(any((params or {}).get("current") == "us_aqi" for _, params in calls))
 
-    def test_knowledge_fast_path_skips_model(self):
+    def test_knowledge_time_observation_can_skip_model_in_legacy_mode(self):
         answers = []
         ready = threading.Event()
         def report(kind, message):
@@ -115,10 +114,10 @@ class QuickAnswerTests(unittest.TestCase):
         knowledge.start()
         try:
             started = time.monotonic()
-            knowledge.submit("hello")
+            knowledge.submit("what time is it?")
             self.assertTrue(ready.wait(1))
             self.assertLess(time.monotonic() - started, 1)
-            self.assertEqual(answers, ["Good morning, Kunal sir. I'm ready."])
+            self.assertEqual(answers, ["The local time is 9:04 AM."])
             knowledge.client.request.assert_not_called()
         finally:
             knowledge.close()

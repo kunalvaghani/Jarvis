@@ -1,4 +1,13 @@
 {
+  "knowledge_acquisition": {
+    "enabled": true,
+    "online": true,
+    "background_refresh": false,
+    "max_sources": 2,
+    "max_research_per_task": 2,
+    "max_seconds": 45,
+    "ttl_seconds": 604800
+  },
   "groq": {
     "enabled": true,
     "model": "qwen/qwen3.8-27b",
@@ -167,11 +176,17 @@
     },
     "blender": {
       "shortcut": "C:\\Users\\kunal\\Desktop\\Apps and Shortcuts\\Blender 4.4.lnk",
-      "executable": "D:\\Blender\\blender-launcher.exe"
+      "executable": "D:\\Blender\\blender-launcher.exe",
+      "observation_executables": [
+        "D:\\Blender\\blender.exe"
+      ]
     },
     "blender 4.4": {
       "shortcut": "C:\\Users\\kunal\\Desktop\\Apps and Shortcuts\\Blender 4.4.lnk",
-      "executable": "D:\\Blender\\blender-launcher.exe"
+      "executable": "D:\\Blender\\blender-launcher.exe",
+      "observation_executables": [
+        "D:\\Blender\\blender.exe"
+      ]
     },
     "booking.com apac big savings on hotels in": {
       "shell_id": "PricelinePartnerNetwork.Booking.comAPACBigsavingso_mgae2k3ys4ra0!App"
@@ -1285,6 +1300,10 @@
   "files": {},
   "file_catalog": ".jarvis-runtime/state/file_catalog.json",
   "knowledge": {
+    "natural_conversation": {
+      "enabled": true,
+      "model": "qwen3.5:0.8b"
+    },
     "enabled": true,
     "model": "qwen3.5:9b",
     "screen_model": "qwen3.5:9b",
@@ -1381,7 +1400,9 @@
       "speed": 1.0,
       "nfe_step": 32,
       "cfg_strength": 2.0,
-      "cross_fade_duration": 0.15
+      "cross_fade_duration": 0.15,
+      "first_chunk_characters": 80,
+      "warm_synthesis": true
     },
     "voice": "am_michael:60,am_fenrir:40",
     "speed": 1.0,
@@ -1391,6 +1412,15 @@
     "stream_answers": true
   },
   "brain": {
+    "hierarchical_execution": {
+      "enabled": true,
+      "parallel_reads": true,
+      "macro_cache": true,
+      "max_concurrency": 3,
+      "max_seconds": 300,
+      "max_repairs": 1,
+      "max_replans": 1
+    },
     "enabled": true,
     "trained_pc_checkpoint": "artifacts/training/qwen-pc-training-20260927T161836Z/round-2",
     "selector": "convaiinnovations/laya",

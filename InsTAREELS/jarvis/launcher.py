@@ -104,6 +104,10 @@ def preflight(base=BASE, repair=True):
             raise ValueError("Invalid config")
         if not isinstance(config.get("brain", {}).get("adaptive_planning", False), bool):
             raise ValueError("brain.adaptive_planning must be a boolean")
+        from .hierarchical import settings as hierarchical_settings
+        hierarchical_settings(config.get('brain', {}))
+        from .knowledge_acquisition import settings as acquisition_settings
+        acquisition_settings(config)
         for key in ('incremental_planning', 'reuse_navigation_workflows', 'native_tool_calling', 'allow_model_fallback'):
             if not isinstance(config.get('brain', {}).get(key, False), bool):
                 raise ValueError('brain.' + key + ' must be a boolean')

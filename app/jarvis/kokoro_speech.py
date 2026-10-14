@@ -177,7 +177,26 @@ def raise_priority():
         pass
 
 
-def serve(loader=None, renderer=None):
+def queued_batch(request, requests):
+    """Join available text in order; retain the first excluded row, including EOF."""
+    batch = [request]
+    combined = str(request.get('text', ''))
+    held, has_held = None, False
+    while len(batch) < 8:
+        try:
+            candidate = requests.get_nowait()
+        except queue.Empty:
+            break
+        if (candidate is None or candidate['_epoch'] != request['_epoch']
+                or len(combined)+len(candidate.get('text', ''))+1 > 1000):
+            held, has_held = candidate, True
+            break
+        batch.append(candidate)
+        combined += ' ' + candidate.get('text', '')
+    return {**request, 'text': combined}, batch, held, has_held
+
+
+def serve(loader=None, renderer=None, coalesce=False):
     import contextlib
     protocol = sys.stdout
     base = Path(__file__).resolve().parent.parent
@@ -209,13 +228,20 @@ def serve(loader=None, renderer=None):
         events.put({"ready": True})
 
         def synthesis():
+            empty = object()
+            held = empty
             while True:
-                request = requests.get()
+                request = requests.get() if held is empty else held
+                held = empty
                 if request is None:
                     return
                 stale = Stale(request)
                 if stale.is_set():
                     continue
+                batch = [request]
+                if coalesce:
+                    request, batch, candidate, has_held = queued_batch(request, requests)
+                    held = candidate if has_held else empty
                 total = 0.0
                 try:
                     started = time.monotonic()
@@ -227,15 +253,21 @@ def serve(loader=None, renderer=None):
                             total += len(audio) / rate
                             if player is not None:
                                 player.add(request["id"], audio)
+                            events.put({'id': request['id'], 'audio_ready': True,
+                                        'synthesis_seconds': round(time.monotonic()-started, 3)})
                     if stale.is_set():
                         continue
                     if player is not None:
-                        player.finish(request["id"], total)
+                        for index, row in enumerate(batch):
+                            player.finish(row['id'], total if index == 0 else 0.)
                     else:
-                        events.put({"id": request["id"], "done": True, "audio_seconds": round(total, 2),
-                                    "synthesis_seconds": round(time.monotonic() - started, 3)})
+                        for index, row in enumerate(batch):
+                            events.put({"id": row['id'], "done": True, "audio_seconds": round(total, 2) if index == 0 else 0.,
+                                        "synthesis_seconds": round(time.monotonic() - started, 3),
+                                        "coalesced_ids": [part['id'] for part in batch]})
                 except Exception as exc:
-                    events.put({"id": request.get("id"), "error": "Local voice failed: " + str(exc)})
+                    for row in batch:
+                        events.put({"id": row.get("id"), "error": "Local voice failed: " + str(exc)})
         worker = threading.Thread(target=synthesis, daemon=True)
         worker.start()
         for line in sys.stdin:

@@ -1,5 +1,71 @@
 # Jarvis — local Windows voice assistant
 
+**Current-app research repair (2026-10-14 IST):** A sphere task in Blender
+paused without research because its wording omitted the app name. Complex feature
+requests such as “make this cube into a sphere” now resolve the current configured
+application through the observation registry before research. Blender's launcher
+and GUI executable are explicitly mapped. Object/control names such as `Cube`
+and `Modifier` are rejected as application names before execution, with one
+read-only planner correction. Search progress now displays the sanitized query.
+84 affected tests and the full **1,785-test regression suite** passed; launcher
+readiness is **`ready`**. Real public search/scrape completed in 2.828 seconds.
+That verifies retrieval, not that the Blender scene was changed.
+[Cause, verification and limits](docs/learning-validation.md#current-app-research-repair).
+
+**Integrated learning (2026-10-14 IST):** Complex configured-app and public-site
+feature tasks can acquire scoped help and documentation before existing planning.
+Learned evidence shares app memory and verified procedural skills; registry
+permissions, fresh verification and recovery remain authoritative. Known simple
+commands bypass research. Foreground acquisition is enabled; idle refresh is
+opt-in and disabled. Native UIA, browser DOM, public retrieval and the configured
+local-model/file workflow passed bounded checks; complex local planning took
+86.6 seconds, so two-second complex-task replies are not guaranteed.
+[Architecture, configuration and rollback](docs/autonomous-learning.md) ·
+[Release tests, benchmark comparison and limits](docs/learning-validation.md).
+Final learning release: **1,781 tests passed in 306.851 seconds**; launcher
+readiness **`ready`**. These checks cover the bounded extension; arbitrary
+applications, third-party exports and two-second complex-task latency remain
+unverified.
+
+**Hierarchical execution (2026-10-14 IST):** The existing Brain and ToolRegistry
+now support validated dependency graphs, bounded parallel reads, typed output
+references, durable TaskState checkpoints and exact compatible verified read-plan
+reuse. Simple commands and specialized coding, desktop, browser, mail and media
+workflows remain available. Battery and quick CPU requests bypass the model.
+Controlled-delay real file reads improved from median 0.332 s to 0.132 s (2.52×);
+this is a component benchmark. The actual local planner/file check passed but
+took 94.812 s, showing that large-model planning remains the bottleneck.
+Earlier missing-scope proposals were rejected before dispatch. Retries and
+concurrency are bounded; uncertain writes are never replayed. Disable
+`brain.hierarchical_execution.enabled` and restart to restore the original path.
+[Architecture, compatibility and rollback](docs/hierarchical-execution.md) ·
+[Benchmarks and production limits](docs/hierarchical-benchmarks.md).
+Historical DAG release regression: **1,765 tests passed**; launcher readiness **`ready`**.
+The actual authored read/create/read DAG also passed independent disk verification.
+
+**Earlier F5 playback (2026-10-14 IST):** Conversation, Groq public answers and
+verified research answers now send completed sentences/opening clauses to speech
+while the island receives text. Audio chunks play as they finish; pending text is
+batched in order and CUDA is silently primed during startup. The voice reference,
+32 steps, CFG and crossfade settings are preserved. A real CUDA worker with
+synthetic word-paced input produced first audio at 5.312 s, before text finished
+at 7.219 s, with every word queued once. This does not guarantee two-second speech
+or gap-free playback; no speaker/listening test was performed. 161 selected
+regression tests passed; real worker Unicode/queue/Stop checks passed without
+speaker playback, and launcher readiness reported `ready`.
+[Configuration, benchmarks and limits](docs/f5-voice.md).
+
+**Generated conversation (2026-10-14 IST):** Removed canned greetings, wellbeing
+and thanks replies and the unsolicited startup greeting. A compact warm local
+model generates brief butler-style conversation with recent dialogue, while
+complex questions keep the existing reasoning/research path. Utility and capability
+facts now ground generated wording. Private conversation stays local.
+The final worker test measured warm full text replies at 0.703–1.110 seconds;
+the first reply, including startup, took 2.485 seconds. F5 speech, cold starts
+and complex answers can exceed two seconds. 148 selected regression tests and
+20 knowledge tests passed; readiness was `ready`.
+[Behaviour, settings, sources and measured limits](docs/natural-conversation.md).
+
 **Speech Unicode repair (2026-10-14 IST):** Speech now repairs malformed Unicode
 such as lone `\udc81` surrogate escapes before worker transport and synthesis.
 Valid surrogate pairs are reconstructed, styled letters become ordinary letters,
@@ -1004,7 +1070,7 @@ Jarvis writes to the existing Obsidian vault at `D:\Phython Project\Jarvis_Memor
 
 A user-provided personal profile is stored as `Kunal Vaghani.md` inside the configured vault and linked from `Jarvis Brain.md`. Jarvis reads it for short personalized greetings and supplies it as reference context to local Qwen questions; the model is instructed to use details only when relevant. Historical daily observations are retrieved for matching activity questions. Update the note in Obsidian when location, goals, or family details change; age is calculated from the recorded birth date when asked. The profile contents are outside Git and are not reproduced in this README. Model answers can still be wrong, so current PC facts need fresh checks.
 
-On normal startup Jarvis says “Good morning/afternoon/evening, Kunal sir,” followed by current weather and time in the detected city when a live UTC offset is available; otherwise it says the local PC time. It skips that spoken greeting on an automatic recovery restart. Say or type **“hello,” “how are you,” “time,” “date,”** or **“weather”** for direct answers that bypass Ollama. Current weather uses an approximate public IP location from [ipapi](https://ipapi.co/) and [Open-Meteo](https://open-meteo.com/en/docs) current conditions. If IP location is unavailable, it tries the city in the Obsidian profile (or `weather.fallback_city`); if weather cannot be fetched, Jarvis says so instead of inventing conditions. An IP or VPN can place you in the wrong city. `weather.ip_location: false` disables the IP lookup and uses the saved city. The weather lookup sends your public IP to ipapi and coordinates/city lookup to Open-Meteo; no microphone audio or profile text is sent. Successful current weather is cached for ten minutes and failed lookups for one minute. A cold weather lookup can exceed four seconds or fail; local model answers, speech recognition and voice playback have variable latency. The 2–4 second target applies best to the direct local replies, not every question.
+Historical behavior before the 2026-10-14 generated-conversation upgrade: on normal startup Jarvis said “Good morning/afternoon/evening, Kunal sir,” followed by current weather and time in the detected city when a live UTC offset is available; otherwise it says the local PC time. It skips that spoken greeting on an automatic recovery restart. Say or type **“hello,” “how are you,” “time,” “date,”** or **“weather”** for direct answers that bypass Ollama. Current weather uses an approximate public IP location from [ipapi](https://ipapi.co/) and [Open-Meteo](https://open-meteo.com/en/docs) current conditions. If IP location is unavailable, it tries the city in the Obsidian profile (or `weather.fallback_city`); if weather cannot be fetched, Jarvis says so instead of inventing conditions. An IP or VPN can place you in the wrong city. `weather.ip_location: false` disables the IP lookup and uses the saved city. The weather lookup sends your public IP to ipapi and coordinates/city lookup to Open-Meteo; no microphone audio or profile text is sent. Successful current weather is cached for ten minutes and failed lookups for one minute. A cold weather lookup can exceed four seconds or fail; local model answers, speech recognition and voice playback have variable latency. The 2–4 second target applies best to the direct local replies, not every question.
 
 Obsidian Graph view shows links between notes, not whether a background connection is running. `Jarvis Brain.md` now links each `Daily/` note and each daily note links back; new daily notes get these links automatically. The Obsidian window alone does not record PC activity: Jarvis must be running for new observations to be written.
 
@@ -1268,13 +1334,13 @@ runs locally with the existing task history and dependencies. See
 license, and validation details.
 
 Spoken replies are enabled in the saved settings. Jarvis uses conversational
-answer wording and the user-selected Kokoro Heart English voice, synthesizing
-each reply into one continuous buffer before playback. The owned voice worker
+answer wording and the currently selected F5 reference-conditioned English voice,
+playing incremental chunks as they finish synthesis. The owned voice worker
 stays warm between replies; Hindi uses Piper. Stop voice interrupts playback; repair notices stay
 silent. Microsoft JARVIS dependency checks now validate related task steps.
 See [planning and speech integration details](docs/jarvis-repository-integrations.md)
-for historical source attribution. See [current Heart voice and repair details](docs/natural-voice-and-model-repair.md)
-for settings, the current preview, measured timing and limitations.
+for historical source attribution. See [F5 settings and measured limits](docs/f5-voice.md)
+and [historical Heart voice and repair details](docs/natural-voice-and-model-repair.md).
 
 The launcher now uses a compact native Dynamic Island with animated size changes.
 Click to open conversation and controls; Settings reveals microphone/language options.
@@ -1696,13 +1762,14 @@ Reference repositories, retained licenses, and pinned revisions are documented u
 ## F5-TTS voice (2026-10-14 IST)
 
 An [F5-TTS integration](docs/f5-voice.md) adds reference-conditioned English speech,
-automatic reference-style selection, native crossfades and complete-reply audio
-buffering through the existing cancellable player. Setup uses a separate environment.
+automatic reference-style selection, native crossfades and incremental audio
+delivery through the existing cancellable player. Setup uses a separate environment.
 A 9.85-second reference from the user-supplied YouTube source is configured and
 agrees with local Whisper transcription. F5 with CUDA is now selected; restart
 Jarvis to apply it. One GPU sample generated 3.861 seconds of audio in 6.218 seconds
-at 32 steps and peaked at 814 MiB reserved VRAM. Complete-reply buffering prevents
-synthesis gaps inside a reply but delays its first audio. Automatic pacing is
+at 32 steps and peaked at 814 MiB reserved VRAM. That historical sample used
+complete-reply buffering; current playback starts after the first chunk and
+can have gaps if synthesis cannot keep up. Automatic pacing is
 enabled; stronger emotional delivery needs additional style references. 80 selected
 voice, launcher, recovery and GPU scheduler regression tests passed. Full launcher
 readiness was `ready`, and real warm-worker queue/Stop checks passed without speaker

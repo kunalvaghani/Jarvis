@@ -5,6 +5,7 @@ import threading
 import sys
 from pathlib import Path
 import soundfile as sf
+import numpy as np
 from jarvis.f5_speech import load_voice, render
 
 
@@ -23,14 +24,20 @@ def main():
                 'We can review your schedule, look through the latest project changes, or prepare the next task together. '
                 'Take your time deciding what matters most. I will keep the details clear and the conversation moving at a comfortable pace. '
                 'Whenever you are ready, tell me where you would like to begin.')
-    parts = list(render(voice, {"text": text}, threading.Event()))
-    audio, rate = parts[0]
-    suffix = '-long' if long_reply else ''
+    parts, first_audio = [], None
+    for part in render(voice, {"text": text}, threading.Event()):
+        if first_audio is None:
+            first_audio = time.monotonic()-loaded
+        parts.append(part)
+    rate = parts[0][1]
+    audio = np.concatenate([part[0] for part in parts])
+    suffix = '-streaming-long' if long_reply else '-streaming'
     output = base / f'.jarvis-runtime/f5-sample{suffix}.wav'
     sf.write(str(output), audio, rate)
     result = {'text': text, 'output': str(output), 'device': voice.device,
               'load_seconds': round(loaded-started, 3),
               'synthesis_seconds': round(time.monotonic()-loaded, 3),
+              'first_audio_seconds': round(first_audio, 3), 'audio_pieces': len(parts),
               'audio_seconds': round(len(audio)/rate, 3)}
     if voice.device == 'cuda':
         result['peak_allocated_mb'] = round(torch.cuda.max_memory_allocated()/1048576)

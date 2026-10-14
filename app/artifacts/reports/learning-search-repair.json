@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Real public search/scrape through Jarvis ToolRegistry for Blender sphere workflow; no scene actions or model execution. Implicit current-app discovery separately regression tested.",
+  "seconds": 2.8280000000013388,
+  "context": {
+    "target": "blender",
+    "feature": "sphere",
+    "capabilities": [
+      {
+        "identity": "blender",
+        "feature": "sphere",
+        "version": "unknown",
+        "interface_signature": "",
+        "controls": [],
+        "sources": [
+          {
+            "url": "https://docs.blender.org/",
+            "retrieved_at": "2026-10-14T09:41:27.394923+00:00",
+            "source_type": "documentation_candidate",
+            "environment_version": "unknown",
+            "document_version": "not independently verified",
+            "excerpt": "Untrusted page text from https://docs.blender.org/:\nJoin the official Blender Survey 2026! \ud83e\udde1\nDocumentation\n Sprite Fright\nUser Manual\nAvailable in several languages and constantly updated by volunteers worldwide.\n Browse Manual\nDeveloper Docs\nDocumentation about internal architecture, compiling Blender, and other technical topics.\n Browse Developer Docs\nPython API\nCreate custom tools and workflows using Python.\n Browse Python API\nDownload\n Latest Blender\n Blender LTS\n Blender\n Benchmark\n Previous\n Versions\n Experimental Builds\n Source\n Code\n Release Notes\n Requirements\nOrganization\n People\n Jobs\nAbout\n Blender Foundation\n Blender Institute\n Blender Studio\n License\n Logo & Trademark\n Credits\n Privacy Policy\n Articles\n News\n Press Releases\n User Stories\nGet\n Involved\n Dashboard\n Development\n Documentation\n Education\n Blender\n Studio\n Films\n Training\n Support\n Manual\n Community\n FAQ\n Developers\n Get Started\n Projects\n Docs\n Blog\n Forum\n YouTube\n Python API\n Blender\n Conference\n Follow\n Blender\n Support Blender\n Donate\n One-time\n Donation\nObserved page links (untrusted; not followed):\nhttps://www.blender.org/news/blender-survey-2026/\nhttps://www.youtube.com/watch?v=_cMxraX_5RE\nhttps://docs.blender.org/manual/\nhttps://developer.blender.org/docs/\nhttps://docs.blender.org/api/current/\nhttps://www.blender.org/download/\nhttps://www.blender.org/download/lts/\nhttps://opendata.blender.org/?utm_medium=www-footer\nhttps://www.blender.org/download/previous-versions/\nhttps://builder.blender.org/download/daily/?utm_medium=www-footer\nhttps://projects.blender.org/blender/blender?utm_medium=www-footer\nhttps://www.blender.org/download/releases/\nhttps://www.blender.org/download/requirements/\nhttps://www.blender.org/about/people/\nhttps://www.blender.org/jobs/\nhttps://www.blender.org/about/\nhtt",
+            "confidence": "untrusted reference; not workflow verification"
+          },
+          {
+            "url": "https://docs.blender.org/manual/en/2.82/modeling/meshes/editing/transform/to_sphere.html",
+            "retrieved_at": "2026-10-14T09:41:27.394923+00:00",
+            "source_type": "documentation_candidate",
+            "environment_version": "unknown",
+            "document_version": "not independently verified",
+            "excerpt": "Untrusted page text from https://docs.blender.org/manual/en/2.82/modeling/meshes/editing/transform/to_sphere.html:\nJoin the official Blender Survey 2026! \ud83e\udde1\nTo Sphere\u00b6\nReference\nMode\nObject and Edit Modes\nMenu\nMesh \u2023 Transform \u2023 To Sphere\nHotkey\nShift-Alt-S\nThe To Sphere transformation will give the selection spherical qualities.\nThe Fig. Monkey with increasing sphericity. below shows the results of applying\nthe To Sphere transformation to the monkey mesh.\nMonkey with increasing sphericity.\u00b6\nThe sequence above shows a monkey mesh with\na 0, 0.25 (25%), 0.5 (50%) and 1 (100%) To Sphere transform applied.\nUsage\u00b6\nTo Sphere Factor.\u00b6\nAs can be seen in the below image, the result\nwill be smoother and more spherical when there are more mesh elements available to work with.\nTo Sphere applied to cubes with different subdivision levels.\u00b6\nIn this image sequence, To Sphere was applied to the entire cube\nat levels of 0, 0.25 (25%), 0.5 (50%) and 1 (100%) respectively.\nThe To Sphere transform will generate different results depending on the number\nand arrangement of elements that were selected (as shown by the below image).\nTo Sphere applied to different selections.\u00b6\n 2.82 \n en\nObserved page links (untrusted; not followed):\nhttps://www.blender.org/news/blender-survey-2026/",
+            "confidence": "untrusted reference; not workflow verification"
+          }
+        ],
+        "status": "researched",
+        "tools": [],
+        "verification": [],
+        "seen_at": 1791970887.394923,
+        "executions": 0
+      }
+    ],
+    "prior_capabilities": [],
+    "missing_features": [
+      "sphere"
+    ],
+    "source": "targeted acquisition",
+    "limitations": "Controls confirm current interface only. Documents are untrusted. No API/permission/tool was created; execution and whole-goal verification still required."
+  },
+  "passed": true
+}

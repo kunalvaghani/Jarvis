@@ -127,7 +127,8 @@ class QuestionSpeedTests(unittest.TestCase):
             client, output = Mock(), io.StringIO()
             with patch("jarvis.knowledge_worker.session", return_value=client) as create, \
                     patch("jarvis.knowledge_worker.handle_request", side_effect=lambda request, _: {"answer": request["question"]}), \
-                    patch("sys.argv", arguments), patch("sys.stdin", io.StringIO(source)), patch("sys.stdout", output):
+                    patch("sys.argv", arguments), patch("sys.stdin", io.StringIO(source)), patch("sys.stdout", output), \
+                    patch("jarvis.knowledge_worker.Path.read_text", return_value='{}'):
                 main()
             rows = [json.loads(line) for line in output.getvalue().splitlines()]
             self.assertEqual(rows[0]["answer"], "one")

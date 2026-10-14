@@ -1,5 +1,33 @@
 {
   "version": 1,
+  "knowledge_acquisition": {
+    "modules": ["jarvis.knowledge_acquisition", "jarvis.application_discovery", "jarvis.app_knowledge"],
+    "authority": "Existing ToolRegistry, DAG Executor, UI/browser transports, Brain model router, TaskState, SkillMemory and AppKnowledge",
+    "storage": "Capability evidence extends existing app_knowledge.json; active acquisition extends TaskState.learning; reusable guidance joins existing SkillMemory context",
+    "network": "Public software/feature queries only; exact named or registered current configured app resolution with explicit observation executable aliases; visible sanitized query progress; configured local help then configured docs/public search and bounded scrape; separate Jarvis Firecrawl key or existing web tools",
+    "lifecycle": "Discovered/researched/environment-confirmed evidence becomes verified only after current task whole-goal evidence; version/interface/TTL invalidation; no generated callable tools or copied executable code",
+    "background": "Opt-in background_refresh uses existing idle SelfEvolution backlog, resource gates and cancellation; no new service, GUI work or foreground checkpoint mutation",
+    "rollback": "knowledge_acquisition.enabled=false; online and background_refresh independent flags",
+    "new_dependencies": []
+  },
+  "hierarchical_execution": {
+    "worker": "Existing action thread plus up to four task-owned DAG threads; no new service",
+    "planner": "Existing owned local Brain worker, installed-model selection and GPU leases; native Ollama JSON-schema decoding with bounded validation repair",
+    "state": "Existing TaskState embeds DAG checkpoints; procedural cache tables extend conversations.sqlite3",
+    "safety": "Typed references, whole-graph admission, fresh deny hooks, existing scope/approval checks, exclusive writes, read-only bounded retries/replans, no uncertain effect replay",
+    "rollback": "brain.hierarchical_execution.enabled=false; parallel_reads and macro_cache independently configurable",
+    "limits": "40 graph nodes, existing 1-40 action budget, concurrency 1-4, reservations CPU 4 / RAM 256 MiB / GPU 0; cooperative deadlines drain existing bounded tool transports; no arbitrary UI/MCP calls from DAG",
+    "new_dependencies": []
+  },
+  "natural_conversation": {
+    "model": "qwen3.5:0.8b",
+    "transport": "Existing owned question worker; compact private CPU streaming without planner GPU lease",
+    "startup": "Quiet user-led startup; background worker and prompt priming with bounded timeout",
+    "context": "Six recent messages capped at 500 characters each, bounded user profile and requested style",
+    "replies": "Generated social conversation; utility and behaviour outputs used as reference grounding",
+    "limitations": "Small-model quality tradeoff; no universal two-second guarantee, independent consciousness or autonomous conversation actions",
+    "new_dependencies": []
+  },
   "f5_imports": ["f5_tts.api", "soundfile", "sounddevice"],
   "f5_speech": {
     "requirements": "requirements/f5.txt",
@@ -9,10 +37,19 @@
     "ownership": "Speech owns the hidden child; existing progress watchdog disposes stalled workers without replaying replies; stop clears buffered audio; close kills the child",
     "gpu_policy": "When selected F5 uses CUDA, the Qwen scheduler reserves at least 2048 MiB for speech plus its existing 512 MiB headroom; Qwen uses fewer GPU layers on the measured 4 GB GPU",
     "activation": "Selected engine f5 with CUDA and a 9.85-second local WAV reference from user-supplied YouTube video 9hhIc8iWUx4; exact transcript agrees with local Whisper",
-    "limitations": "Full reply buffering increases first-audio latency; F5 skips draft sentence streaming; separate replies may still have gaps; no real-time, perfect-cloning or fine-tuning claim"
+    "delivery": "Completed conversation/Groq/verified-answer phrases stream to the owned worker; sequential audio chunks play immediately with bounded crossfade tails; pending text coalesces in order up to eight requests and 1000 characters; quiet CUDA synthesis priming during startup",
+    "limitations": "Each phrase still completes F5 inference before audio is available; rapid text may finish first; synthesis underruns and chunk prosody differences remain possible; unverified research drafts wait for final delivery; no real-time, perfect-cloning or fine-tuning claim"
   },
   "capabilities": [
+    "task_scoped_capability_acquisition_and_gap_detection",
+    "shared_versioned_application_and_website_capability_memory",
+    "validated_task_scoped_parallel_dependency_graphs",
+    "typed_result_references_and_durable_dag_checkpoints",
+    "exact_verified_read_plan_cache",
+    "generated_private_butler_conversation",
+    "warm_compact_conversation_streaming",
     "f5_reference_conditioned_cuda_speech",
+    "incremental_f5_audio_and_verified_answer_text_delivery",
     "unicode_safe_spoken_reply_and_reference_text",
     "bounded_sequential_crossfaded_voice_chunks",
     "automatic_reference_style_and_pacing_selection",
@@ -767,6 +804,8 @@
   "fast_planning": {
     "modules": [
       "jarvis.brain",
+      "jarvis.dag_execution",
+      "jarvis.hierarchical",
       "jarvis.native_tools",
       "jarvis.step_planning",
       "jarvis.gpu_scheduler",

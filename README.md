@@ -1,7 +1,29 @@
 # Jarvis — local Windows voice assistant
 
+[Integrated knowledge acquisition](app/docs/autonomous-learning.md) connects
+scoped local/public research to the existing planner, registry, app memory and
+verified procedural skills. Known commands keep their fast paths; optional idle
+refresh remains disabled. [Dated validation and limits](app/docs/learning-validation.md)
+cover native/browser fixtures, public retrieval, real local planning and regressions.
+Complex feature requests can also resolve the current configured app when its
+name is omitted; invalid object names are rejected before application inspection.
+
+[Hierarchical execution](app/docs/hierarchical-execution.md) extends the existing
+planner and real tool registry with validated dependency graphs, bounded parallel
+reads, checkpoints and verified read-plan reuse. Existing specialized workflows
+remain available. [Measured benchmarks and production limits](app/docs/hierarchical-benchmarks.md)
+distinguish the 2.52× controlled-read speedup from slower model planning.
+
+[Generated natural conversation](app/docs/natural-conversation.md) replaces canned
+social replies and startup greetings with brief contextual butler-style replies.
+Warm text generation was measured below two seconds on selected synthetic turns;
+speech and complex-question latency can be longer.
+
 [F5-TTS speech](app/docs/f5-voice.md) is configured with CUDA and a reference from
-the supplied Jarvis video, automatic pacing and buffered continuous playback.
+the supplied Jarvis video, automatic pacing and incremental audio playback.
+Completed conversation/Groq/verified-answer phrases reach speech while text
+arrives; each audio chunk plays before the next finishes synthesis. F5's
+per-phrase compute time can still delay first audio or cause gaps.
 Local synthesis passed. It uses zero-shot conditioning; weights have not been
 fine-tuned, and human voice comparison remains unverified.
 Speech input cleanup repairs malformed Unicode that could previously stop F5
@@ -67,6 +89,10 @@ are grouped under `app/requirements/`, with `app/requirements.txt` as the main
 installation entry point.
 
 ## Project navigation
+
+For a one-page overview of every feature, skill, tool, model, workflow, piece
+of software and repository, and how they connect, see the
+[system map](app/docs/system-map.md).
 
 | Location | Purpose |
 | --- | --- |

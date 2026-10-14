@@ -12,6 +12,29 @@ from jarvis.speech import Speech
 
 
 class F5Tests(unittest.TestCase):
+    def test_batch_keeps_order_and_preserves_eof(self):
+        import queue
+        from jarvis.kokoro_speech import queued_batch
+        rows = queue.Queue()
+        rows.put({'id': 2, 'text': 'continued.', '_epoch': 0})
+        rows.put(None)
+        merged, batch, held, has_held = queued_batch({'id': 1, 'text': 'First clause,', '_epoch': 0}, rows)
+        self.assertEqual(merged['text'], 'First clause, continued.')
+        self.assertEqual([row['id'] for row in batch], [1, 2])
+        self.assertTrue(has_held)
+        self.assertIsNone(held)
+
+    def test_batch_does_not_consume_new_generation_or_oversized_input(self):
+        import queue
+        from jarvis.kokoro_speech import queued_batch
+        for candidate in [{'id': 2, 'text': 'New answer.', '_epoch': 1},
+                          {'id': 2, 'text': 'x'*1000, '_epoch': 0}]:
+            rows = queue.Queue()
+            rows.put(candidate)
+            merged, batch, held, has_held = queued_batch({'id': 1, 'text': 'Current.', '_epoch': 0}, rows)
+            self.assertEqual(len(batch), 1)
+            self.assertIs(held, candidate)
+            self.assertTrue(has_held)
     def test_direct_worker_input_cleans_surrogates_before_inference(self):
         voice = SimpleNamespace(jarvis_options={}, infer=Mock(return_value=(np.ones(2400), 24000, None)))
         def infer(**kwargs):
@@ -43,8 +66,18 @@ class F5Tests(unittest.TestCase):
         with patch('jarvis.f5_speech.reference', return_value=('ref.wav', 'Exact words.', 'neutral')), patch('jarvis.f5_speech.chunks', return_value=['First.', 'Second.']):
             output = list(render(voice, {'text': 'First. Second.'}, threading.Event(), progress))
         self.assertEqual(voice.infer.call_count, 2)
-        self.assertEqual(len(output[0][0]), 6000)
+        self.assertEqual(sum(len(audio) for audio, _ in output), 6000)
         self.assertEqual(progress.call_count, 2)
+
+    def test_first_audio_is_available_before_next_chunk_inference(self):
+        voice = SimpleNamespace(jarvis_options={}, infer=Mock(return_value=(np.ones(4800), 24000, None)))
+        with patch('jarvis.f5_speech.reference', return_value=('ref.wav', 'Exact words.', 'neutral')), patch('jarvis.f5_speech.chunks', return_value=['First.', 'Second.']):
+            output = render(voice, {'text': 'First. Second.'}, threading.Event())
+            audio, _ = next(output)
+            self.assertTrue(audio.size)
+            self.assertEqual(voice.infer.call_count, 1)
+            list(output)
+            self.assertEqual(voice.infer.call_count, 2)
 
     def test_reference_duration_and_emotion_selection(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -74,13 +107,33 @@ class F5Tests(unittest.TestCase):
             self.assertTrue(result[0].endswith('.'))
             self.assertGreater(len(result), 1)
 
-    def test_f5_waits_for_final_answer(self):
+    def test_f5_streams_sentences_without_repeating_them(self):
         speech = Speech({'engine': 'f5'}, Mock())
         speech._enqueue = Mock()
-        speech.stream('A complete first sentence. Another sentence. ')
-        speech._enqueue.assert_not_called()
+        speech.stream('A complete first sentence. Another sentence. ', phase='Conversing')
+        speech._enqueue.assert_called_once_with('A complete first sentence.')
         speech.say('A complete first sentence. Another sentence.')
-        speech._enqueue.assert_called_once()
+        self.assertEqual(speech._enqueue.call_args.args[0], 'Another sentence.')
+
+    def test_f5_does_not_speak_unverified_research_drafts(self):
+        speech = Speech({'engine': 'f5'}, Mock())
+        speech._enqueue = Mock()
+        speech.stream('A complete speculative draft. More', phase='Generating answer')
+        speech._enqueue.assert_not_called()
+        speech.stream('The evidence supports this result. More', phase='Generating verified answer')
+        speech._enqueue.assert_called_once_with('The evidence supports this result.')
+
+    def test_f5_can_begin_at_a_complete_opening_clause(self):
+        speech = Speech({'engine': 'f5'}, Mock())
+        speech._enqueue = Mock()
+        speech.stream('With the current voice quality settings preserved here, the next words are still arriving', phase='Groq public answer')
+        speech._enqueue.assert_called_once_with('With the current voice quality settings preserved here,')
+
+    def test_stop_stream_discards_queued_speech(self):
+        speech = Speech({'engine': 'f5'}, Mock())
+        speech.stream('A complete first sentence. More', phase='Conversing')
+        speech.stream('', active=False, phase='Cancelled · incomplete')
+        self.assertTrue(speech.queue.empty())
 
     def test_f5_uses_isolated_owned_worker(self):
         speech = Speech({'engine': 'f5'}, Mock())

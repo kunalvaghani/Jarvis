@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Actual owned native app/version/UIA discovery, configured local help, Brain/ToolRegistry action, independent SVG readback and shared-memory promotion. Authored planner and deterministic oracle, no live LLM or internet claim.",
+  "passed": true,
+  "seconds": 2.6090000000003783,
+  "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+  "capability": {
+    "identity": "learningfixture",
+    "feature": "diagram",
+    "version": "3.10.6150.1013",
+    "interface_signature": "7036060195fc994fc567bfa6fc7e7ea2814c2370ef0b0bcb74812d52fdb31204",
+    "controls": [
+      {
+        "name": "Create diagram",
+        "role": "Button",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "Create diagram",
+          "role": "Button"
+        }
+      },
+      {
+        "name": "System",
+        "role": "MenuItem",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "System",
+          "role": "MenuItem"
+        }
+      },
+      {
+        "name": "Minimize",
+        "role": "Button",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "Minimize",
+          "role": "Button"
+        }
+      },
+      {
+        "name": "Maximize",
+        "role": "Button",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "Maximize",
+          "role": "Button"
+        }
+      },
+      {
+        "name": "Close",
+        "role": "Button",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "Close",
+          "role": "Button"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "url": "local:help.md",
+        "source_type": "configured_local_help",
+        "retrieved_at": "2026-10-14T09:19:55.312287+00:00",
+        "environment_version": "3.10.6150.1013",
+        "document_version": "not independently verified",
+        "excerpt": "Learning Fixture: use the Create diagram button. A successful click creates diagram.svg and changes its label to Diagram created.",
+        "confidence": "Untrusted help; not execution verification"
+      }
+    ],
+    "status": "verified",
+    "tools": [
+      "select"
+    ],
+    "verification": [
+      {
+        "source": "fresh_goal_verifier",
+        "evidence": "Fresh whole-goal verification: Independent SVG and fixture event readback"
+      }
+    ],
+    "seen_at": 1791969595.3122878,
+    "executions": 1
+  },
+  "svg_readback": true,
+  "state": "completed"
+}

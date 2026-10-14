@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-14 IST",
+  "branch": "codex/hierarchical-dag-upgrade",
+  "baseline_regression": {
+    "passed": true,
+    "tests": 1750,
+    "seconds": 292.424
+  },
+  "final_regression": {
+    "passed": true,
+    "tests": 1765,
+    "seconds": 282.169
+  },
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "available",
+        "version": "29.8.2",
+        "os": "linux"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "parallel_component_speedup": 2.518799387034933,
+  "component_inputs": "Three actual scoped file reads, each with authored 100 ms delay, five trials per mode",
+  "live_planner": true,
+  "real_authored_write_chain": true,
+  "final_code_hashes": {
+    "jarvis/dag_execution.py": "520dfff01cc84c7c9fbe219261529b508d3ca633f192b5a130b9c80a98979eb2",
+    "jarvis/hierarchical.py": "33b584c4110c8e562a00078389b9fbe0680697b9d2459b9b9da252ac4ae1e1c1",
+    "jarvis/brain.py": "59b669c891ae1cc1ff336c8ce4d8ef93e3e50e5ed9133670c5ff6f77e6fe9a89",
+    "jarvis/brain_worker.py": "54e3e0010536008d30e9b2ad4b6ffde53df815473f1cf166202afd94ce59c135",
+    "jarvis/task_state.py": "391cda1a5dacb7b2ffed6d609a6828562cca349908be4fb483cf3bab01c7e885",
+    "jarvis/launcher.py": "c5aed993742a9f6a9bab5075c1a64c6330514eef9c91507353f1d2c43e5abf95",
+    "jarvis/intent_catalog.py": "c52ec7ff59d1c4f75dc8496c820f45297e53446f4ab1914254af619929768067",
+    "jarvis/intent_handlers.py": "c84e2b724c819cda608b5d44623270832025e3b666262524486f49e6793489ca",
+    "tests/test_hierarchical.py": "1efaf052931c31da085fd6c7b041d40ebcf0af92a95947141548537fce6314e1"
+  },
+  "limitations": [
+    "Not a live external-account/UI/voice acceptance check",
+    "No Unreal Blueprint API integration",
+    "No multi-hour soak or universal latency guarantee",
+    "Resource admission estimates; cooperative synchronous-tool cancellation",
+    "Semantic solver interface tested; live quality/latency not benchmarked"
+  ]
+}

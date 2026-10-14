@@ -17,6 +17,7 @@ class ToolSpec:
 
 
 SPECS = (
+    ToolSpec('application_inspect', 'desktop', 'Read a configured app executable/version and sanitized foreground controls. value MUST be an exact configured application name or current for the current configured app. Cube, Modifier and other object/control names are invalid; use select for controls. Read-only: never selects objects, launches, types, clicks, installs or executes scripts.'),
     ToolSpec('realtime_query', 'realtime', 'Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}. No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provider; self-hosted sources require configured endpoints.'),
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
     ToolSpec("browse", "browser", "Open a website URL in an installed browser."),
@@ -130,6 +131,9 @@ class ToolRegistry:
             raise ValueError("Unsupported tool: " + str(name))
         if cancelled():
             raise ValueError("Task cancelled before tool execution.")
+        if name == 'application_inspect':
+            from .application_discovery import inspect
+            return ToolResult(name, 'desktop_observation', json.dumps(inspect(self.actions, step['value'], cancelled), ensure_ascii=False))
         if name == 'realtime_query':
             params = json.loads(step.get('content') or '{}')
             result = self.actions.realtime.query(step.get('value',''), params, cancelled)

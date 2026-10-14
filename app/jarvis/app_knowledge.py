@@ -268,6 +268,8 @@ class AppKnowledge:
         self.lock = threading.Lock()
         try:
             self.learned = json.loads(self.path.read_text(encoding="utf-8"))
+            if not isinstance(self.learned, dict):
+                self.learned = {}
         except (OSError, ValueError):
             self.learned = {}
         self._inventory = None
@@ -276,6 +278,84 @@ class AppKnowledge:
         if self._inventory is None:
             self._inventory = inventory(self.apps)
         return self._inventory
+
+    def capabilities(self, identity, feature='', ttl=604800, version=None, signature=None):
+        """Bounded version/surface-aware retrieval from this existing app store."""
+        with self.lock:
+            row = self.learned.get('capability:'+identity, {})
+            if not isinstance(row, dict):
+                return []
+            result = []
+            records = row.get('capabilities', {})
+            if not isinstance(records, dict):
+                return []
+            for item in list(records.values())[:24]:
+                if (not isinstance(item, dict) or not isinstance(item.get('seen_at'), (int, float)) or
+                        not all(k in item for k in ('identity','feature','version','status','interface_signature','controls','sources','verification')) or
+                        not all(isinstance(item[k], list) for k in ('controls','sources','verification')) or
+                        not 0 <= time.time()-item['seen_at'] <= ttl):
+                    continue
+                if (feature and item.get('feature') != feature or version and version != 'unknown' and item.get('version') != version or
+                        signature and item.get('interface_signature') != signature or item.get('status') == 'invalidated'):
+                    continue
+                result.append(json.loads(json.dumps(item)))
+            return sorted(result, key=lambda item: item['seen_at'], reverse=True)[:3]
+
+    def remember_capability(self, item):
+        """Persist declarative evidence, never code, coordinates or permissions."""
+        required = {'identity','feature','version','interface_signature','controls','sources','status','tools',
+                    'verification','seen_at','executions'}
+        if not isinstance(item, dict) or set(item) != required or len(json.dumps(item, ensure_ascii=False)) > 18000:
+            raise ValueError('Invalid bounded capability record.')
+        if (item['status'] not in {'discovered','researched','environment_confirmed','verified','invalidated'} or
+                not all(isinstance(item[k], str) and 0 < len(item[k]) <= 300 for k in ('identity','feature','version')) or
+                not isinstance(item['controls'], list) or len(item['controls']) > 60 or
+                not isinstance(item['sources'], list) or len(item['sources']) > 3 or
+                item['status'] == 'verified' and not item['verification']):
+            raise ValueError('Capability status requires real evidence.')
+        from .skill_memory import linked
+        if linked(self.path) or linked(self.path.parent):
+            raise ValueError('App knowledge paths cannot be linked.')
+        key = 'capability:'+item['identity']
+        with self.lock:
+            row = self.learned.setdefault(key, {'buttons': {}, 'capabilities': {}})
+            old = row.setdefault('capabilities', {}).get(item['feature'])
+            if old and item['status'] != 'verified' and old.get('version') == item['version'] and old.get('interface_signature') == item['interface_signature'] and old.get('status') == 'verified':
+                item = {**item, 'status': 'verified', 'executions': old['executions'], 'verification': old['verification']}
+            row['capabilities'][item['feature']] = json.loads(json.dumps(item))
+            row['capabilities'] = dict(sorted(row['capabilities'].items(), key=lambda pair: pair[1]['seen_at'], reverse=True)[:24])
+            capability_keys = [k for k in self.learned if k.startswith('capability:')]
+            if len(capability_keys) > 64:
+                oldest = min(capability_keys, key=lambda k: max((r.get('seen_at', 0) for r in self.learned[k]['capabilities'].values()), default=0))
+                self.learned.pop(oldest)
+            if not self._save():
+                raise OSError('Capability persistence failed.')
+
+    def acquired_context(self, goal):
+        """Semantic guidance only; similarity never authorizes action reuse."""
+        tokens = set(re.findall(r'[a-z]+', goal.casefold()))
+        result = []
+        for key in list(self.learned)[:1000]:
+            if key.startswith('capability:'):
+                for row in self.capabilities(key[len('capability:'):]):
+                    if tokens & set(re.findall(r'[a-z]+', row['feature']+' '+row['identity'])):
+                        result.append({k: row[k] for k in ('identity','feature','version','status','interface_signature')})
+                        result[-1]['controls'] = row['controls'][:8]
+                        result[-1]['sources'] = [{'url': s['url'], 'excerpt': s.get('excerpt','')[:300]} for s in row['sources'][:2]]
+                        result[-1]['verification'] = row['verification'][:1]
+        return result[:3]
+
+    def refresh_capability_sources(self, identity, feature, sources):
+        """Background docs refresh cannot extend stale UI/workflow verification."""
+        from .skill_memory import linked
+        if linked(self.path) or linked(self.path.parent):
+            raise ValueError('App knowledge paths cannot be linked.')
+        with self.lock:
+            row = self.learned.get('capability:'+identity, {}).get('capabilities', {}).get(feature)
+            if row is not None:
+                row['sources'] = json.loads(json.dumps(sources[:3]))
+                if not self._save():
+                    raise OSError('Capability source persistence failed.')
 
     @staticmethod
     def app_key(executable, title="", window_class=""):
@@ -306,8 +386,9 @@ class AppKnowledge:
             temp = self.path.with_suffix(".tmp")
             temp.write_text(json.dumps(self.learned, ensure_ascii=False, indent=1), encoding="utf-8")
             temp.replace(self.path)
+            return True
         except OSError:
-            pass
+            return False
 
     def buttons(self, key, limit=20):
         row = self.learned.get(key) or {}

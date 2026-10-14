@@ -208,6 +208,16 @@ class Actions:
         self.pending_opinion = None  # A recommendation voiced and awaiting the user's go-ahead/rejection.
         from .screen_awareness import ScreenAwareness
         self.screen = ScreenAwareness(self, config.get("screen_awareness", {}))  # Offers help for the app in front.
+        from .knowledge_acquisition import Acquisition
+        self.acquisition = Acquisition(self)
+        self.memory.app_knowledge = self.screen.knowledge
+        def completed_task(task):
+            self.skills.safe_record(task)
+            try:
+                self.acquisition.finished(task)
+            except (ValueError, OSError):
+                pass  # Learning failure never changes an independently verified task.
+        self.task_state.on_finish = completed_task
         self.hands_free = self.hands_free_state = None  # Set by the app while the microphone is on.
         from .context_hub import prompt_block
         self.memory.situation = lambda question="": prompt_block(self, question)  # Several live contexts at once.
@@ -368,6 +378,9 @@ class Actions:
         if command.kind in IMMEDIATE:
             try:
                 reply = intent_execute(self, command)
+                if command.kind == 'behavior' and self.config.get('knowledge', {}).get('natural_conversation', {}).get('enabled', False):
+                    self.knowledge.submit_natural('Explain how you handle ' + command.value.replace('_', ' ') + '.', str(reply or ''))
+                    return
             except ValueError as exc:
                 reply = str(exc)
             if reply:

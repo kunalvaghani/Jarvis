@@ -1,8 +1,16 @@
 # Jarvis documentation
 
 Start with the [application guide](../README.md) and [project structure](project-structure.md).
+For a one-page overview of features, skills, tools, models, workflows, software
+and repositories and how they connect, see the [system map](system-map.md).
 
 ## Project and runtime
+
+- [Integrated autonomous learning, compatibility and rollback — 2026-10-14 IST](autonomous-learning.md)
+- [Learning release tests, native/browser/model checks and benchmarks — 2026-10-14 IST](learning-validation.md)
+
+- [Hierarchical DAG execution, compatibility and rollback — 2026-10-14 IST](hierarchical-execution.md)
+- [Pre/post upgrade benchmarks and production acceptance limits — 2026-10-14 IST](hierarchical-benchmarks.md)
 
 - [Optional Groq hybrid inference, quota protection and offline verification — 2026-10-14 IST](groq-hybrid.md)
 - [Pre-implementation hybrid architecture map — 2026-10-14 IST](groq-architecture.md)
@@ -24,6 +32,8 @@ Start with the [application guide](../README.md) and [project structure](project
 - [Session memory and background context selection](session-context.md)
 
 ## Voice and interface
+
+- [Generated butler-style conversation and measured latency — 2026-10-14 IST](natural-conversation.md)
 
 - [F5-TTS reference voice, CUDA setup and measured limits — 2026-10-14 IST](f5-voice.md)
 

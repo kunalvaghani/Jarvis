@@ -495,6 +495,14 @@ def _process_name(pid):
 
 def system_info(actions, topic, value=""):
     import psutil
+    if topic == 'battery':
+        battery = psutil.sensors_battery()
+        if battery is None:
+            return 'Windows does not report a battery on this PC.'
+        return 'Battery is {}%, {}.'.format(round(battery.percent), 'plugged in' if battery.power_plugged else 'running on battery')
+    if topic == 'quick_cpu':
+        return 'CPU use averaged {}% over the last 100 milliseconds across {} threads.'.format(
+            round(psutil.cpu_percent(interval=.1)), psutil.cpu_count())
     if topic == "cpu":
         total = psutil.cpu_percent(interval=.5)
         return "CPU use is " + str(round(total)) + "% across " + str(psutil.cpu_count()) + " threads. " + system_info(actions, "top")

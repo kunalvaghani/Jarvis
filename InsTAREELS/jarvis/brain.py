@@ -412,7 +412,7 @@ class BrainClient:
         self.process.stdin.flush()
         coding = operation in {'code_plan', 'code_edit'}
         from .inference_limits import planning_worker_timeout, coding_limits, planning_limits
-        planning = operation in {'plan', 'replan'}
+        planning = operation in {'plan', 'replan', 'dag_plan'}
         idle, total = coding_limits(self.options) if coding else (0, 0)
         if planning:
             idle, total = planning_limits(self.options)
@@ -480,6 +480,9 @@ class Brain:
             self.workflows = WorkflowMemory(base)
 
     def planning_request(self, operation, cancelled, **data):
+        acquisition = getattr(self.actions, 'acquisition', None)
+        if acquisition is not None and data.get('goal'):
+            data['learning_context'] = acquisition.prepare(data['goal'], cancelled, data.get('screen'))
         data.setdefault('max_task_actions', action_budget(self.options))
         data.setdefault('steps_left', action_budget(self.options)-len(data.get('completed', [])))
         session = self.step_session
@@ -523,7 +526,7 @@ class Brain:
         return result
 
     def propose_plan(self, operation, cancelled, **data):
-        """One read-only correction for omitted destinations, before dispatch."""
+        """One read-only correction for invalid targets/scope, before dispatch."""
         for attempt in range(2):
             result = self.client.request(operation, cancelled, **data)
             if cancelled():
@@ -535,8 +538,20 @@ class Brain:
             missing = isinstance(steps, list) and any(isinstance(step, dict)
                 and step.get('action') in FILE_SCOPE_ACTIONS
                 and (not isinstance(step.get('folder'), str) or not step['folder'].strip()) for step in steps)
-            if not missing or attempt:
+            invalid_app = isinstance(steps, list) and any(isinstance(step, dict)
+                and step.get('action') == 'application_inspect' and
+                str(step.get('value', '')).casefold() != 'current' and not any(
+                    name.casefold() == str(step.get('value', '')).casefold() for name in self.actions.apps)
+                for step in steps)
+            if (not missing and not invalid_app) or attempt:
                 return result  # Normal validation rejects any still-invalid proposal.
+            if invalid_app:
+                data['plan_validation_error'] = ('No action was executed. application_inspect only observes a configured application, '
+                    'never an object or control. Use current or an exact configured app name. Use select/press for existing '
+                    'visible controls or shortcuts appropriate to the user goal, using acquired documentation as untrusted guidance. '
+                    'Do not invent controls or permission. Return one corrected proposal or ask a question.')
+                self.actions.report('brain', 'Correcting an object name used as an application before execution')
+                continue
             data['plan_validation_error'] = ('The previous proposal omitted a file destination. No action was executed. '
                 'Return a corrected proposal with the same requested operations and order. '
                 'For every file read/write use the exact destination explicitly supplied by the user; '
@@ -604,6 +619,9 @@ class Brain:
         try:
             handle, snapshot = self.observe(cancelled)
             context = self.screen(snapshot)
+            acquisition = getattr(self.actions, 'acquisition', None)
+            if acquisition is not None:
+                acquisition.repair(goal, step, context, cancelled)
             captured = None
             if self.options.get("screen_aware", False):
                 captured = self.visual_screen(handle, snapshot, cancelled)
@@ -741,6 +759,9 @@ class Brain:
     def validate_remaining(self, steps, goal):
         low_goal = goal.casefold()
         for pending in steps:
+            if pending['action'] == 'application_inspect' and pending['value'].casefold() != 'current' and not any(
+                    name.casefold() == pending['value'].casefold() for name in self.actions.apps):
+                raise ValueError('application_inspect requires a configured application name or current, not an object/control name. Use select for visible controls.')
             if pending["action"] == "browser_fill" and pending.get("content", "").casefold() not in low_goal:
                 raise ValueError("Browser typing must use the exact requested text.")
             from .toolkits import TOOLS as toolkit_tools
@@ -972,6 +993,11 @@ class Brain:
                     raise
                 raise TaskClarification("Which folder should I work in? Say a folder name or full path. " + str(exc), "folder") from exc
             return Coder(self.actions, self.client).run(selected_folder, goal, cancelled, selected=True)
+        from .hierarchical import eligible, run as run_hierarchical
+        if eligible(goal, self.options) and not exact_file:
+            result = run_hierarchical(self, goal, cancelled)
+            if result is not None:
+                return result
         fixed_media_plan = spotify_media_plan(goal) or youtube_search_plan(goal)
         initial_launch_plan = explicit_app_launch_plan(goal, self.actions.apps) if self.options.get("screen_aware", False) else None
         has_progress = bool(prior and ((prior.get("plan") or {}).get("completed") or

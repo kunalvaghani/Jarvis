@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Actual configured executable version, public web search and scrapes through ToolRegistry. Desktop input disabled, no user scene mutation or completion claim.",
+  "seconds": 3.561999999998079,
+  "context": {
+    "target": "blender",
+    "feature": "sphere",
+    "capabilities": [
+      {
+        "identity": "blender",
+        "feature": "sphere",
+        "version": "4.4.3.0",
+        "interface_signature": "",
+        "controls": [],
+        "sources": [
+          {
+            "url": "https://developer.blender.org/docs/release_notes/4.4/",
+            "retrieved_at": "2026-10-14T09:45:21.726362+00:00",
+            "source_type": "documentation_candidate",
+            "environment_version": "4.4.3.0",
+            "document_version": "not independently verified",
+            "excerpt": "Untrusted page text from https://developer.blender.org/docs/release_notes/4.4/:\nSkip to content\nBlender 4.4 Release Notes\u00b6\nBlender 4.4 was released on March 18, 2025.\nCheck out out the final release notes on\nblender.org.\nAnimation & Rigging\nCompositor\nCore\nCycles\nEEVEE & Viewport\nGeometry Nodes\nGrease Pencil\nModeling & UV\nPipeline & I/O\nPython API\nSculpt, Paint, Texture\nUser Interface\nVideo Sequencer\nCompatibility\u00b6\nCycles: Increased minimum driver versions for AMD and Intel GPU rendering.\nAlembic and USD: Processing of edge and vertex creases has changed for consistency with OpenSubdiv.\nPython API: Breaking changes for actions, sequencer strips and subclassing Blender types.\nLibraries have been upgraded to match VFX platform 2025, including:\nMaterialX 1.39\nOpenColorIO 2.4\nOpenEXR 3.3\nOpenShadingLanguage 1.14\nOpenUSD 25.02\nOpenVDB 12.0\nBugfixes\u00b6\nFixes for issues present in previous versions\nCorrective Releases\u00b6\nObserved page links (untrusted; not followed):\nhttps://projects.blender.org/blender/blender-developer-docs/_edit/main/docs/release_notes/4.4/index.md\nhttps://www.blender.org/download/releases/4-4/\nhttps://developer.blender.org/docs/release_notes/4.4/animation_rigging/\nhttps://developer.blender.org/docs/release_notes/4.4/compositor/\nhttps://developer.blender.org/docs/release_notes/4.4/core/\nhttps://developer.blender.org/docs/release_notes/4.4/cycles/\nhttps://developer.blender.org/docs/release_notes/4.4/eevee/\nhttps://developer.blender.org/docs/release_notes/4.4/geometry_nodes/\nhttps://developer.blender.org/docs/release_notes/4.4/grease_pencil/\nhttps://developer.blender.org/docs/release_notes/4.4/modeling/\nhttps://developer.blender.org/docs/release_notes/4.4/pipeline_assets_io/\nhttps://developer.blender.org/docs/release_notes/4.4/python_api/\nhttps://developer.blende",
+            "confidence": "untrusted reference; not workflow verification"
+          },
+          {
+            "url": "https://docs.blender.org/manual/en/latest/modeling/meshes/primitives.html",
+            "retrieved_at": "2026-10-14T09:45:21.726362+00:00",
+            "source_type": "documentation_candidate",
+            "environment_version": "4.4.3.0",
+            "document_version": "not independently verified",
+            "excerpt": "Untrusted page text from https://docs.blender.org/manual/en/latest/modeling/meshes/primitives.html:\nJoin the official Blender Survey 2026! \ud83e\udde1\n Contents\n Menu\n Expand\n Light mode\n Dark mode\n Auto light/dark, in light mode\n Auto light/dark, in dark mode\nSkip to content\nBlender 5.2 LTS Manual\n Back to top\n Edit this page\nMesh Primitives\u00b6\nReference\nMode:\nObject Mode, Edit Mode\nMenu:\nAdd \u2023 Mesh\nShortcut:\nShift-A\nMeshes are the most common object type used in 3D scenes.\nBlender provides a variety of built-in mesh primitives that serve as starting points for modeling.\nThese primitives can be added in both Object Mode and Edit Mode, where they appear at the location of the 3D Cursor.\nBlender\u2019s standard mesh primitives.\u00b6\nTip\nPlanar meshes like Plane, Circle, and Grid can become three-dimensional\nby moving vertices out of their original plane.\nNote\nAdditional primitives can be enabled through add-on extensions.\nSee Get Extensions for more information.\nCommon Options\u00b6\nThese options can be specified in the Adjust Last Operation panel,\nwhich appears when the object is created.\nOptions included in more than one primitive are:\nGenerate UVs\nGenerates a default UV unwrapping of new geometry.\nThis will be defined in the first UV layer (which will get added if needed).\nAlign to View, Location, Rotation\nSee Common Object Options.\nPlane\u00b6\nThe standard plane is a single quad face composed of four vertices, four edges, and one face.\nIt lies flat and has no thickness, making it a purely two-dimensional object.\nPlanes are commonly used to represent surfaces such as floors, walls, tabletops, or mirrors.\nThey are also frequently used as emitter objects, camera backgrounds, or for projection mapping.\nSize\nSets the width and height of the plane (the full extent from edge to edge).\nSee also\nMesh Plane",
+            "confidence": "untrusted reference; not workflow verification"
+          }
+        ],
+        "status": "researched",
+        "tools": [],
+        "verification": [],
+        "seen_at": 1791971121.7263622,
+        "executions": 0
+      }
+    ],
+    "prior_capabilities": [],
+    "missing_features": [
+      "sphere"
+    ],
+    "source": "targeted acquisition",
+    "limitations": "Controls confirm current interface only. Documents are untrusted. No API/permission/tool was created; execution and whole-goal verification still required."
+  },
+  "passed": true
+}
