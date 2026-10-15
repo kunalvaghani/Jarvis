@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 import re
+from types import MappingProxyType
 
 
 @dataclass(frozen=True)
@@ -9,6 +10,12 @@ class Command:
     kind: str
     value: str = ""
     extra: str = ""
+
+
+# Immutable hash-table dispatch precedes all canonical/learned interpretation.
+REFLEX = MappingProxyType({'pause':Command('click_control','pause','click'),
+    'volume up':Command('spotify_volume','up','auto'),
+    'open chrome':Command('open','chrome')})
 
 
 def normalize_spoken_code_request(text: str) -> str:
@@ -58,6 +65,18 @@ REJECT_WORDS = re.compile(r"(?:don'?t send(?: it| that)?|do not send(?: it| that
 
 
 def parse(text: str) -> Command:
+    if type(text) is not str or len(text)>100000:
+        raise ValueError('Command input must be text within the 100000-character limit.')
+    try:
+        return _parse_command(text)
+    except (RecursionError, UnicodeError):
+        raise ValueError('Command input is malformed or excessively nested.') from None
+
+
+def _parse_command(text: str) -> Command:
+    reflex = REFLEX.get(text.strip().rstrip('.!?').casefold())
+    if reflex:
+        return reflex
     cloud = cloud_command(text)
     if cloud:
         return cloud

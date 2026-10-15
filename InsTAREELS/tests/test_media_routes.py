@@ -9,7 +9,7 @@ from jarvis.commands import Command, parse
 from jarvis.engine import Engine
 from jarvis import media_ui
 from jarvis.ui_controls import UIControls, _category
-from test_ui_controls import FakeRunner, control
+from tests.test_ui_controls import FakeRunner, control
 
 
 class MediaRoutesTests(unittest.TestCase):

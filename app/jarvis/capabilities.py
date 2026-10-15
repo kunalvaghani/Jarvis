@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import re
+from functools import lru_cache
 
 
 # These are runtime associations, not saved actions or provider-specific tool names.
@@ -120,12 +121,25 @@ def gmail_readiness_question(goal, tools):
             'test draft and say "draft expanded" so its controls can be checked.')
 
 
-def skill_score(row, goal):
-    preferred = {skill for name in intents(goal) for skill in ROUTES[name][2]}
-    native = {skill for _, _, guides in ROUTES.values() for skill in guides}
+@lru_cache(maxsize=2048)
+def _description_tokens(text):
+    return frozenset(tokens(text))
+
+
+def skill_ranking(goal):
+    return ({skill for name in intents(goal) for skill in ROUTES[name][2]},
+            {skill for _,_,guides in ROUTES.values() for skill in guides},tokens(goal))
+
+
+def skill_score(row, goal, ranking=None):
+    if not isinstance(row,dict) or not isinstance(row.get('name'),str) or not isinstance(row.get('description'),str):return 0
+    preferred,native,query = ranking if ranking is not None else skill_ranking(goal)
     if row.get('origin') == 'Builtins' and preferred and row['name'] in native and row['name'] not in preferred:
         return 0
-    score = len(tokens(goal) & tokens(row['name'].replace('-', ' ') + ' ' + row['description']))
+    description=(row['name'].replace('-', ' ')+' '+row['description'])[:2048]
+    from .cloud_policy import SECRET
+    metadata=tokens(description) if SECRET.search(description) else _description_tokens(description)
+    score = len(query & metadata)
     return score + 8 if row['name'] in preferred else score if score >= 2 else 0
 
 
@@ -144,8 +158,9 @@ def rank_tools(specs, query, allowed=None, skills=None, limit=12):
         for index, name in enumerate(ROUTES[intent][1]):
             boosts[name] = max(boosts.get(name, 0), 8 - min(index, 5) * .4)
     if skills is not None:
+        ranking=skill_ranking(query)
         for row in skills.catalog:
-            if skill_score(row, query) > 0:
+            if skill_score(row, query,ranking) > 0:
                 for name in skill_tools(row, specs):
                     boosts[name] = max(boosts.get(name, 0), 5)
     ranked = []
@@ -225,14 +240,16 @@ def runtime_context(goal, tool_rows, skills=None, memory_context=None, coding=Fa
     selected = []
     if skills is not None:
         skills.refresh()
-        ranked = sorted(skills.catalog, key=lambda row: (-skill_score(row, goal), row['name']))
-        for row in ranked:
-            if skill_score(row, goal) <= 0 and ('$custom:' + row['name']) not in goal:
+        ranking=skill_ranking(goal)
+        ranked = sorted(((skill_score(row,goal,ranking),row) for row in skills.catalog),key=lambda item:(-item[0],item[1]['name']))
+        for score,row in ranked:
+            if score <= 0 and ('$custom:' + row['name']) not in goal:
                 continue
             declared = skill_tools(row, names)
             unknown = sorted(set(row.get('tools', [])) - names)
             selected.append({'name': row['name'], 'origin': row['origin'], 'tools': declared,
-                             'tools_not_offered': unknown, 'read_via': 'skill_read folder=@jarvis'})
+                             'tools_not_offered': unknown, 'read_via': 'skill_read folder=@jarvis',
+                             'provenance':row.get('provenance'), 'trust':'untrusted_guidance'})
             if len(selected) == 3:
                 break
     wanted = {name for intent in intents(goal) for name in ROUTES[intent][1]}

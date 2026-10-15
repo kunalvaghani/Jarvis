@@ -106,7 +106,12 @@ class CapabilityGapDetector:
 
         # 1. Unreliable action kinds from the cognition world model's learned statistics.
         cognition = getattr(self.actions, "cognition", None)
-        stats = getattr(cognition, "stats", {}) or {}
+        from .cognition import Cognition
+        if isinstance(cognition, Cognition):
+            stats = cognition.procedure_stats()
+        else:
+            raw = getattr(cognition, 'stats', {})
+            stats = {k:Cognition._stat(v) for k,v in raw.items()} if isinstance(raw, dict) else {}
         for kind, st in stats.items():
             attempts, failures = st.get("attempts", 0), st.get("failures", 0)
             if attempts >= 3 and failures / max(1, attempts) > 0.5:
@@ -326,7 +331,7 @@ class SelfEvolution:
         try:
             import psutil
         except Exception:
-            return True  # Without psutil, rely on idle + cooldown gating only.
+            return False  # Unknown capacity must not start optional learning.
         try:
             available_mb = psutil.virtual_memory().available / (1024 * 1024)
             if available_mb < self.options["min_available_mb"]:
@@ -337,7 +342,7 @@ class SelfEvolution:
             if battery and not battery.power_plugged and battery.percent < 20:
                 return False
         except Exception:
-            return True
+            return False
         return True
 
     def _idle(self):

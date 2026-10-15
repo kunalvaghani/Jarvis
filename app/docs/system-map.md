@@ -4,6 +4,19 @@ A one-page summary of everything Jarvis has as of **2026-10-14 IST**: features,
 skills, tools, architecture, workflows, software, repositories and models, and
 how they connect. Each line is short; follow the links for details. Dated test
 results stay in the linked guides. This page makes no new verification claims.
+Architecture wording was corrected after the
+[2026-10-15 inventory audit](../artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md);
+the audit records implemented, missing, configured and live-unverified boundaries separately.
+
+[Prompts 02–04 follow-up — 2026-10-15](../artifacts/jarvis-audit/final-report.md)
+adds task identity checks, latest-document clarification, bounded voice ownership
+and final-buffer resampling. Its 93 fixture proofs and three acoustic blockers are
+separate from the historical feature counts and live service claims below.
+
+[Prompt 05 follow-up — 2026-10-15](../artifacts/jarvis-audit/modules/05-voice-tts/inventory.md)
+records pre-submission F5→Kokoro/Piper fallback, bounded speech/Stop ownership,
+playback progress and private diagnostic suppression. STT/F5 do not share the
+Ollama lease coordinator; live contention and listening acceptability remain open.
 
 ---
 
@@ -35,9 +48,16 @@ flowchart TD
     Evo --> Mem
 ```
 
-**Core idea:** one cognitive loop receives every input, routes it to the cheapest
-path that can do it (direct command → question → planned task), runs real tools
-behind safety checks, verifies the result, then stores what it learned.
+**Core idea:** cognition observes inputs and outcomes and refreshes attention at
+4 Hz. Commands route immediately to direct handlers, question workers or planned
+tasks; execution runs on owned workers, with registry checks and result feedback.
+The attention tick does not execute every tool or model call.
+
+The [2026-10-15 perception follow-up](../artifacts/jarvis-audit/modules/02-perception-cognition/inventory.md)
+adds stale-window invalidation and tick error/overrun/stall diagnostics. Those
+diagnostics alone do not establish hard native parser-hang containment. The
+completion pass separately added and tested task UUID agreement and stale-result
+rejection. The module ledger distinguishes those fixtures from live acceptance.
 
 ---
 
@@ -58,8 +78,14 @@ Source: [cognitive-architecture.md](cognitive-architecture.md), code in `jarvis/
 
 ## 3. Models and where each is used
 
-All local models run in **Ollama** on an RTX 3050 Laptop (4 GB VRAM), with partial
-GPU offload managed by `gpu_scheduler.py`.
+Local language models run in **Ollama**, with partial GPU offload managed by
+`gpu_scheduler.py`. Whisper uses CTranslate2, F5 uses its separate PyTorch
+environment, and Laya uses the brain environment; they are separate runtimes.
+The configured GPU is an RTX 3050 Laptop (4 GB VRAM).
+The [2026-10-15 GPU audit](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md)
+adds bounded state validation, unchanged-poll write elimination and conservative
+resource admission. F5/Whisper remain outside the Ollama lease coordinator;
+speech reserve is an estimate, not a shared native ownership protocol.
 
 | Model | Role | Config key |
 | --- | --- | --- |
@@ -79,20 +105,35 @@ GPU offload managed by `gpu_scheduler.py`.
 **Routing rule:** private data, PC actions and screen content never go to the
 cloud. Groq gets only a minimal public payload; if quota runs out or it fails,
 the same question runs locally.
+2026-10-15 routing audit: policy/quota refusal precedes a blocking metadata wait,
+backoff header casing is normalized, invalid usage retains reservations and
+route UUIDs correlate with accounting. Common key screening/redaction remains
+heuristic. [Current proof and limitations](../artifacts/jarvis-audit/modules/07-model-routing/inventory.md).
 
 ---
 
 ## 4. Request workflows
 
 ### A. Simple command ("open Chrome", "pause", "volume up")
-`voice → Whisper → cleanup → commands.parse/intent_catalog → Actions.execute → direct handler`. No model call.
+`voice → Whisper → cleanup → commands.parse/intent_catalog → Actions.execute → direct handler`.
+Direct routing and execution bypass planning/answer models. Whisper and optional
+cleanup inference happen before routing; typed commands can bypass speech processing.
 
 ### B. Question ("explain quantum computing")
-`QuickAnswers` (instant facts) → else `QuestionClient` → `context_selector` picks
-memory → Groq (if public and enabled) or local 9b → streamed to the island →
+`Knowledge` checks `QuickAnswers` (instant facts) and prepares bounded context
+through `context_selector` when needed → `QuestionClient` → Groq (if public and
+eligible) or local 9b → streamed to the island →
 phrases streamed to F5 speech → saved to conversation memory.
+2026-10-15 audit: private-context fallback cannot initiate public search; selector
+cancellation, bounded projection and serialized question transport are covered by
+[executed module06 checks](../artifacts/jarvis-audit/modules/06-questions-context/inventory.md).
 
 ### C. Task ("find my unread emails", "make this cube a sphere in Blender")
+The [2026-10-15 DAG/cache audit](../artifacts/jarvis-audit/modules/10-dag-planning/inventory.md)
+adds task UUID checks, exact read-restore binding, per-graph effect serialization
+and bounded invalid-cache fallback. Specialized account/UI workflows retain
+their existing approval paths. Fixture validation does not certify all tasks.
+
 1. **Deliberation** classifies risk and confidence and decides whether to proceed, recommend or ask.
 2. **Knowledge acquisition** researches the app/site if a gap is detected (cached 7 days).
 3. **Brain** plans: specialised workflow (Gmail, media, WhatsApp, coding) if one matches, otherwise next-step planning or a **hierarchical DAG** (parallel reads, typed references).
@@ -111,8 +152,9 @@ gaps → learns repos → ability forge builds tested commands → approval card
 repo learning from browsed GitHub pages, memory summarisation.
 
 ### F. Background safety
-`launcher.py` + `recovery.py` supervise every owned service with health checks,
-silent bounded restarts, and `.jarvis-runtime/repairs.jsonl` logging.
+`launcher.py` + `recovery.py` supervise registered services with health checks,
+restart controls, and `.jarvis-runtime/repairs.jsonl` logging. The manifest's
+service list alone does not prove a current watchdog registration or live health.
 
 ---
 
@@ -160,12 +202,12 @@ ToolRegistry executes. Unknown tool names never become executable.
 
 | Skill source | What it is | Count / location |
 | --- | --- | --- |
-| Bundled skills | app-navigation, browser-navigation, file-operations, form-entry, project-coding, repository-assimilation, reverse-engineer-clone, runtime-questions, spotify-media, web-research, youtube-media | [`skills/`](../skills/) |
+| Bundled skills | app-navigation, browser-navigation, file-operations, form-entry, project-coding, reverse-engineer-clone, runtime-questions, spotify-media, web-research, youtube-media | 10 readable SKILL.md files; repository-assimilation directory lacks SKILL.md in this checkout; [`skills/`](../skills/) |
 | Personal skills | Your own `SKILL.md` in the Obsidian vault `Jarvis Skills/Personal/` | hot-reloaded |
 | Custom skills | `custom-skills/<name>/SKILL.md` | local, ignored by git |
 | Hermes guides | Pinned Nous Research Hermes skill references | 210 guides |
 | DeerFlow guides | Public DeerFlow skill guides | 23 |
-| Utility skills | Reviewed local utilities (format, PDF, OCR, crypto, notebooks…) in `.venv-skills` | 38 local + 3 mock |
+| Utility skills | Reviewed local utilities (format, PDF, OCR, crypto, notebooks…) in `.venv-skills` | 0 currently offered: source-bound validation stale (2026-10-15); historical38 local +3 mock |
 | Repository skills | Python functions from learned repos, run in Docker | approval per call |
 | Repo abilities | Voice commands generated from learned repos | approval card |
 | Learned procedures | Verified past task steps + per-action success stats | Obsidian + `.jarvis-runtime/cognition/` |
@@ -293,6 +335,12 @@ flowchart LR
 ---
 
 ## 11. Safety rules applied everywhere
+
+The [Prompt09 audit](../artifacts/jarvis-audit/modules/09-deliberation/inventory.md)
+tests the following as specific fixture boundaries, not universal security proof.
+Deliberation is advisory: actual tools enforce per-action approvals. Qualified
+consent is not approval, risky ambiguity pauses planning and a bare refusal
+cancels. A deterministic unfamiliar-program research gate is still missing.
 
 - Sends, deletes, writes to accounts and new abilities need approval.
 - Uncertain external actions are never retried automatically; only reads and inference retry.

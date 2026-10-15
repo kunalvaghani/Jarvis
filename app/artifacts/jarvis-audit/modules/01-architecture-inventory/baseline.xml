@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.794" timestamp="2026-10-14T23:56:11.409700+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_architecture_audit" name="test_JRV_01_009_unknown_root_configuration_warns" time="0.314"><failure message="assert False&#10; +  where False = any(&lt;generator object test_JRV_01_009_unknown_root_configuration_warns.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000280FF231E00&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-107/test_JRV_01_009_unknown_root_c0')
+
+    def test_JRV_01_009_unknown_root_configuration_warns(tmp_path):
+        (tmp_path/'config').mkdir()
+        (tmp_path/'main.py').write_text('pass\n',encoding='utf-8')
+        config={**minimal_config(),'approve_all_untrusted_tools':True}
+        (tmp_path/'config/config.json').write_text(json.dumps(config),encoding='utf-8')
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            result=launcher.preflight(tmp_path,repair=False)
+&gt;       assert any('Unknown top-level' in str(w.message) for w in caught)
+E       assert False
+E        +  where False = any(&lt;generator object test_JRV_01_009_unknown_root_configuration_warns.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000280FF231E00&gt;)
+
+tests\test_architecture_audit.py:22: AssertionError</failure></testcase><testcase classname="tests.test_architecture_audit" name="test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload" time="0.008"><failure message="assert 'FAKE_' not in '[{&quot;version&quot;...eoutError&quot;}]'&#10;  &#10;  'FAKE_' is contained here:&#10;    ontent&quot;: &quot;FAKE_PRIVATE&quot;, &quot;api_key&quot;: &quot;FAKE_TOKEN&quot;}, {&quot;version&quot;: 1, &quot;at&quot;: &quot;2026-10-14T18:26:12.193331+00:00&quot;, &quot;event&quot;: &quot;tool.failed&quot;, &quot;call_id&quot;: &quot;bed2979d10414b0c9ab3ebf7212e15ea&quot;, &quot;tool&quot;: &quot;read_file&quot;, &quot;error_type&quot;: &quot;TimeoutError&quot;}]&#10;  ?           +++++">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-107/test_JRV_01_032_lifecycle_meta0')
+
+    def test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload(tmp_path):
+        actions=SimpleNamespace(base=tmp_path)
+        identifier=event(actions,'tool.started','read_file',content='FAKE_PRIVATE',api_key='FAKE_TOKEN')
+        event(actions,'tool.failed','read_file',identifier,error_type='TimeoutError')
+        rows=[json.loads(s) for s in (tmp_path/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
+        assert rows[0]['call_id']==rows[1]['call_id']==identifier
+        assert rows[1]['error_type']=='TimeoutError'
+&gt;       assert 'FAKE_' not in json.dumps(rows)
+E       assert 'FAKE_' not in '[{"version"...eoutError"}]'
+E         
+E         'FAKE_' is contained here:
+E           ontent": "FAKE_PRIVATE", "api_key": "FAKE_TOKEN"}, {"version": 1, "at": "2026-10-14T18:26:12.193331+00:00", "event": "tool.failed", "call_id": "bed2979d10414b0c9ab3ebf7212e15ea", "tool": "read_file", "error_type": "TimeoutError"}]
+E         ?           +++++
+
+tests\test_architecture_audit.py:32: AssertionError</failure></testcase></testsuite></testsuites>

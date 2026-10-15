@@ -1,0 +1,74 @@
+[
+  {
+    "environment": ".venv",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-brain",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-deerflow",
+    "python": "3.12.14",
+    "interpreter_present": true,
+    "dependency_check": "BLOCKED",
+    "conflicts": "",
+    "prerequisite": "pip unavailable in this interpreter"
+  },
+  {
+    "environment": ".venv-f5",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-harness",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-hermes",
+    "python": "3.14.7",
+    "interpreter_present": true,
+    "dependency_check": "BLOCKED",
+    "conflicts": "",
+    "prerequisite": "pip unavailable in this interpreter"
+  },
+  {
+    "environment": ".venv-hermes-bootstrap",
+    "python": "3.11.9",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-skills",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  },
+  {
+    "environment": ".venv-training",
+    "python": "3.10.6",
+    "interpreter_present": true,
+    "dependency_check": "PASS",
+    "conflicts": "",
+    "prerequisite": null
+  }
+]

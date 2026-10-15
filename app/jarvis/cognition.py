@@ -101,7 +101,8 @@ class Percept:
         self.salience, self.at = max(0., min(1., salience)), time.time()
 
     def weight(self, now):
-        return self.salience * math.exp(-(now - self.at) / 120.)  # Attention fades over about two minutes.
+        # Wall-clock corrections cannot amplify salience or overflow exp().
+        return self.salience * math.exp(-max(0., now - self.at) / 120.)
 
     def as_dict(self):
         return {"source": self.source, "modality": self.modality, "content": self.content,
@@ -111,8 +112,15 @@ class Percept:
 class Cognition:
     def __init__(self, actions, options=None):
         self.actions = actions
-        self.options = options or {}
+        if options is not None and not isinstance(options, dict):
+            raise ValueError('cognition options must be an object')
+        self.options = options if options is not None else {}
         self.enabled = self.options.get("enabled", True)
+        rate = self.options.get('cycle_hz', 4)
+        if type(self.enabled) is not bool:
+            raise ValueError('cognition.enabled must be a boolean')
+        if type(rate) not in (int, float) or not math.isfinite(rate):
+            raise ValueError('cognition.cycle_hz must be a finite number')
         self.lock = threading.RLock()
         self.percepts = deque(maxlen=200)
         self.inbox = deque(maxlen=200)
@@ -125,48 +133,108 @@ class Cognition:
         self.last_outcome = None
         self.lessons = deque(maxlen=50)
         self.cycles, self.cycle_started = 0, time.time()
+        self._cycle_clock = time.monotonic()
         self.stop = threading.Event()
         self.thread = None
         base = Path(getattr(actions, "base", "."))
         self.stats_path = base / ".jarvis-runtime" / "cognition" / "procedures.json"
         self.state_path = base / ".jarvis-runtime" / "cognition" / "state.json"
         self.stats = self._load_stats()
-        self.hz = float(self.options.get("cycle_hz", 4))
+        self.hz = max(.5, min(20., float(rate)))
+        self._flush = threading.Event()
+        self.writer_thread = None
+        self._writer_restarts = 0
+        self._stats_dirty = False
+        self._stats_io = threading.Lock()
+        self.persistence_error = None
+        self.dropped_events = 0
+        self.rejected_events = 0
+        self.tick_errors = 0
+        self.tick_error = None
+        self.tick_overruns = 0
+        self._last_tick = self._cycle_clock
+        self.tick_duration_ms = 0.
+        from scipy.special import betaincinv
+        self._beta_quantile = betaincinv  # Prime outside the loop, not on its first tick.
 
     # --- persistence ------------------------------------------------------------------------------------------------
     def _load_stats(self):
         try:
-            return json.loads(self.stats_path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
+            if self.stats_path.stat().st_size > 2_000_000:
+                return {}
+            value = json.loads(self.stats_path.read_text(encoding="utf-8"))
+            return dict(list(value.items())[:512]) if isinstance(value, dict) else {}
+        except (OSError, ValueError, RecursionError):
             return {}
 
     def _save_stats(self):
+        if self.thread and self.thread.is_alive() and not self.stop.is_set():
+            with self.lock:
+                self._stats_dirty = True
+            self._flush.set()
+            return
+        try:
+            self._write_stats()
+        except OSError as exc:
+            self.persistence_error = type(exc).__name__
+            # Statistics failure cannot change an external action's outcome.
+
+    def _write_stats(self):
+        with self._stats_io:
+            return self._write_stats_serial()
+
+    def _write_stats_serial(self):
+        with self.lock:
+            data = json.dumps(self.stats, ensure_ascii=True, indent=1)
+            self._stats_dirty = False
         try:
             self.stats_path.parent.mkdir(parents=True, exist_ok=True)
             temp = self.stats_path.with_suffix(".tmp")
-            temp.write_text(json.dumps(self.stats, ensure_ascii=False, indent=1), encoding="utf-8")
+            temp.write_text(data, encoding="utf-8")
             temp.replace(self.stats_path)
         except OSError:
-            pass
+            with self.lock:
+                self._stats_dirty = True
+            raise
 
     def _mark(self, module, started=None):
         now = time.time()
-        self.activity[module] = now
-        self.counts[module] += 1
-        if started is not None:
-            self.latency[module] = round((time.perf_counter() - started) * 1000, 2)
+        with self.lock:
+            self.activity[module] = now
+            self.counts[module] += 1
+            if started is not None:
+                self.latency[module] = round((time.perf_counter() - started) * 1000, 2)
 
     # --- 1. perception ----------------------------------------------------------------------------------------------
     def perceive(self, source, modality, content, salience=.5):
         """Any module reports something it sensed; the loop folds it into working memory."""
         if not self.enabled or not content:
             return
+        if any(type(value) is not str for value in (source, modality, content)) or len(source) > 64 or len(modality) > 32:
+            with self.lock:
+                self.rejected_events += 1
+            raise ValueError('cognition percept must contain bounded text labels and text content')
+        content = content[:300].encode('utf-8', errors='replace').decode('utf-8')
         started = time.perf_counter()
+        salience = salience if type(salience) in (int,float) and math.isfinite(salience) else .5
+        # Caller-provided sensor scores cannot eclipse a deliberate voice command
+        # or current-window observation. Critical alerts remain in their own UI.
+        salience = 1. if modality == 'speech' and source == 'you' else (.85 if source == 'screen' and modality == 'vision' else min(.7, salience))
         percept = Percept(source, modality, content, salience)
         with self.lock:
-            self.percepts.append(percept)
-            self.inbox.append(percept)
+            self._offer(self.percepts, percept)
+            self._offer(self.inbox, percept)
         self._mark("perception", started)
+
+    def _offer(self, queue, percept):
+        if len(queue) == queue.maxlen:
+            now = percept.at
+            lowest = min(queue, key=lambda p:(p.weight(now), p.at))
+            self.dropped_events += 1
+            if (percept.weight(now), percept.at) <= (lowest.weight(now), lowest.at):
+                return
+            queue.remove(lowest)
+        queue.append(percept)
 
     def perceive_command(self, command):
         if command.kind in {"island_choice", "memory_choice"}:
@@ -180,9 +248,20 @@ class Cognition:
                 self.workspace["goal"] = text[:200]
 
     def perceive_window(self, title):
-        if title and title != getattr(self, "_last_window", None):
-            self._last_window = title
-            self.perceive("screen", "vision", title, .5)
+        if type(title) is not str:
+            raise ValueError('cognition window title must be text')
+        title = title[:300].encode('utf-8', errors='replace').decode('utf-8')
+        with self.lock:
+            if title != getattr(self, "_last_window", None):
+                self._last_window = title
+                # Window observations are current context, not historical attention.
+                for queue in (self.percepts, self.inbox):
+                    stale = [p for p in queue if p.source == 'screen' and p.modality == 'vision']
+                    for percept in stale:
+                        queue.remove(percept)
+                self.attention = [p for p in self.attention if not (p.source == 'screen' and p.modality == 'vision')]
+                self.workspace['focus'] = title
+                self.perceive("screen", "vision", title, .5)
 
     # --- 2. working memory ------------------------------------------------------------------------------------------
     def update_workspace(self):
@@ -190,24 +269,32 @@ class Cognition:
         actions, now = self.actions, time.time()
         with self.lock:
             percepts = list(self.percepts)
-        self.attention = sorted(percepts, key=lambda p: p.weight(now), reverse=True)[:7]
+            window = getattr(self, '_last_window', None)
+        attention = sorted(percepts, key=lambda p:(p.weight(now), p.at), reverse=True)[:7]
         current = getattr(actions, "current_item", None)
         prompts = getattr(actions, "whatsapp_prompts", None) or []
         pending = getattr(prompts[-1], "question", "") if prompts else ("approval card waiting" if getattr(actions, "approvals_waiting", 0) else "")
         with self.lock:
+            # A window may change while external workspace attributes are read.
+            current_window = getattr(self, '_last_window', None)
+            if current_window != window:
+                attention = [p for p in attention if not (p.source == 'screen' and p.modality == 'vision')
+                             or p.content == current_window]
+            self.attention = attention
             self.workspace.update({
                 "active_task": ((current[1].value or current[1].kind)[:120] if current else ""),
                 "queued": len(getattr(actions, "pending_tasks", []) or []),
                 "pending": pending[:160],
                 "style": list((getattr(actions, "session_style", {}) or {}).values()),
-                "focus": next((p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
+                "focus": current_window if current_window is not None else next(
+                    (p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
             })
         self._mark("working_memory", started)
 
     def working_memory(self):
         with self.lock:
             snapshot = dict(self.workspace)
-        snapshot["attention"] = [p.source + ": " + p.content[:90] for p in self.attention]
+            snapshot["attention"] = [p.source + ": " + p.content[:90] for p in self.attention]
         return {k: v for k, v in snapshot.items() if v not in ("", [], 0, None)}
 
     # --- 3. long-term memory ----------------------------------------------------------------------------------------
@@ -260,7 +347,8 @@ class Cognition:
         """Simulate the action before it runs: effects, reversibility, approval, time, odds and uncertainty."""
         started = time.perf_counter()
         effect, reversible, external = effect_of(command.kind)
-        stat = self.stats.get(command.kind, {})
+        with self.lock:
+            stat = self._stat(self.stats.get(command.kind))
         attempts = stat.get("attempts", 0)
         success = (stat.get("successes", 0) + 1) / (attempts + 2)  # Laplace prior: unknown means 50/50.
         seconds = stat.get("mean_seconds") or DEFAULT_SECONDS.get(command.kind, 5)
@@ -278,9 +366,33 @@ class Cognition:
                       "external": external, "needs_approval": command.kind in APPROVAL_KINDS or external,
                       "expected_seconds": round(seconds, 1), "success_chance": round(success, 2), "uncertain": uncertain,
                       "at": time.time()}
+        a, b = stat.get('successes', 0)+1, attempts-stat.get('successes', 0)+1
+        prediction['confidence_interval'] = [round(float(self._beta_quantile(a,b,p)),4) for p in (.025,.975)]
+        prediction['confidence_method'] = 'Beta(1,1) posterior, equal-tailed 95% credible interval'
+        prediction['history_samples'] = attempts
         self.last_prediction = prediction
         self._mark("reasoning", started)
         return prediction
+
+    @staticmethod
+    def _stat(value):
+        value = value if isinstance(value, dict) else {}
+        def count(key, default=0):
+            number = value.get(key, default)
+            return number if type(number) is int and 0 <= number <= 1_000_000_000 else default
+        attempts = count('attempts')
+        successes = min(attempts, count('successes'))
+        seconds = value.get('mean_seconds', 0)
+        seconds = seconds if type(seconds) in (int,float) and math.isfinite(seconds) and seconds >= 0 else 0
+        return {**value, 'attempts':attempts,'successes':successes,'failures':attempts-successes,
+            'mean_seconds':seconds,'last_failure':str(value.get('last_failure',''))[:200]}
+
+    def procedure_stats(self, kind=None):
+        """Validated copy for every consumer; never expose mutable history rows."""
+        with self.lock:
+            if kind is not None:
+                return self._stat(self.stats.get(kind))
+            return {key:self._stat(value) for key,value in self.stats.items()}
 
     def _referent(self):
         """Something recent in working memory that 'it/that/her' can point at (a draft, a chat, a task)."""
@@ -296,7 +408,7 @@ class Cognition:
             parts.append("I'd show you a preview and wait for your approval first")
         parts.append("it usually takes about " + _seconds(prediction["expected_seconds"]))
         parts.append("based on past runs it succeeds about " + str(round(prediction["success_chance"] * 100)) + "% of the time"
-                     if self.stats.get(prediction["kind"], {}).get("attempts", 0) >= 3 else "I don't have enough history yet to estimate how often it works")
+                     if prediction.get('history_samples', 0) >= 3 else "I don't have enough history yet to estimate how often it works")
         text = parts[0] + "; " + "; ".join(parts[1:]) + "."
         if prediction["uncertain"]:
             text += " I'm unsure because " + "; ".join(prediction["uncertain"]) + "."
@@ -320,7 +432,16 @@ class Cognition:
         """Compare outcome with prediction and learn: timing, reliability, and a lesson after repeated failure."""
         started = time.perf_counter()
         kind = command.kind
-        stat = self.stats.setdefault(kind, {"attempts": 0, "successes": 0, "failures": 0, "mean_seconds": 0.})
+        with self.lock:
+            lesson = self._evaluate_locked(command, prediction, ok, seconds, detail, started)
+        if lesson:
+            self.consolidate(lesson)
+        self._save_stats()
+        self._mark('executive', started)
+
+    def _evaluate_locked(self, command, prediction, ok, seconds, detail, started):
+        kind = command.kind
+        stat = self.stats[kind] = self._stat(self.stats.get(kind))
         stat["attempts"] += 1
         stat["successes" if ok else "failures"] += 1
         stat["mean_seconds"] = round(seconds if not stat["mean_seconds"] else .7 * stat["mean_seconds"] + .3 * seconds, 2)
@@ -334,29 +455,29 @@ class Cognition:
                       .4 if ok else .8)
         recent_failures = stat["failures"] >= 3 and stat["failures"] / stat["attempts"] > .5
         if not ok and recent_failures:
-            self.consolidate(kind + " has failed " + str(stat["failures"]) + " of " + str(stat["attempts"]) +
-                             " times; last reason: " + str(detail)[:120])
-        self._save_stats()
-        self._mark("executive", started)
+            return kind + " has failed " + str(stat["failures"]) + " of " + str(stat["attempts"]) + " times; last reason: " + str(detail)[:120]
+        return None
 
     def feedback(self, reward, note):
         """Your correction or praise adjusts the last action's record (meta-learning from people, not just tools)."""
-        outcome = self.last_outcome
-        if not outcome:
-            return
-        stat = self.stats.setdefault(outcome["kind"], {"attempts": 0, "successes": 0, "failures": 0, "mean_seconds": 0.})
-        if reward < 0 and outcome["ok"]:
-            stat["successes"] = max(0, stat.get("successes", 0) - 1)
-            stat["failures"] = stat.get("failures", 0) + 1
-            stat["corrections"] = stat.get("corrections", 0) + 1
-            outcome["ok"] = False
-            self.consolidate("You corrected " + outcome["kind"] + " for '" + outcome["target"][:60] + "': " + note[:100])
-            self._save_stats()
+        with self.lock:
+            outcome = self.last_outcome
+            if not outcome or reward >= 0 or not outcome['ok']:
+                return
+            stat = self.stats[outcome['kind']] = self._stat(self.stats.get(outcome['kind']))
+            stat['successes'] = max(0, stat['successes']-1)
+            stat['failures'] += 1
+            stat['corrections'] = stat.get('corrections',0)+1
+            outcome['ok'] = False
+            lesson = "You corrected " + outcome['kind'] + " for '" + outcome['target'][:60] + "': " + note[:100]
+        self.consolidate(lesson)
+        self._save_stats()
 
     def consolidate(self, lesson):
         """Executive -> long-term memory: keep the lesson, and write it to the Obsidian vault."""
         lesson = datetime.now().strftime("%Y-%m-%d %H:%M") + " " + lesson
-        self.lessons.append(lesson)
+        with self.lock:
+            self.lessons.append(lesson)
         memory = getattr(self.actions, "memory", None)
         if memory is not None and hasattr(memory, "record"):
             try:
@@ -372,6 +493,8 @@ class Cognition:
             return run()
         prediction = self.predict(command)
         started = time.perf_counter()
+        state = getattr(self.actions, 'task_state', None)
+        prior_task = state.snapshot() if command.kind == 'task' and state is not None else None
         self._mark("action")
         with self.lock:
             self.workspace["last_action"] = command.kind + " " + (command.value or "")[:80]
@@ -381,7 +504,15 @@ class Cognition:
             self.evaluate(command, prediction, False, time.perf_counter() - started, str(exc))
             raise
         text = str(result or "")
-        ok = not re.match(r"^(?:i couldn'?t|couldn'?t|failed|error|not available|nothing was sent|cancelled)", text, re.I)
+        pending = getattr(self.actions, 'pending_opinion', None)
+        current_task = state.snapshot() if command.kind == 'task' and state is not None else None
+        execution_started = (current_task or {}).get('started_at') != (prior_task or {}).get('started_at')
+        if command.kind == 'task' and not execution_started and isinstance(pending, dict) and pending.get('goal') == command.value:
+            # A recommendation awaiting consent is not an executed procedure.
+            self.perceive('action', 'feedback', 'awaiting approval: task', .4)
+            self.latency['action'] = round((time.perf_counter() - started) * 1000, 1)
+            return result
+        ok = not re.match(r"^(?:i couldn'?t|couldn'?t|failed|error|not available|nothing was sent|cancelled|task (?:paused|cancelled|failed)|paused)", text, re.I)
         self.evaluate(command, prediction, ok, time.perf_counter() - started, "" if ok else text)
         self.latency["action"] = round((time.perf_counter() - started) * 1000, 1)
         return result
@@ -389,42 +520,116 @@ class Cognition:
     # --- the loop -------------------------------------------------------------------------------------------------
     def start(self):
         if self.enabled and not self.thread:
+            self.cycle_started, self._cycle_clock = time.time(), time.monotonic()
+            self.cycles = 0
+            self.writer_thread = threading.Thread(target=self._writer, name='Jarvis cognition persistence', daemon=True)
+            self.writer_thread.start()
             self.thread = threading.Thread(target=self.run, name="Jarvis cognitive loop", daemon=True)
             self.thread.start()
         return self
 
     def close(self):
         self.stop.set()
+        self._flush.set()
+        for worker in (self.thread, self.writer_thread):
+            if worker and worker is not threading.current_thread():
+                worker.join(timeout=2)
+
+    def persistence_healthy(self):
+        return bool(self.writer_thread and self.writer_thread.is_alive() and not self.persistence_error)
+
+    def repair_persistence(self):
+        with self.lock:
+            if self.stop.is_set() or not self.thread or not self.thread.is_alive():
+                return False
+            if self.writer_thread and self.writer_thread.is_alive():
+                self._flush.set()
+                return not self.persistence_error
+            if self._writer_restarts >= 3:
+                return False
+            self._writer_restarts += 1
+            self.writer_thread = threading.Thread(target=self._writer,name='Jarvis cognition persistence',daemon=True)
+            self.writer_thread.start()
+            return True
+
+    def _writer(self):
+        """One coalescing slot; disk latency never holds the tick thread's lock."""
+        final_flushes = 0
+        while True:
+            self._flush.wait(1.)
+            if self._flush.is_set() or self.stop.is_set():
+                self._flush.clear()
+                try:
+                    if self._stats_dirty:
+                        self._write_stats()
+                    self.write_state()
+                    self.persistence_error = None
+                except Exception as exc:
+                    self.persistence_error = type(exc).__name__
+            if self.stop.is_set():
+                # Updates admitted during an in-flight flush must survive shutdown.
+                # Never busy-loop on a disk fault or let shutdown replay an action.
+                if self._stats_dirty and not self.persistence_error and final_flushes < 2:
+                    final_flushes += 1
+                    self._flush.set()
+                    continue
+                return
 
     def run(self):
         period = 1. / max(.5, min(20., self.hz))
+        deadline = time.monotonic()+period
         last_write = 0.
-        while not self.stop.wait(period):
+        while not self.stop.wait(max(0,deadline-time.monotonic())):
+            started = time.monotonic()
             try:
                 self.tick()
-                if time.time() - last_write > 1.:
-                    self.write_state()
-                    last_write = time.time()
-            except Exception:
-                pass
+                self.tick_error = None
+                if time.monotonic() - last_write > 1.:
+                    if not self.writer_thread.is_alive():
+                        self.repair_persistence()
+                    self._flush.set()
+                    last_write = time.monotonic()
+            except Exception as exc:
+                self.tick_errors += 1
+                self.tick_error = type(exc).__name__
+            finally:
+                self._last_tick = time.monotonic()
+                self.tick_duration_ms = (self._last_tick - started) * 1000
+                if self.tick_duration_ms > period * 1000:
+                    self.tick_overruns += 1
+            deadline += period
+            if deadline <= time.monotonic():
+                deadline = time.monotonic()+period  # No catch-up burst after overload.
 
     def tick(self):
         with self.lock:
-            batch = list(self.inbox)
+            batch = bool(self.inbox)
             self.inbox.clear()
         if batch or self.cycles % 4 == 0:
             self.update_workspace()
         self.cycles += 1
 
     def measured_hz(self):
-        elapsed = max(1e-6, time.time() - self.cycle_started)
+        elapsed = max(1e-6, time.monotonic() - self._cycle_clock)
         return round(self.cycles / elapsed, 1)
 
     def snapshot(self):
+        with self.lock:
+            return self._snapshot_locked()
+
+    def _snapshot_locked(self):
         now = time.time()
-        stats = sorted(self.stats.items(), key=lambda kv: kv[1].get("attempts", 0), reverse=True)[:8]
+        stats = sorted(((k,self._stat(v)) for k,v in self.stats.items()), key=lambda kv: kv[1]['attempts'], reverse=True)[:8]
         return {
             "cycle_hz": self.measured_hz(), "cycles": self.cycles,
+            'dropped_events':self.dropped_events,'persistence_error':self.persistence_error,
+            'rejected_events': self.rejected_events,
+            'persistence_worker_alive':bool(self.writer_thread and self.writer_thread.is_alive()),
+            'persistence_worker_restarts':self._writer_restarts,
+            'tick_errors': self.tick_errors, 'tick_error': self.tick_error,
+            'tick_overruns': self.tick_overruns, 'tick_duration_ms': round(self.tick_duration_ms, 3),
+            'tick_degraded': bool(self.tick_error or (self.thread and self.thread.is_alive() and
+                time.monotonic() - self._last_tick > max(1., 3. / self.hz))),
             "modules": {name: {"active": now - self.activity[name] < 1.5, "last_s": round(now - self.activity[name], 1) if self.activity[name] else None,
                                "latency_ms": self.latency[name], "events": self.counts[name]} for name in MODULES},
             "working_memory": self.working_memory(),
@@ -435,11 +640,10 @@ class Cognition:
         }
 
     def write_state(self):
-        try:
-            self.state_path.parent.mkdir(parents=True, exist_ok=True)
-            self.state_path.write_text(json.dumps(self.snapshot(), ensure_ascii=False, default=str), encoding="utf-8")
-        except OSError:
-            pass
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.state_path.with_suffix('.tmp')
+        temporary.write_text(json.dumps(self.snapshot(),ensure_ascii=True,default=str),encoding='utf-8')
+        temporary.replace(self.state_path)
 
     def status_text(self):
         s = self.snapshot()

@@ -1,0 +1,7 @@
+# Scoped rollback and deterministic resume
+
+No new commit. Do not git-reset/checkout entire shared files: prior user work is dirty. If rollback is needed, Stop Jarvis normally, inspect source.patch and source-hashes.json, reverse only module07 hunks, and reconcile documentation/manifest. Local preimages are .jarvis-runtime/jarvis-audit/module07-pre/. The patch uses one context line to avoid unrelated personal configuration. Preserve subsequent edits, quota SQLite/history, conversations, credentials and personal files; never clear reservations to restore availability.
+
+Re-run the exact targeted command in inventory.md, then `python -m pytest tests -q --tb=short` and `python -m jarvis.launcher --check`. `python scripts/verification/verify_model_routing_audit.py` runs matched CPU fixtures using preserved preimages. `--local-journey` additionally runs fake loopback Groq429 and installed cached local9b through the real worker function, without live cloud/accounts/GUI/speech; run no other heavyweight GPU test concurrently. No missing model is downloaded. `python scripts/verification/report_model_routing_audit.py` publishes only successful completed XML/readiness/route evidence.
+
+Module07 has no incomplete fixture case ID. Next unexecuted module/case:08/JRV-08-001. Earliest global unresolved remains JRV-04-001; ../../remaining-case-ids.txt enumerates every remaining ID. Live Groq entitlement/billing and inference are separately blocked; do not enable them from test code or treat local flags as provider proof.

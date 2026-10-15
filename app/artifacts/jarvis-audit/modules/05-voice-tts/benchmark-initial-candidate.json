@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Owned four-second zero-PCM reference metadata and fixed text chunk boundaries; no inference, speaker, network or GPU. 20 alternating warm batches of40 requests and5 cold subprocess samples/build. RSS sampled, not peak.",
+  "before_cold_adapter_import": {
+    "p50_ms": 31.73149999929592,
+    "p95_ms": 31.906000003800727
+  },
+  "before_warm_reference_and_chunks": {
+    "p50_ms": 0.39707625001028646,
+    "p95_ms": 0.40620250001666136
+  },
+  "after_cold_adapter_import": {
+    "p50_ms": 29.204399994341657,
+    "p95_ms": 29.216499999165535
+  },
+  "after_warm_reference_and_chunks": {
+    "p50_ms": 0.3082149999499961,
+    "p95_ms": 0.3153800000291085
+  }
+}

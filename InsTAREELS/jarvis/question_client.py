@@ -6,12 +6,48 @@ import subprocess
 import sys
 import threading
 import time
+import uuid
+
+
+def bounded_request(value):
+    """Snapshot JSON data after a bounded traversal, before any worker side effect."""
+    pending, nodes, characters = [(value, 0)], 0, 0
+    while pending:
+        item, depth = pending.pop()
+        nodes += 1
+        if depth > 12 or nodes > 4096:
+            raise ValueError('Question request exceeds structural limits.')
+        if isinstance(item, str):
+            characters += len(item)
+        elif isinstance(item, dict):
+            if len(item) > 4096 or any(not isinstance(key, str) for key in item):
+                raise ValueError('Invalid question request object.')
+            pending.extend((key, depth+1) for key in item)
+            pending.extend((child, depth+1) for child in item.values())
+        elif isinstance(item, (list, tuple)):
+            if len(item) > 4096:
+                raise ValueError('Question request exceeds structural limits.')
+            pending.extend((child, depth+1) for child in item)
+        elif item is not None and type(item) not in (bool, int, float):
+            raise ValueError('Question request must contain JSON data only.')
+        if characters > 256000:
+            raise ValueError('Question request exceeds context budget.')
+    try:
+        return json.loads(json.dumps(value, allow_nan=False))
+    except (ValueError, OverflowError):
+        raise ValueError('Invalid question request data.') from None
 
 
 class QuestionClient:
     def __init__(self, base, report, timeout=None):
         self.base, self.report, self.timeout = Path(base), report, timeout
         self.process = self.responses = self.log = None
+        self.admission = threading.Lock()
+        self.last_request = None
+
+    def snapshot(self):
+        """Metadata only: prompts, model output and exception text stay out."""
+        return dict(self.last_request) if self.last_request else None
 
     def close(self):
         process, self.process = self.process, None
@@ -35,19 +71,60 @@ class QuestionClient:
         self.process = subprocess.Popen([sys.executable, "-u", "-m", "jarvis.knowledge_worker", "--serve"],
             cwd=self.base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.log,
             encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        responses = self.responses = queue.Queue()
+        responses = self.responses = queue.Queue(maxsize=64)
         process = self.process
+        def publish(value):
+            while self.process is process:
+                try:
+                    responses.put(value, timeout=.1)
+                    return True
+                except queue.Full:
+                    continue
+            return False
         def read():
             try:
                 for line in process.stdout:
-                    responses.put(line)
+                    if len(line) > 1_000_000:
+                        process.kill()
+                        break
+                    if not publish(line):
+                        break
             except (OSError, ValueError):
                 pass
             finally:
-                responses.put(None)
+                publish(None)
         threading.Thread(target=read, daemon=True).start()
 
     def request(self, request, cancelled):
+        request = bounded_request(request)
+        from .inference_limits import question_limits
+        if not isinstance(request, dict) or not isinstance(request.get('question'), str):
+            raise ValueError('Invalid question request.')
+        options = request.get('options', {})
+        if not isinstance(options, dict):
+            raise ValueError('Invalid question options.')
+        _, total = question_limits(options)  # Validate before spawning or sending.
+        if not self.admission.acquire(blocking=False):
+            deadline = time.monotonic() + total
+            while not self.admission.acquire(timeout=.05):
+                if cancelled():
+                    raise ValueError('Question cancelled while waiting for worker.')
+                if time.monotonic() >= deadline:
+                    raise TimeoutError('Question worker admission timed out.')
+        try:
+            self.last_request = {'trace_id': uuid.uuid4().hex, 'status': 'running'}
+            try:
+                result = self._request(request, cancelled)
+            except Exception as exc:
+                self.last_request = {**self.last_request, 'status': 'cancelled' if cancelled() else 'failed',
+                                     'error_type': type(exc).__name__}
+                raise
+            self.last_request = {**self.last_request, 'status': 'complete'}
+            return result
+        finally:
+            self.admission.release()
+
+    def _request(self, request, cancelled):
         import re
         # Stable across the existing worker-recovery attempt. An uncertain cloud
         # reservation is never dispatched twice after worker death.
@@ -98,6 +175,7 @@ class QuestionClient:
             if cancelled():
                 raise ValueError("Question cancelled.")
             try:
+                request = bounded_request(request)
                 self._start()
                 self.process.stdin.write(json.dumps(request) + "\n")
                 self.process.stdin.flush()
@@ -121,7 +199,11 @@ class QuestionClient:
                         continue
                     if line is None:
                         raise BrokenPipeError("Question worker stopped.")
+                    if not isinstance(line, str) or len(line) > 1_000_000:
+                        raise ValueError('Question worker response exceeds protocol limits.')
                     result = json.loads(line)
+                    if not isinstance(result, dict):
+                        raise ValueError('Invalid question worker response.')
                     if 'answer_progress' in result:
                         event = result['answer_progress']
                         if (not request.get('stream_answer') or not isinstance(event, dict)
@@ -135,8 +217,9 @@ class QuestionClient:
                         self.report('answer_stream', event)
                         continue
                     if result.get("error"):
-                        raise ValueError(result["error"])
-                    if not isinstance(result.get("answer"), str) or not result["answer"].strip():
+                        # Model/transport exceptions may contain prompts or credentials.
+                        raise ValueError('Question inference failed; no complete answer was returned.')
+                    if not isinstance(result.get("answer"), str) or not result["answer"].strip() or len(result['answer']) > 100000:
                         raise ValueError("Question worker returned no answer.")
                     return result
             except Exception as exc:

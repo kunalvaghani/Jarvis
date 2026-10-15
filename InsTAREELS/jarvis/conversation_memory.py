@@ -8,7 +8,7 @@ import uuid
 
 WORDS = re.compile(r"[^\W_]{3,}", re.UNICODE)
 STOPWORDS = set("the and for with from this that what when where why how can could would should please tell explain about more again remember recall previous session conversation discussed question answer does did was were are have has its into using used based give show want know first last current saved memory context yesterday today follow up jarvis".split())
-FOLLOWUP = re.compile(r"\b(?:it|its|they|them|their|this|that|those|these|same|continue|more|again|follow.up|previous|earlier|you said|we discussed)\b", re.I)
+FOLLOWUP = re.compile(r"\b(?:it|its|they|them|their|this|that|those|these|same|continue|more|again|follow.up|previous|earlier|you said|we discussed|what did (?:i|we) (?:ask|say|discuss))\b", re.I)
 
 
 def terms(text):

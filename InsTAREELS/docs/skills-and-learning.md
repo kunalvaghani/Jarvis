@@ -1,12 +1,22 @@
 # Skills and execution learning
 
+<!-- prompt11-audit -->
+**2026-10-15 skill-selection audit:** Current checked-out census is10 bundled,
+210 hash-verified Hermes guides and23 DeerFlow public guides. Local guide reads
+expose source hashes and untrusted-reference contracts. Tool bindings remain
+limited to current registered/allowed handlers. Missing utility environment or
+malformed/stale source-bound proof disables activation; current proof is stale,
+so0 utility tools are offered. Historical counts/live results below retain their
+original dates. [Assertions, performance, limits and rollback](../artifacts/jarvis-audit/modules/11-skill-selection/inventory.md).
+<!-- /prompt11-audit -->
+
 Updated 2026-10-02. Jarvis retrieves relevant workflow guidance and learns procedures from verified task completion, using the configured Obsidian vault. [Experience learning](experience-learning.md) now adds successful and failed cases, condition comparisons and scoped recovery evidence. This supplements the existing tool/app/project inventory and explicitly selected project skills.
 
 ## Research and design
 
 Firecrawl was used to read the [Agent Skills specification](https://agentskills.io/specification), [reference repository](https://github.com/agentskills/agentskills) and [Hermes skills documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills). The specification uses a skill directory containing `SKILL.md`, with name/description metadata and optional supporting resources. Metadata supports discovery before loading the relevant body. Hermes documents on-demand skills and workflow learning. Jarvis implements its own small procedure layer around its existing executor; no upstream scripts or skill marketplace packages are automatically executed.
 
-The nine current Jarvis guides are in [skills](../skills): YouTube, Spotify, project coding, file operations, app navigation, web research, form entry, runtime questions and browser navigation. The procedure-memory layer requires no paid service or model training. The browser upgrade adds Playwright; see [automation setup and verification](automation-upgrade.md).
+The ten current Jarvis guides are in [skills](../skills): YouTube, Spotify, project coding, file operations, app navigation, web research, form entry, runtime questions, browser navigation and reverse-engineer clone. The procedure-memory layer requires no paid service or model training. The browser upgrade adds Playwright; see [automation setup and verification](automation-upgrade.md).
 
 ## Obsidian files and usage
 

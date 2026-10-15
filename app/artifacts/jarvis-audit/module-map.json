@@ -1,0 +1,870 @@
+[
+  {
+    "number": 1,
+    "module": "architecture-inventory",
+    "title": "# PROMPT 01 \u2014 Architecture, dependency graph and truthful capability inventory",
+    "prompt_sha256": "e391ad0c4082dda3654e3048d520c7eb4ec220c70c595057b1c6f800730345e7",
+    "sources": [
+      "docs/system-map.md",
+      "jarvis",
+      "config/config.json",
+      "config/runtime_manifest.json",
+      "scripts",
+      "tests",
+      "README.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_project_structure.py",
+      "tests/test_capabilities.py",
+      "tests/test_runtime_health.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Architecture fixture audit complete; operational/live gaps remain in scoped inventory",
+    "audit_status": "COMPLETE",
+    "catalog_pass": 32
+  },
+  {
+    "number": 2,
+    "module": "perception-cognition",
+    "title": "# PROMPT 02 \u2014 Perception, 4 Hz cognition and attention arbitration",
+    "prompt_sha256": "2db2f81121e57445226766564271dae8261743671f639697a1e56358f5a23b26",
+    "sources": [
+      "jarvis/cognition.py",
+      "jarvis/engine.py",
+      "jarvis/context_hub.py",
+      "jarvis/screen_awareness.py",
+      "jarvis/weather_watch.py"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_cognition.py",
+      "tests/test_cognition_and_routing.py",
+      "tests/test_screen_awareness.py"
+    ],
+    "status": "FIXTURE COMPLETE",
+    "reason": "2026-10-15 executed fixture ledger: {'PASS': 32, 'FAIL': 0, 'BLOCKED': 0, 'SKIPPED': 0, 'NOT RUN': 0}; live integrations remain separate",
+    "audit_status": "PARTIAL",
+    "catalog_counts": {
+      "PASS": 32,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "SKIPPED": 0,
+      "NOT RUN": 0
+    }
+  },
+  {
+    "number": 3,
+    "module": "intent-direct",
+    "title": "# PROMPT 03 \u2014 Natural-language intents, deterministic reflexes and aliases",
+    "prompt_sha256": "b23ddab7d63947dc0323825b82ce34db18951d7388d996823da50c65f7fe483d",
+    "sources": [
+      "jarvis/commands.py",
+      "jarvis/engine.py",
+      "jarvis/actions.py",
+      "jarvis/intent_catalog.py",
+      "docs/natural-language.md",
+      "docs/windows-commands.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_jarvis.py",
+      "tests/test_intent_testbook.py",
+      "tests/test_natural_names.py",
+      "tests/test_windows_commands.py"
+    ],
+    "status": "FIXTURE COMPLETE",
+    "reason": "2026-10-15 executed fixture ledger: {'PASS': 32, 'FAIL': 0, 'BLOCKED': 0, 'SKIPPED': 0, 'NOT RUN': 0}; live integrations remain separate",
+    "audit_status": "PARTIAL",
+    "catalog_counts": {
+      "PASS": 32,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "SKIPPED": 0,
+      "NOT RUN": 0
+    }
+  },
+  {
+    "number": 4,
+    "module": "voice-stt",
+    "title": "# PROMPT 04 \u2014 Wake word, faster-whisper and command cleanup",
+    "prompt_sha256": "1d25d070397ec198504136e5c6183c7ef276fac0bf63d364f7e0cfb347109310",
+    "sources": [
+      "jarvis/voice_input.py",
+      "jarvis/engine.py",
+      "config/config.json",
+      "docs/fast-conversation.md",
+      "docs/push-to-write.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_whisper.py",
+      "tests/test_command_cleanup.py",
+      "tests/test_push_to_write.py"
+    ],
+    "status": "LIVE ACOUSTIC VALIDATION BLOCKED",
+    "reason": "2026-10-15 executed fixture ledger: {'PASS': 29, 'FAIL': 0, 'BLOCKED': 3, 'SKIPPED': 0, 'NOT RUN': 0}; live integrations remain separate",
+    "catalog_counts": {
+      "PASS": 29,
+      "FAIL": 0,
+      "BLOCKED": 3,
+      "SKIPPED": 0,
+      "NOT RUN": 0
+    }
+  },
+  {
+    "number": 5,
+    "module": "voice-tts",
+    "title": "# PROMPT 05 \u2014 F5-TTS streaming and Kokoro/Piper fallback",
+    "prompt_sha256": "3d85141cc74f2d97ec00c53289383260e7cee94005592ad45d0387187a8093af",
+    "sources": [
+      "jarvis/speech.py",
+      "jarvis/f5_speech.py",
+      "jarvis/kokoro_speech.py",
+      "jarvis/runtime_health.py",
+      "jarvis/piper_speech.py",
+      "jarvis/gpu_scheduler.py",
+      "jarvis/natural_voice.py",
+      "docs/f5-voice.md",
+      "config/config.json"
+    ],
+    "unresolved_candidates": [
+      "jarvis/speech_worker.py"
+    ],
+    "test_candidates": [
+      "tests/test_voice_tts_audit.py",
+      "tests/test_f5_speech.py",
+      "tests/test_speech.py",
+      "tests/test_natural_voice.py",
+      "tests/test_gpu_scheduler.py"
+    ],
+    "status": "LIVE ACCEPTANCE BLOCKED",
+    "reason": "30 catalog fixtures PASS; human pronunciation and shared STT/F5 contention unresolved. Real cached F5 and CPU no-playback paths passed.",
+    "catalog_counts": {
+      "PASS": 30,
+      "FAIL": 0,
+      "BLOCKED": 2,
+      "SKIPPED": 0,
+      "NOT RUN": 0
+    }
+  },
+  {
+    "number": 6,
+    "module": "questions-context",
+    "title": "# PROMPT 06 \u2014 Question worker, QuickAnswers and context selector",
+    "prompt_sha256": "9b72bf169388923ad1a7a874824a62c532f50b19dc0edee9b34ef8dc4952e542",
+    "sources": [
+      "jarvis/question_client.py",
+      "jarvis/knowledge_worker.py",
+      "jarvis/context_selector.py",
+      "jarvis/conversation_memory.py",
+      "jarvis/runtime_health.py",
+      "jarvis/knowledge.py",
+      "jarvis/quick_answers.py",
+      "jarvis/everyday_runtime.py",
+      "jarvis/documents.py",
+      "jarvis/hybrid_inference.py",
+      "jarvis/cloud_policy.py",
+      "docs/natural-conversation.md",
+      "docs/session-context.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_questions_context_audit.py",
+      "tests/test_knowledge.py",
+      "tests/test_question_speed.py",
+      "tests/test_conversation_context.py",
+      "tests/test_answer_stream.py",
+      "tests/test_groq.py",
+      "tests/test_documents.py"
+    ],
+    "status": "FIXTURE COMPLETE",
+    "reason": "32 catalog cases executed; two real cached default-model synthetic probes passed. Broad semantics, acoustic latency and live web acceptance remain open."
+  },
+  {
+    "number": 7,
+    "module": "model-routing",
+    "title": "# PROMPT 07 \u2014 Ollama/Groq task routing, quotas and privacy",
+    "prompt_sha256": "43561308db9c5f38432df69ad7b8df70021426b9e44b369ced35ce0265d9599e",
+    "sources": [
+      "jarvis/cloud_policy.py",
+      "jarvis/cloud_quota.py",
+      "jarvis/groq_adapter.py",
+      "jarvis/hybrid_inference.py",
+      "jarvis/obsidian_memory.py",
+      "jarvis/knowledge_worker.py",
+      "jarvis/brain.py",
+      "jarvis/model_selection.py",
+      "jarvis/model_performance.py",
+      "jarvis/gpu_scheduler.py",
+      "jarvis/cloud_cli.py",
+      "jarvis/diagnostics.py",
+      "docs/groq-hybrid.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_model_routing_audit.py",
+      "tests/test_groq.py",
+      "tests/test_gpu_scheduler.py",
+      "tests/test_question_speed.py",
+      "tests/test_answer_stream.py",
+      "tests/test_obsidian_memory.py"
+    ],
+    "status": "FIXTURE COMPLETE / LIVE CLOUD BLOCKED",
+    "reason": "32 catalog fixture cases executed; real cached local fallback passed. Real Groq inference, billing and entitlement acceptance not authorized/verified."
+  },
+  {
+    "number": 8,
+    "module": "gpu-scheduler",
+    "title": "# PROMPT 08 \u2014 RTX 3050 4 GB GPU scheduler and model offload",
+    "prompt_sha256": "3f35c8ffd6f3452e3e1d3b6cf353e8caa0579d6703adf0276df61df72e90bd97",
+    "sources": [
+      "jarvis/gpu_scheduler.py",
+      "jarvis/self_evolution.py",
+      "jarvis/repo_abilities.py",
+      "jarvis/brain.py",
+      "jarvis/speech.py",
+      "jarvis/f5_speech.py",
+      "jarvis/kokoro_speech.py",
+      "jarvis/audio.py",
+      "docs/gpu-priority.md"
+    ],
+    "unresolved_candidates": [
+      "jarvis/speech_worker.py (absent; actual speech subprocess uses kokoro_speech.py and f5_speech.py)"
+    ],
+    "test_candidates": [
+      "tests/test_gpu_scheduler_audit.py",
+      "tests/test_gpu_scheduler.py",
+      "tests/test_self_evolution.py",
+      "tests/test_repo_abilities.py",
+      "tests/test_voice_tts_audit.py"
+    ],
+    "status": "PARTIAL / SHARED SPEECH COORDINATION BLOCKED",
+    "reason": "30 catalog PASS,2 BLOCKED: F5/Whisper do not implement shared leases. Bounded scheduler/learning fixes and sequential real9b observations completed."
+  },
+  {
+    "number": 9,
+    "module": "deliberation",
+    "title": "# PROMPT 09 \u2014 Risk classification, approvals and world-model predictions",
+    "prompt_sha256": "4a7af43d8e4259a2e82d9253443ea8699a2bbebb36f01e3af0b4853cea193a33",
+    "sources": [
+      "jarvis/deliberation.py",
+      "jarvis/actions.py",
+      "jarvis/brain.py",
+      "jarvis/island_desk.py",
+      "jarvis/cognition.py",
+      "jarvis/task_recovery.py",
+      "jarvis/gmail_api.py",
+      "jarvis/gmail_writes.py",
+      "jarvis/whatsapp.py",
+      "docs/deliberation-engine.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_deliberation_audit.py",
+      "tests/test_deliberation.py",
+      "tests/test_brain.py",
+      "tests/test_cognition_and_routing.py",
+      "tests/test_task_recovery.py",
+      "tests/test_gmail_writes.py",
+      "tests/test_whatsapp.py"
+    ],
+    "status": "PARTIAL / MANDATORY UNFAMILIAR-PROGRAM RESEARCH BLOCKED",
+    "reason": "31 catalog fixture PASS,1 BLOCKED (006: no deterministic research-before-action gate); full policy/approval/recovery regression and readiness evidence captured. Live GUI/account consent not certified."
+  },
+  {
+    "number": 10,
+    "module": "dag-planning",
+    "title": "# PROMPT 10 \u2014 Hierarchical DAG tasks and verified plan cache",
+    "prompt_sha256": "55d30ce262563a778a09f3415fb114c12e1380763345883c1c54c0ed969f5b09",
+    "sources": [
+      "jarvis/dag_execution.py",
+      "jarvis/hierarchical.py",
+      "jarvis/task_state.py",
+      "jarvis/brain.py",
+      "jarvis/task_recovery.py",
+      "jarvis/tools.py",
+      "docs/hierarchical-execution.md",
+      "docs/hierarchical-benchmarks.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_dag_planning_audit.py",
+      "tests/test_hierarchical.py",
+      "tests/test_task_graph.py",
+      "tests/test_task_state.py",
+      "tests/test_task_recovery.py"
+    ],
+    "status": "FIXTURE COMPLETE / LIVE ACCEPTANCE UNVERIFIED",
+    "reason": "32 catalog fixture PASS; scoped DAG/cache/restore fixes, measured fingerprint tradeoff, full regression/readiness. No native model/account/UI or automatic partial rollback certification."
+  },
+  {
+    "number": 11,
+    "module": "skill-selection",
+    "title": "# PROMPT 11 \u2014 Bundled/personal/Hermes/DeerFlow skill selection",
+    "prompt_sha256": "cfa67c1178578c23c4f0843e62a9f265f303188ab9906667dc0441c811915592",
+    "sources": [
+      "jarvis/capabilities.py",
+      "jarvis/skill_memory.py",
+      "jarvis/hermes_skills.py",
+      "jarvis/utility_profiles.py",
+      "jarvis/agent_tools.py",
+      "jarvis/tools.py",
+      "jarvis/agent_events.py",
+      "jarvis/deerflow.py",
+      "docs/skills-and-learning.md",
+      "docs/runtime-capabilities.md",
+      "docs/hermes-skills-and-comparison.md",
+      "docs/utility-skills.md",
+      "docs/system-map.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_skill_selection_audit.py",
+      "tests/test_capabilities.py",
+      "tests/test_skill_memory.py",
+      "tests/test_hermes_skills.py",
+      "tests/test_utility_skills.py",
+      "tests/test_deerflow.py"
+    ],
+    "status": "31 FIXTURE PASS / 1 BLOCKED; LIVE ACCEPTANCE UNVERIFIED",
+    "reason": "Bounded guide/provenance/ranking/isolation/activation assertions; arbitrary PDF edit unavailable and utility validation stale. No new abilities/providers/helpers executed."
+  },
+  {
+    "number": 12,
+    "module": "tool-registry",
+    "title": "# PROMPT 12 \u2014 ToolRegistry contracts, argument validation and side effects",
+    "prompt_sha256": "222d86fd15e279b1fc882803d32c40449373a3c97a83e21e3ea379eef9844981",
+    "sources": [
+      "jarvis/actions.py",
+      "jarvis/toolkits.py",
+      "jarvis/tools.py",
+      "jarvis/native_tools.py",
+      "jarvis/capabilities.py"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_tools.py",
+      "tests/test_native_tools.py",
+      "tests/test_toolkits.py",
+      "tests/test_agent_runtime.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 13,
+    "module": "desktop-control",
+    "title": "# PROMPT 13 \u2014 Windows UIA/UFO/Windows-MCP/CUA desktop automation",
+    "prompt_sha256": "93738a2541b9b5f7f4e397ee4f4cfe6c570207a17f2b9d7a8a292caac33bef9c",
+    "sources": [
+      "jarvis/desktop_actions.py",
+      "jarvis/actions.py",
+      "integrations/execution-primitives",
+      "integrations/execution-upstream",
+      "docs/windows-commands.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_ui_controls.py",
+      "tests/test_visual_fallback.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 14,
+    "module": "browser-playwright",
+    "title": "# PROMPT 14 \u2014 Browser DOM automation, Playwright and web controls",
+    "prompt_sha256": "09a7081f626d70fcd23d57601ac4c4fc6e84ffbbae95f1cb9e7436e7be02c471",
+    "sources": [
+      "jarvis/browser_automation.py",
+      "jarvis/browser_worker.py",
+      "jarvis/app_knowledge.py",
+      "docs",
+      "tests"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 15,
+    "module": "app-research",
+    "title": "# PROMPT 15 \u2014 Autonomous app/site knowledge acquisition",
+    "prompt_sha256": "5789b4e2fc1e8eb47fce887db6ccf9aa40da497e6596460d16a53641ccb3c251",
+    "sources": [
+      "jarvis/knowledge_acquisition.py",
+      "jarvis/app_knowledge.py",
+      "jarvis/browser_worker.py",
+      "docs/autonomous-learning.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_knowledge_acquisition.py",
+      "tests/test_live_app_context.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 16,
+    "module": "memory",
+    "title": "# PROMPT 16 \u2014 Obsidian, SQLite, episodic/procedural memory and retrieval",
+    "prompt_sha256": "9f8f9a8bd387c26d62edf2fc8aeea7d924788b659ac7d8416ae078f4e81c815c",
+    "sources": [
+      "jarvis/memory_curator.py",
+      "jarvis/conversation_memory.py",
+      "jarvis/obsidian_memory.py",
+      "jarvis/skill_memory.py",
+      "jarvis/experience_memory.py",
+      "jarvis/context_hub.py"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_obsidian_memory.py",
+      "tests/test_cognition.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 17,
+    "module": "rag-documents",
+    "title": "# PROMPT 17 \u2014 File Buddy, LightRAG/GraphRAG and source citations",
+    "prompt_sha256": "6742b9e31173f9973c65e36504459ea8ec806e3510ec21910cbd0ec65566b626",
+    "sources": [
+      "jarvis",
+      "docs/file-buddy.md",
+      "jarvis/native_tools.py",
+      "jarvis/memory_curator.py"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_buddy.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 18,
+    "module": "repo-learning",
+    "title": "# PROMPT 18 \u2014 GitHub repository learning and reference-code reuse",
+    "prompt_sha256": "6fcd7f490c4691475f22eacffd19d61565089493bc97dffda40919ed75e1d8ed",
+    "sources": [
+      "jarvis/repo_learning.py",
+      "jarvis/repo_tools.py",
+      "jarvis/toolkits.py",
+      "docs/repo-learning.md",
+      "integrations"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_repo_learning.py",
+      "tests/test_repository_skills.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 19,
+    "module": "ability-forge",
+    "title": "# PROMPT 19 \u2014 Repository skill and voice ability forge",
+    "prompt_sha256": "fed60576b6f9c1b117c851b00195dc9ba85eb433897900095a68bff41918a991",
+    "sources": [
+      "jarvis/repo_abilities.py",
+      "jarvis/repo_learning.py",
+      "jarvis/capabilities.py",
+      "docs/repo-abilities.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_repo_abilities.py",
+      "tests/test_repository_skill_isolation.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 20,
+    "module": "self-evolution",
+    "title": "# PROMPT 20 \u2014 Idle self-evolution, self-patching and anticipation",
+    "prompt_sha256": "301a612a3b33b682e4e1188d9483ea9dd1568efe8220630c572b59e38f8c9a8b",
+    "sources": [
+      "jarvis/self_evolution.py",
+      "jarvis/anticipation.py",
+      "jarvis/repo_learning.py",
+      "jarvis/repo_abilities.py",
+      "docs/self-evolution.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_self_evolution.py",
+      "tests/test_anticipation.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 21,
+    "module": "native-coding",
+    "title": "# PROMPT 21 \u2014 Native coding backend and LocalGithub two-worker assembly",
+    "prompt_sha256": "8ceccb080bab2627eec5123c8b3413df5b353f1e14001731b5894e819aee6751",
+    "sources": [
+      "jarvis/native_coding.py",
+      "jarvis/coding_activity.py",
+      "jarvis/coding_console.py",
+      "jarvis/coding_curriculum.py",
+      "jarvis/coding_files.py",
+      "jarvis/coding_languages.py",
+      "jarvis/coding_lessons.py",
+      "jarvis/coding_operations.py",
+      "jarvis/coding_processes.py",
+      "jarvis/coding_programs.py",
+      "jarvis/coding_training_data.py",
+      "docs/native-coding.md"
+    ],
+    "unresolved_candidates": [
+      "LocalGithub path and integration"
+    ],
+    "test_candidates": [
+      "tests/test_native_coding.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 22,
+    "module": "web-development",
+    "title": "# PROMPT 22 \u2014 Web/app development and live previews",
+    "prompt_sha256": "9c19c9065e4d03006798a536e16a54bb331247bf0ebeaf6a363f9a8ec00c6d84",
+    "sources": [
+      "jarvis/native_coding.py",
+      "jarvis/browser_automation.py",
+      "jarvis",
+      "docs/web-app-development.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_development.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 23,
+    "module": "gmail",
+    "title": "# PROMPT 23 \u2014 Gmail API read/draft/send/labels/expiry and approvals",
+    "prompt_sha256": "7ba49fb6db608810b5537e2a707b00a246092fae92216a7016d99615cb1582ac",
+    "sources": [
+      "jarvis/gmail_api.py",
+      "jarvis/gmail_writes.py",
+      "docs/gmail-api.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_gmail_api.py",
+      "tests/test_gmail_writes.py",
+      "tests/test_gmail_workflows.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 24,
+    "module": "whatsapp",
+    "title": "# PROMPT 24 \u2014 WhatsApp messaging and call workflow",
+    "prompt_sha256": "56b7c31ab4b0531dfaeb0861e9bd8f92bc9b2b0eb9f0c0b7afde4d8753c1d344",
+    "sources": [
+      "jarvis/whatsapp.py",
+      "jarvis/messengers.py",
+      "docs/whatsapp.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_whatsapp.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 25,
+    "module": "media",
+    "title": "# PROMPT 25 \u2014 Spotify, YouTube and Windows media session control",
+    "prompt_sha256": "341a16873adaa6560eff7ad16552e18258339f2c790fca704307c8c8cbe2951b",
+    "sources": [
+      "jarvis/media_player.py",
+      "jarvis/spotify.py",
+      "jarvis/actions.py",
+      "docs/media-player.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_media_player.py",
+      "tests/test_media_routes.py",
+      "tests/test_spotify.py",
+      "tests/test_media_process_ownership.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 26,
+    "module": "realtime-data",
+    "title": "# PROMPT 26 \u2014 82 realtime API adapters, weather alerts and reliability",
+    "prompt_sha256": "91de6faeeda8a72527d216bf83dea3283199152a75461f29faf16aad045582a6",
+    "sources": [
+      "jarvis/realtime.py",
+      "jarvis/realtime_sources.py",
+      "jarvis/weather_watch.py",
+      "docs/realtime-data.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_realtime.py",
+      "tests/test_memory_weather.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 27,
+    "module": "gods-eye",
+    "title": "# PROMPT 27 \u2014 God\u2019s Eye map, flight/camera/area signals",
+    "prompt_sha256": "e2193cbd155c6223cfa34c094ed97dd4c498fad9792950f05f7f848411febc1b",
+    "sources": [
+      "jarvis/gods_eye.py",
+      "integrations/gods-eye-view-src",
+      "docs/gods-eye.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_gods_eye.py",
+      "tests/test_gods_eye_view.py",
+      "tests/test_gods_eye_cameras.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 28,
+    "module": "sandbox-deerflow",
+    "title": "# PROMPT 28 \u2014 DeerFlow research and Docker media sandbox",
+    "prompt_sha256": "aebf35577f43a9f78fdef2372b6ca4793f693cfa2c8fb6b073595aac9d4bd998",
+    "sources": [
+      "jarvis/deerflow.py",
+      "jarvis/deerflow_sandbox.py",
+      "jarvis/docker_runtime.py",
+      "docs/deerflow.md",
+      "docs/deerflow-sandbox.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_deerflow.py",
+      "tests/test_repository_skill_isolation.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 29,
+    "module": "reverse-engineering",
+    "title": "# PROMPT 29 \u2014 REA analysis, clone/iterate and source isolation",
+    "prompt_sha256": "5e06606ba0df72975701035f32a018a3fd1cec382a601ec1957fd64aa5b34530",
+    "sources": [
+      "jarvis/rea_tools.py",
+      "integrations",
+      "docs/rea-reverse-engineer-clone.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_rea_tools.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 30,
+    "module": "harness-planners",
+    "title": "# PROMPT 30 \u2014 Hermes Agent, DeepSeek Harness, Laya selector and fallbacks",
+    "prompt_sha256": "23f0bd252d35375bb19b8de386f331fd881867f4aada3ae1e817c96e7105e94e",
+    "sources": [
+      "jarvis/brain.py",
+      "jarvis",
+      "integrations",
+      "docs/deerflow.md",
+      "config/config.json"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_hermes.py",
+      "tests/test_harness.py",
+      "tests/test_model_selection.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 31,
+    "module": "ui-island-pip",
+    "title": "# PROMPT 31 \u2014 Dynamic Island UI, Pip, notifications and accessibility",
+    "prompt_sha256": "9352474cd2c61696b2246767639dfa43f61c6b13954a053144a8b8b1763abadd",
+    "sources": [
+      "jarvis",
+      "docs/dynamic-island.md",
+      "docs/file-buddy.md",
+      "docs/independent-cursor.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_buddy.py",
+      "tests/test_island.py",
+      "tests/test_hud.py",
+      "tests/test_independent_cursor.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 32,
+    "module": "service-recovery",
+    "title": "# PROMPT 32 \u2014 Launcher, manifest, crash recovery and checkpoint semantics",
+    "prompt_sha256": "badebdaab56d5b1eb5aa7516cb0ccd64229025e8e11c40142817cfeaf0bb6459",
+    "sources": [
+      "jarvis/launcher.py",
+      "jarvis/recovery.py",
+      "config/runtime_manifest.json",
+      "docs/CRASH_RECOVERY.md",
+      "Start Jarvis.cmd",
+      "Stop Jarvis.cmd"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_recovery.py",
+      "tests/test_task_recovery.py",
+      "tests/test_launcher_readiness.py",
+      "tests/test_task_state.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 33,
+    "module": "mcp-integrations",
+    "title": "# PROMPT 33 \u2014 MCP, calendar, Jira, Slack and optional adapters",
+    "prompt_sha256": "37a5e1a4b531435d5634eb75bb339d544ce126bc1c0e5d0c523916ca9a26b04a",
+    "sources": [
+      "jarvis/mcp_bridge.py",
+      "jarvis/toolkits.py",
+      "config/config.json",
+      "docs/superagi-toolkits.md"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_toolkits.py",
+      "tests/test_agent_runtime.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 34,
+    "module": "dependencies",
+    "title": "# PROMPT 34 \u2014 Python/Node/CUDA/Ollama/Playwright dependency modernization",
+    "prompt_sha256": "5caa08774209e8b601c264a24d046bb74c437b124016cb7b5a464fcfe88ec0f7",
+    "sources": [
+      "requirements",
+      ".venv",
+      ".venv-brain",
+      ".venv-deerflow",
+      ".venv-f5",
+      ".venv-harness",
+      ".venv-hermes",
+      ".venv-hermes-bootstrap",
+      ".venv-skills",
+      ".venv-training",
+      "config/runtime_manifest.json",
+      "scripts",
+      "integrations",
+      "Start Jarvis.cmd"
+    ],
+    "unresolved_candidates": [
+      "package*.json"
+    ],
+    "test_candidates": [
+      "tests/test_launcher_readiness.py",
+      "tests/test_project_structure.py",
+      "tests/test_ollama_models.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 35,
+    "module": "security",
+    "title": "# PROMPT 35 \u2014 Prompt injection, tool permissions, secrets and privacy red-team",
+    "prompt_sha256": "ef309fc4bed6b74550829da97aa8ba0a623f8982bc03fce748e575d14ba1196f",
+    "sources": [
+      "jarvis/deliberation.py",
+      "jarvis/actions.py",
+      "jarvis/capabilities.py",
+      "jarvis/knowledge_worker.py",
+      "jarvis/toolkits.py",
+      "config/config.json"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_groq.py",
+      "tests/test_repository_skill_isolation.py",
+      "tests/test_toolkits.py",
+      "tests/test_agent_runtime.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 36,
+    "module": "observability",
+    "title": "# PROMPT 36 \u2014 Telemetry, performance, regressions and benchmarks",
+    "prompt_sha256": "f7c2d84dc7378bcf8f014938a5b2ae44288b0d6fba782c34be5fa28c46530ffe",
+    "sources": [
+      "jarvis",
+      "scripts",
+      "tests",
+      "artifacts",
+      "config/runtime_manifest.json"
+    ],
+    "unresolved_candidates": [],
+    "test_candidates": [
+      "tests/test_agent_runtime.py",
+      "tests/test_runtime_health.py",
+      "tests/test_cognition_and_routing.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  },
+  {
+    "number": 37,
+    "module": "e2e",
+    "title": "# PROMPT 37 \u2014 Cross-component realistic Jarvis acceptance and adversarial journeys",
+    "prompt_sha256": "242b8f4334023701a5896b26b29df87ac11e52aafb857a83a230f9db466f2b6e",
+    "sources": [
+      "docs/system-map.md",
+      "tests",
+      "scripts",
+      "config",
+      "artifacts"
+    ],
+    "unresolved_candidates": [
+      "entire jarvis/"
+    ],
+    "test_candidates": [
+      "tests/test_hierarchical.py",
+      "tests/test_knowledge_acquisition.py",
+      "tests/test_task_routing.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+  }
+]

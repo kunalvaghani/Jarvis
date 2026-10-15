@@ -59,6 +59,11 @@ RULES = [
      r"(?:which|what) (?:cities|places|countries|regions) have (?:live )?(?:cctv|cameras)(?: .*)?|"
      r"(?:is there|are there) (?:any )?(?:live )?(?:cctv|cameras) (?:in|for) .+", lambda m: C("gods_eye_cameras", "coverage")),
     # --- references and compound requests the planner or a question should resolve --------------------------
+    (r"open (?:my |the )?(?:latest|most recent) (?:spreadsheet|document|file|report)",
+     lambda m: C('task', m[0])),
+    (r"turn (?:the )?sound (up|down) a notch", lambda m: C('spotify_volume', m[1].lower(), 'auto')),
+    (r"pause what(?:'s| is) playing", lambda m: C('click_control', 'pause', 'click')),
+    (r"i said close (?:this|the) tab,? not the browser", lambda m: C('windows_command', '[329]', '{}')),
     (r"open youtube,? (?:find|search for) (.+?),? and play (?:the official video|it|the official version)",
      lambda m: C("play_media", m[1] + (" official" if "official" in m[0].lower() else ""), "youtube")),
     (r"search (youtube|spotify) for (.+?),? (?:and )?play it(?:,? .*)?", lambda m: C("play_media", m[2], m[1].casefold())),
@@ -670,7 +675,9 @@ def _style(word):
     return list(STYLES.get(word, ("style", "normal")))
 
 
-COMPILED = [(re.compile(pattern, FLAGS), builder) for pattern, builder in RULES]
+COMPILED = tuple((re.compile(pattern, FLAGS), builder) for pattern, builder in RULES)
+import hashlib
+BUILTIN_PATTERN_SHA256 = hashlib.sha256('\n'.join(pattern.pattern for pattern,_ in COMPILED).encode('utf-8')).hexdigest()
 
 
 def match(text):

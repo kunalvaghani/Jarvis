@@ -1,0 +1,2067 @@
+--- captured-before/jarvis/audio.py
++++ jarvis/audio.py
+@@ -1,311 +1,361 @@
+-"""Continuous capture, Silero speech detection, and independent CUDA decoding.
+-
+-Whisper is chunk based. Rolling hypotheses update once a second; superseded
+-partials are coalesced while final segments and window boundaries are ordered.
+-"""
+-from collections import deque
+-from dataclasses import dataclass
+-import math
+-from pathlib import Path
+-import queue
+-import re
+-import threading
+-import time
+-
+-ASR_PROMPT = "Jarvis, Spotify, YouTube, Notepad, Calculator, File Explorer, Python."
+-# Ends hands-free writing; matched alone or at the end of a phrase ("... see you tomorrow. Stop writing.").
+-STOP_WRITING = re.compile(r"(?:^|[\s,.!?]+)(?:(?:hey |ok |okay )?jarvis[, ]+)?(?:stop|end|finish|quit) (?:writing|dictating|dictation|typing)"
+-                          r"(?: now| please| jarvis)?[.!?]*$|^(?:that'?s all|i'?m done|done writing)[.!?]*$", re.I)
+-
+-
+-@dataclass
+-class DecodeJob:
+-    utterance: int
+-    offset: float
+-    audio: object
+-    final: bool = False
+-    rollover: bool = False
+-    playback: bool = False
+-    references: tuple = ()
+-    write: bool = False  # Spoken while the push-to-write keys were held: typed, not a command.
+-    session: int = 0
+-
+-
+-class DecodeQueue:
+-    def __init__(self, limit=12):
+-        self.items = deque()
+-        self.lock = threading.Condition()
+-        self.limit = limit
+-
+-    def put(self, job):
+-        with self.lock:
+-            if self.items:
+-                last = self.items[-1]
+-                if (last.utterance == job.utterance and last.offset == job.offset
+-                        and not last.final and not last.rollover):
+-                    self.items.pop()
+-            if len(self.items) >= self.limit:
+-                raise RuntimeError("Whisper cannot keep up; listening stopped instead of executing stale commands.")
+-            self.items.append(job)
+-            self.lock.notify()
+-
+-    def get(self):
+-        with self.lock:
+-            if not self.items:
+-                self.lock.wait(0.2)
+-            return self.items.popleft() if self.items else None
+-
+-
+-def command_text(text):
+-    # Whisper adds casing and punctuation. Preserve extension dots inside words.
+-    text = text.replace("’", "'")
+-    text = re.sub(r"\b([a-z0-9_-]+)\.\s+(?=(?:text|txt|py|js|jsx|ts|tsx|json|html|css|md|yaml|yml|toml)\b)",
+-                  r"\1.", text, flags=re.I)
+-    text = re.sub(r"[.,!?;:]+(?=\s|$)", " ", text)
+-    return " ".join(text.lower().split())
+-
+-
+-class TranscriptAssembler:
+-    def __init__(self):
+-        self.utterance = None
+-        self.prefix = []
+-        self.cutoff = -1.0
+-
+-    def merge(self, job, words):
+-        if job.utterance != self.utterance:
+-            self.utterance = job.utterance
+-            self.prefix = []
+-            self.cutoff = -1.0
+-        remaining = [(job.offset + end, word) for end, word in words
+-                     if job.offset + end > self.cutoff + 0.05]
+-        text = " ".join(self.prefix + [word.strip() for _, word in remaining])
+-        if job.rollover:
+-            # Next window begins at +16s. Commit through +18s, retaining two
+-            # seconds of shared context before the first uncommitted word.
+-            committed = [(end, word) for end, word in remaining if end <= job.offset + 18.0]
+-            self.prefix.extend(word.strip() for _, word in committed)
+-            if committed:
+-                self.cutoff = committed[-1][0]
+-        return text
+-
+-
+-class Listener:
+-    def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None,
+-                 playback=None, input_filter=None, references=None, command_cleanup=None,
+-                 push_to_write=None, writer=None):
+-        self.model_path, self.device = Path(model_path), device
+-        self.engine, self.report = engine, report
+-        self.options = options or {}
+-        self.activate_on_start = activate_on_start
+-        self.muted = muted or (lambda: False)
+-        self.playback = playback or (lambda: False)
+-        self.input_filter = input_filter
+-        self.command_cleanup = command_cleanup
+-        self.push_to_write, self.writer = push_to_write, writer
+-        self.references = references or (lambda: ())
+-        self.stop_event = threading.Event()
+-        self.audio = queue.Queue(maxsize=100)
+-        self.overflow = threading.Event()
+-        self.jobs = DecodeQueue()
+-        self.thread = threading.Thread(target=self.run, daemon=True)
+-        self.decoder = None
+-        self.capture_started = False
+-        self.last_audio = time.monotonic()
+-        self.decode_started = None
+-
+-    def start(self):
+-        self.thread.start()
+-
+-    def stop(self):
+-        self.stop_event.set()
+-
+-    def _decode(self, model):
+-        assembler = TranscriptAssembler()
+-        try:
+-            while not self.stop_event.is_set():
+-                job = self.jobs.get()
+-                if job is None:
+-                    continue
+-                self.decode_started = time.monotonic()
+-                language = self.options.get("language", "en")
+-                segments, _ = model.transcribe(
+-                    job.audio, language=None if language == "auto" else language,
+-                    beam_size=5 if job.final else 3, temperature=0,
+-                    condition_on_previous_text=False, word_timestamps=True,
+-                    vad_filter=False, no_speech_threshold=0.6,
+-                    log_prob_threshold=-1.0, compression_ratio_threshold=2.4,
+-                    initial_prompt=ASR_PROMPT)
+-                words = []
+-                for segment in segments:
+-                    # Whisper treats high no_speech_prob as silence only when
+-                    # the transcript itself also has low log probability.
+-                    if segment.avg_logprob < -1.0:
+-                        continue
+-                    words.extend((word.end, word.word) for word in segment.words or [])
+-                self.decode_started = None
+-                if self.stop_event.is_set():
+-                    break
+-                if self.muted():
+-                    continue
+-                text = assembler.merge(job, words)
+-                if job.write:
+-                    discarded = getattr(self.push_to_write, 'discarded', ())
+-                    if job.final and text.strip() and self.writer and job.session not in discarded:
+-                        text = text.strip()
+-                        if getattr(self.push_to_write, 'latched', False):
+-                            # Hands-free writing: "stop writing" (alone or at the end) ends it and isn't typed.
+-                            stop = STOP_WRITING.search(text)
+-                            if stop:
+-                                text = text[:stop.start()].rstrip(' ,')
+-                            self.push_to_write.last_write = time.monotonic()
+-                            if text:
+-                                self.report("final", text)
+-                                self.writer(text, job.session)
+-                            if stop:
+-                                self.push_to_write.latch(False)
+-                            continue
+-                        self.report("final", text)
+-                        self.writer(text, job.session)
+-                    continue
+-                accepted = self.input_filter(text, job.playback, job.references) if self.input_filter else command_text(text)
+-                if accepted is None:
+-                    continue
+-                self.report("final" if job.final else "partial", accepted if job.playback else text)
+-                if job.final and self.command_cleanup:
+-                    accepted = self.command_cleanup.clean(accepted, self.engine,
+-                        lambda: self.stop_event.is_set() or self.muted())
+-                if self.stop_event.is_set():
+-                    break
+-                if self.muted():
+-                    continue
+-                self.engine.feed(accepted, final=job.final, raw=text)
+-        except Exception as exc:
+-            self.report("fatal", f"Whisper GPU decoding failed: {exc}")
+-            self.stop_event.set()
+-
+-    def run(self):
+-        try:
+-            import numpy as np
+-            import sounddevice as sd
+-            from scipy.signal import resample_poly
+-            from .whisper_backend import load_model
+-            self.report("state", "Loading Whisper on GPU…")
+-            model = load_model(self.model_path, self.options)
+-            from faster_whisper.vad import get_vad_model
+-            if self.stop_event.is_set():
+-                return
+-            # Inference exposes missing CUDA DLLs before microphone capture.
+-            warmup, _ = model.transcribe(np.zeros(16000, dtype=np.float32), language="en", beam_size=1)
+-            list(warmup)
+-            if self.stop_event.is_set():
+-                return
+-            vad = get_vad_model()
+-            self.decoder = threading.Thread(target=self._decode, args=(model,), daemon=True)
+-            self.decoder.start()
+-            device = sd.query_devices(self.device, "input")
+-            rate = int(device["default_samplerate"])
+-            divisor = math.gcd(rate, 16000)
+-
+-            def callback(data, frames, timing, status):
+-                self.last_audio = time.monotonic()
+-                if status:
+-                    self.overflow.set()
+-                if self.muted():
+-                    return
+-                try:
+-                    self.audio.put_nowait((data[:, 0].copy(), bool(self.playback()), self.references()))
+-                except queue.Full:
+-                    self.overflow.set()
+-
+-            utterance, offset, silent, next_partial = 0, 0.0, 0.0, 0.0
+-            active = False
+-            writing, was_held, session = False, False, 0
+-            active_playback = False
+-            active_references = ()
+-            captured = np.empty(0, dtype=np.float32)
+-            history = np.empty(0, dtype=np.float32)
+-            interval = float(self.options.get("partial_interval_seconds", 1.0))
+-            silence = float(self.options.get("silence_seconds", 0.8))
+-            threshold = float(self.options.get("vad_threshold", 0.45))
+-            with sd.InputStream(samplerate=rate, blocksize=int(rate * 0.1), device=self.device,
+-                                dtype="float32", channels=1, callback=callback):
+-                self.capture_started = True
+-                self.last_audio = time.monotonic()
+-                self.report("backend", f"Whisper {self.options.get('model', 'small')} · {model.model.device} · {model.model.compute_type} · {device['name']}")
+-                if self.activate_on_start:
+-                    self.engine.activate()
+-                else:
+-                    self.report("state", "Listening for Jarvis · Whisper GPU")
+-                while not self.stop_event.is_set():
+-                    if self.overflow.is_set():
+-                        raise RuntimeError("Microphone overflow; listening stopped. Select another input device and restart.")
+-                    try:
+-                        block, block_playback, block_references = self.audio.get(timeout=0.2)
+-                    except queue.Empty:
+-                        continue
+-                    self.last_audio = time.monotonic()
+-                    if self.muted():
+-                        active = False
+-                        captured = np.empty(0, dtype=np.float32)
+-                        history = np.empty(0, dtype=np.float32)
+-                        continue
+-                    self.report("level", min(100.0, float(np.sqrt(np.mean(block ** 2))) * 500))
+-                    held = bool(self.push_to_write is not None and self.push_to_write.active.is_set())
+-                    if held:
+-                        session = self.push_to_write.session
+-                    if was_held and not held and active and writing:
+-                        # Keys released mid-sentence: type what was said so far right away.
+-                        self.jobs.put(DecodeJob(utterance, offset, np.concatenate((captured, block)), final=True,
+-                                                write=True, session=session))
+-                        active = writing = False
+-                        captured = np.empty(0, dtype=np.float32)
+-                        history = np.empty(0, dtype=np.float32)
+-                        was_held = held
+-                        continue
+-                    was_held = held
+-                    if rate != 16000:
+-                        block = resample_poly(block, 16000 // divisor, rate // divisor).astype(np.float32)
+-                    history = np.concatenate((history, block))[-16384:]
+-                    padded = np.pad(history, (0, (-len(history)) % 512))
+-                    probabilities = np.asarray(vad(padded.copy())).reshape(-1)
+-                    speech = bool(np.max(probabilities[-4:]) >= threshold)
+-                    if not active:
+-                        if not speech:
+-                            continue
+-                        active = True
+-                        writing = held
+-                        active_playback = block_playback
+-                        active_references = tuple(block_references)
+-                        utterance += 1
+-                        captured = history.copy()
+-                        offset, silent, next_partial = 0.0, 0.0, interval
+-                    else:
+-                        captured = np.concatenate((captured, block))
+-                        writing = writing or held
+-                        active_playback = active_playback or block_playback
+-                        active_references = tuple(dict.fromkeys(active_references + tuple(block_references)))[-8:]
+-                    silent = 0.0 if speech else silent + len(block) / 16000
+-                    duration = len(captured) / 16000
+-                    if silent >= silence:
+-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback,
+-                                                references=active_references, write=writing, session=session))
+-                        active = writing = False
+-                        captured = np.empty(0, dtype=np.float32)
+-                        history = np.empty(0, dtype=np.float32)
+-                    elif duration >= 20.0:
+-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback,
+-                                                references=active_references, write=writing, session=session))
+-                        captured = captured[16 * 16000:]
+-                        offset += 16.0
+-                        next_partial = len(captured) / 16000 + interval
+-                    elif duration >= next_partial and not writing:
+-                        # No partial decoding while writing: only finished phrases are typed.
+-                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
+-                        next_partial = duration + interval
+-        except Exception as exc:
+-            self.report("fatal", str(exc))
+-        finally:
+-            self.stop_event.set()
+-            if self.decoder:
+-                self.decoder.join()
+-            self.report("listener_stopped", "Microphone off")
++"""Continuous capture, Silero speech detection, and independent CUDA decoding.
++
++Whisper is chunk based. Rolling hypotheses update once a second; superseded
++partials are coalesced while final segments and window boundaries are ordered.
++"""
++from collections import deque
++from dataclasses import dataclass
++import math
++from pathlib import Path
++import queue
++import re
++import threading
++import time
++import uuid
++from .whisper_backend import settings
++
++
++def workers_alive(listener):
++    """A stopped capture thread may still own a stuck native CUDA decoder."""
++    return bool(listener and any(worker is not None and worker.is_alive()
++        for worker in (getattr(listener, 'thread', None), getattr(listener, 'decoder', None))))
++
++ASR_PROMPT = "Jarvis, Spotify, YouTube, Notepad, Calculator, File Explorer, Python."
++# Ends hands-free writing; matched alone or at the end of a phrase ("... see you tomorrow. Stop writing.").
++STOP_WRITING = re.compile(r"(?:^|[\s,.!?]+)(?:(?:hey |ok |okay )?jarvis[, ]+)?(?:stop|end|finish|quit) (?:writing|dictating|dictation|typing)"
++                          r"(?: now| please| jarvis)?[.!?]*$|^(?:that'?s all|i'?m done|done writing)[.!?]*$", re.I)
++
++
++@dataclass
++class DecodeJob:
++    utterance: int
++    offset: float
++    audio: object
++    final: bool = False
++    rollover: bool = False
++    playback: bool = False
++    references: tuple = ()
++    write: bool = False  # Spoken while the push-to-write keys were held: typed, not a command.
++    session: int = 0
++
++
++class DecodeQueue:
++    def __init__(self, limit=12):
++        if type(limit) is not int or not 1<=limit<=128:
++            raise ValueError('Whisper decode queue limit must be between 1 and 128')
++        self.items = deque()
++        self.lock = threading.Condition()
++        self.limit = limit
++
++    def put(self, job):
++        if (not isinstance(job, DecodeJob) or type(job.utterance) is not int or not 0<=job.utterance<2**63
++                or type(job.session) is not int or not 0<=job.session<2**63
++                or type(job.offset) not in (int,float) or not math.isfinite(job.offset) or job.offset<0
++                or any(type(value) is not bool for value in (job.final,job.rollover,job.playback,job.write))):
++            raise ValueError('Invalid Whisper decode job metadata')
++        with self.lock:
++            if self.items:
++                last = self.items[-1]
++                if (last.utterance == job.utterance and last.offset == job.offset
++                        and not last.final and not last.rollover):
++                    self.items.pop()
++            if len(self.items) >= self.limit:
++                raise RuntimeError("Whisper cannot keep up; listening stopped instead of executing stale commands.")
++            self.items.append(job)
++            self.lock.notify()
++
++    def get(self):
++        with self.lock:
++            if not self.items:
++                self.lock.wait(0.2)
++            return self.items.popleft() if self.items else None
++
++
++def command_text(text):
++    # Whisper adds casing and punctuation. Preserve extension dots inside words.
++    text = text.replace("’", "'")
++    text = re.sub(r"\b([a-z0-9_-]+)\.\s+(?=(?:text|txt|py|js|jsx|ts|tsx|json|html|css|md|yaml|yml|toml)\b)",
++                  r"\1.", text, flags=re.I)
++    text = re.sub(r"[.,!?;:]+(?=\s|$)", " ", text)
++    return " ".join(text.lower().split())
++
++
++class TranscriptAssembler:
++    def __init__(self):
++        self.utterance = None
++        self.prefix = []
++        self.cutoff = -1.0
++
++    def merge(self, job, words):
++        if job.utterance != self.utterance:
++            self.utterance = job.utterance
++            self.prefix = []
++            self.cutoff = -1.0
++        remaining = [(job.offset + end, word) for end, word in words
++                     if job.offset + end > self.cutoff + 0.05]
++        text = " ".join(self.prefix + [word.strip() for _, word in remaining])
++        if job.rollover:
++            # Next window begins at +16s. Commit through +18s, retaining two
++            # seconds of shared context before the first uncommitted word.
++            committed = [(end, word) for end, word in remaining if end <= job.offset + 18.0]
++            self.prefix.extend(word.strip() for _, word in committed)
++            if committed:
++                self.cutoff = committed[-1][0]
++        return text
++
++
++class Listener:
++    def __init__(self, model_path, device, engine, report, options=None, activate_on_start=False, muted=None,
++                 playback=None, input_filter=None, references=None, command_cleanup=None,
++                 push_to_write=None, writer=None):
++        self.model_path, self.device = Path(model_path), device
++        self.engine, self.report = engine, report
++        self.options = settings(options)
++        self.activate_on_start = activate_on_start
++        self.muted = muted or (lambda: False)
++        self.playback = playback or (lambda: False)
++        self.input_filter = input_filter
++        self.command_cleanup = command_cleanup
++        self.push_to_write, self.writer = push_to_write, writer
++        self.references = references or (lambda: ())
++        self.stop_event = threading.Event()
++        self.audio = queue.Queue(maxsize=100)
++        self.overflow = threading.Event()
++        self.jobs = DecodeQueue()
++        self.thread = threading.Thread(target=self.run, daemon=True)
++        self.decoder = None
++        self.capture_started = False
++        self.last_audio = time.monotonic()
++        self.decode_started = None
++        self.error = None
++        self.error_type = None
++        self.duplicate_jobs = 0
++        self.trace_id = uuid.uuid4().hex
++
++    def start(self):
++        self.thread.start()
++
++    def stop(self):
++        self.stop_event.set()
++        with self.jobs.lock:
++            self.jobs.items.clear()
++            self.jobs.lock.notify_all()
++        while True:
++            try:self.audio.get_nowait()
++            except queue.Empty:break
++
++    def _fail(self, code, exc=None):
++        codes = {'capture_failure','decode_failure','decoder_stalled','model_missing',
++            'cuda_unavailable','cuda_libraries_missing'}
++        self.error = code if code in codes else 'capture_failure'
++        self.error_type = type(exc).__name__ if exc is not None and type(exc).__module__ == 'builtins' else None
++        self.report('fatal', 'Voice input unavailable ('+self.error+'); microphone off. Typed input remains available.')
++
++    def health(self):
++        return {'trace_id':self.trace_id,'error':self.error,'error_type':self.error_type,'capture_started':self.capture_started,
++            'capture_alive':self.thread.is_alive(), 'decoder_alive':bool(self.decoder and self.decoder.is_alive()),
++            'stopping':self.stop_event.is_set(), 'audio_backlog':self.audio.qsize(),
++            'decode_backlog':len(self.jobs.items), 'duplicate_jobs':self.duplicate_jobs}
++
++    def _decode(self, model):
++        assembler = TranscriptAssembler()
++        finalized = -1  # Capture emits monotonically increasing utterance IDs.
++        try:
++            while not self.stop_event.is_set():
++                job = self.jobs.get()
++                if job is None:
++                    continue
++                if job.utterance <= finalized:
++                    self.duplicate_jobs += 1
++                    continue
++                if job.final:
++                    finalized = job.utterance  # Final/late-partial retransmissions cannot replay an effect.
++                self.decode_started = time.monotonic()
++                language = self.options.get("language", "en")
++                segments, _ = model.transcribe(
++                    job.audio, language=None if language == "auto" else language,
++                    beam_size=5 if job.final else 3, temperature=0,
++                    condition_on_previous_text=False, word_timestamps=True,
++                    vad_filter=False, no_speech_threshold=0.6,
++                    log_prob_threshold=-1.0, compression_ratio_threshold=2.4,
++                    initial_prompt=ASR_PROMPT)
++                words = []
++                for segment in segments:
++                    # Whisper treats high no_speech_prob as silence only when
++                    # the transcript itself also has low log probability.
++                    if segment.avg_logprob < -1.0:
++                        continue
++                    words.extend((word.end, word.word) for word in segment.words or [])
++                self.decode_started = None
++                if self.stop_event.is_set():
++                    break
++                if self.muted():
++                    continue
++                text = assembler.merge(job, words)
++                if job.write:
++                    discarded = getattr(self.push_to_write, 'discarded', ())
++                    if job.final and text.strip() and self.writer and job.session not in discarded:
++                        text = text.strip()
++                        if getattr(self.push_to_write, 'latched', False):
++                            # Hands-free writing: "stop writing" (alone or at the end) ends it and isn't typed.
++                            stop = STOP_WRITING.search(text)
++                            if stop:
++                                text = text[:stop.start()].rstrip(' ,')
++                            self.push_to_write.last_write = time.monotonic()
++                            if text:
++                                self.report("final", text)
++                                self.writer(text, job.session)
++                            if stop:
++                                self.push_to_write.latch(False)
++                            continue
++                        self.report("final", text)
++                        self.writer(text, job.session)
++                    continue
++                accepted = self.input_filter(text, job.playback, job.references) if self.input_filter else command_text(text)
++                if accepted is None:
++                    continue
++                self.report("final" if job.final else "partial", accepted if job.playback else text)
++                if job.final and self.command_cleanup:
++                    accepted = self.command_cleanup.clean(accepted, self.engine,
++                        lambda: self.stop_event.is_set() or self.muted())
++                if self.stop_event.is_set():
++                    break
++                if self.muted():
++                    continue
++                self.engine.feed(accepted, final=job.final, raw=text)
++        except Exception as exc:
++            self._fail('decode_failure', exc)
++            self.stop_event.set()
++        finally:
++            self.decode_started = None
++
++    def run(self):
++        try:
++            import numpy as np
++            import sounddevice as sd
++            from scipy.signal import resample_poly
++            from .whisper_backend import load_model
++            self.report("state", "Loading Whisper on GPU…")
++            model = load_model(self.model_path, self.options)
++            from faster_whisper.vad import get_vad_model
++            if self.stop_event.is_set():
++                return
++            # Inference exposes missing CUDA DLLs before microphone capture.
++            warmup, _ = model.transcribe(np.zeros(16000, dtype=np.float32), language="en", beam_size=1)
++            list(warmup)
++            if self.stop_event.is_set():
++                return
++            vad = get_vad_model()
++            self.decoder = threading.Thread(target=self._decode, args=(model,), daemon=True)
++            self.decoder.start()
++            device = sd.query_devices(self.device, "input")
++            rate = int(device["default_samplerate"])
++            divisor = math.gcd(rate, 16000)
++
++            def callback(data, frames, timing, status):
++                if self.stop_event.is_set():
++                    return
++                self.last_audio = time.monotonic()
++                if status:
++                    self.overflow.set()
++                if self.muted():
++                    return
++                try:
++                    self.audio.put_nowait((data[:, 0].copy(), bool(self.playback()), self.references()))
++                except queue.Full:
++                    self.overflow.set()
++
++            utterance, offset, silent, next_partial = 0, 0.0, 0.0, 0.0
++            active = False
++            writing, was_held, session = False, False, 0
++            active_playback = False
++            active_references = ()
++            captured = np.empty(0, dtype=np.float32)
++            history = np.empty(0, dtype=np.float32)
++            interval = float(self.options.get("partial_interval_seconds", 1.0))
++            silence = float(self.options.get("silence_seconds", 0.8))
++            threshold = float(self.options.get("vad_threshold", 0.45))
++            with sd.InputStream(samplerate=rate, blocksize=int(rate * 0.1), device=self.device,
++                                dtype="float32", channels=1, callback=callback):
++                self.capture_started = True
++                self.last_audio = time.monotonic()
++                self.report("backend", f"Whisper {self.options.get('model', 'small')} · {model.model.device} · {model.model.compute_type} · {device['name']}")
++                if self.activate_on_start:
++                    self.engine.activate()
++                else:
++                    self.report("state", "Listening for Jarvis · Whisper GPU")
++                while not self.stop_event.is_set():
++                    if self.overflow.is_set():
++                        raise RuntimeError("Microphone overflow; listening stopped. Select another input device and restart.")
++                    try:
++                        block, block_playback, block_references = self.audio.get(timeout=0.2)
++                    except queue.Empty:
++                        continue
++                    self.last_audio = time.monotonic()
++                    if self.muted():
++                        active = False
++                        captured = np.empty(0, dtype=np.float32)
++                        history = np.empty(0, dtype=np.float32)
++                        continue
++                    self.report("level", min(100.0, float(np.sqrt(np.mean(block ** 2))) * 500))
++                    if rate != 16000:
++                        block = resample_poly(block, 16000 // divisor, rate // divisor).astype(np.float32)
++                    held = bool(self.push_to_write is not None and self.push_to_write.active.is_set())
++                    if held:
++                        session = self.push_to_write.session
++                    if was_held and not held and active and writing:
++                        # Keys released mid-sentence: type what was said so far right away.
++                        self.jobs.put(DecodeJob(utterance, offset, np.concatenate((captured, block)), final=True,
++                                                write=True, session=session))
++                        active = writing = False
++                        captured = np.empty(0, dtype=np.float32)
++                        history = np.empty(0, dtype=np.float32)
++                        was_held = held
++                        continue
++                    was_held = held
++                    history = np.concatenate((history, block))[-16384:]
++                    padded = np.pad(history, (0, (-len(history)) % 512))
++                    probabilities = np.asarray(vad(padded)).reshape(-1)  # np.pad already owns a fresh buffer.
++                    speech = bool(np.max(probabilities[-4:]) >= threshold)
++                    if not active:
++                        if not speech:
++                            continue
++                        active = True
++                        writing = held
++                        active_playback = block_playback
++                        active_references = tuple(block_references)
++                        utterance += 1
++                        captured = history.copy()
++                        offset, silent, next_partial = 0.0, 0.0, interval
++                    else:
++                        captured = np.concatenate((captured, block))
++                        writing = writing or held
++                        active_playback = active_playback or block_playback
++                        active_references = tuple(dict.fromkeys(active_references + tuple(block_references)))[-8:]
++                    silent = 0.0 if speech else silent + len(block) / 16000
++                    duration = len(captured) / 16000
++                    if silent >= silence:
++                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback,
++                                                references=active_references, write=writing, session=session))
++                        active = writing = False
++                        captured = np.empty(0, dtype=np.float32)
++                        history = np.empty(0, dtype=np.float32)
++                    elif duration >= 20.0:
++                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback,
++                                                references=active_references, write=writing, session=session))
++                        captured = captured[16 * 16000:]
++                        offset += 16.0
++                        next_partial = len(captured) / 16000 + interval
++                    elif duration >= next_partial and not writing:
++                        # No partial decoding while writing: only finished phrases are typed.
++                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
++                        next_partial = duration + interval
++        except Exception as exc:
++            self._fail(getattr(exc,'code','capture_failure'), exc)
++        finally:
++            self.stop_event.set()
++            if self.decoder:
++                self.decoder.join(timeout=2.)
++                if self.decoder.is_alive():
++                    self._fail('decoder_stalled')
++            self.report("listener_stopped", "Microphone off")
+--- captured-before/jarvis/whisper_backend.py
++++ jarvis/whisper_backend.py
+@@ -3,8 +3,34 @@
+ from pathlib import Path
+ import site
+ import ctypes
++import math
+ 
+ _dll_handles = []
++
++
++def settings(options=None):
++    """Validate capture/decoder options before opening a device or starting workers."""
++    if options is not None and not isinstance(options, dict):
++        raise ValueError('whisper options must be an object')
++    result = {**{'device':'cuda', 'compute_type':'int8_float16', 'language':'en',
++        'partial_interval_seconds':1., 'silence_seconds':.8, 'vad_threshold':.45}, **(options or {})}
++    if result['device'] not in ('cuda', 'cpu'):
++        raise ValueError('whisper.device must be cuda or cpu')
++    if not isinstance(result['compute_type'], str) or not result['compute_type'].strip() or len(result['compute_type'])>32:
++        raise ValueError('whisper.compute_type must name a CTranslate2 precision')
++    if not isinstance(result['language'], str) or not result['language'].strip() or len(result['language'])>32:
++        raise ValueError('whisper.language must name a language or auto')
++    for name, low, high in (('partial_interval_seconds',.2,5), ('silence_seconds',.2,5), ('vad_threshold',0,1)):
++        value = result[name]
++        if type(value) not in (int,float) or not math.isfinite(value) or not low<=value<=high:
++            raise ValueError('whisper.'+name+' is outside its finite capture range')
++    return result
++
++
++class WhisperUnavailable(RuntimeError):
++    def __init__(self, code, message):
++        super().__init__(message)
++        self.code = code
+ 
+ 
+ def prepare_cuda():
+@@ -27,20 +53,21 @@
+             try:
+                 ctypes.WinDLL(name)
+             except OSError as exc:
+-                raise RuntimeError(f"CUDA library {name} could not be loaded. Run scripts/setup/setup.ps1 to finish installing the GPU libraries. {exc}") from exc
++                raise WhisperUnavailable('cuda_libraries_missing', f"CUDA library {name} could not be loaded. Run scripts/setup/setup.ps1 to finish installing the GPU libraries.") from exc
+ 
+ 
+ def load_model(path, options):
++    options = settings(options)
+     prepare_cuda()
+     import ctranslate2
+     from faster_whisper import WhisperModel
+     device = options.get("device", "cuda")
+     if device == "cuda" and ctranslate2.get_cuda_device_count() < 1:
+-        raise RuntimeError("CUDA GPU unavailable. Check the NVIDIA driver, then run setup.ps1. No CPU fallback was used.")
++        raise WhisperUnavailable('cuda_unavailable', "CUDA GPU unavailable. Check the NVIDIA driver, then run setup.ps1. No CPU fallback was used.")
+     if device == "cuda":
+         check_cuda_libraries()
+     if not (Path(path) / "model.bin").is_file():
+-        raise RuntimeError("Whisper model missing. Run scripts/setup/setup.ps1 to download it once.")
++        raise WhisperUnavailable('model_missing', "Whisper model missing. Run scripts/setup/setup.ps1 to download it once.")
+     return WhisperModel(str(path), device=device,
+                         compute_type=options.get("compute_type", "int8_float16"),
+                         local_files_only=True, cpu_threads=4, num_workers=1)
+--- captured-before/main.py
++++ main.py
+@@ -1,657 +1,670 @@
+-from jarvis.paths import config_file
+-import json
+-import ctypes
+-from ctypes import wintypes
+-import os
+-from pathlib import Path
+-import queue
+-import threading
+-import time
+-
+-from jarvis.display import enable_high_dpi
+-enable_high_dpi()  # Must precede Tk/native window creation, including verification entry points.
+-
+-# Publish actual interpreter identity before loading UI/native dependencies.
+-_session = os.environ.get("JARVIS_SESSION_ID")
+-if _session and os.environ.get("JARVIS_UI_VERIFY") != "1":
+-    _runtime = Path(__file__).resolve().parent / ".jarvis-runtime"
+-    _runtime.mkdir(exist_ok=True)
+-    (_runtime / ("heartbeat-" + _session + ".json")).write_text(json.dumps({
+-        "session": _session, "pid": os.getpid(), "at": time.time(), "status": "starting"}), encoding="utf-8")
+-import tkinter as tk
+-from tkinter import ttk
+-from tkinter.scrolledtext import ScrolledText
+-
+-from jarvis.actions import Actions, Desktop
+-from jarvis.audio import Listener
+-from jarvis.engine import Engine
+-from jarvis.commands import Command
+-from jarvis.speech import Speech
+-from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
+-
+-BASE = Path(__file__).resolve().parent
+-
+-
+-class App:
+-    def __init__(self, root):
+-        self.root = root
+-        from jarvis.config_contract import load_config
+-        self.config = load_config(config_file(BASE))
+-        if os.environ.get("JARVIS_UI_VERIFY") == "1":
+-            self.config["memory"] = {"enabled": False}
+-            self.config['_ui_verification'] = True
+-        self.events = queue.Queue()
+-        self.closing = False
+-        self.listening_requested = False
+-        self.repair_offset = 0
+-        from jarvis.runtime_health import RuntimeHealth
+-        self.runtime_health = RuntimeHealth()
+-        self.speech = Speech(self.config.setdefault("speech", {"enabled": True, "language": "auto"}), self.report)
+-        self.speech.start()
+-        self.listener = None
+-        self.session = 0
+-        self.actions = Actions(self.config, BASE, self.report, Desktop())
+-        self.actions.start()
+-        anticipation_busy = self.actions.anticipation.busy
+-        self.actions.anticipation.busy = lambda: (anticipation_busy() or self.speech.speaking.is_set()
+-            or bool(getattr(self, 'capture_count', 0)) or bool(getattr(self, 'ui_activity', '')))
+-        self.external_handle = 0
+-        self.actions.external_handle = lambda: self.external_handle
+-        self.capture_count = 0
+-        self.command_window = None
+-        self.actions.knowledge.screen_handle = lambda: self.external_handle
+-        from jarvis.interface import build_interface
+-        build_interface(self)
+-        self.load_microphones()
+-        self.actions.approval_handler = self.request_approval
+-        self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
+-        # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
+-        self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
+-            getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
+-        if not self.config.get('_ui_verification', False):
+-            self.actions.start_whatsapp_watch()
+-            self.actions.start_background_memory()
+-        root.protocol("WM_DELETE_WINDOW", self.close)
+-        self.panel.withdraw()
+-        root.after(40, self.animate_island)
+-        root.after(150, self.exclude_orb_from_capture)
+-        root.after(300, self.remember_external_window)
+-        root.after(80, self.drain)
+-        self.watchdog = Watchdog(self.report)
+-        self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
+-            self.actions.cognition.repair_persistence,
+-            enabled=lambda:not self.closing and self.actions.cognition.enabled and
+-                self.actions.cognition.thread is not None and self.actions.cognition.thread.is_alive() and
+-                not self.actions.cognition.stop.is_set())
+-        from jarvis.docker_runtime import DockerService
+-        self.docker_service = DockerService(BASE, self.report, lambda: self.closing)
+-        self.watchdog.register('Docker Linux engine', self.docker_service.healthy, self.docker_service.repair,
+-            lambda: not self.closing and self.config.get('docker_runtime', {}).get('enabled', False)
+-                and not self.config.get('_ui_verification', False))
+-        if self.config.get('docker_runtime', {}).get('enabled', False) and not self.config.get('_ui_verification', False):
+-            self.docker_service.repair()
+-        selector = self.actions.knowledge.context_selector
+-        if selector:
+-            self.watchdog.register('Context selector', selector.healthy, selector.repair,
+-                lambda: not self.closing and not selector.closed.is_set() and selector.options['enabled'])
+-        self.watchdog.register('Anticipation', self.actions.anticipation.healthy,
+-            self.actions.anticipation.repair,
+-            lambda: not self.closing and not self.actions.anticipation.closed.is_set()
+-                and self.actions.anticipation.options['enabled']
+-                and not self.actions.anticipation.paused
+-                and not self.actions.anticipation.microphone_stopped)
+-        self.watchdog.register('Realtime observations', self.actions.realtime.healthy,
+-            self.actions.realtime.repair,
+-            lambda: not self.closing and self.actions.realtime.options['enabled']
+-                and not self.actions.realtime.closed.is_set() and not self.actions.realtime.paused
+-                and not self.actions.realtime.microphone_stopped and not self.actions.realtime.storage_failed)
+-        self.watchdog.register('Island media observations',self.desk.media.healthy,self.desk.media.repair,
+-            lambda:not self.closing and not self.desk.media.closed)
+-        self.ollama_service = OllamaService()
+-        from jarvis.model_recovery import ModelRecovery
+-        self.model_recovery = ModelRecovery(BASE, self.config, self.report, lambda: self.closing)
+-        self.watchdog.register("Ollama", self.ollama_service.healthy, self.ollama_service.repair,
+-            lambda: not self.closing and (self.config.get("brain", {}).get("enabled")
+-                or self.config.get("knowledge", {}).get("enabled") or self.config.get("command_cleanup", {}).get("enabled")
+-                or self.config.get('context_selector', {}).get('enabled')))
+-        for name, worker in (("Action worker", self.actions), ("Question worker", self.actions.knowledge), ("Speech worker", self.speech)):
+-            self.watchdog.register(name, lambda worker=worker: worker.thread.is_alive(),
+-                lambda worker=worker, name=name: restart_thread(worker, name), lambda: not self.closing)
+-        self.watchdog.register("Microphone", self.listener_healthy, self.repair_listener,
+-            lambda: self.listening_requested and not self.closing)
+-        self.watchdog.register("UI Automation worker", self.actions.ui_healthy, self.actions.repair_ui,
+-            lambda: not self.closing and not self.actions.closed.is_set())
+-        self.watchdog.register("Browser automation worker", self.actions.browser_healthy, self.actions.repair_browser,
+-            lambda: not self.closing and not self.actions.closed.is_set())
+-        self.watchdog.register("Configured models", self.model_recovery.healthy, self.model_recovery.repair,
+-            lambda: not self.closing)
+-        from jarvis.harness import healthy as harness_healthy, repair as repair_harness
+-        self.watchdog.register("Harness inference", lambda: harness_healthy(self.actions.brain.client),
+-            lambda: repair_harness(self.actions.brain.client),
+-            lambda: not self.closing and not self.actions.closed.is_set()
+-                and self.config.get('brain', {}).get('harness', {}).get('enabled', False))
+-        self.watchdog.register("God's Eye service", self.gods_eye_healthy, self.repair_gods_eye,
+-            lambda: not self.closing and self.actions.gods_eye_view is not None)
+-        self.watchdog.register('Development preview',
+-            lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
+-            lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
+-            lambda: not self.closing and not self.actions.closed.is_set())
+-        if not self.config.get('_ui_verification', False):
+-            self.watchdog.start()
+-            self.root.after(100, self.runtime_tick)
+-        if os.environ.get("JARVIS_RESUME_TASK") != "1" and os.environ.get("JARVIS_UI_VERIFY") != "1":
+-            self.root.after(350, self.greet_startup)
+-        if os.environ.get("JARVIS_AUTOLISTEN") == "1" and not self.config.get('_ui_verification', False):
+-            self.root.after(600, self.toggle_listening)
+-        if os.environ.get("JARVIS_RESUME_TASK") == "1" and not self.config.get('_ui_verification', False):
+-            self.root.after(1200, self.resume_interrupted_task)
+-        elif not self.config.get('_ui_verification', False) and self.actions.task_state.unfinished():
+-            self.report("repair", "Unfinished task retained. Say resume last task to inspect and continue it.")
+-
+-    def resume_interrupted_task(self):
+-        if not self.closing and self.actions.generation == 0 and self.actions.queue.empty():
+-            self.actions.submit(Command("resume_task", extra="automatic"))
+-
+-    def greet_startup(self):
+-        # Let the user lead; no unsolicited scripted greeting or weather monologue.
+-        return
+-
+-    def listener_healthy(self):
+-        if not self.listener or not self.listener.thread.is_alive():
+-            return False
+-        audio_limit = 90 if self.listener.capture_started else 300
+-        return time.monotonic() - self.listener.last_audio < audio_limit and (
+-            self.listener.decode_started is None or time.monotonic() - self.listener.decode_started < 180)
+-
+-    def repair_listener(self):
+-        if self.listener and self.listener.thread.is_alive():
+-            self.listener.stop()
+-            if self.actions.task_active:
+-                return False  # Do not sacrifice a running task to repair unrelated audio resources.
+-            if os.environ.get("JARVIS_SUPERVISED") == "1":
+-                record(BASE, "Microphone/decoder stalled; restarting Jarvis to release its audio and CUDA resources.")
+-                os._exit(72)
+-            return False
+-        self.report("restart_listener", "")
+-        return False
+-
+-    def gods_eye_healthy(self):
+-        from jarvis.gods_eye_view import ready
+-        return ready()
+-
+-    def repair_gods_eye(self):
+-        service = self.actions.gods_eye_view
+-        service.close()
+-        service.start(lambda: self.closing)
+-        return self.gods_eye_healthy()
+-
+-    def runtime_tick(self):
+-        if self.closing or self.config.get('_ui_verification', False):
+-            return
+-        if self.actions.memory.error:
+-            self.report("warning", "Obsidian memory stopped: " + self.actions.memory.error)
+-            self.actions.memory.error = None
+-        try:
+-            runtime = BASE / ".jarvis-runtime"
+-            runtime.mkdir(exist_ok=True)
+-            if os.environ.get("JARVIS_SUPERVISED") == "1" and (runtime / "stop").exists():
+-                self.close()
+-                return
+-            session = os.environ.get("JARVIS_SESSION_ID")
+-            if session:
+-                temporary = runtime / ("heartbeat-" + session + ".tmp")
+-                temporary.write_text(json.dumps({"session": session, "pid": os.getpid(), "at": time.time(),
+-                    "status": "running", "listening_requested": self.listening_requested,
+-                    "health": self.runtime_health.snapshot(self)}), encoding="utf-8")
+-                for attempt in range(10):  # A reader can briefly hold the file open on Windows.
+-                    try:
+-                        os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
+-                        break
+-                    except PermissionError:
+-                        if attempt == 9:
+-                            raise
+-                        time.sleep(.02)
+-            repairs = runtime / "repairs.jsonl"
+-            if repairs.is_file():
+-                with repairs.open("r", encoding="utf-8") as source:
+-                    source.seek(self.repair_offset)
+-                    for line in source:
+-                        try:
+-                            self.log_line("repair", json.loads(line)["message"])
+-                        except (ValueError, KeyError):
+-                            pass
+-                    self.repair_offset = source.tell()
+-        except Exception:
+-            self.report("repair", "Runtime status update failed; will retry.")
+-        finally:
+-            if not self.closing:
+-                self.root.after(2000, self.runtime_tick)
+-
+-    @ui_loop(40)
+-    def animate_island(self):
+-        started = time.monotonic()
+-        listening = self.listener is not None and self.listener.thread.is_alive()
+-        speaking = self.speech.speaking.is_set()
+-        status = "WORKING" if self.actions.task_active or self.island.activity.active else "THINKING" if self.ui_activity else "SPEAKING" if speaking else "LISTENING" if listening else "STANDBY"
+-        if self.hud_status.get() != status:
+-            self.hud_status.set(status)
+-        self.island.tick(status, self.level["value"], speaking=speaking, listening=listening)
+-        self.desk.tick(self.island.surface_open and not self.capture_count and self.panel.state()!='withdrawn')
+-        moving = any(abs(a-b) > .5 for a,b in zip(self.island.motion.size,self.island.motion.target))
+-        from jarvis.island import FrameClock
+-        if not hasattr(self, 'frame_clock'):
+-            self.frame_clock = FrameClock()
+-            from jarvis.display import refresh_rate
+-            self.animation_fps = refresh_rate(self.root)
+-        reduced = bool(self.config.get('ui', {}).get('reduced_motion', False))
+-        media_active = self.island.media is not None and started < self.island.media_until
+-        animated = not reduced and (moving or status != 'STANDBY' or media_active or
+-            (self.island.surface_open and self.desk.view == 'Games'))
+-        fps = self.animation_fps if animated else 20
+-        self.root.after(self.frame_clock.delay(started, time.monotonic(), fps), self.animate_island)
+-
+-    def toggle_panel(self, _event=None):
+-        if not self.island.expanded:
+-            self.show_panel()
+-        else:
+-            self.hide_panel()
+-
+-    def show_panel(self):
+-        self.island.expand(True)
+-
+-    def hide_panel(self):
+-        self.island.expand(False)
+-        self.island.message_until = self.island.attention_until = 0.
+-        self.panel.withdraw()
+-
+-    def show_menu(self, event):
+-        self.menu.tk_popup(event.x_root, event.y_root)
+-
+-    @staticmethod
+-    def exclude_window_from_capture(window):
+-        """Windows 10 2004+: omit this window from OS screen captures."""
+-        try:
+-            user = ctypes.WinDLL("user32", use_last_error=True)
+-            user.GetAncestor.argtypes = (wintypes.HWND, wintypes.UINT)
+-            user.GetAncestor.restype = wintypes.HWND
+-            user.SetWindowDisplayAffinity.argtypes = (wintypes.HWND, wintypes.DWORD)
+-            user.SetWindowDisplayAffinity.restype = wintypes.BOOL
+-            hwnd = user.GetAncestor(window.winfo_id(), 2)  # GA_ROOT, not Tk's client child.
+-            return bool(hwnd and user.SetWindowDisplayAffinity(hwnd, 0x11))
+-        except (AttributeError, OSError, tk.TclError):
+-            return False
+-
+-    def exclude_orb_from_capture(self):
+-        self.exclude_window_from_capture(self.root)
+-
+-    def remember_external_window(self):
+-        try:
+-            self.actions.live_app.observe_window(self.external_handle)
+-            import win32gui
+-            import win32process
+-            hwnd = win32gui.GetForegroundWindow()
+-            if (hwnd and win32gui.IsWindowVisible(hwnd)
+-                    and win32process.GetWindowThreadProcessId(hwnd)[1] != os.getpid()
+-                    and win32gui.GetWindowText(hwnd).strip()):
+-                self.external_handle = hwnd
+-                self.actions.live_app.observe_window(hwnd)
+-                self.actions.memory.observe_window(win32gui.GetWindowText(hwnd),
+-                    win32process.GetWindowThreadProcessId(hwnd)[1])
+-                self.actions.anticipation.observe_window(win32gui.GetWindowText(hwnd), hwnd)
+-                title = win32gui.GetWindowText(hwnd)
+-                self.actions.cognition.perceive_window(title)  # Vision: what's in front of you.
+-                screen = getattr(self.actions, 'screen', None)
+-                if screen is not None:
+-                    info = self.actions.live_app.windows.get(hwnd) or {}
+-                    screen.observe(hwnd, title, info.get('executable', ''), info.get('window_class', ''))
+-                if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
+-                    import psutil
+-                    self.actions.repo_learner.observe_title(title, psutil.Process(
+-                        win32process.GetWindowThreadProcessId(hwnd)[1]).name())
+-                else:
+-                    self.actions.repo_learner.observe_title('', '')
+-            elif not hwnd or not win32gui.IsWindowVisible(hwnd) or not win32gui.GetWindowText(hwnd).strip():
+-                self.actions.anticipation.observe_window('', 0)
+-        except Exception:
+-            pass
+-        screen = getattr(getattr(self, 'actions', None), 'screen', None)
+-        if screen is not None:
+-            try:
+-                screen.tick()
+-            except Exception:
+-                pass
+-        self.root.after(300, self.remember_external_window)
+-
+-    def report(self, kind, message):
+-        if getattr(self, 'runtime_health', None) is not None:
+-            self.runtime_health.observe(kind, message)
+-        if kind in {'partial', 'final'} and message and getattr(self, 'actions', None) is not None:
+-            self.actions.anticipation.cancel()
+-            self.actions.realtime.cancel()
+-        if kind in {"action", "answer"} and isinstance(message, str):
+-            self.actions.memory.record("Jarvis " + kind, message)
+-        if kind in {"answer", "spoken_reply"} and isinstance(message, str) and message.strip():
+-            self.actions.last_spoken = message  # "Say that again" repeats it.
+-        if kind == "state":
+-            self.actions.suggest_enabled = message.startswith("Awake")
+-            if self.actions.suggest_enabled:
+-                self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
+-        elif kind in {"partial", "final"} and self.actions.suggest_enabled:
+-            self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
+-        self.events.put((kind, message))
+-
+-    def request_approval(self, kind, detail, cancelled):
+-        answer = {"approved": False}
+-        ready = threading.Event()
+-        self.report("approval", (kind, detail, answer, ready, cancelled))
+-        while not ready.wait(.1):
+-            if cancelled():
+-                return False
+-        return answer["approved"] and not cancelled()
+-
+-    def show_command_prompt(self):
+-        self.desk.show('Console')
+-        self.show_panel()
+-        self.island.focus_pending = True
+-
+-    def run_command(self, value=None):
+-        value = (self.command_entry.get() if value is None else value).strip()
+-        if value:
+-            self.command_entry.delete(0, "end")
+-            self.actions.submit(Command("run_command", value))
+-
+-    def start_native_coding(self, goal=None):
+-        from tkinter import filedialog
+-        goal=(self.coding_goal.get() if goal is None else goal).strip()
+-        if not goal:return
+-        path=filedialog.askdirectory(parent=self.root,title='Choose the individual coding project')
+-        if path:self.actions.submit(Command('code_task',goal,path))
+-
+-    def load_microphones(self):
+-        try:
+-            import sounddevice as sd
+-            devices = sd.query_devices()
+-            hosts = sd.query_hostapis()
+-            labels = ["System default microphone"]
+-            selected = 0
+-            for index, device in enumerate(devices):
+-                if device["max_input_channels"] > 0:
+-                    self.mic_devices.append(index)
+-                    labels.append(f"{device['name']} Ã‚Â· {hosts[device['hostapi']]['name']} [{index}]")
+-                    if self.config.get("microphone") in (index, device["name"]):
+-                        selected = len(labels) - 1
+-            self.mic_choice["values"] = labels
+-            self.mic_choice.current(selected)
+-        except Exception as exc:
+-            self.log_line("warning", f"Microphone discovery failed: {exc}")
+-
+-    def log_line(self, kind, message):
+-        if not message:
+-            return
+-        self.log.configure(state="normal")
+-        self.log.insert("end", f"{time.strftime('%H:%M:%S')}  {kind.upper():8} {message}\n", (kind,))
+-        if int(self.log.index("end-1c").split(".")[0]) > 600:
+-            self.log.delete("1.0", "100.0")
+-        self.log.see("end")
+-        self.log.configure(state="disabled")
+-
+-    @ui_loop(80)
+-    def drain(self):
+-        for _ in range(300):
+-            try:
+-                kind, message = self.events.get_nowait()
+-            except queue.Empty:
+-                break
+-            if kind == 'realtime_alert':
+-                text = message['message'] + ' Source: ' + message['reference']
+-                self.log_line('warning', text)
+-                if not self.actions.anticipation.busy() and not self.actions.realtime.microphone_stopped:
+-                    self.live.set(message['message'][:450])
+-                    self.island.notify('warning', message['message'])
+-                    self.speech.say(message['message'])
+-                continue
+-            if kind == 'coding_activity':
+-                self.coding_console.notify(message)
+-                continue  # Source/output stays in its owned review; never spoken or transcript-logged.
+-            self.island.notify(kind, message)
+-            self.desk.notify(kind,message)
+-            if kind == 'anticipation':
+-                continue  # Silent preparations appear only in Prepared; never speak/pop up.
+-            if kind.startswith('island_'):
+-                continue
+-            if kind == 'task_status':
+-                continue  # Live metadata is shown in the header; never log generated code chunks.
+-            elif kind == 'answer_stream':
+-                self.ui_activity = 'thinking' if message.get('active', True) else ''
+-                # Finished sentences are spoken while the rest is still being written; the
+-                # final answer then adds only what was not spoken yet. Never logged per token.
+-                if 'text' in message:  # Phase-only updates carry no text and change nothing spoken.
+-                    self.speech.stream(message['text'] or '', message.get('active', True), phase=message.get('phase'))
+-                continue
+-            elif kind == 'answer_error':
+-                self.ui_activity = ''
+-                if self.speech.streamed is not None:
+-                    self.speech.cancel()
+-                self.log_line('warning', message)
+-                continue
+-            elif kind == "partial":
+-                if message:
+-                    self.live.set(message)
+-            elif kind == "state":
+-                self.state.set(message)
+-            elif kind == "screen_capture":
+-                if self.capture_count == 0:
+-                    self.hide_panel()
+-                    self.root.withdraw()
+-                self.capture_count += 1
+-            elif kind == "screen_capture_done":
+-                if self.capture_count:
+-                    self.capture_count -= 1
+-                if self.capture_count == 0 and self.root.state() == "withdrawn":
+-                    self.root.deiconify()
+-                    self.root.attributes("-topmost", True)
+-                    self.exclude_orb_from_capture()
+-            elif kind == "screen":
+-                self.log_line(kind, message)
+-            elif kind == "approval":
+-                continue  # Nonblocking explicit approval card owns this decision.
+-            elif kind == "command_output":
+-                if self.command_window and self.command_window.winfo_exists():
+-                    self.command_output.configure(state="normal")
+-                    self.command_output.insert("end", message + "\n\n")
+-                    self.command_output.see("end")
+-                    self.command_output.configure(state="disabled")
+-                self.log_line("command", message[-1000:])
+-            elif kind == "show_command_prompt":
+-                self.show_command_prompt()
+-            elif kind == "question":
+-                self.question.set(message[:700])
+-                self.log_line(kind, message)
+-            elif kind in {"thinking", "answer"}:
+-                self.ui_activity = "thinking" if kind == "thinking" else ""
+-                self.log_line(kind, message)
+-                if kind == "answer":
+-                    self.live.set(message[:450])
+-                    self.speech.say(message)
+-            elif kind == "stop_speech":
+-                self.speech.cancel()  # "Stop talking; I have a question": silence now, keep listening.
+-            elif kind == "spoken_reply":
+-                self.ui_activity = ""
+-                self.live.set(message[:450])
+-                self.speech.say(message)
+-            elif kind == "screen_offer":
+-                self.question.set(message[:700])  # Screen pre-awareness: answer with yes, no, or the detail.
+-                self.live.set(message[:450])
+-                self.log_line("question", message)
+-                self.speech.say(message)
+-                engine = getattr(self, 'engine', None)
+-                if engine is not None and not engine.active:
+-                    engine.activate()
+-            elif kind == "level":
+-                self.level["value"] = message
+-            elif kind == "backend":
+-                self.backend.set(message)
+-                self.log_line(kind, message)
+-            elif kind in {"fatal", "listener_stopped"}:
+-                self.state.set("Microphone off")
+-                self.toggle.configure(text="Start listening")
+-                self.mic_choice.configure(state="readonly")
+-                self.level["value"] = 0
+-                self.log_line(kind, message)
+-            elif kind == "restart_listener":
+-                if self.listening_requested and (not self.listener or not self.listener.thread.is_alive()):
+-                    self.toggle_listening()
+-            elif kind == "repair":
+-                record(BASE, message)
+-            elif kind == "media_card":
+-                continue  # The island draws the animated YouTube/Spotify card; not a transcript line.
+-            else:
+-                self.log_line(kind, message)
+-        self.root.after(80, self.drain)
+-
+-    def toggle_listening(self):
+-        if self.config.get('_ui_verification', False):
+-            return
+-        if self.listener and self.listener.thread.is_alive():
+-            self.stop()
+-            return
+-        self.session += 1
+-        self.listening_requested = True
+-        self.actions.anticipation.microphone_started()
+-        self.actions.realtime.microphone_started()
+-        session = self.session
+-        self.config["microphone"] = self.mic_devices[self.mic_choice.current()]
+-        (config_file(BASE)).write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
+-        self.mic_choice.configure(state="disabled")
+-        if not self.actions.task_active:
+-            self.actions.desktop.target = None
+-            self.actions.typing_failed = False
+-            self.actions.open_target_pending = False
+-        # Generation check also prevents a stopping recognizer enqueueing new work.
+-        def submit(command):
+-            if session == self.session:
+-                self.speech.interrupt()
+-                self.actions.submit(command)
+-        engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
+-        engine.free_text = lambda: bool(getattr(self.actions, "whatsapp_prompts", None)) and \
+-            bool(self.actions.whatsapp_prompts[-1].free_text)  # Dictated names, addresses and messages.
+-        self.engine = engine  # Screen offers wake it so a bare "yes" is heard.
+-        from jarvis.voice_input import VoiceInput
+-        from jarvis.command_cleanup import CommandCleanup
+-        voice_input = VoiceInput(self.speech)
+-        push_to_write = writer = None
+-        if self.config.get("push_to_write", {}).get("enabled", True):
+-            # Hold Left Ctrl + Left Alt: what you say is typed at the cursor until you let go.
+-            from jarvis.push_to_write import PushToWrite
+-            from jarvis.writing import SpokenWriter
+-            writer = SpokenWriter(self.report)
+-            def writing_changed(active, discarded):
+-                self.actions.dictation_active = active  # Pauses on-screen suggestions while writing.
+-                if active:
+-                    self.speech.interrupt()
+-                    self.report("state", "Writing what you say · say 'stop writing' or press Esc to stop"
+-                                if push_to_write.latched else "Writing what you say · let go of Left Ctrl + Left Alt to stop")
+-                else:
+-                    self.report("state", "Awake · ready for commands" if not discarded else
+-                                "Push-to-write cancelled (another key was pressed)")
+-            push_to_write = PushToWrite(writing_changed,
+-                                        self.config.get("push_to_write", {}).get("hold_seconds", 0.2))
+-            push_to_write.start()
+-            self.actions.hands_free = push_to_write.latch  # Hands-free writing ("yes" in Notepad, "start dictation").
+-            self.actions.hands_free_state = push_to_write.latched_since
+-        self.push_to_write, self.spoken_writer = push_to_write, writer
+-        self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
+-                                 playback=self.speech.output_recent, input_filter=voice_input.filter,
+-                                 references=self.speech.output_references,
+-                                 command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report),
+-                                 push_to_write=push_to_write, writer=writer)
+-        self.listener.start()
+-        self.toggle.configure(text="Stop listening")
+-
+-    def stop(self):
+-        realtime = getattr(getattr(self, 'actions', None), 'realtime', None)
+-        if realtime is not None:
+-            realtime.cancel(microphone=True)
+-        anticipation = getattr(getattr(self, 'actions', None), 'anticipation', None)
+-        if anticipation is not None:
+-            anticipation.cancel(microphone=True)
+-        if getattr(self,'desk',None) is not None:
+-            self.desk.cancel_approvals()
+-            self.desk.media.repair()  # Cancel only an owned outstanding media child; never replay it.
+-        self.listening_requested = False
+-        self.session += 1
+-        self.actions.hands_free = self.actions.hands_free_state = None
+-        for owned in (getattr(self, 'push_to_write', None), getattr(self, 'spoken_writer', None)):
+-            if owned is not None:
+-                owned.stop() if hasattr(owned, 'stop') else owned.close()
+-        self.push_to_write = self.spoken_writer = None
+-        if self.listener:
+-            self.listener.stop()
+-        self.actions.cancel()
+-        self.speech.cancel()
+-        self.ui_activity = ""
+-        self.state.set("Stopping microphoneÃ¢â‚¬Â¦")
+-        self.toggle.configure(text="Start listening")
+-
+-    def preview_command(self):
+-        self.desk.show('History', reveal=True)
+-        self.show_panel()
+-        engine = Engine(lambda c: self.log_line("preview", repr(c)), self.log_line)
+-        engine.activate()
+-        engine.feed(self.preview.get(), final=True)
+-
+-    def ask_question(self):
+-        text = self.preview.get().strip()
+-        if text:
+-            self.actions.submit(Command("ask", text))
+-
+-    def send_input(self):
+-        """Enter uses the same command/question routing as spoken instructions."""
+-        text = self.preview.get().strip()
+-        if text:
+-            from jarvis.audio import command_text
+-            engine = Engine(self.actions.submit, self.report)
+-            engine.activate()
+-            engine.feed(command_text(text), final=True, raw=text)
+-
+-    def ask_screen(self):
+-        text = self.preview.get().strip() or "What is visible in this window?"
+-        self.report("question", text)
+-        self.actions.knowledge.submit(text, screen=True)
+-
+-    def do_task(self):
+-        text = self.preview.get().strip()
+-        if text:
+-            self.actions.submit(Command("task", text))
+-
+-    def close(self):
+-        self.closing = True
+-        self.actions.closing = True
+-        target = getattr(self.island, 'drop_target', None)
+-        if target is not None:
+-            target.close()
+-        self.island.close()
+-        self.desk.close()
+-        if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):
+-            (BASE / ".jarvis-runtime" / "stop").touch()
+-        self.watchdog.close()
+-        self.docker_service.close()
+-        self.model_recovery.close()
+-        self.stop()
+-        self.speech.close()
+-        self.actions.close()
+-        self.root.destroy()
+-
+-    def save_speech_settings(self, _event=None):
+-        self.speech.options["enabled"] = self.speak_enabled.get()
+-        if not self.speech.options["enabled"]:
+-            self.speech.cancel()
+-        language = {"Auto": "auto", "English": "en", "Hindi": "hi"}[self.answer_language.get()]
+-        self.speech.options["language"] = language
+-        self.config["knowledge"]["answer_language"] = language
+-        if not self.config.get('_ui_verification', False):
+-            (config_file(BASE)).write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
+-
+-
+-if __name__ == "__main__":
+-    App(tk.Tk()).root.mainloop()
++from jarvis.paths import config_file
++import json
++import ctypes
++from ctypes import wintypes
++import os
++from pathlib import Path
++import queue
++import threading
++import time
++
++from jarvis.display import enable_high_dpi
++enable_high_dpi()  # Must precede Tk/native window creation, including verification entry points.
++
++# Publish actual interpreter identity before loading UI/native dependencies.
++_session = os.environ.get("JARVIS_SESSION_ID")
++if _session and os.environ.get("JARVIS_UI_VERIFY") != "1":
++    _runtime = Path(__file__).resolve().parent / ".jarvis-runtime"
++    _runtime.mkdir(exist_ok=True)
++    (_runtime / ("heartbeat-" + _session + ".json")).write_text(json.dumps({
++        "session": _session, "pid": os.getpid(), "at": time.time(), "status": "starting"}), encoding="utf-8")
++import tkinter as tk
++from tkinter import ttk
++from tkinter.scrolledtext import ScrolledText
++
++from jarvis.actions import Actions, Desktop
++from jarvis.audio import Listener
++from jarvis.engine import Engine
++from jarvis.commands import Command
++from jarvis.speech import Speech
++from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
++
++BASE = Path(__file__).resolve().parent
++
++
++class App:
++    def __init__(self, root):
++        self.root = root
++        from jarvis.config_contract import load_config
++        self.config = load_config(config_file(BASE))
++        if os.environ.get("JARVIS_UI_VERIFY") == "1":
++            self.config["memory"] = {"enabled": False}
++            self.config['_ui_verification'] = True
++        self.events = queue.Queue()
++        self.closing = False
++        self.listening_requested = False
++        self.repair_offset = 0
++        from jarvis.runtime_health import RuntimeHealth
++        self.runtime_health = RuntimeHealth()
++        self.speech = Speech(self.config.setdefault("speech", {"enabled": True, "language": "auto"}), self.report)
++        self.speech.start()
++        self.listener = None
++        self.session = 0
++        self.actions = Actions(self.config, BASE, self.report, Desktop())
++        self.actions.start()
++        anticipation_busy = self.actions.anticipation.busy
++        self.actions.anticipation.busy = lambda: (anticipation_busy() or self.speech.speaking.is_set()
++            or bool(getattr(self, 'capture_count', 0)) or bool(getattr(self, 'ui_activity', '')))
++        self.external_handle = 0
++        self.actions.external_handle = lambda: self.external_handle
++        self.capture_count = 0
++        self.command_window = None
++        self.actions.knowledge.screen_handle = lambda: self.external_handle
++        from jarvis.interface import build_interface
++        build_interface(self)
++        self.load_microphones()
++        self.actions.approval_handler = self.request_approval
++        self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
++        # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
++        self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
++            getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
++        if not self.config.get('_ui_verification', False):
++            self.actions.start_whatsapp_watch()
++            self.actions.start_background_memory()
++        root.protocol("WM_DELETE_WINDOW", self.close)
++        self.panel.withdraw()
++        root.after(40, self.animate_island)
++        root.after(150, self.exclude_orb_from_capture)
++        root.after(300, self.remember_external_window)
++        root.after(80, self.drain)
++        self.watchdog = Watchdog(self.report)
++        self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
++            self.actions.cognition.repair_persistence,
++            enabled=lambda:not self.closing and self.actions.cognition.enabled and
++                self.actions.cognition.thread is not None and self.actions.cognition.thread.is_alive() and
++                not self.actions.cognition.stop.is_set())
++        from jarvis.docker_runtime import DockerService
++        self.docker_service = DockerService(BASE, self.report, lambda: self.closing)
++        self.watchdog.register('Docker Linux engine', self.docker_service.healthy, self.docker_service.repair,
++            lambda: not self.closing and self.config.get('docker_runtime', {}).get('enabled', False)
++                and not self.config.get('_ui_verification', False))
++        if self.config.get('docker_runtime', {}).get('enabled', False) and not self.config.get('_ui_verification', False):
++            self.docker_service.repair()
++        selector = self.actions.knowledge.context_selector
++        if selector:
++            self.watchdog.register('Context selector', selector.healthy, selector.repair,
++                lambda: not self.closing and not selector.closed.is_set() and selector.options['enabled'])
++        self.watchdog.register('Anticipation', self.actions.anticipation.healthy,
++            self.actions.anticipation.repair,
++            lambda: not self.closing and not self.actions.anticipation.closed.is_set()
++                and self.actions.anticipation.options['enabled']
++                and not self.actions.anticipation.paused
++                and not self.actions.anticipation.microphone_stopped)
++        self.watchdog.register('Realtime observations', self.actions.realtime.healthy,
++            self.actions.realtime.repair,
++            lambda: not self.closing and self.actions.realtime.options['enabled']
++                and not self.actions.realtime.closed.is_set() and not self.actions.realtime.paused
++                and not self.actions.realtime.microphone_stopped and not self.actions.realtime.storage_failed)
++        self.watchdog.register('Island media observations',self.desk.media.healthy,self.desk.media.repair,
++            lambda:not self.closing and not self.desk.media.closed)
++        self.ollama_service = OllamaService()
++        from jarvis.model_recovery import ModelRecovery
++        self.model_recovery = ModelRecovery(BASE, self.config, self.report, lambda: self.closing)
++        self.watchdog.register("Ollama", self.ollama_service.healthy, self.ollama_service.repair,
++            lambda: not self.closing and (self.config.get("brain", {}).get("enabled")
++                or self.config.get("knowledge", {}).get("enabled") or self.config.get("command_cleanup", {}).get("enabled")
++                or self.config.get('context_selector', {}).get('enabled')))
++        for name, worker in (("Action worker", self.actions), ("Question worker", self.actions.knowledge), ("Speech worker", self.speech)):
++            self.watchdog.register(name, lambda worker=worker: worker.thread.is_alive(),
++                lambda worker=worker, name=name: restart_thread(worker, name), lambda: not self.closing)
++        self.watchdog.register("Microphone", self.listener_healthy, self.repair_listener,
++            lambda: self.listening_requested and not self.closing)
++        self.watchdog.register("UI Automation worker", self.actions.ui_healthy, self.actions.repair_ui,
++            lambda: not self.closing and not self.actions.closed.is_set())
++        self.watchdog.register("Browser automation worker", self.actions.browser_healthy, self.actions.repair_browser,
++            lambda: not self.closing and not self.actions.closed.is_set())
++        self.watchdog.register("Configured models", self.model_recovery.healthy, self.model_recovery.repair,
++            lambda: not self.closing)
++        from jarvis.harness import healthy as harness_healthy, repair as repair_harness
++        self.watchdog.register("Harness inference", lambda: harness_healthy(self.actions.brain.client),
++            lambda: repair_harness(self.actions.brain.client),
++            lambda: not self.closing and not self.actions.closed.is_set()
++                and self.config.get('brain', {}).get('harness', {}).get('enabled', False))
++        self.watchdog.register("God's Eye service", self.gods_eye_healthy, self.repair_gods_eye,
++            lambda: not self.closing and self.actions.gods_eye_view is not None)
++        self.watchdog.register('Development preview',
++            lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
++            lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
++            lambda: not self.closing and not self.actions.closed.is_set())
++        if not self.config.get('_ui_verification', False):
++            self.watchdog.start()
++            self.root.after(100, self.runtime_tick)
++        if os.environ.get("JARVIS_RESUME_TASK") != "1" and os.environ.get("JARVIS_UI_VERIFY") != "1":
++            self.root.after(350, self.greet_startup)
++        if os.environ.get("JARVIS_AUTOLISTEN") == "1" and not self.config.get('_ui_verification', False):
++            self.root.after(600, self.toggle_listening)
++        if os.environ.get("JARVIS_RESUME_TASK") == "1" and not self.config.get('_ui_verification', False):
++            self.root.after(1200, self.resume_interrupted_task)
++        elif not self.config.get('_ui_verification', False) and self.actions.task_state.unfinished():
++            self.report("repair", "Unfinished task retained. Say resume last task to inspect and continue it.")
++
++    def resume_interrupted_task(self):
++        if not self.closing and self.actions.generation == 0 and self.actions.queue.empty():
++            self.actions.submit(Command("resume_task", extra="automatic"))
++
++    def greet_startup(self):
++        # Let the user lead; no unsolicited scripted greeting or weather monologue.
++        return
++
++    def listener_healthy(self):
++        if not self.listener or not self.listener.thread.is_alive():
++            return False
++        audio_limit = 90 if self.listener.capture_started else 300
++        return time.monotonic() - self.listener.last_audio < audio_limit and (
++            self.listener.decode_started is None or time.monotonic() - self.listener.decode_started < 180)
++
++    def repair_listener(self):
++        from jarvis.audio import workers_alive
++        if workers_alive(self.listener):
++            self.listener.stop()
++            if self.actions.task_active:
++                return False  # Do not sacrifice a running task to repair unrelated audio resources.
++            if os.environ.get("JARVIS_SUPERVISED") == "1":
++                record(BASE, "Microphone/decoder stalled; restarting Jarvis to release its audio and CUDA resources.")
++                os._exit(72)
++            return False
++        self.report("restart_listener", "")
++        return False
++
++    def gods_eye_healthy(self):
++        from jarvis.gods_eye_view import ready
++        return ready()
++
++    def repair_gods_eye(self):
++        service = self.actions.gods_eye_view
++        service.close()
++        service.start(lambda: self.closing)
++        return self.gods_eye_healthy()
++
++    def runtime_tick(self):
++        if self.closing or self.config.get('_ui_verification', False):
++            return
++        if self.actions.memory.error:
++            self.report("warning", "Obsidian memory stopped: " + self.actions.memory.error)
++            self.actions.memory.error = None
++        try:
++            runtime = BASE / ".jarvis-runtime"
++            runtime.mkdir(exist_ok=True)
++            if os.environ.get("JARVIS_SUPERVISED") == "1" and (runtime / "stop").exists():
++                self.close()
++                return
++            session = os.environ.get("JARVIS_SESSION_ID")
++            if session:
++                temporary = runtime / ("heartbeat-" + session + ".tmp")
++                temporary.write_text(json.dumps({"session": session, "pid": os.getpid(), "at": time.time(),
++                    "status": "running", "listening_requested": self.listening_requested,
++                    "health": self.runtime_health.snapshot(self)}), encoding="utf-8")
++                for attempt in range(10):  # A reader can briefly hold the file open on Windows.
++                    try:
++                        os.replace(temporary, runtime / ("heartbeat-" + session + ".json"))
++                        break
++                    except PermissionError:
++                        if attempt == 9:
++                            raise
++                        time.sleep(.02)
++            repairs = runtime / "repairs.jsonl"
++            if repairs.is_file():
++                with repairs.open("r", encoding="utf-8") as source:
++                    source.seek(self.repair_offset)
++                    for line in source:
++                        try:
++                            self.log_line("repair", json.loads(line)["message"])
++                        except (ValueError, KeyError):
++                            pass
++                    self.repair_offset = source.tell()
++        except Exception:
++            self.report("repair", "Runtime status update failed; will retry.")
++        finally:
++            if not self.closing:
++                self.root.after(2000, self.runtime_tick)
++
++    @ui_loop(40)
++    def animate_island(self):
++        started = time.monotonic()
++        listening = self.listener is not None and self.listener.thread.is_alive()
++        speaking = self.speech.speaking.is_set()
++        status = "WORKING" if self.actions.task_active or self.island.activity.active else "THINKING" if self.ui_activity else "SPEAKING" if speaking else "LISTENING" if listening else "STANDBY"
++        if self.hud_status.get() != status:
++            self.hud_status.set(status)
++        self.island.tick(status, self.level["value"], speaking=speaking, listening=listening)
++        self.desk.tick(self.island.surface_open and not self.capture_count and self.panel.state()!='withdrawn')
++        moving = any(abs(a-b) > .5 for a,b in zip(self.island.motion.size,self.island.motion.target))
++        from jarvis.island import FrameClock
++        if not hasattr(self, 'frame_clock'):
++            self.frame_clock = FrameClock()
++            from jarvis.display import refresh_rate
++            self.animation_fps = refresh_rate(self.root)
++        reduced = bool(self.config.get('ui', {}).get('reduced_motion', False))
++        media_active = self.island.media is not None and started < self.island.media_until
++        animated = not reduced and (moving or status != 'STANDBY' or media_active or
++            (self.island.surface_open and self.desk.view == 'Games'))
++        fps = self.animation_fps if animated else 20
++        self.root.after(self.frame_clock.delay(started, time.monotonic(), fps), self.animate_island)
++
++    def toggle_panel(self, _event=None):
++        if not self.island.expanded:
++            self.show_panel()
++        else:
++            self.hide_panel()
++
++    def show_panel(self):
++        self.island.expand(True)
++
++    def hide_panel(self):
++        self.island.expand(False)
++        self.island.message_until = self.island.attention_until = 0.
++        self.panel.withdraw()
++
++    def show_menu(self, event):
++        self.menu.tk_popup(event.x_root, event.y_root)
++
++    @staticmethod
++    def exclude_window_from_capture(window):
++        """Windows 10 2004+: omit this window from OS screen captures."""
++        try:
++            user = ctypes.WinDLL("user32", use_last_error=True)
++            user.GetAncestor.argtypes = (wintypes.HWND, wintypes.UINT)
++            user.GetAncestor.restype = wintypes.HWND
++            user.SetWindowDisplayAffinity.argtypes = (wintypes.HWND, wintypes.DWORD)
++            user.SetWindowDisplayAffinity.restype = wintypes.BOOL
++            hwnd = user.GetAncestor(window.winfo_id(), 2)  # GA_ROOT, not Tk's client child.
++            return bool(hwnd and user.SetWindowDisplayAffinity(hwnd, 0x11))
++        except (AttributeError, OSError, tk.TclError):
++            return False
++
++    def exclude_orb_from_capture(self):
++        self.exclude_window_from_capture(self.root)
++
++    def remember_external_window(self):
++        try:
++            self.actions.live_app.observe_window(self.external_handle)
++            import win32gui
++            import win32process
++            hwnd = win32gui.GetForegroundWindow()
++            if (hwnd and win32gui.IsWindowVisible(hwnd)
++                    and win32process.GetWindowThreadProcessId(hwnd)[1] != os.getpid()
++                    and win32gui.GetWindowText(hwnd).strip()):
++                self.external_handle = hwnd
++                self.actions.live_app.observe_window(hwnd)
++                self.actions.memory.observe_window(win32gui.GetWindowText(hwnd),
++                    win32process.GetWindowThreadProcessId(hwnd)[1])
++                self.actions.anticipation.observe_window(win32gui.GetWindowText(hwnd), hwnd)
++                title = win32gui.GetWindowText(hwnd)
++                self.actions.cognition.perceive_window(title)  # Vision: what's in front of you.
++                screen = getattr(self.actions, 'screen', None)
++                if screen is not None:
++                    info = self.actions.live_app.windows.get(hwnd) or {}
++                    screen.observe(hwnd, title, info.get('executable', ''), info.get('window_class', ''))
++                if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
++                    import psutil
++                    self.actions.repo_learner.observe_title(title, psutil.Process(
++                        win32process.GetWindowThreadProcessId(hwnd)[1]).name())
++                else:
++                    self.actions.repo_learner.observe_title('', '')
++            elif not hwnd or not win32gui.IsWindowVisible(hwnd) or not win32gui.GetWindowText(hwnd).strip():
++                self.actions.anticipation.observe_window('', 0)
++        except Exception:
++            pass
++        screen = getattr(getattr(self, 'actions', None), 'screen', None)
++        if screen is not None:
++            try:
++                screen.tick()
++            except Exception:
++                pass
++        self.root.after(300, self.remember_external_window)
++
++    def report(self, kind, message):
++        if getattr(self, 'runtime_health', None) is not None:
++            self.runtime_health.observe(kind, message)
++        if kind in {'partial', 'final'} and message and getattr(self, 'actions', None) is not None:
++            self.actions.anticipation.cancel()
++            self.actions.realtime.cancel()
++        if kind in {"action", "answer"} and isinstance(message, str):
++            self.actions.memory.record("Jarvis " + kind, message)
++        if kind in {"answer", "spoken_reply"} and isinstance(message, str) and message.strip():
++            self.actions.last_spoken = message  # "Say that again" repeats it.
++        if kind == "state":
++            self.actions.suggest_enabled = message.startswith("Awake")
++            if self.actions.suggest_enabled:
++                self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
++        elif kind in {"partial", "final"} and self.actions.suggest_enabled:
++            self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
++        self.events.put((kind, message))
++
++    def request_approval(self, kind, detail, cancelled):
++        answer = {"approved": False}
++        ready = threading.Event()
++        self.report("approval", (kind, detail, answer, ready, cancelled))
++        while not ready.wait(.1):
++            if cancelled():
++                return False
++        return answer["approved"] and not cancelled()
++
++    def show_command_prompt(self):
++        self.desk.show('Console')
++        self.show_panel()
++        self.island.focus_pending = True
++
++    def run_command(self, value=None):
++        value = (self.command_entry.get() if value is None else value).strip()
++        if value:
++            self.command_entry.delete(0, "end")
++            self.actions.submit(Command("run_command", value))
++
++    def start_native_coding(self, goal=None):
++        from tkinter import filedialog
++        goal=(self.coding_goal.get() if goal is None else goal).strip()
++        if not goal:return
++        path=filedialog.askdirectory(parent=self.root,title='Choose the individual coding project')
++        if path:self.actions.submit(Command('code_task',goal,path))
++
++    def load_microphones(self):
++        try:
++            import sounddevice as sd
++            devices = sd.query_devices()
++            hosts = sd.query_hostapis()
++            labels = ["System default microphone"]
++            selected = 0
++            for index, device in enumerate(devices):
++                if device["max_input_channels"] > 0:
++                    self.mic_devices.append(index)
++                    labels.append(f"{device['name']} Ã‚Â· {hosts[device['hostapi']]['name']} [{index}]")
++                    if self.config.get("microphone") in (index, device["name"]):
++                        selected = len(labels) - 1
++            self.mic_choice["values"] = labels
++            self.mic_choice.current(selected)
++        except Exception as exc:
++            self.log_line("warning", f"Microphone discovery failed: {exc}")
++
++    def log_line(self, kind, message):
++        if not message:
++            return
++        self.log.configure(state="normal")
++        self.log.insert("end", f"{time.strftime('%H:%M:%S')}  {kind.upper():8} {message}\n", (kind,))
++        if int(self.log.index("end-1c").split(".")[0]) > 600:
++            self.log.delete("1.0", "100.0")
++        self.log.see("end")
++        self.log.configure(state="disabled")
++
++    @ui_loop(80)
++    def drain(self):
++        for _ in range(300):
++            try:
++                kind, message = self.events.get_nowait()
++            except queue.Empty:
++                break
++            if kind == 'realtime_alert':
++                text = message['message'] + ' Source: ' + message['reference']
++                self.log_line('warning', text)
++                if not self.actions.anticipation.busy() and not self.actions.realtime.microphone_stopped:
++                    self.live.set(message['message'][:450])
++                    self.island.notify('warning', message['message'])
++                    self.speech.say(message['message'])
++                continue
++            if kind == 'coding_activity':
++                self.coding_console.notify(message)
++                continue  # Source/output stays in its owned review; never spoken or transcript-logged.
++            self.island.notify(kind, message)
++            self.desk.notify(kind,message)
++            if kind == 'anticipation':
++                continue  # Silent preparations appear only in Prepared; never speak/pop up.
++            if kind.startswith('island_'):
++                continue
++            if kind == 'task_status':
++                continue  # Live metadata is shown in the header; never log generated code chunks.
++            elif kind == 'answer_stream':
++                self.ui_activity = 'thinking' if message.get('active', True) else ''
++                # Finished sentences are spoken while the rest is still being written; the
++                # final answer then adds only what was not spoken yet. Never logged per token.
++                if 'text' in message:  # Phase-only updates carry no text and change nothing spoken.
++                    self.speech.stream(message['text'] or '', message.get('active', True), phase=message.get('phase'))
++                continue
++            elif kind == 'answer_error':
++                self.ui_activity = ''
++                if self.speech.streamed is not None:
++                    self.speech.cancel()
++                self.log_line('warning', message)
++                continue
++            elif kind == "partial":
++                if message:
++                    self.live.set(message)
++            elif kind == "state":
++                self.state.set(message)
++            elif kind == "screen_capture":
++                if self.capture_count == 0:
++                    self.hide_panel()
++                    self.root.withdraw()
++                self.capture_count += 1
++            elif kind == "screen_capture_done":
++                if self.capture_count:
++                    self.capture_count -= 1
++                if self.capture_count == 0 and self.root.state() == "withdrawn":
++                    self.root.deiconify()
++                    self.root.attributes("-topmost", True)
++                    self.exclude_orb_from_capture()
++            elif kind == "screen":
++                self.log_line(kind, message)
++            elif kind == "approval":
++                continue  # Nonblocking explicit approval card owns this decision.
++            elif kind == "command_output":
++                if self.command_window and self.command_window.winfo_exists():
++                    self.command_output.configure(state="normal")
++                    self.command_output.insert("end", message + "\n\n")
++                    self.command_output.see("end")
++                    self.command_output.configure(state="disabled")
++                self.log_line("command", message[-1000:])
++            elif kind == "show_command_prompt":
++                self.show_command_prompt()
++            elif kind == "question":
++                self.question.set(message[:700])
++                self.log_line(kind, message)
++            elif kind in {"thinking", "answer"}:
++                self.ui_activity = "thinking" if kind == "thinking" else ""
++                self.log_line(kind, message)
++                if kind == "answer":
++                    self.live.set(message[:450])
++                    self.speech.say(message)
++            elif kind == "stop_speech":
++                self.speech.cancel()  # "Stop talking; I have a question": silence now, keep listening.
++            elif kind == "spoken_reply":
++                self.ui_activity = ""
++                self.live.set(message[:450])
++                self.speech.say(message)
++            elif kind == "screen_offer":
++                self.question.set(message[:700])  # Screen pre-awareness: answer with yes, no, or the detail.
++                self.live.set(message[:450])
++                self.log_line("question", message)
++                self.speech.say(message)
++                engine = getattr(self, 'engine', None)
++                if engine is not None and not engine.active:
++                    engine.activate()
++            elif kind == "level":
++                self.level["value"] = message
++            elif kind == "backend":
++                self.backend.set(message)
++                self.log_line(kind, message)
++            elif kind in {"fatal", "listener_stopped"}:
++                self.state.set("Microphone off")
++                self.toggle.configure(text="Start listening")
++                self.mic_choice.configure(state="readonly")
++                self.level["value"] = 0
++                self.log_line(kind, message)
++            elif kind == "restart_listener":
++                from jarvis.audio import workers_alive
++                if self.listening_requested and not workers_alive(self.listener):
++                    self.toggle_listening()
++            elif kind == "repair":
++                record(BASE, message)
++            elif kind == "media_card":
++                continue  # The island draws the animated YouTube/Spotify card; not a transcript line.
++            else:
++                self.log_line(kind, message)
++        self.root.after(80, self.drain)
++
++    def toggle_listening(self):
++        if self.config.get('_ui_verification', False):
++            return
++        from jarvis.audio import workers_alive
++        if workers_alive(self.listener):
++            if self.listener.thread.is_alive():
++                self.stop()
++            else:
++                self.report('repair', 'Previous voice decoder is still stopping; typed input remains available.')
++            return
++        from jarvis.whisper_backend import settings as whisper_settings
++        try:
++            whisper_options = whisper_settings(self.config.get('whisper'))
++        except ValueError:
++            self.listening_requested = False
++            self.report('fatal', 'Invalid Whisper configuration; typed input remains available.')
++            return
++        self.session += 1
++        self.listening_requested = True
++        self.actions.anticipation.microphone_started()
++        self.actions.realtime.microphone_started()
++        session = self.session
++        self.config["microphone"] = self.mic_devices[self.mic_choice.current()]
++        (config_file(BASE)).write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
++        self.mic_choice.configure(state="disabled")
++        if not self.actions.task_active:
++            self.actions.desktop.target = None
++            self.actions.typing_failed = False
++            self.actions.open_target_pending = False
++        # Generation check also prevents a stopping recognizer enqueueing new work.
++        def submit(command):
++            if session == self.session:
++                self.speech.interrupt()
++                self.actions.submit(command)
++        engine = Engine(submit, self.report, self.config.get("wake_timeout_seconds", 90))
++        engine.free_text = lambda: bool(getattr(self.actions, "whatsapp_prompts", None)) and \
++            bool(self.actions.whatsapp_prompts[-1].free_text)  # Dictated names, addresses and messages.
++        self.engine = engine  # Screen offers wake it so a bare "yes" is heard.
++        from jarvis.voice_input import VoiceInput
++        from jarvis.command_cleanup import CommandCleanup
++        voice_input = VoiceInput(self.speech)
++        push_to_write = writer = None
++        if self.config.get("push_to_write", {}).get("enabled", True):
++            # Hold Left Ctrl + Left Alt: what you say is typed at the cursor until you let go.
++            from jarvis.push_to_write import PushToWrite
++            from jarvis.writing import SpokenWriter
++            writer = SpokenWriter(self.report)
++            def writing_changed(active, discarded):
++                self.actions.dictation_active = active  # Pauses on-screen suggestions while writing.
++                if active:
++                    self.speech.interrupt()
++                    self.report("state", "Writing what you say · say 'stop writing' or press Esc to stop"
++                                if push_to_write.latched else "Writing what you say · let go of Left Ctrl + Left Alt to stop")
++                else:
++                    self.report("state", "Awake · ready for commands" if not discarded else
++                                "Push-to-write cancelled (another key was pressed)")
++            push_to_write = PushToWrite(writing_changed,
++                                        self.config.get("push_to_write", {}).get("hold_seconds", 0.2))
++            push_to_write.start()
++            self.actions.hands_free = push_to_write.latch  # Hands-free writing ("yes" in Notepad, "start dictation").
++            self.actions.hands_free_state = push_to_write.latched_since
++        self.push_to_write, self.spoken_writer = push_to_write, writer
++        self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, whisper_options, activate_on_start=True,
++                                 playback=self.speech.output_recent, input_filter=voice_input.filter,
++                                 references=self.speech.output_references,
++                                 command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report),
++                                 push_to_write=push_to_write, writer=writer)
++        self.listener.start()
++        self.toggle.configure(text="Stop listening")
++
++    def stop(self):
++        realtime = getattr(getattr(self, 'actions', None), 'realtime', None)
++        if realtime is not None:
++            realtime.cancel(microphone=True)
++        anticipation = getattr(getattr(self, 'actions', None), 'anticipation', None)
++        if anticipation is not None:
++            anticipation.cancel(microphone=True)
++        if getattr(self,'desk',None) is not None:
++            self.desk.cancel_approvals()
++            self.desk.media.repair()  # Cancel only an owned outstanding media child; never replay it.
++        self.listening_requested = False
++        self.session += 1
++        self.actions.hands_free = self.actions.hands_free_state = None
++        for owned in (getattr(self, 'push_to_write', None), getattr(self, 'spoken_writer', None)):
++            if owned is not None:
++                owned.stop() if hasattr(owned, 'stop') else owned.close()
++        self.push_to_write = self.spoken_writer = None
++        if self.listener:
++            self.listener.stop()
++        self.actions.cancel()
++        self.speech.cancel()
++        self.ui_activity = ""
++        self.state.set("Stopping microphoneÃ¢â‚¬Â¦")
++        self.toggle.configure(text="Start listening")
++
++    def preview_command(self):
++        self.desk.show('History', reveal=True)
++        self.show_panel()
++        engine = Engine(lambda c: self.log_line("preview", repr(c)), self.log_line)
++        engine.activate()
++        engine.feed(self.preview.get(), final=True)
++
++    def ask_question(self):
++        text = self.preview.get().strip()
++        if text:
++            self.actions.submit(Command("ask", text))
++
++    def send_input(self):
++        """Enter uses the same command/question routing as spoken instructions."""
++        text = self.preview.get().strip()
++        if text:
++            from jarvis.audio import command_text
++            engine = Engine(self.actions.submit, self.report)
++            engine.activate()
++            engine.feed(command_text(text), final=True, raw=text)
++
++    def ask_screen(self):
++        text = self.preview.get().strip() or "What is visible in this window?"
++        self.report("question", text)
++        self.actions.knowledge.submit(text, screen=True)
++
++    def do_task(self):
++        text = self.preview.get().strip()
++        if text:
++            self.actions.submit(Command("task", text))
++
++    def close(self):
++        self.closing = True
++        self.actions.closing = True
++        target = getattr(self.island, 'drop_target', None)
++        if target is not None:
++            target.close()
++        self.island.close()
++        self.desk.close()
++        if os.environ.get("JARVIS_SUPERVISED") == "1" and not self.config.get('_ui_verification', False):
++            (BASE / ".jarvis-runtime" / "stop").touch()
++        self.watchdog.close()
++        self.docker_service.close()
++        self.model_recovery.close()
++        self.stop()
++        self.speech.close()
++        self.actions.close()
++        self.root.destroy()
++
++    def save_speech_settings(self, _event=None):
++        self.speech.options["enabled"] = self.speak_enabled.get()
++        if not self.speech.options["enabled"]:
++            self.speech.cancel()
++        language = {"Auto": "auto", "English": "en", "Hindi": "hi"}[self.answer_language.get()]
++        self.speech.options["language"] = language
++        self.config["knowledge"]["answer_language"] = language
++        if not self.config.get('_ui_verification', False):
++            (config_file(BASE)).write_text(json.dumps(self.config, indent=2) + "\n", encoding="utf-8")
++
++
++if __name__ == "__main__":
++    App(tk.Tk()).root.mainloop()

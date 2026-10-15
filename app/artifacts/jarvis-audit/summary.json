@@ -1,0 +1,185 @@
+{
+  "catalog_counts": {
+    "PASS": 354,
+    "FAIL": 0,
+    "BLOCKED": 9,
+    "SKIPPED": 0,
+    "NOT RUN": 821
+  },
+  "by_tier": {
+    "P0": {
+      "PASS": 87,
+      "BLOCKED": 5,
+      "NOT RUN": 204
+    },
+    "P1": {
+      "PASS": 190,
+      "BLOCKED": 2,
+      "NOT RUN": 437
+    },
+    "P2": {
+      "PASS": 77,
+      "BLOCKED": 2,
+      "NOT RUN": 180
+    }
+  },
+  "by_category": {
+    "config": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "contract": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "edge": {
+      "PASS": 22,
+      "NOT RUN": 52
+    },
+    "fault": {
+      "PASS": 44,
+      "NOT RUN": 104
+    },
+    "idempotency": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "load": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "observability": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "performance": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "privacy": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "race": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "recovery": {
+      "PASS": 22,
+      "NOT RUN": 52
+    },
+    "resource": {
+      "PASS": 11,
+      "NOT RUN": 26
+    },
+    "scenario": {
+      "PASS": 134,
+      "BLOCKED": 9,
+      "NOT RUN": 301
+    },
+    "security": {
+      "PASS": 22,
+      "NOT RUN": 52
+    },
+    "semantic": {
+      "PASS": 11,
+      "NOT RUN": 26
+    }
+  },
+  "runs": {
+    "catalog-tests.xml": {
+      "PASS": 27
+    },
+    "completion-full-regression.xml": {
+      "PASS": 2020,
+      "BLOCKED": 3
+    },
+    "completion-targeted.xml": {
+      "PASS": 120,
+      "BLOCKED": 3
+    },
+    "full-tests.xml": {
+      "PASS": 1851
+    },
+    "modules/01-architecture-inventory/cases-and-contracts.xml": {
+      "PASS": 67
+    },
+    "modules/01-architecture-inventory/full-regression.xml": {
+      "PASS": 1897
+    },
+    "modules/02-perception-cognition/cases-and-contracts.xml": {
+      "PASS": 45
+    },
+    "modules/02-perception-cognition/full-regression.xml": {
+      "PASS": 1927
+    },
+    "modules/03-intent-direct/cases-and-contracts.xml": {
+      "PASS": 36
+    },
+    "modules/03-intent-direct/full-regression.xml": {
+      "PASS": 1942
+    },
+    "modules/04-voice-stt/cases-and-contracts.xml": {
+      "BLOCKED": 3,
+      "PASS": 39
+    },
+    "modules/05-voice-tts/cases-and-contracts.xml": {
+      "PASS": 161,
+      "BLOCKED": 2
+    },
+    "modules/05-voice-tts/full-regression.xml": {
+      "PASS": 2073,
+      "BLOCKED": 5
+    },
+    "modules/06-questions-context/cases-and-contracts.xml": {
+      "PASS": 206
+    },
+    "modules/06-questions-context/full-regression.xml": {
+      "PASS": 2126,
+      "BLOCKED": 5
+    },
+    "modules/07-model-routing/cases-and-contracts.xml": {
+      "PASS": 238
+    },
+    "modules/07-model-routing/full-regression.xml": {
+      "PASS": 2173,
+      "BLOCKED": 5
+    },
+    "modules/08-gpu-scheduler/cases-and-contracts.xml": {
+      "PASS": 219,
+      "BLOCKED": 4
+    },
+    "modules/08-gpu-scheduler/full-regression.xml": {
+      "PASS": 2213,
+      "BLOCKED": 7
+    },
+    "modules/09-deliberation/cases-and-contracts.xml": {
+      "PASS": 204,
+      "BLOCKED": 1
+    },
+    "modules/09-deliberation/full-regression.xml": {
+      "PASS": 2271,
+      "BLOCKED": 8
+    },
+    "modules/10-dag-planning/cases-and-contracts.xml": {
+      "PASS": 180,
+      "BLOCKED": 1
+    },
+    "modules/10-dag-planning/full-regression.xml": {
+      "PASS": 2314,
+      "BLOCKED": 8
+    },
+    "modules/11-skill-selection/cases-and-contracts.xml": {
+      "PASS": 157,
+      "BLOCKED": 1
+    },
+    "modules/11-skill-selection/full-regression.xml": {
+      "PASS": 2355,
+      "BLOCKED": 9
+    },
+    "neighbor-tests.xml": {
+      "PASS": 133
+    }
+  },
+  "next_case": "JRV-04-001"
+}

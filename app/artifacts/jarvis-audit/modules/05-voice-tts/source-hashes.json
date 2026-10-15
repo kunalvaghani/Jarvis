@@ -1,0 +1,27 @@
+{
+  "jarvis/speech.py": {
+    "before": "4acb13c5cd7e52c7e1f2192cb7ef4565219235e59143ed7746a4ab68542df8a5",
+    "after": "ce2355c327e249caf9fbe3b274e18fd6dd03f78e3e5011f610ec04823377b5e1",
+    "preimage": "Captured before module05, including earlier dirty work; diff normalizes line endings only"
+  },
+  "jarvis/f5_speech.py": {
+    "before": "0e53426bffef42aaa4e91a2957313dc2478db62f26693de529fbf36178a74baf",
+    "after": "0f219542701b544ab7e0986de50ec737c32379017507fc7bc27a0f24a07d9864",
+    "preimage": "Captured before module05, including earlier dirty work; diff normalizes line endings only"
+  },
+  "jarvis/kokoro_speech.py": {
+    "before": "d4fcb4d133037dd274c8d5dab1db8c59bba8195979177381997cf2cfc32c0c4d",
+    "after": "77261164466da2664e1652c7fc51a53ceeee87d914667458514375f7e904d61b",
+    "preimage": "Captured before module05, including earlier dirty work; diff normalizes line endings only"
+  },
+  "jarvis/runtime_health.py": {
+    "before": "cc36f0e764074188d64f44a58351843822cc2426c6e2bc8f2fc61a8a9460eea3",
+    "after": "b8726d661db7c65ec7f4c04e22d3c47eec588299ff8832a7b9535695768ffd16",
+    "preimage": "Captured before module05, including earlier dirty work; diff normalizes line endings only"
+  },
+  "config/runtime_manifest.json": {
+    "before": "ac8a24d9b6853730c2db7bbbea27c6710feb17f53786382253253b6d6bb03ad6",
+    "after": "c208573a7e52010976254bdaed297f1579c3c095c3a150a7aa1d4298f58fa716",
+    "preimage": "Captured before module05, including earlier dirty work; diff normalizes line endings only"
+  }
+}

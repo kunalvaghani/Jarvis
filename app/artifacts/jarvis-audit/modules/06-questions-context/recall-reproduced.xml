@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.580" timestamp="2026-10-15T12:00:49.908654+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_questions_context_audit" name="test_catalog[JRV-06-003]" time="0.026"><failure message="assert (False)">tests\test_questions_context_audit.py:136: in test_catalog
+    assert found and projection == history
+E   assert (False)</failure></testcase></testsuite></testsuites>

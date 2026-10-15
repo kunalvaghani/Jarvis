@@ -1,5 +1,15 @@
 # Natural male voice and smooth long speech — 2026-10-10 IST
 
+**2026-10-15 context:** This guide's October 10 Kokoro selection and measurements
+are historical; F5 is currently selected. Installed Kokoro/Piper are now runtime
+fallbacks for failures before any text reaches F5. Current queues and text/audio
+pieces are bounded, and playback heartbeats keep a completed long waveform from
+triggering the progress watchdog. Native worker diagnostics no longer append raw
+spoken text to `speech.log`. [Current F5 behavior](f5-voice.md) and
+[dated speech audit evidence](../artifacts/jarvis-audit/modules/05-voice-tts/inventory.md)
+separate fixtures, real no-playback synthesis, acoustic acceptability and resource
+contention blockers. No new voice sample or screenshot is fabricated.
+
 Jarvis now speaks with a man's voice and a more human delivery: varied pauses, soft breaths before longer
 sentences, slight changes of pace, emotional colour, and a warmer, wittier conversational style with the
 occasional light joke. Long answers are spoken in full, without stopping partway, and answers start being spoken

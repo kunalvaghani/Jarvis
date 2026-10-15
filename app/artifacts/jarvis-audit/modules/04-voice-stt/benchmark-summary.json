@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Two owned 100 ms/48 kHz blocks, push-to-write release, fake capture/VAD/model; 20 alternating warm and 5 cold processes/build. No real audio capture, GPU, inference, typing or WER. RSS sampled, not peak.",
+  "pcm_samples": {
+    "before": 6400,
+    "after": 3200
+  },
+  "expected_samples_at_16khz": 3200,
+  "wer": "BLOCKED: dedicated GPU headroom and labeled acoustic corpora required",
+  "before_warm_capture": {
+    "p50_ms": 1.9166000020049978,
+    "p95_ms": 2.5796999980229884
+  },
+  "before_cold_fixture_startup": {
+    "p50_ms": 2102.065000006405,
+    "p95_ms": 2129.9890000009327
+  },
+  "after_warm_capture": {
+    "p50_ms": 2.0549500040942803,
+    "p95_ms": 2.6734999992186204
+  },
+  "after_cold_fixture_startup": {
+    "p50_ms": 2042.0303999999305,
+    "p95_ms": 2124.6758999986923
+  }
+}

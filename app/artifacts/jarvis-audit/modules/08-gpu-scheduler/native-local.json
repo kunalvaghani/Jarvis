@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "ollama": "0.40.0",
+  "model": "qwen3.5:9b",
+  "initial_gpu_cold": false,
+  "prior_resident_names": [
+    "qwen3.5:9b"
+  ],
+  "samples": [
+    {
+      "phase": "initial",
+      "answer": "4",
+      "ttft_seconds": 0.6560000000026776,
+      "seconds": 0.9219999999986612,
+      "allocation": {
+        "role": "question",
+        "num_gpu": 4,
+        "context_tokens": 16384,
+        "gpu_slot": true
+      },
+      "metrics": {
+        "load_duration": 84731200,
+        "total_duration": 716440200,
+        "eval_count": 2,
+        "eval_duration": 264159000,
+        "prompt_eval_count": 24,
+        "prompt_eval_duration": 365570000
+      }
+    },
+    {
+      "phase": "warm1",
+      "answer": "4",
+      "ttft_seconds": 0.5620000000053551,
+      "seconds": 0.7970000000059372,
+      "allocation": {
+        "role": "question",
+        "num_gpu": 4,
+        "context_tokens": 16384,
+        "gpu_slot": true
+      },
+      "metrics": {
+        "load_duration": 89457000,
+        "total_duration": 569643100,
+        "eval_count": 2,
+        "eval_duration": 207011000,
+        "prompt_eval_count": 24,
+        "prompt_eval_duration": 270635000
+      }
+    },
+    {
+      "phase": "warm2",
+      "answer": "4",
+      "ttft_seconds": 0.4529999999940628,
+      "seconds": 0.6719999999986612,
+      "allocation": {
+        "role": "question",
+        "num_gpu": 4,
+        "context_tokens": 16384,
+        "gpu_slot": true
+      },
+      "metrics": {
+        "load_duration": 90107300,
+        "total_duration": 544218900,
+        "eval_count": 2,
+        "eval_duration": 206421000,
+        "prompt_eval_count": 24,
+        "prompt_eval_duration": 245643000
+      }
+    }
+  ],
+  "sampled_peak_gpu_used_mb": 1341,
+  "initial_sampled_gpu_used_mb": 1341,
+  "observer_peak_rss_bytes": 34414592,
+  "scope": "Sequential synthetic loopback inference only; sampled physical GPU peak and observer RSS, not instantaneous/Ollama RSS peaks. No cache forcibly unloaded, no voice/GUI, no new model/download.",
+  "external_writes": 0,
+  "lease_readback": {
+    "active": null,
+    "pending": 0
+  }
+}

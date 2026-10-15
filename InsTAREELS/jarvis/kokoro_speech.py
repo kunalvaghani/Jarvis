@@ -114,18 +114,33 @@ class Player:
                                       blocksize=int(rate * .04), latency="low")
         self.stream.start()
 
-    def add(self, request_id, audio):
+    def add(self, request_id, audio, stop=None):
+        if (not isinstance(audio,self.np.ndarray) or audio.ndim!=1 or not audio.size
+                or audio.size>self.rate*30 or not self.np.isfinite(audio).all()):
+            raise ValueError('Invalid or oversized local voice audio')
         with self.lock:
+            if stop is not None and stop.is_set():return False
+            if getattr(self,'stream',None) is not None and not self.stream.active:
+                raise OSError('Audio output unavailable')
+            if len(self.pieces)>=128:raise BufferError('Local voice playback buffer full')
             self.pieces.append([request_id, audio, 0])
+            return True
 
-    def finish(self, request_id, seconds):
+    def finish(self, request_id, seconds, stop=None):
         with self.lock:
+            if stop is not None and stop.is_set():return
+            if len(self.pieces)>=128:raise BufferError('Local voice playback buffer full')
             self.pieces.append([request_id, None, seconds])  # End marker: report when reached.
 
     def clear(self):
         with self.lock:
             self.pieces.clear()
             self.current = None
+
+    def discard(self, request_ids):
+        with self.lock:
+            self.pieces=collections.deque(row for row in self.pieces if row[0] not in request_ids)
+            if self.current is not None and self.current[0] in request_ids:self.current=None
 
     def callback(self, out, frames, timing, status):
         out.fill(0)
@@ -143,6 +158,7 @@ class Player:
                         continue
                     if position == 0 and getattr(self, "started_id", None) != request_id:
                         self.started_id = request_id
+                        self.played_samples = 0
                         self.events.put({"id": request_id, "started": True})
                 request_id, audio, position = self.current
                 take = min(frames - filled, len(audio) - position)
@@ -150,6 +166,10 @@ class Player:
                 filled += take
                 position += take
                 self.current[2] = position
+                self.played_samples=getattr(self,'played_samples',0)+take
+                if self.played_samples>=self.rate:
+                    self.played_samples%=self.rate
+                    self.events.put({'id':request_id,'playback':True})
                 if position >= len(audio):
                     self.current = None
 
@@ -201,7 +221,7 @@ def serve(loader=None, renderer=None, coalesce=False):
     protocol = sys.stdout
     base = Path(__file__).resolve().parent.parent
     events = queue.Queue()
-    requests = queue.Queue()
+    requests = queue.Queue(maxsize=64)
     epoch = [0]  # Incremented by "stop"; work from an older epoch is discarded.
 
     class Stale:
@@ -219,7 +239,10 @@ def serve(loader=None, renderer=None, coalesce=False):
                 return
             protocol.write(json.dumps(row) + "\n")
             protocol.flush()
-    threading.Thread(target=writer, daemon=True).start()
+    writer_thread=threading.Thread(target=writer, daemon=True)
+    writer_thread.start()
+    player=None
+    worker=None
     try:
         raise_priority()
         with contextlib.redirect_stdout(sys.stderr):
@@ -252,30 +275,34 @@ def serve(loader=None, renderer=None, coalesce=False):
                                 break
                             total += len(audio) / rate
                             if player is not None:
-                                player.add(request["id"], audio)
+                                player.add(request["id"], audio, stale)
                             events.put({'id': request['id'], 'audio_ready': True,
                                         'synthesis_seconds': round(time.monotonic()-started, 3)})
                     if stale.is_set():
                         continue
                     if player is not None:
                         for index, row in enumerate(batch):
-                            player.finish(row['id'], total if index == 0 else 0.)
+                            player.finish(row['id'], total if index == 0 else 0., stale)
                     else:
                         for index, row in enumerate(batch):
                             events.put({"id": row['id'], "done": True, "audio_seconds": round(total, 2) if index == 0 else 0.,
                                         "synthesis_seconds": round(time.monotonic() - started, 3),
                                         "coalesced_ids": [part['id'] for part in batch]})
                 except Exception as exc:
+                    if player is not None:player.discard({row['id'] for row in batch})
                     for row in batch:
-                        events.put({"id": row.get("id"), "error": "Local voice failed: " + str(exc)})
+                        events.put({"id": row.get("id"), "error": "synthesis_or_output_failure"})
         worker = threading.Thread(target=synthesis, daemon=True)
         worker.start()
+        last_id=0
         for line in sys.stdin:
             try:
+                if len(line)>65536:continue
                 request = json.loads(line)
-            except ValueError:
+            except (ValueError,RecursionError):
                 continue
-            if request.get("stop"):
+            if not isinstance(request,dict):continue
+            if request.get("stop") is True:
                 epoch[0] += 1
                 while True:
                     try:
@@ -286,14 +313,35 @@ def serve(loader=None, renderer=None, coalesce=False):
                     player.clear()
                 events.put({"stopped": True})
                 continue
+            request_id=request.get('id')
+            if type(request_id) is not int or not 0<request_id<2**63:continue
+            if request_id<=last_id:
+                continue  # A retransmitted request id cannot replay audio.
+            text=request.get('text')
+            if not isinstance(text,str) or len(text)>20000:
+                events.put({'id':request_id,'error':'invalid_request'});continue
+            last_id=request_id
+            if not text.strip():
+                events.put({'id':request_id,'done':True,'audio_seconds':0.});continue
             request["_epoch"] = epoch[0]
-            requests.put(request)
-        requests.put(None)
+            try:requests.put_nowait(request)
+            except queue.Full:events.put({'id':request_id,'error':'request_queue_full'})
+        # EOF must not discard output from an already accepted quick request.
+        # Long/stuck synthesis remains bounded and is cancelled, never replayed.
+        try:requests.put(None,timeout=.2)
+        except queue.Full:epoch[0]+=1
+        worker.join(timeout=5.)
+        if worker.is_alive():epoch[0]+=1
     except Exception as exc:
-        events.put({"error": "Local voice initialization failed: " + str(exc)})
+        events.put({"error": "initialization_failure"})
     finally:
+        epoch[0]+=1
+        if player is not None:
+            player.clear()
+            try:player.close()
+            except Exception:pass
         events.put(None)
-        time.sleep(.2)
+        writer_thread.join(timeout=1.)
 
 
 if __name__ == "__main__":

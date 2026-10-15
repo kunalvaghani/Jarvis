@@ -12,7 +12,7 @@ from jarvis.commands import Command, parse
 from jarvis.engine import Engine
 from jarvis.names import rank, rank_spelling
 from jarvis.ui_controls import matches, UIControls
-from test_ui_controls import FakeRunner, control
+from tests.test_ui_controls import FakeRunner, control
 from scripts.catalog.build_catalog_index import build
 
 

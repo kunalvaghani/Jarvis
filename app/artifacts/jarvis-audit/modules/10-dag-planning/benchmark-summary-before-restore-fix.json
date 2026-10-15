@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Same-process source-fingerprint component;5 cleared digest-cache (not OS/model cold),20 warm samples/version. Before6 source digests;after8 plus planner labels and metadata invalidation. Both algorithms hash current same files. No tool/network/model dispatch;TTFT/audio/VRAM not applicable;tracemalloc is not whole-host RAM.",
+  "results": {
+    "before_cold": {
+      "samples": 5,
+      "p50_ms": 1.3728000049013644,
+      "p95_ms": 2.0005000042147003,
+      "peak_python_bytes": 124924
+    },
+    "before_warm": {
+      "samples": 20,
+      "p50_ms": 1.322950000030687,
+      "p95_ms": 1.4711999974679202,
+      "peak_python_bytes": 120412
+    },
+    "after_cold": {
+      "samples": 5,
+      "p50_ms": 3.3361000023433007,
+      "p95_ms": 3.4290000039618462,
+      "peak_python_bytes": 127477
+    },
+    "after_warm": {
+      "samples": 20,
+      "p50_ms": 1.2100000021746382,
+      "p95_ms": 1.3695000016014092,
+      "peak_python_bytes": 8567
+    }
+  }
+}

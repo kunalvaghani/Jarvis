@@ -2,6 +2,7 @@ from .paths import state_file
 import ctypes
 from ctypes import wintypes
 import json
+import re
 import os
 from pathlib import Path
 import queue
@@ -578,6 +579,11 @@ class Actions:
             return False
         verdict = engine.interpret_feedback(command.value or '')['verdict']
         goal, opinion = pending['goal'], pending['opinion']
+        if verdict == 'reject' and re.fullmatch(r"(?:no|nope|nah|stop|cancel(?: that)?|do not|don't)[.! ]*", (command.value or '').strip(), re.I):
+            self.pending_opinion = None
+            engine.record_outcome(pending.get('decision_id'), False, 'user declined')
+            self.report('spoken_reply', 'Cancelled. No action was taken.')
+            return True
         if verdict == 'approve':
             self.pending_opinion = None
             self._agreed_approach = opinion.get('recommendation') or ''
@@ -641,6 +647,15 @@ class Actions:
             decision = engine.decide(opinion)
         except Exception:
             self._agreed_approach = None
+            if cancelled():
+                raise ValueError('Deliberation cancelled.')
+            from .deliberation import BULK_DESTRUCTIVE
+            if BULK_DESTRUCTIVE.search(command.value):
+                opinion = engine._heuristic_opinion(command.value,command,'high',{})
+                decision = engine.decide(opinion)
+                decision_id = engine.record(opinion,decision,'','proposed')
+                self.pending_opinion = {'goal':command.value,'opinion':opinion,'decision_id':decision_id}
+                return decision['message']
             return None  # Deliberation never blocks a task; proceed normally on any error.
         if decision['propose']:
             decision_id = engine.record(opinion, decision, opinion.get('recommendation'), 'proposed')
@@ -944,7 +959,7 @@ class Actions:
             raise ValueError("Open the Jarvis app to approve this action.")
         self.approvals_waiting += 1  # "approve" / "don't send" by voice answers the card too.
         try:
-            approved = not cancelled() and self.approval_handler(kind, detail, cancelled) and not cancelled()
+            approved = not cancelled() and self.approval_handler(kind, detail, cancelled) is True and not cancelled()
         finally:
             self.approvals_waiting -= 1
         if not approved:
@@ -1203,8 +1218,9 @@ class Actions:
                 self.ui_controls.clear_pending()
             self.report("question", "")
             self.task_active = True
+            owned_task_id = ''  # A failed checkpoint start must not finish an older task.
             try:
-                self.task_state.start(command.value, "task")
+                owned_task_id = self.task_state.start(command.value, "task")
                 result = None
                 if self.config.get('agent_runtime', {}).get('direct_execution', False):
                     from .direct_execution import run as run_direct
@@ -1218,7 +1234,7 @@ class Actions:
                 from .gmail_workflows import UnreadSearchResult
                 paused = result and not isinstance(result, UnreadSearchResult) and any(word in result.casefold() for word in
                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
-                self.task_state.finish("paused" if paused else "completed", result)
+                self.task_state.finish("paused" if paused else "completed", result, task_id=owned_task_id)
                 if decision_id is not None and engine is not None:
                     engine.record_outcome(decision_id, not paused, (result or "")[:160])
                 if paused and engine is not None and getattr(engine, 'enabled', False) and command.extra != 'approved_plan' and not cancelled():
@@ -1227,14 +1243,14 @@ class Actions:
             except Exception as exc:
                 from .clarification import TaskClarification
                 if isinstance(exc, TaskClarification) and not cancelled():
-                    self.task_state.finish("paused", exc)
+                    self.task_state.finish("paused", exc, task_id=owned_task_id)
                     self.pending_question = {"time": time.monotonic(), "goal": command.value,
                         "question": str(exc), "slot": exc.slot, "choices": getattr(exc, "choices", []), "source": self.task_state.snapshot()}
                     self.report("question", str(exc))
                     self.report("spoken_reply", str(exc))
                     return "Task paused, waiting for your answer: " + str(exc)
                 self.task_state.finish("cancelled" if cancelled() else
-                    "paused" if str(exc).startswith("Task paused") else "failed", exc)
+                    "paused" if str(exc).startswith("Task paused") else "failed", exc, task_id=owned_task_id)
                 raise
             finally:
                 self.task_active = False

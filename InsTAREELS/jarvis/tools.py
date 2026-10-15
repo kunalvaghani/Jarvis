@@ -104,6 +104,13 @@ class ToolRegistry:
 
     def execute(self, step, cancelled, activate=None):
         from .agent_events import check_policy, event
+        if 'task_id' in step:
+            from .task_state import TaskState
+            state=getattr(self.actions,'task_state',None)
+            if not isinstance(state,TaskState):
+                raise ValueError('Task identity is unavailable; execution refused.')
+            state.require_identity(step['task_id'])
+            step={key:value for key,value in step.items() if key!='task_id'}
         name = step.get('action')
         allowed = getattr(self.actions, 'allowed_tools', None)
         if isinstance(allowed, (set, frozenset)) and name not in allowed:

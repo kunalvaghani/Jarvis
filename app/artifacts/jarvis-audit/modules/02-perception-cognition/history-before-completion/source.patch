@@ -1,0 +1,194 @@
+--- module02-pre/cognition.py
++++ jarvis/cognition.py
+@@ -112,8 +112,15 @@
+ class Cognition:
+     def __init__(self, actions, options=None):
+         self.actions = actions
+-        self.options = options or {}
++        if options is not None and not isinstance(options, dict):
++            raise ValueError('cognition options must be an object')
++        self.options = options if options is not None else {}
+         self.enabled = self.options.get("enabled", True)
++        rate = self.options.get('cycle_hz', 4)
++        if type(self.enabled) is not bool:
++            raise ValueError('cognition.enabled must be a boolean')
++        if type(rate) not in (int, float) or not math.isfinite(rate):
++            raise ValueError('cognition.cycle_hz must be a finite number')
+         self.lock = threading.RLock()
+         self.percepts = deque(maxlen=200)
+         self.inbox = deque(maxlen=200)
+@@ -133,7 +140,7 @@
+         self.stats_path = base / ".jarvis-runtime" / "cognition" / "procedures.json"
+         self.state_path = base / ".jarvis-runtime" / "cognition" / "state.json"
+         self.stats = self._load_stats()
+-        self.hz = float(self.options.get("cycle_hz", 4))
++        self.hz = max(.5, min(20., float(rate)))
+         self._flush = threading.Event()
+         self.writer_thread = None
+         self._writer_restarts = 0
+@@ -141,6 +148,12 @@
+         self._stats_io = threading.Lock()
+         self.persistence_error = None
+         self.dropped_events = 0
++        self.rejected_events = 0
++        self.tick_errors = 0
++        self.tick_error = None
++        self.tick_overruns = 0
++        self._last_tick = self._cycle_clock
++        self.tick_duration_ms = 0.
+         from scipy.special import betaincinv
+         self._beta_quantile = betaincinv  # Prime outside the loop, not on its first tick.
+ 
+@@ -163,7 +176,7 @@
+         try:
+             self._write_stats()
+         except OSError as exc:
+-            self.persistence_error = type(exc).__name__+': '+str(exc)[:160]
++            self.persistence_error = type(exc).__name__
+             # Statistics failure cannot change an external action's outcome.
+ 
+     def _write_stats(self):
+@@ -197,6 +210,11 @@
+         """Any module reports something it sensed; the loop folds it into working memory."""
+         if not self.enabled or not content:
+             return
++        if any(type(value) is not str for value in (source, modality, content)) or len(source) > 64 or len(modality) > 32:
++            with self.lock:
++                self.rejected_events += 1
++            raise ValueError('cognition percept must contain bounded text labels and text content')
++        content = content[:300].encode('utf-8', errors='replace').decode('utf-8')
+         started = time.perf_counter()
+         salience = salience if type(salience) in (int,float) and math.isfinite(salience) else .5
+         # Caller-provided sensor scores cannot eclipse a deliberate voice command
+@@ -230,9 +248,20 @@
+                 self.workspace["goal"] = text[:200]
+ 
+     def perceive_window(self, title):
+-        if title and title != getattr(self, "_last_window", None):
+-            self._last_window = title
+-            self.perceive("screen", "vision", title, .5)
++        if type(title) is not str:
++            raise ValueError('cognition window title must be text')
++        title = title[:300].encode('utf-8', errors='replace').decode('utf-8')
++        with self.lock:
++            if title != getattr(self, "_last_window", None):
++                self._last_window = title
++                # Window observations are current context, not historical attention.
++                for queue in (self.percepts, self.inbox):
++                    stale = [p for p in queue if p.source == 'screen' and p.modality == 'vision']
++                    for percept in stale:
++                        queue.remove(percept)
++                self.attention = [p for p in self.attention if not (p.source == 'screen' and p.modality == 'vision')]
++                self.workspace['focus'] = title
++                self.perceive("screen", "vision", title, .5)
+ 
+     # --- 2. working memory ------------------------------------------------------------------------------------------
+     def update_workspace(self):
+@@ -240,18 +269,25 @@
+         actions, now = self.actions, time.time()
+         with self.lock:
+             percepts = list(self.percepts)
++            window = getattr(self, '_last_window', None)
+         attention = sorted(percepts, key=lambda p:(p.weight(now), p.at), reverse=True)[:7]
+         current = getattr(actions, "current_item", None)
+         prompts = getattr(actions, "whatsapp_prompts", None) or []
+         pending = getattr(prompts[-1], "question", "") if prompts else ("approval card waiting" if getattr(actions, "approvals_waiting", 0) else "")
+         with self.lock:
++            # A window may change while external workspace attributes are read.
++            current_window = getattr(self, '_last_window', None)
++            if current_window != window:
++                attention = [p for p in attention if not (p.source == 'screen' and p.modality == 'vision')
++                             or p.content == current_window]
+             self.attention = attention
+             self.workspace.update({
+                 "active_task": ((current[1].value or current[1].kind)[:120] if current else ""),
+                 "queued": len(getattr(actions, "pending_tasks", []) or []),
+                 "pending": pending[:160],
+                 "style": list((getattr(actions, "session_style", {}) or {}).values()),
+-                "focus": next((p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
++                "focus": current_window if current_window is not None else next(
++                    (p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
+             })
+         self._mark("working_memory", started)
+ 
+@@ -457,6 +493,8 @@
+             return run()
+         prediction = self.predict(command)
+         started = time.perf_counter()
++        state = getattr(self.actions, 'task_state', None)
++        prior_task = state.snapshot() if command.kind == 'task' and state is not None else None
+         self._mark("action")
+         with self.lock:
+             self.workspace["last_action"] = command.kind + " " + (command.value or "")[:80]
+@@ -466,6 +504,14 @@
+             self.evaluate(command, prediction, False, time.perf_counter() - started, str(exc))
+             raise
+         text = str(result or "")
++        pending = getattr(self.actions, 'pending_opinion', None)
++        current_task = state.snapshot() if command.kind == 'task' and state is not None else None
++        execution_started = (current_task or {}).get('started_at') != (prior_task or {}).get('started_at')
++        if command.kind == 'task' and not execution_started and isinstance(pending, dict) and pending.get('goal') == command.value:
++            # A recommendation awaiting consent is not an executed procedure.
++            self.perceive('action', 'feedback', 'awaiting approval: task', .4)
++            self.latency['action'] = round((time.perf_counter() - started) * 1000, 1)
++            return result
+         ok = not re.match(r"^(?:i couldn'?t|couldn'?t|failed|error|not available|nothing was sent|cancelled|task (?:paused|cancelled|failed)|paused)", text, re.I)
+         self.evaluate(command, prediction, ok, time.perf_counter() - started, "" if ok else text)
+         self.latency["action"] = round((time.perf_counter() - started) * 1000, 1)
+@@ -519,7 +565,7 @@
+                     self.write_state()
+                     self.persistence_error = None
+                 except Exception as exc:
+-                    self.persistence_error = type(exc).__name__+': '+str(exc)[:160]
++                    self.persistence_error = type(exc).__name__
+             if self.stop.is_set():
+                 # Updates admitted during an in-flight flush must survive shutdown.
+                 # Never busy-loop on a disk fault or let shutdown replay an action.
+@@ -534,22 +580,30 @@
+         deadline = time.monotonic()+period
+         last_write = 0.
+         while not self.stop.wait(max(0,deadline-time.monotonic())):
++            started = time.monotonic()
+             try:
+                 self.tick()
++                self.tick_error = None
+                 if time.monotonic() - last_write > 1.:
+                     if not self.writer_thread.is_alive():
+                         self.repair_persistence()
+                     self._flush.set()
+                     last_write = time.monotonic()
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self.tick_errors += 1
++                self.tick_error = type(exc).__name__
++            finally:
++                self._last_tick = time.monotonic()
++                self.tick_duration_ms = (self._last_tick - started) * 1000
++                if self.tick_duration_ms > period * 1000:
++                    self.tick_overruns += 1
+             deadline += period
+             if deadline <= time.monotonic():
+                 deadline = time.monotonic()+period  # No catch-up burst after overload.
+ 
+     def tick(self):
+         with self.lock:
+-            batch = list(self.inbox)
++            batch = bool(self.inbox)
+             self.inbox.clear()
+         if batch or self.cycles % 4 == 0:
+             self.update_workspace()
+@@ -569,8 +623,13 @@
+         return {
+             "cycle_hz": self.measured_hz(), "cycles": self.cycles,
+             'dropped_events':self.dropped_events,'persistence_error':self.persistence_error,
++            'rejected_events': self.rejected_events,
+             'persistence_worker_alive':bool(self.writer_thread and self.writer_thread.is_alive()),
+             'persistence_worker_restarts':self._writer_restarts,
++            'tick_errors': self.tick_errors, 'tick_error': self.tick_error,
++            'tick_overruns': self.tick_overruns, 'tick_duration_ms': round(self.tick_duration_ms, 3),
++            'tick_degraded': bool(self.tick_error or (self.thread and self.thread.is_alive() and
++                time.monotonic() - self._last_tick > max(1., 3. / self.hz))),
+             "modules": {name: {"active": now - self.activity[name] < 1.5, "last_s": round(now - self.activity[name], 1) if self.activity[name] else None,
+                                "latency_ms": self.latency[name], "events": self.counts[name]} for name in MODULES},
+             "working_memory": self.working_memory(),

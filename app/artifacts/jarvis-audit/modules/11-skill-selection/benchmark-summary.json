@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Saved pre-change versus current rank_tools, same150 synthetic guide rows/six registered tool labels/machine;5 cleared description-cache and20 warm calls each. Not OS/model cold. No provider/helper/model/GPU work. Tracemalloc transient component allocation, not whole RAM. TTFT/audio/VRAM not applicable.",
+  "results": {
+    "before_cold": {
+      "samples": 5,
+      "p50_ms": 12.713100004475564,
+      "p95_ms": 20.266500003344845,
+      "peak_python_bytes": 152423
+    },
+    "before_warm": {
+      "samples": 20,
+      "p50_ms": 12.587650002387818,
+      "p95_ms": 12.776899995515123,
+      "peak_python_bytes": 5793
+    },
+    "after_cold": {
+      "samples": 5,
+      "p50_ms": 8.583499999076594,
+      "p95_ms": 8.67100000323262,
+      "peak_python_bytes": 232295
+    },
+    "after_warm": {
+      "samples": 20,
+      "p50_ms": 6.6179499990539625,
+      "p95_ms": 12.850499995693099,
+      "peak_python_bytes": 5478
+    }
+  },
+  "rankings_identical": true,
+  "selected": [
+    "browser_inspect",
+    "browser_navigate",
+    "browser_fill",
+    "browser_click",
+    "read_file"
+  ],
+  "external_side_effects": 0
+}

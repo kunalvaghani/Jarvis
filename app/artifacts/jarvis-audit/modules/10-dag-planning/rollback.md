@@ -1,0 +1,7 @@
+# Rollback and resume
+
+Before-change files are preserved in ignored `.jarvis-runtime/jarvis-audit/module10-pre/`; [hash pairs](source-hashes.json) and [scoped patch](source.patch) isolate this module from older dirty work. Compare current hashes and newer user changes before restoring only reviewed hunks; do not reset Git, overwrite unrelated edits or remove personal files. App/root README and guide preimages are also retained. Existing flag rollback: brain.hierarchical_execution.enabled=false restores the legacy path after normal restart; parallel_reads/macro_cache independently disable those features. This audit did not change user configuration.
+
+Reproduce from app/ using [commands.txt](commands.txt), then `.venv/Scripts/python.exe scripts/verification/report_dag_planning_audit.py`. The reporter requires executed successful XML newer than runtime source; it does not run tests or authorize actions. Restored legacy rows without exact binding rerun read observations; effectful rows still require inspection, never automatic replay. No automatic effect undo is performed.
+
+All32 Prompt10 fixture IDs complete. Resume the next requested module11 prompt and exact NOT RUN IDs from the global ledger; earlier acoustic/GPU/mandatory-program-research blockers remain separate. Live authenticated account/UI/model/physical-contention acceptance requires its prerequisites and applicable per-action approval.

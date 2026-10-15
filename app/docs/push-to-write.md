@@ -1,5 +1,13 @@
 # Writing by voice and push-to-write — 2026-10-10 IST
 
+**Release-buffer repair — 2026-10-15 IST:** The final microphone block is now
+resampled to Whisper's 16 kHz before joining the held utterance. Two 100 ms blocks
+captured at 48 kHz produce exactly 3,200 samples, rather than the former 6,400.
+Owned fixtures also verify early release produces no paste, held speech follows
+the writing path and cancellation suppresses dispatch. These tests use fake
+transports; they do not certify live transcription accuracy or target placement.
+[Evidence and remaining acoustic checks](../artifacts/jarvis-audit/modules/04-voice-stt/inventory.md).
+
 Jarvis no longer has a dictation mode. There are three ways to put text where your cursor is.
 
 | You say or do | What happens |

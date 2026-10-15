@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
-from jarvis.codex_validation import contract, declare, inspect, validate_project, repair_packet, execute_check, test_evidence, placeholders, error_summary
+from jarvis.codex_validation import contract, declare, inspect, validate_project, repair_packet, execute_check, test_evidence as validation_evidence, placeholders, error_summary
 
 
 class CodexValidation(unittest.TestCase):
@@ -200,11 +200,11 @@ class CodexValidation(unittest.TestCase):
         for kind,output in [('node_tests','# tests 0\n# pass 0'),('node_tests','# tests 1\n# skipped 1'),
                             ('npm_test','Completed successfully'),('npm_test','Tests 1 passed | 1 todo')]:
             with self.subTest(kind=kind,output=output),self.assertRaisesRegex(ValueError,'unverified'):
-                test_evidence(kind,output)
+                validation_evidence(kind,output)
         for kind,output in [('node_tests','# tests 2\n# pass 2\n# skipped 0'),
                             ('npm_test','Tests 3 passed (3)'),('npm_test','2 passed (1.2s)'),
                             ('npm_test','\x1b[32mTests\x1b[0m 3 passed (3)')]:
-            test_evidence(kind,output)
+            validation_evidence(kind,output)
 
     def test_source_changed_during_test_stops_before_repair(self):
         source=self.root/'logic.py';source.write_text('def answer():\n    return 42\n')

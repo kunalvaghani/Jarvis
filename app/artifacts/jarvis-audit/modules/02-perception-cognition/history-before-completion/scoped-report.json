@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "PARTIAL",
+  "catalog_counts": {
+    "PASS": 18,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "SKIPPED": 0,
+    "NOT RUN": 14
+  },
+  "regression_cases": 1927,
+  "targeted_cases": 108,
+  "regression_seconds": 341.065,
+  "next_case": "JRV-02-008",
+  "scope": "Owned offline fixtures, no live account/UI/model acceptance"
+}

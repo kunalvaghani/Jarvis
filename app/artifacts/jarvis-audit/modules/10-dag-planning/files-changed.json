@@ -1,0 +1,66 @@
+{
+  "scope": "Prompt10 scoped files; pre-existing dirty work preserved, no commit or deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/dag_execution.py",
+      "sha256": "7576204558f6c5c4e728b680243b3c0d7abce3c589ef0f8a34e0e36767fed4d8"
+    },
+    {
+      "path": "app/jarvis/hierarchical.py",
+      "sha256": "da152f2e36c16a1e0593b84dfbcc7010eb08be3111636a2e9d23795efb03155a"
+    },
+    {
+      "path": "app/jarvis/task_state.py",
+      "sha256": "c38cf7e710b9fbc72ca1e9d55ee7d2db8d803ca7d49fb9af2cfc8b354ed47482"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "f067fa98094d62f7dbf049f80ea6d771f4dcba551725121f809767d81932c1ac"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "f19cfc26319d937d9eb10ef266305401ce8822ab04bdeab9278dac68fe6d853e"
+    },
+    {
+      "path": "app/scripts/verification/verify_dag_planning_audit.py",
+      "sha256": "18b9b3e21ec59072f8f3ec35a1e0e49bf0acb33940c82ae9ca0168893ed81af3"
+    },
+    {
+      "path": "app/scripts/verification/report_dag_planning_audit.py",
+      "sha256": "df7c59dfe7f388c2cfa0a6567fd1c724fddc8ab4f5298e17a97bca66f7c2000c"
+    },
+    {
+      "path": "app/tests/test_dag_planning_audit.py",
+      "sha256": "ee146498c5773896d5834cebbade68dba229f42681645405f9e2c3116d4251fb"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "70b4f0e21d5c516037a298b0a6d1a6cfefdbd325bba223bfb10da2fbb63a7b48"
+    },
+    {
+      "path": "app/docs/hierarchical-execution.md",
+      "sha256": "13616b25d7a32797892c74a49774ce141976a041ed322fdfd4280c7f3b82dfcd"
+    },
+    {
+      "path": "app/docs/hierarchical-benchmarks.md",
+      "sha256": "e93f50516073dbe9c38b6c27e22ee49fc7368fd9e4934df22fc5cd80febc531f"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "2f9e99a6e912e83abce3ca50778784c0a85d28e8a2f2722fbbdb364ff462fa00"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4c9a73325f8e9c21c53252a80f7fcd584392547b384d10c8295501a8de57ed72"
+    }
+  ],
+  "artifacts_directory": "app/artifacts/jarvis-audit/modules/10-dag-planning",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "summary.json",
+    "remaining-case-ids.txt"
+  ]
+}

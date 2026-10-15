@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.729" timestamp="2026-10-15T14:42:53.976296+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_dag_planning_audit" name="test_changed_upstream_read_invalidates_restored_descendant" time="0.006"><failure message="AssertionError: assert 'summary old' == 'summary fresh'&#10;  &#10;  - summary fresh&#10;  + summary old">tests\test_dag_planning_audit.py:49: in test_changed_upstream_read_invalidates_restored_descendant
+    assert restored['steps']['b']['result']['text']=='summary fresh'
+E   AssertionError: assert 'summary old' == 'summary fresh'
+E     
+E     - summary fresh
+E     + summary old</failure></testcase></testsuite></testsuites>

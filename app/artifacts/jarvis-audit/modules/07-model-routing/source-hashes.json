@@ -1,0 +1,30 @@
+{
+  "jarvis/cloud_policy.py": {
+    "before": "2c8189f9d966c0763860aefcc795bf0686f0616b9c9fe31dc243db4bbb18a39c",
+    "after": "0a9c5148038a8ea23ea4fec635d4700e095f09c6218be6b95dec8cec70b6fb85"
+  },
+  "jarvis/cloud_quota.py": {
+    "before": "7468627f0e56104c1546e440d961e3259898bc0134116a970857f0be665f19bc",
+    "after": "0d7be0da5997141298485a7fa8eed78b7eaa79f2529af01c58190c7bd4377264"
+  },
+  "jarvis/groq_adapter.py": {
+    "before": "59e24c717771c896cb7d0f3546b83571c90c3a5703ca2b51f422f0ad44b50374",
+    "after": "93c674cabe90bbeb3f2ef72837379c242ddac5f12e768a8c847083cce9af1d56"
+  },
+  "jarvis/hybrid_inference.py": {
+    "before": "0b10c75ad9176322298dec6834ab4fc7e99d87b665b1223464519a9db57c5990",
+    "after": "6be63ac4efb49152f2ea4b307b42be5482dfdadf6c760f7c4dd2a86212a6f37f"
+  },
+  "jarvis/obsidian_memory.py": {
+    "before": "f7bc8b2ebc3bc8aaccc1b9d1102622af940b8d2edf6e53aa110ba39f63adebe3",
+    "after": "1ba10fa1ad2a5bd393c84845591bdc03194c907a804af0af44e8e6c293edb94f"
+  },
+  "config/runtime_manifest.json": {
+    "before": "600c11d4d04cd688148d4cbe16d05a551b92e8aada16f34163d29510552269ea",
+    "after": "133ba0bd83fe54832feb97d3ffb9383eae50b6481ecfa3b91284a5c05748f237"
+  },
+  "scripts/verification/audit_catalog.py": {
+    "before": "0986433f9e18b0b71086b9d4ca1ec14abb69358d2d90309a7b9c2594b94768c9",
+    "after": "414d95556f6bf666c33412f784ebec58c585ab485cf2ef3906b2bcea38ead4a6"
+  }
+}

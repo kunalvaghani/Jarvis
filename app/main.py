@@ -35,7 +35,8 @@ BASE = Path(__file__).resolve().parent
 class App:
     def __init__(self, root):
         self.root = root
-        self.config = json.loads((config_file(BASE)).read_text(encoding="utf-8"))
+        from jarvis.config_contract import load_config
+        self.config = load_config(config_file(BASE))
         if os.environ.get("JARVIS_UI_VERIFY") == "1":
             self.config["memory"] = {"enabled": False}
             self.config['_ui_verification'] = True
@@ -77,6 +78,11 @@ class App:
         root.after(300, self.remember_external_window)
         root.after(80, self.drain)
         self.watchdog = Watchdog(self.report)
+        self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
+            self.actions.cognition.repair_persistence,
+            enabled=lambda:not self.closing and self.actions.cognition.enabled and
+                self.actions.cognition.thread is not None and self.actions.cognition.thread.is_alive() and
+                not self.actions.cognition.stop.is_set())
         from jarvis.docker_runtime import DockerService
         self.docker_service = DockerService(BASE, self.report, lambda: self.closing)
         self.watchdog.register('Docker Linux engine', self.docker_service.healthy, self.docker_service.repair,
@@ -158,7 +164,8 @@ class App:
             self.listener.decode_started is None or time.monotonic() - self.listener.decode_started < 180)
 
     def repair_listener(self):
-        if self.listener and self.listener.thread.is_alive():
+        from jarvis.audio import workers_alive
+        if workers_alive(self.listener):
             self.listener.stop()
             if self.actions.task_active:
                 return False  # Do not sacrifice a running task to repair unrelated audio resources.
@@ -493,7 +500,8 @@ class App:
                 self.level["value"] = 0
                 self.log_line(kind, message)
             elif kind == "restart_listener":
-                if self.listening_requested and (not self.listener or not self.listener.thread.is_alive()):
+                from jarvis.audio import workers_alive
+                if self.listening_requested and not workers_alive(self.listener):
                     self.toggle_listening()
             elif kind == "repair":
                 record(BASE, message)
@@ -506,8 +514,19 @@ class App:
     def toggle_listening(self):
         if self.config.get('_ui_verification', False):
             return
-        if self.listener and self.listener.thread.is_alive():
-            self.stop()
+        from jarvis.audio import workers_alive
+        if workers_alive(self.listener):
+            if self.listener.thread.is_alive():
+                self.stop()
+            else:
+                self.report('repair', 'Previous voice decoder is still stopping; typed input remains available.')
+            return
+        from jarvis.whisper_backend import settings as whisper_settings
+        try:
+            whisper_options = whisper_settings(self.config.get('whisper'))
+        except ValueError:
+            self.listening_requested = False
+            self.report('fatal', 'Invalid Whisper configuration; typed input remains available.')
             return
         self.session += 1
         self.listening_requested = True
@@ -554,7 +573,7 @@ class App:
             self.actions.hands_free = push_to_write.latch  # Hands-free writing ("yes" in Notepad, "start dictation").
             self.actions.hands_free_state = push_to_write.latched_since
         self.push_to_write, self.spoken_writer = push_to_write, writer
-        self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, self.config["whisper"], activate_on_start=True,
+        self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, whisper_options, activate_on_start=True,
                                  playback=self.speech.output_recent, input_filter=voice_input.filter,
                                  references=self.speech.output_references,
                                  command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report),

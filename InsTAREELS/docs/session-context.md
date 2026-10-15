@@ -1,5 +1,20 @@
 # Session memory and background context selection
 
+2026-10-15 IST credential follow-up: bare common provider keys now join the
+existing sensitive-text matcher for new saved question/answer pairs and Obsidian
+notes. Matching text is replaced by the existing redaction marker. Historical
+records are preserved; heuristic matching is not a guarantee of detecting every
+secret format. [Routing/privacy regression evidence](../artifacts/jarvis-audit/modules/07-model-routing/inventory.md).
+
+2026-10-15 IST follow-up: recent-question phrases such as “What did I ask a minute
+ago?” select recent paired context. This does not implement a timestamp query or
+guarantee that the last question occurred exactly one minute ago. Selector jobs
+mark futures running before work, skip cancelled queued work and safely drain on
+shutdown. Eight candidates carry at most 12 keywords of 40 characters each;
+active-app projection accepts only bounded scalar name/title/process/handle fields.
+Unknown app metadata is omitted. Timeout still retains explicit choices.
+[Case proofs, projection benchmark and rollback](../artifacts/jarvis-audit/modules/06-questions-context/inventory.md).
+
 Updated 2026-10-04. Jarvis retains paired questions and completed answers for
 each conversation, searches saved conversations when the current one does not
 resolve the request, and lets you choose between ambiguous memories inside the

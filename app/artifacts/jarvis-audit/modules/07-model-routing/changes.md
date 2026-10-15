@@ -1,0 +1,9 @@
+# Changes and keep/revert rationale — 2026-10-15 IST
+
+Keep early policy/manual preference/utility/feedback/quota refusal before metadata waiting. UNKNOWN/EXHAUSTED can refresh expired time metadata asynchronously, preserving clock recovery without inference probes. Metadata refresh honors valid cached availability. Known budget refusal therefore returns locally without the previous metadata delay; authoritative reserve still checks the shared ledger under BEGIN IMMEDIATE. No sticky automatic offline mode or retry loop introduced.
+
+Normalize response headers before backoff/accounting. Retain the reservation when total usage is zero or a supplied usage field has a bad type; zero can be legitimate provider nonbilling, but uncertain charging deliberately overestimates. Optional estimate fields accept bounded integers. Persist only safe response IDs.
+
+Share common credential-key patterns between outbound screening and new conversation/Obsidian redaction. Keep earlier sensitive-word behavior without broadening the memory matcher to redact every ordinary email address. No historical-record migration. Route UUIDs match reservation IDs and preserve supplied stable recovery IDs; allowed scalar route metadata sanitizes model/error labels.
+
+Matched route benchmark proves latency gain for exhausted fixtures; warm traced allocations increase, so no memory claim. Policy classification changes are correctness improvements; tiny timing differences are not a meaningful speedup claim. Keep deterministic filters instead of adding an unvalidated tiny model, paid requirement or download. Existing local inference keep_alive/warmness/GPU policy and manual model preferences remain intact. No new service/dependency/permission, UI layout or screenshot change; feature flags remain existing cloud/selector controls.

@@ -1,5 +1,15 @@
 # Curated utility skills
 
+<!-- prompt11-audit -->
+**2026-10-15 skill-selection audit:** Current checked-out census is10 bundled,
+210 hash-verified Hermes guides and23 DeerFlow public guides. Local guide reads
+expose source hashes and untrusted-reference contracts. Tool bindings remain
+limited to current registered/allowed handlers. Missing utility environment or
+malformed/stale source-bound proof disables activation; current proof is stale,
+so0 utility tools are offered. Historical counts/live results below retain their
+original dates. [Assertions, performance, limits and rollback](../artifacts/jarvis-audit/modules/11-skill-selection/inventory.md).
+<!-- /prompt11-audit -->
+
 This update reviews all **42 skills** in the two supplied code lists. Supplied code
 is reference material: Jarvis uses reviewed adapters, corrected contracts and its
 existing planner, dispatcher, approvals, project scope and cancellation. It does

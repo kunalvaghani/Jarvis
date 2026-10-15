@@ -1,0 +1,20 @@
+# Compatibility and upstream checks — 2026-10-15 IST
+
+Firecrawl read current official releases, PyPI publisher metadata and the tagged inference source (maxAge:0). Only public URLs were supplied. No repository text, reference recordings or private answers were uploaded. No installation, model download, weight update or paid API requirement was introduced.
+
+| Component | Installed | Official current source observed | Decision |
+| --- | --- | --- | --- |
+| F5-TTS | 1.1.21 | [1.1.22 release](https://github.com/SWivid/F5-TTS/releases/tag/1.1.22), [official release API](https://api.github.com/repos/SWivid/F5-TTS/releases/latest): 2026-07-23T09:20:37Z; [PyPI](https://pypi.org/pypi/f5-tts/json) wheel 09:21:23Z | Patch fixes fixed-duration allocation across chunks. Jarvis does not pass fix_duration; retain tested pins and repair integration. No unsupported native/model upgrade credited as a gain |
+| PyTorch / TorchAudio | 2.6.0+cu124 / 2.6.0+cu124 | [Torch publisher metadata](https://pypi.org/pypi/torch/json): 2.14.1, wheels published 2026-09-30, Python>=3.10 | Retain matched CUDA12.4 pair; newer release is not evidence of compatibility with this F5/Transformers environment. Actual cached CUDA synthesis passed |
+| Transformers | 4.44.2 | Existing F5 compatibility pin, not promoted as current | No Transformers API changed; no blanket dependency-modernization claim |
+| kokoro-onnx | 0.4.9 | [Publisher metadata](https://pypi.org/pypi/kokoro-onnx/json): 0.6.1, 2026-08-19T00:40:35Z, Python>=3.10,<3.14 | Existing SpeedSession bridges fractional speed to the local model. New continuous/timing APIs need separate model/API and quality validation; no blind package replacement |
+| Kokoro model assets | Existing local v1 model/voices | [Official model release](https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.1), published 2025-03-01; current release description discusses float-speed and newer continuous/timed APIs | Model tag date and Python package release are different. No model-file download or conversion performed |
+| Piper | 1.8.0 | [1.8.0 release](https://github.com/OHF-Voice/piper1-gpl/releases/tag/v1.8.0), published 2026-09-04T16:47:48Z; [PyPI](https://pypi.org/pypi/piper-tts/json) Windows wheel 16:47:28Z, Python>=3.9 | Installed version matches. Real local component produced finite PCM; no speaker playback |
+| sounddevice | 0.5.6 | No API migration performed | Existing output callback contract retained; device failure tested with owned fake streams, not physical unplugging |
+| Python | 3.10.6 in main and F5 environments | [Official lifecycle](https://devguide.python.org/versions/): 3.10 EOL 2026-10-01, checked in preceding audit | Remains a wider release blocker; ML interpreter migration not performed |
+
+The [tagged F5 inference source](https://raw.githubusercontent.com/SWivid/F5-TTS/1.1.22/src/f5_tts/infer/utils_infer.py) shows threaded chunk futures and caches for processed reference audio/transcription. Jarvis keeps one bounded inference chunk at a time; the new 16-entry cache covers only WAV header duration. It does not replace upstream acoustic preprocessing or claim to cache synthesis. A GitHub HTML source fetch did not expose useful implementation text; the tagged raw source supplied these facts. No copied implementation code was added.
+
+Main/F5 Python versions and package metadata were read locally; F5 `pip check` returned **No broken requirements found**. CUDA integration used one cached F5 model at a time with HF_HUB_OFFLINE/TRANSFORMERS_OFFLINE and no speaker output. Peak Torch allocated/reserved values apply to that worker, not total machine demand or STT/Qwen contention. No two-second guarantee, pronunciation score or cloning-fidelity verdict follows from protocol success.
+
+Existing upstream/source attribution and model terms remain in [F5 guide](../../../../docs/f5-voice.md): MIT implementation and noncommercial pretrained-weight restrictions. No recordings, weights or upstream code are distributed by this change. Newer versions are documented, not silently installed or described as already validated.

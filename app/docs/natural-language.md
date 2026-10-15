@@ -1,5 +1,19 @@
 # Understanding everyday phrasing
 
+**2026-10-15 fixture follow-up:** Four anchored intent rules cover "turn the sound
+down a notch", "pause what's playing", "I said close the tab, not the browser"
+and latest/most-recent document references. The latter go to the planner rather
+than guessing an installed app. The completion pass asks for filename, path or
+folder before any model request or opening for ambiguous latest-document requests.
+Parser inputs must be strings of at most 100,000 characters; malformed deeply
+nested command JSON produces a validation error. "Open Notepad, then type hello" preserves ordered
+dispatch and a Notepad typing target; only punctuation before a split boundary
+is removed. Existing composed-versus-verbatim writing semantics remain.
+Deterministic matching covers an audited finite corpus; it does not establish
+arbitrary language understanding, latest-file correctness or live app availability.
+[Dated fixture evidence, benchmarks, limits and rollback](../artifacts/jarvis-audit/modules/03-intent-direct/inventory.md).
+October 11 measurements below are historical and remain labeled as such.
+
 Updated 2026-10-11 IST. Jarvis now understands requests and questions however they're phrased: politely, casually, as a question, with filler words, or as a standing instruction ("don't send anything unless I approve it"). The coverage is checked against the 800-scenario *Jarvis Natural-Language Intent Testbook* (2,400 phrasings across 25 areas), kept in the repository at [`tests/fixtures/intent_testbook.txt`](../tests/fixtures/intent_testbook.txt).
 
 ## Before and after

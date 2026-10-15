@@ -311,6 +311,9 @@ class IntegrationTests(unittest.TestCase):
         with server() as (endpoint,state):
             gateway=HybridGateway(self.root,self.options,adapter=self.adapter(endpoint),guardian=self.guard)
             result=gateway.answer({'question':'Explain quantum computing','options':{'answer_language':'hi'},'user_profile':'password=never','situation':'private paths'})
+            self.assertIsNone(result)  # Explicit situation context now forces local inference.
+            self.assertEqual(state['bodies'],[])
+            result=gateway.answer({'question':'Explain quantum computing','options':{'answer_language':'hi'},'user_profile':'password=never'})
             self.assertEqual(result['answer'],'Public answer')
             self.assertNotIn('never',json.dumps(state['bodies']))
             self.assertNotIn('private paths',json.dumps(state['bodies']))

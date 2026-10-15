@@ -1,0 +1,1097 @@
+{
+  "__init__": [],
+  "ability_runner": [],
+  "actions": [
+    "agent_events",
+    "anticipation",
+    "brain",
+    "browser",
+    "browser_automation",
+    "capability_guide",
+    "catalog",
+    "clarification",
+    "coder",
+    "coding_processes",
+    "cognition",
+    "commands",
+    "context_hub",
+    "conversation_intent",
+    "deliberation",
+    "desktop_tasks",
+    "direct_execution",
+    "documents",
+    "experience_memory",
+    "fast_workflows",
+    "file_drop",
+    "folder_lookup",
+    "gmail_workflows",
+    "gods_eye",
+    "gods_eye_view",
+    "hybrid_inference",
+    "intent_handlers",
+    "island_choices",
+    "island_media",
+    "knowledge",
+    "knowledge_acquisition",
+    "live_app_context",
+    "media_player",
+    "media_ui",
+    "memory_curator",
+    "memory_index",
+    "messengers",
+    "names",
+    "obsidian_memory",
+    "paths",
+    "progress",
+    "projects",
+    "quick_answers",
+    "realtime",
+    "repo_abilities",
+    "repo_learning",
+    "screen_awareness",
+    "self_evolution",
+    "skill_memory",
+    "spotify",
+    "targeting",
+    "task_queue",
+    "task_state",
+    "tools",
+    "ui_controls",
+    "ui_memory",
+    "utility_host",
+    "weather_watch",
+    "whatsapp",
+    "window_focus",
+    "windows_commands",
+    "writing"
+  ],
+  "agent_cli": [
+    "agent_session",
+    "harness"
+  ],
+  "agent_context": [
+    "coder",
+    "coding_languages",
+    "development_knowledge",
+    "development_learning",
+    "repo_abilities",
+    "repo_learning"
+  ],
+  "agent_events": [
+    "agent_context"
+  ],
+  "agent_session": [
+    "agent_context",
+    "agent_tools",
+    "gpu_scheduler",
+    "knowledge_worker",
+    "native_tools",
+    "research_evidence",
+    "tools"
+  ],
+  "agent_tools": [
+    "agent_context",
+    "capabilities",
+    "deerflow",
+    "development_api",
+    "development_knowledge",
+    "execution_adapters",
+    "mcp_bridge",
+    "names",
+    "toolkits",
+    "tools",
+    "windows_commands"
+  ],
+  "anticipation": [
+    "obsidian_memory"
+  ],
+  "anticipation_worker": [
+    "anticipation",
+    "gpu_scheduler",
+    "knowledge_worker"
+  ],
+  "app_knowledge": [
+    "skill_memory"
+  ],
+  "application_discovery": [
+    "knowledge_acquisition"
+  ],
+  "audio": [
+    "whisper_backend"
+  ],
+  "brain": [
+    "capabilities",
+    "catalog",
+    "clarification",
+    "coder",
+    "commands",
+    "desktop_actions",
+    "experience_memory",
+    "gmail_workflows",
+    "grounding",
+    "harness",
+    "hermes",
+    "hierarchical",
+    "inference_limits",
+    "names",
+    "recovery",
+    "skill_memory",
+    "spotify",
+    "step_planning",
+    "targeting",
+    "task_graph",
+    "task_recovery",
+    "task_state",
+    "toolkits",
+    "tools",
+    "ui_controls",
+    "visual_fallback"
+  ],
+  "brain_worker": [
+    "agent_context",
+    "capabilities",
+    "code_stream",
+    "development_browser",
+    "hierarchical",
+    "inference_limits",
+    "knowledge_worker",
+    "model_selection",
+    "native_tools",
+    "pc_context",
+    "step_planning",
+    "tools",
+    "trained_coder",
+    "trained_pc"
+  ],
+  "browser": [
+    "names"
+  ],
+  "browser_automation": [
+    "browser",
+    "ui_transport"
+  ],
+  "browser_cursor": [],
+  "browser_worker": [
+    "browser",
+    "browser_cursor",
+    "ui_controls",
+    "windows_command_browser"
+  ],
+  "buddy_engine": [
+    "island_buddy"
+  ],
+  "capabilities": [
+    "memory_index",
+    "skill_memory",
+    "toolkits"
+  ],
+  "capability_guide": [
+    "commands",
+    "gmail_api",
+    "media_player",
+    "realtime",
+    "realtime_catalog",
+    "realtime_sources"
+  ],
+  "catalog": [
+    "folder_lookup",
+    "names"
+  ],
+  "clarification": [],
+  "claude_code": [
+    "agent_context",
+    "claude_code_guard",
+    "code_stream",
+    "coder",
+    "gui_contract",
+    "harness_process",
+    "knowledge_worker",
+    "progress",
+    "task_state"
+  ],
+  "claude_code_guard": [],
+  "claude_code_permissions": [
+    "claude_code_guard",
+    "code_context",
+    "gui_contract"
+  ],
+  "claude_code_proxy": [
+    "knowledge_worker"
+  ],
+  "cloud_cli": [
+    "hybrid_inference"
+  ],
+  "cloud_policy": [],
+  "cloud_quota": [],
+  "code_context": [],
+  "code_stream": [
+    "agent_context",
+    "progress",
+    "skill_memory"
+  ],
+  "coder": [
+    "agent_context",
+    "clarification",
+    "claude_code",
+    "code_context",
+    "code_stream",
+    "codex_code",
+    "codex_workload",
+    "coding_languages",
+    "coding_lessons",
+    "commands",
+    "desktop_tasks",
+    "development",
+    "development_projects",
+    "experience_memory",
+    "native_coding",
+    "progress",
+    "projects",
+    "task_graph",
+    "task_state"
+  ],
+  "codex_browser_check": [
+    "codex_validation",
+    "harness_process"
+  ],
+  "codex_code": [
+    "agent_context",
+    "claude_code_guard",
+    "code_stream",
+    "coder",
+    "codex_validation",
+    "codex_workload",
+    "gui_contract",
+    "harness_process",
+    "knowledge_worker",
+    "ollama_models",
+    "progress",
+    "task_state"
+  ],
+  "codex_files": [
+    "claude_code_guard",
+    "code_context",
+    "coder",
+    "codex_validation",
+    "gui_contract"
+  ],
+  "codex_proxy": [
+    "codex_validation",
+    "codex_workload",
+    "knowledge_worker"
+  ],
+  "codex_validation": [
+    "agent_context",
+    "claude_code_guard",
+    "coder",
+    "codex_code",
+    "gui_contract",
+    "harness_process",
+    "progress"
+  ],
+  "codex_workload": [
+    "agent_context",
+    "claude_code_guard",
+    "coder",
+    "codex_code",
+    "codex_files",
+    "codex_validation",
+    "coding_activity",
+    "knowledge_worker",
+    "ollama_models",
+    "progress",
+    "repo_abilities",
+    "task_state"
+  ],
+  "coding_activity": [],
+  "coding_console": [],
+  "coding_curriculum": [],
+  "coding_files": [
+    "claude_code_guard",
+    "codex_files",
+    "coding_activity"
+  ],
+  "coding_languages": [],
+  "coding_lessons": [
+    "coding_curriculum"
+  ],
+  "coding_operations": [
+    "claude_code_guard",
+    "coder",
+    "coding_programs",
+    "command_reference"
+  ],
+  "coding_processes": [
+    "coding_activity",
+    "coding_files",
+    "coding_programs",
+    "harness_process"
+  ],
+  "coding_programs": [],
+  "coding_training_data": [],
+  "cognition": [],
+  "command_cleanup": [
+    "engine",
+    "gpu_scheduler"
+  ],
+  "command_reference": [],
+  "commands": [
+    "anticipation",
+    "capability_guide",
+    "coder",
+    "coding_languages",
+    "conversation_intent",
+    "documents",
+    "folder_lookup",
+    "gmail_workflows",
+    "gods_eye",
+    "intent_catalog",
+    "island_choices",
+    "media_commands",
+    "memory_curator",
+    "messengers",
+    "phrasing",
+    "rea_tools",
+    "realtime",
+    "repo_abilities",
+    "repo_learning",
+    "repo_tools",
+    "toolkits",
+    "weather_watch",
+    "whatsapp",
+    "windows_commands",
+    "writing"
+  ],
+  "context_hub": [],
+  "context_selector": [
+    "command_cleanup"
+  ],
+  "conversation_intent": [
+    "command_cleanup"
+  ],
+  "conversation_memory": [
+    "obsidian_memory"
+  ],
+  "dag_execution": [
+    "repo_analysis"
+  ],
+  "deerflow": [
+    "agent_context",
+    "capabilities",
+    "deerflow_media",
+    "deerflow_sandbox",
+    "harness_process"
+  ],
+  "deerflow_cli": [
+    "deerflow"
+  ],
+  "deerflow_media": [
+    "deerflow_sandbox"
+  ],
+  "deerflow_media_runner": [],
+  "deerflow_model": [
+    "gpu_scheduler",
+    "knowledge_worker"
+  ],
+  "deerflow_sandbox": [
+    "agent_context",
+    "repo_acquisition",
+    "repo_sandbox",
+    "skill_memory"
+  ],
+  "deerflow_worker": [
+    "agent_context",
+    "agent_session",
+    "deerflow",
+    "deerflow_sandbox",
+    "tools"
+  ],
+  "deliberation": [
+    "cognition"
+  ],
+  "desktop_actions": [],
+  "desktop_tasks": [
+    "commands",
+    "experience_memory",
+    "names"
+  ],
+  "development": [
+    "agent_context",
+    "coder",
+    "development_browser",
+    "development_design",
+    "development_knowledge",
+    "development_learning",
+    "development_projects",
+    "development_tools",
+    "progress",
+    "task_state"
+  ],
+  "development_api": [
+    "agent_context",
+    "coder",
+    "development",
+    "development_design",
+    "development_knowledge",
+    "development_learning",
+    "development_native",
+    "task_state"
+  ],
+  "development_browser": [
+    "agent_context"
+  ],
+  "development_design": [
+    "agent_context"
+  ],
+  "development_knowledge": [
+    "agent_context"
+  ],
+  "development_learning": [
+    "agent_context",
+    "coder",
+    "development_design"
+  ],
+  "development_native": [
+    "agent_context",
+    "development",
+    "development_tools"
+  ],
+  "development_projects": [
+    "agent_context",
+    "coder",
+    "development_knowledge",
+    "progress"
+  ],
+  "development_tools": [
+    "agent_context",
+    "harness_process",
+    "progress",
+    "recovery"
+  ],
+  "diagnostics": [
+    "cloud_policy",
+    "codex_workload",
+    "docker_runtime",
+    "knowledge_worker",
+    "model_selection"
+  ],
+  "direct_execution": [
+    "brain",
+    "commands",
+    "desktop_actions",
+    "targeting",
+    "tools",
+    "ui_controls"
+  ],
+  "display": [],
+  "docker_runtime": [
+    "deerflow_sandbox",
+    "recovery",
+    "repo_acquisition"
+  ],
+  "documents": [
+    "commands",
+    "gpu_scheduler",
+    "knowledge_worker"
+  ],
+  "engine": [
+    "commands",
+    "writing"
+  ],
+  "everyday_runtime": [],
+  "execution_adapters": [
+    "desktop_actions",
+    "jarvis_pointer"
+  ],
+  "execution_router": [
+    "desktop_actions",
+    "execution_adapters"
+  ],
+  "experience": [],
+  "experience_memory": [
+    "desktop_tasks",
+    "obsidian_memory",
+    "skill_memory",
+    "tools"
+  ],
+  "f5_speech": [
+    "kokoro_speech",
+    "natural_voice"
+  ],
+  "fast_workflows": [
+    "agent_events",
+    "commands",
+    "experience_memory",
+    "media_ui",
+    "spotify",
+    "ui_controls"
+  ],
+  "file_drop": [
+    "gmail_api",
+    "media_player",
+    "whatsapp"
+  ],
+  "firecrawl_tools": [
+    "toolkits"
+  ],
+  "folder_lookup": [
+    "catalog",
+    "names",
+    "obsidian_memory",
+    "skill_memory"
+  ],
+  "glass_ui": [
+    "display"
+  ],
+  "gmail_api": [
+    "gmail_writes",
+    "toolkits"
+  ],
+  "gmail_bridge": [],
+  "gmail_chrome_worker": [
+    "gmail_bridge",
+    "independent_cursor"
+  ],
+  "gmail_workflows": [
+    "clarification",
+    "gmail_api",
+    "tools"
+  ],
+  "gmail_writes": [],
+  "gods_eye": [
+    "commands",
+    "gods_eye_cameras",
+    "gods_eye_update",
+    "gods_eye_view",
+    "media_player"
+  ],
+  "gods_eye_cameras": [],
+  "gods_eye_update": [],
+  "gods_eye_view": [],
+  "gpu_scheduler": [],
+  "groq_adapter": [
+    "cloud_policy",
+    "repo_analysis"
+  ],
+  "grounding": [
+    "ui_controls"
+  ],
+  "gui_contract": [],
+  "harness": [
+    "brain",
+    "development_projects",
+    "hermes",
+    "task_recovery"
+  ],
+  "harness_process": [],
+  "harness_worker": [
+    "agent_context",
+    "brain_worker",
+    "harness",
+    "harness_process",
+    "knowledge_worker"
+  ],
+  "hermes": [
+    "brain",
+    "task_graph"
+  ],
+  "hermes_ollama": [
+    "knowledge_worker"
+  ],
+  "hermes_skills": [
+    "agent_context",
+    "hermes",
+    "skill_memory"
+  ],
+  "hermes_worker": [
+    "agent_context",
+    "brain_worker",
+    "hermes",
+    "hermes_ollama"
+  ],
+  "hierarchical": [
+    "agent_context",
+    "agent_events",
+    "brain",
+    "dag_execution",
+    "toolkits",
+    "tools"
+  ],
+  "hud": [],
+  "hybrid_inference": [
+    "cloud_policy",
+    "cloud_quota",
+    "groq_adapter",
+    "knowledge_worker",
+    "model_performance",
+    "model_selection",
+    "skill_memory"
+  ],
+  "independent_cursor": [
+    "execution_adapters",
+    "jarvis_pointer"
+  ],
+  "inference_limits": [],
+  "intent_catalog": [
+    "commands",
+    "conversation_intent",
+    "gods_eye",
+    "writing"
+  ],
+  "intent_handlers": [
+    "capability_guide",
+    "commands",
+    "gmail_api",
+    "gods_eye",
+    "media_player",
+    "whatsapp",
+    "windows_commands"
+  ],
+  "interface": [
+    "coding_console",
+    "display",
+    "file_drop",
+    "glass_ui",
+    "island",
+    "island_desk",
+    "notch_widgets"
+  ],
+  "island": [
+    "buddy_engine",
+    "display",
+    "island_buddy",
+    "island_surface",
+    "media_player",
+    "obsidian_memory"
+  ],
+  "island_artwork": [
+    "ui_controls"
+  ],
+  "island_buddy": [],
+  "island_choices": [
+    "commands",
+    "whatsapp"
+  ],
+  "island_desk": [
+    "commands",
+    "glass_ui",
+    "island_choices",
+    "island_games",
+    "island_media",
+    "island_mind",
+    "notch_widgets"
+  ],
+  "island_games": [
+    "island"
+  ],
+  "island_media": [
+    "harness_process",
+    "spotify"
+  ],
+  "island_mind": [
+    "cognition"
+  ],
+  "island_surface": [],
+  "jarvis_pointer": [],
+  "knowledge": [
+    "clarification",
+    "context_selector",
+    "conversation_memory",
+    "hybrid_inference",
+    "natural_conversation",
+    "question_client",
+    "quick_answers"
+  ],
+  "knowledge_acquisition": [
+    "agent_events",
+    "app_knowledge",
+    "dag_execution",
+    "toolkits",
+    "tools"
+  ],
+  "knowledge_worker": [
+    "code_stream",
+    "conversation_memory",
+    "gpu_scheduler",
+    "hybrid_inference",
+    "inference_limits",
+    "model_selection",
+    "natural_conversation"
+  ],
+  "kokoro_speech": [
+    "natural_voice"
+  ],
+  "launcher": [
+    "anticipation",
+    "claude_code",
+    "cloud_policy",
+    "codex_code",
+    "command_cleanup",
+    "context_selector",
+    "diagnostics",
+    "docker_runtime",
+    "f5_speech",
+    "gpu_scheduler",
+    "harness",
+    "harness_process",
+    "hermes",
+    "hierarchical",
+    "knowledge_acquisition",
+    "paths",
+    "realtime",
+    "recovery",
+    "repo_sandbox",
+    "visual_fallback"
+  ],
+  "live_app_context": [],
+  "mcp_bridge": [
+    "agent_context",
+    "task_state"
+  ],
+  "media_commands": [
+    "commands"
+  ],
+  "media_player": [
+    "commands",
+    "island_media",
+    "spotify",
+    "window_focus"
+  ],
+  "media_ui": [
+    "actions",
+    "ui_controls"
+  ],
+  "memory_curator": [
+    "commands",
+    "gpu_scheduler",
+    "knowledge_worker",
+    "obsidian_memory"
+  ],
+  "memory_index": [
+    "toolkits",
+    "tools"
+  ],
+  "messengers": [
+    "commands",
+    "jarvis_pointer",
+    "window_focus"
+  ],
+  "model_performance": [],
+  "model_recovery": [
+    "knowledge_worker",
+    "model_selection"
+  ],
+  "model_selection": [
+    "command_cleanup",
+    "context_selector",
+    "realtime"
+  ],
+  "names": [],
+  "native_coding": [
+    "agent_context",
+    "agent_tools",
+    "codex_files",
+    "codex_validation",
+    "coding_activity",
+    "coding_files",
+    "coding_operations",
+    "coding_processes",
+    "coding_programs",
+    "command_reference",
+    "firecrawl_tools",
+    "knowledge_worker",
+    "ollama_models",
+    "progress",
+    "repo_abilities",
+    "tools"
+  ],
+  "native_tools": [
+    "agent_context",
+    "inference_limits",
+    "knowledge_worker",
+    "repo_analysis"
+  ],
+  "natural_conversation": [],
+  "natural_voice": [],
+  "notch_widgets": [
+    "display",
+    "glass_ui"
+  ],
+  "obsidian_memory": [
+    "capabilities",
+    "capability_guide",
+    "memory_index"
+  ],
+  "ollama_models": [
+    "gpu_scheduler"
+  ],
+  "paths": [],
+  "pc_context": [
+    "catalog",
+    "projects"
+  ],
+  "phrasing": [],
+  "piper_speech": [
+    "speech"
+  ],
+  "polyglot_training_data": [],
+  "progress": [],
+  "projects": [
+    "names",
+    "paths"
+  ],
+  "push_to_write": [],
+  "question_client": [
+    "hybrid_inference",
+    "inference_limits",
+    "pc_context",
+    "recovery"
+  ],
+  "quick_answers": [
+    "everyday_runtime"
+  ],
+  "rea_tools": [
+    "agent_context",
+    "commands",
+    "task_state",
+    "toolkits"
+  ],
+  "realtime": [
+    "gpu_scheduler",
+    "realtime_catalog",
+    "realtime_sources"
+  ],
+  "realtime_catalog": [],
+  "realtime_sources": [
+    "realtime_catalog"
+  ],
+  "recovery": [
+    "knowledge_worker"
+  ],
+  "repo_abilities": [
+    "commands",
+    "gpu_scheduler",
+    "knowledge_worker",
+    "media_player",
+    "repo_learning"
+  ],
+  "repo_acquisition": [
+    "harness_process",
+    "skill_memory"
+  ],
+  "repo_analysis": [],
+  "repo_learning": [
+    "commands",
+    "gpu_scheduler",
+    "knowledge_worker",
+    "media_player"
+  ],
+  "repo_runtime_runner": [],
+  "repo_sandbox": [
+    "repo_acquisition",
+    "skill_memory"
+  ],
+  "repo_tools": [
+    "commands",
+    "repository_skills"
+  ],
+  "repository_skills": [
+    "repo_acquisition",
+    "repo_analysis",
+    "repo_sandbox",
+    "skill_memory"
+  ],
+  "research_evidence": [],
+  "runtime_health": [
+    "gpu_scheduler"
+  ],
+  "screen_awareness": [
+    "actions",
+    "app_knowledge",
+    "commands",
+    "names",
+    "ui_controls",
+    "window_focus"
+  ],
+  "screen_worker": [],
+  "self_evolution": [
+    "cognition",
+    "knowledge_acquisition",
+    "media_player"
+  ],
+  "skill_memory": [
+    "capabilities",
+    "experience_memory",
+    "fast_workflows",
+    "hermes_skills",
+    "obsidian_memory"
+  ],
+  "speech": [
+    "f5_speech",
+    "natural_voice"
+  ],
+  "spotify": [],
+  "step_planning": [
+    "skill_memory",
+    "task_recovery"
+  ],
+  "targeting": [
+    "ui_controls"
+  ],
+  "task_graph": [],
+  "task_queue": [
+    "command_cleanup"
+  ],
+  "task_recovery": [
+    "names",
+    "toolkits"
+  ],
+  "task_state": [
+    "experience",
+    "experience_memory",
+    "paths",
+    "task_graph"
+  ],
+  "toolkits": [
+    "agent_tools",
+    "code_context",
+    "deerflow",
+    "firecrawl_tools",
+    "gmail_api",
+    "knowledge_worker",
+    "rea_tools",
+    "repo_tools",
+    "task_state",
+    "utility_tools"
+  ],
+  "tools": [
+    "agent_events",
+    "application_discovery",
+    "capabilities",
+    "commands",
+    "desktop_actions",
+    "repo_tools",
+    "skill_memory",
+    "task_state",
+    "toolkits",
+    "utility_profiles"
+  ],
+  "trained_coder": [],
+  "trained_pc": [
+    "pc_context"
+  ],
+  "ui_controls": [
+    "media_ui",
+    "names",
+    "targeting",
+    "ui_transport"
+  ],
+  "ui_memory": [
+    "experience"
+  ],
+  "ui_preview": [
+    "display",
+    "glass_ui",
+    "interface"
+  ],
+  "ui_transport": [],
+  "ui_worker": [
+    "desktop_actions",
+    "execution_router",
+    "independent_cursor",
+    "island_artwork",
+    "media_ui",
+    "windows_command_desktop"
+  ],
+  "upstream_windows_patterns": [],
+  "utility_audio_worker": [],
+  "utility_container_runner": [],
+  "utility_core": [
+    "agent_context",
+    "repo_acquisition"
+  ],
+  "utility_host": [
+    "repo_acquisition",
+    "toolkits",
+    "utility_core",
+    "utility_tools"
+  ],
+  "utility_isolation": [
+    "repo_sandbox"
+  ],
+  "utility_profiles": [],
+  "utility_service_transport": [
+    "harness_process",
+    "utility_services"
+  ],
+  "utility_services": [],
+  "utility_tools": [
+    "browser",
+    "repo_acquisition",
+    "repo_analysis",
+    "ui_transport",
+    "utility_core",
+    "utility_host",
+    "utility_isolation",
+    "utility_profiles",
+    "utility_service_transport"
+  ],
+  "utility_worker": [
+    "utility_core"
+  ],
+  "visual_fallback": [
+    "agent_events",
+    "commands",
+    "names",
+    "skill_memory",
+    "targeting",
+    "task_recovery",
+    "task_state",
+    "visual_worker"
+  ],
+  "visual_worker": [
+    "independent_cursor"
+  ],
+  "voice_input": [
+    "audio",
+    "engine"
+  ],
+  "weather_watch": [
+    "capability_guide",
+    "commands",
+    "media_player"
+  ],
+  "whatsapp": [
+    "clarification",
+    "commands",
+    "gpu_scheduler",
+    "jarvis_pointer",
+    "knowledge_worker",
+    "media_player",
+    "window_focus"
+  ],
+  "whisper_backend": [],
+  "window_focus": [],
+  "windows_command_browser": [
+    "browser_cursor",
+    "toolkits",
+    "windows_commands"
+  ],
+  "windows_command_desktop": [
+    "independent_cursor",
+    "media_ui",
+    "windows_commands"
+  ],
+  "windows_commands": [
+    "commands"
+  ],
+  "writing": [
+    "actions",
+    "audio",
+    "commands",
+    "gpu_scheduler",
+    "knowledge_worker",
+    "names",
+    "window_focus"
+  ]
+}

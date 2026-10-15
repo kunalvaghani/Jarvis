@@ -1,5 +1,12 @@
 # Generated natural conversation
 
+2026-10-15 IST question-worker follow-up: uncertain or malformed local answers
+with private/session/app evidence stay local and report a gap rather than trigger
+public search. Empty search, unsafe citation URLs and nonexistent citation numbers
+are refused. Concurrent callers share one serialized transport; limits are checked
+before dispatch, and request status/UUID metadata contains no question or answer.
+[Audit evidence and remaining limitations](../artifacts/jarvis-audit/modules/06-questions-context/inventory.md).
+
 Updated 2026-10-14 IST. Jarvis starts quietly and lets the user lead. Greetings,
 wellbeing replies and thanks no longer return canned strings. The current
 configuration enables `knowledge.natural_conversation` with `qwen3.5:0.8b`.

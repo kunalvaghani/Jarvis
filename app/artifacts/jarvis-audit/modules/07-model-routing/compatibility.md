@@ -1,0 +1,7 @@
+# Compatibility and official sources — 2026-10-15 IST
+
+Installed Requests2.34.2 matches the [official latest release](https://github.com/psf/requests/releases/tag/v2.34.2), dated14May2026. Release excerpt does not state Python compatibility/security fixes; installed-runtime execution on Python3.10.6 is the compatibility evidence, not an invented upstream promise. No dependency installation. [Release check](requests-release.json).
+
+Official [Groq rate-limit documentation](https://console.groq.com/docs/rate-limits) distinguishes organization-level limits, daily-request versus minute-token response headers, and Retry-After seconds on429. Applications can also face separate input/output token limits. Local ceilings remain conservative application settings, not account entitlements or exact free quotas. No publication date stated. The reviewed [Qwen model page](https://console.groq.com/docs/model/qwen/qwen3.8-27b) still marks it preview; live availability was not tested. [Source checks](upstream-checks.json).
+
+Ollama local0.40.0 completed the cached9b fallback journey. Same-day module06 [release check](../06-questions-context/upstream-checks.json) identified official0.40.4 dated12Oct2026; runtime is not latest. No install/download authorized/performed; no compatibility claim for an untested newer runtime. Python3.10 support-window concern from the prior audit remains. Existing Requests/Ollama APIs passed the local/fixture scope; no new SDK or dependency needed. Upstream code was not downloaded/executed.

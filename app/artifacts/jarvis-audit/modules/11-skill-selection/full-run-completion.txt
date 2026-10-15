@@ -1,0 +1,8 @@
+Actual exec session73573 completion, 2026-10-15 IST, exit_code0:
+tests/test_media_routes.py::MediaRoutesTests::test_search_focus_change_does_not_submit
+  UserWarning: Revert to STA COM threading mode
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: artifacts/jarvis-audit/modules/11-skill-selection/full-regression.xml -
+2355 passed, 9 skipped, 1 warning in 349.22s (0:05:49)
+
+The preceding progress lines are omitted. This is the actual final count, not a planned result.

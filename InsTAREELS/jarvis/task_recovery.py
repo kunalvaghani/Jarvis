@@ -1,5 +1,23 @@
 """Explicit task failures; uncertain external effects must never be retried."""
 from .names import common
+import time
+
+def retry_read(operation, *, read_only, cancelled=lambda:False, attempts=5, wait=None):
+    """Only explicitly admitted observations/inference may be retried, max five."""
+    if read_only is not True or type(attempts) is not int or not 1<=attempts<=5:
+        raise ValueError('Retries require a read-only operation and a 1–5 attempt budget.')
+    for number in range(attempts):
+        if cancelled():raise InterruptedError('Read retry cancelled.')
+        try:return operation()
+        except (OSError,TimeoutError):
+            if number+1==attempts:raise
+            delay=min(.1*2**number,1.)
+            if wait:wait(delay)
+            else:
+                deadline=time.monotonic()+delay
+                while time.monotonic()<deadline:
+                    if cancelled():raise InterruptedError('Read retry cancelled during backoff.')
+                    time.sleep(min(.025,max(0,deadline-time.monotonic())))
 
 
 class TaskFailure(ValueError):

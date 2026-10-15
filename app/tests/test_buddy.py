@@ -41,6 +41,11 @@ class Looks(unittest.TestCase):
 
 class Brain(unittest.TestCase):
     def setUp(self):
+        # Resting moods depend on local hour. These tests exercise daytime
+        # behavior; dedicated night/outfit tests override this fixed clock.
+        calendar = patch('jarvis.buddy_engine.datetime')
+        self.addCleanup(calendar.stop)
+        calendar.start().now.return_value = datetime(2026,10,14,15,0)
         self.clock = [100.0]
         self.pip = be.Buddy(sense=False, clock=lambda: self.clock[0])
 
@@ -84,6 +89,9 @@ class Brain(unittest.TestCase):
         self.assertEqual(self.step(card_phase="sent"), "finished")
 
     def test_jarvis_states_and_events(self):
+        # This checks media/event priority. Random idle dancing is a separate
+        # allowed fidget and must not make the paused-media assertion flaky.
+        self.pip.next_fidget = float('inf')
         self.step(3.5)
         self.assertEqual(self.step(approval=True), "approval")
         self.assertEqual(self.step(question=True), "question")
@@ -106,6 +114,7 @@ class Brain(unittest.TestCase):
         self.assertEqual(self.step(), "dancing")
         self.assertIn("headphones", self.pip.update(self.clock[0])[1]["outfit"])
         self.pip.event("media_card", {"service": "spotify", "phase": "paused"})
+        self.assertEqual(self.pip.music_until, 0.)
         self.assertNotEqual(self.step(), "dancing")
 
     def test_what_you_are_doing(self):

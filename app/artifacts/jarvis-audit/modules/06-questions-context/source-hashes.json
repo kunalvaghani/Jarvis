@@ -1,0 +1,30 @@
+{
+  "jarvis/question_client.py": {
+    "before": "d3045a7366e4764a6a4693d15a7ff42488138f5815287e94cdddea4e532f8a3c",
+    "after": "f0fccba9b4ad04d8c2bd2e59a29610ad953269630a95b6322b5e789626740f29"
+  },
+  "jarvis/knowledge_worker.py": {
+    "before": "e8fbc21075f6a3e0ec0bce46cd36eb79e56ea6c96f6eb82aa5f86e7593d44a64",
+    "after": "84ccec02a9d4402d28a816c843f06dc5623c4c9844bd10ed32a8552699fc8070"
+  },
+  "jarvis/context_selector.py": {
+    "before": "d42b8cd580684df6129187416cb9de5e3e56b638a0de5ced5a6cc0adea6f7fe8",
+    "after": "b42961542ab79e73f88aa516b15c0f5d9f1ce789111b88acb9d047bd5c5a41a2"
+  },
+  "jarvis/conversation_memory.py": {
+    "before": "f4dc216485433497fff85db092de39452ca4d44ef43365edf56cd95783638d72",
+    "after": "54b834c68ced16403126a9ff49eb96a4dd37109a62feab1c4d42b13b5193b007"
+  },
+  "jarvis/runtime_health.py": {
+    "before": "b8726d661db7c65ec7f4c04e22d3c47eec588299ff8832a7b9535695768ffd16",
+    "after": "a4a7cbb501bcf70f11f5f1b0937d054cc59976577b5273d920d6af6a4169b792"
+  },
+  "config/runtime_manifest.json": {
+    "before": "c208573a7e52010976254bdaed297f1579c3c095c3a150a7aa1d4298f58fa716",
+    "after": "600c11d4d04cd688148d4cbe16d05a551b92e8aada16f34163d29510552269ea"
+  },
+  "scripts/verification/audit_catalog.py": {
+    "before": "860acdbd3bb3e1a69a65c307795fd5c1681fb89923633da44568ef4ab9130b0e",
+    "after": "0986433f9e18b0b71086b9d4ca1ec14abb69358d2d90309a7b9c2594b94768c9"
+  }
+}

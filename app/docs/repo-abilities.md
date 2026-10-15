@@ -1,5 +1,12 @@
 # Turning learned repositories into new Jarvis abilities
 
+2026-10-15 IST resource follow-up: initial model selection checks installed model
+size plus the configured RAM margin for both the30B preference and9B fallback.
+If neither fits or capacity cannot be read, it reports a deferred inference rather
+than selecting an unfittable fallback. This is an admission heuristic, not a peak
+RAM guarantee; no30B native load or new ability installation was run for this
+audit. [Cases and limitations](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+
 Updated 2026-10-11 IST. When Jarvis learns a GitHub repository (see [repo-learning.md](repo-learning.md)), it now
 also breaks the repository down into **abilities**: new spoken commands that do what the repository was made to
 do. Learning `trentm/python-markdown2`, for example, gave Jarvis "convert notes.md to html" and "extract headings

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.761" timestamp="2026-10-14T23:55:00.788329+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_architecture_audit" name="test_JRV_01_009_unknown_root_configuration_warns" time="0.286"><failure message="ValueError: Invalid Jarvis source: main.py">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-106/test_JRV_01_009_unknown_root_c0')
+
+    def test_JRV_01_009_unknown_root_configuration_warns(tmp_path):
+        (tmp_path/'config').mkdir()
+        config={**minimal_config(),'approve_all_untrusted_tools':True}
+        (tmp_path/'config/config.json').write_text(json.dumps(config),encoding='utf-8')
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+&gt;           result=launcher.preflight(tmp_path,repair=False)
+
+tests\test_architecture_audit.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-106/test_JRV_01_009_unknown_root_c0')
+repair = False
+
+    def preflight(base=BASE, repair=True):
+        base = Path(base)
+        runtime = base / ".jarvis-runtime"
+        runtime.mkdir(exist_ok=True)
+        config_path = config_file(base)
+        backup = runtime / "config.last-good.json"
+        try:
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+            from .gpu_scheduler import settings as gpu_settings
+            gpu_settings(config.get('gpu_scheduler'))
+            from .docker_runtime import settings as docker_settings
+            docker_settings(config.get('docker_runtime'))
+            from .cloud_policy import settings as groq_settings
+            groq_settings(config.get('groq'))
+            repository_options=config.get('repository_skills',{})
+            if not isinstance(repository_options,dict) or set(repository_options)-{'enabled','image'} or type(repository_options.get('enabled',True)) is not bool:
+                raise ValueError('Invalid repository_skills configuration.')
+            abilities = config.get('repo_abilities', {})
+            if not isinstance(abilities, dict) or any(type(abilities.get(k, True)) is not bool for k in ('enabled', 'auto_build')) or any(
+                    type(abilities.get(k, 1)) not in {int, float} or abilities.get(k, 1) &lt; 0 for k in (
+                        'max_repairs', 'max_builds_per_day', 'run_timeout_seconds', 'test_timeout_seconds', 'max_memory_mb',
+                        'install_timeout_seconds', 'max_input_mb', 'memory_margin_gb', 'idle_seconds')):
+                raise ValueError('Invalid repo_abilities configuration.')
+            documents = config.get('documents', {})
+            if not isinstance(documents, dict) or type(documents.get('enabled', True)) is not bool or any(
+                    type(documents.get(k, 1)) not in {int, float} or documents.get(k, 1) &lt;= 0 for k in (
+                        'graph_threshold_chars', 'graph_max_chunks', 'focus_minutes')):
+                raise ValueError('Invalid documents configuration.')
+            from .repo_sandbox import RepositorySandbox
+            RepositorySandbox(repository_options.get('image','jarvis-repository-runtime:1'))
+            if not isinstance(config.get("apps"), dict) or not isinstance(config.get("whisper"), dict) or not config.get("model_path"):
+                raise ValueError("Invalid config")
+            if not isinstance(config.get("brain", {}).get("adaptive_planning", False), bool):
+                raise ValueError("brain.adaptive_planning must be a boolean")
+            from .hierarchical import settings as hierarchical_settings
+            hierarchical_settings(config.get('brain', {}))
+            from .knowledge_acquisition import settings as acquisition_settings
+            acquisition_settings(config)
+            for key in ('incremental_planning', 'reuse_navigation_workflows', 'native_tool_calling', 'allow_model_fallback'):
+                if not isinstance(config.get('brain', {}).get(key, False), bool):
+                    raise ValueError('brain.' + key + ' must be a boolean')
+            if config.get('brain', {}).get('coding_backend', 'direct-qwen') not in {'direct-qwen','claude-code','codex','jarvis'}:
+                raise ValueError('brain.coding_backend must be jarvis, direct-qwen, claude-code or codex')
+            if config.get('brain', {}).get('coding_backend') == 'jarvis':
+                if config['brain'].get('coder','qwen3.5:9b')!='qwen3.5:9b':raise ValueError('Native Jarvis coding requires local Qwen3.5 9B')
+                for key,low,high in [('native_max_turns',4,100),('native_max_workers',1,4),('native_max_repairs',0,6),('native_predict',256,8192)]:
+                    value=config['brain'].get(key,{'native_max_turns':40,'native_max_workers':2,'native_max_repairs':3,'native_predict':4000}[key])
+                    if type(value) is not int or not low&lt;=value&lt;=high:raise ValueError('Invalid brain.'+key)
+            if config.get('brain', {}).get('coding_backend') == 'codex':
+                from .codex_code import MODEL, executable
+                if config['brain'].get('codex_model', MODEL) not in {MODEL,'qwen3.5:9b'}:
+                    raise ValueError('Codex requires local Qwen3.5 9B')
+                executable(config['brain'])
+            if config.get('brain', {}).get('coding_backend') == 'claude-code':
+                from .claude_code import MODEL, executable
+                if config['brain'].get('claude_code_model', MODEL) not in {MODEL,'qwen3.5:9b'}:
+                    raise ValueError('Claude Code requires the checked local Qwen3.5 9B model')
+                executable(config['brain'])
+            if not isinstance(config.get("brain", {}).get("task_recovery", False), bool):
+                raise ValueError("brain.task_recovery must be a boolean")
+            visual = config.get('brain', {}).get('visual_fallback', {})
+            from .anticipation import settings as anticipation_settings
+            if not isinstance(config.get('anticipation', {}), dict):
+                raise ValueError('anticipation must be an object')
+            anticipation_settings(config.get('anticipation', {}))
+            from .realtime import settings as realtime_settings
+            realtime_settings(config.get('realtime'))
+            from .command_cleanup import settings as cleanup_settings
+            cleanup_settings(config.get('command_cleanup'))
+            from .context_selector import settings as context_settings
+            context_settings(config.get('context_selector'))
+            sessions = config.get('memory', {}).get('conversation_sessions', {})
+            if (not isinstance(sessions, dict) or not isinstance(sessions.get('enabled', False), bool)
+                    or type(sessions.get('context_characters', 24000)) is not int
+                    or not 2000 &lt;= sessions.get('context_characters', 24000) &lt;= 48000
+                    or type(sessions.get('choice_seconds', 300)) is not int
+                    or not 30 &lt;= sessions.get('choice_seconds', 300) &lt;= 900):
+                raise ValueError('Invalid memory.conversation_sessions settings')
+            if (not isinstance(visual, dict) or not isinstance(visual.get('enabled', False), bool)
+                    or type(visual.get('minimum_confidence', .95)) not in (int, float)
+                    or not math.isfinite(visual.get('minimum_confidence', .95))
+                    or not .95 &lt;= visual.get('minimum_confidence', .95) &lt;= 1):
+                raise ValueError('brain.visual_fallback requires a boolean enabled and minimum_confidence between 0.95 and 1')
+        except (ValueError, OSError):
+            if not repair or not backup.is_file():
+                raise ValueError("config/config.json is invalid and no last-good configuration is available.")
+            if config_path.exists():
+                shutil.copy2(config_path, runtime / ("config.damaged." + str(time.time_ns()) + ".json"))
+            shutil.copy2(backup, config_path)
+            record(base, "Invalid Jarvis configuration restored from its last-good copy; damaged copy preserved.")
+            return preflight(base, repair=False)
+        sources = [base / "main.py", *sorted((base / "jarvis").rglob("*.py")), *sorted((base / "scripts").rglob("*.py"))]
+        if (base / "jarvis_bootstrap.py").is_file():
+            sources.append(base / "jarvis_bootstrap.py")
+        for source in sources:
+            relative = source.relative_to(base)
+            saved = runtime / "sources" / relative
+            try:
+                ast.parse(source.read_text(encoding="utf-8"), filename=str(source))
+            except (SyntaxError, UnicodeError, OSError):
+                if not repair or not saved.is_file():
+&gt;                   raise ValueError("Invalid Jarvis source: " + str(relative)) from None
+E                   ValueError: Invalid Jarvis source: main.py
+
+jarvis\launcher.py:174: ValueError</failure></testcase><testcase classname="tests.test_architecture_audit" name="test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload" time="0.008"><failure message="assert 'FAKE_' not in '[{&quot;version&quot;...eoutError&quot;}]'&#10;  &#10;  'FAKE_' is contained here:&#10;    ontent&quot;: &quot;FAKE_PRIVATE&quot;, &quot;api_key&quot;: &quot;FAKE_TOKEN&quot;}, {&quot;version&quot;: 1, &quot;at&quot;: &quot;2026-10-14T18:25:01.538869+00:00&quot;, &quot;event&quot;: &quot;tool.failed&quot;, &quot;call_id&quot;: &quot;6e384f69bf764b728ff70ffa5a488db1&quot;, &quot;tool&quot;: &quot;read_file&quot;, &quot;error_type&quot;: &quot;TimeoutError&quot;}]&#10;  ?           +++++">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-106/test_JRV_01_032_lifecycle_meta0')
+
+    def test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload(tmp_path):
+        actions=SimpleNamespace(base=tmp_path)
+        identifier=event(actions,'tool.started','read_file',content='FAKE_PRIVATE',api_key='FAKE_TOKEN')
+        event(actions,'tool.failed','read_file',identifier,error_type='TimeoutError')
+        rows=[json.loads(s) for s in (tmp_path/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
+        assert rows[0]['call_id']==rows[1]['call_id']==identifier
+        assert rows[1]['error_type']=='TimeoutError'
+&gt;       assert 'FAKE_' not in json.dumps(rows)
+E       assert 'FAKE_' not in '[{"version"...eoutError"}]'
+E         
+E         'FAKE_' is contained here:
+E           ontent": "FAKE_PRIVATE", "api_key": "FAKE_TOKEN"}, {"version": 1, "at": "2026-10-14T18:25:01.538869+00:00", "event": "tool.failed", "call_id": "6e384f69bf764b728ff70ffa5a488db1", "tool": "read_file", "error_type": "TimeoutError"}]
+E         ?           +++++
+
+tests\test_architecture_audit.py:31: AssertionError</failure></testcase></testsuite></testsuites>

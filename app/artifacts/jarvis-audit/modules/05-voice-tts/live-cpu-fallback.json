@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "PASS",
+  "scope": "Actual Speech F5-missing-reference to installed warm Kokoro child with --no-playback, two requests/one launch; separate installed Piper component PCM synthesis, no output stream or download",
+  "kokoro_requests": 2,
+  "kokoro_process_launches": 1,
+  "piper_pcm_samples": 93696,
+  "seconds": 7.156,
+  "events": [
+    {
+      "ready": true
+    },
+    {
+      "id": 1,
+      "progress": 0
+    },
+    {
+      "id": 1,
+      "audio_ready": true,
+      "synthesis_seconds": 1.297
+    },
+    {
+      "id": 1,
+      "done": true,
+      "audio_seconds": 2.58,
+      "synthesis_seconds": 1.297,
+      "coalesced_ids": [
+        1
+      ]
+    },
+    {
+      "id": 2,
+      "progress": 0
+    },
+    {
+      "id": 2,
+      "audio_ready": true,
+      "synthesis_seconds": 0.875
+    },
+    {
+      "id": 2,
+      "done": true,
+      "audio_seconds": 2.98,
+      "synthesis_seconds": 0.875,
+      "coalesced_ids": [
+        2
+      ]
+    },
+    {
+      "stopped": true
+    }
+  ],
+  "report_categories": [
+    "repair"
+  ]
+}

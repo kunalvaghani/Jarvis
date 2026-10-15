@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Transaction_Authorization_Cheat_Sheet.html",
+    "checked": "2026-10-15 IST via Firecrawl",
+    "release_date": null,
+    "finding": "Per-operation authorization, server-side enforcement, invalidation on changed data, final execution gate. Guidance, not a versioned dependency; no date shown."
+  },
+  {
+    "url": "https://docs.python.org/3.10/library/json.html",
+    "checked": "2026-10-15 IST via Firecrawl",
+    "release_date": null,
+    "finding": "allow_nan=False rejects nonfinite numbers; ensure_ascii=True escapes non-ASCII. Local3.10.6 supports these APIs. Documentation identifies3.10.22; page release date unavailable."
+  },
+  {
+    "url": "https://www.python.org/downloads/release/python-31022/",
+    "checked": "2026-10-15 IST via Firecrawl",
+    "release_date": "2026-10-01",
+    "finding": "Python3.10.22 security/source-only release;3.10 support ended. Installed3.10.6 is older; no interpreter or native/GPU dependency migration performed."
+  }
+]

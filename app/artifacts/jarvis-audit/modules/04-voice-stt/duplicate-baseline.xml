@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.152" timestamp="2026-10-15T10:38:58.019492+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_voice_stt_audit" name="test_JRV_04_026_duplicate_final_is_not_replayed" time="0.490"><failure message="AssertionError: assert [Command(kind...r', extra='')] == [Command(kind...r', extra='')]&#10;  &#10;  Left contains one more item: Command(kind='open', value='calculator', extra='')&#10;  Use -v to get more diff">tests\test_voice_stt_audit.py:174: in test_JRV_04_026_duplicate_final_is_not_replayed
+    assert sent == [Command('open','calculator')]*2
+E   AssertionError: assert [Command(kind...r', extra='')] == [Command(kind...r', extra='')]
+E     
+E     Left contains one more item: Command(kind='open', value='calculator', extra='')
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

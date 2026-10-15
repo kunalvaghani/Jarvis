@@ -41,6 +41,17 @@ def linked(path):
         return False
 
 
+def procedure_counts(item):
+    def count(value):return value if type(value) is int and 0<=value<=1_000_000_000 else 0
+    success=count(item.get('successes'))
+    return success,max(success,count(item.get('attempts',success)))
+
+
+def procedure_reliability(item):
+    success,attempts=procedure_counts(item)
+    return (success+1)/(attempts+2)
+
+
 class SkillMemory:
     def __init__(self, memory, source=None):
         self.memory = memory
@@ -108,7 +119,9 @@ class SkillMemory:
                         self._path(path.relative_to(self.vault).as_posix())
                     if path.stat().st_size > 8000:
                         raise ValueError('SKILL.md exceeds the 8,000-byte guide limit.')
-                    body = path.read_text(encoding='utf-8')
+                    with path.open('rb') as source:raw=source.read(8001)
+                    if len(raw)>8000:raise ValueError('SKILL.md exceeds the 8,000-byte guide limit.')
+                    body = raw.decode('utf-8').replace('\r\n','\n').replace('\r','\n')
                     name = re.search(r'(?m)^name: ([a-z0-9-]{1,64})$', body)
                     description = re.search(r'(?m)^description: (.+)$', body)
                     if not name or not description or name[1] != path.parent.name:
@@ -116,14 +129,26 @@ class SkillMemory:
                     if any(row['name'] == name[1] for row in catalog):
                         raise ValueError('duplicate name; choose another personal skill name.')
                     tools = re.search(r'(?m)^tools: \[([a-z0-9_, ]*)\]$', body)
+                    if re.search(r'(?m)^tools:',body) and tools is None:
+                        raise ValueError('tools metadata must be a bounded list of tool names.')
+                    declared=[t.strip() for t in tools[1].split(',') if t.strip()] if tools else []
+                    if len(declared)>32 or any(not re.fullmatch('[a-z][a-z0-9_]{0,79}',t) for t in declared):
+                        raise ValueError('tools metadata exceeds binding limits.')
                     catalog.append({'name': name[1], 'description': description[1][:1024], 'body': body,
-                                    'origin': origin, 'tools': [t.strip() for t in tools[1].split(',') if t.strip()] if tools else []})
+                                    'origin': origin, 'tools': declared,'provenance':{'origin':origin,'relative_path':path.parent.name+'/SKILL.md','sha256':hashlib.sha256(raw).hexdigest()},'trust':'untrusted_guidance'})
                 except (OSError, ValueError, UnicodeError) as exc:
-                    errors.append(path.parent.name + ': ' + str(exc))
+                    errors.append(clean(path.parent.name,80) + ': ' + (str(exc) if type(exc) is ValueError else 'guide read failed: '+type(exc).__name__))
             self.catalog, self.skill_errors, self._guide_stamp = catalog, errors, stamp
 
     def _path(self, relative):
+        if not isinstance(relative,str) or len(relative)>3000 or '\x00' in relative:
+            raise ValueError('Use a bounded relative vault path.')
+        name=Path(relative)
+        if name.is_absolute() or name.drive or '..' in name.parts:
+            raise ValueError('Skill paths must remain within the vault.')
         path = self.vault / relative
+        if not path.resolve().is_relative_to(self.vault.resolve()):
+            raise ValueError('Skill paths must remain within the vault.')
         for part in [path, *path.parents]:
             if part == self.vault.parent:
                 break
@@ -185,10 +210,12 @@ class SkillMemory:
             return {}
         with self.lock:
             explicit = set(re.findall(r'\$custom:([a-z0-9-]{1,64})\b', str(goal)))
-            from .capabilities import skill_score
-            ranked = sorted(self.catalog, key=lambda item: (item['name'] in explicit, skill_score(item, goal)), reverse=True)
+            from .capabilities import skill_score,skill_ranking
+            ranking=skill_ranking(goal)
+            scores={id(item):skill_score(item,goal,ranking) for item in self.catalog}
+            ranked = sorted(self.catalog, key=lambda item: (item['name'] in explicit, scores[id(item)]), reverse=True)
             selected = [{"name": item["name"], "guidance": item["body"]} for item in ranked[:2]
-                        if item['name'] in explicit or skill_score(item, goal) > 0]
+                        if item['name'] in explicit or scores[id(item)] > 0]
             matches = []
             for item in self.procedures.values():
                 if kind and item.get("kind") != kind:
@@ -198,10 +225,11 @@ class SkillMemory:
                 other = words(item.get("goal", ""))
                 score = len(tokens & other) / max(1, len(tokens | other))
                 if score >= .4:
-                    matches.append((score, item.get("updated_at", ""), item))
+                    matches.append((score, procedure_reliability(item),item.get("updated_at", ""), item))
             routes = []
-            for score, _, item in sorted(matches, key=lambda row: (row[0], row[1]), reverse=True)[:3]:
+            for score, reliability, _, item in sorted(matches, key=lambda row: (row[0], row[1],row[2]), reverse=True)[:3]:
                 route = {key: item.get(key) for key in ("goal", "kind", "project", "steps", "verification", "revision", "updated_at", "last_attempt", "conditions")}
+                route['observed_reliability']=reliability
                 route["steps"] = [{k: clean(v, 180) for k, v in step.items() if k in {"stage", "action", "target"}}
                                   for step in item.get("steps", [])[-12:] if isinstance(step, dict)]
                 routes.append(route)
@@ -265,6 +293,7 @@ class SkillMemory:
                 revision = (old or {}).get("revision", 0) + 1
                 item = {**entry, "updated_at": stamp, "revision": revision,
                         "successes": (old or {}).get("successes", 0) + 1,
+                        "attempts":procedure_counts(old or {})[1]+1,
                         "last_attempt": "verified", "previous_revision": (old or {}).get("updated_at")}
                 item["surface"] = next((clean(c.get("screen", ""), 300) for c in checkpoints if c.get("stage") == "procedure_surface"), "")
                 from .experience_memory import CONDITION_KEYS
@@ -289,6 +318,7 @@ class SkillMemory:
                 body += "\n\nVerification scope: " + "; ".join(evidence) + "\n"
                 atomic(self._path(f"Jarvis Skills/Learned/procedure-{key}/SKILL.md"), body)
             elif old:
+                old['attempts']=procedure_counts(old)[1]+1
                 old["last_attempt"] = str(entry["status"]) + "; inspect fresh state before using this reference"
             if verified or old:
                 # Keep lookup bounded; detailed attempts remain in daily logs.

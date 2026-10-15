@@ -1,0 +1,18 @@
+{
+  "scope": "same-machine synchronous projection; cold means first fixture projections, not process/model startup",
+  "python": "3.10.6",
+  "results": {
+    "before": {
+      "p50_ms": 5.7631500021670945,
+      "p95_ms": 6.089000002248213,
+      "payload_bytes": 787592,
+      "peak_python_bytes": 2350018
+    },
+    "after": {
+      "p50_ms": 0.20745000074384734,
+      "p95_ms": 0.21750000450992957,
+      "payload_bytes": 12308,
+      "peak_python_bytes": 49374
+    }
+  }
+}

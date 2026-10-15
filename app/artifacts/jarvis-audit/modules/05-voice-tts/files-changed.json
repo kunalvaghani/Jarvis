@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Module05 scoped files; existing unrelated dirty work excluded. Shared files retain previous changes. No commit/deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/speech.py",
+      "sha256": "ce2355c327e249caf9fbe3b274e18fd6dd03f78e3e5011f610ec04823377b5e1"
+    },
+    {
+      "path": "app/jarvis/f5_speech.py",
+      "sha256": "0f219542701b544ab7e0986de50ec737c32379017507fc7bc27a0f24a07d9864"
+    },
+    {
+      "path": "app/jarvis/kokoro_speech.py",
+      "sha256": "77261164466da2664e1652c7fc51a53ceeee87d914667458514375f7e904d61b"
+    },
+    {
+      "path": "app/jarvis/runtime_health.py",
+      "sha256": "b8726d661db7c65ec7f4c04e22d3c47eec588299ff8832a7b9535695768ffd16"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "c208573a7e52010976254bdaed297f1579c3c095c3a150a7aa1d4298f58fa716"
+    },
+    {
+      "path": "app/tests/test_voice_tts_audit.py",
+      "sha256": "d92fd54b39ee7e0e6af230ba2b64760e88be91179affe2f95e37b0a29c1905be"
+    },
+    {
+      "path": "app/tests/test_f5_speech.py",
+      "sha256": "a794f62eca23a54165c58824984c3924f1f83af7bbc51877386ca8fbf5e9f787"
+    },
+    {
+      "path": "app/tests/test_natural_voice.py",
+      "sha256": "408cecfc8e0f7fa25d1939c34903bfba91ca0a2ca3b6d4541e309123078c1143"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "48fc3525b77ebf42c3e580db7ceefe557e392da01909a334c10b1edaf18f2fd4"
+    },
+    {
+      "path": "app/tests/audit_contract_helpers.py",
+      "sha256": "0b7e79b73bea0776a196836b382c817c8cc5e5987b0ed2483d9dd55cbae57b6b"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "860acdbd3bb3e1a69a65c307795fd5c1681fb89923633da44568ef4ab9130b0e"
+    },
+    {
+      "path": "app/scripts/verification/verify_voice_tts_audit.py",
+      "sha256": "27ee2ae2accfc810a56262398ff9f65be5548d30061c348016cd4bb8da25292a"
+    },
+    {
+      "path": "app/scripts/verification/report_voice_tts_audit.py",
+      "sha256": "60150abd6804d1af530031bec1263077ec1256e72c0c99923816754aba9f3495"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "839ea43672e2e32f2e33a8de70a98c72c5e8793e644d23cf27e1dddd543eace4"
+    },
+    {
+      "path": "app/docs/README.md",
+      "sha256": "311001ec1019c286f4674bc49403dc592ad7fe21285c383dbb532c200299adcf"
+    },
+    {
+      "path": "app/docs/f5-voice.md",
+      "sha256": "86bef75c0c5bb41a5a64c24bfcc6d2729cf837ef3e46fe375454f815386797a7"
+    },
+    {
+      "path": "app/docs/natural-male-voice.md",
+      "sha256": "798af84f5448520a9b8c4b434d6ce7599f8cb9ee13cb82a08c30c867b30ed4cc"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "69872e30510a9fb1fd56b35415e4a73af442c2d22dfcf1c886eba3751d3cceb5"
+    },
+    {
+      "path": "README.md",
+      "sha256": "81841992853bc104b4bf47521867ff7b653c982c6e554633974f30b488e3f7f7"
+    }
+  ],
+  "artifacts_directory": "app/artifacts/jarvis-audit/modules/05-voice-tts",
+  "shared_artifacts": [
+    "test-results.jsonl",
+    "summary.json",
+    "executed-tests.jsonl",
+    "module-map.json",
+    "remaining-case-ids.txt",
+    "security-findings.md",
+    "final-report.md"
+  ]
+}

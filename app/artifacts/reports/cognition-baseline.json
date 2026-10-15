@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-14 IST",
+  "mode": "baseline",
+  "scope": "Synthetic sensor bursts, 4 Hz loop with 180 ms injected storage delay, 300 warm parser calls, 2000 timestamp decay batch. Not production/OS real-time certification.",
+  "tick_ms": {
+    "samples": 10,
+    "median": 0.14970000029279618,
+    "p95": 0.21709999964514282,
+    "max": 0.21800000013172394
+  },
+  "interval_ms": {
+    "samples": 9,
+    "median": 264.6074000003864,
+    "p95": 440.89749999966443,
+    "max": 452.96220000000176
+  },
+  "routing_ms": {
+    "samples": 300,
+    "median": 3.894099999797618,
+    "p95": 5.307299999913084,
+    "max": 801.080300000649
+  },
+  "scalar_decay_ms": 1.1792999999670428,
+  "batch_decay_ms": null,
+  "source_sha256": {
+    "cognition.py": "26df0ef4e291f6c2f098c87e24df7e1a2cf1660428cbc61efda05f7109826964",
+    "context_hub.py": "049ad6453b8c75947aaea47fe02523e6496203c1763849425f94fe32d24c32cd",
+    "engine.py": "80675e1d39b128667b4831335839345fcd3764e33f30148a0b5bec289621f70a",
+    "commands.py": "1bae000a040f6d8f5135b7b430e8336331783b0d0add7865c09a1d5d827750b2",
+    "deliberation.py": "ed393aeb9ebe1fbcd9b260ebfac51c9b63d389c531414d26b5db18cbb561d5d8",
+    "task_recovery.py": "594daa34b5860bee5f5a5a49a7520df3a2211508d3522cf847f0cf627d1c3b11",
+    "experience.py": "db86dd45a18bef31b97031a162b95dfecfaae1bfb54c041a3bcdfb8dd313b047"
+  }
+}

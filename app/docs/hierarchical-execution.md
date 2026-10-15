@@ -1,5 +1,44 @@
 # Hierarchical execution upgrade
 
+## Audit follow-up — 2026-10-15 IST
+
+[Prompt10 evidence](../artifacts/jarvis-audit/modules/10-dag-planning/inventory.md)
+tests the real validator, scheduler, cache and TaskState boundaries with isolated
+data and fake external effects. Effects serialize within one Executor regardless
+of resource labels; reads still overlap when their resources permit it. This is
+not a cross-process/global write lock or a new production email DAG adapter.
+
+Restored reads carry a SHA-256 binding over the exact step and resolved arguments
+and must pass fresh verification. Legacy rows without a binding run fresh.
+Descendants restore only after their prerequisites verify in the current run;
+if upstream data changes, dependent results run fresh instead of reusing a stale
+summary. An out-of-order descendant may conservatively rerun.
+Effectful checkpoints still refuse replay. Production DAG writes require the
+current task UUID, with another identity check at tool authorization. Direct
+legacy callers may omit the optional `task_id`; they do not receive that guard.
+Typed output mismatches prevent downstream dispatch. Oversized/deep JSON is
+bounded before serialization. Errors retain exception categories, excluding
+payload-bearing exception messages; execution/progress have run UUIDs. Actual
+results and graphs stay in local task checkpoints and may contain private data.
+
+Malformed/oversized cached JSON becomes a miss; cache candidates are validated
+before reuse. New recognized credential-bearing goals/graphs are omitted from
+templates. Existing local rows are not retrospectively scrubbed. Source digests
+are reused only while device/inode, size, modification and ctime timestamps
+match; reads detect a changing source file. This is metadata invalidation, not a
+defense against an actor restoring or forging filesystem metadata. Windows
+ctime represents creation time, so it is not an independent content-change log.
+Fingerprints also include configured model labels and additional policy/state
+source files. Warm reads avoid hashing unchanged source contents; cold calls
+cost more. See the paired measurements rather than assuming universal speedups.
+
+Existing capability guards and per-action consent remain authoritative. The
+generic compose→approval→send fixture uses fake effects; real mail stays on its
+specialized path. Partial progress is retained, not automatically undone.
+Cancellation drains owned threads and cannot forcibly stop an uncooperative
+backend. Live accounts, GUI consent, GPU pressure, model planning quality and
+multi-hour soak acceptance were not performed by the fixture suite.
+
 Updated 2026-10-14 IST on `codex/hierarchical-dag-upgrade`. This is an in-place
 upgrade. Existing commands, models, integrations, memories and environments are
 retained. The supplied attachment contained requirements, not reference source

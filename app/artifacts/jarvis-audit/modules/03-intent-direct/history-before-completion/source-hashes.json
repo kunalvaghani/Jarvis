@@ -1,0 +1,17 @@
+{
+  "intent_catalog.py": {
+    "before": "6683dd4e272ee983b46bb48353d5dce192ff88acd54538f9c1e4adb937d19a02",
+    "before_representation": "captured bytes",
+    "after": "ba3ccf4258e716bcd5c3dda63165ae4c4d6a28e306d441919b2e070b7cf76332"
+  },
+  "commands.py": {
+    "before": "924df53bed500f164e493988e4f336bc8049dfeb7a280c93ea94f087f28c8206",
+    "before_representation": "captured bytes",
+    "after": "924df53bed500f164e493988e4f336bc8049dfeb7a280c93ea94f087f28c8206"
+  },
+  "engine.py": {
+    "before": "497740bee165113dda79a86db9628d5fb40e0985e877e9210bc76ffd35707d7d",
+    "before_representation": "reconstructed normalized text",
+    "after": "52af3cee2c5e2e704c3b99302197cc93cc07c8bde34169b99a148a60a4ab7e11"
+  }
+}

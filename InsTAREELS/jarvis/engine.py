@@ -7,6 +7,7 @@ free speech is typed only while the push-to-write keys are held.
 """
 import re
 import time
+import threading
 from .commands import Command, parse
 
 WAKE = re.compile(r"\b(?:hey\s+)?jarvis\b", re.I)
@@ -39,17 +40,20 @@ class Engine:
         self.segment_wake = False
         self.suppressed = False
         self.last_open = None
+        self.lock = threading.RLock()
 
     def reset(self):
-        self.active = False
-        self._reset_segment()
+        with self.lock:
+            self.active = False
+            self._reset_segment()
 
     def activate(self, now=None):
         """A deliberate Start listening click also wakes the command engine."""
-        self.reset()
-        self.active = True
-        self.last_speech = time.monotonic() if now is None else now
-        self.report("state", "Awake · say a command, for example open notepad")
+        with self.lock:
+            self.reset()
+            self.active = True
+            self.last_speech = time.monotonic() if now is None else now
+            self.report("state", "Awake · say a command, for example open notepad")
 
     def _reset_segment(self):
         self.opened = None
@@ -59,6 +63,10 @@ class Engine:
         self.suppressed = False
 
     def feed(self, text, final=False, now=None, raw=None):
+        with self.lock:
+            return self._feed(text,final,now,raw)
+
+    def _feed(self, text, final=False, now=None, raw=None):
         now = time.monotonic() if now is None else now
         text = " ".join(text.split())
         if self.suppressed:
@@ -110,6 +118,8 @@ class Engine:
         for index, clause in enumerate(clauses):
             complete = final or index < len(clauses) - 1
             clause = clause.strip()
+            if not whole and index < len(clauses) - 1:
+                clause = clause.rstrip(',;').rstrip()  # punctuation before a spoken command boundary
             if not clause:
                 continue
             if index in self.done:

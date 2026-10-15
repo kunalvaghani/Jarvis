@@ -1,5 +1,39 @@
 # F5-TTS voice integration
 
+**Audit follow-up — 2026-10-15 IST:** Missing reference/environment or cold worker
+initialization failure now selects installed Kokoro CPU, then installed Piper.
+The worker must report ready before receiving text; startup waits at most 60 s
+without holding the Stop lock. A failed F5 backend stays bypassed for this Speech
+session. No model download is performed by fallback selection. The launcher still
+checks the configured primary dependencies separately; ordinary launcher repair
+retains its previously documented dependency policy.
+
+Once text has been submitted, a runtime/transport failure is not replayed through
+another voice. Failed submitted fragments are discarded; new text requests or
+later unsent stream fragments can restart the owned worker. Stop invalidates text preparation and buffer enqueue, including
+queued replies before playback. Language/backend changes drain earlier audio
+instead of killing it mid-clause. Playback sends periodic metadata heartbeats so
+a long completed waveform is not mistaken for stalled synthesis. F5's progress
+watchdog remains 600 s; Kokoro uses 60 s.
+
+Queues are bounded: 64 parent text entries, 64 worker requests and 128 playback
+pieces, each finite mono PCM of at most 30 s. Speech text has a 20,000-character
+bound; individual words exceeding F5's reference-derived chunk budget are rejected
+before inference. Errors preserve the transcript and never grant tool permissions.
+Malformed protocol roots/types, stale worker events and duplicate request IDs are
+rejected. Native stderr is discarded in production Speech workers; categorical protocol
+and health metadata remain. Historical private `speech.log` files are untouched.
+
+A 16-entry header-duration cache keys on path, size and modification/change times;
+it stores no audio or reference transcript. Actual cached CUDA synthesis and the
+Speech→Kokoro fallback path plus Piper PCM synthesis passed without speaker
+playback. These are functional checks, not a listening evaluation. Model weights,
+32 steps, CFG, reference and pacing defaults are unchanged. Shared STT/F5 admission
+is still absent; the Qwen speech reserve is not a shared lease. No two-second
+first-audio guarantee or acoustic equivalence is claimed.
+[Current assertions, paired measurements, upstream checks and blockers](../artifacts/jarvis-audit/modules/05-voice-tts/inventory.md).
+All October 14 measurements below retain their historical context.
+
 Added 2026-10-14 IST. The F5-TTS v1 Base adapter uses the same hidden,
 owned audio worker and continuous output stream as Kokoro. Dependencies live in
 `.venv-f5`; the main environment is unchanged. F5 is selected in the current

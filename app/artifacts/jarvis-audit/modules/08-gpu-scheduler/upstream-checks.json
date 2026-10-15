@@ -1,0 +1,21 @@
+[
+  {
+    "url": "https://docs.ollama.com/faq",
+    "checked": "2026-10-15 IST",
+    "facts": "- Default context window size is 4096 tokens, which can be overridden via `OLLAMA_CONTEXT_LENGTH`, `/set parameter num_ctx`, or the `num_ctx` API parameter.\n- `ollama ps` shows loaded models and their memory processor usage (`100% GPU`, `100% CPU`, or split like `48%/52% CPU/GPU`).\n- By default, models are kept in memory for 5 minutes before being unloaded.\n- `ollama stop` immediately unloads a model from memory.\n- The `keep_alive` API parameter (or `OLLAMA_KEEP_ALIVE` environment variable) controls model cache lifetime:\n  - Duration string (e.g., “10m” or “24h”)\n  - Number in seconds (e.g., 3600)\n  - Negative number to keep loaded indefinitely (e.g., -1 or “-1m”)\n  - ‘0’ to unload immediately after generating a response\n- Concurrent processing details and limits:\n  - `OLLAMA_MAX_LOADED_MODELS`: Maximum concurrently loaded models that fit in available memory (default is 3 * number of GPUs, or 3 for CPU inference).\n  - `OLLAMA_NUM_PARALLEL`: Maximum parallel requests each model processes at the same time (default 1). Required RAM scales by `OLLAMA_NUM_PARALLEL` * `OLLAMA_CONTEXT_LENGTH`.\n  - `OLLAMA_MAX_QUEUE`: Maximum queued requests before rejecting with 503 (default 512).\n  - Parallel request processing increases context size by the number of parallel requests (e.g., 2K context with 4 parallel requests results in an 8K context and additional memory allocation).\n  - When using GPU inference, new models must completely fit in VRAM to allow concurrent model loads.\n- Multiple GPUs: If a model fits entirely on a single GPU, Ollama loads it on that GPU; otherwise, it is spread across available GPUs.\n- Flash Attention can be forced on with `OLLAMA_FLASH_ATTENTION=1` or disabled with `OLLAMA_FLASH_ATTENTION=0`.\n- K/V cache quantization (`OLLAMA_KV_CACHE_TYPE`, default `f16`):\n  - `f16`: high precision and memory usage (default).\n  - `q8_0`: 8-bit quantization, uses approximately 1/2 the memory of `f16`.\n  - `q4_0`: 4-bit quantization, uses approximately 1/4 the memory of `f16`.",
+    "publication_date": "not stated"
+  },
+  {
+    "url": "https://docs.ollama.com/api/ps",
+    "checked": "2026-10-15 IST",
+    "facts": "- `size_vram`: 5333539264 (bytes)\n- `context_length`: 4096\n- `expires_at`: \"2025-10-17T16:47:07.93355-07:00\"",
+    "publication_date": "not stated",
+    "note": "API example values are documentation examples, not measurements of this machine."
+  },
+  {
+    "url": "https://github.com/ollama/ollama/releases/tag/v0.40.4",
+    "checked": "2026-10-15 IST",
+    "facts": "- Current release version/date: v0.40.4, released 3 days ago (12 Oct 19:00).\n- GPU memory / CPU/GPU offload / context / cache: The page notes \"Improved inference performance by reusing verified manifests and already loaded models\" and \"Fixed loading multimodal embedding models with small context windows\".",
+    "publication_date": "2026-10-12 19:00 (page timezone not established)"
+  }
+]

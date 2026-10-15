@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.615" timestamp="2026-10-15T12:23:24.390972+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_model_routing_audit" name="test_bare_key_is_redacted_in_durable_conversation" time="0.046"><failure message="AssertionError: assert 'Explain quan...aaaaaaaaaaaaa' == 'gsk_aaaaaaaa...aaaaaaaaaaaaa'&#10;  &#10;  - gsk_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&#10;  + Explain quantum computing ghp_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">tests\test_model_routing_audit.py:77: in test_bare_key_is_redacted_in_durable_conversation
+    assert row['question']==row['answer']=='[redacted sensitive text]'
+E   AssertionError: assert 'Explain quan...aaaaaaaaaaaaa' == 'gsk_aaaaaaaa...aaaaaaaaaaaaa'
+E     
+E     - gsk_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+E     + Explain quantum computing ghp_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,164 @@
+--- pre-module01/jarvis/launcher.py
++++ app/jarvis/launcher.py
+@@ -77,7 +77,8 @@
+     config_path = config_file(base)
+     backup = runtime / "config.last-good.json"
+     try:
+-        config = json.loads(config_path.read_text(encoding="utf-8"))
++        from .config_contract import load_config
++        config = load_config(config_path)
+         from .gpu_scheduler import settings as gpu_settings
+         gpu_settings(config.get('gpu_scheduler'))
+         from .docker_runtime import settings as docker_settings
+--- pre-module01/jarvis/agent_events.py
++++ app/jarvis/agent_events.py
+@@ -7,10 +7,35 @@
+ from pathlib import Path
+ import threading
+ import uuid
++import re
++import builtins
++from functools import lru_cache
+ 
+ from .agent_context import bounded_text, scoped
+ 
+ _LOCK = threading.RLock()
++_BACKENDS = frozenset({'files','terminal','browser','desktop','toolkit','dom','realtime','spotify','desktop_observation'})
++_ERROR_TYPES = frozenset(name for name,value in vars(builtins).items()
++    if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled'})
++
++@lru_cache(maxsize=1)
++def lifecycle_tools():
++    # Lazy to keep module import side-effect free; execution happens after registry setup.
++    from .tools import TOOL_NAMES
++    return frozenset(TOOL_NAMES)
++
++def lifecycle_metadata(metadata):
++    """Allow categorical fields only; extra payloads cannot overwrite the envelope."""
++    result = {}
++    backend = metadata.get('backend')
++    if isinstance(backend,str) and backend in _BACKENDS:
++        result['backend'] = backend
++    error = metadata.get('error_type')
++    if isinstance(error,str) and error in _ERROR_TYPES:
++        result['error_type'] = error
++    discarded = len(metadata)-len(result)
++    if discarded: result['discarded_metadata_fields'] = discarded
++    return result
+ 
+ 
+ def runtime_base(actions):
+@@ -45,11 +70,13 @@
+ 
+ def event(actions, kind, name, call_id=None, **metadata):
+     base = runtime_base(actions)
+-    identifier = call_id or uuid.uuid4().hex
++    identifier = call_id if isinstance(call_id,str) and re.fullmatch(r'[0-9a-f]{32}',call_id) else uuid.uuid4().hex
+     if base is None:
+         return identifier
+-    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
+-           'call_id': identifier, 'tool': name, **metadata}
++    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(),
++           'event':kind if kind in {'tool.started','tool.completed','tool.failed'} else 'tool.invalid_event',
++           'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
++           **lifecycle_metadata(metadata)}
+     # Never store arguments, source, responses, credentials or private recordings.
+     with _LOCK:
+         path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
+--- pre-module01/main.py
++++ app/main.py
+@@ -35,7 +35,8 @@
+ class App:
+     def __init__(self, root):
+         self.root = root
+-        self.config = json.loads((config_file(BASE)).read_text(encoding="utf-8"))
++        from jarvis.config_contract import load_config
++        self.config = load_config(config_file(BASE))
+         if os.environ.get("JARVIS_UI_VERIFY") == "1":
+             self.config["memory"] = {"enabled": False}
+             self.config['_ui_verification'] = True
+--- pre-module01/config/runtime_manifest.json
++++ app/config/runtime_manifest.json
+@@ -1,5 +1,14 @@
+ {
+   "version": 1,
++  "configuration_contract": {
++    "module": "jarvis.config_contract",
++    "entrypoints": "launcher.preflight and direct main.App startup share load_config",
++    "limits": "2000000 UTF-8 bytes, 128 root fields, depth 32, 100000 values; malformed/non-finite JSON fails before services start",
++    "unknown_fields": "Metadata-only ConfigurationWarning with field count; no names/values logged, no permission grant; known subsystem validators remain authoritative",
++    "lifecycle_events": "Fixed envelope, registered tool labels and categorical backend/error types only; extras counted and discarded, trace UUIDs preserved",
++    "new_dependencies": [],
++    "new_services": []
++  },
+   "knowledge_acquisition": {
+     "modules": [
+       "jarvis.knowledge_acquisition",
+--- pre-module01/tests/test_buddy.py
++++ app/tests/test_buddy.py
+@@ -89,6 +89,9 @@
+         self.assertEqual(self.step(card_phase="sent"), "finished")
+ 
+     def test_jarvis_states_and_events(self):
++        # This checks media/event priority. Random idle dancing is a separate
++        # allowed fidget and must not make the paused-media assertion flaky.
++        self.pip.next_fidget = float('inf')
+         self.step(3.5)
+         self.assertEqual(self.step(approval=True), "approval")
+         self.assertEqual(self.step(question=True), "question")
+@@ -111,6 +114,7 @@
+         self.assertEqual(self.step(), "dancing")
+         self.assertIn("headphones", self.pip.update(self.clock[0])[1]["outfit"])
+         self.pip.event("media_card", {"service": "spotify", "phase": "paused"})
++        self.assertEqual(self.pip.music_until, 0.)
+         self.assertNotEqual(self.step(), "dancing")
+ 
+     def test_what_you_are_doing(self):
+--- /dev/null
++++ app/jarvis/config_contract.py
+@@ -0,0 +1,45 @@
++"""Shallow startup contract. Unknown fields warn without granting new permissions."""
++import warnings
++import json
++from pathlib import Path
++
++OBJECT_FIELDS = frozenset('knowledge_acquisition groq gpu_scheduler realtime context_selector command_cleanup anticipation ui agent_runtime whisper cursor push_to_write apps folders files knowledge memory weather cognition gods_eye repo_learning weather_alerts whatsapp media speech brain documents repo_abilities repository_skills rea deliberation self_evolution docker_runtime'.split())
++KNOWN_FIELDS = OBJECT_FIELDS | frozenset({'model_path','files_root','project_roots','microphone',
++    'wake_timeout_seconds','suggestion_seconds','file_catalog','_ui_verification'})
++MAX_ROOT_FIELDS = 128
++MAX_CONFIG_BYTES = 2_000_000
++
++class ConfigurationWarning(UserWarning):
++    """Metadata-only diagnostic for unsupported root fields."""
++
++def load_config(path):
++    """Bound bytes before decoding; malformed/deep JSON produces a private-safe error."""
++    try:
++        with Path(path).open('rb') as stream:
++            raw=stream.read(MAX_CONFIG_BYTES+1)
++        if len(raw)>MAX_CONFIG_BYTES:
++            raise ValueError('Jarvis configuration exceeds the two-million-byte limit.')
++        def invalid_constant(_):raise ValueError('Non-finite JSON configuration number.')
++        value=json.loads(raw.decode('utf-8'),parse_constant=invalid_constant)
++    except (UnicodeError,RecursionError,json.JSONDecodeError) as exc:
++        raise ValueError('Malformed or excessively nested Jarvis configuration.') from None
++    return validate_root(value)
++
++def validate_root(config):
++    if not isinstance(config,dict) or len(config)>MAX_ROOT_FIELDS or any(not isinstance(k,str) or len(k)>128 for k in config):
++        raise ValueError('Jarvis configuration must be a bounded object with string field names.')
++    if any(not isinstance(config[key],dict) for key in OBJECT_FIELDS if key in config):
++        raise ValueError('Jarvis configuration sections must be objects.')
++    pending=[(config,0)];count=0
++    while pending:
++        item,depth=pending.pop();count+=1
++        if depth>32 or count>100000:
++            raise ValueError('Jarvis configuration nesting or item limit exceeded.')
++        if isinstance(item,dict):pending.extend((value,depth+1) for value in item.values())
++        elif isinstance(item,list):pending.extend((value,depth+1) for value in item)
++    unknown=set(config)-KNOWN_FIELDS
++    if unknown:
++        # Never echo values or unknown names: either may contain a pasted secret.
++        warnings.warn('Unknown top-level Jarvis configuration fields: '+str(len(unknown))+
++            '. They are not a permission grant; check the documented configuration.',ConfigurationWarning,stacklevel=2)
++    return config

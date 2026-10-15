@@ -9,6 +9,7 @@ from pathlib import Path
 import tempfile
 import threading
 import time
+import uuid
 from datetime import datetime, timezone
 from .experience import recall_tasks
 from .task_graph import MAX_TASK_GOAL_CHARS
@@ -87,9 +88,20 @@ class TaskState:
                 self.data["history"] = (self.data["history"] + [previous])[-20:]
             timestamp = _now()
             self.data["current"] = {"goal": goal[:MAX_TASK_GOAL_CHARS], "kind": kind, "project": str(project) if project else None,
+                                    "task_id": uuid.uuid4().hex,
                                     "status": "running", "stage": "started", "started_at": timestamp,
                                     "updated_at": timestamp, "checkpoints": [], "result": ""}
             self._write()
+            return self.data['current']['task_id']
+
+    def identity(self):
+        with self.lock:
+            current=self.data.get('current') or {}
+            return current.get('task_id') or current.get('started_at')
+
+    def require_identity(self, expected):
+        if not isinstance(expected,str) or not expected or self.identity()!=expected:
+            raise ValueError('Task identity changed; unrelated execution refused.')
 
     def checkpoint(self, stage, *, action=None, target=None, evidence=None, screen=None, source=None):
         with self.lock:
@@ -103,15 +115,27 @@ class TaskState:
             current["stage"] = stage
             current["updated_at"] = item["at"]
             current["checkpoints"] = (current["checkpoints"] + [item])[-30:]
+            if stage in {'uncertain_external_write','external_write_verified'}:
+                pending = current.setdefault('uncertain_external_writes', [])
+                token = {'action':str(action or ''),'target':str(target or '')[:500]}
+                if stage == 'uncertain_external_write' and token not in pending:
+                    pending.append(token)
+                elif stage == 'external_write_verified':
+                    current['uncertain_external_writes'] = [row for row in pending if row!=token]
             self._write()
 
-    def finish(self, status, result):
+    def finish(self, status, result, *, task_id=None):
         with self.lock:
             current = self.data.get("current")
+            if task_id is not None and (not current or current.get('task_id',current.get('started_at'))!=task_id):
+                return False
             if not current or current.get("status") != "running":
                 return
             if status not in {"completed", "paused", "cancelled", "failed"}:
                 raise ValueError("Invalid task status")
+            if status == 'completed' and current.get('uncertain_external_writes'):
+                status = 'paused'
+                result = 'Task paused: an external write is uncertain; inspect the actual result. No automatic replay.'
             current["status"] = status
             current["updated_at"] = _now()
             current["result"] = str(result)[:1000]
@@ -142,9 +166,10 @@ class TaskState:
             current["updated_at"] = _now()
             self._write()
 
-    def update_dag(self, graph, steps, fingerprint, timings):
+    def update_dag(self, graph, steps, fingerprint, timings, *, task_id=None):
         """Task-owned DAG checkpoint, never an automatic effect replay queue."""
         with self.lock:
+            if task_id is not None:self.require_identity(task_id)
             current = self.data.get('current')
             if not current or current.get('status') != 'running':
                 return
@@ -203,6 +228,8 @@ class TaskState:
 
     @staticmethod
     def resume_blocker(task):
+        if task.get('uncertain_external_writes'):
+            return 'An external write is uncertain. Inspect the actual result before continuing; no automatic replay is permitted.'
         dag = task.get('dag', {})
         if any(row.get('effect') and row.get('status') != 'succeeded'
                for row in dag.get('steps', {}).values()):
@@ -214,9 +241,9 @@ class TaskState:
         uncertain = False
         for item in task.get("checkpoints", []):
             stage = item.get("stage")
-            if stage in {"acting", "action_attempted"}:
+            if stage in {"acting", "action_attempted", "uncertain_external_write"}:
                 uncertain = True
-            elif stage == "verified":
+            elif stage in {"verified", "external_write_verified"}:
                 uncertain = False
             if stage in {"wrote_file", "observed_file"}:
                 return "Project files were already changed. Inspect them and request the remaining edits."

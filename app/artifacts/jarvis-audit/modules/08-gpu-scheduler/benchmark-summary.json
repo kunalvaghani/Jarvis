@@ -1,0 +1,33 @@
+{
+  "scope": "Identical empty registry polls, same OS lock/path semantics; cold recreates Python Registry only, not disk cache/process/model.",
+  "results": {
+    "before_cold_read": {
+      "samples": 5,
+      "p50_ms": 2.537200001825113,
+      "p95_ms": 2.7200000040465966,
+      "atomic_promotions": 5,
+      "peak_python_bytes": 57766
+    },
+    "before_warm_read": {
+      "samples": 20,
+      "p50_ms": 2.4942499985627364,
+      "p95_ms": 2.682199999981094,
+      "atomic_promotions": 20,
+      "peak_python_bytes": 38688
+    },
+    "after_cold_read": {
+      "samples": 5,
+      "p50_ms": 0.9944999983417802,
+      "p95_ms": 1.0586999997030944,
+      "atomic_promotions": 0,
+      "peak_python_bytes": 46375
+    },
+    "after_warm_read": {
+      "samples": 20,
+      "p50_ms": 0.9007499975268729,
+      "p95_ms": 1.4969999974709935,
+      "atomic_promotions": 0,
+      "peak_python_bytes": 46913
+    }
+  }
+}

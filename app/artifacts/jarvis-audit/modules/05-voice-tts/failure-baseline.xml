@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="16" skipped="1" tests="17" time="1.053" timestamp="2026-10-15T11:13:19.779967+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_005_f5_initialization_failure_uses_installed_cpu_fallback" time="0.223"><failure message="AssertionError: assert [(None, 'A sa...back reply.')] == [('kokoro', '...back reply.')]&#10;  &#10;  At index 0 diff: (None, 'A safe fallback reply.') != ('kokoro', 'A safe fallback reply.')&#10;  Use -v to get more diff">tests\test_voice_tts_audit.py:41: in test_JRV_05_005_f5_initialization_failure_uses_installed_cpu_fallback
+    speech.queue.join();assert sent==[('kokoro','A safe fallback reply.')]
+E   AssertionError: assert [(None, 'A sa...back reply.')] == [('kokoro', '...back reply.')]
+E     
+E     At index 0 diff: (None, 'A safe fallback reply.') != ('kokoro', 'A safe fallback reply.')
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_006_missing_reference_falls_back_and_gives_setup_hint" time="0.216"><failure message="AssertionError: assert [] == ['kokoro']&#10;  &#10;  Right contains one more item: 'kokoro'&#10;  Use -v to get more diff">tests\test_voice_tts_audit.py:50: in test_JRV_05_006_missing_reference_falls_back_and_gives_setup_hint
+    speech.queue.join();assert sent==['kokoro']
+E   AssertionError: assert [] == ['kokoro']
+E     
+E     Right contains one more item: 'kokoro'
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_018_cancel_during_text_preparation_cannot_enqueue_old_answer[say]" time="0.001"><failure message="assert (False)&#10; +  where False = empty()&#10; +    where empty = &lt;queue.Queue object at 0x00000251A921E620&gt;.empty&#10; +      where &lt;queue.Queue object at 0x00000251A921E620&gt; = &lt;jarvis.speech.Speech object at 0x00000251A921E650&gt;.queue">tests\test_voice_tts_audit.py:61: in test_JRV_05_018_cancel_during_text_preparation_cannot_enqueue_old_answer
+    assert speech.queue.empty() and speech.streamed is None
+E   assert (False)
+E    +  where False = empty()
+E    +    where empty = &lt;queue.Queue object at 0x00000251A921E620&gt;.empty
+E    +      where &lt;queue.Queue object at 0x00000251A921E620&gt; = &lt;jarvis.speech.Speech object at 0x00000251A921E650&gt;.queue</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_018_cancel_during_text_preparation_cannot_enqueue_old_answer[stream]" time="0.001"><failure message="assert (False)&#10; +  where False = empty()&#10; +    where empty = &lt;queue.Queue object at 0x00000251A923FBE0&gt;.empty&#10; +      where &lt;queue.Queue object at 0x00000251A923FBE0&gt; = &lt;jarvis.speech.Speech object at 0x00000251A923FC40&gt;.queue">tests\test_voice_tts_audit.py:61: in test_JRV_05_018_cancel_during_text_preparation_cannot_enqueue_old_answer
+    assert speech.queue.empty() and speech.streamed is None
+E   assert (False)
+E    +  where False = empty()
+E    +    where empty = &lt;queue.Queue object at 0x00000251A923FBE0&gt;.empty
+E    +      where &lt;queue.Queue object at 0x00000251A923FBE0&gt; = &lt;jarvis.speech.Speech object at 0x00000251A923FC40&gt;.queue</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_021_worker_exception_payload_stays_private" time="0.001"><failure message="assert 'FAKE_PRIVATE_TOKEN' not in &quot;[call('warn...rence.wav')]&quot;&#10;  &#10;  'FAKE_PRIVATE_TOKEN' is contained here:&#10;    [call('warning', 'Voice playback failed: FAKE_PRIVATE_TOKEN /private/reference.wav')]&#10;  ?                                          ++++++++++++++++++">tests\test_voice_tts_audit.py:68: in test_JRV_05_021_worker_exception_payload_stays_private
+    assert 'FAKE_PRIVATE_TOKEN' not in str(report.call_args_list)
+E   assert 'FAKE_PRIVATE_TOKEN' not in "[call('warn...rence.wav')]"
+E     
+E     'FAKE_PRIVATE_TOKEN' is contained here:
+E       [call('warning', 'Voice playback failed: FAKE_PRIVATE_TOKEN /private/reference.wav')]
+E     ?                                          ++++++++++++++++++</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_015_malformed_worker_event_is_ignored[row0]" time="0.001"><failure message="AttributeError: 'list' object has no attribute 'get'">tests\test_voice_tts_audit.py:75: in test_JRV_05_015_malformed_worker_event_is_ignored
+    speech._event(json.dumps(row))
+jarvis\speech.py:286: in _event
+    request = row.get("id")
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_015_malformed_worker_event_is_ignored[None]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">tests\test_voice_tts_audit.py:75: in test_JRV_05_015_malformed_worker_event_is_ignored
+    speech._event(json.dumps(row))
+jarvis\speech.py:286: in _event
+    request = row.get("id")
+E   AttributeError: 'NoneType' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_015_malformed_worker_event_is_ignored[1]" time="0.001"><failure message="AttributeError: 'int' object has no attribute 'get'">tests\test_voice_tts_audit.py:75: in test_JRV_05_015_malformed_worker_event_is_ignored
+    speech._event(json.dumps(row))
+jarvis\speech.py:286: in _event
+    request = row.get("id")
+E   AttributeError: 'int' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_015_malformed_worker_event_is_ignored[row3]" time="0.001"><failure message="TypeError: unhashable type: 'list'">tests\test_voice_tts_audit.py:75: in test_JRV_05_015_malformed_worker_event_is_ignored
+    speech._event(json.dumps(row))
+jarvis\speech.py:294: in _event
+    self.outstanding.pop(request, None)
+E   TypeError: unhashable type: 'list'</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_024_old_worker_cannot_complete_current_request" time="0.001"><failure message="TypeError: Speech._event() got an unexpected keyword argument 'process'">tests\test_voice_tts_audit.py:82: in test_JRV_05_024_old_worker_cannot_complete_current_request
+    speech._event('{"id":1,"done":true}',process=old)
+E   TypeError: Speech._event() got an unexpected keyword argument 'process'</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_003_stop_between_render_and_buffer_add_is_respected" time="0.001"><failure message="TypeError: Player.add() takes 3 positional arguments but 4 were given">tests\test_voice_tts_audit.py:88: in test_JRV_05_003_stop_between_render_and_buffer_add_is_respected
+    assert player.add(1,np.ones(10,np.float32),stale) is False
+E   TypeError: Player.add() takes 3 positional arguments but 4 were given</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_031_audio_shape_finiteness_and_duration_bounded[audio0]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_voice_tts_audit.py:95: in test_JRV_05_031_audio_shape_finiteness_and_duration_bounded
+    with pytest.raises(ValueError):player.add(1,audio)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_031_audio_shape_finiteness_and_duration_bounded[audio1]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_voice_tts_audit.py:95: in test_JRV_05_031_audio_shape_finiteness_and_duration_bounded
+    with pytest.raises(ValueError):player.add(1,audio)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_031_audio_shape_finiteness_and_duration_bounded[audio2]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_voice_tts_audit.py:95: in test_JRV_05_031_audio_shape_finiteness_and_duration_bounded
+    with pytest.raises(ValueError):player.add(1,audio)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_025_playback_backpressure_is_bounded" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'BufferError'&gt;">tests\test_voice_tts_audit.py:102: in test_JRV_05_025_playback_backpressure_is_bounded
+    with pytest.raises(BufferError):player.add(1,np.ones(1,np.float32))
+E   Failed: DID NOT RAISE &lt;class 'BufferError'&gt;</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_007_disconnected_output_is_recoverable_error" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'OSError'&gt;">tests\test_voice_tts_audit.py:108: in test_JRV_05_007_disconnected_output_is_recoverable_error
+    with pytest.raises(OSError):player.add(1,np.ones(10,np.float32))
+E   Failed: DID NOT RAISE &lt;class 'OSError'&gt;</failure></testcase><testcase classname="tests.test_voice_tts_audit" name="test_JRV_05_004_real_pronunciation_requires_listening_validation" time="0.001"><skipped type="pytest.skip" message="BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_voice_tts_audit.py:113: BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately.</skipped></testcase></testsuite></testsuites>

@@ -1,0 +1,3306 @@
+{
+  "date": "2026-10-14 IST",
+  "commit": "e9f6f735bc310d11e3cdecfbf95a85d96b170ec2",
+  "branch": "codex/jarvis-prove-fix-audit",
+  "dirty_entries": 59,
+  "snapshot": "PRIVATE .jarvis-runtime/jarvis-audit/pre-change; no credentials in public artifact",
+  "environment": {
+    ".venv": {
+      "python": "3.10.6",
+      "packages": {
+        "attrs": "26.1.0",
+        "av": "17.1.0",
+        "babel": "2.18.0",
+        "certifi": "2026.7.22",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.1",
+        "click": "8.5.0",
+        "cloudpickle": "3.1.2",
+        "colorama": "0.4.6",
+        "coloredlogs": "15.0.1",
+        "colorlog": "6.12.0",
+        "comtypes": "1.4.17",
+        "cryptography": "50.0.2",
+        "csvw": "4.1.0",
+        "ctranslate2": "4.6.0",
+        "ddgs": "9.16.0",
+        "dlinfo": "2.0.0",
+        "espeakng-loader": "0.2.4",
+        "exceptiongroup": "1.3.1",
+        "faster-whisper": "1.2.1",
+        "filelock": "4.0.1",
+        "flatbuffers": "25.12.19",
+        "fsspec": "2026.9.0",
+        "google-auth": "2.61.0",
+        "google-auth-oauthlib": "1.5.0",
+        "greenlet": "3.5.6",
+        "hf-xet": "1.6.0",
+        "huggingface_hub": "0.36.2",
+        "humanfriendly": "10.0",
+        "idna": "3.20",
+        "iniconfig": "2.3.1",
+        "isodate": "0.7.2",
+        "joblib": "1.6.0",
+        "jsonschema": "4.26.0",
+        "jsonschema-specifications": "2025.9.1",
+        "kokoro-onnx": "0.4.9",
+        "language-tags": "1.3.1",
+        "lxml": "6.1.3",
+        "MouseInfo": "0.1.3",
+        "mpmath": "1.3.0",
+        "numpy": "2.2.6",
+        "nvidia-cublas-cu12": "12.9.2.10",
+        "nvidia-cuda-nvrtc-cu12": "12.9.86",
+        "nvidia-cuda-runtime-cu12": "12.9.79",
+        "nvidia-cudnn-cu12": "9.26.0.51",
+        "oauthlib": "4.0.0",
+        "onnxruntime": "1.23.2",
+        "opencv-python": "4.14.0.94",
+        "packaging": "26.3",
+        "pathvalidate": "3.3.1",
+        "phonemizer-fork": "3.3.2",
+        "pillow": "12.3.0",
+        "pip": "26.2.1",
+        "piper-tts": "1.8.0",
+        "playwright": "1.63.0",
+        "pluggy": "1.6.0",
+        "primp": "2.0.1",
+        "protobuf": "7.36.2",
+        "psutil": "7.2.2",
+        "pyasn1": "0.6.4",
+        "pyasn1_modules": "0.4.2",
+        "PyAutoGUI": "0.9.54",
+        "pycaw": "20260921",
+        "pycparser": "3.0",
+        "pyee": "13.0.1",
+        "PyGetWindow": "0.0.9",
+        "Pygments": "2.21.0",
+        "PyMsgBox": "2.0.1",
+        "pyparsing": "3.3.3",
+        "pypdf": "6.20.0",
+        "pyperclip": "1.11.0",
+        "pyreadline3": "3.5.6",
+        "PyRect": "0.2.0",
+        "PyScreeze": "1.0.1",
+        "pytest": "8.4.2",
+        "pytest-asyncio": "0.26.0",
+        "python-dateutil": "2.9.0.post0",
+        "pytweening": "1.2.0",
+        "pywin32": "312",
+        "pywinauto": "0.6.9",
+        "PyYAML": "6.0.3",
+        "rdflib": "7.6.0",
+        "referencing": "0.37.0",
+        "regex": "2026.9.29",
+        "requests": "2.34.2",
+        "requests-oauthlib": "2.0.0",
+        "rfc3986": "1.5.0",
+        "rpds-py": "0.30.0",
+        "scipy": "1.15.3",
+        "segments": "2.4.0",
+        "Send2Trash": "1.8.3",
+        "setuptools": "63.2.0",
+        "six": "1.17.0",
+        "sounddevice": "0.5.6",
+        "srt": "3.5.3",
+        "sympy": "1.14.0",
+        "termcolor": "3.3.0",
+        "tokenizers": "0.23.2",
+        "tomli": "2.5.0",
+        "tqdm": "4.70.1",
+        "typing_extensions": "4.16.0",
+        "uritemplate": "4.2.0",
+        "urllib3": "2.8.0",
+        "vosk": "0.3.45",
+        "websockets": "16.1.1",
+        "websocket-client": "1.9.2",
+        "winrt-runtime": "3.2.1",
+        "winrt-Windows.Foundation": "3.2.1",
+        "winrt-Windows.Foundation.Collections": "3.2.1",
+        "winrt-Windows.Media": "3.2.1",
+        "winrt-Windows.Media.Control": "3.2.1",
+        "winrt-Windows.Storage.Streams": "3.2.1"
+      }
+    },
+    ".venv-brain": {
+      "python": "3.10.6",
+      "packages": {
+        "certifi": "2026.7.22",
+        "charset-normalizer": "3.5.1",
+        "colorama": "0.4.6",
+        "filelock": "3.32.3",
+        "fsspec": "2026.7.0",
+        "huggingface_hub": "0.36.2",
+        "idna": "3.20",
+        "Jinja2": "3.1.6",
+        "laya": "0.3.5",
+        "MarkupSafe": "3.0.3",
+        "mpmath": "1.3.0",
+        "networkx": "3.4.2",
+        "numpy": "2.2.6",
+        "packaging": "26.3",
+        "pip": "26.2.1",
+        "psutil": "7.2.2",
+        "PyYAML": "6.0.3",
+        "regex": "2026.9.10",
+        "requests": "2.34.2",
+        "safetensors": "0.8.0",
+        "setuptools": "63.2.0",
+        "sympy": "1.13.1",
+        "tokenizers": "0.22.2",
+        "torch": "2.6.0+cpu",
+        "tqdm": "4.70.1",
+        "transformers": "4.57.6",
+        "typing_extensions": "4.16.0",
+        "urllib3": "2.8.0"
+      }
+    },
+    ".venv-deerflow": {
+      "python": "3.12.14",
+      "packages": {
+        "agent-client-protocol": "0.12.1",
+        "agent-sandbox": "0.0.30",
+        "aiohappyeyeballs": "2.7.1",
+        "aiohttp": "3.14.5",
+        "aiohttp-retry": "2.9.1",
+        "aiosignal": "1.4.0",
+        "aiosqlite": "0.22.1",
+        "alembic": "1.20.0",
+        "annotated-types": "0.8.0",
+        "anthropic": "1.13.0",
+        "anyio": "4.15.1",
+        "attrs": "26.1.0",
+        "azure-ai-contentunderstanding": "1.2.0b3",
+        "azure-ai-documentintelligence": "1.0.2",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.26.0",
+        "backoff": "2.2.1",
+        "beautifulsoup4": "4.15.0",
+        "blockbuster": "1.5.29",
+        "bracex": "3.1",
+        "certifi": "2026.7.22",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.2",
+        "click": "8.5.0",
+        "cloudpickle": "3.1.2",
+        "cobble": "0.1.4",
+        "colorama": "0.4.6",
+        "coloredlogs": "15.0.1",
+        "connectrpc": "0.11.1",
+        "croniter": "6.2.4",
+        "cryptography": "50.0.2",
+        "ddgs": "9.16.0",
+        "deerflow-extension-api": "0.2.5",
+        "deerflow-harness": "2.1.0",
+        "defusedxml": "0.7.1",
+        "distro": "1.9.0",
+        "docstring_parser": "0.18.0",
+        "dotenv": "0.9.9",
+        "duckdb": "1.5.6",
+        "durationpy": "0.11",
+        "e2b": "2.56.0",
+        "e2b-code-interpreter": "2.11.0",
+        "e2b-dockerfile-utils": "0.1.1",
+        "et_xmlfile": "2.0.0",
+        "exa-py": "2.25.0",
+        "filetype": "1.2.0",
+        "firecrawl-py": "4.50.0",
+        "flatbuffers": "25.12.19",
+        "forbiddenfruit": "0.1.4",
+        "frozenlist": "1.8.0",
+        "googleapis-common-protos": "1.75.5",
+        "google-auth": "2.62.0",
+        "google-genai": "2.30.1",
+        "greenlet": "3.5.6",
+        "grpcio": "1.80.0",
+        "grpcio-health-checking": "1.80.0",
+        "grpcio-tools": "1.80.0",
+        "h11": "0.16.0",
+        "h2": "4.4.1",
+        "hpack": "4.2.0",
+        "html5lib": "1.1",
+        "httpcore": "1.0.9",
+        "httpcore2": "2.13.1",
+        "httpx": "0.28.1",
+        "httpx2": "2.13.1",
+        "httpx-sse": "0.4.3",
+        "humanfriendly": "10.0",
+        "hyperframe": "6.1.0",
+        "idna": "3.20",
+        "iniconfig": "2.3.1",
+        "isodate": "0.7.2",
+        "jiter": "0.17.0",
+        "jsonpatch": "1.35",
+        "jsonpointer": "3.2.1",
+        "jsonschema": "4.26.0",
+        "jsonschema_rs": "0.44.1",
+        "jsonschema-specifications": "2025.9.1",
+        "kubernetes": "37.0.1",
+        "langchain": "1.4.5",
+        "langchain-anthropic": "1.7.6",
+        "langchain-core": "1.6.10",
+        "langchain-deepseek": "1.1.1",
+        "langchain-google-genai": "4.4.2",
+        "langchain-mcp-adapters": "0.3.2",
+        "langchain-ollama": "1.1.0",
+        "langchain-openai": "1.7.1",
+        "langchain-openviking": "0.1.0",
+        "langchain-protocol": "0.0.19",
+        "langfuse": "4.17.0",
+        "langgraph": "1.2.15",
+        "langgraph-api": "0.10.3",
+        "langgraph-checkpoint": "4.3.0",
+        "langgraph-checkpoint-sqlite": "3.1.2",
+        "langgraph-cli": "0.4.33",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-runtime-inmem": "0.30.3",
+        "langgraph-sdk": "0.4.7",
+        "langsmith": "0.14.8",
+        "lxml": "6.1.3",
+        "magika": "0.6.3",
+        "Mako": "1.4.3",
+        "mammoth": "1.11.0",
+        "markdownify": "1.2.3",
+        "markdown-it-py": "4.2.0",
+        "markitdown": "0.1.8",
+        "MarkupSafe": "3.0.4",
+        "mcp": "1.30.0",
+        "mdurl": "0.1.2",
+        "mpmath": "1.3.0",
+        "msal": "1.39.0",
+        "msal-extensions": "1.3.1",
+        "multidict": "7.1.0",
+        "nest-asyncio": "1.6.0",
+        "numpy": "2.5.4",
+        "oauthlib": "4.0.0",
+        "olefile": "0.47",
+        "ollama": "0.6.3",
+        "onnxruntime": "1.20.1",
+        "openai": "3.29.0",
+        "openpyxl": "3.1.5",
+        "opentelemetry-api": "1.45.1",
+        "opentelemetry-exporter-http-transport": "0.66b1",
+        "opentelemetry-exporter-otlp-common": "0.66b1",
+        "opentelemetry-exporter-otlp-proto-common": "1.45.1",
+        "opentelemetry-exporter-otlp-proto-http": "1.45.1",
+        "opentelemetry-proto": "1.45.1",
+        "opentelemetry-sdk": "1.45.1",
+        "opentelemetry-semantic-conventions": "0.66b1",
+        "openviking-sdk": "0.1.15",
+        "orjson": "3.13.0",
+        "ormsgpack": "1.12.2",
+        "packaging": "26.3",
+        "pandas": "3.0.6",
+        "pathspec": "1.1.1",
+        "pdfminer.six": "20260107",
+        "pdfplumber": "0.11.10",
+        "pillow": "12.3.0",
+        "pluggy": "1.6.0",
+        "primp": "2.0.1",
+        "propcache": "0.5.4",
+        "protobuf": "6.33.6",
+        "protobuf-py": "0.1.1",
+        "protobuf-py-ext": "0.1.1",
+        "psutil": "7.2.2",
+        "pyasn1": "0.6.4",
+        "pyasn1_modules": "0.4.2",
+        "pycparser": "3.11",
+        "pydantic": "2.14.1",
+        "pydantic_core": "2.50.1",
+        "pydantic-settings": "2.15.0",
+        "pydub": "0.25.1",
+        "Pygments": "2.21.0",
+        "PyJWT": "2.15.1",
+        "pypdfium2": "5.14.0",
+        "pyqwest": "0.12.0",
+        "pyreadline3": "3.5.6",
+        "pytest": "9.1.1",
+        "python-dateutil": "2.9.0.post0",
+        "python-dotenv": "1.2.4",
+        "python-multipart": "0.0.32",
+        "python-pptx": "1.0.2",
+        "pywin32": "312",
+        "PyYAML": "6.0.3",
+        "readabilipy": "0.3.0",
+        "referencing": "0.37.0",
+        "regex": "2026.9.29",
+        "requests": "2.34.2",
+        "requests-oauthlib": "2.0.0",
+        "requests-toolbelt": "1.0.0",
+        "rich": "15.0.0",
+        "rpds-py": "2026.9.1",
+        "setuptools": "84.0.0",
+        "six": "1.17.0",
+        "sniffio": "1.3.1",
+        "socksio": "1.0.0",
+        "soupsieve": "3.0.3",
+        "SpeechRecognition": "3.17.0",
+        "SQLAlchemy": "2.1.4",
+        "sqlite-vec": "0.1.9",
+        "sse-starlette": "3.3.4",
+        "starlette": "1.8.0",
+        "structlog": "25.5.0",
+        "sympy": "1.14.0",
+        "tavily-python": "0.8.5",
+        "tenacity": "9.1.4",
+        "tiktoken": "0.14.0",
+        "truststore": "0.10.5",
+        "typing_extensions": "4.16.0",
+        "typing-inspection": "0.4.4",
+        "tzdata": "2026.5",
+        "urllib3": "2.8.0",
+        "uuid_utils": "0.17.1",
+        "uvicorn": "0.54.0",
+        "volcengine-python-sdk": "5.0.52",
+        "watchfiles": "1.3.0",
+        "wcmatch": "11.1",
+        "webencodings": "0.6.1",
+        "websockets": "16.1.1",
+        "websocket-client": "1.9.2",
+        "wrapt": "2.5.0",
+        "xlrd": "2.0.2",
+        "xlsxwriter": "3.2.9",
+        "xxhash": "4.0.1",
+        "yarl": "1.25.1",
+        "youtube-transcript-api": "1.2.4",
+        "zstandard": "0.25.0"
+      }
+    },
+    ".venv-f5": {
+      "python": "3.10.6",
+      "packages": {
+        "accelerate": "1.15.0",
+        "aiohappyeyeballs": "2.7.1",
+        "aiohttp": "3.14.5",
+        "aiosignal": "1.4.0",
+        "annotated-doc": "0.0.5",
+        "annotated-types": "0.8.0",
+        "antlr4-python3-runtime": "4.9.3",
+        "anyio": "4.15.1",
+        "async-timeout": "5.0.1",
+        "attrs": "26.1.0",
+        "audioread": "3.1.0",
+        "bitsandbytes": "0.50.2",
+        "boto3": "1.43.113",
+        "botocore": "1.43.113",
+        "brotli": "1.2.0",
+        "cached_path": "1.8.10",
+        "certifi": "2026.7.22",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.2",
+        "click": "8.5.0",
+        "cloudpickle": "3.1.2",
+        "colorama": "0.4.6",
+        "contourpy": "1.3.2",
+        "cryptography": "50.0.2",
+        "cycler": "0.12.1",
+        "datasets": "5.0.1",
+        "decorator": "5.3.1",
+        "dill": "0.4.1",
+        "einops": "0.8.2",
+        "einx": "0.4.3",
+        "ema-pytorch": "0.8.3",
+        "encodec": "0.1.1",
+        "exceptiongroup": "1.3.1",
+        "f5-tts": "1.1.21",
+        "fastapi": "0.143.0",
+        "filelock": "3.32.7",
+        "fonttools": "4.65.0",
+        "frozendict": "2.4.7",
+        "frozenlist": "1.8.0",
+        "fsspec": "2026.6.0",
+        "googleapis-common-protos": "1.75.5",
+        "google-api-core": "2.42.0",
+        "google-auth": "2.62.0",
+        "google-cloud-core": "2.8.0",
+        "google-cloud-storage": "3.17.0",
+        "google-crc32c": "1.9.0",
+        "google-resumable-media": "2.11.0",
+        "gradio": "6.16.0",
+        "gradio_client": "2.5.0",
+        "groovy": "0.1.2",
+        "h11": "0.16.0",
+        "hf-gradio": "0.4.1",
+        "hf-xet": "1.7.0",
+        "httpcore": "1.0.9",
+        "httpx": "0.28.1",
+        "huggingface_hub": "0.36.2",
+        "hydra-core": "1.3.7",
+        "idna": "3.20",
+        "Jinja2": "3.1.6",
+        "jmespath": "1.1.0",
+        "joblib": "1.6.0",
+        "kiwisolver": "1.5.1",
+        "lazy-loader": "0.6",
+        "librosa": "0.11.0",
+        "llvmlite": "0.50.0",
+        "loguru": "0.7.3",
+        "markdown-it-py": "4.2.0",
+        "MarkupSafe": "3.0.4",
+        "matplotlib": "3.10.9",
+        "mdurl": "0.1.2",
+        "mpmath": "1.3.0",
+        "msgpack": "1.2.3",
+        "multidict": "7.1.0",
+        "multiprocess": "0.70.19",
+        "networkx": "3.4.2",
+        "numba": "0.68.0",
+        "numpy": "1.26.4",
+        "omegaconf": "2.3.1",
+        "opentelemetry-api": "1.45.1",
+        "opentelemetry-exporter-http-transport": "0.66b1",
+        "opentelemetry-exporter-otlp-common": "0.66b1",
+        "opentelemetry-exporter-otlp-proto-common": "1.45.1",
+        "opentelemetry-exporter-otlp-proto-http": "1.45.1",
+        "opentelemetry-proto": "1.45.1",
+        "opentelemetry-sdk": "1.45.1",
+        "opentelemetry-semantic-conventions": "0.66b1",
+        "orjson": "3.13.0",
+        "packaging": "26.3",
+        "pandas": "2.3.3",
+        "pillow": "12.3.0",
+        "pip": "22.2.1",
+        "platformdirs": "4.12.4",
+        "pooch": "1.9.0",
+        "propcache": "0.5.4",
+        "protobuf": "7.36.2",
+        "proto-plus": "1.29.0",
+        "psutil": "7.2.2",
+        "pyarrow": "25.0.1",
+        "pyasn1": "0.6.4",
+        "pyasn1_modules": "0.4.2",
+        "pycparser": "3.11",
+        "pydantic": "2.14.1",
+        "pydantic_core": "2.50.1",
+        "pydub": "0.25.1",
+        "Pygments": "2.21.0",
+        "pyparsing": "3.3.3",
+        "pypinyin": "0.55.0",
+        "python-dateutil": "2.9.0.post0",
+        "python-multipart": "0.0.32",
+        "pytz": "2026.5",
+        "PyYAML": "6.0.3",
+        "regex": "2026.9.29",
+        "requests": "2.34.2",
+        "rich": "13.9.4",
+        "rjieba": "0.2.1",
+        "s3transfer": "0.19.2",
+        "safehttpx": "0.1.7",
+        "safetensors": "0.8.0",
+        "scikit-learn": "1.7.2",
+        "scipy": "1.15.3",
+        "semantic-version": "2.10.0",
+        "setuptools": "84.0.0",
+        "shellingham": "1.5.4",
+        "six": "1.17.0",
+        "sounddevice": "0.5.6",
+        "soundfile": "0.14.0",
+        "soxr": "1.1.0",
+        "starlette": "1.7.0",
+        "sympy": "1.13.1",
+        "threadpoolctl": "3.7.0",
+        "tokenizers": "0.19.1",
+        "tomli": "2.5.0",
+        "tomlkit": "0.14.0",
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "torchcodec": "0.16.0",
+        "torchdiffeq": "0.2.5",
+        "torch-einops-utils": "0.1.36",
+        "tqdm": "4.70.1",
+        "transformers": "4.44.2",
+        "transformers-stream-generator": "0.0.5",
+        "typer": "0.27.3",
+        "typing_extensions": "4.16.0",
+        "typing-inspection": "0.4.4",
+        "tzdata": "2026.5",
+        "Unidecode": "1.4.0",
+        "urllib3": "2.8.0",
+        "uvicorn": "0.54.0",
+        "vocos": "0.1.0",
+        "wandb": "0.30.0",
+        "win32_setctime": "1.2.0",
+        "xxhash": "4.0.1",
+        "x-transformers": "2.31.7",
+        "yarl": "1.25.1"
+      }
+    },
+    ".venv-harness": {
+      "python": "3.10.6",
+      "packages": {
+        "annotated-types": "0.8.0",
+        "certifi": "2026.7.22",
+        "charset-normalizer": "3.5.2",
+        "deepseek-harness-runtime-bin": "0.1.5rc1",
+        "deepseek-harness-sdk": "0.1.5rc1",
+        "idna": "3.20",
+        "pip": "22.2.1",
+        "pydantic": "2.13.5",
+        "pydantic_core": "2.46.5",
+        "PyYAML": "6.0.3",
+        "requests": "2.34.2",
+        "setuptools": "63.2.0",
+        "typing_extensions": "4.16.0",
+        "typing-inspection": "0.4.4",
+        "urllib3": "2.8.0"
+      }
+    },
+    ".venv-hermes": {
+      "python": "3.14.7",
+      "packages": {
+        "annotated-doc": "0.0.5",
+        "annotated-types": "0.8.0",
+        "anyio": "4.15.1",
+        "browser-harness": "0.1.13",
+        "cdp-use": "1.4.5",
+        "certifi": "2026.5.20",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.2",
+        "click": "8.5.0",
+        "colorama": "0.4.6",
+        "concurrent-log-handler": "0.9.29",
+        "croniter": "6.0.0",
+        "cryptography": "50.0.1",
+        "distro": "1.9.0",
+        "fastapi": "0.142.2",
+        "fetch-use": "0.4.0",
+        "fire": "0.7.1",
+        "firecrawl-anydoc": "0.2.4",
+        "h11": "0.16.0",
+        "hermes-agent": "0.0.0",
+        "httpcore": "1.0.9",
+        "httptools": "0.8.0",
+        "httpx": "0.28.1",
+        "idna": "3.20",
+        "Jinja2": "3.1.6",
+        "jiter": "0.17.0",
+        "Markdown": "3.10.2",
+        "markdown-it-py": "4.2.0",
+        "MarkupSafe": "3.0.3",
+        "mdurl": "0.1.2",
+        "nemo-relay": "0.9.3",
+        "openai": "2.24.0",
+        "opentelemetry-api": "1.45.0",
+        "packaging": "26.0",
+        "pathspec": "1.1.1",
+        "pillow": "12.3.0",
+        "pillow_heif": "1.8.0",
+        "portalocker": "4.4.0",
+        "prompt_toolkit": "3.0.52",
+        "psutil": "7.2.2",
+        "pycparser": "3.0",
+        "pydantic": "2.13.4",
+        "pydantic_core": "2.46.4",
+        "Pygments": "2.21.0",
+        "PyJWT": "2.13.0",
+        "python-dateutil": "2.9.0.post0",
+        "python-dotenv": "1.2.2",
+        "python-multipart": "0.0.32",
+        "pytz": "2026.4",
+        "pywin32": "311",
+        "pywinpty": "3.0.5",
+        "requests": "2.33.0",
+        "resvg_py": "0.4.0",
+        "rich": "14.3.3",
+        "ruamel.yaml": "0.18.16",
+        "six": "1.17.0",
+        "sniffio": "1.3.1",
+        "snowballstemmer": "3.1.1",
+        "socksio": "1.0.0",
+        "starlette": "1.7.0",
+        "tenacity": "9.1.4",
+        "termcolor": "3.3.0",
+        "tomli_w": "1.2.0",
+        "tqdm": "4.70.1",
+        "truststore": "0.10.4",
+        "typing_extensions": "4.16.0",
+        "typing-inspection": "0.4.4",
+        "tzdata": "2025.3",
+        "urllib3": "2.8.0",
+        "uvicorn": "0.54.0",
+        "watchfiles": "1.3.0",
+        "wcwidth": "0.9.1",
+        "websockets": "15.0.1",
+        "winrt-runtime": "3.2.1",
+        "winrt-Windows.ApplicationModel": "3.2.1",
+        "winrt-Windows.Foundation": "3.2.1",
+        "winrt-Windows.Foundation.Collections": "3.2.1",
+        "winrt-Windows.Services.Store": "3.2.1"
+      }
+    },
+    ".venv-hermes-bootstrap": {
+      "python": "3.11.9",
+      "packages": {
+        "pip": "24.0",
+        "setuptools": "65.5.0",
+        "uv": "0.12.21"
+      }
+    },
+    ".venv-skills": {
+      "python": "3.10.6",
+      "packages": {
+        "asttokens": "3.0.2",
+        "async-timeout": "5.0.1",
+        "attrs": "26.1.0",
+        "bandit": "1.9.4",
+        "black": "26.1.0",
+        "certifi": "2026.7.22",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.2",
+        "click": "8.5.0",
+        "colorama": "0.4.6",
+        "comm": "0.2.3",
+        "cryptography": "47.0.0",
+        "debugpy": "1.8.22",
+        "decorator": "5.3.1",
+        "dnspython": "2.8.0",
+        "exceptiongroup": "1.3.1",
+        "executing": "2.2.1",
+        "fastjsonschema": "2.22.2",
+        "feedparser": "6.0.12",
+        "idna": "3.20",
+        "imageio-ffmpeg": "0.6.0",
+        "ipykernel": "7.3.0",
+        "ipython": "8.39.0",
+        "jedi": "0.20.0",
+        "jsonschema": "4.26.0",
+        "jsonschema-specifications": "2025.9.1",
+        "jupyter_client": "8.10.0",
+        "jupyter_core": "5.9.1",
+        "Markdown": "3.10.3",
+        "markdown-it-py": "4.2.0",
+        "matplotlib-inline": "0.2.2",
+        "mdurl": "0.1.2",
+        "mss": "10.2.0",
+        "mypy_extensions": "1.1.0",
+        "nbclient": "0.11.0",
+        "nbformat": "5.11.1",
+        "nest-asyncio2": "1.7.4",
+        "numpy": "2.2.6",
+        "packaging": "26.3",
+        "pandas": "2.3.3",
+        "parso": "0.8.7",
+        "pathspec": "1.1.1",
+        "pillow": "12.3.0",
+        "pip": "22.2.1",
+        "platformdirs": "4.12.4",
+        "prompt_toolkit": "3.0.53",
+        "psutil": "7.2.2",
+        "pure_eval": "0.2.4",
+        "pyarrow": "23.0.1",
+        "pycparser": "3.1",
+        "Pygments": "2.21.0",
+        "pymongo": "4.18.3",
+        "pytesseract": "0.3.13",
+        "python-dateutil": "2.9.0.post0",
+        "pytokens": "0.4.1",
+        "pytz": "2026.5",
+        "PyYAML": "6.0.3",
+        "pyzmq": "27.2.0",
+        "redis": "7.4.1",
+        "referencing": "0.37.0",
+        "reportlab": "4.5.1",
+        "requests": "2.34.2",
+        "rich": "15.0.0",
+        "rpds-py": "0.30.0",
+        "setuptools": "63.2.0",
+        "sgmllib3k": "1.0.0",
+        "six": "1.17.0",
+        "stack-data": "0.6.3",
+        "stevedore": "5.8.0",
+        "tomli": "2.5.0",
+        "tornado": "6.5.10",
+        "traitlets": "5.16.1",
+        "typing_extensions": "4.16.0",
+        "tzdata": "2026.5",
+        "urllib3": "2.8.0",
+        "wcwidth": "0.9.2"
+      }
+    },
+    ".venv-training": {
+      "python": "3.10.6",
+      "packages": {
+        "accelerate": "1.12.0",
+        "certifi": "2026.7.22",
+        "charset-normalizer": "3.5.1",
+        "colorama": "0.4.6",
+        "filelock": "3.32.3",
+        "fsspec": "2026.7.0",
+        "huggingface_hub": "0.36.2",
+        "idna": "3.20",
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.3",
+        "mpmath": "1.3.0",
+        "networkx": "3.4.2",
+        "numpy": "2.2.6",
+        "packaging": "26.3",
+        "peft": "0.18.1",
+        "pip": "26.2.1",
+        "psutil": "7.2.2",
+        "PyYAML": "6.0.3",
+        "regex": "2026.9.10",
+        "requests": "2.34.2",
+        "safetensors": "0.8.0",
+        "setuptools": "63.2.0",
+        "sympy": "1.13.1",
+        "tokenizers": "0.22.2",
+        "torch": "2.6.0+cu124",
+        "tqdm": "4.70.1",
+        "transformers": "4.57.6",
+        "typing_extensions": "4.16.0",
+        "urllib3": "2.8.0"
+      }
+    }
+  },
+  "flags": {
+    "knowledge_acquisition.enabled": true,
+    "knowledge_acquisition.online": true,
+    "knowledge_acquisition.background_refresh": false,
+    "groq.enabled": true,
+    "groq.model": "qwen/qwen3.8-27b",
+    "gpu_scheduler.enabled": true,
+    "realtime.enabled": true,
+    "realtime.model": "qwen2.5:0.5b",
+    "context_selector.enabled": true,
+    "context_selector.model": "qwen3.5:0.8b",
+    "command_cleanup.enabled": true,
+    "command_cleanup.model": "qwen2.5:0.5b",
+    "anticipation.enabled": true,
+    "whisper.model": "medium.en",
+    "push_to_write.enabled": true,
+    "knowledge.natural_conversation.enabled": true,
+    "knowledge.natural_conversation.model": "qwen3.5:0.8b",
+    "knowledge.enabled": true,
+    "knowledge.model": "qwen3.5:9b",
+    "memory.conversation_sessions.enabled": true,
+    "memory.enabled": true,
+    "memory.long_term.enabled": true,
+    "memory.long_term.model": "qwen3.5:9b",
+    "memory.experience_learning.enabled": true,
+    "cognition.enabled": true,
+    "gods_eye.enabled": true,
+    "repo_learning.enabled": true,
+    "repo_learning.model": "qwen3.5:9b",
+    "weather_alerts.enabled": true,
+    "whatsapp.enabled": true,
+    "speech.enabled": true,
+    "speech.engine": "f5",
+    "brain.hierarchical_execution.enabled": true,
+    "brain.enabled": true,
+    "brain.planner": "qwen3.5:9b",
+    "brain.visual_fallback.enabled": true,
+    "brain.hermes.enabled": false,
+    "brain.hermes.model": "qwen3.5:9b",
+    "brain.harness.enabled": true,
+    "brain.harness.model": "qwen3.5:9b",
+    "brain.coding_backend": "jarvis",
+    "documents.enabled": true,
+    "documents.model": "qwen3.5:9b",
+    "repo_abilities.enabled": true,
+    "repo_abilities.model": "qwen3-coder:30b",
+    "repository_skills.enabled": true,
+    "rea.enabled": true,
+    "deliberation.enabled": true,
+    "self_evolution.enabled": true,
+    "self_evolution.self_modification.enabled": true,
+    "docker_runtime.enabled": true
+  },
+  "hardware": {
+    "logical_cpus": 16,
+    "physical_cpus": 8,
+    "ram_total_bytes": 33656832000,
+    "ram_available_bytes": 12471934976,
+    "cpu_percent_sample": 7.0,
+    "battery": {
+      "percent": 100,
+      "plugged_in": true
+    }
+  },
+  "checks": {
+    "gpu": {
+      "exit_code": 0,
+      "output": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB, 0 MiB, 610.74",
+      "error_type": null
+    },
+    "node": {
+      "exit_code": 0,
+      "output": "v24.14.0",
+      "error_type": null
+    },
+    "docker": {
+      "exit_code": 0,
+      "output": "{\"Client\":{\"Version\":\"29.8.2\",\"ApiVersion\":\"1.56\",\"DefaultAPIVersion\":\"1.56\",\"GitCommit\":\"7fc2dff\",\"GoVersion\":\"go1.26.8\",\"Os\":\"windows\",\"Arch\":\"amd64\",\"BuildTime\":\"Wed Sep 30 19:35:42 2026\",\"Context\":\"desktop-linux\"},\"Server\":{\"Platform\":{\"Name\":\"Docker Desktop 4.94.0 (241994)\"},\"Version\":\"29.8.2\",\"ApiVersion\":\"1.56\",\"MinAPIVersion\":\"1.40\",\"Os\":\"linux\",\"Arch\":\"amd64\",\"Components\":[{\"Name\":\"Engine\",\"Version\":\"29.8.2\",\"Details\":{\"ApiVersion\":\"1.56\",\"Arch\":\"amd64\",\"BuildTime\":\"Wed Sep 30 19:32:25 2026\",\"Experimental\":\"false\",\"GitCommit\":\"8af9fe3\",\"GoVersion\":\"go1.26.8\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"MinAPIVersion\":\"1.40\",\"Module\":\"github.com/moby/moby/v2\",\"ModuleVersion\":\"v2.0.0+unknown\",\"Os\":\"linux\"}},{\"Name\":\"containerd\",\"Version\":\"v2.3.6\",\"Details\":{\"GitCommit\":\"ee2735368117d2eb259779949d5e75cdafec9761\"}},{\"Name\":\"runc\",\"Version\":\"1.5.1\",\"Details\":{\"GitCommit\":\"v1.5.1-0-g8f2685a4\"}},{\"Name\":\"docker-init\",\"Version\":\"0.19.0\",\"Details\":{\"GitCommit\":\"de40ad0\"}}],\"GitCommit\":\"8af9fe3\",\"GoVersion\":\"go1.26.8\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"BuildTime\":\"2026-09-30T19:32:25.000000000+00:00\"}}",
+      "error_type": null
+    },
+    "localgithub": {
+      "exit_code": 0,
+      "output": "true",
+      "error_type": null
+    }
+  },
+  "ollama": {
+    "version": {
+      "version": "0.40.0"
+    },
+    "tags": {
+      "models": [
+        {
+          "name": "qwen3.5:4b",
+          "model": "qwen3.5:4b",
+          "modified_at": "2026-10-10T01:49:08.6180384+05:30",
+          "size": 3389983735,
+          "digest": "3c3adf637187c95955232acd3ed05b9ea45aeb2a5f953e631c38174a46b5b56a",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "4.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2560,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3.5:4b",
+          "model": "qwen3.5:4b",
+          "modified_at": "2026-10-10T01:49:08.6180384+05:30",
+          "size": 3397841620,
+          "digest": "96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35",
+              "clip"
+            ],
+            "parameter_size": "4.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2560,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "llamacpp:96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+          "model": "llamacpp:96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+          "modified_at": "2026-10-10T01:49:08.5985231+05:30",
+          "size": 3397841620,
+          "digest": "96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35",
+              "clip"
+            ],
+            "parameter_size": "4.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2560,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "jarvis-codex-qwen3.5:9b",
+          "model": "jarvis-codex-qwen3.5:9b",
+          "modified_at": "2026-10-08T13:56:13.0171899+05:30",
+          "size": 6603314917,
+          "digest": "833db6ba4baaae9eb30787ce683f432938e05ac0291dec68a30d31ffdef3ade0",
+          "details": {
+            "parent_model": "qwen3.5:9b",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35",
+              "clip"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 4096,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3.5:0.8b",
+          "model": "qwen3.5:0.8b",
+          "modified_at": "2026-10-07T20:58:42.0786663+05:30",
+          "size": 1322069277,
+          "digest": "de63045f29755d4721c09d54c9b45c2dadb644f4fd7d604d4cac90d96049971c",
+          "details": {
+            "parent_model": "qwen35-validation-20260930:0.8b-stock-q8_0-q8draft2",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "752.39M",
+            "quantization_level": "Q8_0",
+            "context_length": 262144,
+            "embedding_length": 1024,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen2.5:0.5b",
+          "model": "qwen2.5:0.5b",
+          "modified_at": "2026-10-07T12:26:17.1306401+05:30",
+          "size": 397821319,
+          "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen2",
+            "families": [
+              "qwen2"
+            ],
+            "parameter_size": "494.03M",
+            "quantization_level": "Q4_K_M",
+            "context_length": 32768,
+            "embedding_length": 896,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        },
+        {
+          "name": "qwen3.5:9b",
+          "model": "qwen3.5:9b",
+          "modified_at": "2026-10-07T11:13:42.5658387+05:30",
+          "size": 6594474711,
+          "digest": "2e16a80fe3d77d431d295466415848403c8c266667ee5d7d8991ee445b4e1311",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 4096,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3.5:9b",
+          "model": "qwen3.5:9b",
+          "modified_at": "2026-10-07T11:13:42.5658387+05:30",
+          "size": 6603314868,
+          "digest": "c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35",
+              "clip"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 4096,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "llamacpp:c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+          "model": "llamacpp:c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+          "modified_at": "2026-10-07T11:13:42.5432048+05:30",
+          "size": 6603314868,
+          "digest": "c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35",
+              "clip"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 4096,
+            "runner": "llamacpp"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3-coder:latest",
+          "model": "qwen3-coder:latest",
+          "modified_at": "2026-10-04T08:14:42.8663406+05:30",
+          "size": 18556700761,
+          "digest": "06c1097efce0431c2045fe7b2e5108366e43bee1b4603a7aded8f21689e90bca",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3moe",
+            "families": [
+              "qwen3moe"
+            ],
+            "parameter_size": "30.5B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2048,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        },
+        {
+          "name": "qwen3-vl:2b",
+          "model": "qwen3-vl:2b",
+          "modified_at": "2026-09-25T00:58:04.5518316+05:30",
+          "size": 1889519687,
+          "digest": "0635d9d857d497aeadba3d7d27485746c50554446f9f6ec01ef39788221adbe8",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3vl",
+            "families": [
+              "qwen3vl"
+            ],
+            "parameter_size": "2.1B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2048,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3-vl:4b",
+          "model": "qwen3-vl:4b",
+          "modified_at": "2026-08-10T17:42:05.2787121+05:30",
+          "size": 3295636135,
+          "digest": "1343d82ebee38e26a4dd6b0180b915eb91550184e67c505dea97509571c8f683",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3vl",
+            "families": [
+              "qwen3vl"
+            ],
+            "parameter_size": "4.4B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2560,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "qwen3-coder:30b",
+          "model": "qwen3-coder:30b",
+          "modified_at": "2026-05-03T08:25:52.8450003+05:30",
+          "size": 18556700761,
+          "digest": "06c1097efce0431c2045fe7b2e5108366e43bee1b4603a7aded8f21689e90bca",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3moe",
+            "families": [
+              "qwen3moe"
+            ],
+            "parameter_size": "30.5B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 2048,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        },
+        {
+          "name": "qwen3.5:latest",
+          "model": "qwen3.5:latest",
+          "modified_at": "2026-03-19T09:15:57.4003356+05:30",
+          "size": 6594474711,
+          "digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "9.7B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 262144,
+            "embedding_length": 4096,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ]
+        },
+        {
+          "name": "llama3.2:latest",
+          "model": "llama3.2:latest",
+          "modified_at": "2026-02-27T19:41:52.6208018+05:30",
+          "size": 2019393189,
+          "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "llama",
+            "families": [
+              "llama"
+            ],
+            "parameter_size": "3.2B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 131072,
+            "embedding_length": 3072,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        },
+        {
+          "name": "llama3.2:3b",
+          "model": "llama3.2:3b",
+          "modified_at": "2025-11-13T10:00:59.9707516+05:30",
+          "size": 2019393189,
+          "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "llama",
+            "families": [
+              "llama"
+            ],
+            "parameter_size": "3.2B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 131072,
+            "embedding_length": 3072,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        },
+        {
+          "name": "qwen2.5:3b-instruct",
+          "model": "qwen2.5:3b-instruct",
+          "modified_at": "2025-09-28T13:34:50.2182996+05:30",
+          "size": 1929912432,
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen2",
+            "families": [
+              "qwen2"
+            ],
+            "parameter_size": "3.1B",
+            "quantization_level": "Q4_K_M",
+            "context_length": 32768,
+            "embedding_length": 2048,
+            "runner": "ggml"
+          },
+          "capabilities": [
+            "completion",
+            "tools"
+          ]
+        }
+      ]
+    },
+    "ps": {
+      "models": []
+    },
+    "show": {
+      "qwen2.5:0.5b": {
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "494.03M",
+          "quantization_level": "Q4_K_M"
+        },
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "modified_at": "2026-10-07T12:26:17.1306401+05:30"
+      },
+      "qwen3-coder:30b": {
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3moe",
+          "families": [
+            "qwen3moe"
+          ],
+          "parameter_size": "30.5B",
+          "quantization_level": "Q4_K_M"
+        },
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "modified_at": "2026-05-03T08:25:52.8450003+05:30"
+      },
+      "qwen3.5:0.8b": {
+        "details": {
+          "parent_model": "qwen35-validation-20260930:0.8b-stock-q8_0-q8draft2",
+          "format": "gguf",
+          "family": "qwen35",
+          "families": [
+            "qwen35"
+          ],
+          "parameter_size": "752.39M",
+          "quantization_level": "Q8_0",
+          "runner": "llamacpp"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "modified_at": "2026-10-07T20:58:42.0786663+05:30"
+      },
+      "qwen3.5:9b": {
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen35",
+          "families": [
+            "qwen35",
+            "clip"
+          ],
+          "parameter_size": "9.7B",
+          "quantization_level": "Q4_K_M",
+          "runner": "llamacpp"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "modified_at": "2026-10-07T11:13:42.5658387+05:30"
+      }
+    }
+  },
+  "credentials": {
+    "GROQ_API_KEY": false,
+    "FIRECRAWL_API_KEY": false,
+    "GITHUB_TOKEN": false,
+    "YOUTUBE_API_KEY": false
+  },
+  "credential_files_present": {
+    "groq.json": true,
+    "realtime.json": true
+  },
+  "manifest_sha256": "8d8791e0629474aa4cee5cee6ea2092d5d846dc94da7d96a7823c772755cb461",
+  "manifest_keys": [
+    "version",
+    "knowledge_acquisition",
+    "hierarchical_execution",
+    "natural_conversation",
+    "f5_imports",
+    "f5_speech",
+    "capabilities",
+    "main_imports",
+    "brain_imports",
+    "utility_imports",
+    "gmail_api",
+    "utility_skills",
+    "services",
+    "ui_assets",
+    "optional_audit",
+    "optional_training",
+    "optional_hermes",
+    "voice_assets",
+    "experience_learning",
+    "optional_harness",
+    "visual_interaction",
+    "step_planning",
+    "native_tools",
+    "development",
+    "python_script_workloads",
+    "gpu_scheduler",
+    "independent_cursor",
+    "execution_providers",
+    "inference_limits",
+    "claude_code",
+    "codex_code",
+    "native_coding",
+    "documents",
+    "repo_abilities",
+    "self_evolution",
+    "deliberation",
+    "rea",
+    "repository_skills",
+    "fast_planning",
+    "conversation_and_queue",
+    "optional_groq",
+    "optional_deerflow",
+    "cognition_audit"
+  ],
+  "modules": {
+    "__init__": {
+      "sha256": "13d7892d81b8c39f453cb7ea5710dfde007ca7b9c7147adefc6955292fbdc712",
+      "imports": []
+    },
+    "ability_runner": {
+      "sha256": "cb41aae612270d058a0dff085b83eab96ba1d314b31b6ed12f7b828d05b6db29",
+      "imports": []
+    },
+    "actions": {
+      "sha256": "f3061e9c9a6256a325b722db0d2543d1c64fbba8b780c20aac7f08869129bbdd",
+      "imports": [
+        "",
+        "agent_events",
+        "anticipation",
+        "brain",
+        "browser",
+        "browser_automation",
+        "capability_guide",
+        "catalog",
+        "clarification",
+        "coder",
+        "coding_processes",
+        "cognition",
+        "commands",
+        "context_hub",
+        "conversation_intent",
+        "deliberation",
+        "desktop_tasks",
+        "direct_execution",
+        "documents",
+        "experience_memory",
+        "fast_workflows",
+        "file_drop",
+        "folder_lookup",
+        "gmail_workflows",
+        "gods_eye",
+        "gods_eye_view",
+        "hybrid_inference",
+        "intent_handlers",
+        "island_choices",
+        "island_media",
+        "knowledge",
+        "knowledge_acquisition",
+        "live_app_context",
+        "media_player",
+        "media_ui",
+        "memory_curator",
+        "memory_index",
+        "messengers",
+        "names",
+        "obsidian_memory",
+        "paths",
+        "progress",
+        "projects",
+        "quick_answers",
+        "realtime",
+        "repo_abilities",
+        "repo_learning",
+        "screen_awareness",
+        "self_evolution",
+        "skill_memory",
+        "spotify",
+        "targeting",
+        "task_queue",
+        "task_state",
+        "tools",
+        "ui_controls",
+        "ui_memory",
+        "utility_host",
+        "weather_watch",
+        "whatsapp",
+        "window_focus",
+        "windows_commands",
+        "writing"
+      ]
+    },
+    "agent_cli": {
+      "sha256": "bef785b79ea434ea713652ecc4b18c4e447d57311db3de9757098f497ab9b5ba",
+      "imports": [
+        "agent_session",
+        "harness"
+      ]
+    },
+    "agent_context": {
+      "sha256": "0100c958fc9cb3ddafe9a9be2c695e480ffaff70105359a2d405da1d237fe9cf",
+      "imports": [
+        "coder",
+        "coding_languages",
+        "development_knowledge",
+        "development_learning",
+        "repo_abilities",
+        "repo_learning"
+      ]
+    },
+    "agent_events": {
+      "sha256": "f4b3b49b6d703f07e12109adcb9c30ba56996a63f835f6ee7c6f14b46235bc66",
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "agent_session": {
+      "sha256": "9b1c22cf002473bc925d9b2e76c91056d50243d8cc15b3c1317b407f18918c06",
+      "imports": [
+        "agent_context",
+        "agent_tools",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "native_tools",
+        "research_evidence",
+        "tools"
+      ]
+    },
+    "agent_tools": {
+      "sha256": "0e8e248c8d60049a2297e88a78d4d73fcf7c3755e7af086ceb0772447ef89603",
+      "imports": [
+        "agent_context",
+        "capabilities",
+        "deerflow",
+        "development_api",
+        "development_knowledge",
+        "execution_adapters",
+        "mcp_bridge",
+        "names",
+        "toolkits",
+        "tools",
+        "windows_commands"
+      ]
+    },
+    "anticipation": {
+      "sha256": "5a4b849128797cf1d27cd98314e90b954c3d1452f0d15d8908dc6ce1c52dbd10",
+      "imports": [
+        "obsidian_memory"
+      ]
+    },
+    "anticipation_worker": {
+      "sha256": "71d681b50ba64cf7de1d65cad3cbb3c6ad6cecc8053fca3a838eacafba3f7fc3",
+      "imports": [
+        "anticipation",
+        "gpu_scheduler",
+        "knowledge_worker"
+      ]
+    },
+    "app_knowledge": {
+      "sha256": "c9761b37b2bc30b05e80f7f8fe74567e315e6571f6a20807e6b9aef171131603",
+      "imports": [
+        "skill_memory"
+      ]
+    },
+    "application_discovery": {
+      "sha256": "a495921a2ceb5ff958f8ae049ac31b9386679acdc5f9fdec17595e8a6b31bfd2",
+      "imports": [
+        "knowledge_acquisition"
+      ]
+    },
+    "audio": {
+      "sha256": "dc61e6ff56abb6513bd62bac0780bb99a2ef836b0109bba32633d189779a1ac8",
+      "imports": [
+        "whisper_backend"
+      ]
+    },
+    "brain": {
+      "sha256": "4ee57bc6efe77f201fc28054ff5dcee1f5fa79a39fa0ccdb81b3cd28fcfad88f",
+      "imports": [
+        "capabilities",
+        "catalog",
+        "clarification",
+        "coder",
+        "commands",
+        "desktop_actions",
+        "experience_memory",
+        "gmail_workflows",
+        "grounding",
+        "harness",
+        "hermes",
+        "hierarchical",
+        "inference_limits",
+        "names",
+        "recovery",
+        "skill_memory",
+        "spotify",
+        "step_planning",
+        "targeting",
+        "task_graph",
+        "task_recovery",
+        "task_state",
+        "toolkits",
+        "tools",
+        "ui_controls",
+        "visual_fallback"
+      ]
+    },
+    "brain_worker": {
+      "sha256": "7388ad8b8e19b5e69ad770b5dc38d611b880d4bb01881445c64e19fc4942786f",
+      "imports": [
+        "agent_context",
+        "capabilities",
+        "code_stream",
+        "development_browser",
+        "hierarchical",
+        "inference_limits",
+        "knowledge_worker",
+        "model_selection",
+        "native_tools",
+        "pc_context",
+        "step_planning",
+        "tools",
+        "trained_coder",
+        "trained_pc"
+      ]
+    },
+    "browser": {
+      "sha256": "840373a60a7a359bcf331f0011ff6b3eab25faf86462ac25a0c318ab188431bc",
+      "imports": [
+        "names"
+      ]
+    },
+    "browser_automation": {
+      "sha256": "b92c0982de3020e753fa7df0b97da3fca39b270a99c305abad8f62d2a3bf5f36",
+      "imports": [
+        "browser",
+        "ui_transport"
+      ]
+    },
+    "browser_cursor": {
+      "sha256": "8c62648c5eaa8f5ffd302d27c3dc22ab357b6f83490435a55d8c911f60679ec9",
+      "imports": []
+    },
+    "browser_worker": {
+      "sha256": "ab02865e521fa71f4159f0e8658923d14d33342d3e30dacadfcb5193d8919656",
+      "imports": [
+        "browser",
+        "browser_cursor",
+        "ui_controls",
+        "windows_command_browser"
+      ]
+    },
+    "buddy_engine": {
+      "sha256": "c07ff6f60c49565418192721202ebd1f742e441fb4c2601d5d6035289125737a",
+      "imports": [
+        "island_buddy"
+      ]
+    },
+    "capabilities": {
+      "sha256": "c3f7afa5a1e292456fd19949a926a1b210c5989e0ed9e6b55393a51a2bbf79db",
+      "imports": [
+        "memory_index",
+        "skill_memory",
+        "toolkits"
+      ]
+    },
+    "capability_guide": {
+      "sha256": "b52c24067a642c2989707ae9637e0723f4f78a8a6f3c61ad1d58a388c650c8ea",
+      "imports": [
+        "commands",
+        "gmail_api",
+        "media_player",
+        "realtime",
+        "realtime_catalog",
+        "realtime_sources"
+      ]
+    },
+    "catalog": {
+      "sha256": "69c5faeb9526c4b694b3cfb1587e4bd54997f8e4b0d36b0358c1b70059b8af68",
+      "imports": [
+        "folder_lookup",
+        "names"
+      ]
+    },
+    "clarification": {
+      "sha256": "a0ebd2f1021029933eebde8214153b426a20cbc9993f766dba625fc33d93c859",
+      "imports": []
+    },
+    "claude_code": {
+      "sha256": "011ca2c85f9a028fa40ef35d0d864ef61709f4b3203080736a4feeb46e08b1d1",
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "code_stream",
+        "coder",
+        "gui_contract",
+        "harness_process",
+        "knowledge_worker",
+        "progress",
+        "task_state"
+      ]
+    },
+    "claude_code_guard": {
+      "sha256": "2cfd02dc32cde1a1d3c30fd1ee2dddaec9c8267668cbce8bb562679a3e313415",
+      "imports": []
+    },
+    "claude_code_permissions": {
+      "sha256": "c0c0e329b3827ba01765bf825f5afd56cf68a4818b4258e67b6b137d04410957",
+      "imports": [
+        "claude_code_guard",
+        "code_context",
+        "gui_contract"
+      ]
+    },
+    "claude_code_proxy": {
+      "sha256": "a19c4c29095728ff3817097dd4c2e129219c2edfd5bf2bcd265724b22d67f97d",
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "cloud_cli": {
+      "sha256": "a71b5096e2a032266c3eb7e6531b33ad739efa5a5391dfe800b61ce20784a7d3",
+      "imports": [
+        "hybrid_inference"
+      ]
+    },
+    "cloud_policy": {
+      "sha256": "2c8189f9d966c0763860aefcc795bf0686f0616b9c9fe31dc243db4bbb18a39c",
+      "imports": []
+    },
+    "cloud_quota": {
+      "sha256": "7468627f0e56104c1546e440d961e3259898bc0134116a970857f0be665f19bc",
+      "imports": []
+    },
+    "code_context": {
+      "sha256": "9b4eee4d50ff2dd3ab9abb3ba0d6d7cd7aa4d585d45c07553f6a9064448007ce",
+      "imports": []
+    },
+    "code_stream": {
+      "sha256": "a4872a7e205857240eda1850429ba1381309225df11480788b80b7e201486aa2",
+      "imports": [
+        "agent_context",
+        "progress",
+        "skill_memory"
+      ]
+    },
+    "coder": {
+      "sha256": "d15afd9dab000253d8f735d56631e088ef35e7dfa68be0d69699ff0fa1a7a117",
+      "imports": [
+        "",
+        "agent_context",
+        "clarification",
+        "claude_code",
+        "code_context",
+        "code_stream",
+        "codex_code",
+        "codex_workload",
+        "coding_languages",
+        "coding_lessons",
+        "commands",
+        "desktop_tasks",
+        "development",
+        "development_projects",
+        "experience_memory",
+        "native_coding",
+        "progress",
+        "projects",
+        "task_graph",
+        "task_state"
+      ]
+    },
+    "codex_browser_check": {
+      "sha256": "53659bdbfb9e5e460b5d09cfa0249a3269d115a31bc50603226c54e7f57312d6",
+      "imports": [
+        "codex_validation",
+        "harness_process"
+      ]
+    },
+    "codex_code": {
+      "sha256": "9428c8604b28ba53479e9beb6560c05ff3b016f7f817343115032e1391af181b",
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "code_stream",
+        "coder",
+        "codex_validation",
+        "codex_workload",
+        "gui_contract",
+        "harness_process",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "task_state"
+      ]
+    },
+    "codex_files": {
+      "sha256": "64f990d5e2f46e90f891d54b0b44defb40f6d06ef9a6c811625c9f005d444f8c",
+      "imports": [
+        "claude_code_guard",
+        "code_context",
+        "coder",
+        "codex_validation",
+        "gui_contract"
+      ]
+    },
+    "codex_proxy": {
+      "sha256": "cfcfface2632afeee2a015e97c1798d6151680724fd44fd09aa2559020a5c0a0",
+      "imports": [
+        "codex_validation",
+        "codex_workload",
+        "knowledge_worker"
+      ]
+    },
+    "codex_validation": {
+      "sha256": "82bfbd0db817607b33d86dc75d632ec3c02d6102b0614116e305441cfce5aa3c",
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "coder",
+        "codex_code",
+        "gui_contract",
+        "harness_process",
+        "progress"
+      ]
+    },
+    "codex_workload": {
+      "sha256": "ba812d658b0cf439d3b0a96266850069e5be5cc405b934cbc2a65a4a2e19ea4f",
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "coder",
+        "codex_code",
+        "codex_files",
+        "codex_validation",
+        "coding_activity",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "repo_abilities",
+        "task_state"
+      ]
+    },
+    "coding_activity": {
+      "sha256": "f7baade664239b0f833f40ec68d681dcbd8c1e30259175b005a09f3e32274bb1",
+      "imports": []
+    },
+    "coding_console": {
+      "sha256": "5c51ace7f880e5e34bb63c9f2c4fecf6d11363d72c2a440f33cd953c333fdc93",
+      "imports": []
+    },
+    "coding_curriculum": {
+      "sha256": "e07665dfa6446218b46be8052649bd7b0a27da13842c756a1ee50088fff34924",
+      "imports": []
+    },
+    "coding_files": {
+      "sha256": "b769648f7697ce8153e11fa0bfb0cedbbff7a7104e91ef83cdcf6bc21498eff8",
+      "imports": [
+        "claude_code_guard",
+        "codex_files",
+        "coding_activity"
+      ]
+    },
+    "coding_languages": {
+      "sha256": "b4e1dd94ce8b25d8ee3abddc8e9af532e530e85f13dae1d253b15589d0ca656d",
+      "imports": []
+    },
+    "coding_lessons": {
+      "sha256": "e92dfb29789f7d13278baeb3776574b54ce6232dfa29ff326c8eda7159a41dea",
+      "imports": [
+        "coding_curriculum"
+      ]
+    },
+    "coding_operations": {
+      "sha256": "308cb76777afc39e6c7fc090f19d957bfa6191bf6562d51fd0b51ce6e0996bd8",
+      "imports": [
+        "claude_code_guard",
+        "coder",
+        "coding_programs",
+        "command_reference"
+      ]
+    },
+    "coding_processes": {
+      "sha256": "af6eedade9ab899a5b6601339acc5807e66030bbf090961502d0e2f7c13bf2c8",
+      "imports": [
+        "coding_activity",
+        "coding_files",
+        "coding_programs",
+        "harness_process"
+      ]
+    },
+    "coding_programs": {
+      "sha256": "737e1c31c31082610122d8c7bf822b08a845e5b31a8bd65d1c7d90c2b4ba8138",
+      "imports": []
+    },
+    "coding_training_data": {
+      "sha256": "99fead037281aa34e3242ab9516f5bf66e2d5ba9bfe3b66d8c62490bdeb0c626",
+      "imports": []
+    },
+    "cognition": {
+      "sha256": "f4e15d3321f45cfdad5a0a337b4b3e2392db8c826f8131fefe13a69b23da7864",
+      "imports": []
+    },
+    "command_cleanup": {
+      "sha256": "403470847d3158e3a1141e192161d4a665f63b47e2002fe54fdbdff15125187f",
+      "imports": [
+        "engine",
+        "gpu_scheduler"
+      ]
+    },
+    "command_reference": {
+      "sha256": "0a0fc2c8d01ecb8e89d36effff075def1c3ee596ef5d2370be8351163afede48",
+      "imports": []
+    },
+    "commands": {
+      "sha256": "924df53bed500f164e493988e4f336bc8049dfeb7a280c93ea94f087f28c8206",
+      "imports": [
+        "anticipation",
+        "capability_guide",
+        "coder",
+        "coding_languages",
+        "conversation_intent",
+        "documents",
+        "folder_lookup",
+        "gmail_workflows",
+        "gods_eye",
+        "intent_catalog",
+        "island_choices",
+        "media_commands",
+        "memory_curator",
+        "messengers",
+        "phrasing",
+        "rea_tools",
+        "realtime",
+        "repo_abilities",
+        "repo_learning",
+        "repo_tools",
+        "toolkits",
+        "weather_watch",
+        "whatsapp",
+        "windows_commands",
+        "writing"
+      ]
+    },
+    "context_hub": {
+      "sha256": "d865cd88a8689b79a31700482d9d5cd8e581b9dbafb74b08d448630b6fd322ba",
+      "imports": []
+    },
+    "context_selector": {
+      "sha256": "d42b8cd580684df6129187416cb9de5e3e56b638a0de5ced5a6cc0adea6f7fe8",
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "conversation_intent": {
+      "sha256": "04b43f8118f41565c002fd305fbc279dcd4d40e1728d9144912763d142487b3f",
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "conversation_memory": {
+      "sha256": "f4dc216485433497fff85db092de39452ca4d44ef43365edf56cd95783638d72",
+      "imports": [
+        "obsidian_memory"
+      ]
+    },
+    "dag_execution": {
+      "sha256": "520dfff01cc84c7c9fbe219261529b508d3ca633f192b5a130b9c80a98979eb2",
+      "imports": [
+        "repo_analysis"
+      ]
+    },
+    "deerflow": {
+      "sha256": "b4c7af37356e44b65cec58db6e33aa032614781d37fe2b54e84e8400dd15f521",
+      "imports": [
+        "_vendor.deerflow_contracts",
+        "agent_context",
+        "capabilities",
+        "deerflow_media",
+        "deerflow_sandbox",
+        "harness_process"
+      ]
+    },
+    "deerflow_cli": {
+      "sha256": "d78fca1a1e52ca84e2dda0b6f46d773ffb414bf6e87b425e562f97987db3ab0a",
+      "imports": [
+        "deerflow"
+      ]
+    },
+    "deerflow_media": {
+      "sha256": "b976e468132ae2e61ad8bdbaf6d569a41d2139a6a74e75f083ec10853b812be3",
+      "imports": [
+        "deerflow_sandbox"
+      ]
+    },
+    "deerflow_media_runner": {
+      "sha256": "473e7d164c67d49e3cc9bc47818ca5c6c799663ab22d27f680ed47977578d9dc",
+      "imports": []
+    },
+    "deerflow_model": {
+      "sha256": "8c7521008172d1c51078063732d8457e19b5dbf41a0d775858b4a07ad88289c4",
+      "imports": [
+        "gpu_scheduler",
+        "knowledge_worker"
+      ]
+    },
+    "deerflow_sandbox": {
+      "sha256": "4521911d0ecd3dd8a1d3f9328094b009e56906de5240d597f5546f4a74490d11",
+      "imports": [
+        "agent_context",
+        "repo_acquisition",
+        "repo_sandbox",
+        "skill_memory"
+      ]
+    },
+    "deerflow_worker": {
+      "sha256": "e2b23867c855df554ef07911df7e568ce322745e2b125eb7b2894d3e52021a36",
+      "imports": [
+        "",
+        "_vendor.deerflow_contracts",
+        "agent_context",
+        "agent_session",
+        "deerflow",
+        "deerflow_sandbox",
+        "tools"
+      ]
+    },
+    "deliberation": {
+      "sha256": "911c225ace1230aef7be9dedfe3c508929cb06aaa355e1aa54563e00e49de369",
+      "imports": [
+        "cognition"
+      ]
+    },
+    "desktop_actions": {
+      "sha256": "27d4381d8778afff2fd5bde3a8ae7010f22ebbe9d64a87712b211cc2935f2930",
+      "imports": []
+    },
+    "desktop_tasks": {
+      "sha256": "3afdb03c595964905e3afeb492d34b8717a6baa2b56ba375a31a6a06b92ae90d",
+      "imports": [
+        "commands",
+        "experience_memory",
+        "names"
+      ]
+    },
+    "development": {
+      "sha256": "2f8640252f25190753e7081a0d1340a035fe16f74d7a8487e19484be8042b5bd",
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_browser",
+        "development_design",
+        "development_knowledge",
+        "development_learning",
+        "development_projects",
+        "development_tools",
+        "progress",
+        "task_state"
+      ]
+    },
+    "development_api": {
+      "sha256": "ce548477ee34aa441b58487da28df315a334772327899fc6497ee371cf485f90",
+      "imports": [
+        "agent_context",
+        "coder",
+        "development",
+        "development_design",
+        "development_knowledge",
+        "development_learning",
+        "development_native",
+        "task_state"
+      ]
+    },
+    "development_browser": {
+      "sha256": "64a90d6556b1de8a8168edd7e4c03b5c45cfb40ad001ecf2fa5326d6d636c444",
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_design": {
+      "sha256": "652ae7a30640cb0c7fd3afa9b57ec9a7f8041dbb3fd17c0108330a1b43a0bac5",
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_knowledge": {
+      "sha256": "d07a7d2888e7a0a30e4aaee787e57aecdb0d2cae92b33ae61c8bc4ad9a6129f5",
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_learning": {
+      "sha256": "49d53ebd5a01e80845f04b5ab05a90835bc8e0b4cc041ed24f6e7a6526751c46",
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_design"
+      ]
+    },
+    "development_native": {
+      "sha256": "1c93c48e38334ead108c93d434aad6e5c1b51808d1550b65901e15d9645eb90a",
+      "imports": [
+        "agent_context",
+        "development",
+        "development_tools"
+      ]
+    },
+    "development_projects": {
+      "sha256": "6aada3298387c23fc55e9f50077443801ce7f0e77e4eee0b5b77348e6985f8f4",
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_knowledge",
+        "progress"
+      ]
+    },
+    "development_tools": {
+      "sha256": "abce30936f83d31b19bdb07944990ba65414eb702ea146e083e7713a81c91f7c",
+      "imports": [
+        "agent_context",
+        "harness_process",
+        "progress",
+        "recovery"
+      ]
+    },
+    "diagnostics": {
+      "sha256": "165d6eb538219993f9960255a52e0fdf3097fe76a6b05dc652b5116bd53b88d4",
+      "imports": [
+        "cloud_policy",
+        "codex_workload",
+        "docker_runtime",
+        "knowledge_worker",
+        "model_selection"
+      ]
+    },
+    "direct_execution": {
+      "sha256": "05fa804cfa097723986e7fa04e6c6c47d97fff60fe22d84821c983b14240e184",
+      "imports": [
+        "brain",
+        "commands",
+        "desktop_actions",
+        "targeting",
+        "tools",
+        "ui_controls"
+      ]
+    },
+    "display": {
+      "sha256": "3f97d27164aacd7a32685ff8adf15967445cf2b2ecb61c54b234d4b8cc5c3584",
+      "imports": []
+    },
+    "docker_runtime": {
+      "sha256": "a50e7da90d083f902864acf71fb10614184ce3fe5612a6b4f6e385be3d549d61",
+      "imports": [
+        "deerflow_sandbox",
+        "recovery",
+        "repo_acquisition"
+      ]
+    },
+    "documents": {
+      "sha256": "47f1af35a16e3c693b736cebe923fb562db9c9a1a0454958d28d33479e2c5b04",
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker"
+      ]
+    },
+    "engine": {
+      "sha256": "236c2f801cde132279a3da9745a82ddcb857f11071035d933b72f1d5acc928c4",
+      "imports": [
+        "commands",
+        "writing"
+      ]
+    },
+    "everyday_runtime": {
+      "sha256": "dce498ae0158945b2e8cbe99091de3f84b49a087ed3aba3e286492cc6e481787",
+      "imports": []
+    },
+    "execution_adapters": {
+      "sha256": "ffd7bb9c1c9f05b9b489faabb3705dd9823141b5ff172322a612a154d2e3464a",
+      "imports": [
+        "",
+        "desktop_actions",
+        "jarvis_pointer"
+      ]
+    },
+    "execution_router": {
+      "sha256": "9d207c3f141476764c1772dd3d56798afa04a12caf8c912b8035d8672f75ada2",
+      "imports": [
+        "desktop_actions",
+        "execution_adapters"
+      ]
+    },
+    "experience": {
+      "sha256": "87c8584f47d4973c58335280e92723acabafa89fc427a92cfd74e1c1b7c4812f",
+      "imports": []
+    },
+    "experience_memory": {
+      "sha256": "fcf9111ab9fc9da3dd1da993221bb95655fe8c4b380dfa2a2c622d262be4ca78",
+      "imports": [
+        "desktop_tasks",
+        "obsidian_memory",
+        "skill_memory",
+        "tools"
+      ]
+    },
+    "f5_speech": {
+      "sha256": "0e53426bffef42aaa4e91a2957313dc2478db62f26693de529fbf36178a74baf",
+      "imports": [
+        "kokoro_speech",
+        "natural_voice"
+      ]
+    },
+    "fast_workflows": {
+      "sha256": "9f95c0af8ed0bdd1a9e4ac414d74a2043dd168cf62734baa6312a45e7895385a",
+      "imports": [
+        "agent_events",
+        "commands",
+        "experience_memory",
+        "media_ui",
+        "spotify",
+        "ui_controls"
+      ]
+    },
+    "file_drop": {
+      "sha256": "01685489703285757ee037bb68e0257c76d051fdcdb8a32b05a18079284dc07a",
+      "imports": [
+        "gmail_api",
+        "media_player",
+        "whatsapp"
+      ]
+    },
+    "firecrawl_tools": {
+      "sha256": "aa29adff8301764b7151794425c885743cd94ac3e05bd996613874041e386747",
+      "imports": [
+        "toolkits"
+      ]
+    },
+    "folder_lookup": {
+      "sha256": "0b60d3e107f2790975af901198dd25fedeaf7fd207d038dbe71ab91617d0e012",
+      "imports": [
+        "catalog",
+        "names",
+        "obsidian_memory",
+        "skill_memory"
+      ]
+    },
+    "glass_ui": {
+      "sha256": "45cb224cd6109052adc348662a15f4f1287f25a032e4d4e62fe8984ab649343b",
+      "imports": [
+        "display"
+      ]
+    },
+    "gmail_api": {
+      "sha256": "b6b5873f19d8855248212184feebbb33c484c6ce8a9de79c5612730805dd0baf",
+      "imports": [
+        "gmail_writes",
+        "toolkits"
+      ]
+    },
+    "gmail_bridge": {
+      "sha256": "1bbe811e24754d420953c076fa94d79e8a7d8fbcedf0330201a1e2baa815b321",
+      "imports": []
+    },
+    "gmail_chrome_worker": {
+      "sha256": "81524392faaf98b1144a04dd176ade805116d51dd406a75a285891dbffa3d67a",
+      "imports": [
+        "gmail_bridge",
+        "independent_cursor"
+      ]
+    },
+    "gmail_workflows": {
+      "sha256": "b3d3ed0a7a558539fc4dd9559d24a2da02ba8c974d449fb1dbfb5101db3f0c1c",
+      "imports": [
+        "clarification",
+        "gmail_api",
+        "tools"
+      ]
+    },
+    "gmail_writes": {
+      "sha256": "7334110b29fa589ca787f6ea1afd981b702f2482cbe2487d0f22b0e866614a39",
+      "imports": []
+    },
+    "gods_eye": {
+      "sha256": "c9a3907627fde236306c91ccd599ffcc47ed37483f87359bb5df014617ccb8df",
+      "imports": [
+        "commands",
+        "gods_eye_cameras",
+        "gods_eye_update",
+        "gods_eye_view",
+        "media_player"
+      ]
+    },
+    "gods_eye_cameras": {
+      "sha256": "1957f54ec2e9afc151f0db183946c26ba852700352966dcc165018c59ae85509",
+      "imports": []
+    },
+    "gods_eye_update": {
+      "sha256": "b4b9edb43f48ca49cc234f94a6ff7a50d4722d764e549c36d76f79dd631a5a25",
+      "imports": []
+    },
+    "gods_eye_view": {
+      "sha256": "154de7748571c3349a48e257479095c8a5141854c16bbcdd2826dbede4ee3e34",
+      "imports": []
+    },
+    "gpu_scheduler": {
+      "sha256": "7181ea52098a7061a07c259037bbfda2b87458a951ec42a0309cc0e684471dcd",
+      "imports": []
+    },
+    "groq_adapter": {
+      "sha256": "59e24c717771c896cb7d0f3546b83571c90c3a5703ca2b51f422f0ad44b50374",
+      "imports": [
+        "cloud_policy",
+        "repo_analysis"
+      ]
+    },
+    "grounding": {
+      "sha256": "e88074db133eecf68bd068d88e4a15bd56635771be71d769dfad2a31c79aae41",
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "gui_contract": {
+      "sha256": "742672b9dba66435efe83a077de048b530ed727c574d750b2bb2b81c675700fd",
+      "imports": []
+    },
+    "harness": {
+      "sha256": "d562861a6647e4857ffc0cd32c289c11c176842967929cd04726414743bfc15e",
+      "imports": [
+        "brain",
+        "development_projects",
+        "hermes",
+        "task_recovery"
+      ]
+    },
+    "harness_process": {
+      "sha256": "fe04882d3ba1d4dddde24c2c3f492603f559b6caf07862ba8ed4dc788520af72",
+      "imports": []
+    },
+    "harness_worker": {
+      "sha256": "76a9c5c2f0ff0ebf35fc172bf61058bfdc032055586c18e8927877a87238fed1",
+      "imports": [
+        "agent_context",
+        "brain_worker",
+        "harness",
+        "harness_process",
+        "knowledge_worker"
+      ]
+    },
+    "hermes": {
+      "sha256": "b23c4faa94d60d9cd07216c9bb5d5d7ba82cdc527fc2c89dcdbf2507c1ab6407",
+      "imports": [
+        "brain",
+        "task_graph"
+      ]
+    },
+    "hermes_ollama": {
+      "sha256": "44d80cc663842fbc78022375d33ac3a77a411a5781f5da8fd077e93670405dec",
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "hermes_skills": {
+      "sha256": "1918d290f9ef95202efece2ccedbf3b6576c058cc9bef91859d6483c0352c244",
+      "imports": [
+        "agent_context",
+        "hermes",
+        "skill_memory"
+      ]
+    },
+    "hermes_worker": {
+      "sha256": "70ba7a2e2470fd5f252625a4e17a872e26b1053c8bfa2997f6a5e4bc4023675f",
+      "imports": [
+        "agent_context",
+        "brain_worker",
+        "hermes",
+        "hermes_ollama"
+      ]
+    },
+    "hierarchical": {
+      "sha256": "fd66e1c5c53faa6336a4b716ef15924ba1995ef977ba8e6d5f16a954a194cb82",
+      "imports": [
+        "agent_context",
+        "agent_events",
+        "brain",
+        "dag_execution",
+        "toolkits",
+        "tools"
+      ]
+    },
+    "hud": {
+      "sha256": "527c54183e6aa6953c8cd4bb9b845faad989f6bba7ede671fa21ecb6f05bdcaa",
+      "imports": []
+    },
+    "hybrid_inference": {
+      "sha256": "0b10c75ad9176322298dec6834ab4fc7e99d87b665b1223464519a9db57c5990",
+      "imports": [
+        "cloud_policy",
+        "cloud_quota",
+        "groq_adapter",
+        "knowledge_worker",
+        "model_performance",
+        "model_selection",
+        "skill_memory"
+      ]
+    },
+    "independent_cursor": {
+      "sha256": "f811d04c179b5ac3a481f86dd3d1f20d2cf58ba08e82c11dd420693599c185bb",
+      "imports": [
+        "execution_adapters",
+        "jarvis_pointer"
+      ]
+    },
+    "inference_limits": {
+      "sha256": "9f5fd9ca3646acda57c0eb86fa15d5e45842a5bfa50b563e4128f79e74d4afa4",
+      "imports": []
+    },
+    "intent_catalog": {
+      "sha256": "6683dd4e272ee983b46bb48353d5dce192ff88acd54538f9c1e4adb937d19a02",
+      "imports": [
+        "commands",
+        "conversation_intent",
+        "gods_eye",
+        "writing"
+      ]
+    },
+    "intent_handlers": {
+      "sha256": "c84e2b724c819cda608b5d44623270832025e3b666262524486f49e6793489ca",
+      "imports": [
+        "",
+        "capability_guide",
+        "commands",
+        "gmail_api",
+        "gods_eye",
+        "media_player",
+        "whatsapp",
+        "windows_commands"
+      ]
+    },
+    "interface": {
+      "sha256": "bba324c0b22ecdb0eaa6069b058837b904026a16c6f7e5104f5c71c881c6c035",
+      "imports": [
+        "coding_console",
+        "display",
+        "file_drop",
+        "glass_ui",
+        "island",
+        "island_desk",
+        "notch_widgets"
+      ]
+    },
+    "island": {
+      "sha256": "a998a153b6d1bedb550b46b90d93316faa032b81eb6e293df6b0fcf62fa6c2c8",
+      "imports": [
+        "buddy_engine",
+        "display",
+        "island_buddy",
+        "island_surface",
+        "media_player",
+        "obsidian_memory"
+      ]
+    },
+    "island_artwork": {
+      "sha256": "5aacfca7878737cfe538e9504366f05dd18f25db4a6fd22f9b04304aebe35751",
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "island_buddy": {
+      "sha256": "7a64bf261108c9f2343853b2593f2f6a243f1a115609ea636621b8300ecabe53",
+      "imports": []
+    },
+    "island_choices": {
+      "sha256": "10fd66bad7bd9ce856e6c9c22d774249ed8389e2bfe0f65f44447bf0597b150a",
+      "imports": [
+        "commands",
+        "whatsapp"
+      ]
+    },
+    "island_desk": {
+      "sha256": "20b614886e3de0fb2e3bcdf6cd90d139d89e0c1d52eee539c90eb221dd048d86",
+      "imports": [
+        "commands",
+        "glass_ui",
+        "island_choices",
+        "island_games",
+        "island_media",
+        "island_mind",
+        "notch_widgets"
+      ]
+    },
+    "island_games": {
+      "sha256": "2cc6fa2f9dab1ce28f594fbed5ea311501db6ba61ae43ae9c37d94a7ec6e7d26",
+      "imports": [
+        "island"
+      ]
+    },
+    "island_media": {
+      "sha256": "74d00deab2662cf8768366cc8c47eaa527400c3a85ebfd3b57cf16ea6803af38",
+      "imports": [
+        "harness_process",
+        "spotify"
+      ]
+    },
+    "island_mind": {
+      "sha256": "0d51b685d84a4be896856744374d3f3098975956bb49805c0a8a1ebbe45cb1a9",
+      "imports": [
+        "cognition"
+      ]
+    },
+    "island_surface": {
+      "sha256": "42193a997c313ac822ce9d7937eb08e72c7dce213e9022b602130b47bc8ba068",
+      "imports": []
+    },
+    "jarvis_pointer": {
+      "sha256": "e04b05c14022162f561b2afcb12a3df8507cb523c3b9db462852c99d032d7414",
+      "imports": []
+    },
+    "knowledge": {
+      "sha256": "1b482fb40e74257cd59708928fee53980ebc318ca022d20b1d2cbb23a8538ef5",
+      "imports": [
+        "clarification",
+        "context_selector",
+        "conversation_memory",
+        "hybrid_inference",
+        "natural_conversation",
+        "question_client",
+        "quick_answers"
+      ]
+    },
+    "knowledge_acquisition": {
+      "sha256": "3c7b638e5befd6c3ddf460d74bc27adc3e3f4c5174032b5986143469738fa71d",
+      "imports": [
+        "agent_events",
+        "app_knowledge",
+        "dag_execution",
+        "toolkits",
+        "tools"
+      ]
+    },
+    "knowledge_worker": {
+      "sha256": "e8fbc21075f6a3e0ec0bce46cd36eb79e56ea6c96f6eb82aa5f86e7593d44a64",
+      "imports": [
+        "code_stream",
+        "conversation_memory",
+        "gpu_scheduler",
+        "hybrid_inference",
+        "inference_limits",
+        "model_selection",
+        "natural_conversation"
+      ]
+    },
+    "kokoro_speech": {
+      "sha256": "d4fcb4d133037dd274c8d5dab1db8c59bba8195979177381997cf2cfc32c0c4d",
+      "imports": [
+        "natural_voice"
+      ]
+    },
+    "launcher": {
+      "sha256": "c424d3c466e5a1994a07eef2c58ee0f6bad792a4cc7106fec5217f23c1479601",
+      "imports": [
+        "anticipation",
+        "claude_code",
+        "cloud_policy",
+        "codex_code",
+        "command_cleanup",
+        "context_selector",
+        "diagnostics",
+        "docker_runtime",
+        "f5_speech",
+        "gpu_scheduler",
+        "harness",
+        "harness_process",
+        "hermes",
+        "hierarchical",
+        "knowledge_acquisition",
+        "paths",
+        "realtime",
+        "recovery",
+        "repo_sandbox",
+        "visual_fallback"
+      ]
+    },
+    "live_app_context": {
+      "sha256": "e3159826442765d5d880d4d8a22f5ae33ff313176ef29ba8b6323d37076d5aaf",
+      "imports": []
+    },
+    "mcp_bridge": {
+      "sha256": "bd077998362a1df2fee4bf4a2d5c6045b8899be8dcbb447970728d5032014e25",
+      "imports": [
+        "agent_context",
+        "task_state"
+      ]
+    },
+    "media_commands": {
+      "sha256": "950c988104e1682c88ac54f58f0dbb28db33a768e18e423776847a066ee71711",
+      "imports": [
+        "commands"
+      ]
+    },
+    "media_player": {
+      "sha256": "a7091b75ee5f12c74fffdfd68724c90c0686ffd301cb0fc98959931d65a593d5",
+      "imports": [
+        "commands",
+        "island_media",
+        "spotify",
+        "window_focus"
+      ]
+    },
+    "media_ui": {
+      "sha256": "0ff127a35e48c686d01bca84a1ad9b573b3eff7c19fa46aae30afa015a06d609",
+      "imports": [
+        "actions",
+        "ui_controls"
+      ]
+    },
+    "memory_curator": {
+      "sha256": "002b255332e8d052551690bfdac1e7be284108bc66f81a5106fe3e9345dcc5a1",
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "obsidian_memory"
+      ]
+    },
+    "memory_index": {
+      "sha256": "2ee8eaa0e099aece9e1551b40d100f8b9a6857b3701cdb3ed1d040bae3415404",
+      "imports": [
+        "toolkits",
+        "tools"
+      ]
+    },
+    "messengers": {
+      "sha256": "0a7b6e0dcdb8a904afde02ff72ebb47fc7019bec7465479ce24c192f54da6281",
+      "imports": [
+        "",
+        "commands",
+        "jarvis_pointer",
+        "window_focus"
+      ]
+    },
+    "model_performance": {
+      "sha256": "dd8fa7b12efdc0a61dc867111aebaf79b553a977b51cf99be19a42f3ff4d3411",
+      "imports": []
+    },
+    "model_recovery": {
+      "sha256": "decf0bc37af672d2126e66a3ddd22382fb1b38b3a094279ce545ac10d66e8ed6",
+      "imports": [
+        "knowledge_worker",
+        "model_selection"
+      ]
+    },
+    "model_selection": {
+      "sha256": "f906d45f8c0cc4922b1cdd21d8da308bed35a5cedb754e553b30b6ffc5be3108",
+      "imports": [
+        "command_cleanup",
+        "context_selector",
+        "realtime"
+      ]
+    },
+    "names": {
+      "sha256": "52d684c45b03c29c5aa9278d659454205494a09e3020cba7980f6f44a83e4c0f",
+      "imports": []
+    },
+    "native_coding": {
+      "sha256": "cf9190757d2490b8958267d87b2b00ca1602a7822b8994fa1aea1af5bf582e61",
+      "imports": [
+        "agent_context",
+        "agent_tools",
+        "codex_files",
+        "codex_validation",
+        "coding_activity",
+        "coding_files",
+        "coding_operations",
+        "coding_processes",
+        "coding_programs",
+        "command_reference",
+        "firecrawl_tools",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "repo_abilities",
+        "tools"
+      ]
+    },
+    "native_tools": {
+      "sha256": "fac0aeeea2332ef318c34c50a8b8232dcc5f3e3dd21bc3282a94d422c44856d2",
+      "imports": [
+        "agent_context",
+        "inference_limits",
+        "knowledge_worker",
+        "repo_analysis"
+      ]
+    },
+    "natural_conversation": {
+      "sha256": "b4c037ece85fb384c7e76ff551cc7e7dece00c4549cc2409b22a689bf92fe7db",
+      "imports": []
+    },
+    "natural_voice": {
+      "sha256": "9d6afca36e39b4d1fd90584764128a1b9ce7b2bef367b6fb731a1e2ab0b5ef34",
+      "imports": []
+    },
+    "notch_widgets": {
+      "sha256": "870b25b1fe899aa744516a2baf1de68a740baf33ae2face0bcdd07728c8dbd65",
+      "imports": [
+        "display",
+        "glass_ui"
+      ]
+    },
+    "obsidian_memory": {
+      "sha256": "f7bc8b2ebc3bc8aaccc1b9d1102622af940b8d2edf6e53aa110ba39f63adebe3",
+      "imports": [
+        "capabilities",
+        "capability_guide",
+        "memory_index"
+      ]
+    },
+    "ollama_models": {
+      "sha256": "8bfbfd8820192d4237e93529af963378c8ce4a688febb5624c62135b245614c8",
+      "imports": [
+        "gpu_scheduler"
+      ]
+    },
+    "paths": {
+      "sha256": "669cc10a79a2f140747656e4e48e6d8f7bf014320b205f95b8883e66e6ff9c80",
+      "imports": []
+    },
+    "pc_context": {
+      "sha256": "464770e3a55a7db15c334a615da4badf8d141714262e3780b64c8df2ffd604e2",
+      "imports": [
+        "catalog",
+        "projects"
+      ]
+    },
+    "phrasing": {
+      "sha256": "e0e09258adea9cb21731d10cd2c6949c231a40e8b73e1cdd1700a63b6e1cbedf",
+      "imports": []
+    },
+    "piper_speech": {
+      "sha256": "9931fd246c5d9c7cb541c8ab983d92aa326d0b44e136aaa39c1a1083c4fc1042",
+      "imports": [
+        "speech"
+      ]
+    },
+    "polyglot_training_data": {
+      "sha256": "4692572302cb02531133e05fe35f528b5545c366ea68716ea7637d44e5823e9a",
+      "imports": []
+    },
+    "progress": {
+      "sha256": "67c7a4d65b072a1b47b1f598f51240b39f23990f1bb12b558dda95183aabfb22",
+      "imports": []
+    },
+    "projects": {
+      "sha256": "09f6e89a8ee2c2b7a6551aac2f3eaada6f31c10bb99b4f611247b3399f27c35b",
+      "imports": [
+        "names",
+        "paths"
+      ]
+    },
+    "push_to_write": {
+      "sha256": "1e5ce889e2e8273f0f829d71fb0d79e86c4dd6e39ac1341d337351dd8fc04484",
+      "imports": []
+    },
+    "question_client": {
+      "sha256": "d3045a7366e4764a6a4693d15a7ff42488138f5815287e94cdddea4e532f8a3c",
+      "imports": [
+        "hybrid_inference",
+        "inference_limits",
+        "pc_context",
+        "recovery"
+      ]
+    },
+    "quick_answers": {
+      "sha256": "94df28f8deebce8b2fc5a3c4ccc730108bac26d9bfc9c9d76a0ba57c4c83a5bc",
+      "imports": [
+        "everyday_runtime"
+      ]
+    },
+    "rea_tools": {
+      "sha256": "07a5739b6bff500d05b0c164129bc5644c706da14d7d3ebf7d9318364e239724",
+      "imports": [
+        "agent_context",
+        "commands",
+        "task_state",
+        "toolkits"
+      ]
+    },
+    "realtime": {
+      "sha256": "7c4740d0df7ea1c2fd1a90a8566ce1f8a5f0bfda84811bf4f0b4ee2f8ec985ed",
+      "imports": [
+        "gpu_scheduler",
+        "realtime_catalog",
+        "realtime_sources"
+      ]
+    },
+    "realtime_catalog": {
+      "sha256": "2b05b32cb171a7f88b847b2fd3381090e6dbd0693f8e64ea9d0be75c4534d366",
+      "imports": []
+    },
+    "realtime_sources": {
+      "sha256": "6a9e8068c9607ca65d3b571a233f1ceb5bae3178be9d53f0db7890e1461f0de8",
+      "imports": [
+        "realtime_catalog"
+      ]
+    },
+    "recovery": {
+      "sha256": "1faa10835309be6768c51c65f7bd11498bc0f3ce0a82eef41c3ef6adbc49e2dc",
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "repo_abilities": {
+      "sha256": "adfb2999a9b402741e81c2ca644f31e29da602f462d182c24dcd4397816006b2",
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "media_player",
+        "repo_learning"
+      ]
+    },
+    "repo_acquisition": {
+      "sha256": "b6a1c10869c57821cae41489cb338b918f456e166e27dd74c78e302e63ebd4c3",
+      "imports": [
+        "harness_process",
+        "skill_memory"
+      ]
+    },
+    "repo_analysis": {
+      "sha256": "a4aedd102ac8983ad12e749fb9a1c3e2cbc17d130fd8d1cb658747138234c3dc",
+      "imports": []
+    },
+    "repo_learning": {
+      "sha256": "91dae1bff4fcee46a75bd47bf7113fd98214e29c34c6d2b15433fbde91c1abda",
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "media_player"
+      ]
+    },
+    "repo_runtime_runner": {
+      "sha256": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+      "imports": []
+    },
+    "repo_sandbox": {
+      "sha256": "a6089c1944b228b4757ab97b8837c2cca1a30296682ff5823ad251d4d2706c97",
+      "imports": [
+        "repo_acquisition",
+        "skill_memory"
+      ]
+    },
+    "repo_tools": {
+      "sha256": "d4deb4f953ea6392468e48aae74da5eb2a1441bfda95019096c2466046d71a03",
+      "imports": [
+        "commands",
+        "repository_skills"
+      ]
+    },
+    "repository_skills": {
+      "sha256": "3821a6fd938484889fd2b806f5d393a6768f38df01883e48c430484c2c917160",
+      "imports": [
+        "repo_acquisition",
+        "repo_analysis",
+        "repo_sandbox",
+        "skill_memory"
+      ]
+    },
+    "research_evidence": {
+      "sha256": "359060bdfb462be5317160eca436fbc7bb5b26f671bfa96515d8e535b1a608e5",
+      "imports": [
+        "_vendor.deerflow_contracts"
+      ]
+    },
+    "runtime_health": {
+      "sha256": "603213547ac3a896816d307e0aec5bd75810787d108090486b13ceb77547b20b",
+      "imports": [
+        "gpu_scheduler"
+      ]
+    },
+    "screen_awareness": {
+      "sha256": "d5ea611474631f34bab989b1a21f21ad067be484073af4d56c1bb89295aae21a",
+      "imports": [
+        "actions",
+        "app_knowledge",
+        "commands",
+        "names",
+        "ui_controls",
+        "window_focus"
+      ]
+    },
+    "screen_worker": {
+      "sha256": "9a9fe4b1d84d8dc6445bc87134c5dcf901b1f2d6a989377df3578662cfe3a007",
+      "imports": []
+    },
+    "self_evolution": {
+      "sha256": "c1f2c328ef623c21204d634fbc06516901fa0fbb7325211236f037f70c8b93dd",
+      "imports": [
+        "cognition",
+        "knowledge_acquisition",
+        "media_player"
+      ]
+    },
+    "skill_memory": {
+      "sha256": "0fa33a3fd537c4f89c9fe654dd812e962c66680cab100689985e3baf213845cb",
+      "imports": [
+        "capabilities",
+        "experience_memory",
+        "fast_workflows",
+        "hermes_skills",
+        "obsidian_memory"
+      ]
+    },
+    "speech": {
+      "sha256": "4acb13c5cd7e52c7e1f2192cb7ef4565219235e59143ed7746a4ab68542df8a5",
+      "imports": [
+        "f5_speech",
+        "natural_voice"
+      ]
+    },
+    "spotify": {
+      "sha256": "dfb7d3f0645f3819b15d387790a41f23ad05706b1c1d36b93f9acfbfd385d2b9",
+      "imports": []
+    },
+    "step_planning": {
+      "sha256": "0741841afd9a714fcc0b463a8d281e9726f1c45871309412c47f609b16b4d8b1",
+      "imports": [
+        "skill_memory",
+        "task_recovery"
+      ]
+    },
+    "targeting": {
+      "sha256": "c09799b13ee400424a92fb431a02495b65a197d27e1d6544f9bae061461d8828",
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "task_graph": {
+      "sha256": "5fba6db493f0505f7ccad2fc10ebe08cc8075f2c776e96ac37a0174db60033c9",
+      "imports": []
+    },
+    "task_queue": {
+      "sha256": "a72bebc4e7b3f8b55b4f6b2e49b42d9853756bf6610580779fa8e561ad6c3e9e",
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "task_recovery": {
+      "sha256": "23cdaf8b3ee3d64a6b35206f6101943474313b380e3ff58d184509e7b786d556",
+      "imports": [
+        "names",
+        "toolkits"
+      ]
+    },
+    "task_state": {
+      "sha256": "4288ce066db78bba5250f7efeb2fd4c6c716d654e26e437385400f84b8331c90",
+      "imports": [
+        "experience",
+        "experience_memory",
+        "paths",
+        "task_graph"
+      ]
+    },
+    "toolkits": {
+      "sha256": "5e432d08b91556ff27829907aa0a0bb4f5de0553c0ff3feede3235745dbeded2",
+      "imports": [
+        "agent_tools",
+        "code_context",
+        "deerflow",
+        "firecrawl_tools",
+        "gmail_api",
+        "knowledge_worker",
+        "rea_tools",
+        "repo_tools",
+        "task_state",
+        "utility_tools"
+      ]
+    },
+    "tools": {
+      "sha256": "076492a4da70e1f3aa40edf5fb2e420a8def53ebd8050def15565343deac1d2f",
+      "imports": [
+        "agent_events",
+        "application_discovery",
+        "capabilities",
+        "commands",
+        "desktop_actions",
+        "repo_tools",
+        "skill_memory",
+        "task_state",
+        "toolkits",
+        "utility_profiles"
+      ]
+    },
+    "trained_coder": {
+      "sha256": "973df2a7a6fbe0a0910b5ad3dc523901c50e217264893bdcd1427cdd9aae8e59",
+      "imports": []
+    },
+    "trained_pc": {
+      "sha256": "01667123847c22840d2bf5132df9b2ae5c58ef1b1bf28a873cf67d34c34b181a",
+      "imports": [
+        "pc_context"
+      ]
+    },
+    "ui_controls": {
+      "sha256": "bdd7f12fd5fdf1979be5e7a2bc36746b61670f9bfdf5fb23e7d59f784b7ad4fd",
+      "imports": [
+        "media_ui",
+        "names",
+        "targeting",
+        "ui_transport"
+      ]
+    },
+    "ui_memory": {
+      "sha256": "ca380dd605fedc39aaccb3885d7b9d09711e2c47e57e3420b947219c3e579452",
+      "imports": [
+        "experience"
+      ]
+    },
+    "ui_preview": {
+      "sha256": "37a62a7ae8efbf1d3c37ad31738ffaa8e498199061fa4363f0899af13b8872c4",
+      "imports": [
+        "display",
+        "glass_ui",
+        "interface"
+      ]
+    },
+    "ui_transport": {
+      "sha256": "08ca567dca1950a93af9340e234115d1e1dae82e5cdbdc91f7b1f8e78fe8b838",
+      "imports": []
+    },
+    "ui_worker": {
+      "sha256": "ac6ff5f9f90f6a1192375204d81acdab10690f70edaed7ad874108ef2cf81da2",
+      "imports": [
+        "desktop_actions",
+        "execution_router",
+        "independent_cursor",
+        "island_artwork",
+        "media_ui",
+        "windows_command_desktop"
+      ]
+    },
+    "upstream_windows_patterns": {
+      "sha256": "4f43c44023ec9319533d9ebfad00b89626a5ca7eb53d110e3d2c74f57e192bd9",
+      "imports": []
+    },
+    "utility_audio_worker": {
+      "sha256": "4e4b0b5f7d2a95c481fa594c2999b54eb5fc02c2e35200a1f399bf7b776bd5ef",
+      "imports": []
+    },
+    "utility_container_runner": {
+      "sha256": "d667ca069d8594d0f5d65b6b43660097b76b5c9e7272a8ecd292c6a119fcefd2",
+      "imports": []
+    },
+    "utility_core": {
+      "sha256": "c6367b0e4802287b14335d2f901d98dc3f9f98274a5f03e8966daea3456cd826",
+      "imports": [
+        "agent_context",
+        "repo_acquisition"
+      ]
+    },
+    "utility_host": {
+      "sha256": "a1cacc09dd5081dc5f5735f76b12d4baa15d7f6e1fef01543cab4ab2c140c09d",
+      "imports": [
+        "repo_acquisition",
+        "toolkits",
+        "utility_core",
+        "utility_tools"
+      ]
+    },
+    "utility_isolation": {
+      "sha256": "64351d2f8d6ad96d3ae9d658f63c51d8a959e9995836daef0e72f704d792d383",
+      "imports": [
+        "repo_sandbox"
+      ]
+    },
+    "utility_profiles": {
+      "sha256": "7e3727e3c498021d352c55b58e453f496d59171352f69bd92bbed3641b9762b8",
+      "imports": []
+    },
+    "utility_service_transport": {
+      "sha256": "cd279bb938f1b5aeb08f0281b11cd58cc13efc8dcc66ef74b8ab90dc307b441c",
+      "imports": [
+        "harness_process",
+        "utility_services"
+      ]
+    },
+    "utility_services": {
+      "sha256": "536fe4273bdaad5412e4bc09cc54c2cb19fafa4adb9abfa726c9888c05b4f4b9",
+      "imports": []
+    },
+    "utility_tools": {
+      "sha256": "d6b1320e90e603a69ddc8a2262cd5f2fb21028c1484e1b255eef6a39cb17be3b",
+      "imports": [
+        "browser",
+        "repo_acquisition",
+        "repo_analysis",
+        "ui_transport",
+        "utility_core",
+        "utility_host",
+        "utility_isolation",
+        "utility_profiles",
+        "utility_service_transport"
+      ]
+    },
+    "utility_worker": {
+      "sha256": "1a8740825a9b6f46a91c785b36487297e5f31bd0ac1c16c81fa116284a58c1f6",
+      "imports": [
+        "utility_core"
+      ]
+    },
+    "visual_fallback": {
+      "sha256": "1bd6d22d98d86fa5bf1f8531080e362a3a920fc0c75aef844cd812534272ce8e",
+      "imports": [
+        "_vendor.ui_tars_action_parser",
+        "agent_events",
+        "commands",
+        "names",
+        "skill_memory",
+        "targeting",
+        "task_recovery",
+        "task_state",
+        "visual_worker"
+      ]
+    },
+    "visual_worker": {
+      "sha256": "9d2dddd7afc3c0abe6398094102d3fcc7bb1dee9c57a57b7e8a374231ddb7ef7",
+      "imports": [
+        "independent_cursor"
+      ]
+    },
+    "voice_input": {
+      "sha256": "63d19062bc048644867adc0ceebebb84ee57e00688f9a9840002c098bf064a2b",
+      "imports": [
+        "audio",
+        "engine"
+      ]
+    },
+    "weather_watch": {
+      "sha256": "e977e05c044cdb79c5e7921ef684a693a677bbbd38e20e04798aa1ff81382333",
+      "imports": [
+        "capability_guide",
+        "commands",
+        "media_player"
+      ]
+    },
+    "whatsapp": {
+      "sha256": "1df6d4698623431cbec7c1ac4a5732d97bc6b464879b35b1865c050c94c0f4e8",
+      "imports": [
+        "clarification",
+        "commands",
+        "gpu_scheduler",
+        "jarvis_pointer",
+        "knowledge_worker",
+        "media_player",
+        "window_focus"
+      ]
+    },
+    "whisper_backend": {
+      "sha256": "aeea81604d8e06e0194e6e262d86b9cf80572a6d05a31a755c2b8919c66bffa5",
+      "imports": []
+    },
+    "window_focus": {
+      "sha256": "e8031309d57be99e9d30ce8e34a0240b2165d909cd0dbd45e6dc85def09f64bc",
+      "imports": []
+    },
+    "windows_command_browser": {
+      "sha256": "2c7abbd0618a6d41e92609883ac2862c470ecf38ca65e236d56cf960a3a21529",
+      "imports": [
+        "browser_cursor",
+        "toolkits",
+        "windows_commands"
+      ]
+    },
+    "windows_command_desktop": {
+      "sha256": "b0e9bd827e9c480f94dde4af2cba15b872cea6cc3a1ea6e42269b0b91eea7d1d",
+      "imports": [
+        "independent_cursor",
+        "media_ui",
+        "windows_commands"
+      ]
+    },
+    "windows_commands": {
+      "sha256": "c482c715ceb1595d0bde5cc925c7807c1faa573d441e5602f17c2dd6e7e72dcf",
+      "imports": [
+        "commands"
+      ]
+    },
+    "writing": {
+      "sha256": "539ddeb0f6798f5fddf576cbd2bcebe33f07014f0a948381b19c0038a05f7112",
+      "imports": [
+        "actions",
+        "audio",
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "names",
+        "window_focus"
+      ]
+    }
+  },
+  "integrations": [
+    {
+      "name": "deer-flow",
+      "licenses": [
+        "LICENSE"
+      ],
+      "commit": {
+        "exit_code": 0,
+        "output": "a5e71751d7a9f8f4a71ca458da3984fc1284d098",
+        "error_type": null
+      }
+    },
+    {
+      "name": "deer-flow-upstream",
+      "licenses": [
+        "LICENSE"
+      ],
+      "commit": {
+        "exit_code": 0,
+        "output": "a5e71751d7a9f8f4a71ca458da3984fc1284d098",
+        "error_type": null
+      }
+    },
+    {
+      "name": "deerflow",
+      "licenses": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "execution-primitives",
+      "licenses": [
+        "licenses"
+      ]
+    },
+    {
+      "name": "execution-upstream",
+      "licenses": []
+    },
+    {
+      "name": "gmail-chrome",
+      "licenses": []
+    },
+    {
+      "name": "gods-eye-view-src",
+      "licenses": []
+    },
+    {
+      "name": "hermes-agent",
+      "licenses": [
+        "LICENSE"
+      ],
+      "commit": {
+        "exit_code": 0,
+        "output": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+        "error_type": null
+      }
+    },
+    {
+      "name": "profiles",
+      "licenses": []
+    },
+    {
+      "name": "rea-upstream",
+      "licenses": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "references",
+      "licenses": []
+    },
+    {
+      "name": "repository-runtime",
+      "licenses": []
+    },
+    {
+      "name": "utility-runtime",
+      "licenses": []
+    },
+    {
+      "name": "windows-command-reference",
+      "licenses": []
+    }
+  ],
+  "realtime_catalog_count": 82,
+  "test_cases_file_present": false,
+  "requirements": {
+    "audit.txt": "# Optional source analysis; install into .jarvis-runtime/audit-tools, not .venv.\npyflakes==3.4.0\n",
+    "brain.txt": "# Isolated from Whisper's dependencies. Install CPU torch separately first.\nlaya==0.3.5\ntransformers==4.57.6\nrequests>=2.32,<3\npsutil>=6,<8\n",
+    "deerflow.txt": "# Isolated Python 3.12 DeerFlow runtime; install from app/.\n# Resolved 2026-10-13; revision in integrations/deerflow/source-manifest.json.\n./integrations/deer-flow-upstream/backend/packages/extension-api\n./integrations/deer-flow-upstream/backend/packages/harness[ollama]\nMako==1.4.3\nMarkupSafe==3.0.4\nPyJWT==2.15.1\nPyYAML==6.0.3\nPygments==2.21.0\nSQLAlchemy==2.1.4\nSpeechRecognition==3.17.0\nagent-client-protocol==0.12.1\nagent-sandbox==0.0.30\naiohappyeyeballs==2.7.1\naiohttp-retry==2.9.1\naiohttp==3.14.5\naiosignal==1.4.0\naiosqlite==0.22.1\nalembic==1.20.0\nannotated-types==0.8.0\nanthropic==1.13.0\nanyio==4.15.1\nattrs==26.1.0\nazure-ai-contentunderstanding==1.2.0b3\nazure-ai-documentintelligence==1.0.2\nazure-core==1.41.0\nazure-identity==1.26.0\nbackoff==2.2.1\nbeautifulsoup4==4.15.0\nblockbuster==1.5.29\nbracex==3.1\ncertifi==2026.7.22\ncffi==2.1.1\ncharset-normalizer==3.5.2\nclick==8.5.0\ncloudpickle==3.1.2\ncobble==0.1.4\ncolorama==0.4.6\ncoloredlogs==15.0.1\nconnectrpc==0.11.1\ncroniter==6.2.4\ncryptography==50.0.2\nddgs==9.16.0\ndefusedxml==0.7.1\ndistro==1.9.0\ndocstring_parser==0.18.0\ndotenv==0.9.9\nduckdb==1.5.6\ndurationpy==0.11\ne2b-code-interpreter==2.11.0\ne2b-dockerfile-utils==0.1.1\ne2b==2.56.0\net_xmlfile==2.0.0\nexa-py==2.25.0\nfiletype==1.2.0\nfirecrawl-py==4.50.0\nflatbuffers==25.12.19\nforbiddenfruit==0.1.4\nfrozenlist==1.8.0\ngoogle-auth==2.62.0\ngoogle-genai==2.30.1\ngoogleapis-common-protos==1.75.5\ngreenlet==3.5.6\ngrpcio-health-checking==1.80.0\ngrpcio-tools==1.80.0\ngrpcio==1.80.0\nh11==0.16.0\nh2==4.4.1\nhpack==4.2.0\nhtml5lib==1.1\nhttpcore2==2.13.1\nhttpcore==1.0.9\nhttpx-sse==0.4.3\nhttpx2==2.13.1\nhttpx==0.28.1\nhumanfriendly==10.0\nhyperframe==6.1.0\nidna==3.20\niniconfig==2.3.1\nisodate==0.7.2\njiter==0.17.0\njsonpatch==1.35\njsonpointer==3.2.1\njsonschema-specifications==2025.9.1\njsonschema==4.26.0\njsonschema_rs==0.44.1\nkubernetes==37.0.1\nlangchain-anthropic==1.7.6\nlangchain-core==1.6.10\nlangchain-deepseek==1.1.1\nlangchain-google-genai==4.4.2\nlangchain-mcp-adapters==0.3.2\nlangchain-ollama==1.1.0\nlangchain-openai==1.7.1\nlangchain-openviking==0.1.0\nlangchain-protocol==0.0.19\nlangchain==1.4.5\nlangfuse==4.17.0\nlanggraph-api==0.10.3\nlanggraph-checkpoint-sqlite==3.1.2\nlanggraph-checkpoint==4.3.0\nlanggraph-cli==0.4.33\nlanggraph-prebuilt==1.1.0\nlanggraph-runtime-inmem==0.30.3\nlanggraph-sdk==0.4.7\nlanggraph==1.2.15\nlangsmith==0.14.8\nlxml==6.1.3\nmagika==0.6.3\nmammoth==1.11.0\nmarkdown-it-py==4.2.0\nmarkdownify==1.2.3\nmarkitdown==0.1.8\nmcp==1.30.0\nmdurl==0.1.2\nmpmath==1.3.0\nmsal-extensions==1.3.1\nmsal==1.39.0\nmultidict==7.1.0\nnest-asyncio==1.6.0\nnumpy==2.5.4\noauthlib==4.0.0\nolefile==0.47\nollama==0.6.3\nonnxruntime==1.20.1\nopenai==3.29.0\nopenpyxl==3.1.5\nopentelemetry-api==1.45.1\nopentelemetry-exporter-http-transport==0.66b1\nopentelemetry-exporter-otlp-common==0.66b1\nopentelemetry-exporter-otlp-proto-common==1.45.1\nopentelemetry-exporter-otlp-proto-http==1.45.1\nopentelemetry-proto==1.45.1\nopentelemetry-sdk==1.45.1\nopentelemetry-semantic-conventions==0.66b1\nopenviking-sdk==0.1.15\norjson==3.13.0\normsgpack==1.12.2\npackaging==26.3\npandas==3.0.6\npathspec==1.1.1\npdfminer.six==20260107\npdfplumber==0.11.10\npillow==12.3.0\npluggy==1.6.0\nprimp==2.0.1\npropcache==0.5.4\nprotobuf-py-ext==0.1.1\nprotobuf-py==0.1.1\nprotobuf==6.33.6\npyasn1==0.6.4\npyasn1_modules==0.4.2\npycparser==3.11\npydantic-settings==2.15.0\npydantic==2.14.1\npydantic_core==2.50.1\npydub==0.25.1\npypdfium2==5.14.0\npyqwest==0.12.0\npyreadline3==3.5.6\npytest==9.1.1\npython-dateutil==2.9.0.post0\npython-dotenv==1.2.4\npython-multipart==0.0.32\npython-pptx==1.0.2\npywin32==312\nreadabilipy==0.3.0\nreferencing==0.37.0\nregex==2026.9.29\nrequests-oauthlib==2.0.0\nrequests-toolbelt==1.0.0\nrequests==2.34.2\nrich==15.0.0\nrpds-py==2026.9.1\nsetuptools==84.0.0\nsix==1.17.0\nsniffio==1.3.1\nsocksio==1.0.0\nsoupsieve==3.0.3\nsqlite-vec==0.1.9\nsse-starlette==3.3.4\nstarlette==1.8.0\nstructlog==25.5.0\nsympy==1.14.0\ntavily-python==0.8.5\ntenacity==9.1.4\ntiktoken==0.14.0\ntruststore==0.10.5\ntyping-inspection==0.4.4\ntyping_extensions==4.16.0\ntzdata==2026.5\nurllib3==2.8.0\nuuid_utils==0.17.1\nuvicorn==0.54.0\nvolcengine-python-sdk==5.0.52\nwatchfiles==1.3.0\nwcmatch==11.1\nwebencodings==0.6.1\nwebsocket-client==1.9.2\nwebsockets==16.1.1\nwrapt==2.5.0\nxlrd==2.0.2\nxlsxwriter==3.2.9\nxxhash==4.0.1\nyarl==1.25.1\nyoutube-transcript-api==1.2.4\nzstandard==0.25.0\npsutil==7.2.2\n",
+    "f5.txt": "# Separate environment: keep PyTorch and F5 dependencies out of the main runtime.\nf5-tts==1.1.21\ntorch==2.6.0\ntorchaudio==2.6.0\ntransformers==4.44.2\ngradio==6.16.0\nsounddevice>=0.5,<0.6\n",
+    "gmail.txt": "google-auth>=2.40,<3\ngoogle-auth-oauthlib>=1.2,<2\n",
+    "harness.txt": "# Published Python SDK and its exact matching Windows runtime; isolated from Jarvis.\ndeepseek-harness-sdk==0.1.5rc1\nrequests>=2.32,<3\nPyYAML==6.0.3\n",
+    "runtime.txt": "faster-whisper==1.2.1\nctranslate2==4.6.0\nhuggingface-hub>=0.24,<1\nnumpy>=1.26,<3\nrequests>=2.32,<3\npsutil>=6,<8\nwebsocket-client>=1.8,<2\nddgs==9.16.0\nscipy>=1.10,<2\nnvidia-cublas-cu12>=12.4,<13; sys_platform == 'win32'\nnvidia-cudnn-cu12>=9,<10; sys_platform == 'win32'\nnvidia-cuda-runtime-cu12>=12.4,<13; sys_platform == 'win32'\nsounddevice>=0.5,<0.6\npiper-tts==1.8.0\nkokoro-onnx==0.4.9\nPillow>=11,<13\nPyAutoGUI==0.9.54; sys_platform == 'win32'\nopencv-python>=4.10,<5; sys_platform == 'win32'\nSend2Trash>=1.8,<2\npypdf==6.20.0\npywinauto==0.6.9; sys_platform == 'win32'\npywin32==312; sys_platform == 'win32'\nwinrt-Windows.Foundation==3.2.1; sys_platform == 'win32'\nwinrt-Windows.Foundation.Collections==3.2.1; sys_platform == 'win32'\nwinrt-Windows.Media==3.2.1; sys_platform == 'win32'\nwinrt-Windows.Media.Control==3.2.1; sys_platform == 'win32'\nwinrt-Windows.Storage.Streams==3.2.1; sys_platform == 'win32'\npycaw==20260921; sys_platform == 'win32'\nplaywright==1.63.0\nPyYAML==6.0.3\n",
+    "skills.txt": "# Separate vetted utility runtime; never installs into the speech environment.\nblack==26.1.0\ncryptography>=46,<48\npymongo>=4.13,<5\nredis>=6,<8\nfeedparser==6.0.12\nMarkdown>=3.8,<4\nreportlab>=4.4,<5\nbandit>=1.8,<2\npandas>=2.3,<3\npyarrow>=21,<24\nnbformat>=5.10,<6\nnbclient>=0.10,<1\nipykernel>=6.30,<8\npytesseract==0.3.13\nmss>=10,<12\nimageio-ffmpeg>=0.6,<1\nPillow>=11,<13\nrequests>=2.32,<3\npsutil>=6,<8\nPyYAML==6.0.3\n",
+    "testing.txt": "# Optional QA environment, not required by Start Jarvis.\npytest==8.4.2\npytest-asyncio==0.26.0\n",
+    "training.txt": "# Optional, isolated .venv-training; never installed into speech/brain environments.\n# Install torch first with: pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124\ntorch==2.6.0\ntransformers==4.57.6\npeft==0.18.1\naccelerate==1.12.0\nhuggingface-hub>=0.34,<1\nsafetensors>=0.4.3\nrequests>=2.32,<3\n"
+  },
+  "lockfiles": [
+    "integrations\\hermes-agent\\package-lock.json"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-15 IST",
+  "command": "python -m jarvis.launcher --check",
+  "exit_code": 0,
+  "status": "ready",
+  "scope": "dependencies_and_configured_services",
+  "missing_count": 0,
+  "incomplete_count": 0,
+  "service_statuses": {
+    "groq": "optional_not_live_checked",
+    "docker": "available",
+    "ollama": "available",
+    "localgithub": "available"
+  },
+  "live_feature_acceptance": false
+}

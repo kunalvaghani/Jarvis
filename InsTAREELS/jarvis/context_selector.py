@@ -34,10 +34,17 @@ PROMPT = ('Select historical context relevant to the given request. Return only 
 def select_payload(goal, candidates, options):
     request=goal.get('request','') if isinstance(goal,dict) else goal
     active_app=goal.get('active_app') if isinstance(goal,dict) else None
+    # Project only bounded, scalar observations; never serialize arbitrary trees.
+    if isinstance(active_app, dict):
+        active_app = {key: str(active_app[key])[:300] for key in ('name', 'title', 'process', 'hwnd')
+                      if key in active_app and isinstance(active_app[key], (str, int))}
+    else:
+        active_app = None
     payload = {'model': options['model'], 'stream': True, 'keep_alive': '5m',
                'messages': [{'role': 'system', 'content': PROMPT}, {'role': 'user', 'content': json.dumps({
                    'request': request[:1000], **({'active_app':active_app} if active_app else {}), 'candidates': [{'id': chr(97+index), 'question': row['question'][:300],
-                     'answer': row['answer'][:400], 'keywords': row.get('keywords', [])} for index,row in enumerate(candidates[:8])]})}],
+                     'answer': row['answer'][:400], 'keywords': [word[:40] for word in row.get('keywords', [])[:12]
+                         if isinstance(word, str)]} for index,row in enumerate(candidates[:8])]})}],
                'format': {'type': 'object', 'properties': {'id': {'type': 'string',
                    'enum': ['none', 'ambiguous'] + [chr(97+index) for index,_ in enumerate(candidates[:8])]}},
                    'required': ['id'], 'additionalProperties': False},
@@ -97,6 +104,8 @@ class ContextSelector:
                 continue
             stopped = lambda: self.closed.is_set() or cancelled()
             try:
+                if not future.set_running_or_notify_cancel():
+                    continue
                 result = None if stopped() else producer(self.choose, stopped)
                 future.set_result(None if stopped() else result)
             except Exception:
@@ -108,7 +117,8 @@ class ContextSelector:
                 _, _, future = self.queue.get_nowait()
             except queue.Empty:
                 break
-            future.set_result(None)
+            if future.set_running_or_notify_cancel():
+                future.set_result(None)
             self.queue.task_done()
 
     def choose(self, goal, candidates, cancelled):

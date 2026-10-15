@@ -7,19 +7,26 @@ from pathlib import Path
 
 
 class Journal:
-    def __init__(self,path,name,target):
+    def __init__(self,path,name,target,state=None):
         self.path,self.name,self.target=path,name,target
+        self.state=state
     def save(self,row):
         temporary=self.path.with_suffix('.tmp')
         temporary.write_text(json.dumps(row)+'\n')
         temporary.replace(self.path)
     def begin(self):
         self.save({'pending':True,'operation':self.name,'target':self.target})
+        if self.state:
+            self.state.checkpoint('uncertain_external_write',action=self.name,target=self.target,
+                evidence='Durable external write intent; verification not yet committed')
     def accepted(self,result):
         # Retain the actual draft/message IDs even if the subsequent readback fails.
         self.save({'pending':True,'operation':self.name,'target':self.target,**self.identities(result)})
     def complete(self,result):
         self.save({'pending':False,'operation':self.name,'target':self.target,**self.identities(result)})
+        if self.state:
+            self.state.checkpoint('external_write_verified',action=self.name,target=self.target,
+                evidence='External write acknowledged and independently read back')
     def identities(self,result):
         drafts=self.name in {'gmail_api_draft','gmail_api_update_draft','gmail_api_delete_draft'}
         keys={'id':'draft_id' if drafts else 'message_id','draft_id':'draft_id','message_id':'message_id','ids':'message_ids'}
@@ -27,7 +34,7 @@ class Journal:
 
 
 @contextmanager
-def guard(base,name,value,args):
+def guard(base,name,value,args,state=None):
     fields={key:item for key,item in args.items() if key!='expected_sha256'}
     digest=hashlib.sha256(json.dumps([name,value,fields],sort_keys=True,ensure_ascii=False).encode()).hexdigest()
     root=Path(base)/'.jarvis-runtime/gmail-api/writes'
@@ -50,7 +57,7 @@ def guard(base,name,value,args):
         try:
             if path.exists() and json.loads(path.read_text()).get('pending'):
                 raise ValueError('An earlier identical Gmail write has an uncertain outcome. Inspect the actual draft or message before another write; no action replayed.')
-            yield Journal(path,name,value)
+            yield Journal(path,name,value,state)
         finally:
             lock.seek(0)
             if os.name=='nt':msvcrt.locking(lock.fileno(),msvcrt.LK_UNLCK,1)

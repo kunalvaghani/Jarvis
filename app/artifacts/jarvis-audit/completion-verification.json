@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "PASS",
+  "compiled_files": [
+    "app/jarvis/cognition.py",
+    "app/jarvis/screen_awareness.py",
+    "app/jarvis/task_state.py",
+    "app/jarvis/brain.py",
+    "app/jarvis/tools.py",
+    "app/jarvis/actions.py",
+    "app/jarvis/commands.py",
+    "app/jarvis/intent_catalog.py",
+    "app/jarvis/engine.py",
+    "app/jarvis/audio.py",
+    "app/jarvis/whisper_backend.py",
+    "app/main.py",
+    "app/jarvis/runtime_health.py",
+    "app/tests/test_perception_cognition_audit.py",
+    "app/tests/test_intent_direct_audit.py",
+    "app/tests/test_voice_stt_audit.py",
+    "app/tests/test_audit_completion_cases.py",
+    "app/tests/audit_contract_helpers.py",
+    "app/tests/test_audit_result_accounting.py",
+    "app/tests/test_cognition_and_routing.py",
+    "app/scripts/verification/verify_perception_cognition.py",
+    "app/scripts/verification/verify_intent_direct.py",
+    "app/scripts/verification/verify_voice_stt_audit.py",
+    "app/scripts/verification/report_perception_cognition.py",
+    "app/scripts/verification/report_intent_direct.py",
+    "app/scripts/verification/audit_catalog.py",
+    "app/scripts/verification/report_completion_02_04.py"
+  ],
+  "diff_check_exit": 0,
+  "line_ending_warning_count": 27,
+  "links_checked": 540,
+  "missing_links": [],
+  "catalog_unique_cases": 1184,
+  "scope_counts": {
+    "PASS": 93,
+    "BLOCKED": 3
+  },
+  "full_regression": {
+    "passed": 2020,
+    "blocked": 3,
+    "seconds": 322.674,
+    "warning": "One pywinauto STA COM threading-mode UserWarning in test_media_routes; no failure"
+  },
+  "accounting_regression": {
+    "passed": 31,
+    "evidence": "completion-accounting.xml"
+  },
+  "launcher_status": "ready",
+  "soak": {
+    "passed": true,
+    "cycles": 125,
+    "workers_alive_after_stop": false
+  },
+  "source_hashes_current": true
+}

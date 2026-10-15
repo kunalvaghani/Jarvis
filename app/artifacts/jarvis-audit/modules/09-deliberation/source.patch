@@ -1,0 +1,262 @@
+--- module09-pre/jarvis/deliberation.py
++++ jarvis/deliberation.py
+@@ -19,2 +19,3 @@
+ import json
++import math
+ import re
+@@ -22,2 +23,3 @@
+ import threading
++import uuid
+ from datetime import datetime, timezone
+@@ -54,2 +56,42 @@
+ 
++EXPLICIT_APPROVAL = re.compile(APPROVE.pattern + r"(?:[,.! ]*(?:please|thanks|thank you))?[.! ]*\Z", re.I)
++RISKY_AMBIGUITY = re.compile(r"\b(?:maybe|perhaps|possibly|not sure|might|do not|don't|never)\b", re.I)
++
++
++def ledger_text(value, limit=300):
++    """Keep readback local and omit recognized private/credential text."""
++    from .cloud_policy import SECRET, PRIVATE, PRIVATE_APP
++    text = str(value or '')[:16384].encode('utf-8', errors='replace').decode('utf-8')
++    return '[redacted]' if any(p.search(text) for p in (SECRET, PRIVATE, PRIVATE_APP)) else text[:limit]
++
++
++def valid_opinion(value):
++    if not isinstance(value, dict):
++        return False
++    required = {'understanding', 'recommendation', 'reasoning', 'question', 'confidence', 'agrees_with_user', 'alternatives', 'claims'}
++    if not required <= set(value) or set(value) - required - {'model_used'}:
++        return False
++    if 'model_used' in value and (not isinstance(value['model_used'], str) or not 1 <= len(value['model_used']) <= 150):
++        return False  # Worker envelope metadata is advisory and never grants authority.
++    for key in ('understanding', 'recommendation', 'reasoning', 'question'):
++        if not isinstance(value.get(key, ''), str) or len(value.get(key, '')) > 4000:
++            return False
++    number = value.get('confidence', .5)
++    if type(number) not in (int, float) or not math.isfinite(number) or not 0 <= number <= 1:
++        return False
++    if type(value.get('agrees_with_user', True)) is not bool:
++        return False
++    for key, allowed, maximum in [('alternatives', {'approach', 'pros', 'cons'}, 4),
++                                  ('claims', {'text', 'type'}, 6)]:
++        rows = value.get(key, [])
++        if not isinstance(rows, list) or len(rows) > maximum:
++            return False
++        for row in rows:
++            if not isinstance(row, dict) or set(row) != allowed or any(not isinstance(v, str) or len(v) > 4000 for v in row.values()):
++                return False
++            if key == 'claims' and row.get('type') not in {'fact', 'assumption', 'prediction', 'preference'}:
++                return False
++    return sum(len(value.get(k, '')) for k in ('understanding', 'recommendation', 'reasoning', 'question')) + sum(len(v) for key in ('alternatives','claims') for row in value[key] for v in row.values()) <= 65536
++
++
+ class Deliberation:
+@@ -59,3 +101,16 @@
+         self.actions = actions
+-        self.options = options or {}
++        self.options = {} if options is None else dict(options)
++        if type(self.options.get('enabled', True)) is not bool:
++            raise ValueError('Deliberation enabled must be boolean.')
++        if self.options.get('assertiveness', 'when_it_matters') not in {'when_it_matters', 'always', 'on_request'}:
++            raise ValueError('Invalid deliberation assertiveness.')
++        if self.options.get('ask_min_risk', 'high') not in {'low', 'moderate', 'high'}:
++            raise ValueError('Invalid deliberation risk threshold.')
++        for key, default, lower, upper in [('voice_confidence_threshold', .6, 0, 1), ('timeout_seconds', 20, .1, 120),
++                                          ('max_alternatives', 3, 1, 10), ('ledger_max', 500, 1, 10000)]:
++            value = self.options.get(key, default)
++            if type(value) not in (int, float) or not math.isfinite(value) or not lower <= value <= upper:
++                raise ValueError('Invalid deliberation setting: ' + key)
++            if key in {'max_alternatives', 'ledger_max'} and type(value) is not int:
++                raise ValueError('Deliberation count must be integer: ' + key)
+         self.enabled = self.options.get("enabled", True)
+@@ -69,4 +124,4 @@
+         self.ledger_path = base / ".jarvis-runtime" / "deliberation" / "decisions.jsonl"
+-        self._by_id = {}
+         self.lock = threading.RLock()
++        self.last_ledger_error = None
+ 
+@@ -85,3 +140,3 @@
+         except Exception:
+-            reversible, external = True, False
++            reversible, external = False, False
+         if external:
+@@ -130,3 +185,3 @@
+         """Blend the model's self-estimate with learned reliability and uncertainty penalties."""
+-        value = model_confidence if isinstance(model_confidence, (int, float)) else 0.5
++        value = model_confidence if type(model_confidence) in (int, float) and math.isfinite(model_confidence) else 0.5
+         value = max(0.0, min(1.0, float(value)))
+@@ -153,2 +208,6 @@
+         """Return a structured opinion. Uses the local model; falls back to a heuristic."""
++        if cancelled():
++            raise ValueError('Deliberation cancelled.')
++        if not isinstance(goal, str) or len(goal) > 16384:
++            raise ValueError('Deliberation goal must be text of at most 16384 characters.')
+         risk = self.classify_risk(command)
+@@ -156,2 +215,4 @@
+         model = self._model_opinion(goal, context, cancelled, exclude) if self.enabled else None
++        if cancelled():
++            raise ValueError('Deliberation cancelled.')
+         if model is None:
+@@ -184,16 +245,7 @@
+             data["rejected_approaches"] = list(exclude)[:5]
+-        prior = getattr(brain, "timeout_seconds", None)
+         try:
+-            if isinstance(prior, (int, float)) and prior:
+-                brain.timeout_seconds = min(prior, self.timeout_seconds)
+-            result = brain.request("deliberate", cancelled, **data)
++            result = brain.request("deliberate", cancelled, _timeout_seconds=self.timeout_seconds, **data)
+         except Exception:
+             return None
+-        finally:
+-            if isinstance(prior, (int, float)):
+-                try:
+-                    brain.timeout_seconds = prior
+-                except Exception:
+-                    pass
+-        return result if isinstance(result, dict) else None
++        return result if valid_opinion(result) else None
+ 
+@@ -233,2 +285,5 @@
+         risk, confidence = opinion["risk"], opinion["confidence"]
++        if risk == 'high' and RISKY_AMBIGUITY.search(opinion.get('goal', '')):
++            return {'propose': True, 'note': False, 'chosen': '', 'risk': risk, 'confidence': confidence,
++                    'message': 'Please clarify the intended action and exact scope before I plan any consequential changes.'}
+         if risk == 'high' and BULK_DESTRUCTIVE.search(opinion.get('goal','')):
+@@ -280,3 +335,3 @@
+             return {"verdict": "refine", "note": stripped}
+-        if APPROVE.match(stripped):
++        if EXPLICIT_APPROVAL.fullmatch(stripped):
+             return {"verdict": "approve", "note": stripped}
+@@ -291,10 +346,10 @@
+         entry = {
+-            "id": "dec_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%f"),
++            "id": "dec_" + uuid.uuid4().hex,
+             "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+-            "goal": opinion.get("goal", "")[:300],
+-            "recommendation": opinion.get("recommendation", "")[:300],
+-            "alternatives": [a.get("approach", "")[:120] for a in opinion.get("alternatives", [])],
+-            "confidence": opinion.get("confidence"),
++            "goal": ledger_text(opinion.get("goal", "")),
++            "recommendation": ledger_text(opinion.get("recommendation", "")),
++            "alternatives": [ledger_text(a.get("approach", ""), 120) for a in opinion.get("alternatives", [])],
++            "confidence": opinion.get("confidence") if type(opinion.get('confidence')) in (int,float) and math.isfinite(opinion['confidence']) else None,
+             "risk": opinion.get("risk"),
+-            "chosen": (chosen or "")[:300],
++            "chosen": ledger_text(chosen),
+             "approval": approval,
+@@ -304,3 +359,2 @@
+         self._append(entry)
+-        self._by_id[entry["id"]] = entry
+         return entry["id"]
+@@ -311,3 +365,3 @@
+         self._append({"id": decision_id, "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+-                      "outcome": {"ok": bool(ok), "detail": str(detail)[:300]}})
++                      "outcome": {"ok": bool(ok), "detail": ledger_text(detail)}})
+ 
+@@ -320,8 +374,9 @@
+             self.ledger_path.parent.mkdir(parents=True, exist_ok=True)
+-            lines = []
++            from collections import deque
++            lines = deque(maxlen=self.ledger_max)
+             if self.ledger_path.is_file():
+-                lines = self.ledger_path.read_text(encoding="utf-8").splitlines()
+-            lines.append(json.dumps(entry, ensure_ascii=False))
+-            if len(lines) > self.ledger_max:
+-                lines = lines[-self.ledger_max:]
++                with self.ledger_path.open(encoding='utf-8') as existing:
++                    for line in existing:
++                        lines.append(line.rstrip('\n'))
++            lines.append(json.dumps(entry, ensure_ascii=True, allow_nan=False))
+             tmp = self.ledger_path.with_suffix(".jsonl.tmp")
+@@ -329,4 +384,5 @@
+             tmp.replace(self.ledger_path)
+-        except OSError:
+-            pass
++            self.last_ledger_error = None
++        except (OSError, ValueError) as exc:
++            self.last_ledger_error = type(exc).__name__
+ 
+--- module09-pre/jarvis/actions.py
++++ jarvis/actions.py
+@@ -4,2 +4,3 @@
+ import json
++import re
+ import os
+@@ -580,2 +581,7 @@
+         goal, opinion = pending['goal'], pending['opinion']
++        if verdict == 'reject' and re.fullmatch(r"(?:no|nope|nah|stop|cancel(?: that)?|do not|don't)[.! ]*", (command.value or '').strip(), re.I):
++            self.pending_opinion = None
++            engine.record_outcome(pending.get('decision_id'), False, 'user declined')
++            self.report('spoken_reply', 'Cancelled. No action was taken.')
++            return True
+         if verdict == 'approve':
+@@ -643,2 +649,4 @@
+             self._agreed_approach = None
++            if cancelled():
++                raise ValueError('Deliberation cancelled.')
+             from .deliberation import BULK_DESTRUCTIVE
+@@ -953,3 +961,3 @@
+         try:
+-            approved = not cancelled() and self.approval_handler(kind, detail, cancelled) and not cancelled()
++            approved = not cancelled() and self.approval_handler(kind, detail, cancelled) is True and not cancelled()
+         finally:
+--- module09-pre/jarvis/brain.py
++++ jarvis/brain.py
+@@ -373,2 +373,7 @@
+     def _request_once(self, operation, cancelled, **data):
++        request_timeout = data.pop('_timeout_seconds', None)
++        if request_timeout is not None:
++            import math
++            if type(request_timeout) not in (int, float) or not math.isfinite(request_timeout) or not .1 <= request_timeout <= 120:
++                raise ValueError('Invalid per-request inference timeout.')
+         callback = data.pop('_on_code', None)
+@@ -419,2 +424,4 @@
+         seconds = idle + 30 if coding else getattr(self, 'timeout_seconds', planning_worker_timeout(self.options))
++        if request_timeout is not None:
++            seconds = min(seconds, request_timeout)
+         if operation=='tool_text' and data.get('tool')=='test_writer' and data.get('development') is True:
+--- module09-pre/jarvis/island_desk.py
++++ jarvis/island_desk.py
+@@ -5,2 +5,3 @@
+ import time
++import threading
+ import tkinter as tk
+@@ -27,11 +28,13 @@
+         self.done = False
++        self.lock = threading.Lock()
+ 
+     def decide(self, approved, now=None):
+-        if self.done:
+-            return False
+-        now = time.monotonic() if now is None else now
+-        self.done = True
+-        self.answer['approved'] = bool(approved and not self.cancelled() and now-self.created < 180)
+-        self.ready.set()
+-        return self.answer['approved']
++        with self.lock:
++            if self.done:
++                return False
++            now = time.monotonic() if now is None else now
++            self.done = True
++            self.answer['approved'] = approved is True and not self.cancelled() and 0 <= now-self.created < 180
++            self.ready.set()
++            return self.answer['approved']
+ 
+--- module09-pre/config/runtime_manifest.json
++++ config/runtime_manifest.json
+@@ -797,2 +797,3 @@
+   "deliberation": {
++    "audit_2026_10_15": "Prompt09: exact unqualified proposal approval; bare refusal cancels; boolean-only per-action consent; validated finite config/opinions; risky ambiguity pauses planning; per-request brain timeout; UUID/redacted rotating ledger with categorical write diagnostics. Isolated catalog, full-regression and readiness evidence: artifacts/jarvis-audit/modules/09-deliberation/. Unknown-program mandatory research gate absent; no live account/GUI certification.",
+     "configuration": "deliberation.enabled/assertiveness/voice_confidence_threshold/ask_min_risk/max_alternatives/ledger_max/timeout_seconds",
+--- module09-pre/scripts/verification/audit_catalog.py
++++ scripts/verification/audit_catalog.py
+@@ -73,3 +73,3 @@
+             state='FAIL' if node.find('failure') is not None or node.find('error') is not None else ('SKIPPED' if node.find('skipped') is not None else 'PASS')
+-            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit')):
++            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit')):
+                 skipped=node.find('skipped')
+@@ -79,3 +79,3 @@
+             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
+-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_audit_completion_cases')):
++            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_audit_completion_cases')):
+                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])

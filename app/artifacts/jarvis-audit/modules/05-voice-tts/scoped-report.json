@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "LIVE ACCEPTANCE BLOCKED",
+  "catalog_counts": {
+    "PASS": 30,
+    "FAIL": 0,
+    "BLOCKED": 2,
+    "SKIPPED": 0,
+    "NOT RUN": 0
+  },
+  "targeted": {
+    "passed": 161,
+    "blocked": 2,
+    "seconds": 8.436
+  },
+  "full": {
+    "passed": 2073,
+    "blocked": 5,
+    "seconds": 319.665
+  },
+  "native_gpu": "live-worker.json",
+  "native_cpu": "live-cpu-fallback.json",
+  "readiness": "ready",
+  "next_case": "JRV-05-004"
+}

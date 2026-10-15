@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="16" time="6.077" timestamp="2026-10-15T00:41:39.796977+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_001_wake_and_weather" time="1.027" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_002_bounded_sensor_retention" time="0.127" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_003_urgent_eviction" time="0.005" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_005_back_to_back" time="0.916" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_006_window_replacement" time="0.008"><failure message="assert False&#10; +  where False = all(&lt;generator object test_JRV_02_006_window_replacement.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000252FFBE4F90&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_006_window_replace0')
+
+    def test_JRV_02_006_window_replacement(tmp_path):
+        mind = mind_at(tmp_path)
+        mind.perceive_window('Private old window')
+        mind.tick()
+        mind.perceive_window('New window')
+        mind.tick()
+        assert mind.working_memory()['focus'] == 'New window'
+&gt;       assert all(p.content != 'Private old window' for p in mind.attention)
+E       assert False
+E        +  where False = all(&lt;generator object test_JRV_02_006_window_replacement.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000252FFBE4F90&gt;)
+
+tests\test_perception_cognition_audit.py:73: AssertionError</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_007_real_tick_jitter" time="2.186" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_012_hostile_sensor_stays_observation" time="0.004" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_017_five_way_twenty_rounds" time="0.012" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_018_stop_blocks_repair" time="0.010" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_022_unicode_roundtrip" time="0.009" /><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_029_invalid_config[options0]" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config0')
+options = {'cycle_hz': nan}
+
+    @pytest.mark.parametrize('options', [dict(cycle_hz=float('nan')), dict(cycle_hz=True),
+        dict(cycle_hz='unknown'), dict(enabled='false')])
+    def test_JRV_02_029_invalid_config(tmp_path, options):
+&gt;       with pytest.raises(ValueError, match='cognition'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_perception_cognition_audit.py:140: Failed</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_029_invalid_config[options1]" time="0.005"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config1')
+options = {'cycle_hz': True}
+
+    @pytest.mark.parametrize('options', [dict(cycle_hz=float('nan')), dict(cycle_hz=True),
+        dict(cycle_hz='unknown'), dict(enabled='false')])
+    def test_JRV_02_029_invalid_config(tmp_path, options):
+&gt;       with pytest.raises(ValueError, match='cognition'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_perception_cognition_audit.py:140: Failed</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_029_invalid_config[options2]" time="0.006"><failure message="AssertionError: Regex pattern did not match.&#10; Regex: 'cognition'&#10; Input: &quot;could not convert string to float: 'unknown'&quot;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config2')
+options = {'cycle_hz': 'unknown'}
+
+    @pytest.mark.parametrize('options', [dict(cycle_hz=float('nan')), dict(cycle_hz=True),
+        dict(cycle_hz='unknown'), dict(enabled='false')])
+    def test_JRV_02_029_invalid_config(tmp_path, options):
+        with pytest.raises(ValueError, match='cognition'):
+&gt;           mind_at(tmp_path, **options)
+
+tests\test_perception_cognition_audit.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_perception_cognition_audit.py:18: in mind_at
+    return Cognition(actions, options)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.cognition.Cognition object at 0x00000252FFBCE830&gt;
+actions = namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config2'), current_item=None, whatsapp_prompts=[], pending_tasks=[], session_style={}, approvals_waiting=0, memory=None)
+options = {'cycle_hz': 'unknown'}
+
+    def __init__(self, actions, options=None):
+        self.actions = actions
+        self.options = options or {}
+        self.enabled = self.options.get("enabled", True)
+        self.lock = threading.RLock()
+        self.percepts = deque(maxlen=200)
+        self.inbox = deque(maxlen=200)
+        self.attention = []
+        self.workspace = {"goal": "", "focus": "", "active_task": "", "pending": "", "style": [], "last_action": ""}
+        self.activity = {name: 0. for name in MODULES}  # When each module last worked (for the live view).
+        self.latency = {name: 0. for name in MODULES}
+        self.counts = {name: 0 for name in MODULES}
+        self.last_prediction = None
+        self.last_outcome = None
+        self.lessons = deque(maxlen=50)
+        self.cycles, self.cycle_started = 0, time.time()
+        self._cycle_clock = time.monotonic()
+        self.stop = threading.Event()
+        self.thread = None
+        base = Path(getattr(actions, "base", "."))
+        self.stats_path = base / ".jarvis-runtime" / "cognition" / "procedures.json"
+        self.state_path = base / ".jarvis-runtime" / "cognition" / "state.json"
+        self.stats = self._load_stats()
+&gt;       self.hz = float(self.options.get("cycle_hz", 4))
+E       ValueError: could not convert string to float: 'unknown'
+
+jarvis\cognition.py:136: ValueError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config2')
+options = {'cycle_hz': 'unknown'}
+
+    @pytest.mark.parametrize('options', [dict(cycle_hz=float('nan')), dict(cycle_hz=True),
+        dict(cycle_hz='unknown'), dict(enabled='false')])
+    def test_JRV_02_029_invalid_config(tmp_path, options):
+&gt;       with pytest.raises(ValueError, match='cognition'):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'cognition'
+E        Input: "could not convert string to float: 'unknown'"
+
+tests\test_perception_cognition_audit.py:140: AssertionError</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_029_invalid_config[options3]" time="0.006"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_JRV_02_029_invalid_config3')
+options = {'enabled': 'false'}
+
+    @pytest.mark.parametrize('options', [dict(cycle_hz=float('nan')), dict(cycle_hz=True),
+        dict(cycle_hz='unknown'), dict(enabled='false')])
+    def test_JRV_02_029_invalid_config(tmp_path, options):
+&gt;       with pytest.raises(ValueError, match='cognition'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_perception_cognition_audit.py:140: Failed</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_tick_error_is_visible_and_private" time="0.619"><failure message="KeyError: 'tick_errors'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_tick_error_is_visible_and0')
+
+    def test_tick_error_is_visible_and_private(tmp_path):
+        mind = mind_at(tmp_path)
+        mind.tick = Mock(side_effect=RuntimeError('PRIVATE_FAKE_SECRET'))
+        mind.start()
+        try:
+            time.sleep(.6)
+            snapshot = mind.snapshot()
+&gt;           assert snapshot['tick_errors'] &gt;= 1
+E           KeyError: 'tick_errors'
+
+tests\test_perception_cognition_audit.py:151: KeyError</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_pending_opinion_is_not_success" time="0.013"><failure message="assert 1 == 0">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-118/test_pending_opinion_is_not_su0')
+
+    def test_pending_opinion_is_not_success(tmp_path):
+        mind = mind_at(tmp_path)
+        def proposal():
+            mind.actions.pending_opinion = {'goal': 'delete files'}
+            return 'I recommend reviewing the files first. Go ahead?'
+        assert mind.act(Command('task', 'delete files'), proposal).endswith('Go ahead?')
+&gt;       assert mind.procedure_stats('task')['attempts'] == 0
+E       assert 1 == 0
+
+tests\test_perception_cognition_audit.py:165: AssertionError</failure></testcase></testsuite></testsuites>

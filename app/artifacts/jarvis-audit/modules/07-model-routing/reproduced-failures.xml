@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="12" time="0.865" timestamp="2026-10-15T12:17:34.147559+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_model_routing_audit" name="test_known_key_formats_never_qualify_as_public[ghp_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.002"><failure message="AssertionError: assert 'PUBLIC' == 'SENSITIVE'&#10;  &#10;  - SENSITIVE&#10;  + PUBLIC">tests\test_model_routing_audit.py:23: in test_known_key_formats_never_qualify_as_public
+    assert classify({'question':text})['privacy']=='SENSITIVE'
+E   AssertionError: assert 'PUBLIC' == 'SENSITIVE'
+E     
+E     - SENSITIVE
+E     + PUBLIC</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_known_key_formats_never_qualify_as_public[github_pat_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.001"><failure message="AssertionError: assert 'PUBLIC' == 'SENSITIVE'&#10;  &#10;  - SENSITIVE&#10;  + PUBLIC">tests\test_model_routing_audit.py:23: in test_known_key_formats_never_qualify_as_public
+    assert classify({'question':text})['privacy']=='SENSITIVE'
+E   AssertionError: assert 'PUBLIC' == 'SENSITIVE'
+E     
+E     - SENSITIVE
+E     + PUBLIC</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_known_key_formats_never_qualify_as_public[AIzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.001"><failure message="AssertionError: assert 'PUBLIC' == 'SENSITIVE'&#10;  &#10;  - SENSITIVE&#10;  + PUBLIC">tests\test_model_routing_audit.py:23: in test_known_key_formats_never_qualify_as_public
+    assert classify({'question':text})['privacy']=='SENSITIVE'
+E   AssertionError: assert 'PUBLIC' == 'SENSITIVE'
+E     
+E     - SENSITIVE
+E     + PUBLIC</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_known_key_formats_never_qualify_as_public[AKIAAAAAAAAAAAAAAAAA]" time="0.001"><failure message="AssertionError: assert 'PUBLIC' == 'SENSITIVE'&#10;  &#10;  - SENSITIVE&#10;  + PUBLIC">tests\test_model_routing_audit.py:23: in test_known_key_formats_never_qualify_as_public
+    assert classify({'question':text})['privacy']=='SENSITIVE'
+E   AssertionError: assert 'PUBLIC' == 'SENSITIVE'
+E     
+E     - SENSITIVE
+E     + PUBLIC</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_known_key_formats_never_qualify_as_public[xoxb-123456789012-123456789012-FAKESYNTHETIC]" time="0.001"><failure message="AssertionError: assert 'PUBLIC' == 'SENSITIVE'&#10;  &#10;  - SENSITIVE&#10;  + PUBLIC">tests\test_model_routing_audit.py:23: in test_known_key_formats_never_qualify_as_public
+    assert classify({'question':text})['privacy']=='SENSITIVE'
+E   AssertionError: assert 'PUBLIC' == 'SENSITIVE'
+E     
+E     - SENSITIVE
+E     + PUBLIC</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_exhausted_quota_does_not_wait_for_provider_metadata" time="0.027"><failure message="AssertionError: Expected 'ready' to not have been called. Called 1 times.&#10;Calls: [call(wait_seconds=8)].">tests\test_model_routing_audit.py:33: in test_exhausted_quota_does_not_wait_for_provider_metadata
+    adapter.ready.assert_not_called()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:880: in assert_not_called
+    raise AssertionError(msg)
+E   AssertionError: Expected 'ready' to not have been called. Called 1 times.
+E   Calls: [call(wait_seconds=8)].</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_http_header_case_does_not_change_backoff[Retry-After]" time="0.039"><failure message="AssertionError: assert 'NORMAL' == 'UNKNOWN'&#10;  &#10;  - UNKNOWN&#10;  + NORMAL">tests\test_model_routing_audit.py:48: in test_http_header_case_does_not_change_backoff
+    assert guard.snapshot(fresh=True)['state']=='UNKNOWN'
+E   AssertionError: assert 'NORMAL' == 'UNKNOWN'
+E     
+E     - UNKNOWN
+E     + NORMAL</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_http_header_case_does_not_change_backoff[RETRY-AFTER]" time="0.032"><failure message="AssertionError: assert 'NORMAL' == 'UNKNOWN'&#10;  &#10;  - UNKNOWN&#10;  + NORMAL">tests\test_model_routing_audit.py:48: in test_http_header_case_does_not_change_backoff
+    assert guard.snapshot(fresh=True)['state']=='UNKNOWN'
+E   AssertionError: assert 'NORMAL' == 'UNKNOWN'
+E     
+E     - UNKNOWN
+E     + NORMAL</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_http_header_case_does_not_change_backoff[retry-after]" time="0.034" /><testcase classname="tests.test_model_routing_audit" name="test_invalid_usage_cannot_refund_a_reservation[usage0]" time="0.024"><failure message="assert 0 == 1000">tests\test_model_routing_audit.py:59: in test_invalid_usage_cannot_refund_a_reservation
+    assert guard.snapshot(fresh=True)['used']['daily_tokens']==1000
+E   assert 0 == 1000</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_invalid_usage_cannot_refund_a_reservation[usage1]" time="0.028"><failure message="assert 1 == 1000">tests\test_model_routing_audit.py:59: in test_invalid_usage_cannot_refund_a_reservation
+    assert guard.snapshot(fresh=True)['used']['daily_tokens']==1000
+E   assert 1 == 1000</failure></testcase><testcase classname="tests.test_model_routing_audit" name="test_route_metadata_does_not_persist_untrusted_model_text" time="0.023"><failure message="assert 'PRIVATE_SENTINEL' not in '{&quot;at&quot;: 1792...00342633575}'&#10;  &#10;  'PRIVATE_SENTINEL' is contained here:&#10;    &quot;password=PRIVATE_SENTINEL&quot;, &quot;privacy&quot;: &quot;INTERNAL&quot;, &quot;complexity&quot;: &quot;unknown&quot;, &quot;reason&quot;: &quot;private_context_or_action&quot;, &quot;routing_ms&quot;: 0.035400000342633575}&#10;  ?           ++++++++++++++++">tests\test_model_routing_audit.py:67: in test_route_metadata_does_not_persist_untrusted_model_text
+    assert 'PRIVATE_SENTINEL' not in (tmp_path/'.jarvis-runtime/cloud/last-route.json').read_text()
+E   assert 'PRIVATE_SENTINEL' not in '{"at": 1792...00342633575}'
+E     
+E     'PRIVATE_SENTINEL' is contained here:
+E       "password=PRIVATE_SENTINEL", "privacy": "INTERNAL", "complexity": "unknown", "reason": "private_context_or_action", "routing_ms": 0.035400000342633575}
+E     ?           ++++++++++++++++</failure></testcase></testsuite></testsuites>

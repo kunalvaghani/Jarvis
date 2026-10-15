@@ -1,0 +1,86 @@
+{
+  "scope": "Scoped Prompt11 files relative to saved dirty preimages, not total git diff; artifacts and shared catalog reports regenerated. No commit/deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/capabilities.py",
+      "sha256": "cd687f05b139202e795237ac3ffe22bfd3d671eb7b8a2c474deccaa774cd92cb"
+    },
+    {
+      "path": "app/jarvis/skill_memory.py",
+      "sha256": "5485e762c21d90374c7b8fdaf158530ba2384eeb6940b637a070f524e1e95b96"
+    },
+    {
+      "path": "app/jarvis/hermes_skills.py",
+      "sha256": "7b442bccdc58e3096a28b2a8cb0a4138cf54574faee92e4bb80f7b5b08ce1e9d"
+    },
+    {
+      "path": "app/jarvis/utility_profiles.py",
+      "sha256": "432970ea1ce07a84abf99dcb0ae46fa3f12b8d287964814447f11b45e073d96b"
+    },
+    {
+      "path": "app/jarvis/agent_tools.py",
+      "sha256": "bcf943abbe375f0aa1723fec53576baa62c6f5aec76130861251e6ed645a7bad"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "42b006c44fae2a932cf8c03faf431383097f1928a74165d0b5fdcc7d38f963ee"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "ee5235560a29e3b28d16c445ce12a40f9401237e39749318d13f5b7592425667"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "7db33d4c47b262791bf4bb69c89d1274fd00d76efd8b8f75428ad18aea588e54"
+    },
+    {
+      "path": "app/tests/test_skill_selection_audit.py",
+      "sha256": "a6ad80582cb91424939d53e3b48de443a6468d89038ec0fa412e0fed41f8562b"
+    },
+    {
+      "path": "app/scripts/verification/verify_skill_selection_audit.py",
+      "sha256": "baae5f92388b61607224899f3378453d0b3e715d02d9970cb49c61b1ece6e205"
+    },
+    {
+      "path": "app/scripts/verification/report_skill_selection_audit.py",
+      "sha256": "41643a4d3f258e545f86b34a3a5bccd3056c97372789af56ef05aa4fb0527c50"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "083f16c5b51416e1c4b4322ed71f11581d941228170ea20070c5ad85b6f289f4"
+    },
+    {
+      "path": "app/docs/skills-and-learning.md",
+      "sha256": "73889bcc66aa58b9d281f3cc065438800f317a11996d91ad4de406e398dd19d6"
+    },
+    {
+      "path": "app/docs/runtime-capabilities.md",
+      "sha256": "d8f319826993a6a0c9a11dec391cd66135a7822f215a06ddd03c600119c8225a"
+    },
+    {
+      "path": "app/docs/hermes-skills-and-comparison.md",
+      "sha256": "11d0a1887c111cf6e426914f6479c3a8294daba4bef098eebf110b02e96ac556"
+    },
+    {
+      "path": "app/docs/utility-skills.md",
+      "sha256": "6e129e78eef74d8c4a252d59c1fe639370ce11bc3de7b72f47368647cef644b9"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "b39b9cc8c96a8e12b70b0546976bfdee3416a27b806dbc61e068101411cab6ce"
+    },
+    {
+      "path": "README.md",
+      "sha256": "23a9da0fa1b0d4b969b4d7b97d043c51e27aa7088990e18c6682f1456521414c"
+    }
+  ],
+  "artifact_directory": "app/artifacts/jarvis-audit/modules/11-skill-selection",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "summary.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "remaining-case-ids.txt"
+  ]
+}

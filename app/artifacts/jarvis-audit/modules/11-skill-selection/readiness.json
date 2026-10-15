@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-15 IST",
+  "command": ".venv/Scripts/python.exe -m jarvis.launcher --check",
+  "status": "ready",
+  "services": {
+    "groq": "optional_not_live_checked",
+    "docker": "available",
+    "ollama": "available",
+    "localgithub": "available"
+  },
+  "exit_code": 0
+}

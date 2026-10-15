@@ -105,6 +105,9 @@ class QuotaGuardian:
     def reserve(self, model, amount, request_id=None, input_tokens=None, output_tokens=None):
         self.cache_until=0
         if type(amount) is not int or amount<1: raise QuotaDenied('invalid_token_estimate')
+        if any(value is not None and (type(value) is not int or not 0 <= value <= amount)
+               for value in (input_tokens,output_tokens)):
+            raise QuotaDenied('invalid_token_estimate')
         try:
             with self.connect() as db:
                 db.execute('BEGIN IMMEDIATE')
@@ -127,7 +130,14 @@ class QuotaGuardian:
         usage=usage if isinstance(usage,dict) else {}
         safe={k:usage[k] for k in ('prompt_tokens','completion_tokens','total_tokens') if type(usage.get(k)) is int and usage[k]>=0}
         exact=safe.get('total_tokens')
+        # Missing, zero or malformed metering must not refund submitted work.
+        # A successful text completion consumes positive tokens; a zero report
+        # is conservatively uncertain even if the provider did not bill it.
+        if exact == 0 or any(k in usage and k not in safe for k in ('prompt_tokens','completion_tokens','total_tokens')):
+            exact=None
         if exact is not None and exact < safe.get('prompt_tokens',0)+safe.get('completion_tokens',0): exact=None
+        from .cloud_policy import SECRET
+        response_id=response_id if isinstance(response_id,str) and re.fullmatch(r'[A-Za-z0-9_-]{1,100}',response_id) and not SECRET.search(response_id) else ''
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             row=db.execute('SELECT * FROM calls WHERE id=?',(identifier,)).fetchone()
