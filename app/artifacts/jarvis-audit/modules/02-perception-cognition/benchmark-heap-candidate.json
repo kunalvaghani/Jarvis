@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "200 synthetic percepts; 100 ticks per warm sample, periodic workspace refresh; 20 alternating warm samples/build and 5 fresh-process cold samples/build. No model, network, GUI or GPU allocations. TTFT/audio N/A. RSS sampled, not peak.",
+  "source_sha256": {
+    "before": "f4e15d3321f45cfdad5a0a337b4b3e2392db8c826f8131fefe13a69b23da7864",
+    "after": "aa6a3bc04eeb0641760411a424f3677ad3346b3865a5ba702218ca568c45a885"
+  },
+  "before_warm_tick": {
+    "p50_ms": 0.022998499998720945,
+    "p95_ms": 0.023487999987992225,
+    "samples": 20
+  },
+  "before_cold_startup": {
+    "p50_ms": 807.6787999998487,
+    "p95_ms": 819.2491000008886,
+    "samples": 5
+  },
+  "after_warm_tick": {
+    "p50_ms": 0.02629600001455401,
+    "p95_ms": 0.027675999990606215,
+    "samples": 20
+  },
+  "after_cold_startup": {
+    "p50_ms": 793.8070999989577,
+    "p95_ms": 808.1404000004113,
+    "samples": 5
+  }
+}

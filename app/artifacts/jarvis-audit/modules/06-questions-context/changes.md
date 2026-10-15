@@ -1,0 +1,7 @@
+# Changes and keep/revert decisions — 2026-10-15 IST
+
+Keep the scoped boundary changes: (1) local/private context cannot escalate to search, history is never concatenated into search queries; (2) malformed/empty drafts and empty/unsafe evidence return honest gaps; nonexistent source numbers are refused; (3) cancelled queued selector work is skipped using Future's running transition; (4) selector keyword/app fields have fixed budgets; (5) question calls use cancellable serialized admission, pre-dispatch finite configuration validation, bounded JSON snapshots, response queues and output envelopes; (6) exception text does not enter parent-facing errors and runtime request traces use UUID/status/error type only; (7) recent-question recall phrase recognized.
+
+No model/voice settings, service names, launch/stop/bootstrap/recovery APIs, permissions, task execution, dependencies or external-action policy changed. No new service. Direct utility facts still use existing EverydayRuntime. Feature flag not needed for fail-closed validation fixes; selector retains its existing enabled flag.
+
+Matched benchmark retains the fixed projection budget: less oversized payload/time/allocation and unchanged selector identities/schema. No additional reranker/model, embedding index, batching service or speculative result cache introduced. Larger semantic changes lack a correctness baseline and are deferred. No A/B claim for native model/first-audio latency.

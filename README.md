@@ -1,5 +1,111 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt11-audit -->
+**Skill-selection audit — 2026-10-15 IST:** Bounded guide validation and provenance,
+observed procedure reliability and reused description tokens retain existing tool,
+policy and approval gates. Census:10 bundled/210 hash-verified Hermes/23 DeerFlow
+guides. Utility validation is stale:0 offered; historical activation counts below
+are dated results. Arbitrary PDF editing remains blocked.
+[Executed assertions, measurements and limits](app/artifacts/jarvis-audit/modules/11-skill-selection/inventory.md).
+Verification: **2,355 regression PASS / 9 blocked skips**;
+**157 targeted PASS / 1 blocked skip**; Prompt11 **31 PASS / 1 BLOCKED**,
+launcher **ready**. These fixtures do not certify live production acceptance.
+<!-- /prompt11-audit -->
+
+[DAG/cache audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/10-dag-planning/inventory.md)
+adds serialized effects, bound read restoration, task-owned checkpoints,
+malformed-cache fallback, credential-template screening and content-free errors.
+Warm source fingerprints reuse verified digests; cold-cache cost and live
+acceptance remain separate from fixture success. Existing mail approvals remain
+on the specialized path.
+Verification: **2,314 regression PASS / eight existing blocked skips**, **180
+targeted PASS / one existing blocked skip**; module10 **32/32 fixture PASS**,
+launcher **ready**. Live production acceptance remains open.
+
+[Risk/approval audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/09-deliberation/inventory.md)
+adds strict consent and model/configuration validation, cancellation of declined
+proposals, risky-ambiguity clarification, independent inference deadlines and
+redacted Unicode-safe ledger records. Mandatory unfamiliar-program research and
+live consent acceptance remain open; measured fixture results are in the report.
+Verification: **2,271 regression PASS / eight explicit blocked skips**, **204
+targeted PASS / one blocked skip**; module09 **31 PASS / one BLOCKED**, launcher
+**ready**. Whole-system production acceptance remains open.
+
+[GPU/resource audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md)
+adds bounded lease-state validation, failure cleanup, unchanged-poll write
+elimination and conservative optional-learning admission. Sequential cached 9B
+cold/warm measurements are separate from the unresolved shared F5/Whisper lease
+coordination and whole-system production acceptance.
+Verification: **2,213 regression PASS / seven explicit blocked skips**, **219
+targeted PASS / four blocked skips**; module08 **30 PASS / two BLOCKED**, launcher
+**ready**.
+
+[GPU/resource audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md)
+adds bounded lease-state validation, failure cleanup, unchanged-poll write
+elimination and conservative optional-learning admission. Sequential cached 9B
+cold/warm measurements are separate from the unresolved shared F5/Whisper lease
+coordination and whole-system production acceptance.
+
+[Routing/quota/privacy audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/07-model-routing/inventory.md)
+adds early local refusal, case-insensitive backoff, conservative usage accounting,
+shared credential redaction and route/reservation trace IDs. Its matched fixture
+measurements and actual cached local fallback are separate from live Groq,
+billing and voice acceptance.
+Verification: **2,173 regression PASS / five existing blocked skips**, **238
+targeted PASS**, **32/32 module07 fixture cases PASS**; launcher **ready**.
+
+[Question/context audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/06-questions-context/inventory.md)
+repairs private search fallback, selector cancellation, recent-question recall and
+question transport isolation. Fixed context budgets reduce oversized selector
+payloads; actual default-model samples and full regression evidence are reported
+separately from fixture timings. Two-second answers and whole-system production
+acceptance remain unproved.
+Verification: **2,126 regression PASS / five existing blocked skips**, **206
+targeted PASS**, all **32 module06 cases PASS**; launcher readiness **ready**.
+
+[Speech audit — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/05-voice-tts/inventory.md)
+repairs pre-submission F5→Kokoro/Piper fallback, Stop races, backend ordering and
+long-playback heartbeats. Actual cached CUDA and CPU fallback checks passed with
+speaker playback disabled; current measurements, case blockers and regression
+results are recorded separately from historical voice tests.
+The full regression passed **2,073 tests**, with five explicit blocked skips;
+launcher readiness is **ready**. Whole-system production acceptance remains open.
+
+[Prompts 02–04 completion — 2026-10-15 IST](app/artifacts/jarvis-audit/final-report.md)
+records 93 catalog cases proved by executed fixtures and three acoustic cases
+blocked by missing labeled recordings/GPU headroom. Fixes cover final audio
+resampling, duplicate utterance dispatch, bounded microphone shutdown and worker
+ownership, stale task identity, and latest-document clarification. Paired CPU
+benchmarks and full regression evidence are included; live speech accuracy and
+whole-system production readiness remain unverified.
+
+[Intent/reflex follow-up — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/03-intent-direct/inventory.md)
+records media paraphrase, corrected tab scope, latest-document routing and compound
+punctuation fixes, with fake-transport assertions and paired parser measurements.
+The [audit report](app/artifacts/jarvis-audit/final-report.md) records the completed
+fixture fault matrix and remaining live acceptance and production release work.
+
+[Perception/cognition follow-up — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/02-perception-cognition/inventory.md)
+records stale-window, configuration, text admission and outcome-accounting fixes,
+tick diagnostics, paired measurements and task-ID disagreement regression proof.
+Hard native sensor-hang containment remains unproved; production
+readiness remains uncertified.
+
+[Architecture audit follow-up — 2026-10-15 IST](app/artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md)
+records all 32 architecture cases, bounded startup validation, metadata privacy,
+source/health bindings and corrected map claims. [Current audit progress](app/artifacts/jarvis-audit/final-report.md)
+keeps live-validation and release blockers separate from passing fixture tests.
+
+[Initial audit pass — 2026-10-14 IST](app/artifacts/jarvis-audit/final-report-before-module01.md)
+preserves all 1,184 supplied case IDs and records scoped fixes, a passing
+1,851-test full regression, 26 catalog cases passed and 1,158 cases pending.
+Whole-system production/security certification remains incomplete.
+
+[Core cognition and routing audit](app/artifacts/cognition_audit_report.md) covers
+4 Hz scheduling under slow storage, protected attention, immutable reflex dispatch,
+cloud privacy, bulk-task approval and durable external-write non-replay. It includes
+the requested async tests and measured before/after timings.
+
 [Integrated knowledge acquisition](app/docs/autonomous-learning.md) connects
 scoped local/public research to the existing planner, registry, app memory and
 verified procedural skills. Known commands keep their fast paths; optional idle

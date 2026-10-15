@@ -1,0 +1,3 @@
+# Optional QA environment, not required by Start Jarvis.
+pytest==8.4.2
+pytest-asyncio==0.26.0

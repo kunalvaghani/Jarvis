@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="18" time="2.256" timestamp="2026-10-14T23:37:12.187812+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_audit_catalog" name="test_attention_and_order[JRV-02-001]" time="0.706" /><testcase classname="tests.test_audit_catalog" name="test_attention_and_order[JRV-02-003]" time="0.004" /><testcase classname="tests.test_audit_catalog" name="test_attention_and_order[JRV-02-005]" time="0.300"><failure message="AssertionError: assert [('open', 'ch...', 'notepad')] == [('open', 'Ch...', 'Notepad')]&#10;  &#10;  At index 0 diff: ('open', 'chrome') != ('open', 'Chrome')&#10;  Use -v to get more diff">case = 'JRV-02-005'
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-98/test_attention_and_order_JRV_02')
+
+    @pytest.mark.parametrize('case', ['JRV-02-001','JRV-02-003','JRV-02-005','JRV-02-012'])
+    def test_attention_and_order(case,tmp_path):
+        world=FixtureWorld(tmp_path)
+        if case=='JRV-02-005':
+            world.engine.activate(now=10)
+            world.engine.feed('open Chrome',True,now=11)
+            world.engine.feed('open Notepad',True,now=12)
+&gt;           assert [(c.kind,c.value) for c in world.calls]==[('open','Chrome'),('open','Notepad')]
+E           AssertionError: assert [('open', 'ch...', 'notepad')] == [('open', 'Ch...', 'Notepad')]
+E             
+E             At index 0 diff: ('open', 'chrome') != ('open', 'Chrome')
+E             Use -v to get more diff
+
+tests\test_audit_catalog.py:29: AssertionError</failure></testcase><testcase classname="tests.test_audit_catalog" name="test_attention_and_order[JRV-02-012]" time="0.005" /><testcase classname="tests.test_audit_catalog" name="test_alias_JRV_03_002" time="0.007" /><testcase classname="tests.test_audit_catalog" name="test_volume_JRV_03_007" time="0.007"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">def test_volume_JRV_03_007():
+&gt;       with pytest.raises(ValueError):parse('Set volume to 150 percent')
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_audit_catalog.py:48: Failed</failure></testcase><testcase classname="tests.test_audit_catalog" name="test_outbound_privacy[JRV-07-002-Explain my private bank statement]" time="0.001" /><testcase classname="tests.test_audit_catalog" name="test_outbound_privacy[JRV-07-003-Explain cryptography api_key=fixture-secret-key]" time="0.001" /><testcase classname="tests.test_audit_catalog" name="test_outbound_privacy[JRV-07-004-Click the submit button]" time="0.001" /><testcase classname="tests.test_audit_catalog" name="test_outbound_privacy[JRV-35-006-Explain quantum entanglement]" time="0.001" /><testcase classname="tests.test_audit_catalog" name="test_risk_independent_of_model_certainty[JRV-09-001]" time="0.005" /><testcase classname="tests.test_audit_catalog" name="test_risk_independent_of_model_certainty[JRV-09-008]" time="0.005" /><testcase classname="tests.test_audit_catalog" name="test_unknown_tool_JRV_12_003" time="0.015" /><testcase classname="tests.test_audit_catalog" name="test_scope_claim_JRV_12_011" time="0.005" /><testcase classname="tests.test_audit_catalog" name="test_memory_corruption_JRV_16_008" time="0.005" /><testcase classname="tests.test_audit_catalog" name="test_adapter_census_JRV_26_008" time="0.001" /><testcase classname="tests.test_audit_catalog" name="test_environment_census_JRV_34_010" time="0.003" /><testcase classname="tests.test_audit_catalog" name="test_catalog_unique_ids_and_modules" time="0.024" /></testsuite></testsuites>

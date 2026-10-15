@@ -1,0 +1,228 @@
+--- module10-pre/jarvis/dag_execution.py
++++ jarvis/dag_execution.py
+@@ -7,2 +7,3 @@
+ import copy
++import hashlib
+ from dataclasses import dataclass
+@@ -13,2 +14,3 @@
+ import time
++import uuid
+ 
+@@ -49,2 +51,28 @@
+ 
++def bounded_payload(value, maximum):
++    """Bound JSON structure before encoding, including hostile depth/cycles."""
++    pending=[(value,0)];nodes=0;characters=0
++    while pending:
++        item,depth=pending.pop();nodes+=1
++        if depth>20 or nodes>6000:
++            raise ValueError('DAG payload exceeds structural limits.')
++        if isinstance(item,str):characters+=len(item)
++        elif isinstance(item,dict):
++            if len(item)>1000 or any(not isinstance(k,str) for k in item):raise ValueError('Invalid DAG object.')
++            characters+=sum(len(k) for k in item)
++            pending.extend((v,depth+1) for v in item.values())
++        elif isinstance(item,list):
++            if len(item)>1000:raise ValueError('DAG array exceeds limit.')
++            pending.extend((v,depth+1) for v in item)
++        elif item is not None and type(item) not in (bool,int,float):raise ValueError('Invalid DAG JSON value.')
++        elif type(item) is float and not math.isfinite(item):raise ValueError('Nonfinite DAG value.')
++        if characters>maximum:raise ValueError('DAG payload exceeds text budget.')
++    if len(json.dumps(value,allow_nan=False))>maximum:raise ValueError('DAG payload exceeds encoded budget.')
++
++
++def step_binding(step, arguments):
++    from dataclasses import asdict
++    return hashlib.sha256(json.dumps({'step':asdict(step),'resolved':arguments},sort_keys=True,allow_nan=False).encode()).hexdigest()
++
++
+ def references(value, depth=0):
+@@ -57,3 +85,3 @@
+                     set(ref) != {'step', 'path', 'type'} or not isinstance(ref['step'], str) or
+-                    ref['type'] not in {'string', 'integer', 'number', 'boolean', 'object', 'array'} or
++                    not isinstance(ref['type'], str) or ref['type'] not in {'string', 'integer', 'number', 'boolean', 'object', 'array'} or
+                     not isinstance(ref['path'], list) or len(ref['path']) > 8 or
+@@ -99,2 +127,3 @@
+ def validate_plan(plan, tools, budgets=None):
++    bounded_payload(plan,100000)
+     budgets = budgets or {'cpu': 4, 'ram_mb': 256, 'gpu_mb': 0}
+@@ -102,4 +131,3 @@
+             type(plan['version']) is not int or plan['version'] != 1 or
+-            not isinstance(plan['steps'], list) or not 1 <= len(plan['steps']) <= 40 or
+-            len(json.dumps(plan, allow_nan=False)) > 100000):
++            not isinstance(plan['steps'], list) or not 1 <= len(plan['steps']) <= 40):
+         raise ValueError('Invalid bounded DAG envelope.')
+@@ -208,6 +236,8 @@
+                 old = restored.get(step.id, {})
+-                if old.get('status') == 'succeeded' and self.tools[step.tool].read_only:
+-                    args = resolve(step.arguments, restored)
++                if (old.get('status') == 'succeeded' and self.tools[step.tool].read_only and
++                        all(rows[dep]['status']=='succeeded' for dep in step.dependencies)):
++                    args = resolve(step.arguments, rows)
++                    argument_shape(self.tools[step.tool].schema,args)
+                     self.tools[step.tool].authorize(args)
+-                    if self.tools[step.tool].verify(args, old.get('result')) is True:
++                    if old.get('binding') == step_binding(step,args) and self.tools[step.tool].verify(args, old.get('result')) is True:
+                         rows[step.id] = copy.deepcopy(old)
+@@ -216,2 +246,3 @@
+         started = time.monotonic()
++        trace_id=uuid.uuid4().hex
+         running, reservations, tokens, ready_at = {}, {}, {}, {}
+@@ -231,4 +262,3 @@
+                 raise TimeoutError('Tool exceeded deadline; worker drained, effect not replayed.')
+-            if len(json.dumps(output, allow_nan=False)) > 24000:
+-                raise ValueError('Tool output exceeds task result budget.')
++            bounded_payload(output,24000)
+             verify_started = time.monotonic()
+@@ -265,3 +295,3 @@
+                         row.update(status='retry_wait' if retry else ('cancelled' if interrupted else 'failed'),
+-                                   error_type=type(exc).__name__, error=str(exc)[:300],
++                                   error_type=type(exc).__name__, error='DAG tool failed: '+type(exc).__name__,
+                                    uncertain_effect=not self.tools[step.tool].read_only)
+@@ -271,3 +301,3 @@
+                     tokens.pop(step.id)
+-                    self.progress({'step': step.id, 'tool': step.tool, 'status': row['status']})
++                    self.progress({'step': step.id, 'tool': step.tool, 'status': row['status'],'trace_id':trace_id})
+                     save()
+@@ -285,3 +315,4 @@
+                     tool = self.tools[step.tool]
+-                    if (tool.resource and any(self.tools[s.tool].resource == tool.resource and
++                    if ((not tool.read_only and any(not self.tools[s.tool].read_only for s,_ in running.values())) or
++                            tool.resource and any(self.tools[s.tool].resource == tool.resource and
+                             not (tool.read_only and self.tools[s.tool].read_only) for s, _ in running.values()) or
+@@ -294,3 +325,3 @@
+                     except Exception as exc:
+-                        row.update(status='failed', error_type=type(exc).__name__, error=str(exc)[:300])
++                        row.update(status='failed', error_type=type(exc).__name__, error='DAG admission failed: '+type(exc).__name__)
+                         save()
+@@ -298,3 +329,4 @@
+                     row.update(status='running', attempts=row['attempts']+1,
+-                               queue_seconds=now-started, effect=not tool.read_only)
++                               queue_seconds=now-started, effect=not tool.read_only,
++                               binding=step_binding(step,arguments),trace_id=trace_id)
+                     # Durable running state precedes dispatch, even for irreversible tools.
+@@ -304,3 +336,3 @@
+                     running[pool.submit(work, step, arguments, stop)] = (step, time.monotonic())
+-                    self.progress({'step': step.id, 'tool': step.tool, 'status': 'running'})
++                    self.progress({'step': step.id, 'tool': step.tool, 'status': 'running','trace_id':trace_id})
+                 if running:
+@@ -311,3 +343,3 @@
+                     raise ValueError('DAG deadlock; no admissible task.')
+-            return {'status': 'cancelled' if interrupted else ('completed' if all(r['status'] == 'succeeded' for r in rows.values()) else 'failed'),
++            return {'trace_id':trace_id,'status': 'cancelled' if interrupted else ('completed' if all(r['status'] == 'succeeded' for r in rows.values()) else 'failed'),
+                     'steps': rows, 'total_seconds': time.monotonic()-started}
+--- module10-pre/jarvis/hierarchical.py
++++ jarvis/hierarchical.py
+@@ -1,3 +1,3 @@
+ """Compatibility adapter: existing Brain/ToolRegistry/TaskState, no second agent."""
+-from dataclasses import asdict
++from dataclasses import asdict, replace
+ import hashlib
+@@ -8,5 +8,6 @@
+ import time
++import threading
+ from pathlib import Path
+ 
+-from .dag_execution import Executor, Tool, validate_plan
++from .dag_execution import Executor, Tool, validate_plan, bounded_payload
+ from .tools import ToolRegistry
+@@ -34,2 +35,4 @@
+         raise ValueError('hierarchical_execution must be an object.')
++    if set(row)-{'enabled','parallel_reads','macro_cache','max_concurrency','max_seconds','max_repairs','max_replans'}:
++        raise ValueError('Unknown hierarchical execution setting.')
+     result = {'enabled': False, 'parallel_reads': True, 'macro_cache': True,
+@@ -159,8 +162,28 @@
+ 
++_CODE_HASHES={}
++_CODE_LOCK=threading.RLock()
++
++
++def implementation_hash(path):
++    """Reuse content digests only while file identity/size/change timestamps match."""
++    path=Path(path)
++    def identity():
++        stat=path.stat()
++        return (stat.st_dev,stat.st_ino,stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)
++    with _CODE_LOCK:
++        stamp=identity();cached=_CODE_HASHES.get(str(path))
++        if cached and cached[0]==stamp:return cached[1]
++        digest=hashlib.sha256(path.read_bytes()).hexdigest()
++        if identity()!=stamp:raise ValueError('Implementation changed during DAG fingerprinting.')
++        if len(_CODE_HASHES)>=64:_CODE_HASHES.clear()
++        _CODE_HASHES[str(path)]=(stamp,digest)
++        return digest
++
++
+ def fingerprint(tools, options, environment=None):
+-    data = {'version': 1, 'options': settings(options), 'tools': {k: {
++    data = {'version': 2, 'options': settings(options), 'models':{k:options.get(k) for k in ('planner','decision','screen_model')},'tools': {k: {
+         'schema': v.schema, 'read_only': v.read_only, 'resource': v.resource} for k, v in tools.items()}}
+     data['environment'] = environment or {}
+-    data['implementations'] = {name: hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest()
+-        for name in ('hierarchical.py', 'dag_execution.py', 'tools.py', 'toolkits.py', 'brain.py', 'agent_events.py')}
++    data['implementations'] = {name: implementation_hash(Path(__file__).parent/name)
++        for name in ('hierarchical.py', 'dag_execution.py', 'tools.py', 'toolkits.py', 'brain.py', 'agent_events.py','task_state.py','cloud_policy.py')}
+     return hashlib.sha256(json.dumps(data, sort_keys=True).encode()).hexdigest()
+@@ -182,8 +205,15 @@
+         with closing(sqlite3.connect(self.path, timeout=1)) as db, db:
+-            row = db.execute('SELECT plan FROM dag_macros WHERE intent=? AND fingerprint=? AND verified_at>?',
++            row = db.execute('SELECT plan FROM dag_macros WHERE intent=? AND fingerprint=? AND verified_at>? AND LENGTH(plan)<=100000',
+                 (self.key(goal), signature, time.time()-86400)).fetchone()
+             if row:
++                try:
++                    plan=json.loads(row[0]);bounded_payload(plan,100000)
++                    if not isinstance(plan,dict) or set(plan)!={'version','steps'}:return None
++                except (ValueError,RecursionError,TypeError):return None
+                 db.execute('UPDATE dag_macros SET hits=hits+1 WHERE intent=?', (self.key(goal),))
+-                return json.loads(row[0])
++                return plan
+     def remember(self, goal, signature, graph, tools):
++        validate_plan(graph,tools)
++        from .cloud_policy import SECRET
++        if SECRET.search(goal) or SECRET.search(json.dumps(graph)):return
+         if any(not tools[row['tool']].read_only for row in graph['steps']):
+@@ -198,4 +228,10 @@
+     started = time.monotonic()
++    state=brain.actions.task_state
++    task_id=state.identity()
+     options = settings(brain.options)
+     tools = adapters(brain, goal)
++    def scoped_authorize(arguments, original):
++        state.require_identity(task_id)
++        original(arguments)
++    tools={name:replace(tool,authorize=lambda arguments,original=tool.authorize:scoped_authorize(arguments,original)) for name,tool in tools.items()}
+     if not tools:
+@@ -217,2 +253,5 @@
+     cached = graph is not None
++    if cached:
++        try:validate_plan(graph,tools)
++        except ValueError:graph,restored,cached=None,None,False
+     if graph is None and 'read_file' in tools:
+@@ -252,3 +291,3 @@
+             'dag_validation_seconds': validation_seconds,
+-            'elapsed_seconds': time.monotonic()-started})
++            'elapsed_seconds': time.monotonic()-started},task_id=task_id)
+     def progress(event):
+--- module10-pre/jarvis/task_state.py
++++ jarvis/task_state.py
+@@ -168,5 +168,6 @@
+ 
+-    def update_dag(self, graph, steps, fingerprint, timings):
++    def update_dag(self, graph, steps, fingerprint, timings, *, task_id=None):
+         """Task-owned DAG checkpoint, never an automatic effect replay queue."""
+         with self.lock:
++            if task_id is not None:self.require_identity(task_id)
+             current = self.data.get('current')
+--- module10-pre/config/runtime_manifest.json
++++ config/runtime_manifest.json
+@@ -42,2 +42,3 @@
+   "hierarchical_execution": {
++    "audit_2026_10_15": "Prompt10: serialized effects even without resource labels; exact-step/resolved-argument restore binding and fresh verification; bounded malformed cache miss; recognized credential templates omitted; categorical errors and UUID traces; DAG checkpoint/task UUID agreement; bounded JSON admission; source digests reused only while file identity/change metadata match. Evidence: artifacts/jarvis-audit/modules/10-dag-planning/. Generic mail/approval fixture is not a newly enabled production DAG mail adapter.",
+     "worker": "Existing action thread plus up to four task-owned DAG threads; no new service",
+--- module10-pre/scripts/verification/audit_catalog.py
++++ scripts/verification/audit_catalog.py
+@@ -79,3 +79,3 @@
+             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
+-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_audit_completion_cases')):
++            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_audit_completion_cases')):
+                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])

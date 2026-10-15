@@ -1,7 +1,41 @@
 {
   "version": 1,
+  "gpu_audit_2026_10_15": {
+    "state": "200000 characters, depth12/4096 nodes, <=128 pending records; validated role/priority/owner/cache metadata; unchanged polls keep the OS lock but skip atomic rewrites",
+    "safety": "20 percent primary-envelope margin floor, probe failures release admission, duplicate acquisition refused, serialized release bookkeeping, categorical UUID events; no forced CUDA clears",
+    "optional_learning": "Unknown resource readings defer idle learning; selected fallback needs installed size plus configured RAM margin",
+    "limits": "Ollama admission only; F5/Whisper lack a shared lease protocol. No running-model preemption or physical immediate VRAM-release guarantee.",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "question_context_contract": {
+    "modules": [
+      "jarvis.question_client",
+      "jarvis.context_selector",
+      "jarvis.knowledge_worker",
+      "jarvis.conversation_memory"
+    ],
+    "transport": "Serialized cancellable admission; 256000 input characters, depth 12 and 4096 traversal nodes; 64 response frames; 100000 answer characters; finite limits validated before dispatch",
+    "privacy": "Private/context-dependent web fallback refused; history never appended to public search; categorical transport errors and prompt-free UUID/status health metadata",
+    "retrieval": "Eight selector candidates, 12 keywords of 40 characters each, bounded scalar app fields; cancelled queued futures never execute; empty evidence and invalid citation targets return explicit gaps",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "configuration_contract": {
+    "module": "jarvis.config_contract",
+    "entrypoints": "launcher.preflight and direct main.App startup share load_config",
+    "limits": "2000000 UTF-8 bytes, 128 root fields, depth 32, 100000 values; malformed/non-finite JSON fails before services start",
+    "unknown_fields": "Metadata-only ConfigurationWarning with field count; no names/values logged, no permission grant; known subsystem validators remain authoritative",
+    "lifecycle_events": "Fixed envelope, registered tool labels and categorical backend/error types only; extras counted and discarded, trace UUIDs preserved",
+    "new_dependencies": [],
+    "new_services": []
+  },
   "knowledge_acquisition": {
-    "modules": ["jarvis.knowledge_acquisition", "jarvis.application_discovery", "jarvis.app_knowledge"],
+    "modules": [
+      "jarvis.knowledge_acquisition",
+      "jarvis.application_discovery",
+      "jarvis.app_knowledge"
+    ],
     "authority": "Existing ToolRegistry, DAG Executor, UI/browser transports, Brain model router, TaskState, SkillMemory and AppKnowledge",
     "storage": "Capability evidence extends existing app_knowledge.json; active acquisition extends TaskState.learning; reusable guidance joins existing SkillMemory context",
     "network": "Public software/feature queries only; exact named or registered current configured app resolution with explicit observation executable aliases; visible sanitized query progress; configured local help then configured docs/public search and bounded scrape; separate Jarvis Firecrawl key or existing web tools",
@@ -11,6 +45,7 @@
     "new_dependencies": []
   },
   "hierarchical_execution": {
+    "audit_2026_10_15": "Prompt10: serialized effects even without resource labels; exact-step/resolved-argument restore binding and fresh verification; bounded malformed cache miss; recognized credential templates omitted; categorical errors and UUID traces; DAG checkpoint/task UUID agreement; bounded JSON admission; source digests reused only while file identity/change metadata match. Evidence: artifacts/jarvis-audit/modules/10-dag-planning/. Generic mail/approval fixture is not a newly enabled production DAG mail adapter.",
     "worker": "Existing action thread plus up to four task-owned DAG threads; no new service",
     "planner": "Existing owned local Brain worker, installed-model selection and GPU leases; native Ollama JSON-schema decoding with bounded validation repair",
     "state": "Existing TaskState embeds DAG checkpoints; procedural cache tables extend conversations.sqlite3",
@@ -28,17 +63,21 @@
     "limitations": "Small-model quality tradeoff; no universal two-second guarantee, independent consciousness or autonomous conversation actions",
     "new_dependencies": []
   },
-  "f5_imports": ["f5_tts.api", "soundfile", "sounddevice"],
+  "f5_imports": [
+    "f5_tts.api",
+    "soundfile",
+    "sounddevice"
+  ],
   "f5_speech": {
     "requirements": "requirements/f5.txt",
     "cuda_requirements": "torch==2.6.0+cu124 and torchaudio==2.6.0+cu124 from official PyTorch cu124 index; setup_f5.ps1 -Cuda",
     "environment": ".venv-f5",
     "worker": "jarvis.f5_speech",
-    "ownership": "Speech owns the hidden child; existing progress watchdog disposes stalled workers without replaying replies; stop clears buffered audio; close kills the child",
+    "ownership": "Speech owns the hidden child; cancellation invalidates generation and clears playback, no automatic replay; startup ready deadline60s releases Stop lock; close disposes child; ongoing playback heartbeats prevent false stall recovery.",
     "gpu_policy": "When selected F5 uses CUDA, the Qwen scheduler reserves at least 2048 MiB for speech plus its existing 512 MiB headroom; Qwen uses fewer GPU layers on the measured 4 GB GPU",
     "activation": "Selected engine f5 with CUDA and a 9.85-second local WAV reference from user-supplied YouTube video 9hhIc8iWUx4; exact transcript agrees with local Whisper",
     "delivery": "Completed conversation/Groq/verified-answer phrases stream to the owned worker; sequential audio chunks play immediately with bounded crossfade tails; pending text coalesces in order up to eight requests and 1000 characters; quiet CUDA synthesis priming during startup",
-    "limitations": "Each phrase still completes F5 inference before audio is available; rapid text may finish first; synthesis underruns and chunk prosody differences remain possible; unverified research drafts wait for final delivery; no real-time, perfect-cloning or fine-tuning claim"
+    "limitations": "Each phrase completes F5 inference before audio; underruns/prosody differences remain possible. Startup pre-submission fallback to installed Kokoro/Piper; no replay after runtime/transport failure. No shared STT/F5 lease gate, human pronunciation/voice similarity unverified, no perfect-cloning or2-second guarantee."
   },
   "capabilities": [
     "task_scoped_capability_acquisition_and_gap_detection",
@@ -390,7 +429,9 @@
     "gods_eye",
     "harness_inference",
     "development_preview",
-    "docker_linux_engine"
+    "docker_linux_engine",
+    "cognitive_loop",
+    "cognition_persistence"
   ],
   "ui_assets": [],
   "optional_audit": {
@@ -760,6 +801,7 @@
     "status": "2026-10-13 IST: gap detection, scored crash-safe backlog, idle orchestration wiring and SafeEvolutionManager added and unit-tested (backlog persistence/resume, dedup, pause-on-activity, worktree test gate, approval-required deploy, rollback, protected-file refusal). `python -m jarvis.launcher --offline-check` passed with no new dependency. Live autonomous idle cycle driven end-to-end 2026-10-13 against real GitHub + the local model: detected a gap, discovered real repos, learned/understood one (17 modules, Obsidian note written), auto-triggered the forge which designed a concrete new ability ('generate slug') into the registry; the forge's code-gen + sandbox-test + activation did not finish within the ~7-minute bounded run (state 'building'), that final stage being the existing AbilityForge pipeline covered by tests.test_repo_abilities. See README dated results."
   },
   "deliberation": {
+    "audit_2026_10_15": "Prompt09: exact unqualified proposal approval; bare refusal cancels; boolean-only per-action consent; validated finite config/opinions; risky ambiguity pauses planning; per-request brain timeout; UUID/redacted rotating ledger with categorical write diagnostics. Isolated catalog, full-regression and readiness evidence: artifacts/jarvis-audit/modules/09-deliberation/. Unknown-program mandatory research gate absent; no live account/GUI certification.",
     "configuration": "deliberation.enabled/assertiveness/voice_confidence_threshold/ask_min_risk/max_alternatives/ledger_max/timeout_seconds",
     "module": "jarvis/deliberation.py; wired at the task choke point in actions.execute and the feedback hook in actions.submit, with a new bounded 'deliberate' inference op in brain_worker.py and an optional approach hint threaded through brain.run",
     "purpose": "Shared reasoning/opinion/decision layer: forms evidence-based opinions over existing systems (cognition memory/reliability, skills, capability routing), classifies risk, estimates confidence, and decides to proceed, note a recommendation, or propose-and-wait. Interprets conversational approval/rejection/delegation and keeps a traceable decision ledger.",
@@ -772,7 +814,8 @@
     "new_python_dependencies": [],
     "long_running_service": false,
     "automatic_action_replay": false,
-    "status": "2026-10-13 IST: engine, risk classification, confidence calibration, decision/feedback logic, ledger round-trip and the task/feedback wiring added and unit-tested; `python -m jarvis.launcher --offline-check` passed with no new dependency. Live end-to-end deliberation with the local qwen3.5:9b model: see README dated results."
+    "status": "2026-10-13 IST: engine, risk classification, confidence calibration, decision/feedback logic, ledger round-trip and the task/feedback wiring added and unit-tested; `python -m jarvis.launcher --offline-check` passed with no new dependency. Live end-to-end deliberation with the local qwen3.5:9b model: see README dated results.",
+    "safety": "Existing per-effect approvals remain required. Bulk destructive freeform tasks additionally pause for explicit scope approval before planning, including heuristic fallback. Decision ledger serialized. Confidence is an estimate, never permission."
   },
   "rea": {
     "configuration": "rea.enabled/node_path/entry/allow_commands/analysis_timeout_seconds/max_input_mb",
@@ -834,6 +877,7 @@
   },
   "optional_groq": {
     "module": "jarvis.hybrid_inference",
+    "audit_2026_10_15": "Local policy/feedback/quota refusal precedes blocking metadata wait; expired time metadata may refresh asynchronously. Case-insensitive backoff headers; zero/malformed usage retains reservation; shared common-key redaction; request UUID correlates route and reservation. No new dependency/service or provider quota entitlement claim.",
     "configuration": "groq.* or corresponding GROQ_* environment overrides; default disabled, free_only, no sensitive data or live tests",
     "model": "qwen/qwen3.8-27b",
     "endpoint": "https://api.groq.com/openai/v1",
@@ -871,5 +915,63 @@
       "storage": "64 MB per-file ulimit, 128 open files, 256 MB tmpfs; parent polling guard stops owned container above 256 MB workspace/output or 1000 files, may overshoot.",
       "free_media": "chart, poster, PDF, PPTX, text-card MP4, procedural melody WAV, existing local Kokoro narration; no paid API/account publishing"
     }
+  },
+  "cognition_audit": {
+    "date": "2026-10-15 IST",
+    "perception_follow_up": "Typed bounded admission, stale/empty-window invalidation and race filtering, tick metadata; deep history recovery and escaped Unicode persistence. Task UUID binding checks planner/actuator identity and rejects stale completion. Busy Python sensor isolation and 15-second stalled-read health asserted; hard native/GIL hang containment remains unresolved. No new dependency or service.",
+    "runtime": "Existing cognitive loop plus one owned coalescing persistence thread; no network, model, SQLite or state-file IO on tick. Tick CPU budget 250 ms, monotonic deadlines, no catch-up bursts.",
+    "lifecycle": "Cognition.start/close owns both threads, bounded 2-second joins per worker and at most 3 dead-writer restarts per session; Stop/Quit suppresses restarts. Health: persistence_worker_alive, persistence_worker_restarts and persistence_error in cognitive snapshot. Existing Watchdog registers persistence health/recovery and records quiet repair status; all recovery is read-only metadata, not action replay.",
+    "memory": "200 percept/inbox entries with priority-preserving backpressure; 7 attention slots, deterministic salience/age ordering; goal and active task remain separate. Cached ISO parsing and vectorized NumPy decay for >=32 timestamps.",
+    "confidence": "Persisted local success counts drive Beta(1,1) posterior and SciPy 95% credible intervals; malformed statistics sanitized; paused tasks not successes.",
+    "safety": "Immutable direct reflex dispatch and compiled built-in catalog fingerprint; explicit context/Unicode-normalized cloud privacy gate; compound bulk destruction requires scope approval and ledger; durable per-target external-write uncertainty survives checkpoint truncation.",
+    "development_requirements": "requirements/testing.txt; pytest and pytest-asyncio optional QA runners, not production dependencies",
+    "new_runtime_dependencies": []
+  },
+  "voice_input_audit": {
+    "date": "2026-10-15 IST",
+    "entrypoints": [
+      "main.App.toggle_listening",
+      "jarvis.audio.Listener",
+      "jarvis.whisper_backend.settings",
+      "jarvis.command_cleanup.CommandCleanup"
+    ],
+    "lifecycle": "Existing owned capture/decoder; stop clears buffers, decoder join bounded to 2 seconds; live decoder retains ownership and blocks duplicate restart, intentional stops respected; categorical repair health and trace UUID",
+    "audio": "Resample release block to 16 kHz before enqueue; reject duplicate final utterance IDs; retain explicitly repeated requests; no model, quantization or endpoint-default change",
+    "validation": "Finite partial/silence intervals 0.2\u20135 seconds and VAD 0\u20131; explicit cuda/cpu device; no silent CPU fallback; typed mode available on failure",
+    "limitations": "Fixture coverage only; quiet-room accuracy, background-TV false activations and long-pause acoustic tests BLOCKED pending labeled audio and dedicated GPU headroom",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "speech_audit": {
+    "date": "2026-10-15 IST",
+    "entrypoints": [
+      "jarvis.speech.Speech",
+      "jarvis.f5_speech",
+      "jarvis.kokoro_speech.serve",
+      "jarvis.piper_speech"
+    ],
+    "fallback": "F5 missing reference/environment or startup failure before any text submission selects installed Kokoro CPU, then installed Piper; no downloads or private text replay after submission. Failed F5 stays bypassed for this Speech session. A fresh request can restart a failed owned worker.",
+    "ownership": "Ready handshake bounded to60 seconds without holding Stop lock; worker identity binds progress; generation guards text and audio enqueue; backend changes drain earlier audio; long playback emits heartbeat; malformed frames rejected. Existing owned services only.",
+    "bounds": "Parent64 text entries; worker64 requests with monotonic ID non-replay; Player128 pieces, mono finite<=30 seconds/piece;20,000 characters/request; pathological single words rejected before inference. EOF join5 seconds; stale audio discarded.",
+    "privacy": "Protocol and health metadata categorical; native stderr discarded instead of appending speech.log; old private logs preserved, not published/deleted.",
+    "optimization": "LRU16 WAV header durations, invalidated by size/mtime/ctime; no cached audio/transcript; quality parameters/model/reference unchanged.",
+    "limits": "Human pronunciation/cloning acceptability and controlled shared STT/F5 lease arbitration remain blocked; no universal2-second speech guarantee; Qwen reserve is not a shared STT/F5 lease.",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "skill_selection_audit_2026_10_15": {
+    "modules": [
+      "jarvis.capabilities",
+      "jarvis.skill_memory",
+      "jarvis.hermes_skills",
+      "jarvis.utility_profiles",
+      "jarvis.agent_tools"
+    ],
+    "contract": "Guides are untrusted references, never permissions or executable adapters. Builtin > Custom > Personal precedence, currently registered tools/current policy/scope/approval/cancellation remain authoritative.",
+    "bounds": "8k local UTF-8 guides;50/source;32 declared bindings;2MB Hermes manifest;validated unique indexed paths/digests;read budget checked before open;bounded2048 description-token cache excludes recognized credential descriptions and does not cache goals.",
+    "procedure_ranking": "Relevance then smoothed observed successes/attempts then recency. Legacy rows default attempts to successes; preexisting failures not reconstructed.",
+    "utility_gate": "Missing separate environment, malformed validation or changed source hashes disable activation; no automatic validation refresh or install.",
+    "new_dependencies": [],
+    "new_services": []
   }
 }

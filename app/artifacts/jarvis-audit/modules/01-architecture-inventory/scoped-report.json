@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-15 IST",
+  "module": "01-architecture-inventory",
+  "catalog_pass": 32,
+  "catalog_fail": 0,
+  "catalog_blocked": 0,
+  "catalog_skipped": 0,
+  "catalog_not_run": 0,
+  "full_regression_pass": 1897,
+  "status": "AUDIT_COMPLETE_OPERATIONAL_GAPS_REMAIN",
+  "census": {
+    "configured_apps": 333,
+    "bundled_readable_guides": 10,
+    "missing_guide_directories": [
+      "repository-assimilation"
+    ],
+    "hermes_manifest_guides": 210,
+    "deerflow_public_guides": 23,
+    "windows_reference_entries": 493,
+    "realtime_registered_adapters": 82,
+    "registry_tool_specs": 107,
+    "manifest_service_names": 22
+  },
+  "dependency_checks": {
+    "pass": 7,
+    "blocked": 2
+  },
+  "all_system_production_ready": false
+}

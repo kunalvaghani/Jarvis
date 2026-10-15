@@ -1,5 +1,55 @@
 # GPU allocation by inference phase
 
+## Audit follow-up — 2026-10-15 IST
+
+Lease input is bounded to 200,000 characters, depth12/4096 values and128 queued
+records; owner IDs, role/priority agreement and cache identity fields are checked
+before liveness inspection or mutation. Malformed state is retained and refuses
+admission. Unchanged polls retain cross-process locking but skip atomic rewrites.
+Hardware-probe exceptions release the lease. Duplicate acquisition cannot release
+an already active owner; response release bookkeeping is serialized. Metadata
+events use lease trace UUIDs and categorical failures, with payload fields dropped.
+
+The primary9b calibrated envelope keeps the larger of configured headroom and one
+sixth of available memory, enough for a20% envelope overrun in fixture arithmetic.
+This is not a guarantee against another application allocating VRAM after polling,
+unknown footprints or native driver failures. Current F5 CUDA configuration raises
+effective speech reserve to2048MiB. Current warm_seconds is1800 and cpu_threads12;
+the dated October8 settings/measurements below remain historical.
+
+F5 and Whisper are outside this coordinator. Speech-arrival and stuck-TTS lease
+watchdog cases remain blocked until a shared ownership/cancellation protocol is
+implemented and safely validated. Priority applies to queued turns; active kernels
+are not forcibly preempted. Releasing admission does not imply immediate physical
+VRAM release while Ollama retains its cache. No manual CUDA clears, runtime/model
+installations or global environment changes were introduced.
+[Case ledger, matched I/O benchmark, native samples and rollback](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+
+## Audit follow-up — 2026-10-15 IST
+
+Lease input is bounded to 200,000 characters, depth12/4096 values and128 queued
+records; owner IDs, role/priority agreement and cache identity fields are checked
+before liveness inspection or mutation. Malformed state is retained and refuses
+admission. Unchanged polls retain cross-process locking but skip atomic rewrites.
+Hardware-probe exceptions release the lease. Duplicate acquisition cannot release
+an already active owner; response release bookkeeping is serialized. Metadata
+events use lease trace UUIDs and categorical failures, with payload fields dropped.
+
+The primary9b calibrated envelope keeps the larger of configured headroom and one
+sixth of available memory, enough for a20% envelope overrun in fixture arithmetic.
+This is not a guarantee against another application allocating VRAM after polling,
+unknown footprints or native driver failures. Current F5 CUDA configuration raises
+effective speech reserve to2048MiB. Current warm_seconds is1800 and cpu_threads12;
+the dated October8 settings/measurements below remain historical.
+
+F5 and Whisper are outside this coordinator. Speech-arrival and stuck-TTS lease
+watchdog cases remain blocked until a shared ownership/cancellation protocol is
+implemented and safely validated. Priority applies to queued turns; active kernels
+are not forcibly preempted. Releasing admission does not imply immediate physical
+VRAM release while Ollama retains its cache. No manual CUDA clears, runtime/model
+installations or global environment changes were introduced.
+[Case ledger, matched I/O benchmark, native samples and rollback](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+
 Updated **2026-10-08, Asia/Kolkata**. Qwen3.5 9B planning, execution,
 questions, research and local Codex now share a process-wide priority queue.
 Whisper remains on CUDA. This RTX 3050 Laptop has **4,096 MiB VRAM**;

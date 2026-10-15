@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-14 IST",
+  "scope": "Real headless Chrome, existing BrowserSession/BrowserAutomation/UITransport and ToolRegistry, production acquisition/Brain/shared memory, locally intercepted synthetic page. Authored planner and independent DOM oracle; no third-party website, live LLM, account or presentation-export claim.",
+  "passed": true,
+  "seconds": 2.875,
+  "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+  "capability": {
+    "identity": "https://learning.example",
+    "feature": "presentation slide",
+    "version": "unknown",
+    "interface_signature": "dbeb0dcf3eb343037073447ec42d6d977403c363152bb34a57195bde3101769d",
+    "controls": [
+      {
+        "name": "Create slide",
+        "role": "Button",
+        "locator": {
+          "kind": "accessible_name",
+          "name": "Create slide",
+          "role": "Button"
+        }
+      }
+    ],
+    "sources": [],
+    "status": "verified",
+    "tools": [
+      "browser_click"
+    ],
+    "verification": [
+      {
+        "source": "fresh_goal_verifier",
+        "evidence": "Fresh whole-goal verification: Independent fresh page text oracle"
+      }
+    ],
+    "seen_at": 1792001332.5998647,
+    "executions": 1
+  },
+  "state": "completed"
+}

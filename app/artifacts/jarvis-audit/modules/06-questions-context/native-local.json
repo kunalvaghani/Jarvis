@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "model": "qwen3.5:0.8b",
+  "ollama": "0.40.0",
+  "scope": "cached CPU helper only; default 9b model, GPU contention, acoustic and broad semantic acceptance not established",
+  "cases": [
+    {
+      "question": "Explain quantum computing to a beginner",
+      "answer": "Quantum computers use tiny particles called 'qubits' instead of just 0s and 1s. Like classical bits, they can be 0 or 1, but qubits can also be in a special state called 'superposition', meaning all possibilities exist at once. This allows them to do massive calculations faster than classical computers for certain problems.",
+      "seconds": 2.9210000000020955,
+      "first_content_seconds": 0.5149999999994179
+    },
+    {
+      "question": "Explain the invented term zorbulatorium; say when you cannot verify its meaning",
+      "answer": "This question needs web verification, but internet search is disabled.",
+      "seconds": 3.8439999999973224,
+      "first_content_seconds": 3.0469999999986612
+    }
+  ],
+  "external_searches": 0,
+  "external_writes": 0
+}

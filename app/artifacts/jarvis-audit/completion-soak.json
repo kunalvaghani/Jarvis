@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-15 IST",
+  "passed": true,
+  "scope": "30-second owned synthetic cognition soak; no external actions or model loads",
+  "seconds": 31.31199999999808,
+  "iterations": 120,
+  "producers": 5,
+  "events": 12120,
+  "cycles": 125,
+  "rss_before_bytes": 18747392,
+  "rss_peak_bytes": 57942016,
+  "rss_after_bytes": 57815040,
+  "workers_alive_after_stop": false,
+  "command": "python -m scripts.verification.audit_soak (invoked main; dated completion copy)",
+  "rss_metric": "Maximum of periodic RSS samples, not operating-system peak"
+}

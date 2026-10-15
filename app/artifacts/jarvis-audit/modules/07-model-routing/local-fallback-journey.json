@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "Real handle_request: loopback fakeGroq429 then cached realOllama9b; no real cloud/desktop/speech/account action.",
+  "model": "qwen3.5:9b",
+  "seconds": 15.171999999998661,
+  "answer": "Imagine coins spinning on a table instead of just lying flat; that's how qubits work in quantum computers. Unlike regular bits that are either zero or one, these spinning coins can be both at once, letting them solve certain puzzles much faster than standard laptops.",
+  "fake_cloud_calls": 1,
+  "real_cloud_calls": 0,
+  "external_writes": 0,
+  "quota_readback": {
+    "id": "bb0aa479f7854f3b9f3205f6e76d6583",
+    "tokens": 2121,
+    "reserved": 2121,
+    "status": "uncertain"
+  }
+}

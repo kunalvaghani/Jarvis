@@ -6,7 +6,8 @@ import threading
 import time
 
 
-SENSITIVE = re.compile(r"(?i)(password|passcode|secret|api[_ -]?key|access[_ -]?token|authorization|bearer|credential|private key)")
+from .cloud_policy import KEY_MATERIAL
+SENSITIVE = re.compile(r"(?i)(?:password|passcode|secret|api[_ -]?key|access[_ -]?token|authorization|bearer|credential|private key|"+KEY_MATERIAL+r")")
 WORDS = re.compile(r"[\w.-]{3,}", re.UNICODE)
 RECALL = re.compile(r"(?i)\b(remember|recall|did i|was i|what did|when did|worked on|opened|used today|yesterday|recently|history|activity)\b")
 PERSONAL = re.compile(r"(?i)\b(my|mine|myself|i am|i'm|am i|family|brother|father|mother|birthday|birth date|age|hometown|home town|kunal|vaghani|jaydeep|rajeshbhai|alkaben|where do i live|where am i from|what job do i want|where do i want to work)\b")

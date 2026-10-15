@@ -1,0 +1,7 @@
+# Official current checks and compatibility — 2026-10-15 IST
+
+Firecrawl retrieved [Python futures](https://docs.python.org/3.10/library/concurrent.futures.html), [SQLite release history](https://sqlite.org/changes.html) and [Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs). [Machine-readable checks](upstream-checks.json).
+
+Python futures: running threads are not forcibly cancelled by Future.cancel/shutdown cancel_futures or wait timeouts; current docs identify3.10.22, page date unavailable. Existing stdlib cooperative drain is retained. Ollama documents local format schema plus independent response validation; no permission-granting claim, no page release date. No inference provider or model change.
+
+Official SQLite latest observed **3.54.0,2026-10-09**, mentioning WAL-reset corruption fixes; installed bundled version **3.37.2** is older. A specific vulnerability/applicability is not inferred without an advisory audit. Do not drop an untested SQLite DLL into the Windows native environments. Official [Python3.10.22](https://www.python.org/downloads/release/python-31022/) was checked in same-day Prompt09 (**2026-10-01**,security/source-only); installed **3.10.6** is older and3.10 support ended. Python/native Whisper/F5/brain migration requires separate compatibility work, not automatic package installation. No new dependency or paid API introduced.

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Cognition persistence",
+    "line": 81,
+    "healthy": "self.actions.cognition.persistence_healthy",
+    "repair": "self.actions.cognition.repair_persistence"
+  },
+  {
+    "name": "Docker Linux engine",
+    "line": 88,
+    "healthy": "self.docker_service.healthy",
+    "repair": "self.docker_service.repair"
+  },
+  {
+    "name": "Anticipation",
+    "line": 97,
+    "healthy": "self.actions.anticipation.healthy",
+    "repair": "self.actions.anticipation.repair"
+  },
+  {
+    "name": "Realtime observations",
+    "line": 103,
+    "healthy": "self.actions.realtime.healthy",
+    "repair": "self.actions.realtime.repair"
+  },
+  {
+    "name": "Island media observations",
+    "line": 108,
+    "healthy": "self.desk.media.healthy",
+    "repair": "self.desk.media.repair"
+  },
+  {
+    "name": "Ollama",
+    "line": 113,
+    "healthy": "self.ollama_service.healthy",
+    "repair": "self.ollama_service.repair"
+  },
+  {
+    "name": "Microphone",
+    "line": 120,
+    "healthy": "self.listener_healthy",
+    "repair": "self.repair_listener"
+  },
+  {
+    "name": "UI Automation worker",
+    "line": 122,
+    "healthy": "self.actions.ui_healthy",
+    "repair": "self.actions.repair_ui"
+  },
+  {
+    "name": "Browser automation worker",
+    "line": 124,
+    "healthy": "self.actions.browser_healthy",
+    "repair": "self.actions.repair_browser"
+  },
+  {
+    "name": "Configured models",
+    "line": 126,
+    "healthy": "self.model_recovery.healthy",
+    "repair": "self.model_recovery.repair"
+  },
+  {
+    "name": "Harness inference",
+    "line": 129,
+    "healthy": "lambda : harness_healthy(self.actions.brain.client)",
+    "repair": "lambda : repair_harness(self.actions.brain.client)"
+  },
+  {
+    "name": "God's Eye service",
+    "line": 133,
+    "healthy": "self.gods_eye_healthy",
+    "repair": "self.repair_gods_eye"
+  },
+  {
+    "name": "Development preview",
+    "line": 135,
+    "healthy": "lambda : self.actions.development_tools is None or self.actions.development_tools.healthy()",
+    "repair": "lambda : self.actions.development_tools is None or self.actions.development_tools.repair()"
+  },
+  {
+    "name": "Context selector",
+    "line": 95,
+    "healthy": "selector.healthy",
+    "repair": "selector.repair"
+  },
+  {
+    "name": "worker loop: Action/Question/Speech",
+    "line": 118,
+    "healthy": "lambda worker=worker: worker.thread.is_alive()",
+    "repair": "lambda worker=worker, name=name: restart_thread(worker, name)"
+  }
+]

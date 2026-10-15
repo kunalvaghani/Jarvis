@@ -1,0 +1,70 @@
+{
+  "scope": "Prompt09 scoped files; earlier dirty work preserved. No commit or deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/deliberation.py",
+      "sha256": "62ac1840b5b909393582a7c1226969642d8d6f152926940c6c99f01d9afae670"
+    },
+    {
+      "path": "app/jarvis/actions.py",
+      "sha256": "f2bd86ed8f2c98833b1a15fed94afb3014d48c7fe11567906ac8a053ee434ae2"
+    },
+    {
+      "path": "app/jarvis/brain.py",
+      "sha256": "06d2cdae797bd299d603f0ff1ab5a86daa0546fa4d8018698547b1412b5fa847"
+    },
+    {
+      "path": "app/jarvis/island_desk.py",
+      "sha256": "4dc1a15d030f28fa821a98897a9c7fc11bd73aadc422ee04ef1c1770eedd0ea8"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "35232456037651955fad2243e16a667dfe899a04af658274e66292b3121b1fcb"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "b42d639df5338a40202b2eeeccea9aad48973cf68cdaafa397a110c7307a062f"
+    },
+    {
+      "path": "app/scripts/verification/verify_deliberation_audit.py",
+      "sha256": "ce06180cdd649ed1debfaeaff00b45e602cc422e3ef8791b7d33a9574ba6af68"
+    },
+    {
+      "path": "app/scripts/verification/report_deliberation_audit.py",
+      "sha256": "4a5b962bed98c084ab3d0193cf5b30d98627c3f55d0627762fc0f8399572be1a"
+    },
+    {
+      "path": "app/tests/test_deliberation_audit.py",
+      "sha256": "46d14be418067e12814e0119e77aa4fda29b7dd06e69432098ff234fa70e9e95"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "a4e9dcce22ad4551055e2d0dbd35110c84ef1718f848e208b47bfdedb86fa5e6"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "4de5b3dac9bc912628e48bade6c4ca94e0ea33a0e757af08559d54093ea63174"
+    },
+    {
+      "path": "app/docs/deliberation-engine.md",
+      "sha256": "049ef42c2d0a2f314e4d384f6018a05346d394fd79d7c0c2498ce66ed3bc9bd2"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "ca716a37c5bf5bc9e2ed1f0b889693b98affcb6b7e66353b3849ecc463662a54"
+    },
+    {
+      "path": "README.md",
+      "sha256": "07f03bd4b6725c1a8fafaae8cc4a6c98dfe4a93750a9eec22fdcdb0e9a527133"
+    }
+  ],
+  "artifacts_directory": "app/artifacts/jarvis-audit/modules/09-deliberation",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "summary.json",
+    "remaining-case-ids.txt"
+  ]
+}

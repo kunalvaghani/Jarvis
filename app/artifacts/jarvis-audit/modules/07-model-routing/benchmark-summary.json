@@ -1,0 +1,39 @@
+{
+  "scope": "Exhausted quota with identical simulated20ms metadata wait. Cold includes gateway/SQLite feedback initialization; warm reuses gateway. No network/model/first-audio benchmark.",
+  "route": {
+    "before_cold_gateway": {
+      "samples": 5,
+      "p50_ms": 31.161399994743988,
+      "p95_ms": 42.310500000894535,
+      "peak_python_bytes": 25674
+    },
+    "before_warm_gateway": {
+      "samples": 20,
+      "p50_ms": 31.67694999865489,
+      "p95_ms": 41.96809999848483,
+      "peak_python_bytes": 4974
+    },
+    "after_cold_gateway": {
+      "samples": 5,
+      "p50_ms": 1.7069999958039261,
+      "p95_ms": 8.517200003552716,
+      "peak_python_bytes": 22446
+    },
+    "after_warm_gateway": {
+      "samples": 20,
+      "p50_ms": 0.21980000019539148,
+      "p95_ms": 1.6340999936801381,
+      "peak_python_bytes": 15846
+    }
+  },
+  "classification": {
+    "before": {
+      "p50_ms_per_request": 0.01351000028080307,
+      "p95_ms_per_request": 0.014400000509340316
+    },
+    "after": {
+      "p50_ms_per_request": 0.01340000017080456,
+      "p95_ms_per_request": 0.014159998681861907
+    }
+  }
+}

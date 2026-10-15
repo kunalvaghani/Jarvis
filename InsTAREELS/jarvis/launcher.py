@@ -77,7 +77,8 @@ def preflight(base=BASE, repair=True):
     config_path = config_file(base)
     backup = runtime / "config.last-good.json"
     try:
-        config = json.loads(config_path.read_text(encoding="utf-8"))
+        from .config_contract import load_config
+        config = load_config(config_path)
         from .gpu_scheduler import settings as gpu_settings
         gpu_settings(config.get('gpu_scheduler'))
         from .docker_runtime import settings as docker_settings

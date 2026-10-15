@@ -1,0 +1,79 @@
+{
+  "scope": "Module07 scoped files; existing dirty work preserved. No commit/install/deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/cloud_policy.py",
+      "sha256": "0a9c5148038a8ea23ea4fec635d4700e095f09c6218be6b95dec8cec70b6fb85"
+    },
+    {
+      "path": "app/jarvis/cloud_quota.py",
+      "sha256": "0d7be0da5997141298485a7fa8eed78b7eaa79f2529af01c58190c7bd4377264"
+    },
+    {
+      "path": "app/jarvis/groq_adapter.py",
+      "sha256": "93c674cabe90bbeb3f2ef72837379c242ddac5f12e768a8c847083cce9af1d56"
+    },
+    {
+      "path": "app/jarvis/hybrid_inference.py",
+      "sha256": "6be63ac4efb49152f2ea4b307b42be5482dfdadf6c760f7c4dd2a86212a6f37f"
+    },
+    {
+      "path": "app/jarvis/obsidian_memory.py",
+      "sha256": "1ba10fa1ad2a5bd393c84845591bdc03194c907a804af0af44e8e6c293edb94f"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "133ba0bd83fe54832feb97d3ffb9383eae50b6481ecfa3b91284a5c05748f237"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "414d95556f6bf666c33412f784ebec58c585ab485cf2ef3906b2bcea38ead4a6"
+    },
+    {
+      "path": "app/scripts/verification/verify_model_routing_audit.py",
+      "sha256": "c5adf5b93cada00f2a4bb4572ef56dcf25545b7db429c63438c7439317b6dc02"
+    },
+    {
+      "path": "app/scripts/verification/report_model_routing_audit.py",
+      "sha256": "51aa9e767e69c5c30622a68a56c4283581510afb79ea230d79bfbcfe4110f234"
+    },
+    {
+      "path": "app/tests/test_model_routing_audit.py",
+      "sha256": "7aef89b3ff66065217093c4217137efb9db10de046c97921678b48bba69375fa"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "f8e1bb936c3ce5228bd3405bf5054f9b5c524a67b005098c8bf7f216daf560f4"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "e9c968e6d8c90063a12eefb13a217075ed33237f22289e2db7cd293ab7030efe"
+    },
+    {
+      "path": "app/docs/groq-hybrid.md",
+      "sha256": "c89b489b8c83b706d5518360446d4389117262a7865209d22a959a4d09b33674"
+    },
+    {
+      "path": "app/docs/session-context.md",
+      "sha256": "6506cdd785fb430a1a7ee0754d49d9851d511a46e4cd2ff0501b652aa8260fcc"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "b1b6b6bb59fbb8552dcba629eba6a35a2957e86a3106c7092854cd8b267dd10b"
+    },
+    {
+      "path": "README.md",
+      "sha256": "df22996a6b5367e44c9f92fed1fe19f0e1c122ca6f0f68b203c750e22beee08f"
+    }
+  ],
+  "artifacts_directory": "app/artifacts/jarvis-audit/modules/07-model-routing",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "summary.json",
+    "remaining-case-ids.txt",
+    "security-findings.md"
+  ]
+}

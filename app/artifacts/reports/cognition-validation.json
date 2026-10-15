@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-14T17:47:12.624612+00:00",
+  "client_date": "2026-10-14 IST",
+  "full_unittest": {
+    "tests": 1785,
+    "seconds": 286.841,
+    "passed": true
+  },
+  "requested_pytest": {
+    "tests": 30,
+    "seconds": 10.09,
+    "passed": true
+  },
+  "benchmarks": {
+    "baseline": {
+      "date": "2026-10-14 IST",
+      "mode": "baseline",
+      "scope": "Synthetic sensor bursts, 4 Hz loop with 180 ms injected storage delay, 300 warm parser calls, 2000 timestamp decay batch. Not production/OS real-time certification.",
+      "tick_ms": {
+        "samples": 10,
+        "median": 0.14970000029279618,
+        "p95": 0.21709999964514282,
+        "max": 0.21800000013172394
+      },
+      "interval_ms": {
+        "samples": 9,
+        "median": 264.6074000003864,
+        "p95": 440.89749999966443,
+        "max": 452.96220000000176
+      },
+      "routing_ms": {
+        "samples": 300,
+        "median": 3.894099999797618,
+        "p95": 5.307299999913084,
+        "max": 801.080300000649
+      },
+      "scalar_decay_ms": 1.1792999999670428,
+      "batch_decay_ms": null,
+      "source_sha256": {
+        "cognition.py": "26df0ef4e291f6c2f098c87e24df7e1a2cf1660428cbc61efda05f7109826964",
+        "context_hub.py": "049ad6453b8c75947aaea47fe02523e6496203c1763849425f94fe32d24c32cd",
+        "engine.py": "80675e1d39b128667b4831335839345fcd3764e33f30148a0b5bec289621f70a",
+        "commands.py": "1bae000a040f6d8f5135b7b430e8336331783b0d0add7865c09a1d5d827750b2",
+        "deliberation.py": "ed393aeb9ebe1fbcd9b260ebfac51c9b63d389c531414d26b5db18cbb561d5d8",
+        "task_recovery.py": "594daa34b5860bee5f5a5a49a7520df3a2211508d3522cf847f0cf627d1c3b11",
+        "experience.py": "db86dd45a18bef31b97031a162b95dfecfaae1bfb54c041a3bcdfb8dd313b047"
+      }
+    },
+    "upgraded": {
+      "date": "2026-10-14 IST",
+      "mode": "upgraded",
+      "scope": "Synthetic sensor bursts, 4 Hz loop with 180 ms injected storage delay, 300 parser calls including first resolver import, 2000 timestamp decay batch. Not production/OS real-time certification.",
+      "tick_ms": {
+        "samples": 12,
+        "median": 0.1864999999270367,
+        "p95": 0.2285999999003252,
+        "max": 0.25300000015704427
+      },
+      "interval_ms": {
+        "samples": 11,
+        "median": 249.91460000001098,
+        "p95": 262.8956999997172,
+        "max": 264.7170999998707
+      },
+      "routing_ms": {
+        "samples": 300,
+        "median": 0.0006000000212225132,
+        "p95": 0.0008000006346264854,
+        "max": 0.009299999874201603
+      },
+      "scalar_decay_ms": 1.246709999986706,
+      "batch_decay_ms": 0.29162999999243766,
+      "source_sha256": {
+        "cognition.py": "3a5856feb898dba27476aa7d24dfa9fa04e7dded2cacd7e66853f08c01ff30bb",
+        "context_hub.py": "d865cd88a8689b79a31700482d9d5cd8e581b9dbafb74b08d448630b6fd322ba",
+        "engine.py": "66daed95fec155d6dd9992c893a9350771ad26e5e11409f7dc25add8eb48a7a7",
+        "commands.py": "924df53bed500f164e493988e4f336bc8049dfeb7a280c93ea94f087f28c8206",
+        "deliberation.py": "acdd2aafac692d9cc439ebecb9f1294e8c5a51708eb96ed4f9ad80021b8ed4ac",
+        "task_recovery.py": "23cdaf8b3ee3d64a6b35206f6101943474313b380e3ff58d184509e7b786d556",
+        "experience.py": "87c8584f47d4973c58335280e92723acabafa89fc427a92cfd74e1c1b7c4812f"
+      }
+    }
+  },
+  "source_sha256": {
+    "jarvis/cognition.py": "3a5856feb898dba27476aa7d24dfa9fa04e7dded2cacd7e66853f08c01ff30bb",
+    "jarvis/engine.py": "66daed95fec155d6dd9992c893a9350771ad26e5e11409f7dc25add8eb48a7a7",
+    "jarvis/deliberation.py": "acdd2aafac692d9cc439ebecb9f1294e8c5a51708eb96ed4f9ad80021b8ed4ac",
+    "jarvis/context_hub.py": "d865cd88a8689b79a31700482d9d5cd8e581b9dbafb74b08d448630b6fd322ba",
+    "jarvis/task_recovery.py": "23cdaf8b3ee3d64a6b35206f6101943474313b380e3ff58d184509e7b786d556",
+    "jarvis/commands.py": "924df53bed500f164e493988e4f336bc8049dfeb7a280c93ea94f087f28c8206",
+    "jarvis/cloud_policy.py": "2c8189f9d966c0763860aefcc795bf0686f0616b9c9fe31dc243db4bbb18a39c",
+    "jarvis/task_state.py": "4288ce066db78bba5250f7efeb2fd4c6c716d654e26e437385400f84b8331c90",
+    "jarvis/gmail_writes.py": "7334110b29fa589ca787f6ea1afd981b702f2482cbe2487d0f22b0e866614a39",
+    "jarvis/gmail_api.py": "b6b5873f19d8855248212184feebbb33c484c6ce8a9de79c5612730805dd0baf",
+    "jarvis/brain.py": "4ee57bc6efe77f201fc28054ff5dcee1f5fa79a39fa0ccdb81b3cd28fcfad88f",
+    "jarvis/experience.py": "87c8584f47d4973c58335280e92723acabafa89fc427a92cfd74e1c1b7c4812f",
+    "jarvis/intent_catalog.py": "6683dd4e272ee983b46bb48353d5dce192ff88acd54538f9c1e4adb937d19a02",
+    "jarvis/actions.py": "f3061e9c9a6256a325b722db0d2543d1c64fbba8b780c20aac7f08869129bbdd",
+    "main.py": "b33a2e0e7fb3265cccc902d4f48baf4f08d10a5a6473eb23a7422077879ba743",
+    "config/runtime_manifest.json": "8d8791e0629474aa4cee5cee6ea2092d5d846dc94da7d96a7823c772755cb461"
+  },
+  "limits": [
+    "Controlled sensor ingress and injected storage, not hard real-time",
+    "Simulated Groq endpoint and mocked local generation; no real provider or mailbox writes",
+    "Bayesian intervals describe historical counters, not proven semantic calibration",
+    "No microphone/speaker/live hardware sensors/soak or GPU memory acceptance check",
+    "Immutable dispatch is not protection against arbitrary trusted source modification"
+  ],
+  "readiness": {
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "available",
+        "version": "29.8.2",
+        "os": "linux"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  }
+}

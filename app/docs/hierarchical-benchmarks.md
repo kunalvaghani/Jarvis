@@ -1,5 +1,11 @@
 # Hierarchical upgrade benchmarks and acceptance
 
+**2026-10-15 audit follow-up:** [Prompt10](../artifacts/jarvis-audit/modules/10-dag-planning/inventory.md)
+adds paired source-fingerprint timing/allocation measurements, exact catalog
+assertions and regression/readiness evidence. These component fixtures are
+separate from the historical 2026-10-14 native-model and controlled-I/O results
+below. No new end-to-end model, speech or live account latency claim is made.
+
 Measured 2026-10-14 IST. The [baseline](../artifacts/reports/hierarchical-baseline.json)
 was collected before production edits. Existing uncommitted conversation/F5 work
 was part of that baseline and was preserved. The dedicated branch is

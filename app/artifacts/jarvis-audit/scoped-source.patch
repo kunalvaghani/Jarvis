@@ -1,0 +1,186 @@
+--- pre-audit/jarvis/cognition.py
++++ app/jarvis/cognition.py
+@@ -101,7 +101,8 @@
+         self.salience, self.at = max(0., min(1., salience)), time.time()
+ 
+     def weight(self, now):
+-        return self.salience * math.exp(-(now - self.at) / 120.)  # Attention fades over about two minutes.
++        # Wall-clock corrections cannot amplify salience or overflow exp().
++        return self.salience * math.exp(-max(0., now - self.at) / 120.)
+ 
+     def as_dict(self):
+         return {"source": self.source, "modality": self.modality, "content": self.content,
+@@ -209,9 +210,10 @@
+ 
+     def _offer(self, queue, percept):
+         if len(queue) == queue.maxlen:
+-            lowest = min(queue, key=lambda p:(p.salience, p.at))
++            now = percept.at
++            lowest = min(queue, key=lambda p:(p.weight(now), p.at))
+             self.dropped_events += 1
+-            if (percept.salience, percept.at) <= (lowest.salience, lowest.at):
++            if (percept.weight(now), percept.at) <= (lowest.weight(now), lowest.at):
+                 return
+             queue.remove(lowest)
+         queue.append(percept)
+@@ -349,6 +351,13 @@
+         return {**value, 'attempts':attempts,'successes':successes,'failures':attempts-successes,
+             'mean_seconds':seconds,'last_failure':str(value.get('last_failure',''))[:200]}
+ 
++    def procedure_stats(self, kind=None):
++        """Validated copy for every consumer; never expose mutable history rows."""
++        with self.lock:
++            if kind is not None:
++                return self._stat(self.stats.get(kind))
++            return {key:self._stat(value) for key,value in self.stats.items()}
++
+     def _referent(self):
+         """Something recent in working memory that 'it/that/her' can point at (a draft, a chat, a task)."""
+         actions = self.actions
+@@ -363,7 +372,7 @@
+             parts.append("I'd show you a preview and wait for your approval first")
+         parts.append("it usually takes about " + _seconds(prediction["expected_seconds"]))
+         parts.append("based on past runs it succeeds about " + str(round(prediction["success_chance"] * 100)) + "% of the time"
+-                     if self.stats.get(prediction["kind"], {}).get("attempts", 0) >= 3 else "I don't have enough history yet to estimate how often it works")
++                     if prediction.get('history_samples', 0) >= 3 else "I don't have enough history yet to estimate how often it works")
+         text = parts[0] + "; " + "; ".join(parts[1:]) + "."
+         if prediction["uncertain"]:
+             text += " I'm unsure because " + "; ".join(prediction["uncertain"]) + "."
+--- pre-audit/jarvis/deliberation.py
++++ app/jarvis/deliberation.py
+@@ -111,8 +111,7 @@
+                 context["memory"] = cognition.recall(goal, 3)
+             except Exception:
+                 pass
+-            stats = getattr(cognition, "stats", {}) or {}
+-            task_stat = stats.get("task", {})
++            task_stat = self._task_stat()
+             if task_stat.get("attempts", 0) >= 3:
+                 context["task_reliability"] = round(
+                     task_stat.get("successes", 0) / max(1, task_stat.get("attempts", 1)), 2)
+@@ -131,9 +130,7 @@
+         """Blend the model's self-estimate with learned reliability and uncertainty penalties."""
+         value = model_confidence if isinstance(model_confidence, (int, float)) else 0.5
+         value = max(0.0, min(1.0, float(value)))
+-        cognition = getattr(self.actions, "cognition", None)
+-        stats = getattr(cognition, "stats", {}) if cognition is not None else {}
+-        task_stat = (stats or {}).get("task", {})
++        task_stat = self._task_stat()
+         if task_stat.get("attempts", 0) >= 3:
+             rate = task_stat.get("successes", 0) / max(1, task_stat.get("attempts", 1))
+             value = 0.6 * value + 0.4 * rate
+@@ -142,6 +139,14 @@
+         if risk == "high":
+             value -= 0.1
+         return round(max(0.05, min(0.99, value)), 2)
++
++    def _task_stat(self):
++        from .cognition import Cognition
++        cognition = getattr(self.actions, 'cognition', None)
++        if isinstance(cognition, Cognition):
++            return cognition.procedure_stats('task')
++        stats = getattr(cognition, 'stats', {})
++        return Cognition._stat(stats.get('task') if isinstance(stats, dict) else None)
+ 
+     # --- opinion formation -----------------------------------------------------------------------------------------
+     def form_opinion(self, goal, command, cancelled, exclude=None):
+--- pre-audit/jarvis/engine.py
++++ app/jarvis/engine.py
+@@ -43,15 +43,17 @@
+         self.lock = threading.RLock()
+ 
+     def reset(self):
+-        self.active = False
+-        self._reset_segment()
++        with self.lock:
++            self.active = False
++            self._reset_segment()
+ 
+     def activate(self, now=None):
+         """A deliberate Start listening click also wakes the command engine."""
+-        self.reset()
+-        self.active = True
+-        self.last_speech = time.monotonic() if now is None else now
+-        self.report("state", "Awake · say a command, for example open notepad")
++        with self.lock:
++            self.reset()
++            self.active = True
++            self.last_speech = time.monotonic() if now is None else now
++            self.report("state", "Awake · say a command, for example open notepad")
+ 
+     def _reset_segment(self):
+         self.opened = None
+--- pre-audit/jarvis/self_evolution.py
++++ app/jarvis/self_evolution.py
+@@ -106,7 +106,12 @@
+ 
+         # 1. Unreliable action kinds from the cognition world model's learned statistics.
+         cognition = getattr(self.actions, "cognition", None)
+-        stats = getattr(cognition, "stats", {}) or {}
++        from .cognition import Cognition
++        if isinstance(cognition, Cognition):
++            stats = cognition.procedure_stats()
++        else:
++            raw = getattr(cognition, 'stats', {})
++            stats = {k:Cognition._stat(v) for k,v in raw.items()} if isinstance(raw, dict) else {}
+         for kind, st in stats.items():
+             attempts, failures = st.get("attempts", 0), st.get("failures", 0)
+             if attempts >= 3 and failures / max(1, attempts) > 0.5:
+--- pre-audit/tests/test_knowledge.py
++++ app/tests/test_knowledge.py
+@@ -13,7 +13,7 @@
+ from jarvis.actions import Actions
+ from jarvis.ui_controls import UIControls
+ from jarvis.ui_memory import UIMemory
+-from test_ui_controls import FakeRunner, control
++from tests.test_ui_controls import FakeRunner, control
+ 
+ 
+ class KnowledgeTests(unittest.TestCase):
+--- pre-audit/tests/test_media_routes.py
++++ app/tests/test_media_routes.py
+@@ -9,7 +9,7 @@
+ from jarvis.engine import Engine
+ from jarvis import media_ui
+ from jarvis.ui_controls import UIControls, _category
+-from test_ui_controls import FakeRunner, control
++from tests.test_ui_controls import FakeRunner, control
+ 
+ 
+ class MediaRoutesTests(unittest.TestCase):
+--- pre-audit/tests/test_natural_names.py
++++ app/tests/test_natural_names.py
+@@ -12,7 +12,7 @@
+ from jarvis.engine import Engine
+ from jarvis.names import rank, rank_spelling
+ from jarvis.ui_controls import matches, UIControls
+-from test_ui_controls import FakeRunner, control
++from tests.test_ui_controls import FakeRunner, control
+ from scripts.catalog.build_catalog_index import build
+ 
+ 
+--- pre-audit/tests/test_codex_validation.py
++++ app/tests/test_codex_validation.py
+@@ -8,7 +8,7 @@
+ import unittest
+ from unittest.mock import Mock, patch
+ 
+-from jarvis.codex_validation import contract, declare, inspect, validate_project, repair_packet, execute_check, test_evidence, placeholders, error_summary
++from jarvis.codex_validation import contract, declare, inspect, validate_project, repair_packet, execute_check, test_evidence as validation_evidence, placeholders, error_summary
+ 
+ 
+ class CodexValidation(unittest.TestCase):
+@@ -200,11 +200,11 @@
+         for kind,output in [('node_tests','# tests 0\n# pass 0'),('node_tests','# tests 1\n# skipped 1'),
+                             ('npm_test','Completed successfully'),('npm_test','Tests 1 passed | 1 todo')]:
+             with self.subTest(kind=kind,output=output),self.assertRaisesRegex(ValueError,'unverified'):
+-                test_evidence(kind,output)
++                validation_evidence(kind,output)
+         for kind,output in [('node_tests','# tests 2\n# pass 2\n# skipped 0'),
+                             ('npm_test','Tests 3 passed (3)'),('npm_test','2 passed (1.2s)'),
+                             ('npm_test','\x1b[32mTests\x1b[0m 3 passed (3)')]:
+-            test_evidence(kind,output)
++            validation_evidence(kind,output)
+ 
+     def test_source_changed_during_test_stops_before_repair(self):
+         source=self.root/'logic.py';source.write_text('def answer():\n    return 42\n')

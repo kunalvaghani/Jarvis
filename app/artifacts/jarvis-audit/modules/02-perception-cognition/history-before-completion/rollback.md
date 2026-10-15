@@ -1,0 +1,7 @@
+# Rollback and deterministic continuation
+
+Intentionally stop the owned Jarvis app before rollback. Preserve newer edits. Compare `source.patch` with `.jarvis-runtime/jarvis-audit/module02-pre/cognition.py`, then restore only the selected cognition hunks or that preimage if no later changes intervene. Never use git reset/clean or restore HEAD over prior dirty audit work. Keep all runtime/task state and uncertainty journals intact. No schema migration, permission change or replay queue was added.
+
+To rerun: from app use `.venv/Scripts/python.exe -m pytest tests/test_perception_cognition_audit.py tests/test_cognition.py tests/test_cognition_and_routing.py tests/test_self_evolution.py tests/test_audit_resilience.py -q`; full `-m pytest tests -q`; `-m jarvis.launcher --check`. Benchmark: `scripts/verification/verify_perception_cognition.py` (preserve old artifacts first). Reconcile and publish: `-m scripts.verification.audit_catalog --reconcile`, then `-m scripts.verification.report_perception_cognition`. Publisher refuses a benchmark/source hash mismatch or an incomplete/failing full XML.
+
+Continue at JRV-02-008 with bounded owned sensor-worker fault fixtures, then JRV-02-010 task identity. `remaining-case-ids.txt` is the exact module backlog; the top-level file preserves every pending ID across all 37 modules. Do not convert related regression coverage or benchmark samples into a catalog PASS without a dedicated executed assertion. Account/GUI/hardware prerequisites require separately scoped live acceptance. Whole-system release remains uncertified.

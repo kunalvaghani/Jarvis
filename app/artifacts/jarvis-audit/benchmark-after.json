@@ -1,0 +1,254 @@
+{
+  "date": "2026-10-14 IST",
+  "phase": "after",
+  "scope": "Authored 800 scenario/2400 phrasing oracle and bounded synthetic sensor fixtures; no real LLM answer quality or end-user acceptance measurement",
+  "intent": {
+    "correct": 2400,
+    "total": 2400,
+    "accuracy": 1.0,
+    "per_class": {
+      "api_health": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "approval_answer": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ask": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "behavior": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "cancel_all": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "cancel_current": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "cancel_task": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "click_control": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "close_app": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "compose_text": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "conversation_style": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "end_conversation": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_camera": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_explain": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_show": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_status": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_update": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "gods_eye_view": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "jarvis_status": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "media_control": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "media_related": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "media_search": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "memory_conversations": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "memory_forget": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "memory_list": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "memory_save": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "memory_summarize": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "messenger_focus": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "open": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "open_folder": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "play_media": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "project_recent": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "queue_status": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "repeat_last": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "repo_explain": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "repo_learn": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "repo_list": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "resume_task": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "select_context": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "spotify_control": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "spotify_volume": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "stop_speaking": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "system_info": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "task": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "toolkit": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "unparsed": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "weather_alerts": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "whatsapp_read": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "whatsapp_reply": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "windows_command": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "write_text": {
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "routing_ms": {
+      "n": 2400,
+      "p50": 0.1820000002226152,
+      "p95": 2.784600000268256,
+      "max": 132.44190000023082
+    },
+    "total_seconds": 1.3575385000003735
+  },
+  "cold_parser_ms": 78.88860000002751,
+  "tick_ms": {
+    "n": 24,
+    "p50": 0.20510000013018725,
+    "p95": 0.28960000054212287,
+    "max": 0.2984000002470566
+  },
+  "ingress_21_ms": {
+    "n": 193,
+    "p50": 1.752199999828008,
+    "p95": 2.180700000280922,
+    "max": 2.699600000596547
+  },
+  "interval_ms": {
+    "n": 23,
+    "p50": 250.0,
+    "p95": 264.9999999994179,
+    "max": 264.9999999994179
+  },
+  "stop_workers_alive": false,
+  "fresh_window_rank1": true,
+  "scoped_tools": [
+    "application_inspect",
+    "open"
+  ],
+  "decay_2000_ms": {
+    "n": 30,
+    "p50": 0.3071999999519903,
+    "p95": 0.33379999968019547,
+    "max": 0.38069999936851673
+  }
+}

@@ -1,0 +1,233 @@
+--- module08-pre/jarvis/gpu_scheduler.py
++++ jarvis/gpu_scheduler.py
+@@ -12,2 +12,4 @@
+ import time
++import math
++import re
+ from urllib.parse import urlsplit
+@@ -27,2 +29,41 @@
+ 
++def model_label(value):
++    from .cloud_policy import SECRET, PRIVATE
++    return (isinstance(value,str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/-]{0,149}',value)
++            and not SECRET.search(value) and not PRIVATE.search(value))
++
++
++def validate_state(value):
++    """Bound persisted input before owner inspection; corrupt state never grants admission."""
++    if not isinstance(value,dict) or not isinstance(value.get('pending'),list) or len(value['pending'])>128:
++        raise ValueError('Invalid GPU lease state; no inference issued.')
++    pending=[(value,0)];nodes=0
++    while pending:
++        item,depth=pending.pop();nodes+=1
++        if depth>12 or nodes>4096 or type(item) is float and not math.isfinite(item):
++            raise ValueError('GPU lease state exceeds structural limits.')
++        if isinstance(item,dict):pending.extend((v,depth+1) for v in item.values())
++        elif isinstance(item,list):pending.extend((v,depth+1) for v in item)
++    rows=value['pending']+([value['active']] if value.get('active') is not None else [])
++    seen=set()
++    for row in rows:
++        if (not isinstance(row,dict) or row.get('role') not in PRIORITIES
++                or row.get('priority')!=PRIORITIES[row['role']]
++                or not isinstance(row.get('token'),str) or not re.fullmatch('[a-f0-9]{32}',row['token'])
++                or row['token'] in seen or type(row.get('pid')) is not int or row['pid']<=0
++                or not model_label(row.get('model'))
++                or any(type(row.get(k)) not in (int,float) or not math.isfinite(row[k]) or row[k]<0 for k in ('birth','queued_at'))):
++            raise ValueError('Invalid GPU owner record; no inference issued.')
++        seen.add(row['token'])
++    resident=value.get('resident')
++    if resident is not None:
++        if (not isinstance(resident,dict) or not model_label(resident.get('model'))
++                or not isinstance(resident.get('digest'),str) or not 1<=len(resident['digest'])<=150
++                or type(resident.get('size_vram')) is not int or resident['size_vram']<0
++                or type(resident.get('context')) is not int or not 1<=resident['context']<=262144
++                or type(resident.get('num_gpu')) is not int or not -1<=resident['num_gpu']<=33
++                or type(resident.get('expires_at')) not in (int,float) or not math.isfinite(resident['expires_at'])):
++            raise ValueError('Invalid GPU cache record; no inference issued.')
++
++
+ def replace_state(temporary,path):
+@@ -42,2 +83,3 @@
+         raise ValueError('gpu_scheduler must be an object.')
++    if options is not None and set(options)-set(DEFAULTS):raise ValueError('Unknown GPU setting.')
+     value={**DEFAULTS, **(options or {})}
+@@ -78,3 +120,6 @@
+     if not hardware or type(context) is not int or context<1:return 0
+-    budget=hardware['total_mb']-max(hardware['used_mb'],policy['speech_reserve_mb'])-policy['reserve_mb']
++    available=hardware['total_mb']-max(hardware['used_mb'],policy['speech_reserve_mb'])
++    # Leave at least one sixth of available memory: a 20% envelope overrun
++    # then fits (estimate <= available/1.2), even with a smaller configured reserve.
++    budget=available-max(policy['reserve_mb'],available/6)
+     if model in {'qwen3.5:0.8b','qwen2.5:0.5b'}:
+@@ -105,2 +150,3 @@
+         value=json.loads(path.read_text())
++        validate_state(value)
+         active=value.get('active');active=active if active and alive(active) else None
+@@ -141,5 +187,15 @@
+             try:
+-                value=json.loads(self.path.read_text()) if self.path.exists() else {'active':None,'pending':[]}
+-                if not isinstance(value,dict) or not isinstance(value.get('pending'),list):
+-                    raise ValueError('Invalid GPU lease state; no inference issued.')
++                before=None
++                if self.path.exists():
++                    with self.path.open(encoding='utf-8') as source:
++                        pieces=[];size=0
++                        while size<=200000:
++                            piece=source.read(min(4096,200001-size))
++                            if not piece:break
++                            pieces.append(piece);size+=len(piece)
++                        before=''.join(pieces)
++                    if len(before)>200000:raise ValueError('GPU lease state exceeds size limit.')
++                try:value=json.loads(before) if before is not None else {'active':None,'pending':[]}
++                except RecursionError:raise ValueError('GPU lease state exceeds depth limit.') from None
++                validate_state(value)
+                 if value.get('active') and not self.live(value['active']):value['active']=None
+@@ -148,4 +204,8 @@
+                 yield value
+-                temp=self.path.with_suffix('.tmp')
+-                temp.write_text(json.dumps(value)+'\n');replace_state(temp,self.path)
++                validate_state(value)
++                serialized=json.dumps(value,allow_nan=False)+'\n'
++                if len(serialized)>200000:raise ValueError('GPU lease state exceeds size limit.')
++                if serialized!=before:
++                    temp=self.path.with_suffix('.tmp')
++                    temp.write_text(serialized,encoding='utf-8');replace_state(temp,self.path)
+             finally:
+@@ -157,2 +217,14 @@
+         # Metadata only, never input/output, screenshots, URLs or tool arguments.
++        allowed={'stage','role','model','previous_model','wait_seconds','num_gpu','context_tokens','gpu_slot','trace_id','error_type'}
++        value={key:item for key,item in value.items() if key in allowed and type(item) in (str,int,float,bool)}
++        stages={'admitted','dispatch','released','handoff','failed','cache_identity_unconfirmed','cache_duration_unconfirmed'}
++        if value.get('stage') not in stages:return
++        if value.get('role') not in PRIORITIES:value.pop('role',None)
++        for key in ('wait_seconds','num_gpu','context_tokens'):
++            if key in value and (type(value[key]) not in (int,float) or not math.isfinite(value[key])):value.pop(key)
++        if 'gpu_slot' in value and type(value['gpu_slot']) is not bool:value.pop('gpu_slot')
++        for key in ('model','previous_model'):
++            if key in value and not model_label(value[key]):value[key]='redacted_model'
++        if 'error_type' in value and not model_label(value['error_type']):value['error_type']='InferenceError'
++        if 'trace_id' in value and not re.fullmatch('[a-f0-9]{32}',str(value['trace_id'])):value.pop('trace_id')
+         try:
+@@ -167,2 +239,3 @@
+         if role not in PRIORITIES:raise ValueError('Unknown inference role.')
++        if not model_label(model):raise ValueError('Invalid inference model label; no admission issued.')
+         self.role,self.model,self.policy=role,model,policy
+@@ -172,3 +245,7 @@
+ 
++    def event(self,**value):
++        self.registry.event(trace_id=self.row['token'],**value)
++
+     def acquire(self):
++        if self.admitted:raise ValueError('GPU lease is already admitted; duplicate acquisition refused.')
+         if self.role in HELPERS and not self.policy['helper_gpu']:return False
+@@ -192,3 +269,3 @@
+                 if self.admitted:
+-                    self.registry.event(stage='admitted',role=self.role,model=self.model,
++                    self.event(stage='admitted',role=self.role,model=self.model,
+                         wait_seconds=round(time.monotonic()-started,3));return True
+@@ -243,3 +320,3 @@
+             finally:observation.close()
+-        hardware=memory() if admitted else None
++        hardware=None
+         layers=0
+@@ -247,2 +324,3 @@
+         try:
++            hardware=memory() if admitted else None
+             if admitted:
+@@ -261,3 +339,3 @@
+                         unload.raise_for_status();unload.close()
+-                        lease.registry.event(stage='handoff',role=role,model=model,previous_model=previous['model'])
++                        lease.event(stage='handoff',role=role,model=model,previous_model=previous['model'])
+                         hardware=memory()
+@@ -277,3 +355,3 @@
+                 kwargs['json']={**payload,'keep_alive':keep,'options':options}
+-            lease.registry.event(stage='dispatch',role=role,model=model,num_gpu=layers,
++            lease.event(stage='dispatch',role=role,model=model,num_gpu=layers,
+                 context_tokens=context,gpu_slot=admitted)
+@@ -282,4 +360,6 @@
+                                  'context_tokens':context,'gpu_slot':admitted}
+-        except BaseException:
+-            if admitted:lease.close()
++        except BaseException as error:
++            if admitted:
++                lease.event(stage='failed',role=role,model=model,error_type=type(error).__name__)
++                lease.close()
+             raise
+@@ -287,6 +367,8 @@
+         closed=False
++        release_lock=threading.Lock()
+         def release():
+             nonlocal closed
+-            if closed:return
+-            closed=True
++            with release_lock:
++                if closed:return
++                closed=True
+             try:
+@@ -297,3 +379,3 @@
+                     except (requests.RequestException,KeyError,ValueError):
+-                        lease.registry.event(stage='cache_identity_unconfirmed',role=role,model=model)
++                        lease.event(stage='cache_identity_unconfirmed',role=role,model=model)
+                 if target.path.startswith('/v1/') and row:
+@@ -305,3 +387,3 @@
+                     except requests.RequestException:
+-                        lease.registry.event(stage='cache_duration_unconfirmed',role=role,model=model)
++                        lease.event(stage='cache_duration_unconfirmed',role=role,model=model)
+                 if row and layers>0 and policy['warm_seconds']:
+@@ -313,5 +395,5 @@
+                     except (requests.RequestException,KeyError,ValueError):
+-                        lease.registry.event(stage='cache_identity_unconfirmed',role=role,model=model)
++                        lease.event(stage='cache_identity_unconfirmed',role=role,model=model)
+             finally:
+-                lease.registry.event(stage='released',role=role,model=model)
++                lease.event(stage='released',role=role,model=model)
+                 lease.close()
+--- module08-pre/jarvis/self_evolution.py
++++ jarvis/self_evolution.py
+@@ -333,3 +333,3 @@
+         except Exception:
+-            return True  # Without psutil, rely on idle + cooldown gating only.
++            return False  # Unknown capacity must not start optional learning.
+         try:
+@@ -344,3 +344,3 @@
+         except Exception:
+-            return True
++            return False
+         return True
+--- module08-pre/jarvis/repo_abilities.py
++++ jarvis/repo_abilities.py
+@@ -604,3 +604,3 @@
+                 return self.model
+-            if self.fallback_model in sizes:
++            if self.fallback_model in sizes and sizes[self.fallback_model] + self.memory_margin_gb <= free_gb:
+                 return self.fallback_model
+@@ -608,3 +608,3 @@
+             pass
+-        return self.fallback_model
++        raise AbilityError('Insufficient or unknown RAM for ability inference; learning deferred.')
+ 
+--- module08-pre/config/runtime_manifest.json
++++ config/runtime_manifest.json
+@@ -2,2 +2,10 @@
+   "version": 1,
++  "gpu_audit_2026_10_15": {
++    "state": "200000 characters, depth12/4096 nodes, <=128 pending records; validated role/priority/owner/cache metadata; unchanged polls keep the OS lock but skip atomic rewrites",
++    "safety": "20 percent primary-envelope margin floor, probe failures release admission, duplicate acquisition refused, serialized release bookkeeping, categorical UUID events; no forced CUDA clears",
++    "optional_learning": "Unknown resource readings defer idle learning; selected fallback needs installed size plus configured RAM margin",
++    "limits": "Ollama admission only; F5/Whisper lack a shared lease protocol. No running-model preemption or physical immediate VRAM-release guarantee.",
++    "new_dependencies": [],
++    "new_services": []
++  },
+   "question_context_contract": {
+--- module08-pre/scripts/verification/audit_catalog.py
++++ scripts/verification/audit_catalog.py
+@@ -73,3 +73,3 @@
+             state='FAIL' if node.find('failure') is not None or node.find('error') is not None else ('SKIPPED' if node.find('skipped') is not None else 'PASS')
+-            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit')):
++            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit')):
+                 skipped=node.find('skipped')
+@@ -79,3 +79,3 @@
+             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
+-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_audit_completion_cases')):
++            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_audit_completion_cases')):
+                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])

@@ -5,12 +5,14 @@ cancellation; workers are drained before returning, never abandoned or replayed.
 """
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 import copy
+import hashlib
 from dataclasses import dataclass
 import json
 import math
 import re
 import threading
 import time
+import uuid
 
 from .repo_analysis import validate
 
@@ -47,6 +49,32 @@ def bounded_number(value, low, high):
     return type(value) in {int, float} and math.isfinite(value) and low <= value <= high
 
 
+def bounded_payload(value, maximum):
+    """Bound JSON structure before encoding, including hostile depth/cycles."""
+    pending=[(value,0)];nodes=0;characters=0
+    while pending:
+        item,depth=pending.pop();nodes+=1
+        if depth>20 or nodes>6000:
+            raise ValueError('DAG payload exceeds structural limits.')
+        if isinstance(item,str):characters+=len(item)
+        elif isinstance(item,dict):
+            if len(item)>1000 or any(not isinstance(k,str) for k in item):raise ValueError('Invalid DAG object.')
+            characters+=sum(len(k) for k in item)
+            pending.extend((v,depth+1) for v in item.values())
+        elif isinstance(item,list):
+            if len(item)>1000:raise ValueError('DAG array exceeds limit.')
+            pending.extend((v,depth+1) for v in item)
+        elif item is not None and type(item) not in (bool,int,float):raise ValueError('Invalid DAG JSON value.')
+        elif type(item) is float and not math.isfinite(item):raise ValueError('Nonfinite DAG value.')
+        if characters>maximum:raise ValueError('DAG payload exceeds text budget.')
+    if len(json.dumps(value,allow_nan=False))>maximum:raise ValueError('DAG payload exceeds encoded budget.')
+
+
+def step_binding(step, arguments):
+    from dataclasses import asdict
+    return hashlib.sha256(json.dumps({'step':asdict(step),'resolved':arguments},sort_keys=True,allow_nan=False).encode()).hexdigest()
+
+
 def references(value, depth=0):
     if depth > 20:
         raise ValueError('Result references exceed nesting limit.')
@@ -55,7 +83,7 @@ def references(value, depth=0):
             ref = value['$ref']
             if (set(value) != {'$ref'} or not isinstance(ref, dict) or
                     set(ref) != {'step', 'path', 'type'} or not isinstance(ref['step'], str) or
-                    ref['type'] not in {'string', 'integer', 'number', 'boolean', 'object', 'array'} or
+                    not isinstance(ref['type'], str) or ref['type'] not in {'string', 'integer', 'number', 'boolean', 'object', 'array'} or
                     not isinstance(ref['path'], list) or len(ref['path']) > 8 or
                     any(not (type(k) is int and 0 <= k < 1000 or
                         isinstance(k, str) and 0 < len(k) < 100 and not k.startswith('__')) for k in ref['path'])):
@@ -97,11 +125,11 @@ def argument_shape(schema, value):
 
 
 def validate_plan(plan, tools, budgets=None):
+    bounded_payload(plan,100000)
     budgets = budgets or {'cpu': 4, 'ram_mb': 256, 'gpu_mb': 0}
     if (not isinstance(plan, dict) or set(plan) != {'version', 'steps'} or
             type(plan['version']) is not int or plan['version'] != 1 or
-            not isinstance(plan['steps'], list) or not 1 <= len(plan['steps']) <= 40 or
-            len(json.dumps(plan, allow_nan=False)) > 100000):
+            not isinstance(plan['steps'], list) or not 1 <= len(plan['steps']) <= 40):
         raise ValueError('Invalid bounded DAG envelope.')
     steps, ids = [], set()
     fields = {'id', 'tool', 'arguments', 'dependencies', 'expected', 'permission', 'resources', 'retry', 'timeout_seconds'}
@@ -206,14 +234,17 @@ class Executor:
         if restored:
             for step in steps:
                 old = restored.get(step.id, {})
-                if old.get('status') == 'succeeded' and self.tools[step.tool].read_only:
-                    args = resolve(step.arguments, restored)
+                if (old.get('status') == 'succeeded' and self.tools[step.tool].read_only and
+                        all(rows[dep]['status']=='succeeded' for dep in step.dependencies)):
+                    args = resolve(step.arguments, rows)
+                    argument_shape(self.tools[step.tool].schema,args)
                     self.tools[step.tool].authorize(args)
-                    if self.tools[step.tool].verify(args, old.get('result')) is True:
+                    if old.get('binding') == step_binding(step,args) and self.tools[step.tool].verify(args, old.get('result')) is True:
                         rows[step.id] = copy.deepcopy(old)
                 elif old.get('status') != 'pending' and not self.tools[step.tool].read_only:
                     raise ValueError('Effectful checkpoint requires fresh inspection; never replayed.')
         started = time.monotonic()
+        trace_id=uuid.uuid4().hex
         running, reservations, tokens, ready_at = {}, {}, {}, {}
         pool = ThreadPoolExecutor(max_workers=self.concurrency, thread_name_prefix='Jarvis DAG')
         interrupted = False
@@ -229,8 +260,7 @@ class Executor:
             execution = time.monotonic()-now
             if stop.is_set() or execution > step.timeout_seconds:
                 raise TimeoutError('Tool exceeded deadline; worker drained, effect not replayed.')
-            if len(json.dumps(output, allow_nan=False)) > 24000:
-                raise ValueError('Tool output exceeds task result budget.')
+            bounded_payload(output,24000)
             verify_started = time.monotonic()
             if tool.verify(arguments, output) is not True:
                 raise ValueError('Deterministic verification failed.')
@@ -263,13 +293,13 @@ class Executor:
                                      and not isinstance(exc, InterruptedError) and not interrupted)
                         retry = retryable and row['attempts'] < step.retry['attempts']
                         row.update(status='retry_wait' if retry else ('cancelled' if interrupted else 'failed'),
-                                   error_type=type(exc).__name__, error=str(exc)[:300],
+                                   error_type=type(exc).__name__, error='DAG tool failed: '+type(exc).__name__,
                                    uncertain_effect=not self.tools[step.tool].read_only)
                         ready_at[step.id] = now+step.retry['backoff_seconds']*2**(row['attempts']-1)
                     running.pop(future)
                     reservations.pop(step.id)
                     tokens.pop(step.id)
-                    self.progress({'step': step.id, 'tool': step.tool, 'status': row['status']})
+                    self.progress({'step': step.id, 'tool': step.tool, 'status': row['status'],'trace_id':trace_id})
                     save()
                 for step in steps:
                     row = rows[step.id]
@@ -283,7 +313,8 @@ class Executor:
                     if any(d != 'succeeded' for d in deps) or now < ready_at.get(step.id, 0) or len(running) >= self.concurrency:
                         continue
                     tool = self.tools[step.tool]
-                    if (tool.resource and any(self.tools[s.tool].resource == tool.resource and
+                    if ((not tool.read_only and any(not self.tools[s.tool].read_only for s,_ in running.values())) or
+                            tool.resource and any(self.tools[s.tool].resource == tool.resource and
                             not (tool.read_only and self.tools[s.tool].read_only) for s, _ in running.values()) or
                             any(sum(r[k] for r in reservations.values())+step.resources[k] > self.budgets[k] for k in self.budgets)):
                         continue
@@ -292,24 +323,25 @@ class Executor:
                         argument_shape(tool.schema, arguments)
                         tool.authorize(arguments)  # Admission plus a fresh check inside the worker.
                     except Exception as exc:
-                        row.update(status='failed', error_type=type(exc).__name__, error=str(exc)[:300])
+                        row.update(status='failed', error_type=type(exc).__name__, error='DAG admission failed: '+type(exc).__name__)
                         save()
                         continue
                     row.update(status='running', attempts=row['attempts']+1,
-                               queue_seconds=now-started, effect=not tool.read_only)
+                               queue_seconds=now-started, effect=not tool.read_only,
+                               binding=step_binding(step,arguments),trace_id=trace_id)
                     # Durable running state precedes dispatch, even for irreversible tools.
                     save()
                     stop = tokens[step.id] = threading.Event()
                     reservations[step.id] = step.resources
                     running[pool.submit(work, step, arguments, stop)] = (step, time.monotonic())
-                    self.progress({'step': step.id, 'tool': step.tool, 'status': 'running'})
+                    self.progress({'step': step.id, 'tool': step.tool, 'status': 'running','trace_id':trace_id})
                 if running:
                     wait(running, timeout=.02, return_when=FIRST_COMPLETED)
                 elif any(r['status'] == 'retry_wait' for r in rows.values()):
                     time.sleep(.01)
                 elif any(r['status'] == 'pending' for r in rows.values()):
                     raise ValueError('DAG deadlock; no admissible task.')
-            return {'status': 'cancelled' if interrupted else ('completed' if all(r['status'] == 'succeeded' for r in rows.values()) else 'failed'),
+            return {'trace_id':trace_id,'status': 'cancelled' if interrupted else ('completed' if all(r['status'] == 'succeeded' for r in rows.values()) else 'failed'),
                     'steps': rows, 'total_seconds': time.monotonic()-started}
         finally:
             for stop in tokens.values():

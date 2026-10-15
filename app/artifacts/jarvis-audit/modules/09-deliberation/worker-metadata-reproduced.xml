@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.763" timestamp="2026-10-15T13:51:25.066785+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_deliberation_audit" name="test_real_worker_opinion_metadata_and_private_local_transport" time="0.193"><failure message="AssertionError: assert 'heuristic' == 'model'&#10;  &#10;  - model&#10;  + heuristic">tests\test_deliberation_audit.py:120: in test_real_worker_opinion_metadata_and_private_local_transport
+    assert opinion['source']=='model'
+E   AssertionError: assert 'heuristic' == 'model'
+E     
+E     - model
+E     + heuristic</failure></testcase></testsuite></testsuites>

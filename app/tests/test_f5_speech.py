@@ -138,7 +138,9 @@ class F5Tests(unittest.TestCase):
     def test_f5_uses_isolated_owned_worker(self):
         speech = Speech({'engine': 'f5'}, Mock())
         process = Mock()
-        process.stdout = io.StringIO()
+        from tests.audit_contract_helpers import ReadyVoiceOutput
+        process.stdout = ReadyVoiceOutput()
+        process.poll.return_value = None
         with patch('jarvis.speech.subprocess.Popen', return_value=process) as launch:
             self.assertTrue(speech._ensure_kokoro(0))
             argv = launch.call_args.args[0]

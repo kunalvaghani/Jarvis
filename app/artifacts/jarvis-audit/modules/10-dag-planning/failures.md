@@ -1,0 +1,7 @@
+# Reproductions and corrections — 2026-10-15 IST
+
+[Before-fix XML](reproduced-failures.xml):7 failures,1 existing NaN-config pass. Effects without resource labels overlapped; restored rows were not bound to changed arguments; corrupt cache JSON escaped; raw exception messages persisted synthetic secrets/email; update_dag lacked a task-bound guard; deep graphs reached recursive JSON encoding; credential templates were stored. [Additional reproduction](restore-dependency-reproduced.xml) exposed a stale restored descendant after upstream readback changed; descendants now require currently verified prerequisites and resolve from current verified rows. Total8 reproduced defects fixed.
+
+Corrections serialize all per-graph effects, bind exact steps/resolved arguments with fresh verification, treat bounded malformed cache as miss, store categorical errors/trace IDs, require current UUID in the production checkpoint/authorization path, pre-bound JSON structure, and omit recognized credential templates. Tests assert no denied dispatch, no uncertain replay, read-only bounded retry/replan and independent state readback. One catalog setup omitted a fixture directory; corrected and recorded separately, not counted as a product defect.
+
+No known failure remains in final executed assertions. Live model/account/UI/GPU acceptance, multi-process write locking, uncooperative-thread containment and arbitrary effect rollback remain unverified/unsupported, not inferred from passing mocks. Local private results remain local; redaction/template screening is heuristic.

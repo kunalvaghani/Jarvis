@@ -1,0 +1,75 @@
+{
+  "scope": "Module08 scoped files; earlier dirty work preserved. No commit/install/deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/gpu_scheduler.py",
+      "sha256": "907635b4c263dd76750acba4dc877d6f73c95a8f4100fe20a5e8f3c10c1b1065"
+    },
+    {
+      "path": "app/jarvis/self_evolution.py",
+      "sha256": "f99f1bbe86f24ace58d68939803ee241720732e14a94a780cf74fcdfacec36ad"
+    },
+    {
+      "path": "app/jarvis/repo_abilities.py",
+      "sha256": "bf6143ea4c33c3a1fedd713528fa957b14aa44af2e19f447c1cc29ec0d5b3373"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "eb40508e624b0656c1ddc9d54c8c0b664c4f54a50ae3d32639da824e6dc3b5a1"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "72070bc3d19fb4cb575a90f1cae7cbda870cb61a20e617b688dee7f443239ff8"
+    },
+    {
+      "path": "app/scripts/verification/verify_gpu_scheduler_audit.py",
+      "sha256": "eec69f05288b672ad4f47ffc5725c84bf2b985ab321eabe5dd083e1f538ff6f0"
+    },
+    {
+      "path": "app/scripts/verification/report_gpu_scheduler_audit.py",
+      "sha256": "945b3be0d5890ec4f8c31b5f0e11b9c8947d914a6dd3252d2899974fe3dd7c9d"
+    },
+    {
+      "path": "app/tests/test_gpu_scheduler_audit.py",
+      "sha256": "f78b4c674490dd39d5598d573aa4f58f65fa526d13233cfe6d1f3c306676692e"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "f34b6307da1460f39c6075b7ee8578045c08c1e56cc777a6b427a562b7d42054"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "ac49d814334fe87b4387e145abeaaf812f0997d3b280f4d44c8c080a716d9b47"
+    },
+    {
+      "path": "app/docs/gpu-priority.md",
+      "sha256": "5a861b7980dd8ae45e025e0aa72e4cc6b4a25185d681e96c003eeacdc780b9b1"
+    },
+    {
+      "path": "app/docs/self-evolution.md",
+      "sha256": "3260e3001c8c4d558d7f3bd5d12c9a9b01b29b614f5f3c3915fc1c90d810f6db"
+    },
+    {
+      "path": "app/docs/repo-abilities.md",
+      "sha256": "bad8de54a6547121086c52090b75555dbbc3cf9bfb0427243adb46b2f1a00880"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "0becb79a0a2871fd4e990822114558fdb8dc70779cf77f95b2f63fa77a041bad"
+    },
+    {
+      "path": "README.md",
+      "sha256": "305311fc5a32f53b7b35a91e8f827c3879675f074d81309a9bab5e6160c4d36a"
+    }
+  ],
+  "artifacts_directory": "app/artifacts/jarvis-audit/modules/08-gpu-scheduler",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "summary.json",
+    "remaining-case-ids.txt",
+    "security-findings.md"
+  ]
+}

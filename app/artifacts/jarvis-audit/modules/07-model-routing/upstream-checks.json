@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://console.groq.com/docs/rate-limits",
+    "checked": "2026-10-15 IST",
+    "facts": "- **Quota/Header Scopes and Retry-After Semantics:**\n  - Rate limits are measured in RPM (Requests per minute), RPD (Requests per day), TPM (Tokens per minute), TPD (Tokens per day), ASH (Audio seconds per hour), ASD (Audio seconds per day), ITPM (Input tokens per minute), and OTPM (Output tokens per minute).\n  - Rate limits apply at the organization level, and organizations may be subject to separate per-minute limits on input tokens (ITPM) and output tokens (OTPM).\n  - When rate limits are exceeded, the API returns a `429 Too Many Requests` HTTP status code.\n  - `retry-after` is only set if the rate limit is hit and status code 429 is returned (value is in seconds).\n  - Rate limit headers include:\n    - `retry-after`: In seconds\n    - `x-ratelimit-limit-requests`: Always refers to Requests Per Day (RPD)\n    - `x-ratelimit-limit-tokens`: Always refers to Tokens Per Minute (TPM)\n    - `x-ratelimit-remaining-requests`: Always refers to Requests Per Day (RPD)\n    - `x-ratelimit-remaining-tokens`: Always refers to Tokens Per Minute (TPM)\n    - `x-ratelimit-reset-requests`: Always refers to Requests Per Day (RPD)\n    - `x-ratelimit-reset-tokens`: Always refers to Tokens Per Minute (TPM)",
+    "publication_date": "not stated"
+  },
+  {
+    "url": "https://console.groq.com/docs/model/qwen/qwen3.8-27b",
+    "checked": "2026-10-15 IST",
+    "facts": "Model preview/availability status: Preview",
+    "publication_date": "not stated"
+  }
+]

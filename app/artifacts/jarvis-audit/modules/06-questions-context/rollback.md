@@ -1,0 +1,7 @@
+# Scoped rollback and deterministic resume
+
+No new commit created. Do not reset/checkout whole files from HEAD: earlier user changes share these files. Stop Jarvis through its normal launcher if applying a rollback, compare source.patch/source-hashes.json against current files, then reverse only these module06 hunks. Local preimages are under .jarvis-runtime/jarvis-audit/module06-pre/; preserve later edits. README/report and manifest updates should match any rollback. Never erase the conversation database, personal files, credentials or historical logs.
+
+Re-run the targeted command in inventory.md, then `python -m pytest tests -q --tb=short` and `python -m jarvis.launcher --check`. Capture corrected results; run `python scripts/verification/report_questions_context_audit.py` only with completed successful XMLs. Native benchmark: `python scripts/verification/verify_questions_context_audit.py --native --default` uses cached9b only; do not run concurrently with another heavyweight/GPU probe. Omitting --native runs only the paired CPU projection microbenchmark. The before baseline requires preserved local preimages; never silently replace them with current code.
+
+Module06 has no incomplete case ID. Next unexecuted catalog case: JRV-07-001; first global unresolved case remains JRV-04-001 (live acoustic prerequisite). See ../../remaining-case-ids.txt for every unresolved ID. Broad semantic evaluation/live web and full voice acceptance remain additional open work, not silently passed cases.

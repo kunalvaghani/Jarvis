@@ -13,7 +13,7 @@ from jarvis.knowledge import Knowledge
 from jarvis.actions import Actions
 from jarvis.ui_controls import UIControls
 from jarvis.ui_memory import UIMemory
-from test_ui_controls import FakeRunner, control
+from tests.test_ui_controls import FakeRunner, control
 
 
 class KnowledgeTests(unittest.TestCase):

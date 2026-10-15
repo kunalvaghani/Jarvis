@@ -115,7 +115,7 @@ def situation(actions, question=""):
     cognition = getattr(actions, "cognition", None)
     if cognition is not None and cognition.enabled:
         workspace = cognition.working_memory()
-        keep = {k: workspace[k] for k in ("goal", "last_action", "attention") if workspace.get(k)}
+        keep = {k: workspace[k] for k in ("goal", "active_task", "last_action", "attention") if workspace.get(k)}
         if keep:
             keep["attention"] = keep.get("attention", [])[:4]
             found["working_memory"] = keep

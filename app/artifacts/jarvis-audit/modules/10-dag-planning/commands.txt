@@ -1,0 +1,5 @@
+.venv/Scripts/python.exe -m pytest tests/test_hierarchical.py tests/test_task_graph.py tests/test_task_recovery.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/10-dag-planning/existing-baseline.xml
+.venv/Scripts/python.exe scripts/verification/verify_dag_planning_audit.py
+.venv/Scripts/python.exe -m pytest tests/test_dag_planning_audit.py tests/test_hierarchical.py tests/test_task_graph.py tests/test_task_state.py tests/test_task_recovery.py tests/test_cognition_and_routing.py tests/test_deliberation_audit.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/10-dag-planning/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/10-dag-planning/full-regression.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check

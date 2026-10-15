@@ -58,6 +58,16 @@ class RuntimeHealth:
                 'workers': {name: alive(worker) for name, worker in
                     [('actions', app.actions), ('questions', app.actions.knowledge), ('speech', app.speech)]}}
         config=getattr(app,'config',{})
+        from .audio import Listener
+        if isinstance(listener,Listener):
+            result['audio']['listener']=listener.health()
+        from .speech import Speech
+        if isinstance(app.speech,Speech):
+            result['speech']=app.speech.health()
+        from .question_client import QuestionClient
+        question_client = getattr(app.actions.knowledge, 'client', None)
+        if isinstance(question_client, QuestionClient):
+            result['answer']['request'] = question_client.snapshot()
         if isinstance(config,dict) and config.get('gpu_scheduler',{}).get('enabled'):
             from .gpu_scheduler import status
             result['gpu']=status()

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.386" timestamp="2026-10-15T10:40:51.037445+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_perception_cognition_audit" name="test_JRV_02_010_reasoner_actuator_identity_mismatch" time="0.755"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_perception_cognition_audit.py:334: in test_JRV_02_010_reasoner_actuator_identity_mismatch
+    with pytest.raises(ValueError,match='identity'):
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_perception_cognition_audit" name="test_stale_task_finish_preserves_new_task" time="0.021"><failure message="assert (False)&#10; +  where False = isinstance(None, str)">tests\test_perception_cognition_audit.py:344: in test_stale_task_finish_preserves_new_task
+    assert isinstance(first,str) and first!=second
+E   assert (False)
+E    +  where False = isinstance(None, str)</failure></testcase></testsuite></testsuites>

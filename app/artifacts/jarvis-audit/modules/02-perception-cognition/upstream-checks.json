@@ -1,0 +1,23 @@
+[
+  {
+    "url": "https://docs.python.org/3.10/library/threading.html",
+    "title": "threading — Thread-based parallelism — Python 3.10.22 documentation",
+    "summary": "Timed event waits support cooperative shutdown. Native hangs cannot be forcibly interrupted using a thread; the GIL limits CPU parallelism.",
+    "checked": "2026-10-15 IST",
+    "transport": "Firecrawl live maxAge 0"
+  },
+  {
+    "url": "https://docs.python.org/3.10/library/heapq.html",
+    "title": "heapq — Heap queue algorithm — Python 3.10.22 documentation",
+    "summary": "Selecting the highest ranked n items preserves sorted order. Efficiency depends on workload and n; local measurement determines adoption.",
+    "checked": "2026-10-15 IST",
+    "transport": "Firecrawl live maxAge 0"
+  },
+  {
+    "url": "https://devguide.python.org/versions/",
+    "title": "Status of Python versions",
+    "summary": "Python 3.10 support ended on 2026-10-01. The table's branch first-release dates do not certify Jarvis ML compatibility.",
+    "checked": "2026-10-15 IST",
+    "transport": "Firecrawl live maxAge 0"
+  }
+]

@@ -10,6 +10,8 @@ from pathlib import Path
 import subprocess
 import threading
 import time
+import math
+import re
 from urllib.parse import urlsplit
 from uuid import uuid4
 
@@ -23,6 +25,45 @@ DEFAULTS = {'enabled':False, 'helper_gpu':False, 'primary_layers':12, 'codex_lay
 # Models split across GPU and CPU; their CPU layers use the configured thread count.
 PRIMARY = {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}
 _threads = threading.RLock()
+
+
+def model_label(value):
+    from .cloud_policy import SECRET, PRIVATE
+    return (isinstance(value,str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/-]{0,149}',value)
+            and not SECRET.search(value) and not PRIVATE.search(value))
+
+
+def validate_state(value):
+    """Bound persisted input before owner inspection; corrupt state never grants admission."""
+    if not isinstance(value,dict) or not isinstance(value.get('pending'),list) or len(value['pending'])>128:
+        raise ValueError('Invalid GPU lease state; no inference issued.')
+    pending=[(value,0)];nodes=0
+    while pending:
+        item,depth=pending.pop();nodes+=1
+        if depth>12 or nodes>4096 or type(item) is float and not math.isfinite(item):
+            raise ValueError('GPU lease state exceeds structural limits.')
+        if isinstance(item,dict):pending.extend((v,depth+1) for v in item.values())
+        elif isinstance(item,list):pending.extend((v,depth+1) for v in item)
+    rows=value['pending']+([value['active']] if value.get('active') is not None else [])
+    seen=set()
+    for row in rows:
+        if (not isinstance(row,dict) or row.get('role') not in PRIORITIES
+                or row.get('priority')!=PRIORITIES[row['role']]
+                or not isinstance(row.get('token'),str) or not re.fullmatch('[a-f0-9]{32}',row['token'])
+                or row['token'] in seen or type(row.get('pid')) is not int or row['pid']<=0
+                or not model_label(row.get('model'))
+                or any(type(row.get(k)) not in (int,float) or not math.isfinite(row[k]) or row[k]<0 for k in ('birth','queued_at'))):
+            raise ValueError('Invalid GPU owner record; no inference issued.')
+        seen.add(row['token'])
+    resident=value.get('resident')
+    if resident is not None:
+        if (not isinstance(resident,dict) or not model_label(resident.get('model'))
+                or not isinstance(resident.get('digest'),str) or not 1<=len(resident['digest'])<=150
+                or type(resident.get('size_vram')) is not int or resident['size_vram']<0
+                or type(resident.get('context')) is not int or not 1<=resident['context']<=262144
+                or type(resident.get('num_gpu')) is not int or not -1<=resident['num_gpu']<=33
+                or type(resident.get('expires_at')) not in (int,float) or not math.isfinite(resident['expires_at'])):
+            raise ValueError('Invalid GPU cache record; no inference issued.')
 
 
 def replace_state(temporary,path):
@@ -40,6 +81,7 @@ def replace_state(temporary,path):
 def settings(options=None):
     if options is not None and not isinstance(options,dict):
         raise ValueError('gpu_scheduler must be an object.')
+    if options is not None and set(options)-set(DEFAULTS):raise ValueError('Unknown GPU setting.')
     value={**DEFAULTS, **(options or {})}
     for name in ('enabled','helper_gpu'):
         if type(value[name]) is not bool:raise ValueError('GPU '+name+' must be boolean.')
@@ -76,7 +118,10 @@ def memory():
 
 def allocation(model,context,policy,hardware):
     if not hardware or type(context) is not int or context<1:return 0
-    budget=hardware['total_mb']-max(hardware['used_mb'],policy['speech_reserve_mb'])-policy['reserve_mb']
+    available=hardware['total_mb']-max(hardware['used_mb'],policy['speech_reserve_mb'])
+    # Leave at least one sixth of available memory: a 20% envelope overrun
+    # then fits (estimate <= available/1.2), even with a smaller configured reserve.
+    budget=available-max(policy['reserve_mb'],available/6)
     if model in {'qwen3.5:0.8b','qwen2.5:0.5b'}:
         return -1 if policy['helper_gpu'] and budget>=1024 else 0
     if model not in {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}:
@@ -103,6 +148,7 @@ def status(root=None):
         if not path.exists():return {'status':'idle','pending':0}
         if path.stat().st_size>200000:return {'status':'unavailable'}
         value=json.loads(path.read_text())
+        validate_state(value)
         active=value.get('active');active=active if active and alive(active) else None
         return {'status':'busy' if active else 'idle',
             'active_role':active.get('role') if active else None,
@@ -139,15 +185,29 @@ class Registry:
                     if time.monotonic()>=deadline:raise ValueError('GPU admission lock unavailable; no inference issued.')
                     time.sleep(.01)
             try:
-                value=json.loads(self.path.read_text()) if self.path.exists() else {'active':None,'pending':[]}
-                if not isinstance(value,dict) or not isinstance(value.get('pending'),list):
-                    raise ValueError('Invalid GPU lease state; no inference issued.')
+                before=None
+                if self.path.exists():
+                    with self.path.open(encoding='utf-8') as source:
+                        pieces=[];size=0
+                        while size<=200000:
+                            piece=source.read(min(4096,200001-size))
+                            if not piece:break
+                            pieces.append(piece);size+=len(piece)
+                        before=''.join(pieces)
+                    if len(before)>200000:raise ValueError('GPU lease state exceeds size limit.')
+                try:value=json.loads(before) if before is not None else {'active':None,'pending':[]}
+                except RecursionError:raise ValueError('GPU lease state exceeds depth limit.') from None
+                validate_state(value)
                 if value.get('active') and not self.live(value['active']):value['active']=None
                 value['pending']=[r for r in value['pending'] if self.live(r)]
                 if value.get('resident') and value['resident'].get('expires_at',0)<=time.time():value['resident']=None
                 yield value
-                temp=self.path.with_suffix('.tmp')
-                temp.write_text(json.dumps(value)+'\n');replace_state(temp,self.path)
+                validate_state(value)
+                serialized=json.dumps(value,allow_nan=False)+'\n'
+                if len(serialized)>200000:raise ValueError('GPU lease state exceeds size limit.')
+                if serialized!=before:
+                    temp=self.path.with_suffix('.tmp')
+                    temp.write_text(serialized,encoding='utf-8');replace_state(temp,self.path)
             finally:
                 lock.seek(0)
                 if os.name=='nt':msvcrt.locking(lock.fileno(),msvcrt.LK_UNLCK,1)
@@ -155,6 +215,18 @@ class Registry:
 
     def event(self,**value):
         # Metadata only, never input/output, screenshots, URLs or tool arguments.
+        allowed={'stage','role','model','previous_model','wait_seconds','num_gpu','context_tokens','gpu_slot','trace_id','error_type'}
+        value={key:item for key,item in value.items() if key in allowed and type(item) in (str,int,float,bool)}
+        stages={'admitted','dispatch','released','handoff','failed','cache_identity_unconfirmed','cache_duration_unconfirmed'}
+        if value.get('stage') not in stages:return
+        if value.get('role') not in PRIORITIES:value.pop('role',None)
+        for key in ('wait_seconds','num_gpu','context_tokens'):
+            if key in value and (type(value[key]) not in (int,float) or not math.isfinite(value[key])):value.pop(key)
+        if 'gpu_slot' in value and type(value['gpu_slot']) is not bool:value.pop('gpu_slot')
+        for key in ('model','previous_model'):
+            if key in value and not model_label(value[key]):value[key]='redacted_model'
+        if 'error_type' in value and not model_label(value['error_type']):value['error_type']='InferenceError'
+        if 'trace_id' in value and not re.fullmatch('[a-f0-9]{32}',str(value['trace_id'])):value.pop('trace_id')
         try:
             with (self.root/'events.jsonl').open('a') as out:
                 out.write(json.dumps({'at':time.time(),**value})+'\n')
@@ -165,12 +237,17 @@ class Lease:
     def __init__(self,role,model,policy,registry=None,cancelled=lambda:False):
         import psutil
         if role not in PRIORITIES:raise ValueError('Unknown inference role.')
+        if not model_label(model):raise ValueError('Invalid inference model label; no admission issued.')
         self.role,self.model,self.policy=role,model,policy
         self.registry=registry or Registry();self.cancelled=cancelled;self.admitted=False
         self.row={'token':uuid4().hex,'pid':os.getpid(),'birth':psutil.Process().create_time(),
                   'role':role,'model':model,'priority':PRIORITIES[role],'queued_at':time.time()}
 
+    def event(self,**value):
+        self.registry.event(trace_id=self.row['token'],**value)
+
     def acquire(self):
+        if self.admitted:raise ValueError('GPU lease is already admitted; duplicate acquisition refused.')
         if self.role in HELPERS and not self.policy['helper_gpu']:return False
         started=time.monotonic()
         try:
@@ -190,7 +267,7 @@ class Lease:
                         state['pending']=[r for r in state['pending'] if r['token']!=self.row['token']]
                         self.admitted=True
                 if self.admitted:
-                    self.registry.event(stage='admitted',role=self.role,model=self.model,
+                    self.event(stage='admitted',role=self.role,model=self.model,
                         wait_seconds=round(time.monotonic()-started,3));return True
                 if time.monotonic()-started>=self.policy['wait_seconds']:
                     raise ValueError('GPU inference queue deadline reached; no request issued.')
@@ -241,10 +318,11 @@ def install(client,role='question'):
             try:
                 observation.raise_for_status();return observation.json().get('models',[])
             finally:observation.close()
-        hardware=memory() if admitted else None
+        hardware=None
         layers=0
         cached=None
         try:
+            hardware=memory() if admitted else None
             if admitted:
                 with lease.registry.state() as state:previous=state.get('resident')
                 if previous:
@@ -259,7 +337,7 @@ def install(client,role='question'):
                         # One normal unload of the last identified Jarvis cache; no kill/replay.
                         unload=original('http://127.0.0.1:11434/api/generate',json={'model':previous['model'],'keep_alive':0},timeout=(2,3))
                         unload.raise_for_status();unload.close()
-                        lease.registry.event(stage='handoff',role=role,model=model,previous_model=previous['model'])
+                        lease.event(stage='handoff',role=role,model=model,previous_model=previous['model'])
                         hardware=memory()
                     with lease.registry.state() as state:state['resident']=None
                 layers=allocation(model,context,policy,hardware)
@@ -275,27 +353,31 @@ def install(client,role='question'):
                 options={**payload.get('options',{}),'num_ctx':context,'num_gpu':layers}
                 if policy['cpu_threads'] and model in PRIMARY:options['num_thread']=policy['cpu_threads']
                 kwargs['json']={**payload,'keep_alive':keep,'options':options}
-            lease.registry.event(stage='dispatch',role=role,model=model,num_gpu=layers,
+            lease.event(stage='dispatch',role=role,model=model,num_gpu=layers,
                 context_tokens=context,gpu_slot=admitted)
             response=original(url,**kwargs)
             response.jarvis_gpu={'role':role,'num_gpu':policy['codex_layers'] if target.path.startswith('/v1/') else layers,
                                  'context_tokens':context,'gpu_slot':admitted}
-        except BaseException:
-            if admitted:lease.close()
+        except BaseException as error:
+            if admitted:
+                lease.event(stage='failed',role=role,model=model,error_type=type(error).__name__)
+                lease.close()
             raise
         if not admitted:return response
         closed=False
+        release_lock=threading.Lock()
         def release():
             nonlocal closed
-            if closed:return
-            closed=True
+            with release_lock:
+                if closed:return
+                closed=True
             try:
                 row=None
                 if response.ok and model in {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}:
                     try:
                         row=next((r for r in loaded() if r.get('name')==model and r.get('context_length')==context and r.get('digest') and isinstance(r.get('size_vram'),int)),None)
                     except (requests.RequestException,KeyError,ValueError):
-                        lease.registry.event(stage='cache_identity_unconfirmed',role=role,model=model)
+                        lease.event(stage='cache_identity_unconfirmed',role=role,model=model)
                 if target.path.startswith('/v1/') and row:
                     try:
                         timer=original('http://127.0.0.1:11434/api/generate',
@@ -303,7 +385,7 @@ def install(client,role='question'):
                         try:timer.raise_for_status()
                         finally:timer.close()
                     except requests.RequestException:
-                        lease.registry.event(stage='cache_duration_unconfirmed',role=role,model=model)
+                        lease.event(stage='cache_duration_unconfirmed',role=role,model=model)
                 if row and layers>0 and policy['warm_seconds']:
                     try:
                         with lease.registry.state() as state:
@@ -311,9 +393,9 @@ def install(client,role='question'):
                                 'size_vram':row['size_vram'],'num_gpu':policy['codex_layers'] if target.path.startswith('/v1/') else layers,
                                 'expires_at':time.time()+policy['warm_seconds']}
                     except (requests.RequestException,KeyError,ValueError):
-                        lease.registry.event(stage='cache_identity_unconfirmed',role=role,model=model)
+                        lease.event(stage='cache_identity_unconfirmed',role=role,model=model)
             finally:
-                lease.registry.event(stage='released',role=role,model=model)
+                lease.event(stage='released',role=role,model=model)
                 lease.close()
         if not kwargs.get('stream'):
             release();return response

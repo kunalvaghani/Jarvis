@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="34" time="14.737" timestamp="2026-10-15T00:03:03.834057+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_architecture_audit" name="test_JRV_01_009_unknown_root_configuration_warns" time="0.373" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload" time="0.010" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-002-tests.test_deliberation-IntegrationTests-test_bulk_destructive_task_cannot_proceed_without_scope_approval]" time="0.009"><failure message="AttributeError: module 'tests.test_deliberation' has no attribute 'IntegrationTests'">case = 'JRV-01-002', module = 'tests.test_deliberation'
+cls = 'IntegrationTests'
+method = 'test_bulk_destructive_task_cannot_proceed_without_scope_approval'
+
+    @pytest.mark.parametrize('case,module,cls,method',[
+        ('JRV-01-002','tests.test_deliberation','IntegrationTests','test_bulk_destructive_task_cannot_proceed_without_scope_approval'),
+        ('JRV-01-006','tests.test_native_coding','NativeCoding','test_native_localgithub_assembles_single_worker_after_real_checks'),
+        ('JRV-01-008','tests.test_recovery','RecoveryTests','test_dead_worker_restarts_without_replaying_queued_actions'),
+        ('JRV-01-010','tests.test_intent_testbook','TestbookTests','test_every_scenario_and_its_three_phrasings_reach_the_expected_intent'),
+        ('JRV-01-014','tests.test_launcher_readiness','LauncherReadinessTests','test_timeout_is_reported_as_incomplete_not_missing_dependencies'),
+        ('JRV-01-018','tests.test_task_recovery','TaskRecoveryTests','test_cancel_before_recovery_never_calls_planner'),
+        ('JRV-01-019','tests.test_task_state','TaskStateTests','test_restart_marks_unfinished_task_and_preserves_checkpoints'),
+        ('JRV-01-024','tests.test_task_recovery','TaskRecoveryTests','test_missing_control_uses_fresh_alternative_and_records_failure'),
+        ('JRV-01-026','tests.test_task_recovery','TaskRecoveryTests','test_repeat_cannot_bypass_block_by_changing_unused_fields'),
+        ('JRV-01-030','tests.test_task_recovery','TaskRecoveryTests','test_tool_exception_is_uncertain_and_never_replayed'),
+    ])
+    def test_reviewed_architecture_cases(case,module,cls,method):
+&gt;       run_reviewed(module,cls,method)
+
+tests\test_architecture_audit.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+module = 'tests.test_deliberation', cls = 'IntegrationTests'
+method = 'test_bulk_destructive_task_cannot_proceed_without_scope_approval'
+
+    def run_reviewed(module,cls,method):
+        from importlib import import_module
+&gt;       result=unittest.TestResult();getattr(import_module(module),cls)(method).run(result)
+E       AttributeError: module 'tests.test_deliberation' has no attribute 'IntegrationTests'
+
+tests\test_architecture_audit.py:41: AttributeError</failure></testcase><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-006-tests.test_native_coding-NativeCoding-test_native_localgithub_assembles_single_worker_after_real_checks]" time="5.142" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-008-tests.test_recovery-RecoveryTests-test_dead_worker_restarts_without_replaying_queued_actions]" time="0.006" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-010-tests.test_intent_testbook-TestbookTests-test_every_scenario_and_its_three_phrasings_reach_the_expected_intent]" time="2.524" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-014-tests.test_launcher_readiness-LauncherReadinessTests-test_timeout_is_reported_as_incomplete_not_missing_dependencies]" time="0.014" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-018-tests.test_task_recovery-TaskRecoveryTests-test_cancel_before_recovery_never_calls_planner]" time="0.039" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-019-tests.test_task_state-TaskStateTests-test_restart_marks_unfinished_task_and_preserves_checkpoints]" time="0.054" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-024-tests.test_task_recovery-TaskRecoveryTests-test_missing_control_uses_fresh_alternative_and_records_failure]" time="0.125" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-026-tests.test_task_recovery-TaskRecoveryTests-test_repeat_cannot_bypass_block_by_changing_unused_fields]" time="0.012" /><testcase classname="tests.test_architecture_audit" name="test_reviewed_architecture_cases[JRV-01-030-tests.test_task_recovery-TaskRecoveryTests-test_tool_exception_is_uncertain_and_never_replayed]" time="0.063" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_001_wake_to_fake_launch_and_readback" time="1.115" /><testcase classname="tests.test_architecture_audit" name="test_public_question_boundaries[JRV-01-003-ok]" time="0.601" /><testcase classname="tests.test_architecture_audit" name="test_public_question_boundaries[JRV-01-003-429]" time="0.568" /><testcase classname="tests.test_architecture_audit" name="test_public_question_boundaries[JRV-01-003-timeout]" time="1.604" /><testcase classname="tests.test_architecture_audit" name="test_private_question_and_telemetry[JRV-01-004]" time="0.526" /><testcase classname="tests.test_architecture_audit" name="test_private_question_and_telemetry[JRV-01-021]" time="0.523" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_005_registry_click_requires_grounding_and_fresh_readback" time="0.038" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_007_idle_research_cannot_promote_an_unapproved_ability" time="0.105" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_011_interpreters_and_conflicts_are_enumerated" time="0.003" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_012_registry_inventory_is_not_live_capability_proof" time="0.008" /><testcase classname="tests.test_architecture_audit" name="test_service_failures_are_explicit_and_private[JRV-01-013-offline]" time="0.006" /><testcase classname="tests.test_architecture_audit" name="test_service_failures_are_explicit_and_private[JRV-01-015-malformed]" time="0.004" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_016_optional_dependency_is_not_reported_ready" time="0.012" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_017_five_way_trace_isolation_twenty_rounds" time="0.012"><failure message="FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-109\\test_JRV_01_017_five_way_trace0\\0'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-109/test_JRV_01_017_five_way_trace0')
+
+    def test_JRV_01_017_five_way_trace_isolation_twenty_rounds(tmp_path):
+        from jarvis.tools import ToolRegistry
+        def run(i):
+            actions=SimpleNamespace(base=tmp_path/str(i),config={},allowed_tools={'open'},report=Mock(),execute=Mock(return_value='Fake observed'))
+            ToolRegistry(actions).execute({'action':'open','value':f'fixture-{i}'},lambda:False)
+            rows=[json.loads(s) for s in (actions.base/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
+            assert len(rows)==2 and rows[0]['call_id']==rows[1]['call_id']
+            actions.execute.assert_called_once()
+            return rows[0]['call_id']
+        with ThreadPoolExecutor(max_workers=5) as pool:
+            identifiers=[]
+&gt;           for round_ in range(20):identifiers.extend(pool.map(run,range(round_*5,round_*5+5)))
+
+tests\test_architecture_audit.py:176: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:621: in result_iterator
+    yield _result_or_cancel(fs.pop())
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:319: in _result_or_cancel
+    return fut.result(timeout)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:451: in result
+    return self.__get_result()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:403: in __get_result
+    raise self._exception
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+tests\test_architecture_audit.py:169: in run
+    ToolRegistry(actions).execute({'action':'open','value':f'fixture-{i}'},lambda:False)
+jarvis\tools.py:111: in execute
+    check_policy(self.actions, name)
+jarvis\agent_events.py:41: in check_policy
+    path = scoped(base, '.jarvis/policy.json')
+jarvis\agent_context.py:13: in scoped
+    root = Path(root).resolve(strict=True)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1077: in resolve
+    s = self._accessor.realpath(self, strict=strict)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-109\\test_JRV_01_017_five_way_trace0\\0'
+
+    def realpath(path, *, strict=False):
+        path = normpath(path)
+        if isinstance(path, bytes):
+            prefix = b'\\\\?\\'
+            unc_prefix = b'\\\\?\\UNC\\'
+            new_unc_prefix = b'\\\\'
+            cwd = os.getcwdb()
+            # bpo-38081: Special case for realpath(b'nul')
+            if normcase(path) == normcase(os.fsencode(devnull)):
+                return b'\\\\.\\NUL'
+        else:
+            prefix = '\\\\?\\'
+            unc_prefix = '\\\\?\\UNC\\'
+            new_unc_prefix = '\\\\'
+            cwd = os.getcwd()
+            # bpo-38081: Special case for realpath('nul')
+            if normcase(path) == normcase(devnull):
+                return '\\\\.\\NUL'
+        had_prefix = path.startswith(prefix)
+        if not had_prefix and not isabs(path):
+            path = join(cwd, path)
+        try:
+&gt;           path = _getfinalpathname(path)
+E           FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-109\\test_JRV_01_017_five_way_trace0\\0'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\ntpath.py:686: FileNotFoundError</failure></testcase><testcase classname="tests.test_architecture_audit" name="test_JRV_01_020_hostile_metadata_is_not_an_instruction_or_envelope_override" time="0.016" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_022_unicode_exact_targets_remain_data" time="0.028" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_023_negation_cannot_launch" time="0.010" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_025_pressure_does_not_enable_model_or_effect_retries" time="0.008"><failure message="AttributeError: &lt;module 'jarvis.command_cleanup' from 'D:\\Kunals GitHub Repo\\Jarvis\\app\\jarvis\\command_cleanup.py'&gt; does not have the attribute 'dispatch'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-109/test_JRV_01_025_pressure_does_0')
+
+    def test_JRV_01_025_pressure_does_not_enable_model_or_effect_retries(tmp_path):
+        from jarvis.commands import parse
+        from jarvis.config_contract import validate_root
+        from jarvis.gpu_scheduler import allocation,settings
+&gt;       with patch('psutil.virtual_memory',return_value=SimpleNamespace(available=128*2**20)),patch('jarvis.command_cleanup.dispatch',side_effect=MemoryError('Fake GPU OOM')):
+
+tests\test_architecture_audit.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1437: in __enter__
+    original, local = self.get_original()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;unittest.mock._patch object at 0x0000017A31C8C760&gt;
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+&gt;           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: &lt;module 'jarvis.command_cleanup' from 'D:\\Kunals GitHub Repo\\Jarvis\\app\\jarvis\\command_cleanup.py'&gt; does not have the attribute 'dispatch'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1410: AttributeError</failure></testcase><testcase classname="tests.test_architecture_audit" name="test_JRV_01_027_five_cold_twenty_warm_are_actual_measurements" time="0.004" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_028_forged_tool_approval_does_not_replace_real_permission" time="0.020" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_029_malformed_configuration_fails_before_services" time="0.001" /><testcase classname="tests.test_architecture_audit" name="test_JRV_01_031_oversized_configuration_is_bounded" time="0.059"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-109/test_JRV_01_031_oversized_conf0')
+
+    def test_JRV_01_031_oversized_configuration_is_bounded(tmp_path):
+        (tmp_path/'config').mkdir();(tmp_path/'main.py').write_text('pass\n')
+        config={**minimal_config(),'untrusted_metadata':'x'*2_000_000}
+        (tmp_path/'config/config.json').write_text(json.dumps(config),encoding='utf-8')
+&gt;       with pytest.raises(ValueError):launcher.preflight(tmp_path,repair=False)
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_architecture_audit.py:234: Failed</failure></testcase></testsuite></testsuites>

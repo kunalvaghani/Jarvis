@@ -8,6 +8,11 @@ import sys
 import threading
 import math
 import time
+import uuid
+
+
+class VoiceStartupError(RuntimeError):
+    """No text has been submitted, so selecting another backend is safe."""
 
 
 def spoken_text(answer):
@@ -78,6 +83,11 @@ class Speech:
     STALL_SECONDS = 60  # No synthesis/playback progress for this long means the worker is stuck.
 
     def __init__(self, options, report):
+        if (not isinstance(options,dict) or not isinstance(options.get('engine','piper'),str)
+                or not isinstance(options.get('language','auto'),str)
+                or options.get('engine','piper') not in {'f5','kokoro','piper'}
+                or options.get('language','auto') not in {'auto','en','hi'}):
+            raise ValueError('Invalid speech engine or language configuration')
         self.options, self.report = options, report
         self.queue = queue.Queue(maxsize=64)
         self.generation = 0
@@ -92,6 +102,12 @@ class Speech:
         self.outstanding = {}  # Kokoro request id -> generation
         self.next_id = 0
         self.last_progress = time.monotonic()
+        self.worker_engine = None
+        self.worker_ready = threading.Event()
+        self.worker_init_error = False
+        self.failed_backends = set()
+        self.restart_required = False
+        self.trace_id = uuid.uuid4().hex
         self.streamed = None  # Text of the answer being spoken while it is written.
         self.thread = threading.Thread(target=self._run, daemon=True)
 
@@ -104,18 +120,19 @@ class Speech:
         """Speak a reply; if it was already being spoken while written, only the rest is added."""
         if self.closed.is_set() or not self.options.get("enabled", True):
             return
+        generation = self.generation
         content = spoken_text(answer)
         with self.lock:
+            if generation != self.generation or self.closed.is_set():
+                return
             streamed, self.streamed = self.streamed, None
-        if streamed is not None:
-            if streamed and content.startswith(streamed):
-                content = content[len(streamed):].strip()
-            elif streamed:
-                # The final answer differs from what was spoken (for example after online
-                # verification): stop the draft and speak the verified answer in full.
-                self.cancel()
-        if content:
-            self._enqueue(content)
+            if streamed is not None:
+                if streamed and content.startswith(streamed):
+                    content = content[len(streamed):].strip()
+                elif streamed:
+                    self.cancel()
+            if content:
+                self._enqueue(content)
 
     def stream(self, text, active=True, phase=None):
         """Speak complete sentences of an answer while it is still being generated."""
@@ -131,8 +148,11 @@ class Speech:
             if not text and self.streamed:
                 self.cancel()
             return
+        generation = self.generation
         content = spoken_text(text or "")
         with self.lock:
+            if generation != self.generation or self.closed.is_set():
+                return
             spoken = self.streamed
             if spoken is None:
                 if not content:
@@ -162,14 +182,14 @@ class Speech:
                 return
             piece = content[len(spoken):boundary + 1]
             self.streamed = content[:boundary + 1]
-        if piece.strip():
-            self._enqueue(piece.strip())
+            if piece.strip():
+                self._enqueue(piece.strip())
 
     def cancel(self):
         with self.lock:
             self.generation += 1
             if self.process and self.process.poll() is None:
-                if self.options.get("engine") in {"kokoro", "f5"} and self.process.stdin:
+                if (self.worker_engine or self.options.get("engine")) in {"kokoro", "f5"} and self.process.stdin:
                     try:
                         # Stop playback and pending synthesis; the warm model stays loaded.
                         self.process.stdin.write(json.dumps({"stop": True}) + "\n")
@@ -190,7 +210,7 @@ class Speech:
 
     def interrupt(self):
         with self.lock:
-            if self.speaking.is_set() or self.outstanding:
+            if self.speaking.is_set() or self.outstanding or not self.queue.empty() or self.streamed is not None:
                 self.cancel()
 
     def output_recent(self):
@@ -199,6 +219,14 @@ class Speech:
 
     def output_references(self):
         return tuple(self.reference_texts)  # Replaced as a whole under the writer lock.
+
+    def health(self):
+        with self.lock:
+            return {'trace_id':self.trace_id,'backend':self.worker_engine,
+                'ready':self.worker_ready.is_set() and not self.worker_init_error,
+                'fallback':sorted(self.failed_backends),'pending':len(self.outstanding),
+                'queue':self.queue.qsize(),'speaking':self.speaking.is_set(),
+                'closed':self.closed.is_set(),'restart_required':self.restart_required}
 
     def close(self):
         self.closed.set()
@@ -232,6 +260,8 @@ class Speech:
     def _dispose_voice(self):
         with self.lock:
             process, self.process = self.process, None
+            self.worker_engine = None
+            self.worker_ready.clear()
             self.outstanding.clear()
             if process:
                 if process.poll() is None:
@@ -244,54 +274,109 @@ class Speech:
                 self.voice_log.close()
                 self.voice_log = None
 
-    def _ensure_kokoro(self, generation):
+    def _ensure_kokoro(self, generation, engine=None):
+        engine = engine or self.options.get('engine', 'kokoro')
+        if self.worker_engine is not None and self.worker_engine!=engine:
+            if not self._drain_output(generation):return False
         with self.lock:
             if self.closed.is_set() or generation != self.generation:
                 return False
-            if self.process and self.process.poll() is None:
+            if (self.process and self.process.poll() is None and not self.restart_required
+                    and (self.worker_engine is None or self.worker_engine == engine)):
                 return True
             self._dispose_voice()
             base = Path(__file__).resolve().parent.parent
-            directory = base / ".jarvis-runtime"
-            directory.mkdir(exist_ok=True)
-            self.voice_log = (directory / "speech.log").open("a", encoding="utf-8")
-            f5 = self.options.get("engine") == "f5"
+            f5 = engine == "f5"
             executable = str(base / ".venv-f5/Scripts/python.exe") if f5 else sys.executable
             module = "jarvis.f5_speech" if f5 else "jarvis.kokoro_speech"
-            self.process = subprocess.Popen([executable, "-u", "-m", module, "--serve"],
-                cwd=base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.voice_log,
-                encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-            responses = self.responses = queue.Queue()
+            try:
+                self.process = subprocess.Popen([executable, "-u", "-m", module, "--serve"],
+                    cwd=base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                    encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            except OSError:
+                raise VoiceStartupError('Local voice process could not start') from None
+            self.worker_engine = engine
+            self.restart_required = False
+            self.worker_init_error = False
+            responses = self.responses = queue.Queue(maxsize=128)
             process = self.process
             def read():
                 try:
-                    for line in process.stdout:
-                        responses.put(line)
-                        self._event(line)
+                    while True:
+                        line=process.stdout.readline(65537)
+                        if not line:break
+                        if len(line)>65536:
+                            self._event('{"error":"invalid_worker_frame"}',process=process)
+                            break
+                        if responses.full():responses.get_nowait()
+                        responses.put_nowait(line)
+                        self._event(line, process=process)
                 except (OSError, ValueError):
                     pass
                 finally:
-                    responses.put(None)
+                    with self.lock:
+                        if self.process is process:
+                            self.worker_init_error = True
+                            self.worker_ready.set()
+                            self.restart_required = True
+                            if self.outstanding and not self.closed.is_set():
+                                self.report('repair','Voice connection closed; pending audio was discarded, not replayed. A new request can restart the owned worker.')
+                            self.outstanding.clear()
+                            self._end_output()
             threading.Thread(target=read, daemon=True).start()
-            return True
+        # Do not hold the synthesis/ownership lock while a cold model loads:
+        # Stop and Quit must remain responsive. No text is submitted until ready.
+        deadline = time.monotonic()+60
+        while not self.closed.is_set() and generation == self.generation:
+            if self.worker_ready.wait(.05):
+                if self.worker_init_error:
+                    raise VoiceStartupError('Local voice initialization failed')
+                return True
+            if process.poll() is not None or time.monotonic() >= deadline:
+                raise VoiceStartupError('Local voice startup deadline exceeded')
+        return False
 
-    def _event(self, line):
+    def _drain_output(self,generation):
+        """A language/backend change cannot kill the previous reply mid-clause."""
+        while not self.closed.is_set() and generation==self.generation:
+            with self.lock:
+                if not self.outstanding:return True
+            self.closed.wait(.05)  # Existing watchdog bounds a stalled worker.
+        return False
+
+    def _event(self, line, process=None):
         """Worker progress: keeps the speaking state exact and feeds the stall watchdog."""
+        if not isinstance(line,str) or len(line)>65536:
+            return
         try:
             row = json.loads(line)
-        except ValueError:
+        except (ValueError,RecursionError):
             return
+        if not isinstance(row,dict):return
+        flags=('ready','done','started','audio_ready','stopped','playback')
+        if any(key in row and type(row[key]) is not bool for key in flags):return
+        if 'progress' in row and (type(row['progress']) is not int or not 0<=row['progress']<1000000):return
+        if 'error' in row and not isinstance(row['error'],str):return
+        if not (any(row.get(key) is True for key in flags) or 'progress' in row or row.get('error')):return
+        request=row.get('id')
+        if request is not None and (type(request) is not int or not 0<request<2**63):return
         with self.lock:
-            self.last_progress = time.monotonic()
-            request = row.get("id")
+            if process is not None and process is not self.process:return
+            if row.get('ready') is True:
+                self.worker_ready.set()
+                self.last_progress = time.monotonic()
+                return
             if row.get("error"):
-                if request is None and self.options.get("engine") == "f5" and not self.closed.is_set():
-                    self.report("warning", str(row["error"])[:300])
+                if request is None:
+                    self.worker_init_error = True
+                    self.worker_ready.set()
+                self.restart_required = True
                 if request in self.outstanding and self.outstanding[request] == self.generation and not self.closed.is_set():
-                    self.report("warning", "Voice playback failed: " + str(row["error"])[:300])
+                    self.report("warning", "Voice playback failed; the answer remains in the transcript. A new request can restart the owned voice worker.")
                 self.outstanding.pop(request, None)
             elif row.get("done"):
                 self.outstanding.pop(request, None)
+            if request in self.outstanding:self.last_progress = time.monotonic()
             if not self.outstanding:
                 self._end_output()
 
@@ -299,15 +384,16 @@ class Speech:
         while not self.closed.is_set():
             time.sleep(1)
             with self.lock:
-                limit = 600 if self.options.get("engine") == "f5" else self.STALL_SECONDS
+                limit = 600 if (self.worker_engine or self.options.get("engine")) == "f5" else self.STALL_SECONDS
                 stuck = self.outstanding and time.monotonic() - self.last_progress > limit
             if stuck:
                 self.report("repair", "Voice worker stopped making progress and was restarted; the answer remains in the transcript.")
                 self._dispose_voice()
                 self._end_output()
 
-    def _kokoro_send(self, generation, payload, content):
-        if not self._ensure_kokoro(generation):
+    def _kokoro_send(self, generation, payload, content, engine=None):
+        ready = self._ensure_kokoro(generation, engine=engine) if engine else self._ensure_kokoro(generation)
+        if not ready:
             return False
         with self.lock:
             if self.closed.is_set() or generation != self.generation:
@@ -333,6 +419,9 @@ class Speech:
                     if not readiness(self.options.get("f5", {})):
                         self._ensure_kokoro(self.generation)
             except Exception:
+                if self.options.get('engine') == 'f5':
+                    self.failed_backends.add('f5')
+                    self.report('repair','F5 startup unavailable; trying installed CPU speech. Check speech.f5 or scripts/setup/setup_f5.ps1.')
                 self._dispose_voice()
         while not self.closed.is_set():
             try:
@@ -346,30 +435,49 @@ class Speech:
                 if language == "en" and self.options.get("engine") == "f5":
                     from .f5_speech import readiness
                     issue = readiness(self.options.get("f5", {}))
-                    if issue:
-                        self.report("warning", issue)
-                        continue
-                    self._kokoro_send(generation, {"text": content}, content)
-                    continue
+                    if issue or 'f5' in self.failed_backends:
+                        if 'f5' not in self.failed_backends:
+                            self.report('repair','F5 reference/environment unavailable; trying installed CPU speech. Configure speech.f5; run scripts/setup/setup_f5.ps1 if needed.')
+                        self.failed_backends.add('f5')
+                    else:
+                        try:
+                            self._kokoro_send(generation, {"text": content}, content, engine='f5')
+                            continue
+                        except VoiceStartupError:
+                            # _ensure failed before any text was sent: CPU fallback
+                            # cannot duplicate audible audio. Runtime failures never replay.
+                            self.failed_backends.add('f5')
+                            self._dispose_voice()
+                            self.report('repair','F5 startup unavailable; trying installed CPU speech. Check speech.f5.')
                 name = "hi_IN-rohan-medium" if language == "hi" else "en_GB-alan-medium"
                 base = Path(__file__).resolve().parent.parent
-                kokoro = language == "en" and self.options.get("engine") == "kokoro"
+                kokoro = language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends
                 voice_model = base / "models" / "voices" / ("kokoro/kokoro-v1.0.onnx" if kokoro else name + ".onnx")
                 voices = base / "models/voices/kokoro/voices-v1.0.bin"
                 if not voice_model.is_file() or (kokoro and not voices.is_file()):
-                    self.report("warning", f"{language.upper()} voice model is missing. Run scripts/setup/setup.ps1 to install it.")
-                    continue
+                    if kokoro:
+                        kokoro=False
+                        voice_model=base/'models/voices'/(name+'.onnx')
+                    if not voice_model.is_file():
+                        self.report("warning", f"{language.upper()} voice model is missing. Run scripts/setup/setup.ps1 to install it.")
+                        continue
                 if kokoro:
                     # Sent without waiting: the worker plays it right after what is already queued.
-                    self._kokoro_send(generation, {
-                        "text": content, "voice": self.options.get("voice", "am_michael:60,am_fenrir:40"),
-                        "speed": self.options.get("speed", 1.0), "natural": self.options.get("natural", True),
-                        "breaths": self.options.get("breaths", True),
-                        "breath_level": self.options.get("breath_level", .012)}, content)
-                    continue
+                    try:
+                        self._kokoro_send(generation, {
+                            "text": content, "voice": self.options.get("voice", "am_michael:60,am_fenrir:40"),
+                            "speed": self.options.get("speed", 1.0), "natural": self.options.get("natural", True),
+                            "breaths": self.options.get("breaths", True),
+                            "breath_level": self.options.get("breath_level", .012)}, content, engine='kokoro')
+                        continue
+                    except VoiceStartupError:
+                        self.failed_backends.add('kokoro');self._dispose_voice()
+                        voice_model=base/'models/voices'/(name+'.onnx')
+                        if not voice_model.is_file():raise RuntimeError('Piper fallback unavailable')
                 command = [sys.executable, "-m", "jarvis.piper_speech"]
                 payload = json.dumps({"text": content, "model": str(voice_model), **speech_parameters(self.options)},
                                      ensure_ascii=False)
+                if not self._drain_output(generation):continue
                 with self.lock:
                     if generation != self.generation or self.closed.is_set():
                         continue
@@ -379,6 +487,7 @@ class Speech:
                         command, cwd=Path(__file__).resolve().parent.parent,
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                         encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                    self.worker_engine='piper'
                 try:
                     _, error = self.process.communicate(payload, timeout=playback_timeout(content))
                 except subprocess.TimeoutExpired:
@@ -390,9 +499,9 @@ class Speech:
                 finally:
                     self._end_output()
                 if self.process.returncode and generation == self.generation and not self.closed.is_set():
-                    self.report("warning", "Voice playback failed: " + error.strip()[-300:])
+                    self.report("warning", "Voice playback failed; the answer remains in the transcript.")
             except Exception as exc:
                 if generation == self.generation and not self.closed.is_set():
-                    self.report("warning", f"Voice playback failed: {exc}")
+                    self.report("warning", "Voice playback failed; the answer remains in the transcript.")
             finally:
                 self.queue.task_done()

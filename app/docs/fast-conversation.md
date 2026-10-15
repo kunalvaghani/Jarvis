@@ -1,5 +1,15 @@
 # Fast planning, task queue and natural conversation — 2026-10-10 IST
 
+**Voice lifecycle audit — 2026-10-15 IST:** Decoder jobs carry utterance IDs;
+duplicate final jobs are discarded, while a separately spoken second request is
+preserved. Stop drains pending capture/decode buffers. Decoder shutdown waits at
+most two seconds and reports a stalled worker; recovery retains ownership until
+it exits, avoiding a second decoder. Voice failure leaves typed input available.
+Whisper settings are checked before capture: device `cuda` or explicit `cpu`,
+partial/silence intervals 0.2–5 seconds and VAD threshold 0–1, all finite.
+No automatic CPU fallback, new model or endpoint tuning was introduced.
+[Fixture coverage, paired measurements and live acoustic blockers](../artifacts/jarvis-audit/modules/04-voice-stt/inventory.md).
+
 Jarvis now plans and acts one step at a time with far less waiting, keeps a spoken
 conversation going like a call, queues the tasks you give it during that conversation
 and works through them in the background, and understands natural phrasing such as

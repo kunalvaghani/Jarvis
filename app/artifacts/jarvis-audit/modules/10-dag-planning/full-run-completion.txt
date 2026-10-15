@@ -1,0 +1,19 @@
+Actual final pytest completion chunk; earlier progress omitted.
+...................................... [ 77%]
+........................................................................ [ 80%]
+........................................................................ [ 83%]
+........................................................................ [ 86%]
+........................................................................ [ 89%]
+........................................................................ [ 93%]
+........................................................................ [ 96%]
+.....s....s............................................................. [ 99%]
+..................                                                       [100%]
+============================== warnings summary ===============================
+tests/test_media_routes.py::MediaRoutesTests::test_search_focus_change_does_not_submit
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\modules\10-dag-planning\full-regression.xml -
+2314 passed, 8 skipped, 1 warning in 349.24s (0:05:49)
+

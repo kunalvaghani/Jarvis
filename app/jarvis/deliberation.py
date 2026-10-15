@@ -17,8 +17,11 @@ Design constraints honoured here:
 - "Speak up only when it matters": stays silent on simple/agreed low-risk work.
 """
 import json
+import math
 import re
 import time
+import threading
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -29,6 +32,7 @@ HIGH_RISK_TEXT = re.compile(
     r"wire|invoice|credential|password|api[- ]?key|secret|private key|token|ssh key|disable (?:firewall|"
     r"antivirus|defender)|grant (?:access|permission)|chmod\s+777|overwrite everything|factory reset)\b",
     re.I)
+BULK_DESTRUCTIVE = re.compile(r'(?is)\b(?:delete|erase|wipe|format)\b.*\b(?:all|every|everything|and|then)\b')
 MODERATE_RISK_TEXT = re.compile(
     r"\b(install|modify|edit|refactor|rename|move|overwrite|migrate|update|configure|commit|merge|"
     r"schedule|write to|change the)\b", re.I)
@@ -50,12 +54,65 @@ VAGUE = re.compile(
     re.I)
 
 
+EXPLICIT_APPROVAL = re.compile(APPROVE.pattern + r"(?:[,.! ]*(?:please|thanks|thank you))?[.! ]*\Z", re.I)
+RISKY_AMBIGUITY = re.compile(r"\b(?:maybe|perhaps|possibly|not sure|might|do not|don't|never)\b", re.I)
+
+
+def ledger_text(value, limit=300):
+    """Keep readback local and omit recognized private/credential text."""
+    from .cloud_policy import SECRET, PRIVATE, PRIVATE_APP
+    text = str(value or '')[:16384].encode('utf-8', errors='replace').decode('utf-8')
+    return '[redacted]' if any(p.search(text) for p in (SECRET, PRIVATE, PRIVATE_APP)) else text[:limit]
+
+
+def valid_opinion(value):
+    if not isinstance(value, dict):
+        return False
+    required = {'understanding', 'recommendation', 'reasoning', 'question', 'confidence', 'agrees_with_user', 'alternatives', 'claims'}
+    if not required <= set(value) or set(value) - required - {'model_used'}:
+        return False
+    if 'model_used' in value and (not isinstance(value['model_used'], str) or not 1 <= len(value['model_used']) <= 150):
+        return False  # Worker envelope metadata is advisory and never grants authority.
+    for key in ('understanding', 'recommendation', 'reasoning', 'question'):
+        if not isinstance(value.get(key, ''), str) or len(value.get(key, '')) > 4000:
+            return False
+    number = value.get('confidence', .5)
+    if type(number) not in (int, float) or not math.isfinite(number) or not 0 <= number <= 1:
+        return False
+    if type(value.get('agrees_with_user', True)) is not bool:
+        return False
+    for key, allowed, maximum in [('alternatives', {'approach', 'pros', 'cons'}, 4),
+                                  ('claims', {'text', 'type'}, 6)]:
+        rows = value.get(key, [])
+        if not isinstance(rows, list) or len(rows) > maximum:
+            return False
+        for row in rows:
+            if not isinstance(row, dict) or set(row) != allowed or any(not isinstance(v, str) or len(v) > 4000 for v in row.values()):
+                return False
+            if key == 'claims' and row.get('type') not in {'fact', 'assumption', 'prediction', 'preference'}:
+                return False
+    return sum(len(value.get(k, '')) for k in ('understanding', 'recommendation', 'reasoning', 'question')) + sum(len(v) for key in ('alternatives','claims') for row in value[key] for v in row.values()) <= 65536
+
+
 class Deliberation:
     """The decision engine. One instance lives on Actions; it never acts on its own."""
 
     def __init__(self, actions, options=None):
         self.actions = actions
-        self.options = options or {}
+        self.options = {} if options is None else dict(options)
+        if type(self.options.get('enabled', True)) is not bool:
+            raise ValueError('Deliberation enabled must be boolean.')
+        if self.options.get('assertiveness', 'when_it_matters') not in {'when_it_matters', 'always', 'on_request'}:
+            raise ValueError('Invalid deliberation assertiveness.')
+        if self.options.get('ask_min_risk', 'high') not in {'low', 'moderate', 'high'}:
+            raise ValueError('Invalid deliberation risk threshold.')
+        for key, default, lower, upper in [('voice_confidence_threshold', .6, 0, 1), ('timeout_seconds', 20, .1, 120),
+                                          ('max_alternatives', 3, 1, 10), ('ledger_max', 500, 1, 10000)]:
+            value = self.options.get(key, default)
+            if type(value) not in (int, float) or not math.isfinite(value) or not lower <= value <= upper:
+                raise ValueError('Invalid deliberation setting: ' + key)
+            if key in {'max_alternatives', 'ledger_max'} and type(value) is not int:
+                raise ValueError('Deliberation count must be integer: ' + key)
         self.enabled = self.options.get("enabled", True)
         self.assertiveness = self.options.get("assertiveness", "when_it_matters")
         self.voice_threshold = float(self.options.get("voice_confidence_threshold", 0.6))
@@ -65,7 +122,8 @@ class Deliberation:
         self.timeout_seconds = float(self.options.get("timeout_seconds", 20))
         base = Path(getattr(actions, "base", "."))
         self.ledger_path = base / ".jarvis-runtime" / "deliberation" / "decisions.jsonl"
-        self._by_id = {}
+        self.lock = threading.RLock()
+        self.last_ledger_error = None
 
     # --- risk classification (single source of truth) --------------------------------------------------------------
     def classify_risk(self, command, prediction=None):
@@ -80,7 +138,7 @@ class Deliberation:
         try:
             _, reversible, external = effect_of(kind)
         except Exception:
-            reversible, external = True, False
+            reversible, external = False, False
         if external:
             return "high"
         if prediction is not None and (prediction.get("needs_approval") or prediction.get("reversible") is False):
@@ -108,8 +166,7 @@ class Deliberation:
                 context["memory"] = cognition.recall(goal, 3)
             except Exception:
                 pass
-            stats = getattr(cognition, "stats", {}) or {}
-            task_stat = stats.get("task", {})
+            task_stat = self._task_stat()
             if task_stat.get("attempts", 0) >= 3:
                 context["task_reliability"] = round(
                     task_stat.get("successes", 0) / max(1, task_stat.get("attempts", 1)), 2)
@@ -126,11 +183,9 @@ class Deliberation:
 
     def _confidence(self, model_confidence, risk, has_question):
         """Blend the model's self-estimate with learned reliability and uncertainty penalties."""
-        value = model_confidence if isinstance(model_confidence, (int, float)) else 0.5
+        value = model_confidence if type(model_confidence) in (int, float) and math.isfinite(model_confidence) else 0.5
         value = max(0.0, min(1.0, float(value)))
-        cognition = getattr(self.actions, "cognition", None)
-        stats = getattr(cognition, "stats", {}) if cognition is not None else {}
-        task_stat = (stats or {}).get("task", {})
+        task_stat = self._task_stat()
         if task_stat.get("attempts", 0) >= 3:
             rate = task_stat.get("successes", 0) / max(1, task_stat.get("attempts", 1))
             value = 0.6 * value + 0.4 * rate
@@ -140,12 +195,26 @@ class Deliberation:
             value -= 0.1
         return round(max(0.05, min(0.99, value)), 2)
 
+    def _task_stat(self):
+        from .cognition import Cognition
+        cognition = getattr(self.actions, 'cognition', None)
+        if isinstance(cognition, Cognition):
+            return cognition.procedure_stats('task')
+        stats = getattr(cognition, 'stats', {})
+        return Cognition._stat(stats.get('task') if isinstance(stats, dict) else None)
+
     # --- opinion formation -----------------------------------------------------------------------------------------
     def form_opinion(self, goal, command, cancelled, exclude=None):
         """Return a structured opinion. Uses the local model; falls back to a heuristic."""
+        if cancelled():
+            raise ValueError('Deliberation cancelled.')
+        if not isinstance(goal, str) or len(goal) > 16384:
+            raise ValueError('Deliberation goal must be text of at most 16384 characters.')
         risk = self.classify_risk(command)
         context = self._context(goal)
         model = self._model_opinion(goal, context, cancelled, exclude) if self.enabled else None
+        if cancelled():
+            raise ValueError('Deliberation cancelled.')
         if model is None:
             return self._heuristic_opinion(goal, command, risk, context)
         question = (model.get("question") or "").strip()
@@ -174,20 +243,11 @@ class Deliberation:
         data = {"goal": goal, "context": context, "max_alternatives": self.max_alternatives}
         if exclude:
             data["rejected_approaches"] = list(exclude)[:5]
-        prior = getattr(brain, "timeout_seconds", None)
         try:
-            if isinstance(prior, (int, float)) and prior:
-                brain.timeout_seconds = min(prior, self.timeout_seconds)
-            result = brain.request("deliberate", cancelled, **data)
+            result = brain.request("deliberate", cancelled, _timeout_seconds=self.timeout_seconds, **data)
         except Exception:
             return None
-        finally:
-            if isinstance(prior, (int, float)):
-                try:
-                    brain.timeout_seconds = prior
-                except Exception:
-                    pass
-        return result if isinstance(result, dict) else None
+        return result if valid_opinion(result) else None
 
     def _heuristic_opinion(self, goal, command, risk, context):
         """Evidence-based opinion without the model: honest, minimal, never invented."""
@@ -223,6 +283,13 @@ class Deliberation:
         say — a genuine disagreement or a real ambiguity it cannot resolve itself.
         """
         risk, confidence = opinion["risk"], opinion["confidence"]
+        if risk == 'high' and RISKY_AMBIGUITY.search(opinion.get('goal', '')):
+            return {'propose': True, 'note': False, 'chosen': '', 'risk': risk, 'confidence': confidence,
+                    'message': 'Please clarify the intended action and exact scope before I plan any consequential changes.'}
+        if risk == 'high' and BULK_DESTRUCTIVE.search(opinion.get('goal','')):
+            return {'propose':True,'note':False,'chosen':opinion.get('recommendation',''),
+                'risk':risk,'confidence':confidence,'message':
+                'This request includes bulk destructive changes. Review the scope and give explicit approval before I plan any action. Go ahead?'}
         disagrees = not opinion["agrees_with_user"] and bool(opinion["recommendation"])
         ambiguous = bool(opinion["question"])
         if self.assertiveness == "on_request":
@@ -266,7 +333,7 @@ class Deliberation:
         stripped = (text or "").strip()
         if not stripped:
             return {"verdict": "refine", "note": stripped}
-        if APPROVE.match(stripped):
+        if EXPLICIT_APPROVAL.fullmatch(stripped):
             return {"verdict": "approve", "note": stripped}
         if VAGUE.match(stripped):
             return {"verdict": "vague", "note": stripped}
@@ -277,42 +344,47 @@ class Deliberation:
     # --- decision ledger (traceable record) ------------------------------------------------------------------------
     def record(self, opinion, decision, chosen, approval):
         entry = {
-            "id": "dec_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%f"),
+            "id": "dec_" + uuid.uuid4().hex,
             "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "goal": opinion.get("goal", "")[:300],
-            "recommendation": opinion.get("recommendation", "")[:300],
-            "alternatives": [a.get("approach", "")[:120] for a in opinion.get("alternatives", [])],
-            "confidence": opinion.get("confidence"),
+            "goal": ledger_text(opinion.get("goal", "")),
+            "recommendation": ledger_text(opinion.get("recommendation", "")),
+            "alternatives": [ledger_text(a.get("approach", ""), 120) for a in opinion.get("alternatives", [])],
+            "confidence": opinion.get("confidence") if type(opinion.get('confidence')) in (int,float) and math.isfinite(opinion['confidence']) else None,
             "risk": opinion.get("risk"),
-            "chosen": (chosen or "")[:300],
+            "chosen": ledger_text(chosen),
             "approval": approval,
             "source": opinion.get("source"),
             "outcome": None,
         }
         self._append(entry)
-        self._by_id[entry["id"]] = entry
         return entry["id"]
 
     def record_outcome(self, decision_id, ok, detail=""):
         if not decision_id:
             return
         self._append({"id": decision_id, "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                      "outcome": {"ok": bool(ok), "detail": str(detail)[:300]}})
+                      "outcome": {"ok": bool(ok), "detail": ledger_text(detail)}})
 
     def _append(self, entry):
+        with self.lock:
+            self._append_locked(entry)
+
+    def _append_locked(self, entry):
         try:
             self.ledger_path.parent.mkdir(parents=True, exist_ok=True)
-            lines = []
+            from collections import deque
+            lines = deque(maxlen=self.ledger_max)
             if self.ledger_path.is_file():
-                lines = self.ledger_path.read_text(encoding="utf-8").splitlines()
-            lines.append(json.dumps(entry, ensure_ascii=False))
-            if len(lines) > self.ledger_max:
-                lines = lines[-self.ledger_max:]
+                with self.ledger_path.open(encoding='utf-8') as existing:
+                    for line in existing:
+                        lines.append(line.rstrip('\n'))
+            lines.append(json.dumps(entry, ensure_ascii=True, allow_nan=False))
             tmp = self.ledger_path.with_suffix(".jsonl.tmp")
             tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
             tmp.replace(self.ledger_path)
-        except OSError:
-            pass
+            self.last_ledger_error = None
+        except (OSError, ValueError) as exc:
+            self.last_ledger_error = type(exc).__name__
 
     def decisions(self, limit=20):
         """Read back the most recent decisions for inspection/tests."""

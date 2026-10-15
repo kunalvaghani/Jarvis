@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Same machine,500-row isolated rotating ledger; cold means new Deliberation instance, not OS/model cold. No GPU/model/audio work; TTFT/VRAM not applicable. Side effects counts exclude fixture ledger writes.",
+  "results": {
+    "before": {
+      "retained_decisions": 500,
+      "in_memory_id_cache": 92
+    },
+    "after": {
+      "retained_decisions": 500,
+      "in_memory_id_cache": 0
+    },
+    "before_cold": {
+      "samples": 5,
+      "p50_ms": 2.4432999998680316,
+      "p95_ms": 2.56430000445107,
+      "peak_python_bytes": 157587
+    },
+    "before_warm": {
+      "samples": 20,
+      "p50_ms": 2.4531000017304905,
+      "p95_ms": 2.674800001841504,
+      "peak_python_bytes": 171446
+    },
+    "after_cold": {
+      "samples": 5,
+      "p50_ms": 2.784000003885012,
+      "p95_ms": 22.212200005014893,
+      "peak_python_bytes": 213264
+    },
+    "after_warm": {
+      "samples": 20,
+      "p50_ms": 2.8088500002922956,
+      "p95_ms": 2.9896999985794537,
+      "peak_python_bytes": 169871
+    }
+  }
+}

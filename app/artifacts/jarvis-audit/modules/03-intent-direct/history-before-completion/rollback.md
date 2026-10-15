@@ -1,0 +1,5 @@
+# Safe rollback and resume
+
+Intentionally Stop Jarvis before rollback. Preserve later edits. Review source.patch and restore only the four inserted catalog patterns and two Engine punctuation lines, or compare with the captured `module03-pre/intent_catalog.py`. commands.py was captured but not changed. The Engine preimage is reconstructed from the two audited inserted lines, preserving earlier dirty edits. Never reset/clean the repository or replay queued/uncertain actions. No data/schema migration occurred.
+
+From app: `.venv/Scripts/python.exe -m pytest tests/test_intent_direct_audit.py tests/test_intent_testbook.py tests/test_natural_names.py tests/test_jarvis.py tests/test_audit_resilience.py -q`; full `-m pytest tests -q`; `-m jarvis.launcher --check`. Parser benchmark: `scripts/verification/verify_intent_direct.py` (archive measurements before repeat). Report: `-m scripts.verification.report_intent_direct`, which requires complete passing fresh XML. Exact unfinished IDs are in remaining-case-ids.txt and the global catalog. Continue the first pending generic module case with dedicated fault fixtures; prior JRV-02-008/JRV-02-010 remain unresolved.

@@ -1,0 +1,5 @@
+.venv/Scripts/python.exe -m pytest tests/test_deliberation.py tests/test_cognition.py tests/test_task_recovery.py tests/test_gmail_writes.py -q --junitxml=artifacts/jarvis-audit/modules/09-deliberation/existing-baseline.xml
+.venv/Scripts/python.exe scripts/verification/verify_deliberation_audit.py
+.venv/Scripts/python.exe -m pytest tests/test_deliberation_audit.py tests/test_deliberation.py tests/test_brain.py tests/test_task_recovery.py tests/test_gmail_api.py tests/test_gmail_writes.py tests/test_whatsapp.py tests/test_cognition_and_routing.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/09-deliberation/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/09-deliberation/full-regression.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check

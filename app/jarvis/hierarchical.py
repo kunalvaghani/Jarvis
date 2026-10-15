@@ -1,14 +1,15 @@
 """Compatibility adapter: existing Brain/ToolRegistry/TaskState, no second agent."""
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import hashlib
 import json
 import re
 import sqlite3
 from contextlib import closing
 import time
+import threading
 from pathlib import Path
 
-from .dag_execution import Executor, Tool, validate_plan
+from .dag_execution import Executor, Tool, validate_plan, bounded_payload
 from .tools import ToolRegistry
 
 READ_TOOLS = frozenset({'read_file', 'list_files', 'search_files', 'query_resource',
@@ -32,6 +33,8 @@ def settings(options):
     row = options.get('hierarchical_execution', {})
     if not isinstance(row, dict):
         raise ValueError('hierarchical_execution must be an object.')
+    if set(row)-{'enabled','parallel_reads','macro_cache','max_concurrency','max_seconds','max_repairs','max_replans'}:
+        raise ValueError('Unknown hierarchical execution setting.')
     result = {'enabled': False, 'parallel_reads': True, 'macro_cache': True,
               'max_concurrency': 3, 'max_seconds': 300, 'max_repairs': 1,
               'max_replans': 1, **row}
@@ -157,12 +160,32 @@ def adapters(brain, goal):
     return result
 
 
+_CODE_HASHES={}
+_CODE_LOCK=threading.RLock()
+
+
+def implementation_hash(path):
+    """Reuse content digests only while file identity/size/change timestamps match."""
+    path=Path(path)
+    def identity():
+        stat=path.stat()
+        return (stat.st_dev,stat.st_ino,stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)
+    with _CODE_LOCK:
+        stamp=identity();cached=_CODE_HASHES.get(str(path))
+        if cached and cached[0]==stamp:return cached[1]
+        digest=hashlib.sha256(path.read_bytes()).hexdigest()
+        if identity()!=stamp:raise ValueError('Implementation changed during DAG fingerprinting.')
+        if len(_CODE_HASHES)>=64:_CODE_HASHES.clear()
+        _CODE_HASHES[str(path)]=(stamp,digest)
+        return digest
+
+
 def fingerprint(tools, options, environment=None):
-    data = {'version': 1, 'options': settings(options), 'tools': {k: {
+    data = {'version': 2, 'options': settings(options), 'models':{k:options.get(k) for k in ('planner','decision','screen_model')},'tools': {k: {
         'schema': v.schema, 'read_only': v.read_only, 'resource': v.resource} for k, v in tools.items()}}
     data['environment'] = environment or {}
-    data['implementations'] = {name: hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest()
-        for name in ('hierarchical.py', 'dag_execution.py', 'tools.py', 'toolkits.py', 'brain.py', 'agent_events.py')}
+    data['implementations'] = {name: implementation_hash(Path(__file__).parent/name)
+        for name in ('hierarchical.py', 'dag_execution.py', 'tools.py', 'toolkits.py', 'brain.py', 'agent_events.py','task_state.py','cloud_policy.py')}
     return hashlib.sha256(json.dumps(data, sort_keys=True).encode()).hexdigest()
 
 
@@ -180,12 +203,19 @@ class MacroMemory:
         return hashlib.sha256(goal.strip().encode()).hexdigest()
     def lookup(self, goal, signature):
         with closing(sqlite3.connect(self.path, timeout=1)) as db, db:
-            row = db.execute('SELECT plan FROM dag_macros WHERE intent=? AND fingerprint=? AND verified_at>?',
+            row = db.execute('SELECT plan FROM dag_macros WHERE intent=? AND fingerprint=? AND verified_at>? AND LENGTH(plan)<=100000',
                 (self.key(goal), signature, time.time()-86400)).fetchone()
             if row:
+                try:
+                    plan=json.loads(row[0]);bounded_payload(plan,100000)
+                    if not isinstance(plan,dict) or set(plan)!={'version','steps'}:return None
+                except (ValueError,RecursionError,TypeError):return None
                 db.execute('UPDATE dag_macros SET hits=hits+1 WHERE intent=?', (self.key(goal),))
-                return json.loads(row[0])
+                return plan
     def remember(self, goal, signature, graph, tools):
+        validate_plan(graph,tools)
+        from .cloud_policy import SECRET
+        if SECRET.search(goal) or SECRET.search(json.dumps(graph)):return
         if any(not tools[row['tool']].read_only for row in graph['steps']):
             return  # Effectful macros require a future explicit parameter/approval contract.
         with closing(sqlite3.connect(self.path, timeout=1)) as db, db:
@@ -196,8 +226,14 @@ class MacroMemory:
 
 def run(brain, goal, cancelled):
     started = time.monotonic()
+    state=brain.actions.task_state
+    task_id=state.identity()
     options = settings(brain.options)
     tools = adapters(brain, goal)
+    def scoped_authorize(arguments, original):
+        state.require_identity(task_id)
+        original(arguments)
+    tools={name:replace(tool,authorize=lambda arguments,original=tool.authorize:scoped_authorize(arguments,original)) for name,tool in tools.items()}
     if not tools:
         return None  # No dispatch has happened; preserve existing specialized planner.
     tool_selection_seconds = time.monotonic()-started
@@ -215,6 +251,9 @@ def run(brain, goal, cancelled):
     else:
         graph = memory.lookup(goal, signature) if memory else None
     cached = graph is not None
+    if cached:
+        try:validate_plan(graph,tools)
+        except ValueError:graph,restored,cached=None,None,False
     if graph is None and 'read_file' in tools:
         graph = literal_reads(goal)
     memory_seconds = time.monotonic()-memory_started
@@ -250,7 +289,7 @@ def run(brain, goal, cancelled):
             'cache_hit': cached, 'planner_model': brain.options.get('planner'),
             'tool_selection_seconds': tool_selection_seconds, 'memory_retrieval_seconds': memory_seconds,
             'dag_validation_seconds': validation_seconds,
-            'elapsed_seconds': time.monotonic()-started})
+            'elapsed_seconds': time.monotonic()-started},task_id=task_id)
     def progress(event):
         brain.actions.report('plan', 'DAG ' + event['step'] + ': ' + event['tool'] + ' · ' + event['status'])
     import psutil

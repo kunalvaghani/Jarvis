@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "PASS",
+  "compiled_files": [
+    "app/jarvis/speech.py",
+    "app/jarvis/f5_speech.py",
+    "app/jarvis/kokoro_speech.py",
+    "app/jarvis/runtime_health.py",
+    "app/tests/test_voice_tts_audit.py",
+    "app/tests/test_f5_speech.py",
+    "app/tests/test_natural_voice.py",
+    "app/tests/test_audit_result_accounting.py",
+    "app/tests/audit_contract_helpers.py",
+    "app/scripts/verification/audit_catalog.py",
+    "app/scripts/verification/verify_voice_tts_audit.py",
+    "app/scripts/verification/report_voice_tts_audit.py"
+  ],
+  "source_hashes_current": true,
+  "links_checked": 474,
+  "missing_links": [],
+  "diff_check_exit": 0,
+  "line_ending_warning_count": 30,
+  "catalog_unique_ids": 1184,
+  "module05_cases": 32,
+  "module05_pass": 30,
+  "module05_blocked": 2,
+  "full_regression": {
+    "passed": 2073,
+    "blocked": 5,
+    "seconds": 319.665
+  },
+  "targeted": {
+    "passed": 161,
+    "blocked": 2,
+    "seconds": 8.436
+  },
+  "native_gpu": "PASS: cached F5, no playback, one model at a time",
+  "native_cpu": "PASS: Speech fallback Kokoro and Piper PCM, no playback",
+  "f5_pip_check": "No broken requirements found",
+  "launcher": "ready",
+  "installations_or_downloads": 0,
+  "physical_speaker_tests": 0,
+  "external_account_writes": 0
+}

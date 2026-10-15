@@ -1,5 +1,10 @@
 # Self-evolution engine — autonomous idle learning & capability expansion
 
+2026-10-15 IST resource follow-up: optional idle learning now defers when psutil or
+a RAM/CPU/battery reading fails. Its existing idle, user-busy and configured
+threshold gates still apply. This avoids treating unknown capacity as permission
+to start background work. [Executed resource checks](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+
 Jarvis improves itself while idle: it detects its own weaknesses, discovers and learns relevant
 GitHub repositories, lets the ability forge turn them into new tested commands, remembers everything,
 and — when you authorize it — can even patch its own source under strict gates. It is the
@@ -14,8 +19,11 @@ Most of the pipeline already existed and is **reused, not rebuilt**:
   `Jarvis Repos/`, offline cache), `repo_analysis.py`, `repo_acquisition.py`.
 - **Capability extraction → tested commands** — `repo_abilities.py` (`AbilityForge`): a learned repo
   is automatically broken into abilities, generated as `ability.py`, statically checked, tested in a
-  sandboxed per-ability virtualenv, and activated into a registry; stdlib-only abilities activate
-  automatically, third-party/network ones require approval, and built-in commands always win.
+  per-ability virtualenv, and proposed for registry activation. Standard-library abilities are
+  self-tested before the activation approval; third-party/network installation waits for approval.
+  Every activation requires approval, and built-in commands win. This host subprocess uses
+  Python audit hooks, rather than the Docker kernel isolation used for repository skills;
+  [the 2026-10-14 audit](../artifacts/jarvis-audit/security-findings.md) records the remaining boundary.
 - **Idle detection style + resources** — `anticipation.py`, `gpu_scheduler.py`.
 - **Memory** — Obsidian via `obsidian_memory.py` / `skill_memory.py`.
 - **Notifications** — the Dynamic Island (`media_card`), with a dedicated **"Learning"** card.

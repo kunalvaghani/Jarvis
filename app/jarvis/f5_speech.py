@@ -4,8 +4,28 @@ import math
 import os
 import threading
 from pathlib import Path
+from functools import lru_cache
 
 BASE = Path(__file__).resolve().parents[1]
+
+
+@lru_cache(maxsize=16)
+def _wav_duration(path, size, modified, changed):
+    """Cache only validated header metadata, never audio or a private transcript."""
+    import wave
+    try:
+        with wave.open(path,'rb') as audio:
+            duration=audio.getnframes()/audio.getframerate()
+    except (wave.Error,EOFError,ZeroDivisionError):
+        raise ValueError('F5 reference must be a PCM WAV recording.') from None
+    if not 3<=duration<=11:
+        raise ValueError('F5-TTS reference must be 3–11 seconds, including a short quiet tail.')
+    return duration
+
+
+def reference_duration(path):
+    path=Path(path);stat=path.stat()
+    return _wav_duration(str(path),stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)
 
 
 def number(options, key, default, low, high):
@@ -18,23 +38,23 @@ def number(options, key, default, low, high):
 
 def reference(options, text=""):
     from .natural_voice import EXCITED, SOMBRE, PLAYFUL, speech_unicode
+    if not isinstance(options,dict):raise ValueError('speech.f5 must be an object.')
+    if not isinstance(options.get('references',{}),dict):raise ValueError('F5 style references must be objects.')
+    if type(options.get('auto_emotion',True)) is not bool:raise ValueError('F5 auto_emotion must be boolean.')
+    if options.get('device','cpu') not in ('cpu','cuda'):raise ValueError('F5 device must be cpu or cuda.')
     style = "neutral"
     if options.get("auto_emotion", True):
         style = "serious" if SOMBRE.search(text) else "playful" if PLAYFUL.search(text) else "excited" if EXCITED.search(text) else "neutral"
     selected = options.get("references", {}).get(style) or options
+    if not isinstance(selected,dict):raise ValueError('F5 style reference must be an object.')
+    if not isinstance(selected.get('reference_audio',''),(str,Path)) or not isinstance(selected.get('reference_text',''),str):
+        raise ValueError('F5 reference path and exact transcript must be text.')
     path = Path(selected.get("reference_audio", ""))
     path = path if path.is_absolute() else BASE / path
     transcript = speech_unicode(str(selected.get("reference_text", ""))).strip()
     if not path.is_file() or not transcript:
         raise ValueError("F5-TTS needs a local 3–11 second reference recording and its exact reference_text. Configure speech.f5.")
-    import wave
-    try:
-        with wave.open(str(path), 'rb') as audio:
-            duration = audio.getnframes() / audio.getframerate()
-    except (wave.Error, EOFError) as exc:
-        raise ValueError('F5 reference must be a PCM WAV recording.') from exc
-    if not 3 <= duration <= 11:
-        raise ValueError("F5-TTS reference must be 3–11 seconds, including a short quiet tail.")
+    reference_duration(path)
     return path, transcript, style
 
 
@@ -44,7 +64,7 @@ def readiness(options):
     try:
         reference(options)
     except (ValueError, OSError, ImportError) as exc:
-        return str(exc)
+        return 'F5 reference unavailable or invalid. Configure a local PCM WAV and exact speech.f5.reference_text.'
     return None
 
 
@@ -69,15 +89,15 @@ def load_voice():
 
 def chunks(text, path, transcript, pacing, first_limit=80):
     """Keep each API call to one bounded chunk, avoiding upstream unbounded futures."""
-    import wave
-    with wave.open(str(path), 'rb') as audio:
-        duration = audio.getnframes() / audio.getframerate() + .1
+    duration = reference_duration(path) + .1
     maximum = max(1, int(len(transcript.encode('utf-8')) / duration * (22-duration) * pacing * .8))
     if len(text.encode('utf-8')) <= maximum:
         return [text]  # Do not split an already short sentence just to make a smaller head.
     rows, words, size = [], [], 0
     for word in text.split():
         count = len(word.encode('utf-8')) + 1
+        if count>maximum:
+            raise ValueError('F5 word exceeds the bounded synthesis chunk budget.')
         limit = min(maximum, first_limit) if not rows else maximum
         if words and size + count > limit:
             boundaries = [index+1 for index, value in enumerate(words)
@@ -118,7 +138,7 @@ def render(voice, request, stop, emit_progress=lambda index: None, rng=None):
             remove_silence=False, show_info=lambda *args: None)
         emit_progress(index)
         audio = np.asarray(audio, dtype=np.float32)
-        if not audio.size or not np.isfinite(audio).all() or rate != 24000:
+        if audio.ndim!=1 or not audio.size or audio.size>24000*30 or not np.isfinite(audio).all() or rate != 24000:
             raise ValueError("F5-TTS returned invalid audio or sample rate.")
         if stop.is_set():
             return

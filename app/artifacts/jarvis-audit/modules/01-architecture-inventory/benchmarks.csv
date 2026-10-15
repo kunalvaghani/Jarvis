@@ -1,0 +1,7 @@
+experiment,metric,before_p50,after_p50,before_p95,after_p95,unit,sample_count_per_phase
+alternating preimage/current,cold_process_ms,789.7782000000007,778.9608000002772,814.9587000007159,803.9329000002908,ms,5
+alternating preimage/current,cold_ms,86.42499999950815,86.71200000026147,86.62019999974291,87.80809999916528,ms,5
+alternating preimage/current,warm_ms,13.991449999593897,14.1997500004436,15.64920000055281,15.984800000296673,ms,20
+alternating preimage/current,warm_rss_bytes,33828864.0,33828864.0,33841152,33841152,bytes,20
+metadata privacy,unreviewed payload fields persisted,2,0,,,fields,baseline regression
+config diagnostics,unknown-root warning observed,0,1,,,boolean,baseline regression

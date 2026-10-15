@@ -1,5 +1,52 @@
 # Deliberation engine — reasoning, opinions and decisions
 
+## Audit follow-up — 2026-10-15 IST
+
+[Prompt09 evidence and rollback](../artifacts/jarvis-audit/modules/09-deliberation/inventory.md)
+separates isolated approval fixtures from live user/GUI acceptance. Proposal
+approval now matches the whole reply. “Yes, only draft it” is a refinement;
+“no” cancels without another inference call. Explicit requests for a different
+approach still allow a new proposal. High-risk “maybe”/negated goals ask for
+clarification before planning. This is conservative English pattern matching,
+not a multilingual intent or universal prompt-injection guarantee.
+
+Model opinions must match the existing worker schema, including typed claims,
+finite confidence, bounded fields and lists. Invalid responses use a heuristic.
+The worker's bounded `model_used` envelope label is accepted as metadata and
+cannot grant approval or change risk. This boundary is covered through the actual
+Models.predict/generate path with fake local transport and cloud enabled.
+Goals over 16,384 characters are rejected; cancellation is checked before and
+after inference. The real BrainClient consumes a per-request deadline locally,
+without sending it as model data or changing the shared timeout. A stalled
+native dependency cannot be made hard real-time by this Python deadline.
+The limit covers each owned inference attempt, not context gathering or total
+recovery time across attempts.
+
+Configuration requires booleans, known assertiveness/risk enums, confidence
+0–1, timeout 0.1–120 seconds, 1–10 alternatives and 1–10,000 ledger rows.
+The worker schema still caps returned alternatives at four.
+
+Actions require literal boolean `True` from the approval handler. Approval cards
+serialize decisions, reject backward/expired clocks and cannot be used twice.
+Tool/model output claiming consent grants no authority. Each account action
+still invokes its own existing preview/approval path; probability never replaces
+that gate. Folder deletion is unsupported by the individual-file command.
+
+New decision records use UUIDs and ASCII-escaped JSON, preserving decoded Unicode.
+Recognized credentials, email addresses, private paths and context labels are
+redacted in new goal/recommendation/chosen/outcome fields. Pattern matching does
+not identify all possible personal data; the ledger remains local. Historical
+rows are preserved until normal rotation, not retrospectively scrubbed. Writes
+atomically replace the rotating ledger; “append-only” below means logical
+decision/outcome events within that retention window. The unused unbounded ID
+cache was removed. `last_ledger_error` reports a categorical persistence error;
+the ledger is diagnostic, not the authority granting an action permission.
+
+There is no deterministic research-before-action gate for every unfamiliar
+program. Local-model advice and planner tool availability are not proof that
+research occurred. Shared BrainClient transport concurrency and live spoofed-UI
+resistance are not certified by the concurrent ledger fixture.
+
 Jarvis forms its own evidence-based opinions instead of blindly following whatever
 approach it is given. The deliberation engine ([jarvis/deliberation.py](../jarvis/deliberation.py))
 is one shared decision layer wired at the central task choke point — not a separate
@@ -51,7 +98,8 @@ When Jarvis has proposed something and is waiting, your reply is interpreted:
 | You say | Verdict | Jarvis does |
 | --- | --- | --- |
 | "go ahead", "do it", "yes" | approve | executes the agreed approach |
-| "no", "try something else" | reject | generates a *meaningfully different* alternative (excluding the rejected one) and proposes again |
+| "no", "stop", "cancel" | reject | cancels the pending proposal without execution or retry |
+| "no, try something else" | reject/refine | generates a different alternative and proposes again |
 | "you decide", "do what's best", "whatever" | vague | picks the best low-risk reversible option and proceeds; asks for confirmation only if high-risk |
 | a refinement ("use Rust instead") | refine | regenerates with your preference; an unrelated new request is handled normally |
 
@@ -81,8 +129,8 @@ approval, and the real outcome. Read it back with `Deliberation.decisions()`.
 
 ## Design guarantees
 
-- **Never blocks a turn.** Every model call is bounded; on timeout or error the engine
-  returns a heuristic opinion (risk + confidence from learned history) and proceeds.
+- **Bounded model wait.** Opinion inference can wait up to its configured deadline;
+  on timeout/error it returns a heuristic. Risky ambiguity still pauses planning.
 - **No duplicated approvals.** High-risk actions funnel through the one existing approval
   gate; this layer advises and sequences, it does not grant permissions.
 - **No new background autonomy.** Nothing acts on its own beyond today's authorized

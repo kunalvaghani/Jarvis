@@ -1,0 +1,21 @@
+{
+  "jarvis/audio.py": {
+    "before": "dc61e6ff56abb6513bd62bac0780bb99a2ef836b0109bba32633d189779a1ac8",
+    "after": "edf88ff35b277fda2726cfc73796aea6a61d4fd31cd5ab148fc1d569df34101e",
+    "before_representation": "captured preimage"
+  },
+  "jarvis/whisper_backend.py": {
+    "before": "aeea81604d8e06e0194e6e262d86b9cf80572a6d05a31a755c2b8919c66bffa5",
+    "after": "c2a955480feb0ee2b52cf7217862482d22d91d099b6bbe97fffd13f591257a99",
+    "before_representation": "HEAD preimage; file clean at start of voice pass"
+  },
+  "main.py": {
+    "before": "f44088ba48b5ad78931b80bded77c507fbef976857d38f4da963e83a478ba2ef",
+    "after": "193e7ca190d1288017e5327b8edb1a5d78fe16c1db0d6da705eef7bac4e68a04",
+    "before_representation": "captured preimage"
+  },
+  "jarvis/runtime_health.py": {
+    "after": "cc36f0e764074188d64f44a58351843822cc2426c6e2bc8f2fc61a8a9460eea3",
+    "before_representation": "no captured preimage; inspect completion telemetry change in working diff"
+  }
+}

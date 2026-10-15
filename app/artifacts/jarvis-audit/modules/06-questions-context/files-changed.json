@@ -1,0 +1,79 @@
+{
+  "scope": "Scoped module06 files; shared files preserve earlier dirty work. No commit or deployment.",
+  "files": [
+    {
+      "path": "app/jarvis/question_client.py",
+      "sha256": "f0fccba9b4ad04d8c2bd2e59a29610ad953269630a95b6322b5e789626740f29"
+    },
+    {
+      "path": "app/jarvis/knowledge_worker.py",
+      "sha256": "84ccec02a9d4402d28a816c843f06dc5623c4c9844bd10ed32a8552699fc8070"
+    },
+    {
+      "path": "app/jarvis/context_selector.py",
+      "sha256": "b42961542ab79e73f88aa516b15c0f5d9f1ce789111b88acb9d047bd5c5a41a2"
+    },
+    {
+      "path": "app/jarvis/conversation_memory.py",
+      "sha256": "54b834c68ced16403126a9ff49eb96a4dd37109a62feab1c4d42b13b5193b007"
+    },
+    {
+      "path": "app/jarvis/runtime_health.py",
+      "sha256": "a4a7cbb501bcf70f11f5f1b0937d054cc59976577b5273d920d6af6a4169b792"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "600c11d4d04cd688148d4cbe16d05a551b92e8aada16f34163d29510552269ea"
+    },
+    {
+      "path": "app/tests/test_questions_context_audit.py",
+      "sha256": "6c412e1299a818c53787a20a205870365fe5f6307409d1d8c4fba27ecc171563"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "939ce8ed50283d7c05689afa980371bc3c44282ec5525f8ff30833136aec6933"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "0986433f9e18b0b71086b9d4ca1ec14abb69358d2d90309a7b9c2594b94768c9"
+    },
+    {
+      "path": "app/scripts/verification/verify_questions_context_audit.py",
+      "sha256": "83fb21f588356bf45cebcfeb1f0672a835ec4ef98db96ef7e9bedb1f3a0c4007"
+    },
+    {
+      "path": "app/scripts/verification/report_questions_context_audit.py",
+      "sha256": "8fb6af878a907e4e273d00eb099300b9a387a02793a3fb6cbc9eee02d14db139"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "482d67716d9847a9c60269d5642fe987b3beb95f79dec608755369922b5e0664"
+    },
+    {
+      "path": "app/docs/natural-conversation.md",
+      "sha256": "dfbd5028605ad374cae485b4ff5e4b7277260c4ee3038db85e3294a239d3fad9"
+    },
+    {
+      "path": "app/docs/session-context.md",
+      "sha256": "ff6a745c3655bd3536a7357cbe1a1c3fbe6f6249d3201130346ac947310d24e7"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "2df300c35cdf1a8b6f2750e2069b458cbe44c2af89f9e4751273fcefc957e2d4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "7abcf3bcaf43722ee39eb788fc8c0e3baee84f9f1f7b7839696a5b7b16eee455"
+    }
+  ],
+  "artifact_directory": "app/artifacts/jarvis-audit/modules/06-questions-context",
+  "shared_artifacts": [
+    "module-map.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "summary.json",
+    "remaining-case-ids.txt",
+    "security-findings.md",
+    "final-report.md"
+  ]
+}

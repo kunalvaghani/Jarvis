@@ -1,0 +1,43 @@
+--- captured-before/jarvis/commands.py
++++ jarvis/commands.py
+@@ -65,6 +65,15 @@
+ 
+ 
+ def parse(text: str) -> Command:
++    if type(text) is not str or len(text)>100000:
++        raise ValueError('Command input must be text within the 100000-character limit.')
++    try:
++        return _parse_command(text)
++    except (RecursionError, UnicodeError):
++        raise ValueError('Command input is malformed or excessively nested.') from None
++
++
++def _parse_command(text: str) -> Command:
+     reflex = REFLEX.get(text.strip().rstrip('.!?').casefold())
+     if reflex:
+         return reflex
+--- captured-before/jarvis/intent_catalog.py
++++ jarvis/intent_catalog.py
+@@ -59,6 +59,11 @@
+      r"(?:which|what) (?:cities|places|countries|regions) have (?:live )?(?:cctv|cameras)(?: .*)?|"
+      r"(?:is there|are there) (?:any )?(?:live )?(?:cctv|cameras) (?:in|for) .+", lambda m: C("gods_eye_cameras", "coverage")),
+     # --- references and compound requests the planner or a question should resolve --------------------------
++    (r"open (?:my |the )?(?:latest|most recent) (?:spreadsheet|document|file|report)",
++     lambda m: C('task', m[0])),
++    (r"turn (?:the )?sound (up|down) a notch", lambda m: C('spotify_volume', m[1].lower(), 'auto')),
++    (r"pause what(?:'s| is) playing", lambda m: C('click_control', 'pause', 'click')),
++    (r"i said close (?:this|the) tab,? not the browser", lambda m: C('windows_command', '[329]', '{}')),
+     (r"open youtube,? (?:find|search for) (.+?),? and play (?:the official video|it|the official version)",
+      lambda m: C("play_media", m[1] + (" official" if "official" in m[0].lower() else ""), "youtube")),
+     (r"search (youtube|spotify) for (.+?),? (?:and )?play it(?:,? .*)?", lambda m: C("play_media", m[2], m[1].casefold())),
+--- captured-before/jarvis/engine.py
++++ jarvis/engine.py
+@@ -118,6 +118,8 @@
+         for index, clause in enumerate(clauses):
+             complete = final or index < len(clauses) - 1
+             clause = clause.strip()
++            if not whole and index < len(clauses) - 1:
++                clause = clause.rstrip(',;').rstrip()  # punctuation before a spoken command boundary
+             if not clause:
+                 continue
+             if index in self.done:

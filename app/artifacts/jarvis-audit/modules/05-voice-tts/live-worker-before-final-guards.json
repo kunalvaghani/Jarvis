@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "PASS",
+  "scope": "Actual cached F5 CUDA inference and owned protocol, one model load, offline/no speaker playback; no acoustic quality or STT/Qwen contention claim",
+  "ready_seconds": 28.719,
+  "first_request_audio_seconds": 4.922,
+  "stop_ack_seconds": 0.0,
+  "peak_allocated_mb": 798.46,
+  "peak_reserved_mb": 840.0,
+  "events": [
+    {
+      "at_seconds": 28.719,
+      "ready": true
+    },
+    {
+      "at_seconds": 33.641,
+      "id": 1,
+      "progress": 0
+    },
+    {
+      "at_seconds": 33.641,
+      "id": 1,
+      "audit_metrics": {
+        "loads": 1,
+        "peak_allocated_mb": 775.52,
+        "peak_reserved_mb": 812.0
+      }
+    },
+    {
+      "at_seconds": 33.641,
+      "id": 1,
+      "audio_ready": true,
+      "synthesis_seconds": 4.922
+    },
+    {
+      "at_seconds": 33.641,
+      "id": 1,
+      "done": true,
+      "audio_seconds": 3.15,
+      "synthesis_seconds": 4.922,
+      "coalesced_ids": [
+        1
+      ]
+    },
+    {
+      "at_seconds": 39.094,
+      "id": 2,
+      "progress": 0
+    },
+    {
+      "at_seconds": 39.094,
+      "id": 2,
+      "audio_ready": true,
+      "synthesis_seconds": 5.453
+    },
+    {
+      "at_seconds": 46.359,
+      "id": 2,
+      "progress": 1
+    },
+    {
+      "at_seconds": 46.375,
+      "id": 2,
+      "audio_ready": true,
+      "synthesis_seconds": 12.734
+    },
+    {
+      "at_seconds": 51.297,
+      "id": 2,
+      "progress": 2
+    },
+    {
+      "at_seconds": 51.297,
+      "id": 2,
+      "audit_metrics": {
+        "loads": 1,
+        "peak_allocated_mb": 798.46,
+        "peak_reserved_mb": 840.0
+      }
+    },
+    {
+      "at_seconds": 51.297,
+      "id": 2,
+      "audio_ready": true,
+      "synthesis_seconds": 17.656
+    },
+    {
+      "at_seconds": 51.297,
+      "id": 2,
+      "done": true,
+      "audio_seconds": 16.14,
+      "synthesis_seconds": 17.656,
+      "coalesced_ids": [
+        2
+      ]
+    },
+    {
+      "at_seconds": 51.312,
+      "stopped": true
+    },
+    {
+      "at_seconds": 51.312,
+      "id": 3,
+      "audit_metrics": {
+        "loads": 1,
+        "peak_allocated_mb": 798.46,
+        "peak_reserved_mb": 840.0
+      }
+    },
+    {
+      "at_seconds": 56.266,
+      "id": 4,
+      "progress": 0
+    },
+    {
+      "at_seconds": 56.266,
+      "id": 4,
+      "audit_metrics": {
+        "loads": 1,
+        "peak_allocated_mb": 798.46,
+        "peak_reserved_mb": 840.0
+      }
+    },
+    {
+      "at_seconds": 56.266,
+      "id": 4,
+      "audio_ready": true,
+      "synthesis_seconds": 4.954
+    },
+    {
+      "at_seconds": 56.266,
+      "id": 4,
+      "done": true,
+      "audio_seconds": 3.15,
+      "synthesis_seconds": 4.954,
+      "coalesced_ids": [
+        4
+      ]
+    }
+  ]
+}

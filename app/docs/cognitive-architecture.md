@@ -1,5 +1,27 @@
 # Cognitive architecture: one perceive → remember → reason → decide → act → learn loop
 
+**2026-10-15 audit follow-up:** The attention loop observes inputs and refreshes
+working memory; independent action workers execute commands. Old screen attention
+is invalidated on window switches, including empty titles. Text admission bounds
+labels/content and rejects arbitrary serializers; malformed surrogate text is
+replaced before persistence. Configuration requires a boolean `enabled` and finite
+numeric `cycle_hz` (clamped to 0.5–20 Hz). Snapshots expose `tick_errors`,
+`tick_error`, `tick_overruns`, `tick_duration_ms`, `tick_degraded` and `rejected_events`.
+Tick/storage errors retain the exception type without the payload. A stalled
+heartbeat is diagnostic; it neither kills a native hang nor replays an action.
+Unexecuted task proposals awaiting consent do not train success statistics;
+attempted failures followed by recovery offers still count. The diagnostic writer
+and Stop/recovery limits remain unchanged.
+[Dated fixture evidence, paired measurements and unresolved cases](../artifacts/jarvis-audit/modules/02-perception-cognition/inventory.md).
+Historical October 11 results below remain historical measurements. Live microphone,
+GUI/model quality and hard native CPU-hang containment remain unproved. The
+completion pass adds task UUID binding: stale planner results and task finishes
+cannot update an unrelated task, and explicit tool task IDs must match the current
+checkpoint. A busy Python sensor fixture leaves attention responsive and reports
+stalled observation after 15 seconds. Malformed deep statistics recover to the
+prior; Unicode statistics are escaped on disk without changing decoded text.
+[Completed scope, exact assertions and remaining live prerequisites](../artifacts/jarvis-audit/final-report.md).
+
 Updated 2026-10-11 IST. Jarvis is now organised as the six-module cognitive architecture from the "Blueprint for Building J.A.R.V.I.S." diagram. The modules are Multimodal Perception, Working Memory, Long-Term Memory, Core Reasoning & World Model, Executive Control & Meta-Learning, and Action / Tool Output. Every command, sensor event and action result passes through one loop.
 
 Nothing was thrown away. The tools, APIs, skills, memories and coding agents Jarvis already had are wired into the module they belong to, and [`jarvis/cognition.py`](../jarvis/cognition.py) adds what was missing:
@@ -20,20 +42,26 @@ Nothing was thrown away. The tools, APIs, skills, memories and coding agents Jar
 
 | Module | What it is in Jarvis | Code |
 | --- | --- | --- |
-| **Multimodal perception** | Speech (faster-whisper) and typed commands; the focused window (vision); background sensors (God's Eye area alerts, weather alerts, WhatsApp messages and calls, repairs); and feedback from every action. Each percept gets a salience score (your words 0.9, alerts 0.7, failures 0.8, focus changes 0.5). | `engine.py`, `voice_input.py`, `main.py` window observer, `gods_eye.py`, `weather_watch.py`, `whatsapp.py` |
+| **Multimodal perception** | Speech (faster-whisper) and typed commands; the focused window (vision); background sensors (God's Eye area alerts, weather alerts, WhatsApp messages and calls, repairs); and feedback from every action. Current admission gives user speech 1.0, active-window vision 0.85, and other sensor/feedback scores at most 0.7. | `engine.py`, `voice_input.py`, `main.py` window observer, `gods_eye.py`, `weather_watch.py`, `whatsapp.py` |
 | **Working memory** | A bounded workspace: the current goal, the window in focus, the active task, the queue length, any decision waiting on you, the session style, the last action, and seven attention slots. Attention is ranked by salience × recency, and fades over about two minutes. It is added to the live context every answer and plan sees. | `cognition.py` `update_workspace()`, `context_hub.py` `situation()` |
 | **Long-term memory** | One `recall()` over three stores. *Episodic:* conversation summaries and the Obsidian activity log. *Declarative:* curated facts. *Procedural:* skills, past task experience, coding lessons, learned GitHub repositories, plus per-action outcome statistics in `.jarvis-runtime/cognition/procedures.json`. | `memory_curator.py`, `conversation_memory.py`, `obsidian_memory.py`, `skill_memory.py`, `experience_memory.py`, `repo_learning.py` |
 | **Core reasoning & world model** | Local models plan and answer (`qwen3.5:9b`). Before any action runs, the world model predicts: what it affects (reads only / sends to a person / writes files or memory / operates an app / plays media / moves a view); whether it can be undone; whether it needs your approval; how long it usually takes (learned average); and how often it succeeds (learned, starting at 50/50). It also lists what it's unsure about. | `brain.py`, `knowledge_worker.py`, `cognition.py` `predict()` |
 | **Executive control & meta-learning** | Decides whether to go ahead or ask you first. After the action it compares the outcome with the prediction ("surprise") and updates timing and reliability. It treats "no, that's wrong" or "that didn't work" right after an action as a failure. When something fails repeatedly, or you correct it, it writes a lesson to the Obsidian vault and adds it to future context. | `cognition.py` `deliberate()`, `evaluate()`, `feedback()`, `consolidate()`; `task_recovery.py`; approvals |
-| **Action / tool output** | Everything Jarvis can do: desktop and app control, writing, media, WhatsApp, Gmail, God's Eye, coding agents, Windows commands and live data providers. Each action runs inside the loop, and its result feeds back into perception. | `actions.py` `execute()` → `cognition.act()` |
+| **Action / tool output** | Desktop and app control, writing, media, WhatsApp, Gmail, God's Eye, coding agents, Windows commands and live data providers. Actions run on independent owned workers and direct handlers; prediction/outcome feedback wraps `execute()`, outside the attention tick. | `actions.py` `execute()` → `cognition.act()` |
 
-The loop runs on its own thread at `cognition.cycle_hz` (default 4 Hz; measured 3.7–3.8 Hz live). Each cycle folds new percepts into working memory, and about once a second it writes `.jarvis-runtime/cognition/state.json`. The diagram's "~20 Hz" is a theoretical target. Jarvis's loop only re-ranks attention between events, so a faster rate would cost CPU without adding anything.
+The attention loop runs on its own thread at `cognition.cycle_hz` (default 4 Hz;
+the 3.7–3.8 Hz live measurement below is from October 11). It folds incoming
+percepts into working memory. An owned coalescing writer persists
+`.jarvis-runtime/cognition/state.json` about once a second; disk I/O is outside
+the tick. Monotonic deadlines avoid catch-up bursts. Windows scheduling provides
+no hard real-time guarantee. The diagram's "~20 Hz" is a theoretical target,
+not an executed model/tool cycle rate.
 
 ## What changes for you
 
 - **Jarvis won't guess who a message goes to.** "Message him on Telegram saying hi" with nobody recent in context now gets "Before I send anything: it isn't clear who 'him' is. Say it again with their name and I'll go ahead." It only asks for sends whose recipient is just a pronoun, and only when there's no recent conversation, waiting question or running task for the pronoun to refer to. Named recipients go straight through to the usual preview and approval.
 - **Ask what an action would do, without doing it.** "What would happen if you send hi to mom on WhatsApp?" runs the world model only. The answer says it sends a message to another person, can't simply be undone, would show a preview and wait for approval, and usually takes about 25 seconds. Nothing is sent.
-- **Learning from outcomes.** Every action's time and result are recorded per kind. After three or more runs, predictions use the real success rate, and a kind that keeps failing is flagged ("this kind of action failed 3 of the last 3 times (last: …)").
+- **Learning from outcomes.** Executed actions update timing and result counts per kind. Predictions use a Beta(1,1) posterior mean and 95% credible interval; they explain when fewer than three historical samples are available. Repeated failures are flagged. Unexecuted approval proposals contribute no success sample.
 - **Corrections count.** Saying "no, that's wrong" right after an action marks it as a failure and records a lesson.
 - **Shared context.** Answers and task plans see the current goal, the last action, the top attention items and any relevant lessons.
 

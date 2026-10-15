@@ -1,0 +1,7 @@
+# Failure baselines and disposition — 2026-10-15 IST
+
+Seven initial actual failing variants: every unchanged poll rewrote state; hardware-probe exception leaked an active admission; three malformed owner/cache shapes were accepted or raised an unhelpful TypeError; oversized state was accepted; unknown resource readings admitted optional learning. One initial test imported nonexistent Forge; corrected to AbilityForge, which then genuinely failed to reject an unfittable fallback. Separate32K/small-reserve test demonstrated a20% envelope overrun exceeding capacity. Baseline XMLs are retained; current runs are distinct.
+
+Repairs validate bounded persisted state before liveness/mutation, skip unchanged writes, protect probe failures with lease cleanup, retain a primary-envelope margin floor, defer uncertain optional learning and require initial fallback size+margin to fit. Additional assertions cover duplicate lease acquisition, fake secret metadata, forged priorities, cross-process ownership and partial/failed transport non-replay. An initial nonexistent resource-policy test filename was a collection error and counts no assertions.
+
+Open implementation blockers002/012: F5/Whisper are outside the shared lease coordinator. No live speech-arrival/stuck-TTS proof, forced driver reset, native30B stress, simultaneous uncontrolled GPU load, physical immediate free guarantee or kernel preemption was attempted. Prior speech acceptance blockers remain. Physical polling and initial model-size estimates cannot guarantee future capacity against external allocators.

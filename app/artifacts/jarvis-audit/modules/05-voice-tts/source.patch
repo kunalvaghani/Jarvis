@@ -1,0 +1,691 @@
+--- module05-pre/jarvis/speech.py
++++ jarvis/speech.py
+@@ -8,6 +8,11 @@
+ import threading
+ import math
+ import time
++import uuid
++
++
++class VoiceStartupError(RuntimeError):
++    """No text has been submitted, so selecting another backend is safe."""
+ 
+ 
+ def spoken_text(answer):
+@@ -78,6 +83,11 @@
+     STALL_SECONDS = 60  # No synthesis/playback progress for this long means the worker is stuck.
+ 
+     def __init__(self, options, report):
++        if (not isinstance(options,dict) or not isinstance(options.get('engine','piper'),str)
++                or not isinstance(options.get('language','auto'),str)
++                or options.get('engine','piper') not in {'f5','kokoro','piper'}
++                or options.get('language','auto') not in {'auto','en','hi'}):
++            raise ValueError('Invalid speech engine or language configuration')
+         self.options, self.report = options, report
+         self.queue = queue.Queue(maxsize=64)
+         self.generation = 0
+@@ -92,6 +102,12 @@
+         self.outstanding = {}  # Kokoro request id -> generation
+         self.next_id = 0
+         self.last_progress = time.monotonic()
++        self.worker_engine = None
++        self.worker_ready = threading.Event()
++        self.worker_init_error = False
++        self.failed_backends = set()
++        self.restart_required = False
++        self.trace_id = uuid.uuid4().hex
+         self.streamed = None  # Text of the answer being spoken while it is written.
+         self.thread = threading.Thread(target=self._run, daemon=True)
+ 
+@@ -104,18 +120,19 @@
+         """Speak a reply; if it was already being spoken while written, only the rest is added."""
+         if self.closed.is_set() or not self.options.get("enabled", True):
+             return
++        generation = self.generation
+         content = spoken_text(answer)
+         with self.lock:
++            if generation != self.generation or self.closed.is_set():
++                return
+             streamed, self.streamed = self.streamed, None
+-        if streamed is not None:
+-            if streamed and content.startswith(streamed):
+-                content = content[len(streamed):].strip()
+-            elif streamed:
+-                # The final answer differs from what was spoken (for example after online
+-                # verification): stop the draft and speak the verified answer in full.
+-                self.cancel()
+-        if content:
+-            self._enqueue(content)
++            if streamed is not None:
++                if streamed and content.startswith(streamed):
++                    content = content[len(streamed):].strip()
++                elif streamed:
++                    self.cancel()
++            if content:
++                self._enqueue(content)
+ 
+     def stream(self, text, active=True, phase=None):
+         """Speak complete sentences of an answer while it is still being generated."""
+@@ -131,8 +148,11 @@
+             if not text and self.streamed:
+                 self.cancel()
+             return
++        generation = self.generation
+         content = spoken_text(text or "")
+         with self.lock:
++            if generation != self.generation or self.closed.is_set():
++                return
+             spoken = self.streamed
+             if spoken is None:
+                 if not content:
+@@ -162,14 +182,14 @@
+                 return
+             piece = content[len(spoken):boundary + 1]
+             self.streamed = content[:boundary + 1]
+-        if piece.strip():
+-            self._enqueue(piece.strip())
++            if piece.strip():
++                self._enqueue(piece.strip())
+ 
+     def cancel(self):
+         with self.lock:
+             self.generation += 1
+             if self.process and self.process.poll() is None:
+-                if self.options.get("engine") in {"kokoro", "f5"} and self.process.stdin:
++                if (self.worker_engine or self.options.get("engine")) in {"kokoro", "f5"} and self.process.stdin:
+                     try:
+                         # Stop playback and pending synthesis; the warm model stays loaded.
+                         self.process.stdin.write(json.dumps({"stop": True}) + "\n")
+@@ -190,7 +210,7 @@
+ 
+     def interrupt(self):
+         with self.lock:
+-            if self.speaking.is_set() or self.outstanding:
++            if self.speaking.is_set() or self.outstanding or not self.queue.empty() or self.streamed is not None:
+                 self.cancel()
+ 
+     def output_recent(self):
+@@ -199,6 +219,14 @@
+ 
+     def output_references(self):
+         return tuple(self.reference_texts)  # Replaced as a whole under the writer lock.
++
++    def health(self):
++        with self.lock:
++            return {'trace_id':self.trace_id,'backend':self.worker_engine,
++                'ready':self.worker_ready.is_set() and not self.worker_init_error,
++                'fallback':sorted(self.failed_backends),'pending':len(self.outstanding),
++                'queue':self.queue.qsize(),'speaking':self.speaking.is_set(),
++                'closed':self.closed.is_set(),'restart_required':self.restart_required}
+ 
+     def close(self):
+         self.closed.set()
+@@ -232,6 +260,8 @@
+     def _dispose_voice(self):
+         with self.lock:
+             process, self.process = self.process, None
++            self.worker_engine = None
++            self.worker_ready.clear()
+             self.outstanding.clear()
+             if process:
+                 if process.poll() is None:
+@@ -244,54 +274,109 @@
+                 self.voice_log.close()
+                 self.voice_log = None
+ 
+-    def _ensure_kokoro(self, generation):
++    def _ensure_kokoro(self, generation, engine=None):
++        engine = engine or self.options.get('engine', 'kokoro')
++        if self.worker_engine is not None and self.worker_engine!=engine:
++            if not self._drain_output(generation):return False
+         with self.lock:
+             if self.closed.is_set() or generation != self.generation:
+                 return False
+-            if self.process and self.process.poll() is None:
++            if (self.process and self.process.poll() is None and not self.restart_required
++                    and (self.worker_engine is None or self.worker_engine == engine)):
+                 return True
+             self._dispose_voice()
+             base = Path(__file__).resolve().parent.parent
+-            directory = base / ".jarvis-runtime"
+-            directory.mkdir(exist_ok=True)
+-            self.voice_log = (directory / "speech.log").open("a", encoding="utf-8")
+-            f5 = self.options.get("engine") == "f5"
++            f5 = engine == "f5"
+             executable = str(base / ".venv-f5/Scripts/python.exe") if f5 else sys.executable
+             module = "jarvis.f5_speech" if f5 else "jarvis.kokoro_speech"
+-            self.process = subprocess.Popen([executable, "-u", "-m", module, "--serve"],
+-                cwd=base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.voice_log,
+-                encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+-            responses = self.responses = queue.Queue()
++            try:
++                self.process = subprocess.Popen([executable, "-u", "-m", module, "--serve"],
++                    cwd=base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
++                    encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
++            except OSError:
++                raise VoiceStartupError('Local voice process could not start') from None
++            self.worker_engine = engine
++            self.restart_required = False
++            self.worker_init_error = False
++            responses = self.responses = queue.Queue(maxsize=128)
+             process = self.process
+             def read():
+                 try:
+-                    for line in process.stdout:
+-                        responses.put(line)
+-                        self._event(line)
++                    while True:
++                        line=process.stdout.readline(65537)
++                        if not line:break
++                        if len(line)>65536:
++                            self._event('{"error":"invalid_worker_frame"}',process=process)
++                            break
++                        if responses.full():responses.get_nowait()
++                        responses.put_nowait(line)
++                        self._event(line, process=process)
+                 except (OSError, ValueError):
+                     pass
+                 finally:
+-                    responses.put(None)
++                    with self.lock:
++                        if self.process is process:
++                            self.worker_init_error = True
++                            self.worker_ready.set()
++                            self.restart_required = True
++                            if self.outstanding and not self.closed.is_set():
++                                self.report('repair','Voice connection closed; pending audio was discarded, not replayed. A new request can restart the owned worker.')
++                            self.outstanding.clear()
++                            self._end_output()
+             threading.Thread(target=read, daemon=True).start()
+-            return True
+-
+-    def _event(self, line):
++        # Do not hold the synthesis/ownership lock while a cold model loads:
++        # Stop and Quit must remain responsive. No text is submitted until ready.
++        deadline = time.monotonic()+60
++        while not self.closed.is_set() and generation == self.generation:
++            if self.worker_ready.wait(.05):
++                if self.worker_init_error:
++                    raise VoiceStartupError('Local voice initialization failed')
++                return True
++            if process.poll() is not None or time.monotonic() >= deadline:
++                raise VoiceStartupError('Local voice startup deadline exceeded')
++        return False
++
++    def _drain_output(self,generation):
++        """A language/backend change cannot kill the previous reply mid-clause."""
++        while not self.closed.is_set() and generation==self.generation:
++            with self.lock:
++                if not self.outstanding:return True
++            self.closed.wait(.05)  # Existing watchdog bounds a stalled worker.
++        return False
++
++    def _event(self, line, process=None):
+         """Worker progress: keeps the speaking state exact and feeds the stall watchdog."""
++        if not isinstance(line,str) or len(line)>65536:
++            return
+         try:
+             row = json.loads(line)
+-        except ValueError:
++        except (ValueError,RecursionError):
+             return
+-        with self.lock:
+-            self.last_progress = time.monotonic()
+-            request = row.get("id")
++        if not isinstance(row,dict):return
++        flags=('ready','done','started','audio_ready','stopped','playback')
++        if any(key in row and type(row[key]) is not bool for key in flags):return
++        if 'progress' in row and (type(row['progress']) is not int or not 0<=row['progress']<1000000):return
++        if 'error' in row and not isinstance(row['error'],str):return
++        if not (any(row.get(key) is True for key in flags) or 'progress' in row or row.get('error')):return
++        request=row.get('id')
++        if request is not None and (type(request) is not int or not 0<request<2**63):return
++        with self.lock:
++            if process is not None and process is not self.process:return
++            if row.get('ready') is True:
++                self.worker_ready.set()
++                self.last_progress = time.monotonic()
++                return
+             if row.get("error"):
+-                if request is None and self.options.get("engine") == "f5" and not self.closed.is_set():
+-                    self.report("warning", str(row["error"])[:300])
++                if request is None:
++                    self.worker_init_error = True
++                    self.worker_ready.set()
++                self.restart_required = True
+                 if request in self.outstanding and self.outstanding[request] == self.generation and not self.closed.is_set():
+-                    self.report("warning", "Voice playback failed: " + str(row["error"])[:300])
++                    self.report("warning", "Voice playback failed; the answer remains in the transcript. A new request can restart the owned voice worker.")
+                 self.outstanding.pop(request, None)
+             elif row.get("done"):
+                 self.outstanding.pop(request, None)
++            if request in self.outstanding:self.last_progress = time.monotonic()
+             if not self.outstanding:
+                 self._end_output()
+ 
+@@ -299,15 +384,16 @@
+         while not self.closed.is_set():
+             time.sleep(1)
+             with self.lock:
+-                limit = 600 if self.options.get("engine") == "f5" else self.STALL_SECONDS
++                limit = 600 if (self.worker_engine or self.options.get("engine")) == "f5" else self.STALL_SECONDS
+                 stuck = self.outstanding and time.monotonic() - self.last_progress > limit
+             if stuck:
+                 self.report("repair", "Voice worker stopped making progress and was restarted; the answer remains in the transcript.")
+                 self._dispose_voice()
+                 self._end_output()
+ 
+-    def _kokoro_send(self, generation, payload, content):
+-        if not self._ensure_kokoro(generation):
++    def _kokoro_send(self, generation, payload, content, engine=None):
++        ready = self._ensure_kokoro(generation, engine=engine) if engine else self._ensure_kokoro(generation)
++        if not ready:
+             return False
+         with self.lock:
+             if self.closed.is_set() or generation != self.generation:
+@@ -333,6 +419,9 @@
+                     if not readiness(self.options.get("f5", {})):
+                         self._ensure_kokoro(self.generation)
+             except Exception:
++                if self.options.get('engine') == 'f5':
++                    self.failed_backends.add('f5')
++                    self.report('repair','F5 startup unavailable; trying installed CPU speech. Check speech.f5 or scripts/setup/setup_f5.ps1.')
+                 self._dispose_voice()
+         while not self.closed.is_set():
+             try:
+@@ -346,30 +435,49 @@
+                 if language == "en" and self.options.get("engine") == "f5":
+                     from .f5_speech import readiness
+                     issue = readiness(self.options.get("f5", {}))
+-                    if issue:
+-                        self.report("warning", issue)
+-                        continue
+-                    self._kokoro_send(generation, {"text": content}, content)
+-                    continue
++                    if issue or 'f5' in self.failed_backends:
++                        if 'f5' not in self.failed_backends:
++                            self.report('repair','F5 reference/environment unavailable; trying installed CPU speech. Configure speech.f5; run scripts/setup/setup_f5.ps1 if needed.')
++                        self.failed_backends.add('f5')
++                    else:
++                        try:
++                            self._kokoro_send(generation, {"text": content}, content, engine='f5')
++                            continue
++                        except VoiceStartupError:
++                            # _ensure failed before any text was sent: CPU fallback
++                            # cannot duplicate audible audio. Runtime failures never replay.
++                            self.failed_backends.add('f5')
++                            self._dispose_voice()
++                            self.report('repair','F5 startup unavailable; trying installed CPU speech. Check speech.f5.')
+                 name = "hi_IN-rohan-medium" if language == "hi" else "en_GB-alan-medium"
+                 base = Path(__file__).resolve().parent.parent
+-                kokoro = language == "en" and self.options.get("engine") == "kokoro"
++                kokoro = language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends
+                 voice_model = base / "models" / "voices" / ("kokoro/kokoro-v1.0.onnx" if kokoro else name + ".onnx")
+                 voices = base / "models/voices/kokoro/voices-v1.0.bin"
+                 if not voice_model.is_file() or (kokoro and not voices.is_file()):
+-                    self.report("warning", f"{language.upper()} voice model is missing. Run scripts/setup/setup.ps1 to install it.")
+-                    continue
++                    if kokoro:
++                        kokoro=False
++                        voice_model=base/'models/voices'/(name+'.onnx')
++                    if not voice_model.is_file():
++                        self.report("warning", f"{language.upper()} voice model is missing. Run scripts/setup/setup.ps1 to install it.")
++                        continue
+                 if kokoro:
+                     # Sent without waiting: the worker plays it right after what is already queued.
+-                    self._kokoro_send(generation, {
+-                        "text": content, "voice": self.options.get("voice", "am_michael:60,am_fenrir:40"),
+-                        "speed": self.options.get("speed", 1.0), "natural": self.options.get("natural", True),
+-                        "breaths": self.options.get("breaths", True),
+-                        "breath_level": self.options.get("breath_level", .012)}, content)
+-                    continue
++                    try:
++                        self._kokoro_send(generation, {
++                            "text": content, "voice": self.options.get("voice", "am_michael:60,am_fenrir:40"),
++                            "speed": self.options.get("speed", 1.0), "natural": self.options.get("natural", True),
++                            "breaths": self.options.get("breaths", True),
++                            "breath_level": self.options.get("breath_level", .012)}, content, engine='kokoro')
++                        continue
++                    except VoiceStartupError:
++                        self.failed_backends.add('kokoro');self._dispose_voice()
++                        voice_model=base/'models/voices'/(name+'.onnx')
++                        if not voice_model.is_file():raise RuntimeError('Piper fallback unavailable')
+                 command = [sys.executable, "-m", "jarvis.piper_speech"]
+                 payload = json.dumps({"text": content, "model": str(voice_model), **speech_parameters(self.options)},
+                                      ensure_ascii=False)
++                if not self._drain_output(generation):continue
+                 with self.lock:
+                     if generation != self.generation or self.closed.is_set():
+                         continue
+@@ -379,6 +487,7 @@
+                         command, cwd=Path(__file__).resolve().parent.parent,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
++                    self.worker_engine='piper'
+                 try:
+                     _, error = self.process.communicate(payload, timeout=playback_timeout(content))
+                 except subprocess.TimeoutExpired:
+@@ -390,9 +499,9 @@
+                 finally:
+                     self._end_output()
+                 if self.process.returncode and generation == self.generation and not self.closed.is_set():
+-                    self.report("warning", "Voice playback failed: " + error.strip()[-300:])
++                    self.report("warning", "Voice playback failed; the answer remains in the transcript.")
+             except Exception as exc:
+                 if generation == self.generation and not self.closed.is_set():
+-                    self.report("warning", f"Voice playback failed: {exc}")
++                    self.report("warning", "Voice playback failed; the answer remains in the transcript.")
+             finally:
+                 self.queue.task_done()
+--- module05-pre/jarvis/f5_speech.py
++++ jarvis/f5_speech.py
+@@ -4,8 +4,28 @@
+ import os
+ import threading
+ from pathlib import Path
++from functools import lru_cache
+ 
+ BASE = Path(__file__).resolve().parents[1]
++
++
++@lru_cache(maxsize=16)
++def _wav_duration(path, size, modified, changed):
++    """Cache only validated header metadata, never audio or a private transcript."""
++    import wave
++    try:
++        with wave.open(path,'rb') as audio:
++            duration=audio.getnframes()/audio.getframerate()
++    except (wave.Error,EOFError,ZeroDivisionError):
++        raise ValueError('F5 reference must be a PCM WAV recording.') from None
++    if not 3<=duration<=11:
++        raise ValueError('F5-TTS reference must be 3–11 seconds, including a short quiet tail.')
++    return duration
++
++
++def reference_duration(path):
++    path=Path(path);stat=path.stat()
++    return _wav_duration(str(path),stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)
+ 
+ 
+ def number(options, key, default, low, high):
+@@ -18,23 +38,23 @@
+ 
+ def reference(options, text=""):
+     from .natural_voice import EXCITED, SOMBRE, PLAYFUL, speech_unicode
++    if not isinstance(options,dict):raise ValueError('speech.f5 must be an object.')
++    if not isinstance(options.get('references',{}),dict):raise ValueError('F5 style references must be objects.')
++    if type(options.get('auto_emotion',True)) is not bool:raise ValueError('F5 auto_emotion must be boolean.')
++    if options.get('device','cpu') not in ('cpu','cuda'):raise ValueError('F5 device must be cpu or cuda.')
+     style = "neutral"
+     if options.get("auto_emotion", True):
+         style = "serious" if SOMBRE.search(text) else "playful" if PLAYFUL.search(text) else "excited" if EXCITED.search(text) else "neutral"
+     selected = options.get("references", {}).get(style) or options
++    if not isinstance(selected,dict):raise ValueError('F5 style reference must be an object.')
++    if not isinstance(selected.get('reference_audio',''),(str,Path)) or not isinstance(selected.get('reference_text',''),str):
++        raise ValueError('F5 reference path and exact transcript must be text.')
+     path = Path(selected.get("reference_audio", ""))
+     path = path if path.is_absolute() else BASE / path
+     transcript = speech_unicode(str(selected.get("reference_text", ""))).strip()
+     if not path.is_file() or not transcript:
+         raise ValueError("F5-TTS needs a local 3–11 second reference recording and its exact reference_text. Configure speech.f5.")
+-    import wave
+-    try:
+-        with wave.open(str(path), 'rb') as audio:
+-            duration = audio.getnframes() / audio.getframerate()
+-    except (wave.Error, EOFError) as exc:
+-        raise ValueError('F5 reference must be a PCM WAV recording.') from exc
+-    if not 3 <= duration <= 11:
+-        raise ValueError("F5-TTS reference must be 3–11 seconds, including a short quiet tail.")
++    reference_duration(path)
+     return path, transcript, style
+ 
+ 
+@@ -44,7 +64,7 @@
+     try:
+         reference(options)
+     except (ValueError, OSError, ImportError) as exc:
+-        return str(exc)
++        return 'F5 reference unavailable or invalid. Configure a local PCM WAV and exact speech.f5.reference_text.'
+     return None
+ 
+ 
+@@ -69,15 +89,15 @@
+ 
+ def chunks(text, path, transcript, pacing, first_limit=80):
+     """Keep each API call to one bounded chunk, avoiding upstream unbounded futures."""
+-    import wave
+-    with wave.open(str(path), 'rb') as audio:
+-        duration = audio.getnframes() / audio.getframerate() + .1
++    duration = reference_duration(path) + .1
+     maximum = max(1, int(len(transcript.encode('utf-8')) / duration * (22-duration) * pacing * .8))
+     if len(text.encode('utf-8')) <= maximum:
+         return [text]  # Do not split an already short sentence just to make a smaller head.
+     rows, words, size = [], [], 0
+     for word in text.split():
+         count = len(word.encode('utf-8')) + 1
++        if count>maximum:
++            raise ValueError('F5 word exceeds the bounded synthesis chunk budget.')
+         limit = min(maximum, first_limit) if not rows else maximum
+         if words and size + count > limit:
+             boundaries = [index+1 for index, value in enumerate(words)
+@@ -118,7 +138,7 @@
+             remove_silence=False, show_info=lambda *args: None)
+         emit_progress(index)
+         audio = np.asarray(audio, dtype=np.float32)
+-        if not audio.size or not np.isfinite(audio).all() or rate != 24000:
++        if audio.ndim!=1 or not audio.size or audio.size>24000*30 or not np.isfinite(audio).all() or rate != 24000:
+             raise ValueError("F5-TTS returned invalid audio or sample rate.")
+         if stop.is_set():
+             return
+--- module05-pre/jarvis/kokoro_speech.py
++++ jarvis/kokoro_speech.py
+@@ -114,18 +114,33 @@
+                                       blocksize=int(rate * .04), latency="low")
+         self.stream.start()
+ 
+-    def add(self, request_id, audio):
+-        with self.lock:
++    def add(self, request_id, audio, stop=None):
++        if (not isinstance(audio,self.np.ndarray) or audio.ndim!=1 or not audio.size
++                or audio.size>self.rate*30 or not self.np.isfinite(audio).all()):
++            raise ValueError('Invalid or oversized local voice audio')
++        with self.lock:
++            if stop is not None and stop.is_set():return False
++            if getattr(self,'stream',None) is not None and not self.stream.active:
++                raise OSError('Audio output unavailable')
++            if len(self.pieces)>=128:raise BufferError('Local voice playback buffer full')
+             self.pieces.append([request_id, audio, 0])
+-
+-    def finish(self, request_id, seconds):
+-        with self.lock:
++            return True
++
++    def finish(self, request_id, seconds, stop=None):
++        with self.lock:
++            if stop is not None and stop.is_set():return
++            if len(self.pieces)>=128:raise BufferError('Local voice playback buffer full')
+             self.pieces.append([request_id, None, seconds])  # End marker: report when reached.
+ 
+     def clear(self):
+         with self.lock:
+             self.pieces.clear()
+             self.current = None
++
++    def discard(self, request_ids):
++        with self.lock:
++            self.pieces=collections.deque(row for row in self.pieces if row[0] not in request_ids)
++            if self.current is not None and self.current[0] in request_ids:self.current=None
+ 
+     def callback(self, out, frames, timing, status):
+         out.fill(0)
+@@ -143,6 +158,7 @@
+                         continue
+                     if position == 0 and getattr(self, "started_id", None) != request_id:
+                         self.started_id = request_id
++                        self.played_samples = 0
+                         self.events.put({"id": request_id, "started": True})
+                 request_id, audio, position = self.current
+                 take = min(frames - filled, len(audio) - position)
+@@ -150,6 +166,10 @@
+                 filled += take
+                 position += take
+                 self.current[2] = position
++                self.played_samples=getattr(self,'played_samples',0)+take
++                if self.played_samples>=self.rate:
++                    self.played_samples%=self.rate
++                    self.events.put({'id':request_id,'playback':True})
+                 if position >= len(audio):
+                     self.current = None
+ 
+@@ -201,7 +221,7 @@
+     protocol = sys.stdout
+     base = Path(__file__).resolve().parent.parent
+     events = queue.Queue()
+-    requests = queue.Queue()
++    requests = queue.Queue(maxsize=64)
+     epoch = [0]  # Incremented by "stop"; work from an older epoch is discarded.
+ 
+     class Stale:
+@@ -219,7 +239,10 @@
+                 return
+             protocol.write(json.dumps(row) + "\n")
+             protocol.flush()
+-    threading.Thread(target=writer, daemon=True).start()
++    writer_thread=threading.Thread(target=writer, daemon=True)
++    writer_thread.start()
++    player=None
++    worker=None
+     try:
+         raise_priority()
+         with contextlib.redirect_stdout(sys.stderr):
+@@ -252,30 +275,34 @@
+                                 break
+                             total += len(audio) / rate
+                             if player is not None:
+-                                player.add(request["id"], audio)
++                                player.add(request["id"], audio, stale)
+                             events.put({'id': request['id'], 'audio_ready': True,
+                                         'synthesis_seconds': round(time.monotonic()-started, 3)})
+                     if stale.is_set():
+                         continue
+                     if player is not None:
+                         for index, row in enumerate(batch):
+-                            player.finish(row['id'], total if index == 0 else 0.)
++                            player.finish(row['id'], total if index == 0 else 0., stale)
+                     else:
+                         for index, row in enumerate(batch):
+                             events.put({"id": row['id'], "done": True, "audio_seconds": round(total, 2) if index == 0 else 0.,
+                                         "synthesis_seconds": round(time.monotonic() - started, 3),
+                                         "coalesced_ids": [part['id'] for part in batch]})
+                 except Exception as exc:
++                    if player is not None:player.discard({row['id'] for row in batch})
+                     for row in batch:
+-                        events.put({"id": row.get("id"), "error": "Local voice failed: " + str(exc)})
++                        events.put({"id": row.get("id"), "error": "synthesis_or_output_failure"})
+         worker = threading.Thread(target=synthesis, daemon=True)
+         worker.start()
++        last_id=0
+         for line in sys.stdin:
+             try:
++                if len(line)>65536:continue
+                 request = json.loads(line)
+-            except ValueError:
++            except (ValueError,RecursionError):
+                 continue
+-            if request.get("stop"):
++            if not isinstance(request,dict):continue
++            if request.get("stop") is True:
+                 epoch[0] += 1
+                 while True:
+                     try:
+@@ -286,14 +313,35 @@
+                     player.clear()
+                 events.put({"stopped": True})
+                 continue
++            request_id=request.get('id')
++            if type(request_id) is not int or not 0<request_id<2**63:continue
++            if request_id<=last_id:
++                continue  # A retransmitted request id cannot replay audio.
++            text=request.get('text')
++            if not isinstance(text,str) or len(text)>20000:
++                events.put({'id':request_id,'error':'invalid_request'});continue
++            last_id=request_id
++            if not text.strip():
++                events.put({'id':request_id,'done':True,'audio_seconds':0.});continue
+             request["_epoch"] = epoch[0]
+-            requests.put(request)
+-        requests.put(None)
++            try:requests.put_nowait(request)
++            except queue.Full:events.put({'id':request_id,'error':'request_queue_full'})
++        # EOF must not discard output from an already accepted quick request.
++        # Long/stuck synthesis remains bounded and is cancelled, never replayed.
++        try:requests.put(None,timeout=.2)
++        except queue.Full:epoch[0]+=1
++        worker.join(timeout=5.)
++        if worker.is_alive():epoch[0]+=1
+     except Exception as exc:
+-        events.put({"error": "Local voice initialization failed: " + str(exc)})
++        events.put({"error": "initialization_failure"})
+     finally:
++        epoch[0]+=1
++        if player is not None:
++            player.clear()
++            try:player.close()
++            except Exception:pass
+         events.put(None)
+-        time.sleep(.2)
++        writer_thread.join(timeout=1.)
+ 
+ 
+ if __name__ == "__main__":
+--- module05-pre/jarvis/runtime_health.py
++++ jarvis/runtime_health.py
+@@ -61,6 +61,9 @@
+         from .audio import Listener
+         if isinstance(listener,Listener):
+             result['audio']['listener']=listener.health()
++        from .speech import Speech
++        if isinstance(app.speech,Speech):
++            result['speech']=app.speech.health()
+         if isinstance(config,dict) and config.get('gpu_scheduler',{}).get('enabled'):
+             from .gpu_scheduler import status
+             result['gpu']=status()
+--- module05-pre/config/runtime_manifest.json
++++ config/runtime_manifest.json
+@@ -51,11 +51,11 @@
+     "cuda_requirements": "torch==2.6.0+cu124 and torchaudio==2.6.0+cu124 from official PyTorch cu124 index; setup_f5.ps1 -Cuda",
+     "environment": ".venv-f5",
+     "worker": "jarvis.f5_speech",
+-    "ownership": "Speech owns the hidden child; existing progress watchdog disposes stalled workers without replaying replies; stop clears buffered audio; close kills the child",
++    "ownership": "Speech owns the hidden child; cancellation invalidates generation and clears playback, no automatic replay; startup ready deadline60s releases Stop lock; close disposes child; ongoing playback heartbeats prevent false stall recovery.",
+     "gpu_policy": "When selected F5 uses CUDA, the Qwen scheduler reserves at least 2048 MiB for speech plus its existing 512 MiB headroom; Qwen uses fewer GPU layers on the measured 4 GB GPU",
+     "activation": "Selected engine f5 with CUDA and a 9.85-second local WAV reference from user-supplied YouTube video 9hhIc8iWUx4; exact transcript agrees with local Whisper",
+     "delivery": "Completed conversation/Groq/verified-answer phrases stream to the owned worker; sequential audio chunks play immediately with bounded crossfade tails; pending text coalesces in order up to eight requests and 1000 characters; quiet CUDA synthesis priming during startup",
+-    "limitations": "Each phrase still completes F5 inference before audio is available; rapid text may finish first; synthesis underruns and chunk prosody differences remain possible; unverified research drafts wait for final delivery; no real-time, perfect-cloning or fine-tuning claim"
++    "limitations": "Each phrase completes F5 inference before audio; underruns/prosody differences remain possible. Startup pre-submission fallback to installed Kokoro/Piper; no replay after runtime/transport failure. No shared STT/F5 lease gate, human pronunciation/voice similarity unverified, no perfect-cloning or2-second guarantee."
+   },
+   "capabilities": [
+     "task_scoped_capability_acquisition_and_gap_detection",
+@@ -917,5 +917,22 @@
+     "limitations": "Fixture coverage only; quiet-room accuracy, background-TV false activations and long-pause acoustic tests BLOCKED pending labeled audio and dedicated GPU headroom",
+     "new_dependencies": [],
+     "new_services": []
++  },
++  "speech_audit": {
++    "date": "2026-10-15 IST",
++    "entrypoints": [
++      "jarvis.speech.Speech",
++      "jarvis.f5_speech",
++      "jarvis.kokoro_speech.serve",
++      "jarvis.piper_speech"
++    ],
++    "fallback": "F5 missing reference/environment or startup failure before any text submission selects installed Kokoro CPU, then installed Piper; no downloads or private text replay after submission. Failed F5 stays bypassed for this Speech session. A fresh request can restart a failed owned worker.",
++    "ownership": "Ready handshake bounded to60 seconds without holding Stop lock; worker identity binds progress; generation guards text and audio enqueue; backend changes drain earlier audio; long playback emits heartbeat; malformed frames rejected. Existing owned services only.",
++    "bounds": "Parent64 text entries; worker64 requests with monotonic ID non-replay; Player128 pieces, mono finite<=30 seconds/piece;20,000 characters/request; pathological single words rejected before inference. EOF join5 seconds; stale audio discarded.",
++    "privacy": "Protocol and health metadata categorical; native stderr discarded instead of appending speech.log; old private logs preserved, not published/deleted.",
++    "optimization": "LRU16 WAV header durations, invalidated by size/mtime/ctime; no cached audio/transcript; quality parameters/model/reference unchanged.",
++    "limits": "Human pronunciation/cloning acceptability and controlled shared STT/F5 lease arbitration remain blocked; no universal2-second speech guarantee; Qwen reserve is not a shared STT/F5 lease.",
++    "new_dependencies": [],
++    "new_services": []
+   }
+ }

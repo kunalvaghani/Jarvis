@@ -1,0 +1,7 @@
+# Scoped rollback and deterministic resume
+
+Saved pre-change runtime/manifest/accounting files are under the ignored local directory `.jarvis-runtime/jarvis-audit/module09-pre/`; [before/after hashes](source-hashes.json) and [patch](source.patch) identify this module only. App/root README and guide preimages are also preserved there. Never reset Git or overwrite unrelated newer user edits. Compare current hashes/diffs, then restore only reviewed Prompt09 hunks from those preimages; keep previous module01–08 changes. New regression tests will intentionally expose old defects after rollback. Rerun relevant tests and launcher check; do not erase evidence.
+
+Resume from JRV-09-006: inspect actual installed-app/research discovery boundaries, define deterministic unfamiliar-program admission, add tests before changing behavior, then fixture-test research-before-action with no program install/launch. Live UI/human-origin authorization and authenticated sends remain separate approval-dependent acceptance. Existing blocked acoustic/GPU cases remain in the global ledger. Read the next requested module prompt before beginning module10; do not infer whole-catalog completion.
+
+Reproduce report locally from app/: run the recorded commands in commands.txt, then `.venv/Scripts/python.exe scripts/verification/report_deliberation_audit.py`. All required modules/artifacts must exist and successful full XML must be newer than the changed runtime files. This reporter does not run tests or authorize actions.

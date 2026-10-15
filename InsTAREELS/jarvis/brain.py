@@ -371,6 +371,11 @@ class BrainClient:
                 record(self.base, "Brain inference worker stopped; restarted and retried inference only, without replaying actions.")
 
     def _request_once(self, operation, cancelled, **data):
+        request_timeout = data.pop('_timeout_seconds', None)
+        if request_timeout is not None:
+            import math
+            if type(request_timeout) not in (int, float) or not math.isfinite(request_timeout) or not .1 <= request_timeout <= 120:
+                raise ValueError('Invalid per-request inference timeout.')
         callback = data.pop('_on_code', None)
         if callback:
             data['stream_content'] = True
@@ -417,6 +422,8 @@ class BrainClient:
         if planning:
             idle, total = planning_limits(self.options)
         seconds = idle + 30 if coding else getattr(self, 'timeout_seconds', planning_worker_timeout(self.options))
+        if request_timeout is not None:
+            seconds = min(seconds, request_timeout)
         if operation=='tool_text' and data.get('tool')=='test_writer' and data.get('development') is True:
             seconds=max(300, seconds)
         deadline = time.monotonic() + seconds
@@ -527,8 +534,18 @@ class Brain:
 
     def propose_plan(self, operation, cancelled, **data):
         """One read-only correction for invalid targets/scope, before dispatch."""
+        state=getattr(self.actions,'task_state',None)
+        identity=state.identity() if isinstance(state,TaskState) else None
         for attempt in range(2):
             result = self.client.request(operation, cancelled, **data)
+            if identity is not None:
+                state.require_identity(identity)
+            if isinstance(result,dict):
+                identities=[result['task_id']] if 'task_id' in result else []
+                if isinstance(result.get('steps'),list):
+                    identities += [step['task_id'] for step in result['steps'] if isinstance(step,dict) and 'task_id' in step]
+                if any(value!=identity or not isinstance(value,str) for value in identities):
+                    raise ValueError('Planner task identity disagrees with the current task; execution refused.')
             if cancelled():
                 raise ValueError('Task cancelled before accepting the plan.')
             result = ground_file_scope(result, data.get('goal', ''))
@@ -821,7 +838,9 @@ class Brain:
         ui = self.actions._ui()
         handle = ui._handle()
         try:
-            snapshot = ui.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled)
+            from .task_recovery import retry_read
+            snapshot = retry_read(lambda:ui.runner({"operation": "list", "handle": handle, "owner_pid": os.getpid()}, cancelled),
+                read_only=True,cancelled=cancelled)
         except ValueError:
             if not self.visual_fallback.enabled or cancelled():
                 raise
@@ -924,6 +943,19 @@ class Brain:
                 "controls": observation.get("controls", [])}
 
     def run(self, goal, cancelled, approach=None):
+        reference=re.fullmatch(r"open (?:my |the )?(?:latest|most recent) (spreadsheet|document|file|report)", goal.strip(), re.I)
+        if reference:
+            raise TaskClarification('Which '+reference[1].lower()+' should I open? Say its filename or full path, or specify a folder.', 'file')
+        state=getattr(self.actions,'task_state',None)
+        identity=state.identity() if isinstance(state,TaskState) else None
+        original_cancelled=cancelled
+        def bound_cancelled():
+            if identity is not None:
+                state.require_identity(identity)
+            return original_cancelled()
+        return self._run_bound(goal,bound_cancelled,approach)
+
+    def _run_bound(self, goal, cancelled, approach=None):
         if approach:
             # The user already agreed to this approach during deliberation; the goal stays
             # authoritative and this is an additional, non-overriding planning hint.

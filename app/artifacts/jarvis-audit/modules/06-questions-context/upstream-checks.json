@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://github.com/ollama/ollama/releases/tag/v0.40.4",
+    "check_date": "2026-10-15 IST",
+    "answer": "Version: v0.40.4\nPublication date: 2 days ago (12 Oct 19:00)\n\nChanges relevant to chat output streaming, structured JSON and model memory: None",
+    "release_date": "2026-10-12 (page shows 12 Oct 19:00; timezone not established)"
+  },
+  {
+    "url": "https://docs.ollama.com/capabilities/structured-outputs",
+    "check_date": "2026-10-15 IST",
+    "answer": "Official guide recommends JSON schemas and validating model responses client-side; no release date stated.",
+    "release_date": null
+  },
+  {
+    "url": "https://docs.python.org/3/library/concurrent.futures.html",
+    "check_date": "2026-10-15 IST",
+    "answer": "Future.set_running_or_notify_cancel prevents executing cancelled queued jobs; set_result on completed/cancelled futures raises InvalidStateError. Existing Python 3.10 supports this contract.",
+    "release_date": null
+  }
+]

@@ -3,6 +3,7 @@ import base64
 import io
 from pathlib import Path
 import time
+import threading
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
@@ -25,15 +26,17 @@ class Approval:
         self.kind,self.detail,self.answer,self.ready,self.cancelled = payload
         self.created = time.monotonic() if now is None else now
         self.done = False
+        self.lock = threading.Lock()
 
     def decide(self, approved, now=None):
-        if self.done:
-            return False
-        now = time.monotonic() if now is None else now
-        self.done = True
-        self.answer['approved'] = bool(approved and not self.cancelled() and now-self.created < 180)
-        self.ready.set()
-        return self.answer['approved']
+        with self.lock:
+            if self.done:
+                return False
+            now = time.monotonic() if now is None else now
+            self.done = True
+            self.answer['approved'] = approved is True and not self.cancelled() and 0 <= now-self.created < 180
+            self.ready.set()
+            return self.answer['approved']
 
     def expired(self, now):
         return self.cancelled() or now-self.created >= 180

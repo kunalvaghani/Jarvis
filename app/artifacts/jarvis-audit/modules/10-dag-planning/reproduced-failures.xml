@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="8" time="0.800" timestamp="2026-10-15T14:21:06.280290+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_dag_planning_audit" name="test_all_effects_serialize_even_without_resource_label" time="0.045"><failure message="AssertionError: assert ('completed' == 'completed'&#10;  &#10;    completed and 2 == 1)">tests\test_dag_planning_audit.py:26: in test_all_effects_serialize_even_without_resource_label
+    assert result['status']=='completed' and peak==1
+E   AssertionError: assert ('completed' == 'completed'
+E     
+E       completed and 2 == 1)</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_restore_is_bound_to_exact_step_arguments" time="0.002"><failure message="AssertionError: assert 'old' == 'new'&#10;  &#10;  - new&#10;  + old">tests\test_dag_planning_audit.py:35: in test_restore_is_bound_to_exact_step_arguments
+    assert result['steps']['a']['result']['text']=='new'
+E   AssertionError: assert 'old' == 'new'
+E     
+E     - new
+E     + old</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_corrupt_cached_json_is_miss" time="0.034"><failure message="json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)">tests\test_dag_planning_audit.py:42: in test_corrupt_cached_json_is_miss
+    assert memory.lookup('read data','v1') is None
+jarvis\hierarchical.py:187: in lookup
+    return json.loads(row[0])
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:353: in raw_decode
+    obj, end = self.scan_once(s, idx)
+E   json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_error_checkpoint_never_contains_exception_secrets" time="0.002"><failure message="assert ('gsk_xxxxxxx...xxxxxxxxxxxx' not in '{&quot;status&quot;: ...conds&quot;: 0.0}'&#10;  &#10;  'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' is contained here:&#10;    mple.test gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;, &quot;uncertain_effect&quot;: false}}, &quot;total_seconds&quot;: 0.0}&#10;  ?           ++++++++++++++++++++++++++++++++++++)">tests\test_dag_planning_audit.py:49: in test_error_checkpoint_never_contains_exception_secrets
+    assert secret not in json.dumps(result) and 'fixture@example.test' not in json.dumps(result)
+E   assert ('gsk_xxxxxxx...xxxxxxxxxxxx' not in '{"status": ...conds": 0.0}'
+E     
+E     'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' is contained here:
+E       mple.test gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "uncertain_effect": false}}, "total_seconds": 0.0}
+E     ?           ++++++++++++++++++++++++++++++++++++)</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_stale_task_cannot_overwrite_new_dag" time="0.012"><failure message="TypeError: TaskState.update_dag() got an unexpected keyword argument 'task_id'">tests\test_dag_planning_audit.py:57: in test_stale_task_cannot_overwrite_new_dag
+    state.update_dag(graph(step()),{},'v1',{},task_id=old)
+E   TypeError: TaskState.update_dag() got an unexpected keyword argument 'task_id'</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_deep_payload_is_bounded_value_error" time="0.002"><failure message="RecursionError: maximum recursion depth exceeded while encoding a JSON object">tests\test_dag_planning_audit.py:64: in test_deep_payload_is_bounded_value_error
+    with pytest.raises(ValueError):validate_plan(graph(step(arguments=value)),tools())
+jarvis\dag_execution.py:104: in validate_plan
+    len(json.dumps(plan, allow_nan=False)) &gt; 100000):
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:238: in dumps
+    **kw).encode(obj)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\encoder.py:199: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\json\encoder.py:257: in iterencode
+    return _iterencode(o, 0)
+E   RecursionError: maximum recursion depth exceeded while encoding a JSON object</failure></testcase><testcase classname="tests.test_dag_planning_audit" name="test_nonfinite_configuration_is_rejected" time="0.001" /><testcase classname="tests.test_dag_planning_audit" name="test_credential_template_not_retained" time="0.016"><failure message="AssertionError: assert {'steps': [{'arguments': {'value': 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, 'dependencies': [], 'expected': 'Read data', 'id': 'a', ...}], 'version': 1} is None&#10; +  where {'steps': [{'arguments': {'value': 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, 'dependencies': [], 'expected': 'Read data', 'id': 'a', ...}], 'version': 1} = lookup(('read ' + 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'), 'v1')&#10; +    where lookup = &lt;jarvis.hierarchical.MacroMemory object at 0x00000172AE3A7850&gt;.lookup">tests\test_dag_planning_audit.py:75: in test_credential_template_not_retained
+    assert memory.lookup('read '+secret,'v1') is None
+E   AssertionError: assert {'steps': [{'arguments': {'value': 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, 'dependencies': [], 'expected': 'Read data', 'id': 'a', ...}], 'version': 1} is None
+E    +  where {'steps': [{'arguments': {'value': 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, 'dependencies': [], 'expected': 'Read data', 'id': 'a', ...}], 'version': 1} = lookup(('read ' + 'gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'), 'v1')
+E    +    where lookup = &lt;jarvis.hierarchical.MacroMemory object at 0x00000172AE3A7850&gt;.lookup</failure></testcase></testsuite></testsuites>

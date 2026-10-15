@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "12 fixed parser-only phrases, 20 alternating warm batches and 5 fresh subprocess imports/batches per build. No launches, models, network requests or GPU allocations. RSS sampled; not peak. TTFT/audio N/A.",
+  "routes": {
+    "before": [
+      {
+        "kind": "open",
+        "value": "chrome",
+        "extra": ""
+      },
+      {
+        "kind": "click_control",
+        "value": "pause",
+        "extra": "click"
+      },
+      {
+        "kind": "spotify_volume",
+        "value": "up",
+        "extra": "auto"
+      },
+      {
+        "kind": "open",
+        "value": "chrome",
+        "extra": ""
+      },
+      {
+        "kind": "rejected"
+      },
+      {
+        "kind": "open_folder",
+        "value": "Chrome downloads folder",
+        "extra": ""
+      },
+      {
+        "kind": "open",
+        "value": "my latest spreadsheet",
+        "extra": ""
+      },
+      {
+        "kind": "rejected"
+      },
+      {
+        "kind": "rejected"
+      },
+      {
+        "kind": "rejected"
+      },
+      {
+        "kind": "open",
+        "value": "vs code",
+        "extra": ""
+      },
+      {
+        "kind": "spotify_volume",
+        "value": "150",
+        "extra": "auto"
+      }
+    ],
+    "after": [
+      {
+        "kind": "open",
+        "value": "chrome",
+        "extra": ""
+      },
+      {
+        "kind": "click_control",
+        "value": "pause",
+        "extra": "click"
+      },
+      {
+        "kind": "spotify_volume",
+        "value": "up",
+        "extra": "auto"
+      },
+      {
+        "kind": "open",
+        "value": "chrome",
+        "extra": ""
+      },
+      {
+        "kind": "rejected"
+      },
+      {
+        "kind": "open_folder",
+        "value": "Chrome downloads folder",
+        "extra": ""
+      },
+      {
+        "kind": "task",
+        "value": "Open my latest spreadsheet",
+        "extra": ""
+      },
+      {
+        "kind": "spotify_volume",
+        "value": "down",
+        "extra": "auto"
+      },
+      {
+        "kind": "click_control",
+        "value": "pause",
+        "extra": "click"
+      },
+      {
+        "kind": "windows_command",
+        "value": "[329]",
+        "extra": "{}"
+      },
+      {
+        "kind": "open",
+        "value": "vs code",
+        "extra": ""
+      },
+      {
+        "kind": "spotify_volume",
+        "value": "150",
+        "extra": "auto"
+      }
+    ]
+  },
+  "before_warm_per_phrase": {
+    "p50_ms": 1.8080958331362733,
+    "p95_ms": 2.3538749998503286
+  },
+  "before_cold_import_and_batch": {
+    "p50_ms": 539.6400000026915,
+    "p95_ms": 548.6490999974194
+  },
+  "after_warm_per_phrase": {
+    "p50_ms": 0.8650250001664972,
+    "p95_ms": 1.4643083335007152
+  },
+  "after_cold_import_and_batch": {
+    "p50_ms": 507.61449999845354,
+    "p95_ms": 543.8222000011592
+  }
+}

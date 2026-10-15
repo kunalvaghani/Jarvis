@@ -1,0 +1,9 @@
+# Scoped changes and keep/revert decisions — 2026-10-15 IST
+
+Keep validated state size/depth/node/queue bounds; role/priority, owner token/PID/time and cache field checks. Preserve malformed files and refuse admission. Keep the OS lock while omitting a redundant atomic promotion when canonical state is unchanged; real queue/owner/cache mutations remain atomic. The measured fixture shows fewer disk writes and lower p95; traced allocation slightly increases, so no RAM gain claimed.
+
+Move physical probing inside failure cleanup; categorical failure events correlate with lease UUIDs. Lock release bookkeeping, reject duplicate active acquisition and unknown policy fields. Validate model labels and filter event fields without serializing prompts, paths, approval claims or errors. Do not reclaim live owners on arbitrary age. Known cache identity handoff/reuse and no uncertain external-action replay remain unchanged.
+
+The primary-model envelope subtracts max(configured reserve,available/6), allowing a20% estimate overrun within measured available capacity. Defaults on this4GB/F5 configuration keep their prior allocation. This is fixture arithmetic, not a safety promise for unknown models or concurrent external allocators. Preserve existing num_ctx/keep_alive/quantization/global environment settings: native cold/warm observations have no matched before/after accuracy/latency baseline to justify retuning them.
+
+Optional learning now defers unknown resource readings, and initial ability model selection checks fallback size+RAM margin. Existing model_chat fixtures remain supported. No new dependency/service, ability installation, permission bypass, UI layout or image introduced. Shared speech-coordinator integration is not represented as solved; it needs a separate lifecycle design and native contention validation.

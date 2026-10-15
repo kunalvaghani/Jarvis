@@ -1,5 +1,195 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt11-audit -->
+**Skill-selection audit — 2026-10-15 IST:** Bounded guide validation and provenance,
+observed procedure reliability and reused description tokens retain existing tool,
+policy and approval gates. Census:10 bundled/210 hash-verified Hermes/23 DeerFlow
+guides. Utility validation is stale:0 offered; historical activation counts below
+are dated results. Arbitrary PDF editing remains blocked.
+[Executed assertions, measurements and limits](artifacts/jarvis-audit/modules/11-skill-selection/inventory.md).
+Verification: **2,355 regression PASS / 9 blocked skips**;
+**157 targeted PASS / 1 blocked skip**; Prompt11 **31 PASS / 1 BLOCKED**,
+launcher **ready**. These fixtures do not certify live production acceptance.
+<!-- /prompt11-audit -->
+
+**DAG/cache audit (2026-10-15 IST):** Effects now serialize within each graph even
+without adapter resource labels. Restored reads require an exact step/argument
+binding and fresh verification; DAG checkpoints check the owning task UUID.
+Corrupt templates become cache misses, new credential-bearing templates are
+omitted, and errors carry categories plus trace IDs. Source fingerprint digests
+are reused while file identity and change metadata match.
+[Executed cases, same-machine metrics, limitations and rollback](artifacts/jarvis-audit/modules/10-dag-planning/inventory.md).
+Production mail remains on its specialized approval path; a generic DAG fixture
+does not add a mail adapter. Cancellation remains cooperative and irreversible
+effects have no automatic rollback.
+Verification: **2,314 regression PASS / eight existing blocked skips**, **180
+targeted PASS / one existing blocked skip**; module10 **32/32 fixture PASS**,
+launcher **ready**. One existing pywinauto COM warning remains. Live acceptance
+and whole-system production readiness remain open.
+
+**Risk/approval audit (2026-10-15 IST):** Proposal consent accepts an entire,
+unqualified approval; restrictions such as “yes, only draft it” require a new
+decision. A plain refusal cancels without replanning. Per-action approval requires
+boolean `true`, and cards accept one decision within their lifetime. Risky
+ambiguity pauses planning. Model opinions and configuration are validated;
+opinion deadlines no longer mutate a shared planner timeout. New ledger records
+use UUIDs, escape Unicode and redact recognized private/credential patterns.
+[Assertions, latency tradeoffs, limits and rollback](artifacts/jarvis-audit/modules/09-deliberation/inventory.md).
+Mandatory research before acting on every unfamiliar program remains unimplemented;
+fixture proofs do not certify live accounts, GUI consent or model accuracy.
+Verification: **2,271 regression PASS / eight explicit blocked skips**, **204
+targeted PASS / one blocked skip**; module09 **31 PASS / one BLOCKED**, launcher
+**ready**. One existing pywinauto COM warning remains. No latency gain claimed.
+
+**GPU/resource audit (2026-10-15 IST):** GPU lease state is size/depth/queue bounded
+and validates owner, priority and cache records. Unchanged polls retain the OS lock
+without rewriting state; failed hardware probes release admission. Duplicate lease
+acquisition is refused and lifecycle events carry content-free trace IDs. The
+primary-model envelope keeps at least 20% estimation headroom, even with a smaller
+configured reserve. Unknown resource readings defer optional learning, and ability
+model selection requires its fallback to fit the configured RAM allowance.
+[Executed cases, measured cold/warm limits and rollback](artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+F5/Whisper still lack a shared lease protocol: their arrival and stuck-speech
+coordination cases remain blocked. Model caching and lease release do not imply
+immediate physical VRAM release or running-kernel preemption.
+Verification: **2,213 regression PASS / seven explicit blocked skips**, **219
+targeted PASS / four blocked skips**, module08 **30 PASS / two BLOCKED**; launcher
+**ready**. One pywinauto COM warning remains. Production acceptance is open.
+
+**GPU/resource audit (2026-10-15 IST):** GPU lease state is size/depth/queue bounded
+and validates owner, priority and cache records. Unchanged polls retain the OS lock
+without rewriting state; failed hardware probes release admission. Duplicate lease
+acquisition is refused and lifecycle events carry content-free trace IDs. The
+primary-model envelope keeps at least 20% estimation headroom, even with a smaller
+configured reserve. Unknown resource readings defer optional learning, and ability
+model selection requires its fallback to fit the configured RAM allowance.
+[Executed cases, measured cold/warm limits and rollback](artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md).
+F5/Whisper still lack a shared lease protocol: their arrival and stuck-speech
+coordination cases remain blocked. Model caching and lease release do not imply
+immediate physical VRAM release or running-kernel preemption.
+
+**Routing/quota/privacy audit (2026-10-15 IST):** Local policy, feedback and quota
+refusals now precede the bounded cloud metadata wait. Expired metadata can refresh
+without delaying a quota-refused answer. Backoff respects HTTP header casing;
+zero/malformed usage retains the full reservation. Added key-format screening
+also redacts new conversation/Obsidian records. Route UUIDs correlate with quota
+reservations; unsafe model/error labels are omitted from route metadata.
+[Catalog results, matched benchmark, live limits and rollback](artifacts/jarvis-audit/modules/07-model-routing/inventory.md).
+The cloud side of fault tests uses loopback fakes. A real cached local9b fallback
+journey passed; provider entitlement, real Groq inference and two-second voice
+acceptance remain unverified. Existing historical records are preserved.
+Verification: **2,173 regression PASS / five existing blocked skips**, **238
+targeted PASS**, **32/32 module07 fixture cases PASS**, launcher **ready**.
+One pywinauto COM warning remains. These results do not certify live cloud billing
+or whole-system production acceptance.
+
+**Question/context audit (2026-10-15 IST):** Private or context-dependent questions
+cannot fall through to public search after uncertain/malformed local inference.
+Empty retrieval and invalid citation targets produce an explicit verification gap.
+Question transport serializes callers, validates limits before dispatch, bounds
+payloads/response queues, and exposes prompt-free request UUID/status metadata.
+Cancelled selector futures no longer kill the worker, selector fields have fixed
+budgets, and “What did I ask a minute ago?” retains recent session context.
+[Executed cases, measured limits and rollback](artifacts/jarvis-audit/modules/06-questions-context/inventory.md).
+Two cached default-model synthetic probes passed; their first content took
+3.109 s and 1.844 s. These samples do not establish a universal two-second target
+or broad answer accuracy. No model, dependency, voice or system setting changed.
+Verification: **2,126 regression PASS / five existing blocked skips** (one
+pywinauto COM warning); **206 targeted PASS**, all **32 module06 cases PASS**,
+and launcher readiness **ready**. Earlier dated results below remain historical.
+
+**Speech audit (2026-10-15 IST):** F5 now falls back to installed Kokoro, then
+installed Piper, when reference/environment/startup fails before text submission.
+Runtime or transport failures discard uncertain speech rather than replay it.
+Stop guards both text preparation and audio enqueue; interruption also clears
+not-yet-playing replies. Backend changes wait for earlier audio, and playback
+heartbeats prevent long replies from being mistaken for stalled synthesis.
+Worker frames and audio buffers are validated and bounded. New native diagnostics
+are discarded rather than appended with private spoken text to `speech.log`;
+existing private logs are preserved. Reference-header caching retains unchanged
+model/reference/quality settings. Actual cache-only F5 CUDA and installed CPU
+fallback checks passed without speaker playback or downloads. Human pronunciation
+and shared STT/F5 lease contention remain blocked.
+Final verification: **2,073 regression PASS / five blocked skips** (three prior
+STT checks and two TTS checks); **161 targeted PASS / two blocked**. Launcher
+readiness is **ready**. The CPU and CUDA native checks are additional no-playback
+functional checks, not human listening tests or a two-second latency result.
+[Case results, full regression, measured limits and rollback](artifacts/jarvis-audit/modules/05-voice-tts/inventory.md).
+
+**Prompts 02–04 completion (2026-10-15 IST):** All 96 scope IDs are accounted for:
+93 executed fixture PASS and three live acoustic checks BLOCKED. Microphone release
+audio is resampled before final decoding; repeated decoder jobs cannot dispatch the
+same utterance twice, while an explicit second request remains valid. Stop drains
+owned buffers and waits at most two seconds for the decoder. A stuck decoder retains
+ownership, preventing duplicate microphone workers. Typed input remains available
+when voice fails; repair health uses categorical errors and a session trace ID.
+Task UUID checks reject unrelated model results and stale task completion. Latest
+document requests ask for filename/path/folder before opening. Parser input is
+bounded to 100,000 characters; Whisper settings are validated before capture.
+[Current results, measured tradeoffs, acoustic blockers and rollback](artifacts/jarvis-audit/final-report.md).
+The full regression passed **2,020 tests** with three explicitly blocked acoustic
+skips; the targeted run passed120. Launcher readiness is **ready** and the 30-second
+synthetic cognition soak passed. Live WER, TV false activations and
+long-pause endpoint behavior require labeled recordings and dedicated GPU headroom.
+
+**Intent/reflex follow-up (2026-10-15 IST):** "Turn the sound down a notch" and
+"pause what's playing" now use existing media handlers. Corrected tab-close wording
+selects the tab command, and latest-document references go to the planner instead
+of guessed app opening. A comma before "then" no longer contaminates the first
+app name or the typing target. Existing literal/composed writing policy, aliases,
+negative commands, approvals and direct model-free reflexes remain unchanged.
+[Fixture results, paired measurements and exact pending cases](artifacts/jarvis-audit/modules/03-intent-direct/inventory.md).
+The fixture fault matrix is now complete; live acceptance remains separate in the
+[current audit report](artifacts/jarvis-audit/final-report.md).
+
+**Perception/cognition follow-up (2026-10-15 IST):** Window switches now remove
+stale screen attention, including empty titles and concurrent workspace updates.
+Cognition rejects invalid boolean/rate settings and arbitrary object conversion;
+bounded text safely replaces malformed surrogates. Tick errors, overruns and stalled
+heartbeat are observable without exception payloads. Unexecuted approval proposals
+do not count as task successes; attempted failures followed by recovery offers still
+count. The slower heap-ranking candidate was reverted after paired measurements.
+[Executed assertions, measurements, exact remaining cases and rollback](artifacts/jarvis-audit/modules/02-perception-cognition/inventory.md).
+Task-ID disagreement and the remaining fixture journeys now have executed coverage.
+Hard native sensor-hang containment remains unresolved. [Latest audit report](artifacts/jarvis-audit/final-report.md)
+separates fixture results from live voice, GUI, cloud and production acceptance.
+
+**Architecture audit follow-up (2026-10-15 IST):** All **32 architecture catalog
+cases** have executed fixture coverage. Startup now shares a bounded UTF-8/JSON
+contract: at most 2,000,000 bytes, 128 root fields, depth 32 and 100,000 values.
+Unknown root fields warn by count; names and values are omitted. Lifecycle logs
+accept registered tool labels and categorical metadata, preserving trace IDs
+while discarding arbitrary payloads. Registry names and existing permissions
+remain authoritative. The system map now distinguishes the attention tick from
+execution workers, language models from speech runtimes, and registrations from
+live capability proof. It records the missing repository-assimilation guide.
+[Cases, source/health bindings, benchmarks, upstream checks and rollback](artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md).
+Whole-system production readiness remains uncertified: Python 3.10 is upstream
+end-of-life, two environment dependency checks lack pip, and live integration
+and ability-isolation gaps remain. [Current catalog progress](artifacts/jarvis-audit/final-report.md).
+
+**Initial audit pass (2026-10-14 IST):** All 37 supplied subsystem
+prompts and 1,184 unique catalog IDs are inventoried. This bounded pass repaired
+clock-sensitive attention, stale-event admission, shared reliability-history
+validation and Stop/reset concurrency, and fixed pytest fixture collection.
+The full regression passed **1,851 tests**; the separate catalog suite passed
+27 tests covering **26 catalog IDs**. **1,158 IDs remain NOT RUN**.
+The owned browser journey and 30-second synthetic cognition soak passed;
+native UIA smoke was blocked by Windows foreground denial. Launcher readiness
+is `ready`, while whole-system production/security certification is incomplete.
+[Initial evidence, measured tradeoffs and open risks](artifacts/jarvis-audit/final-report-before-module01.md).
+
+**Cognition/routing audit (2026-10-14 IST):** The 4 Hz loop now uses monotonic
+deadlines and an owned coalescing metadata writer. Voice and active-window attention
+survive sensor floods; protected task context and Bayesian reliability intervals
+are exposed consistently. Exact reflexes use immutable hash dispatch. Unicode and
+explicit-context cloud privacy checks are stricter, and bulk destructive tasks
+pause for scope approval. Gmail uncertainty survives unrelated reads and truncated
+checkpoints. The requested 30-test async/pytest suite and 1,785-test full regression passed;
+launcher readiness is `ready`. Under injected slow
+storage, worst tick interval improved from 453 ms to 265 ms (not hard real-time).
+[Full audit, benchmarks, tests and limitations](artifacts/cognition_audit_report.md).
+
 **Current-app research repair (2026-10-14 IST):** A sphere task in Blender
 paused without research because its wording omitted the app name. Complex feature
 requests such as “make this cube into a sphere” now resolve the current configured

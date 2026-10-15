@@ -11,6 +11,14 @@ import queue
 import re
 import threading
 import time
+import uuid
+from .whisper_backend import settings
+
+
+def workers_alive(listener):
+    """A stopped capture thread may still own a stuck native CUDA decoder."""
+    return bool(listener and any(worker is not None and worker.is_alive()
+        for worker in (getattr(listener, 'thread', None), getattr(listener, 'decoder', None))))
 
 ASR_PROMPT = "Jarvis, Spotify, YouTube, Notepad, Calculator, File Explorer, Python."
 # Ends hands-free writing; matched alone or at the end of a phrase ("... see you tomorrow. Stop writing.").
@@ -33,11 +41,18 @@ class DecodeJob:
 
 class DecodeQueue:
     def __init__(self, limit=12):
+        if type(limit) is not int or not 1<=limit<=128:
+            raise ValueError('Whisper decode queue limit must be between 1 and 128')
         self.items = deque()
         self.lock = threading.Condition()
         self.limit = limit
 
     def put(self, job):
+        if (not isinstance(job, DecodeJob) or type(job.utterance) is not int or not 0<=job.utterance<2**63
+                or type(job.session) is not int or not 0<=job.session<2**63
+                or type(job.offset) not in (int,float) or not math.isfinite(job.offset) or job.offset<0
+                or any(type(value) is not bool for value in (job.final,job.rollover,job.playback,job.write))):
+            raise ValueError('Invalid Whisper decode job metadata')
         with self.lock:
             if self.items:
                 last = self.items[-1]
@@ -95,7 +110,7 @@ class Listener:
                  push_to_write=None, writer=None):
         self.model_path, self.device = Path(model_path), device
         self.engine, self.report = engine, report
-        self.options = options or {}
+        self.options = settings(options)
         self.activate_on_start = activate_on_start
         self.muted = muted or (lambda: False)
         self.playback = playback or (lambda: False)
@@ -112,20 +127,49 @@ class Listener:
         self.capture_started = False
         self.last_audio = time.monotonic()
         self.decode_started = None
+        self.error = None
+        self.error_type = None
+        self.duplicate_jobs = 0
+        self.trace_id = uuid.uuid4().hex
 
     def start(self):
         self.thread.start()
 
     def stop(self):
         self.stop_event.set()
+        with self.jobs.lock:
+            self.jobs.items.clear()
+            self.jobs.lock.notify_all()
+        while True:
+            try:self.audio.get_nowait()
+            except queue.Empty:break
+
+    def _fail(self, code, exc=None):
+        codes = {'capture_failure','decode_failure','decoder_stalled','model_missing',
+            'cuda_unavailable','cuda_libraries_missing'}
+        self.error = code if code in codes else 'capture_failure'
+        self.error_type = type(exc).__name__ if exc is not None and type(exc).__module__ == 'builtins' else None
+        self.report('fatal', 'Voice input unavailable ('+self.error+'); microphone off. Typed input remains available.')
+
+    def health(self):
+        return {'trace_id':self.trace_id,'error':self.error,'error_type':self.error_type,'capture_started':self.capture_started,
+            'capture_alive':self.thread.is_alive(), 'decoder_alive':bool(self.decoder and self.decoder.is_alive()),
+            'stopping':self.stop_event.is_set(), 'audio_backlog':self.audio.qsize(),
+            'decode_backlog':len(self.jobs.items), 'duplicate_jobs':self.duplicate_jobs}
 
     def _decode(self, model):
         assembler = TranscriptAssembler()
+        finalized = -1  # Capture emits monotonically increasing utterance IDs.
         try:
             while not self.stop_event.is_set():
                 job = self.jobs.get()
                 if job is None:
                     continue
+                if job.utterance <= finalized:
+                    self.duplicate_jobs += 1
+                    continue
+                if job.final:
+                    finalized = job.utterance  # Final/late-partial retransmissions cannot replay an effect.
                 self.decode_started = time.monotonic()
                 language = self.options.get("language", "en")
                 segments, _ = model.transcribe(
@@ -180,8 +224,10 @@ class Listener:
                     continue
                 self.engine.feed(accepted, final=job.final, raw=text)
         except Exception as exc:
-            self.report("fatal", f"Whisper GPU decoding failed: {exc}")
+            self._fail('decode_failure', exc)
             self.stop_event.set()
+        finally:
+            self.decode_started = None
 
     def run(self):
         try:
@@ -207,6 +253,8 @@ class Listener:
             divisor = math.gcd(rate, 16000)
 
             def callback(data, frames, timing, status):
+                if self.stop_event.is_set():
+                    return
                 self.last_audio = time.monotonic()
                 if status:
                     self.overflow.set()
@@ -250,6 +298,8 @@ class Listener:
                         history = np.empty(0, dtype=np.float32)
                         continue
                     self.report("level", min(100.0, float(np.sqrt(np.mean(block ** 2))) * 500))
+                    if rate != 16000:
+                        block = resample_poly(block, 16000 // divisor, rate // divisor).astype(np.float32)
                     held = bool(self.push_to_write is not None and self.push_to_write.active.is_set())
                     if held:
                         session = self.push_to_write.session
@@ -263,11 +313,9 @@ class Listener:
                         was_held = held
                         continue
                     was_held = held
-                    if rate != 16000:
-                        block = resample_poly(block, 16000 // divisor, rate // divisor).astype(np.float32)
                     history = np.concatenate((history, block))[-16384:]
                     padded = np.pad(history, (0, (-len(history)) % 512))
-                    probabilities = np.asarray(vad(padded.copy())).reshape(-1)
+                    probabilities = np.asarray(vad(padded)).reshape(-1)  # np.pad already owns a fresh buffer.
                     speech = bool(np.max(probabilities[-4:]) >= threshold)
                     if not active:
                         if not speech:
@@ -303,9 +351,11 @@ class Listener:
                         self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
                         next_partial = duration + interval
         except Exception as exc:
-            self.report("fatal", str(exc))
+            self._fail(getattr(exc,'code','capture_failure'), exc)
         finally:
             self.stop_event.set()
             if self.decoder:
-                self.decoder.join()
+                self.decoder.join(timeout=2.)
+                if self.decoder.is_alive():
+                    self._fail('decoder_stalled')
             self.report("listener_stopped", "Microphone off")

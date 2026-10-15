@@ -2,7 +2,7 @@
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import tempfile
 
@@ -17,6 +17,11 @@ CONTRACT = ("Upstream Hermes reference guidance only. Use Jarvis's currently off
             "Check prerequisites and fresh state; unsupported platforms are reference only. Verify the whole task.")
 
 
+def safe_resource(value):
+    return (isinstance(value,str) and 0<len(value)<=1000 and '\\' not in value and ':' not in value and
+            not PurePosixPath(value).is_absolute() and not any(p in {'','..','.'} for p in value.split('/')))
+
+
 class HermesSkills:
     def __init__(self, base):
         self.base = Path(base)
@@ -28,17 +33,39 @@ class HermesSkills:
             if not manifest.is_file():
                 self.error = "Hermes skill manifest missing; run scripts/skills/build_hermes_skill_catalog.py after Hermes setup."
                 return
+            if manifest.stat().st_size>2_000_000:raise ValueError('Hermes manifest exceeds its size budget.')
             data = json.loads(manifest.read_text(encoding="utf-8"))
             if data.get("revision") != REVISION or data.get("version") != 1:
                 raise ValueError("Hermes skill manifest revision does not match the pinned source.")
+            if not isinstance(data.get('skills'),list) or len(data['skills'])>2500:raise ValueError('Invalid bounded Hermes skill list.')
+            names=set()
             for row in data["skills"]:
+                if not isinstance(row,dict) or not isinstance(row.get('name'),str) or row['name'] in names:
+                    raise ValueError('Invalid or duplicate Hermes skill name.')
+                names.add(row['name'])
                 if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", row["name"]):
                     raise ValueError("Invalid Hermes skill name.")
+                if not isinstance(row.get('description'),str) or len(row['description'])>4096:raise ValueError('Invalid Hermes description.')
+                for key in ('platforms','tags'):
+                    if not isinstance(row.get(key,[]),list) or len(row.get(key,[]))>64 or any(not isinstance(x,str) or len(x)>200 for x in row.get(key,[])):
+                        raise ValueError('Invalid Hermes metadata list.')
+                if not isinstance(row.get('directory'),str) or not safe_resource(row['directory']):raise ValueError('Invalid Hermes directory.')
+                files=row.get('files')
+                if not isinstance(files,list) or not 1<=len(files)<=4096:raise ValueError('Invalid Hermes resource index.')
+                paths=set()
+                for entry in files:
+                    if not isinstance(entry,dict) or not safe_resource(entry.get('path')) or entry['path'] in paths:
+                        raise ValueError('Invalid or duplicate Hermes resource path.')
+                    paths.add(entry['path'])
+                    if (type(entry.get('bytes')) is not int or not 0<=entry['bytes']<=8_000_000 or
+                            not isinstance(entry.get('sha256'),str) or not re.fullmatch('[a-f0-9]{64}',entry['sha256'])):
+                        raise ValueError('Invalid bounded Hermes resource digest/size.')
+                if 'SKILL.md' not in paths:raise ValueError('Hermes resource index lacks SKILL.md.')
                 scoped(self.root, row["directory"])
                 self.rows.append(row)
-        except (OSError, ValueError, KeyError, TypeError) as exc:
+        except (OSError, ValueError, KeyError, TypeError,RecursionError,AttributeError) as exc:
             self.rows = []
-            self.error = str(exc)
+            self.error = str(exc) if type(exc) is ValueError else 'Hermes catalog unavailable: '+type(exc).__name__
 
     def compatible(self, row):
         return not row.get("platforms") or "windows" in row["platforms"]
@@ -67,17 +94,23 @@ class HermesSkills:
         from .skill_memory import linked
         if any(linked(p) for p in (path, *path.parents) if p.is_relative_to(self.root)):
             raise ValueError("Linked Hermes resources are unsupported.")
-        raw = path.read_bytes()
+        with path.open('rb') as source:raw=source.read(entry['bytes']+1)
         if len(raw) != entry['bytes'] or hashlib.sha256(raw).hexdigest() != entry['sha256']:
             raise ValueError("Hermes resource changed from the indexed pinned copy; preserve and review it before rebuilding the index.")
         return raw
 
     def read(self, name, resource="SKILL.md", limit=12000):
+        if type(limit) is not int or not 1<=limit<=60000:raise ValueError('Invalid Hermes read budget.')
+        if not safe_resource(resource):raise ValueError('Use an indexed relative Hermes resource path.')
         row = next((r for r in self.rows if r['name'] == name), None)
         if row is None:
             raise ValueError("Unknown Hermes skill name.")
         if not self.compatible(row):
             raise ValueError("This upstream skill does not declare Windows support; see its reference copy in Obsidian.")
+        entry=next((f for f in row['files'] if f['path']==resource),None)
+        if entry is None:raise ValueError('No indexed resource with that exact relative path.')
+        if entry['bytes']>limit:
+            raise ValueError('Full skill/resource exceeds the model context budget. No partial guide was loaded.')
         raw = self.read_bytes(row, resource)
         if len(raw) > limit:
             raise ValueError("Full skill/resource exceeds the model context budget; inspect its complete Obsidian copy or choose a smaller supporting reference. No partial guide was loaded.")

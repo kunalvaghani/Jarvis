@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.534" timestamp="2026-10-15T11:21:59.025549+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_voice_tts_audit" name="test_speech_catalog[JRV-05-009]" time="0.029"><failure message="assert (False)&#10; +  where False = empty()&#10; +    where empty = &lt;queue.Queue object at 0x0000026B4A1A8700&gt;.empty&#10; +      where &lt;queue.Queue object at 0x0000026B4A1A8700&gt; = &lt;jarvis.speech.Speech object at 0x0000026B4A1A8670&gt;.queue">tests\test_voice_tts_audit.py:160: in test_speech_catalog
+    assert speech.queue.empty() and speech.streamed is None
+E   assert (False)
+E    +  where False = empty()
+E    +    where empty = &lt;queue.Queue object at 0x0000026B4A1A8700&gt;.empty
+E    +      where &lt;queue.Queue object at 0x0000026B4A1A8700&gt; = &lt;jarvis.speech.Speech object at 0x0000026B4A1A8670&gt;.queue</failure></testcase></testsuite></testsuites>

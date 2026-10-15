@@ -33,7 +33,7 @@ class GroqAdapter:
 
     def refresh_async(self):
         with self.lock:
-            if self.closed.is_set() or time.monotonic()<self.next_refresh or (self.thread and self.thread.is_alive()): return
+            if self.closed.is_set() or time.monotonic()<max(self.next_refresh,self.available_until) or (self.thread and self.thread.is_alive()): return
             self.thread=threading.Thread(target=self.refresh,name='groq-metadata',daemon=True)
             self.thread.start()
 
@@ -117,7 +117,7 @@ class GroqAdapter:
             response=self.client.post(self.endpoint+'/chat/completions',json=payload,
                 headers={'Authorization':'Bearer '+self.key},stream=True,
                 timeout=(3,self.options['timeout_seconds']),allow_redirects=False)
-            headers=dict(response.headers)
+            headers={str(key).lower():str(value) for key,value in response.headers.items()}
             if response.status_code!=200:
                 if response.status_code==429:
                     try: delay=float(headers.get('retry-after','60'))

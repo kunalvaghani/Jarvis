@@ -125,6 +125,8 @@ class ScreenAwareness:
         self.declined = {}  # app key -> consecutive no's
         self.muted = set()
         self.reading = False
+        self.read_started = None
+        self.read_warned = False
         self.lock = threading.RLock()
 
     # --- watching ---------------------------------------------------------------------------------------------------
@@ -150,6 +152,9 @@ class ScreenAwareness:
         if not self.enabled:
             return
         now = time.monotonic()
+        if self.health(now)['state']=='stalled' and not self.read_warned:
+            self.read_warned=True
+            self.actions.report('repair','Screen observation stalled; additional observations paused. Commands remain available.')
         offer = self.offer
         if offer and now - offer["time"] > self.options["offer_seconds"]:
             self.offer = None
@@ -168,6 +173,8 @@ class ScreenAwareness:
             return
         self.asked[key] = now
         self.reading = True
+        self.read_started = now
+        self.read_warned = False
         threading.Thread(target=self._prepare, args=(focus, profile, key), name="Jarvis screen awareness", daemon=True).start()
 
     @staticmethod
@@ -181,6 +188,8 @@ class ScreenAwareness:
 
     def _prepare(self, focus, profile, key, forced=False):
         """Read the screen, learn the buttons, and ask the app's question if it still makes sense."""
+        if self.read_started is None:
+            self.read_started=time.monotonic()
         try:
             snapshot = self._snapshot(focus["handle"])
             controls = snapshot.get("controls", [])
@@ -212,6 +221,13 @@ class ScreenAwareness:
             pass  # A protected or closing window: just don't ask.
         finally:
             self.reading = False
+            self.read_started = None
+
+    def health(self, now=None):
+        now=time.monotonic() if now is None else now
+        age=max(0.,now-self.read_started) if self.read_started is not None else 0.
+        return {'state':'stalled' if self.reading and age>15 else 'reading' if self.reading else 'idle',
+            'read_seconds':round(age,3)}
 
     # --- answering --------------------------------------------------------------------------------------------------
     def answer(self, command):

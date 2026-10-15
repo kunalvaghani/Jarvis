@@ -1,0 +1,417 @@
+--- captured-before/jarvis/cognition.py
++++ jarvis/cognition.py
+@@ -112,8 +112,15 @@
+ class Cognition:
+     def __init__(self, actions, options=None):
+         self.actions = actions
+-        self.options = options or {}
++        if options is not None and not isinstance(options, dict):
++            raise ValueError('cognition options must be an object')
++        self.options = options if options is not None else {}
+         self.enabled = self.options.get("enabled", True)
++        rate = self.options.get('cycle_hz', 4)
++        if type(self.enabled) is not bool:
++            raise ValueError('cognition.enabled must be a boolean')
++        if type(rate) not in (int, float) or not math.isfinite(rate):
++            raise ValueError('cognition.cycle_hz must be a finite number')
+         self.lock = threading.RLock()
+         self.percepts = deque(maxlen=200)
+         self.inbox = deque(maxlen=200)
+@@ -133,7 +140,7 @@
+         self.stats_path = base / ".jarvis-runtime" / "cognition" / "procedures.json"
+         self.state_path = base / ".jarvis-runtime" / "cognition" / "state.json"
+         self.stats = self._load_stats()
+-        self.hz = float(self.options.get("cycle_hz", 4))
++        self.hz = max(.5, min(20., float(rate)))
+         self._flush = threading.Event()
+         self.writer_thread = None
+         self._writer_restarts = 0
+@@ -141,6 +148,12 @@
+         self._stats_io = threading.Lock()
+         self.persistence_error = None
+         self.dropped_events = 0
++        self.rejected_events = 0
++        self.tick_errors = 0
++        self.tick_error = None
++        self.tick_overruns = 0
++        self._last_tick = self._cycle_clock
++        self.tick_duration_ms = 0.
+         from scipy.special import betaincinv
+         self._beta_quantile = betaincinv  # Prime outside the loop, not on its first tick.
+ 
+@@ -151,7 +164,7 @@
+                 return {}
+             value = json.loads(self.stats_path.read_text(encoding="utf-8"))
+             return dict(list(value.items())[:512]) if isinstance(value, dict) else {}
+-        except (OSError, ValueError):
++        except (OSError, ValueError, RecursionError):
+             return {}
+ 
+     def _save_stats(self):
+@@ -163,7 +176,7 @@
+         try:
+             self._write_stats()
+         except OSError as exc:
+-            self.persistence_error = type(exc).__name__+': '+str(exc)[:160]
++            self.persistence_error = type(exc).__name__
+             # Statistics failure cannot change an external action's outcome.
+ 
+     def _write_stats(self):
+@@ -172,7 +185,7 @@
+ 
+     def _write_stats_serial(self):
+         with self.lock:
+-            data = json.dumps(self.stats, ensure_ascii=False, indent=1)
++            data = json.dumps(self.stats, ensure_ascii=True, indent=1)
+             self._stats_dirty = False
+         try:
+             self.stats_path.parent.mkdir(parents=True, exist_ok=True)
+@@ -197,6 +210,11 @@
+         """Any module reports something it sensed; the loop folds it into working memory."""
+         if not self.enabled or not content:
+             return
++        if any(type(value) is not str for value in (source, modality, content)) or len(source) > 64 or len(modality) > 32:
++            with self.lock:
++                self.rejected_events += 1
++            raise ValueError('cognition percept must contain bounded text labels and text content')
++        content = content[:300].encode('utf-8', errors='replace').decode('utf-8')
+         started = time.perf_counter()
+         salience = salience if type(salience) in (int,float) and math.isfinite(salience) else .5
+         # Caller-provided sensor scores cannot eclipse a deliberate voice command
+@@ -230,9 +248,20 @@
+                 self.workspace["goal"] = text[:200]
+ 
+     def perceive_window(self, title):
+-        if title and title != getattr(self, "_last_window", None):
+-            self._last_window = title
+-            self.perceive("screen", "vision", title, .5)
++        if type(title) is not str:
++            raise ValueError('cognition window title must be text')
++        title = title[:300].encode('utf-8', errors='replace').decode('utf-8')
++        with self.lock:
++            if title != getattr(self, "_last_window", None):
++                self._last_window = title
++                # Window observations are current context, not historical attention.
++                for queue in (self.percepts, self.inbox):
++                    stale = [p for p in queue if p.source == 'screen' and p.modality == 'vision']
++                    for percept in stale:
++                        queue.remove(percept)
++                self.attention = [p for p in self.attention if not (p.source == 'screen' and p.modality == 'vision')]
++                self.workspace['focus'] = title
++                self.perceive("screen", "vision", title, .5)
+ 
+     # --- 2. working memory ------------------------------------------------------------------------------------------
+     def update_workspace(self):
+@@ -240,18 +269,25 @@
+         actions, now = self.actions, time.time()
+         with self.lock:
+             percepts = list(self.percepts)
++            window = getattr(self, '_last_window', None)
+         attention = sorted(percepts, key=lambda p:(p.weight(now), p.at), reverse=True)[:7]
+         current = getattr(actions, "current_item", None)
+         prompts = getattr(actions, "whatsapp_prompts", None) or []
+         pending = getattr(prompts[-1], "question", "") if prompts else ("approval card waiting" if getattr(actions, "approvals_waiting", 0) else "")
+         with self.lock:
++            # A window may change while external workspace attributes are read.
++            current_window = getattr(self, '_last_window', None)
++            if current_window != window:
++                attention = [p for p in attention if not (p.source == 'screen' and p.modality == 'vision')
++                             or p.content == current_window]
+             self.attention = attention
+             self.workspace.update({
+                 "active_task": ((current[1].value or current[1].kind)[:120] if current else ""),
+                 "queued": len(getattr(actions, "pending_tasks", []) or []),
+                 "pending": pending[:160],
+                 "style": list((getattr(actions, "session_style", {}) or {}).values()),
+-                "focus": next((p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
++                "focus": current_window if current_window is not None else next(
++                    (p.content for p in reversed(percepts) if p.modality == "vision"), self.workspace.get("focus", "")),
+             })
+         self._mark("working_memory", started)
+ 
+@@ -457,6 +493,8 @@
+             return run()
+         prediction = self.predict(command)
+         started = time.perf_counter()
++        state = getattr(self.actions, 'task_state', None)
++        prior_task = state.snapshot() if command.kind == 'task' and state is not None else None
+         self._mark("action")
+         with self.lock:
+             self.workspace["last_action"] = command.kind + " " + (command.value or "")[:80]
+@@ -466,6 +504,14 @@
+             self.evaluate(command, prediction, False, time.perf_counter() - started, str(exc))
+             raise
+         text = str(result or "")
++        pending = getattr(self.actions, 'pending_opinion', None)
++        current_task = state.snapshot() if command.kind == 'task' and state is not None else None
++        execution_started = (current_task or {}).get('started_at') != (prior_task or {}).get('started_at')
++        if command.kind == 'task' and not execution_started and isinstance(pending, dict) and pending.get('goal') == command.value:
++            # A recommendation awaiting consent is not an executed procedure.
++            self.perceive('action', 'feedback', 'awaiting approval: task', .4)
++            self.latency['action'] = round((time.perf_counter() - started) * 1000, 1)
++            return result
+         ok = not re.match(r"^(?:i couldn'?t|couldn'?t|failed|error|not available|nothing was sent|cancelled|task (?:paused|cancelled|failed)|paused)", text, re.I)
+         self.evaluate(command, prediction, ok, time.perf_counter() - started, "" if ok else text)
+         self.latency["action"] = round((time.perf_counter() - started) * 1000, 1)
+@@ -519,7 +565,7 @@
+                     self.write_state()
+                     self.persistence_error = None
+                 except Exception as exc:
+-                    self.persistence_error = type(exc).__name__+': '+str(exc)[:160]
++                    self.persistence_error = type(exc).__name__
+             if self.stop.is_set():
+                 # Updates admitted during an in-flight flush must survive shutdown.
+                 # Never busy-loop on a disk fault or let shutdown replay an action.
+@@ -534,22 +580,30 @@
+         deadline = time.monotonic()+period
+         last_write = 0.
+         while not self.stop.wait(max(0,deadline-time.monotonic())):
++            started = time.monotonic()
+             try:
+                 self.tick()
++                self.tick_error = None
+                 if time.monotonic() - last_write > 1.:
+                     if not self.writer_thread.is_alive():
+                         self.repair_persistence()
+                     self._flush.set()
+                     last_write = time.monotonic()
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self.tick_errors += 1
++                self.tick_error = type(exc).__name__
++            finally:
++                self._last_tick = time.monotonic()
++                self.tick_duration_ms = (self._last_tick - started) * 1000
++                if self.tick_duration_ms > period * 1000:
++                    self.tick_overruns += 1
+             deadline += period
+             if deadline <= time.monotonic():
+                 deadline = time.monotonic()+period  # No catch-up burst after overload.
+ 
+     def tick(self):
+         with self.lock:
+-            batch = list(self.inbox)
++            batch = bool(self.inbox)
+             self.inbox.clear()
+         if batch or self.cycles % 4 == 0:
+             self.update_workspace()
+@@ -569,8 +623,13 @@
+         return {
+             "cycle_hz": self.measured_hz(), "cycles": self.cycles,
+             'dropped_events':self.dropped_events,'persistence_error':self.persistence_error,
++            'rejected_events': self.rejected_events,
+             'persistence_worker_alive':bool(self.writer_thread and self.writer_thread.is_alive()),
+             'persistence_worker_restarts':self._writer_restarts,
++            'tick_errors': self.tick_errors, 'tick_error': self.tick_error,
++            'tick_overruns': self.tick_overruns, 'tick_duration_ms': round(self.tick_duration_ms, 3),
++            'tick_degraded': bool(self.tick_error or (self.thread and self.thread.is_alive() and
++                time.monotonic() - self._last_tick > max(1., 3. / self.hz))),
+             "modules": {name: {"active": now - self.activity[name] < 1.5, "last_s": round(now - self.activity[name], 1) if self.activity[name] else None,
+                                "latency_ms": self.latency[name], "events": self.counts[name]} for name in MODULES},
+             "working_memory": self.working_memory(),
+@@ -583,7 +642,7 @@
+     def write_state(self):
+         self.state_path.parent.mkdir(parents=True, exist_ok=True)
+         temporary = self.state_path.with_suffix('.tmp')
+-        temporary.write_text(json.dumps(self.snapshot(),ensure_ascii=False,default=str),encoding='utf-8')
++        temporary.write_text(json.dumps(self.snapshot(),ensure_ascii=True,default=str),encoding='utf-8')
+         temporary.replace(self.state_path)
+ 
+     def status_text(self):
+--- captured-before/jarvis/screen_awareness.py
++++ jarvis/screen_awareness.py
+@@ -125,6 +125,8 @@
+         self.declined = {}  # app key -> consecutive no's
+         self.muted = set()
+         self.reading = False
++        self.read_started = None
++        self.read_warned = False
+         self.lock = threading.RLock()
+ 
+     # --- watching ---------------------------------------------------------------------------------------------------
+@@ -150,6 +152,9 @@
+         if not self.enabled:
+             return
+         now = time.monotonic()
++        if self.health(now)['state']=='stalled' and not self.read_warned:
++            self.read_warned=True
++            self.actions.report('repair','Screen observation stalled; additional observations paused. Commands remain available.')
+         offer = self.offer
+         if offer and now - offer["time"] > self.options["offer_seconds"]:
+             self.offer = None
+@@ -168,6 +173,8 @@
+             return
+         self.asked[key] = now
+         self.reading = True
++        self.read_started = now
++        self.read_warned = False
+         threading.Thread(target=self._prepare, args=(focus, profile, key), name="Jarvis screen awareness", daemon=True).start()
+ 
+     @staticmethod
+@@ -181,6 +188,8 @@
+ 
+     def _prepare(self, focus, profile, key, forced=False):
+         """Read the screen, learn the buttons, and ask the app's question if it still makes sense."""
++        if self.read_started is None:
++            self.read_started=time.monotonic()
+         try:
+             snapshot = self._snapshot(focus["handle"])
+             controls = snapshot.get("controls", [])
+@@ -212,6 +221,13 @@
+             pass  # A protected or closing window: just don't ask.
+         finally:
+             self.reading = False
++            self.read_started = None
++
++    def health(self, now=None):
++        now=time.monotonic() if now is None else now
++        age=max(0.,now-self.read_started) if self.read_started is not None else 0.
++        return {'state':'stalled' if self.reading and age>15 else 'reading' if self.reading else 'idle',
++            'read_seconds':round(age,3)}
+ 
+     # --- answering --------------------------------------------------------------------------------------------------
+     def answer(self, command):
+--- captured-before/jarvis/task_state.py
++++ jarvis/task_state.py
+@@ -9,6 +9,7 @@
+ import tempfile
+ import threading
+ import time
++import uuid
+ from datetime import datetime, timezone
+ from .experience import recall_tasks
+ from .task_graph import MAX_TASK_GOAL_CHARS
+@@ -87,9 +88,20 @@
+                 self.data["history"] = (self.data["history"] + [previous])[-20:]
+             timestamp = _now()
+             self.data["current"] = {"goal": goal[:MAX_TASK_GOAL_CHARS], "kind": kind, "project": str(project) if project else None,
++                                    "task_id": uuid.uuid4().hex,
+                                     "status": "running", "stage": "started", "started_at": timestamp,
+                                     "updated_at": timestamp, "checkpoints": [], "result": ""}
+             self._write()
++            return self.data['current']['task_id']
++
++    def identity(self):
++        with self.lock:
++            current=self.data.get('current') or {}
++            return current.get('task_id') or current.get('started_at')
++
++    def require_identity(self, expected):
++        if not isinstance(expected,str) or not expected or self.identity()!=expected:
++            raise ValueError('Task identity changed; unrelated execution refused.')
+ 
+     def checkpoint(self, stage, *, action=None, target=None, evidence=None, screen=None, source=None):
+         with self.lock:
+@@ -112,9 +124,11 @@
+                     current['uncertain_external_writes'] = [row for row in pending if row!=token]
+             self._write()
+ 
+-    def finish(self, status, result):
+-        with self.lock:
+-            current = self.data.get("current")
++    def finish(self, status, result, *, task_id=None):
++        with self.lock:
++            current = self.data.get("current")
++            if task_id is not None and (not current or current.get('task_id',current.get('started_at'))!=task_id):
++                return False
+             if not current or current.get("status") != "running":
+                 return
+             if status not in {"completed", "paused", "cancelled", "failed"}:
+--- captured-before/jarvis/brain.py
++++ jarvis/brain.py
+@@ -527,8 +527,18 @@
+ 
+     def propose_plan(self, operation, cancelled, **data):
+         """One read-only correction for invalid targets/scope, before dispatch."""
++        state=getattr(self.actions,'task_state',None)
++        identity=state.identity() if isinstance(state,TaskState) else None
+         for attempt in range(2):
+             result = self.client.request(operation, cancelled, **data)
++            if identity is not None:
++                state.require_identity(identity)
++            if isinstance(result,dict):
++                identities=[result['task_id']] if 'task_id' in result else []
++                if isinstance(result.get('steps'),list):
++                    identities += [step['task_id'] for step in result['steps'] if isinstance(step,dict) and 'task_id' in step]
++                if any(value!=identity or not isinstance(value,str) for value in identities):
++                    raise ValueError('Planner task identity disagrees with the current task; execution refused.')
+             if cancelled():
+                 raise ValueError('Task cancelled before accepting the plan.')
+             result = ground_file_scope(result, data.get('goal', ''))
+@@ -926,6 +936,19 @@
+                 "controls": observation.get("controls", [])}
+ 
+     def run(self, goal, cancelled, approach=None):
++        reference=re.fullmatch(r"open (?:my |the )?(?:latest|most recent) (spreadsheet|document|file|report)", goal.strip(), re.I)
++        if reference:
++            raise TaskClarification('Which '+reference[1].lower()+' should I open? Say its filename or full path, or specify a folder.', 'file')
++        state=getattr(self.actions,'task_state',None)
++        identity=state.identity() if isinstance(state,TaskState) else None
++        original_cancelled=cancelled
++        def bound_cancelled():
++            if identity is not None:
++                state.require_identity(identity)
++            return original_cancelled()
++        return self._run_bound(goal,bound_cancelled,approach)
++
++    def _run_bound(self, goal, cancelled, approach=None):
+         if approach:
+             # The user already agreed to this approach during deliberation; the goal stays
+             # authoritative and this is an additional, non-overriding planning hint.
+--- captured-before/jarvis/tools.py
++++ jarvis/tools.py
+@@ -104,6 +104,13 @@
+ 
+     def execute(self, step, cancelled, activate=None):
+         from .agent_events import check_policy, event
++        if 'task_id' in step:
++            from .task_state import TaskState
++            state=getattr(self.actions,'task_state',None)
++            if not isinstance(state,TaskState):
++                raise ValueError('Task identity is unavailable; execution refused.')
++            state.require_identity(step['task_id'])
++            step={key:value for key,value in step.items() if key!='task_id'}
+         name = step.get('action')
+         allowed = getattr(self.actions, 'allowed_tools', None)
+         if isinstance(allowed, (set, frozenset)) and name not in allowed:
+--- captured-before/jarvis/actions.py
++++ jarvis/actions.py
+@@ -1210,8 +1210,9 @@
+                 self.ui_controls.clear_pending()
+             self.report("question", "")
+             self.task_active = True
+-            try:
+-                self.task_state.start(command.value, "task")
++            owned_task_id = ''  # A failed checkpoint start must not finish an older task.
++            try:
++                owned_task_id = self.task_state.start(command.value, "task")
+                 result = None
+                 if self.config.get('agent_runtime', {}).get('direct_execution', False):
+                     from .direct_execution import run as run_direct
+@@ -1225,7 +1226,7 @@
+                 from .gmail_workflows import UnreadSearchResult
+                 paused = result and not isinstance(result, UnreadSearchResult) and any(word in result.casefold() for word in
+                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
+-                self.task_state.finish("paused" if paused else "completed", result)
++                self.task_state.finish("paused" if paused else "completed", result, task_id=owned_task_id)
+                 if decision_id is not None and engine is not None:
+                     engine.record_outcome(decision_id, not paused, (result or "")[:160])
+                 if paused and engine is not None and getattr(engine, 'enabled', False) and command.extra != 'approved_plan' and not cancelled():
+@@ -1234,14 +1235,14 @@
+             except Exception as exc:
+                 from .clarification import TaskClarification
+                 if isinstance(exc, TaskClarification) and not cancelled():
+-                    self.task_state.finish("paused", exc)
++                    self.task_state.finish("paused", exc, task_id=owned_task_id)
+                     self.pending_question = {"time": time.monotonic(), "goal": command.value,
+                         "question": str(exc), "slot": exc.slot, "choices": getattr(exc, "choices", []), "source": self.task_state.snapshot()}
+                     self.report("question", str(exc))
+                     self.report("spoken_reply", str(exc))
+                     return "Task paused, waiting for your answer: " + str(exc)
+                 self.task_state.finish("cancelled" if cancelled() else
+-                    "paused" if str(exc).startswith("Task paused") else "failed", exc)
++                    "paused" if str(exc).startswith("Task paused") else "failed", exc, task_id=owned_task_id)
+                 raise
+             finally:
+                 self.task_active = False

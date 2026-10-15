@@ -6,6 +6,21 @@ and repositories and how they connect, see the [system map](system-map.md).
 
 ## Project and runtime
 
+- [F5/Kokoro/Piper audit, live synthesis checks, fallback and acoustic/resource limits — 2026-10-15 IST](../artifacts/jarvis-audit/modules/05-voice-tts/inventory.md)
+
+- [Prompts 02–04 completion, full regression, benchmarks and acoustic blockers — 2026-10-15 IST](../artifacts/jarvis-audit/final-report.md)
+- [Wake/STT lifecycle, cleanup, source bindings and live-validation gaps](../artifacts/jarvis-audit/modules/04-voice-stt/inventory.md)
+
+- [Intent/reflex follow-up, scoped fixes and remaining cases — 2026-10-15 IST](../artifacts/jarvis-audit/modules/03-intent-direct/inventory.md)
+
+- [Perception/cognition fixes, fixture results, benchmarks and remaining cases — 2026-10-15 IST](../artifacts/jarvis-audit/modules/02-perception-cognition/inventory.md)
+
+- [Architecture inventory follow-up, 32 case proofs, typed contracts and open gaps — 2026-10-15 IST](../artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md)
+
+- [Whole-system audit evidence, catalog progress, open risks and continuation — 2026-10-15 IST](../artifacts/jarvis-audit/final-report.md)
+
+- [Core architecture and cognitive audit, tests and benchmarks — 2026-10-14 IST](../artifacts/cognition_audit_report.md)
+
 - [Integrated autonomous learning, compatibility and rollback — 2026-10-14 IST](autonomous-learning.md)
 - [Learning release tests, native/browser/model checks and benchmarks — 2026-10-14 IST](learning-validation.md)
 

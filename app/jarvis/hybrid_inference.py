@@ -6,8 +6,10 @@ import sqlite3
 import threading
 import time
 import hashlib
+import re
+import uuid
 
-from .cloud_policy import classify, credential, settings
+from .cloud_policy import classify, credential, settings, SECRET, PRIVATE
 from .cloud_quota import QuotaGuardian, QuotaDenied
 from .groq_adapter import CloudFailure, GroqAdapter
 from .skill_memory import atomic
@@ -16,6 +18,14 @@ BASE=Path(__file__).resolve().parents[1]
 _service=None
 _stamp=None
 _lock=threading.Lock()
+
+
+def metadata_model(value):
+    """Do not persist caller-controlled paths/credentials as model labels."""
+    if (not isinstance(value,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:/-]{0,149}',value)
+            or SECRET.search(value) or PRIVATE.search(value)):
+        return 'configured_local_model'
+    return value
 
 
 def policy(base):
@@ -85,23 +95,37 @@ class HybridGateway:
     def decide(self,request):
         start=time.perf_counter()
         features=classify(request)
-        route={'provider':'local','model':request.get('options',{}).get('model','qwen3.5:9b'),**features}
+        supplied_id=request.get('_cloud_request_id')
+        trace_id=supplied_id if isinstance(supplied_id,str) and re.fullmatch('[a-f0-9]{32}',supplied_id) else uuid.uuid4().hex
+        route={'trace_id':trace_id,'provider':'local','model':metadata_model(request.get('options',{}).get('model','qwen3.5:9b')),**features}
         if not self.options['enabled'] or self.options['routing']=='local': route['reason']='offline_or_disabled'
         elif features['privacy']!='PUBLIC': pass
         elif not self.options['free_tier_confirmed'] or not self.options['dedicated_quota_confirmed'] or self.options['account_plan']!='free': route['reason']='free_account_not_confirmed'
-        elif not self.adapter or not self.adapter.ready(wait_seconds=8): route['reason']='model_metadata_unavailable'
         elif policy(self.base).get('local_model'): route['reason']='manual_local_preference'
+        elif features['complexity']!='complex' and self.options['routing']!='public': route['reason']='local_utility_or_quota_conservation'
+        elif self.performance.cloud_failed_class(features['complexity'],self.options['model']): route['reason']='validated_feedback_prefers_local'
         else:
             snap=self.guardian.snapshot(); route['quota_state']=snap['state']
-            if snap['state'] in {'UNKNOWN','EXHAUSTED'}: route['reason']='quota_unavailable'
-            elif self.performance.cloud_failed_class(features['complexity'],self.options['model']): route['reason']='validated_feedback_prefers_local'
-            elif snap['state']=='CRITICAL' or (features['complexity']!='complex' and self.options['routing']!='public'):
+            if snap['state'] in {'UNKNOWN','EXHAUSTED'}:
+                route['reason']='quota_unavailable'
+                # Refresh expired metadata/time without delaying a local answer.
+                # This permits clock/window recovery; it never probes with inference.
+                if self.adapter: self.adapter.refresh_async()
+            elif snap['state']=='CRITICAL':
                 route['reason']='local_utility_or_quota_conservation'
+            elif not self.adapter or not self.adapter.ready(wait_seconds=8): route['reason']='model_metadata_unavailable'
             else: route.update(provider='groq',model=self.options['model'],reason='eligible_public_complex_question')
         route['routing_ms']=1000*(time.perf_counter()-start)
         return route
 
     def record(self,route):
+        fields={'trace_id','provider','model','privacy','complexity','reason','routing_ms','quota_state',
+                'inference_ms','transport_complete','fallback','interruption_reason'}
+        route={key:value for key,value in route.items() if key in fields and type(value) in (str,int,float,bool)}
+        route['model']=metadata_model(route.get('model'))
+        for key in ('reason','interruption_reason'):
+            if key in route and (not isinstance(route[key],str) or not re.fullmatch(r'[a-z][a-z0-9_]{0,99}',route[key]) or SECRET.search(route[key])):
+                route[key]='cloud_failure'
         try: atomic(self.root/'last-route.json',json.dumps({'at':time.time(),**route}))
         except OSError: pass
 
@@ -137,7 +161,7 @@ class HybridGateway:
         if progress: progress({'phase':'Groq · public inference','text':''})
         try:
             message=self.adapter.complete(messages,output,on_chunk=chunk if progress and request.get('stream_answer') else None,
-                cancelled=cancelled,reasoning='low' if route['complexity']=='complex' else 'none',request_id=request.get('_cloud_request_id'))
+                cancelled=cancelled,reasoning='low' if route['complexity']=='complex' else 'none',request_id=request.get('_cloud_request_id',route['trace_id']))
             route.update(inference_ms=1000*(time.perf_counter()-started),transport_complete=True)
             self.record(route)
             if progress and text: progress({'phase':'Groq public answer','text':text})

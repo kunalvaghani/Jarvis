@@ -1,0 +1,9 @@
+# Keep / defer decisions — 2026-10-14 IST
+
+Retain the four localized runtime repairs: observed baseline faults now pass. No registry names, provider order, model pins or approval permissions changed. A/B results in [CSV](benchmark-before-after.csv) used the same 2400 parser oracle and six-second sensor fixtures on this host. Accuracy stayed 2400/2400; fresh-window rank improved false → true. Tick p95 0.367 → 0.290 ms; interval p95 265.000 → 265.000 ms. Ingress p95 1.487 → 2.181 ms: correct age-aware admission costs about 0.694 ms per 21-event burst. Retained for correctness; this is an ingress microbenchmark regression, not a universal speed improvement. It remains small relative to the 250ms tick budget. Repeated long production-load equivalence is NOT RUN.
+
+Unchanged decay timing also varied between runs; no speedup is attributed to this audit's unchanged experience.py. Cold parser values include imports and differ with OS cache. No first-token/audio or GPU throughput win is claimed.
+
+Modules 02/09/16/20 share validated statistics/attention improvements; direct-command concurrency module03 improved Stop consistency. Module34/test infrastructure now supports complete pytest collection. Other modules have census/regression evidence but no isolated new baseline/improvement selection; they are **deferred**, not declared already optimal. No-safe-improvement exceptions are not asserted without profiling. Per-module contracts remain pending, as recorded in modules/*/changes.md.
+
+No blind dependency/model upgrades. No new framework or service. Existing launcher, bootstrap, manifest and recovery contracts remain intact; read-only launcher check is ready. No heavyweight model tests ran concurrently (none were launched). Idle learning was never started in fixtures; no running user service was stopped or reconfigured for benchmarking.

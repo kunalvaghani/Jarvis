@@ -602,11 +602,11 @@ class AbilityForge:
             sizes = {m.get("name"): m.get("size", 0) / 2 ** 30 for m in tags}
             if self.model in sizes and sizes[self.model] + self.memory_margin_gb <= free_gb:
                 return self.model
-            if self.fallback_model in sizes:
+            if self.fallback_model in sizes and sizes[self.fallback_model] + self.memory_margin_gb <= free_gb:
                 return self.fallback_model
         except Exception:
             pass
-        return self.fallback_model
+        raise AbilityError('Insufficient or unknown RAM for ability inference; learning deferred.')
 
     def _chat(self, system, user, schema=None, predict=900, cancelled=lambda: False):
         """One model call that always gives way to the user.

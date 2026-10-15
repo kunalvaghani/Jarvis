@@ -43,7 +43,8 @@ class NaturalVoiceTests(unittest.TestCase):
             speech._kokoro_send(0, {"text": "reply"}, "reply")
         speech._event('{"id": 1, "error": "device unavailable"}')
         report.assert_called_once()
-        self.assertIn("device unavailable", report.call_args.args[1])
+        self.assertIn("answer remains in the transcript", report.call_args.args[1])
+        self.assertNotIn("device unavailable", report.call_args.args[1])
         speech.process.stdin.write.assert_called_once()
         self.assertFalse(speech.speaking.is_set())
 

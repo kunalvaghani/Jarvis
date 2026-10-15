@@ -1,0 +1,7 @@
+# Compatibility — checked 2026-10-15 IST using Firecrawl
+
+Local Ollama `/api/version`:0.40.0. Official [latest release](https://github.com/ollama/ollama/releases/tag/v0.40.4) shows0.40.4,12 October2026 at19:00 (page timezone not established); relevant release excerpt did not identify a streaming/schema/memory fix required here. Runtime is not latest. No installation or model change authorized/performed; two current-runtime native probes passed, so retain existing runtime for this scoped patch. New-runtime live compatibility remains untested.
+
+Official [structured outputs guide](https://docs.ollama.com/capabilities/structured-outputs) documents format schemas and client-side validation. This patch keeps the existing local schema and adds validation; no SDK/Pydantic dependency is necessary. The guide has no stated release date. [Python Future contract](https://docs.python.org/3/library/concurrent.futures.html) documents set_running_or_notify_cancel and InvalidStateError on completed futures; supported on installed Python3.10.6. No new dependency/service. The current documentation redirected to Python3.15; it does not imply a local Python upgrade. Python3.10 is beyond its October2026 support window (previous audit finding); migration remains separate validation work.
+
+[Source URL/check records](upstream-checks.json). Third-party pages are evidence only; no downloaded code or scripts were executed.

@@ -1,0 +1,15 @@
+scope,metric,before,after,unit,samples_before,samples_after,interpretation
+cognition fixture,tick_ms.p50,0.24469999971188372,0.20510000013018725,ms,23,24,single bounded A/B run; OS/background-load variance
+cognition fixture,tick_ms.p95,0.3666000002340297,0.28960000054212287,ms,23,24,single bounded A/B run; OS/background-load variance
+cognition fixture,tick_ms.max,0.4279000004316913,0.2984000002470566,ms,23,24,single bounded A/B run; OS/background-load variance
+cognition fixture,interval_ms.p50,250.0,250.0,ms,22,23,single bounded A/B run; OS/background-load variance
+cognition fixture,interval_ms.p95,265.0000000003274,264.9999999994179,ms,22,23,single bounded A/B run; OS/background-load variance
+cognition fixture,interval_ms.max,265.0000000003274,264.9999999994179,ms,22,23,single bounded A/B run; OS/background-load variance
+cognition fixture,ingress_21_ms.p50,1.0493999998288928,1.752199999828008,ms,193,193,single bounded A/B run; OS/background-load variance
+cognition fixture,ingress_21_ms.p95,1.486799999838695,2.180700000280922,ms,193,193,single bounded A/B run; OS/background-load variance
+cognition fixture,ingress_21_ms.max,1.8552999999883468,2.699600000596547,ms,193,193,single bounded A/B run; OS/background-load variance
+unchanged memory decay,decay_2000_ms.p50,0.779050000346615,0.3071999999519903,ms,30,30,single bounded A/B run; OS/background-load variance
+unchanged memory decay,decay_2000_ms.p95,0.8096000001387438,0.33379999968019547,ms,30,30,single bounded A/B run; OS/background-load variance
+unchanged memory decay,decay_2000_ms.max,0.8361999998669489,0.38069999936851673,ms,30,30,single bounded A/B run; OS/background-load variance
+intent,accuracy,1.0,1.0,fraction,2400,2400,Authored 800-scenario/2400-phrasing oracle
+attention,fresh_window_rank1,False,True,boolean,1,1,Fixed stale voice starvation

@@ -91,15 +91,29 @@ def fingerprints(base=None):
     return result
 
 
-def tools(base=None):
+def availability(base=None):
     from pathlib import Path
     import json
-    target=(Path(base) if base else Path(__file__).resolve().parent.parent)/'artifacts/reports/utility-validation.json'
-    try:validated=json.loads(target.read_text(encoding='utf-8'))['skills']
-    except (OSError,ValueError,KeyError):return {}
+    root=Path(base) if base else Path(__file__).resolve().parent.parent
+    if not (root/'.venv-skills/Scripts/python.exe').is_file():
+        return {'status':'missing_environment','notice':'Separate utility environment missing; run reviewed utility setup.','validated':[]}
+    target=root/'artifacts/reports/utility-validation.json'
     try:
-        if json.loads(target.read_text(encoding='utf-8')).get('source_hashes')!=fingerprints(base):return {}
-    except OSError:return {}
+        if target.stat().st_size>2_000_000:raise ValueError('Validation report too large.')
+        data=json.loads(target.read_text(encoding='utf-8'));validated=data['skills']
+        if not isinstance(validated,list) or len(validated)>1000:raise ValueError('Invalid validation rows.')
+        for row in validated:
+            if not isinstance(row,dict) or not isinstance(row.get('id'),str) or type(row.get('passed')) is not bool or not isinstance(row.get('evidence',{}),dict):
+                raise ValueError('Invalid validation row.')
+        if data.get('source_hashes')!=fingerprints(base):
+            return {'status':'stale_validation','notice':'Utility source hashes changed; reviewed per-skill verification is required. Do not activate old results.','validated':[]}
+    except (OSError,ValueError,KeyError,TypeError,RecursionError,AttributeError):
+        return {'status':'validation_unavailable','notice':'Utility validation is missing or malformed; preserve it and run reviewed verification.','validated':[]}
+    return {'status':'ready','notice':'Recorded component validation only; current task policy/credentials still apply.','validated':validated}
+
+
+def tools(base=None):
+    validated=availability(base)['validated']
     passed={row['id'] for row in validated if row.get('passed') is True
             and row.get('evidence',{}).get('live_account_verified') is not False}
     environment={'mongodb':('JARVIS_MONGODB_URI',),'slack_approval':('JARVIS_SLACK_WEBHOOK_URL',),

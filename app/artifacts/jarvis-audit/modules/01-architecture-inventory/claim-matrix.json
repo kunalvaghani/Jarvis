@@ -1,0 +1,785 @@
+[
+  {
+    "map_line": 54,
+    "claim": "| Perception | Voice, typed text, focused window, sensor alerts; each gets a salience score | `engine.py`, `voice_input.py`, `screen_awareness.py`, `gods_eye.py`, `weather_watch.py`, `whatsapp.py` | Working memory |",
+    "source_paths": [
+      "jarvis/engine.py",
+      "jarvis/voice_input.py",
+      "jarvis/screen_awareness.py",
+      "jarvis/gods_eye.py",
+      "jarvis/weather_watch.py",
+      "jarvis/whatsapp.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 55,
+    "claim": "| Working memory | Current goal, active task, queue, 7 attention slots | `cognition.py`, `context_hub.py` | Reasoning, all prompts |",
+    "source_paths": [
+      "jarvis/cognition.py",
+      "jarvis/context_hub.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 56,
+    "claim": "| Long-term memory | Episodic (conversations), declarative (facts), procedural (skills, lessons, repos) | `memory_curator.py`, `conversation_memory.py`, `obsidian_memory.py`, `skill_memory.py`, `experience_memory.py` | Reasoning, deliberation |",
+    "source_paths": [
+      "jarvis/memory_curator.py",
+      "jarvis/conversation_memory.py",
+      "jarvis/obsidian_memory.py",
+      "jarvis/skill_memory.py",
+      "jarvis/experience_memory.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 57,
+    "claim": "| Reasoning + world model | Plans/answers; predicts effects, undo-ability, approval need, time, success rate | `brain.py`, `knowledge_worker.py`, `cognition.predict()` | Executive |",
+    "source_paths": [
+      "jarvis/brain.py",
+      "jarvis/knowledge_worker.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 58,
+    "claim": "| Executive + meta-learning | Proceed or ask; compares result vs prediction; writes lessons | `cognition.py`, `deliberation.py`, `task_recovery.py` | Action, memory |",
+    "source_paths": [
+      "jarvis/cognition.py",
+      "jarvis/deliberation.py",
+      "jarvis/task_recovery.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 59,
+    "claim": "| Action / tools | Every real action | `actions.py` \u2192 `cognition.act()` | Perception (feedback) |",
+    "source_paths": [
+      "jarvis/actions.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 72,
+    "claim": "| `qwen3.5:9b` | Main brain: planner, coder, decisions, screen reading, answers, memory facts, repo learning, documents | `brain.*`, `knowledge.model`, `memory.long_term.model` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 73,
+    "claim": "| `qwen3.5:0.8b` | Context selector; fast butler-style small talk | `context_selector.model`, `knowledge.natural_conversation.model` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 74,
+    "claim": "| `qwen2.5:0.5b` | Voice-command cleanup; idle realtime-data reader | `command_cleanup.model`, `realtime.model` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 75,
+    "claim": "| `qwen3-coder:30b` | Ability forge (falls back to 9b if RAM is short) | `repo_abilities.model` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 76,
+    "claim": "| `jarvis-codex-qwen3.5:9b` | Legacy Codex coding backend model | `brain.codex_model` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 77,
+    "claim": "| `qwen3-vl:2b / 4b`, `qwen3.5:4b`, `llama3.2:3b`, `qwen2.5:3b-instruct` | Installed alternatives / earlier experiments | \u2014 |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 78,
+    "claim": "| `qwen/qwen3.8-27b` on **Groq** (cloud, free tier) | Optional: public, non-private complex questions only | `groq.*` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 79,
+    "claim": "| faster-whisper `medium.en` | Speech-to-text, CUDA int8_float16 | `whisper.*` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 80,
+    "claim": "| **F5-TTS** | Main voice, cloned zero-shot from a Jarvis reference clip | `speech.engine: \"f5\"` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 81,
+    "claim": "| Kokoro (`am_michael` + `am_fenrir`), Piper | Earlier/fallback voices | `speech.voice` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 82,
+    "claim": "| `convaiinnovations/laya` | Tool/action selector in the brain env | `brain.selector` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 83,
+    "claim": "| Qwen2.5-Coder-0.5B + LoRA | Own trained coding/PC adapters (experiment) | `brain.trained_pc_checkpoint` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 132,
+    "claim": "| Voice | Wake word \"Jarvis\", call-style conversation, task queue while talking | [fast-conversation.md](fast-conversation.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 133,
+    "claim": "| Voice | Push-to-write (hold Left Ctrl + Left Alt), \"write \u2026\" composed by model | [push-to-write.md](push-to-write.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 134,
+    "claim": "| Voice | F5-TTS cloned voice, streamed speech, Unicode-safe | [f5-voice.md](f5-voice.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 135,
+    "claim": "| Voice | Generated butler-style small talk | [natural-conversation.md](natural-conversation.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 136,
+    "claim": "| Voice | 800-scenario natural phrasing coverage | [natural-language.md](natural-language.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 137,
+    "claim": "| UI | Dynamic Island glass notch, Mind view, media cards | [dynamic-island.md](dynamic-island.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 138,
+    "claim": "| UI | Pip buddy: 35 emotions, eats dropped files | [file-buddy.md](file-buddy.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 139,
+    "claim": "| UI | Jarvis's own cyan cursor and physical clicks | [independent-cursor.md](independent-cursor.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 140,
+    "claim": "| Desktop | Open 333 catalogued apps, folders, files; Windows commands (493 entries) | [windows-commands.md](windows-commands.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 141,
+    "claim": "| Desktop | Screen pre-awareness: offers help for the app in front | [screen-awareness.md](screen-awareness.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 142,
+    "claim": "| Media | YouTube + Spotify search, play, full control | [media-player.md](media-player.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 143,
+    "claim": "| Messaging | WhatsApp send/reply/call handling with approvals | [whatsapp.md](whatsapp.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 144,
+    "claim": "| Email | Gmail API: read, draft, send, trash, labels, read aloud | [gmail-api.md](gmail-api.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 145,
+    "claim": "| Documents | Drop file \u2192 LightRAG/GraphRAG Q&A with citations | [file-buddy.md](file-buddy.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 146,
+    "claim": "| Memory | Long-term facts, conversation summaries, Obsidian vault | [memory-apis-alerts.md](memory-apis-alerts.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 147,
+    "claim": "| Data | 82 public API adapters, weather alerts every 30 min | [realtime-data.md](realtime-data.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 148,
+    "claim": "| World | God's Eye globe by voice, 25-mile area alerts, traffic cameras | [gods-eye.md](gods-eye.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 149,
+    "claim": "| Reasoning | Deliberation: opinions, risk tiers, decision ledger | [deliberation-engine.md](deliberation-engine.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 150,
+    "claim": "| Planning | Hierarchical DAG execution, verified plan cache | [hierarchical-execution.md](hierarchical-execution.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 151,
+    "claim": "| Learning | Scoped knowledge acquisition before tasks | [autonomous-learning.md](autonomous-learning.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 152,
+    "claim": "| Learning | Learn GitHub repos \u2192 reuse for coding | [repo-learning.md](repo-learning.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 153,
+    "claim": "| Learning | Turn repos into new tested voice abilities | [repo-abilities.md](repo-abilities.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 154,
+    "claim": "| Learning | Idle self-evolution, gated self-patching | [self-evolution.md](self-evolution.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 155,
+    "claim": "| Coding | Native coding workspace, multi-worker, streaming | [native-coding.md](native-coding.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 156,
+    "claim": "| Coding | Web/app development with previews | [web-app-development.md](web-app-development.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 157,
+    "claim": "| Reverse eng. | REA ingest \u2192 analyse \u2192 clone \u2192 iterate | [rea-reverse-engineer-clone.md](rea-reverse-engineer-clone.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 158,
+    "claim": "| Research | DeerFlow source research + 23 skill guides | [deerflow.md](deerflow.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 159,
+    "claim": "| Sandbox | Docker offline tasks + 7 free media renderers | [deerflow-sandbox.md](deerflow-sandbox.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 160,
+    "claim": "| Cloud | Optional Groq hybrid with quota + privacy routing | [groq-hybrid.md](groq-hybrid.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 161,
+    "claim": "| Ops | GPU priority scheduler, crash recovery, launcher readiness | [gpu-priority.md](gpu-priority.md), [CRASH_RECOVERY.md](CRASH_RECOVERY.md) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 172,
+    "claim": "| Bundled skills | app-navigation, browser-navigation, file-operations, form-entry, project-coding, reverse-engineer-clone, runtime-questions, spotify-media, web-research, youtube-media | 10 readable SKILL.md files; repository-assimilation directory lacks SKILL.md in this checkout; [`skills/`](../skills/) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 173,
+    "claim": "| Personal skills | Your own `SKILL.md` in the Obsidian vault `Jarvis Skills/Personal/` | hot-reloaded |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 174,
+    "claim": "| Custom skills | `custom-skills/<name>/SKILL.md` | local, ignored by git |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 175,
+    "claim": "| Hermes guides | Pinned Nous Research Hermes skill references | 210 guides |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 176,
+    "claim": "| DeerFlow guides | Public DeerFlow skill guides | 23 |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 177,
+    "claim": "| Utility skills | Reviewed local utilities (format, PDF, OCR, crypto, notebooks\u2026) in `.venv-skills` | 38 local + 3 mock |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 178,
+    "claim": "| Repository skills | Python functions from learned repos, run in Docker | approval per call |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 179,
+    "claim": "| Repo abilities | Voice commands generated from learned repos | approval card |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 180,
+    "claim": "| Learned procedures | Verified past task steps + per-action success stats | Obsidian + `.jarvis-runtime/cognition/` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 192,
+    "claim": "| Desktop | open app, click, type_text, focus window, scroll | `desktop_actions.py`, UIA via providers **UFO \u2192 Windows-MCP \u2192 CUA \u2192 Open Computer Use \u2192 Agent-S** |",
+    "source_paths": [
+      "jarvis/desktop_actions.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 193,
+    "claim": "| Browser | DOM inspect, navigate, fill, click | `browser_automation.py` (Playwright), `browser_worker.py` |",
+    "source_paths": [
+      "jarvis/browser_automation.py",
+      "jarvis/browser_worker.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 194,
+    "claim": "| Files | list, read, search, append, open | `tools.py`, `native_tools.py`, SQLite file index |",
+    "source_paths": [
+      "jarvis/tools.py",
+      "jarvis/native_tools.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 195,
+    "claim": "| Web / research | web_search, scrape_web, DeerFlow research, Firecrawl (optional) | `toolkits.py`, `deerflow.py`, `firecrawl_tools.py` |",
+    "source_paths": [
+      "jarvis/toolkits.py",
+      "jarvis/deerflow.py",
+      "jarvis/firecrawl_tools.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 196,
+    "claim": "| GitHub | search, read file, PRs | `toolkits.py`, `repo_tools.py` |",
+    "source_paths": [
+      "jarvis/toolkits.py",
+      "jarvis/repo_tools.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 197,
+    "claim": "| Gmail | search, read, draft, send, trash, label | `gmail_api.py`, `gmail_writes.py` |",
+    "source_paths": [
+      "jarvis/gmail_api.py",
+      "jarvis/gmail_writes.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 198,
+    "claim": "| Messaging | WhatsApp send/reply/calls | `whatsapp.py`, `messengers.py` |",
+    "source_paths": [
+      "jarvis/whatsapp.py",
+      "jarvis/messengers.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 199,
+    "claim": "| Media | YouTube Data API, Spotify desktop + Windows media session | `media_player.py`, `spotify.py` |",
+    "source_paths": [
+      "jarvis/media_player.py",
+      "jarvis/spotify.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 200,
+    "claim": "| Coding | read/write/patch files, run checks, LocalGithub commit | `native_coding.py`, `coding_*.py` |",
+    "source_paths": [
+      "jarvis/native_coding.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 201,
+    "claim": "| Sandbox | Docker Linux tasks, media renderers | `deerflow_sandbox.py`, `docker_runtime.py` |",
+    "source_paths": [
+      "jarvis/deerflow_sandbox.py",
+      "jarvis/docker_runtime.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 202,
+    "claim": "| Reverse eng. | REA analyze | `rea_tools.py` |",
+    "source_paths": [
+      "jarvis/rea_tools.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 203,
+    "claim": "| Data | 82 realtime APIs | `realtime.py`, `realtime_sources.py` |",
+    "source_paths": [
+      "jarvis/realtime.py",
+      "jarvis/realtime_sources.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 204,
+    "claim": "| Integrations | MCP, calendar, Jira, Slack (when configured) | `mcp_bridge.py`, `toolkits.py` |",
+    "source_paths": [
+      "jarvis/mcp_bridge.py",
+      "jarvis/toolkits.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 205,
+    "claim": "| Introspection | runtime_capabilities, cognition status, predict | `capabilities.py`, `cognition.py` |",
+    "source_paths": [
+      "jarvis/capabilities.py",
+      "jarvis/cognition.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 216,
+    "claim": "| Python (7+ venvs) | `.venv` main, `.venv-brain` (laya/transformers), `.venv-f5` (F5-TTS + CUDA torch), `.venv-skills`, `.venv-training`, `.venv-harness`, `.venv-hermes`, `.venv-deerflow` (Py 3.12) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 217,
+    "claim": "| Ollama | All local models |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 218,
+    "claim": "| CUDA / NVIDIA libs | Whisper, F5-TTS, partial Qwen offload |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 219,
+    "claim": "| Docker Desktop (Linux engine) | Repository skills, DeerFlow sandbox; auto-started silently |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 220,
+    "claim": "| Node.js | REA, DeepSeek Harness |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 221,
+    "claim": "| Playwright + Chrome | Browser automation, Gmail Chrome adapter |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 222,
+    "claim": "| Obsidian vault | Long-term memory (`D:\\Phython Project\\Jarvis_Memory\\Jarvis_Mem`) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 223,
+    "claim": "| WhatsApp Desktop, Spotify Desktop, Blender, VS Code\u2026 | Controlled apps |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 224,
+    "claim": "| Key Python packages | faster-whisper, ctranslate2, kokoro-onnx, piper-tts, pywinauto, pywin32, winrt media, pycaw, PyAutoGUI, opencv, pypdf, ddgs, playwright |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 241,
+    "claim": "| ByteDance **DeerFlow** | Embedded research harness, skills, sandbox | Active, `integrations/deer-flow*` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 242,
+    "claim": "| Nous Research **Hermes Agent** | Optional planner loop + 210 skill guides | Planner off (`brain.hermes.enabled: false`), guides active |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 243,
+    "claim": "| DeepSeek **Harness** | Optional agent harness with local Qwen | Enabled (`brain.harness`) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 244,
+    "claim": "| **REA** (morluto/rea) | Reverse-engineering analysis via Node CLI | Active, not vendored |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 245,
+    "claim": "| **God's Eye View** | Globe, flights, cameras, alerts | Active, `integrations/gods-eye-view-src` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 246,
+    "claim": "| UFO, Windows-MCP, CUA, Open Computer Use, Agent-S | Desktop execution provider patterns | Adapted, `integrations/execution-*` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 247,
+    "claim": "| **Ultron** (ModelScope) | Memory hotness/decay formula | Adapted in `experience.py` |",
+    "source_paths": [
+      "jarvis/experience.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 248,
+    "claim": "| **SuperAGI** | Toolkit design | Re-implemented in `toolkits.py` |",
+    "source_paths": [
+      "jarvis/toolkits.py"
+    ],
+    "status": "PARTIAL",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 249,
+    "claim": "| **agenticSeek** | Coder generate/check/feedback loop | Ideas only |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 250,
+    "claim": "| Microsoft JARVIS, isair-jarvis, jarvis-ui, Memento, UI-TARS | Reference designs | Reference only |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 251,
+    "claim": "| Codex CLI / Claude Code CLI | Earlier coding backends with local Qwen | Legacy, selectable |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 252,
+    "claim": "| **LocalGithub** (`D:\\Kunals GitHub Repo\\LocalGithub`) | Local git assembly for coding workloads | Active |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 253,
+    "claim": "| Learned GitHub repos (e.g. `trentm/python-markdown2`, `sindresorhus/is`, `mahmoud/boltons`) | Coding reference + new abilities | Stored in Obsidian `Jarvis Repos/` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 318,
+    "claim": "| [`jarvis/`](../jarvis/) | All application modules |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 319,
+    "claim": "| [`config/`](../config/) | `config.json`, `runtime_manifest.json` |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 320,
+    "claim": "| [`docs/`](README.md) | Guides (this page included) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 321,
+    "claim": "| [`skills/`](../skills/) | Bundled skills |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 322,
+    "claim": "| [`integrations/`](../integrations/) | Upstream checkouts, profiles, references |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 323,
+    "claim": "| [`scripts/`](../scripts/) | Setup, models, training, verification, audit |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 324,
+    "claim": "| [`tests/`](../tests/) | Regression suite |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 325,
+    "claim": "| [`artifacts/`](../artifacts/) | Reports, media, training runs, generated projects |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  },
+  {
+    "map_line": 326,
+    "claim": "| `.jarvis-runtime/` | Runtime state, logs, repairs, cognition stats (ignored) |",
+    "source_paths": [],
+    "status": "UNVERIFIED_CLAIM",
+    "reason": "Code/registration evidence does not prove a live feature. See module matrix and named tests."
+  }
+]

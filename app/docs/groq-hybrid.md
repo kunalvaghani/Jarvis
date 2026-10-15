@@ -1,5 +1,27 @@
 # Optional Groq hybrid inference — 2026-10-14 IST
 
+## Audit follow-up — 2026-10-15 IST
+
+Current route order checks privacy/action provenance, free-policy confirmations,
+manual local selection, utility/explicit feedback and advisory quota before a
+blocking metadata wait. Unknown/exhausted quota answers locally while expired
+metadata/time refreshes asynchronously; inference reservations still recheck all
+budgets transactionally. Valid metadata is not fetched again for each refusal.
+
+HTTP backoff headers are case-insensitive. Zero or malformed usage does not refund
+submitted work: the conservative reservation remains uncertain. Common Groq,
+OpenAI, GitHub, Google, AWS and Slack key patterns are refused by outbound screening
+and redacted in new conversation/Obsidian records. This is heuristic detection,
+not a complete secret classifier or a migration of historical private records.
+
+The route UUID matches its cloud reservation ID, including the existing stable
+QuestionClient ID across recovery. Metadata persists only allowed scalar fields;
+untrusted model/error labels and credential-shaped response IDs are redacted.
+Question routing confers no tool authority. [Executed cases, source diff, benchmark
+and rollback](../artifacts/jarvis-audit/modules/07-model-routing/inventory.md).
+Current account flags are local attestations; provider free-tier entitlement and
+real inference remain unverified. Historical measurements below retain their dates.
+
 Jarvis integrates `qwen/qwen3.8-27b` through its existing question worker. Cloud
 inference is **disabled by default**; local Qwen, offline model configuration,
 voice, memory, research, coding and permission-controlled automation stay usable.
@@ -286,8 +308,10 @@ offline selection has precedence. API keys have no tracked configuration field.
 ```
 
 Metadata refresh checks the supported-model endpoint and provider time only.
-Routine routing refreshes asynchronously and never waits for network I/O. A cold
-or expired metadata cache chooses local for that turn. Quitting closes the worker
+An otherwise eligible public request can wait at most eight seconds for cold or
+expired metadata, then falls back locally. A prior local/quota refusal does not
+wait; unknown/exhausted quota may start an expired refresh in the background.
+Quitting closes the worker
 and bounded helper threads; no Groq daemon restarts on its own.
 
 For a separately authorized future live smoke test, explicitly enable

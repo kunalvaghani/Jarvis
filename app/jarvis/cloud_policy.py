@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import re
+import unicodedata
 
 DEFAULTS = dict(enabled=False, model='qwen/qwen3.8-27b', free_only=True,
     account_plan='unknown', free_tier_confirmed=False, dedicated_quota_confirmed=False,
@@ -60,22 +61,29 @@ def credential(base):
     return value
 
 
-SECRET = re.compile(r'(?i)(?:gsk_[a-z0-9]{10,}|sk-(?:proj-)?[a-z0-9_-]{12,}|-----BEGIN .*PRIVATE KEY|(?:passwords?|passwd|api[_ -]?keys?|secrets?|authorization|bearer|cookies?|(?:session[_-]?)?tokens?)\s*[:=]\s*\S+|\b\d{3}-\d{2}-\d{4}\b|[\w.+-]+@[\w.-]+\.[a-z]{2,})')
+KEY_MATERIAL = r'gsk_[a-z0-9]{10,}|sk-(?:proj-)?[a-z0-9_-]{12,}|gh[pousr]_[a-z0-9]{20,}|github_pat_[a-z0-9_]{20,}|AIza[a-z0-9_-]{30,}|(?:AKIA|ASIA)[a-z0-9]{16}|xox[baprs]-[a-z0-9-]{20,}'
+SECRET = re.compile(r'(?i)(?:'+KEY_MATERIAL+r'|-----BEGIN .*PRIVATE KEY|(?:passwords?|passwd|api[_ -]?keys?|secrets?|authorization|bearer|cookies?|(?:session[_-]?)?tokens?)\s*[:=]\s*\S+|\b\d{3}-\d{2}-\d{4}\b|[\w.+-]+@[\w.-]+\.[a-z]{2,})')
 PRIVATE = re.compile(r'(?i)(?:[a-z]:[\\/]|\\\\|/(?:home|users|etc|mnt)/|\.env\b|\b(?:my|our|personal|private|confidential|credentials?|bank|accounts?|passwords?|ssh|memory|memories|remember|previous|continue|screenshots?|desktop|clipboard|downloads|documents|passport|ssn|patient|diagnosis|financial|identity)\b|(?:मेरे|मेरा|मेरी|पासवर्ड|खाता|निजी))')
 ACTION = re.compile(r'(?i)\b(?:open|launch|delete|send|publish|upload|install|execute|run|click|type|save|turn down|volume|shutdown|restart|search my|fix my)\b|(?:खोलो|भेजो|चलाओ|हटाओ)')
 PUBLIC = re.compile(r'(?i)^(?:please\s+)?(?:explain|compare|describe|derive|prove|design|outline|discuss|analyze|analyse|what (?:is|are)|how (?:does|do)|why (?:does|do)|give (?:a|an)|show (?:a|an)|explica|compara|describe|समझाओ|समझाइए|बताओ|तुलना|explain karo)\b')
 FOLLOWUP = re.compile(r'(?i)\b(?:this|that|it|above|earlier|same|again|we|you said)\b')
 COMPLEX = re.compile(r'(?i)\b(?:tradeoffs?|architecture|distributed|proof|prove|derive|algorithm|complexity|concurrency|quantum|cryptography|optimization|compare|debug|consistency|design|reasoning)\b')
-CONTEXT = ('history','screen','conversation_context','pc_context','memory_context','catalog_context','live_app_context','realtime_context')
+CONTEXT = ('history','screen','images','image','screenshot','working_memory','situation',
+           'conversation_context','pc_context','memory_context','catalog_context','live_app_context','realtime_context','learning_context','skill_context')
+PRIVATE_APP = re.compile(r'(?i)\b(?:gmail|whatsapp|inbox|unread|mailbox|clipboard|screen|contacts)\b')
+
+def privacy_text(text):
+    return ''.join(c for c in unicodedata.normalize('NFKC',text) if unicodedata.category(c)!='Cf')
 
 
 def classify(request):
     question = request.get('question','')
     if not isinstance(question,str) or not 3 <= len(question) <= 4000:
         return {'privacy':'UNKNOWN','complexity':'unknown','reason':'invalid_or_ambiguous'}
+    question = privacy_text(question)
     if SECRET.search(question): return {'privacy':'SENSITIVE','complexity':'unknown','reason':'secret_pattern'}
     if request.get('task_kind','ask') != 'ask': return {'privacy':'INTERNAL','complexity':'unknown','reason':'local_executor_task'}
-    if PRIVATE.search(question) or ACTION.search(question) or any(request.get(k) for k in CONTEXT):
+    if PRIVATE.search(question) or PRIVATE_APP.search(question) or ACTION.search(question) or any(request.get(k) for k in CONTEXT):
         return {'privacy':'INTERNAL','complexity':'unknown','reason':'private_context_or_action'}
     if not PUBLIC.search(question.strip()) or FOLLOWUP.search(question):
         return {'privacy':'UNKNOWN','complexity':'unknown','reason':'uncertain_provenance'}
@@ -85,7 +93,7 @@ def classify(request):
 
 def screen_payload(messages):
     """Hard outbound guard, including tool definitions and all conversation roles."""
-    text = json.dumps(messages, ensure_ascii=False)
-    if len(text.encode()) > 64000 or SECRET.search(text) or PRIVATE.search(text):
+    text = privacy_text(json.dumps(messages, ensure_ascii=False))
+    if len(text.encode()) > 64000 or SECRET.search(text) or PRIVATE.search(text) or PRIVATE_APP.search(text):
         raise ValueError('Cloud payload refused by local privacy policy.')
     return len(text.encode()) + 256  # conservative byte upper bound plus protocol allowance

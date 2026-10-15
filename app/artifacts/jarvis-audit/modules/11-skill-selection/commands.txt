@@ -1,0 +1,6 @@
+.venv/Scripts/python.exe -m pytest tests/test_capabilities.py tests/test_skill_memory.py tests/test_custom_skills.py tests/test_hermes_skills.py tests/test_utility_skills.py tests/test_deerflow.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/11-skill-selection/existing-baseline.xml
+.venv/Scripts/python.exe scripts/verification/verify_skill_selection_audit.py
+.venv/Scripts/python.exe -m pytest tests/test_skill_selection_audit.py tests/test_capabilities.py tests/test_skill_memory.py tests/test_custom_skills.py tests/test_hermes_skills.py tests/test_utility_skills.py tests/test_deerflow.py tests/test_cognition_and_routing.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/11-skill-selection/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/11-skill-selection/full-regression.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check
+.venv/Scripts/python.exe scripts/verification/report_skill_selection_audit.py
