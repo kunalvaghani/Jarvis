@@ -1,10 +1,16 @@
 """Ordered preflight fallback; one external action, followed by observations only."""
 import time
+import uuid
 from contextlib import nullcontext
-from .execution_adapters import PROVIDERS, Unsupported
+from .execution_adapters import PROVIDERS, Unsupported, access_denied
 
 
 def validate(request, control):
+    if not isinstance(request,dict) or not isinstance(control,dict):
+        raise ValueError('Use a bounded desktop request and observed control.')
+    for key in ('value','content'):
+        if key in request and (not isinstance(request[key],str) or len(request[key])>10000 or '\x00' in request[key]):
+            raise ValueError('Desktop text must be a bounded string up to 10,000 characters.')
     operation = request['operation']
     if operation == 'fill_text':
         content = request.get('content')
@@ -36,21 +42,22 @@ def execute(request, element, control, window, guard, observe=None,
     """
     validate(request, control)
     started, attempts = clock(), []
-    providers = providers if providers is not None else [provider() for provider in PROVIDERS]
+    trace_id=uuid.uuid4().hex
+    providers = providers if providers is not None else (provider() for provider in PROVIDERS)
     for provider in providers:
         guard()
         try:
             prepared = provider.prepare(element, control, request, window)
         except Exception as exc:
-            if isinstance(exc, ValueError):
+            if isinstance(exc, ValueError) or access_denied(exc):
                 raise  # Invalid parameters/read-only targets are not provider outages.
             attempts.append({'provider': provider.name, 'state': 'not_dispatched',
-                             'error_type': type(exc).__name__, 'reason': str(exc)[:180]})
+                             'error_type': type(exc).__name__, 'reason': 'Preparation unavailable: '+type(exc).__name__})
             continue
         guard()
         before = observe() if observe and not prepared.read and not prepared.no_op else None
         guard()
-        receipt = {'provider': provider.name, 'operation': request['operation'],
+        receipt = {'trace_id':trace_id,'provider': provider.name, 'operation': request['operation'],
                    'attempts': attempts, 'dispatched': not prepared.no_op, 'verified': False}
         error = None
         if not prepared.no_op:
@@ -62,7 +69,7 @@ def execute(request, element, control, window, guard, observe=None,
                     if prepared.call() is False:
                         error = 'The input method reported failure after dispatch.'
                 except Exception as exc:
-                    error = type(exc).__name__ + ': ' + str(exc)[:180]
+                    error = 'Input outcome uncertain: '+type(exc).__name__
         # Once input was entered, inspect even on exception. Never try the next provider.
         deadline = clock() + 1.0
         while True:

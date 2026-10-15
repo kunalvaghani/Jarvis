@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-15 IST",
+  "priority": [
+    "jarvis-pointer",
+    "ufo",
+    "windows-mcp",
+    "cua",
+    "open-computer-use",
+    "agent-s"
+  ],
+  "frameworks_fully_installed_by_this_update": 0,
+  "pinned_sources": [
+    {
+      "name": "ufo",
+      "url": "https://github.com/microsoft/ufo",
+      "revision": "a795552d976c4c019d7c2f778a0effb5cef7de6b"
+    },
+    {
+      "name": "windows-mcp",
+      "url": "https://github.com/cursortouch/windows-mcp",
+      "revision": "f51d6f14da57c290dac44f0f465c37c45ca4f394"
+    },
+    {
+      "name": "cua",
+      "url": "https://github.com/trycua/cua",
+      "revision": "35751f65f121ccb93bf4434bb453b97b58ad4ca7"
+    },
+    {
+      "name": "open-computer-use",
+      "url": "https://github.com/opensymph/open-computer-use",
+      "revision": "5b433b98019c18201a15d11e8c3cb0010879a3d8"
+    },
+    {
+      "name": "agent-s",
+      "url": "https://github.com/simular-ai/Agent-S",
+      "revision": "3aa272d23d2994c7bbde1acbbe0ef8e8d06b8693"
+    }
+  ],
+  "windows_mcp_retained_runtime_text_hash_matches": true,
+  "new_dependencies": [],
+  "new_services": [],
+  "scope": "Static/read-only source census; no full upstream reinstall or live COM/provider claim."
+}

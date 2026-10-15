@@ -1,5 +1,11 @@
 # GPU allocation by inference phase
 
+**Later Phase 2 upgrade — 2026-10-15 IST:** [Current policy and verification](phase2-gpu-voice-ui.md)
+add shared F5/Whisper inference leases, a 3850 MiB admission ceiling, bounded
+contexts and owned-server environment settings. Earlier audit statements below
+about native speech being outside the coordinator describe their earlier source
+version. Active CUDA kernels still cannot be forcibly preempted.
+
 ## Audit follow-up — 2026-10-15 IST
 
 Lease input is bounded to 200,000 characters, depth12/4096 values and128 queued

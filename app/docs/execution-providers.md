@@ -1,5 +1,14 @@
 # Ordered Windows execution providers
 
+<!-- prompt13-audit -->
+**2026-10-15 desktop-control audit:** Current pointer-first order is preserved.
+Delayed touch re-admits target geometry/focus/hit-test and visual-point window
+guards; thread DPI context is restored. Malformed pointer settings and worker
+responses fail closed. Provider errors are categorical and traceable; uncertain
+actions are never replayed. [Executed fixture scope, live blockers and tradeoffs](../artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Historical images/results below keep their dates; no new live desktop check.
+<!-- /prompt13-audit -->
+
 **2026-10-08 update:** Native activation now displays Jarvis's disposable cyan J
 cursor and uses accessibility patterns throughout the provider chain. The final
 Agent-S adaptation refuses a missing pattern instead of moving/clicking the

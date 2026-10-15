@@ -26,6 +26,25 @@ class KBDLLHOOKSTRUCT(ctypes.Structure):
                 ('time', wintypes.DWORD), ('dwExtraInfo', ctypes.c_size_t)]
 
 
+class KEYBDINPUT(ctypes.Structure):
+    _fields_ = [('wVk',wintypes.WORD),('wScan',wintypes.WORD),('dwFlags',wintypes.DWORD),
+                ('time',wintypes.DWORD),('dwExtraInfo',ctypes.c_size_t)]
+
+
+class MOUSEINPUT(ctypes.Structure):
+    _fields_ = [('dx',wintypes.LONG),('dy',wintypes.LONG),('mouseData',wintypes.DWORD),
+                ('dwFlags',wintypes.DWORD),('time',wintypes.DWORD),('dwExtraInfo',ctypes.c_size_t)]
+
+
+class INPUTUNION(ctypes.Union):
+    _fields_ = [('ki',KEYBDINPUT),('mi',MOUSEINPUT)]
+
+
+class INPUT(ctypes.Structure):
+    _anonymous_ = ('value',)
+    _fields_ = [('type',wintypes.DWORD),('value',INPUTUNION)]
+
+
 class PushToWrite:
     """Key state machine; the Windows hook feeds key(vk, down, injected)."""
     def __init__(self, on_change, hold_seconds=0.2, send=None, clock=time.monotonic):
@@ -37,7 +56,8 @@ class PushToWrite:
         self.ctrl = self.alt = self.other = self.combo = False
         self.latched = False  # Hands-free writing: on without holding the keys.
         self.last_write = 0.
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
+        self.hold_epoch = 0
         self.thread = None
         self.thread_id = None
         self.closed = threading.Event()
@@ -49,6 +69,11 @@ class PushToWrite:
             return False  # Jarvis's own typing and the mask key pass through untouched.
         block = False
         if self.latched:
+            with self.lock:
+                if vk == VK_LCONTROL:self.ctrl = down
+                if vk == VK_LMENU:self.alt = down
+                self.combo = False
+                self.hold_epoch += 1
             if vk == 0x1B and down:  # Esc ends hands-free writing.
                 self.latch(False)
             return False
@@ -56,16 +81,22 @@ class PushToWrite:
             if vk == VK_LCONTROL:
                 self.ctrl = down
             elif vk == VK_LMENU:
+                self.alt = down  # Even a failed injection must observe the physical release.
                 if not down and self.combo and not self.other:
-                    self.send()  # Mask key, then the Alt release: no menu-shortcut mode.
-                    block = True
-                self.alt = down
+                    try:
+                        self.send()  # Only block when the replacement release succeeded.
+                        block = True
+                    except Exception:
+                        block = False  # Let the real Alt-up reach Windows.
             elif down:
                 self.other = True
             both = self.ctrl and self.alt
             if both and not self.combo:
                 self.combo, self.other, started = True, False, self.clock()
-                threading.Thread(target=self._arm, args=(started,), daemon=True).start()
+                self.hold_epoch += 1
+                threading.Thread(target=self._arm, args=(started,self.hold_epoch), daemon=True).start()
+            if not both or self.other:
+                self.hold_epoch += 1
             if not self.ctrl and not self.alt:
                 self.combo = self.other = False
             stop = self.active.is_set() and (not both or self.other)
@@ -86,15 +117,16 @@ class PushToWrite:
         """When hands-free writing last typed something (None when it's off)."""
         return max(self.last_write, 0.) if self.latched else None
 
-    def _arm(self, started):
+    def _arm(self, started, epoch=None):
         while self.clock() - started < self.hold_seconds:
             if self.closed.is_set():
                 return
             time.sleep(.02)
         with self.lock:
-            ready = self.ctrl and self.alt and self.combo and not self.other and not self.active.is_set()
-        if ready:
-            self._set(True)
+            ready = (not self.closed.is_set() and (epoch is None or epoch == self.hold_epoch)
+                     and self.ctrl and self.alt and self.combo and not self.other and not self.active.is_set())
+            if ready:
+                self._set(True)
 
     def _set(self, value, discard=False):
         if value:
@@ -112,9 +144,13 @@ class PushToWrite:
     @staticmethod
     def _send_mask_and_alt_up():
         user = ctypes.WinDLL('user32', use_last_error=True)
-        user.keybd_event(VK_MASK, 0, 0, 0)
-        user.keybd_event(VK_MASK, 0, KEYEVENTF_KEYUP, 0)
-        user.keybd_event(VK_LMENU, 0, KEYEVENTF_KEYUP, 0)
+        events = (INPUT*3)(*(INPUT(type=1,ki=KEYBDINPUT(wVk=key,dwFlags=flags)) for key,flags in
+                               ((VK_MASK,0),(VK_MASK,KEYEVENTF_KEYUP),(VK_LMENU,KEYEVENTF_KEYUP))))
+        user.SendInput.argtypes = (wintypes.UINT,ctypes.POINTER(INPUT),ctypes.c_int)
+        user.SendInput.restype = wintypes.UINT
+        if user.SendInput(3,events,ctypes.sizeof(INPUT)) != 3:
+            user.keybd_event(VK_MASK,0,KEYEVENTF_KEYUP,0)
+            raise OSError('Modifier masking incomplete; physical Alt release must pass through.')
 
     # --- Windows hook ---
     def start(self):
@@ -124,8 +160,11 @@ class PushToWrite:
 
     def stop(self):
         self.closed.set()
-        if self.active.is_set():
-            self._set(False)
+        with self.lock:
+            self.hold_epoch += 1
+            self.ctrl = self.alt = self.other = self.combo = self.latched = False
+            if self.active.is_set():
+                self._set(False)
         if self.thread_id:
             ctypes.WinDLL('user32').PostThreadMessageW(self.thread_id, WM_QUIT, 0, 0)
 

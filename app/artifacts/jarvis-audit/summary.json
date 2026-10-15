@@ -1,89 +1,89 @@
 {
   "catalog_counts": {
-    "PASS": 354,
+    "PASS": 411,
     "FAIL": 0,
-    "BLOCKED": 9,
+    "BLOCKED": 11,
     "SKIPPED": 0,
-    "NOT RUN": 821
+    "NOT RUN": 762
   },
   "by_tier": {
     "P0": {
-      "PASS": 87,
+      "PASS": 100,
       "BLOCKED": 5,
-      "NOT RUN": 204
+      "NOT RUN": 191
     },
     "P1": {
-      "PASS": 190,
-      "BLOCKED": 2,
-      "NOT RUN": 437
+      "PASS": 221,
+      "BLOCKED": 4,
+      "NOT RUN": 404
     },
     "P2": {
-      "PASS": 77,
+      "PASS": 90,
       "BLOCKED": 2,
-      "NOT RUN": 180
+      "NOT RUN": 167
     }
   },
   "by_category": {
     "config": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "contract": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "edge": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 26,
+      "NOT RUN": 48
     },
     "fault": {
-      "PASS": 44,
-      "NOT RUN": 104
+      "PASS": 52,
+      "NOT RUN": 96
     },
     "idempotency": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "load": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "observability": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "performance": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "privacy": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "race": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "recovery": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 26,
+      "NOT RUN": 48
     },
     "resource": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     },
     "scenario": {
-      "PASS": 134,
-      "BLOCKED": 9,
-      "NOT RUN": 301
+      "PASS": 151,
+      "BLOCKED": 11,
+      "NOT RUN": 282
     },
     "security": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 26,
+      "NOT RUN": 48
     },
     "semantic": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 13,
+      "NOT RUN": 24
     }
   },
   "runs": {
@@ -176,6 +176,22 @@
     "modules/11-skill-selection/full-regression.xml": {
       "PASS": 2355,
       "BLOCKED": 9
+    },
+    "modules/12-tool-registry/cases-and-contracts.xml": {
+      "PASS": 37
+    },
+    "modules/12-tool-registry/full-regression.xml": {
+      "PASS": 2392,
+      "BLOCKED": 9
+    },
+    "modules/13-desktop-control/cases-and-contracts.xml": {
+      "PASS": 191,
+      "BLOCKED": 2
+    },
+    "modules/13-desktop-control/full-regression.xml": {
+      "PASS": 2423,
+      "BLOCKED": 11,
+      "SKIPPED": 10
     },
     "neighbor-tests.xml": {
       "PASS": 133

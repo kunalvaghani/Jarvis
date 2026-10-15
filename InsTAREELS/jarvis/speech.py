@@ -100,6 +100,10 @@ class Speech:
         self.responses = None
         self.voice_log = None
         self.outstanding = {}  # Kokoro request id -> generation
+        self.submitted = {}  # Retained only until playback completes or is cancelled.
+        self.submitted_at = {}
+        self.audio_committed = set()
+        self.first_audio_seconds = None
         self.next_id = 0
         self.last_progress = time.monotonic()
         self.worker_engine = None
@@ -165,6 +169,7 @@ class Speech:
                 return
             boundary = max(content.rfind(mark, len(spoken)) for mark in (". ", "! ", "? ", "\n\n"))
             if f5:
+                from .speech_normalizer import opening_clause
                 # A sentence can finish at the stream edge before another token arrives.
                 ends = [match.end() for match in re.finditer(r'[.!?](?=\s|$)', content)
                         if match.end() > len(spoken) and match.end()-len(spoken) >= 24]
@@ -177,6 +182,10 @@ class Speech:
                                if match.end() > len(spoken) and 32 <= match.end()-len(spoken) <= 120]
                     if clauses:
                         boundary = clauses[0]-1
+                if not spoken and boundary < 0:
+                    head = opening_clause(content)
+                    if head is not None:
+                        boundary = head - 1
             if boundary < 0 or (boundary + 1 - len(spoken) < 25 and spoken):
                 self.streamed = spoken
                 return
@@ -199,6 +208,9 @@ class Speech:
                 else:
                     self.process.kill()
             self.outstanding.clear()
+            self.submitted.clear()
+            self.submitted_at.clear()
+            self.audio_committed.clear()
             self.streamed = None
             self._end_output()
             while True:
@@ -226,6 +238,7 @@ class Speech:
                 'ready':self.worker_ready.is_set() and not self.worker_init_error,
                 'fallback':sorted(self.failed_backends),'pending':len(self.outstanding),
                 'queue':self.queue.qsize(),'speaking':self.speaking.is_set(),
+                'first_audio_seconds':self.first_audio_seconds,
                 'closed':self.closed.is_set(),'restart_required':self.restart_required}
 
     def close(self):
@@ -263,6 +276,9 @@ class Speech:
             self.worker_engine = None
             self.worker_ready.clear()
             self.outstanding.clear()
+            self.submitted.clear()
+            self.submitted_at.clear()
+            self.audio_committed.clear()
             if process:
                 if process.poll() is None:
                     process.kill()
@@ -322,6 +338,9 @@ class Speech:
                             if self.outstanding and not self.closed.is_set():
                                 self.report('repair','Voice connection closed; pending audio was discarded, not replayed. A new request can restart the owned worker.')
                             self.outstanding.clear()
+                            self.submitted.clear()
+                            self.submitted_at.clear()
+                            self.audio_committed.clear()
                             self._end_output()
             threading.Thread(target=read, daemon=True).start()
         # Do not hold the synthesis/ownership lock while a cold model loads:
@@ -353,7 +372,7 @@ class Speech:
         except (ValueError,RecursionError):
             return
         if not isinstance(row,dict):return
-        flags=('ready','done','started','audio_ready','stopped','playback')
+        flags=('ready','done','started','audio_ready','stopped','playback','safe_to_retry')
         if any(key in row and type(row[key]) is not bool for key in flags):return
         if 'progress' in row and (type(row['progress']) is not int or not 0<=row['progress']<1000000):return
         if 'error' in row and not isinstance(row['error'],str):return
@@ -362,6 +381,11 @@ class Speech:
         if request is not None and (type(request) is not int or not 0<request<2**63):return
         with self.lock:
             if process is not None and process is not self.process:return
+            if request in self.outstanding and any(row.get(flag) is True for flag in ('audio_ready','started','playback')):
+                self.audio_committed.add(request)
+            if request in self.submitted_at and row.get('started') is True:
+                self.first_audio_seconds = round(time.monotonic()-self.submitted_at[request],3)
+                self.submitted_at.pop(request,None)
             if row.get('ready') is True:
                 self.worker_ready.set()
                 self.last_progress = time.monotonic()
@@ -372,10 +396,23 @@ class Speech:
                     self.worker_ready.set()
                 self.restart_required = True
                 if request in self.outstanding and self.outstanding[request] == self.generation and not self.closed.is_set():
-                    self.report("warning", "Voice playback failed; the answer remains in the transcript. A new request can restart the owned voice worker.")
+                    content = self.submitted.get(request)
+                    backend = self.worker_engine
+                    if row.get('safe_to_retry') is True and request not in self.audio_committed and content and backend in {'f5','kokoro'}:
+                        self.failed_backends.add(backend)
+                        try:self.queue.put_nowait((self.generation,content))
+                        except queue.Full:self.report('warning','Voice fallback queue full; the answer remains in the transcript.')
+                    else:
+                        self.report("warning", "Voice playback failed; the answer remains in the transcript. A new request can restart the owned voice worker.")
                 self.outstanding.pop(request, None)
+                self.submitted.pop(request, None)
+                self.submitted_at.pop(request,None)
+                self.audio_committed.discard(request)
             elif row.get("done"):
                 self.outstanding.pop(request, None)
+                self.submitted.pop(request, None)
+                self.submitted_at.pop(request,None)
+                self.audio_committed.discard(request)
             if request in self.outstanding:self.last_progress = time.monotonic()
             if not self.outstanding:
                 self._end_output()
@@ -402,6 +439,8 @@ class Speech:
             request = self.next_id
             payload = {**payload, "id": request}
             self.outstanding[request] = generation
+            self.submitted[request] = content
+            self.submitted_at[request] = time.monotonic()
             self.last_progress = time.monotonic()
             self._begin_output(content)
             self.process.stdin.write(json.dumps(payload, ensure_ascii=False) + "\n")

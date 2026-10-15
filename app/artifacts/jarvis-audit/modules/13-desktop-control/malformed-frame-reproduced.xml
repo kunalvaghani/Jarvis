@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.659" timestamp="2026-10-15T21:26:37.675280+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_desktop_control_audit" name="test_malformed_worker_frame_stops_owned_worker_without_replay" time="0.239"><failure message="AttributeError: 'list' object has no attribute 'get'">tests\test_desktop_control_audit.py:81: in test_malformed_worker_frame_stops_owned_worker_without_replay
+    with pytest.raises(RuntimeError,match='without replay'):worker.request({'operation':'activate'})
+jarvis\ui_transport.py:104: in request
+    if result.get("transport_error") or result.get("id") != self.serial:
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase></testsuite></testsuites>

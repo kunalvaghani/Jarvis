@@ -1,5 +1,32 @@
 # Jarvis — local Windows voice assistant
 
+**GPU/voice/UI upgrade — 2026-10-15 IST:** [Phase 2 changes](docs/phase2-gpu-voice-ui.md)
+add bounded Ollama contexts and server settings, shared native inference leases,
+shared-memory PCM, speech normalization, safer modifier release, and coalesced UI
+telemetry with DAG state labels. [Verification and unmet targets](artifacts/phase2_gpu_voice_verified.md)
+include real local model/synthesis probes; sub-500 ms F5 first audio is not achieved.
+The guide includes a current rendered Pip/island fixture, accurately labelled.
+
+**System reference — 2026-10-15 IST:** The [system map](docs/system-map.md)
+collects features, skills, tools, models, software, repositories and architecture.
+Its [connection table](docs/system-map.md#13-workflow--skill--tool--model-connections)
+shows how requests reach skills, workers, models, verification and memory.
+Configured, historical and live-unverified capabilities are distinguished; this
+documentation update adds no live feature validation.
+
+<!-- prompt13-audit -->
+**Desktop-control audit — 2026-10-15 IST:** Eight reproduced defects fixed:
+COM/Win32/Python permission denial stops fallback; delayed touch rechecks target/window admission;
+DPI context is restored; malformed pointer settings and IPC frames fail closed;
+request text is bounded and router errors carry categories/UUIDs.
+Provider order stays pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S.
+[Assertions, measured tradeoffs and rollback](artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Verification: **2,423 regression PASS / 21 blocked skips**;
+**191 targeted PASS / 2 blocked skips**; Prompt13 **30 PASS / 2 BLOCKED**,
+launcher **repair_required** (Docker/Ollama unavailable; F5 check timed out). Live150% DPI and secure desktop remain unverified; no live
+Notepad/Calculator or production desktop success is claimed.
+<!-- /prompt13-audit -->
+
 <!-- prompt12-audit -->
 **Tool-registry audit — 2026-10-15 IST:** All 24 built-in tools now have typed argument
 contracts checked before any report or dispatch. Approval claims inside a proposal are

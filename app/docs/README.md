@@ -1,5 +1,7 @@
 # Jarvis documentation
 
+- [GPU/model/voice/UI Phase 2, configuration, current rendered preview and verification limits — 2026-10-15 IST](phase2-gpu-voice-ui.md)
+
 Start with the [application guide](../README.md) and [project structure](project-structure.md).
 For a one-page overview of features, skills, tools, models, workflows, software
 and repositories and how they connect, see the [system map](system-map.md).

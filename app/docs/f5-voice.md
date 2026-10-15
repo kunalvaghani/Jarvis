@@ -1,5 +1,11 @@
 # F5-TTS voice integration
 
+**Phase 2 — 2026-10-15 IST:** [Current changes and measurements](phase2-gpu-voice-ui.md)
+add shared native inference leases, bounded shared-memory PCM, English speech
+normalization, opening-clause lookahead and confirmed pre-audio fallback. The
+500 ms first-audio target is unmet; historical timing/voice checks below retain
+their original scope. No new listening-quality acceptance is claimed.
+
 **Audit follow-up — 2026-10-15 IST:** Missing reference/environment or cold worker
 initialization failure now selects installed Kokoro CPU, then installed Piper.
 The worker must report ready before receiving text; startup waits at most 60 s

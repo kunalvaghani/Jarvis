@@ -1,0 +1,44 @@
+[
+  {
+    "url": "https://github.com/microsoft/UFO/releases/latest",
+    "checked": "2026-10-15 IST",
+    "answer": "- Current release tag/version: v3.0.10\n- Exact publication date: Not shown\n- Canonical URL: https://github.com/microsoft/UFO/releases/latest\n- Windows UI Automation/focus/permission or compatibility changes: Not mentioned",
+    "canonical": "https://github.com/microsoft/UFO/releases/tag/v3.0.10",
+    "status": 200
+  },
+  {
+    "url": "https://github.com/CursorTouch/Windows-MCP/releases/latest",
+    "checked": "2026-10-15 IST",
+    "answer": "Release tag/version: v0.8.8\nPublication date: 10 Oct 01:33\nCanonical URL: https://github.com/CursorTouch/Windows-MCP/releases/latest\nWindows UI Automation/focus/permission or compatibility changes:\n- Run UIA-bound tools on the event-loop thread to preserve COM affinity by @legendteddy in #449\n- fix(tree): allow excluding processes from UIA traversal by @legendteddy in #450\n- Run UIA-affine tools on a dedicated worker thread by @legendteddy in #451",
+    "canonical": "https://github.com/CursorTouch/Windows-MCP/releases/tag/v0.8.8",
+    "status": 200
+  },
+  {
+    "url": "https://github.com/trycua/cua/releases/latest",
+    "checked": "2026-10-15 IST",
+    "answer": "- Current release tag/version: cua-spaces-v0.9.2\n- Exact publication date: Not shown\n- Canonical URL: https://github.com/trycua/cua/releases/latest\n- Windows UI Automation/focus/permission or compatibility changes: Not shown",
+    "canonical": "https://github.com/trycua/cua/releases/tag/cua-spaces-v0.9.2",
+    "status": 200
+  },
+  {
+    "url": "https://github.com/opensymph/open-computer-use/releases/latest",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://github.com/opensymph/open-computer-use/releases/tag/v1.2.0",
+    "status": 200,
+    "answer": "Current tag: v1.2.0\nExact publication date: Aug 25\nWindows input/security changes: The page does not contain information about Windows input/security changes."
+  },
+  {
+    "url": "https://github.com/simular-ai/Agent-S/releases/latest",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://github.com/simular-ai/Agent-S/releases/tag/v0.3.2",
+    "status": 200,
+    "answer": "Current tag: v0.3.2\nExact publication date: Dec 16, 2025\nWindows input/security changes: Not on the page."
+  },
+  {
+    "url": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setthreaddpiawarenesscontext",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setthreaddpiawarenesscontext",
+    "status": 200,
+    "answer": "**DPI context restoration:**\nYou can use this value to restore the old **DPI_AWARENESS_CONTEXT** after overriding it with a predefined value.\n\n**Input privilege limitations:**\nThe provided page does not document input privilege limitations."
+  }
+]

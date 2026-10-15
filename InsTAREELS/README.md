@@ -1,5 +1,45 @@
 # Jarvis — local Windows voice assistant
 
+**GPU/voice/UI upgrade — 2026-10-15 IST:** [Phase 2 changes](docs/phase2-gpu-voice-ui.md)
+add bounded Ollama contexts and server settings, shared native inference leases,
+shared-memory PCM, speech normalization, safer modifier release, and coalesced UI
+telemetry with DAG state labels. [Verification and unmet targets](artifacts/phase2_gpu_voice_verified.md)
+include real local model/synthesis probes; sub-500 ms F5 first audio is not achieved.
+The guide includes a current rendered Pip/island fixture, accurately labelled.
+
+**System reference — 2026-10-15 IST:** The [system map](docs/system-map.md)
+collects features, skills, tools, models, software, repositories and architecture.
+Its [connection table](docs/system-map.md#13-workflow--skill--tool--model-connections)
+shows how requests reach skills, workers, models, verification and memory.
+Configured, historical and live-unverified capabilities are distinguished; this
+documentation update adds no live feature validation.
+
+<!-- prompt13-audit -->
+**Desktop-control audit — 2026-10-15 IST:** Eight reproduced defects fixed:
+COM/Win32/Python permission denial stops fallback; delayed touch rechecks target/window admission;
+DPI context is restored; malformed pointer settings and IPC frames fail closed;
+request text is bounded and router errors carry categories/UUIDs.
+Provider order stays pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S.
+[Assertions, measured tradeoffs and rollback](artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Verification: **2,423 regression PASS / 21 blocked skips**;
+**191 targeted PASS / 2 blocked skips**; Prompt13 **30 PASS / 2 BLOCKED**,
+launcher **repair_required** (Docker/Ollama unavailable; F5 check timed out). Live150% DPI and secure desktop remain unverified; no live
+Notepad/Calculator or production desktop success is claimed.
+<!-- /prompt13-audit -->
+
+<!-- prompt12-audit -->
+**Tool-registry audit — 2026-10-15 IST:** All 24 built-in tools now have typed argument
+contracts checked before any report or dispatch. Approval claims inside a proposal are
+stripped, malformed or deeply nested JSON gives typed errors, concurrent appends to one
+file are serialized in-process, and emitted tool reports redact credentials. Tool
+evidence is unchanged. Failure events carry a category and results carry a correlation ID.
+`requests`/`urllib3` were already current. [Reproductions, changes, benchmarks and
+limits](artifacts/jarvis-audit/modules/12-tool-registry/inventory.md).
+Verification: **2,392 regression PASS / 9 blocked skips** (other modules); Prompt12
+**32 PASS** (18 PASS / 13 FAIL on pre-change code), launcher **ready**. Warm p50 latency is
+unchanged at about 40 ms. Offline fixtures only; live GUI, accounts and network not exercised.
+<!-- /prompt12-audit -->
+
 <!-- prompt11-audit -->
 **Skill-selection audit — 2026-10-15 IST:** Bounded guide validation and provenance,
 observed procedure reliability and reused description tokens retain existing tool,

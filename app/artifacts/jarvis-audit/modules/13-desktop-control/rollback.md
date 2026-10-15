@@ -1,3 +1,5 @@
-# Rollback / resume
+# Rollback and deterministic resume
 
-[Scoped restoration and exact ID continuation](../../rollback.md). Preserve user changes and credentials.
+Preserve the existing dirty tree. Review source.patch/source-hashes.json, then reverse only Prompt13 hunks; never git reset/clean or replace the whole checkout with older files. Ignored local preimages: .jarvis-runtime/jarvis-audit/module13-pre/<relative-path-with-__>. Root overview is root-README.md. app/ canonical; InsTAREELS alias must not be separately patched. Preserve later/user/Prompt12 changes. No commit/deployment/package/model/settings change to undo; public patch is a portable scoped rollback aid.
+
+Run commands.txt with the existing main environment and isolated fixtures; benchmark generation precedes the catalog assertion that checks its measurements. Keep <=2 small test workers and no parallel heavy GPU tests. Read the selected next module prompt before continuing; global remaining-case-ids.txt has exact unresolved IDs. JRV-13-004 needs an authorized isolated desktop at150% DPI/multi-monitor; JRV-13-007 needs an authorized secure-desktop/UAC fixture. Do not change personal display settings, elevate, lock the session or generate real input to satisfy those blockers without permission. Existing full XML and readiness must correspond to accepted source; report script refuses failed/stale evidence. No blanket production sign-off.

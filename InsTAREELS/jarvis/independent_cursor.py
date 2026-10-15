@@ -185,7 +185,7 @@ def physical_point(x, y, hwnd, pid):
                 or win32process.GetWindowThreadProcessId(hwnd)[1] != pid or win32gui.GetAncestor(hit, 2) != hwnd):
             raise ValueError('The target window changed or is covered; no click was sent.')
     guard()
-    return Prepared(lambda: tap(x, y)), [x - 12, y - 12, x + 12, y + 12], guard
+    return Prepared(lambda: tap(x, y, admit=guard)), [x - 12, y - 12, x + 12, y + 12], guard
 
 
 def activate_point(x,y,hwnd):

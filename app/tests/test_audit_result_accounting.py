@@ -23,6 +23,7 @@ def test_failed_catalog_variant_cannot_be_masked_by_later_pass(tmp_path):
     ('tests.test_questions_context_audit', 'BLOCKED: local model not installed', 'BLOCKED'),
     ('tests.test_model_routing_audit', 'BLOCKED: live entitlement not independently verified', 'BLOCKED'),
     ('tests.test_gpu_scheduler_audit', 'BLOCKED: speech lease protocol missing', 'BLOCKED'),
+    ('tests.test_desktop_control_audit', 'BLOCKED: no authorized live DPI/UAC fixture', 'BLOCKED'),
     ('tests.test_skill_selection_audit', 'BLOCKED: no validated PDF-edit adapter offered', 'BLOCKED'),
     ('tests.test_deliberation_audit', 'BLOCKED: deterministic research-before-action policy absent', 'BLOCKED'),
     ('tests.test_audit_completion_cases', 'optional fixture unavailable', 'SKIPPED'),

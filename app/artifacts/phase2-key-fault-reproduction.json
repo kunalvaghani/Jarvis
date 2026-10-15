@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "injection_error": "OSError",
+    "alt_tracked_down_after_release": true,
+    "writing_active_after_release": true,
+    "physical_release_blocked": null,
+    "stopped_timer_rearmed": true
+  },
+  "current": {
+    "injection_error": null,
+    "alt_tracked_down_after_release": false,
+    "writing_active_after_release": false,
+    "physical_release_blocked": false,
+    "stopped_timer_rearmed": false
+  }
+}

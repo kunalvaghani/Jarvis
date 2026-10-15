@@ -1,0 +1,7 @@
+Actual exec session71840 completion, 2026-10-15 IST, exit_code0:
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  pywinauto UserWarning: Revert to STA COM threading mode
+- generated xml file: artifacts/jarvis-audit/modules/13-desktop-control/full-regression.xml -
+2422 passed, 21 skipped, 1 warning in 451.36s (0:07:31)
+
+Progress lines omitted. All fixture inputs used fake native providers/user32/pipe transports; no new live desktop trial.

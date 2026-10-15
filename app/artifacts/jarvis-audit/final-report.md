@@ -1,86 +1,61 @@
-# Jarvis audit — through Prompt12, 2026-10-15 IST
+# Jarvis audit — Prompt13 follow-up, 2026-10-15 IST
 
-**Prompt12: 32 fixture PASS; no failed, blocked or pending fixture cases.** On the pre-change code the same file gave 18 PASS / 13 FAIL / 1 not run. Seven defects were reproduced and fixed: missing contracts for built-in tool arguments, untyped malformed replies, realtime non-object content, a concurrent append race, credentials echoed into tool reports, unhandled `RecursionError` from nested JSON, and an untyped missing realtime provider. Full suite **2,392 PASS / 9 BLOCKED skips** (all from earlier modules), 361.5 s; launcher `ready`. [Inventory](modules/12-tool-registry/inventory.md), [failures](modules/12-tool-registry/failures.md), [changes](modules/12-tool-registry/changes.md), [benchmarks](modules/12-tool-registry/benchmark-summary.json), [cases](modules/12-tool-registry/tests.jsonl), [compatibility](modules/12-tool-registry/compatibility.md), [rollback](modules/12-tool-registry/rollback.md), [full XML](modules/12-tool-registry/full-regression.xml).
+**Prompt13:30 catalog fixture PASS / 2 BLOCKED / 0 FAIL.** Full **2423 PASS / 21 skips**, 386.72s; targeted **191 PASS / 2 BLOCKED skips**. Launcher **repair_required**. [Full XML](modules/13-desktop-control/full-regression.xml),[targeted XML](modules/13-desktop-control/cases-and-contracts.xml),[actual completion](modules/13-desktop-control/full-run-completion.txt),[redacted readiness](modules/13-desktop-control/readiness.json). Counts overlap. These are fixture/regression checks. Readiness failed: Docker/Ollama unavailable, F5 check timed out; no service start attempted. Whole-system/live production acceptance remains open.
 
-Branch `audit/12-tool-registry` from `main` `1dd5ea3`. Offline fakes only: no real send, delete, account write, network call, dependency install or GPU use. Live GUI and account journeys: NOT RUN. Previous report: [final-report-before-module12.md](final-report-before-module12.md).
+Repo `1dd5ea3ff47bc9ee42ed6fbd27fc3f5b68335f41`, existing branch `audit/12-tool-registry`, Windows/Python3.10.6, Ryzen7/32GB/RTX3050 Laptop4GB target; CPU-only mocked desktop work. Existing dirty/Prompt12 work preserved, no new checkout/reset/commit/deploy/install/account write/personal setting/delete/model/real input. [Environment/run order/inventory](modules/13-desktop-control/inventory.md).
 
+## Source map, changes and measurement
 
-**Prompt11:31 fixture PASS / 1 BLOCKED; no pending or failed fixture cases.** Arbitrary PDF editing lacks a validated offered adapter. Full **2355 PASS / 9 BLOCKED skips**, 349.16s; targeted **157 PASS / 1 BLOCKED skip**. [Full XML](modules/11-skill-selection/full-regression.xml),[targeted XML](modules/11-skill-selection/cases-and-contracts.xml),[actual completion](modules/11-skill-selection/full-run-completion.txt),[launcher ready](modules/11-skill-selection/readiness.json). Suites overlap; existing COM warning persists. Whole-system/live production acceptance remains open.
-
-Repo `e9f6f735bc310d11e3cdecfbf95a85d96b170ec2`, branch `codex/jarvis-prove-fix-audit`, Windows/Python3.10.6, Ryzen7/32GB/RTX3050 Laptop4GB target. CPU-only guide work, no new heavyweight/GPU test. Existing dirty work preserved; no commit/deployment, account send/write, personal deletion, system setting, credentials or ability installation. [Environment, dependency/entry-point/source-map evidence matrix and execution order](modules/11-skill-selection/inventory.md).
-
-Eight pre-existing reproduced defects fixed: guide path/metadata validation, Hermes duplicate/missing resource validation/pre-open bounds, observed recipe ordering, missing utility environment and malformed validation handling. [Reproductions](modules/11-skill-selection/failures.md),[exact changed files/hashes](modules/11-skill-selection/files-changed.json),[scoped before/after diff](modules/11-skill-selection/source.patch),[rollback/resume](modules/11-skill-selection/rollback.md). Public source census10 native/210 verified Hermes/23 DeerFlow; utility proof stale before and after,0 offered. No helpers/providers newly activated.
-
-Same-machine metadata ranking warm p50/p95 **12.588/12.777→6.618/12.850ms**; cold p95 **20.267→8.671ms**. [50 measurements](modules/11-skill-selection/benchmarks.csv),[allocation/tradeoffs/scope](modules/11-skill-selection/benchmark-summary.json). All selected rankings identical on the fixture; no general semantic precision, TTFT/audio/VRAM or whole-task speed claim. Bounded cache retains description metadata, not goals; recognized credential descriptions bypass it. Cold allocation cost is explicit. [Earlier per-module metrics/report through10](final-report-before-module11.md) and linked predecessors preserve prior evidence.
-
-Official upstream pages checked today through Firecrawl: [Agent Skills](https://agentskills.io/client-implementation/adding-skills-support) (no date), [Hermes v0.22.2](https://github.com/NousResearch/hermes-agent/releases/tag/v0.22.2) (2026-10-15), [DeerFlow v2.1.0](https://github.com/bytedance/deer-flow/releases/tag/v2.1.0) (page24 Sep;2026 inferred). [Actual answers and compatibility limits](modules/11-skill-selection/upstream-checks.json),[pinned revisions/decision](modules/11-skill-selection/compatibility.md). No upstream/runtime installation assumed compatible without tests.
-
-## Risk and exact accounting
-
-Guidance does not grant permission; current registry, policy, scope, approvals and cancellation remain authoritative. Hashes/provenance establish consistency, not identity; reload metadata is not adversarial tamper-proof. Legacy procedure failure counts unavailable, rate is a smoothed estimate. No real GUI/account/native model/physical GPU/long soak validation in this module. Arbitrary PDF editing and utility revalidation require reviewed implementation/authorized checks; earlier acoustic, shared speech lease and mandatory unfamiliar-program research blockers remain. No whole-system security/production or universal two-second certificate.
-
-All1184 unique catalog IDs accounted: **{'PASS': 354, 'FAIL': 0, 'BLOCKED': 9, 'SKIPPED': 0, 'NOT RUN': 821}**. [Exact ledger](test-results.jsonl),[tier/category/run totals](summary.json),[32 Prompt11 IDs/scopes](modules/11-skill-selection/tests.jsonl),[remaining IDs](remaining-case-ids.txt). No pass inferred from JSONL ingestion. Prior reports and failures retained.
-
-| Tier | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
-| --- | --- | --- | --- | --- | --- |
-| P0 | 87 | 0 | 5 | 0 | 204 |
-| P1 | 190 | 0 | 2 | 0 | 437 |
-| P2 | 77 | 0 | 2 | 0 | 180 |
-
-| Category | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
-| --- | --- | --- | --- | --- | --- |
-| config | 11 | 0 | 0 | 0 | 26 |
-| contract | 11 | 0 | 0 | 0 | 26 |
-| edge | 22 | 0 | 0 | 0 | 52 |
-| fault | 44 | 0 | 0 | 0 | 104 |
-| idempotency | 11 | 0 | 0 | 0 | 26 |
-| load | 11 | 0 | 0 | 0 | 26 |
-| observability | 11 | 0 | 0 | 0 | 26 |
-| performance | 11 | 0 | 0 | 0 | 26 |
-| privacy | 11 | 0 | 0 | 0 | 26 |
-| race | 11 | 0 | 0 | 0 | 26 |
-| recovery | 22 | 0 | 0 | 0 | 52 |
-| resource | 11 | 0 | 0 | 0 | 26 |
-| scenario | 134 | 0 | 9 | 0 | 301 |
-| security | 22 | 0 | 0 | 0 | 52 |
-| semantic | 11 | 0 | 0 | 0 | 26 |
-
-## Source-map evidence and exact scoped files
-
-| Claim / entry point | Actual checked-out evidence | Proven boundary / limitation |
+| Documented claim / entry | Checked implementation | Executed proof / limit |
 | --- | --- | --- |
-| Native/custom/personal guides | skills/, custom-skills/, skill_memory.SkillMemory.refresh/context | 10 bundled; bounded50/source; builtin > custom > personal deterministic collision reporting; hot reload uses path/mtime/size, not adversarial metadata forgery protection |
-| Tool discovery | capabilities.rank_tools/runtime_context → ToolRegistry.search/catalog | Existing handlers only, prerequisites/scope/provider filters retained; unknown names diagnostic, not executable |
-| Trust/provenance | refresh → skill_read folder=@jarvis | Origin, relative path, SHA256 and untrusted_guidance label; registry policy/current authorization remain authoritative; hash is consistency, not authenticity |
-| Hermes references | hermes_skills.HermesSkills → skill_list/read folder=@hermes | 210 indexed SKILL.md contents verified,1090 indexed resources; unique bounded metadata, indexed exact resource/read budget, hashes checked; helpers not run |
-| DeerFlow references | deerflow.status/search_skills/read_skill → folder=@deerflow | 23 public guides present; existing neighboring fixture suite, no provider readiness inferred from guide availability |
-| Utility activation | utility_profiles.availability/tools → toolkits/registry | Separate environment exists but validation already stale before this update:0 offered. Missing/malformed/stale states fail closed. No arbitrary PDF-edit adapter offered |
-| Learned procedures | SkillMemory.record/context | Existing verified recipe preserved after failure; new success/attempt counts, relevance then smoothed rate then recency; historical missing failures not reconstructed |
-| Builtin and lifecycle policy | commands.py immutable dispatch; ToolRegistry.execute → check_policy/_execute/event | Existing builtin wins; denied/cancelled tools never dispatched in fixtures; categorical UUID metadata excludes payloads; no replay/helper queue |
+| Ordered providers | execution_adapters.PROVIDERS → execution_router.execute | Actual order jarvis-pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S; five adapted ports, not five installed frameworks; only preparation fallback, deny/dispatch failure stops |
+| Existing app/keyboard path | actions.Desktop.capture/type, Actions._execute, window_focus.focus_app | Existing executable/focus checks and per-character foreground/SendInput checks retained; no typing-speed change/live Notepad proof. App focus helpers can select the first matching executable/Z-order window; not general duplicate-window disambiguation |
+| UIA target/focus | UIControls._handle → UITransport → ui_worker.perform/routed.guard | Explicit HWND/PID/foreground/visible/enabled/runtime ID/name/role/rectangle; fake changed foreground/lock0 refuses input, duplicate labels clarify; no live app launch certification |
+| Touch/coordinates | JarvisPointer.prepare → jarvis_pointer.tap | Temporary physical-pixel DPI context restored; exact runtime ID/geometry/focus/hit-test repeated after idle and immediately before touch; fake150% geometry injects one down/up at300,225, moved target gets0 touches |
+| Visual-point fallback | independent_cursor.at_point/activate_point | Existing window/PID/coverage guard now passed into tap admission; no whole-scene capture during every idle wait, so same-window scene races remain possible |
+| Readback and no replay | execution_router + direct_execution.run + TaskState | Exact fake-native field value, no-op fresh state, failed/hung dispatch sent once, no next provider, direct runner pauses on unverified result; postcondition observations are bounded but COM itself can block |
+| IPC failure ownership | UITransport.request/_stop_process/_backoff/close | Malformed/mismatched frames stop only owned worker, no replay;100 requests over5 threads×20 rounds have unique serial IDs; cancellation/backoff/intentional Stop preserved |
+| Privacy/authority | categorical router errors/trace UUIDs, ui_worker.record, ToolRegistry policy | Synthetic secret excluded from new router receipt/message; existing journal omits labels/text. Current registry approval/allowlist still authoritative; not a general personal-data scrubber |
+| Source/dependency truth | integrations/execution-primitives/source-manifest + retained licenses | Pinned selected sources; Windows-MCP pattern subset runs existingPython3.10.6, full Python3.14 server not installed; licenses preserved; no package/model/service added |
 
 
-Changed files (not the entire pre-existing dirty tree); before/after hashes and artifact inventory are linked above:
+Eight reproduced faults fixed; [before failures](modules/13-desktop-control/failures.md),[scoped changes](modules/13-desktop-control/changes.md),[exact files and SHA256s](modules/13-desktop-control/files-changed.json),[source patch](modules/13-desktop-control/source.patch),[rollback/resume](modules/13-desktop-control/rollback.md). Baseline118 PASS. Current order remains pointer-first, not the older UIA-first map claim. Late pointer guards cover semantic target/window admission; visual same-window scene and final-check/input races remain limits. Malformed protocol cleanup respects owned worker/backoff/no replay.
 
-- app/jarvis/capabilities.py
-- app/jarvis/skill_memory.py
-- app/jarvis/hermes_skills.py
-- app/jarvis/utility_profiles.py
-- app/jarvis/agent_tools.py
-- app/config/runtime_manifest.json
-- app/scripts/verification/audit_catalog.py
-- app/tests/test_audit_result_accounting.py
-- app/tests/test_skill_selection_audit.py
-- app/scripts/verification/verify_skill_selection_audit.py
-- app/scripts/verification/report_skill_selection_audit.py
-- app/README.md
-- app/docs/skills-and-learning.md
-- app/docs/runtime-capabilities.md
-- app/docs/hermes-skills-and-comparison.md
-- app/docs/utility-skills.md
-- app/docs/system-map.md
-- README.md (root overview)
+Paired synthetic router warm p50/p95 **0.02175/0.04360→0.02440/0.03570ms**; cold p95 **0.06390→0.04860ms**. [50 trials](modules/13-desktop-control/benchmarks.csv),[peak allocation/scope](modules/13-desktop-control/benchmark-summary.json). First-success provider construction6→1; warm median increases slightly and tail timings vary; no speedup claim.0 real effects, one fake dispatch/readback each. No native COM/desktop/GPU/TTFT/audio measurement. Prior per-module results/metrics remain in [preserved previous report](final-report-before-module13.md) and linked predecessors; pre-existing [Prompt12 evidence](modules/12-tool-registry/inventory.md) is preserved independently, reconciled after review and a fresh [registry/accounting check](modules/13-desktop-control/accounting-followup.xml).
 
-## Enumerated modules
+Firecrawl official current pages: UFOv3.0.10(no displayed date), Windows-MCPv0.8.8(10Oct01:33,no year printed), CuaSpacesv0.9.2(no date), OpenComputerUsev1.2.0(Aug25,no year printed), Agent-Sv0.3.2(2025-12-16); [exact URLs/findings](modules/13-desktop-control/upstream-checks.json),[compatibility and Microsoft DPI guidance](modules/13-desktop-control/compatibility.md). Pinned ports/full-server separation and licenses retained; no untested upstream/runtime upgrade.
+
+## Risks, blockers and exact accounting
+
+Live150%DPI/multi-monitor and real UAC/secure-desktop tests blocked; no personal OS state changed. Physical admission/input is not atomic; visual-point idle wait lacks full-image recapture. Shared keyboard/focus/pointer compatibility restoration remains. Uncooperative COM can block until owned worker timeout; verification deadline is not forcible cancellation. Arbitrary model/GUI/business-task correctness, all elevated apps, long soak and physical GPU contention remain unverified. Existing acoustic/shared-speech-lease/unfamiliar-program-research/PDF blockers persist. Existing executable/Z-order app-focus selection is not general duplicate-window clarification. No production/security or universal two-second certificate.
+
+1184 unique catalog IDs: **{'PASS': 411, 'FAIL': 0, 'BLOCKED': 11, 'SKIPPED': 0, 'NOT RUN': 762}**. [All IDs/assertions](test-results.jsonl),[all32 Prompt13 IDs](modules/13-desktop-control/tests.jsonl),[remaining IDs](remaining-case-ids.txt),[machine-readable totals](summary.json). No pass inferred from JSONL ingestion. Existing module12 dedicated37 assertions were reviewed/rerun in a focused follow-up, resolving a missing catalog namespace;32 fixture cases now counted. This reporting-only change followed the final application full run; [fresh follow-up XML](modules/13-desktop-control/accounting-followup.xml) verifies it independently.
+
+
+| tier | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
+| --- | --- | --- | --- | --- | --- |
+| P0 | 100 | 0 | 5 | 0 | 191 |
+| P1 | 221 | 0 | 4 | 0 | 404 |
+| P2 | 90 | 0 | 2 | 0 | 167 |
+
+| category | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
+| --- | --- | --- | --- | --- | --- |
+| config | 13 | 0 | 0 | 0 | 24 |
+| contract | 13 | 0 | 0 | 0 | 24 |
+| edge | 26 | 0 | 0 | 0 | 48 |
+| fault | 52 | 0 | 0 | 0 | 96 |
+| idempotency | 13 | 0 | 0 | 0 | 24 |
+| load | 13 | 0 | 0 | 0 | 24 |
+| observability | 13 | 0 | 0 | 0 | 24 |
+| performance | 13 | 0 | 0 | 0 | 24 |
+| privacy | 13 | 0 | 0 | 0 | 24 |
+| race | 13 | 0 | 0 | 0 | 24 |
+| recovery | 26 | 0 | 0 | 0 | 48 |
+| resource | 13 | 0 | 0 | 0 | 24 |
+| scenario | 151 | 0 | 11 | 0 | 282 |
+| security | 26 | 0 | 0 | 0 | 48 |
+| semantic | 13 | 0 | 0 | 0 | 24 |
+
 
 | Module | Name | Status |
 | --- | --- | --- |
@@ -95,8 +70,8 @@ Changed files (not the entire pre-existing dirty tree); before/after hashes and 
 | 09 | deliberation | PARTIAL / MANDATORY UNFAMILIAR-PROGRAM RESEARCH BLOCKED |
 | 10 | dag-planning | FIXTURE COMPLETE / LIVE ACCEPTANCE UNVERIFIED |
 | 11 | skill-selection | 31 FIXTURE PASS / 1 BLOCKED; LIVE ACCEPTANCE UNVERIFIED |
-| 12 | tool-registry | PARTIAL |
-| 13 | desktop-control | PARTIAL |
+| 12 | tool-registry | 32 FIXTURE PASS; LIVE ACCEPTANCE UNVERIFIED |
+| 13 | desktop-control | 30 FIXTURE PASS / 2 BLOCKED; LIVE DESKTOP ACCEPTANCE UNVERIFIED |
 | 14 | browser-playwright | PARTIAL |
 | 15 | app-research | PARTIAL |
 | 16 | memory | PARTIAL |
@@ -122,4 +97,4 @@ Changed files (not the entire pre-existing dirty tree); before/after hashes and 
 | 36 | observability | PARTIAL |
 | 37 | e2e | PARTIAL |
 
-Earliest unresolved **JRV-04-001**; next NOT RUN **JRV-12-004**. Prompt11 unresolved **JRV-11-002**. Read the next requested prompt before proceeding;37 modules are not all complete.
+Earliest unresolved **JRV-04-001**; next NOT RUN **JRV-14-001**. Prompt13 unresolved **JRV-13-004/JRV-13-007**. Read the next requested prompt before continuing; all37 modules are not complete.

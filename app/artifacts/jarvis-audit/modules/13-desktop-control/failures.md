@@ -1,5 +1,7 @@
-# Status
+# Reproductions and fixes — 2026-10-15 IST
 
-{'NOT RUN': 32}
+Six initial failures: PermissionError preparation fell through; arbitrary provider exception payload was copied into uncertain-action messages/receipts; oversized target strings reached guard/provider; malformed/nonboolean pointer config enabled physical input; target guard could not run after up-to1.5s mouse-idle wait; thread DPI override was never restored. A seventh reproduced fault let a non-object worker frame raise AttributeError without stopping/backing off the owned worker. Final review reproduced an eighth defect: native COM E_ACCESSDENIED fell through despite the Python PermissionError fix. Shared COM HRESULT/Win32 denial classification now halts both router fallback and pointer preparation. All have executed regressions. The earlier full result2422 PASS/21 skips is preserved separately; the accepted full XML is rerun after this last correction.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+Corrections halt on permission denial, bound text before guard, use categorical errors/UUIDs, fail closed on malformed/missing config file (valid omitted option still defaults on), scope/restore DPI context, re-admit semantic target/hit-test/geometry after idle and before DOWN, propagate visual-point window guard, and reject malformed response/ID/result/error envelopes through existing no-replay cleanup. First targeted146 PASS. Initial expanded catalog had two fixture class-name errors (UIControlTests versus actual UITests), corrected without product behavior changes. The first baseline command referenced absent test_ui_transport.py; no tests ran in that invocation, then the actual baseline paths ran118 assertions; transport tests live in test_automation_upgrade.py. These are audit setup errors, not additional product defects.
+
+Final assertions have0 FAIL. Live DPI and UAC are two explicit BLOCKED catalog IDs; mocks do not certify them. Time-of-check/input races, visual-only same-window scene changes and uncooperative COM are practical limits, not claimed solved by these fixtures.

@@ -199,6 +199,19 @@ class TaskState:
         with self.lock:
             return json.loads(json.dumps(self.data.get("current")))
 
+    def ui_snapshot(self):
+        """Bounded metadata only; Tk must not wait on a durable checkpoint write."""
+        from itertools import islice
+        if not self.lock.acquire(blocking=False):return None
+        try:
+            current=self.data.get('current') or {}
+            steps=(current.get('dag') or {}).get('steps') or {}
+            return {'task_id':str(current.get('task_id',''))[:36],
+                    'status':str(current.get('status','idle'))[:32],
+                    'steps':[{'id':str(key)[:32],'status':str(value.get('status','pending'))[:32]}
+                             for key,value in islice(steps.items(),32) if isinstance(value,dict)]}
+        finally:self.lock.release()
+
     def set_project(self, project):
         with self.lock:
             current = self.data.get("current")

@@ -349,8 +349,8 @@
       "tests/test_toolkits.py",
       "tests/test_agent_runtime.py"
     ],
-    "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "status": "32 FIXTURE PASS; LIVE ACCEPTANCE UNVERIFIED",
+    "reason": "Existing37-assertion dedicated XML and current full regression reviewed; omitted catalog namespace now authorized, with fresh accounting/registry check. Original module12 source/evidence preserved."
   },
   {
     "number": 13,
@@ -358,19 +358,31 @@
     "title": "# PROMPT 13 \u2014 Windows UIA/UFO/Windows-MCP/CUA desktop automation",
     "prompt_sha256": "93738a2541b9b5f7f4e397ee4f4cfe6c570207a17f2b9d7a8a292caac33bef9c",
     "sources": [
+      "jarvis/execution_router.py",
+      "jarvis/execution_adapters.py",
+      "jarvis/jarvis_pointer.py",
+      "jarvis/independent_cursor.py",
+      "jarvis/ui_transport.py",
+      "jarvis/ui_worker.py",
+      "jarvis/ui_controls.py",
+      "jarvis/visual_fallback.py",
       "jarvis/desktop_actions.py",
-      "jarvis/actions.py",
-      "integrations/execution-primitives",
-      "integrations/execution-upstream",
-      "docs/windows-commands.md"
+      "docs/execution-providers.md",
+      "docs/independent-cursor.md",
+      "docs/windows-commands.md",
+      "docs/system-map.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_desktop_control_audit.py",
+      "tests/test_execution_router.py",
       "tests/test_ui_controls.py",
-      "tests/test_visual_fallback.py"
+      "tests/test_jarvis_pointer.py",
+      "tests/test_visual_fallback.py",
+      "tests/test_automation_upgrade.py"
     ],
-    "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "status": "30 FIXTURE PASS / 2 BLOCKED; LIVE DESKTOP ACCEPTANCE UNVERIFIED",
+    "reason": "Provider/admission/physical-coordinate/focus/readback/uncertainty/protocol/privacy fixtures; live150%DPI and UAC require authorized isolated desktop. No real clicks/app launches/settings changes."
   },
   {
     "number": 14,

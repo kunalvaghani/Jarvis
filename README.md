@@ -1,5 +1,23 @@
 # Jarvis — local Windows voice assistant
 
+[GPU, model, voice and UI Phase 2 — 2026-10-15 IST](app/docs/phase2-gpu-voice-ui.md)
+adds bounded contexts, shared CUDA inference leases, shared-memory audio buffers,
+safer Push-to-Write and coalesced UI telemetry. [Measured verification and remaining gates](app/artifacts/phase2_gpu_voice_verified.md)
+keep live results separate from fixtures; the F5 first-audio target remains unmet.
+
+<!-- prompt13-audit -->
+**Desktop-control audit — 2026-10-15 IST:** Eight reproduced defects fixed:
+COM/Win32/Python permission denial stops fallback; delayed touch rechecks target/window admission;
+DPI context is restored; malformed pointer settings and IPC frames fail closed;
+request text is bounded and router errors carry categories/UUIDs.
+Provider order stays pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S.
+[Assertions, measured tradeoffs and rollback](app/artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Verification: **2,423 regression PASS / 21 blocked skips**;
+**191 targeted PASS / 2 blocked skips**; Prompt13 **30 PASS / 2 BLOCKED**,
+launcher **repair_required** (Docker/Ollama unavailable; F5 check timed out). Live150% DPI and secure desktop remain unverified; no live
+Notepad/Calculator or production desktop success is claimed.
+<!-- /prompt13-audit -->
+
 <!-- prompt12-audit -->
 **Tool-registry audit — 2026-10-15 IST:** All 24 built-in tools now have typed argument
 contracts checked before any report or dispatch. Approval claims inside a proposal are
@@ -212,6 +230,9 @@ installation entry point.
 For a one-page overview of every feature, skill, tool, model, workflow, piece
 of software and repository, and how they connect, see the
 [system map](app/docs/system-map.md).
+Updated **2026-10-15 IST** with a workflow-to-skill/tool/model connection table,
+configuration status and links to inventory sources. This is documentation review;
+it adds no live feature or readiness results.
 
 | Location | Purpose |
 | --- | --- |

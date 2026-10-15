@@ -11,6 +11,7 @@ import ctypes
 from ctypes import wintypes
 import threading
 import time
+from contextlib import contextmanager
 
 
 class POINTER_INFO(ctypes.Structure):
@@ -59,16 +60,25 @@ def wait_for_idle_mouse(user, clock=time.monotonic, sleep=time.sleep, quiet=.15,
     return False
 
 
-def tap(x, y, user=None, sleep=time.sleep, clock=time.monotonic):
+@contextmanager
+def physical_pixels(user):
+    """Use physical pixels temporarily; do not change the caller's DPI context."""
+    previous=None
+    try:
+        previous=user.SetThreadDpiAwarenessContext(ctypes.c_void_p(-4))
+        if not previous:raise ValueError('Cannot establish physical-pixel coordinates; no input sent.')
+        yield
+    finally:
+        if previous:user.SetThreadDpiAwarenessContext(previous)
+
+
+def tap(x, y, user=None, sleep=time.sleep, clock=time.monotonic, admit=None):
     """One physical tap at screen pixel (x, y). Never retried; raises before any input if unsafe."""
     user = user or user32()
-    with _lock:
-        try:
-            user.SetThreadDpiAwarenessContext(ctypes.c_void_p(-4))  # Physical pixels (per-monitor v2).
-        except (AttributeError, OSError):
-            pass
+    with _lock, physical_pixels(user):
         if not wait_for_idle_mouse(user, clock, sleep):
             raise ValueError("You are using the mouse, so Jarvis did not click. It will not retry on its own.")
+        if admit:admit() # Idle waiting can outlive the previous identity/focus/hit-test.
         if not _initialized[0]:
             if not user.InitializeTouchInjection(1, 0x3):  # One contact, no touch feedback ripple.
                 raise ValueError("Windows refused Jarvis's pointer (touch injection unavailable); no click was sent.")
@@ -83,6 +93,7 @@ def tap(x, y, user=None, sleep=time.sleep, clock=time.monotonic):
         info.orientation = 90
         info.pressure = 512
         info.pointerInfo.pointerFlags = FLAG_DOWN
+        if admit:admit() # Final read-only admission immediately before touch down.
         if not user.InjectTouchInput(1, ctypes.byref(info)):
             raise ValueError("Windows refused Jarvis's tap (error %d); no click was sent." % ctypes.get_last_error())
         try:
@@ -109,6 +120,10 @@ def enabled(base=None):
     from pathlib import Path
     path = Path(base or Path(__file__).resolve().parents[1]) / 'config/config.json'
     try:
-        return bool(json.loads(path.read_text(encoding='utf-8')).get('cursor', {}).get('physical_clicks', True))
-    except (OSError, ValueError):
-        return True
+        if path.stat().st_size>2_000_000:return False
+        data=json.loads(path.read_text(encoding='utf-8'))
+        if not isinstance(data,dict) or not isinstance(data.get('cursor',{}),dict):return False
+        value=data.get('cursor',{}).get('physical_clicks',True)
+        return value if type(value) is bool else False
+    except (OSError, ValueError,TypeError,RecursionError):
+        return False

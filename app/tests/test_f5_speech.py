@@ -58,7 +58,7 @@ class F5Tests(unittest.TestCase):
         with patch('pathlib.Path.read_text', return_value=json.dumps(config)):
             policy = configured()
         self.assertEqual(policy['speech_reserve_mb'], 2048)
-        self.assertEqual(allocation('qwen3.5:9b', 8192, policy, {'total_mb': 4096, 'used_mb': 0}), 5)
+        self.assertEqual(allocation('qwen3.5:9b', 8192, policy, {'total_mb': 4096, 'used_mb': 0}), 3)
 
     def test_chunks_synthesize_sequentially_with_crossfade(self):
         voice = SimpleNamespace(jarvis_options={}, infer=Mock(return_value=(np.ones(4800), 24000, None)))

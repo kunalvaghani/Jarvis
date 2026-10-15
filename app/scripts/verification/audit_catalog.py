@@ -71,13 +71,13 @@ def reconcile():
     for path in sorted(paths):
         for node in ET.parse(path).iter('testcase'):
             state='FAIL' if node.find('failure') is not None or node.find('error') is not None else ('SKIPPED' if node.find('skipped') is not None else 'PASS')
-            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit')):
+            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit', 'test_desktop_control_audit')):
                 skipped=node.find('skipped')
                 if 'BLOCKED:' in (skipped.get('message','')+(skipped.text or '')):state='BLOCKED'
             result={'node':node.get('classname','')+'::'+node.get('name',''),'status':state,'seconds':float(node.get('time','0')),'evidence':path.relative_to(OUT).as_posix()}
             executed.append(result)
             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_audit_completion_cases')):
+            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_tool_registry_audit', 'test_audit_completion_cases')):
                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])
                 for module,case in ids:actual.setdefault(f'JRV-{module}-{case}',[]).append(result)
     results=[]

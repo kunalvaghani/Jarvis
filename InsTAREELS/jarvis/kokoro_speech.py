@@ -107,12 +107,18 @@ class Player:
         import numpy as np
         import sounddevice as sd
         self.np, self.rate, self.events = np, rate, events
+        from .pcm_ring import PCMBuffer
+        self.pcm = PCMBuffer(rate * 60)
         self.pieces = collections.deque()
         self.lock = threading.Lock()
         self.current = None  # [id, audio, position]
-        self.stream = sd.OutputStream(samplerate=rate, channels=1, dtype="float32", callback=self.callback,
-                                      blocksize=int(rate * .04), latency="low")
-        self.stream.start()
+        try:
+            self.stream = sd.OutputStream(samplerate=rate, channels=1, dtype="float32", callback=self.callback,
+                                          blocksize=int(rate * .02), latency="low")
+            self.stream.start()
+        except BaseException:
+            self.pcm.close()
+            raise
 
     def add(self, request_id, audio, stop=None):
         if (not isinstance(audio,self.np.ndarray) or audio.ndim!=1 or not audio.size
@@ -123,7 +129,7 @@ class Player:
             if getattr(self,'stream',None) is not None and not self.stream.active:
                 raise OSError('Audio output unavailable')
             if len(self.pieces)>=128:raise BufferError('Local voice playback buffer full')
-            self.pieces.append([request_id, audio, 0])
+            self.pieces.append([request_id, self.pcm.put(audio) if hasattr(self,'pcm') else audio, 0])
             return True
 
     def finish(self, request_id, seconds, stop=None):
@@ -134,11 +140,17 @@ class Player:
 
     def clear(self):
         with self.lock:
+            if hasattr(self, 'pcm'):
+                for row in list(self.pieces) + ([self.current] if self.current else []):
+                    if row[1] is not None:self.pcm.release(row[1])
             self.pieces.clear()
             self.current = None
 
     def discard(self, request_ids):
         with self.lock:
+            if hasattr(self, 'pcm'):
+                for row in list(self.pieces) + ([self.current] if self.current else []):
+                    if row[0] in request_ids and row[1] is not None:self.pcm.release(row[1])
             self.pieces=collections.deque(row for row in self.pieces if row[0] not in request_ids)
             if self.current is not None and self.current[0] in request_ids:self.current=None
 
@@ -161,8 +173,9 @@ class Player:
                         self.played_samples = 0
                         self.events.put({"id": request_id, "started": True})
                 request_id, audio, position = self.current
-                take = min(frames - filled, len(audio) - position)
-                out[filled:filled + take, 0] = audio[position:position + take]
+                size = self.pcm.size(audio) if hasattr(self,'pcm') else len(audio)
+                take = min(frames - filled, size - position)
+                out[filled:filled + take, 0] = self.pcm.read(audio,position,take) if hasattr(self,'pcm') else audio[position:position + take]
                 filled += take
                 position += take
                 self.current[2] = position
@@ -170,12 +183,15 @@ class Player:
                 if self.played_samples>=self.rate:
                     self.played_samples%=self.rate
                     self.events.put({'id':request_id,'playback':True})
-                if position >= len(audio):
+                if position >= size:
+                    if hasattr(self,'pcm'):self.pcm.release(audio)
                     self.current = None
 
     def close(self):
         self.stream.stop()
         self.stream.close()
+        self.clear()
+        self.pcm.close()
 
 
 def main():
@@ -266,6 +282,7 @@ def serve(loader=None, renderer=None, coalesce=False):
                     request, batch, candidate, has_held = queued_batch(request, requests)
                     held = candidate if has_held else empty
                 total = 0.0
+                committed = False
                 try:
                     started = time.monotonic()
                     with contextlib.redirect_stdout(sys.stderr):
@@ -276,6 +293,7 @@ def serve(loader=None, renderer=None, coalesce=False):
                             total += len(audio) / rate
                             if player is not None:
                                 player.add(request["id"], audio, stale)
+                                committed = True
                             events.put({'id': request['id'], 'audio_ready': True,
                                         'synthesis_seconds': round(time.monotonic()-started, 3)})
                     if stale.is_set():
@@ -291,7 +309,8 @@ def serve(loader=None, renderer=None, coalesce=False):
                 except Exception as exc:
                     if player is not None:player.discard({row['id'] for row in batch})
                     for row in batch:
-                        events.put({"id": row.get("id"), "error": "synthesis_or_output_failure"})
+                        events.put({"id": row.get("id"), "error": "synthesis_or_output_failure",
+                                    "safe_to_retry": not committed})
         worker = threading.Thread(target=synthesis, daemon=True)
         worker.start()
         last_id=0

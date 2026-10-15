@@ -43,13 +43,13 @@ class GPUSchedulerTests(unittest.TestCase):
         hardware={'total_mb':4096,'used_mb':1041}
         small=allocation('qwen3.5:9b',8192,self.policy,hardware)
         large=allocation('qwen3.5:9b',32768,self.policy,hardware)
-        self.assertEqual(small,12);self.assertEqual(large,9)
+        self.assertEqual(small,10);self.assertEqual(large,8)
         self.assertLess(large,small)
         self.assertEqual(allocation('qwen3.5:9b',8192,self.policy,{'total_mb':4096,'used_mb':3900}),0)
         self.assertEqual(allocation('unknown:70b',8192,self.policy,hardware),0)
         self.assertEqual(allocation('qwen3.5:9b',8192,self.policy,None),0)
         self.assertEqual(allocation('qwen3.5:9b',-1,self.policy,hardware),0)
-        self.assertEqual(allocation('jarvis-codex-qwen3.5:9b',32768,{**self.policy,'primary_layers':0},hardware),9)
+        self.assertEqual(allocation('jarvis-codex-qwen3.5:9b',32768,{**self.policy,'primary_layers':0},hardware),8)
         self.assertEqual(allocation('jarvis-codex-qwen3.5:9b',32768,{**self.policy,'codex_layers':0},hardware),0)
 
     def test_small_models_use_gpu_only_with_reserved_capacity(self):
@@ -188,7 +188,7 @@ class GPUSchedulerTests(unittest.TestCase):
             'options':{'num_gpu':0,'num_ctx':8192}},stream=True)
         self.assertEqual(self.state()['active']['role'],'planner')
         self.assertEqual(method.call_args.kwargs['json']['options']['num_gpu'],11)
-        self.assertEqual(method.call_args.kwargs['json']['options']['num_ctx'],16384)
+        self.assertEqual(method.call_args.kwargs['json']['options']['num_ctx'],4096)
         self.assertEqual(method.call_args.kwargs['json']['keep_alive'],30)
         result.close();result.close()
         self.assertIsNone(self.state()['active']);self.assertEqual(method.call_count,1)
@@ -224,6 +224,7 @@ class GPUSchedulerTests(unittest.TestCase):
         self.assertFalse(self.registry.path.exists())
 
     def test_codex_retains_api_body_and_limits_only_its_model_cache_after_turn(self):
+        self.policy['vram_ceiling_mb']=4096  # Historical alias contract; separate 3850 refusal tests apply.
         client,method=self.transport('coding')
         observed=self.response();observed._content=json.dumps({'models':[{'name':'jarvis-codex-qwen3.5:9b','context_length':32768,'size_vram':2200*1048576,'digest':'fixture'}]}).encode()
         patch('requests.sessions.Session.get',return_value=observed).start()
@@ -237,6 +238,7 @@ class GPUSchedulerTests(unittest.TestCase):
         self.assertIsNone(self.state()['active'])
 
     def test_codex_failed_or_absent_cache_never_preloads_a_model_after_close(self):
+        self.policy['vram_ceiling_mb']=4096
         client,method=self.transport('coding')
         for status_code in (200,500):
             with self.subTest(status_code=status_code):
@@ -248,6 +250,7 @@ class GPUSchedulerTests(unittest.TestCase):
                 self.assertFalse(self.state().get('resident'))
 
     def test_coding_cache_identity_survives_uncertain_duration_update(self):
+        self.policy['vram_ceiling_mb']=4096
         client,method=self.transport('coding')
         observed=self.response();observed._content=json.dumps({'models':[{'name':'jarvis-codex-qwen3.5:9b','context_length':32768,'size_vram':2200*1048576,'digest':'fixture'}]}).encode()
         timer=self.response();timer.status_code=500;method.side_effect=[self.response(),timer]
@@ -275,10 +278,10 @@ class GPUSchedulerTests(unittest.TestCase):
         self.assertIsNone(self.state()['active']);self.assertFalse(self.state().get('resident'))
 
     def cache(self):
-        row={'name':'qwen3.5:9b','digest':'fixture','context_length':16384,'size_vram':2400*1048576}
+        row={'name':'qwen3.5:9b','digest':'fixture','context_length':4096,'size_vram':2400*1048576}
         with self.registry.state() as state:
-            state['resident']={'model':row['name'],'digest':row['digest'],'context':16384,
-                'num_gpu':11,'size_vram':row['size_vram'],'expires_at':time.time()+30}
+            state['resident']={'model':row['name'],'digest':row['digest'],'context':4096,
+                'num_gpu':10,'size_vram':row['size_vram'],'expires_at':time.time()+30}
         return row
 
     def test_same_model_reuses_owned_warm_gpu_cache(self):
@@ -288,10 +291,11 @@ class GPUSchedulerTests(unittest.TestCase):
              patch('jarvis.gpu_scheduler.memory',return_value={'total_mb':4096,'used_mb':3500}):
             client.post('http://127.0.0.1:11434/api/chat',json={'model':row['name'],'messages':[{}],'options':{'num_ctx':8192}})
         self.assertEqual(method.call_count,1)
-        self.assertEqual(method.call_args.kwargs['json']['options']['num_gpu'],11)
+        self.assertEqual(method.call_args.kwargs['json']['options']['num_gpu'],10)
         self.assertEqual(self.state()['resident']['digest'],'fixture')
 
     def test_model_handoff_unloads_identified_cache_before_codex_once(self):
+        self.policy['vram_ceiling_mb']=4096
         row=self.cache();client,method=self.transport('coding')
         observation=self.response();observation._content=json.dumps({'models':[row]}).encode()
         with patch('requests.sessions.Session.get',return_value=observation), \

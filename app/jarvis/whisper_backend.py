@@ -68,6 +68,27 @@ def load_model(path, options):
         check_cuda_libraries()
     if not (Path(path) / "model.bin").is_file():
         raise WhisperUnavailable('model_missing', "Whisper model missing. Run scripts/setup/setup.ps1 to download it once.")
-    return WhisperModel(str(path), device=device,
-                        compute_type=options.get("compute_type", "int8_float16"),
-                        local_files_only=True, cpu_threads=4, num_workers=1)
+    from contextlib import nullcontext
+    from .gpu_scheduler import native_turn
+    gate = native_turn('recognition','native/whisper',load_mb=1536) if device == 'cuda' else nullcontext()
+    with gate:
+        model = WhisperModel(str(path), device=device,
+                             compute_type=options.get("compute_type", "int8_float16"),
+                             local_files_only=True, cpu_threads=4, num_workers=1)
+    return CoordinatedWhisper(model) if device == 'cuda' else model
+
+
+class CoordinatedWhisper:
+    """Whisper returns lazy segments: hold the lease until decoding is consumed."""
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
+        self.cancelled = lambda: False
+
+    def __getattr__(self, name):
+        return getattr(self.wrapped, name)
+
+    def transcribe(self, *args, **kwargs):
+        from .gpu_scheduler import native_turn
+        with native_turn('recognition', 'native/whisper', self.cancelled):
+            segments, info = self.wrapped.transcribe(*args, **kwargs)
+            return iter(list(segments)), info

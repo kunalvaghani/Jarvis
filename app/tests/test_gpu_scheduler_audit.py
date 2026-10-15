@@ -106,7 +106,11 @@ EXISTING={
 @pytest.mark.parametrize('number',range(1,33),ids=lambda n:f'JRV-08-{n:03d}')
 def test_catalog(number,tmp_path):
     if number in (2,12):
-        pytest.skip('BLOCKED: F5/Whisper have no shared scheduler lease protocol; live arrival/stuck-TTS recovery cannot be established by an Ollama fixture')
+        if number==2:
+            from tests.test_phase2_gpu_models_voice_ui import test_native_fault_releases_shared_slot_and_queued_stop_cancels
+            test_native_fault_releases_shared_slot_and_queued_stop_cancels(tmp_path)
+            return
+        pytest.skip('BLOCKED: forcible interruption of stuck native CUDA kernels requires a separate owned-process live fault test; cooperative shared leases are covered by Phase 2 fixtures.')
     if number in EXISTING:
         run_existing(EXISTING[number]);return
     if number in (1,10):
