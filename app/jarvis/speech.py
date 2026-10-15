@@ -21,6 +21,16 @@ def spoken_text(answer):
     answer = speech_unicode(answer)
     answer = re.split(r"\n\s*Sources:\s*\n", answer, maxsplit=1, flags=re.I)[0]
     answer = re.sub(r"```[\s\S]*?```", " The code is in the transcript. ", answer)
+    # A traceback is spoken as its final error line; its frames stay in the transcript.
+    answer = re.sub(r"(?m)^\s*Traceback \(most recent call last\):\n(?:[ \t]+.*\n?)*"
+                    r"(?:([A-Za-z_][\w.]*(?:Error|Exception|Warning|Interrupt|Exit))(?::[ \t]*(.*))?)?",
+                    lambda m: ("An error occurred: " + re.sub(r"(?<=[a-z])(?=[A-Z])", " ", m[1].rsplit('.', 1)[-1])
+                               + (", " + m[2].strip() if m[2] and m[2].strip() else "") + ".\n") if m[1]
+                    else "An error occurred; the details are in the transcript.\n", answer)
+    # Markdown tables: separator rows go; each row becomes a short comma-separated phrase.
+    answer = re.sub(r"(?m)^[ \t]*\|?(?:[ \t]*:?-{3,}:?[ \t]*\|)+[ \t]*:?-*:?[ \t]*$\n?", "", answer)
+    answer = re.sub(r"(?m)^[ \t]*\|(.+)\|[ \t]*$", lambda m: ", ".join(
+        cell.strip() for cell in m[1].split("|") if cell.strip()) + ".", answer)
     answer = re.sub(r"!?\[([^\]]+)\]\([^\n)]+\)", r"\1", answer)
     answer = re.sub(r"https?://\S+", "", answer)
     answer = re.sub(r"\[\d+\]", "", answer)
@@ -100,6 +110,8 @@ class Speech:
         self.responses = None
         self.voice_log = None
         self.outstanding = {}  # Kokoro request id -> generation
+        self.request_text = {}  # Request id -> text, so an F5 failure before any audio can reach the CPU voice.
+        self.audio_emitted = False  # Any audio produced for the current outstanding requests.
         self.next_id = 0
         self.last_progress = time.monotonic()
         self.worker_engine = None
@@ -319,7 +331,7 @@ class Speech:
                             self.worker_init_error = True
                             self.worker_ready.set()
                             self.restart_required = True
-                            if self.outstanding and not self.closed.is_set():
+                            if self.outstanding and not self.closed.is_set() and not self._salvage_unspoken():
                                 self.report('repair','Voice connection closed; pending audio was discarded, not replayed. A new request can restart the owned worker.')
                             self.outstanding.clear()
                             self._end_output()
@@ -366,11 +378,15 @@ class Speech:
                 self.worker_ready.set()
                 self.last_progress = time.monotonic()
                 return
+            if any(row.get(key) is True for key in ('started', 'audio_ready', 'playback')) and request in self.outstanding:
+                self.audio_emitted = True
             if row.get("error"):
                 if request is None:
                     self.worker_init_error = True
                     self.worker_ready.set()
                 self.restart_required = True
+                if request in self.outstanding and self._salvage_unspoken():
+                    return
                 if request in self.outstanding and self.outstanding[request] == self.generation and not self.closed.is_set():
                     self.report("warning", "Voice playback failed; the answer remains in the transcript. A new request can restart the owned voice worker.")
                 self.outstanding.pop(request, None)
@@ -379,6 +395,31 @@ class Speech:
             if request in self.outstanding:self.last_progress = time.monotonic()
             if not self.outstanding:
                 self._end_output()
+
+    def _salvage_unspoken(self):
+        """F5 failed before producing any audio for its pending requests: give their text to the CPU voice once.
+
+        Nothing of these requests was heard, so this cannot repeat audio. Once any audio exists the
+        existing no-replay rule applies. Called with self.lock held.
+        """
+        if self.worker_engine != 'f5' or self.audio_emitted or self.closed.is_set():
+            return False
+        pending = sorted(i for i, generation in self.outstanding.items()
+                         if generation == self.generation and i in self.request_text)
+        if not pending:
+            return False
+        texts = [self.request_text[i] for i in pending]
+        self.failed_backends.add('f5')
+        self.outstanding.clear()
+        self.request_text.clear()
+        with self.queue.mutex:
+            # Ahead of anything queued later, so the reply keeps its order.
+            for text in reversed(texts):
+                self.queue.queue.appendleft((self.generation, text))
+            self.queue.unfinished_tasks += len(texts)
+            self.queue.not_empty.notify(len(texts))
+        self.report('repair', 'F5 voice failed before speaking; continuing with the CPU voice.')
+        return True
 
     def _watchdog(self):
         while not self.closed.is_set():
@@ -401,7 +442,11 @@ class Speech:
             self.next_id += 1
             request = self.next_id
             payload = {**payload, "id": request}
+            if not self.outstanding:
+                self.audio_emitted = False
+                self.request_text.clear()
             self.outstanding[request] = generation
+            self.request_text[request] = content
             self.last_progress = time.monotonic()
             self._begin_output(content)
             self.process.stdin.write(json.dumps(payload, ensure_ascii=False) + "\n")

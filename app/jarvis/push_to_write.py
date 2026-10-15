@@ -57,8 +57,11 @@ class PushToWrite:
                 self.ctrl = down
             elif vk == VK_LMENU:
                 if not down and self.combo and not self.other:
-                    self.send()  # Mask key, then the Alt release: no menu-shortcut mode.
-                    block = True
+                    try:
+                        self.send()  # Mask key, then the Alt release: no menu-shortcut mode.
+                        block = True
+                    except Exception:
+                        block = False  # Let the real release through rather than leave Alt or writing held.
                 self.alt = down
             elif down:
                 self.other = True

@@ -130,6 +130,17 @@ class Yield(Exception):
     """The user needs Jarvis: abandon this model call now and repeat it when they are idle again."""
 
 
+def memory_refusal(exc):
+    """Ollama refused to load a model for lack of RAM/VRAM. The reason is only in the HTTP 500 body."""
+    response = getattr(exc, "response", None)
+    try:
+        body = response.text[:2000] if response is not None else ""
+    except Exception:
+        body = ""
+    return bool(re.search(r"requires more system memory|out of memory|insufficient memory|unable to allocate",
+                          str(exc) + " " + body, re.I))
+
+
 def now_iso():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -653,6 +664,12 @@ class AbilityForge:
                     raise AbilityError("Cancelled.")
                 if self.user_busy() or "GPU inference" in str(exc):  # The user (or other work) needed the model first.
                     time.sleep(2)
+                    continue
+                if model != self.fallback_model and memory_refusal(exc):
+                    # RAM fell after the coder model was picked. Only inference is repeated, on the smaller model.
+                    self._log({"event": "model_fallback", "from": model, "to": self.fallback_model})
+                    self._unload_model()
+                    self.used_model = self.fallback_model
                     continue
                 raise
             finally:
