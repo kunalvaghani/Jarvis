@@ -1,5 +1,18 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt12-audit -->
+**Tool-registry audit — 2026-10-15 IST:** All 24 built-in tools now have typed argument
+contracts checked before any report or dispatch. Approval claims inside a proposal are
+stripped, malformed or deeply nested JSON gives typed errors, concurrent appends to one
+file are serialized in-process, and emitted tool reports redact credentials. Tool
+evidence is unchanged. Failure events carry a category and results carry a correlation ID.
+`requests`/`urllib3` were already current. [Reproductions, changes, benchmarks and
+limits](artifacts/jarvis-audit/modules/12-tool-registry/inventory.md).
+Verification: **2,392 regression PASS / 9 blocked skips** (other modules); Prompt12
+**32 PASS** (18 PASS / 13 FAIL on pre-change code), launcher **ready**. Warm p50 latency is
+unchanged at about 40 ms. Offline fixtures only; live GUI, accounts and network not exercised.
+<!-- /prompt12-audit -->
+
 <!-- prompt11-audit -->
 **Skill-selection audit — 2026-10-15 IST:** Bounded guide validation and provenance,
 observed procedure reliability and reused description tokens retain existing tool,

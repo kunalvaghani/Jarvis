@@ -1,4 +1,9 @@
-# Jarvis audit — through Prompt11, 2026-10-15 IST
+# Jarvis audit — through Prompt12, 2026-10-15 IST
+
+**Prompt12: 32 fixture PASS; no failed, blocked or pending fixture cases.** On the pre-change code the same file gave 18 PASS / 13 FAIL / 1 not run. Seven defects were reproduced and fixed: missing contracts for built-in tool arguments, untyped malformed replies, realtime non-object content, a concurrent append race, credentials echoed into tool reports, unhandled `RecursionError` from nested JSON, and an untyped missing realtime provider. Full suite **2,392 PASS / 9 BLOCKED skips** (all from earlier modules), 361.5 s; launcher `ready`. [Inventory](modules/12-tool-registry/inventory.md), [failures](modules/12-tool-registry/failures.md), [changes](modules/12-tool-registry/changes.md), [benchmarks](modules/12-tool-registry/benchmark-summary.json), [cases](modules/12-tool-registry/tests.jsonl), [compatibility](modules/12-tool-registry/compatibility.md), [rollback](modules/12-tool-registry/rollback.md), [full XML](modules/12-tool-registry/full-regression.xml).
+
+Branch `audit/12-tool-registry` from `main` `1dd5ea3`. Offline fakes only: no real send, delete, account write, network call, dependency install or GPU use. Live GUI and account journeys: NOT RUN. Previous report: [final-report-before-module12.md](final-report-before-module12.md).
+
 
 **Prompt11:31 fixture PASS / 1 BLOCKED; no pending or failed fixture cases.** Arbitrary PDF editing lacks a validated offered adapter. Full **2355 PASS / 9 BLOCKED skips**, 349.16s; targeted **157 PASS / 1 BLOCKED skip**. [Full XML](modules/11-skill-selection/full-regression.xml),[targeted XML](modules/11-skill-selection/cases-and-contracts.xml),[actual completion](modules/11-skill-selection/full-run-completion.txt),[launcher ready](modules/11-skill-selection/readiness.json). Suites overlap; existing COM warning persists. Whole-system/live production acceptance remains open.
 

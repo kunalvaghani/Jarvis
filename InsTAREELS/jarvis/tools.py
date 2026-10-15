@@ -1,6 +1,7 @@
 """Shared capabilities and dispatch for the planner and desktop task runner."""
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import json
+import os
 import re
 
 from .commands import Command
@@ -46,6 +47,94 @@ SPECS += tuple(ToolSpec(name, "toolkit", data[1], "user" if data[3] else "none")
                for name, data in KIT_TOOLS.items())
 TOOL_NAMES = tuple(spec.name for spec in SPECS)
 
+# Fields each built-in tool reads: (required, optional). Toolkit tools are checked by toolkits.validate_step.
+_FIELDS = {
+    'application_inspect': ({'value'}, set()), 'realtime_query': ({'value'}, {'content'}),
+    'open': ({'value'}, set()), 'browse': ({'value'}, {'browser'}), 'browser_search': ({'value'}, {'browser'}),
+    'browser_inspect': (set(), {'value', 'folder', 'content'}), 'browser_navigate': (set(), {'value', 'folder', 'content'}),
+    'browser_click': (set(), {'value', 'folder', 'content'}), 'browser_fill': (set(), {'value', 'folder', 'content'}),
+    'media_search': ({'value', 'platform'}, set()), 'media_control': ({'value', 'platform'}, set()),
+    'select': ({'value'}, set()), 'fill_text': ({'value', 'content'}, set()), 'type_text': ({'value', 'content'}, set()),
+    'scroll': ({'value'}, set()), 'shortcut': ({'value'}, set()), 'open_menu': ({'value'}, set()),
+    'handle_dialog': ({'value'}, set()), 'save_file': ({'value'}, {'folder'}), 'close_app': ({'value'}, set()),
+    'create_file': ({'value', 'folder', 'content'}, set()), 'modify_file': ({'value', 'folder', 'content'}, {'find'}),
+    'delete_file': ({'value', 'folder'}, set()), 'run_command': ({'value'}, set()),
+}
+_LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
+# A proposal can never carry its own authorization; only the host approval flow grants it.
+APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
+                             'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
+_SECRET_PATTERNS = (
+    (re.compile(r'(?i)\b(access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|'
+                r'password|passwd|pwd|sig|signature)=([^&\s#"\']+)'), r'\1=[redacted]'),
+    (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}'), r'\1 [redacted]'),
+    (re.compile(r'\b(?:sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|'
+                r'xox[abprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{30,}|gsk_[A-Za-z0-9]{20,})'), '[redacted]'),
+)
+
+
+class ToolArgumentError(ValueError):
+    """A proposal failed its tool contract; nothing was reported or dispatched."""
+
+
+def redact(text):
+    """Scrub credential-like values from emitted traces (UI reports, logs); never from tool evidence."""
+    text = str(text)
+    for key, secret in os.environ.items():
+        if len(secret) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|API_?KEY|ACCESS_KEY', key, re.I) and secret in text:
+            text = text.replace(secret, '[redacted]')
+    for pattern, replacement in _SECRET_PATTERNS:
+        text = pattern.sub(replacement, text)
+    return text
+
+
+def validate_arguments(step):
+    """Deterministic contract check before any report, approval prompt or dispatch."""
+    if not isinstance(step, dict):
+        raise ToolArgumentError('A tool step must be an object.')
+    name = step.get('action')
+    if name in KIT_TOOLS:
+        from .toolkits import validate_step
+        try:
+            validate_step(step)
+        except KeyError as exc:
+            raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+        except ValueError as exc:
+            raise ToolArgumentError(str(exc)) from None
+        return
+    required, optional = _FIELDS.get(name, (set(), set()))
+    missing = sorted(field for field in required if field not in step)
+    if missing:
+        raise ToolArgumentError(f'{name} requires: ' + ', '.join(missing))
+    for field in required | optional:
+        if field in step and not isinstance(step[field], str):
+            raise ToolArgumentError(f'{name} {field} must be text.')
+        if len(step.get(field, '')) > _LIMITS.get(field, 4000):
+            raise ToolArgumentError(f'{name} {field} exceeds its size limit.')
+    if 'value' in required and not step['value'].strip():
+        raise ToolArgumentError(f'{name} requires a nonempty value.')
+    if name == 'realtime_query':
+        try:
+            params = json.loads(step.get('content') or '{}')
+        except (ValueError, RecursionError):
+            raise ToolArgumentError('realtime_query content must be a JSON object.') from None
+        if not isinstance(params, dict):
+            raise ToolArgumentError('realtime_query content must be a JSON object.')
+
+
+def failure_category(exc, cancelled):
+    from .toolkits import ToolUnavailable
+    if isinstance(exc, ToolArgumentError):
+        return 'invalid_arguments'
+    if isinstance(exc, ToolUnavailable):
+        return 'unavailable'
+    try:
+        if cancelled():
+            return 'cancelled'
+    except Exception:
+        pass
+    return 'failed'
+
 
 @dataclass(frozen=True)
 class ToolResult:
@@ -54,6 +143,7 @@ class ToolResult:
     evidence: str
     # Dispatch evidence is not verification of the user's goal.
     attempted: bool = True
+    call_id: str = ''  # Correlates with .jarvis-runtime/agent-events.jsonl.
 
 
 class ToolRegistry:
@@ -111,6 +201,9 @@ class ToolRegistry:
                 raise ValueError('Task identity is unavailable; execution refused.')
             state.require_identity(step['task_id'])
             step={key:value for key,value in step.items() if key!='task_id'}
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        step = {key: value for key, value in step.items() if key not in APPROVAL_CLAIMS}
         name = step.get('action')
         allowed = getattr(self.actions, 'allowed_tools', None)
         if isinstance(allowed, (set, frozenset)) and name not in allowed:
@@ -118,11 +211,14 @@ class ToolRegistry:
         check_policy(self.actions, name)
         call_id = event(self.actions, 'tool.started', name)
         try:
+            if name in self.specs:
+                validate_arguments(step)
             result = self._execute(step, cancelled, activate)
         except Exception as exc:
             # Audit failures cannot turn an uncertain write into a retriable action.
             try:
-                event(self.actions, 'tool.failed', name, call_id, error_type=type(exc).__name__)
+                event(self.actions, 'tool.failed', name, call_id, error_type=type(exc).__name__,
+                      category=failure_category(exc, cancelled))
             except (OSError, ValueError):
                 pass
             raise
@@ -130,7 +226,7 @@ class ToolRegistry:
             event(self.actions, 'tool.completed', name, call_id, backend=result.backend)
         except (OSError, ValueError):
             pass
-        return result
+        return replace(result, call_id=call_id) if isinstance(result, ToolResult) else result
 
     def _execute(self, step, cancelled, activate=None):
         name = step.get("action")
@@ -143,7 +239,11 @@ class ToolRegistry:
             return ToolResult(name, 'desktop_observation', json.dumps(inspect(self.actions, step['value'], cancelled), ensure_ascii=False))
         if name == 'realtime_query':
             params = json.loads(step.get('content') or '{}')
-            result = self.actions.realtime.query(step.get('value',''), params, cancelled)
+            realtime = getattr(self.actions, 'realtime', None)
+            if realtime is None:
+                from .toolkits import ToolUnavailable
+                raise ToolUnavailable('Realtime data is not available in this session.')
+            result = realtime.query(step.get('value',''), params, cancelled)
             return ToolResult(name, 'realtime', json.dumps(result, ensure_ascii=False))
         if name in {"browser_inspect", "browser_navigate", "browser_click", "browser_fill"}:
             if name == "browser_fill" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
@@ -154,7 +254,7 @@ class ToolRegistry:
             return ToolResult(name, "dom", json.dumps(result, ensure_ascii=False)[:12000])
         spec = self.specs[name]
         validate_desktop_step(step)
-        self.actions.report("tool", spec.backend + ": " + name + " " + str(step.get("value", "")))
+        self.actions.report("tool", redact(spec.backend + ": " + name + " " + str(step.get("value", ""))))
         if name == 'save_file':
             from .task_state import TaskState
             state = getattr(self.actions, 'task_state', None)
