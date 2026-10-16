@@ -1,0 +1,10 @@
+Canonical cwd: app.
+Fixture test runs require atomic replacement access in owned temporary directories.
+Initial root-cwd sandbox baseline retained existing-baseline.xml (duplicate alias collection and WinError5, not accepted baseline).
+.venv/Scripts/python.exe -m pytest tests/test_knowledge_acquisition.py tests/test_live_app_context.py -q --junitxml=artifacts/jarvis-audit/modules/15-app-research/baseline.xml
+.venv/Scripts/python.exe -m pytest tests/test_app_research_audit.py -q --junitxml=artifacts/jarvis-audit/modules/15-app-research/reproduced.xml
+.venv/Scripts/python.exe scripts/verification/verify_app_research_audit.py
+.venv/Scripts/python.exe -m scripts.verification.verify_app_research_journey
+.venv/Scripts/python.exe -m pytest tests/test_app_research_audit.py tests/test_knowledge_acquisition.py tests/test_live_app_context.py tests/test_skill_memory.py tests/test_task_state.py tests/test_tools.py tests/test_toolkits.py tests/test_audit_result_accounting.py -q --junitxml=artifacts/jarvis-audit/modules/15-app-research/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/jarvis-audit/modules/15-app-research/full-regression.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check

@@ -1,0 +1,26 @@
+{
+  "jarvis/browser_worker.py": {
+    "before": "ab02865e521fa71f4159f0e8658923d14d33342d3e30dacadfcb5193d8919656",
+    "after": "f5c5275c921a39901d90e81e617417425d5f00912cf3cb5a891e9c71381989e3"
+  },
+  "jarvis/browser_automation.py": {
+    "before": "b92c0982de3020e753fa7df0b97da3fca39b270a99c305abad8f62d2a3bf5f36",
+    "after": "3a55ffdc82083a3c76bb018552f633226ba815592c9cd2fee69cc625cdfc35a3"
+  },
+  "jarvis/browser_cursor.py": {
+    "before": "8c62648c5eaa8f5ffd302d27c3dc22ab357b6f83490435a55d8c911f60679ec9",
+    "after": "a4553ced83a8a62f1b4da918bf0a27b7a808fc9894d56638674c5fc565bea9bc"
+  },
+  "config/runtime_manifest.json": {
+    "before": "47e71663fdb1e173c5e12d851921a87172e2a8c2d2288687e73ab6325c5d51a6",
+    "after": "9433ddf373b5675eb6a7ab4177369909c87f8e7d7a72930f376f2054f152e160"
+  },
+  "scripts/verification/audit_catalog.py": {
+    "before": "18ecaa2174ae1e0904f84c28e880aed9f9dc9572c1288676dcc3ebfe6fbe4bc5",
+    "after": "be0a1b60696b9a362c30a347a23033abbbd46c0e9081b79acec0de1c1f55dc84"
+  },
+  "tests/test_questions_context_audit.py": {
+    "before": "dfe52d0fc0aa25bd91065e2e7a24978cd1db6d966f22a4daa44a3c763bb4fbfc",
+    "after": "44d18082dd4245b7983b177ce39fa9596508604f32302d3445182150051e3a22"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "date": "2026-10-15 IST",
+  "elapsed_seconds": 134.53099999999995,
+  "probes": {
+    "whisper": {
+      "completed": true,
+      "decode_seconds": [
+        0.7653976999999941,
+        0.3224619000002349,
+        0.33312839999962307,
+        0.36266669999986334,
+        0.3279375000001892
+      ],
+      "seconds": 12.339980599999762,
+      "input": "synthetic silence; no acoustic accuracy claim"
+    },
+    "f5": {
+      "completed": true,
+      "first_pcm_seconds": [
+        4.7336568999999145,
+        4.714162700000088
+      ],
+      "audio_seconds": [
+        2.5493333333333332,
+        2.5493333333333332
+      ],
+      "seconds": 46.306251500000144,
+      "scope": "warm synthesis only; no microphone or speaker loopback"
+    },
+    "cleanup": {
+      "completed": false,
+      "error_type": "ConnectionError"
+    },
+    "context": {
+      "completed": false,
+      "error_type": "ConnectionError"
+    },
+    "planner": {
+      "completed": false,
+      "error_type": "ConnectionError"
+    },
+    "laya": {
+      "completed": true,
+      "correct": 0,
+      "total": 25,
+      "rows": [
+        {
+          "expected": "a",
+          "selected": "{'type': 'choice', 'choice': 'a', 'probabilities': {'a': 0.7908, 'b': 0.0808, 'c': 0.065, 'none': 0.0633}, 'confidence': 0.4652, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0181, 'b': 0.945, 'c': 0.0185, 'none': 0.0184}, 'confidence': 0.8028, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.2162, 'b': 0.214, 'c': 0.2978, 'none': 0.2721}, 'confidence': 0.0075, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0334, 'b': 0.9098, 'c': 0.0204, 'none': 0.0364}, 'confidence': 0.7119, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.0962, 'b': 0.0134, 'c': 0.8636, 'none': 0.0268}, 'confidence': 0.6346, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "a",
+          "selected": "{'type': 'choice', 'choice': 'a', 'probabilities': {'a': 0.8246, 'b': 0.0663, 'c': 0.0551, 'none': 0.0539}, 'confidence': 0.5267, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0179, 'b': 0.9516, 'c': 0.0143, 'none': 0.0162}, 'confidence': 0.822, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'none', 'probabilities': {'a': 0.2608, 'b': 0.2108, 'c': 0.2419, 'none': 0.2865}, 'confidence': 0.0044, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0476, 'b': 0.89, 'c': 0.0219, 'none': 0.0405}, 'confidence': 0.6665, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.0537, 'b': 0.0099, 'c': 0.9178, 'none': 0.0186}, 'confidence': 0.7436, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "a",
+          "selected": "{'type': 'choice', 'choice': 'a', 'probabilities': {'a': 0.8445, 'b': 0.0647, 'c': 0.0427, 'none': 0.0481}, 'confidence': 0.5669, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.014, 'b': 0.963, 'c': 0.011, 'none': 0.012}, 'confidence': 0.8568, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'none', 'probabilities': {'a': 0.2516, 'b': 0.2196, 'c': 0.2643, 'none': 0.2645}, 'confidence': 0.002, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0415, 'b': 0.9019, 'c': 0.0217, 'none': 0.0348}, 'confidence': 0.6932, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.0454, 'b': 0.0092, 'c': 0.9302, 'none': 0.0153}, 'confidence': 0.773, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "a",
+          "selected": "{'type': 'choice', 'choice': 'a', 'probabilities': {'a': 0.7792, 'b': 0.0858, 'c': 0.0657, 'none': 0.0693}, 'confidence': 0.4453, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.019, 'b': 0.9491, 'c': 0.0157, 'none': 0.0162}, 'confidence': 0.8148, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'none', 'probabilities': {'a': 0.1926, 'b': 0.2132, 'c': 0.2754, 'none': 0.3188}, 'confidence': 0.0144, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0515, 'b': 0.8552, 'c': 0.0267, 'none': 0.0665}, 'confidence': 0.5933, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.086, 'b': 0.026, 'c': 0.8377, 'none': 0.0503}, 'confidence': 0.564, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "a",
+          "selected": "{'type': 'choice', 'choice': 'a', 'probabilities': {'a': 0.8499, 'b': 0.072, 'c': 0.0438, 'none': 0.0343}, 'confidence': 0.5813, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0229, 'b': 0.9319, 'c': 0.0247, 'none': 0.0205}, 'confidence': 0.7668, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.2473, 'b': 0.2125, 'c': 0.3321, 'none': 0.2081}, 'confidence': 0.0136, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "b",
+          "selected": "{'type': 'choice', 'choice': 'b', 'probabilities': {'a': 0.0291, 'b': 0.9051, 'c': 0.0221, 'none': 0.0437}, 'confidence': 0.7011, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        },
+        {
+          "expected": "c",
+          "selected": "{'type': 'choice', 'choice': 'c', 'probabilities': {'a': 0.0507, 'b': 0.0109, 'c': 0.9234, 'none': 0.015}, 'confidence': 0.757, 'action': {'act_probability': 1.0}}",
+          "correct": false
+        }
+      ],
+      "seconds": 30.273243200000252
+    },
+    "lora": {
+      "completed": true,
+      "generated_tokens": 2,
+      "seconds": 46.450390300000436
+    },
+    "legacy": {
+      "completed": false,
+      "error_type": "ConnectionError"
+    }
+  },
+  "gates": {
+    "simultaneous_cuda": {
+      "status": "blocked",
+      "reason": "One or more CUDA/model workers did not complete; see probe metadata."
+    },
+    "lora_load": {
+      "status": "pass"
+    },
+    "legacy_alias": {
+      "status": "blocked",
+      "reason": "ConnectionError"
+    },
+    "laya_25": {
+      "status": "fail",
+      "correct": 0,
+      "total": 25,
+      "threshold": 20
+    },
+    "ttfa": {
+      "status": "blocked",
+      "reason": "First-PCM synthesis timing is recorded where available; audible TTFA needs a speaker callback/loopback measurement."
+    },
+    "live_hotkeys": {
+      "status": "blocked",
+      "reason": "No interactive Notepad/VS Code key injection performed; fixture key-state results are separate."
+    },
+    "live_mind_dag": {
+      "status": "blocked",
+      "reason": "No live Tk Mind/DAG session captured; state and rendering fixtures are separate."
+    }
+  },
+  "vram_peak_sampled_mb": 2075,
+  "sample_count": 202,
+  "oom_count": null,
+  "oom_scope": "No global CUDA allocator/log interception; zero OOM is not certified by sampling."
+}

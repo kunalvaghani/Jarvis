@@ -11,6 +11,13 @@ class Unsupported(Exception):
     """No external input has been issued; another provider may prepare."""
 
 
+def access_denied(error):
+    """Native COM/Win32 denial is a permission boundary, not a provider outage."""
+    hresult=getattr(error,'hresult',None)
+    return (isinstance(error,PermissionError) or getattr(error,'winerror',None)==5
+            or type(hresult) is int and hresult & 0xffffffff == 0x80070005)
+
+
 @dataclass
 class Prepared:
     call: object
@@ -243,29 +250,44 @@ class JarvisPointer:
         try:
             import win32gui
             from pywinauto import Desktop
-            rect = element.rectangle()
-            if rect.width() < 4 or rect.height() < 4:
-                raise Unsupported('Control is too small to tap safely')
-            x, y = (rect.left + rect.right) // 2, (rect.top + rect.bottom) // 2
-            if win32gui.GetAncestor(win32gui.WindowFromPoint((x, y)), 2) != window.handle:
-                raise Unsupported('Another window covers the control')
-            target = list(element.element_info.runtime_id)
-            hit = Desktop(backend='uia').from_point(x, y)
-            for _ in range(8):  # The point may land on a child (an icon or label inside the button).
-                if hit is None or list(hit.element_info.runtime_id) == target:
-                    break
-                hit = hit.parent()
-            if hit is None or list(hit.element_info.runtime_id) != target:
-                raise Unsupported('The control centre belongs to a different element')
+            from .jarvis_pointer import physical_pixels,user32
+            def target():
+                if (win32gui.GetForegroundWindow()!=window.handle or not win32gui.IsWindow(window.handle)
+                        or not element.is_visible() or not element.is_enabled()):
+                    raise ValueError('Target focus or availability changed; no touch sent.')
+                rect=element.rectangle()
+                if rect.width()<4 or rect.height()<4:raise Unsupported('Control is too small to tap safely')
+                bounds=(rect.left,rect.top,rect.right,rect.bottom)
+                x,y=(rect.left+rect.right)//2,(rect.top+rect.bottom)//2
+                if win32gui.GetAncestor(win32gui.WindowFromPoint((x,y)),2)!=window.handle:
+                    raise ValueError('Another window covers the target; no touch sent.')
+                identity=list(element.element_info.runtime_id)
+                if identity!=control.get('id'):
+                    raise ValueError('Target identity changed; no touch sent.')
+                hit=Desktop(backend='uia').from_point(x,y)
+                for _ in range(8):
+                    if hit is None or list(hit.element_info.runtime_id)==identity:break
+                    hit=hit.parent()
+                if hit is None or list(hit.element_info.runtime_id)!=identity:
+                    raise ValueError('The target centre belongs to another control; no touch sent.')
+                return x,y,bounds
+            with physical_pixels(user32()):point=target()
+            x,y,_=point
+            def admit():
+                if target()!=point:raise ValueError('Target moved after preparation; inspect fresh state before clicking.')
+        except PermissionError:
+            raise
         except Unsupported:
             raise
         except Exception as exc:
-            raise Unsupported('Jarvis pointer could not admit this control: ' + type(exc).__name__) from exc
+            if access_denied(exc):raise
+            raise Unsupported('Jarvis pointer could not admit this control: '+type(exc).__name__) from exc
+
         try:
             state = selection(element, control, request.get('verb', 'click'))
         except Unsupported:
             state = Prepared(None)
-        return Prepared(lambda: tap(x, y), state.read, state.expected, state.before, state.no_op)
+        return Prepared(lambda: tap(x, y, admit=admit), state.read, state.expected, state.before, state.no_op)
 
 
 PROVIDERS = (JarvisPointer, UFO, WindowsMCP, CUA, OpenComputerUse, AgentS)

@@ -29,11 +29,12 @@ import re
 import threading
 import time
 import zipfile
+import unicodedata
 
 TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".csv", ".tsv", ".json", ".log", ".py", ".js", ".ts", ".tsx", ".jsx", ".java",
                  ".c", ".cpp", ".h", ".cs", ".go", ".rs", ".rb", ".php", ".sql", ".yaml", ".yml", ".toml", ".ini", ".xml",
                  ".css", ".ps1", ".sh", ".bat", ".rst", ".tex"}
-WORD = re.compile(r"[a-z0-9]+")  # "brief-client" and "brief client" share their words.
+WORD = re.compile(r"[^\W_]+", re.UNICODE)
 STOP = set("a an the and or but if then else of to in on at by for with from as is are was were be been being this that "
            "these those it its into over under about than so such not no yes can could should would will may might must "
            "do does did done have has had i you he she we they them his her our your their me my mine us what which who "
@@ -64,8 +65,10 @@ def now_iso():
 
 
 def terms(text):
+    text=unicodedata.normalize('NFC',str(text).casefold())
+    words=WORD.findall(text) if text.isascii() else ''.join(c if c.isalnum() or unicodedata.category(c).startswith('M') else ' ' for c in text).split()
     return [w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w
-            for w in WORD.findall(str(text).casefold()) if w not in STOP and len(w) > 1]
+            for w in words if w not in STOP and len(w) > 1]
 
 
 def file_id(path):
@@ -80,6 +83,8 @@ def file_id(path):
 def extract(path, max_chars=2_000_000, max_pages=400):
     """[(page or None, text)] for PDFs, Word, text-like and HTML files; [] for anything else (images, archives)."""
     path = Path(path)
+    if type(max_chars) is not int or not 0 < max_chars <= 2_000_000 or type(max_pages) is not int or not 0 < max_pages <= 400:
+        raise ValueError('Invalid document extraction limits.')
     suffix = path.suffix.casefold()
     if suffix == ".pdf":
         from pypdf import PdfReader
@@ -95,28 +100,35 @@ def extract(path, max_chars=2_000_000, max_pages=400):
                 text = page.extract_text() or ""
             except Exception:
                 text = ""
+            text = text[:max_chars-total]
             total += len(text)
             pages.append((number, text))
-            if total > max_chars:
+            if total >= max_chars:
                 break
         return pages
     if suffix == ".docx":
         with zipfile.ZipFile(path) as archive:
+            if archive.getinfo('word/document.xml').file_size > max(8192,max_chars*8):
+                raise ValueError('DOCX XML expansion exceeds the extraction limit.')
             xml = archive.read("word/document.xml").decode("utf-8", "replace")
         paragraphs = [html.unescape("".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", p)))
                       for p in re.split(r"</w:p>", xml)]
         return [(None, "\n".join(p for p in paragraphs if p.strip())[:max_chars])]
     if suffix in {".html", ".htm"}:
-        raw = path.read_text(encoding="utf-8", errors="replace")[:max_chars * 2]
+        with path.open(encoding='utf-8',errors='replace') as source:
+            raw = source.read(max_chars*2)
         raw = re.sub(r"(?is)<(script|style).*?</\1>", " ", raw)
         return [(None, html.unescape(re.sub(r"<[^>]+>", " ", raw))[:max_chars])]
     if suffix in TEXT_SUFFIXES:
-        return [(None, path.read_text(encoding="utf-8", errors="replace")[:max_chars])]
+        with path.open(encoding='utf-8',errors='replace') as source:
+            return [(None, source.read(max_chars))]
     return []
 
 
 def chunk(pages, size=1200, overlap=200):
     """Paragraph-aware chunks of about ``size`` characters that remember their page."""
+    if type(size) is not int or not 1 <= size <= 10000 or type(overlap) is not int or not 0 <= overlap < size:
+        raise ValueError('Invalid chunk size/overlap.')
     chunks = []
     for page, text in pages:
         text = re.sub(r"[ \t]+", " ", text).strip()
@@ -126,11 +138,15 @@ def chunk(pages, size=1200, overlap=200):
         current = ""
         for paragraph in paragraphs:
             while len(paragraph) > size:
-                chunks.append({"page": page, "text": (current + " " + paragraph[:size]).strip()})
+                if current.strip():
+                    chunks.append({'page':page,'text':current.strip()})
+                chunks.append({"page": page, "text": paragraph[:size].strip()})
                 current, paragraph = "", paragraph[size - overlap:]
             if len(current) + len(paragraph) > size and current:
                 chunks.append({"page": page, "text": current.strip()})
-                current = current[-overlap:]
+                current = current[-overlap:] if overlap else ''
+                if len(current)+len(paragraph)+1>size:
+                    current = ''
             current += "\n" + paragraph
         if current.strip():
             chunks.append({"page": page, "text": current.strip()})
@@ -144,6 +160,17 @@ class Document:
     """One indexed document: chunks, BM25 statistics, and an entity graph."""
 
     def __init__(self, data):
+        if (not isinstance(data,dict) or not isinstance(data.get('id'),str) or not re.fullmatch('[a-f0-9]{16}',data['id']) or
+                not isinstance(data.get('chunks'),list) or not 1 <= len(data['chunks']) <= 10000 or
+                any(not isinstance(c,dict) or c.get('id')!=i or not isinstance(c.get('text'),str) or len(c['text'])>10000 or
+                    c.get('page') is not None and (type(c['page']) is not int or not 1 <= c['page'] <= 400)
+                    for i,c in enumerate(data['chunks'])) or
+                not all(isinstance(data.get(k),str) for k in ('name','path','mode','mode_reason','created_at')) or
+                not isinstance(data.get('graph_chunks_done'),list) or not isinstance(data.get('questions'),list) or
+                any(type(i) is not int or not 0 <= i < len(data['chunks']) for i in data['graph_chunks_done']) or
+                not isinstance(data.get('graph'),dict) or not isinstance(data['graph'].get('entities'),dict) or
+                not isinstance(data['graph'].get('relations'),list)):
+            raise ValueError('Invalid bounded document index.')
         self.data = data
         self.lock = threading.RLock()
         self._prepare()
@@ -151,7 +178,10 @@ class Document:
     @classmethod
     def build(cls, path, graph_threshold=40_000):
         path = Path(path)
+        identity = file_id(path)
         pages = extract(path)
+        if identity != file_id(path):
+            raise ValueError('Document changed during extraction; inspect the fresh file before retry.')
         text_chars = sum(len(t) for _, t in pages)
         if not pages or text_chars < 20:
             raise ValueError("I couldn't read any text in " + path.name + (" (it may be a scanned image)." if
@@ -160,7 +190,7 @@ class Document:
         entities = Counter(e.strip() for _, t in pages for e in ENTITY.findall(t) if len(e.strip()) > 2)
         named = len([e for e, n in entities.items() if n >= 2])
         mode = "graph" if text_chars >= graph_threshold or named >= 60 else "light"
-        data = {"id": file_id(path), "name": path.name, "path": str(path), "size": path.stat().st_size,
+        data = {"id": identity, "name": path.name, "path": str(path), "size": path.stat().st_size,
                 "pages": max([p for p, _ in pages if p] or [0]), "chars": text_chars, "mode": mode,
                 "mode_reason": ("long document (" + str(text_chars // 1000) + "k characters)" if text_chars >= graph_threshold
                                 else str(named) + " recurring names" if mode == "graph" else
@@ -176,6 +206,12 @@ class Document:
         self.lengths = [sum(t.values()) for t in self.tokens]
         self.avg = sum(self.lengths) / max(1, len(self.lengths))
         self.df = Counter(term for t in self.tokens for term in t)
+        self.postings = {}
+        for index,tokens in enumerate(self.tokens):
+            for term in tokens:
+                self.postings.setdefault(term,[]).append(index)
+        n=len(self.tokens)
+        self.idf={term:math.log(1+(n-count+.5)/(count+.5)) for term,count in self.df.items()}
 
     @property
     def id(self):
@@ -213,11 +249,20 @@ class Document:
 
     def merge_graph(self, chunk_id, extracted):
         """Add model-extracted entities and relations from one chunk (GraphRAG-style)."""
+        if (type(chunk_id) is not int or not 0 <= chunk_id < len(self.data['chunks']) or not isinstance(extracted,dict) or
+                any(not isinstance(extracted.get(k,[]),list) for k in ('entities','relations')) or
+                any(not isinstance(item,dict) or any(not isinstance(v,str) for v in item.values())
+                    for k in ('entities','relations') for item in extracted.get(k,[])[:12])):
+            raise ValueError('Invalid bounded graph response.')
         with self.lock:
+            if chunk_id in self.data['graph_chunks_done']:
+                return
             entities = self.data["graph"]["entities"]
+            text=self.data['chunks'][chunk_id]['text'].casefold()
             for item in extracted.get("entities", [])[:12]:
                 name = re.sub(r"\s+", " ", str(item.get("name", ""))).strip()[:80]
-                if len(name) < 2:
+                where=[c['id'] for c in self.data['chunks'] if name.casefold() in re.sub(r'\s+',' ',c['text']).casefold()]
+                if len(name) < 2 or not where:
                     continue
                 key = next((k for k in entities if k.casefold() == name.casefold()), name)
                 row = entities.setdefault(key, {"type": "", "description": "", "chunks": [], "source": "model"})
@@ -225,14 +270,16 @@ class Document:
                 description = str(item.get("description", ""))[:240]
                 if description and description not in row["description"]:
                     row["description"] = (row["description"] + " " + description).strip()[:600]
-                row["chunks"] = sorted(set(row["chunks"]) | {chunk_id})
+                row["chunks"] = sorted(set(row["chunks"]) | set(where))[:40]
                 row["source"] = "model"
             for item in extracted.get("relations", [])[:12]:
                 source, target = str(item.get("source", "")).strip()[:80], str(item.get("target", "")).strip()[:80]
-                if source and target and source.casefold() != target.casefold():
+                known={name.casefold() for name in entities}
+                if source and target and source.casefold() != target.casefold() and source.casefold() in known and target.casefold() in known:
                     self.data["graph"]["relations"].append({"source": source, "target": target, "chunk": chunk_id,
                                                             "relation": str(item.get("relation", ""))[:80], "source_kind": "model"})
             self.data["graph_chunks_done"].append(chunk_id)
+            self.data['graph']['relations']=self.data['graph']['relations'][-800:]
 
     def graph_order(self, limit):
         """Chunks to send through the model first: rich in names, but not reference lists (citations are mostly names
@@ -256,12 +303,14 @@ class Document:
         wanted = terms(question)
         n = len(self.tokens)
         scores = []
-        for index, tokens in enumerate(self.tokens):
+        candidates=sorted({i for term in wanted for i in self.postings.get(term,[])})
+        for index in candidates:
+            tokens=self.tokens[index]
             score = 0.
             for term in wanted:
                 frequency = tokens.get(term, 0)
                 if frequency:
-                    idf = math.log(1 + (n - self.df[term] + .5) / (self.df[term] + .5))
+                    idf = self.idf[term]
                     score += idf * frequency * 2.5 / (frequency + 1.5 * (1 - .75 + .75 * self.lengths[index] / max(1, self.avg)))
             if score > 0:
                 scores.append((score, self.data["chunks"][index]))
@@ -273,8 +322,8 @@ class Document:
         lower = question.casefold()
         wanted = set(terms(question))
         entities = self.data["graph"]["entities"]
-        hits = [name for name in entities if name.casefold() in lower or
-                (len(name) > 3 and set(terms(name)) and set(terms(name)) <= wanted)]
+        hits = [name for name in entities if terms(name) and (name.casefold() in lower or
+                (len(name) > 3 and set(terms(name)) <= wanted))]
         hits.sort(key=lambda n: (entities[n].get("source") != "model", -len(n)))
         hits = hits[:6]
         facts = []
@@ -295,18 +344,23 @@ class Document:
 
     def context(self, question, budget=7000):
         """Excerpts and graph facts for one question, plus how confident the match is."""
+        if type(budget) is not int or not 0 <= budget <= 24000:
+            raise ValueError('Invalid document context budget.')
         ranked = self.search(question, 6)
         hits, facts, graph_chunks = self.neighbourhood(question)
         chosen, seen, used = [], set(), 0
         for chunk_row in [c for _, c in ranked[:4]] + graph_chunks + [c for _, c in ranked[4:]]:
-            if chunk_row["id"] in seen or used > budget:
+            if chunk_row["id"] in seen or used >= budget:
                 continue
             seen.add(chunk_row["id"])
-            text = chunk_row["text"][:max(300, budget - used)]
+            text = chunk_row["text"][:budget - used]
             chosen.append({"page": chunk_row["page"], "text": text})
             used += len(text)
         if not chosen:
-            chosen = [{"page": c["page"], "text": c["text"]} for c in self.data["chunks"][:3]]
+            for c in self.data['chunks'][:3]:
+                text=c['text'][:max(0,budget-used)]
+                if text:chosen.append({'page':c['page'],'text':text})
+                used+=len(text)
         best = ranked[0][0] if ranked else 0.
         return {"excerpts": chosen, "graph_facts": facts[:20], "entities": hits, "score": round(best, 2)}
 
@@ -327,6 +381,11 @@ class Document:
 class Library:
     def __init__(self, actions, options=None, model_chat=None, clock=time.time):
         options = options or {}
+        if (not isinstance(options,dict) or type(options.get('enabled',True)) is not bool or
+                type(options.get('graph_max_chunks',12)) is not int or not 0 <= options.get('graph_max_chunks',12) <= 40 or
+                type(options.get('graph_threshold_chars',40000)) is not int or not 100 <= options.get('graph_threshold_chars',40000) <= 2_000_000 or
+                type(options.get('focus_minutes',30)) not in (int,float) or not math.isfinite(options.get('focus_minutes',30)) or not 0 < options.get('focus_minutes',30) <= 1440):
+            raise ValueError('Invalid bounded document configuration.')
         self.actions = actions
         self.enabled = bool(options.get("enabled", True))
         self.model = options.get("model", "qwen3.5:9b")
@@ -339,6 +398,7 @@ class Library:
         vault = getattr(getattr(actions, "memory", None), "vault", None)
         self.notes = Path(vault) / "Jarvis Documents" if vault else None
         self.lock = threading.RLock()
+        self._write_lock = threading.RLock()
         self.session = {}             # id -> Document (session memory)
         self.focus = None             # id of the document questions go to
         self.focus_used = 0.
@@ -349,15 +409,18 @@ class Library:
     # --- storage ---
     def _index(self):
         try:
-            return json.loads((self.root / "index.json").read_text(encoding="utf-8"))
+            path=self.root/'index.json'
+            if path.stat().st_size>2_000_000:raise ValueError('Oversized document catalog.')
+            data=json.loads(path.read_text(encoding='utf-8'))
+            return {k:v for k,v in data.items() if isinstance(k,str) and re.fullmatch('[a-f0-9]{16}',k) and
+                    isinstance(v,dict) and isinstance(v.get('name'),str)} if isinstance(data,dict) else {}
         except (OSError, ValueError):
             return {}
 
     def _write(self, path, data):
-        path.parent.mkdir(parents=True, exist_ok=True)
-        temp = path.with_suffix(".tmp")
-        temp.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-        temp.replace(path)
+        from .skill_memory import atomic
+        with self._write_lock:
+            atomic(path,json.dumps(data,ensure_ascii=False))
 
     def spill(self, document):
         """Crash-safe session copy; promoted to long-term memory when the session ends."""
@@ -378,14 +441,15 @@ class Library:
     def remember(self, document):
         """Long-term memory: the index, an index entry, and an Obsidian note. Removes the session spill."""
         with document.lock:
-            data = dict(document.data)
+            data = json.loads(json.dumps(document.data))
         data["saved_at"] = now_iso()
         self._write(self.root / document.id / "index.json", data)
-        index = self._index()
-        index[document.id] = {"name": document.name, "path": data["path"], "mode": data["mode"], "pages": data["pages"],
-                              "summary": data.get("summary", "")[:400], "saved_at": data["saved_at"],
-                              "questions": len(data.get("questions", [])), "entities": list(data["graph"]["entities"])[:30]}
-        self._write(self.root / "index.json", index)
+        with self.lock:
+            index = self._index()
+            index[document.id] = {"name": document.name, "path": data["path"], "mode": data["mode"], "pages": data["pages"],
+                                  "summary": data.get("summary", "")[:400], "saved_at": data["saved_at"],
+                                  "questions": len(data.get("questions", [])), "entities": list(data["graph"]["entities"])[:30]}
+            self._write(self.root / "index.json", index)
         if self.notes is not None:
             try:
                 self.notes.mkdir(parents=True, exist_ok=True)
@@ -410,8 +474,12 @@ class Library:
         return data["saved_at"]
 
     def load(self, doc_id):
+        if not isinstance(doc_id,str) or not re.fullmatch('[a-f0-9]{16}',doc_id):
+            return None
         try:
-            return Document(json.loads((self.root / doc_id / "index.json").read_text(encoding="utf-8")))
+            path=self.root/doc_id/'index.json'
+            if path.stat().st_size>16_000_000:raise ValueError('Oversized document index.')
+            return Document(json.loads(path.read_text(encoding='utf-8')))
         except (OSError, ValueError):
             return None
 
@@ -434,6 +502,12 @@ class Library:
             else:
                 document.data["path"] = str(path)
         with self.lock:
+            if document.id!=doc_id or file_id(path)!=doc_id:
+                raise ValueError('Document changed while preparing the index.')
+            stale=[key for key,value in self.session.items() if key!=doc_id and value.data.get('path')==str(path)]
+            for key in stale:
+                self.session.pop(key)
+                if self.focus==key:self.focus=doc_id
             self.session[doc_id] = document
         self.spill(document)
         return document, reused
@@ -523,6 +597,8 @@ class Library:
         try:
             sample = "\n\n".join(c["text"] for c in document.data["chunks"][:6])[:6000]
             summary = self._chat(SUMMARY_PROMPT, {"document": document.name, "text": sample}, role="research", predict=220)
+            if self.stop.is_set():
+                return
             with document.lock:
                 document.data["summary"] = str(summary).strip()[:800]
             self.spill(document)
@@ -542,6 +618,8 @@ class Library:
                     extracted = self._chat(GRAPH_PROMPT, {"document": document.name, "page": row["page"],
                                                           "excerpt": row["text"][:2400]}, GRAPH_SCHEMA, role="research",
                                            predict=1600)
+                    if self.stop.is_set():
+                        return
                     document.merge_graph(row["id"], extracted)
                     self.spill(document)
                 except Exception:
@@ -552,17 +630,39 @@ class Library:
 
     def answer(self, question, document=None):
         """Answer one question from a document (focused one by default). Returns the spoken answer."""
+        if self.stop.is_set():
+            raise InterruptedError('Document library stopped.')
+        if not isinstance(question,str) or not 1 <= len(question) <= 10000 or any(0xd800 <= ord(c) <= 0xdfff for c in question):
+            raise ValueError('Use a bounded Unicode document question.')
         document = document or self.focused() or (list(self.session.values())[-1] if self.session else None)
         if document is None:
             raise ValueError("No document is open. Drop a file on the island first, or name a document I remember.")
+        path=Path(document.data['path'])
+        if path.is_file() and file_id(path)!=document.id:
+            raise ValueError('Document changed since indexing. Drop the updated file before asking again.')
         with self.lock:
             self.focus, self.focus_used = document.id, self.clock()
         context = document.context(question)
+        if not context['score'] and not context['entities'] and not re.search(r'\b(?:summari[sz]e|summary|overview)\b',question,re.I):
+            return "I couldn't find that in the document excerpts."
         reply = self._chat(ANSWER_PROMPT, {"document": document.name, "question": question[:600], **context},
                            predict=500)
-        reply = str(reply).strip()
+        if self.stop.is_set():
+            raise InterruptedError('Document library stopped during answer readback.')
+        if path.is_file() and file_id(path)!=document.id:
+            raise ValueError('Document changed during answer generation; inspect the fresh source.')
+        if not isinstance(reply,str) or not reply.strip() or len(reply)>20000:
+            raise ValueError('Invalid bounded document answer.')
+        reply = reply.strip()
+        cited={int(n) for n in (re.findall(r'\bp\.\s*(\d+)\b',reply,re.I) +
+                              re.findall(r'\[\s*page\s+(\d+)\s*\]',reply,re.I))}
+        supplied={e['page'] for e in context['excerpts'] if e['page'] is not None}
+        not_found=bool(re.search(r"could(?:n.t| not) find|not (?:found|in the document)|does(?:n.t| not) (?:cover|mention)",reply,re.I))
+        if cited-supplied or supplied and not cited and not not_found:
+            return 'I could not verify the page citations against the supplied document excerpts.'
         with document.lock:
             document.data.setdefault("questions", []).append({"q": question[:300], "a": reply[:500], "at": now_iso()})
+            document.data['questions']=document.data['questions'][-200:]
         self.spill(document)
         return reply
 

@@ -1,5 +1,31 @@
 {
   "version": 1,
+  "phase2_gpu_voice_ui": {
+    "date": "2026-10-15 IST",
+    "modules": [
+      "jarvis.gpu_scheduler",
+      "jarvis.whisper_backend",
+      "jarvis.f5_speech",
+      "jarvis.pcm_ring",
+      "jarvis.speech_normalizer",
+      "jarvis.ui_events",
+      "jarvis.island_mind"
+    ],
+    "ollama_owned_server_environment": {
+      "OLLAMA_FLASH_ATTENTION": "1",
+      "OLLAMA_KV_CACHE_TYPE": "q8_0",
+      "OLLAMA_MAX_LOADED_MODELS": "2",
+      "OLLAMA_NUM_PARALLEL": "1",
+      "OLLAMA_CONTEXT_LENGTH": "4096"
+    },
+    "request_policy": "Native Ollama contexts capped at 4096; micro-models at 1024. Existing v1 aliases retain Modelfile parameters and fail admission if their estimated VRAM does not fit. keep_alive remains bounded by the configured warm_seconds.",
+    "native_audio": "Warm owned F5/Whisper workers use speech/recognition leases around CUDA loads and inference; lazy Whisper decoding stays under the lease. Admission estimates do not certify allocator peaks or forcibly preempt kernels.",
+    "buffers": "Owned shared-memory PCM pools: playback 60 seconds at 24 kHz, capture 10 seconds at device rate, bounded at 120 seconds of 24 kHz PCM. Existing Silero CPU VAD gates speech decoding.",
+    "ui": "Replaceable snapshots coalesced; 16 ms drain cadence, 6 ms cooperative batch budget; ordered terminal/control events retained. Mind task/cognition reads do not wait on checkpoint locks.",
+    "new_dependencies": [],
+    "new_services": [],
+    "verification": "artifacts/phase2_gpu_voice_verified.md; performance targets and live blockers are reported separately from fixtures."
+  },
   "gpu_audit_2026_10_15": {
     "state": "200000 characters, depth12/4096 nodes, <=128 pending records; validated role/priority/owner/cache metadata; unchanged polls keep the OS lock but skip atomic rewrites",
     "safety": "20 percent primary-envelope margin floor, probe failures release admission, duplicate acquisition refused, serialized release bookkeeping, categorical UUID events; no forced CUDA clears",
@@ -971,6 +997,35 @@
     "bounds": "8k local UTF-8 guides;50/source;32 declared bindings;2MB Hermes manifest;validated unique indexed paths/digests;read budget checked before open;bounded2048 description-token cache excludes recognized credential descriptions and does not cache goals.",
     "procedure_ranking": "Relevance then smoothed observed successes/attempts then recency. Legacy rows default attempts to successes; preexisting failures not reconstructed.",
     "utility_gate": "Missing separate environment, malformed validation or changed source hashes disable activation; no automatic validation refresh or install.",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "desktop_control_audit_2026_10_15": {
+    "modules": [
+      "jarvis.execution_router",
+      "jarvis.execution_adapters",
+      "jarvis.jarvis_pointer",
+      "jarvis.independent_cursor",
+      "jarvis.ui_transport"
+    ],
+    "contract": "Preserved pointer-first priority; only read-only preparation fallback; permission denial halts. No replay after dispatch. Bounded text, categorical exceptions and per-action UUID receipts.",
+    "pointer": "Physical-pixel DPI context scoped/restored; admitted semantic target geometry/identity/focus/hit tested after mouse idle and immediately before touch; visual-point fallback rechecks existing window guard. Missing/malformed cursor configuration disables touch. Valid missing cursor option defaults on.",
+    "transport": "Malformed response envelopes or non-integer IDs stop only owned worker and enter existing backoff without replay.",
+    "limits": "Fixture coverage only; live150%DPI, secure desktop/UAC and arbitrary elevated applications not certified. Touch/COM dispatch remains cooperative with existing outer worker deadline; checks are not atomic with external desktop changes.",
+    "new_dependencies": [],
+    "new_services": []
+  },
+  "browser_audit_2026_10_15": {
+    "modules": [
+      "jarvis.browser_worker",
+      "jarvis.browser_automation",
+      "jarvis.browser_cursor"
+    ],
+    "contract": "Controller-owned settings; validate requests before opening; role locators wait then require unique target and exact observed URL; pinned click target rechecked after cursor cue; no replay after dispatched action.",
+    "summary": "Single evaluated DOM summary, <=5000 visited elements/120 controls, HTML and aria label metadata, no field values/cookies, untrusted reference contract and heuristic authentication_required.",
+    "tabs_downloads": "Bound page only, generic click/fill refuse multiple owned tabs. No new verified-download/save or tab activation capability.",
+    "dependencies": "Existing Playwright1.63.0 and installed Chrome retained; no download/install/service.1.64.0 upstream availability recorded separately.",
+    "limits": "A fill can trigger site input/autosave handlers. Auth heuristic is not complete. No universal transaction safety or atomicity between DOM checks and input.",
     "new_dependencies": [],
     "new_services": []
   }

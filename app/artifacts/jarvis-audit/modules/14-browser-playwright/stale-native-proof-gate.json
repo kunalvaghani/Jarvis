@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-15 IST",
+  "result": "PASS",
+  "assertions": [
+    "stale PASS proof becomes explicit BLOCKED, never current PASS",
+    "recorded FAIL remains AssertionError, never converted to skip",
+    "historical native-default.json SHA256 unchanged"
+  ],
+  "old_proof_modified": false,
+  "service_started": false,
+  "model_downloaded": false
+}

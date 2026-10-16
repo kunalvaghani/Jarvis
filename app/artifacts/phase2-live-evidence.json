@@ -1,0 +1,298 @@
+{
+  "date": "2026-10-15 IST",
+  "elapsed_seconds": 227.20299999999952,
+  "probes": {
+    "server_start": {
+      "returncode": null,
+      "owned": true
+    },
+    "whisper": {
+      "completed": true,
+      "decode_seconds": [
+        2.2221362000000227,
+        0.38140129999919736,
+        0.34195940000063274,
+        0.3524118000004819,
+        0.365325999999186
+      ],
+      "seconds": 35.09797770000023,
+      "input": "synthetic silence; no acoustic accuracy claim"
+    },
+    "f5": {
+      "completed": true,
+      "first_pcm_seconds": [
+        4.741378800000348,
+        4.716599899999892
+      ],
+      "audio_seconds": [
+        2.5493333333333332,
+        2.5493333333333332
+      ],
+      "seconds": 64.65332969999963,
+      "scope": "warm synthesis only; no microphone or speaker loopback"
+    },
+    "cleanup": {
+      "completed": true,
+      "seconds": 10.553862800000388,
+      "tokens": 8,
+      "model": "qwen2.5:0.5b",
+      "policy": {
+        "role": "cleanup",
+        "num_gpu": 0,
+        "context_tokens": 1024,
+        "gpu_slot": false
+      }
+    },
+    "context": {
+      "completed": true,
+      "seconds": 8.099207499999466,
+      "tokens": 8,
+      "model": "qwen3.5:0.8b",
+      "policy": {
+        "role": "context",
+        "num_gpu": 0,
+        "context_tokens": 1024,
+        "gpu_slot": false
+      }
+    },
+    "planner": {
+      "completed": true,
+      "seconds": 22.564378999999462,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 4,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    "laya": {
+      "completed": true,
+      "correct": 22,
+      "total": 25,
+      "rows": [
+        {
+          "expected": "a",
+          "selected": "a",
+          "correct": true,
+          "confidence": 0.4652
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.8028
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.0075
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.7119
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.6346
+        },
+        {
+          "expected": "a",
+          "selected": "a",
+          "correct": true,
+          "confidence": 0.5267
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.822
+        },
+        {
+          "expected": "c",
+          "selected": "none",
+          "correct": false,
+          "confidence": 0.0044
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.6665
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.7436
+        },
+        {
+          "expected": "a",
+          "selected": "a",
+          "correct": true,
+          "confidence": 0.5669
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.8568
+        },
+        {
+          "expected": "c",
+          "selected": "none",
+          "correct": false,
+          "confidence": 0.002
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.6932
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.773
+        },
+        {
+          "expected": "a",
+          "selected": "a",
+          "correct": true,
+          "confidence": 0.4453
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.8148
+        },
+        {
+          "expected": "c",
+          "selected": "none",
+          "correct": false,
+          "confidence": 0.0144
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.5933
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.564
+        },
+        {
+          "expected": "a",
+          "selected": "a",
+          "correct": true,
+          "confidence": 0.5813
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.7668
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.0136
+        },
+        {
+          "expected": "b",
+          "selected": "b",
+          "correct": true,
+          "confidence": 0.7011
+        },
+        {
+          "expected": "c",
+          "selected": "c",
+          "correct": true,
+          "confidence": 0.757
+        }
+      ],
+      "seconds": 45.54039909999938
+    },
+    "lora": {
+      "completed": true,
+      "generated_tokens": 2,
+      "seconds": 35.77241589999994
+    },
+    "legacy": {
+      "completed": true,
+      "seconds": 33.824312499999905,
+      "tokens": 8,
+      "model": "jarvis-codex-qwen3.5:9b",
+      "policy": {
+        "role": "coding",
+        "num_gpu": 4,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    "kokoro": {
+      "completed": true,
+      "first_pcm_seconds": 4.013432299999295,
+      "audio_seconds": 2.35925,
+      "seconds": 9.515056599999298
+    },
+    "piper": {
+      "completed": true,
+      "first_pcm_seconds": 2.0959046999996644,
+      "audio_seconds": 2.716734693877551,
+      "seconds": 4.609880799999701
+    }
+  },
+  "gates": {
+    "simultaneous_cuda": {
+      "status": "pass",
+      "peak_mb": 3322,
+      "scope": "simultaneous submissions, synthetic decode and generation; sampled VRAM is not allocator peak proof"
+    },
+    "lora_load": {
+      "status": "pass"
+    },
+    "legacy_alias": {
+      "status": "pass"
+    },
+    "laya_25": {
+      "status": "pass",
+      "correct": 22,
+      "total": 25,
+      "threshold": 20
+    },
+    "ttfa": {
+      "status": "fail",
+      "target_seconds": 0.5,
+      "first_pcm_seconds": [
+        4.741378800000348,
+        4.716599899999892
+      ],
+      "reason": "First PCM already exceeds audible TTFA target; speaker callback/loopback was not measured."
+    },
+    "live_hotkeys": {
+      "status": "blocked",
+      "reason": "No interactive Notepad/VS Code key injection performed; fixture key-state results are separate."
+    },
+    "live_mind_dag": {
+      "status": "blocked",
+      "reason": "No live Tk Mind/DAG session captured; state and rendering fixtures are separate."
+    }
+  },
+  "vram_peak_sampled_mb": 3322,
+  "sample_count": 585,
+  "oom_count": null,
+  "oom_scope": "No global CUDA allocator/log interception; zero OOM is not certified by sampling."
+}

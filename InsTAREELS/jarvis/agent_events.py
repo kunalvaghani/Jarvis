@@ -16,7 +16,9 @@ from .agent_context import bounded_text, scoped
 _LOCK = threading.RLock()
 _BACKENDS = frozenset({'files','terminal','browser','desktop','toolkit','dom','realtime','spotify','desktop_observation'})
 _ERROR_TYPES = frozenset(name for name,value in vars(builtins).items()
-    if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled'})
+    if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled',
+    'ToolArgumentError','ToolUnavailable','TaskFailure'})
+_CATEGORIES = frozenset({'invalid_arguments','unavailable','cancelled','failed'})
 
 @lru_cache(maxsize=1)
 def lifecycle_tools():
@@ -33,6 +35,9 @@ def lifecycle_metadata(metadata):
     error = metadata.get('error_type')
     if isinstance(error,str) and error in _ERROR_TYPES:
         result['error_type'] = error
+    category = metadata.get('category')
+    if isinstance(category,str) and category in _CATEGORIES:
+        result['category'] = category
     discarded = len(metadata)-len(result)
     if discarded: result['discarded_metadata_fields'] = discarded
     return result

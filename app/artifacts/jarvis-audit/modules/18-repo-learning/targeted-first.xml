@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="45" time="1.956" timestamp="2026-10-16T11:34:33.244105+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_001_search_evidence" time="0.020" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_002_zero_search_no_invention" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_003_claims_are_not_validation" time="0.045" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_004_commit_pin" time="0.030" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_005_absent_license_no_excerpts" time="0.028" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_006_malware_is_static_data" time="0.005" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_007_read_budget_is_strict" time="0.001" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_008_duplicate_reuses_memory" time="0.029" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_009_platform_note" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_010_minified_source_excluded" time="0.001" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_011_offline_reference" time="0.035" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_012_credit_and_restrict_copyleft" time="0.031" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_013_outage_one_attempt" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_014_timeout_one_attempt" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[None]" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[payload1]" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[payload2]" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_016_without_git_still_static" time="0.031" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_017_five_concurrent_twenty_rounds" time="0.073" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_018_cancel_before_network_and_after_summary" time="0.006" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_019_restart_readback" time="0.038" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_020_injected_readme_is_untrusted" time="0.030" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_021_credential_origin_gate" time="0.005" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_022_unicode_source_and_bad_id" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_023_negative_task_no_search" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_024_tampered_cache_not_reused" time="0.044" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_025_model_resource_failure_no_publication" time="0.006" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_026_queue_dedupe_and_stopped" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_027_real_benchmark" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\18-repo-learning\\benchmark-summary.json'">def test_JRV_18_027_real_benchmark():
+&gt;       data=json.loads((Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/18-repo-learning/benchmark-summary.json').read_text())
+
+tests\test_repo_learning_audit.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Kunals GitHub Repo/Jarvis/app/artifacts/jarvis-audit/modules/18-repo-learning/benchmark-summary.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\18-repo-learning\\benchmark-summary.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_028_forged_approval_not_authority" time="0.074" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_029_config_rejected" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_030_failed_save_not_replayed" time="0.014" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_031_oversized_zip_rejected" time="0.001" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_032_trace_and_redacted_failure" time="0.032" /><testcase classname="tests.test_repo_learning.AnalysisTests" name="test_browser_titles" time="0.002" /><testcase classname="tests.test_repo_learning.AnalysisTests" name="test_zip_analysis_is_multilanguage_and_skips_vendor" time="0.001" /><testcase classname="tests.test_repo_learning.LearningTests" name="test_browsing_queues_after_dwell_and_verifies" time="0.052" /><testcase classname="tests.test_repo_learning.LearningTests" name="test_commands" time="0.199" /><testcase classname="tests.test_repo_learning.LearningTests" name="test_failed_learning_is_remembered" time="0.003" /><testcase classname="tests.test_repo_learning.LearningTests" name="test_large_repository_is_learned_from_its_key_files" time="0.003"><failure message="jarvis.repo_learning.LearningError: GitHub did not provide an immutable commit SHA.">self = &lt;tests.test_repo_learning.LearningTests testMethod=test_large_repository_is_learned_from_its_key_files&gt;
+
+    def test_large_repository_is_learned_from_its_key_files(self):
+        # Live 2026-10-11: deepseek-ai/deepseek-harness (273 MB) was refused as "too large", so nothing was learned.
+        info = dict(self.INFO, full_name="big/harness", size=280_000)
+        files = {"README.md": b"# Harness\nRuns agents.", "pyproject.toml": b"[project]\nname='harness'",
+                 "harness/cli.py": b"def main(argv=None):\n    return 0\n", "tests/test_cli.py": b"def test():\n    pass\n",
+                 "assets/logo.png": b"\x89PNG"}
+        fetched = []
+        http = Mock()
+    
+        def get(url, params=None, headers=None, timeout=None, stream=False, **kwargs):
+            response = Mock(status_code=200)
+            response.raise_for_status = lambda: None
+            if "/commits/" in url:
+                response.json = lambda: {"sha": "a"*40}
+            elif "codeload" in url:
+                raise AssertionError("A large repository is never downloaded whole.")
+            if "/git/trees/" in url:
+                response.json = lambda: {"tree": [{"type": "blob", "path": p, "size": len(b)} for p, b in files.items()]}
+            elif "raw.githubusercontent.com" in url:
+                path = url.split("/"+"a"*40+"/", 1)[1]
+                fetched.append(path)
+                response.iter_content = lambda n: [files[path]]
+            else:
+                response.json = lambda: info
+            return response
+        http.get.side_effect = get
+        instance, reports = learner(http=http)
+&gt;       row = instance.learn("big/harness", "you viewed it")
+
+tests\test_repo_learning.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\repo_learning.py:502: in learn
+    return self._learn(full_name,reason,lambda:self.stop.is_set() or cancelled(),info,role)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.repo_learning.RepoLearner object at 0x000001F08386DF60&gt;
+full_name = 'big/harness', reason = 'you viewed it'
+cancelled = &lt;function RepoLearner.learn.&lt;locals&gt;.&lt;lambda&gt; at 0x000001F083884940&gt;
+info = {'default_branch': 'main', 'description': 'Snake game on canvas', 'full_name': 'big/harness', 'html_url': 'https://github.com/demo/snake', ...}
+role = 'research'
+
+    def _learn(self, full_name, reason="asked", cancelled=lambda: False, info=None, role="research"):
+        """Download, analyse, understand and save one repository. Returns its index row."""
+        with self.lock:
+            self.current = full_name
+        try:
+            self.card("learning", full_name, "Learning in the background — keep Jarvis open", "Checking the repository")
+            info = info or self.info(full_name)
+            if not info:
+                raise LearningError(full_name + " was not found on GitHub (or it is private).")
+            full_name = info["full_name"]
+            canonical_name(full_name)
+            if info.get('private'):raise LearningError('Private repository learning is unsupported.')
+            branch = info.get("default_branch") or "main"
+            if not isinstance(branch,str) or not 1&lt;=len(branch)&lt;=200:raise LearningError('Invalid branch metadata.')
+            pinned=self.get(API+'/repos/'+full_name+'/commits/'+quote(branch,safe=''))
+            commit=pinned.get('sha') if isinstance(pinned,dict) else None
+            if not isinstance(commit,str) or not re.fullmatch('[a-f0-9]{40}',commit):
+&gt;               raise LearningError('GitHub did not provide an immutable commit SHA.')
+E               jarvis.repo_learning.LearningError: GitHub did not provide an immutable commit SHA.
+
+jarvis\repo_learning.py:521: LearningError</failure></testcase><testcase classname="tests.test_repo_learning.LearningTests" name="test_learn_saves_note_index_cache_and_cards" time="0.040" /><testcase classname="tests.test_repo_learning.LearningTests" name="test_prepare_searches_then_reuses_memory" time="0.047" /><testcase classname="tests.test_repo_learning.ContextTests" name="test_situation_combines_contexts" time="0.004" /><testcase classname="tests.test_repo_learning.IslandTests" name="test_github_card" time="0.133" /><testcase classname="tests.test_repo_learning.PlanRepairTests" name="test_unowned_split_becomes_one_worker" time="0.006" /></testsuite></testsuites>

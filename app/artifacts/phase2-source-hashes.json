@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Final review snapshot; measurements retain their documented probe/fixture scopes.",
+  "sha256": {
+    "main.py": "38907bea4978f407480aee7ce7260bca73ae2f798a20b73dfaf1c83b98559e53",
+    "jarvis/gpu_scheduler.py": "be3c0e0d65a510e5d9b22a61edfed1261ea06746319d8e02a59d9179b2f4f6cd",
+    "jarvis/launcher.py": "7e2c7c1c1711ea70148f5e0ab1c08582a3d19b7f629b673906c6c0dc0bfc7eca",
+    "jarvis/knowledge_worker.py": "6b0792e5e1492e2ceb9541ebcdafb2ba216e7515f0d9fca68836f2127ef1630c",
+    "jarvis/audio.py": "d185137f417a1347b58387492dec9970610425b475d865f6b25454592e750497",
+    "jarvis/whisper_backend.py": "cc351977157d8f2b028a99ce8d412c374eb56aac864ba582ba1649af6fdce44f",
+    "jarvis/f5_speech.py": "ffb3597dd1be3f0146fb60e3a07c3c56a29c0da5708ea7765453040d61977e0e",
+    "jarvis/kokoro_speech.py": "7ede67a84d5b6a5dc8e1c1b68c071e1be0903b393023efd1cf7f7d285acce53b",
+    "jarvis/speech.py": "f0ae16f84fec1961fbf515f65a86b7e35d75c257ee83f6a62e23a44a495b6b76",
+    "jarvis/speech_normalizer.py": "d2307722b8d0509b6c46679623d66bfb7d255ebd2f30fdbc75caec43e11307d6",
+    "jarvis/pcm_ring.py": "0e3fd6414c066814a5c1313fb631c9dceef18a16265b006fc1b196ccb58954ac",
+    "jarvis/push_to_write.py": "63a4a8bedd8588ca0f4bd5306455cddb87f489707ef8151653dd3056cee1326d",
+    "jarvis/ui_events.py": "7d70b4b53d2d7505fc4bbba6eddda2f8f1e3b128eb0eb6acb6d02074879c09c2",
+    "jarvis/island_mind.py": "a248b2b7bc18ea2f09123cd06bbbd2ba1bfdd6fea70fe3184f23e10050bb8605",
+    "jarvis/task_state.py": "26b386116decefcbeee574fce88f5c7843b2e454b03821e1f6ec03f84ec9c463",
+    "config/runtime_manifest.json": "47e71663fdb1e173c5e12d851921a87172e2a8c2d2288687e73ab6325c5d51a6",
+    "tests/test_phase2_gpu_models_voice_ui.py": "d0ccebe02f3a4c19e22333b112f627dfc106ef3669076da4166f04985fc4db52",
+    "tests/test_gpu_scheduler.py": "9e884ccf9095c6fa223bb7e86699314bbe41bfc1f740ccb11f56792cc3a6a56e",
+    "tests/test_gpu_scheduler_audit.py": "729f3109fd66b35069d3228d83223b76305a0bff24d98ad7775af4e772f929f3",
+    "tests/test_f5_speech.py": "87a1e8a4438f355730fc1b3fa6fe9d6296a5a1971bf8e9c0c0371c2041e5ba66",
+    "scripts/verification/phase2_gpu_voice_probe.py": "57e5217b50a899619f7eeb646ecbf17457051863b2754ef448391fe81e213b8c"
+  }
+}

@@ -1,5 +1,102 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt20-audit -->
+**Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
+Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
+[Evidence, limitations and rollback](artifacts/jarvis-audit/modules/20-self-evolution/inventory.md).
+
+![Rendered fixture preview: learning needs fresh state review](artifacts/media/self-evolution-paused-preview.png)
+
+Rendered fixture preview, not a native app screenshot.
+
+<!-- /prompt20-audit -->
+
+<!-- prompt19-audit -->
+**Ability-forge audit — 2026-10-16 IST:** Review now binds code/version/scope; network runs require fresh approval and a durable non-replay checkpoint. Wrong-type output withdraws the new version and can restore prior approved metadata without execution. Oversized code is rejected before parsing.
+Verification: **2,756 full regression PASS /32 skips**; **32 Prompt19 catalog fixture PASS**. Voice abilities use process guard rails, not Docker isolation. Launcher **repair_required**; live model/account/voice acceptance and supported Python migration remain open.
+[Evidence, limits and rollback](artifacts/jarvis-audit/modules/19-ability-forge/inventory.md).
+<!-- /prompt19-audit -->
+
+<!-- prompt18-audit -->
+**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
+Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
+[Evidence, limits and rollback](artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
+<!-- /prompt18-audit -->
+
+
+<!-- prompt17-audit -->
+**Document audit — 2026-10-16 IST:** Bounded extraction/context, multilingual tokenization, stale-source checks, atomic session writes and drop admission guards added. Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places.
+Verification: **2,654 full regression PASS / 40 skips**; **28 Prompt 17 catalog PASS /4 BLOCKED**. Cross-document conflicts, semantic citation faithfulness, hard parser resource isolation and operation traces remain incomplete. Launcher **repair_required**. Installed pypdf 6.20.0 predates the 6.20.1 cyclic-tree security fix; no dependency installation performed.
+[Evidence, limitations and rollback](artifacts/jarvis-audit/modules/17-rag-documents/inventory.md).
+<!-- /prompt17-audit -->
+
+
+<!-- prompt16-audit -->
+**Memory audit — 2026-10-16 IST:** Bounded record/model validation, conservative subject/polarity guards, broader secret screening before clipping and Stop/readback guards added. Canonical facts flush before replacement; failed precommit restores RAM. Equivalent500-fact lexical retrieval warm median 15.40→5.40ms with a small temporary allocation increase.
+Verification: **2,616 full regression PASS / 36 skips**; **28 Prompt16 catalog PASS /4 BLOCKED**. Global erase, durable unavailable-vault writes, general document freshness and memory lifecycle correlation remain incomplete. Launcher **repair_required**; real vault/model/Obsidian GUI were not tested.
+[Evidence, limits and rollback](artifacts/jarvis-audit/modules/16-memory/inventory.md).
+<!-- /prompt16-audit -->
+
+<!-- prompt15-audit -->
+**App/site knowledge audit — 2026-10-16 IST:** Fresh surface/version and task UUID checks prevent stale context reuse; login observations suppress research/control hints; bounded inputs and numeric public versions fail closed. Source preference uses configured origin, with explicit URL version hints marked stale. Cache lookup warm median 3.52→0.45 ms on synthetic records.
+Verification: **2,576 full regression PASS / 32 skips**; **31 Prompt15 catalog PASS / 1 BLOCKED** (plugin identity namespace missing). Launcher **repair_required**. Owned headless browser fixture passed; live accounts/native GUI/model/production readiness remain unverified.
+[Evidence, limits and rollback](artifacts/jarvis-audit/modules/15-app-research/inventory.md).
+<!-- /prompt15-audit -->
+
+
+<!-- prompt14-audit -->
+**Browser/DOM audit — 2026-10-15 IST:** Nine reproduced defects fixed: validate
+before opening, preserve controller settings, wait for semantic targets, report
+labels/sign-in and reject malformed replies, stale URLs and renamed click targets.
+DOM summaries use one browser round trip and omit field values.
+[Executed cases, measurements, limits and rollback](artifacts/jarvis-audit/modules/14-browser-playwright/inventory.md).
+Verification: **2,536 regression PASS / 31 skips**;
+**165 targeted PASS / 4 blocked skips**; Prompt14 **30 PASS / 2 BLOCKED**.
+Launcher: **repair_required**; [current check](artifacts/jarvis-audit/modules/14-browser-playwright/readiness.json).
+Verified downloads and explicit tab selection remain missing production adapters.
+Headless fixtures do not certify live accounts, arbitrary autosave or production readiness.
+<!-- /prompt14-audit -->
+
+**GPU/voice/UI upgrade — 2026-10-15 IST:** [Phase 2 changes](docs/phase2-gpu-voice-ui.md)
+add bounded Ollama contexts and server settings, shared native inference leases,
+shared-memory PCM, speech normalization, safer modifier release, and coalesced UI
+telemetry with DAG state labels. [Verification and unmet targets](artifacts/phase2_gpu_voice_verified.md)
+include real local model/synthesis probes; sub-500 ms F5 first audio is not achieved.
+The guide includes a current rendered Pip/island fixture, accurately labelled.
+
+**System reference — 2026-10-15 IST:** The [system map](docs/system-map.md)
+collects features, skills, tools, models, software, repositories and architecture.
+Its [connection table](docs/system-map.md#13-workflow--skill--tool--model-connections)
+shows how requests reach skills, workers, models, verification and memory.
+Configured, historical and live-unverified capabilities are distinguished; this
+documentation update adds no live feature validation.
+
+<!-- prompt13-audit -->
+**Desktop-control audit — 2026-10-15 IST:** Eight reproduced defects fixed:
+COM/Win32/Python permission denial stops fallback; delayed touch rechecks target/window admission;
+DPI context is restored; malformed pointer settings and IPC frames fail closed;
+request text is bounded and router errors carry categories/UUIDs.
+Provider order stays pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S.
+[Assertions, measured tradeoffs and rollback](artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Verification: **2,423 regression PASS / 21 blocked skips**;
+**191 targeted PASS / 2 blocked skips**; Prompt13 **30 PASS / 2 BLOCKED**,
+launcher **repair_required** (Docker/Ollama unavailable; F5 check timed out). Live150% DPI and secure desktop remain unverified; no live
+Notepad/Calculator or production desktop success is claimed.
+<!-- /prompt13-audit -->
+
+<!-- prompt12-audit -->
+**Tool-registry audit — 2026-10-15 IST:** All 24 built-in tools now have typed argument
+contracts checked before any report or dispatch. Approval claims inside a proposal are
+stripped, malformed or deeply nested JSON gives typed errors, concurrent appends to one
+file are serialized in-process, and emitted tool reports redact credentials. Tool
+evidence is unchanged. Failure events carry a category and results carry a correlation ID.
+`requests`/`urllib3` were already current. [Reproductions, changes, benchmarks and
+limits](artifacts/jarvis-audit/modules/12-tool-registry/inventory.md).
+Verification: **2,392 regression PASS / 9 blocked skips** (other modules); Prompt12
+**32 PASS** (18 PASS / 13 FAIL on pre-change code), launcher **ready**. Warm p50 latency is
+unchanged at about 40 ms. Offline fixtures only; live GUI, accounts and network not exercised.
+<!-- /prompt12-audit -->
+
 <!-- prompt11-audit -->
 **Skill-selection audit — 2026-10-15 IST:** Bounded guide validation and provenance,
 observed procedure reliability and reused description tokens retain existing tool,

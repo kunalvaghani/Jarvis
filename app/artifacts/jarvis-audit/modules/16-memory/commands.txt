@@ -1,0 +1,10 @@
+Canonical cwd app; isolated fixtures only.
+Baseline: .venv/Scripts/python.exe -m pytest tests/test_memory_weather.py tests/test_obsidian_memory.py tests/test_memory_index.py tests/test_skill_memory.py tests/test_experience_memory.py tests/test_experience.py -q --junitxml=artifacts/jarvis-audit/modules/16-memory/baseline.xml
+Reproduction: .venv/Scripts/python.exe -m pytest tests/test_memory_audit.py -q --junitxml=artifacts/jarvis-audit/modules/16-memory/reproduced.xml
+A/B: .venv/Scripts/python.exe scripts/verification/verify_memory_audit.py
+Journey: .venv/Scripts/python.exe scripts/verification/verify_memory_journey.py
+Targeted: .venv/Scripts/python.exe -m pytest tests/test_memory_audit.py tests/test_memory_weather.py tests/test_obsidian_memory.py tests/test_memory_index.py tests/test_skill_memory.py tests/test_experience_memory.py tests/test_experience.py tests/test_knowledge.py tests/test_audit_result_accounting.py -q --junitxml=artifacts/jarvis-audit/modules/16-memory/cases-and-contracts.xml
+Full: .venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/jarvis-audit/modules/16-memory/full-regression.xml
+First full attempt: approval review usage-limit error; no execution. Resumed full superseded by final Stop/readback guard, owned process stopped with Ctrl+C before acceptance; see interrupted-full-run.txt.
+Fault A/B: .venv/Scripts/python.exe scripts/verification/verify_memory_durability.py
+.venv/Scripts/python.exe -m jarvis.launcher --check

@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-15 IST",
+  "file_hashes_verified": 15,
+  "preimage_pairs_verified": 6,
+  "frozen_source_test_files_verified": 377,
+  "source_changes_during_final_full_run": [],
+  "relative_links_checked": 411,
+  "broken_links": [],
+  "catalog_ids": 1184,
+  "prompt14_cases": 32,
+  "prompt14_passed": 30,
+  "prompt14_blocked": 2,
+  "native_proof_blockers": [
+    "JRV-06-002",
+    "JRV-06-009"
+  ],
+  "full_passed": 2536,
+  "full_skipped": 31,
+  "targeted_passed": 165,
+  "targeted_blocked": 4,
+  "readiness": "repair_required",
+  "scope": "Artifact/link/source-freeze/accounting assertions, not additional live site/account acceptance."
+}

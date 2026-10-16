@@ -1,0 +1,7 @@
+.venv/Scripts/python.exe -m pytest tests/test_execution_router.py tests/test_desktop_actions.py tests/test_ui_controls.py tests/test_visual_fallback.py tests/test_independent_cursor.py tests/test_jarvis_pointer.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/13-desktop-control/existing-baseline.xml
+.venv/Scripts/python.exe scripts/verification/verify_desktop_control_audit.py
+.venv/Scripts/python.exe -m pytest tests/test_desktop_control_audit.py tests/test_execution_router.py tests/test_desktop_actions.py tests/test_ui_controls.py tests/test_visual_fallback.py tests/test_independent_cursor.py tests/test_jarvis_pointer.py tests/test_automation_upgrade.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/13-desktop-control/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/13-desktop-control/full-regression.xml
+.venv/Scripts/python.exe -m pytest tests/test_tool_registry_audit.py tests/test_audit_result_accounting.py -q --junitxml=artifacts/jarvis-audit/modules/13-desktop-control/accounting-followup.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check
+.venv/Scripts/python.exe scripts/verification/report_desktop_control_audit.py

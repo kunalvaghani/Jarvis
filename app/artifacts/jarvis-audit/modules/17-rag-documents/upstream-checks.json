@@ -1,0 +1,47 @@
+{
+  "provider": "Firecrawl",
+  "check_date": "2026-10-16 IST",
+  "sources": [
+    {
+      "url": "https://pypi.org/project/pypdf/",
+      "checked": "2026-10-16 IST",
+      "release": "6.20.1",
+      "release_date": "2026-10-12",
+      "conclusion": "Python >=3.9; installed6.20.0, no installation.",
+      "retrieval_ok": true
+    },
+    {
+      "url": "https://github.com/py-pdf/pypdf/releases/tag/6.20.1",
+      "checked": "2026-10-16 IST",
+      "release": "6.20.1",
+      "release_date": "2026-10-12",
+      "conclusion": "Security fix prevents cyclic tree handling (#4188); appearance color operator bugfix (#4158). Installed6.20.0 lacks this release fix.",
+      "retrieval_ok": true
+    },
+    {
+      "url": "https://pypdf.readthedocs.io/en/stable/user/extract-text.html",
+      "checked": "2026-10-16 IST",
+      "release": null,
+      "release_date": null,
+      "conclusion": "Page content stream extraction may consume substantial memory; no OCR, semantic table reconstruction not guaranteed.",
+      "retrieval_ok": true
+    },
+    {
+      "url": "https://github.com/HKUDS/LightRAG/releases/tag/v1.5.7",
+      "checked": "2026-10-16 IST",
+      "release": "v1.5.7",
+      "release_date": "2026-09-02",
+      "conclusion": "Comparison only: upstream is not a Jarvis dependency.",
+      "retrieval_ok": true,
+      "release_date_basis": "Year inferred from page-relative date on current release page; not an independently fetched API timestamp."
+    },
+    {
+      "url": "https://github.com/microsoft/graphrag/releases/tag/v3.3.0",
+      "checked": "2026-10-16 IST",
+      "release": "v3.3.0",
+      "release_date": "2026-10-08",
+      "conclusion": "Comparison only: upstream is not a Jarvis dependency.",
+      "retrieval_ok": true
+    }
+  ]
+}

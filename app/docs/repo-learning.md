@@ -1,5 +1,12 @@
 # Learning GitHub repositories for coding, and multi-context awareness
 
+<!-- prompt18-audit -->
+**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
+Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
+<!-- /prompt18-audit -->
+
+
 Updated 2026-10-10 IST. Jarvis now learns public GitHub repositories and codes with that knowledge, learns repositories you look at in the browser in the background, saves everything to memory for next time, and keeps several live contexts in mind at once.
 
 ![Rendered island GitHub learning cards with sample text — not a desktop screenshot](../artifacts/media/island-repo-card-preview.png)

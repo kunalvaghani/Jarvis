@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "date": "2026-10-16 IST",
+  "case": "JRV-15-006",
+  "scope": "Actual Acquisition prepare / registry / executor with deterministic fake DNS/transports. First configured-document result empty; fallback search offers spoofed docs title and configured origin. No network or external effects.",
+  "selected": "https://vendor.example/guide",
+  "attempts": [
+    {
+      "action": "application_inspect",
+      "value": "Fixture"
+    },
+    {
+      "action": "scrape_web",
+      "value": "https://vendor.example/guide"
+    },
+    {
+      "action": "web_search",
+      "value": "Fixture diagram official documentation 1.0"
+    },
+    {
+      "action": "scrape_web",
+      "value": "https://vendor.example/guide"
+    }
+  ],
+  "side_effects": 0,
+  "event_count": 8
+}

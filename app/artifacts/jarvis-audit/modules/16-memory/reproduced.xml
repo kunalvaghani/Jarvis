@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="2" tests="36" time="1.927" timestamp="2026-10-16T00:17:45.678957+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_memory_audit" name="test_JRV_16_001_preference_restart" time="0.032" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_002_latest_authoritative_preference" time="0.015"><failure message="AssertionError: assert ['Kunal prefe...fers coffee.'] == ['Kunal prefers coffee.']&#10;  &#10;  At index 0 diff: 'Kunal prefers tea.' != 'Kunal prefers coffee.'&#10;  Left contains one more item: 'Kunal prefers coffee.'&#10;  Use -v to get more diff">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEA200A0&gt;
+
+    def test_JRV_16_002_latest_authoritative_preference(curator):
+        c=curator;c.add('Kunal prefers tea','preference');c.add('Kunal prefers coffee','preference')
+&gt;       assert [r['text'] for r in c.active()]==['Kunal prefers coffee.']
+E       AssertionError: assert ['Kunal prefe...fers coffee.'] == ['Kunal prefers coffee.']
+E         
+E         At index 0 diff: 'Kunal prefers tea.' != 'Kunal prefers coffee.'
+E         Left contains one more item: 'Kunal prefers coffee.'
+E         Use -v to get more diff
+
+tests\test_memory_audit.py:29: AssertionError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_003_people_not_merged" time="0.021"><failure message="AssertionError: assert 1 == 2&#10; +  where 1 = len([{'category': 'person', 'created': '2026-10-15T18:47:46+00:00', 'id': '8b8ac522bb', 'source': 'you asked me to remember', ...}])&#10; +    where [{'category': 'person', 'created': '2026-10-15T18:47:46+00:00', 'id': '8b8ac522bb', 'source': 'you asked me to remember', ...}] = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEC4BFA0&gt;.facts">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEC4BFA0&gt;
+
+    def test_JRV_16_003_people_not_merged(curator):
+        c=curator
+        c.add("Kunal's sister Riya likes masala chai while studying",'person')
+        c.add("Kunal's sister Diya likes masala chai while studying",'person')
+&gt;       assert len(c.facts)==2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len([{'category': 'person', 'created': '2026-10-15T18:47:46+00:00', 'id': '8b8ac522bb', 'source': 'you asked me to remember', ...}])
+E        +    where [{'category': 'person', 'created': '2026-10-15T18:47:46+00:00', 'id': '8b8ac522bb', 'source': 'you asked me to remember', ...}] = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEC4BFA0&gt;.facts
+
+tests\test_memory_audit.py:36: AssertionError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_004_supported_forget_broader_erase_blocked" time="0.013"><skipped type="pytest.skip" message="BLOCKED: fact forget does not purge raw SQLite turns, summaries, Daily notes or in-flight paraphrased extraction; no cross-store erase/tombstone protocol.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_memory_audit.py:42: BLOCKED: fact forget does not purge raw SQLite turns, summaries, Daily notes or in-flight paraphrased extraction; no cross-store erase/tombstone protocol.</skipped></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_005_secret_all_memory_boundaries" time="0.052"><failure message="AssertionError: assert 'my OTP is 654321' == '[redacted sensitive text]'&#10;  &#10;  - [redacted sensitive text]&#10;  + my OTP is 654321">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_005_secret_all_mem0')
+curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEAC6680&gt;
+
+    def test_JRV_16_005_secret_all_memory_boundaries(tmp_path,curator):
+        c=curator;db=ConversationMemory(tmp_path/'turns.db');session=db.start_session()
+        for text in ['my password is FAKE_SECRET','my OTP is 654321','my cvv is 987','card number 4111111111111111']:
+            assert c.add(text)[0] is None
+            key=db.begin(session,text);db.finish(key,text)
+&gt;           assert clean(text)=='[redacted sensitive text]'
+E           AssertionError: assert 'my OTP is 654321' == '[redacted sensitive text]'
+E             
+E             - [redacted sensitive text]
+E             + my OTP is 654321
+
+tests\test_memory_audit.py:50: AssertionError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_006_unavailable_vault_queue_boundary" time="0.004"><skipped type="pytest.skip" message="BLOCKED: no durable unavailable-vault write outbox; bounded model job queue is not durable write recovery.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_memory_audit.py:60: BLOCKED: no durable unavailable-vault write outbox; bounded model job queue is not durable write recovery.</skipped></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_007_sqlite_busy_safe_transaction" time="0.118" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_008_corrupt_record_skipped[data0]" time="0.005"><failure message="AttributeError: 'list' object has no attribute 'get'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_008_corrupt_record0')
+data = []
+
+    @pytest.mark.parametrize('data',[[],{'facts':[{'text':['bad']},None,{'text':'valid','expires':3}]},{'facts':'bad'}])
+    def test_JRV_16_008_corrupt_record_skipped(tmp_path,data):
+        tmp_path.joinpath('Jarvis Memory.json').write_text(json.dumps(data))
+&gt;       c=MemoryCurator(tmp_path)
+
+tests\test_memory_audit.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\memory_curator.py:110: in __init__
+    self.load()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEAA8DC0&gt;
+
+    def load(self):
+        try:
+            data = json.loads(self.facts_path.read_text(encoding="utf-8"))
+&gt;           self.facts = [f for f in data.get("facts", []) if isinstance(f, dict) and f.get("text")]
+E           AttributeError: 'list' object has no attribute 'get'
+
+jarvis\memory_curator.py:116: AttributeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_008_corrupt_record_skipped[data1]" time="0.011"><failure message="TypeError: '&gt;=' not supported between instances of 'int' and 'str'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_008_corrupt_record1')
+data = {'facts': [{'text': ['bad']}, None, {'expires': 3, 'text': 'valid'}]}
+
+    @pytest.mark.parametrize('data',[[],{'facts':[{'text':['bad']},None,{'text':'valid','expires':3}]},{'facts':'bad'}])
+    def test_JRV_16_008_corrupt_record_skipped(tmp_path,data):
+        tmp_path.joinpath('Jarvis Memory.json').write_text(json.dumps(data))
+        c=MemoryCurator(tmp_path)
+&gt;       assert c.context('anything')=={} and c.error
+
+tests\test_memory_audit.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\memory_curator.py:382: in context
+    facts = [f["text"] for f in self.relevant(question)]
+jarvis\memory_curator.py:197: in relevant
+    rows = self.active()
+jarvis\memory_curator.py:158: in active
+    return [f for f in self.facts if not f.get("expires") or f["expires"] &gt;= today]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x0000020AFEB2BD90&gt;
+
+&gt;   return [f for f in self.facts if not f.get("expires") or f["expires"] &gt;= today]
+E   TypeError: '&gt;=' not supported between instances of 'int' and 'str'
+
+jarvis\memory_curator.py:158: TypeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_008_corrupt_record_skipped[data2]" time="0.011"><failure message="assert ({} == {}&#10;  &#10;  Use -v to get more diff and None)&#10; +  where None = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEA59960&gt;.error">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_008_corrupt_record2')
+data = {'facts': 'bad'}
+
+    @pytest.mark.parametrize('data',[[],{'facts':[{'text':['bad']},None,{'text':'valid','expires':3}]},{'facts':'bad'}])
+    def test_JRV_16_008_corrupt_record_skipped(tmp_path,data):
+        tmp_path.joinpath('Jarvis Memory.json').write_text(json.dumps(data))
+        c=MemoryCurator(tmp_path)
+&gt;       assert c.context('anything')=={} and c.error
+E       assert ({} == {}
+E         
+E         Use -v to get more diff and None)
+E        +  where None = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEA59960&gt;.error
+
+tests\test_memory_audit.py:77: AssertionError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_009_duplicate_fact" time="0.018" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_010_idle_summary_does_not_hold_typing_lock" time="0.008" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_011_current_document_over_history" time="0.003"><failure message="ImportError: cannot import name 'payload' from 'jarvis.question_client' (D:\Kunals GitHub Repo\Jarvis\app\jarvis\question_client.py)">def test_JRV_16_011_current_document_over_history():
+&gt;       from jarvis.question_client import payload
+E       ImportError: cannot import name 'payload' from 'jarvis.question_client' (D:\Kunals GitHub Repo\Jarvis\app\jarvis\question_client.py)
+
+tests\test_memory_audit.py:100: ImportError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_012_malicious_memory_is_data" time="0.008" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_013_offline_store_has_no_network" time="0.215" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_014_model_timeout_preserves_fact" time="0.008" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_015_malformed_model_result[data0]" time="0.004"><failure message="AttributeError: 'list' object has no attribute 'get'">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEC4B8B0&gt;
+data = []
+
+    @pytest.mark.parametrize('data',[[],None,{'facts':[None,{'text':[]}]}])
+    def test_JRV_16_015_malformed_model_result(curator,data):
+        curator.model_chat.return_value=data
+&gt;       assert curator.extract('I prefer tea','')==[]
+
+tests\test_memory_audit.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEC4B8B0&gt;
+question = 'I prefer tea', answer = ''
+
+    def extract(self, question, answer):
+        today = date.today()
+        data = self._chat(self.model, EXTRACT_PROMPT, {"today": today.isoformat(), "weekday": today.strftime("%A"),
+                                                      "user_message": question, "jarvis_reply": answer[:600]}, FACT_SCHEMA)
+        saved = []
+&gt;       for fact in (data.get("facts") or [])[:4]:
+E       AttributeError: 'list' object has no attribute 'get'
+
+jarvis\memory_curator.py:303: AttributeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_015_malformed_model_result[None]" time="0.004"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEAC8130&gt;
+data = None
+
+    @pytest.mark.parametrize('data',[[],None,{'facts':[None,{'text':[]}]}])
+    def test_JRV_16_015_malformed_model_result(curator,data):
+        curator.model_chat.return_value=data
+&gt;       assert curator.extract('I prefer tea','')==[]
+
+tests\test_memory_audit.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEAC8130&gt;
+question = 'I prefer tea', answer = ''
+
+    def extract(self, question, answer):
+        today = date.today()
+        data = self._chat(self.model, EXTRACT_PROMPT, {"today": today.isoformat(), "weekday": today.strftime("%A"),
+                                                      "user_message": question, "jarvis_reply": answer[:600]}, FACT_SCHEMA)
+        saved = []
+&gt;       for fact in (data.get("facts") or [])[:4]:
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\memory_curator.py:303: AttributeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_015_malformed_model_result[data2]" time="0.004"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEACA8F0&gt;
+data = {'facts': [None, {'text': []}]}
+
+    @pytest.mark.parametrize('data',[[],None,{'facts':[None,{'text':[]}]}])
+    def test_JRV_16_015_malformed_model_result(curator,data):
+        curator.model_chat.return_value=data
+&gt;       assert curator.extract('I prefer tea','')==[]
+
+tests\test_memory_audit.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEACA8F0&gt;
+question = 'I prefer tea', answer = ''
+
+    def extract(self, question, answer):
+        today = date.today()
+        data = self._chat(self.model, EXTRACT_PROMPT, {"today": today.isoformat(), "weekday": today.strftime("%A"),
+                                                      "user_message": question, "jarvis_reply": answer[:600]}, FACT_SCHEMA)
+        saved = []
+        for fact in (data.get("facts") or [])[:4]:
+&gt;           text = safe(fact.get("text", ""))
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\memory_curator.py:304: AttributeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_016_no_model_for_explicit_memory" time="0.014" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_017_five_writers_twenty_rounds" time="0.454" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_018_closed_curator_no_later_observe" time="0.004"><failure message="assert (False)&#10; +  where False = empty()&#10; +    where empty = &lt;queue.Queue object at 0x0000020AFEEB43D0&gt;.empty&#10; +      where &lt;queue.Queue object at 0x0000020AFEEB43D0&gt; = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEEB4D00&gt;.queue">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEEB4D00&gt;
+
+    def test_JRV_16_018_closed_curator_no_later_observe(curator):
+        c=curator;c.close();c.observe('I prefer tea','ok')
+&gt;       assert c.queue.empty() and not c.turns
+E       assert (False)
+E        +  where False = empty()
+E        +    where empty = &lt;queue.Queue object at 0x0000020AFEEB43D0&gt;.empty
+E        +      where &lt;queue.Queue object at 0x0000020AFEEB43D0&gt; = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEEB4D00&gt;.queue
+
+tests\test_memory_audit.py:145: AssertionError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_019_pending_sqlite_restart_not_retrieved" time="0.034" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_020_untrusted_text_no_authority" time="0.007" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_021_private_context_stays_local" time="0.006"><failure message="AttributeError: &lt;module 'jarvis.knowledge_worker' from 'D:\\Kunals GitHub Repo\\Jarvis\\app\\jarvis\\knowledge_worker.py'&gt; does not have the attribute 'cloud_answer'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_021_private_contex0')
+
+    def test_JRV_16_021_private_context_stays_local(tmp_path):
+        from jarvis.knowledge_worker import answer
+        captured=[]
+        def chat(client,options,messages,structured=False):
+            captured.extend(messages);return '{"answer":"Local memory answer","needs_web":true}'
+&gt;       with patch('jarvis.knowledge_worker.cloud_answer',side_effect=AssertionError('cloud forbidden')):
+
+tests\test_memory_audit.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1437: in __enter__
+    original, local = self.get_original()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;unittest.mock._patch object at 0x0000020AFEF4DDB0&gt;
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+&gt;           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: &lt;module 'jarvis.knowledge_worker' from 'D:\\Kunals GitHub Repo\\Jarvis\\app\\jarvis\\knowledge_worker.py'&gt; does not have the attribute 'cloud_answer'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1410: AttributeError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_022_unicode_roundtrip" time="0.014" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_023_negation_not_merged" time="0.012" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_024_corrupt_reload_does_not_run_actions" time="0.009" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_025_bounded_queue_under_pressure" time="0.011" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_026_finish_idempotent_fts" time="0.048" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_027_benchmark_artifact" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\16-memory\\benchmark-summary.json'">def test_JRV_16_027_benchmark_artifact():
+        p=Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/16-memory/benchmark-summary.json'
+&gt;       data=json.loads(p.read_text());assert data['equivalent'] and data['samples_per_version']==25
+
+tests\test_memory_audit.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Kunals GitHub Repo/Jarvis/app/artifacts/jarvis-audit/modules/16-memory/benchmark-summary.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\16-memory\\benchmark-summary.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_028_forged_approval_is_only_text" time="0.007" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_029_invalid_config" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-226/test_JRV_16_029_invalid_config0')
+
+    def test_JRV_16_029_invalid_config(tmp_path):
+        for options in ({'max_facts':-1},{'summary_idle_minutes':float('nan')},{'enabled':'yes'}):
+&gt;           with pytest.raises(ValueError):MemoryCurator(tmp_path,options)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_memory_audit.py:208: Failed</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_030_disconnected_store_no_replay" time="0.016" /><testcase classname="tests.test_memory_audit" name="test_JRV_16_031_oversize_rejected" time="0.023"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">curator = &lt;jarvis.memory_curator.MemoryCurator object at 0x0000020AFEF55420&gt;
+
+    def test_JRV_16_031_oversize_rejected(curator):
+&gt;       with pytest.raises(ValueError):curator.add('Kunal '+'x'*100001)
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_memory_audit.py:219: Failed</failure></testcase><testcase classname="tests.test_memory_audit" name="test_JRV_16_032_error_is_categorical" time="0.012" /></testsuite></testsuites>

@@ -16,10 +16,25 @@ import smtplib
 import socket
 import ssl
 import tempfile
+import threading
 from urllib.parse import quote, urlsplit, urljoin
 
 import requests
 from .agent_tools import TOOLS as AGENT_TOOLS
+
+
+class ToolUnavailable(ValueError):
+    """Required configuration is missing; nothing was attempted."""
+
+
+_APPEND_LOCKS = {}
+_APPEND_GUARD = threading.Lock()
+
+
+def _append_lock(path):
+    key = os.path.normcase(str(path))
+    with _APPEND_GUARD:
+        return _APPEND_LOCKS.setdefault(key, threading.Lock())
 
 # name: (toolkit, description, required environment variables, external write)
 TOOLS = {
@@ -97,8 +112,8 @@ def arguments(step):
         return {}
     try:
         value = json.loads(content)
-    except ValueError as exc:
-        raise ValueError("This tool needs JSON parameters in content.") from exc
+    except (ValueError, RecursionError):
+        raise ValueError("This tool needs JSON parameters in content.") from None
     if not isinstance(value, dict):
         raise ValueError("Tool parameters must be a JSON object.")
     return value
@@ -144,38 +159,49 @@ def file_tool(actions, step, cancelled):
     name, value = step["action"], step["value"]
     if name in {"read_file", "append_file"}:
         path = scoped_path(root, value)
-        current = read_text(path)
         if name == "read_file":
-            return current
-        content = current + step.get("content", "")
-        if not step.get("content") or len(content.encode("utf-8")) > 20000:
-            raise ValueError("Append requires nonempty content and a final file up to 20,000 bytes.")
-        original = current.encode("utf-8")
-        from .code_context import save_change_review
-        from .task_state import TaskState
-        state = getattr(actions, "task_state", None)
+            return read_text(path)
+        # Read-compare-replace must be one critical section, or concurrent appends lose updates.
+        with _append_lock(path.resolve()):
+            return _append(actions, root, path, step, cancelled)
+    return _scan(root, name, value, cancelled)
+
+
+def _append(actions, root, path, step, cancelled):
+    name = step["action"]
+    current = read_text(path)
+    content = current + step.get("content", "")
+    if not step.get("content") or len(content.encode("utf-8")) > 20000:
+        raise ValueError("Append requires nonempty content and a final file up to 20,000 bytes.")
+    original = current.encode("utf-8")
+    from .code_context import save_change_review
+    from .task_state import TaskState
+    state = getattr(actions, "task_state", None)
+    if isinstance(state, TaskState):
+        review = save_change_review(root, [(path, original, content)], state.base)
+        state.checkpoint("coding_review", target=review, evidence="append backup and diff saved")
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile("wb", dir=path.parent, prefix=".jarvis-append-", delete=False) as output:
+            temporary = Path(output.name)
+            output.write(content.encode("utf-8"))
+        if cancelled() or path.read_bytes() != original:
+            raise ValueError("Append cancelled or file changed; nothing committed.")
         if isinstance(state, TaskState):
-            review = save_change_review(root, [(path, original, content)], state.base)
-            state.checkpoint("coding_review", target=review, evidence="append backup and diff saved")
+            state.checkpoint("action_attempted", action=name, target=path, evidence="append commit beginning")
+        os.replace(temporary, path)
         temporary = None
-        try:
-            with tempfile.NamedTemporaryFile("wb", dir=path.parent, prefix=".jarvis-append-", delete=False) as output:
-                temporary = Path(output.name)
-                output.write(content.encode("utf-8"))
-            if cancelled() or path.read_bytes() != original:
-                raise ValueError("Append cancelled or file changed; nothing committed.")
-            if isinstance(state, TaskState):
-                state.checkpoint("action_attempted", action=name, target=path, evidence="append commit beginning")
-            os.replace(temporary, path)
-            temporary = None
-            if path.read_bytes() != content.encode("utf-8"):
-                raise ValueError("Append result uncertain; inspect the file before continuing.")
-            if isinstance(state, TaskState):
-                state.checkpoint("observed_file", target=path, evidence="appended bytes read back")
-            return "Appended and verified " + str(path)
-        finally:
-            if temporary is not None:
-                temporary.unlink(missing_ok=True)
+        if path.read_bytes() != content.encode("utf-8"):
+            raise ValueError("Append result uncertain; inspect the file before continuing.")
+        if isinstance(state, TaskState):
+            state.checkpoint("observed_file", target=path, evidence="appended bytes read back")
+        return "Appended and verified " + str(path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def _scan(root, name, value, cancelled):
     results, inspected = [], 0
     for directory, folders, files in os.walk(root, followlinks=False):
         if cancelled():
@@ -286,7 +312,7 @@ def execute(actions, step, cancelled):
     data = TOOLS[name]
     missing = [key for key in data[2] if not os.environ.get(key)]
     if missing:
-        raise ValueError("Configure environment variables for " + name + ": " + ", ".join(missing))
+        raise ToolUnavailable("Configure environment variables for " + name + ": " + ", ".join(missing))
     if cancelled():
         raise ValueError("Tool cancelled.")
     if name in GMAIL_API_TOOLS:
@@ -342,6 +368,10 @@ def execute(actions, step, cancelled):
     except (requests.RequestException, smtplib.SMTPException, imaplib.IMAP4.error, OSError) as exc:
         # Provider exceptions can contain URLs with API keys or authentication text.
         raise ValueError("Service request failed; inspect external state before repeating any write.") from None
+    except (KeyError, TypeError, AttributeError, RecursionError):
+        # Missing JSON parameters or a non-object service reply; a write may already have been sent.
+        raise ValueError("Malformed tool parameters or service response" + (
+            "; the external write may have happened, so inspect it before repeating." if data[3] else ".")) from None
     finally:
         client.close()
 

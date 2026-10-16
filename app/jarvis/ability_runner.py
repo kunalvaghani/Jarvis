@@ -104,6 +104,7 @@ def main(request_path):
                                     + [repo] if repo else [])
     os.chdir(work)
     guard(writable, readable, bool(request.get("network")))
+    output_validation = False
     try:
         spec = importlib.util.spec_from_file_location("jarvis_learned_ability", os.path.join(ability_dir, "ability.py"))
         module = importlib.util.module_from_spec(spec)
@@ -115,15 +116,20 @@ def main(request_path):
         else:
             inputs = request.get("inputs") or {}
         result = module.run(inputs, work)
+        output_validation = True
         if isinstance(result, str):
             result = {"text": result}
         if not isinstance(result, dict):
             raise TypeError("run() must return a dict with 'text' and/or 'files'.")
-        text = result.get("text") or ""
+        text = result.get("text", "")
         if not isinstance(text, str):
-            text = json.dumps(text, ensure_ascii=False, default=str)
+            raise TypeError("run() text must be a string.")
+        returned_files = result.get("files", [])
+        if not isinstance(returned_files, list) or len(returned_files) > 20 or any(
+                not isinstance(item, str) for item in returned_files):
+            raise TypeError("run() files must be a list of at most 20 path strings.")
         files = []
-        for item in result.get("files") or []:
+        for item in returned_files:
             path = real(os.path.join(work, os.fspath(item)))
             if not inside(path, [real(work)]) or not os.path.isfile(path):
                 raise ValueError("run() returned a file that is missing or outside the run folder: " + str(item)[:200])
@@ -134,6 +140,7 @@ def main(request_path):
                 "inputs": json.loads(json.dumps(inputs, default=str))})
     except BaseException as exc:  # Report everything (including SystemExit) to Jarvis instead of crashing silently.
         finish({"ok": False, "error": (type(exc).__name__ + ": " + str(exc))[:600],
+                "failure_kind": "output_contract" if output_validation else "execution",
                 "trace": traceback.format_exc()[-3000:]})
 
 

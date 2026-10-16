@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.183" timestamp="2026-10-15T23:29:29.283418+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_browser_playwright_audit" name="test_label_change_during_cursor_cue_never_clicks" time="1.769"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_browser_playwright_audit.py:104: in test_label_change_during_cursor_cue_never_clicks
+    with pytest.raises(ValueError,match='target changed'):
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase></testsuite></testsuites>

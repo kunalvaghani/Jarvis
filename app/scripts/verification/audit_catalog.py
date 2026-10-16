@@ -18,7 +18,7 @@ TESTS={
 10:['hierarchical','task_graph','plan_execution','task_state'],11:['skill_memory','hermes_skills','capabilities'],
 12:['tools','native_tools','toolkits','agent_runtime'],13:['execution','ui_controls','visual_fallback'],
 14:['browser_automation'],15:['knowledge_acquisition','live_app_context'],16:['obsidian_memory','conversation_memory','cognition'],
-17:['file_knowledge','file_knowledge_training','buddy'],18:['repo_learning','repository_skills'],19:['repo_abilities','repository_skill_isolation'],
+17:['documents','rag_documents_audit','buddy'],18:['repo_learning','repository_skills'],19:['repo_abilities','repository_skill_isolation'],
 20:['self_evolution','anticipation'],21:['native_coding','coding_backend'],22:['development','coding_preview'],
 23:['gmail_api','gmail_writes','gmail_workflows'],24:['whatsapp'],25:['media_player','media_routes','spotify','media_process_ownership'],
 26:['realtime','memory_weather'],27:['gods_eye','gods_eye_view','gods_eye_cameras'],28:['deerflow','deerflow_sandbox','repository_skill_isolation'],
@@ -71,13 +71,13 @@ def reconcile():
     for path in sorted(paths):
         for node in ET.parse(path).iter('testcase'):
             state='FAIL' if node.find('failure') is not None or node.find('error') is not None else ('SKIPPED' if node.find('skipped') is not None else 'PASS')
-            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit')):
+            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit', 'test_repo_learning_audit', 'test_ability_forge_audit', 'test_self_evolution_audit')):
                 skipped=node.find('skipped')
                 if 'BLOCKED:' in (skipped.get('message','')+(skipped.text or '')):state='BLOCKED'
             result={'node':node.get('classname','')+'::'+node.get('name',''),'status':state,'seconds':float(node.get('time','0')),'evidence':path.relative_to(OUT).as_posix()}
             executed.append(result)
             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_audit_completion_cases')):
+            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit', 'test_repo_learning_audit', 'test_ability_forge_audit', 'test_self_evolution_audit', 'test_tool_registry_audit', 'test_audit_completion_cases')):
                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])
                 for module,case in ids:actual.setdefault(f'JRV-{module}-{case}',[]).append(result)
     results=[]

@@ -1,0 +1,42 @@
+[
+  {
+    "path": "jarvis/repo_abilities.py",
+    "before": "bf6143ea4c33c3a1fedd713528fa957b14aa44af2e19f447c1cc29ec0d5b3373",
+    "after": "0d72ac3fdb9560f98fea016ea320c411e7f1e7b8ef9914114703f03eb6376272"
+  },
+  {
+    "path": "jarvis/ability_runner.py",
+    "before": "cb41aae612270d058a0dff085b83eab96ba1d314b31b6ed12f7b828d05b6db29",
+    "after": "f0a38549f355358ad7e646f1a1fd2a1fd3dd0aa2f3ed9edbd61d21a3cf33479c"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "c7bdaf0d695e9f87998ac757c8c16a7d32077e5559033e85f628538502919e77",
+    "after": "21d5701f67bdf9dc4100a72fbdd28042473a00cc3933c61e6c772c021e769ace"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "483e6cbaa57e134aeece19176157090b8a4512abafc779e8a039cfcdf31baec5",
+    "after": "bb07779a2a4caf3ab1bd6c1b86ee6b7a88bbad8e5f2c3b9bca50ad1a9bcf39c9"
+  },
+  {
+    "path": "README.md",
+    "before": "9ffca16bdf05261fe74c1a12fab7288cd6e0c73d1946786678a4fd8dba825636",
+    "after": "6539753bf117dfe5baa9ddfeb9f470d5f26f8349ff9913e34ee25f8001de4024"
+  },
+  {
+    "path": "docs/system-map.md",
+    "before": "a6236a51cc809d2e34cf7dd7547387b0c8ff6e14cf54b22c6b4ee4f20124f89f",
+    "after": "152cd7faac9026fb3ba655517eca42ef8691d473c7064b27162ffe36363df47b"
+  },
+  {
+    "path": "docs/repo-abilities.md",
+    "before": "bad8de54a6547121086c52090b75555dbbc3cf9bfb0427243adb46b2f1a00880",
+    "after": "2ba106671aa9459bf1d155c99a86ec1caec9288521fab5a905a034adb6f9cfa7"
+  },
+  {
+    "path": "../README.md",
+    "before": "266c1807da001994049656ddc7c27598c6ad41af853f7e9d78b7e9fa7148e893",
+    "after": "d03abe9cc1432f1abdf0d076cfb4c60b03ea378a2c4f0b375c668d665e218b54"
+  }
+]

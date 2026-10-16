@@ -1,5 +1,10 @@
 # Writing by voice and push-to-write — 2026-10-10 IST
 
+**Phase 2 repair — 2026-10-15 IST:** Failed modifier masking now forwards the
+physical Alt release; `SendInput` counts are checked and stale/closed hold timers
+cannot reactivate writing. [Fault reproductions, tests and remaining live editor checks](phase2-gpu-voice-ui.md)
+distinguish internal state-machine proof from actual Notepad/VS Code key state.
+
 **Release-buffer repair — 2026-10-15 IST:** The final microphone block is now
 resampled to Whisper's 16 kHz before joining the held utterance. Two 100 ms blocks
 captured at 48 kHz produce exactly 3,200 samples, rather than the former 6,400.

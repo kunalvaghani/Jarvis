@@ -1,0 +1,12 @@
+Canonical cwd app/; existing .venv/Scripts/python.exe; owned fixtures/fake transports.
+Baseline: .venv/Scripts/python.exe -m pytest tests/test_repo_learning.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_toolkits.py -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/baseline.xml
+Reproduction: .venv/Scripts/python.exe -m pytest tests/test_repo_learning_audit.py -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/reproduced.xml
+A/B: .venv/Scripts/python.exe scripts/verification/verify_repo_learning_audit.py
+Journey: .venv/Scripts/python.exe scripts/verification/verify_repo_learning_journey.py
+Final focused: .venv/Scripts/python.exe -m pytest tests/test_repo_learning_audit.py tests/test_repo_learning.py tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_toolkits.py tests/test_audit_result_accounting.py tests/test_gpu_scheduler.py tests/test_gpu_scheduler_audit.py -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/cases-and-contracts.xml
+First full: .venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/full-regression.xml
+First full result:1 FAIL /2703 PASS /32 skips in437.75s; shared-state read fixture PermissionError. Retained full-regression-shared-state.xml and source hashes.
+Final full rerun: same command, new frozen hashes; exit0,2706 PASS /32 skips /1 existing COM warning in429.89s.
+Readiness: .venv/Scripts/python.exe -m jarvis.launcher --check; exit1 repair_required (Ollama unavailable; Docker/LocalGithub available), no repair/start.
+Report: .venv/Scripts/python.exe scripts/verification/report_repo_learning_audit.py
+Artifact verification: .venv/Scripts/python.exe scripts/verification/verify_repo_learning_artifacts.py

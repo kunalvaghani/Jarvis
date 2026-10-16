@@ -1,7 +1,45 @@
-# PROMPT 14 — Browser DOM automation, Playwright and web controls
+# Prompt14 — browser/Playwright audit, 2026-10-15 IST
 
-PARTIAL. Sources: ['jarvis/browser_automation.py', 'jarvis/browser_worker.py', 'jarvis/app_knowledge.py', 'docs', 'tests']
+**30 catalog fixture PASS / 2 BLOCKED / 0 FAIL / 0 SKIPPED / 0 NOT RUN.** JRV-14-007 lacks a production verified-download/save adapter; JRV-14-009 lacks explicit tab selection. Their negative boundaries and a harness download readback are tested, not promoted into new abilities. No account/send/personal file deletion/OS setting/credential setup/package or browser install/deployment occurred. No real user tabs/profile used.
 
-Missing inferred candidates: []
+Current repo `e1a33a0944b5cd725e1a76a72eda228513e45963`; baseline `bdcb15a52bbf23101950cd1625f249a564e647ee`, existing branch `audit/12-tool-registry` retained; Windows/Python3.10.6, installed Playwright1.63.0/Chrome, Ryzen7/32GB/RTX3050 Laptop4GB target. Headless browser fixture scope is module; it closes before unrelated tests. [Exact read-only environment and concurrent HEAD note](environment.json). No heavyweight model/GPU inference tests added, no new dependencies/services. app/ canonical; existing dirty work and InsTAREELS alias preserved.
 
-[Whole inventory](../../inventory.md)
+## Source map, dependency and safe run order
+
+| Claim / entry | Actual implementation and boundary | Executed proof / limitation |
+| --- | --- | --- |
+| Owned browser/controller | BrowserAutomation.request → UITransport(module=browser_worker) → Session.perform/open | Fixed controller executable settings override caller settings; validate before open; existing separate persistent production profile retained. Tests use fresh nonpersistent contexts, not that profile |
+| Semantic actions | Session.perform click/fill → get_by_role(exact) → visible wait → uniqueness → browser_cursor.click | CSS classes irrelevant; delayed element uses built-in wait; exact observed URL rechecked after wait/before fill/readback; pinned node compared to current semantic locator after cue |
+| DOM discovery | Session.inspect → one SUMMARY evaluate → validate_summary | HTML/ARIA labels, bound5000 visited nodes/120 controls, no field values/cookies, hidden/inert disabled filtering; metadata marked untrusted. This is an approximate accessible-name summary, not a complete accessibility tree |
+| Authentication/redirect | bounded DOM summary flag → navigate message | Owned loopback302→signin plus visible password detection; no credential entry. Heuristic not general OAuth/SSO/session validity proof |
+| Forms/dialogs | exact fill/input_value, generic sensitive-target refusal, existing registry scope/approvals | Exact Unicode value and0 fixture submits; no Enter from generic fill. Site input/autosave handlers can still issue requests; generic click labels are not a complete transaction policy |
+| Tabs/downloads | bound Session.page/open_tabs; generic click/fill refuses >1 owned tab | Original page not silently retargeted. No production explicit tab-selection or verified-download/save adapter. Harness alone verifies suggested filename and exact synthetic PDF-marker bytes |
+| Fault/recovery/handoff | UITransport lock/serial/deadline/owned process/backoff; BrowserAutomation.owns_handle |100 fake IPC requests over5 threads×20 rounds, timeout/cancel/malformed response no replay, intentional Stop. Existing owned-browser versus desktop routing preserved; no new live Windows handoff trial |
+| Authority/privacy | untrusted summary contract, ToolRegistry allowlist, metadata-only agent events | Injection labels do not override known tools/scope/approvals; fake private field values absent from summary; UUID events omit payload. Not a general personal-text scrubber or prompt-injection proof |
+| Existing neighboring paths | windows_command_browser.perform, media workflows, app_knowledge profiles | Existing scoped recipes/media/AppKnowledge remain; their historical live results are not rerun as general site/account acceptance |
+
+
+Read system-map, automation-upgrade, existing execution/Windows command/browser cursor contracts, source registrations/config/tests and AppKnowledge metadata boundaries. Run order: ownership/permission/no-replay inspection → existing baseline → isolated failure assertions → bounded fixes → actual controlled headless journeys and32 catalog IDs → matched metadata benchmark → full regression/readiness → accounting/docs. Existing tools and UI preserved. No generic remote browser or autonomous new adapter installed. Screenshots/full Playwright traces not enabled automatically because they can retain private DOM/field data; metadata-only lifecycle traces stay in existing logs. A concurrent phase1 commit changed knowledge_worker source. Initial full run2 FAIL/2536 PASS/29 skips were stale native-proof hash assertions, retained in full-regression-stale-native.xml. Current cached proof remains untouched; two live native cases explicitly BLOCKED because Ollama is unavailable. [Read-only prerequisite probe](native-refresh-status.json),[stale/FAIL classification assertions](stale-native-proof-gate.json). Fresh native validation, not a rehash, is required. The QA freshness classification was updated separately from product code, then all fixtures/full suite rerun. Full-start source/test hashes are checked for concurrent mutations. No new UI screenshot; historical artwork/live evidence retains labels/dates/attribution.
+
+## Executed results and scoped journeys
+
+Baseline **62 PASS**, 6.03s,[XML](existing-baseline.xml). Nine reproduced browser failures: [initial7](reproduced-failures.xml),[renamed button during cue](semantic-target-reproduced.xml),[URL changes during wait](wait-url-reproduced.xml). First fixes69 PASS before catalog expansion. Final targeted **165 PASS / 4 explicit BLOCKED skips**, 23.33s,[XML](cases-and-contracts.xml). Full **2536 PASS / 31 skips**, 398.03s,[XML](full-regression.xml),[completion](full-run-completion.txt). Counts overlap. Launcher **repair_required**,[current redacted result](readiness.json); this is separate from headless fixture success. [All32 IDs/assertions](tests.jsonl),[commands](commands.txt),[skip reasons](full-regression-skip-reasons.json). Existing COM warning, if emitted, retained in completion.
+
+Actual headless journeys fill labelled forms with Unicode and assert exact DOM value/0 submits, change CSS/SPA routes, wait for delayed controls without arbitrary target sleeps, reject duplicate labels/sensitive controls/stale URL, detect owned loopback302 sign-in, refuse changed semantic target during cursor cue, report extra tabs without retargeting, and verify harness suggested filename/exact temporary synthetic PDF-marker payload. The payload tests bytes/headers, not PDF rendering. [Additional actual confirm-dialog fixture](dialog-fixture.json) observed default dismissal and0 synthetic submits; [reproducer](../../../../scripts/verification/verify_browser_dialog_audit.py). General dialog/authentication or arbitrary account behavior is not certified. Generic cursor's intentional240ms cue delay remains; no universal sleep-free claim. Fault tests use fake pipes/registry/policy and injected outages; concurrency covers serialized IPC, not concurrent use of Playwright's thread-affine sync API. No user recording, cookie or real desktop screenshot in artifacts.
+
+## Matched before/after component measurement
+
+| Version/context | Samples | p50 ms | p95 ms | Peak traced Python bytes |
+| --- | --- | --- | --- | --- |
+| before_cold | 5 | 54.508 | 83.254 | 428705 |
+| before_warm | 20 | 18.585 | 22.125 | 352947 |
+| after_cold | 5 | 11.360 | 11.762 | 344828 |
+| after_warm | 20 | 6.906 | 12.563 | 284444 |
+
+[Raw50 trials](benchmarks.csv),[scope](benchmark-summary.json). Saved pre-change inspect versus current inspect, same80 explicit-ARIA buttons/video, installed Chrome and machine. Five first-summary measurements in fresh isolated contexts and20 warm summaries/version; page load/browser launch excluded. Browser round trips4→1. Common name/role/href projection is identical (absent href normalized to None), new metadata/labels measured separately by assertions. Python allocation only, not Chrome/whole-host RAM; TTFT/audio/VRAM not applicable. Warm p50 **18.585→6.906ms**, p95 **22.125→12.563ms**. Keep fewer IPC round trips and bounded useful metadata. This small synthetic fixture does not establish every page's speed/precision, overall answer/voice latency or a2-second guarantee. No real external mutation in benchmark.
+
+## Risks, blockers and next work
+
+Production verified download/save and explicit tab-selection contracts remain missing; adding them requires scoped review/authorization. Multiple tabs are intentionally refused for generic click/fill. Authentication flag is a heuristic, not a credential/SSO detector. A fill can run site oninput/autosave code; label keyword screening is not universal write protection. Dedicated account adapters/current approvals remain required. The DOM may change between final guard and actual input; checks are not atomic. Summary naming/visibility approximates native accessibility and can omit controls beyond limits, shadow DOM or iframes; generic role locators remain separate. Page content/URLs remain private local task context; new untrusted labels do not replace core cloud policy. Error messages in other established paths retain existing redaction behavior. No live public-site account, real login, headed desktop handoff, GPU contention or long soak validation. Whole-system production acceptance remains open.
+
+[Changes](changes.md),[failure history](failures.md),[official compatibility](compatibility.md),[rollback/resume](rollback.md),[files/hashes](files-changed.json),[scoped diff](source.patch). Earliest unresolved **JRV-04-001**, next NOT RUN **JRV-15-001**.

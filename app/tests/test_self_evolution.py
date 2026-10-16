@@ -246,6 +246,9 @@ class SafeEvolutionTests(unittest.TestCase):
         m = json.loads((folder / "meta.json").read_text())
         m["tested"] = {"ok": True, "detail": "passed"}
         (folder / "meta.json").write_text(json.dumps(m), encoding="utf-8")
+        # Fake the process-owned evaluator receipt for this approval unit test.
+        # Actual worktree/pytest/deploy/rollback is covered by the owned audit journey.
+        self.mgr.validations[pid] = self.mgr._binding(folder, m)
         # Approval refused -> no deploy.
         self.actions._approved = False
         with self.assertRaises(ValueError):

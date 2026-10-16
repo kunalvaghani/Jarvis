@@ -1,89 +1,91 @@
 {
   "catalog_counts": {
-    "PASS": 354,
+    "PASS": 615,
     "FAIL": 0,
-    "BLOCKED": 9,
+    "BLOCKED": 30,
     "SKIPPED": 0,
-    "NOT RUN": 821
+    "NOT RUN": 539
   },
   "by_tier": {
     "P0": {
-      "PASS": 87,
-      "BLOCKED": 5,
-      "NOT RUN": 204
+      "PASS": 151,
+      "BLOCKED": 10,
+      "NOT RUN": 135
     },
     "P1": {
-      "PASS": 190,
-      "BLOCKED": 2,
-      "NOT RUN": 437
+      "PASS": 329,
+      "BLOCKED": 14,
+      "NOT RUN": 286
     },
     "P2": {
-      "PASS": 77,
-      "BLOCKED": 2,
-      "NOT RUN": 180
+      "PASS": 135,
+      "BLOCKED": 6,
+      "NOT RUN": 118
     }
   },
   "by_category": {
     "config": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "contract": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "edge": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 40,
+      "NOT RUN": 34
     },
     "fault": {
-      "PASS": 44,
-      "NOT RUN": 104
+      "PASS": 80,
+      "NOT RUN": 68
     },
     "idempotency": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "load": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "observability": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 18,
+      "BLOCKED": 2,
+      "NOT RUN": 17
     },
     "performance": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "privacy": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "race": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "recovery": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 39,
+      "BLOCKED": 1,
+      "NOT RUN": 34
     },
     "resource": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     },
     "scenario": {
-      "PASS": 134,
-      "BLOCKED": 9,
-      "NOT RUN": 301
+      "PASS": 218,
+      "BLOCKED": 27,
+      "NOT RUN": 199
     },
     "security": {
-      "PASS": 22,
-      "NOT RUN": 52
+      "PASS": 40,
+      "NOT RUN": 34
     },
     "semantic": {
-      "PASS": 11,
-      "NOT RUN": 26
+      "PASS": 20,
+      "NOT RUN": 17
     }
   },
   "runs": {
@@ -176,6 +178,85 @@
     "modules/11-skill-selection/full-regression.xml": {
       "PASS": 2355,
       "BLOCKED": 9
+    },
+    "modules/12-tool-registry/cases-and-contracts.xml": {
+      "PASS": 37
+    },
+    "modules/12-tool-registry/full-regression.xml": {
+      "PASS": 2392,
+      "BLOCKED": 9
+    },
+    "modules/13-desktop-control/cases-and-contracts.xml": {
+      "PASS": 191,
+      "BLOCKED": 2
+    },
+    "modules/13-desktop-control/full-regression.xml": {
+      "PASS": 2423,
+      "BLOCKED": 11,
+      "SKIPPED": 10
+    },
+    "modules/14-browser-playwright/cases-and-contracts.xml": {
+      "PASS": 165,
+      "BLOCKED": 4
+    },
+    "modules/14-browser-playwright/full-regression.xml": {
+      "PASS": 2536,
+      "BLOCKED": 14,
+      "SKIPPED": 17
+    },
+    "modules/15-app-research/cases-and-contracts.xml": {
+      "PASS": 138,
+      "BLOCKED": 1
+    },
+    "modules/15-app-research/full-regression.xml": {
+      "PASS": 2576,
+      "BLOCKED": 15,
+      "SKIPPED": 17
+    },
+    "modules/16-memory/cases-and-contracts.xml": {
+      "PASS": 146,
+      "BLOCKED": 4
+    },
+    "modules/16-memory/full-regression.xml": {
+      "PASS": 2616,
+      "BLOCKED": 19,
+      "SKIPPED": 17
+    },
+    "modules/17-rag-documents/cases-and-contracts.xml": {
+      "PASS": 156,
+      "BLOCKED": 4,
+      "SKIPPED": 7
+    },
+    "modules/17-rag-documents/full-regression.xml": {
+      "PASS": 2654,
+      "BLOCKED": 23,
+      "SKIPPED": 17
+    },
+    "modules/18-repo-learning/cases-and-contracts.xml": {
+      "PASS": 225,
+      "BLOCKED": 3
+    },
+    "modules/18-repo-learning/full-regression.xml": {
+      "PASS": 2706,
+      "BLOCKED": 25,
+      "SKIPPED": 7
+    },
+    "modules/19-ability-forge/cases-and-contracts.xml": {
+      "PASS": 196
+    },
+    "modules/19-ability-forge/full-regression.xml": {
+      "PASS": 2756,
+      "BLOCKED": 25,
+      "SKIPPED": 7
+    },
+    "modules/20-self-evolution/cases-and-contracts.xml": {
+      "PASS": 183,
+      "BLOCKED": 4
+    },
+    "modules/20-self-evolution/full-regression.xml": {
+      "PASS": 2796,
+      "BLOCKED": 29,
+      "SKIPPED": 7
     },
     "neighbor-tests.xml": {
       "PASS": 133

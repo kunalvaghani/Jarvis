@@ -1,5 +1,11 @@
 # Long-term memory, API repair, and bad-weather alerts
 
+<!-- prompt16-audit -->
+**Memory audit — 2026-10-16 IST:** Bounded record/model validation, conservative subject/polarity guards, broader secret screening before clipping and Stop/readback guards added. Canonical facts flush before replacement; failed precommit restores RAM. Equivalent500-fact lexical retrieval warm median 15.40→5.40ms with a small temporary allocation increase.
+Verification: **2,616 full regression PASS / 36 skips**; **28 Prompt16 catalog PASS /4 BLOCKED**. Global erase, durable unavailable-vault writes, general document freshness and memory lifecycle correlation remain incomplete. Launcher **repair_required**; real vault/model/Obsidian GUI were not tested.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/16-memory/inventory.md).
+<!-- /prompt16-audit -->
+
 Updated 2026-10-10 IST. Three changes: Jarvis builds its own long-term memory in the Obsidian vault, every connected API was tested and the failing ones repaired, and Jarvis now warns you about bad or upcoming bad weather while it runs.
 
 ## How memory worked before

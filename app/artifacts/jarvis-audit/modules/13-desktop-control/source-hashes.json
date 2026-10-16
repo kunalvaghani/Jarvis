@@ -1,0 +1,30 @@
+{
+  "jarvis/execution_router.py": {
+    "before": "9d207c3f141476764c1772dd3d56798afa04a12caf8c912b8035d8672f75ada2",
+    "after": "cec12ac30b01f5b265de58142f8f5799fe51b827a7c1ad4dc097fcd385d0cb4a"
+  },
+  "jarvis/execution_adapters.py": {
+    "before": "ffd7bb9c1c9f05b9b489faabb3705dd9823141b5ff172322a612a154d2e3464a",
+    "after": "180b08e360615b9e9a719322b2c6f4893657ea57637247e338cb303c23637ddf"
+  },
+  "jarvis/jarvis_pointer.py": {
+    "before": "e04b05c14022162f561b2afcb12a3df8507cb523c3b9db462852c99d032d7414",
+    "after": "5878b9a4291475a552ab50f0edf5d928f74caf834511a45bc6229d13c4aea9f1"
+  },
+  "jarvis/independent_cursor.py": {
+    "before": "f811d04c179b5ac3a481f86dd3d1f20d2cf58ba08e82c11dd420693599c185bb",
+    "after": "a6bd230d17fd32e91975c62e5b574c30e27564bbe4ac0233a4c86fab9cf47a96"
+  },
+  "jarvis/ui_transport.py": {
+    "before": "08ca567dca1950a93af9340e234115d1e1dae82e5cdbdc91f7b1f8e78fe8b838",
+    "after": "828b4383c27de6c1a40783852d77ccaf5dfb4bc66b9f6c2f86503b4e388a767a"
+  },
+  "config/runtime_manifest.json": {
+    "before": "42b006c44fae2a932cf8c03faf431383097f1928a74165d0b5fdcc7d38f963ee",
+    "after": "5326e2b70078b1e371b25f18070785d1a5a391f6815e556c3565e74843cb35fd"
+  },
+  "scripts/verification/audit_catalog.py": {
+    "before": "ee5235560a29e3b28d16c445ce12a40f9401237e39749318d13f5b7592425667",
+    "after": "18ecaa2174ae1e0904f84c28e880aed9f9dc9572c1288676dcc3ebfe6fbe4bc5"
+  }
+}

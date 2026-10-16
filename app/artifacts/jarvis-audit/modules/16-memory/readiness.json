@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-16 IST",
+  "status": "repair_required",
+  "exit_code": 1,
+  "command": ".venv/Scripts/python.exe -m jarvis.launcher --check",
+  "seconds": 85.82800000000134,
+  "scope": "dependencies_and_configured_services",
+  "missing": [
+    "docker: unavailable (DockerEngineUnavailable)",
+    "ollama: unavailable (ConnectionError)"
+  ],
+  "incomplete": [],
+  "services": {
+    "groq": "optional_not_live_checked",
+    "docker": "unavailable",
+    "ollama": "unavailable",
+    "localgithub": "available"
+  }
+}

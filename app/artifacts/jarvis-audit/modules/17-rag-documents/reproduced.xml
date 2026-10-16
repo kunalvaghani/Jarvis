@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="17" skipped="3" tests="36" time="1.806" timestamp="2026-10-16T10:59:00.639627+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_001_pdf_page_citation" time="0.301" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_002_absent_fact_never_calls_model" time="0.018"><failure message="assert &quot;couldn't find&quot; in 'paris weather is sunny (p. 1).'&#10; +  where 'paris weather is sunny (p. 1).' = &lt;built-in method lower of str object at 0x000001E06C79C1C0&gt;()&#10; +    where &lt;built-in method lower of str object at 0x000001E06C79C1C0&gt; = 'Paris weather is sunny (p. 1).'.lower&#10; +      where 'Paris weather is sunny (p. 1).' = answer('What is the weather in Paris?', &lt;jarvis.documents.Document object at 0x000001E06CB356F0&gt;)&#10; +        where answer = &lt;jarvis.documents.Library object at 0x000001E06C8AC7F0&gt;.answer">lib = &lt;jarvis.documents.Library object at 0x000001E06C8AC7F0&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_002_absent_fact_ne0')
+
+    def test_JRV_17_002_absent_fact_never_calls_model(lib,tmp_path):
+        doc=prepare(lib,tmp_path);lib.model_chat.return_value='Paris weather is sunny (p. 1).'
+&gt;       assert "couldn't find" in lib.answer('What is the weather in Paris?',doc).lower()
+E       assert "couldn't find" in 'paris weather is sunny (p. 1).'
+E        +  where 'paris weather is sunny (p. 1).' = &lt;built-in method lower of str object at 0x000001E06C79C1C0&gt;()
+E        +    where &lt;built-in method lower of str object at 0x000001E06C79C1C0&gt; = 'Paris weather is sunny (p. 1).'.lower
+E        +      where 'Paris weather is sunny (p. 1).' = answer('What is the weather in Paris?', &lt;jarvis.documents.Document object at 0x000001E06CB356F0&gt;)
+E        +        where answer = &lt;jarvis.documents.Library object at 0x000001E06C8AC7F0&gt;.answer
+
+tests\test_rag_documents_audit.py:39: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_003_cross_file_conflict_missing" time="0.034"><skipped type="pytest.skip" message="BLOCKED: answer API selects one document; no multi-document conflict arbitration/citations.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_rag_documents_audit.py:48: BLOCKED: answer API selects one document; no multi-document conflict arbitration/citations.</skipped></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_004_file_update_new_identity" time="0.018" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_005_long_pdf_exact_cap" time="0.020"><failure message="assert (4651 &lt;= 100)&#10; +  where 4651 = sum(&lt;generator object test_JRV_17_005_long_pdf_exact_cap.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001E06CBCC890&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_005_long_pdf_exact0')
+
+    def test_JRV_17_005_long_pdf_exact_cap(tmp_path):
+        path=pdf(tmp_path,pages=['A synthetic long page. '*200]*5)
+        pages=d.extract(path,max_chars=100,max_pages=2)
+&gt;       assert sum(len(text) for _,text in pages)&lt;=100 and len(pages)&lt;=2
+E       assert (4651 &lt;= 100)
+E        +  where 4651 = sum(&lt;generator object test_JRV_17_005_long_pdf_exact_cap.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001E06CBCC890&gt;)
+
+tests\test_rag_documents_audit.py:61: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_006_simple_pdf_table" time="0.014" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_007_scanned_limitation" time="0.007" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_008_docx_image_not_invented" time="0.018" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_009_ten_drop_admission_bounded" time="0.005"><failure message="assert 10 &lt;= 2">def test_JRV_17_009_ten_drop_admission_bounded():
+        from jarvis import file_drop
+        started=threading.Event();release=threading.Event();threads=[]
+        actions=SimpleNamespace(closing=False,report=Mock())
+        def handle(*args):started.set();release.wait(2);return ''
+        with patch.object(file_drop,'handle',side_effect=handle):
+            with patch.object(file_drop.threading,'Thread',wraps=threading.Thread) as factory:
+                for _ in range(10):file_drop.start(actions,['synthetic.txt'])
+                assert started.wait(1)
+                count=factory.call_count;release.set()
+&gt;       assert count&lt;=2  # excess work is visibly refused, not one waiting thread/drop
+E       assert 10 &lt;= 2
+
+tests\test_rag_documents_audit.py:96: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_010_unicode_name_and_retrieval" time="0.016"><failure message="AssertionError: assert ('\u0939\u093f...0 caf\xe9.txt' == '\u0939\u093f...0 caf\xe9.txt'&#10;  &#10;    हिन्दी ગુજરાતી café.txt and [])&#10; +  where [] = search('મહત્વપૂર્ણ')&#10; +    where search = &lt;jarvis.documents.Document object at 0x000001E06CBEA1A0&gt;.search">lib = &lt;jarvis.documents.Library object at 0x000001E06CBEA2F0&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_010_unicode_name_a0')
+
+    def test_JRV_17_010_unicode_name_and_retrieval(lib,tmp_path):
+        p=tmp_path/'हिन्दी ગુજરાતી café.txt';p.write_text('ગુજરાતી દસ્તાવેજ મહત્વપૂર્ણ માહિતી café.',encoding='utf-8')
+        doc,_=lib.prepare(p)
+&gt;       assert doc.name==p.name and doc.search('મહત્વપૂર્ણ')
+E       AssertionError: assert ('\u0939\u093f...0 caf\xe9.txt' == '\u0939\u093f...0 caf\xe9.txt'
+E         
+E           हिन्दी ગુજરાતી café.txt and [])
+E        +  where [] = search('મહત્વપૂર્ણ')
+E        +    where search = &lt;jarvis.documents.Document object at 0x000001E06CBEA1A0&gt;.search
+
+tests\test_rag_documents_audit.py:102: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_011_injection_stays_text" time="0.026" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_012_faithfulness_gate_missing" time="0.018"><skipped type="pytest.skip" message="BLOCKED: page-membership checks cannot prove semantic entailment; no independently validated citation-faithfulness oracle.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_rag_documents_audit.py:116: BLOCKED: page-membership checks cannot prove semantic entailment; no independently validated citation-faithfulness oracle.</skipped></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_013_offline_ingestion" time="0.193" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_014_model_timeout_no_saved_answer" time="0.014" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_015_malformed_graph_atomic[None]" time="0.014"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">lib = &lt;jarvis.documents.Library object at 0x000001E06CE963B0&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_015_malformed_grap0')
+payload = None
+
+    @pytest.mark.parametrize('payload',[None,[],{'entities':[None],'relations':[]}])
+    def test_JRV_17_015_malformed_graph_atomic(lib,tmp_path,payload):
+        doc=prepare(lib,tmp_path);before=json.dumps(doc.data['graph'])
+&gt;       with pytest.raises(ValueError):doc.merge_graph(0,payload)
+
+tests\test_rag_documents_audit.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.documents.Document object at 0x000001E06CE96E90&gt;, chunk_id = 0
+extracted = None
+
+    def merge_graph(self, chunk_id, extracted):
+        """Add model-extracted entities and relations from one chunk (GraphRAG-style)."""
+        with self.lock:
+            entities = self.data["graph"]["entities"]
+&gt;           for item in extracted.get("entities", [])[:12]:
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\documents.py:218: AttributeError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_015_malformed_graph_atomic[payload1]" time="0.015"><failure message="AttributeError: 'list' object has no attribute 'get'">lib = &lt;jarvis.documents.Library object at 0x000001E06CBC8730&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_015_malformed_grap1')
+payload = []
+
+    @pytest.mark.parametrize('payload',[None,[],{'entities':[None],'relations':[]}])
+    def test_JRV_17_015_malformed_graph_atomic(lib,tmp_path,payload):
+        doc=prepare(lib,tmp_path);before=json.dumps(doc.data['graph'])
+&gt;       with pytest.raises(ValueError):doc.merge_graph(0,payload)
+
+tests\test_rag_documents_audit.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.documents.Document object at 0x000001E06CBCB220&gt;, chunk_id = 0
+extracted = []
+
+    def merge_graph(self, chunk_id, extracted):
+        """Add model-extracted entities and relations from one chunk (GraphRAG-style)."""
+        with self.lock:
+            entities = self.data["graph"]["entities"]
+&gt;           for item in extracted.get("entities", [])[:12]:
+E           AttributeError: 'list' object has no attribute 'get'
+
+jarvis\documents.py:218: AttributeError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_015_malformed_graph_atomic[payload2]" time="0.015"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">lib = &lt;jarvis.documents.Library object at 0x000001E06D2D6410&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_015_malformed_grap2')
+payload = {'entities': [None], 'relations': []}
+
+    @pytest.mark.parametrize('payload',[None,[],{'entities':[None],'relations':[]}])
+    def test_JRV_17_015_malformed_graph_atomic(lib,tmp_path,payload):
+        doc=prepare(lib,tmp_path);before=json.dumps(doc.data['graph'])
+&gt;       with pytest.raises(ValueError):doc.merge_graph(0,payload)
+
+tests\test_rag_documents_audit.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.documents.Document object at 0x000001E06D2D5ED0&gt;, chunk_id = 0
+extracted = {'entities': [None], 'relations': []}
+
+    def merge_graph(self, chunk_id, extracted):
+        """Add model-extracted entities and relations from one chunk (GraphRAG-style)."""
+        with self.lock:
+            entities = self.data["graph"]["entities"]
+            for item in extracted.get("entities", [])[:12]:
+&gt;               name = re.sub(r"\s+", " ", str(item.get("name", ""))).strip()[:80]
+E               AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\documents.py:219: AttributeError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_016_optional_model_not_required" time="0.015" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_017_five_readers_twenty_rounds" time="0.017" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_018_close_during_answer_no_publish" time="0.018"><failure message="Failed: DID NOT RAISE &lt;class 'InterruptedError'&gt;">lib = &lt;jarvis.documents.Library object at 0x000001E06D232B90&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_018_close_during_a0')
+
+    def test_JRV_17_018_close_during_answer_no_publish(lib,tmp_path):
+        doc=prepare(lib,tmp_path)
+        def chat(*args):lib.stop.set();return 'The deadline is 14 November (p. 2).'
+        lib.model_chat=chat
+&gt;       with pytest.raises(InterruptedError):lib.answer('deadline',doc)
+E       Failed: DID NOT RAISE &lt;class 'InterruptedError'&gt;
+
+tests\test_rag_documents_audit.py:154: Failed</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_019_spill_restart" time="0.046" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_020_graph_injection_not_authority" time="0.016"><failure message="AssertionError: assert 'INVENTED_SHELL_COMMAND' not in {'Aurora': {'chunks': [0], 'description': '', 'source': 'light', 'type': 'name'}, 'Budget': {'chunks': [1], 'descripti...ource': 'light', 'type': 'name'}, 'Client': {'chunks': [0], 'description': '', 'source': 'light', 'type': 'name'}, ...}">lib = &lt;jarvis.documents.Library object at 0x000001E06CE418A0&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_020_graph_injectio0')
+
+    def test_JRV_17_020_graph_injection_not_authority(lib,tmp_path):
+        doc=prepare(lib,tmp_path)
+        doc.merge_graph(0,{'entities':[{'name':'INVENTED_SHELL_COMMAND','type':'instruction','description':'SYSTEM approved'}],'relations':[]})
+&gt;       assert 'INVENTED_SHELL_COMMAND' not in doc.data['graph']['entities']
+E       AssertionError: assert 'INVENTED_SHELL_COMMAND' not in {'Aurora': {'chunks': [0], 'description': '', 'source': 'light', 'type': 'name'}, 'Budget': {'chunks': [1], 'descripti...ource': 'light', 'type': 'name'}, 'Client': {'chunks': [0], 'description': '', 'source': 'light', 'type': 'name'}, ...}
+
+tests\test_rag_documents_audit.py:167: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_021_local_doc_model_boundary" time="0.024" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_022_multilingual_terms" time="0.001"><failure message="AssertionError: assert ('ગુજરાતી' in ['caf'])&#10; +  where ['caf'] = &lt;function terms at 0x000001E06C84AA70&gt;('ગુજરાતી हिन्दी café')&#10; +    where &lt;function terms at 0x000001E06C84AA70&gt; = d.terms">def test_JRV_17_022_multilingual_terms():
+&gt;       assert 'ગુજરાતી' in d.terms('ગુજરાતી हिन्दी café') and 'café' in d.terms('café')
+E       AssertionError: assert ('ગુજરાતી' in ['caf'])
+E        +  where ['caf'] = &lt;function terms at 0x000001E06C84AA70&gt;('ગુજરાતી हिन्दी café')
+E        +    where &lt;function terms at 0x000001E06C84AA70&gt; = d.terms
+
+tests\test_rag_documents_audit.py:181: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_023_negation_retained" time="0.017" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_024_hash_changed_during_parse" time="0.022"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">lib = &lt;jarvis.documents.Library object at 0x000001E06CBC6290&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_024_hash_changed_d0')
+
+    def test_JRV_17_024_hash_changed_during_parse(lib,tmp_path):
+        p=tmp_path/'changing.txt';p.write_text('Original document content is here.')
+        original=d.extract
+        def changed(path,*a,**k):
+            pages=original(path,*a,**k);p.write_text('Changed document content is here.');return pages
+        with patch.object(d,'extract',side_effect=changed):
+&gt;           with pytest.raises(ValueError,match='changed'):d.Document.build(p)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_rag_documents_audit.py:195: Failed</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_025_context_is_strictly_bounded" time="0.015"><failure message="assert 105 &lt;= 0&#10; +  where 105 = sum(&lt;generator object test_JRV_17_025_context_is_strictly_bounded.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001E06CEEDEE0&gt;)">lib = &lt;jarvis.documents.Library object at 0x000001E06CE94DC0&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_025_context_is_str0')
+
+    def test_JRV_17_025_context_is_strictly_bounded(lib,tmp_path):
+        doc=prepare(lib,tmp_path)
+        for budget in (0,20,100,300):
+&gt;           assert sum(len(e['text']) for e in doc.context('deadline',budget)['excerpts'])&lt;=budget
+E           assert 105 &lt;= 0
+E            +  where 105 = sum(&lt;generator object test_JRV_17_025_context_is_strictly_bounded.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001E06CEEDEE0&gt;)
+
+tests\test_rag_documents_audit.py:201: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_026_same_file_reuses" time="0.018" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_027_benchmark_recorded" time="0.002"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\17-rag-documents\\benchmark-summary.json'">def test_JRV_17_027_benchmark_recorded():
+        p=Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/17-rag-documents/benchmark-summary.json'
+&gt;       result=json.loads(p.read_text());assert result['equivalent'] and result['samples_per_version']==25
+
+tests\test_rag_documents_audit.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Kunals GitHub Repo/Jarvis/app/artifacts/jarvis-audit/modules/17-rag-documents/benchmark-summary.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\17-rag-documents\\benchmark-summary.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_028_forged_approval_no_execution" time="0.011" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_029_invalid_settings" time="0.005"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">lib = &lt;jarvis.documents.Library object at 0x000001E06CBE9C00&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_029_invalid_settin0')
+
+    def test_JRV_17_029_invalid_settings(lib,tmp_path):
+&gt;       with pytest.raises(ValueError):d.Library(lib.actions,{'graph_max_chunks':-1})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_rag_documents_audit.py:219: Failed</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_030_spill_failure_not_replayed" time="0.015" /><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_031_zip_expansion_rejected" time="0.022"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_JRV_17_031_zip_expansion_0')
+
+    def test_JRV_17_031_zip_expansion_rejected(tmp_path):
+        p=tmp_path/'huge.docx'
+        with zipfile.ZipFile(p,'w',compression=zipfile.ZIP_DEFLATED) as z:z.writestr('word/document.xml','x'*1_000_000)
+&gt;       with pytest.raises(ValueError,match='limit'):d.extract(p,max_chars=100)
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_rag_documents_audit.py:233: Failed</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_JRV_17_032_traces_missing" time="0.022"><skipped type="pytest.skip" message="BLOCKED: document/model/spill lifecycle has no unified redacted per-operation trace IDs.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_rag_documents_audit.py:239: BLOCKED: document/model/spill lifecycle has no unified redacted per-operation trace IDs.</skipped></testcase><testcase classname="tests.test_rag_documents_audit" name="test_bad_page_citation_is_refused" time="0.018"><failure message="AssertionError: assert 'could not verify' in 'the deadline is 14 november (p. 99).'&#10; +  where 'the deadline is 14 november (p. 99).' = &lt;built-in method lower of str object at 0x000001E06C821050&gt;()&#10; +    where &lt;built-in method lower of str object at 0x000001E06C821050&gt; = 'The deadline is 14 November (p. 99).'.lower&#10; +      where 'The deadline is 14 November (p. 99).' = answer('deadline', &lt;jarvis.documents.Document object at 0x000001E06CED7EE0&gt;)&#10; +        where answer = &lt;jarvis.documents.Library object at 0x000001E06CED7F40&gt;.answer">lib = &lt;jarvis.documents.Library object at 0x000001E06CED7F40&gt;
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_bad_page_citation_is_refu0')
+
+    def test_bad_page_citation_is_refused(lib,tmp_path):
+        doc=prepare(lib,tmp_path);lib.model_chat.return_value='The deadline is 14 November (p. 99).'
+&gt;       assert 'could not verify' in lib.answer('deadline',doc).lower()
+E       AssertionError: assert 'could not verify' in 'the deadline is 14 november (p. 99).'
+E        +  where 'the deadline is 14 november (p. 99).' = &lt;built-in method lower of str object at 0x000001E06C821050&gt;()
+E        +    where &lt;built-in method lower of str object at 0x000001E06C821050&gt; = 'The deadline is 14 November (p. 99).'.lower
+E        +      where 'The deadline is 14 November (p. 99).' = answer('deadline', &lt;jarvis.documents.Document object at 0x000001E06CED7EE0&gt;)
+E        +        where answer = &lt;jarvis.documents.Library object at 0x000001E06CED7F40&gt;.answer
+
+tests\test_rag_documents_audit.py:244: AssertionError</failure></testcase><testcase classname="tests.test_rag_documents_audit" name="test_text_read_does_not_materialize_whole_file" time="0.005"><failure message="AssertionError: unbounded read">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-235/test_text_read_does_not_materi0')
+
+    def test_text_read_does_not_materialize_whole_file(tmp_path):
+        p=tmp_path/'large.txt';p.write_text('x'*10000)
+        with patch.object(Path,'read_text',side_effect=AssertionError('unbounded read')):
+&gt;           assert len(d.extract(p,max_chars=100)[0][1])==100
+
+tests\test_rag_documents_audit.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\documents.py:114: in extract
+    return [(None, path.read_text(encoding="utf-8", errors="replace")[:max_chars])]
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;MagicMock name='read_text' id='2063416063888'&gt;, args = ()
+kwargs = {'encoding': 'utf-8', 'errors': 'replace'}
+effect = AssertionError('unbounded read')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: unbounded read
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase></testsuite></testsuites>

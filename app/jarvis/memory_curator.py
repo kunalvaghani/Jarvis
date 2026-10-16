@@ -13,6 +13,8 @@ Secrets are never stored: anything that looks like a password, OTP, card or key 
 """
 from datetime import date, datetime, timedelta, timezone
 import json
+import math
+import os
 from pathlib import Path
 import queue
 import re
@@ -83,9 +85,31 @@ def safe(text):
     return "" if (SENSITIVE.search(text) or SECRET.search(text)) else text
 
 
+def subject(text):
+    """Conservative named subject anchor; no entity inference from similarity."""
+    match = re.match(r"(.+?)\s+(?:is|are|likes|loves|prefers|enjoys|lives|works|has|does)\b", text, re.I)
+    return match[1].casefold() if match else None
+
+
+def preference_slot(text):
+    # Only an explicit singular 'prefers' assertion from the user replaces its
+    # prior value. Compound preferences/negations remain separate evidence.
+    match = re.fullmatch(r"(.+?) prefers ([^.]+)\.?", text, re.I)
+    return match[1].casefold() if match and not re.search(r'\b(?:and|not|never|when|while|during|in|at|for)\b', match[2], re.I) else None
+
+
 class MemoryCurator:
     def __init__(self, vault, options=None, model_chat=None, clock=time.time):
         options = options or {}
+        if not isinstance(options, dict):
+            raise ValueError('Memory options must be an object.')
+        for key in ('enabled','learn_facts','summarize_conversations'):
+            if key in options and type(options[key]) is not bool:
+                raise ValueError('Memory flags must be booleans.')
+        if (type(options.get('max_facts',500)) is not int or not 1 <= options.get('max_facts',500) <= 5000 or
+                type(options.get('summary_idle_minutes',15)) not in (int,float) or
+                not math.isfinite(options.get('summary_idle_minutes',15)) or not 0 < options.get('summary_idle_minutes',15) <= 1440):
+            raise ValueError('Invalid memory capacity/idle bounds.')
         self.vault = Path(vault)
         self.enabled = bool(options.get("enabled", True))
         self.learn = bool(options.get("learn_facts", True))
@@ -105,34 +129,63 @@ class MemoryCurator:
         self.closed = threading.Event()
         self.thread = None
         self.error = None
+        self.storage_error = False
+        self._fact_commit_revision = 0
         self.facts_path = self.vault / "Jarvis Memory.json"
         self.summary_dir = self.vault / "Jarvis Conversations"
         self.load()
 
     # --- storage ------------------------------------------------------------------------------------------
     def load(self):
+        self.storage_error = False
         try:
+            if self.facts_path.stat().st_size > 4_000_000:
+                raise ValueError('Oversized fact store.')
             data = json.loads(self.facts_path.read_text(encoding="utf-8"))
-            self.facts = [f for f in data.get("facts", []) if isinstance(f, dict) and f.get("text")]
+            if not isinstance(data,dict) or data.get('version',1)!=1 or not isinstance(data.get('facts'),list):
+                raise ValueError('Invalid fact store.')
+            self.facts = []
+            for f in data['facts'][-self.max_facts:]:
+                if (not isinstance(f,dict) or not isinstance(f.get('text'),str) or not 6 <= len(f['text']) <= 2000 or
+                        not safe(f['text']) or any(k in f and not isinstance(f[k],str) for k in ('expires','updated','created','source','category')) or
+                        f.get('expires') and not re.fullmatch(r'\d{4}-\d{2}-\d{2}', f['expires'])):
+                    self.error = 'Memory fact record rejected: invalid schema.'
+                    self.storage_error = True
+                    continue
+                self.facts.append(f)
         except FileNotFoundError:
             self.facts = []
         except (OSError, ValueError) as exc:
             self.error = "Jarvis Memory.json could not be read: " + type(exc).__name__
+            self.storage_error = True
             self.facts = []
         try:
             index = self.summary_dir / "index.json"
-            self.summaries = json.loads(index.read_text(encoding="utf-8")).get("summaries", [])
+            if index.stat().st_size>2_000_000:
+                raise ValueError('Oversized summary index.')
+            data=json.loads(index.read_text(encoding="utf-8"))
+            if not isinstance(data,dict) or not isinstance(data.get('summaries'),list):
+                raise ValueError('Invalid summary index.')
+            self.summaries = [s for s in data['summaries'][-400:] if isinstance(s,dict) and
+                all(isinstance(s.get(k),str) for k in ('date','time','title','summary')) and
+                isinstance(s.get('topics'),list) and all(isinstance(t,str) for t in s['topics']) and safe(s['summary'])]
         except (OSError, ValueError):
             self.summaries = []
 
     def save(self):
         if not self.enabled:
             return
+        if self.storage_error:
+            raise ValueError('Corrupt/unreadable fact store requires review before writes.')
         with self.lock:
             self.vault.mkdir(parents=True, exist_ok=True)
             temp = self.facts_path.with_suffix(".tmp")
-            temp.write_text(json.dumps({"version": 1, "facts": self.facts}, ensure_ascii=False, indent=1), encoding="utf-8")
+            with temp.open('w',encoding='utf-8') as output:
+                json.dump({'version':1,'facts':self.facts},output,ensure_ascii=False,indent=1)
+                output.flush()
+                os.fsync(output.fileno())
             temp.replace(self.facts_path)
+            self._fact_commit_revision += 1
             lines = ["# Jarvis Memory", "", "[[Jarvis Brain]] · Things Jarvis has learned about Kunal. "
                      "This page is regenerated; to correct a fact, edit `Jarvis Memory.json` or tell Jarvis. "
                      "Say \"forget that ...\" to remove a fact.", ""]
@@ -160,24 +213,45 @@ class MemoryCurator:
     # --- facts --------------------------------------------------------------------------------------------
     def add(self, text, category="fact", source="you asked me to remember", expires=""):
         """Add or update one fact. Returns (fact, 'added'|'updated'|'rejected')."""
+        if not isinstance(text,str) or len(text)>2000 or any(0xd800 <= ord(c) <= 0xdfff for c in text):
+            raise ValueError('Use a bounded Unicode memory fact.')
+        if not isinstance(expires,str):
+            raise ValueError('Use an ISO expiry date.')
+        if expires:
+            date.fromisoformat(expires)
         text = safe(text).strip().rstrip(".") + "."
         if len(text) < 6 or not terms(text):
             return None, "rejected"
         category = category if category in CATEGORIES else "fact"
         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         with self.lock:
-            same = max(self.facts, key=lambda f: overlap(f["text"], text), default=None)
-            if same is not None and overlap(same["text"], text) >= .7:
+            previous = [dict(f) for f in self.facts]
+            revision = self._fact_commit_revision
+            candidates = [f for f in self.facts if subject(f['text'])==subject(text) and
+                          bool(re.search(r'\b(?:not|never|no)\b',f['text'],re.I))==bool(re.search(r'\b(?:not|never|no)\b',text,re.I))]
+            same = max(candidates, key=lambda f: overlap(f["text"], text), default=None)
+            same_slot = same and source=='you asked me to remember' and preference_slot(text) and preference_slot(same['text'])==preference_slot(text)
+            if same is not None and (overlap(same["text"], text) >= .7 or same_slot):
                 same.update(text=text, updated=now, category=category, source=source,
                             **({"expires": expires} if expires else {}))
-                self.save()
+                try:
+                    self.save()
+                except (OSError,ValueError):
+                    if self._fact_commit_revision == revision:
+                        self.facts = previous
+                    raise
                 return same, "updated"
             fact = {"id": uuid.uuid4().hex[:10], "text": text, "category": category, "created": now,
                     "updated": now, "source": source, **({"expires": expires} if expires else {})}
             self.facts.append(fact)
             if len(self.facts) > self.max_facts:
                 self.facts = sorted(self.facts, key=lambda f: f.get("updated", ""))[-self.max_facts:]
-            self.save()
+            try:
+                self.save()
+            except (OSError,ValueError):
+                if self._fact_commit_revision == revision:
+                    self.facts = previous
+                raise
             return fact, "added"
 
     def forget(self, about):
@@ -188,8 +262,14 @@ class MemoryCurator:
                 return []
             best = scored[0][0]
             removed = [f for score, f in scored if score >= max(.5, best - .1)][:3]
+            previous, revision = self.facts, self._fact_commit_revision
             self.facts = [f for f in self.facts if f not in removed]
-            self.save()
+            try:
+                self.save()
+            except (OSError,ValueError):
+                if self._fact_commit_revision == revision:
+                    self.facts = previous
+                raise
             return [f["text"] for f in removed]
 
     def relevant(self, question, limit=8):
@@ -197,8 +277,12 @@ class MemoryCurator:
         rows = self.active()
         if not rows:
             return []
-        scored = sorted(rows, key=lambda f: (overlap(f["text"], question), f.get("updated", "")), reverse=True)
-        chosen = [f for f in scored if overlap(f["text"], question) > 0][:limit]
+        query = terms(question)
+        def score(f):
+            other = terms(f['text'])
+            return len(other & query)/max(1,min(len(other),len(query))) if other and query else 0.
+        scored = sorted(((score(f),f) for f in rows), key=lambda pair: (pair[0],pair[1].get('updated','')), reverse=True)
+        chosen = [f for value,f in scored if value>0][:limit]
         recent = sorted(rows, key=lambda f: f.get("updated", ""), reverse=True)[:3]
         for f in recent:
             if f not in chosen and len(chosen) < limit:
@@ -208,7 +292,7 @@ class MemoryCurator:
     # --- learning ---------------------------------------------------------------------------------------------
     def observe(self, question, answer, kind="conversation"):
         """Called after every completed turn (question/answer or command/result). Never blocks the caller."""
-        if not self.enabled or not question or getattr(self, "paused", False):
+        if not self.enabled or not question or getattr(self, "paused", False) or self.closed.is_set():
             return  # Paused: "keep this only for the current conversation".
         question, answer = safe(question)[:2000], safe(answer)[:2000]
         with self.lock:
@@ -277,7 +361,7 @@ class MemoryCurator:
                 elif job[0] == "summary" and self.summarize:
                     self.summarise(job[1])
             except Exception as exc:
-                self.error = "Memory curator: " + type(exc).__name__ + ": " + str(exc)[:160]
+                self.error = "Memory curator: " + type(exc).__name__
 
     def _chat(self, model, system, payload, schema):
         if self.model_chat is not None:
@@ -300,7 +384,15 @@ class MemoryCurator:
         data = self._chat(self.model, EXTRACT_PROMPT, {"today": today.isoformat(), "weekday": today.strftime("%A"),
                                                       "user_message": question, "jarvis_reply": answer[:600]}, FACT_SCHEMA)
         saved = []
+        if self.closed.is_set():
+            return []
+        if not isinstance(data,dict) or not isinstance(data.get('facts'),list):
+            self.error='Memory extraction rejected: invalid schema.'
+            return []
         for fact in (data.get("facts") or [])[:4]:
+            if not isinstance(fact,dict) or not isinstance(fact.get('text'),str):
+                self.error='Memory extraction rejected: invalid fact.'
+                continue
             text = safe(fact.get("text", ""))
             # Grounding: a learned fact must reuse the user's own words, or it is the model's invention.
             if (not text or len(text) > 220 or len(terms(text) & terms(question)) < 1
@@ -314,11 +406,17 @@ class MemoryCurator:
         return saved
 
     def summarise(self, turns):
-        turns = [t for t in turns if t.get("q")]
+        turns = [{**t,'q':safe(t['q'])[:2000],'a':safe(t.get('a',''))[:2000]} for t in turns[-40:]
+                 if isinstance(t,dict) and isinstance(t.get('q'),str) and isinstance(t.get('at'),str) and safe(t['q'])]
         if len(turns) < 2:
             return None
         payload = [{"kunal": t["q"][:600], "jarvis": t["a"][:600], "type": t.get("kind", "conversation")} for t in turns[-24:]]
         data = self._chat(self.summary_model, SUMMARY_PROMPT, {"conversation": payload}, SUMMARY_SCHEMA)
+        if self.closed.is_set():
+            return None
+        if not isinstance(data,dict) or not isinstance(data.get('topics',[]),list):
+            self.error='Memory summary rejected: invalid schema.'
+            return None
         title, summary = safe(data.get("title", ""))[:80], safe(data.get("summary", ""))[:900]
         if not summary:
             return None

@@ -76,9 +76,13 @@ def load_voice():
     torch.set_num_threads(int(number(options, 'cpu_threads', 4, 1, 16)))
     from f5_tts.api import F5TTS
     # CPU avoids competing with Whisper/Qwen on the measured 4 GB GPU.
-    voice = F5TTS(model="F5TTS_v1_Base", device=options.get("device", "cpu"),
-                  ckpt_file=options.get("checkpoint", ""),
-                  hf_cache_dir=str(BASE / "models/voices/f5/cache"))
+    from contextlib import nullcontext
+    from .gpu_scheduler import native_turn
+    gate = native_turn('speech', 'native/f5', load_mb=2048) if options.get('device') == 'cuda' else nullcontext()
+    with gate:
+        voice = F5TTS(model="F5TTS_v1_Base", device=options.get("device", "cpu"),
+                      ckpt_file=options.get("checkpoint", ""),
+                      hf_cache_dir=str(BASE / "models/voices/f5/cache"))
     voice.jarvis_options = options
     if voice.device == 'cuda' and options.get('warm_synthesis', True):
         # Prime CUDA kernels quietly during startup, without speaker playback.
@@ -91,6 +95,10 @@ def chunks(text, path, transcript, pacing, first_limit=80):
     """Keep each API call to one bounded chunk, avoiding upstream unbounded futures."""
     duration = reference_duration(path) + .1
     maximum = max(1, int(len(transcript.encode('utf-8')) / duration * (22-duration) * pacing * .8))
+    from .speech_normalizer import opening_clause
+    head = opening_clause(text)
+    if head and head < len(text) and len(text[:head].encode('utf-8')) <= min(maximum,first_limit):
+        return [text[:head]] + chunks(text[head:].strip(), path, transcript, pacing, 0)
     if len(text.encode('utf-8')) <= maximum:
         return [text]  # Do not split an already short sentence just to make a smaller head.
     rows, words, size = [], [], 0
@@ -98,7 +106,7 @@ def chunks(text, path, transcript, pacing, first_limit=80):
         count = len(word.encode('utf-8')) + 1
         if count>maximum:
             raise ValueError('F5 word exceeds the bounded synthesis chunk budget.')
-        limit = min(maximum, first_limit) if not rows else maximum
+        limit = min(maximum, first_limit) if not rows and first_limit else maximum
         if words and size + count > limit:
             boundaries = [index+1 for index, value in enumerate(words)
                           if value.endswith(('.', ',', ';', ':', '!', '?')) and index >= len(words)//2]
@@ -116,8 +124,9 @@ def chunks(text, path, transcript, pacing, first_limit=80):
 def render(voice, request, stop, emit_progress=lambda index: None, rng=None):
     import numpy as np
     from .natural_voice import tts_text, finish
+    from .speech_normalizer import normalize
     options = voice.jarvis_options
-    text = tts_text(request["text"])
+    text = tts_text(normalize(request["text"]))
     if not text or stop.is_set():
         return
     path, transcript, style = reference(options, text)
@@ -131,11 +140,15 @@ def render(voice, request, stop, emit_progress=lambda index: None, rng=None):
     for index, text_chunk in enumerate(text_chunks):
         if stop.is_set():
             return
-        audio, rate, _ = voice.infer(ref_file=str(path), ref_text=transcript, gen_text=text_chunk,
-            speed=pacing, nfe_step=int(number(options, "nfe_step", 32, 16, 64)),
-            cfg_strength=number(options, "cfg_strength", 2., 1., 3.),
-            sway_sampling_coef=-1, cross_fade_duration=crossfade,
-            remove_silence=False, show_info=lambda *args: None)
+        from contextlib import nullcontext
+        from .gpu_scheduler import native_turn
+        gate = native_turn('speech', 'native/f5', stop.is_set) if options.get('device') == 'cuda' else nullcontext()
+        with gate:
+            audio, rate, _ = voice.infer(ref_file=str(path), ref_text=transcript, gen_text=text_chunk,
+                speed=pacing, nfe_step=int(number(options, "nfe_step", 32, 16, 64)),
+                cfg_strength=number(options, "cfg_strength", 2., 1., 3.),
+                sway_sampling_coef=-1, cross_fade_duration=crossfade,
+                remove_silence=False, show_info=lambda *args: None)
         emit_progress(index)
         audio = np.asarray(audio, dtype=np.float32)
         if audio.ndim!=1 or not audio.size or audio.size>24000*30 or not np.isfinite(audio).all() or rate != 24000:

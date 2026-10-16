@@ -1,5 +1,8 @@
-# Scope
+# Retained scoped changes
 
-No runtime change retained for this module in this bounded pass; independent baseline/upgrade selection pending.
-
-Existing full regression evidence is separate from completing this module contract.
+- execution_router.py: strict bounded request text before guard/preparation; COM/Win32/Python permission denial halts; exception text categorized; trace UUID per route; construct providers lazily in the unchanged priority order.
+- execution_adapters.py: physical-pointer preparation uses temporary physical-pixel context; its admission closure repeats HWND/foreground/visible/enabled/runtime ID, exact geometry and control-centre hit-test after idle and immediately before touch. No stale coordinate is automatically retried or substituted.
+- jarvis_pointer.py: temporary/restored DPI context; optional read-only admit callback after idle/before DOWN; malformed/missing/oversized config fails closed and only boolean values enable touch. Valid omitted physical_clicks keeps its existing default true. Existing touch-UP cleanup and user's cursor restoration preserved.
+- independent_cursor.py: existing visual-point window/PID/coverage guard propagates through tap's delayed admission. This does not add a new whole-image check after idle.
+- ui_transport.py: malformed/non-object frames, boolean/noninteger IDs, invalid results/errors trigger existing owned-worker cleanup/backoff, no replay. No changes to shared services/process ownership.
+-32 dedicated catalog assertions +10 supplemental regressions, reviewed BLOCKED accounting, source preimages/paired benchmark/report. A catalog allowlist omission for the reviewed existing Prompt12 class was corrected with a fresh registry/accounting check; no module12 product source was changed. Runtime manifest and READMEs/docs updated; no new dependency/service/tool/public capability/model/download/install/setting mutation. Existing app behavior and artwork remain; no new UI screenshot.

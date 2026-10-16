@@ -1,5 +1,13 @@
-# Status
+# Actual failures and remaining gates
 
-{'NOT RUN': 32}
+[Baseline](baseline.xml):62 PASS /10 unavailable live skips. [Reproduction](reproduced.xml):27 FAIL /7 PASS. Case027 was missing benchmark artifact sequencing, not a product defect. Other failures exposed missing commit/validation provenance, unrestricted unknown/copyleft snippets, read-budget overshoot, repeated learning, platform/minified gaps, malformed responses, cancellation, origin-prefix credential risk, cache tamper acceptance, raw resource errors, late enqueue, invalid settings, failed-save RAM drift and missing trace/redaction contracts. Overlapping assertions are not distinct bug counts.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+[First focused](targeted-first.xml):2 FAIL /43 PASS: benchmark still absent; large-repo fake commit handler overwritten by a later else. Fixed fake protocol control flow, stream/redirect kwargs, pinned raw URL and added synthetic root license. Existing error assertion now expects categorical ConnectionError instead of raw offline payload, preserving failure/readback semantics while preventing diagnostic leakage. [Second focused](targeted-second.xml):124 PASS /10 skips.
+
+Final focused {'PASS': 225, 'SKIPPED': 3, 'FAIL': 0}; full {'PASS': 2706, 'SKIPPED': 32, 'FAIL': 0}, frozen source hashes unchanged. [Exact skips](full-regression-skip-reasons.json). Later supplemental tests cover real independent concurrency, browser caps, redirects/token origin, source redaction/tamper, private queries, corrupt-index preservation and host/GPU resource faults. Case003 static labels are insufficient proof of README behavior;019 completed-record reopen is insufficient proof of in-flight crash recovery.
+
+JRV-18-003: static symbols/test-file presence and untrusted labels do not behaviorally validate arbitrary README claims; no authorized general sandbox test oracle. JRV-18-019: completed knowledge reopens, but in-flight learning jobs have no durable checkpoint/process-crash restart contract.
+
+First full run:1 FAIL /2703 PASS /32 skips in437.75s. Failed full-regression-shared-state.xml and matching source hashes retained. An existing GPU test read state.json during Windows replacement and got PermissionError. Only the fixture observation now retries transient read/share/JSON states for at most1s; permanent failure remains an error. Added transient/permanent regression assertions. No lease liveness, priority assertion, action replay or production scheduler semantics changed. The accepted full rerun uses a new source freeze.
+
+No arbitrary downloaded repository code/postinstall, live GitHub clone or ability install executed. Owned synthetic Docker isolation fixtures executed when the backend became available. Prior module acceptance gates remain separate.

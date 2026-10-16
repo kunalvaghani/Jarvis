@@ -68,7 +68,7 @@ def parse(message, rows, finish_limit=500):
             raise ValueError('Native arguments exceed the size limit.')
         try:
             args = json.loads(args)
-        except ValueError:
+        except (ValueError, RecursionError):
             raise ValueError('Native arguments are incomplete JSON.') from None
     if not isinstance(args, dict):
         raise ValueError('Native function arguments must be an object.')

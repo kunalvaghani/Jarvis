@@ -40,7 +40,8 @@ class App:
         if os.environ.get("JARVIS_UI_VERIFY") == "1":
             self.config["memory"] = {"enabled": False}
             self.config['_ui_verification'] = True
-        self.events = queue.Queue()
+        from jarvis.ui_events import UIEventBuffer
+        self.events = UIEventBuffer()
         self.closing = False
         self.listening_requested = False
         self.repair_offset = 0
@@ -76,7 +77,7 @@ class App:
         root.after(40, self.animate_island)
         root.after(150, self.exclude_orb_from_capture)
         root.after(300, self.remember_external_window)
-        root.after(80, self.drain)
+        root.after(16, self.drain)
         self.watchdog = Watchdog(self.report)
         self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
             self.actions.cognition.repair_persistence,
@@ -396,9 +397,12 @@ class App:
         self.log.see("end")
         self.log.configure(state="disabled")
 
-    @ui_loop(80)
+    @ui_loop(16)
     def drain(self):
+        deadline = time.monotonic() + .006
         for _ in range(300):
+            if time.monotonic() >= deadline:
+                break
             try:
                 kind, message = self.events.get_nowait()
             except queue.Empty:
@@ -509,7 +513,7 @@ class App:
                 continue  # The island draws the animated YouTube/Spotify card; not a transcript line.
             else:
                 self.log_line(kind, message)
-        self.root.after(80, self.drain)
+        self.root.after(16, self.drain)
 
     def toggle_listening(self):
         if self.config.get('_ui_verification', False):

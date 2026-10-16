@@ -1,3 +1,11 @@
-# Compatibility
+# Official upstream and compatibility — 2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+[Checked URLs/release dates](upstream-checks.json). Installed Python3.10.6, pip26.2.1, Requests2.34.2, pytest8.4.2, psutil7.2.2; Docker CLI29.8.2; RTX3050 Laptop4096MiB/driver610.74; RAM33656832000B. Actual commands in environment/commands evidence.
+
+[pip26.2.1](https://pypi.org/project/pip/26.2.1/) released **2026-08-04**, currently listed latest and requiresPython≥3.10. Installed version retained. [pip binary-only option](https://pip.pypa.io/en/stable/cli/pip_install/#cmdoption-only-binary) documents refusing source distributions; binary-only is not package authenticity or sandboxing. No package upgrades/installers run.
+
+[Python3.10.21](https://www.python.org/downloads/release/python-31021/) released **2026-08-12**; Python3.10 reached end-of-life **2026-10-01**. Current interpreter3.10.6 is older. A supported Python/environment migration needs separate compatibility/resource verification; no installer/system change made. [Version-matched audit-hook documentation](https://docs.python.org/3.10/library/sys.html#sys.addaudithook) explicitly excludes using these hooks as a hostile-code sandbox. Current code therefore keeps the guard-rail limitation explicit rather than claiming Docker isolation for voice abilities.
+
+[Docker Desktop4.95.0 notes](https://docs.docker.com/desktop/release-notes/#4950) dated **2026-10-12** reviewed; engine startup/Enhanced Container Isolation fixes relevant to future maintenance. CLI version does not identify the Desktop app version; no claim that Desktop is current or upgraded. [Seccomp](https://docs.docker.com/engine/security/seccomp/) and [rootless security](https://docs.docker.com/engine/security/rootless/) reviewed as boundaries, not proof of those host modes. Existing isolated runtime tests:10 PASS/0 skipped. No image build/pull/OS setting change.
+
+Source docs without a release date are recorded as documentation checked on the run date. Actual local/model/GPU voice acceptance remains BLOCKED by unavailable Ollama and lack of a separately authorized live human/account/ability trial. Those live gates are separate from32 automated mock/owned catalog PASS. Prior global dependency/security gates remain open. No new paid API requirement or giant model download.

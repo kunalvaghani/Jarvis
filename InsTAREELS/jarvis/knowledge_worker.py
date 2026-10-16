@@ -42,7 +42,8 @@ def ensure_server(client):
         executable = executable or (str(fallback) if fallback.is_file() else None)
         if not executable:
             raise ValueError("Install/start Ollama and load a local model. See README: general questions.")
-        environment = os.environ.copy()
+        from .gpu_scheduler import runtime_environment
+        environment = runtime_environment()
         environment["OLLAMA_HOST"] = "127.0.0.1:11434"
         if isinstance(initial_error, requests.ConnectionError):
             subprocess.Popen([executable, "serve"], env=environment, stdout=subprocess.DEVNULL,

@@ -1,0 +1,31 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "items": 1000,
+  "external_effects": 0,
+  "scope": "Same eligible1000-item backlog; exact chosen signature/tie order.5 newly constructed instances/20 warm selections per implementation; construction/imports/I/O excluded from timed section. No network, inference, audio, GPU or native energy/throughput claim.",
+  "before": {
+    "cold": {
+      "p50_ms": 0.4871,
+      "p95_ms": 0.5908,
+      "python_peak_bytes": 45112
+    },
+    "warm": {
+      "p50_ms": 0.41275,
+      "p95_ms": 0.4465,
+      "python_peak_bytes": 33944
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 0.3685,
+      "p95_ms": 0.4069,
+      "python_peak_bytes": 1816
+    },
+    "warm": {
+      "p50_ms": 0.35995,
+      "p95_ms": 0.3694,
+      "python_peak_bytes": 664
+    }
+  }
+}

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="27" skipped="0" tests="34" time="2.105" timestamp="2026-10-16T11:32:09.152821+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_001_search_evidence" time="0.011" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_002_zero_search_no_invention" time="0.003" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_003_claims_are_not_validation" time="0.031"><failure message="AssertionError: assert None is False&#10; +  where None = &lt;built-in method get of dict object at 0x000001C1A32D2B00&gt;('executed_tests')&#10; +    where &lt;built-in method get of dict object at 0x000001C1A32D2B00&gt; = {}.get&#10; +      where {} = &lt;built-in method get of dict object at 0x000001C1A32D3080&gt;('verification', {})&#10; +        where &lt;built-in method get of dict object at 0x000001C1A32D3080&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A32A9750&gt;
+
+    def test_JRV_18_003_claims_are_not_validation(learner):
+        data=learned(learner)
+        assert data['has_tests'] and any(m['path']=='app.py' for m in data['modules'])
+&gt;       assert data.get('verification',{}).get('executed_tests') is False
+E       AssertionError: assert None is False
+E        +  where None = &lt;built-in method get of dict object at 0x000001C1A32D2B00&gt;('executed_tests')
+E        +    where &lt;built-in method get of dict object at 0x000001C1A32D2B00&gt; = {}.get
+E        +      where {} = &lt;built-in method get of dict object at 0x000001C1A32D3080&gt;('verification', {})
+E        +        where &lt;built-in method get of dict object at 0x000001C1A32D3080&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get
+
+tests\test_repo_learning_audit.py:50: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_004_commit_pin" time="0.028"><failure message="AssertionError: assert None == 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'&#10; +  where None = &lt;built-in method get of dict object at 0x000001C1A3283C80&gt;('commit')&#10; +    where &lt;built-in method get of dict object at 0x000001C1A3283C80&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3347CD0&gt;
+
+    def test_JRV_18_004_commit_pin(learner):
+        data=learned(learner)
+&gt;       assert data.get('commit')==SHA
+E       AssertionError: assert None == 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+E        +  where None = &lt;built-in method get of dict object at 0x000001C1A3283C80&gt;('commit')
+E        +    where &lt;built-in method get of dict object at 0x000001C1A3283C80&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get
+
+tests\test_repo_learning_audit.py:55: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_005_absent_license_no_excerpts" time="0.040"><failure message="assert [{'excerpt': ...rc/snake.js'}] == []&#10;  &#10;  Left contains 3 more items, first extra item: {'excerpt': &quot;def serve(port: int = 8000):\n    '''Serve the game.'''\n    return port\n\nclass Store:\n    def save(self, x):\n        pass\n&quot;, 'path': 'app.py'}&#10;  Use -v to get more diff">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A32ABD60&gt;
+
+    def test_JRV_18_005_absent_license_no_excerpts(learner):
+        learner.learn('demo/snake',info={**INFO,'license':None})
+&gt;       assert learner.reference('demo/snake','snake canvas')['code_excerpts']==[]
+E       assert [{'excerpt': ...rc/snake.js'}] == []
+E         
+E         Left contains 3 more items, first extra item: {'excerpt': "def serve(port: int = 8000):\n    '''Serve the game.'''\n    return port\n\nclass Store:\n    def save(self, x):\n        pass\n", 'path': 'app.py'}
+E         Use -v to get more diff
+
+tests\test_repo_learning_audit.py:63: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_006_malware_is_static_data" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_007_read_budget_is_strict" time="0.001"><failure message="assert 102 &lt;= 100&#10; +  where 102 = sum(&lt;generator object test_JRV_18_007_read_budget_is_strict.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3374900&gt;)">def test_JRV_18_007_read_budget_is_strict():
+        raw=make_zip({'a.py':'x='+'1'*100,'b.py':'y='+'2'*100})
+        facts=r.analyze_zip(raw,{'max_read_bytes':100})
+&gt;       assert sum(len(m['_text'].encode()) for m in facts['modules'])&lt;=100
+E       assert 102 &lt;= 100
+E        +  where 102 = sum(&lt;generator object test_JRV_18_007_read_budget_is_strict.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3374900&gt;)
+
+tests\test_repo_learning_audit.py:77: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_008_duplicate_reuses_memory" time="0.027"><failure message="AssertionError: assert 4 == 2&#10; +  where 4 = &lt;Mock name='mock.get' id='1931178574464'&gt;.call_count&#10; +    where &lt;Mock name='mock.get' id='1931178574464'&gt; = &lt;Mock id='1931178573984'&gt;.get&#10; +      where &lt;Mock id='1931178573984'&gt; = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3368640&gt;.http">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3368640&gt;
+
+    def test_JRV_18_008_duplicate_reuses_memory(learner):
+        learned(learner);calls=learner.http.get.call_count
+        learner.learn('demo/snake')
+&gt;       assert learner.http.get.call_count==calls
+E       AssertionError: assert 4 == 2
+E        +  where 4 = &lt;Mock name='mock.get' id='1931178574464'&gt;.call_count
+E        +    where &lt;Mock name='mock.get' id='1931178574464'&gt; = &lt;Mock id='1931178573984'&gt;.get
+E        +      where &lt;Mock id='1931178573984'&gt; = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3368640&gt;.http
+
+tests\test_repo_learning_audit.py:83: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_009_platform_note" time="0.005"><failure message="assert False&#10; +  where False = any(&lt;generator object test_JRV_18_009_platform_note.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3375700&gt;)">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335F250&gt;
+
+    def test_JRV_18_009_platform_note(learner):
+        raw=make_zip({'main.swift':'import SwiftUI\nstruct App {}'})
+        facts=r.analyze_zip(raw)
+&gt;       assert any('Windows' in n for n in facts.get('platform_notes',[]))
+E       assert False
+E        +  where False = any(&lt;generator object test_JRV_18_009_platform_note.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3375700&gt;)
+
+tests\test_repo_learning_audit.py:89: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_010_minified_source_excluded" time="0.001"><failure message="AssertionError: assert 'src/app.min.js' not in ['src/app.min.js', 'app.py']">def test_JRV_18_010_minified_source_excluded():
+        facts=r.analyze_zip(make_zip({'src/app.min.js':'function bad(){}'*1000,'app.py':'def main(): return 1'}))
+&gt;       assert 'src/app.min.js' not in [m['path'] for m in facts['modules']]
+E       AssertionError: assert 'src/app.min.js' not in ['src/app.min.js', 'app.py']
+
+tests\test_repo_learning_audit.py:94: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_011_offline_reference" time="0.020"><failure message="assert ('demo/snake' == 'demo/snake'&#10;  &#10;    demo/snake and None == 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')&#10; +  where None = &lt;built-in method get of dict object at 0x000001C1A33B6CC0&gt;('commit')&#10; +    where &lt;built-in method get of dict object at 0x000001C1A33B6CC0&gt; = {'architecture': 'main.js starts a Snake.', 'code_excerpts': [{'excerpt': &quot;def serve(port: int = 8000):\n    '''Serve ...ir) =&gt; s\n', 'path': 'src/snake.js'}], 'entry_points': ['src/main.js', 'app.py'], 'how_to_run': 'open index.html', ...}.get">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335C8B0&gt;
+
+    def test_JRV_18_011_offline_reference(learner):
+        learned(learner);learner.http.get.side_effect=r.requests.ConnectionError('offline')
+        ref=learner.reference('demo/snake','snake canvas')
+&gt;       assert ref['repository']=='demo/snake' and ref.get('commit')==SHA
+E       assert ('demo/snake' == 'demo/snake'
+E         
+E           demo/snake and None == 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+E        +  where None = &lt;built-in method get of dict object at 0x000001C1A33B6CC0&gt;('commit')
+E        +    where &lt;built-in method get of dict object at 0x000001C1A33B6CC0&gt; = {'architecture': 'main.js starts a Snake.', 'code_excerpts': [{'excerpt': "def serve(port: int = 8000):\n    '''Serve ...ir) =&gt; s\n', 'path': 'src/snake.js'}], 'entry_points': ['src/main.js', 'app.py'], 'how_to_run': 'open index.html', ...}.get
+
+tests\test_repo_learning_audit.py:100: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_012_credit_and_restrict_copyleft" time="0.026"><failure message="assert (not [{'excerpt': &quot;def serve(port: int = 8000):\n    '''Serve the game.'''\n    return port\n\nclass Store:\n    def save(s...xport class Snake {\n  constructor(c) { this.c = c }\n}\nexport const step = (s, dir) =&gt; s\n', 'path': 'src/snake.js'}])">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A337F160&gt;
+
+    def test_JRV_18_012_credit_and_restrict_copyleft(learner):
+        learner.learn('demo/snake',info={**INFO,'license':{'spdx_id':'GPL-3.0-only'}})
+        ref=learner.reference('demo/snake','snake')
+        assert ref['url']==INFO['html_url'] and ref['license']=='GPL-3.0-only'
+&gt;       assert not ref['code_excerpts'] and ref.get('reuse_review_required') is True
+E       assert (not [{'excerpt': "def serve(port: int = 8000):\n    '''Serve the game.'''\n    return port\n\nclass Store:\n    def save(s...xport class Snake {\n  constructor(c) { this.c = c }\n}\nexport const step = (s, dir) =&gt; s\n', 'path': 'src/snake.js'}])
+
+tests\test_repo_learning_audit.py:107: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_013_outage_one_attempt" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_014_timeout_one_attempt" time="0.004" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[None]" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3340B20&gt;
+payload = None
+
+    @pytest.mark.parametrize('payload',[None,[],{'items':[None]}])
+    def test_JRV_18_015_malformed_search(learner,payload):
+        learner.get=Mock(return_value=payload)
+&gt;       with pytest.raises(r.LearningError):learner.search('markdown parser')
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;
+
+tests\test_repo_learning_audit.py:125: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[payload1]" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335D540&gt;
+payload = []
+
+    @pytest.mark.parametrize('payload',[None,[],{'items':[None]}])
+    def test_JRV_18_015_malformed_search(learner,payload):
+        learner.get=Mock(return_value=payload)
+&gt;       with pytest.raises(r.LearningError):learner.search('markdown parser')
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;
+
+tests\test_repo_learning_audit.py:125: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_015_malformed_search[payload2]" time="0.004"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3342650&gt;
+payload = {'items': [None]}
+
+    @pytest.mark.parametrize('payload',[None,[],{'items':[None]}])
+    def test_JRV_18_015_malformed_search(learner,payload):
+        learner.get=Mock(return_value=payload)
+&gt;       with pytest.raises(r.LearningError):learner.search('markdown parser')
+
+tests\test_repo_learning_audit.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\repo_learning.py:332: in search
+    rows = [r for r in data.get("items", []) if r.get("size", 0) * 1024 &lt;= self.max_zip * 3]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x000001C1A33439A0&gt;
+
+&gt;   rows = [r for r in data.get("items", []) if r.get("size", 0) * 1024 &lt;= self.max_zip * 3]
+E   AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\repo_learning.py:332: AttributeError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_016_without_git_still_static" time="0.025" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_017_five_concurrent_twenty_rounds" time="0.575"><failure message="AssertionError: assert 200 == 3&#10; +  where 200 = &lt;Mock name='mock.get' id='1931178532800'&gt;.call_count&#10; +    where &lt;Mock name='mock.get' id='1931178532800'&gt; = &lt;Mock id='1931178530880'&gt;.get&#10; +      where &lt;Mock id='1931178530880'&gt; = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335E860&gt;.http">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335E860&gt;
+
+    def test_JRV_18_017_five_concurrent_twenty_rounds(learner):
+        def request(_):return learner.learn('demo/snake')['purpose']
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+            for _ in range(20):assert len(set(pool.map(request,range(5))))==1
+&gt;       assert learner.http.get.call_count==3
+E       AssertionError: assert 200 == 3
+E        +  where 200 = &lt;Mock name='mock.get' id='1931178532800'&gt;.call_count
+E        +    where &lt;Mock name='mock.get' id='1931178532800'&gt; = &lt;Mock id='1931178530880'&gt;.get
+E        +      where &lt;Mock id='1931178530880'&gt; = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A335E860&gt;.http
+
+tests\test_repo_learning_audit.py:137: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_018_cancel_before_network_and_after_summary" time="0.005"><failure message="AssertionError: Expected 'get' to not have been called. Called 2 times.&#10;Calls: [call('https://api.github.com/repos/demo/snake', params=None, headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'Jarvis-repo-learning'}, timeout=(5, 15), stream=False),&#10; call('https://codeload.github.com/demo/snake/zip/refs/heads/main', params=None, headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'Jarvis-repo-learning'}, timeout=(5, 60), stream=True)].">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A347C4C0&gt;
+
+    def test_JRV_18_018_cancel_before_network_and_after_summary(learner):
+        with pytest.raises(r.LearningError):learner.learn('demo/snake',cancelled=lambda:True)
+&gt;       learner.http.get.assert_not_called()
+
+tests\test_repo_learning_audit.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock name='mock.get' id='1931179719264'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'get' to not have been called. Called 2 times.
+E           Calls: [call('https://api.github.com/repos/demo/snake', params=None, headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'Jarvis-repo-learning'}, timeout=(5, 15), stream=False),
+E            call('https://codeload.github.com/demo/snake/zip/refs/heads/main', params=None, headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'Jarvis-repo-learning'}, timeout=(5, 60), stream=True)].
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:880: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_019_restart_readback" time="0.035"><failure message="KeyError: 'commit'">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34855A0&gt;
+
+    def test_JRV_18_019_restart_readback(learner):
+        data=learned(learner)
+        other=r.RepoLearner(learner.actions,{},http=Mock(),model_chat=Mock())
+        try:
+&gt;           assert other.known('demo/snake') and other.knowledge('demo/snake')['commit']==data['commit']
+E           KeyError: 'commit'
+
+tests\test_repo_learning_audit.py:154: KeyError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_020_injected_readme_is_untrusted" time="0.017"><failure message="AssertionError: assert None == 'untrusted'&#10; +  where None = &lt;built-in method get of dict object at 0x000001C1A337A140&gt;('source_trust')&#10; +    where &lt;built-in method get of dict object at 0x000001C1A337A140&gt; = {}.get&#10; +      where {} = &lt;built-in method get of dict object at 0x000001C1A3379380&gt;('verification', {})&#10; +        where &lt;built-in method get of dict object at 0x000001C1A3379380&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2F0AD10&gt;
+
+    def test_JRV_18_020_injected_readme_is_untrusted(learner):
+        data=learned(learner)
+&gt;       assert data.get('verification',{}).get('source_trust')=='untrusted'
+E       AssertionError: assert None == 'untrusted'
+E        +  where None = &lt;built-in method get of dict object at 0x000001C1A337A140&gt;('source_trust')
+E        +    where &lt;built-in method get of dict object at 0x000001C1A337A140&gt; = {}.get
+E        +      where {} = &lt;built-in method get of dict object at 0x000001C1A3379380&gt;('verification', {})
+E        +        where &lt;built-in method get of dict object at 0x000001C1A3379380&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get
+
+tests\test_repo_learning_audit.py:160: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_021_credential_origin_gate" time="0.005"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2F08160&gt;
+
+    def test_JRV_18_021_credential_origin_gate(learner):
+        with patch.dict('os.environ',{'GITHUB_TOKEN':'A'*25}):
+&gt;           with pytest.raises(r.LearningError):learner.get('https://api.github.com.evil.invalid/repos/a/b')
+E           Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;
+
+tests\test_repo_learning_audit.py:166: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_022_unicode_source_and_bad_id" time="0.017"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2E6F040&gt;
+
+    def test_JRV_18_022_unicode_source_and_bad_id(learner):
+        facts=r.analyze_zip(make_zip({'ગુજરાતી.py':'def café():\n    """हिन्दी #x1F642"""\n    return 1'}))
+        assert facts['modules'][0]['symbols'][0]['name']=='café'
+&gt;       with pytest.raises(r.LearningError):learner.learn('owner/'+'a'*500)
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;
+
+tests\test_repo_learning_audit.py:175: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_023_negative_task_no_search" time="0.031"><failure message="assert [{'architectu...x.html', ...}] == []&#10;  &#10;  Left contains one more item: {'architecture': 'main.js starts a Snake.', 'code_excerpts': [{'excerpt': &quot;def serve(port: int = 8000):\n    '''Serve ...ir) =&gt; s\n', 'path': 'src/snake.js'}], 'entry_points': ['src/main.js', 'app.py'], 'how_to_run': 'open index.html', ...}&#10;  Use -v to get more diff">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3484D30&gt;
+
+    def test_JRV_18_023_negative_task_no_search(learner):
+&gt;       assert learner.prepare('do not search GitHub or learn repositories to create a snake game')==[]
+E       assert [{'architectu...x.html', ...}] == []
+E         
+E         Left contains one more item: {'architecture': 'main.js starts a Snake.', 'code_excerpts': [{'excerpt': "def serve(port: int = 8000):\n    '''Serve ...ir) =&gt; s\n', 'path': 'src/snake.js'}], 'entry_points': ['src/main.js', 'app.py'], 'how_to_run': 'open index.html', ...}
+E         Use -v to get more diff
+
+tests\test_repo_learning_audit.py:179: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_024_tampered_cache_not_reused" time="0.026"><failure message="assert False&#10; +  where False = all(&lt;generator object test_JRV_18_024_tampered_cache_not_reused.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3504DD0&gt;)">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34868C0&gt;
+
+    def test_JRV_18_024_tampered_cache_not_reused(learner):
+        data=learned(learner);row=data['cached_files'][0]
+        p=learner.cache/'demo__snake'/'files'/row['file'];p.write_text('FORGED CODE')
+        ref=learner.reference('demo/snake','snake canvas')
+&gt;       assert all('FORGED CODE' not in x['excerpt'] for x in ref['code_excerpts'])
+E       assert False
+E        +  where False = all(&lt;generator object test_JRV_18_024_tampered_cache_not_reused.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001C1A3504DD0&gt;)
+
+tests\test_repo_learning_audit.py:187: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_025_model_resource_failure_no_publication" time="0.005"><failure message="RuntimeError: CUDA out of memory">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34869B0&gt;
+
+    def test_JRV_18_025_model_resource_failure_no_publication(learner):
+        learner.model_chat=Mock(side_effect=RuntimeError('CUDA out of memory'))
+&gt;       with pytest.raises(r.LearningError):learner.learn('demo/snake')
+
+tests\test_repo_learning_audit.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\repo_learning.py:444: in learn
+    summary = self._chat("You study a public code repository so an AI coding assistant can reuse it later. From the "
+jarvis\repo_learning.py:383: in _chat
+    return self.model_chat(system, payload, schema)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1931179751504'&gt;
+args = ('You study a public code repository so an AI coding assistant can reuse it later. From the supplied structure, manife..., 'required': ['purpose', 'architecture', 'how_to_run', 'key_modules', 'patterns', 'use_when', ...], 'type': 'object'})
+kwargs = {}, effect = RuntimeError('CUDA out of memory')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               RuntimeError: CUDA out of memory
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: RuntimeError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_026_queue_dedupe_and_stopped" time="0.004"><failure message="AssertionError: assert not True&#10; +  where True = enqueue('other/repo', 'late')&#10; +    where enqueue = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34808B0&gt;.enqueue">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34808B0&gt;
+
+    def test_JRV_18_026_queue_dedupe_and_stopped(learner):
+        assert learner.enqueue('demo/snake','fixture')
+        assert not learner.enqueue('DEMO/snake','duplicate')
+&gt;       learner.close();assert not learner.enqueue('other/repo','late')
+E       AssertionError: assert not True
+E        +  where True = enqueue('other/repo', 'late')
+E        +    where enqueue = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A34808B0&gt;.enqueue
+
+tests\test_repo_learning_audit.py:199: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_027_real_benchmark" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\18-repo-learning\\benchmark-summary.json'">def test_JRV_18_027_real_benchmark():
+&gt;       data=json.loads((Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/18-repo-learning/benchmark-summary.json').read_text())
+
+tests\test_repo_learning_audit.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Kunals GitHub Repo/Jarvis/app/artifacts/jarvis-audit/modules/18-repo-learning/benchmark-summary.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\18-repo-learning\\benchmark-summary.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_028_forged_approval_not_authority" time="0.058" /><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_029_config_rejected" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A3487070&gt;
+
+    def test_JRV_18_029_config_rejected(learner):
+        for cfg in ({'max_zip_mb':-1},{'enabled':'yes'},{'dwell_seconds':float('nan')},{'repos_per_task':99}):
+&gt;           with pytest.raises(ValueError):r.RepoLearner(learner.actions,cfg,http=Mock())
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_repo_learning_audit.py:219: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_030_failed_save_not_replayed" time="0.011"><failure message="AssertionError: assert (1 == 1 and not {'demo/snake': {'keywords': ['building', 'canvas', 'demo', 'game', 'games', 'html', ...], 'languages': ['JavaScript', 'Python'], 'learned_at': '2026-10-16T06:02:11+00:00', 'purpose': 'A small snake game on an HTML canvas.', ...}})&#10; +  where 1 = &lt;MagicMock name='_save_index' id='1931173990112'&gt;.call_count&#10; +  and   {'demo/snake': {'keywords': ['building', 'canvas', 'demo', 'game', 'games', 'html', ...], 'languages': ['JavaScript', 'Python'], 'learned_at': '2026-10-16T06:02:11+00:00', 'purpose': 'A small snake game on an HTML canvas.', ...}} = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2F09D80&gt;.index">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2F09D80&gt;
+
+    def test_JRV_18_030_failed_save_not_replayed(learner):
+        with patch.object(learner,'_save_index',side_effect=OSError('disconnected')) as write:
+            with pytest.raises((r.LearningError,OSError)):learner.learn('demo/snake')
+&gt;       assert write.call_count==1 and not learner.index
+E       AssertionError: assert (1 == 1 and not {'demo/snake': {'keywords': ['building', 'canvas', 'demo', 'game', 'games', 'html', ...], 'languages': ['JavaScript', 'Python'], 'learned_at': '2026-10-16T06:02:11+00:00', 'purpose': 'A small snake game on an HTML canvas.', ...}})
+E        +  where 1 = &lt;MagicMock name='_save_index' id='1931173990112'&gt;.call_count
+E        +  and   {'demo/snake': {'keywords': ['building', 'canvas', 'demo', 'game', 'games', 'html', ...], 'languages': ['JavaScript', 'Python'], 'learned_at': '2026-10-16T06:02:11+00:00', 'purpose': 'A small snake game on an HTML canvas.', ...}} = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A2F09D80&gt;.index
+
+tests\test_repo_learning_audit.py:225: AssertionError</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_031_oversized_zip_rejected" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;">def test_JRV_18_031_oversized_zip_rejected():
+&gt;       with pytest.raises(r.LearningError):r.analyze_zip(make_zip({'a.py':'x'}),{'max_read_bytes':-1})
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_learning.LearningError'&gt;
+
+tests\test_repo_learning_audit.py:229: Failed</failure></testcase><testcase classname="tests.test_repo_learning_audit" name="test_JRV_18_032_trace_and_redacted_failure" time="0.018"><failure message="AssertionError: assert None&#10; +  where None = &lt;built-in method get of dict object at 0x000001C1A2F00BC0&gt;('trace_id')&#10; +    where &lt;built-in method get of dict object at 0x000001C1A2F00BC0&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get">learner = &lt;jarvis.repo_learning.RepoLearner object at 0x000001C1A336A7D0&gt;
+
+    def test_JRV_18_032_trace_and_redacted_failure(learner):
+&gt;       data=learned(learner);assert data.get('trace_id')
+E       AssertionError: assert None
+E        +  where None = &lt;built-in method get of dict object at 0x000001C1A2F00BC0&gt;('trace_id')
+E        +    where &lt;built-in method get of dict object at 0x000001C1A2F00BC0&gt; = {'cached_files': [{'file': 'app.py.txt', 'path': 'app.py'}, {'file': 'src__main.js.txt', 'path': 'src/main.js'}, {'fil...pp.py'}], 'default_branch': 'main', 'description': 'Snake game canvas', 'entry_points': ['src/main.js', 'app.py'], ...}.get
+
+tests\test_repo_learning_audit.py:233: AssertionError</failure></testcase></testsuite></testsuites>

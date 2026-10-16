@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-15 IST",
+  "scope": "Same machine/current Prepared/identical synthetic six provider factories; first preparation succeeds; old eager versus current lazy construction plus new validation/UUID.5 fresh per-call fixtures labelled cold and20 repeated fixtures labelled warm, not OS/model cold or real COM/UIA latency. Tracemalloc component allocation only. No network/GPU/screen/model/audio work; TTFT/audio/VRAM not applicable.",
+  "results": {
+    "before_cold": {
+      "samples": 5,
+      "p50_ms": 0.03040000001419685,
+      "p95_ms": 0.0638999999864609,
+      "peak_python_bytes": 6376
+    },
+    "before_warm": {
+      "samples": 20,
+      "p50_ms": 0.021750000087195076,
+      "p95_ms": 0.04360000002634479,
+      "peak_python_bytes": 2392
+    },
+    "after_cold": {
+      "samples": 5,
+      "p50_ms": 0.024699999812582973,
+      "p95_ms": 0.04859999990003416,
+      "peak_python_bytes": 3961
+    },
+    "after_warm": {
+      "samples": 20,
+      "p50_ms": 0.024400000029345392,
+      "p95_ms": 0.03569999989849748,
+      "peak_python_bytes": 2049
+    }
+  },
+  "effects_verified": true,
+  "real_side_effects": 0
+}

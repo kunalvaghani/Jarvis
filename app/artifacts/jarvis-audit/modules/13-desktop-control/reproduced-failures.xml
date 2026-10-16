@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="6" time="1.457" timestamp="2026-10-15T21:23:49.951745+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_desktop_control_audit" name="test_preparation_access_denied_never_falls_through" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'PermissionError'&gt;">tests\test_desktop_control_audit.py:29: in test_preparation_access_denied_never_falls_through
+    with pytest.raises(PermissionError):route([first,second])
+E   Failed: DID NOT RAISE &lt;class 'PermissionError'&gt;</failure></testcase><testcase classname="tests.test_desktop_control_audit" name="test_exception_payload_not_returned_in_receipt_or_message" time="0.002"><failure message="AssertionError: assert 'password=fa...ivate-123456' not in 'Task paused... continuing.'&#10;  &#10;  'password=fake-private-123456' is contained here:&#10;    Task paused: RuntimeError: password=fake-private-123456 No action was replayed; inspect fresh state before continuing.&#10;  ?                            ++++++++++++++++++++++++++++">tests\test_desktop_control_audit.py:36: in test_exception_payload_not_returned_in_receipt_or_message
+    assert secret not in str(failure.value)
+E   AssertionError: assert 'password=fa...ivate-123456' not in 'Task paused... continuing.'
+E     
+E     'password=fake-private-123456' is contained here:
+E       Task paused: RuntimeError: password=fake-private-123456 No action was replayed; inspect fresh state before continuing.
+E     ?                            ++++++++++++++++++++++++++++</failure></testcase><testcase classname="tests.test_desktop_control_audit" name="test_oversized_request_never_enters_guard_or_provider" time="1.026"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_desktop_control_audit.py:43: in test_oversized_request_never_enters_guard_or_provider
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_desktop_control_audit" name="test_invalid_pointer_configuration_fails_closed" time="0.014"><failure message="AssertionError: assert True is False&#10; +  where True = &lt;function enabled at 0x000001F36A3E8AF0&gt;(WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-202/test_invalid_pointer_configura0'))">tests\test_desktop_control_audit.py:53: in test_invalid_pointer_configuration_fails_closed
+    assert enabled(tmp_path) is False
+E   AssertionError: assert True is False
+E    +  where True = &lt;function enabled at 0x000001F36A3E8AF0&gt;(WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-202/test_invalid_pointer_configura0'))</failure></testcase><testcase classname="tests.test_desktop_control_audit" name="test_pointer_admission_runs_after_mouse_idle_wait" time="0.006"><failure message="TypeError: tap() got an unexpected keyword argument 'admit'">tests\test_desktop_control_audit.py:61: in test_pointer_admission_runs_after_mouse_idle_wait
+    with pytest.raises(ValueError,match='target moved'):tap(10,20,user=user,sleep=lambda _:None,admit=admit)
+E   TypeError: tap() got an unexpected keyword argument 'admit'</failure></testcase><testcase classname="tests.test_desktop_control_audit" name="test_touch_restores_thread_dpi_context" time="0.001"><failure message="AssertionError: assert 1 == 2&#10; +  where 1 = &lt;Mock id='2144970573328'&gt;.call_count&#10; +    where &lt;Mock id='2144970573328'&gt; = &lt;tests.test_jarvis_pointer.FakeUser object at 0x000001F36A3585B0&gt;.SetThreadDpiAwarenessContext">tests\test_desktop_control_audit.py:72: in test_touch_restores_thread_dpi_context
+    assert user.SetThreadDpiAwarenessContext.call_count==2
+E   AssertionError: assert 1 == 2
+E    +  where 1 = &lt;Mock id='2144970573328'&gt;.call_count
+E    +    where &lt;Mock id='2144970573328'&gt; = &lt;tests.test_jarvis_pointer.FakeUser object at 0x000001F36A3585B0&gt;.SetThreadDpiAwarenessContext</failure></testcase></testsuite></testsuites>

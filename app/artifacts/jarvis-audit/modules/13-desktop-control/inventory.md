@@ -1,7 +1,45 @@
-# PROMPT 13 — Windows UIA/UFO/Windows-MCP/CUA desktop automation
+# Prompt13 — desktop-control audit, 2026-10-15 IST
 
-PARTIAL. Sources: ['jarvis/desktop_actions.py', 'jarvis/actions.py', 'integrations/execution-primitives', 'integrations/execution-upstream', 'docs/windows-commands.md']
+**30 catalog fixture PASS / 2 BLOCKED / 0 FAIL / 0 SKIPPED / 0 NOT RUN.** JRV-13-004 live150% DPI and JRV-13-007 real UAC/secure desktop are blocked without an authorized isolated live setup. Fake coordinate/permission assertions execute separately. No personal display change, elevation, screen lock, mouse click, real app launch, typing, send, account mutation, install or deployment occurred. Fixtures are not production desktop acceptance.
 
-Missing inferred candidates: []
+Repo `1dd5ea3ff47bc9ee42ed6fbd27fc3f5b68335f41`, existing branch `audit/12-tool-registry` retained, Windows/Python3.10.6, Ryzen7/32GB/RTX3050 Laptop4GB target (prior observed machine). app/ canonical; InsTAREELS alias not separately edited. Existing user/Prompt12 work preserved. No commit/reset or heavyweight GPU/model work.
 
-[Whole inventory](../../inventory.md)
+## Source-map evidence and dependency/run order
+
+| Documented claim / entry | Checked implementation | Executed proof / limit |
+| --- | --- | --- |
+| Ordered providers | execution_adapters.PROVIDERS → execution_router.execute | Actual order jarvis-pointer → UFO → Windows-MCP → CUA → OpenComputerUse → Agent-S; five adapted ports, not five installed frameworks; only preparation fallback, deny/dispatch failure stops |
+| Existing app/keyboard path | actions.Desktop.capture/type, Actions._execute, window_focus.focus_app | Existing executable/focus checks and per-character foreground/SendInput checks retained; no typing-speed change/live Notepad proof. App focus helpers can select the first matching executable/Z-order window; not general duplicate-window disambiguation |
+| UIA target/focus | UIControls._handle → UITransport → ui_worker.perform/routed.guard | Explicit HWND/PID/foreground/visible/enabled/runtime ID/name/role/rectangle; fake changed foreground/lock0 refuses input, duplicate labels clarify; no live app launch certification |
+| Touch/coordinates | JarvisPointer.prepare → jarvis_pointer.tap | Temporary physical-pixel DPI context restored; exact runtime ID/geometry/focus/hit-test repeated after idle and immediately before touch; fake150% geometry injects one down/up at300,225, moved target gets0 touches |
+| Visual-point fallback | independent_cursor.at_point/activate_point | Existing window/PID/coverage guard now passed into tap admission; no whole-scene capture during every idle wait, so same-window scene races remain possible |
+| Readback and no replay | execution_router + direct_execution.run + TaskState | Exact fake-native field value, no-op fresh state, failed/hung dispatch sent once, no next provider, direct runner pauses on unverified result; postcondition observations are bounded but COM itself can block |
+| IPC failure ownership | UITransport.request/_stop_process/_backoff/close | Malformed/mismatched frames stop only owned worker, no replay;100 requests over5 threads×20 rounds have unique serial IDs; cancellation/backoff/intentional Stop preserved |
+| Privacy/authority | categorical router errors/trace UUIDs, ui_worker.record, ToolRegistry policy | Synthetic secret excluded from new router receipt/message; existing journal omits labels/text. Current registry approval/allowlist still authoritative; not a general personal-data scrubber |
+| Source/dependency truth | integrations/execution-primitives/source-manifest + retained licenses | Pinned selected sources; Windows-MCP pattern subset runs existingPython3.10.6, full Python3.14 server not installed; licenses preserved; no package/model/service added |
+
+
+Read system-map, execution-providers, windows-commands execution contract, independent-cursor and retained primitive source/license documentation. Historical images/live checks are preserved with dates and attribution, not fabricated new validation. Source files/config/registrations/tests inspected; [static source census](source-census.json) confirms current order, all five pinned revisions and matching text-normalized retained/runtime Windows-MCP pattern copies. Order: real entry points/permissions/recovery → baseline → isolated fault reproductions → scoped router/target/protocol fixes →32 catalog assertions + neighboring visual/direct/task tests → matched component profile → full regression/readiness → ledger/docs. Deviation from suggested UIA-first upgrade: preserve the user's existing pointer-first setting/order; improve admission rather than silently change click behavior. No new language/vision/model reranker, framework server or learned ability.
+
+## Executed results
+
+Baseline **118 PASS**, 11.08s,[XML](existing-baseline.xml). **Eight reproduced defects**: six in [initial failure XML](reproduced-failures.xml), plus [malformed worker frame](malformed-frame-reproduced.xml) and [native COM denial](native-denial-reproduced.xml). Earlier2422-pass full result is retained separately; only accepted full-regression.xml includes the native denial correction. First fixes passed146 neighboring tests before catalog expansion. Final targeted **191 PASS / 2 skips**, 6.99s,[XML](cases-and-contracts.xml). Full **2423 PASS / 21 skips**, 386.72s,[XML](full-regression.xml),[actual completion](full-run-completion.txt). Suites overlap. Launcher **repair_required**,[redacted check](readiness.json). [Commands](commands.txt),[all32 IDs/assertions](tests.jsonl). Readiness is a separate check: Docker Linux engine/Ollama unavailable and F5 import check timed out in this run; no services were started or personal settings changed. Existing COM warning, if emitted, is retained in completion output.
+
+Applicable journey is simulated Notepad field admission and exact hello readback through the actual router, changed HWND/foreground rejection through ui_worker.routed, duplicate choices, real provider→tap exercised entirely on fake user32/UIA, temporary transports/direct TaskState fixtures and zero model calls for exact direct grammar. No actual Notepad→Calculator journey claimed. Case003 proves existing foreground-HWND binding and duplicate-control refusal; app focus helpers still select a first matching executable/Z-order window and do not provide general duplicate-window clarification. Network outage fixture proves local routing makes0 network calls; MemoryError fixture proves pre-dispatch fallback, not physical RAM/VRAM resilience. Mocked secure-desktop denial is not live UAC proof. Five-way100-request protocol load is bounded concurrency, not a multi-hour soak. Screen/PC content did not go to cloud; public upstream research is separate.
+
+## Same-machine component profile and keep decision
+
+| Algorithm/fixture | Samples | p50 ms | p95 ms | Peak traced Python bytes |
+| --- | --- | --- | --- | --- |
+| before_cold | 5 | 0.03040 | 0.06390 | 6376 |
+| before_warm | 20 | 0.02175 | 0.04360 | 2392 |
+| after_cold | 5 | 0.02470 | 0.04860 | 3961 |
+| after_warm | 20 | 0.02440 | 0.03570 | 2049 |
+
+[50 raw trials](benchmarks.csv),[scope](benchmark-summary.json): saved old router versus current router, same six synthetic factories/first provider success/native fake readback, one fake dispatch every trial and0 real effects.5 fresh per-call fixtures labelled cold,20 repeated labelled warm; not OS/model/COM cold. Lazy construction creates1 provider instead of6 on first success; original fixed order preserved. New strict text validation and UUID carry overhead: warm p95 **0.04360→0.03570ms**. Warm median increases slightly; these short timings do not establish a general latency win. Retain reduced unused construction/warm allocation and correctness/privacy changes; no full desktop, TTFT, first-audio or VRAM speed claim. Physical re-admission adds native calls not measured by this synthetic router profile. Tracemalloc measures transient component allocations, not whole-process memory.
+
+## Limits and blockers
+
+Live150% DPI/multi-monitor and real secure desktop/elevated/locked-session trials remain blocked. Shared focus/keyboard and physical cursor compatibility restoration remain shared resources. Admission and Windows input are not atomic; a target/user mouse can still change after the final check. Visual-only points recheck window/PID/coverage, not the whole image during every idle wait. COM providers can block; one-second verification means observation deadline, not forced COM cancellation; outer owned-worker deadline is the containment boundary. Touch injection failure after DOWN remains uncertain, never fallback/replay. Freshly successful UIA readback does not establish an arbitrary app/business outcome. Categorical router errors reduce diagnostics; other pre-existing task logs retain their established behavior. Existing app-opening/focus helpers can choose the first matching executable/Z-order window; foreground-bound fixture disambiguation does not certify every ambiguous app-opening request. No broad security/production certificate.
+
+[Changes](changes.md),[failures](failures.md),[upstream/pins](compatibility.md),[rollback/resume](rollback.md),[exact files/hashes](files-changed.json),[source diff](source.patch). Earliest global unresolved **JRV-04-001**, next catalog NOT RUN **JRV-14-001**. Other module work is preserved. Existing Prompt12 assertions were fully reviewed and rerun in a focused registry/accounting check; the omitted reviewed namespace is now included in global totals, without changing Prompt12 product code.

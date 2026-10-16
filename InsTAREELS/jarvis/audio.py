@@ -119,7 +119,8 @@ class Listener:
         self.push_to_write, self.writer = push_to_write, writer
         self.references = references or (lambda: ())
         self.stop_event = threading.Event()
-        self.audio = queue.Queue(maxsize=100)
+        from .pcm_ring import CaptureQueue
+        self.audio = CaptureQueue()
         self.overflow = threading.Event()
         self.jobs = DecodeQueue()
         self.thread = threading.Thread(target=self.run, daemon=True)
@@ -237,6 +238,9 @@ class Listener:
             from .whisper_backend import load_model
             self.report("state", "Loading Whisper on GPU…")
             model = load_model(self.model_path, self.options)
+            from .whisper_backend import CoordinatedWhisper
+            if isinstance(model, CoordinatedWhisper):
+                model.cancelled = self.stop_event.is_set
             from faster_whisper.vad import get_vad_model
             if self.stop_event.is_set():
                 return
@@ -251,6 +255,7 @@ class Listener:
             device = sd.query_devices(self.device, "input")
             rate = int(device["default_samplerate"])
             divisor = math.gcd(rate, 16000)
+            self.audio.configure(rate)
 
             def callback(data, frames, timing, status):
                 if self.stop_event.is_set():
@@ -358,4 +363,6 @@ class Listener:
                 self.decoder.join(timeout=2.)
                 if self.decoder.is_alive():
                     self._fail('decoder_stalled')
+            if hasattr(self.audio, 'close'):
+                self.audio.close()
             self.report("listener_stopped", "Microphone off")

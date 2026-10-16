@@ -1,0 +1,10 @@
+[
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-004]",
+    "reason": "BLOCKED: live150% DPI/multi-monitor click validation not authorized; no personal display settings changed. Physical-coordinate fixture passed separately."
+  },
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-007]",
+    "reason": "BLOCKED: real UAC/secure-desktop validation would require elevation/personal OS state changes; no bypass attempted. Permission-denial fixture passed separately."
+  }
+]

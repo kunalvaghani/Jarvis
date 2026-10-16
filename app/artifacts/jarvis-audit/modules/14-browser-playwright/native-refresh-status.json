@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-15 IST",
+  "status": "BLOCKED",
+  "probe": "GET localhost11434/api/version with3s timeout, trust_env false",
+  "error_type": "ConnectionError",
+  "needed": "Fresh qwen3.5:9b synthetic two-answer proof matching current knowledge_worker SHA256; running existing local Ollama required.",
+  "existing_proof_modified": false,
+  "service_started": false,
+  "models_downloaded": false
+}

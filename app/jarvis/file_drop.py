@@ -12,9 +12,11 @@ import json
 from pathlib import Path
 import re
 import threading
+import queue
 
 WM_DROPFILES = 0x0233
 MAX_FILES = 5
+DROP_SLOTS = threading.BoundedSemaphore(2)
 
 
 class DropTarget:
@@ -32,7 +34,8 @@ class DropTarget:
         import win32gui
         import queue
         self.root, self.on_drop, self.previous = root, on_drop, {}
-        self.dropped = queue.SimpleQueue()  # Filled by the window procedure, emptied by poll() on the Tk loop.
+        self.dropped = queue.Queue(maxsize=8)  # Native callback never waits on the UI.
+        self.dropped_overflow = 0
         self.original = {}  # Kept for the window's whole life: late messages after close() still reach Tk.
         user = ctypes.windll.user32
         for widget in widgets:
@@ -61,7 +64,10 @@ class DropTarget:
                 count = win32api.DragQueryFile(wparam, -1)
                 paths = [win32api.DragQueryFile(wparam, i) for i in range(min(count, MAX_FILES * 2))]
                 win32api.DragFinish(wparam)
-                self.dropped.put(paths)  # No Tk call here (see the class note).
+                try:
+                    self.dropped.put_nowait(paths)  # No Tk call here.
+                except queue.Full:
+                    self.dropped_overflow += 1
             except Exception:
                 pass
             return 0
@@ -73,7 +79,7 @@ class DropTarget:
     def poll(self):
         """Deliver queued drops; call from the Tk loop (the island's tick). Returns how many drops were delivered."""
         delivered = 0
-        while True:
+        for _ in range(8):
             try:
                 paths = self.dropped.get_nowait()
             except Exception:
@@ -83,6 +89,7 @@ class DropTarget:
                 self.on_drop(paths)
             except Exception:
                 pass
+        return delivered
 
     @property
     def active(self):
@@ -306,16 +313,29 @@ def send_email(actions, files, documents, cancelled):
 
 def start(actions, paths):
     """Run one drop flow on its own thread (a second drop while one is open waits for it)."""
+    if not DROP_SLOTS.acquire(blocking=False):
+        actions.report('action','File drop queue is full. Please drop these files again after the current request.')
+        return False
     def work():
-        with FLOW_LOCK:
-            try:
-                reply = handle(actions, paths, lambda: getattr(actions, "closing", False))
-            except Exception as exc:
-                actions.report("media_card", card("sad", "Something went wrong", str(exc)[:110]))
-                reply = "Sorry, I couldn't finish that: " + str(exc)[:200]
-            if reply:
-                actions.report("spoken_reply", reply)
-    threading.Thread(target=work, daemon=True, name="Jarvis file drop").start()
+        try:
+            with FLOW_LOCK:
+                if getattr(actions,'closing',False):
+                    return
+                try:
+                    reply = handle(actions, paths, lambda: getattr(actions, "closing", False))
+                except Exception as exc:
+                    actions.report("media_card", card("sad", "Something went wrong", type(exc).__name__))
+                    reply = "I couldn't finish that file request: " + type(exc).__name__
+                if reply:
+                    actions.report("spoken_reply", reply)
+        finally:
+            DROP_SLOTS.release()
+    try:
+        threading.Thread(target=work, daemon=True, name="Jarvis file drop").start()
+    except Exception:
+        DROP_SLOTS.release()
+        raise
+    return True
 
 
 def parse_paths(value):

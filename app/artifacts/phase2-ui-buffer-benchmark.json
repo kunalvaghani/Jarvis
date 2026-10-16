@@ -1,0 +1,54 @@
+{
+  "scope": "headless queue benchmark, not Tk FPS or end-to-end speech",
+  "runs": [
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.02629530000012892,
+      "drain_seconds": 1.2800000149582047e-05
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.025706299999910698,
+      "drain_seconds": 7.300000106624793e-06
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.026194399999440066,
+      "drain_seconds": 7.300000106624793e-06
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.026437000000441913,
+      "drain_seconds": 6.8999997893115506e-06
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.03258850000020175,
+      "drain_seconds": 7.300000106624793e-06
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.032266400000480644,
+      "drain_seconds": 7.0000005507608876e-06
+    },
+    {
+      "events": 10000,
+      "delivered_snapshots": 1,
+      "coalesced": 9999,
+      "producer_seconds": 0.02551359999961278,
+      "drain_seconds": 6.099999154685065e-06
+    }
+  ]
+}

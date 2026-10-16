@@ -7,7 +7,7 @@ import time
 
 
 from .cloud_policy import KEY_MATERIAL
-SENSITIVE = re.compile(r"(?i)(?:password|passcode|secret|api[_ -]?key|access[_ -]?token|authorization|bearer|credential|private key|"+KEY_MATERIAL+r")")
+SENSITIVE = re.compile(r"(?i)(?:password|passcode|secret|api[_ -]?key|access[_ -]?token|authorization|bearer|credential|private key|\b(?:otp|one[- ]time|pin|cvv|card number|account number|ifsc|upi pin|aadhaar|pan number)\b|\b\d{12,19}\b|"+KEY_MATERIAL+r")")
 WORDS = re.compile(r"[\w.-]{3,}", re.UNICODE)
 RECALL = re.compile(r"(?i)\b(remember|recall|did i|was i|what did|when did|worked on|opened|used today|yesterday|recently|history|activity)\b")
 PERSONAL = re.compile(r"(?i)\b(my|mine|myself|i am|i'm|am i|family|brother|father|mother|birthday|birth date|age|hometown|home town|kunal|vaghani|jaydeep|rajeshbhai|alkaben|where do i live|where am i from|what job do i want|where do i want to work)\b")
@@ -15,8 +15,8 @@ PERSONAL = re.compile(r"(?i)\b(my|mine|myself|i am|i'm|am i|family|brother|fathe
 
 def clean(value, limit=400):
     """Keep notes short and avoid storing obvious credential-bearing text."""
-    value = " ".join(str(value).split())[:limit]
-    return "[redacted sensitive text]" if SENSITIVE.search(value) else value.replace("`", "'")
+    value = " ".join(str(value).split())
+    return "[redacted sensitive text]" if SENSITIVE.search(value) else value[:limit].replace("`", "'")
 
 
 class ObsidianMemory:

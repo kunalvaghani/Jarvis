@@ -1,12 +1,84 @@
 # Jarvis system map
 
-A one-page summary of everything Jarvis has as of **2026-10-14 IST**: features,
+<!-- prompt20-audit -->
+**Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
+Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/20-self-evolution/inventory.md).
+<!-- /prompt20-audit -->
+
+<!-- prompt19-audit -->
+**Ability-forge audit — 2026-10-16 IST:** Review now binds code/version/scope; network runs require fresh approval and a durable non-replay checkpoint. Wrong-type output withdraws the new version and can restore prior approved metadata without execution. Oversized code is rejected before parsing.
+Verification: **2,756 full regression PASS /32 skips**; **32 Prompt19 catalog fixture PASS**. Voice abilities use process guard rails, not Docker isolation. Launcher **repair_required**; live model/account/voice acceptance and supported Python migration remain open.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/19-ability-forge/inventory.md).
+<!-- /prompt19-audit -->
+
+<!-- prompt18-audit -->
+**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
+Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
+<!-- /prompt18-audit -->
+
+
+<!-- prompt17-audit -->
+**Document audit — 2026-10-16 IST:** Bounded extraction/context, multilingual tokenization, stale-source checks, atomic session writes and drop admission guards added. Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places.
+Verification: **2,654 full regression PASS / 40 skips**; **28 Prompt 17 catalog PASS /4 BLOCKED**. Cross-document conflicts, semantic citation faithfulness, hard parser resource isolation and operation traces remain incomplete. Launcher **repair_required**. Installed pypdf 6.20.0 predates the 6.20.1 cyclic-tree security fix; no dependency installation performed.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/17-rag-documents/inventory.md).
+<!-- /prompt17-audit -->
+
+
+<!-- prompt16-audit -->
+**Memory audit — 2026-10-16 IST:** Bounded record/model validation, conservative subject/polarity guards, broader secret screening before clipping and Stop/readback guards added. Canonical facts flush before replacement; failed precommit restores RAM. Equivalent500-fact lexical retrieval warm median 15.40→5.40ms with a small temporary allocation increase.
+Verification: **2,616 full regression PASS / 36 skips**; **28 Prompt16 catalog PASS /4 BLOCKED**. Global erase, durable unavailable-vault writes, general document freshness and memory lifecycle correlation remain incomplete. Launcher **repair_required**; real vault/model/Obsidian GUI were not tested.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/16-memory/inventory.md).
+<!-- /prompt16-audit -->
+
+<!-- prompt15-audit -->
+**App/site knowledge audit — 2026-10-16 IST:** Fresh surface/version and task UUID checks prevent stale context reuse; login observations suppress research/control hints; bounded inputs and numeric public versions fail closed. Source preference uses configured origin, with explicit URL version hints marked stale. Cache lookup warm median 3.52→0.45 ms on synthetic records.
+Verification: **2,576 full regression PASS / 32 skips**; **31 Prompt15 catalog PASS / 1 BLOCKED** (plugin identity namespace missing). Launcher **repair_required**. Owned headless browser fixture passed; live accounts/native GUI/model/production readiness remain unverified.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/15-app-research/inventory.md).
+<!-- /prompt15-audit -->
+
+
+<!-- prompt14-audit -->
+**2026-10-15 browser audit:** Current DOM summaries include bounded label names,
+sign-in heuristics and untrusted metadata; generic role targets wait then require
+uniqueness, fresh URL and pinned semantic identity after the cue. Multiple owned
+tabs block generic mutations. Download/save and explicit tab selection are not
+implemented production capabilities. [Actual headless assertions, metrics and limits](../artifacts/jarvis-audit/modules/14-browser-playwright/inventory.md).
+Playwright1.63.0 retained;1.64.0 upstream release recorded without installation.
+Historical live measurements below retain original dates; no new public account/GUI trial.
+<!-- /prompt14-audit -->
+
+**Latest Phase 2 — 2026-10-15 IST:** [GPU, voice and UI changes](phase2-gpu-voice-ui.md)
+add native F5/Whisper inference leases, bounded Ollama contexts, shared-memory PCM,
+speech normalization, modifier-state fixes and coalesced UI/Mind DAG telemetry.
+[Measured results and remaining gates](../artifacts/phase2_gpu_voice_verified.md)
+supersede earlier architecture statements about speech being outside the lease
+coordinator. Active kernels still cannot be forcibly preempted; the F5 latency
+target remains unmet. Earlier dated audit evidence retains its original scope.
+
+<!-- prompt13-audit -->
+**2026-10-15 desktop-control audit:** Current pointer-first order is preserved.
+Delayed touch re-admits target geometry/focus/hit-test and visual-point window
+guards; thread DPI context is restored. Malformed pointer settings and worker
+responses fail closed. Provider errors are categorical and traceable; uncertain
+actions are never replayed. [Executed fixture scope, live blockers and tradeoffs](../artifacts/jarvis-audit/modules/13-desktop-control/inventory.md).
+Historical images/results below keep their dates; no new live desktop check.
+<!-- /prompt13-audit -->
+
+A compact reference to Jarvis as of **2026-10-15 IST**: features,
 skills, tools, architecture, workflows, software, repositories and models, and
 how they connect. Each line is short; follow the links for details. Dated test
 results stay in the linked guides. This page makes no new verification claims.
 Architecture wording was corrected after the
 [2026-10-15 inventory audit](../artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md);
 the audit records implemented, missing, configured and live-unverified boundaries separately.
+
+**Reading status:** model names below describe configuration, not a fresh installed-model
+census. Feature counts and timings belong to their dated source guides. An adapter,
+skill or configured service does not establish that its accounts, dependencies or live
+workflow work now. This map documents Jarvis; tools available only in the Codex chat
+are not automatically installed in Jarvis.
 
 [Prompts 02–04 follow-up — 2026-10-15](../artifacts/jarvis-audit/final-report.md)
 adds task identity checks, latest-document clarification, bounded voice ownership
@@ -24,7 +96,8 @@ Ollama lease coordinator; live contention and listening acceptability remain ope
 
 ```mermaid
 flowchart TD
-    Mic[Microphone / typed command / Push-to-write] --> STT[faster-whisper medium.en CUDA]
+    Mic[Microphone / Push-to-write audio] --> STT[faster-whisper medium.en CUDA]
+    Typed[Typed command] --> Engine
     STT --> Clean[Command cleanup qwen2.5:0.5b]
     Clean --> Engine[engine.py + commands.py + intent_catalog]
     Sensors[Screen awareness, God's Eye, weather, WhatsApp watcher] --> Cog
@@ -82,10 +155,11 @@ Local language models run in **Ollama**, with partial GPU offload managed by
 `gpu_scheduler.py`. Whisper uses CTranslate2, F5 uses its separate PyTorch
 environment, and Laya uses the brain environment; they are separate runtimes.
 The configured GPU is an RTX 3050 Laptop (4 GB VRAM).
-The [2026-10-15 GPU audit](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md)
+The earlier [2026-10-15 GPU audit](../artifacts/jarvis-audit/modules/08-gpu-scheduler/inventory.md)
 adds bounded state validation, unchanged-poll write elimination and conservative
-resource admission. F5/Whisper remain outside the Ollama lease coordinator;
-speech reserve is an estimate, not a shared native ownership protocol.
+resource admission. At that audit revision F5/Whisper were outside the coordinator.
+Phase 2 now shares inference-turn admission; native weights remain runtime-owned
+and the speech reserve remains an estimate.
 
 | Model | Role | Config key |
 | --- | --- | --- |
@@ -94,7 +168,7 @@ speech reserve is an estimate, not a shared native ownership protocol.
 | `qwen2.5:0.5b` | Voice-command cleanup; idle realtime-data reader | `command_cleanup.model`, `realtime.model` |
 | `qwen3-coder:30b` | Ability forge (falls back to 9b if RAM is short) | `repo_abilities.model` |
 | `jarvis-codex-qwen3.5:9b` | Legacy Codex coding backend model | `brain.codex_model` |
-| `qwen3-vl:2b / 4b`, `qwen3.5:4b`, `llama3.2:3b`, `qwen2.5:3b-instruct` | Installed alternatives / earlier experiments | — |
+| `qwen3-vl:2b / 4b`, `qwen3.5:4b`, `llama3.2:3b`, `qwen2.5:3b-instruct` | Historically recorded alternatives / earlier experiments; availability needs a fresh Ollama check | — |
 | `qwen/qwen3.8-27b` on **Groq** (cloud, free tier) | Optional: public, non-private complex questions only | `groq.*` |
 | faster-whisper `medium.en` | Speech-to-text, CUDA int8_float16 | `whisper.*` |
 | **F5-TTS** | Main voice, cloned zero-shot from a Jarvis reference clip | `speech.engine: "f5"` |
@@ -102,9 +176,11 @@ speech reserve is an estimate, not a shared native ownership protocol.
 | `convaiinnovations/laya` | Tool/action selector in the brain env | `brain.selector` |
 | Qwen2.5-Coder-0.5B + LoRA | Own trained coding/PC adapters (experiment) | `brain.trained_pc_checkpoint` |
 
-**Routing rule:** private data, PC actions and screen content never go to the
-cloud. Groq gets only a minimal public payload; if quota runs out or it fails,
-the same question runs locally.
+**Routing policy:** private data, PC actions and screen content are assigned local
+inference. Groq receives a minimal eligible public payload. Quota/policy refusal can
+fall back locally; a partial streamed failure retains its cause and is not
+automatically replayed. Groq is enabled in this checkout's configuration; this is
+not a live cloud check.
 2026-10-15 routing audit: policy/quota refusal precedes a blocking metadata wait,
 backoff header casing is normalized, invalid usage retains reservations and
 route UUIDs correlate with accounting. Common key screening/redaction remains
@@ -207,7 +283,7 @@ ToolRegistry executes. Unknown tool names never become executable.
 | Custom skills | `custom-skills/<name>/SKILL.md` | local, ignored by git |
 | Hermes guides | Pinned Nous Research Hermes skill references | 210 guides |
 | DeerFlow guides | Public DeerFlow skill guides | 23 |
-| Utility skills | Reviewed local utilities (format, PDF, OCR, crypto, notebooks…) in `.venv-skills` | 0 currently offered: source-bound validation stale (2026-10-15); historical38 local +3 mock |
+| Utility skills | Reviewed local utilities (format, PDF, OCR, crypto, notebooks…) in `.venv-skills` | Audit recorded 0 offered because source-bound validation was stale (2026-10-15); historical 38 local + 3 mock |
 | Repository skills | Python functions from learned repos, run in Docker | approval per call |
 | Repo abilities | Voice commands generated from learned repos | approval card |
 | Learned procedures | Verified past task steps + per-action success stats | Obsidian + `.jarvis-runtime/cognition/` |
@@ -222,7 +298,7 @@ arguments → registry enforces policy.
 
 | Group | Examples | Executor |
 | --- | --- | --- |
-| Desktop | open app, click, type_text, focus window, scroll | `desktop_actions.py`, UIA via providers **UFO → Windows-MCP → CUA → Open Computer Use → Agent-S** |
+| Desktop | open app, click, type_text, focus window, scroll | `desktop_actions.py`, UIA/touch via providers **Jarvis pointer → UFO → Windows-MCP → CUA → Open Computer Use → Agent-S** |
 | Browser | DOM inspect, navigate, fill, click | `browser_automation.py` (Playwright), `browser_worker.py` |
 | Files | list, read, search, append, open | `tools.py`, `native_tools.py`, SQLite file index |
 | Web / research | web_search, scrape_web, DeerFlow research, Firecrawl (optional) | `toolkits.py`, `deerflow.py`, `firecrawl_tools.py` |
@@ -247,19 +323,19 @@ until configured ([superagi-toolkits.md](superagi-toolkits.md)).
 | Software | Use |
 | --- | --- |
 | Python (7+ venvs) | `.venv` main, `.venv-brain` (laya/transformers), `.venv-f5` (F5-TTS + CUDA torch), `.venv-skills`, `.venv-training`, `.venv-harness`, `.venv-hermes`, `.venv-deerflow` (Py 3.12) |
-| Ollama | All local models |
+| Ollama | Local language/vision model serving; speech and Laya use separate runtimes |
 | CUDA / NVIDIA libs | Whisper, F5-TTS, partial Qwen offload |
 | Docker Desktop (Linux engine) | Repository skills, DeerFlow sandbox; auto-started silently |
 | Node.js | REA, DeepSeek Harness |
 | Playwright + Chrome | Browser automation, Gmail Chrome adapter |
-| Obsidian vault | Long-term memory (`D:\Phython Project\Jarvis_Memory\Jarvis_Mem`) |
+| Obsidian vault | Long-term memory; installation-specific vault path comes from configuration |
 | WhatsApp Desktop, Spotify Desktop, Blender, VS Code… | Controlled apps |
 | Key Python packages | faster-whisper, ctranslate2, kokoro-onnx, piper-tts, pywinauto, pywin32, winrt media, pycaw, PyAutoGUI, opencv, pypdf, ddgs, playwright |
 
 Dependencies: [`requirements/`](../requirements/). Services and health checks:
 [`config/runtime_manifest.json`](../config/runtime_manifest.json).
 
-**Owned services:** interface, microphone, action_worker, question_worker,
+**Declared service names (not current health):** interface, microphone, action_worker, question_worker,
 speech_worker, brain_inference, ui_automation_worker, browser_automation_worker,
 context_selector, realtime_observations, anticipation, island_media_observations,
 gods_eye, harness_inference, hermes_inference, development_preview, ollama,
@@ -282,7 +358,7 @@ docker_linux_engine.
 | **agenticSeek** | Coder generate/check/feedback loop | Ideas only |
 | Microsoft JARVIS, isair-jarvis, jarvis-ui, Memento, UI-TARS | Reference designs | Reference only |
 | Codex CLI / Claude Code CLI | Earlier coding backends with local Qwen | Legacy, selectable |
-| **LocalGithub** (`D:\Kunals GitHub Repo\LocalGithub`) | Local git assembly for coding workloads | Active |
+| **LocalGithub** (separate local checkout) | Local git assembly for coding workloads | Configured integration; location is installation-specific |
 | Learned GitHub repos (e.g. `trentm/python-markdown2`, `sindresorhus/is`, `mahmoud/boltons`) | Coding reference + new abilities | Stored in Obsidian `Jarvis Repos/` |
 
 Licenses stay with each reference in [`integrations/`](../integrations/).
@@ -326,10 +402,10 @@ flowchart LR
 ```
 
 - **Learning feeds tools:** repos learned → abilities forged → approved → appear as skills in the registry.
-- **Memory feeds planning:** Obsidian facts, skills and lessons enter every plan and answer.
+- **Memory feeds planning:** relevant bounded facts, skills and lessons can enter local plans and answers; public cloud questions exclude private enrichment.
 - **Outcomes feed memory:** each action updates success stats; repeated failures become lessons.
 - **Deliberation gates actions:** risky or unclear tasks stop and ask before tools run.
-- **GPU scheduler shares one 4 GB GPU:** priority planner > coding > question > cleanup; F5 speech keeps a reserve.
+- **GPU scheduler budgets inference:** F5/Whisper share native turn admission; Ollama planner/coding/question/cleanup ordering and estimated speech headroom remain. Kernels are not forcibly preempted.
 - **Recovery wraps everything:** launcher health checks restart owned workers silently, never replaying uncertain actions.
 
 ---
@@ -366,3 +442,39 @@ cancels. A deterministic unfamiliar-program research gate is still missing.
 
 Start: [`Start Jarvis.cmd`](<../Start Jarvis.cmd>) · Stop: [`Stop Jarvis.cmd`](<../Stop Jarvis.cmd>) ·
 Full guide: [app README](../README.md).
+
+## 13. Workflow → skill → tool → model connections
+
+These are routing summaries, not promises that every integration is ready.
+
+| Request | Skill / context | Tool or worker path | Model / software | Outcome feeds |
+| --- | --- | --- | --- | --- |
+| Open an app or change a control | app-navigation, form-entry, fresh window observation | commands → Actions → guarded desktop providers | Direct commands need no planner; ambiguous selection can use Qwen/Laya, UIA | Fresh control readback → task state, experience |
+| Find and play a video/song | youtube-media, spotify-media | media_commands → media_player → browser/Spotify session | Playwright, Windows media APIs; direct paths bypass planning | Playback check → island card |
+| Answer a general question | runtime-questions, bounded relevant memory | Knowledge → QuestionClient → knowledge_worker | Local Qwen 9b or eligible Groq; F5 reads streamed phrases | Answer → island, conversation memory |
+| Research a public topic | web-research, DeerFlow guides | registry → web/search/research adapters | Public retrieval + local synthesis; optional providers require setup | Source receipts → answer/research artifact |
+| Ask about a dropped PDF/Word file | file-operations, focused document | Pip/file_drop → documents extraction → retrieval | pypdf/DOCX extraction, local Qwen; light index or graph enrichment | Cited answer → document/session memory |
+| Draft/send email or WhatsApp | recipient/account context, explicit applicable approval | Gmail API/Chrome adapter or WhatsApp workflow | API/browser/native app; model may compose text | Preview → approved action → receipt/readback |
+| Build or edit a project | project-coding, learned repo references | native_coding → typed file/check tools → LocalGithub | Qwen 9b, Python/Node tooling, browser preview | Build/check evidence → project lessons |
+| Clone an app/site | reverse-engineer-clone | rea_tools → REA analysis → development/coding | Node REA CLI + local Qwen | Analysis/artifacts → best-effort implementation → checks |
+| Learn a new reusable command | repo guidance, capability gap | repo_learning → repo_abilities → review/approval | Configured coder 30b, 9b fallback subject to admission; Docker where required | Tested approved ability → registry discovery |
+| Prepare for future work | prior outcomes, app knowledge | anticipation / knowledge acquisition / self-evolution | Small helpers or local Qwen under idle/resource gates | Cached evidence and lessons → later planner context |
+
+**The boundary:** a skill supplies instructions; a model proposes arguments; a
+registered tool performs the action; independent checks determine what succeeded.
+Reading a repository or adding a Markdown guide alone does not add executable tools.
+
+**Inventory entry points:** [bundled skills](../skills/),
+[built-in registry source](../jarvis/tools.py), [capability selection](../jarvis/capabilities.py),
+[integration profiles](../integrations/profiles/), [dependency groups](../requirements/),
+and [runtime manifest](../config/runtime_manifest.json). The historical
+[assistant-session tool inventory](exposed-tool-inventory.json) describes tools exposed
+to a separate assistant session on 2026-10-08, not Jarvis's executable registry.
+
+**Documentation review — 2026-10-15 IST:** refreshed against current configuration,
+source paths, documentation and audit records; all 65 local Markdown targets resolve,
+and the scoped diff whitespace check passed. No new live account, microphone or
+desktop action validation was performed. Regression tests were not rerun for this
+documentation-only change. `python -m jarvis.launcher --check` was attempted from
+`app/` but interrupted after prolonged silent probing; no fresh readiness status
+was obtained. Historical readiness results above retain their original scope.

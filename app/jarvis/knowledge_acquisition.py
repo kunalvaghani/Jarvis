@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 import time
+import threading
 from urllib.parse import urlsplit
 
 from .dag_execution import Executor, Tool, validate_plan
@@ -29,6 +30,8 @@ def settings(config):
     result = {'enabled': False, 'online': True, 'background_refresh': False,
         'max_sources': 2, 'max_research_per_task': 2, 'max_seconds': 45,
         'ttl_seconds': 604800, **row}
+    if set(row)-{'enabled','online','background_refresh','max_sources','max_research_per_task','max_seconds','ttl_seconds'}:
+        raise ValueError('Unknown acquisition configuration.')
     for name in ('enabled', 'online', 'background_refresh'):
         if type(result[name]) is not bool:
             raise ValueError('Learning feature flags must be booleans.')
@@ -40,18 +43,41 @@ def settings(config):
 
 
 def interface_signature(controls):
+    if not isinstance(controls, list):
+        controls = []
     rows = sorted({(str(c.get('role', '')), str(c.get('name', ''))[:160])
-        for c in controls if isinstance(c, dict) and not c.get('password')})
+        for c in controls[:120] if isinstance(c, dict) and not c.get('password')})
     return hashlib.sha256(json.dumps(rows, ensure_ascii=True).encode()).hexdigest()
 
 
 def safe_controls(controls):
     from .app_knowledge import KEEP_ROLES, PRIVATE_LABEL
+    if not isinstance(controls, list):
+        return []
     return [{'name': c['name'][:100], 'role': c['role'], 'locator': {
         'kind': 'accessible_name', 'name': c['name'][:100], 'role': c['role']}}
-        for c in controls[:120] if isinstance(c, dict) and c.get('role') in KEEP_ROLES
+        for c in controls[:120] if isinstance(c, dict) and isinstance(c.get('role'), str) and c['role'] in KEEP_ROLES
         and isinstance(c.get('name'), str) and c['name'].strip() and not c.get('password')
         and not PRIVATE_LABEL.search(c['name'])][:20]
+
+
+def source_rank(url, configured_urls):
+    """Configured exact origin outranks unverified origins; titles grant no trust."""
+    def origin(value):
+        parsed = urlsplit(value)
+        return parsed.scheme.casefold(), parsed.hostname, parsed.port or (443 if parsed.scheme == 'https' else 80)
+    return 0 if origin(url) in {origin(u) for u in configured_urls} else 1
+
+
+def reconcile_source(source, version):
+    """Only explicit URL version hints; unknown content is never declared current."""
+    hint = re.search(r'/(?:v)?(\d+\.\d+(?:\.\d+)?)(?:/|$)', urlsplit(source['url']).path)
+    source['stale'] = None
+    if hint:
+        source['document_version'] = hint[1]
+        if version != 'unknown':
+            source['stale'] = hint[1].split('.')[:2] != version.split('.')[:2]
+    return source
 
 
 class Acquisition:
@@ -65,9 +91,12 @@ class Acquisition:
         self.surface = None
         self.background = False
         self.deadline = float('inf')
+        self._prepare_lock = threading.RLock()
 
     def assess(self, goal):
         """No model/network call. Specific software + complex feature evidence only."""
+        if not isinstance(goal, str) or len(goal)>10000 or any(0xd800 <= ord(c) <= 0xdfff for c in goal):
+            raise ValueError('Acquisition requires a bounded Unicode goal.')
         if not self.options['enabled']:
             return {'needed': False, 'reason': 'disabled'}
         features = sorted(set(re.findall(r'[a-z]+', goal.casefold())) & FEATURES)
@@ -137,6 +166,8 @@ class Acquisition:
             if self.background:
                 return
             task = self.actions.task_state.snapshot() or {}
+            if (task.get('task_id') or task.get('started_at')) != self.task_key:
+                return
             self.actions.task_state.update_learning({**task.get('learning', {}), 'acquisition_steps': state})
         result = Executor(tools, max_concurrency=min(2, len(rows)), max_seconds=remaining,
             checkpoint=checkpoint).run(validate_plan({'version': 1, 'steps': rows}, tools), cancelled)
@@ -148,18 +179,34 @@ class Acquisition:
                 'expected': 'Read scoped capability evidence', 'browser': 'chrome', 'find': '', 'platform': ''}
 
     def prepare(self, goal, cancelled=lambda: False, screen=None, force=False, background=False):
+        # A foreground/background caller must not replace another request's budget
+        # or context. Waiting is bounded and cancellation-aware; no new worker.
+        until = time.monotonic()+self.options['max_seconds']
+        while not self._prepare_lock.acquire(timeout=.05):
+            if cancelled() or time.monotonic()>=until:
+                return {}
+        try:
+            return self._prepare(goal, cancelled, screen, force, background)
+        finally:
+            self._prepare_lock.release()
+
+    def _prepare(self, goal, cancelled, screen, force, background):
         assessment = self.assess(goal)
         if cancelled():
             return {}
         if 'identity' not in assessment and assessment.get('reason') != 'no public software target':
             return {}
         task = self.actions.task_state.snapshot() or {}
-        task_key = task.get('started_at', goal)
+        task_key = task.get('task_id') or task.get('started_at', goal)
         if self.task_key != task_key:
             self.task_key, self.research_count, self.context, self.surface = task_key, 0, {}, None
+        user_cancelled = cancelled
+        def cancelled():
+            current = self.actions.task_state.snapshot() or {}
+            return user_cancelled() or (current.get('task_id') or current.get('started_at', goal)) != task_key
         current_surface = (str(screen.get('title', ''))[:200], interface_signature(screen.get('controls', []))) if screen else None
-        if self.context and not force and current_surface == self.surface:
-            return self.context
+        # Always reacquire the observed process/version/surface for a new request.
+        # Caller screen metadata alone cannot validate an earlier capability.
         started = time.monotonic()
         self.background = background
         self.deadline = started+self.options['max_seconds']
@@ -174,7 +221,7 @@ class Acquisition:
                     if name.casefold() == raw.get('identity')), None)
                 if target and not PRIVATE.search(target):
                     assessment = self.assess(goal+' use '+target)
-            except (ValueError, OSError, AttributeError, IndexError):
+            except (ValueError, OSError, AttributeError, IndexError, MemoryError):
                 observations = []
         if 'identity' not in assessment:
             return {}
@@ -183,30 +230,37 @@ class Acquisition:
             inspect = 'application_inspect' if assessment['kind'] == 'application' else 'browser_inspect'
             try:
                 observations = self._scheduled([self.proposal(inspect, assessment['target'])], cancelled)
-            except (ValueError, OSError):
+            except (ValueError, OSError, MemoryError):
                 observations = []
         live = {}
         for result in observations:
             try:
-                raw = json.loads(result['evidence'])
+                raw = json.loads(result['evidence']) if len(result['evidence']) <= 12000 else {}
+                if not isinstance(raw, dict):
+                    continue
                 if raw.get('identity') == assessment['identity'] or assessment['kind'] == 'website' and str(raw.get('url','')).startswith(assessment['identity']+'/'):
                     live = raw
             except (ValueError, AttributeError):
                 pass
-        controls = safe_controls(live.get('controls', []))
+        authenticated = live.get('authentication_required') is True
+        controls = [] if authenticated else safe_controls(live.get('controls', []))
         signature = interface_signature(controls) if controls else ''
-        version = str(live.get('version', 'unknown'))[:80]
-        known = self.memory.capabilities(assessment['identity'], assessment['feature'], self.options['ttl_seconds'], version, signature)
-        compatible = self.memory.capabilities(assessment['identity'], ttl=self.options['ttl_seconds'], version=version, signature=signature)
+        version = live.get('version', 'unknown')
+        if not isinstance(version, str) or not re.fullmatch(r'\d+(?:\.\d+){1,3}', version) or len(version)>40:
+            version = 'unknown'
+        if live:
+            self.memory.invalidate_capabilities(assessment['identity'], version, signature)
+        known = self.memory.capabilities(assessment['identity'], assessment['feature'], self.options['ttl_seconds'], version, signature) if signature else []
+        compatible = self.memory.capabilities(assessment['identity'], ttl=self.options['ttl_seconds'], version=version, signature=signature) if signature else []
         covered = set()
         for row in compatible:
             if row.get('status') in {'environment_confirmed', 'verified'}:
                 covered.update(row['feature'].split())
         missing = sorted(set(assessment['feature'].split())-covered)
-        sources = list(known[0].get('sources', [])) if known and not force else []
+        sources = list(known[0].get('sources', [])) if known and not force and not authenticated else []
         entry = getattr(self.actions, 'apps', {}).get(assessment['target'], {})
         help_file = entry.get('documentation_file') if isinstance(entry, dict) else None
-        if not sources and isinstance(help_file, str) and not background:
+        if not authenticated and not sources and isinstance(help_file, str) and not background:
             path = Path(help_file)
             if path.is_file() and path.suffix.casefold() in {'.txt','.md'}:
                 proposal = {**self.proposal('read_file', path.name), 'folder': str(path.parent)}
@@ -219,7 +273,7 @@ class Acquisition:
                 except (ValueError, OSError):
                     pass
         documentation_url = entry.get('documentation_url') if isinstance(entry, dict) else None
-        if (not sources and self.options['online'] and isinstance(documentation_url, str) and
+        if (not authenticated and not sources and self.options['online'] and isinstance(documentation_url, str) and
                 self.research_count < self.options['max_research_per_task'] and not cancelled()):
             try:
                 from .toolkits import public_url
@@ -232,7 +286,7 @@ class Acquisition:
                         'excerpt': fetched[0]['evidence'][:1800], 'confidence': 'Untrusted documentation; not workflow verification'}]
             except (ValueError, OSError):
                 pass
-        if not sources and self.options['online'] and self.research_count < self.options['max_research_per_task'] and not cancelled():
+        if not authenticated and not sources and self.options['online'] and self.research_count < self.options['max_research_per_task'] and not cancelled():
             if assessment['kind'] == 'website':
                 try:
                     from .toolkits import public_url
@@ -270,7 +324,10 @@ class Acquisition:
                     except (ValueError, TypeError, OSError):
                         continue
                     selected.append((url, str(row.get('title', ''))[:150]))
-                selected.sort(key=lambda r: ('docs.' not in urlsplit(r[0]).netloc and 'documentation' not in r[1].casefold(), r[0]))
+                origins = [documentation_url] if isinstance(documentation_url, str) else []
+                if assessment['kind']=='website':
+                    origins.append(assessment['identity'])
+                selected.sort(key=lambda r: (source_rank(r[0], origins), r[0]))
                 for url, title in selected[:self.options['max_sources']]:
                     proposals.append(self.proposal('firecrawl_scrape' if available('firecrawl_scrape') else 'scrape_web', url))
                 fetched = self._scheduled(proposals, cancelled) if proposals else []
@@ -282,13 +339,14 @@ class Acquisition:
                 pass
         if cancelled():
             return {}
+        sources = [reconcile_source(s, version) for s in sources]
         registry = ToolRegistry(self.actions)
         allowed = getattr(self.actions, 'allowed_tools', None)
         candidates = ('select', 'open_menu') if assessment['kind'] == 'application' else ('browser_click', 'browser_fill')
         capability = {'identity': assessment['identity'], 'feature': assessment['feature'], 'version': version,
             'interface_signature': signature, 'controls': controls, 'sources': sources[:3],
             'status': 'environment_confirmed' if controls else 'researched' if sources else 'discovered',
-            'tools': [name for name in candidates if name in registry.specs and
+            'tools': [name for name in candidates if not authenticated and name in registry.specs and
                       (not isinstance(allowed, (set, frozenset)) or name in allowed)],
             'verification': [], 'seen_at': time.time(), 'executions': 0}
         if background:

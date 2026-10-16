@@ -1,0 +1,30 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "side_effects": 0,
+  "scope": "500 synthetic facts; five fresh in-memory curator objects and20 warm lookups/version. Lookup only, excludes load/save, network/model and full cognition; no GPU/TTFT/audio measured.",
+  "before": {
+    "cold": {
+      "p50_ms": 16.2147,
+      "p95_ms": 19.139,
+      "python_peak_bytes": 30736
+    },
+    "warm": {
+      "p50_ms": 15.4031,
+      "p95_ms": 20.1828,
+      "python_peak_bytes": 25960
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 5.4391,
+      "p95_ms": 5.7397,
+      "python_peak_bytes": 49747
+    },
+    "warm": {
+      "p50_ms": 5.3995,
+      "p95_ms": 5.7082,
+      "python_peak_bytes": 30755
+    }
+  }
+}

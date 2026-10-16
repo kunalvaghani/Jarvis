@@ -321,6 +321,8 @@ def run():
                 beat = RUNTIME / ("heartbeat-" + session + ".json")
                 env = dict(os.environ, JARVIS_SUPERVISED="1", JARVIS_SESSION_ID=session,
                            JARVIS_RESUME_TASK="1" if resume_after_crash else "0", JARVIS_AUTOLISTEN="1" if listen else "0")
+                from .gpu_scheduler import runtime_environment
+                env = runtime_environment(env)
                 with (RUNTIME / "startup.log").open("a", encoding="utf-8") as output:
                     child = subprocess.Popen([str(python), str(BASE / "main.py")], cwd=BASE, env=env,
                         stdout=output, stderr=subprocess.STDOUT, creationflags=flags)

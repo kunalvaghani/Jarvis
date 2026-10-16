@@ -1,120 +1,150 @@
-# Jarvis audit — through Prompt11, 2026-10-15 IST
+# Jarvis audit — Prompt20 — 2026-10-16 IST
 
-**Prompt11:31 fixture PASS / 1 BLOCKED; no pending or failed fixture cases.** Arbitrary PDF editing lacks a validated offered adapter. Full **2355 PASS / 9 BLOCKED skips**, 349.16s; targeted **157 PASS / 1 BLOCKED skip**. [Full XML](modules/11-skill-selection/full-regression.xml),[targeted XML](modules/11-skill-selection/cases-and-contracts.xml),[actual completion](modules/11-skill-selection/full-run-completion.txt),[launcher ready](modules/11-skill-selection/readiness.json). Suites overlap; existing COM warning persists. Whole-system/live production acceptance remains open.
+**Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
+Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
 
-Repo `e9f6f735bc310d11e3cdecfbf95a85d96b170ec2`, branch `codex/jarvis-prove-fix-audit`, Windows/Python3.10.6, Ryzen7/32GB/RTX3050 Laptop4GB target. CPU-only guide work, no new heavyweight/GPU test. Existing dirty work preserved; no commit/deployment, account send/write, personal deletion, system setting, credentials or ability installation. [Environment, dependency/entry-point/source-map evidence matrix and execution order](modules/11-skill-selection/inventory.md).
+HEAD **e1a33a0944b5cd725e1a76a72eda228513e45963**, branch **audit/12-tool-registry**; inherited changes preserved, no audit commit. [Environment](modules/20-self-evolution/environment.json). Baseline {'PASS': 96, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 26.639}; targeted {'PASS': 183, 'FAIL': 0, 'SKIPPED': 4, 'seconds': 36.317}; full {'PASS': 2796, 'FAIL': 0, 'SKIPPED': 36, 'seconds': 455.362}. All **382 frozen runtime/test hashes unchanged**. [Full output](modules/20-self-evolution/full-regression.xml), [skip reasons](modules/20-self-evolution/full-regression-skip-reasons.json), [readiness](modules/20-self-evolution/readiness.json).
 
-Eight pre-existing reproduced defects fixed: guide path/metadata validation, Hermes duplicate/missing resource validation/pre-open bounds, observed recipe ordering, missing utility environment and malformed validation handling. [Reproductions](modules/11-skill-selection/failures.md),[exact changed files/hashes](modules/11-skill-selection/files-changed.json),[scoped before/after diff](modules/11-skill-selection/source.patch),[rollback/resume](modules/11-skill-selection/rollback.md). Public source census10 native/210 verified Hermes/23 DeerFlow; utility proof stale before and after,0 offered. No helpers/providers newly activated.
+Owned temporary backlogs/files/Git repositories; fake discovery, learners, approval, CPU/RAM/GPU failures and clock. Actual owned child exits29 during discovery; reload returns that read step to pending and completes with a fake learner. Actual trusted Git worktree→pytest assertion→refused approval→approved owned fixture deploy→readback→explicit rollback ran. No Jarvis source was self-patched, no real ability installed, no dependency installation, account operation, OS setting change, model download or live inference/voice/GUI trial. Native Windows power-saving state was read without changing it. The card image is a rendered fixture preview, not a native screenshot.
 
-Same-machine metadata ranking warm p50/p95 **12.588/12.777→6.618/12.850ms**; cold p95 **20.267→8.671ms**. [50 measurements](modules/11-skill-selection/benchmarks.csv),[allocation/tradeoffs/scope](modules/11-skill-selection/benchmark-summary.json). All selected rankings identical on the fixture; no general semantic precision, TTFT/audio/VRAM or whole-task speed claim. Bounded cache retains description metadata, not goals; recognized credential descriptions bypass it. Cold allocation cost is explicit. [Earlier per-module metrics/report through10](final-report-before-module11.md) and linked predecessors preserve prior evidence.
+Next-job selection warm p50/p95 **0.4128/0.4465→0.3599/0.3694ms**, traced peak **33944→664B** on the same1,000 eligible/tied fixture rows. Exact selected signature/tie order preserved. This excludes I/O, inference, audio, GPU, construction and energy measurements.
 
-Official upstream pages checked today through Firecrawl: [Agent Skills](https://agentskills.io/client-implementation/adding-skills-support) (no date), [Hermes v0.22.2](https://github.com/NousResearch/hermes-agent/releases/tag/v0.22.2) (2026-10-15), [DeerFlow v2.1.0](https://github.com/bytedance/deer-flow/releases/tag/v2.1.0) (page24 Sep;2026 inferred). [Actual answers and compatibility limits](modules/11-skill-selection/upstream-checks.json),[pinned revisions/decision](modules/11-skill-selection/compatibility.md). No upstream/runtime installation assumed compatible without tests.
+[Source-map-to-code evidence matrix](modules/20-self-evolution/inventory.md), [changes/metrics](modules/20-self-evolution/changes.md), [exact files](modules/20-self-evolution/files-changed.json), [diff](modules/20-self-evolution/source.patch), [upstream URLs/dates](modules/20-self-evolution/compatibility.md), [risk/known flaws](modules/20-self-evolution/failures.md), [rollback/resume](modules/20-self-evolution/rollback.md), [commands/results](modules/20-self-evolution/commands.txt).
 
-## Risk and exact accounting
+- **JRV-20-002 BLOCKED:** No native game/GPU occupancy sensor or guaranteed kernel preemption. Cooperative busy/activity/resource callbacks are tested; blocking I/O/native kernels may finish before yielding.
+- **JRV-20-003 BLOCKED:** Learner writes lack a transactional completion receipt. Durable `needs_review` prevents uncertain replays, but automatic safe continuation through an interrupted repository write is not proved; no dedicated review/resume UI.
+- **JRV-20-006 BLOCKED:** No independent semantic privacy oracle, hardened host patch execution sandbox, shadow evaluation or canary/automatic post-deploy rollback. A source worktree is not security isolation.
+- **JRV-20-011 BLOCKED:** Only a single eligible Jarvis Python source target is supported; no lockfile/environment migration rollout or reproducible dependency environment test exists. Dependency inputs invalidate receipts, but are not upgraded by this manager.
 
-Guidance does not grant permission; current registry, policy, scope, approvals and cancellation remain authoritative. Hashes/provenance establish consistency, not identity; reload metadata is not adversarial tamper-proof. Legacy procedure failure counts unavailable, rate is a smoothed estimate. No real GUI/account/native model/physical GPU/long soak validation in this module. Arbitrary PDF editing and utility revalidation require reviewed implementation/authorized checks; earlier acoustic, shared speech lease and mandatory unfamiliar-program research blockers remain. No whole-system security/production or universal two-second certificate.
-
-All1184 unique catalog IDs accounted: **{'PASS': 354, 'FAIL': 0, 'BLOCKED': 9, 'SKIPPED': 0, 'NOT RUN': 821}**. [Exact ledger](test-results.jsonl),[tier/category/run totals](summary.json),[32 Prompt11 IDs/scopes](modules/11-skill-selection/tests.jsonl),[remaining IDs](remaining-case-ids.txt). No pass inferred from JSONL ingestion. Prior reports and failures retained.
-
-| Tier | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
-| --- | --- | --- | --- | --- | --- |
-| P0 | 87 | 0 | 5 | 0 | 204 |
-| P1 | 190 | 0 | 2 | 0 | 437 |
-| P2 | 77 | 0 | 2 | 0 | 180 |
-
-| Category | PASS | FAIL | BLOCKED | SKIPPED | NOT RUN |
-| --- | --- | --- | --- | --- | --- |
-| config | 11 | 0 | 0 | 0 | 26 |
-| contract | 11 | 0 | 0 | 0 | 26 |
-| edge | 22 | 0 | 0 | 0 | 52 |
-| fault | 44 | 0 | 0 | 0 | 104 |
-| idempotency | 11 | 0 | 0 | 0 | 26 |
-| load | 11 | 0 | 0 | 0 | 26 |
-| observability | 11 | 0 | 0 | 0 | 26 |
-| performance | 11 | 0 | 0 | 0 | 26 |
-| privacy | 11 | 0 | 0 | 0 | 26 |
-| race | 11 | 0 | 0 | 0 | 26 |
-| recovery | 22 | 0 | 0 | 0 | 52 |
-| resource | 11 | 0 | 0 | 0 | 26 |
-| scenario | 134 | 0 | 9 | 0 | 301 |
-| security | 22 | 0 | 0 | 0 | 52 |
-| semantic | 11 | 0 | 0 | 0 | 26 |
-
-## Source-map evidence and exact scoped files
-
-| Claim / entry point | Actual checked-out evidence | Proven boundary / limitation |
-| --- | --- | --- |
-| Native/custom/personal guides | skills/, custom-skills/, skill_memory.SkillMemory.refresh/context | 10 bundled; bounded50/source; builtin > custom > personal deterministic collision reporting; hot reload uses path/mtime/size, not adversarial metadata forgery protection |
-| Tool discovery | capabilities.rank_tools/runtime_context → ToolRegistry.search/catalog | Existing handlers only, prerequisites/scope/provider filters retained; unknown names diagnostic, not executable |
-| Trust/provenance | refresh → skill_read folder=@jarvis | Origin, relative path, SHA256 and untrusted_guidance label; registry policy/current authorization remain authoritative; hash is consistency, not authenticity |
-| Hermes references | hermes_skills.HermesSkills → skill_list/read folder=@hermes | 210 indexed SKILL.md contents verified,1090 indexed resources; unique bounded metadata, indexed exact resource/read budget, hashes checked; helpers not run |
-| DeerFlow references | deerflow.status/search_skills/read_skill → folder=@deerflow | 23 public guides present; existing neighboring fixture suite, no provider readiness inferred from guide availability |
-| Utility activation | utility_profiles.availability/tools → toolkits/registry | Separate environment exists but validation already stale before this update:0 offered. Missing/malformed/stale states fail closed. No arbitrary PDF-edit adapter offered |
-| Learned procedures | SkillMemory.record/context | Existing verified recipe preserved after failure; new success/attempt counts, relevance then smoothed rate then recency; historical missing failures not reconstructed |
-| Builtin and lifecycle policy | commands.py immutable dispatch; ToolRegistry.execute → check_policy/_execute/event | Existing builtin wins; denied/cancelled tools never dispatched in fixtures; categorical UUID metadata excludes payloads; no replay/helper queue |
-
-
-Changed files (not the entire pre-existing dirty tree); before/after hashes and artifact inventory are linked above:
-
-- app/jarvis/capabilities.py
-- app/jarvis/skill_memory.py
-- app/jarvis/hermes_skills.py
-- app/jarvis/utility_profiles.py
-- app/jarvis/agent_tools.py
-- app/config/runtime_manifest.json
-- app/scripts/verification/audit_catalog.py
-- app/tests/test_audit_result_accounting.py
-- app/tests/test_skill_selection_audit.py
-- app/scripts/verification/verify_skill_selection_audit.py
-- app/scripts/verification/report_skill_selection_audit.py
-- app/README.md
-- app/docs/skills-and-learning.md
-- app/docs/runtime-capabilities.md
-- app/docs/hermes-skills-and-comparison.md
-- app/docs/utility-skills.md
-- app/docs/system-map.md
-- README.md (root overview)
+No production-ready certificate. All1,184 IDs: **{'PASS': 615, 'FAIL': 0, 'BLOCKED': 30, 'SKIPPED': 0, 'NOT RUN': 539}**. [Exact ledger](test-results.jsonl), [tier/category counts](summary.json), [remaining IDs](remaining-case-ids.txt). Next NOT RUN **JRV-21-001**; earliest unresolved **JRV-04-001**; current missing contracts002/003/006/011. [Previous Prompt19 report](final-report-before-module20.md) preserves its original evidence. The overall37-module production audit remains incomplete.
 
 ## Enumerated modules
 
-| Module | Name | Status |
-| --- | --- | --- |
-| 01 | architecture-inventory | PARTIAL |
-| 02 | perception-cognition | FIXTURE COMPLETE |
-| 03 | intent-direct | FIXTURE COMPLETE |
-| 04 | voice-stt | LIVE ACOUSTIC VALIDATION BLOCKED |
-| 05 | voice-tts | LIVE ACCEPTANCE BLOCKED |
-| 06 | questions-context | FIXTURE COMPLETE |
-| 07 | model-routing | FIXTURE COMPLETE / LIVE CLOUD BLOCKED |
-| 08 | gpu-scheduler | PARTIAL / SHARED SPEECH COORDINATION BLOCKED |
-| 09 | deliberation | PARTIAL / MANDATORY UNFAMILIAR-PROGRAM RESEARCH BLOCKED |
-| 10 | dag-planning | FIXTURE COMPLETE / LIVE ACCEPTANCE UNVERIFIED |
-| 11 | skill-selection | 31 FIXTURE PASS / 1 BLOCKED; LIVE ACCEPTANCE UNVERIFIED |
-| 12 | tool-registry | PARTIAL |
-| 13 | desktop-control | PARTIAL |
-| 14 | browser-playwright | PARTIAL |
-| 15 | app-research | PARTIAL |
-| 16 | memory | PARTIAL |
-| 17 | rag-documents | PARTIAL |
-| 18 | repo-learning | PARTIAL |
-| 19 | ability-forge | PARTIAL |
-| 20 | self-evolution | PARTIAL |
-| 21 | native-coding | PARTIAL |
-| 22 | web-development | PARTIAL |
-| 23 | gmail | PARTIAL |
-| 24 | whatsapp | PARTIAL |
-| 25 | media | PARTIAL |
-| 26 | realtime-data | PARTIAL |
-| 27 | gods-eye | PARTIAL |
-| 28 | sandbox-deerflow | PARTIAL |
-| 29 | reverse-engineering | PARTIAL |
-| 30 | harness-planners | PARTIAL |
-| 31 | ui-island-pip | PARTIAL |
-| 32 | service-recovery | PARTIAL |
-| 33 | mcp-integrations | PARTIAL |
-| 34 | dependencies | PARTIAL |
-| 35 | security | PARTIAL |
-| 36 | observability | PARTIAL |
-| 37 | e2e | PARTIAL |
+| Module | Catalog statuses |
+| --- | --- |
+| 01 architecture-inventory | PASS: 32 |
+| 02 perception-cognition | PASS: 32 |
+| 03 intent-direct | PASS: 32 |
+| 04 voice-stt | BLOCKED: 3, PASS: 29 |
+| 05 voice-tts | PASS: 30, BLOCKED: 2 |
+| 06 questions-context | PASS: 30, BLOCKED: 2 |
+| 07 model-routing | PASS: 32 |
+| 08 gpu-scheduler | PASS: 30, BLOCKED: 2 |
+| 09 deliberation | PASS: 31, BLOCKED: 1 |
+| 10 dag-planning | PASS: 32 |
+| 11 skill-selection | PASS: 31, BLOCKED: 1 |
+| 12 tool-registry | PASS: 32 |
+| 13 desktop-control | PASS: 30, BLOCKED: 2 |
+| 14 browser-playwright | PASS: 30, BLOCKED: 2 |
+| 15 app-research | PASS: 31, BLOCKED: 1 |
+| 16 memory | PASS: 28, BLOCKED: 4 |
+| 17 rag-documents | PASS: 28, BLOCKED: 4 |
+| 18 repo-learning | PASS: 30, BLOCKED: 2 |
+| 19 ability-forge | PASS: 32 |
+| 20 self-evolution | PASS: 28, BLOCKED: 4 |
+| 21 native-coding | NOT RUN: 32 |
+| 22 web-development | NOT RUN: 32 |
+| 23 gmail | NOT RUN: 32 |
+| 24 whatsapp | NOT RUN: 32 |
+| 25 media | NOT RUN: 32 |
+| 26 realtime-data | NOT RUN: 31, PASS: 1 |
+| 27 gods-eye | NOT RUN: 32 |
+| 28 sandbox-deerflow | NOT RUN: 32 |
+| 29 reverse-engineering | NOT RUN: 31, PASS: 1 |
+| 30 harness-planners | NOT RUN: 32 |
+| 31 ui-island-pip | NOT RUN: 32 |
+| 32 service-recovery | NOT RUN: 32 |
+| 33 mcp-integrations | NOT RUN: 32 |
+| 34 dependencies | NOT RUN: 31, PASS: 1 |
+| 35 security | NOT RUN: 30, PASS: 2 |
+| 36 observability | NOT RUN: 32 |
+| 37 e2e | NOT RUN: 32 |
 
-Earliest unresolved **JRV-04-001**; next NOT RUN **JRV-12-004**. Prompt11 unresolved **JRV-11-002**. Read the next requested prompt before proceeding;37 modules are not all complete.
+## Category and tier statistics
+
+```json
+{
+  "by_category": {
+    "config": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "contract": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "edge": {
+      "PASS": 40,
+      "NOT RUN": 34
+    },
+    "fault": {
+      "PASS": 80,
+      "NOT RUN": 68
+    },
+    "idempotency": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "load": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "observability": {
+      "PASS": 18,
+      "BLOCKED": 2,
+      "NOT RUN": 17
+    },
+    "performance": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "privacy": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "race": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "recovery": {
+      "PASS": 39,
+      "BLOCKED": 1,
+      "NOT RUN": 34
+    },
+    "resource": {
+      "PASS": 20,
+      "NOT RUN": 17
+    },
+    "scenario": {
+      "PASS": 218,
+      "BLOCKED": 27,
+      "NOT RUN": 199
+    },
+    "security": {
+      "PASS": 40,
+      "NOT RUN": 34
+    },
+    "semantic": {
+      "PASS": 20,
+      "NOT RUN": 17
+    }
+  },
+  "by_tier": {
+    "P0": {
+      "PASS": 151,
+      "BLOCKED": 10,
+      "NOT RUN": 135
+    },
+    "P1": {
+      "PASS": 329,
+      "BLOCKED": 14,
+      "NOT RUN": 286
+    },
+    "P2": {
+      "PASS": 135,
+      "BLOCKED": 6,
+      "NOT RUN": 118
+    }
+  }
+}
+```

@@ -1,7 +1,7 @@
 """Process-shared, priority ordered inference leases; no external action retries.
 
 The GPU belongs to the active inference turn, not permanently to a task/model.
-Whisper and other applications are outside this coordinator and are reserved for.
+Owned F5/Whisper CUDA turns share admission; other applications remain external.
 """
 from contextlib import contextmanager
 import json
@@ -16,15 +16,34 @@ from urllib.parse import urlsplit
 from uuid import uuid4
 
 BASE = Path(__file__).resolve().parents[1]
-PRIORITIES = {'planner':100, 'execution':90, 'coding':90, 'question':80,
+PRIORITIES = {'speech':120, 'recognition':110, 'planner':100, 'execution':90, 'coding':90, 'question':80,
               'cleanup':60, 'context':40, 'research':30, 'background':10}
 HELPERS = {'cleanup', 'context', 'background'}
 DEFAULTS = {'enabled':False, 'helper_gpu':False, 'primary_layers':12, 'codex_layers':9,
             'speech_reserve_mb':1024, 'reserve_mb':512, 'wait_seconds':120, 'warm_seconds':30,
-            'cpu_threads':0}
+            'cpu_threads':0, 'context_limit':4096, 'helper_context_limit':1024,
+            'vram_ceiling_mb':3850}
 # Models split across GPU and CPU; their CPU layers use the configured thread count.
 PRIMARY = {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}
 _threads = threading.RLock()
+
+
+def runtime_environment(environment=None):
+    """Apply only to a newly owned server/child; never restart a shared Ollama."""
+    return {**(os.environ if environment is None else environment),
+            'OLLAMA_FLASH_ATTENTION':'1', 'OLLAMA_KV_CACHE_TYPE':'q8_0',
+            'OLLAMA_MAX_LOADED_MODELS':'2', 'OLLAMA_NUM_PARALLEL':'1',
+            'OLLAMA_CONTEXT_LENGTH':'4096'}
+
+
+def request_context(model, options, policy):
+    if not isinstance(options,dict):
+        raise ValueError('Inference options must be an object.')
+    limit = policy['helper_context_limit'] if model in {'qwen2.5:0.5b','qwen3.5:0.8b'} else policy['context_limit']
+    context = options.get('num_ctx', limit)
+    if type(context) is not int or not 1 <= context <= 262144:
+        raise ValueError('Invalid inference context; no GPU slot or request issued.')
+    return min(context, limit)
 
 
 def model_label(value):
@@ -87,7 +106,8 @@ def settings(options=None):
         if type(value[name]) is not bool:raise ValueError('GPU '+name+' must be boolean.')
     for name,low,high in [('primary_layers',0,33),('codex_layers',0,33),
                           ('speech_reserve_mb',0,8192),('reserve_mb',128,8192),('wait_seconds',1,300),('warm_seconds',0,3600),
-                          ('cpu_threads',0,64)]:
+                          ('cpu_threads',0,64), ('context_limit',512,32768),
+                          ('helper_context_limit',256,4096), ('vram_ceiling_mb',1024,8192)]:
         if type(value[name]) is not int or not low<=value[name]<=high:
             raise ValueError('Invalid GPU setting: '+name)
     return value
@@ -118,7 +138,7 @@ def memory():
 
 def allocation(model,context,policy,hardware):
     if not hardware or type(context) is not int or context<1:return 0
-    available=hardware['total_mb']-max(hardware['used_mb'],policy['speech_reserve_mb'])
+    available=min(hardware['total_mb'],policy['vram_ceiling_mb'])-max(hardware['used_mb'],policy['speech_reserve_mb'])
     # Leave at least one sixth of available memory: a 20% envelope overrun
     # then fits (estimate <= available/1.2), even with a smaller configured reserve.
     budget=available-max(policy['reserve_mb'],available/6)
@@ -306,7 +326,8 @@ def install(client,role='question'):
         context=payload.get('options',{}).get('num_ctx',32768 if target.path.startswith('/v1/') else 4096)
         if type(context) is not int or not 1<=context<=262144:
             raise ValueError('Invalid inference context; no GPU slot or request issued.')
-        if not target.path.startswith('/v1/') and model=='qwen3.5:9b':context=max(16384,context)
+        if not target.path.startswith('/v1/'):
+            context=request_context(model,payload.get('options',{}),policy)
         wait=getattr(client,'gpu_wait_seconds',None)
         if wait is not None:
             if type(wait) not in (int,float) or not 1<=wait<=3600:raise ValueError('Invalid task GPU wait bound.')
@@ -407,3 +428,56 @@ def install(client,role='question'):
         return response
     client.post=post
     return client
+
+
+@contextmanager
+def native_turn(role, model, cancelled=lambda: False, load_mb=0):
+    """Serialize native CUDA work with Ollama; weights remain owned by their runtime.
+
+    Admission cannot preempt a running CUDA kernel. A load estimate is a refusal
+    boundary, not a guarantee about an external allocator's peak workspace.
+    """
+    policy = configured()
+    if not policy['enabled']:
+        yield
+        return
+    lease = Lease(role, model, policy, cancelled=cancelled)
+    try:
+        lease.acquire()
+        if cancelled():
+            raise ValueError('Native inference cancelled before dispatch.')
+        if load_mb:
+            hardware = memory()
+            if hardware is None:
+                raise MemoryError('Native CUDA load deferred: GPU memory unavailable.')
+            if hardware['used_mb'] + load_mb > min(hardware['total_mb'], policy['vram_ceiling_mb']):
+                # Evict only a digest/context/VRAM-bound cache recorded by Jarvis.
+                # An unconfirmed or shared model is never unloaded for this test.
+                import requests
+                with lease.registry.state() as state:resident=state.get('resident')
+                if resident:
+                    with requests.Session() as client:
+                        client.trust_env=False
+                        with client.get('http://127.0.0.1:11434/api/ps',timeout=(2,3)) as response:
+                            response.raise_for_status()
+                            rows=response.json().get('models',[])
+                        matched=any(row.get('name')==resident['model'] and row.get('digest')==resident['digest']
+                            and row.get('size_vram')==resident['size_vram'] and row.get('context_length')==resident['context'] for row in rows)
+                        if matched:
+                            with client.post('http://127.0.0.1:11434/api/generate',json={'model':resident['model'],'keep_alive':0},timeout=(2,3)) as response:
+                                response.raise_for_status()
+                            lease.event(stage='handoff',role=role,model=model,previous_model=resident['model'])
+                            with lease.registry.state() as state:state['resident']=None
+                            deadline=time.monotonic()+3
+                            while time.monotonic()<deadline and not cancelled():
+                                hardware=memory()
+                                if hardware and hardware['used_mb']+load_mb<=min(hardware['total_mb'],policy['vram_ceiling_mb']):break
+                                time.sleep(.05)
+                if hardware is None:
+                    raise MemoryError('Native CUDA load deferred: GPU memory unavailable after handoff.')
+            if hardware['used_mb'] + load_mb > min(hardware['total_mb'], policy['vram_ceiling_mb']):
+                raise MemoryError('Native CUDA load deferred: reserved GPU budget unavailable.')
+        lease.event(stage='dispatch',role=role,model=model,gpu_slot=True)
+        yield
+    finally:
+        lease.close()

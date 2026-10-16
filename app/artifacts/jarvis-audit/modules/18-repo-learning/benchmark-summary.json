@@ -1,0 +1,32 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "repositories": 500,
+  "keywords_each": 80,
+  "external_effects": 0,
+  "scope": "Saved-memory keyword relevance only: five cold caches,20 warm queries/version; identical scores/top3 names. Construction, disk, source parsing, Git/HTTP/model/audio/GPU excluded. Cold peak includes building derived keyword cache; warm excludes its retained memory.",
+  "before": {
+    "cold": {
+      "p50_ms": 1.2918,
+      "p95_ms": 1.321,
+      "python_peak_bytes": 19815
+    },
+    "warm": {
+      "p50_ms": 1.21285,
+      "p95_ms": 1.2665,
+      "python_peak_bytes": 19815
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 3.8665,
+      "p95_ms": 4.069,
+      "python_peak_bytes": 4597431
+    },
+    "warm": {
+      "p50_ms": 0.6546000000000001,
+      "p95_ms": 0.7882,
+      "python_peak_bytes": 6295
+    }
+  }
+}

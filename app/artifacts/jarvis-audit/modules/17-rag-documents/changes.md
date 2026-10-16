@@ -1,5 +1,11 @@
-# Scope
+# Retained changes and upgrade evaluation
 
-No runtime change retained for this module in this bounded pass; independent baseline/upgrade selection pending.
+documents.py: strict extraction/chunk/config/model/index/input bounds; Unicode NFC/casefold token grouping including combining marks; postings/IDF candidate lookup; stopword-only entity filter; source identity checked around parse/prepare/model; stale same-path RAM index replaced; unique atomic session/index writes and locked catalog read-modify-write; conservative model graph schema/name grounding and real chunk provenance; exact excerpt budgets; stop/invalid citation/answer guards and200-question cap.
 
-Existing full regression evidence is separate from completing this module contract.
+file_drop.py: two admitted flow threads globally, nonblocking refusal, existing serialized questions preserved; native callback queue8/poll8 cap; categorical async diagnostics. No Tk call inside native callback. No changes to send/draft approval semantics, service start/recovery, file deletion or action retry.
+
+Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places. Retain postings candidate pruning: scores equal to 10 decimal places, order/output unchanged on fixture and regression suite passes. Warm lookup peak traced temporary allocations 1566→1462 bytes; cold lookup2126→2854 bytes. This excludes persistent postings/IDF memory (additional per-term dictionary/list storage), construction overhead, PDF native parser peak and end-to-end model latency. No claim of overall memory reduction or faster spoken answer. A/B benchmark against exact saved preimage, not reconstructed old code.
+
+Upgrade candidates evaluated: existing paragraph/page chunking retained with hard size guards; semantic embeddings, reranking and hierarchical indexes deferred because no local approved embedding/reranker dependency or accuracy/resource baseline exists. Existing lexical+graph hybrid retained, with model names grounded and stopword-only graph hits excluded; no universal relevance/precision estimate from a tiny authored fixture. Incremental update remains full content rehash/reparse for changed source, safer version identity but extra read cost. Citation page-membership gate retained; semantic verification and cross-file arbitration remain blocked. These choices avoid unmeasured model/GPU additions on4GB target.
+
+No dependency/config/manifest/launcher/schema installation or model download. Existing pypdf security disparity remains a release gate, not called current. Exact diff/hashes/files in source.patch/source-hashes.json/files-changed.json. App/root README, system-map and file-buddy docs updated with dated scope; all prior images/attribution retained.

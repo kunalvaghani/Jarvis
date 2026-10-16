@@ -1,0 +1,82 @@
+{
+  "scope": "Scoped Prompt13 dirty-preimage diff, not all git changes; app/ canonical. No commit/deploy.",
+  "files": [
+    {
+      "path": "app/jarvis/execution_router.py",
+      "sha256": "cec12ac30b01f5b265de58142f8f5799fe51b827a7c1ad4dc097fcd385d0cb4a"
+    },
+    {
+      "path": "app/jarvis/execution_adapters.py",
+      "sha256": "180b08e360615b9e9a719322b2c6f4893657ea57637247e338cb303c23637ddf"
+    },
+    {
+      "path": "app/jarvis/jarvis_pointer.py",
+      "sha256": "5878b9a4291475a552ab50f0edf5d928f74caf834511a45bc6229d13c4aea9f1"
+    },
+    {
+      "path": "app/jarvis/independent_cursor.py",
+      "sha256": "a6bd230d17fd32e91975c62e5b574c30e27564bbe4ac0233a4c86fab9cf47a96"
+    },
+    {
+      "path": "app/jarvis/ui_transport.py",
+      "sha256": "828b4383c27de6c1a40783852d77ccaf5dfb4bc66b9f6c2f86503b4e388a767a"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "5326e2b70078b1e371b25f18070785d1a5a391f6815e556c3565e74843cb35fd"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "18ecaa2174ae1e0904f84c28e880aed9f9dc9572c1288676dcc3ebfe6fbe4bc5"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "f2c7797ae3a444b9d74d4732cbc18b915139234a9de4e8f71f7afae8e43e7bc9"
+    },
+    {
+      "path": "app/tests/test_desktop_control_audit.py",
+      "sha256": "17388b142ed3420b4c70cd5984d4b04201ca13bc104a960658ff2a18cb7e798b"
+    },
+    {
+      "path": "app/scripts/verification/verify_desktop_control_audit.py",
+      "sha256": "55de8026b99f4ae41fec27dd04997b77115b6105ee5f5b74efb0407a8c269050"
+    },
+    {
+      "path": "app/scripts/verification/report_desktop_control_audit.py",
+      "sha256": "4d7db51bff0890661aa85c37c302c266488cb8ec21aa58447b9723eebc13de02"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "d2a01e87bbe40f1bfaebc22c7c16d99bcbcd4038a4ad0f7bf5c39e5caf3119ee"
+    },
+    {
+      "path": "app/docs/execution-providers.md",
+      "sha256": "d688d9d435ce281e6c6bea1760e42f947df2e5f743b491e0b97e460b892f86f9"
+    },
+    {
+      "path": "app/docs/independent-cursor.md",
+      "sha256": "53274f0554809216dee2259e724aee8b4db7aefd4c766641d2deb8ef71a9919d"
+    },
+    {
+      "path": "app/docs/windows-commands.md",
+      "sha256": "9d6684735b59daf6ddd86a6d52be0d188e95e6e278c5b575434d79d62c67a9a9"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "563b59d626f6636097f34b7171ade2b8541d1e12c462f4a68125f080cc8e5636"
+    },
+    {
+      "path": "README.md",
+      "sha256": "f0fc341198a1e888c32ddc8c3899484a1c0c24619c733f7741746bd767819ffc"
+    }
+  ],
+  "artifact_directory": "app/artifacts/jarvis-audit/modules/13-desktop-control",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "summary.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "remaining-case-ids.txt"
+  ]
+}

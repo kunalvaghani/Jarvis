@@ -1,5 +1,13 @@
-# Status
+# Actual failures and fixes
 
-{'NOT RUN': 31, 'PASS': 1}
+[First dedicated run](reproduced.xml):15 FAIL /19 PASS /2 BLOCKED skips. Twelve failures represented eight runtime/design families: simple explicit preference correction(002), people merged by fuzzy overlap(003), narrower episodic/clean secret screening(005), malformed persisted facts(008 three variants), malformed model fact results(015 three variants), observe after close(018), invalid capacity/flags/NaN idle config(029), unbounded explicit fact(031).
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+Three initial failures were harness setup, not runtime defects:011 imported nonexistent question_client.payload,021 patched nonexistent knowledge_worker.cloud_answer,027 benchmark artifact not yet generated. Corrected to an explicit missing-freshness blocker, forbidden real network transport and actual A/B output. Not counted as product fixes. 004/006 were already blocked;032 was later honestly blocked because categorical errors alone do not prove lifecycle correlation.
+
+Additional safe fixes: canonical JSON flushed/fsynced before replace; precommit add/forget failure restores RAM and never retries the action, committed facts retained if a later Markdown write fails; unreadable/corrupt canonical not overwritten; full text screened before truncation; summary inputs filtered before model payload; a stopped curator drops a later model extraction/summary result. Existing entity/negation tests retain evidence rather than invent semantic arbitration.
+
+durability-reproduction.json independently executes old saved source and current code against the same injected Path.replace failure: before RAM/disk diverges, after matches, one commit attempt in both. This is an additional reproduced defect beyond the initial eight families.
+
+The first full command never executed because automatic approval review hit an account usage limit. After user continuation a full run started; it was deliberately stopped at about16% when the final Stop/readback guard and honest032 blocker were added. That partial run is not acceptance. The final full-regression.xml and frozen source hashes are authoritative; no source/test changes during that accepted run. Initial failures remain retained, not overwritten with passing XML.
+
+The next full run exposed an existing paused-adapter compatibility failure: observe read self.closed before the paused short-circuit on a lightweight adapter. Pause now returns before lifecycle access. The failed full XML is retained as full-regression-paused-adapter.xml; the corrected focused suite includes tests/test_intent_testbook.py::CuratorTests, followed by a fresh full rerun. No privacy/approval assertion was relaxed.

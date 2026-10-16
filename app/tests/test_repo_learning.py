@@ -21,6 +21,7 @@ def make_zip(files):
 
 
 SAMPLE = make_zip({
+    "LICENSE": "MIT License\nPermission is hereby granted to use this synthetic fixture. Copyright Fixture.",
     "README.md": "# Demo\nA tiny snake game.\n\nRun: open index.html",
     "package.json": '{"name": "demo", "scripts": {"start": "vite"}}',
     "src/main.js": "import { Snake } from './snake.js'\nexport function start(canvas) {\n  return new Snake(canvas)\n}\n",
@@ -87,10 +88,12 @@ class LearningTests(unittest.TestCase):
     def http_for(self, info, archive=SAMPLE):
         http = Mock()
 
-        def get(url, params=None, headers=None, timeout=None, stream=False):
+        def get(url, params=None, headers=None, timeout=None, stream=False, **kwargs):
             response = Mock(status_code=200)
             response.raise_for_status = lambda: None
-            if "codeload" in url:
+            if "/commits/" in url:
+                response.json = lambda: {"sha": "a"*40}
+            elif "codeload" in url:
                 response.iter_content = lambda size: [archive]
             elif "/search/" in url:
                 response.json = lambda: {"items": [dict(info, full_name="other/finance-tool", description="stock charts"),
@@ -126,17 +129,19 @@ class LearningTests(unittest.TestCase):
         fetched = []
         http = Mock()
 
-        def get(url, params=None, headers=None, timeout=None, stream=False):
+        def get(url, params=None, headers=None, timeout=None, stream=False, **kwargs):
             response = Mock(status_code=200)
             response.raise_for_status = lambda: None
-            if "codeload" in url:
+            if "/commits/" in url:
+                response.json = lambda: {"sha": "a"*40}
+            elif "codeload" in url:
                 raise AssertionError("A large repository is never downloaded whole.")
-            if "/git/trees/" in url:
+            elif "/git/trees/" in url:
                 response.json = lambda: {"tree": [{"type": "blob", "path": p, "size": len(b)} for p, b in files.items()]}
             elif "raw.githubusercontent.com" in url:
-                path = url.split("/main/", 1)[1]
+                path = url.split("/"+"a"*40+"/", 1)[1]
                 fetched.append(path)
-                response.content = files[path]
+                response.iter_content = lambda n: [files[path]]
             else:
                 response.json = lambda: info
             return response
@@ -157,7 +162,7 @@ class LearningTests(unittest.TestCase):
         instance, reports = learner(http=http)
         with self.assertRaises(rl.LearningError):
             instance.learn("demo/snake", "you asked")
-        self.assertIn("offline", instance.failures["demo/snake"]["error"])
+        self.assertIn("ConnectionError", instance.failures["demo/snake"]["error"])
         self.assertEqual(reports[-1][1]["phase"], "error")
 
     def test_prepare_searches_then_reuses_memory(self):

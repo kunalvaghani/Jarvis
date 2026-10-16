@@ -1,7 +1,32 @@
-# PROMPT 20 — Idle self-evolution, self-patching and anticipation
+# Prompt20 audit — 2026-10-16 IST
 
-PARTIAL. Sources: ['jarvis/self_evolution.py', 'jarvis/anticipation.py', 'jarvis/repo_learning.py', 'jarvis/repo_abilities.py', 'docs/self-evolution.md']
+**28 catalog PASS /4 BLOCKED /0 FAIL /0 SKIPPED /0 NOT RUN.** Baseline **{'PASS': 96, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 26.639}**, final targeted **{'PASS': 183, 'FAIL': 0, 'SKIPPED': 4, 'seconds': 36.317}**, full **{'PASS': 2796, 'FAIL': 0, 'SKIPPED': 36, 'seconds': 455.362}**. [32 exact IDs/assertions](tests.jsonl), [commands](commands.txt), [targeted XML](cases-and-contracts.xml), [full XML](full-regression.xml), [exact skips](full-regression-skip-reasons.json).
 
-Missing inferred candidates: []
+Owned temporary backlogs/files/Git repositories; fake discovery, learners, approval, CPU/RAM/GPU failures and clock. Actual owned child exits29 during discovery; reload returns that read step to pending and completes with a fake learner. Actual trusted Git worktree→pytest assertion→refused approval→approved owned fixture deploy→readback→explicit rollback ran. No Jarvis source was self-patched, no real ability installed, no dependency installation, account operation, OS setting change, model download or live inference/voice/GUI trial. Native Windows power-saving state was read without changing it. The card image is a rendered fixture preview, not a native screenshot.
 
-[Whole inventory](../../inventory.md)
+| Claim | Actual source/config/entry point | Evidence and boundary |
+| --- | --- | --- |
+| Idle evolution | Actions creates SelfEvolution with anticipation.busy; starts/closes owned worker; user commands call note_activity | configured enabled/explore true, idle90s/poll5s/cooldown600s/day4; no event-driven scheduler replacement |
+| Resource admission | _idle→_resources_ok; _cancelled rechecks resources with≤1s sampled cache | RAM/CPU/low-battery/Windows saver/unknown capacity defer; default RAM3072MB/CPU55%; game/native GPU admission not proved |
+| Public gap discovery | CapabilityGapDetector reads cognition, ledger and bounded command history; run_job calls existing RepoLearner | original topics screened before query synthesis; public_query checked immediately before fake search; local PC gap descriptions remain local |
+| Persistent backlog | refresh_backlog/_save/_load plus _write_checkpoint | bounded RAM/file backlog; jobs_today survives restart; discover learning state can reopen pending, unknown/learn state needs review; no fsync/power-loss guarantee |
+| Preemption | note_activity/stop_current/close→cooperative cancelled callback | before transport/after discovery/readback checks; paused checkpoint retained; no forced shared process kill or native preemption |
+| Failure control | max_attempts default3; existing per-job cooldown and daily cap; categorical outcomes | repeated failed exploration≤3; five concurrent independent requests×20 rounds,100 completions; one active job, others retained pending |
+| Knowledge versus ability | learner callback drives separate forge; own card reports knowledge saved | no activation/deploy in run_job; tested owned forge proposal remains awaiting approval; per-action gates from module19 retained |
+| Anticipation | explicit request/title signals→budgeted one-shot worker→owned draft→review feedback | existing39 anticipation regressions retained; pause/revoke/expiry/microphone behavior; error diagnostics now categorical to suppress fake credentials |
+| Patch API | SafeEvolutionManager attached as self.evolution; propose/evaluate/deploy/rollback are APIs | no automatic patch proposal/deploy in idle loop and no new public self-patch command registered |
+| Patch scope | canonical inside-base Py paths; traversal/link rejection; named policy/runtime exclusions | source/input size cap; unrelated file types/named policy modules refused; not semantic behavior confinement |
+| Evaluation | clean Git snapshot required, controlled full pytest command, worktree tracked-diff scope, changed-candidate check | preserves dirty user checkout; git hooks/global config disabled for evaluation; worktree execution is on host, not Docker; no malicious downloaded patch run |
+| Receipt | process-owned validation hash binds target/original/new source, flat source/tests, requirements and runtime config | forged JSON flag insufficient; changed code/test/neighbor invalidates; receipt lost on restart so re-evaluation required; native environment is not reproduced |
+| Consent/deploy | Actions._approve wrapper, fresh binding before/after approval; backup and atomic source replacement | rejects nontrue explicit callback answer; None means wrapper success (raises on denial); trusted API callers, not a signed human event ledger |
+| Rollback | explicit API validates target still equals deployed candidate and restores exact bytes | refuses later user edit; no automatic canary or rollback on a privacy regression; deployment interrupted in deploying state requires review |
+| Diagnostics/UI | per-engine trace UUID in checkpoint/outcome; secret-bearing transport messages replaced by error class | instance correlation, not distributed tracing; pause card distinguishes pending from needs_review; no claim of safe rendering arbitrary historical private data |
+
+- **JRV-20-002 BLOCKED:** No native game/GPU occupancy sensor or guaranteed kernel preemption. Cooperative busy/activity/resource callbacks are tested; blocking I/O/native kernels may finish before yielding.
+- **JRV-20-003 BLOCKED:** Learner writes lack a transactional completion receipt. Durable `needs_review` prevents uncertain replays, but automatic safe continuation through an interrupted repository write is not proved; no dedicated review/resume UI.
+- **JRV-20-006 BLOCKED:** No independent semantic privacy oracle, hardened host patch execution sandbox, shadow evaluation or canary/automatic post-deploy rollback. A source worktree is not security isolation.
+- **JRV-20-011 BLOCKED:** Only a single eligible Jarvis Python source target is supported; no lockfile/environment migration rollout or reproducible dependency environment test exists. Dependency inputs invalidate receipts, but are not upgraded by this manager.
+
+Read the actual system-map and linked self-evolution/anticipation/repository guides; mapped source/config/callers and treated historic live claims as dated claims. Retained dirty branch **audit/12-tool-registry**, HEAD **e1a33a0944b5cd725e1a76a72eda228513e45963** to preserve user/module14–19 work; a fresh checkout would omit those changes. Before-source snapshots preserved, no reset/commit/deploy/install in the real checkout. Run order: contracts/approval/recovery→baseline→failure reproduction→narrow fixes→official upstream→equivalent A/B→neighbors/owned journey→frozen full/readiness→ledger/docs. [Environment](environment.json), [changes](changes.md), [compatibility](compatibility.md), [rollback](rollback.md).
+
+Next-job selection warm p50/p95 **0.4128/0.4465→0.3599/0.3694ms**, traced peak **33944→664B** on the same1,000 eligible/tied fixture rows. Exact selected signature/tie order preserved. This excludes I/O, inference, audio, GPU, construction and energy measurements. [Raw50 samples](benchmarks.csv), [benchmark scope](benchmark-summary.json).

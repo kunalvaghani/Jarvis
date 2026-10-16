@@ -1,0 +1,126 @@
+[
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-001]",
+    "reason": "BLOCKED: Dedicated medium.en WER/latency session requires free GPU headroom; only 1396 MiB free was observed and no labeled quiet-room corpus is supplied."
+  },
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-002]",
+    "reason": "BLOCKED: No labeled background-TV audio corpus with channel/source annotations; textual echo tests cannot measure acoustic false activation rate."
+  },
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-003]",
+    "reason": "BLOCKED: No labeled long-pause utterance corpus or reference word timings; 0.8-second VAD endpoint policy cannot certify arbitrary pause intent."
+  },
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-007]",
+    "reason": "BLOCKED: owned fixture download verified, but no production verified-download/save adapter exists; adding an ability requires review/authorization."
+  },
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-009]",
+    "reason": "BLOCKED: multiple tabs fail closed; an explicit reviewed tab-selection adapter is absent. No silent popup retargeting."
+  },
+  {
+    "node": "tests.test_deliberation_audit::test_catalog[JRV-09-006]",
+    "reason": "BLOCKED: no deterministic unfamiliar-program research-before-action gate exists; model/planner research is advisory, not guaranteed. No program installed or executed."
+  },
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-004]",
+    "reason": "BLOCKED: live150% DPI/multi-monitor click validation not authorized; no personal display settings changed. Physical-coordinate fixture passed separately."
+  },
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-007]",
+    "reason": "BLOCKED: real UAC/secure-desktop validation would require elevation/personal OS state changes; no bypass attempted. Permission-denial fixture passed separately."
+  },
+  {
+    "node": "tests.test_gpu_scheduler_audit::test_catalog[JRV-08-012]",
+    "reason": "BLOCKED: forcible interruption of stuck native CUDA kernels requires a separate owned-process live fault test; cooperative shared leases are covered by Phase 2 fixtures."
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[simultaneous_cuda]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify simultaneous_cuda"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[laya_25]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify laya_25"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[lora_load]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify lora_load"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[legacy_alias]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify legacy_alias"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[ttfa]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify ttfa"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[live_hotkeys]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_hotkeys"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[live_mind_dag]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_mind_dag"
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-002]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-009]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_actual_nonroot_mount_cgroup_and_seccomp_probe",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_async_execution_and_default_relative_package_imports",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_enum_annotations_convert_json_inside_isolation",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_kernel_denies_shell_and_internet_socket",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_malicious_import_never_runs_during_analysis_and_is_blocked_in_execution",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_memory_and_output_budgets",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_missing_dependency_and_exception_contracts",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_readonly_source_and_external_root_write_blocked",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_repository_cannot_read_host_environment_or_home",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_repository_skill_isolation.RepositoryIsolationTests::test_timeout_and_cancellation_stop_owned_container",
+    "reason": "Actual repository isolation unavailable: CLI failed: ocker Inc.\",\"Version\":\"v0.13.0\",\"ShortDescription\":\"\\\"docker sandbox\\\" is deprecated, use Docker Sandboxes instead\",\"URL\":\"https://www.docker.com/products/docker-sandboxes\",\"Hidden\":true,\"Name\":\"sandbox\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-sandbox.exe\"},{\"SchemaVersion\":\"0.1.0\",\"Vendor\":\"Docker Inc.\",\"Version\":\"v1.25.0\",\"ShortDescription\":\"Docker Scout\",\"Name\":\"scout\",\"Path\":\"C:\\\\Program Files\\\\Docker\\\\cli-plugins\\\\docker-scout.exe\"}],\"Warnings\":null}}\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file"
+  },
+  {
+    "node": "tests.test_skill_selection_audit::test_catalog[JRV-11-002]",
+    "reason": "BLOCKED: no validated arbitrary PDF-edit adapter offered; current real utility proof stale. Missing installer/validation not bypassed. Fixture availability gate is separately tested."
+  },
+  {
+    "node": "tests.test_voice_tts_audit::test_JRV_05_004_real_pronunciation_requires_listening_validation",
+    "reason": "BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately."
+  },
+  {
+    "node": "tests.test_voice_tts_audit::test_speech_catalog[JRV-05-010]",
+    "reason": "BLOCKED: STT and F5 are outside the Ollama lease coordinator; Qwen speech reservation is unit-tested, but no shared STT/F5 lease admission or controlled contention calibration exists. No concurrent heavyweight models launched."
+  }
+]

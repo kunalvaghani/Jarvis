@@ -31,6 +31,10 @@ class MindView:
         self.header = tk.Label(parent, text='Cognitive cycle · starting', bg=BG, fg=ACCENT, anchor='w',
                                font=('Segoe UI', 9, 'bold'))
         self.header.pack(fill='x')
+        self.dag = tk.Label(parent,text='DAG · idle',bg=BG,fg=MUTED,anchor='w',justify='left',
+                            wraplength=440,font=('Segoe UI',8))
+        self.dag.pack(fill='x')
+        self.dag_text = None
         self.canvas = tk.Canvas(parent, bg=CARD, highlightthickness=0, height=220)
         self.canvas.pack(fill='x', pady=(2, 4))
         self.canvas.bind('<Button-1>', self.click)
@@ -54,7 +58,19 @@ class MindView:
         if cognition is None or not cognition.enabled:
             self.header.configure(text='Cognitive loop is off (config cognition.enabled)')
             return
-        snap = cognition.snapshot()
+        if not cognition.lock.acquire(blocking=False):return
+        try:snap = cognition.snapshot()
+        finally:cognition.lock.release()
+        state=getattr(getattr(self.app,'actions',None),'task_state',None)
+        if state is not None:
+            task=state.ui_snapshot()
+            if task is not None:
+                rows=task['steps']
+                text=('DAG · '+task['status']+' · '+str(len(rows))+' nodes\n'+
+                      ' · '.join(row['id']+': '+row['status'] for row in rows[:8])) if rows else 'DAG · '+task['status']
+                if text!=self.dag_text:
+                    self.dag.configure(text=text)
+                    self.dag_text=text
         self.header.configure(text=f"Cognitive cycle · {snap['cycle_hz']} Hz · {snap['cycles']} cycles · click a module for details")
         self.draw(snap)
         self.describe(snap)

@@ -101,7 +101,10 @@ class UITransport:
                     result = self.responses.get(timeout=.05)
                 except queue.Empty:
                     continue
-                if result.get("transport_error") or result.get("id") != self.serial:
+                if (not isinstance(result,dict) or result.get("transport_error")
+                        or type(result.get('id')) is not int or result.get("id") != self.serial
+                        or ('error' in result and (not isinstance(result['error'],str) or not result['error'] or len(result['error'])>10000))
+                        or ('error' not in result and not isinstance(result.get('result'),dict))):
                     raise RuntimeError("UI worker lost the response; inspect the app before repeating it.")
                 self.failures, self.retry_at = 0, 0
                 if result.get("error"):

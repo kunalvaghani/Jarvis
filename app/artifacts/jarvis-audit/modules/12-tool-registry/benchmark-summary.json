@@ -1,0 +1,71 @@
+{
+ "date": "2026-10-15",
+ "hardware": {
+  "cpu": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "logical_cpus": 16,
+  "ram_gb": 31.3,
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB",
+  "os": "Windows-10-10.0.26200-SP0",
+  "python": "3.10.6"
+ },
+ "workload": "4 valid dispatches (read_file, search_files over 21 files, open, create_file via fake actions) + 3 invalid steps per batch",
+ "results": {
+  "round1_before_cold": {
+   "samples": 5,
+   "p50_ms": 414.04,
+   "p95_ms": 424.03,
+   "peak_rss_mb": 32.3
+  },
+  "round1_before_warm": {
+   "samples": 20,
+   "p50_ms": 42.13,
+   "p95_ms": 44.4,
+   "peak_rss_mb": 32.2
+  },
+  "round1_after_cold": {
+   "samples": 5,
+   "p50_ms": 398.2,
+   "p95_ms": 536.95,
+   "peak_rss_mb": 32.5
+  },
+  "round1_after_warm": {
+   "samples": 20,
+   "p50_ms": 40.56,
+   "p95_ms": 42.11,
+   "peak_rss_mb": 32.5
+  },
+  "round2_before_cold": {
+   "samples": 5,
+   "p50_ms": 399.2,
+   "p95_ms": 471.54,
+   "peak_rss_mb": 32.4
+  },
+  "round2_before_warm": {
+   "samples": 20,
+   "p50_ms": 39.95,
+   "p95_ms": 42.3,
+   "peak_rss_mb": 32.4
+  },
+  "round2_after_cold": {
+   "samples": 5,
+   "p50_ms": 389.09,
+   "p95_ms": 480.11,
+   "peak_rss_mb": 32.5
+  },
+  "round2_after_warm": {
+   "samples": 20,
+   "p50_ms": 40.41,
+   "p95_ms": 41.23,
+   "peak_rss_mb": 32.5
+  }
+ },
+ "results_identical": true,
+ "invalid_rejected": {
+  "before": 2,
+  "after": 3,
+  "of": 3
+ },
+ "external_side_effects": 0,
+ "gpu_used": false,
+ "note": "CPU-only registry path; no first-token/first-audio metric applies. Canonical CSV = round 2; round 1 retained in bench-*-1.jsonl."
+}

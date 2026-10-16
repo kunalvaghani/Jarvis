@@ -1,0 +1,40 @@
+All commands run from app/ using the existing .venv/Scripts/python.exe unless noted. Local fixture tests needed sandbox escalation only for Windows temporary atomic replacement; no real account/ability/dependency installation. Existing dirty branch preserved.
+
+Baseline:
+-m pytest tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py -q --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/baseline.xml
+New fault reproductions:
+-m pytest tests/test_ability_forge_audit.py -q --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/reproduced.xml
+-m pytest tests/test_ability_forge_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/reproduced-authorized.xml
+First scoped fix:
+-m pytest tests/test_ability_forge_audit.py tests/test_repo_abilities.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/targeted-first.xml
+Expanded fixtures:
+-m pytest tests/test_ability_forge_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/targeted-second.xml
+Collection-only mistake (no tests/test_commands.py in checkout; no PASS credit):
+-m pytest tests/test_ability_forge_audit.py tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_repo_learning.py tests/test_commands.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/targeted-third.xml
+Neighbor integration:
+-m pytest tests/test_ability_forge_audit.py tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_repo_learning.py tests/test_intent_direct_audit.py tests/test_capabilities.py tests/test_toolkits.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/targeted-fourth.xml
+Runner/output/queued consent fixes:
+-m pytest tests/test_ability_forge_audit.py tests/test_repo_abilities.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/targeted-fifth.xml
+Equivalent original preimage A/B:
+scripts/verification/verify_ability_forge_audit.py
+Final targeted acceptance:
+-m pytest tests/test_ability_forge_audit.py tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_repo_learning.py tests/test_intent_direct_audit.py tests/test_capabilities.py tests/test_toolkits.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/cases-and-contracts.xml
+Full frozen-source acceptance:
+-m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/19-ability-forge/full-regression.xml
+Read-only readiness:
+-m jarvis.launcher --check > .jarvis-runtime/jarvis-audit/module19-readiness-private.json
+Hardware/read-only environment:
+nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+docker --version
+git rev-parse HEAD
+git branch --show-current
+Official Firecrawl search/scrape URLs/dates are in upstream-checks.json; no remote script executed.
+
+Actual owned journey in final targeted/full XML:
+tests.test_repo_abilities.Building::test_build_test_activate_and_use
+Hand-written word-count fixture proposal, strict local test approval, real guarded child, parse learned count/open command precedence, copied input unchanged, unique delivered output and disable/enable readback. No actual microphone or model used.
+Owned crash journey:
+tests.test_ability_forge_audit::test_JRV_19_019_JRV_19_026_uncertain_network_write_persisted_and_never_replayed
+A child runs production dispatch with fake approval/transport then exits27 before any external send; parent reopens checkpoint and verifies zero dispatch on replay.
+
+See command-results.json for executed outcomes; accepted full XML and artifact-verification.json supersede intermediate results. Sandbox errors and collection errors are retained, never reclassified as product passes.

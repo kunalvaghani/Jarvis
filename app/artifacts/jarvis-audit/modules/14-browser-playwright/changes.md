@@ -1,5 +1,8 @@
-# Scope
+# Retained scoped changes
 
-No runtime change retained for this module in this bounded pass; independent baseline/upgrade selection pending.
-
-Existing full regression evidence is separate from completing this module contract.
+- browser_worker.py: request validation before browser open/reset; strict boolean new-task/headless and bounded literal Unicode/URL; one evaluated bounded summary with HTML/ARIA labels, private field-value exclusion, hidden/inert filtering, sign-in heuristic and untrusted contract; typed summary errors. Visible wait before strict uniqueness, URL rechecks around waiting/fill/readback; pinned semantic node guard after cue. Extra owned tabs reported and generic mutation refused.
+- browser_automation.py: trusted controller settings win over caller settings; validation before transport; malformed replies rejected before touched/last_url updates. Intentional close/recovery ownership preserved.
+- browser_cursor.py: optional read-only final admission callback before one pinned-element click; existing visual cue, URL check, disposal and no-replay preserved.
+-32 catalog scenarios +11 supplemental regressions; real isolated headless contexts, loopback302 and synthetic temporary download; fake fault/transport/policy tests. Reviewed accounting class handles explicit blockers. Runtime manifest, READMEs and dated linked docs updated; rollback/source evidence preserved.
+- tests/test_questions_context_audit.py: stale native proof now explicitly BLOCKED with required fresh inference, rather than claiming a current native pass after source changes. Historical native-default.json is preserved; no app inference code modified by this browser audit.
++- Existing Playwright1.63.0 retained despite upstream1.64.0 availability; no package/browser/model download, service, new public tool/ability, credential setup, account operation or UI artwork change.

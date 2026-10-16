@@ -1,0 +1,38 @@
+{
+  "checked_date": "2026-10-16 IST",
+  "provider": "Firecrawl; official primary sources only",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getsystempowerstatus",
+      "release_date": null,
+      "finding": "Read-only Windows power state API; no OS setting mutation."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-system_power_status",
+      "release_date": null,
+      "finding": "SystemStatusFlag0=off,1=battery saver on; unknown API status defers optional learning."
+    },
+    {
+      "url": "https://pypi.org/project/pytest/",
+      "version": "9.1.1",
+      "release_date": "2026-06-19",
+      "finding": "Current listed release, requires Python>=3.10; installed8.4.2 retained, no dependency installation."
+    },
+    {
+      "url": "https://docs.pytest.org/en/stable/changelog.html",
+      "release_date": null,
+      "finding": "Current changelog inspected; no claim that installing9.1.1 is tested in this application."
+    },
+    {
+      "url": "https://git-scm.com/install/windows",
+      "version": "2.56.0(2)",
+      "release_date": "2026-10-05",
+      "finding": "Current maintained Windows build; installed2.49.1.windows.1 older; no installer run."
+    },
+    {
+      "url": "https://git-scm.com/docs/git-worktree",
+      "release_date": null,
+      "finding": "Worktree checkout/cleanup is a source snapshot, not a hostile-code security boundary."
+    }
+  ]
+}

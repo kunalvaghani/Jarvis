@@ -1,0 +1,74 @@
+{
+  "scope": "Scoped Prompt14 preimage diffs, not total dirty tree; no commit/deploy.",
+  "files": [
+    {
+      "path": "app/jarvis/browser_worker.py",
+      "sha256": "f5c5275c921a39901d90e81e617417425d5f00912cf3cb5a891e9c71381989e3"
+    },
+    {
+      "path": "app/jarvis/browser_automation.py",
+      "sha256": "3a55ffdc82083a3c76bb018552f633226ba815592c9cd2fee69cc625cdfc35a3"
+    },
+    {
+      "path": "app/jarvis/browser_cursor.py",
+      "sha256": "a4553ced83a8a62f1b4da918bf0a27b7a808fc9894d56638674c5fc565bea9bc"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "sha256": "9433ddf373b5675eb6a7ab4177369909c87f8e7d7a72930f376f2054f152e160"
+    },
+    {
+      "path": "app/scripts/verification/audit_catalog.py",
+      "sha256": "be0a1b60696b9a362c30a347a23033abbbd46c0e9081b79acec0de1c1f55dc84"
+    },
+    {
+      "path": "app/tests/test_audit_result_accounting.py",
+      "sha256": "8e1ac5e82e366d702b32e4f08bae945aa5b55b0fe836be4e43027e49eac80369"
+    },
+    {
+      "path": "app/tests/test_browser_playwright_audit.py",
+      "sha256": "a185db0efd88bc3019fad980c62fdc2c1fa81faf8caef33a1dca35e1e34bf76f"
+    },
+    {
+      "path": "app/tests/test_questions_context_audit.py",
+      "sha256": "44d18082dd4245b7983b177ce39fa9596508604f32302d3445182150051e3a22"
+    },
+    {
+      "path": "app/scripts/verification/verify_browser_playwright_audit.py",
+      "sha256": "e9db6353665c05deba219a3a9ccf33b01204c282f87ea5b21a61574e3d711908"
+    },
+    {
+      "path": "app/scripts/verification/verify_browser_dialog_audit.py",
+      "sha256": "020931e9cada8d0270bc1a03475b065c82ff648c1bb0fa4df9db5ad826e81fea"
+    },
+    {
+      "path": "app/scripts/verification/report_browser_playwright_audit.py",
+      "sha256": "751925b86c3fafaef7cc5a20a912e720f254600be9a6caf04901c583ac3b6fa1"
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "84fd803f0e713833aebc3bebf87c5abcdd94a0482763d51f3fba21f128a69389"
+    },
+    {
+      "path": "app/docs/automation-upgrade.md",
+      "sha256": "40f1e77c449c5b2157caf3efe5680a5251d093e83d4e08b69353d38ea48ebea7"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "sha256": "26f6019a6a9c0cc1558fb842aac3374cb8c522fa9c447ff1a39103565d6adf9f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b31f0f1f48a08b97b1c5a649b10b8f2beb3e0f6c5d36633fdfab3e631184bd4a"
+    }
+  ],
+  "artifact_directory": "app/artifacts/jarvis-audit/modules/14-browser-playwright",
+  "shared_artifacts": [
+    "final-report.md",
+    "module-map.json",
+    "summary.json",
+    "test-results.jsonl",
+    "executed-tests.jsonl",
+    "remaining-case-ids.txt"
+  ]
+}
