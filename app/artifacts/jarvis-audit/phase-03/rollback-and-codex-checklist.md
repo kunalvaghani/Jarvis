@@ -5,7 +5,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert <phase-03-commit-sha>        # on claude; removes the modules, sidecars and integration edits
+git revert 6f880332610cc1a5c483f702c5f33b43d1537aa0        # on claude; removes the modules, sidecars and integration edits
 ```
 
 Runtime state created by Phase 3 is local and ignored by Git; remove only if you want a clean slate:
