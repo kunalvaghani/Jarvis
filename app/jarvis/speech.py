@@ -21,6 +21,16 @@ def spoken_text(answer):
     answer = speech_unicode(answer)
     answer = re.split(r"\n\s*Sources:\s*\n", answer, maxsplit=1, flags=re.I)[0]
     answer = re.sub(r"```[\s\S]*?```", " The code is in the transcript. ", answer)
+    # A traceback is spoken as its final error line; its frames stay in the transcript.
+    answer = re.sub(r"(?m)^\s*Traceback \(most recent call last\):\n(?:[ \t]+.*\n?)*"
+                    r"(?:([A-Za-z_][\w.]*(?:Error|Exception|Warning|Interrupt|Exit))(?::[ \t]*(.*))?)?",
+                    lambda m: ("An error occurred: " + re.sub(r"(?<=[a-z])(?=[A-Z])", " ", m[1].rsplit('.', 1)[-1])
+                               + (", " + m[2].strip() if m[2] and m[2].strip() else "") + ".\n") if m[1]
+                    else "An error occurred; the details are in the transcript.\n", answer)
+    # Markdown tables: separator rows go; each row becomes a short comma-separated phrase.
+    answer = re.sub(r"(?m)^[ \t]*\|?(?:[ \t]*:?-{3,}:?[ \t]*\|)+[ \t]*:?-*:?[ \t]*$\n?", "", answer)
+    answer = re.sub(r"(?m)^[ \t]*\|(.+)\|[ \t]*$", lambda m: ", ".join(
+        cell.strip() for cell in m[1].split("|") if cell.strip()) + ".", answer)
     answer = re.sub(r"!?\[([^\]]+)\]\([^\n)]+\)", r"\1", answer)
     answer = re.sub(r"https?://\S+", "", answer)
     answer = re.sub(r"\[\d+\]", "", answer)

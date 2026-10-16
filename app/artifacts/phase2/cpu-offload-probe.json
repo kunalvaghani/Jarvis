@@ -1,0 +1,65 @@
+{
+ "date": "2026-10-15 22:10:44",
+ "rows": [
+  {
+   "model": "qwen3.5:9b",
+   "attempt": 0,
+   "num_gpu": 0,
+   "context": 16384,
+   "peak_vram_mb": 8,
+   "size_vram_mb": 0,
+   "load_s": 9.18,
+   "error": null
+  },
+  {
+   "model": "qwen3.5:9b",
+   "attempt": 1,
+   "num_gpu": 0,
+   "context": 16384,
+   "peak_vram_mb": 0,
+   "size_vram_mb": 0,
+   "load_s": 0.1,
+   "error": null
+  },
+  {
+   "model": "qwen2.5:0.5b",
+   "attempt": 0,
+   "num_gpu": 0,
+   "context": 2048,
+   "peak_vram_mb": 0,
+   "size_vram_mb": 0,
+   "load_s": 2.54,
+   "error": null
+  },
+  {
+   "model": "qwen2.5:0.5b",
+   "attempt": 1,
+   "num_gpu": 0,
+   "context": 2048,
+   "peak_vram_mb": 0,
+   "size_vram_mb": 0,
+   "load_s": 0.08,
+   "error": null
+  },
+  {
+   "model": "qwen3.5:0.8b",
+   "attempt": 0,
+   "num_gpu": 0,
+   "context": 4096,
+   "peak_vram_mb": 0,
+   "size_vram_mb": 0,
+   "load_s": 7.29,
+   "error": null
+  },
+  {
+   "model": "qwen3.5:0.8b",
+   "attempt": 1,
+   "num_gpu": 0,
+   "context": 4096,
+   "peak_vram_mb": 0,
+   "size_vram_mb": 0,
+   "load_s": 0.13,
+   "error": null
+  }
+ ]
+}

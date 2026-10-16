@@ -36,12 +36,127 @@ def speech_unicode(text):
     full-width punctuation) become ordinary spoken text.
     """
     text = text.encode('utf-16-le', errors='surrogatepass').decode('utf-16-le', errors='replace')
+    # NFKC would turn x³ into x3, which changes the meaning; say the exponent first.
+    text = re.sub('[⁰¹²³⁴-⁹]+', lambda m: ' squared' if m[0] == '²' else ' cubed' if m[0] == '³'
+                  else ' to the power of ' + m[0].translate(_SUPERSCRIPTS), text)
     return unicodedata.normalize('NFKC', text.replace('\ufffd', ' '))
+
+
+_SUPERSCRIPTS = str.maketrans('⁰¹²³⁴⁵⁶⁷⁸⁹', '0123456789')
+_ONES = ('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen '
+         'sixteen seventeen eighteen nineteen').split()
+_TENS = 'twenty thirty forty fifty sixty seventy eighty ninety'.split()
+_ORDINAL = {'one': 'first', 'two': 'second', 'three': 'third', 'five': 'fifth', 'eight': 'eighth',
+            'nine': 'ninth', 'twelve': 'twelfth'}
+_MONTHS = 'January February March April May June July August September October November December'.split()
+_CURRENCY = {'$': ('dollar', 'dollars', 'cent', 'cents'), '₹': ('rupee', 'rupees', 'paisa', 'paise'),
+             '€': ('euro', 'euros', 'cent', 'cents'), '£': ('pound', 'pounds', 'penny', 'pence')}
+_SYMBOLS = (('√', ' square root of '), ('≈', ' approximately '), ('≠', ' not equal to '), ('≤', ' at most '),
+            ('≥', ' at least '), ('±', ' plus or minus '), ('×', ' times '), ('÷', ' divided by '),
+            ('∑', ' the sum of '), ('∞', ' infinity '), ('π', ' pi '), ('→', ' to '),
+            ('°C', ' degrees Celsius'), ('°F', ' degrees Fahrenheit'), ('°', ' degrees'))
+_EXTENSIONS = (r'txt|md|pdf|docx?|xlsx?|pptx?|csv|json|ya?ml|toml|ini|cfg|log|py|js|ts|tsx|jsx|html?|css|java|'
+               r'cpp|cs|go|rs|rb|php|sh|ps1|bat|cmd|exe|dll|zip|png|jpe?g|gif|svg|mp3|mp4|wav|mkv')
+_FILE = re.compile(r'\.(?:' + _EXTENSIONS + r')$', re.I)
+
+
+def number_words(n):
+    """English words for a non-negative integer up to the trillions."""
+    if n < 20:
+        return _ONES[n]
+    if n < 100:
+        return _TENS[n // 10 - 2] + ('-' + _ONES[n % 10] if n % 10 else '')
+    if n < 1000:
+        return _ONES[n // 100] + ' hundred' + (' ' + number_words(n % 100) if n % 100 else '')
+    for size, name in ((10**12, 'trillion'), (10**9, 'billion'), (10**6, 'million'), (1000, 'thousand')):
+        if n >= size:
+            return number_words(n // size) + ' ' + name + (' ' + number_words(n % size) if n % size else '')
+
+
+def ordinal_words(n):
+    words = number_words(n)
+    cut = max(words.rfind(' '), words.rfind('-'))
+    head, last = words[:cut + 1], words[cut + 1:]
+    return head + (_ORDINAL.get(last) or (last[:-1] + 'ieth' if last.endswith('y') else last + 'th'))
+
+
+def _number(text):
+    """Say a numeral: integers, thousands separators, decimals and long digit strings."""
+    digits = text.replace(',', '')
+    if '.' in digits:
+        whole, fraction = digits.split('.', 1)
+        return _number(whole or '0') + ' point ' + ' '.join(_ONES[int(d)] for d in fraction)
+    if len(digits) > 12 or (len(digits) > 1 and digits.startswith('0')):
+        return ' '.join(_ONES[int(d)] for d in digits)  # Codes and phone numbers are read digit by digit.
+    return number_words(int(digits))
+
+
+def _money(match):
+    one, many, minor_one, minor_many = _CURRENCY[match[1]]
+    whole, _, cents = match[2].replace(',', '').partition('.')
+    spoken = number_words(int(whole)) + ' ' + (one if int(whole) == 1 else many)
+    minor = int(cents.ljust(2, '0')[:2]) if cents else 0
+    if minor:
+        spoken += ' and ' + number_words(minor) + ' ' + (minor_one if minor == 1 else minor_many)
+    return spoken
+
+
+def _file_name(name):
+    stem, _, extension = name.rpartition('.')
+    return re.sub(r'[_\-]+', ' ', stem).strip() + ' dot ' + extension
+
+
+def _place(name):
+    """A path is spoken as its last part: 'the file report v2 dot docx' or 'the folder Documents'."""
+    return 'the file ' + _file_name(name) if _FILE.search(name) else 'the folder ' + name
+
+
+def _time(match):
+    hour, minute = int(match[1]), match[2]
+    spoken = number_words(hour)
+    if minute != '00':
+        spoken += (' oh ' if minute[0] == '0' else ' ') + number_words(int(minute))
+    return spoken + ' ' + match[3].upper() + ' M'
+
+
+def speakable(text):
+    """Rewrite what a voice would read as symbols into the words a person would say.
+
+    Speech only; the stored answer is unchanged. F5 has no text normalizer of its own, so
+    paths, file names, emails, bare www links, money, percentages, dates, times, ordinals,
+    math symbols, camelCase identifiers and numerals become words here.
+    """
+    text = re.sub(r'(?<![\w/])[A-Za-z]:\\(?:[^\\\s]+\\)*([^\\\s]+?)(?=[.,;:!?)]*(?:\s|$))', lambda m: _place(m[1]), text)
+    text = re.sub(r'(?<![\w:/])(?:~|\.{1,2})?/(?:[\w.-]+/)+([\w.-]+?)(?=[.,;:!?)]*(?:\s|$))', lambda m: _place(m[1]), text)
+    text = re.sub(r'\b([\w.+-]+)@([\w-]+(?:\.[\w-]+)+)\b',
+                  lambda m: m[1].replace('.', ' dot ') + ' at ' + m[2].replace('.', ' dot '), text)
+    text = re.sub(r'\bwww\.([\w-]+(?:\.[\w-]+)+)(?:/[^\s,;!?]*)?', lambda m: m[1].replace('.', ' dot '), text)
+    text = re.sub(r'\b[\w-]+\.(?:' + _EXTENSIONS + r')\b', lambda m: _file_name(m[0]), text, flags=re.I)
+    text = re.sub(r'([$₹€£])\s?(\d[\d,]*(?:\.\d{1,2})?)\b', _money, text)
+    text = re.sub(r'(\d[\d,]*(?:\.\d+)?)\s?%', lambda m: _number(m[1]) + ' percent', text)
+    text = re.sub(r'\b(\d{4})-(\d{2})-(\d{2})\b', lambda m: (
+        _MONTHS[int(m[2]) - 1] + ' ' + ordinal_words(int(m[3])) + ', ' + m[1]
+        if 1 <= int(m[2]) <= 12 and 1 <= int(m[3]) <= 31 else m[0]), text)
+    text = re.sub(r'\b(\d{1,2}):(\d{2})(?::\d{2})?\s?([AaPp])\.?[Mm]\b\.?', _time, text)
+    text = re.sub(r'\b(\d+)(?:st|nd|rd|th)\b', lambda m: ordinal_words(int(m[1])), text)
+    for symbol, words in _SYMBOLS:
+        text = text.replace(symbol, words)
+    text = re.sub(r'(?<=\s)=(?=\s)', 'equals', text)
+    text = re.sub(r'(?<=\s)\+(?=\s)|(?<=[\w)])\+(?=[\w(])', ' plus ', text)
+    # Fractions only: a numeral or bracket on one side ('and/or' stays as written).
+    text = re.sub(r'(?<=[\d)])/(?=[\w(])|(?<=\w)/(?=[\d(])', ' over ', text)
+    text = re.sub(r'\b([a-z]{2,})((?:[A-Z][a-z]+)+)\b',
+                  lambda m: m[1] + ' ' + ' '.join(re.findall('[A-Z][a-z]+', m[2])).lower(), text)
+    # Plain numerals last; version-like runs (3.10.6) become 'three point ten point six'.
+    text = re.sub(r'\d+(?:\.\d+){2,}', lambda m: ' point '.join(_number(part) for part in m[0].split('.')), text)
+    text = re.sub(r'(?<![\w.])\d{1,3}(?:,\d{3})+(?:\.\d+)?(?![\w.]*\d)|(?<![\w.])\d+(?:\.\d+)?(?![\w.]*\d)',
+                  lambda m: _number(m[0]), text)
+    return text
 
 
 def tts_text(text):
     """Clean text so Kokoro reads it like a person would say it."""
-    text = speech_unicode(text)
+    text = speakable(speech_unicode(text))
     text = re.sub(r"[\U0001F300-\U0001FAFF☀-➿]", "", text)  # Emoji are not spoken.
     text = re.sub(r"\b(?:lol|lmao)\b", "haha", text, flags=re.I)
     text = re.sub(r"\b(ha)(?:ha)+\b", lambda m: "ha ha" + ("!" if not m.string[m.end():m.end() + 1] in "!.?" else ""), text, flags=re.I)
