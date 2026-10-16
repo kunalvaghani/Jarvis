@@ -49,7 +49,13 @@ New clones use the canonical `app/` tree, consistent with existing setup docs.
 - Git connectivity validation exited successfully; existing dangling blobs were
   retained. A token-format scan of 457 preserved changed paths found only two
   repeated-character synthetic tokens from privacy regression test names.
-- Final local/remote branch and worktree verification: pending at report preparation.
+- Local/remote topology assertions passed: exactly `main`, `codex`, and `claude`,
+  all at tested integration commit 9bf5868 before the final documentation/evidence
+  commit. [Topology receipt](topology-verification.json). The final evidence commit
+  advances all three branches together without changing runtime/test sources.
+- The web build regression rewrote its historical module22 build log. Fresh output
+  is preserved [separately](web-build-checks-during-regression.json); the original
+  tracked receipt was restored from the integration commit to retain its date/context.
 
 These checks establish integration regression behavior. They do not certify
 blocked live integrations, model quality, or the full audit catalog. The
@@ -75,8 +81,14 @@ The original branch names and commit hashes are in the manifest. Use
 inspect the archive paths and patches before applying them. Do not extract the
 legacy `InsTAREELS` paths over the active junction.
 
-The intended final topology is one primary checkout on `main` and exactly
+The verified final topology is one primary checkout on `main` and exactly
 `main`, `codex`, and `claude` locally and on origin, initially at the same tested
-commit. Obsolete branch deletion follows ancestor checks and successful push;
-worktree removal follows archive verification. The original commits stay
+commit. Four obsolete local/remote branches were deleted after ancestor checks
+and successful main push. `D:\jw-p2` was removed after verifying its unchanged
+93 ignored files against the archive. The primary checkout and compatibility
+junction remain. The original commits stay
 reachable from main's merge ancestry and the local recovery bundle.
+
+An additional verified `integrated-refs.bundle` preserves the integrated commit
+and all original branch names immediately before cleanup. The recovery directory
+stays ignored and local; it has not been uploaded to GitHub.

@@ -1,0 +1,22 @@
+{
+  "local_branches": [
+    "claude",
+    "codex",
+    "main"
+  ],
+  "remote_branches": {
+    "claude": "9bf5868651ea5f842214ce0d3938c84b7fe92cb1",
+    "codex": "9bf5868651ea5f842214ce0d3938c84b7fe92cb1",
+    "main": "9bf5868651ea5f842214ce0d3938c84b7fe92cb1"
+  },
+  "worktrees": "worktree D:/Kunals GitHub Repo/Jarvis\nHEAD 9bf5868651ea5f842214ce0d3938c84b7fe92cb1\nbranch refs/heads/main",
+  "removed_worktree": "D:\\jw-p2",
+  "removed_branches": [
+    "audit/12-tool-registry",
+    "audit/phase2-gpu-voice-ui",
+    "codex/hierarchical-dag-upgrade",
+    "codex/jarvis-prove-fix-audit"
+  ],
+  "original_heads_preserved": true,
+  "secondary_ignored_files_verified_before_removal": 93
+}
