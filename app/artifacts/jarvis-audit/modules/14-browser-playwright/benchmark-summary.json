@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-15 IST",
+  "results": {
+    "before_cold": {
+      "samples": 5,
+      "p50_ms": 54.507599999851664,
+      "p95_ms": 83.2535999998072,
+      "peak_python_bytes": 428705
+    },
+    "before_warm": {
+      "samples": 20,
+      "p50_ms": 18.58459999994011,
+      "p95_ms": 22.12469999994937,
+      "peak_python_bytes": 352947
+    },
+    "after_cold": {
+      "samples": 5,
+      "p50_ms": 11.359699999957229,
+      "p95_ms": 11.76209999994171,
+      "peak_python_bytes": 344828
+    },
+    "after_warm": {
+      "samples": 20,
+      "p50_ms": 6.906350000463135,
+      "p95_ms": 12.562800000523566,
+      "peak_python_bytes": 284444
+    }
+  },
+  "controls_identical": true,
+  "scope": "Installed Chrome/Playwright1.63.0, one headless owned browser;5 first summaries of fresh isolated contexts,20 repeated warm summaries per algorithm. Page loaded before timer. Same80 explicit-ARIA buttons/video fixture and machine; before4 browser round trips,after1. Tracemalloc Python component allocation only, not Chrome/whole RAM. All external requests aborted, no user profile or persistent download. No GPU/model/voice; TTFT/audio/VRAM not applicable."
+}

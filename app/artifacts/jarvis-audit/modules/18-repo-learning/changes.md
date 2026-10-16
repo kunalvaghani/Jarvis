@@ -1,5 +1,9 @@
-# Scope
+# Retained implementation and benchmark decision
 
-No runtime change retained for this module in this bounded pass; independent baseline/upgrade selection pending.
+repo_learning.py: canonical name/path/settings/index/model guards; private public-search rejection and recognized credential redaction; parsed exact-origin authorization, redirects refused, response closure and streamed pre-append caps; immutable commit for archive/tree/raw; generated/minified/link/traversal exclusion; source-grounded module paths and static/untrusted labels; Windows hints; root license artifacts and conservative excerpt transfer; SHA256 cache filenames/content readback; atomic JSON, fresh-learning canonical-index RAM rollback, corrupt-index guard; serialized pinned dedupe; bounded2-worker browser checks and duplicate-thread fix; Stop guards; record/card/failure trace IDs and categorical errors. No dependency/service/config/tool-name or approval/execution-engine change.
 
-Existing full regression evidence is separate from completing this module contract.
+Candidates: immutable commit pinning implemented; derived keyword-set cache improves warm relevance; existing static symbols retained; license evidence and literal transfer limits added. General sandbox behavior validation remains BLOCKED, not replaced by parsing. No embeddings/reranker/model download or arbitrary source execution. Pin resolution adds one metadata API call on first/refreshed learning; pinned duplicates avoid network. Live service latency was not measured.
+
+Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each. Warm peak traced Python allocation 19815→6295B. Cold p50 **1.2918→3.8665ms**, peak **19815→4597431B**. Keep derived cache for repeated warm requests on32GB target; roughly4.6MB extra fixture allocation and cold slowdown explicitly retained, not called an overall speed/memory win. No privacy/approval correctness regression accepted. Query cache scales with repository keywords; warm excludes retained cache memory. Construction/disk/download/parse/model/TTFT/audio/VRAM excluded.
+
+Test fakes now supply immutable SHA/root license/stream protocol and categorical errors; old baseline/failure XML preserved. App/root README, repo-learning and system-map updated with dated scope; existing art/attribution preserved. [Implementation/doc files](files-changed.json), [generated output paths](generated-files.json), [preimage hashes](source-hashes.json), [complete scoped diff](source.patch).

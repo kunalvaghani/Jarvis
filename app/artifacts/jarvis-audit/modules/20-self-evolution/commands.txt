@@ -1,0 +1,33 @@
+Run directory: app/; interpreter .venv/Scripts/python.exe. Sandbox escalation permitted only owned fixture Git/worktree/temporary registry writes; no production core self-patch, native model test or dependency installation.
+
+Baseline:
+-m pytest tests/test_self_evolution.py tests/test_anticipation.py tests/test_repo_learning.py tests/test_repo_abilities.py -q --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/baseline.xml
+Failure reproduction:
+-m pytest tests/test_self_evolution_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/reproduced.xml
+First fixes:
+-m pytest tests/test_self_evolution_audit.py tests/test_self_evolution.py tests/test_anticipation.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/targeted-first.xml
+Corrected fixtures/query screening:
+-m pytest tests/test_self_evolution_audit.py tests/test_self_evolution.py tests/test_anticipation.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/targeted-second.xml
+A/B original source:
+scripts/verification/verify_self_evolution_audit.py
+Final focused and neighboring acceptance (repeated after changes; final XML supersedes prior intermediate overwrite):
+-m pytest tests/test_self_evolution_audit.py tests/test_self_evolution.py tests/test_anticipation.py tests/test_repo_learning.py tests/test_repo_abilities.py tests/test_gpu_scheduler.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/cases-and-contracts.xml
+Full frozen-source acceptance:
+-m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/20-self-evolution/full-regression.xml
+Read-only readiness:
+-m jarvis.launcher --check > .jarvis-runtime/jarvis-audit/module20-readiness-private.json
+Official primary-source research:
+Firecrawl search/scrape; exact URLs and dates in upstream-checks.json. No downloaded script executed.
+Read-only environment:
+git --version, git rev-parse HEAD, git branch --show-current; Python/importlib.metadata/psutil environment inspection. Windows _battery_saver() API read succeeded and returnedFalse; no setting changed. GPU target verified on same machine in module19; no new native GPU workload.
+
+Owned applicable journeys in final focused/full XML:
+tests.test_self_evolution_audit::test_owned_git_patch_evaluation_deploy_and_rollback
+Hand-written VALUE1/2 source, fixture-only Git init/add/commit using sanitized environment, actual production worktree evaluation running pytest with a real assertion, refused approval then fake approval, owned target readback and explicit rollback. No Jarvis checkout change.
+tests.test_self_evolution_audit::test_JRV_20_019_owned_child_crash_resumes_discovery_only
+Owned child exits29 during fake search after durable discover checkpoint; restart reopens pending read step and fake learn completes. No automatic replay of unknown learner write; separate002/003/006/011 blockers retained.
+tests.test_self_evolution_audit::test_JRV_20_007_tested_skill_card_contains_change
+Legacy owned word-count fixture self-test, awaiting-approval card contents and no activation.
+
+Rendered preview uses the actual island renderer with fixed fixture card data; saved artifacts/media/self-evolution-paused-preview.png and visually inspected; not a live UI screenshot.
+Results: command-results.json; authoritative final full output and artifact hashes are separate artifacts. No production-ready or native game/voice acceptance claim.

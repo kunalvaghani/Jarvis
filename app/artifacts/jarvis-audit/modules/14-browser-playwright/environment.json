@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-15 IST",
+  "repo_commit": "e1a33a0944b5cd725e1a76a72eda228513e45963",
+  "branch": "audit/12-tool-registry",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.10.6",
+  "playwright": "1.63.0",
+  "chrome": "155.0.8059.79",
+  "logical_cpus": 16,
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "ram_total_bytes": 33656832000,
+  "gpu_target": "RTX3050 Laptop4GB; not a new live GPU measurement",
+  "scope": "Read-only environment metadata; no user profile, credentials, account or desktop contents.",
+  "baseline_repo_commit": "bdcb15a52bbf23101950cd1625f249a564e647ee",
+  "concurrent_commit_note": "HEAD advanced to phase1 during the audit; no commit was created by this audit. Existing work preserved; browser diffs compare saved preimages, not HEAD."
+}

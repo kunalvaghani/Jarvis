@@ -1,0 +1,46 @@
+[
+  {
+    "evidence": "baseline.xml",
+    "PASS": 96,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "seconds": 26.639
+  },
+  {
+    "evidence": "reproduced.xml",
+    "PASS": 10,
+    "FAIL": 20,
+    "SKIPPED": 4,
+    "seconds": 1.461
+  },
+  {
+    "evidence": "targeted-first.xml",
+    "PASS": 87,
+    "FAIL": 3,
+    "SKIPPED": 4,
+    "seconds": 8.319
+  },
+  {
+    "evidence": "targeted-second.xml",
+    "PASS": 90,
+    "FAIL": 0,
+    "SKIPPED": 4,
+    "seconds": 6.893
+  },
+  {
+    "evidence": "cases-and-contracts.xml",
+    "PASS": 183,
+    "FAIL": 0,
+    "SKIPPED": 4,
+    "seconds": 36.317
+  },
+  {
+    "evidence": "full-regression.xml",
+    "PASS": 2796,
+    "FAIL": 0,
+    "SKIPPED": 36,
+    "seconds_cli": 455.47,
+    "warning": "1 existing pywinauto STA COM threading mode warning; no failed assertion",
+    "frozen_files": 382
+  }
+]

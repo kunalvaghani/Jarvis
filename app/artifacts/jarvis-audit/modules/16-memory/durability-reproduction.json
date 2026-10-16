@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-16 IST",
+  "scope": "Injected Path.replace failure on isolated canonical temporary fact JSON; no external effects/replay.",
+  "before": {
+    "ram_matches_disk": false,
+    "commit_attempts": 1
+  },
+  "after": {
+    "ram_matches_disk": true,
+    "commit_attempts": 1
+  },
+  "passed": true
+}

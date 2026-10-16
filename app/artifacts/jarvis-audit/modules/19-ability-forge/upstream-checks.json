@@ -1,0 +1,44 @@
+{
+  "checked_date": "2026-10-16 IST",
+  "provider": "Firecrawl search/scrape; official primary sources only",
+  "sources": [
+    {
+      "url": "https://pypi.org/project/pip/26.2.1/",
+      "release": "26.2.1",
+      "release_date": "2026-08-04",
+      "finding": "Latest listed; Python >=3.10; installed version matches."
+    },
+    {
+      "url": "https://pip.pypa.io/en/stable/cli/pip_install/#cmdoption-only-binary",
+      "release_date": null,
+      "finding": "Binary-only refuses source distributions, not a security sandbox."
+    },
+    {
+      "url": "https://www.python.org/downloads/release/python-31021/",
+      "release": "3.10.21",
+      "release_date": "2026-08-12",
+      "finding": "Branch end-of-life 2026-10-01; installed3.10.6 older; no installer migration performed."
+    },
+    {
+      "url": "https://docs.python.org/3.10/library/sys.html#sys.addaudithook",
+      "release_date": null,
+      "finding": "Audit hooks unsuitable as a hostile-code sandbox."
+    },
+    {
+      "url": "https://docs.docker.com/desktop/release-notes/#4950",
+      "release": "4.95.0",
+      "release_date": "2026-10-12",
+      "finding": "Official release notes reviewed; CLI29.8.2 does not identify Desktop app version."
+    },
+    {
+      "url": "https://docs.docker.com/engine/security/seccomp/",
+      "release_date": null,
+      "finding": "Seccomp restrictions documented; no host mode change."
+    },
+    {
+      "url": "https://docs.docker.com/engine/security/rootless/",
+      "release_date": null,
+      "finding": "Rootless mode boundaries documented; no mode installation or enablement."
+    }
+  ]
+}

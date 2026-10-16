@@ -289,17 +289,33 @@ class AppKnowledge:
             records = row.get('capabilities', {})
             if not isinstance(records, dict):
                 return []
+            now = time.time()
             for item in list(records.values())[:24]:
                 if (not isinstance(item, dict) or not isinstance(item.get('seen_at'), (int, float)) or
                         not all(k in item for k in ('identity','feature','version','status','interface_signature','controls','sources','verification')) or
                         not all(isinstance(item[k], list) for k in ('controls','sources','verification')) or
-                        not 0 <= time.time()-item['seen_at'] <= ttl):
+                        not 0 <= now-item['seen_at'] <= ttl):
                     continue
-                if (feature and item.get('feature') != feature or version and version != 'unknown' and item.get('version') != version or
+                if (feature and item.get('feature') != feature or version is not None and item.get('version') != version or
                         signature and item.get('interface_signature') != signature or item.get('status') == 'invalidated'):
                     continue
-                result.append(json.loads(json.dumps(item)))
-            return sorted(result, key=lambda item: item['seen_at'], reverse=True)[:3]
+                result.append(item)
+            # Clone only the returned top three while still holding the lock.
+            # Callers receive independent data; discarded rows allocate no JSON.
+            return json.loads(json.dumps(sorted(result, key=lambda item: item['seen_at'], reverse=True)[:3]))
+
+    def invalidate_capabilities(self, identity, version, signature):
+        """Retain historical proof but remove stale surfaces from guidance/reuse."""
+        with self.lock:
+            row = self.learned.get('capability:'+identity, {})
+            records = row.get('capabilities', {}) if isinstance(row, dict) else {}
+            if not isinstance(records, dict):
+                return
+            for item in records.values():
+                if isinstance(item, dict) and (item.get('version') != version or item.get('interface_signature') != signature):
+                    item['status'] = 'invalidated'
+            # The foreground prepare subsequently persists its new record. Avoid
+            # a second synchronous write here; background never observes the UI.
 
     def remember_capability(self, item):
         """Persist declarative evidence, never code, coordinates or permissions."""

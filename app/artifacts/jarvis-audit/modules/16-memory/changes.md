@@ -1,5 +1,9 @@
-# Scope
+# Retained bounded memory changes
 
-Shared cognitive resilience repairs retained; [exact delta](../../scoped-source.patch).
+memory_curator.py: strict capacity/idle/boolean and fact-size/Unicode bounds; bounded schema checks for canonical facts/summaries and model output; invalid facts excluded with categorical diagnostics and corrupt/unreadable canonical write guard; named-subject/polarity separation and narrow explicit prefers replacement; scoring once per fact/query; fsync before canonical replace, RAM rollback on failed precommit, preserve RAM after canonical commit even if derived note fails; observe after close and post-model Stop guards; sensitive summary inputs removed before local model call; diagnostic worker exceptions omit message payload.
 
-Existing full regression evidence is separate from completing this module contract.
+obsidian_memory.py: shared credential matcher extended to OTP/PIN/CVV/account/card markers and long digit strings, scanning before clipping. This applies to conversation begin/finish/FTS, activity/experience/procedure clean helpers and curator checks through existing imports. Wider screening can over-redact benign words such as PIN; full regression determines compatibility. Existing historical stored text is not rewritten.
+
+No new schema, DB, service, API, paid dependency, vector index, embedding model or arbitrary action graph. SQLite schema/transaction behavior unchanged and directly tested. Learned memories remain guidance under registry permissions; no external effects/replay added. Existing hotness_many already vectorized; kept with equivalence assertion. Lexical optimization retained: warm median 15.4031→5.3995ms, +4795B peak traced allocations on bounded fixture; exact selected results unchanged.
+
+Exact changed files/hashes and preimages: files-changed.json / source-hashes.json; complete scoped new/modified diff: source.patch. app/root README and memory/system docs updated in the same change, preserving dated screenshots/historical measurements. No visible UI change/new screenshot. No commit/deploy/install.

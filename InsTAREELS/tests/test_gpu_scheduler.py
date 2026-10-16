@@ -20,7 +20,27 @@ class GPUSchedulerTests(unittest.TestCase):
         self.registry=Registry(self.temporary.name)
         self.policy=settings({'enabled':True,'wait_seconds':2})
 
-    def state(self):return json.loads(self.registry.path.read_text())
+    def state(self):
+        # Observe without reaping leases. Windows replacement can briefly deny a
+        # concurrent reader; retry only this fixture observation, never the work.
+        deadline=time.monotonic()+1
+        while True:
+            try:return json.loads(self.registry.path.read_text())
+            except (PermissionError,FileNotFoundError,json.JSONDecodeError):
+                if time.monotonic()>=deadline:raise
+                time.sleep(.005)
+
+    def test_fixture_state_read_tolerates_transient_replacement(self):
+        expected={'active':None,'pending':[]}
+        with patch.object(Path,'read_text',side_effect=[PermissionError('replacing'),json.dumps(expected)]) as read:
+            self.assertEqual(self.state(),expected)
+            self.assertEqual(read.call_count,2)
+
+    def test_fixture_state_read_has_a_bounded_failure(self):
+        with patch.object(Path,'read_text',side_effect=PermissionError('persistent')) as read:
+            with patch('tests.test_gpu_scheduler.time.monotonic',side_effect=[0,2]):
+                with self.assertRaises(PermissionError):self.state()
+            self.assertEqual(read.call_count,1)
 
     def response(self):
         response=requests.Response();response.status_code=200

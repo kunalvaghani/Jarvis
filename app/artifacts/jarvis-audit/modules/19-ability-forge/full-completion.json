@@ -1,0 +1,9 @@
+{
+  "evidence": "full-regression.xml",
+  "PASS": 2756,
+  "FAIL": 0,
+  "SKIPPED": 32,
+  "seconds_cli": 442.1,
+  "warning": "1 existing pywinauto Revert to STA COM threading mode warning; no assertion failure",
+  "frozen_files": 381
+}

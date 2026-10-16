@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-16 IST",
+  "head": "e1a33a0944b5cd725e1a76a72eda228513e45963",
+  "branch": "audit/12-tool-registry",
+  "python": "3.10.6",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "requests": "2.34.2",
+  "git": "git version 2.49.1.windows.1",
+  "preimages": [
+    "jarvis/repo_learning.py",
+    "tests/test_repo_learning.py",
+    "scripts/verification/audit_catalog.py",
+    "tests/test_audit_result_accounting.py",
+    "README.md",
+    "docs/system-map.md",
+    "docs/repo-learning.md",
+    "tests/test_gpu_scheduler.py"
+  ],
+  "real_repository_code_executed": false,
+  "dependencies_installed": false,
+  "target": "Windows/Ryzen7/32GB/RTX3050Laptop4GB; no native model/GPU stress",
+  "host_ram_bytes": 33656832000
+}

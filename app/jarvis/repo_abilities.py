@@ -19,13 +19,15 @@ After repo_learning.py learns a repository (asked, or viewed in the browser), th
 
 Jarvis's own source is never edited: abilities are data plus generated code that only ever runs out of process,
 and command matching is checked last in `commands.parse`, so built-in commands always win. Abilities that only use
-the standard library are activated automatically. Abilities that need third-party packages (installed as binary
-wheels only into the ability's own environment), the repository's own code, or the network wait for the user to
-say "approve ability <name>"; the island shows what each one needs.
+the standard library are tested before review. Every ability waits for explicit user approval. Third-party
+packages use binary wheels in the ability's environment. Network invocations require fresh action approval.
+These process audit hooks are guard rails, not a security sandbox; repository skills use a separate Docker path.
 """
 from datetime import datetime, timedelta, timezone
 import ast
+import copy
 import hashlib
+import uuid
 import io
 import json
 from pathlib import Path
@@ -152,7 +154,7 @@ def check_code(code, spec, repo_modules=()):
     """Static policy for generated ability code. Returns a list of problems (empty when it may be tested)."""
     problems = []
     if len(code) > 40_000:
-        problems.append("The file is longer than 40,000 characters.")
+        return ["The file is longer than 40,000 characters."]
     try:
         tree = ast.parse(code)
     except SyntaxError as exc:
@@ -196,6 +198,19 @@ def check_code(code, spec, repo_modules=()):
 
 def clean_spec(raw, repo_modules=()):
     """Validate one proposed ability. Returns a clean dict or raises AbilityError."""
+    if not isinstance(raw, dict):
+        raise AbilityError("Ability proposal must be an object.")
+    if type(raw.get("network", False)) is not bool:
+        raise AbilityError("Ability network permission must be boolean.")
+    for field, limit in (("inputs", 4), ("packages", 6), ("triggers", 4)):
+        items = raw.get(field, [])
+        if not isinstance(items, list) or len(items) > limit or any(
+                not isinstance(item, str if field == "triggers" else dict) for item in items):
+            raise AbilityError("Invalid bounded ability " + field + ".")
+    if raw.get("approach", "standalone") not in {"standalone", "packages", "repo_code"}:
+        raise AbilityError("Unknown ability approach.")
+    if raw.get("output", "text") not in {"text", "file", "both"}:
+        raise AbilityError("Unknown ability output contract.")
     name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
     if len(name) < 3:
         raise AbilityError("missing name")
@@ -261,7 +276,19 @@ def needs_approval(spec):
 
 class AbilityForge:
     def __init__(self, actions, options=None, model_chat=None, clock=time.time):
-        options = options or {}
+        options = {} if options is None else options
+        if not isinstance(options, dict):
+            raise AbilityError("Ability configuration must be an object.")
+        for flag in ("enabled", "auto_build"):
+            if type(options.get(flag, True)) is not bool:
+                raise AbilityError("Ability " + flag + " must be boolean.")
+        bounds = {"memory_margin_gb": (0, 128), "max_repairs": (0, 5), "max_builds_per_day": (0, 100),
+                  "run_timeout_seconds": (1, 3600), "test_timeout_seconds": (1, 3600),
+                  "max_memory_mb": (32, 32768), "install_timeout_seconds": (1, 3600),
+                  "max_input_mb": (1, 2048), "idle_seconds": (0, 3600)}
+        for key, (low, high) in bounds.items():
+            if key in options and (type(options[key]) not in (int, float) or not low <= options[key] <= high):
+                raise AbilityError("Ability configuration out of bounds: " + key)
         self.actions = actions
         self.enabled = bool(options.get("enabled", True))
         self.auto_build = bool(options.get("auto_build", True))
@@ -285,6 +312,7 @@ class AbilityForge:
         self.outputs = Path(files_root) / "Abilities" if files_root else self.root / "outputs"
         self.lock = threading.RLock()
         self.build_lock = threading.Lock()  # One build or install at a time, whoever starts it.
+        self.execution_lock = threading.RLock()  # One owned child/process handle; invocations never share run folders.
         self.jobs = queue.Queue(maxsize=30)
         self.queued = set()
         self.wanted = set()           # Repositories the user asked to build once they are learned
@@ -294,6 +322,7 @@ class AbilityForge:
         self.stop = threading.Event()
         self.thread = None
         self.used_model = None
+        self.trace_id = uuid.uuid4().hex
         self.decider = None           # Tests: callable(row, detail) -> True / False / None instead of the island card
         self.next_review = float("inf")
         self.next_resume = float("inf")
@@ -429,13 +458,19 @@ class AbilityForge:
             pass
 
     def enqueue(self, full_name, why="asked", ability_id=None, start=True):
+        consent = None
+        if ability_id:
+            row = self.registry["abilities"].get(ability_id)
+            if not row:
+                return False
+            consent = self._approval_digest(row.get("candidate") or row)
         key = (full_name.casefold(), ability_id)
         with self.lock:
             if key in self.queued:
                 return False
             self.queued.add(key)
         try:
-            self.jobs.put_nowait((full_name, why, ability_id))
+            self.jobs.put_nowait((full_name, why, ability_id, consent))
         except queue.Full:
             with self.lock:
                 self.queued.discard(key)
@@ -484,7 +519,7 @@ class AbilityForge:
     def run(self):
         while not self.stop.is_set():
             try:
-                full_name, why, ability_id = self.jobs.get(timeout=1)
+                full_name, why, ability_id, consent = self.jobs.get(timeout=1)
             except queue.Empty:
                 if self.clock() >= self.next_resume:
                     self.next_resume = self.clock() + 3600  # Hourly: picks up repositories held by the daily limit.
@@ -502,7 +537,7 @@ class AbilityForge:
                     with self.build_lock:
                         self.review_pending(lambda: self.stop.is_set())
                 elif ability_id:
-                    self.install_approved(ability_id, lambda: self.stop.is_set())
+                    self.install_approved(ability_id, lambda: self.stop.is_set(), consent)
                 else:
                     self.build_repo(full_name, why, lambda: self.stop.is_set())
             except Exception as exc:  # A failed build never reaches the rest of Jarvis.
@@ -514,10 +549,20 @@ class AbilityForge:
                 self._unload_model()
 
     def _log(self, row):
+        from .repo_learning import text_data
+        def safe(value):
+            if isinstance(value, str):
+                return text_data(value)
+            if isinstance(value, dict):
+                return {k: ('[redacted]' if re.search(r'password|secret|api[_ -]?key|access[_ -]?token', str(k), re.I)
+                            else safe(v)) for k, v in value.items()}
+            if isinstance(value, list):
+                return [safe(v) for v in value]
+            return value
         try:
             self.root.mkdir(parents=True, exist_ok=True)
-            with (self.root / "builds.jsonl").open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps({"at": now_iso(), **row}, ensure_ascii=False) + "\n")
+            with self.lock, (self.root / "builds.jsonl").open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(safe({"at": now_iso(), "trace_id": self.trace_id, **row}), ensure_ascii=True) + "\n")
         except OSError:
             pass
 
@@ -626,6 +671,7 @@ class AbilityForge:
             model = self.used_model or self.pick_model()
             self.used_model = model
             client = install(requests.Session(), "research")
+            client.trust_env = False  # Private local forge prompts must never use an environment proxy.
             client.gpu_cancelled = lambda: cancelled() or self.user_busy()
             client.gpu_wait_seconds = 60
 
@@ -778,6 +824,8 @@ class AbilityForge:
                                  if isinstance(knowledge.get("manifests"), dict) else {}),
                    "readme": str(knowledge.get("readme", ""))[:2500], "license": knowledge.get("license")}
         data = self._chat(DESIGN_PROMPT, json.dumps(payload, ensure_ascii=False), DESIGN_SCHEMA, 1200, cancelled)
+        if not isinstance(data, dict) or not isinstance(data.get("abilities"), list) or len(data["abilities"]) > 2:
+            raise AbilityError("Malformed bounded ability design response.")
         # A name another repository already provides is skipped; this repository's own abilities may be upgraded.
         specs, existing = [], {a["name"].casefold() for a in self.abilities()
                                if a.get("state") != "removed" and a.get("repo") != knowledge.get("full_name")}
@@ -788,7 +836,7 @@ class AbilityForge:
             except AbilityError as exc:
                 self._log({"event": "spec_rejected", "repo": knowledge.get("full_name"), "error": str(exc),
                            "proposal": json.dumps(raw, ensure_ascii=False)[:800]})
-                rejected.append(str(raw.get("name", "?"))[:40] + ": " + str(exc))
+                rejected.append(str(raw.get("name", "?") if isinstance(raw, dict) else "?")[:40] + ": " + str(exc))
                 continue
             if spec["name"].casefold() not in existing:
                 specs.append(spec)
@@ -836,6 +884,7 @@ class AbilityForge:
         row = {**{k: v for k, v in (previous_row or {}).items() if k in {"runs", "last_run", "version"}},
                "id": ability_id, **spec, "repo": full_name,
                "repo_modules": sorted(repo_modules) if spec["approach"] == "repo_code" else [],
+               "source_commit": knowledge.get("commit"),
                "license": knowledge.get("license"), "approval": needs_approval(spec), "state": "building",
                "created_at": (previous_row or {}).get("created_at", now_iso()), "updated_at": now_iso(),
                "last_error": "", "attempts": 0}
@@ -897,6 +946,7 @@ class AbilityForge:
         live = {**live, "rebuilding": False, "candidate": {**{k: v for k, v in candidate.items() if k != "candidate"},
                                                            "version": version, "folder": str(target.relative_to(self.root)),
                                                            "state": "awaiting_approval",
+                                                           "sha256": hashlib.sha256((target / "ability.py").read_bytes()).hexdigest(),
                                                            "triggers": self.usable_triggers(candidate)}}
         self.registry["abilities"][live["id"]] = live
         self._save()
@@ -985,6 +1035,10 @@ class AbilityForge:
                 pass
 
     def _execute(self, python, folder, work, mode, inputs, row, timeout, cancelled):
+        with self.execution_lock:
+            return self._execute_owned(python, folder, work, mode, inputs, row, timeout, cancelled)
+
+    def _execute_owned(self, python, folder, work, mode, inputs, row, timeout, cancelled):
         """Run ability.py out of process. Returns the runner's result dict (never raises for ability errors)."""
         import psutil
         home = self.root / row["id"] / "home"
@@ -1053,12 +1107,12 @@ class AbilityForge:
         except OSError:
             pass
 
-    def install_approved(self, ability_id, cancelled=lambda: False):
+    def install_approved(self, ability_id, cancelled=lambda: False, expected_digest=None):
         """After 'approve ability X': create its environment, install binary wheels, fetch repo code, test, activate."""
         with self.build_lock:
-            return self._install_approved(ability_id, cancelled)
+            return self._install_approved(ability_id, cancelled, expected_digest)
 
-    def _install_approved(self, ability_id, cancelled):
+    def _install_approved(self, ability_id, cancelled, expected_digest=None):
         row = self.registry["abilities"].get(ability_id)
         live = None
         if row and row.get("candidate"):
@@ -1067,6 +1121,13 @@ class AbilityForge:
                 not (self.root / row.get("folder", "-")).is_dir():
             raise AbilityError("That ability is not waiting for approval.")
         folder = self.root / row["folder"]
+        approved_scope = self._approval_digest(row)
+        if expected_digest is not None and approved_scope != expected_digest:
+            raise AbilityError("Ability changed after queued approval; review it again.")
+        if cancelled() or self.stop.is_set():
+            raise AbilityError("Cancelled before ability installation.")
+        if hashlib.sha256((folder / "ability.py").read_bytes()).hexdigest() != row.get("sha256"):
+            raise AbilityError("Ability code changed after review; rebuild and approve it again.")
         name, full_name = row["name"], row["repo"]
         row.update(state="building", approved=True, approved_at=now_iso())
         if live is None:
@@ -1090,29 +1151,28 @@ class AbilityForge:
                 row["installed"] = frozen.stdout.split()[:60]
             if row["approach"] == "repo_code" and not (folder / "repo").is_dir():
                 self._step(full_name, "Fetching the repository's code", name)
-                self._fetch_repo(full_name, folder / "repo")
+                self._fetch_repo(full_name, folder / "repo", row.get("source_commit"))
             row["env"] = str(env)
             self._step(full_name, "Testing it safely", name)
             code = (folder / "ability.py").read_text(encoding="utf-8")
             result = self.test(row, folder, cancelled)
-            attempts = 0
-            while not result.get("ok") and attempts < self.max_repairs and not cancelled():
-                attempts += 1
-                self._step(full_name, "Repairing (" + str(attempts) + ")", name)
-                code = self.generate(row, self._reference(full_name, row), code,
-                                     result.get("error", "") + "\n" + result.get("trace", ""), cancelled)
-                problems = check_code(code, row, row.get("repo_modules", []))
-                if problems:
-                    result = {"ok": False, "error": "Static check failed:\n- " + "\n- ".join(problems)}
-                    continue
-                (folder / "ability.py").write_text(code, encoding="utf-8")
-                result = self.test(row, folder, cancelled)
+            # Repair changes executable code: a failed approved test must return to review,
+            # never silently execute a second, unreviewed model response.
             if not result.get("ok"):
                 raise AbilityError(result.get("error", "Test failed")[:300])
+            if cancelled() or self.stop.is_set():
+                raise AbilityError("Cancelled before ability promotion.")
+            if hashlib.sha256((folder / "ability.py").read_bytes()).hexdigest() != row["sha256"]:
+                raise AbilityError("Ability code changed during validation.")
+            if self._approval_digest(row) != approved_scope:
+                raise AbilityError("Ability scope changed during validation.")
             row.update(state="active", triggers=self.usable_triggers(row), python=self._python_for(row, folder),
                        last_test=result.get("text", "")[:300], last_error="", updated_at=now_iso(),
                        sha256=hashlib.sha256((folder / "ability.py").read_bytes()).hexdigest())
             row.pop("candidate", None)
+            if live is not None:
+                row["previous_version"] = {k: v for k, v in live.items()
+                                           if k not in {"candidate", "previous_version", "rebuilding"}}
             self.registry["abilities"][ability_id] = row  # One atomic registry write merges it.
             self._save()
             self.card("learned", ("Updated ability: " if live else "Added ability: ") + name, "Say \"" + self.example(row) + "\"",
@@ -1156,7 +1216,7 @@ class AbilityForge:
                  "How it works: " + (row.get("plan") or "")[:400],
                  test, "",
                  "Approve keeps it in Jarvis for good; Deny discards it and Jarvis moves on.", "",
-                 "Code (ability.py, " + str(code.count("\n") + 1) + " lines):", code[:14000]]
+                 "Code (ability.py, " + str(code.count("\n") + 1) + " lines):", code[:40000]]
         return "\n".join(lines)
 
     def ask(self, row, cancelled):
@@ -1178,7 +1238,13 @@ class AbilityForge:
             self.actions.approvals_waiting -= 1
         if answer.get("expired"):
             return None
-        return bool(answer.get("approved"))
+        return answer.get("approved") if type(answer.get("approved")) is bool else None
+
+    def _approval_digest(self, row):
+        """Bind island consent to code, version and declared capability scope."""
+        fields = ("id", "folder", "version", "repo", "source_commit", "license", "inputs", "output", "packages", "network", "approach", "triggers")
+        payload = json.dumps({k: row.get(k) for k in fields}, sort_keys=True, ensure_ascii=True)
+        return hashlib.sha256(payload.encode() + (self.root / row["folder"] / "ability.py").read_bytes()).hexdigest()
 
     def decide(self, ability_id, cancelled=lambda: False, automatic=False):
         """Show one ability; approve installs, tests and keeps it, deny discards it. Returns the outcome word."""
@@ -1194,14 +1260,21 @@ class AbilityForge:
         shown["asked_at"] = now_iso()
         self._save()
         self.card("learned", "Review ability: " + shown["name"], "Approve or deny it on the island", "From " + shown["repo"])
-        answer = self.ask(shown, cancelled)
-        if answer is None:
+        if cancelled() or self.stop.is_set():
+            return "waiting"
+        reviewed = self._approval_digest(shown)
+        answer = self.ask(copy.deepcopy(shown), cancelled)
+        if type(answer) is not bool or cancelled() or self.stop.is_set():
             self._log({"event": "undecided", "ability": ability_id})
             return "waiting"
         if not answer:
             self.deny(ability_id)
             return "denied"
         try:
+            current = self.registry["abilities"].get(ability_id, {})
+            current = current.get("candidate") or current
+            if current.get("state") != "awaiting_approval" or self._approval_digest(current) != reviewed:
+                raise AbilityError("Ability changed during approval; review it again.")
             self._install_approved(ability_id, cancelled)
             return "active"
         except Exception as exc:
@@ -1230,17 +1303,23 @@ class AbilityForge:
             outcomes[row["name"]] = self.decide(row["id"], cancelled, automatic)
         return outcomes
 
-    def _fetch_repo(self, full_name, target):
+    def _fetch_repo(self, full_name, target, commit=None):
+        if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+            raise AbilityError("Repository code needs a pinned source commit; relearn and review it.")
         learner = self._learner()
-        info = learner.info(full_name) or {}
-        raw = learner.get("https://codeload.github.com/" + full_name + "/zip/refs/heads/" + (info.get("default_branch") or "main"),
+        raw = learner.get("https://codeload.github.com/" + full_name + "/zip/" + commit,
                           timeout=60, raw=True)
         if not raw:
             raise AbilityError("GitHub did not provide the source of " + full_name + ".")
+        if len(raw) > 40 * 2 ** 20:
+            raise AbilityError("Repository archive exceeds the 40 MB limit.")
         staging = target.with_name("repo-staging")
         shutil.rmtree(staging, ignore_errors=True)
         with zipfile.ZipFile(io.BytesIO(raw)) as archive:
-            for item in archive.infolist():
+            entries = archive.infolist()
+            if len(entries) > 20000 or sum(i.file_size for i in entries) > 64 * 2 ** 20:
+                raise AbilityError("Repository extraction exceeds the bounded source budget.")
+            for item in entries:
                 parts = item.filename.replace("\\", "/").split("/")[1:]
                 if not parts or item.is_dir() or any(p in {"", ".", ".."} or ":" in p for p in parts):
                     continue
@@ -1307,14 +1386,32 @@ class AbilityForge:
         raise AbilityError("I couldn't find the file " + value + ". Say its full path, or put it in JarvisFiles.")
 
     def invoke(self, ability_id, args, cancelled=lambda: False):
+        with self.execution_lock:
+            return self._invoke(ability_id, args, cancelled)
+
+    def _invoke(self, ability_id, args, cancelled):
+        if cancelled() or self.stop.is_set():
+            raise AbilityError("Cancelled before ability invocation.")
         row = self.registry["abilities"].get(ability_id)
         if not row or row.get("state") != "active":
             raise AbilityError("That ability isn't active.")
+        if row.get("invocation_state") == "uncertain_external_write":
+            raise AbilityError("Previous external write is uncertain; inspect external state before rebuilding/reviewing.")
         folder = self.root / row["folder"]
         if hashlib.sha256((folder / "ability.py").read_bytes()).hexdigest() != row.get("sha256"):
             raise AbilityError(row["name"] + " was changed after it was tested, so I won't run it. Say 'rebuild ability " +
                                row["name"] + "'.")
-        work = self.root / row["id"] / "runs" / time.strftime("%Y%m%d-%H%M%S")
+        if row.get("network"):
+            approve = getattr(self.actions, "_approve", None)
+            if approve is None:
+                raise AbilityError("Fresh action approval is required for network abilities.")
+            reviewed = self._approval_digest(row)
+            approve("learned_ability", "Run " + row["name"] + " with network access; inputs: " +
+                    json.dumps(args, ensure_ascii=True)[:20000], cancelled)
+            if (cancelled() or self.stop.is_set() or row.get("state") != "active" or
+                    self.registry["abilities"].get(ability_id) is not row or self._approval_digest(row) != reviewed):
+                raise AbilityError("Ability changed or cancelled during action approval.")
+        work = self.root / row["id"] / "runs" / uuid.uuid4().hex
         (work / "in").mkdir(parents=True, exist_ok=True)
         inputs = {}
         if row["inputs"] and not any(str(args.get(spec["name"], "")).strip() for spec in row["inputs"]):
@@ -1344,16 +1441,44 @@ class AbilityForge:
             else:
                 inputs[spec["name"]] = value[:20000]
         try:
+            if row.get("network"):
+                row["invocation_state"] = "uncertain_external_write"
+                self._save()  # Durable before dispatch; never auto-replay after a crash or lost reply.
             result = self._execute(row["python"], folder, work, "run", inputs, row, self.run_seconds, cancelled)
         except OSError as exc:
             raise AbilityError(row["name"] + " couldn't start (" + str(exc)[:120] + "). Say 'rebuild ability " +
                                row["name"] + "'.") from exc
         row["runs"] = int(row.get("runs", 0)) + 1
         row["last_run"] = now_iso()
-        if not result.get("ok"):
+        if not isinstance(result, dict):
+            result = {"ok": False, "error": "Malformed ability result."}
+        if not result.get("ok") and result.get("failure_kind") != "output_contract":
             row["last_error"] = result.get("error", "")[:300]
             self._save()
             raise AbilityError(row["name"] + " couldn't finish: " + result.get("error", "unknown error")[:300])
+        if (result.get("failure_kind") == "output_contract" or
+                not isinstance(result.get("text", ""), str) or not isinstance(result.get("files", []), list) or
+                any(not isinstance(p, str) for p in result.get("files", [])) or
+                row["output"] in {"text", "both"} and not result.get("text", "").strip() or
+                row["output"] in {"file", "both"} and not result.get("files")):
+            row.update(state="failed", last_error="Ability output contract violation; rebuild and review before reuse.")
+            previous = row.get("previous_version")
+            if previous and previous.get("state") == "active" and previous.get("approved") is True:
+                try:
+                    old_code = self.root / previous["folder"] / "ability.py"
+                    if hashlib.sha256(old_code.read_bytes()).hexdigest() == previous.get("sha256"):
+                        self.registry["abilities"][ability_id] = {**previous,
+                            "last_error": "Rolled back after output contract violation in " + row["version"]}
+                        if row.get("invocation_state") == "uncertain_external_write":
+                            self.registry["abilities"][ability_id]["invocation_state"] = "uncertain_external_write"
+                except (OSError, KeyError):
+                    pass  # A missing/tampered older version must never become active.
+            self._save()
+            raise AbilityError(row["last_error"])
+        if cancelled() or self.stop.is_set():
+            raise AbilityError("Cancelled before ability output delivery.")
+        if row.get("network"):
+            row["invocation_state"] = "completed"
         saved = self._deliver(row, work, result.get("files", []))
         self._save()
         self._prune_runs(row["id"])

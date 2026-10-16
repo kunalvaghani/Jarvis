@@ -1,0 +1,58 @@
+[
+  {
+    "path": "jarvis/memory_curator.py",
+    "sha256": "1a91c759efba89338a8fb6d009aa50d4d46b0135eb7ce246b730130b02ff8cbb"
+  },
+  {
+    "path": "jarvis/obsidian_memory.py",
+    "sha256": "462084635470e2ef777cb22f88c3f12cd5822f03cf1b03008365d7630707d586"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "8b90fbf39c6650694f92e0280f186c633f3b7ad22335dd6b0bc1e5f167b72267"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "8123180aad0817887c3f0cee75b7529d53b0a174e86bdaba1b4c13e29d5807a6"
+  },
+  {
+    "path": "tests/test_memory_audit.py",
+    "sha256": "71f91a59af9f5793905936b6252e44a7b0191f20b91c550e7a29bd934f952711"
+  },
+  {
+    "path": "scripts/verification/verify_memory_audit.py",
+    "sha256": "ac55b620c3f40a758bdd6f2799380fdf4d3d3acb7c9920ece0f8e1dc29f9f291"
+  },
+  {
+    "path": "scripts/verification/verify_memory_journey.py",
+    "sha256": "5530f6ff9a69db69e49cb60dfb38f675fdc3dc14773756ad444f46b613e61f87"
+  },
+  {
+    "path": "scripts/verification/verify_memory_durability.py",
+    "sha256": "8232e62651d8f6c4ab4a8c8bb4be5cf3844ec056f27cc5345ccab99a450457a1"
+  },
+  {
+    "path": "scripts/verification/report_memory_audit.py",
+    "sha256": "3a3d494c6d973abf12a0a219191165def95953ef65c8de458fe44d79fddde082"
+  },
+  {
+    "path": "scripts/verification/verify_memory_artifacts.py",
+    "sha256": "53e12d4391ecc4aa9d373e3f25d1a04af2cae5f32afe25b3f836baeca8fd4580"
+  },
+  {
+    "path": "README.md",
+    "sha256": "534f140030acd1661221de80240a2c973b6dd67864ed5d283be581a1a72d2bbc"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "ae0ed3c8c48896fb7935a9886c386f4ea15b017fcc470e8af5abfe47cb981146"
+  },
+  {
+    "path": "docs/memory-apis-alerts.md",
+    "sha256": "67fae6b0bfa8bd0cd5ffc871b276811a097d2f23c5317ab336b90f26929751b3"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "1b4af772997d31fee3ef47c534ae83b612524e97ef1ae1bf9d424db06edecfe4"
+  }
+]

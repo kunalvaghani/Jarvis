@@ -1,5 +1,12 @@
 # Integrated knowledge acquisition
 
+<!-- prompt15-audit -->
+**App/site knowledge audit — 2026-10-16 IST:** Fresh surface/version and task UUID checks prevent stale context reuse; login observations suppress research/control hints; bounded inputs and numeric public versions fail closed. Source preference uses configured origin, with explicit URL version hints marked stale. Cache lookup warm median 3.52→0.45 ms on synthetic records.
+Verification: **2,576 full regression PASS / 32 skips**; **31 Prompt15 catalog PASS / 1 BLOCKED** (plugin identity namespace missing). Launcher **repair_required**. Owned headless browser fixture passed; live accounts/native GUI/model/production readiness remain unverified.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/15-app-research/inventory.md).
+<!-- /prompt15-audit -->
+
+
 Implemented 2026-10-14 IST. This extends the existing Jarvis execution authority.
 It adds no inference provider, browser, production service, memory database or
 automatic executable-code installation. See [validation](learning-validation.md)

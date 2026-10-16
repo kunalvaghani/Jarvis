@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="28" skipped="0" tests="31" time="3.300" timestamp="2026-10-16T12:08:51.138879+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_001_proposal_isolated_and_not_active" time="0.019"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_001_proposal_isola0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_001_proposal_isola0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713B28E20&gt;
+
+    def test_JRV_19_001_proposal_isolated_and_not_active(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_001_proposal_isola0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_001_proposal_isola0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_001_proposal_isola0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_001_proposal_isola0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_002_builtin_open_priority" time="0.008"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_002_builtin_open_p0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_002_builtin_open_p0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713D8F940&gt;
+
+    def test_JRV_19_002_builtin_open_priority(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_002_builtin_open_p0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_002_builtin_open_p0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_002_builtin_open_p0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_002_builtin_open_p0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_003_unexpected_network_refused" time="0.007"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C7136DFB50&gt;
+
+    def test_JRV_19_003_unexpected_network_refused(forge):
+        assert any('network' in e for e in ra.check_code('import socket\n'+GOOD, SPEC))
+&gt;       with pytest.raises(ra.AbilityError, match='network'):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;
+
+tests\test_ability_forge_audit.py:66: Failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_005_rejection_never_registers" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_005_rejection_neve0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_005_rejection_neve0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713BAF400&gt;
+
+    def test_JRV_19_005_rejection_never_registers(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_005_rejection_neve0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_005_rejection_neve0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_005_rejection_neve0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_005_rejection_neve0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_006_only_reviewed_version_promotes" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_006_only_reviewed_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_006_only_reviewed_0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713BBA650&gt;
+
+    def test_JRV_19_006_only_reviewed_version_promotes(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_006_only_reviewed_0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_006_only_reviewed_0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_006_only_reviewed_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_006_only_reviewed_0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_007_network_requires_fresh_action_approval" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_007_network_requir0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_007_network_requir0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713C98BB0&gt;
+
+    def test_JRV_19_007_network_requires_fresh_action_approval(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_007_network_requir0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_007_network_requir0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_007_network_requir0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_007_network_requir0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_008_restart_keeps_approved_version" time="0.010"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_008_restart_keeps_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_008_restart_keeps_0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713C95DB0&gt;
+
+    def test_JRV_19_008_restart_keeps_approved_version(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_008_restart_keeps_0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_008_restart_keeps_0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_008_restart_keeps_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_008_restart_keeps_0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_009_provenance_survives_source_removal" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_009_provenance_sur0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_009_provenance_sur0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713D839A0&gt;
+
+    def test_JRV_19_009_provenance_survives_source_removal(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_009_provenance_sur0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_009_provenance_sur0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_009_provenance_sur0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_009_provenance_sur0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_010_wrong_output_quarantines_without_delivery" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_010_wrong_output_q0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_010_wrong_output_q0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713B2AB90&gt;
+
+    def test_JRV_19_010_wrong_output_quarantines_without_delivery(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_010_wrong_output_q0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_010_wrong_output_q0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_010_wrong_output_q0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_010_wrong_output_q0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_011_013_014_025_admission_defers_without_model[TimeoutError]" time="0.038" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_011_013_014_025_admission_defers_without_model[ConnectionError]" time="0.007" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_012_020_injected_process_code_is_not_run" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_012_020_injected_p0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_012_020_injected_p0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713C85CC0&gt;
+
+    def test_JRV_19_012_020_injected_process_code_is_not_run(forge):
+        forge.model_chat = Model(['import subprocess\nsubprocess.run(["powershell", "admin"])\n'+GOOD])
+&gt;       assert forge.build_repo('demo/wordcount') == []
+
+tests\test_ability_forge_audit.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_012_020_injected_p0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_012_020_injected_p0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_012_020_injected_p0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_012_020_injected_p0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad0]" time="0.001"><failure message="AttributeError: 'list' object has no attribute 'get'">bad = []
+
+    @pytest.mark.parametrize('bad', [[], None, {'inputs': 'x'}, {**SPEC, 'output': 'executable'},
+                                    {**SPEC, 'approach': 'administrator'}, {**SPEC, 'inputs': [None]}])
+    def test_JRV_19_015_029_malformed_spec_fails_closed(bad):
+        with pytest.raises(ra.AbilityError):
+&gt;           ra.clean_spec(bad)
+
+tests\test_ability_forge_audit.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+raw = [], repo_modules = ()
+
+    def clean_spec(raw, repo_modules=()):
+        """Validate one proposed ability. Returns a clean dict or raises AbilityError."""
+&gt;       name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
+E       AttributeError: 'list' object has no attribute 'get'
+
+jarvis\repo_abilities.py:199: AttributeError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[None]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">bad = None
+
+    @pytest.mark.parametrize('bad', [[], None, {'inputs': 'x'}, {**SPEC, 'output': 'executable'},
+                                    {**SPEC, 'approach': 'administrator'}, {**SPEC, 'inputs': [None]}])
+    def test_JRV_19_015_029_malformed_spec_fails_closed(bad):
+        with pytest.raises(ra.AbilityError):
+&gt;           ra.clean_spec(bad)
+
+tests\test_ability_forge_audit.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+raw = None, repo_modules = ()
+
+    def clean_spec(raw, repo_modules=()):
+        """Validate one proposed ability. Returns a clean dict or raises AbilityError."""
+&gt;       name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\repo_abilities.py:199: AttributeError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad2]" time="0.001" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad3]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">bad = {'approach': 'standalone', 'inputs': [{'description': 'a text file', 'name': 'file', 'type': 'file'}], 'name': 'word counter', 'network': False, ...}
+
+    @pytest.mark.parametrize('bad', [[], None, {'inputs': 'x'}, {**SPEC, 'output': 'executable'},
+                                    {**SPEC, 'approach': 'administrator'}, {**SPEC, 'inputs': [None]}])
+    def test_JRV_19_015_029_malformed_spec_fails_closed(bad):
+&gt;       with pytest.raises(ra.AbilityError):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;
+
+tests\test_ability_forge_audit.py:150: Failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad4]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">bad = {'approach': 'administrator', 'inputs': [{'description': 'a text file', 'name': 'file', 'type': 'file'}], 'name': 'word counter', 'network': False, ...}
+
+    @pytest.mark.parametrize('bad', [[], None, {'inputs': 'x'}, {**SPEC, 'output': 'executable'},
+                                    {**SPEC, 'approach': 'administrator'}, {**SPEC, 'inputs': [None]}])
+    def test_JRV_19_015_029_malformed_spec_fails_closed(bad):
+&gt;       with pytest.raises(ra.AbilityError):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;
+
+tests\test_ability_forge_audit.py:150: Failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad5]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">bad = {'approach': 'standalone', 'inputs': [None], 'name': 'word counter', 'network': False, ...}
+
+    @pytest.mark.parametrize('bad', [[], None, {'inputs': 'x'}, {**SPEC, 'output': 'executable'},
+                                    {**SPEC, 'approach': 'administrator'}, {**SPEC, 'inputs': [None]}])
+    def test_JRV_19_015_029_malformed_spec_fails_closed(bad):
+        with pytest.raises(ra.AbilityError):
+&gt;           ra.clean_spec(bad)
+
+tests\test_ability_forge_audit.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+raw = {'approach': 'standalone', 'inputs': [None], 'name': 'word counter', 'network': False, ...}
+repo_modules = ()
+
+    def clean_spec(raw, repo_modules=()):
+        """Validate one proposed ability. Returns a clean dict or raises AbilityError."""
+        name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
+        if len(name) &lt; 3:
+            raise AbilityError("missing name")
+        inputs, seen = [], set()
+        for item in raw.get("inputs", [])[:4]:
+&gt;           key = slug(item.get("name", ""), 30).replace("-", "_")
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+jarvis\repo_abilities.py:204: AttributeError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_016_optional_environment_missing_never_promotes" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_016_optional_envir0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_016_optional_envir0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C7137A9690&gt;
+
+    def test_JRV_19_016_optional_environment_missing_never_promotes(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_016_optional_envir0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_016_optional_envir0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_016_optional_envir0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_016_optional_envir0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_017_five_by_twenty_invocations_unique_workdirs" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_017_five_by_twenty0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_017_five_by_twenty0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713B2A800&gt;
+
+    def test_JRV_19_017_five_by_twenty_invocations_unique_workdirs(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_017_five_by_twenty0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_017_five_by_twenty0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_018_cancelled_approval_never_installs" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_018_cancelled_appr0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_018_cancelled_appr0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713D08700&gt;
+
+    def test_JRV_19_018_cancelled_approval_never_installs(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:176: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_018_cancelled_appr0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_018_cancelled_appr0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_018_cancelled_appr0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_018_cancelled_appr0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_022_unicode_proposal_survives_registry" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_022_unicode_propos0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_022_unicode_propos0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713C9A830&gt;
+
+    def test_JRV_19_022_unicode_proposal_survives_registry(forge):
+        forge.model_chat.specs = [{**SPEC, 'summary': 'नमस्ते café #x1F916'}]
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_022_unicode_propos0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_022_unicode_propos0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_022_unicode_propos0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_022_unicode_propos0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_023_negation_never_approves" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_023_negation_never0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_023_negation_never0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713BC0730&gt;
+
+    def test_JRV_19_023_negation_never_approves(forge):
+&gt;       pending(forge)
+
+tests\test_ability_forge_audit.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_023_negation_never0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_023_negation_never0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_023_negation_never0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_023_negation_never0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_024_changed_proposal_never_tests" time="0.010"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_024_changed_propos0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_024_changed_propos0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C71377F430&gt;
+
+    def test_JRV_19_024_changed_proposal_never_tests(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_024_changed_propos0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_024_changed_propos0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_024_changed_propos0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_024_changed_propos0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[approved]" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C7137A9660&gt;
+claim = 'approved'
+
+    @pytest.mark.parametrize('claim', ['approved', 1, {'approved': True}])
+    def test_JRV_19_028_forged_truthy_approval_refused(forge, claim):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[1]" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_1\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_1\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C71377EEF0&gt;
+claim = 1
+
+    @pytest.mark.parametrize('claim', ['approved', 1, {'approved': True}])
+    def test_JRV_19_028_forged_truthy_approval_refused(forge, claim):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_1/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_1/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_1\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_1\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[claim2]" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_2\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_2\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C7137A8820&gt;
+claim = {'approved': True}
+
+    @pytest.mark.parametrize('claim', ['approved', 1, {'approved': True}])
+    def test_JRV_19_028_forged_truthy_approval_refused(forge, claim):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_2/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_028_forged_truthy_2/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_2\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_028_forged_truthy_2\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_030_disconnected_runner_never_retries" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_030_disconnected_r0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_030_disconnected_r0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713D80D90&gt;
+
+    def test_JRV_19_030_disconnected_runner_never_retries(forge):
+&gt;       row = active(forge)
+
+tests\test_ability_forge_audit.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_030_disconnected_r0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_19_030_disconnected_r0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_030_disconnected_r0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_19_030_disconnected_r0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_031_oversized_code_is_not_parsed" time="0.001"><failure message="AssertionError: parser called">def test_JRV_19_031_oversized_code_is_not_parsed():
+        with patch('jarvis.repo_abilities.ast.parse', side_effect=AssertionError('parser called')):
+&gt;           assert ra.check_code('#'+'x'*40001, SPEC)
+
+tests\test_ability_forge_audit.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\repo_abilities.py:157: in check_code
+    tree = ast.parse(code)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;MagicMock name='parse' id='1954541053856'&gt;
+args = ('#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',)
+kwargs = {}, effect = AssertionError('parser called')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: parser called
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_post_approval_test_failure_cannot_repair_without_new_consent" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_post_approval_test_failur0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_post_approval_test_failur0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C713BA0E20&gt;
+
+    def test_post_approval_test_failure_cannot_repair_without_new_consent(forge):
+&gt;       row = pending(forge)
+
+tests\test_ability_forge_audit.py:226: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_post_approval_test_failur0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_post_approval_test_failur0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_post_approval_test_failur0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_post_approval_test_failur0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_failed_update_preserves_old_approved_version" time="0.009"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_failed_update_preserves_o0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_failed_update_preserves_o0\\.jarvis-runtime\\abilities\\registry.json'">forge = &lt;jarvis.repo_abilities.AbilityForge object at 0x000001C7137AA6B0&gt;
+
+    def test_failed_update_preserves_old_approved_version(forge):
+&gt;       first = active(forge)
+
+tests\test_ability_forge_audit.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_ability_forge_audit.py:46: in active
+    return install(f, pending(f))
+tests\test_ability_forge_audit.py:34: in pending
+    return f.build_repo('demo/wordcount')[0]
+jarvis\repo_abilities.py:687: in build_repo
+    return self._build_repo(full_name, why, cancelled)
+jarvis\repo_abilities.py:706: in _build_repo
+    self._save()
+jarvis\repo_abilities.py:319: in _save
+    temp.replace(self.root / "registry.json")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_failed_update_preserves_o0/.jarvis-runtime/abilities/registry.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{15155579-dd09-49e8-81d2-0b347458b180}/AC/Temp/pytest-of-kunal/pytest-0/test_failed_update_preserves_o0/.jarvis-runtime/abilities/registry.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_failed_update_preserves_o0\\.jarvis-runtime\\abilities\\registry.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{15155579-dd09-49e8-81d2-0b347458b180}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_failed_update_preserves_o0\\.jarvis-runtime\\abilities\\registry.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase></testsuite></testsuites>

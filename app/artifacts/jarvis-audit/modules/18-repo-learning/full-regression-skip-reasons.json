@@ -1,0 +1,130 @@
+[
+  {
+    "node": "tests.test_app_research_audit::test_JRV_15_010_plugin_scope_missing",
+    "reason": "BLOCKED: no production plugin identity/version namespace; host UI cannot prove plugin scope."
+  },
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-001]",
+    "reason": "BLOCKED: Dedicated medium.en WER/latency session requires free GPU headroom; only 1396 MiB free was observed and no labeled quiet-room corpus is supplied."
+  },
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-002]",
+    "reason": "BLOCKED: No labeled background-TV audio corpus with channel/source annotations; textual echo tests cannot measure acoustic false activation rate."
+  },
+  {
+    "node": "tests.test_audit_completion_cases::test_voice_completion[JRV-04-003]",
+    "reason": "BLOCKED: No labeled long-pause utterance corpus or reference word timings; 0.8-second VAD endpoint policy cannot certify arbitrary pause intent."
+  },
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-007]",
+    "reason": "BLOCKED: owned fixture download verified, but no production verified-download/save adapter exists; adding an ability requires review/authorization."
+  },
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-009]",
+    "reason": "BLOCKED: multiple tabs fail closed; an explicit reviewed tab-selection adapter is absent. No silent popup retargeting."
+  },
+  {
+    "node": "tests.test_deliberation_audit::test_catalog[JRV-09-006]",
+    "reason": "BLOCKED: no deterministic unfamiliar-program research-before-action gate exists; model/planner research is advisory, not guaranteed. No program installed or executed."
+  },
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-004]",
+    "reason": "BLOCKED: live150% DPI/multi-monitor click validation not authorized; no personal display settings changed. Physical-coordinate fixture passed separately."
+  },
+  {
+    "node": "tests.test_desktop_control_audit::test_catalog[JRV-13-007]",
+    "reason": "BLOCKED: real UAC/secure-desktop validation would require elevation/personal OS state changes; no bypass attempted. Permission-denial fixture passed separately."
+  },
+  {
+    "node": "tests.test_gpu_scheduler_audit::test_catalog[JRV-08-012]",
+    "reason": "BLOCKED: forcible interruption of stuck native CUDA kernels requires a separate owned-process live fault test; cooperative shared leases are covered by Phase 2 fixtures."
+  },
+  {
+    "node": "tests.test_memory_audit::test_JRV_16_004_supported_forget_broader_erase_blocked",
+    "reason": "BLOCKED: fact forget does not purge raw SQLite turns, summaries, Daily notes or in-flight paraphrased extraction; no cross-store erase/tombstone protocol."
+  },
+  {
+    "node": "tests.test_memory_audit::test_JRV_16_006_unavailable_vault_queue_boundary",
+    "reason": "BLOCKED: no durable unavailable-vault write outbox; bounded model job queue is not durable write recovery."
+  },
+  {
+    "node": "tests.test_memory_audit::test_JRV_16_011_current_document_over_history",
+    "reason": "BLOCKED: no universal freshness reconciliation between curated facts/summaries and current documents; module06 selector proofs cover only its scoped paths."
+  },
+  {
+    "node": "tests.test_memory_audit::test_JRV_16_032_error_is_categorical",
+    "reason": "BLOCKED: memory curator errors have no per-operation correlation IDs; redaction passes but end-to-end memory lifecycle trace/readback correlation is incomplete."
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[simultaneous_cuda]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify simultaneous_cuda"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[laya_25]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify laya_25"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[lora_load]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify lora_load"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[legacy_alias]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify legacy_alias"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[ttfa]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify ttfa"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[live_hotkeys]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_hotkeys"
+  },
+  {
+    "node": "tests.test_phase2_gpu_models_voice_ui::test_live_acceptance_gate[live_mind_dag]",
+    "reason": "BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_mind_dag"
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-002]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-009]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  },
+  {
+    "node": "tests.test_rag_documents_audit::test_JRV_17_003_cross_file_conflict_missing",
+    "reason": "BLOCKED: answer API selects one document; no multi-document conflict arbitration/citations."
+  },
+  {
+    "node": "tests.test_rag_documents_audit::test_JRV_17_005_long_pdf_exact_cap",
+    "reason": "BLOCKED: returned text is bounded; in-process pypdf content-stream parsing has no hard RAM/time sandbox for hostile long PDFs."
+  },
+  {
+    "node": "tests.test_rag_documents_audit::test_JRV_17_012_faithfulness_gate_missing",
+    "reason": "BLOCKED: page-membership checks cannot prove semantic entailment; no independently validated citation-faithfulness oracle."
+  },
+  {
+    "node": "tests.test_rag_documents_audit::test_JRV_17_032_traces_missing",
+    "reason": "BLOCKED: document/model/spill lifecycle has no unified redacted per-operation trace IDs."
+  },
+  {
+    "node": "tests.test_repo_learning_audit::test_JRV_18_003_claims_are_not_validation",
+    "reason": "BLOCKED: static symbols/test-file presence and untrusted labels do not behaviorally verify exaggerated README claims; no authorized sandbox test oracle for arbitrary repos."
+  },
+  {
+    "node": "tests.test_repo_learning_audit::test_JRV_18_019_restart_readback",
+    "reason": "BLOCKED: completed metadata reopens, but in-flight learning jobs have no durable checkpoint/worker crash-restart contract."
+  },
+  {
+    "node": "tests.test_skill_selection_audit::test_catalog[JRV-11-002]",
+    "reason": "BLOCKED: no validated arbitrary PDF-edit adapter offered; current real utility proof stale. Missing installer/validation not bypassed. Fixture availability gate is separately tested."
+  },
+  {
+    "node": "tests.test_voice_tts_audit::test_JRV_05_004_real_pronunciation_requires_listening_validation",
+    "reason": "BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately."
+  },
+  {
+    "node": "tests.test_voice_tts_audit::test_speech_catalog[JRV-05-010]",
+    "reason": "BLOCKED: STT and F5 are outside the Ollama lease coordinator; Qwen speech reservation is unit-tested, but no shared STT/F5 lease admission or controlled contention calibration exists. No concurrent heavyweight models launched."
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "path": "jarvis/repo_abilities.py",
+    "sha256": "0d72ac3fdb9560f98fea016ea320c411e7f1e7b8ef9914114703f03eb6376272"
+  },
+  {
+    "path": "jarvis/ability_runner.py",
+    "sha256": "f0a38549f355358ad7e646f1a1fd2a1fd3dd0aa2f3ed9edbd61d21a3cf33479c"
+  },
+  {
+    "path": "tests/test_ability_forge_audit.py",
+    "sha256": "44bd4f46a89293952293605c3c12a210b4010fe1d42e9eddbfb9bdb7c84eb247"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "21d5701f67bdf9dc4100a72fbdd28042473a00cc3933c61e6c772c021e769ace"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "bb07779a2a4caf3ab1bd6c1b86ee6b7a88bbad8e5f2c3b9bca50ad1a9bcf39c9"
+  },
+  {
+    "path": "scripts/verification/verify_ability_forge_audit.py",
+    "sha256": "d8ae01a3ea46a175a30de73f54d48232c0d588934bff5808ae8f875d3b83a430"
+  },
+  {
+    "path": "scripts/verification/report_ability_forge_audit.py",
+    "sha256": "d6bcb6f74b56ace515317333730760cdd0f0a934381869fe9b1bca605448b55a"
+  },
+  {
+    "path": "scripts/verification/verify_ability_forge_artifacts.py",
+    "sha256": "5ec943539db41dbe6d77588f373c1a42e5efe1b209f6f1ad74f6386a10c3770f"
+  },
+  {
+    "path": "README.md",
+    "sha256": "6539753bf117dfe5baa9ddfeb9f470d5f26f8349ff9913e34ee25f8001de4024"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "152cd7faac9026fb3ba655517eca42ef8691d473c7064b27162ffe36363df47b"
+  },
+  {
+    "path": "docs/repo-abilities.md",
+    "sha256": "2ba106671aa9459bf1d155c99a86ec1caec9288521fab5a905a034adb6f9cfa7"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "d03abe9cc1432f1abdf0d076cfb4c60b03ea378a2c4f0b375c668d665e218b54"
+  }
+]

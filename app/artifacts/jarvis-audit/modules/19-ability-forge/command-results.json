@@ -1,0 +1,83 @@
+[
+  {
+    "evidence": "baseline.xml",
+    "PASS": 57,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 48.759
+  },
+  {
+    "evidence": "reproduced.xml",
+    "PASS": 3,
+    "FAIL": 28,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 3.3
+  },
+  {
+    "evidence": "reproduced-authorized.xml",
+    "PASS": 13,
+    "FAIL": 18,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 2.983
+  },
+  {
+    "evidence": "targeted-first.xml",
+    "PASS": 59,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 26.092
+  },
+  {
+    "evidence": "targeted-second.xml",
+    "PASS": 39,
+    "FAIL": 1,
+    "SKIPPED": 2,
+    "collection_errors": 0,
+    "seconds": 3.13
+  },
+  {
+    "evidence": "targeted-third.xml",
+    "PASS": 0,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 0.005
+  },
+  {
+    "evidence": "targeted-fourth.xml",
+    "PASS": 175,
+    "FAIL": 0,
+    "SKIPPED": 1,
+    "collection_errors": 0,
+    "seconds": 64.5
+  },
+  {
+    "evidence": "targeted-fifth.xml",
+    "PASS": 77,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 27.716
+  },
+  {
+    "evidence": "cases-and-contracts.xml",
+    "PASS": 196,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "collection_errors": 0,
+    "seconds": 66.519
+  },
+  {
+    "evidence": "full-regression.xml",
+    "PASS": 2756,
+    "FAIL": 0,
+    "SKIPPED": 32,
+    "seconds_cli": 442.1,
+    "warning": "1 existing pywinauto Revert to STA COM threading mode warning; no assertion failure",
+    "frozen_files": 381
+  }
+]

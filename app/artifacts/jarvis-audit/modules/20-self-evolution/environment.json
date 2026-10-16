@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-16 IST",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "ram_bytes": 33656832000,
+  "packages": {
+    "pip": "26.2.1",
+    "requests": "2.34.2",
+    "pytest": "8.4.2",
+    "psutil": "7.2.2"
+  },
+  "git": "git version 2.49.1.windows.1",
+  "commit": "e1a33a0944b5cd725e1a76a72eda228513e45963",
+  "branch": "audit/12-tool-registry",
+  "frozen_files": 382,
+  "gpu": {
+    "name": "NVIDIA GeForce RTX3050 Laptop GPU",
+    "memory_mib": 4096,
+    "source": "same-machine read-only nvidia-smi verification in module19; no native inference stress in module20"
+  }
+}

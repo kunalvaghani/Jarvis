@@ -1,0 +1,18 @@
+[
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-007]",
+    "reason": "BLOCKED: owned fixture download verified, but no production verified-download/save adapter exists; adding an ability requires review/authorization."
+  },
+  {
+    "node": "tests.test_browser_playwright_audit::test_catalog[JRV-14-009]",
+    "reason": "BLOCKED: multiple tabs fail closed; an explicit reviewed tab-selection adapter is absent. No silent popup retargeting."
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-002]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  },
+  {
+    "node": "tests.test_questions_context_audit::test_catalog[JRV-06-009]",
+    "reason": "BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized."
+  }
+]

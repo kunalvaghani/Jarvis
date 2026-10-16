@@ -1,0 +1,7 @@
+.venv/Scripts/python.exe -m pytest tests/test_automation_upgrade.py tests/test_independent_cursor.py tests/test_windows_commands.py tests/test_hermes_skills.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/14-browser-playwright/existing-baseline.xml
+.venv/Scripts/python.exe scripts/verification/verify_browser_playwright_audit.py
+.venv/Scripts/python.exe scripts/verification/verify_browser_dialog_audit.py
+.venv/Scripts/python.exe -m pytest tests/test_browser_playwright_audit.py tests/test_automation_upgrade.py tests/test_independent_cursor.py tests/test_windows_commands.py tests/test_hermes_skills.py tests/test_audit_result_accounting.py tests/test_questions_context_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/14-browser-playwright/cases-and-contracts.xml
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/14-browser-playwright/full-regression.xml
+.venv/Scripts/python.exe -m jarvis.launcher --check
+.venv/Scripts/python.exe scripts/verification/report_browser_playwright_audit.py

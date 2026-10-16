@@ -1,3 +1,5 @@
-# Rollback / resume
+# Scoped rollback and deterministic resume
 
-[Scoped restoration and exact ID continuation](../../rollback.md). Preserve user changes and credentials.
+Preserve the current dirty tree and existing user work. Review source.patch/source-hashes.json, reverse only Prompt14 hunks; never git reset/clean or replace the whole checkout. Ignored preimages .jarvis-runtime/jarvis-audit/module14-pre/<relative-path-with-__>, root overview root-README.md. app/ canonical, InsTAREELS alias not separately edited. No commit/deploy/install/browser download to undo. Preserve completed evidence and later edits.
+
+Run commands.txt with existing main environment/installed Chrome; benchmark before catalog. <=2 small workers, no concurrent heavy model/GPU work. Headless contexts are temporary, all generic fixture traffic intercepted/aborted; redirect fixture allows only its owned loopback origin. Never use the production profile or real account to make a fixture pass. JRV-14-007 requires a reviewed scoped download/save/verification adapter; JRV-14-009 needs explicit scoped tab selection. Both are new capability work requiring appropriate review/authorization. Current authentication/form/autosave limits remain. Exact global remaining IDs are in ../../remaining-case-ids.txt; read the next requested prompt first. Full evidence must match accepted source; reporter rejects failed/stale XML. No blanket production certificate.

@@ -5,7 +5,7 @@ Remember -> Repeat loop over the subsystems Jarvis already has. It does NOT reim
 
 - GitHub discovery, download and static understanding: jarvis/repo_learning.py (RepoLearner),
   repo_analysis.py, repo_acquisition.py.
-- Capability extraction, sandboxed generation, validation, registry and activation:
+- Capability extraction, guarded generation, validation, registry and activation:
   jarvis/repo_abilities.py (AbilityForge), which auto-builds abilities from a learned repo.
 - Idle detection style and resource gating: jarvis/anticipation.py, gpu_scheduler.py.
 - Persistent memory: Obsidian via obsidian_memory.py / skill_memory.py.
@@ -20,13 +20,15 @@ What this module adds (the genuine gaps):
    records the outcome, mirrors to Obsidian, and shows an island "capability" card. Checkpointed and
    resumable; preempted by any user task.
 4. SafeEvolutionManager - gated self-modification of Jarvis's own source: propose -> isolate worktree
-   -> build -> test -> require explicit approval -> deploy with backup -> roll back on regression.
+   -> build -> test -> require explicit approval -> deploy with backup -> explicit stale-safe rollback.
    Never autonomous, never silently disables its checks.
 
 Downloaded code and repository text remain untrusted (handled by the reused subsystems). Nothing here
 executes repository code in-process; abilities run out of process through the existing forge.
 """
 import json
+import hashlib
+import math
 import os
 import re
 import shutil
@@ -34,6 +36,7 @@ import subprocess
 import sys
 import threading
 import time
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -44,6 +47,7 @@ DEFAULTS = dict(
     cooldown_seconds=600,     # Between learning jobs.
     max_jobs_per_day=4,
     max_backlog=200,
+    max_attempts=3,
     min_available_mb=3072,    # Skip learning when free RAM is low.
     max_cpu_percent=55,       # Skip when the machine is already busy.
     explore=True,             # When idle with no detected gaps, study a relevant topic anyway.
@@ -75,13 +79,48 @@ def _now():
 
 
 def _settings(options):
-    merged = dict(DEFAULTS)
+    if options is not None and not isinstance(options, dict):
+        raise ValueError('self_evolution must be an object')
+    merged = {**DEFAULTS,'weights':dict(DEFAULTS['weights']),
+              'self_modification':dict(DEFAULTS['self_modification']),'explore_topics':list(DEFAULTS['explore_topics'])}
     for key, value in (options or {}).items():
         if key in {"weights", "self_modification"} and isinstance(value, dict):
             merged[key] = {**DEFAULTS[key], **value}
         elif key in merged:
             merged[key] = value
+    for flag in ('enabled','explore'):
+        if type(merged[flag]) is not bool:raise ValueError('Invalid evolution boolean: '+flag)
+    ranges={'idle_seconds':(0,3600),'poll_seconds':(.1,60),'cooldown_seconds':(0,86400),
+            'max_jobs_per_day':(0,100),'max_backlog':(1,1000),'max_attempts':(1,10),
+            'min_available_mb':(0,65536),'max_cpu_percent':(0,100)}
+    for key,(low,high) in ranges.items():
+        v=merged[key]
+        if type(v) not in (int,float) or not math.isfinite(v) or not low<=v<=high:
+            raise ValueError('Invalid evolution bound: '+key)
+        if key in {'max_jobs_per_day','max_backlog','max_attempts'} and type(v) is not int:
+            raise ValueError('Evolution count must be integer: '+key)
+    if not isinstance(merged['weights'],dict) or any(type(v) not in (int,float) or not math.isfinite(v) or not 0<=v<=100 for v in merged['weights'].values()):
+        raise ValueError('Invalid evolution weights')
+    if not isinstance(merged['explore_topics'],list) or len(merged['explore_topics'])>100 or any(not isinstance(t,str) or len(t)>180 for t in merged['explore_topics']):
+        raise ValueError('Invalid bounded evolution topics')
+    modification=merged['self_modification']
+    if not isinstance(modification,dict) or type(modification.get('enabled')) is not bool or modification.get('auto_deploy') is not False:
+        raise ValueError('Self-modification requires boolean enabled and auto_deploy=false')
     return merged
+
+
+def _battery_saver():
+    """Read Windows power-saving state; unknown Windows state defers optional work."""
+    if os.name!='nt':return False
+    try:
+        import ctypes
+        class Power(ctypes.Structure):
+            _fields_=[('ac',ctypes.c_ubyte),('flag',ctypes.c_ubyte),('percent',ctypes.c_ubyte),
+                      ('saver',ctypes.c_ubyte),('life',ctypes.c_ulong),('full',ctypes.c_ulong)]
+        status=Power()
+        if not ctypes.windll.kernel32.GetSystemPowerStatus(ctypes.byref(status)):return True
+        return bool(status.saver)
+    except Exception:return True
 
 
 def _signature(kind, subject):
@@ -98,6 +137,10 @@ class CapabilityGapDetector:
         gaps = {}
 
         def add(kind, subject, summary, evidence, query, usefulness=2.0, performance=1.0):
+            from .repo_learning import public_query
+            from .anticipation import safe_topic
+            if not safe_topic(str(subject)) or not public_query(str(query)) or re.search(r"\b(?:don't|do not|never|stop|cancel|reject|deny)\b",str(subject),re.I):
+                return
             sig = _signature(kind, subject)
             if sig not in gaps:
                 gaps[sig] = {"signature": sig, "kind": kind, "subject": str(subject)[:80],
@@ -182,16 +225,32 @@ class SelfEvolution:
         self.checkpoint_path = self.directory / "checkpoint.json"
         self.backlog = []
         self.storage_failed = False
+        self.trace_id = uuid.uuid4().hex
+        self._resource_checked = (-float('inf'),False)
         self._load()
 
     # --- persistence (crash-safe, atomic) --------------------------------------------------------
     def _load(self):
         try:
             if self.backlog_path.is_file():
+                if self.backlog_path.stat().st_size>2**20:raise ValueError('backlog exceeds limit')
                 data = json.loads(self.backlog_path.read_text(encoding="utf-8"))
+                if not isinstance(data,dict):raise ValueError('backlog must be an object')
                 if isinstance(data, dict) and isinstance(data.get("items"), list):
                     self.backlog = [i for i in data["items"] if isinstance(i, dict) and i.get("signature")]
-        except (OSError, ValueError):
+                    for row in self.backlog:
+                        if (not isinstance(row['signature'],str) or len(row['signature'])>200 or
+                                type(row.get('attempts',0)) is not int or row.get('attempts',0)<0 or
+                                type(row.get('score',0)) not in (int,float) or not math.isfinite(row.get('score',0))):
+                            raise ValueError('Invalid backlog row')
+                    self.backlog=self.backlog[-self.options['max_backlog']:]
+                    self.jobs_today=[v for v in data.get('jobs_today',[]) if isinstance(v,str)][-100:]
+                    for row in self.backlog:
+                        if row.get('status')=='learning':
+                            stage=row.get('stage','unknown')
+                            row['status']='pending' if stage=='discover' else 'needs_review'
+                            row['outcome']={'detail':'Interrupted '+stage+'; fresh state review required for uncertain writes','trace_id':self.trace_id}
+        except (OSError, ValueError, TypeError, RecursionError):
             self.storage_failed = True
 
     def _save(self):
@@ -201,21 +260,27 @@ class SelfEvolution:
             self.directory.mkdir(parents=True, exist_ok=True)
             tmp = self.backlog_path.with_suffix(".tmp")
             tmp.write_text(json.dumps({"version": 1, "updated": _now(),
-                                       "items": self.backlog[-self.options["max_backlog"]:]},
-                                      ensure_ascii=False, indent=1), encoding="utf-8")
+                                       "jobs_today":self.jobs_today[-100:], "items": self.backlog[-self.options["max_backlog"]:]},
+                                      ensure_ascii=True, indent=1), encoding="utf-8")
             tmp.replace(self.backlog_path)
         except OSError:
             self.storage_failed = True
 
     def _write_checkpoint(self, item, stage, extra=None):
+        item['stage']=stage
+        if extra:item.update(extra)
+        self._save()
+        if self.storage_failed:return False
         try:
             self.directory.mkdir(parents=True, exist_ok=True)
             tmp = self.checkpoint_path.with_suffix(".tmp")
             tmp.write_text(json.dumps({"signature": item["signature"], "stage": stage,
-                                       "at": _now(), **(extra or {})}, ensure_ascii=False), encoding="utf-8")
+                                       "trace_id":self.trace_id,"at": _now(), **(extra or {})}, ensure_ascii=True), encoding="utf-8")
             tmp.replace(self.checkpoint_path)
+            return True
         except OSError:
-            pass
+            self.storage_failed=True
+            return False
 
     def _clear_checkpoint(self):
         try:
@@ -277,6 +342,7 @@ class SelfEvolution:
                 self._seed_explore(existing)  # Idle with nothing to fix -> study a relevant topic anyway.
             for row in self.backlog:
                 row["score"] = self.score(row)
+            self.backlog=self.backlog[-self.options['max_backlog']:]
             self._save()
             return list(self.backlog)
 
@@ -295,15 +361,16 @@ class SelfEvolution:
                 return
         # Every topic has been tried; re-queue the oldest that did not yield a capability, to retry later.
         stale = sorted((i for i in self.backlog if i.get("kind") == "explore"
-                        and i.get("status") in {"exhausted", "failed"}), key=lambda i: i.get("created", ""))
+                        and i.get("status") in {"exhausted", "failed"}
+                        and i.get('attempts',0)<self.options['max_attempts']), key=lambda i: i.get("created", ""))
         if stale:
             stale[0]["status"] = "pending"
 
     def next_job(self):
         with self.lock:
-            pending = [i for i in self.backlog if i.get("status") == "pending"]
-            pending.sort(key=lambda i: (-i.get("score", 0), i.get("created", "")))
-            return pending[0] if pending else None
+            return min((i for i in self.backlog if i.get("status") == "pending"
+                        and i.get('attempts',0)<self.options['max_attempts']),
+                       key=lambda i:(-i.get('score',0),i.get('created','')),default=None)
 
     # --- idle gating -----------------------------------------------------------------------------
     def _what(self, item):
@@ -328,6 +395,7 @@ class SelfEvolution:
         self._interrupt = True
 
     def _resources_ok(self):
+        if _battery_saver():return False
         try:
             import psutil
         except Exception:
@@ -378,17 +446,24 @@ class SelfEvolution:
                     self.refresh_backlog()
                     job = self.next_job()
                     if job is not None:
-                        self.run_job(job)
-            except Exception:
+                        self.run_job(job, require_idle=True)
+            except Exception as exc:
+                self.notify('repair','Self-evolution deferred: '+type(exc).__name__)
                 self.next_job_at = self.clock() + self.options["cooldown_seconds"]
 
     def _cancelled(self):
-        return self.stop.is_set() or getattr(self, "_interrupt", False) or self.busy()
+        if self.stop.is_set() or getattr(self, "_interrupt", False) or self.busy():return True
+        when,ok=self._resource_checked
+        if self.clock()-when>=1:
+            ok=self._resources_ok();self._resource_checked=(self.clock(),ok)
+        return not ok
 
-    def run_job(self, item):
+    def run_job(self, item, require_idle=False):
         """Drive one learning job through the existing pipeline. Checkpointed; never replays writes."""
         with self.lock:
-            if item.get("status") != "pending":
+            if (item.get("status") != "pending" or self.inflight or self.stop.is_set() or self.storage_failed
+                    or self.busy() or item.get('attempts',0)>=self.options['max_attempts']
+                    or require_idle and not self._idle()):
                 return None
             item["status"] = "learning"
             item["attempts"] = item.get("attempts", 0) + 1
@@ -398,7 +473,9 @@ class SelfEvolution:
             self.jobs_today.append(datetime.now(timezone.utc).date().isoformat())
             self._save()
         try:
-            self._write_checkpoint(item, "discover")
+            if not self._write_checkpoint(item, "discover"):
+                return self._finish(item,'needs_review','checkpoint storage unavailable',None)
+            if self._cancelled():return self._pause(item,'discover')
             if item.get('kind') == 'knowledge_refresh':
                 from .knowledge_acquisition import Acquisition
                 acquisition = Acquisition(self.actions)  # Task-owned context, same stores/dispatcher.
@@ -417,50 +494,60 @@ class SelfEvolution:
             if learner is None or not getattr(learner, "enabled", False):
                 return self._finish(item, "skipped", "repository learning is unavailable", None)
             query = item.get("suggested_query") or item.get("subject")
+            from .repo_learning import canonical_name,public_query
+            if not isinstance(query,str) or len(query)>180 or not public_query(query):
+                return self._finish(item,'skipped','Discovery requires a bounded public topic',None)
             candidates = []
             try:
                 candidates = learner.search(query) or []
             except Exception as exc:
-                return self._finish(item, "failed", "discovery failed: " + str(exc)[:120], None)
+                return self._finish(item, "failed", "discovery failed: " + type(exc).__name__, None)
             if self._cancelled():
                 return self._pause(item, "discover")
             learned_names = self._learned_names()
+            if not isinstance(candidates,list) or len(candidates)>100:
+                return self._finish(item,'failed','Malformed bounded discovery response',None)
+            candidates=[c for c in candidates if isinstance(c,dict) and isinstance(c.get('full_name'),str)]
             pick = next((c for c in candidates if isinstance(c, dict)
                          and c.get("full_name", "").casefold() not in learned_names), None)
             if pick is None:
                 return self._finish(item, "exhausted", "no new candidate repository found", None)
             full_name = pick["full_name"]
-            self._write_checkpoint(item, "learn", {"repo": full_name})
+            try:full_name=canonical_name(full_name)
+            except ValueError:return self._finish(item,'failed','Invalid repository identity',None)
+            if not self._write_checkpoint(item, "learn", {"repo": full_name}):
+                return self._finish(item,'needs_review','checkpoint storage unavailable',full_name)
+            if self._cancelled():return self._pause(item,'discover')
             self._card("learning", "Learning: " + what, "from " + full_name, "Reading the project")
             try:
                 learner.learn(full_name, reason="self-evolution", cancelled=self._cancelled)
             except Exception as exc:
-                return self._finish(item, "failed", "learning failed: " + str(exc)[:120], full_name)
+                return self._finish(item, "needs_review", "learning outcome uncertain: " + type(exc).__name__, full_name)
             if self._cancelled():
                 return self._pause(item, "learn")
             # The ability forge auto-builds from the learned repo on its own background thread and
             # emits its own island cards; we record the discovery and surface the capability summary.
-            self._card("learned", "Learned: " + what, full_name, "Building a new capability")
+            self._card("learned", "Learned: " + what, full_name, "Knowledge saved; new abilities still require approval")
             self._remember(item, full_name)
             return self._finish(item, "learned", "learned " + full_name, full_name)
         finally:
             with self.lock:
                 self.inflight = False
-            self._clear_checkpoint()
+            if item.get('status') not in {'pending','needs_review','learning'}:self._clear_checkpoint()
 
     def _pause(self, item, stage):
         with self.lock:
-            item["status"] = "pending"  # Resume on a later idle tick; nothing uncertain was replayed.
+            item["status"] = "needs_review" if stage=='learn' else "pending"
             self._save()
         self._write_checkpoint(item, stage + ":paused")
-        self._card("notice", "Learning paused", "resuming when you're idle",
+        self._card("notice", "Learning paused", "fresh state review required" if stage=='learn' else "resuming when you're idle",
                    "Your task comes first")
         return None
 
     def _finish(self, item, status, detail, repo):
         with self.lock:
             item["status"] = status
-            item["outcome"] = {"detail": detail, "repo": repo, "at": _now()}
+            item["outcome"] = {"detail": detail, "repo": repo, "at": _now(),'trace_id':self.trace_id}
             item["score"] = self.score(item)
             self._save()
         return item
@@ -491,8 +578,8 @@ class SafeEvolutionManager:
     """Gated self-modification of Jarvis's own source: propose -> test in isolation -> approve -> deploy.
 
     Core deploys ALWAYS require explicit approval (via Actions._approve); backups are kept and a
-    regression rolls back automatically. This manager never edits security/permission code and never
-    disables its own checks.
+    rollback is explicit and refuses later edits. Named policy/runtime modules are excluded;
+    a worktree is not a hostile-code sandbox or a semantic privacy oracle.
     """
 
     PROTECTED = re.compile(r"(secret|credential|permission|approval|security|auth|token|_approve)", re.I)
@@ -502,16 +589,55 @@ class SafeEvolutionManager:
         self.options = {"enabled": True, "auto_deploy": False, **(options or {})}
         self.base = Path(actions.base).resolve()
         self.directory = self.base / ".jarvis-runtime" / "self-evolution" / "patches"
+        if type(self.options['enabled']) is not bool or self.options['auto_deploy'] is not False:
+            raise ValueError('Self-modification requires explicit approval; auto_deploy must remain false.')
+        self.validations = {}  # Process-owned receipts: edited JSON cannot forge an evaluation.
+        self.lock = threading.RLock()
 
     def _target(self, relative):
+        from .skill_memory import linked
+        if not isinstance(relative,str) or len(relative)>300 or '..' in relative.replace('\\','/').split('/'):
+            raise ValueError('Patch target has invalid scope.')
+        candidate=self.base/relative
+        if any(linked(p) for p in [candidate,*candidate.parents] if p!=self.base and self.base in p.parents):
+            raise ValueError('Linked patch targets are refused.')
         path = (self.base / relative).resolve()
-        if not str(path).startswith(str(self.base)) or path.is_symlink():
+        if self.base not in path.parents or path.is_symlink():
             raise ValueError("Patch target must be a real file inside the project.")
         if path.suffix.lower() != ".py" or not str(relative).startswith(("jarvis/", "jarvis\\")):
             raise ValueError("Only Jarvis Python source files may be proposed for self-modification.")
         if self.PROTECTED.search(str(relative)):
             raise ValueError("Security/permission source is not eligible for autonomous self-modification.")
+        if path.name in {'actions.py','self_evolution.py','cloud_policy.py','repo_abilities.py','repository_skills.py',
+                         'tools.py','native_tools.py','commands.py','brain.py','knowledge_worker.py','deliberation.py',
+                         'task_recovery.py','recovery.py','launcher.py','gpu_scheduler.py'}:
+            raise ValueError('Core policy/runtime source is outside the patch scope.')
         return path
+
+    def _folder(self,pid):
+        from .skill_memory import linked
+        if not isinstance(pid,str) or not re.fullmatch(r'patch_\d{8}T\d{12}',pid):
+            raise ValueError('Invalid patch identifier.')
+        folder=self.directory/pid
+        if any(linked(p) for p in [folder,*folder.parents] if p!=self.base and self.base in p.parents):
+            raise ValueError('Linked patch storage refused.')
+        return folder
+
+    def _binding(self,folder,meta):
+        target=self._target(meta['relative'])
+        original=(folder/'original.py').read_bytes();current=target.read_bytes()
+        if original!=current:raise ValueError('Patch target changed since proposal; re-propose against fresh source.')
+        digest=hashlib.sha256(meta['relative'].encode()+b'\0'+original+b'\0'+(folder/'new.py').read_bytes())
+        # Bind neighboring source/tests and declared environment inputs too. A passing
+        # receipt must not survive an edit to the code it exercised or its assertions.
+        from .skill_memory import linked
+        count=total=0
+        for pattern in ('jarvis/*.py','tests/*.py','requirements/*.txt','config/runtime_manifest.json','pytest.ini','pyproject.toml'):
+            for path in sorted(self.base.glob(pattern)):
+                count+=1;total+=path.stat().st_size
+                if count>1000 or total>20*2**20 or linked(path):raise ValueError('Evaluation input snapshot exceeds safe bounds or is linked.')
+                digest.update(path.relative_to(self.base).as_posix().encode()+b'\0'+path.read_bytes())
+        return digest.hexdigest()
 
     def propose(self, relative, new_source, rationale=""):
         if not self.options.get("enabled", True):
@@ -521,15 +647,16 @@ class SafeEvolutionManager:
             raise ValueError("Patch target does not exist: " + str(relative))
         if not isinstance(new_source, str) or not new_source.strip():
             raise ValueError("A non-empty replacement source is required.")
+        if len(new_source)>1000000:raise ValueError('Patch source exceeds the size limit.')
         try:
             compile(new_source, str(target), "exec")  # Reject syntactically invalid patches up front.
         except SyntaxError as exc:
             raise ValueError("Proposed source does not parse: " + str(exc)) from None
         pid = "patch_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%f")
-        folder = self.directory / pid
+        folder = self._folder(pid)
         folder.mkdir(parents=True, exist_ok=True)
         (folder / "new.py").write_text(new_source, encoding="utf-8")
-        (folder / "original.py").write_text(target.read_text(encoding="utf-8"), encoding="utf-8")
+        (folder / "original.py").write_bytes(target.read_bytes())
         meta = {"id": pid, "relative": str(relative).replace("\\", "/"), "rationale": rationale[:500],
                 "created": _now(), "status": "proposed", "tested": None}
         (folder / "meta.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
@@ -539,6 +666,7 @@ class SafeEvolutionManager:
         env = {k: v for k, v in os.environ.items() if k.upper() in
                {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "COMSPEC", "PATHEXT", "APPDATA", "LOCALAPPDATA"}}
         env.update(GIT_TERMINAL_PROMPT="0", GIT_CONFIG_NOSYSTEM="1")
+        env.update(GIT_CONFIG_GLOBAL=os.devnull,GIT_CONFIG_COUNT='1',GIT_CONFIG_KEY_0='core.hooksPath',GIT_CONFIG_VALUE_0=os.devnull)
         return env
 
     def _repo_root(self, env):
@@ -554,17 +682,23 @@ class SafeEvolutionManager:
         The worktree checks out the whole repository, so the patched file and the test working
         directory are resolved relative to the repo root (the base may be a subdirectory of it).
         """
-        folder = self.directory / pid
+        folder = self._folder(pid)
         meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+        self.validations.pop(pid,None)
+        binding=self._binding(folder,meta)
+        approved_cmd=[sys.executable,'-m','pytest','tests','-q']
+        if test_cmd is not None and test_cmd!=approved_cmd:raise ValueError('Evaluation requires the full pytest regression command.')
         target = self._target(meta["relative"])
         worktree = folder / "worktree"
         env = self._git_env()
         try:
             repo_root = self._repo_root(env)
+            status=subprocess.run(['git','status','--porcelain'],cwd=self.base,env=env,capture_output=True,text=True,timeout=30)
+            if status.returncode or status.stdout.strip():raise ValueError('Evaluation requires a clean source snapshot; dirty work is preserved.')
             rel_to_root = target.resolve().relative_to(repo_root)
             base_in_root = self.base.relative_to(repo_root)
             if worktree.exists():
-                shutil.rmtree(worktree, ignore_errors=True)
+                raise ValueError('Existing evaluation workspace preserved; review before reuse.')
             subprocess.run(["git", "worktree", "add", "--detach", str(worktree)], cwd=self.base, env=env,
                            capture_output=True, timeout=180, check=True)
         except (subprocess.SubprocessError, OSError, ValueError) as exc:
@@ -574,11 +708,15 @@ class SafeEvolutionManager:
         try:
             (worktree / rel_to_root).write_text((folder / "new.py").read_text(encoding="utf-8"), encoding="utf-8")
             work_cwd = worktree / base_in_root  # Run tests from the app directory inside the worktree.
-            cmd = test_cmd or [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"]
+            cmd = approved_cmd
             proc = subprocess.run(cmd, cwd=work_cwd, env=env, capture_output=True, text=True, timeout=timeout)
             ok = proc.returncode == 0
+            changed=subprocess.run(['git','diff','--name-only'],cwd=worktree,env=env,capture_output=True,text=True,timeout=30)
+            ok=ok and changed.returncode==0 and set(changed.stdout.splitlines())=={rel_to_root.as_posix()}
+            ok=ok and self._binding(folder,meta)==binding and (worktree/rel_to_root).read_bytes()==(folder/'new.py').read_bytes()
             tail = (proc.stderr or proc.stdout or "")[-400:]
             meta.update(status="tested" if ok else "test_failed", tested={"ok": ok, "detail": tail})
+            if ok:self.validations[pid]=binding
         except subprocess.TimeoutExpired:
             meta.update(status="test_failed", tested={"ok": False, "detail": "tests exceeded the time limit"})
         except (subprocess.SubprocessError, OSError) as exc:
@@ -590,34 +728,56 @@ class SafeEvolutionManager:
         return meta["tested"]
 
     def deploy(self, pid, cancelled=lambda: False):
+        with self.lock:return self._deploy(pid,cancelled)
+
+    def _deploy(self,pid,cancelled):
         """Deploy a tested patch after explicit approval; keep a backup; roll back on failure."""
-        folder = self.directory / pid
+        if not self.options['enabled'] or cancelled():raise ValueError('Self-modification disabled or cancelled.')
+        folder = self._folder(pid)
         meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
-        if not (meta.get("tested") or {}).get("ok"):
+        if ((meta.get("tested") or {}).get("ok") is not True or
+                self.validations.get(pid)!=self._binding(folder,meta)):
             raise ValueError("Only a patch whose tests passed can be deployed.")
         target = self._target(meta["relative"])
         approve = getattr(self.actions, "_approve", None)
         if approve is None:
             raise ValueError("Core self-modification needs interactive approval, which is unavailable.")
-        approve("self_modification", json.dumps({"file": meta["relative"], "rationale": meta.get("rationale", ""),
-                                                 "patch": pid}, ensure_ascii=False), cancelled)
-        if cancelled():
+        reviewed=self._binding(folder,meta)
+        answer=approve("self_modification", json.dumps({"file": meta["relative"], "rationale": meta.get("rationale", ""),
+                                                 "patch": pid,'binding':reviewed,'new_source':(folder/'new.py').read_text(encoding='utf-8')}, ensure_ascii=False), cancelled)
+        if answer is not None and answer is not True:raise ValueError('Explicit approval was not given.')
+        latest=json.loads((folder/'meta.json').read_text(encoding='utf-8'))
+        if cancelled() or not self.options['enabled'] or latest.get('relative')!=meta['relative'] or self._binding(folder,meta)!=reviewed:
             raise ValueError("Deployment cancelled during approval.")
         backup = folder / "deployed_backup.py"
-        backup.write_text(target.read_text(encoding="utf-8"), encoding="utf-8")
-        target.write_text((folder / "new.py").read_text(encoding="utf-8"), encoding="utf-8")
+        backup.write_bytes(target.read_bytes())
+        meta['status']='deploying'
+        (folder/'meta.json').write_text(json.dumps(meta,indent=1),encoding='utf-8')
+        self.validations.pop(pid,None)
+        self._replace_source(target,(folder/'new.py').read_bytes())
         meta.update(status="deployed", deployed_at=_now())
         (folder / "meta.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
         return meta
 
     def rollback(self, pid):
-        folder = self.directory / pid
+        with self.lock:return self._rollback(pid)
+
+    def _replace_source(self,target,source):
+        temporary=target.with_name(target.name+'.'+uuid.uuid4().hex+'.tmp')
+        with temporary.open('xb') as handle:handle.write(source)
+        shutil.copymode(target,temporary)
+        temporary.replace(target)
+
+    def _rollback(self,pid):
+        folder = self._folder(pid)
         meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
         backup = folder / "deployed_backup.py"
         if not backup.is_file():
             raise ValueError("No deployed backup to roll back.")
         target = self._target(meta["relative"])
-        target.write_text(backup.read_text(encoding="utf-8"), encoding="utf-8")
+        if meta.get('status')!='deployed' or target.read_bytes()!=(folder/'new.py').read_bytes():
+            raise ValueError('Deployed source changed; automatic overwrite refused.')
+        self._replace_source(target,backup.read_bytes())
         meta.update(status="rolled_back", rolled_back_at=_now())
         (folder / "meta.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
         return meta

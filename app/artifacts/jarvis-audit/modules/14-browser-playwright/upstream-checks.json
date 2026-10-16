@@ -1,0 +1,30 @@
+[
+  {
+    "url": "https://playwright.dev/python/docs/actionability",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://playwright.dev/python/docs/actionability",
+    "status": 200,
+    "answer": "The provided page does not contain PyPI version, release/upload date, requires_python, or publication date information. \n\nDocumentation summary of guarantees and limits:\n- Playwright performs a range of actionability checks on elements before making actions and auto-waits for all relevant checks to pass. If required checks do not pass within the given `timeout`, the action fails with a `TimeoutError`.\n- For `locator.click()`, Playwright ensures:\n  - locator resolves to exactly one element\n  - element is Visible\n  - element is Stable (not animating or completed animation)\n  - element Receives Events (not obscured by other elements)\n  - element is Enabled\n- Actionability check matrix:\n  - `locator.check()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.click()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.dblclick()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.set_checked()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.tap()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.uncheck()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (Yes), Editable (-)\n  - `locator.hover()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (-), Editable (-)\n  - `locator.drag_to()`: Visible (Yes), Stable (Yes), Receives Events (Yes), Enabled (-), Editable (-)\n  - `locator.screenshot()`: Visible (Yes), Stable (Yes), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.fill()`: Visible (Yes), Stable (-), Receives Events (-), Enabled (Yes), Editable (Yes)\n  - `locator.clear()`: Visible (Yes), Stable (-), Receives Events (-), Enabled (Yes), Editable (Yes)\n  - `locator.select_option()`: Visible (Yes), Stable (-), Receives Events (-), Enabled (Yes), Editable (-)\n  - `locator.select_text()`: Visible (Yes), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.scroll_into_view_if_needed()`: Visible (-), Stable (Yes), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.blur()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.dispatch_event()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.focus()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.press()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.press_sequentially()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n  - `locator.set_input_files()`: Visible (-), Stable (-), Receives Events (-), Enabled (-), Editable (-)\n- Forcing actions: actions like `locator.click()` support a `force` option that disables non-essential actionability checks (e.g., passing truthy `force` to `locator.click()` will not check that the target element actually receives click events).\n- Assertions: Playwright includes auto-retrying assertions that remove flakiness by waiting until the condition is met.\n- Visible definition: Element has non-empty bounding box and does not have `visibility:hidden` computed style (zero size and `display:none` are not considered visible; `opacity:0` is considered visible).\n- Stable definition: Element has maintained the same bounding box for at least two consecutive animation frames.\n- Enabled definition: Element is not disabled. Disabled rules include specific tags with `[disabled]`, inside a `<fieldset>` with `[disabled]`, or descendant of an element with `[aria-disabled=true]`.\n- Editable definition: Element is enabled and not readonly. Readonly rules include specific tags with `[readonly]` or matching `[aria-readonly=true]`.\n- Receives Events definition: Element is considered receiving pointer events when it is the hit target of the pointer event at the action point."
+  },
+  {
+    "url": "https://playwright.dev/python/docs/locators",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://playwright.dev/python/docs/locators",
+    "status": 200,
+    "answer": "Information not on the page."
+  },
+  {
+    "url": "https://pypi.org/pypi/playwright/json",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://pypi.org/pypi/playwright/json",
+    "status": 200,
+    "answer": "Latest Playwright version: 1.64.0\nRelease/upload date: 2026-10-13T23:35:20 (or individual wheels starting 2026-10-13T23:35:20.723360Z)\nrequires_python: >=3.10"
+  },
+  {
+    "url": "https://playwright.dev/python/docs/downloads",
+    "checked": "2026-10-15 IST",
+    "canonical": "https://playwright.dev/python/docs/downloads",
+    "status": 200,
+    "answer": "PyPI information is not on the page.\n\nDocumentation summary:\n- Wait guarantees: Use `page.expect_download()` to start waiting for the download, perform the action that initiates the download, and wait for the download process to complete.\n- Locator guarantees: None listed.\n- Download guarantees and limits: All attachments are downloaded into a temporary folder. Downloaded files are deleted when the browser context that produced them is closed. You can obtain the download url, file name, and payload stream using the `Download` object. You can specify where to persist downloaded files using the `downloads_path` option in `browser_type.launch()`. Save the file using `download.save_as(\"/path/to/save/at/\" + download.suggested_filename)`. Handling the event with `page.on(\"download\", ...)` forks the control flow and makes the script harder to follow; the scenario might end while you are downloading a file since the main control flow is not awaiting the operation to resolve.\n- Publication date: Not displayed.\n- Source: https://playwright.dev/python/docs/downloads"
+  }
+]

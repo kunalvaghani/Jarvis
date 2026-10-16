@@ -1,5 +1,16 @@
 # Self-evolution engine — autonomous idle learning & capability expansion
 
+<!-- prompt20-audit -->
+**Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
+Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/20-self-evolution/inventory.md).
+
+![Rendered fixture preview: interrupted learning requires fresh state review](../artifacts/media/self-evolution-paused-preview.png)
+
+Rendered fixture preview,560×126; not a live app screenshot. Existing renderer artwork is preserved.
+
+<!-- /prompt20-audit -->
+
 2026-10-15 IST resource follow-up: optional idle learning now defers when psutil or
 a RAM/CPU/battery reading fails. Its existing idle, user-busy and configured
 threshold gates still apply. This avoids treating unknown capacity as permission
@@ -67,7 +78,7 @@ To make a genuinely idle Jarvis keep improving, **exploration** is on by default
 (`self_evolution.explore`): when idle with an empty pending backlog, it seeds one topic from
 `explore_topics` (Windows automation, speech, local LLM, semantic search, PDF/text tools, …) and
 studies it. Real gaps always outrank exploration, exploration respects the daily job cap, and it stops
-re-queuing a topic once tried (retried only after the refresh window). Set `explore` to `false` to
+re-queuing a topic once tried (retried only up to max_attempts, subject to cooldown/day limits). Set `explore` to `false` to
 learn strictly from detected gaps.
 
 Learning still only begins once **all** idle gates pass, so if you never see it:
@@ -89,26 +100,21 @@ Any user command calls `note_activity()`, which resets the idle timer and interr
 - Every user command calls `note_activity()`, which preempts and interrupts any in-flight step —
   **your tasks always win**. Heavy work (download, analysis, ability build) runs in the existing
   out-of-process workers, so the idle thread itself holds no model in memory.
-- The backlog and a per-job checkpoint are durable and atomic. After a crash or restart, the backlog
-  is restored and an interrupted job returns to `pending` to resume on the next idle tick. **Uncertain
-  learning writes are never replayed** — the learner and forge own their own idempotent resume.
+- Backlog and checkpoints use separate atomic file replacements, not a cross-file transaction or power-loss guarantee. After a crash or restart, discovery-only interrupted jobs can return to `pending`. Interrupted learner writes remain `needs_review`; there is no transactional completion receipt or automatic write resume. **Uncertain learning writes are never replayed automatically.**
 
 ## Gated self-modification (opt-in)
 
 `SafeEvolutionManager` can change Jarvis's own Python source, but only through a strict pipeline:
 
 **propose → isolate (git worktree) → build → run tests → require explicit approval → deploy with
-backup → roll back on regression.**
+backup → explicit rollback after inspecting fresh state.**
 
 - `propose(relative, new_source, rationale)` — rejects anything that is not a `jarvis/*.py` file,
   refuses security/permission/approval source outright (`PROTECTED` pattern), and rejects source that
   does not even parse.
-- `evaluate(pid)` — checks out the repo in an isolated worktree, applies the patch, and runs the test
-  suite there (paths resolved relative to the git root, so a subdirectory `base` works). Deploys
-  nothing.
-- `deploy(pid)` — only for a patch whose tests passed, and only after `Actions._approve` grants it;
-  keeps a timestamped backup.
-- `rollback(pid)` — restores the backup.
+- `evaluate(pid)` — requires a clean source snapshot, creates an owned Git worktree and runs the full `pytest tests -q` command there. Checks candidate/tracked-file scope and binds a process-owned receipt to source, tests and declared inputs. Dirty work is preserved; a worktree is not a hostile-code sandbox. Deploys nothing.
+- `deploy(pid)` — requires the fresh process-owned evaluation receipt and explicit `Actions._approve`; rechecks the binding after approval, preserves exact backup bytes and atomically replaces source. Restart requires re-evaluation; an edited JSON passed flag cannot authorize deployment.
+- `rollback(pid)` — explicitly restores the backup only while the target still matches the deployed candidate; refuses later edits.
 
 Defaults are conservative: `self_modification.auto_deploy` is **false** (no unattended core deploys),
 and the engine never disables its own checks.
@@ -123,6 +129,7 @@ and the engine never disables its own checks.
 | `cooldown_seconds` | `600` | Minimum gap between learning jobs. |
 | `max_jobs_per_day` | `4` | Daily learning-job cap. |
 | `max_backlog` | `200` | Backlog size (rotated). |
+| `max_attempts` | `3` | Maximum attempts per item, persisted in the backlog; cooldown/day limits also apply. |
 | `min_available_mb` | `3072` | Skip learning below this free RAM. |
 | `max_cpu_percent` | `55` | Skip learning above this CPU load. |
 | `self_modification.enabled` | `true` | Allow proposing core patches. |

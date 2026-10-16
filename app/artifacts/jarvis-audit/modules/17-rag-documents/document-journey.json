@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-16 IST",
+  "passed": true,
+  "seconds": 0.6903831000017817,
+  "scope": "Actual drop handler, scripted ask choice, local authored model fake, spoken-command parser/execute, session JSON and durable restart readback. No real account/model/Explorer drag.",
+  "external_effect_calls": 0,
+  "network_calls": 0,
+  "steps": [
+    "drop",
+    "focus",
+    "command answer/page evidence",
+    "session readback",
+    "end",
+    "restart",
+    "load/readback"
+  ]
+}

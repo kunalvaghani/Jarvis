@@ -1,0 +1,31 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "chunks": 1500,
+  "side_effects": 0,
+  "scope": "BM25 lookup only; five fresh prepared indexes and20 warm lookups/version, top5 IDs/page/text identical, scores equal after rounding to10 decimal places. Index construction, hashing, parsing, graph building, model/network/audio and GPU excluded.",
+  "before": {
+    "cold": {
+      "p50_ms": 0.8773,
+      "p95_ms": 1.1809,
+      "python_peak_bytes": 2126
+    },
+    "warm": {
+      "p50_ms": 0.8772,
+      "p95_ms": 0.9154,
+      "python_peak_bytes": 1566
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 0.0918,
+      "p95_ms": 0.0983,
+      "python_peak_bytes": 2854
+    },
+    "warm": {
+      "p50_ms": 0.055,
+      "p95_ms": 0.0591,
+      "python_peak_bytes": 1462
+    }
+  }
+}

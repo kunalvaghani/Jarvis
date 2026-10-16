@@ -1,0 +1,7 @@
+Actual final exec session50720 completion, 2026-10-15 IST, exit_code0:
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  pywinauto UserWarning: Revert to STA COM threading mode
+- generated xml file: artifacts/jarvis-audit/modules/14-browser-playwright/full-regression.xml -
+2536 passed, 31 skipped, 1 warning in 398.11s (0:06:38)
+
+Progress lines omitted. Initial full2 FAIL/2536 PASS/29 skips is preserved in full-regression-stale-native.xml; failures were stale native9b proof hashes after concurrent knowledge_worker changes. Current native prerequisites are explicitly BLOCKED; old proof unchanged.

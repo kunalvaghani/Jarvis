@@ -1,5 +1,7 @@
-# Status
+# Reproductions and corrections — 2026-10-15 IST
 
-{'NOT RUN': 32}
+Seven initial failures: immediate count rejected a late target before waiting; malformed request could reach browser lifecycle operations; caller settings replaced controller executable settings; non-object controller reply raised AttributeError; HTML label names absent from summaries; no sign-in flag; malformed summary accepted. Initial fixes passed69 tests. Review then reproduced renamed Continue→Submit during240ms cue being clicked; pinned node must now match current exact role/name locator before dispatch. A ninth reproduction showed URL change during target wait could fill another page; URL is rechecked after wait/before fill/with readback.9 product defects covered by executed assertions.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+First catalog run had two audit fixture errors: benchmark compared absent href to None as different schemas, and intercepted302 handling let the synthetic .example redirect attempt DNS and fail. Corrected benchmark compares common name/role/href semantics; redirect now uses an owned loopback-only server and blocks other destinations. No user data/account sent. Missing benchmark output consequently failed its dependent catalog assertion; corrected after generation. These are fixture errors, not extra product defects.
+
+Initial full run2 FAIL/2536 PASS/29 skips is retained as full-regression-stale-native.xml: phase1 changed knowledge_worker while cached native9b proof retained old SHA. After read-only Ollama probe failed, the audit now marks that stale native proof BLOCKED, never PASS or a fabricated new hash. Historical proof unchanged, fresh inference required. Final accepted assertions have0 FAIL. Cases007/009 explicitly BLOCKED, not skipped silently. Fixture download is exact bytes/filename only, not a production adapter or PDF rendering claim. Same-window/page races, arbitrary site autosave and general transaction classification remain limits.

@@ -41,6 +41,7 @@ def inspect(actions, name, cancelled):
         except Exception:
             pass
     controls = []
+    authentication_required = False
     if not cancelled():
         try:
             ui, handle, actual = observed or foreground(actions)
@@ -48,8 +49,11 @@ def inspect(actions, name, cancelled):
             if matches(entry, actual):
                 snapshot = ui.runner({'operation': 'list', 'handle': handle, 'owner_pid': os.getpid()}, cancelled)
                 from .knowledge_acquisition import safe_controls
-                controls = safe_controls(snapshot.get('controls', []))
+                raw = snapshot.get('controls', []) if isinstance(snapshot, dict) else []
+                authentication_required = isinstance(raw, list) and any(isinstance(c,dict) and c.get('password') for c in raw[:120])
+                controls = [] if authentication_required else safe_controls(raw)
         except (ValueError, OSError, AttributeError, psutil.Error):
             pass
     return {'identity': key.casefold(), 'configured': True, 'installed': bool(path and path.is_file()),
-            'version': version, 'controls': controls, 'scope': 'Names/roles only; no fields, screenshots, coordinates or actions.'}
+            'version': version, 'controls': controls, 'authentication_required': bool(authentication_required),
+            'scope': 'Names/roles only; no fields, screenshots, coordinates or actions.'}

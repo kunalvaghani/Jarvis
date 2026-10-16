@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="13" skipped="1" tests="35" time="6.255" timestamp="2026-10-15T23:57:36.910104+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_app_research_audit" name="test_JRV_15_001_unknown_app_registry_research_and_controls" time="0.991"><failure message="AssertionError: assert {'capabilitie...iagram'], ...} == {}&#10;  &#10;  Left contains 7 more items:&#10;  {'capabilities': [{'controls': [{'locator': {'kind': 'accessible_name',&#10;                                               'name': 'Create diagram',&#10;                                               'role': 'Button'},&#10;                                   'name': 'Create diagram',&#10;                                   'role': 'Button'}],...&#10;  &#10;  ...Full output truncated (29 lines hidden), use '-vv' to show">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_001_unknown_app_registry_research_and_controls(fixture):
+        f=fixture; cap=record(f)
+        assert [s['action'] for s in f.calls] == ['application_inspect','web_search','scrape_web']
+        assert cap['controls'][0]['name']=='Create diagram'
+        assert cap['sources'] and cap['status']=='environment_confirmed'; readonly(f)
+&gt;       assert f.acq.prepare('Use Unconfigured to create diagram') == {}
+E       AssertionError: assert {'capabilitie...iagram'], ...} == {}
+E         
+E         Left contains 7 more items:
+E         {'capabilities': [{'controls': [{'locator': {'kind': 'accessible_name',
+E                                                      'name': 'Create diagram',
+E                                                      'role': 'Button'},
+E                                          'name': 'Create diagram',
+E                                          'role': 'Button'}],...
+E         
+E         ...Full output truncated (29 lines hidden), use '-vv' to show
+
+tests\test_app_research_audit.py:55: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_002_old_document_version_marked_stale" time="0.133"><failure message="AssertionError: assert 'not independently verified' == '0.9'&#10;  &#10;  - 0.9&#10;  + not independently verified">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_002_old_document_version_marked_stale(fixture):
+        f=fixture
+        f.actions.apps['Fixture']['documentation_url']='https://docs.example.org/0.9/manual'
+        source=record(f)['sources'][0]
+&gt;       assert source['document_version']=='0.9'
+E       AssertionError: assert 'not independently verified' == '0.9'
+E         
+E         - 0.9
+E         + not independently verified
+
+tests\test_app_research_audit.py:62: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_003_young_cache_reuse" time="0.230" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_004_update_same_task_reobserved" time="0.186"><failure message="AssertionError: assert '1.0' == '2.0'&#10;  &#10;  - 2.0&#10;  + 1.0">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_004_update_same_task_reobserved(fixture):
+        f=fixture; record(f); f.calls.clear(); observation(f,version='2.0')
+        cap=record(f)
+&gt;       assert cap['version']=='2.0'
+E       AssertionError: assert '1.0' == '2.0'
+E         
+E         - 2.0
+E         + 1.0
+
+tests\test_app_research_audit.py:77: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_005_offline_local_inspection" time="0.088" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_006_provenance_beats_spoofed_title" time="0.001"><failure message="ImportError: cannot import name 'source_rank' from 'jarvis.knowledge_acquisition' (D:\Kunals GitHub Repo\Jarvis\app\jarvis\knowledge_acquisition.py)">def test_JRV_15_006_provenance_beats_spoofed_title():
+&gt;       from jarvis.knowledge_acquisition import source_rank
+E       ImportError: cannot import name 'source_rank' from 'jarvis.knowledge_acquisition' (D:\Kunals GitHub Repo\Jarvis\app\jarvis\knowledge_acquisition.py)
+
+tests\test_app_research_audit.py:89: ImportError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_007_untrusted_shell_not_dispatched" time="0.171" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_008_missing_control_no_invention" time="0.164" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_009_coordinates_never_become_locator" time="0.160" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_010_plugin_scope_missing" time="0.167"><skipped type="pytest.skip" message="BLOCKED: no production plugin identity/version namespace; host UI cannot prove plugin scope.">D:\Kunals GitHub Repo\Jarvis\app\tests\test_app_research_audit.py:118: BLOCKED: no production plugin identity/version namespace; host UI cannot prove plugin scope.</skipped></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_011_executable_identity" time="0.032" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_012_login_no_harvest" time="0.168"><failure message="AssertionError: assert (not [{'locator': {'kind': 'accessible_name', 'name': 'Sign in', 'role': 'Button'}, 'name': 'Sign in', 'role': 'Button'}])">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_012_login_no_harvest(fixture):
+        f=fixture; observation(f,authentication_required=True,controls=[{'name':'Sign in','role':'Button'},{'name':'FAKE_SECRET','role':'Edit','password':True}])
+        cap=record(f)
+&gt;       assert not cap['controls'] and not cap['sources']
+E       AssertionError: assert (not [{'locator': {'kind': 'accessible_name', 'name': 'Sign in', 'role': 'Button'}, 'name': 'Sign in', 'role': 'Button'}])
+
+tests\test_app_research_audit.py:134: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_013_network_outage" time="0.087" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_014_expired_deadline_no_dispatch" time="0.028" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_015_malformed_controls_fail_closed[None]" time="0.068"><failure message="TypeError: 'NoneType' object is not subscriptable">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+controls = None
+
+    @pytest.mark.parametrize('controls',[None,{},'bad',[{'name':[],'role':'Button'}]])
+    def test_JRV_15_015_malformed_controls_fail_closed(fixture,controls):
+        f=fixture; observation(f,controls=controls)
+&gt;       cap=record(f); assert cap['controls']==[] and cap['status']!='environment_confirmed'
+
+tests\test_app_research_audit.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_app_research_audit.py:43: in record
+    return f.acq.prepare(goal())['capabilities'][0]
+jarvis\knowledge_acquisition.py:196: in prepare
+    controls = safe_controls(live.get('controls', []))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+controls = None
+
+    def safe_controls(controls):
+        from .app_knowledge import KEEP_ROLES, PRIVATE_LABEL
+        return [{'name': c['name'][:100], 'role': c['role'], 'locator': {
+            'kind': 'accessible_name', 'name': c['name'][:100], 'role': c['role']}}
+&gt;           for c in controls[:120] if isinstance(c, dict) and c.get('role') in KEEP_ROLES
+            and isinstance(c.get('name'), str) and c['name'].strip() and not c.get('password')
+            and not PRIVATE_LABEL.search(c['name'])][:20]
+E       TypeError: 'NoneType' object is not subscriptable
+
+jarvis\knowledge_acquisition.py:52: TypeError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_015_malformed_controls_fail_closed[controls1]" time="0.070"><failure message="TypeError: unhashable type: 'slice'">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+controls = {}
+
+    @pytest.mark.parametrize('controls',[None,{},'bad',[{'name':[],'role':'Button'}]])
+    def test_JRV_15_015_malformed_controls_fail_closed(fixture,controls):
+        f=fixture; observation(f,controls=controls)
+&gt;       cap=record(f); assert cap['controls']==[] and cap['status']!='environment_confirmed'
+
+tests\test_app_research_audit.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_app_research_audit.py:43: in record
+    return f.acq.prepare(goal())['capabilities'][0]
+jarvis\knowledge_acquisition.py:196: in prepare
+    controls = safe_controls(live.get('controls', []))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+controls = {}
+
+    def safe_controls(controls):
+        from .app_knowledge import KEEP_ROLES, PRIVATE_LABEL
+        return [{'name': c['name'][:100], 'role': c['role'], 'locator': {
+            'kind': 'accessible_name', 'name': c['name'][:100], 'role': c['role']}}
+&gt;           for c in controls[:120] if isinstance(c, dict) and c.get('role') in KEEP_ROLES
+            and isinstance(c.get('name'), str) and c['name'].strip() and not c.get('password')
+            and not PRIVATE_LABEL.search(c['name'])][:20]
+E       TypeError: unhashable type: 'slice'
+
+jarvis\knowledge_acquisition.py:52: TypeError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_015_malformed_controls_fail_closed[bad]" time="0.159" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_015_malformed_controls_fail_closed[controls3]" time="0.160" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_016_missing_optional_firecrawl" time="0.177" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_017_five_independent_requests_twenty_rounds" time="0.028" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_018_cancel_before_and_during_readback" time="0.068" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_019_restart_readonly_cache" time="0.221" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_020_injection_is_reference" time="0.162" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_021_query_privacy" time="0.162"><failure message="AssertionError: assert (['Fixture diagram official documentation FAKE_SECRET_123'] and False)&#10; +  where False = all(&lt;generator object test_JRV_15_021_query_privacy.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001DD4D942650&gt;)">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_021_query_privacy(fixture):
+        f=fixture; observation(f,version='FAKE_SECRET_123')
+        f.acq.prepare(goal()+' customer@example.org C:/private/file FAKE_TOKEN')
+        queries=[s['value'] for s in f.calls if 'search' in s['action']]
+&gt;       assert queries and all('FAKE_' not in q and 'customer@' not in q and 'private/file' not in q for q in queries)
+E       AssertionError: assert (['Fixture diagram official documentation FAKE_SECRET_123'] and False)
+E        +  where False = all(&lt;generator object test_JRV_15_021_query_privacy.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001DD4D942650&gt;)
+
+tests\test_app_research_audit.py:211: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_022_unicode_bounded_names" time="0.167" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_023_negation_no_effect" time="0.162" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_024_new_feature_same_surface_not_old_context" time="0.161"><failure message="AssertionError: assert ('diagram' == 'sphere'&#10;  &#10;  - sphere&#10;  + diagram)">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_024_new_feature_same_surface_not_old_context(fixture):
+        f=fixture; record(f)
+        context=f.acq.prepare(goal('sphere'))
+&gt;       assert context['feature']=='sphere' and context['missing_features']==['sphere']
+E       AssertionError: assert ('diagram' == 'sphere'
+E         
+E         - sphere
+E         + diagram)
+
+tests\test_app_research_audit.py:231: AssertionError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_025_resource_admission_estimates" time="0.165" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_026_repeat_uncertain_no_mutation" time="0.175"><failure message="AttributeError: 'TaskState' object has no attribute 'record_checkpoint'">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_026_repeat_uncertain_no_mutation(fixture):
+        f=fixture; record(f); before=f.acq.memory.capabilities('fixture')[0]['executions']
+&gt;       f.actions.task_state.record_checkpoint('uncertain_external_write', tool='send_email')
+E       AttributeError: 'TaskState' object has no attribute 'record_checkpoint'
+
+tests\test_app_research_audit.py:249: AttributeError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_027_measured_cache_benchmark_exists" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\15-app-research\\benchmark-summary.json'">def test_JRV_15_027_measured_cache_benchmark_exists():
+        path=Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/15-app-research/benchmark-summary.json'
+&gt;       data=json.loads(path.read_text())
+
+tests\test_app_research_audit.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Kunals GitHub Repo/Jarvis/app/artifacts/jarvis-audit/modules/15-app-research/benchmark-summary.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\modules\\15-app-research\\benchmark-summary.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_028_forged_approval_no_tools_created" time="0.168" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_029_configuration_rejected" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">def test_JRV_15_029_configuration_rejected():
+        for row in ({'enabled':'yes'},{'ttl_seconds':True},{'max_sources':999},{'unknown_mode':'execute'}):
+&gt;           with pytest.raises(ValueError):settings({'knowledge_acquisition':row})
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_app_research_audit.py:270: Failed</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_030_connection_loss_no_replay" time="0.120" /><testcase classname="tests.test_app_research_audit" name="test_JRV_15_031_oversized_input_rejected_before_dispatch" time="0.028"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">fixture = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=runTest&gt;
+
+    def test_JRV_15_031_oversized_input_rejected_before_dispatch(fixture):
+        f=fixture
+&gt;       with pytest.raises(ValueError):f.acq.prepare(goal()+'x'*100001)
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_app_research_audit.py:285: Failed</failure></testcase><testcase classname="tests.test_app_research_audit" name="test_JRV_15_032_trace_redaction" time="0.171" /></testsuite></testsuites>

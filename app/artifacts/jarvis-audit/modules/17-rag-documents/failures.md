@@ -1,5 +1,15 @@
-# Status
+# Reproduced failures and open gates
 
-{'NOT RUN': 32}
+Existing [baseline](baseline.xml):30 PASS /2 native deselected. Initial [dedicated reproduction](reproduced.xml):17 FAIL /16 PASS /3 BLOCKED skips. One failure027 was harness sequencing (benchmark artifact not generated), not a runtime defect.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+Reproduced runtime/design failures included absent-query model invention, extraction cap overshoot, unbounded drop threads, ASCII-only multilingual lookup, malformed graph mutation (three variants), graph-invented entity, Unicode term splitting, file changes during extraction, context budget overflow, size0 chunk/config handling, DOCX expansion, graph API shape handling. Consult exact node traces in XML; overlapping tests are not distinct bug counts.
+
+[First targeted](targeted-first.xml):3 FAIL /44 PASS /3 skips /3 deselected. Indic mark characters still split, graph stopword entity The defeated absent-query filtering, and a model fixture returned Claire Martin for chunks not containing that name. Fixed token grouping/stopword-only neighbourhood lookup; graph entity provenance now points to actual matching source chunks across the document. It does not establish semantic relation truth. [Second targeted](targeted-second.xml):47 PASS /3 skips /3 deselected.
+
+Final [targeted](cases-and-contracts.xml):156 PASS /11 BLOCKED skips. Case005 changed from an insufficient cap-only pass to explicit BLOCKED: a character count assertion is not hard parser-memory isolation. Simple table assertion strengthened to match each row's label and value, without certifying merged/positioned tables. Supplemental faults cover stale generation, five parallel commits, malformed persisted chunks and eight-per-frame dispatch. Accepted [full suite](full-regression.xml):2654 PASS /40 skips /0FAIL in406.76s; source/test hashes unchanged during acceptance. [Exact skip reasons](full-regression-skip-reasons.json).
+
+JRV-17-003: the answer API selects one document; no cross-document conflict arbitration. JRV-17-005: extracted text is capped, but pypdf parses page streams in-process without a hard RAM/time sandbox. JRV-17-012: valid page numbers do not establish semantic entailment; a fake wrong date with a valid page passes. JRV-17-032: document/model/spill operations lack unified redacted operation trace IDs.
+
+First full run:1 FAIL /2652 PASS /40 skips in405.92s; the new page gate rejected the established [page1] citation spelling. [Failed full XML](full-regression-citation-format.xml) and its matching source hashes are preserved. Restored bracketed page-number support while retaining supplied-page membership checks for both spellings; added invalid bracketed citation regression, reran phase2 neighbors and a fresh frozen full suite. No assertion relaxed or failed evidence overwritten.
+
+These are missing production contracts, not waived failures. Semantic faithfulness can be reproduced by a wrong99December answer citing valid page2; no independent entailment oracle introduced. Security maintenance gate: installed pypdf 6.20.0 lacks upstream6.20.1 cyclic-tree handling fix; no hostile native-parser exploit or installation was run. Earlier acoustic/GPU/account gates remain separate; final targeted run also includes phase2 fixtures and its seven live acceptance gate skips.

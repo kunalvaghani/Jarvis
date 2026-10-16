@@ -1,5 +1,9 @@
-# Status
+# Reproduction and fixes
 
-{'NOT RUN': 32}
+[Original new-test run](reproduced.xml): 13 failing nodes / 21 PASS / 1 explicit blocker. Ten failures represent nine runtime/design families: URL document-version uncertainty (002), same-task version bypass (004), title-based provenance (006), login research/control exposure (012), malformed None/dict controls (015 two variants), private version metadata in public query (021), wrong feature reuse (024), unknown configuration keys (029), unbounded goal (031).
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+Three initial failures were QA setup, not product defects: 001 wrongly expected no implicit actual-foreground fallback (existing intended behavior), 026 used a nonexistent checkpoint helper (corrected to TaskState.checkpoint), 027 benchmark artifact had not yet been generated. These were corrected explicitly, not counted as runtime fixes. The initial root-cwd sandbox baseline also collected the app/InsTAREELS alias twice and hit WinError5 temporary atomic replace restrictions: existing-baseline.xml retained. Accepted baseline used canonical app cwd and approved isolated fixture filesystem access: 29 PASS. No runtime permission check was relaxed.
+
+Subsequent supplemental guards cover exact TTL, changed other-feature invalidation, native password detection, absent-observation nonreuse, pending-lock cancellation and task replacement during readback. No physical resource-pressure or native GUI result inferred from fake boundaries. The final full XML is authoritative for final runtime code; targeted XML predates the last conservative invalidation-shape guard. No failure in accepted final full run.
+
+006 initially reports the absence of the new rank helper, not an executed pre-change malicious scrape. Original title/docs-host sorting is source evidence of the design gap; the additional provenance-journey.json asserts the corrected production prepare/registry/Executor selection after a failed configured-doc read. Task UUID checks cover sampled boundaries; persistence/checkpoint attachment is not an atomic transaction with task replacement.

@@ -1,7 +1,27 @@
-# PROMPT 19 — Repository skill and voice ability forge
+# Prompt19 ability forge audit — 2026-10-16 IST
 
-PARTIAL. Sources: ['jarvis/repo_abilities.py', 'jarvis/repo_learning.py', 'jarvis/capabilities.py', 'docs/repo-abilities.md']
+**32 catalog PASS /0 FAIL /0 BLOCKED /0 SKIPPED /0 NOT RUN**, fixture scope only. Baseline **{'PASS': 57, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 48.759}**; final focused **{'PASS': 196, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 66.519}**; full **{'PASS': 2756, 'FAIL': 0, 'SKIPPED': 32, 'seconds': 442.009}**. [All32 IDs and assertions](tests.jsonl), [commands](commands.txt), [focused XML](cases-and-contracts.xml), [full XML](full-regression.xml), [exact full skips](full-regression-skip-reasons.json).
 
-Missing inferred candidates: []
+Owned temporary proposals/registries/files, scripted model and permission callbacks, fake installer/transport faults; no real account data or dependency installation. The legacy regression uses a stdlib-only venv and hand-written utility. Command routing→approved owned fixture→real guarded child→file readback→disable/enable journey passed. An owned child exited27 after a durable external-write checkpoint; reload refused dispatch. Actual existing Docker kernel fixtures: **10 PASS /0 skipped**. No downloaded repository code, real ability installation, live account send, microphone/GUI, native30B/9B inference or GPU stress acceptance.
 
-[Whole inventory](../../inventory.md)
+| Claim | Real entry point and evidence | Boundary |
+| --- | --- | --- |
+| New voice abilities | repo_learning.on_learned → AbilityForge.enqueue/run/build_repo → design/generate/static check → approval → test/promotion | actions constructs forge; active config enabled/auto_build true,30B preferred/9B fallback; model proposals are not built-in tools |
+| Typed contracts | clean_spec inputs(text/file/url/number), output(text/file/both), package/network/approach validation; ability_runner result validation | output text is string, files list≤20; scalar string return remains compatible; no semantic quality oracle |
+| Precedence | commands.parse immutable reflex and deterministic handlers → learned parse fallback; usable_triggers suppresses conflicts | built-in open preserved by executed command assertions, no built-in mutation |
+| Review binding | strict boolean island result; deep copy for callback; code/scope SHA256 before/after callback; voice queue captures digest | queued scope changes fail closed; trusted direct install_approved API represents explicit caller approval, not an untrusted tool-result receipt |
+| Test/promotion | version folders/code hash/registry replace, no post-consent model repairs; cancelled/stale tests cannot promote | pre-review stdlib test still runs with process audit hooks; packages/repo_code require consent first |
+| Output rollback | failed output contract withdraws new version; prior approved hash-verified metadata restored | one previous version only; no execution/replay during rollback; missing/tampered previous code remains failed |
+| External actions | fresh Actions._approve for each network invocation; durable uncertain_external_write before dispatch | all network calls conservatively treated as writes; crash/lost reply blocks later dispatch until external state is inspected and ability rebuilt/reviewed; no claim to prove arbitrary network semantics |
+| Isolation | ability_runner uses isolated Python process/audit hooks, memory/time checks; separate RepositorySkills uses Docker | voice forge does not use Docker. Audit hooks are not a hostile-code sandbox; native code remains a hardening gate |
+| Docker skills | static learn→ANALYZED→approved check→VALIDATED→approved activation→ACTIVE; per-call approval | fake failed Docker validation quarantines/no promotion; existing owned kernel tests separate from forge |
+| Concurrency | shared owned process serialized, UUID work folders, lock-protected registry/log writes |5 concurrent requests×20 rounds,100 distinct work folders and100 runs; serialization intentionally sacrifices parallel ability throughput |
+| Provenance | source repo/license/commit/version/codehash retained in registry; repo_code downloads immutable SHA with40MB/20k entries/64MB extraction bounds | legacy unpinned repo_code fetch refused; codehash is integrity, not authenticity/signature or a license compatibility certificate |
+| Recovery/observability | registry persists version/approval/write checkpoint; JSONL events have forge-instance trace UUID and recognized credential redaction | process crash tested, not power-loss/fsync or multi-process transaction; correlation is per forge instance, not distributed tracing |
+| Resources/privacy | pick_model checks available RAM and installed sizes; research queue yields to user; local HTTP client ignores environment proxy | fake outages/timeouts/RAM/GPU faults; actual knowledge_worker transport receives fake private payload only at127.0.0.1; no live cloud entitlement test |
+| Lifecycle | compatible launchers, stable commands, disabled/forgotten files retained | no user file deletion, app restart, migration, runtime installation or publishing |
+
+
+Read actual system-map and existing repo-abilities/repository-skills/repo-learning guides and source/config bindings. Architecture counts/configuration are claims, not live service proof. Existing dirty branch **audit/12-tool-registry**, HEAD **e1a33a0944b5cd725e1a76a72eda228513e45963**, retained because a clean checkout would omit user/module14–18 work. Before-source snapshots preserved in ignored runtime storage. Order: contracts/approval→baseline→failure assertions→narrow fixes→official upstream→A/B→neighbors/journey→frozen full regression/readiness→ledger/report. No reset/commit/install/service start.
+
+Oversized-source rejection warm p50/p95 **1.3831/1.4527 → 0.0012/0.0013 ms**, identical rejection on a400KB comment plus valid owned utility. Peak traced allocation **483521→100B**. This measures the input guard, not ordinary build, model or speech latency. [50 samples](benchmarks.csv), [environment](environment.json), [changes](changes.md), [compatibility/live gates](compatibility.md), [rollback](rollback.md).

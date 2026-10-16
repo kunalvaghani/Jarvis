@@ -25,7 +25,7 @@ SHOW = """({token,box}) => {
 REMOVE = "token => {for(const e of document.querySelectorAll('[data-jarvis-cursor]')) if(e.dataset.jarvisCursor===token)e.remove()}"
 
 
-def click(target, page, **kwargs):
+def click(target, page, admit=None, **kwargs):
     """Pin one element, illustrate, dispatch once, clean up even on navigation/error."""
     element = target.element_handle(timeout=5000) if hasattr(target,'element_handle') else target
     if element is None: raise ValueError('The selected browser control disappeared; no click issued.')
@@ -39,6 +39,7 @@ def click(target, page, **kwargs):
         page.wait_for_timeout(240)
         if page.is_closed() or page.url!=before:
             raise ValueError('The page changed while Jarvis approached; no click issued.')
+        if admit:admit(element)
         return element.click(**kwargs)
     finally:
         try: page.evaluate(REMOVE,token)

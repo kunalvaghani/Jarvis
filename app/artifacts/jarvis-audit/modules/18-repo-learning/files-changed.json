@@ -1,0 +1,58 @@
+[
+  {
+    "path": "tests/test_gpu_scheduler.py",
+    "sha256": "1aa8f85828dfaab530ce02fbd04a0e8e59915ae311deefde1294b2e462db8e46"
+  },
+  {
+    "path": "jarvis/repo_learning.py",
+    "sha256": "f3d1c5d9c11f35d0ddab0ae806b9c89473e3601ef36127079a7613bbd38c2b9b"
+  },
+  {
+    "path": "tests/test_repo_learning.py",
+    "sha256": "91bc4cbdfec2b033b7bc7b0b30ecca4c7f19d5b099bb4bcf9cff9ac716b90811"
+  },
+  {
+    "path": "tests/test_repo_learning_audit.py",
+    "sha256": "0b672767a5b97a4f53c5c4cd51b244b2a1d075a2fb3480882c452758db751d60"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "c7bdaf0d695e9f87998ac757c8c16a7d32077e5559033e85f628538502919e77"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "483e6cbaa57e134aeece19176157090b8a4512abafc779e8a039cfcdf31baec5"
+  },
+  {
+    "path": "scripts/verification/verify_repo_learning_audit.py",
+    "sha256": "2b6a99658c78c000b1618d76b102918d4ec4ae128de1c111ed476d8129074194"
+  },
+  {
+    "path": "scripts/verification/verify_repo_learning_journey.py",
+    "sha256": "eb053a55aa07632d85533edef290f0640bc5dba9a09c1a86e54e336a6fed162f"
+  },
+  {
+    "path": "scripts/verification/report_repo_learning_audit.py",
+    "sha256": "3fa94c8bd73d04122b917364154c3b3941b2c1dcad45e59b2ea065b3166e8efd"
+  },
+  {
+    "path": "scripts/verification/verify_repo_learning_artifacts.py",
+    "sha256": "b08122289df8946a30caf7167cc34b4e0ebdb55164487740430558e6c00d5071"
+  },
+  {
+    "path": "README.md",
+    "sha256": "9ffca16bdf05261fe74c1a12fab7288cd6e0c73d1946786678a4fd8dba825636"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "a6236a51cc809d2e34cf7dd7547387b0c8ff6e14cf54b22c6b4ee4f20124f89f"
+  },
+  {
+    "path": "docs/repo-learning.md",
+    "sha256": "deb42729689394234353e12d36a5ced01f826e52728cb528bee90fa5c329b2a5"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "266c1807da001994049656ddc7c27598c6ad41af853f7e9d78b7e9fa7148e893"
+  }
+]

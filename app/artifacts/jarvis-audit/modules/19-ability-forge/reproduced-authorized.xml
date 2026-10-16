@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="18" skipped="0" tests="31" time="2.983" timestamp="2026-10-16T12:09:05.224808+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_001_proposal_isolated_and_not_active" time="0.322"><failure message="assert 'import os\n\...ile&quot;: path}\n' == '\nimport os\...ile&quot;: path}\n'&#10;  &#10;  - &#10;    import os&#10;    &#10;    def run(inputs, workdir):&#10;        with open(inputs[&quot;file&quot;], encoding=&quot;utf-8&quot;) as handle:&#10;            text = handle.read()...&#10;  &#10;  ...Full output truncated (12 lines hidden), use '-vv' to show">tests\test_ability_forge_audit.py:54: in test_JRV_19_001_proposal_isolated_and_not_active
+    assert (forge.root/row['folder']/'ability.py').read_text() == GOOD
+E   assert 'import os\n\...ile": path}\n' == '\nimport os\...ile": path}\n'
+E     
+E     - 
+E       import os
+E       
+E       def run(inputs, workdir):
+E           with open(inputs["file"], encoding="utf-8") as handle:
+E               text = handle.read()...
+E     
+E     ...Full output truncated (12 lines hidden), use '-vv' to show</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_002_builtin_open_priority" time="0.090" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_003_unexpected_network_refused" time="0.005"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">tests\test_ability_forge_audit.py:66: in test_JRV_19_003_unexpected_network_refused
+    with pytest.raises(ra.AbilityError, match='network'):
+E   Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_005_rejection_never_registers" time="0.043" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_006_only_reviewed_version_promotes" time="0.045" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_007_network_requires_fresh_action_approval" time="0.060"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">tests\test_ability_forge_audit.py:93: in test_JRV_19_007_network_requires_fresh_action_approval
+    with pytest.raises(ra.AbilityError, match='approval'):
+E   Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_008_restart_keeps_approved_version" time="0.075" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_009_provenance_survives_source_removal" time="0.065" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_010_wrong_output_quarantines_without_delivery" time="0.059"><failure message="TypeError: 'Mock' object is not subscriptable">tests\test_ability_forge_audit.py:125: in test_JRV_19_010_wrong_output_quarantines_without_delivery
+    forge.invoke(row['id'], {})
+jarvis\repo_abilities.py:1362: in invoke
+    where = saved[0].parent
+E   TypeError: 'Mock' object is not subscriptable</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_011_013_014_025_admission_defers_without_model[TimeoutError]" time="0.006" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_011_013_014_025_admission_defers_without_model[ConnectionError]" time="0.007" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_012_020_injected_process_code_is_not_run" time="0.018" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad0]" time="0.001"><failure message="AttributeError: 'list' object has no attribute 'get'">tests\test_ability_forge_audit.py:151: in test_JRV_19_015_029_malformed_spec_fails_closed
+    ra.clean_spec(bad)
+jarvis\repo_abilities.py:199: in clean_spec
+    name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[None]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">tests\test_ability_forge_audit.py:151: in test_JRV_19_015_029_malformed_spec_fails_closed
+    ra.clean_spec(bad)
+jarvis\repo_abilities.py:199: in clean_spec
+    name = re.sub(r"\s+", " ", str(raw.get("name", "")).replace("_", " ")).strip()[:60]
+E   AttributeError: 'NoneType' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad2]" time="0.001" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad3]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">tests\test_ability_forge_audit.py:150: in test_JRV_19_015_029_malformed_spec_fails_closed
+    with pytest.raises(ra.AbilityError):
+E   Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad4]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">tests\test_ability_forge_audit.py:150: in test_JRV_19_015_029_malformed_spec_fails_closed
+    with pytest.raises(ra.AbilityError):
+E   Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_015_029_malformed_spec_fails_closed[bad5]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">tests\test_ability_forge_audit.py:151: in test_JRV_19_015_029_malformed_spec_fails_closed
+    ra.clean_spec(bad)
+jarvis\repo_abilities.py:204: in clean_spec
+    key = slug(item.get("name", ""), 30).replace("-", "_")
+E   AttributeError: 'NoneType' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_016_optional_environment_missing_never_promotes" time="0.053" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_017_five_by_twenty_invocations_unique_workdirs" time="0.412"><failure message="AssertionError: assert (2 == 100)&#10; +  where 2 = len({WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...test-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907')})&#10; +    where {WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...test-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907')} = set([WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907'), ...])">tests\test_ability_forge_audit.py:172: in test_JRV_19_017_five_by_twenty_invocations_unique_workdirs
+    assert len(set(paths)) == 100 and row['runs'] == 100
+E   AssertionError: assert (2 == 100)
+E    +  where 2 = len({WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...test-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907')})
+E    +    where {WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...test-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907')} = set([WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-run...of-kunal/pytest-253/test_JRV_19_017_five_by_twenty0/.jarvis-runtime/abilities/word-counter/runs/20261016-120907'), ...])</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_018_cancelled_approval_never_installs" time="0.058"><failure message="AssertionError: assert 'failed' == 'waiting'&#10;  &#10;  - waiting&#10;  + failed">tests\test_ability_forge_audit.py:178: in test_JRV_19_018_cancelled_approval_never_installs
+    assert forge.decide(row['id'], cancelled=lambda: True) == 'waiting'
+E   AssertionError: assert 'failed' == 'waiting'
+E     
+E     - waiting
+E     + failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_022_unicode_proposal_survives_registry" time="0.044" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_023_negation_never_approves" time="0.036"><failure message="ValueError: No action taken for a negated command.">tests\test_ability_forge_audit.py:191: in test_JRV_19_023_negation_never_approves
+    assert parse(phrase).kind != 'ability_approve'
+jarvis\commands.py:71: in parse
+    return _parse_command(text)
+jarvis\commands.py:93: in _parse_command
+    command = _parse(text)
+jarvis\commands.py:219: in _parse
+    raise ValueError("No action taken for a negated command.")
+E   ValueError: No action taken for a negated command.</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_024_changed_proposal_never_tests" time="0.065"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;">tests\test_ability_forge_audit.py:198: in test_JRV_19_024_changed_proposal_never_tests
+    with pytest.raises(ra.AbilityError, match='changed'):
+E   Failed: DID NOT RAISE &lt;class 'jarvis.repo_abilities.AbilityError'&gt;</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[approved]" time="0.047"><failure message="AssertionError: assert 'failed' == 'waiting'&#10;  &#10;  - waiting&#10;  + failed">tests\test_ability_forge_audit.py:207: in test_JRV_19_028_forged_truthy_approval_refused
+    assert forge.decide(row['id']) == 'waiting'
+E   AssertionError: assert 'failed' == 'waiting'
+E     
+E     - waiting
+E     + failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[1]" time="0.049"><failure message="AssertionError: assert 'failed' == 'waiting'&#10;  &#10;  - waiting&#10;  + failed">tests\test_ability_forge_audit.py:207: in test_JRV_19_028_forged_truthy_approval_refused
+    assert forge.decide(row['id']) == 'waiting'
+E   AssertionError: assert 'failed' == 'waiting'
+E     
+E     - waiting
+E     + failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_028_forged_truthy_approval_refused[claim2]" time="0.048"><failure message="AssertionError: assert 'failed' == 'waiting'&#10;  &#10;  - waiting&#10;  + failed">tests\test_ability_forge_audit.py:207: in test_JRV_19_028_forged_truthy_approval_refused
+    assert forge.decide(row['id']) == 'waiting'
+E   AssertionError: assert 'failed' == 'waiting'
+E     
+E     - waiting
+E     + failed</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_030_disconnected_runner_never_retries" time="0.062" /><testcase classname="tests.test_ability_forge_audit" name="test_JRV_19_031_oversized_code_is_not_parsed" time="0.001"><failure message="AssertionError: parser called">tests\test_ability_forge_audit.py:222: in test_JRV_19_031_oversized_code_is_not_parsed
+    assert ra.check_code('#'+'x'*40001, SPEC)
+jarvis\repo_abilities.py:157: in check_code
+    tree = ast.parse(code)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: in _execute_mock_call
+    raise effect
+E   AssertionError: parser called</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_post_approval_test_failure_cannot_repair_without_new_consent" time="0.059"><failure message="AssertionError: unreviewed code generation">tests\test_ability_forge_audit.py:231: in test_post_approval_test_failure_cannot_repair_without_new_consent
+    install(forge, row)
+tests\test_ability_forge_audit.py:42: in install
+    return f.install_approved(row['id'])
+jarvis\repo_abilities.py:1059: in install_approved
+    return self._install_approved(ability_id, cancelled)
+jarvis\repo_abilities.py:1102: in _install_approved
+    code = self.generate(row, self._reference(full_name, row), code,
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: in _execute_mock_call
+    raise effect
+E   AssertionError: unreviewed code generation</failure></testcase><testcase classname="tests.test_ability_forge_audit" name="test_failed_update_preserves_old_approved_version" time="0.104" /></testsuite></testsuites>

@@ -1,0 +1,52 @@
+{
+  "provider": "Firecrawl",
+  "sources": [
+    {
+      "url": "https://docs.github.com/en/rest/commits/commits#get-a-commit",
+      "checked": "2026-10-16 IST",
+      "finding": "Official commit endpoint returns SHA; resolve a branch once, then read archive/tree/raw files by immutable SHA. Retrieved docs show API version2026-03-10; existing unversioned API header retained."
+    },
+    {
+      "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository",
+      "checked": "2026-10-16 IST",
+      "finding": "Public visibility alone does not grant code reuse rights; license restrictions and attribution still require review."
+    },
+    {
+      "url": "https://pypi.org/project/requests/",
+      "checked": "2026-10-16 IST",
+      "release": "2.34.2",
+      "release_date": "2026-05-14",
+      "requires_python": ">=3.10",
+      "installed": "2.34.2",
+      "finding": "Already current on Python3.10.6; retained and improved origin/redirect/stream boundaries instead of installing."
+    },
+    {
+      "url": "https://requests.readthedocs.io/en/latest/user/quickstart/#redirection-and-history",
+      "checked": "2026-10-16 IST",
+      "finding": "Redirects configurable; the learner now explicitly refuses them and scopes authorization by exact parsed origin."
+    },
+    {
+      "url": "https://git-scm.com/install/windows",
+      "checked": "2026-10-16 IST",
+      "release": "2.56.0.windows.2",
+      "release_date": "2026-10-05",
+      "installed": "2.49.1.windows.1",
+      "finding": "Installed Git is older. No installer/system mutation. Current protected acquisition flags regression tested; not certified current security level."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/git/git/v2.56.0/Documentation/RelNotes/2.56.0.adoc",
+      "checked": "2026-10-16 IST",
+      "finding": "Official2.56 release notes reviewed; existing read-only acquisition does not need new features. No unapproved binary upgrade."
+    },
+    {
+      "url": "https://github.com/Python-Markdown/markdown",
+      "checked": "2026-10-16 IST",
+      "finding": "Real public Python Markdown implementation identity verified through Firecrawl search; protocol tests use authored size/star fields, not a live API metadata census."
+    },
+    {
+      "url": "https://docs.github.com/en/rest/using-the-rest-api/api-versions",
+      "checked": "2026-10-16 IST",
+      "finding": "404 page returned; not used as compatibility proof."
+    }
+  ]
+}

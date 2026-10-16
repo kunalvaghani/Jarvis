@@ -1,5 +1,11 @@
 # Turning learned repositories into new Jarvis abilities
 
+<!-- prompt19-audit -->
+**Ability-forge audit — 2026-10-16 IST:** Review now binds code/version/scope; network runs require fresh approval and a durable non-replay checkpoint. Wrong-type output withdraws the new version and can restore prior approved metadata without execution. Oversized code is rejected before parsing.
+Verification: **2,756 full regression PASS /32 skips**; **32 Prompt19 catalog fixture PASS**. Voice abilities use process guard rails, not Docker isolation. Launcher **repair_required**; live model/account/voice acceptance and supported Python migration remain open.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/19-ability-forge/inventory.md).
+<!-- /prompt19-audit -->
+
 2026-10-15 IST resource follow-up: initial model selection checks installed model
 size plus the configured RAM margin for both the30B preference and9B fallback.
 If neither fits or capacity cannot be read, it reports a deferred inference rather

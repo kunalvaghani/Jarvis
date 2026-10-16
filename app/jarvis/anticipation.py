@@ -464,7 +464,7 @@ class Anticipation:
                     self.next_retry = self.clock() + min(300, 5 * 2 ** min(self.failures, 6))
                 if writing and isinstance(exc, OSError):
                     self.storage_failed = True
-                self.report('repair', 'Anticipation preparation stopped: ' + str(exc)[:200])
+                self.report('repair', 'Anticipation preparation stopped: ' + type(exc).__name__)
         finally:
             with self.lock:
                 self.inflight = False

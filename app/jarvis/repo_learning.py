@@ -15,8 +15,10 @@ searches/minute without a token; an optional token in `secrets/github.json` rais
 """
 from datetime import datetime, timedelta, timezone
 import ast
+import hashlib
 import io
 import json
+import math
 import os
 from pathlib import Path
 import queue
@@ -24,6 +26,8 @@ import re
 import threading
 import time
 import zipfile
+from urllib.parse import urlsplit,quote
+from uuid import uuid4
 
 import requests
 
@@ -92,6 +96,40 @@ class LearningError(ValueError):
 
 class TooLarge(LearningError):
     """The full source download is over the size limit (large repositories are then read file by file)."""
+
+
+def canonical_name(value):
+    if not isinstance(value,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9][A-Za-z0-9._-]{0,99}',value):
+        raise LearningError('Use a bounded public owner/repository name.')
+    return value
+
+
+def safe_source_path(value):
+    return (isinstance(value,str) and 0<len(value)<=500 and not value.startswith(('/','\\')) and
+            not re.search(r'[\\:\x00-\x1f]',value) and all(p not in {'','..','.'} for p in value.split('/')))
+
+
+def sensitive(value):
+    from .obsidian_memory import SENSITIVE
+    return bool(SENSITIVE.search(str(value)))
+
+
+def text_data(value):
+    # Only redact recognizable credential assignments, not words like tokenize in source.
+    from .cloud_policy import KEY_MATERIAL
+    value=re.sub(KEY_MATERIAL,'[redacted credential]',value,flags=re.I)
+    return re.sub(r'(?im)^.*\b\w*(?:api[_ -]?key|password|access[_ -]?token|secret)\w*\s*[:=].*$',
+                  '[redacted credential assignment]',value)
+
+
+def public_query(value):
+    from .cloud_policy import PRIVATE,SECRET
+    return not (sensitive(value) or PRIVATE.search(value) or SECRET.search(value))
+
+
+def atomic_json(path,data):
+    from .skill_memory import atomic
+    atomic(path,json.dumps(data,ensure_ascii=False,allow_nan=False))
 
 
 def words(text):
@@ -173,15 +211,22 @@ def imports_of(text, suffix):
 def analyze_zip(raw, limits=None):
     """Structure, manifests, entry points and symbols from a repository zip (read as text only)."""
     limits = limits or {}
+    budget=limits.get('max_read_bytes',12_000_000)
+    if type(budget) is not int or not 0<budget<=12_000_000 or not isinstance(raw,bytes) or len(raw)>40_000_000:
+        raise LearningError('Invalid bounded source archive/read budget.')
     archive = zipfile.ZipFile(io.BytesIO(raw))
+    if len(archive.infolist())>20000:
+        raise TooLarge('Source archive exceeds 20,000 entries.')
     names = [n for n in archive.namelist() if not n.endswith("/")]
     prefix = os.path.commonprefix(names).split("/")[0] + "/" if names else ""
     languages, modules, manifests, readme, tree, files = {}, [], {}, "", {}, []
-    budget = int(limits.get("max_read_bytes", 12_000_000))
+    license_files,platform_notes={},set()
     for info in archive.infolist():
         if info.is_dir() or not info.filename.startswith(prefix):
             continue
         path = info.filename[len(prefix):]
+        if not safe_source_path(path) or info.external_attr>>16 & 0o170000 == 0o120000:
+            continue
         parts = path.split("/")
         if not path or any(p in SKIP_DIRS or (p.startswith(".") and p not in {".github"}) for p in parts[:-1]):
             continue
@@ -194,19 +239,25 @@ def analyze_zip(raw, limits=None):
             tree[top].add(parts[1])
         suffix = Path(path).suffix.casefold()
         name = Path(path).name
+        if re.search(r'(?i)(?:\.min\.[jt]s$|\.map$|(?:^|[._-])generated[._-])',name):
+            continue
         if suffix in CODE:
             languages[CODE[suffix]] = languages.get(CODE[suffix], 0) + 1
-        wanted = suffix in CODE or name in MANIFESTS or re.fullmatch(r"(?i)readme(\.\w+)?", name)
-        if not wanted or info.file_size > 400_000 or budget <= 0:
+        is_license=bool(re.fullmatch(r'(?i)(?:licen[cs]e|copying)(?:\.[\w-]+)?',name)) and len(parts)==1
+        wanted = suffix in CODE or name in MANIFESTS or re.fullmatch(r"(?i)readme(\.\w+)?", name) or is_license
+        if not wanted or info.file_size > min(400_000,budget) or budget <= 0:
             continue
         budget -= info.file_size
-        text = archive.read(info).decode("utf-8", errors="replace")
+        text = text_data(archive.read(info).decode("utf-8", errors="replace"))
         if "\x00" in text[:2000]:
             continue
         if re.fullmatch(r"(?i)readme(\.\w+)?", name) and len(parts) == 1:
             readme = text[:12000]
         if name in MANIFESTS and len(parts) <= 2:
             manifests[path] = text[:3000]
+        if is_license:license_files[path]=text[:12000]
+        if re.search(r'\b(?:import SwiftUI|import AppKit|import Darwin|import fcntl)\b',text):
+            platform_notes.add('Windows compatibility requires review: platform-specific imports detected in '+path)
         if suffix in CODE and suffix not in {".html", ".css", ".scss", ".sql"}:
             symbols = python_symbols(text) if suffix == ".py" else regex_symbols(text, suffix)
             if symbols is None:
@@ -222,7 +273,7 @@ def analyze_zip(raw, limits=None):
     return {"files_total": len(files), "languages": dict(sorted(languages.items(), key=lambda x: -x[1])),
             "tree": tree_lines, "manifests": manifests, "readme": readme, "modules": modules,
             "entry_points": [m["path"] for m in modules if m["entry"]][:10],
-            "has_tests": any(m["test"] for m in modules)}
+            "has_tests": any(m["test"] for m in modules),'license_files':license_files,'platform_notes':sorted(platform_notes)}
 
 
 def importance(module):
@@ -233,6 +284,13 @@ def importance(module):
 class RepoLearner:
     def __init__(self, actions, options=None, http=None, model_chat=None, clock=time.time):
         options = options or {}
+        for key in ('enabled','auto_learn_browsing','search_for_coding'):
+            if key in options and type(options[key]) is not bool:raise ValueError('Invalid repo learning flag: '+key)
+        for key,default,low,high in (('repos_per_task',1,1,3),('min_stars',20,0,1000000),('max_zip_mb',40,1,40),('refresh_days',30,1,365)):
+            value=options.get(key,default)
+            if type(value) is not int or not low<=value<=high:raise ValueError('Invalid repo learning bound: '+key)
+        dwell=options.get('dwell_seconds',8)
+        if type(dwell) not in (int,float) or not math.isfinite(dwell) or not 0<=dwell<=3600:raise ValueError('Invalid repo dwell.')
         self.actions = actions
         self.enabled = bool(options.get("enabled", True))
         self.auto_browse = bool(options.get("auto_learn_browsing", True))
@@ -249,6 +307,11 @@ class RepoLearner:
         self.vault = Path(actions.memory.vault) / "Jarvis Repos"
         self.cache = Path(actions.base) / ".jarvis-runtime" / "repo-knowledge"
         self.lock = threading.RLock()
+        self._learning_lock=threading.RLock()
+        self._verify_slots=threading.BoundedSemaphore(2)
+        self._word_cache={}
+        self.trace_id=None
+        self._index_invalid=False
         self.index = self._load_index()
         self.jobs = queue.Queue(maxsize=20)
         self.queued = set()
@@ -262,20 +325,30 @@ class RepoLearner:
     # --- storage ------------------------------------------------------------------------------------------
     def _load_index(self):
         try:
-            return json.loads((self.vault / "index.json").read_text(encoding="utf-8")).get("repos", {})
+            path=self.vault/'index.json'
+            if path.stat().st_size>4_000_000:raise ValueError('Oversized repository index.')
+            data=json.loads(path.read_text(encoding='utf-8'))
+            rows=data.get('repos') if isinstance(data,dict) else None
+            if not isinstance(rows,dict) or len(rows)>2000:raise ValueError('Invalid repository index.')
+            return {name:row for name,row in rows.items() if isinstance(row,dict) and isinstance(row.get('purpose'),str) and
+                    isinstance(row.get('keywords'),list) and len(row['keywords'])<=80 and all(isinstance(k,str) for k in row['keywords']) and
+                    isinstance(row.get('learned_at'),str)}
+        except FileNotFoundError:return {}
         except (OSError, ValueError):
+            self._index_invalid=True
             return {}
 
     def _save_index(self):
+        if self._index_invalid:raise LearningError('Repository index is unreadable; preserve it for review before writing.')
+        if len(self.index)>2000:raise LearningError('Repository memory exceeds 2,000 records.')
         self.vault.mkdir(parents=True, exist_ok=True)
-        temp = self.vault / "index.tmp"
-        temp.write_text(json.dumps({"version": 1, "repos": self.index}, ensure_ascii=False, indent=1), encoding="utf-8")
-        temp.replace(self.vault / "index.json")
+        atomic_json(self.vault/'index.json',{'version':1,'repos':self.index})
         lines = ["# Jarvis Repos", "", "[[Jarvis Brain]] · Repositories Jarvis has learned and reuses when coding.", ""]
         for name, row in sorted(self.index.items(), key=lambda x: x[1].get("learned_at", ""), reverse=True):
             lines.append("- [[Jarvis Repos/" + repo_id(name) + "|" + name + "]] — " + row.get("purpose", "")[:140] +
                          " *(" + row.get("learned_at", "")[:10] + ", " + row.get("reason", "") + ")*")
-        (self.vault / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        try:(self.vault / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        except OSError:pass  # Canonical index already committed; never replay it for a derived-note failure.
         brain = self.vault.parent / "Jarvis Brain.md"
         try:
             text = brain.read_text(encoding="utf-8") if brain.exists() else "# Jarvis Brain\n"
@@ -287,7 +360,16 @@ class RepoLearner:
 
     def knowledge(self, full_name):
         try:
-            return json.loads((self.cache / repo_id(full_name) / "knowledge.json").read_text(encoding="utf-8"))
+            canonical_name(full_name)
+            path=self.cache/repo_id(full_name)/'knowledge.json'
+            if path.stat().st_size>4_000_000:return None
+            data=json.loads(path.read_text(encoding='utf-8'))
+            if not isinstance(data,dict) or data.get('full_name')!=full_name or not isinstance(data.get('summary'),dict) or not isinstance(data.get('modules'),list) or len(data['modules'])>80:return None
+            for row in data['modules']:
+                if not isinstance(row,dict) or not safe_source_path(row.get('path')) or not isinstance(row.get('symbols'),list) or len(row['symbols'])>40:return None
+                if any(not isinstance(s,dict) or not isinstance(s.get('name'),str) or not isinstance(s.get('signature'),str) for s in row['symbols']):return None
+                if type(row.get('lines')) is not int or type(row.get('entry')) is not bool or type(row.get('test')) is not bool:return None
+            return data
         except (OSError, ValueError):
             return None
 
@@ -295,16 +377,27 @@ class RepoLearner:
         row = self.index.get(full_name) or next((v for k, v in self.index.items() if k.casefold() == full_name.casefold()), None)
         if not row:
             return None
-        learned = datetime.fromisoformat(row["learned_at"])
-        return row if datetime.now(timezone.utc) - learned < timedelta(days=self.refresh_days) else None
+        try:
+            learned = datetime.fromisoformat(row["learned_at"])
+            age=datetime.now(timezone.utc)-learned
+            return row if learned.tzinfo is not None and timedelta(0)<=age<timedelta(days=self.refresh_days) else None
+        except (ValueError,TypeError,KeyError):return None
 
     # --- GitHub ---------------------------------------------------------------------------------------------
     def get(self, url, params=None, timeout=15, raw=False):
+        origin=urlsplit(url)
+        if origin.scheme!='https' or origin.hostname not in {'api.github.com','codeload.github.com','raw.githubusercontent.com'} or origin.port not in {None,443} or origin.username or origin.password:
+            raise LearningError('Unsupported public repository origin.')
         headers = dict(HEADERS)
         secret = token(self.actions.base)
-        if secret and url.startswith(API):
+        if secret and origin.hostname=='api.github.com':
             headers["Authorization"] = "Bearer " + secret
-        response = self.http.get(url, params=params, headers=headers, timeout=(5, timeout), stream=raw)
+        response = self.http.get(url, params=params, headers=headers, timeout=(5, timeout), stream=raw,allow_redirects=False)
+        try:return self._response(response,raw)
+        finally:response.close()
+
+    def _response(self,response,raw):
+        if 300<=response.status_code<400:raise LearningError('Repository redirect refused; inspect the canonical source.')
         if response.status_code == 404:
             return None
         if response.status_code in {403, 429}:
@@ -314,22 +407,38 @@ class RepoLearner:
             return response.json()
         data = bytearray()
         for chunk in response.iter_content(65536):
-            data.extend(chunk)
-            if len(data) > self.max_zip:
+            if self.stop.is_set():raise LearningError('Learning cancelled during download.')
+            if len(data)+len(chunk) > self.max_zip:
                 raise TooLarge("Repository download is larger than " + str(self.max_zip // 1_000_000) + " MB.")
+            data.extend(chunk)
         return bytes(data)
 
     def info(self, full_name):
+        canonical_name(full_name)
         data = self.get(API + "/repos/" + full_name)
         if not data or not isinstance(data, dict) or not data.get("full_name"):
             return None
+        canonical_name(data['full_name'])
+        if data.get('private'):raise LearningError('Private repository learning is unsupported.')
         return data
 
     def search(self, query, language=""):
+        if not isinstance(query,str) or not 1<=len(query)<=200 or not public_query(query):raise LearningError('Use a bounded public non-sensitive search query.')
         q = query + (" language:" + language if language and re.fullmatch(r"[A-Za-z+#-]{1,20}", language) else "")
         data = self.get(API + "/search/repositories", {"q": q + " archived:false fork:false", "sort": "stars",
-                                                       "order": "desc", "per_page": 10}) or {}
-        rows = [r for r in data.get("items", []) if r.get("size", 0) * 1024 <= self.max_zip * 3]
+                                                       "order": "desc", "per_page": 10})
+        if not isinstance(data,dict) or not isinstance(data.get('items'),list) or len(data['items'])>100:
+            raise LearningError('Invalid bounded repository search result.')
+        rows=[]
+        for row in data['items']:
+            if (not isinstance(row,dict) or not isinstance(row.get('full_name'),str) or
+                    type(row.get('size',0)) is not int or type(row.get('stargazers_count',0)) is not int or
+                    not isinstance(row.get('topics') or [],list) or any(not isinstance(t,str) for t in row.get('topics') or []) or
+                    not isinstance(row.get('description') or '',str)):
+                raise LearningError('Invalid repository candidate schema.')
+            canonical_name(row['full_name'])
+            if not (row.get('private') or row.get('fork') or row.get('archived')) and 0<=row.get('size',0)*1024<=self.max_zip*3:
+                rows.append(row)
         wanted = words(query)
 
         def relevance(row):
@@ -396,9 +505,23 @@ class RepoLearner:
     # --- learning ---------------------------------------------------------------------------------------------
     def card(self, phase, full_name, subtitle="", detail=""):
         from .media_player import card
-        self.actions.report("media_card", card("github", phase, full_name, subtitle, "", 0, 0, detail))
+        event=card("github", phase, full_name, subtitle, "", 0, 0, detail)
+        event['trace_id']=self.trace_id
+        self.actions.report("media_card", event)
 
     def learn(self, full_name, reason="asked", cancelled=lambda: False, info=None, role="research"):
+        canonical_name(full_name)
+        if self.stop.is_set() or cancelled():raise LearningError('Learning cancelled.')
+        with self._learning_lock:
+            if self.stop.is_set() or cancelled():raise LearningError('Learning cancelled.')
+            row=self.known(full_name)
+            data=self.knowledge(full_name) if row else None
+            if data and data.get('commit') and data.get('commit')==row.get('commit'):
+                return row
+            self.trace_id=uuid4().hex
+            return self._learn(full_name,reason,lambda:self.stop.is_set() or cancelled(),info,role)
+
+    def _learn(self, full_name, reason="asked", cancelled=lambda: False, info=None, role="research"):
         """Download, analyse, understand and save one repository. Returns its index row."""
         with self.lock:
             self.current = full_name
@@ -408,13 +531,21 @@ class RepoLearner:
             if not info:
                 raise LearningError(full_name + " was not found on GitHub (or it is private).")
             full_name = info["full_name"]
+            canonical_name(full_name)
+            if info.get('private'):raise LearningError('Private repository learning is unsupported.')
             branch = info.get("default_branch") or "main"
+            if not isinstance(branch,str) or not 1<=len(branch)<=200:raise LearningError('Invalid branch metadata.')
+            pinned=self.get(API+'/repos/'+full_name+'/commits/'+quote(branch,safe=''))
+            commit=pinned.get('sha') if isinstance(pinned,dict) else None
+            if not isinstance(commit,str) or not re.fullmatch('[a-f0-9]{40}',commit):
+                raise LearningError('GitHub did not provide an immutable commit SHA.')
+            info={**info,'commit':commit,'html_url':'https://github.com/'+full_name}
             large = info.get("size", 0) * 1024 > self.max_zip * 3
             raw = None
             if not large:
                 self.card("learning", full_name, "Learning in the background — keep Jarvis open", "Downloading source")
                 try:
-                    raw = self.get("https://codeload.github.com/" + full_name + "/zip/refs/heads/" + branch, timeout=60, raw=True)
+                    raw = self.get("https://codeload.github.com/" + full_name + "/zip/" + commit, timeout=60, raw=True)
                 except TooLarge:
                     large = True
                 if raw is None and not large:
@@ -422,7 +553,7 @@ class RepoLearner:
             if large:
                 # Too big to download whole: read the file list, README, manifests and the key source files instead.
                 self.card("learning", full_name, "Large repository — reading its key files", "Downloading key files")
-                raw = self.light_source(full_name, branch, cancelled)
+                raw = self.light_source(full_name, commit, cancelled)
             if cancelled():
                 raise LearningError("Learning cancelled.")
             facts = analyze_zip(raw)
@@ -450,6 +581,14 @@ class RepoLearner:
                                  payload, SUMMARY_SCHEMA, role=role)
             if cancelled():
                 raise LearningError("Learning cancelled.")
+            if not isinstance(summary,dict) or any(not isinstance(summary.get(k),str) for k in ('purpose','architecture','how_to_run','use_when')) or any(not isinstance(summary.get(k),list) for k in ('keywords','patterns','key_modules')):
+                raise LearningError('Invalid repository summary schema.')
+            summary={k:text_data(v)[:2000] if isinstance(v,str) else v for k,v in summary.items()}
+            for key in ('keywords','patterns'):
+                if any(not isinstance(x,str) for x in summary[key]):raise LearningError('Invalid repository summary entries.')
+                summary[key]=[text_data(x)[:240] for x in summary[key]][:12]
+            source_paths={m['path'] for m in ranked}
+            summary['key_modules']=[{'path':m['path'],'role':text_data(m.get('role',''))[:240]} for m in summary['key_modules'][:10] if isinstance(m,dict) and m.get('path') in source_paths and isinstance(m.get('role',''),str)]
             self.card("learning", full_name, summary.get("purpose", "")[:90], "Saving to memory")
             row = self._save(full_name, info, facts, ranked, summary, reason)
             self.card("learned", full_name, row["purpose"][:120],
@@ -465,16 +604,18 @@ class RepoLearner:
         except LearningError as exc:
             self._failed(full_name, str(exc), reason)
             raise
-        except (requests.RequestException, zipfile.BadZipFile, ValueError) as exc:
-            self._failed(full_name, str(exc), reason)
-            raise LearningError("Could not learn " + full_name + ": " + str(exc)[:200]) from exc
+        except (requests.RequestException, zipfile.BadZipFile, ValueError,RuntimeError,MemoryError,OSError,TypeError,KeyError,AttributeError) as exc:
+            error='Repository learning failed ('+type(exc).__name__+'); inspect local prerequisites.'
+            self._failed(full_name,error,reason)
+            raise LearningError(error) from exc
         finally:
             with self.lock:
                 self.current = None
 
     def _failed(self, full_name, error, reason):
         """Keep the reason, so "list your abilities" and "repo status" can say why (the card alone is brief)."""
-        self.failures[full_name] = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "error": error[:300]}
+        error=text_data(error)
+        self.failures[full_name] = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "error": error[:300],'trace_id':self.trace_id}
         self.card("error", full_name, error[:120], "Not learned")
         forge = getattr(self.actions, "ability_forge", None)
         if forge is not None:
@@ -485,8 +626,14 @@ class RepoLearner:
         most important source files fetched from raw.githubusercontent.com (no API quota). analyze_zip reads it."""
         from concurrent.futures import ThreadPoolExecutor
         from urllib.parse import quote
+        canonical_name(full_name)
+        if not re.fullmatch('[a-f0-9]{40}',branch) or type(limit) is not int or not 1<=limit<=45 or type(budget) is not int or not 1<=budget<=2_500_000:
+            raise LearningError('Use a pinned commit and bounded key-file budget.')
         tree = self.get(API + "/repos/" + full_name + "/git/trees/" + quote(branch, safe=""), {"recursive": "1"}, timeout=30)
-        items = [t for t in (tree or {}).get("tree", []) if t.get("type") == "blob" and t.get("path")]
+        if not isinstance(tree,dict) or not isinstance(tree.get('tree'),list) or len(tree['tree'])>20000:
+            raise LearningError('Invalid/oversized repository tree.')
+        if tree.get('truncated'):raise LearningError('GitHub tree is truncated; complete source provenance unavailable.')
+        items = [t for t in tree['tree'] if isinstance(t,dict) and t.get('type')=='blob' and safe_source_path(t.get('path')) and type(t.get('size',0)) is int and 0<=t.get('size',0)<=400000]
         if not items:
             raise LearningError("GitHub did not list the files of " + full_name + ".")
 
@@ -499,7 +646,7 @@ class RepoLearner:
             name, suffix, depth = Path(path).name, Path(path).suffix.casefold(), path.count("/")
             if re.fullmatch(r"(?i)readme(\.\w+)?", name) and not depth:
                 return 1000
-            if name in MANIFESTS and depth <= 1:
+            if name in MANIFESTS and depth <= 1 or re.fullmatch(r'(?i)(?:license|copying)(?:\.\w+)?',name) and not depth:
                 return 500 - depth
             if suffix not in CODE or suffix in {".html", ".css", ".scss", ".sql"} or size > 150_000:
                 return -1
@@ -520,12 +667,19 @@ class RepoLearner:
                 return path, b""
             try:
                 response = self.http.get("https://raw.githubusercontent.com/" + full_name + "/" + quote(branch, safe="") + "/" +
-                                         quote(path), headers={"User-Agent": HEADERS["User-Agent"]}, timeout=(5, 30))
-                return path, response.content[:400_000] if response.status_code == 200 else b""
+                                         quote(path), headers={"User-Agent": HEADERS["User-Agent"]}, timeout=(5, 30),stream=True,allow_redirects=False)
+                try:
+                    if response.status_code!=200:return path,b''
+                    raw=bytearray()
+                    for piece in response.iter_content(65536):
+                        if cancelled() or len(raw)+len(piece)>min(400000,budget//max(1,len(chosen))):return path,b''
+                        raw.extend(piece)
+                    return path,bytes(raw)
+                finally:response.close()
             except requests.RequestException:
                 return path, b""
 
-        with ThreadPoolExecutor(6) as pool:
+        with ThreadPoolExecutor(2) as pool:
             fetched = dict(pool.map(fetch, chosen))
         if not any(fetched.values()):
             raise LearningError("Could not download any files of " + full_name + ".")
@@ -537,6 +691,7 @@ class RepoLearner:
         return buffer.getvalue()
 
     def _save(self, full_name, info, facts, ranked, summary, reason):
+        if self.stop.is_set():raise LearningError('Learning cancelled before storage.')
         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         folder = self.cache / repo_id(full_name)
         files = folder / "files"
@@ -546,9 +701,9 @@ class RepoLearner:
             content = module["_text"][:40000]
             if total + len(content) > 600_000:
                 break
-            name = re.sub(r"[^A-Za-z0-9._-]", "_", module["path"].replace("/", "__"))[:150] + ".txt"
+            name = hashlib.sha256(module['path'].encode('utf-8')).hexdigest()+'.txt'
             (files / name).write_text(content, encoding="utf-8")
-            cached.append({"path": module["path"], "file": name})
+            cached.append({"path": module["path"], "file": name,'sha256':hashlib.sha256(content.encode('utf-8')).hexdigest()})
             total += len(content)
         modules = [{k: v for k, v in m.items() if k != "_text"} for m in ranked[:80]]
         knowledge = {"full_name": full_name, "url": info.get("html_url", "https://github.com/" + full_name),
@@ -559,20 +714,27 @@ class RepoLearner:
                      "languages": facts["languages"], "tree": facts["tree"], "entry_points": facts["entry_points"],
                      "manifests": facts["manifests"], "has_tests": facts["has_tests"], "summary": summary,
                      "modules": modules, "cached_files": cached, "readme": facts["readme"][:6000]}
-        (folder / "knowledge.json").write_text(json.dumps(knowledge, ensure_ascii=False, indent=1), encoding="utf-8")
+        knowledge.update(commit=info['commit'],trace_id=self.trace_id,license_files=facts['license_files'],platform_notes=facts['platform_notes'],
+                         verification={'source_trust':'untrusted','executed_tests':False,'method':'static symbols/manifests; test-file presence only','summary_trust':'unverified local model'})
+        atomic_json(folder/'knowledge.json',knowledge)
         keywords = sorted(words(" ".join([full_name.replace("/", " ").replace("-", " ").replace("_", " "),
                                           knowledge["description"], " ".join(knowledge["topics"]),
                                           " ".join(summary.get("keywords", [])), summary.get("use_when", ""),
                                           summary.get("purpose", ""), " ".join(knowledge["languages"])])))[:80]
         row = {"url": knowledge["url"], "purpose": summary.get("purpose", "")[:400], "use_when": summary.get("use_when", "")[:300],
                "languages": list(facts["languages"])[:5], "stars": knowledge["stars"], "keywords": keywords,
-               "learned_at": now, "reason": reason, "used_for": (self.index.get(full_name) or {}).get("used_for", [])}
+               "learned_at": now, "reason": reason,'commit':info['commit'], "used_for": (self.index.get(full_name) or {}).get("used_for", [])}
         with self.lock:
+            old=self.index.get(full_name)
             self.index[full_name] = row
-            self._save_index()
+            try:self._save_index()
+            except Exception:
+                if old is None:self.index.pop(full_name,None)
+                else:self.index[full_name]=old
+                raise
         note = ["# " + full_name, "", "[[Jarvis Repos/index|Jarvis Repos]] · " + knowledge["url"] + " · ★ " +
                 str(knowledge["stars"]) + (" · " + knowledge["license"] if knowledge["license"] else "") + " · learned " +
-                now[:10] + " (" + reason + ")", "", "## Purpose", "", summary.get("purpose", ""), "",
+                now[:10] + " (" + reason + ")", 'Commit: '+info['commit'], 'Validation: static only; repository claims and model summary unverified.', "", "## Purpose", "", summary.get("purpose", ""), "",
                 "## Architecture", "", summary.get("architecture", ""), "", "## How to run", "", summary.get("how_to_run", ""), "",
                 "## Use it when", "", summary.get("use_when", ""), "", "## Key modules", ""]
         note += ["- `" + m.get("path", "") + "` — " + m.get("role", "") for m in summary.get("key_modules", [])]
@@ -595,8 +757,12 @@ class RepoLearner:
         if not want:
             return []
         scored = []
-        for name, row in self.index.items():
-            have = set(row.get("keywords", []))
+        for name, row in list(self.index.items()):
+            signature=tuple(row.get('keywords',[]))
+            saved=self._word_cache.get(name)
+            if saved is None or saved[0]!=signature:
+                saved=(signature,frozenset(signature));self._word_cache[name]=saved
+            have = saved[1]
             hits = len(want & have)
             if hits:
                 scored.append((hits / max(3, min(len(want), 8)), name, row))
@@ -608,19 +774,28 @@ class RepoLearner:
         data = self.knowledge(full_name)
         if not data:
             return None
+        if type(budget) is not int or not 0<=budget<=10000:raise LearningError('Invalid excerpt budget.')
+        commit=data.get('commit')
+        pinned=isinstance(commit,str) and re.fullmatch('[a-f0-9]{40}',commit)
+        if self.index.get(full_name,{}).get('commit') not in {None,commit}:return None
+        reuse=(pinned and data.get('license') in {'MIT','Apache-2.0','BSD-2-Clause','BSD-3-Clause','ISC','0BSD','Zlib','Unlicense','CC0-1.0'} and bool(data.get('license_files')) and not data.get('platform_notes'))
         want = words(goal)
         summary = data.get("summary", {})
         modules = sorted(data.get("modules", []), key=lambda m: -(len(want & words(m["path"] + " " + " ".join(
             s["name"] + " " + s.get("doc", "") for s in m["symbols"]))) * 3 + importance(m)))
         symbols = [{"path": m["path"], "symbols": [s["signature"] for s in m["symbols"][:10]]} for m in modules[:8] if m["symbols"]]
         excerpts, used = [], 0
-        cached = {c["path"]: c["file"] for c in data.get("cached_files", [])}
-        for module in modules[:6]:
-            name = cached.get(module["path"])
-            if not name or used > budget:
+        cached = {c["path"]: c for c in data.get("cached_files", []) if isinstance(c,dict)}
+        for module in modules[:6] if reuse else []:
+            item = cached.get(module["path"]);name=item.get('file') if item else None
+            if not name or Path(name).name!=name or '/' in name or '\\' in name or used >= budget:
                 continue
             try:
-                text = (self.cache / repo_id(full_name) / "files" / name).read_text(encoding="utf-8")
+                path=self.cache / repo_id(full_name) / 'files' / name
+                from .skill_memory import linked
+                if any(linked(p) for p in (path,path.parent,path.parent.parent)) or path.stat().st_size>160000:continue
+                text = path.read_text(encoding="utf-8")
+                if hashlib.sha256(text.encode('utf-8')).hexdigest()!=item.get('sha256'):continue
             except OSError:
                 continue
             piece = text[:min(1600, budget - used)]
@@ -628,14 +803,17 @@ class RepoLearner:
             used += len(piece)
             if len(excerpts) >= 3:
                 break
-        return {"repository": full_name, "url": data.get("url"), "purpose": summary.get("purpose", ""),
+        return {"repository": full_name, "url": 'https://github.com/'+full_name, "purpose": summary.get("purpose", ""),
                 "architecture": summary.get("architecture", ""), "how_to_run": summary.get("how_to_run", ""),
                 "patterns": summary.get("patterns", [])[:6], "key_modules": summary.get("key_modules", [])[:8],
                 "entry_points": data.get("entry_points", [])[:5], "relevant_symbols": symbols, "code_excerpts": excerpts,
-                "license": data.get("license", "")}
+                "license": data.get("license", ""),'commit':commit,'source_url':data.get('url','')+'/tree/'+commit if pinned else None,
+                'reuse_review_required':True,'reuse_policy':'Permissive metadata and license file required for excerpts; preserve attribution and review terms. Legacy/unpinned/other licenses: metadata only.',
+                'verification':data.get('verification',{'executed_tests':False,'source_trust':'untrusted'}),'platform_notes':data.get('platform_notes',[])}
 
     def wants_reference(self, goal):
         lower = goal.casefold()
+        if re.search(r"\b(?:do not|don't|never|without)\b.{0,80}\b(?:search|learn|github|repos?\b|repositories)\b",lower):return False
         if re.search(r"\b(?:typo|rename|delete|remove|comment|format|indent|readme text|spelling|bump version)\b", lower) \
                 and not re.search(r"\b(?:build|create|make|implement|develop|write a|add a)\b", lower):
             return False
@@ -644,12 +822,12 @@ class RepoLearner:
 
     def prepare(self, goal, cancelled=lambda: False, budget_seconds=240):
         """References for a coding task: saved knowledge first, otherwise search GitHub and learn."""
-        if not self.enabled or not self.wants_reference(goal):
+        if self.stop.is_set() or cancelled() or not isinstance(goal,str) or not 1<=len(goal)<=10000 or sensitive(goal) or not self.enabled or not self.wants_reference(goal):
             return []
         started = self.clock()
         chosen = [(name, row) for score, name, row in self.relevant(goal) if score >= .5][:self.repos_per_task]
         source = "memory"
-        if not chosen and self.search_for_coding:
+        if not chosen and self.search_for_coding and public_query(goal):
             source = "github"
             query, language = self.search_query(goal)
             self.card("learning", "Searching GitHub", query, "Finding repositories for your task")
@@ -686,7 +864,9 @@ class RepoLearner:
 
     # --- background ----------------------------------------------------------------------------------------------------
     def enqueue(self, full_name, reason):
+        canonical_name(full_name)
         with self.lock:
+            if self.stop.is_set():return False
             if full_name.casefold() in {q.casefold() for q in self.queued} or (self.current or "").casefold() == full_name.casefold():
                 return False
             self.queued.add(full_name)
@@ -729,7 +909,7 @@ class RepoLearner:
 
     def observe_title(self, title, process_name=""):
         """Foreground window changed (called every 300 ms; cheap). Queues a repo after it stays open."""
-        if not (self.enabled and self.auto_browse):
+        if self.stop.is_set() or not (self.enabled and self.auto_browse):
             return
         if process_name and process_name.casefold() not in BROWSERS:
             return
@@ -754,8 +934,18 @@ class RepoLearner:
             return
         if forge is not None:
             forge.on_viewed(candidate, learned=False)  # Learned long ago (being refreshed) but abilities already exist.
-        threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
-        threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
+        if not self._verify_slots.acquire(blocking=False):
+            self.viewing['queued']=False
+            return
+        def verify():
+            try:
+                if not self.stop.is_set():self._verify_and_queue(candidate)
+            finally:self._verify_slots.release()
+        try:threading.Thread(target=verify,daemon=True,name='Jarvis repo check').start()
+        except Exception:
+            self._verify_slots.release()
+            self.viewing['queued']=False
+            raise
 
     def _verify_and_queue(self, candidate):
         cached = self.checked.get(candidate)

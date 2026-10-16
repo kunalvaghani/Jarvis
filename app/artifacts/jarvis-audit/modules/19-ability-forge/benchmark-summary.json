@@ -1,0 +1,30 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "external_effects": 0,
+  "scope": "Static rejection of identical 400 KB comment plus valid owned utility. Five initial cold calls and20 subsequent warm calls/version, not fresh Python processes; imports and fixture allocation excluded. Same rejection and valid-source acceptance. No inference/audio/GPU/build throughput claim; TTFT/TTFA/VRAM not applicable.",
+  "before": {
+    "cold": {
+      "p50_ms": 1.4757,
+      "p95_ms": 1.5838,
+      "python_peak_bytes": 483521
+    },
+    "warm": {
+      "p50_ms": 1.3831000000000002,
+      "p95_ms": 1.4527,
+      "python_peak_bytes": 483521
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 0.0013,
+      "p95_ms": 0.0024,
+      "python_peak_bytes": 100
+    },
+    "warm": {
+      "p50_ms": 0.0012,
+      "p95_ms": 0.0013,
+      "python_peak_bytes": 100
+    }
+  }
+}

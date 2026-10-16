@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="7" time="4.059" timestamp="2026-10-15T23:21:53.628602+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_browser_playwright_audit" name="test_late_target_waits_before_uniqueness_check" time="0.003"><failure message="ValueError: The named browser target is not unique; specify its context.">tests\test_browser_playwright_audit.py:21: in test_late_target_waits_before_uniqueness_check
+    assert session.perform({'operation':'fill','url':session.page.url,'value':'Name','content':'hello'})['verified']
+jarvis\browser_worker.py:429: in perform
+    raise ValueError("The named browser target is not unique; specify its context.")
+E   ValueError: The named browser target is not unique; specify its context.</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_invalid_request_refused_before_browser_start" time="0.002"><failure message="AttributeError: 'NoneType' object has no attribute 'bring_to_front'">tests\test_browser_playwright_audit.py:32: in test_invalid_request_refused_before_browser_start
+    with pytest.raises(ValueError):session.perform(request)
+jarvis\browser_worker.py:395: in perform
+    self.page.bring_to_front()
+E   AttributeError: 'NoneType' object has no attribute 'bring_to_front'</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_controller_settings_cannot_be_replaced" time="0.001"><failure message="AssertionError: assert {'executable'...ewed-program'} == {'executable'...iewed-chrome'}&#10;  &#10;  Differing items:&#10;  {'executable': 'unreviewed-program'} != {'executable': 'reviewed-chrome'}&#10;  Use -v to get more diff">tests\test_browser_playwright_audit.py:41: in test_controller_settings_cannot_be_replaced
+    assert controller.transport.request.call_args.args[0]['settings']=={'executable':'reviewed-chrome'}
+E   AssertionError: assert {'executable'...ewed-program'} == {'executable'...iewed-chrome'}
+E     
+E     Differing items:
+E     {'executable': 'unreviewed-program'} != {'executable': 'reviewed-chrome'}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_controller_rejects_non_object_reply" time="0.001"><failure message="AttributeError: 'list' object has no attribute 'get'">tests\test_browser_playwright_audit.py:48: in test_controller_rejects_non_object_reply
+    with pytest.raises(ValueError):controller.request('inspect')
+jarvis\browser_automation.py:24: in request
+    self.last_url = result.get("url", self.last_url)
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_html_label_names_are_present_in_dom_summary" time="3.138"><failure message="assert False&#10; +  where False = any(&lt;generator object test_html_label_names_are_present_in_dom_summary.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000219E5A6CAC0&gt;)">tests\test_browser_playwright_audit.py:81: in test_html_label_names_are_present_in_dom_summary
+    assert any(c['name']=='Full name' and c['role']=='Edit' for c in report['controls'])
+E   assert False
+E    +  where False = any(&lt;generator object test_html_label_names_are_present_in_dom_summary.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000219E5A6CAC0&gt;)</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_authentication_redirect_is_reported" time="0.299"><failure message="KeyError: 'authentication_required'">tests\test_browser_playwright_audit.py:87: in test_authentication_redirect_is_reported
+    assert attached(page).inspect()['authentication_required'] is True
+E   KeyError: 'authentication_required'</failure></testcase><testcase classname="tests.test_browser_playwright_audit" name="test_summary_malformed_result_is_typed_error" time="0.193"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_browser_playwright_audit.py:94: in test_summary_malformed_result_is_typed_error
+    with pytest.raises(ValueError):session.inspect()
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase></testsuite></testsuites>

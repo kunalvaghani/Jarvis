@@ -1,7 +1,27 @@
-# PROMPT 17 — File Buddy, LightRAG/GraphRAG and source citations
+# Prompt 17 document audit — 2026-10-16 IST
 
-PARTIAL. Sources: ['jarvis', 'docs/file-buddy.md', 'jarvis/native_tools.py', 'jarvis/memory_curator.py']
+**28 PASS /4 BLOCKED /0 FAIL** catalog classifications, fixture scope only. Existing baseline 30 PASS /2 native tests deselected; final targeted 156 PASS /11 explicit blocker skips; full 2654 PASS /40 skips. [32 IDs/assertions](tests.jsonl), [targeted XML](cases-and-contracts.xml), [full XML](full-regression.xml).
 
-Missing inferred candidates: []
+Synthetic PDF/DOCX/text, fake local model/HTTP/account transports, temporary session/index readback. Actual owned Tk WM_DROPFILES and child event-loop regression fixtures ran; no Explorer drag, real document/account, live model/GPU, microphone or Obsidian trial.
 
-[Whole inventory](../../inventory.md)
+| Advertised/source-map claim | Actual binding/configuration | Evidence and boundary |
+| --- | --- | --- |
+| Drop file and ask | Actions constructs documents.Library; file_drop.handle → prepare → choice → ask_about/add; doc_ask parse/execute and Actions._answer_document route to Library.answer | actual scripted drop→command→spill→end→restart→load [journey](document-journey.json); owned native WM_DROPFILES tests; real send/draft remain fakes |
+| Extraction | PDF pypdf 6.20.0; DOCX zip/XML text; text/HTML bounded reads | exact returned-character/page caps; ZipInfo expansion guard; scanned blank PDF honest no-text; embedded image not inferred. No OCR/complex PDF semantic table reconstruction |
+| Chunking | paragraph/page-aware1200 chars, bounded overlap | invalid size/overlap rejected; carry-over no longer exceeds chunk budget; page identity retained |
+| LightRAG/GraphRAG | own BM25 + entity co-occurrence; optional local model graph enrichment | NOT upstream libraries, no embeddings/reranker download. Graph names grounded in document text; relation meaning/descriptions still model supplied |
+| Active settings | documents.enabled=true, model=qwen3.5:9b, graph_threshold_chars=40000, graph_max_chunks=12, focus_minutes=30 | config validation for booleans, numeric bounds, finite focus. Manifest/requirements retain pypdf 6.20.0; no new service/dependency |
+| Retrieval | terms/Document.search/context, precomputed IDF and postings | identical ranked top5 on1500-chunk A/B, scores compared to 10 decimal places; Gujarati/Devanagari combining marks preserved; tested short-question negation sent to model (payload clips at600 chars); lexical English STOP still removes not/no |
+| Incremental identity | SHA256 content-derived16hex ID before/after parsing and prepare; session focus updates | changed file rejects stale answer before/after generation; updated file fully rebuilds index, not incremental per-page vector update. Historical disk versions retained |
+| Persistence/concurrency | session JSON, per-document index, catalog JSON, optional Markdown note; unique-temp skill_memory.atomic under write lock | crash/reopen, malformed chunks/path IDs, five concurrent documents preserve catalog entries; one spill attempt on failure. Not a multi-file/multi-process transaction |
+| Local/private boundary | Library._chat → knowledge_worker.chat configured local model | transport fake asserts local qwen3.5:9b; no requests in offline ingestion/journey. Content remains untrusted data, no executable capability in retrieval; no universal privacy proof for unrelated adapters |
+| Citation/absence | supplied excerpt page membership, absent lexical/graph evidence returns no-find before model | invalid p99 refused, page2 grounded authored fixture works; general entailment and graph-only negative answers unproved |
+| Drop backpressure | global2-slot nonblocking admission, serialized FLOW_LOCK; native queue8, poll8/frame | ten starts create<=2 threads; excess start visibly refused. Native overflow counted internally, not displayed; direct add/background summary threads not globally bounded |
+| Stop/fault | post-model stop/stale checks; no question append on timeout/Stop/stale | sampled boundary checks, no hard cancellation of native model kernel; writes after uncertain failure never automatically replayed by these paths |
+| Missing contracts | JRV-17-003: the answer API selects one document; no cross-document conflict arbitration. JRV-17-005: extracted text is capped, but pypdf parses page streams in-process without a hard RAM/time sandbox. JRV-17-012: valid page numbers do not establish semantic entailment; a fake wrong date with a valid page passes. JRV-17-032: document/model/spill operations lack unified redacted operation trace IDs. | blocked tests execute prerequisite readback before explicit skip; skips are not passing assertions of missing behavior |
+
+Read actual system map, full file-buddy guide and real source/config registrations. Candidate jarvis/native_tools.py and memory_curator.py do not implement document retrieval; old file_knowledge candidate modules do not exist. Buddy rendering/brain regressions retained, no visible artwork change/new screenshot. Existing README rendered images and historical live measurements remain dated.
+
+Order: preserve inherited dirty branch/preimages → existing baseline → reproduce → focused fixes → exact A/B → targeted/native/accounting → synthetic journey → source-frozen full run with parallel read-only launcher check → ledger/report. No new branch/reset: audit/12-tool-registry already held user/module14–16 work. No commit/install/send/deploy/real-vault mutation.
+
+Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places. Lookup excludes construction, parsing, hashing, enrichment/model/audio and GPU. [50 raw samples](benchmarks.csv), [scope/cold/warm](benchmark-summary.json), [tradeoffs](changes.md), [official compatibility](compatibility.md), [rollback](rollback.md).

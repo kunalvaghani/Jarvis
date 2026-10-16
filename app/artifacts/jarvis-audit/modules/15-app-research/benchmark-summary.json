@@ -1,0 +1,31 @@
+{
+  "samples_per_version": 25,
+  "equivalent": true,
+  "side_effects": 0,
+  "scope": "24 records/target, 20 controls and 3 clipped synthetic sources each. Lookup only; cold is a fresh in-memory store. No disk startup, network, model, TTFT/audio or GPU workload.",
+  "vram": "N/A: no GPU allocation",
+  "before": {
+    "cold": {
+      "p50_ms": 3.5171,
+      "p95_ms": 3.7281,
+      "python_peak_bytes": 382100
+    },
+    "warm": {
+      "p50_ms": 3.51745,
+      "p95_ms": 3.7913,
+      "python_peak_bytes": 357246
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 0.4846,
+      "p95_ms": 0.5309,
+      "python_peak_bytes": 66126
+    },
+    "warm": {
+      "p50_ms": 0.44515,
+      "p95_ms": 0.4511,
+      "python_peak_bytes": 64405
+    }
+  }
+}

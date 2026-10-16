@@ -1,0 +1,1641 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="40" skipped="0" tests="58" time="19.122" timestamp="2026-10-15T23:54:52.850256+05:30" hostname="Kunal-Beast"><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_background_has_no_gui_or_foreground_checkpoint_effect" time="1.505"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpp4033iww\\.jarvis-runtime\\state\\.jarvis-task-t3cuuaxu' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpp4033iww\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_background_has_no_gui_or_foreground_checkpoint_effect&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE207A30&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpp4033iww\\.jarvis-runtime\\state\\.jarvis-task-t3cuuaxu' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpp4033iww\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_background_source_refresh_preserves_verification_and_expiry" time="0.363"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpg5sd32qf\\.jarvis-runtime\\state\\.jarvis-task-42btpjnt' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpg5sd32qf\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_background_source_refresh_preserves_verification_and_expiry&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2E9300&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpg5sd32qf\\.jarvis-runtime\\state\\.jarvis-task-42btpjnt' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpg5sd32qf\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_budget_bounds_network_research" time="0.371"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpdmyho8wv\\.jarvis-runtime\\state\\.jarvis-task-9tt5np6c' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpdmyho8wv\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_budget_bounds_network_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE304040&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpdmyho8wv\\.jarvis-runtime\\state\\.jarvis-task-9tt5np6c' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpdmyho8wv\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_correction_context_retains_acquired_help" time="0.388"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmplzars19p\\.jarvis-runtime\\state\\.jarvis-task-nbus0u1r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmplzars19p\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_correction_context_retains_acquired_help&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2DA860&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmplzars19p\\.jarvis-runtime\\state\\.jarvis-task-nbus0u1r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmplzars19p\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_corrupt_cache_and_failed_persistence_are_not_success" time="0.383"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpr1fu65mb\\.jarvis-runtime\\state\\.jarvis-task-s0_gfgi4' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpr1fu65mb\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_corrupt_cache_and_failed_persistence_are_not_success&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2E8D60&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpr1fu65mb\\.jarvis-runtime\\state\\.jarvis-task-s0_gfgi4' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpr1fu65mb\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_implicit_current_app_task_searches_before_planning" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp8e22v1cu\\.jarvis-runtime\\state\\.jarvis-task-77rwmfcn' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp8e22v1cu\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_implicit_current_app_task_searches_before_planning&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2EC2E0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp8e22v1cu\\.jarvis-runtime\\state\\.jarvis-task-77rwmfcn' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp8e22v1cu\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_known_simple_commands_do_not_trigger_learning" time="0.380"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp6kazmpt2\\.jarvis-runtime\\state\\.jarvis-task-0nrb0fas' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp6kazmpt2\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_known_simple_commands_do_not_trigger_learning&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE3550C0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp6kazmpt2\\.jarvis-runtime\\state\\.jarvis-task-0nrb0fas' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp6kazmpt2\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_native_planner_receives_learning_on_reused_conversation" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp31wjq4vf\\.jarvis-runtime\\state\\.jarvis-task-rjete82e' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp31wjq4vf\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_native_planner_receives_learning_on_reused_conversation&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE309A20&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp31wjq4vf\\.jarvis-runtime\\state\\.jarvis-task-rjete82e' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp31wjq4vf\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_only_configured_foreground_executable_can_supply_implicit_target" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwpgt_z1_\\.jarvis-runtime\\state\\.jarvis-task-8bt5eugp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwpgt_z1_\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_only_configured_foreground_executable_can_supply_implicit_target&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE381120&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwpgt_z1_\\.jarvis-runtime\\state\\.jarvis-task-8bt5eugp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwpgt_z1_\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_only_whole_goal_verification_promotes_workflow" time="0.362"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpoyabfcch\\.jarvis-runtime\\state\\.jarvis-task-j_qnr7lc' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpoyabfcch\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_only_whole_goal_verification_promotes_workflow&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2D1480&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpoyabfcch\\.jarvis-runtime\\state\\.jarvis-task-j_qnr7lc' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpoyabfcch\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_partial_knowledge_researches_only_missing_features" time="0.363"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpx1h3rgo1\\.jarvis-runtime\\state\\.jarvis-task-in7lti_b' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpx1h3rgo1\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_partial_knowledge_researches_only_missing_features&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2CCA30&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpx1h3rgo1\\.jarvis-runtime\\state\\.jarvis-task-in7lti_b' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpx1h3rgo1\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_policy_denial_and_cancellation_do_not_execute_actions" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkd5uv42i\\.jarvis-runtime\\state\\.jarvis-task-7rs_nwym' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkd5uv42i\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_policy_denial_and_cancellation_do_not_execute_actions&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2575B0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkd5uv42i\\.jarvis-runtime\\state\\.jarvis-task-7rs_nwym' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkd5uv42i\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_private_website_scope_is_not_sent_to_research" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpse0gir22\\.jarvis-runtime\\state\\.jarvis-task-rnrkepud' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpse0gir22\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_private_website_scope_is_not_sent_to_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2CE890&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpse0gir22\\.jarvis-runtime\\state\\.jarvis-task-rnrkepud' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpse0gir22\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_rejected_app_object_proposal_gets_one_readonly_correction" time="0.381"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp5nxk5kpc\\.jarvis-runtime\\state\\.jarvis-task-oad5dgm8' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp5nxk5kpc\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_rejected_app_object_proposal_gets_one_readonly_correction&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2567D0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp5nxk5kpc\\.jarvis-runtime\\state\\.jarvis-task-oad5dgm8' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp5nxk5kpc\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_repair_targets_failed_feature_without_dispatching_prior_effects" time="0.368"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp9z6y3wc2\\.jarvis-runtime\\state\\.jarvis-task-zzn5vor6' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp9z6y3wc2\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_repair_targets_failed_feature_without_dispatching_prior_effects&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE381090&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp9z6y3wc2\\.jarvis-runtime\\state\\.jarvis-task-zzn5vor6' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp9z6y3wc2\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_reuse_offline_and_restart_no_research" time="0.375"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmptvkzjk_d\\.jarvis-runtime\\state\\.jarvis-task-8ms_vce2' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmptvkzjk_d\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_reuse_offline_and_restart_no_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2D0400&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmptvkzjk_d\\.jarvis-runtime\\state\\.jarvis-task-8ms_vce2' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmptvkzjk_d\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_shared_skill_memory_registers_verified_procedure_as_guidance" time="0.375"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp84e_1zav\\.jarvis-runtime\\state\\.jarvis-task-5tkthclz' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp84e_1zav\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_shared_skill_memory_registers_verified_procedure_as_guidance&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2EFD30&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp84e_1zav\\.jarvis-runtime\\state\\.jarvis-task-5tkthclz' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp84e_1zav\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_targeted_discovery_uses_registry_and_shared_state" time="0.376"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2sp91tt5\\.jarvis-runtime\\state\\.jarvis-task-0qultw0u' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2sp91tt5\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_targeted_discovery_uses_registry_and_shared_state&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE356380&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2sp91tt5\\.jarvis-runtime\\state\\.jarvis-task-0qultw0u' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2sp91tt5\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_tool_mapping_respects_task_scope_and_document_version_is_unknown" time="0.381"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp35yepnuf\\.jarvis-runtime\\state\\.jarvis-task-nnm8vmla' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp35yepnuf\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_tool_mapping_respects_task_scope_and_document_version_is_unknown&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2DB850&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp35yepnuf\\.jarvis-runtime\\state\\.jarvis-task-nnm8vmla' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp35yepnuf\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_knowledge_acquisition.AcquisitionTests" name="test_version_and_interface_changes_invalidate_reuse" time="0.377"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpvuk3zz84\\.jarvis-runtime\\state\\.jarvis-task-9t4yrogs' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpvuk3zz84\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_version_and_interface_changes_invalidate_reuse&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5FF91B880&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpvuk3zz84\\.jarvis-runtime\\state\\.jarvis-task-9t4yrogs' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpvuk3zz84\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_background_has_no_gui_or_foreground_checkpoint_effect" time="0.383"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpsw3da2m8\\.jarvis-runtime\\state\\.jarvis-task-6lef4s4c' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpsw3da2m8\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_background_has_no_gui_or_foreground_checkpoint_effect&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2CCFD0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpsw3da2m8\\.jarvis-runtime\\state\\.jarvis-task-6lef4s4c' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpsw3da2m8\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_background_source_refresh_preserves_verification_and_expiry" time="0.362"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpbrgybctp\\.jarvis-runtime\\state\\.jarvis-task-w12phnxa' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpbrgybctp\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_background_source_refresh_preserves_verification_and_expiry&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE47B940&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpbrgybctp\\.jarvis-runtime\\state\\.jarvis-task-w12phnxa' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpbrgybctp\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_budget_bounds_network_research" time="0.380"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpnrjz4tbj\\.jarvis-runtime\\state\\.jarvis-task-tetnumls' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpnrjz4tbj\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_budget_bounds_network_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2F1990&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpnrjz4tbj\\.jarvis-runtime\\state\\.jarvis-task-tetnumls' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpnrjz4tbj\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_correction_context_retains_acquired_help" time="0.361"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph3kmv2_1\\.jarvis-runtime\\state\\.jarvis-task-g1fvxnp3' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph3kmv2_1\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_correction_context_retains_acquired_help&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE366650&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph3kmv2_1\\.jarvis-runtime\\state\\.jarvis-task-g1fvxnp3' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph3kmv2_1\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_corrupt_cache_and_failed_persistence_are_not_success" time="0.364"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp3d3fg_ck\\.jarvis-runtime\\state\\.jarvis-task-3plosjyo' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp3d3fg_ck\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_corrupt_cache_and_failed_persistence_are_not_success&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5FF8DD450&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp3d3fg_ck\\.jarvis-runtime\\state\\.jarvis-task-3plosjyo' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp3d3fg_ck\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_implicit_current_app_task_searches_before_planning" time="0.381"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp_tt1d1oy\\.jarvis-runtime\\state\\.jarvis-task-nzhjr_gl' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp_tt1d1oy\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_implicit_current_app_task_searches_before_planning&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2DBFA0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp_tt1d1oy\\.jarvis-runtime\\state\\.jarvis-task-nzhjr_gl' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp_tt1d1oy\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_known_simple_commands_do_not_trigger_learning" time="0.379"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpfg788ntg\\.jarvis-runtime\\state\\.jarvis-task-smcl9ul_' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpfg788ntg\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_known_simple_commands_do_not_trigger_learning&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2CF2E0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpfg788ntg\\.jarvis-runtime\\state\\.jarvis-task-smcl9ul_' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpfg788ntg\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_native_planner_receives_learning_on_reused_conversation" time="0.385"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph8i5vbd5\\.jarvis-runtime\\state\\.jarvis-task-myvwz0oq' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph8i5vbd5\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_native_planner_receives_learning_on_reused_conversation&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE3565F0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph8i5vbd5\\.jarvis-runtime\\state\\.jarvis-task-myvwz0oq' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmph8i5vbd5\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_only_configured_foreground_executable_can_supply_implicit_target" time="0.365"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpzbjlsf8b\\.jarvis-runtime\\state\\.jarvis-task-9hg4ve65' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpzbjlsf8b\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_only_configured_foreground_executable_can_supply_implicit_target&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE478A60&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpzbjlsf8b\\.jarvis-runtime\\state\\.jarvis-task-9hg4ve65' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpzbjlsf8b\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_only_whole_goal_verification_promotes_workflow" time="0.378"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0c9yud9f\\.jarvis-runtime\\state\\.jarvis-task-m645td0r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0c9yud9f\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_only_whole_goal_verification_promotes_workflow&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2EB580&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0c9yud9f\\.jarvis-runtime\\state\\.jarvis-task-m645td0r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0c9yud9f\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_partial_knowledge_researches_only_missing_features" time="0.384"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0fg4tacu\\.jarvis-runtime\\state\\.jarvis-task-d39vg55q' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0fg4tacu\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_partial_knowledge_researches_only_missing_features&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE44C7C0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0fg4tacu\\.jarvis-runtime\\state\\.jarvis-task-d39vg55q' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp0fg4tacu\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_policy_denial_and_cancellation_do_not_execute_actions" time="0.364"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkhhnhgo6\\.jarvis-runtime\\state\\.jarvis-task-h427er5v' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkhhnhgo6\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_policy_denial_and_cancellation_do_not_execute_actions&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE455E70&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkhhnhgo6\\.jarvis-runtime\\state\\.jarvis-task-h427er5v' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpkhhnhgo6\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_private_website_scope_is_not_sent_to_research" time="0.389"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpyimk1c0b\\.jarvis-runtime\\state\\.jarvis-task-djzwxsmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpyimk1c0b\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_private_website_scope_is_not_sent_to_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE305B70&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpyimk1c0b\\.jarvis-runtime\\state\\.jarvis-task-djzwxsmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpyimk1c0b\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_rejected_app_object_proposal_gets_one_readonly_correction" time="0.370"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp00nv8lh3\\.jarvis-runtime\\state\\.jarvis-task-370h_6a1' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp00nv8lh3\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_rejected_app_object_proposal_gets_one_readonly_correction&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2E9570&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp00nv8lh3\\.jarvis-runtime\\state\\.jarvis-task-370h_6a1' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp00nv8lh3\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_repair_targets_failed_feature_without_dispatching_prior_effects" time="0.373"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa_5ol8nq\\.jarvis-runtime\\state\\.jarvis-task-488lvpxp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa_5ol8nq\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_repair_targets_failed_feature_without_dispatching_prior_effects&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2D3CA0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa_5ol8nq\\.jarvis-runtime\\state\\.jarvis-task-488lvpxp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa_5ol8nq\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_reuse_offline_and_restart_no_research" time="0.378"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmprz0zejq0\\.jarvis-runtime\\state\\.jarvis-task-9f9zpyb_' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmprz0zejq0\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_reuse_offline_and_restart_no_research&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE3825F0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmprz0zejq0\\.jarvis-runtime\\state\\.jarvis-task-9f9zpyb_' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmprz0zejq0\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_shared_skill_memory_registers_verified_procedure_as_guidance" time="0.389"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2f0dh87j\\.jarvis-runtime\\state\\.jarvis-task-g4h08xh8' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2f0dh87j\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_shared_skill_memory_registers_verified_procedure_as_guidance&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE2EA980&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2f0dh87j\\.jarvis-runtime\\state\\.jarvis-task-g4h08xh8' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmp2f0dh87j\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_targeted_discovery_uses_registry_and_shared_state" time="0.378"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpypynlmim\\.jarvis-runtime\\state\\.jarvis-task-wmbqvza0' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpypynlmim\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_targeted_discovery_uses_registry_and_shared_state&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE366B30&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpypynlmim\\.jarvis-runtime\\state\\.jarvis-task-wmbqvza0' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpypynlmim\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_tool_mapping_respects_task_scope_and_document_version_is_unknown" time="0.374"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa8klk7dp\\.jarvis-runtime\\state\\.jarvis-task-v2mtud_r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa8klk7dp\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_tool_mapping_respects_task_scope_and_document_version_is_unknown&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE357EB0&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa8klk7dp\\.jarvis-runtime\\state\\.jarvis-task-v2mtud_r' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpa8klk7dp\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="app.tests.test_knowledge_acquisition.AcquisitionTests" name="test_version_and_interface_changes_invalidate_reuse" time="0.361"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwqc9zdb7\\.jarvis-runtime\\state\\.jarvis-task-o4uyr1hb' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwqc9zdb7\\.jarvis-runtime\\state\\task_state.json'">self = &lt;tests.test_knowledge_acquisition.AcquisitionTests testMethod=test_version_and_interface_changes_invalidate_reuse&gt;
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.actions = Actions({'files_root': 'managed', '_ui_verification': True,
+            'apps': {'Fixture': {'executable': sys.executable}}, 'memory': {'enabled': False},
+            'brain': {'enabled': False}, 'knowledge_acquisition': {'enabled': True}}, self.root, lambda *_: None)
+        self.actions.task_state = TaskState(self.root)
+&gt;       self.actions.task_state.start('Use Fixture to create a diagram', 'task')
+
+app\tests\test_knowledge_acquisition.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+InsTAREELS\jarvis\task_state.py:94: in start
+    self._write()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.task_state.TaskState object at 0x000001A5BE257A60&gt;
+
+    def _write(self):
+        if self.read_only:
+            return  # Hidden UI verification must not mark a real running task interrupted.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=self.path.parent,
+                                             prefix=".jarvis-task-", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(self.data, output, ensure_ascii=False, indent=2)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Windows scanners/readers may briefly deny atomic replacement. Retry
+        # only this known failed metadata commit, never the task/action or write.
+        # If another writer changed the destination, or the source vanished,
+        # preserve the pending checkpoint and stop rather than overwrite it.
+        previous = self.path.read_bytes() if self.path.exists() else None
+        for attempt in range(4):
+            try:
+&gt;               os.replace(temporary, self.path)
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwqc9zdb7\\.jarvis-runtime\\state\\.jarvis-task-o4uyr1hb' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{5deb785f-9cb0-4333-a1f4-8197e14c3ccb}\\AC\\Temp\\tmpwqc9zdb7\\.jarvis-runtime\\state\\task_state.json'
+
+InsTAREELS\jarvis\task_state.py:68: PermissionError</failure></testcase><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_changed_title_or_hidden_window_clears_controls" time="0.003" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_closed_window_cannot_offer_old_controls" time="0.001" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_each_planner_operation_receives_live_status" time="0.008" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_failed_or_cancelled_refresh_cannot_reuse_old_controls" time="0.001" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_local_app_answer_contains_status_and_controls" time="0.007" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_open_status_and_controls_do_not_retain_action_ids_or_passwords" time="0.001" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_reused_handle_or_process_identity_invalidates_controls" time="0.001" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_successful_refresh_updates_changed_control_list" time="0.001" /><testcase classname="InsTAREELS.tests.test_live_app_context.LiveAppTests" name="test_switch_keeps_previous_window_status_and_current_window" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_changed_title_or_hidden_window_clears_controls" time="0.002" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_closed_window_cannot_offer_old_controls" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_each_planner_operation_receives_live_status" time="0.002" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_failed_or_cancelled_refresh_cannot_reuse_old_controls" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_local_app_answer_contains_status_and_controls" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_open_status_and_controls_do_not_retain_action_ids_or_passwords" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_reused_handle_or_process_identity_invalidates_controls" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_successful_refresh_updates_changed_control_list" time="0.001" /><testcase classname="app.tests.test_live_app_context.LiveAppTests" name="test_switch_keeps_previous_window_status_and_current_window" time="0.001" /></testsuite></testsuites>

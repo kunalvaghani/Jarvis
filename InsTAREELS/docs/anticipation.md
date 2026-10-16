@@ -1,5 +1,11 @@
 # Idle-time anticipation
 
+<!-- prompt20-audit -->
+**Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
+Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/20-self-evolution/inventory.md).
+<!-- /prompt20-audit -->
+
 Implemented 2026-10-03. Jarvis can anticipate a small set of likely next needs,
 explain their activity evidence, and prepare read-only research outlines or editor
 review checklists while its foreground work is idle. The separate component uses

@@ -1,0 +1,54 @@
+[
+  {
+    "path": "jarvis/knowledge_acquisition.py",
+    "sha256": "58029b2eccc63d73cea9016f76871e157631d675657461938fac9341d305ea88"
+  },
+  {
+    "path": "jarvis/app_knowledge.py",
+    "sha256": "d20f195f90d19ab1f46a36dc0ab15571448aeed61f68d484045d08d7628fa622"
+  },
+  {
+    "path": "jarvis/application_discovery.py",
+    "sha256": "b4baf7b911dbc320d81a9def626798be22f59062e94ac237f0c4d84e2c61fc61"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "cf355797237359f1eb8afe2f4e01441dcfce68cebf5505b1e48b91b35e71e156"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "bd11e9985482ebf50c1aa9e272ddf369296d08384df9e0bb8039a8114db23b1c"
+  },
+  {
+    "path": "tests/test_app_research_audit.py",
+    "sha256": "4e2a4a8b9ce43bf393601eb4aa0e04cd9ad9067992e0fe5aed941d0c3293f8e2"
+  },
+  {
+    "path": "scripts/verification/verify_app_research_audit.py",
+    "sha256": "aa1efd70eb53f4d03f6cad99334141d1f5759eba6fe8543ede71e1b28081169e"
+  },
+  {
+    "path": "scripts/verification/verify_app_research_journey.py",
+    "sha256": "1a28c536faad8267c131e09cc7aa8d2c91800dd42c39b34d57af37fc645f3b1b"
+  },
+  {
+    "path": "scripts/verification/report_app_research_audit.py",
+    "sha256": "21b023e60261876929833141a7acdea6dc6f4f4e3a7bb3148c497f17ecc62fe8"
+  },
+  {
+    "path": "README.md",
+    "sha256": "cd2fb4fc5ec8ef169323c324121154a2949fe3d574058bff4e0e7845741a939d"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "393546d853b42e6e9cc53abbef5bd5db98b2cb5545e17b93631afe5346977ab5"
+  },
+  {
+    "path": "docs/autonomous-learning.md",
+    "sha256": "559abd5ce631870ad62a2c5d1ecec99af8d8d653a3052d91b8b595962044c526"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "9dbf8a97e54e3c7703f1dcb011447a6e27c62a32a57460daf516dd92d4606e12"
+  }
+]

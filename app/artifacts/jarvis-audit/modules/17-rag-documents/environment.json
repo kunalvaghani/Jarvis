@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-16 IST",
+  "head": "e1a33a0944b5cd725e1a76a72eda228513e45963",
+  "branch": "audit/12-tool-registry",
+  "preimages": [
+    "jarvis/documents.py",
+    "jarvis/file_drop.py",
+    "scripts/verification/audit_catalog.py",
+    "tests/test_audit_result_accounting.py",
+    "README.md",
+    "docs/system-map.md",
+    "docs/file-buddy.md"
+  ],
+  "private_documents_used": false,
+  "python": "3.10.6",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "pypdf": "6.20.0",
+  "host_ram_bytes": 33656832000,
+  "logical_cpus": 16,
+  "target": "Windows/Ryzen7/32GB/RTX3050Laptop4GB; no GPU/native model benchmark",
+  "dependencies_installed": false
+}

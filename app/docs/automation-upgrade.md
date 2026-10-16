@@ -1,5 +1,15 @@
 # Automation upgrade
 
+<!-- prompt14-audit -->
+**2026-10-15 browser audit:** Current DOM summaries include bounded label names,
+sign-in heuristics and untrusted metadata; generic role targets wait then require
+uniqueness, fresh URL and pinned semantic identity after the cue. Multiple owned
+tabs block generic mutations. Download/save and explicit tab selection are not
+implemented production capabilities. [Actual headless assertions, metrics and limits](../artifacts/jarvis-audit/modules/14-browser-playwright/inventory.md).
+Playwright1.63.0 retained;1.64.0 upstream release recorded without installation.
+Historical live measurements below retain original dates; no new public account/GUI trial.
+<!-- /prompt14-audit -->
+
 Updated 2026-10-01. This change improves target selection and avoids repeated model inference for supported, explicit workflows. It does not establish that every desktop task succeeds or finishes in five seconds.
 
 ## Causes found and changes

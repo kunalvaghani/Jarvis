@@ -1,0 +1,62 @@
+[
+  {
+    "path": "jarvis/self_evolution.py",
+    "sha256": "b895463ed1f97d67bac4b6b1d2ab5f092143104d9427ab9adcecce820657388e"
+  },
+  {
+    "path": "jarvis/anticipation.py",
+    "sha256": "c4fbb4f49c887f35f9254177d3f2bdabd99ae8113cf910511d8c3e907dbcdc25"
+  },
+  {
+    "path": "tests/test_self_evolution.py",
+    "sha256": "40b7108b0ec33d4bdcbf8f73965a342c6df93dac92d703808009893f75432df3"
+  },
+  {
+    "path": "tests/test_self_evolution_audit.py",
+    "sha256": "eb24e515959920390ace750ab4057bd8aa189bc41a243dc0c0371f4da199b18e"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "2799e8904a884f45f69bdf62694acbbdba118b93bf9a2211b133cda03a3f45fc"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "880db3f8b4604f776ef0b9121acc9dcb93fe0d798b164e53e3f2153ec36808a0"
+  },
+  {
+    "path": "scripts/verification/verify_self_evolution_audit.py",
+    "sha256": "2f776676e0b844ee4babb37350c118cbec6facd057f902d87190bf2be407a912"
+  },
+  {
+    "path": "scripts/verification/report_self_evolution_audit.py",
+    "sha256": "3186bc4951d0e98d3bb21c09d437291ad7cafe608bb8a41a0b65a3f5afce0832"
+  },
+  {
+    "path": "scripts/verification/verify_self_evolution_artifacts.py",
+    "sha256": "31d379b8a9812f1cb7ce32390453e51de89d6f7fd9c8a604fcc98118ae587504"
+  },
+  {
+    "path": "README.md",
+    "sha256": "a6e9bddaafe23923a6a8e646f8586b04baffe008d1fd9aaaa486a400c6230ed2"
+  },
+  {
+    "path": "docs/self-evolution.md",
+    "sha256": "fd9fadb0a03b1690bc5181a80122dece764257ed31c3ce0ee3f8489dddbad2ab"
+  },
+  {
+    "path": "docs/anticipation.md",
+    "sha256": "f5f31fa4b6c4c901ff666899aa0a3fa127f6c861e2f4fdb1e2bab591157c1629"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "ca2b33a61b834546c703dcf80699f9bd56872f759fa1ed36e8d3f219eee63ba0"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "9fe1c62ccd0cd159071d06ebcc13c354922e8551e3268dc17207df2e8dab33a7"
+  },
+  {
+    "path": "artifacts/media/self-evolution-paused-preview.png",
+    "sha256": "afcaaf62617bd178b30ba83ced77b58dc6820c5993480df55a32e6763800bf9f"
+  }
+]

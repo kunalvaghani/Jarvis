@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-16 IST",
+  "passed": true,
+  "seconds": 0.07800000000133878,
+  "external_side_effects": 0,
+  "scope": "Actual memory command parser/executor, temporary JSON/Markdown fact storage, restart, knowledge_worker with authored local chat response and network forbidden, real SQLite/FTS commit/readback/reopen. No real vault or model, speaker, Obsidian GUI or cloud acceptance.",
+  "facts": [
+    "Kunal prefers masala chai."
+  ],
+  "answer": "You prefer masala chai, according to local memory.",
+  "sqlite_reopen_verified": true
+}

@@ -178,8 +178,8 @@
       "tests/test_groq.py",
       "tests/test_documents.py"
     ],
-    "status": "FIXTURE COMPLETE",
-    "reason": "32 catalog cases executed; two real cached default-model synthetic probes passed. Broad semantics, acoustic latency and live web acceptance remain open."
+    "status": "30 CURRENT FIXTURE PASS / 2 NATIVE ACCEPTANCE BLOCKED",
+    "reason": "Existing native qwen9b proof source hash became stale after external phase1 knowledge_worker change. Ollama unavailable on read-only probe; historical proof preserved, fresh synthetic inference required. Current module06 fixtures re-executed with Prompt14."
   },
   {
     "number": 7,
@@ -390,16 +390,25 @@
     "title": "# PROMPT 14 \u2014 Browser DOM automation, Playwright and web controls",
     "prompt_sha256": "09a7081f626d70fcd23d57601ac4c4fc6e84ffbbae95f1cb9e7436e7be02c471",
     "sources": [
-      "jarvis/browser_automation.py",
       "jarvis/browser_worker.py",
+      "jarvis/browser_automation.py",
+      "jarvis/browser_cursor.py",
+      "jarvis/ui_transport.py",
+      "jarvis/windows_command_browser.py",
+      "jarvis/tools.py",
       "jarvis/app_knowledge.py",
-      "docs",
-      "tests"
+      "docs/automation-upgrade.md",
+      "docs/system-map.md"
     ],
     "unresolved_candidates": [],
-    "test_candidates": [],
-    "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "test_candidates": [
+      "tests/test_browser_playwright_audit.py",
+      "tests/test_automation_upgrade.py",
+      "tests/test_independent_cursor.py",
+      "tests/test_windows_commands.py"
+    ],
+    "status": "30 FIXTURE PASS / 2 BLOCKED; LIVE SITE ACCEPTANCE UNVERIFIED",
+    "reason": "Actual isolated headless Chrome DOM/forms/SPA/delayed controls/redirect/download readback plus fake transport/policy faults. Production verified-download and explicit tab selection adapters absent; no new capability installed."
   },
   {
     "number": 15,
@@ -409,11 +418,15 @@
     "sources": [
       "jarvis/knowledge_acquisition.py",
       "jarvis/app_knowledge.py",
+      "jarvis/application_discovery.py",
+      "jarvis/tools.py",
       "jarvis/browser_worker.py",
-      "docs/autonomous-learning.md"
+      "docs/autonomous-learning.md",
+      "docs/learning-validation.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_app_research_audit.py",
       "tests/test_knowledge_acquisition.py",
       "tests/test_live_app_context.py"
     ],
@@ -431,12 +444,22 @@
       "jarvis/obsidian_memory.py",
       "jarvis/skill_memory.py",
       "jarvis/experience_memory.py",
-      "jarvis/context_hub.py"
+      "jarvis/experience.py",
+      "jarvis/memory_index.py",
+      "jarvis/context_hub.py",
+      "docs/memory-apis-alerts.md",
+      "docs/cognitive-architecture.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_memory_audit.py",
+      "tests/test_memory_weather.py",
       "tests/test_obsidian_memory.py",
-      "tests/test_cognition.py"
+      "tests/test_memory_index.py",
+      "tests/test_skill_memory.py",
+      "tests/test_experience_memory.py",
+      "tests/test_experience.py",
+      "tests/test_knowledge.py"
     ],
     "status": "PARTIAL",
     "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
@@ -447,17 +470,25 @@
     "title": "# PROMPT 17 \u2014 File Buddy, LightRAG/GraphRAG and source citations",
     "prompt_sha256": "6742b9e31173f9973c65e36504459ea8ec806e3510ec21910cbd0ec65566b626",
     "sources": [
-      "jarvis",
+      "jarvis/documents.py",
+      "jarvis/file_drop.py",
+      "jarvis/actions.py",
+      "jarvis/commands.py",
+      "jarvis/buddy_engine.py",
+      "jarvis/island_buddy.py",
       "docs/file-buddy.md",
-      "jarvis/native_tools.py",
-      "jarvis/memory_curator.py"
+      "config/config.json",
+      "config/runtime_manifest.json",
+      "requirements/runtime.txt"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_rag_documents_audit.py",
+      "tests/test_documents.py",
       "tests/test_buddy.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "28 catalog fixture PASS; 4 missing correctness/resource/trace contracts BLOCKED; live model/account acceptance separate"
   },
   {
     "number": 18,
@@ -466,18 +497,28 @@
     "prompt_sha256": "6fcd7f490c4691475f22eacffd19d61565089493bc97dffda40919ed75e1d8ed",
     "sources": [
       "jarvis/repo_learning.py",
+      "jarvis/repo_acquisition.py",
+      "jarvis/repo_analysis.py",
+      "jarvis/repository_skills.py",
       "jarvis/repo_tools.py",
       "jarvis/toolkits.py",
+      "jarvis/agent_context.py",
+      "jarvis/actions.py",
       "docs/repo-learning.md",
-      "integrations"
+      "docs/repo-abilities.md",
+      "docs/repository-skills.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_repo_learning_audit.py",
       "tests/test_repo_learning.py",
-      "tests/test_repository_skills.py"
+      "tests/test_repo_abilities.py",
+      "tests/test_repository_skills.py",
+      "tests/test_repository_skill_isolation.py",
+      "tests/test_toolkits.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "30 catalog fixture PASS /2 missing behavior/crash-checkpoint contracts BLOCKED; live validation separate"
   },
   {
     "number": 19,
@@ -486,17 +527,28 @@
     "prompt_sha256": "fed60576b6f9c1b117c851b00195dc9ba85eb433897900095a68bff41918a991",
     "sources": [
       "jarvis/repo_abilities.py",
+      "jarvis/ability_runner.py",
       "jarvis/repo_learning.py",
+      "jarvis/repository_skills.py",
+      "jarvis/repo_sandbox.py",
+      "jarvis/commands.py",
       "jarvis/capabilities.py",
-      "docs/repo-abilities.md"
+      "jarvis/actions.py",
+      "jarvis/repo_tools.py",
+      "docs/repo-abilities.md",
+      "docs/repository-skills.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_ability_forge_audit.py",
       "tests/test_repo_abilities.py",
-      "tests/test_repository_skill_isolation.py"
+      "tests/test_repository_skills.py",
+      "tests/test_repository_skill_isolation.py",
+      "tests/test_capabilities.py",
+      "tests/test_toolkits.py"
     ],
-    "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "status": "FIXTURE VERIFIED; LIVE/HARDENING GATES OPEN",
+    "reason": "32 dedicated catalog fixtures executed; no arbitrary downloaded-code/real-account/GUI/model acceptance"
   },
   {
     "number": 20,
@@ -506,17 +558,25 @@
     "sources": [
       "jarvis/self_evolution.py",
       "jarvis/anticipation.py",
+      "jarvis/anticipation_worker.py",
       "jarvis/repo_learning.py",
       "jarvis/repo_abilities.py",
-      "docs/self-evolution.md"
+      "jarvis/actions.py",
+      "main.py",
+      "docs/self-evolution.md",
+      "docs/anticipation.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_self_evolution_audit.py",
       "tests/test_self_evolution.py",
-      "tests/test_anticipation.py"
+      "tests/test_anticipation.py",
+      "tests/test_repo_learning.py",
+      "tests/test_repo_abilities.py",
+      "tests/test_gpu_scheduler.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "28 catalog fixture PASS/4 missing production contracts BLOCKED; no production self-patch or live model/GUI acceptance"
   },
   {
     "number": 21,

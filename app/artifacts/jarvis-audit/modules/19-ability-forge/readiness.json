@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-16 IST",
+  "status": "repair_required",
+  "exit_code": 1,
+  "command": ".venv/Scripts/python.exe -m jarvis.launcher --check",
+  "scope": "dependencies_and_configured_services",
+  "missing": [
+    "ollama: unavailable (ConnectionError)"
+  ],
+  "incomplete": [],
+  "raw_output": "ignored .jarvis-runtime/jarvis-audit/module19-readiness-private.json; no repairs or service starts"
+}

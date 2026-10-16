@@ -1,0 +1,1437 @@
+--- before/tests/test_gpu_scheduler.py
++++ after/tests/test_gpu_scheduler.py
+@@ -20,7 +20,27 @@
+         self.registry=Registry(self.temporary.name)
+         self.policy=settings({'enabled':True,'wait_seconds':2})
+ 
+-    def state(self):return json.loads(self.registry.path.read_text())
++    def state(self):
++        # Observe without reaping leases. Windows replacement can briefly deny a
++        # concurrent reader; retry only this fixture observation, never the work.
++        deadline=time.monotonic()+1
++        while True:
++            try:return json.loads(self.registry.path.read_text())
++            except (PermissionError,FileNotFoundError,json.JSONDecodeError):
++                if time.monotonic()>=deadline:raise
++                time.sleep(.005)
++
++    def test_fixture_state_read_tolerates_transient_replacement(self):
++        expected={'active':None,'pending':[]}
++        with patch.object(Path,'read_text',side_effect=[PermissionError('replacing'),json.dumps(expected)]) as read:
++            self.assertEqual(self.state(),expected)
++            self.assertEqual(read.call_count,2)
++
++    def test_fixture_state_read_has_a_bounded_failure(self):
++        with patch.object(Path,'read_text',side_effect=PermissionError('persistent')) as read:
++            with patch('tests.test_gpu_scheduler.time.monotonic',side_effect=[0,2]):
++                with self.assertRaises(PermissionError):self.state()
++            self.assertEqual(read.call_count,1)
+ 
+     def response(self):
+         response=requests.Response();response.status_code=200
+--- before/jarvis/repo_learning.py
++++ after/jarvis/repo_learning.py
+@@ -15,8 +15,10 @@
+ """
+ from datetime import datetime, timedelta, timezone
+ import ast
++import hashlib
+ import io
+ import json
++import math
+ import os
+ from pathlib import Path
+ import queue
+@@ -24,6 +26,8 @@
+ import threading
+ import time
+ import zipfile
++from urllib.parse import urlsplit,quote
++from uuid import uuid4
+ 
+ import requests
+ 
+@@ -94,6 +98,40 @@
+     """The full source download is over the size limit (large repositories are then read file by file)."""
+ 
+ 
++def canonical_name(value):
++    if not isinstance(value,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9][A-Za-z0-9._-]{0,99}',value):
++        raise LearningError('Use a bounded public owner/repository name.')
++    return value
++
++
++def safe_source_path(value):
++    return (isinstance(value,str) and 0<len(value)<=500 and not value.startswith(('/','\\')) and
++            not re.search(r'[\\:\x00-\x1f]',value) and all(p not in {'','..','.'} for p in value.split('/')))
++
++
++def sensitive(value):
++    from .obsidian_memory import SENSITIVE
++    return bool(SENSITIVE.search(str(value)))
++
++
++def text_data(value):
++    # Only redact recognizable credential assignments, not words like tokenize in source.
++    from .cloud_policy import KEY_MATERIAL
++    value=re.sub(KEY_MATERIAL,'[redacted credential]',value,flags=re.I)
++    return re.sub(r'(?im)^.*\b\w*(?:api[_ -]?key|password|access[_ -]?token|secret)\w*\s*[:=].*$',
++                  '[redacted credential assignment]',value)
++
++
++def public_query(value):
++    from .cloud_policy import PRIVATE,SECRET
++    return not (sensitive(value) or PRIVATE.search(value) or SECRET.search(value))
++
++
++def atomic_json(path,data):
++    from .skill_memory import atomic
++    atomic(path,json.dumps(data,ensure_ascii=False,allow_nan=False))
++
++
+ def words(text):
+     return {w for w in WORDS.findall(str(text or "").casefold()) if w not in STOP}
+ 
+@@ -173,15 +211,22 @@
+ def analyze_zip(raw, limits=None):
+     """Structure, manifests, entry points and symbols from a repository zip (read as text only)."""
+     limits = limits or {}
++    budget=limits.get('max_read_bytes',12_000_000)
++    if type(budget) is not int or not 0<budget<=12_000_000 or not isinstance(raw,bytes) or len(raw)>40_000_000:
++        raise LearningError('Invalid bounded source archive/read budget.')
+     archive = zipfile.ZipFile(io.BytesIO(raw))
++    if len(archive.infolist())>20000:
++        raise TooLarge('Source archive exceeds 20,000 entries.')
+     names = [n for n in archive.namelist() if not n.endswith("/")]
+     prefix = os.path.commonprefix(names).split("/")[0] + "/" if names else ""
+     languages, modules, manifests, readme, tree, files = {}, [], {}, "", {}, []
+-    budget = int(limits.get("max_read_bytes", 12_000_000))
++    license_files,platform_notes={},set()
+     for info in archive.infolist():
+         if info.is_dir() or not info.filename.startswith(prefix):
+             continue
+         path = info.filename[len(prefix):]
++        if not safe_source_path(path) or info.external_attr>>16 & 0o170000 == 0o120000:
++            continue
+         parts = path.split("/")
+         if not path or any(p in SKIP_DIRS or (p.startswith(".") and p not in {".github"}) for p in parts[:-1]):
+             continue
+@@ -194,19 +239,25 @@
+             tree[top].add(parts[1])
+         suffix = Path(path).suffix.casefold()
+         name = Path(path).name
++        if re.search(r'(?i)(?:\.min\.[jt]s$|\.map$|(?:^|[._-])generated[._-])',name):
++            continue
+         if suffix in CODE:
+             languages[CODE[suffix]] = languages.get(CODE[suffix], 0) + 1
+-        wanted = suffix in CODE or name in MANIFESTS or re.fullmatch(r"(?i)readme(\.\w+)?", name)
+-        if not wanted or info.file_size > 400_000 or budget <= 0:
++        is_license=bool(re.fullmatch(r'(?i)(?:licen[cs]e|copying)(?:\.[\w-]+)?',name)) and len(parts)==1
++        wanted = suffix in CODE or name in MANIFESTS or re.fullmatch(r"(?i)readme(\.\w+)?", name) or is_license
++        if not wanted or info.file_size > min(400_000,budget) or budget <= 0:
+             continue
+         budget -= info.file_size
+-        text = archive.read(info).decode("utf-8", errors="replace")
++        text = text_data(archive.read(info).decode("utf-8", errors="replace"))
+         if "\x00" in text[:2000]:
+             continue
+         if re.fullmatch(r"(?i)readme(\.\w+)?", name) and len(parts) == 1:
+             readme = text[:12000]
+         if name in MANIFESTS and len(parts) <= 2:
+             manifests[path] = text[:3000]
++        if is_license:license_files[path]=text[:12000]
++        if re.search(r'\b(?:import SwiftUI|import AppKit|import Darwin|import fcntl)\b',text):
++            platform_notes.add('Windows compatibility requires review: platform-specific imports detected in '+path)
+         if suffix in CODE and suffix not in {".html", ".css", ".scss", ".sql"}:
+             symbols = python_symbols(text) if suffix == ".py" else regex_symbols(text, suffix)
+             if symbols is None:
+@@ -222,7 +273,7 @@
+     return {"files_total": len(files), "languages": dict(sorted(languages.items(), key=lambda x: -x[1])),
+             "tree": tree_lines, "manifests": manifests, "readme": readme, "modules": modules,
+             "entry_points": [m["path"] for m in modules if m["entry"]][:10],
+-            "has_tests": any(m["test"] for m in modules)}
++            "has_tests": any(m["test"] for m in modules),'license_files':license_files,'platform_notes':sorted(platform_notes)}
+ 
+ 
+ def importance(module):
+@@ -233,6 +284,13 @@
+ class RepoLearner:
+     def __init__(self, actions, options=None, http=None, model_chat=None, clock=time.time):
+         options = options or {}
++        for key in ('enabled','auto_learn_browsing','search_for_coding'):
++            if key in options and type(options[key]) is not bool:raise ValueError('Invalid repo learning flag: '+key)
++        for key,default,low,high in (('repos_per_task',1,1,3),('min_stars',20,0,1000000),('max_zip_mb',40,1,40),('refresh_days',30,1,365)):
++            value=options.get(key,default)
++            if type(value) is not int or not low<=value<=high:raise ValueError('Invalid repo learning bound: '+key)
++        dwell=options.get('dwell_seconds',8)
++        if type(dwell) not in (int,float) or not math.isfinite(dwell) or not 0<=dwell<=3600:raise ValueError('Invalid repo dwell.')
+         self.actions = actions
+         self.enabled = bool(options.get("enabled", True))
+         self.auto_browse = bool(options.get("auto_learn_browsing", True))
+@@ -249,6 +307,11 @@
+         self.vault = Path(actions.memory.vault) / "Jarvis Repos"
+         self.cache = Path(actions.base) / ".jarvis-runtime" / "repo-knowledge"
+         self.lock = threading.RLock()
++        self._learning_lock=threading.RLock()
++        self._verify_slots=threading.BoundedSemaphore(2)
++        self._word_cache={}
++        self.trace_id=None
++        self._index_invalid=False
+         self.index = self._load_index()
+         self.jobs = queue.Queue(maxsize=20)
+         self.queued = set()
+@@ -262,20 +325,30 @@
+     # --- storage ------------------------------------------------------------------------------------------
+     def _load_index(self):
+         try:
+-            return json.loads((self.vault / "index.json").read_text(encoding="utf-8")).get("repos", {})
++            path=self.vault/'index.json'
++            if path.stat().st_size>4_000_000:raise ValueError('Oversized repository index.')
++            data=json.loads(path.read_text(encoding='utf-8'))
++            rows=data.get('repos') if isinstance(data,dict) else None
++            if not isinstance(rows,dict) or len(rows)>2000:raise ValueError('Invalid repository index.')
++            return {name:row for name,row in rows.items() if isinstance(row,dict) and isinstance(row.get('purpose'),str) and
++                    isinstance(row.get('keywords'),list) and len(row['keywords'])<=80 and all(isinstance(k,str) for k in row['keywords']) and
++                    isinstance(row.get('learned_at'),str)}
++        except FileNotFoundError:return {}
+         except (OSError, ValueError):
++            self._index_invalid=True
+             return {}
+ 
+     def _save_index(self):
++        if self._index_invalid:raise LearningError('Repository index is unreadable; preserve it for review before writing.')
++        if len(self.index)>2000:raise LearningError('Repository memory exceeds 2,000 records.')
+         self.vault.mkdir(parents=True, exist_ok=True)
+-        temp = self.vault / "index.tmp"
+-        temp.write_text(json.dumps({"version": 1, "repos": self.index}, ensure_ascii=False, indent=1), encoding="utf-8")
+-        temp.replace(self.vault / "index.json")
++        atomic_json(self.vault/'index.json',{'version':1,'repos':self.index})
+         lines = ["# Jarvis Repos", "", "[[Jarvis Brain]] · Repositories Jarvis has learned and reuses when coding.", ""]
+         for name, row in sorted(self.index.items(), key=lambda x: x[1].get("learned_at", ""), reverse=True):
+             lines.append("- [[Jarvis Repos/" + repo_id(name) + "|" + name + "]] — " + row.get("purpose", "")[:140] +
+                          " *(" + row.get("learned_at", "")[:10] + ", " + row.get("reason", "") + ")*")
+-        (self.vault / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
++        try:(self.vault / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
++        except OSError:pass  # Canonical index already committed; never replay it for a derived-note failure.
+         brain = self.vault.parent / "Jarvis Brain.md"
+         try:
+             text = brain.read_text(encoding="utf-8") if brain.exists() else "# Jarvis Brain\n"
+@@ -287,7 +360,16 @@
+ 
+     def knowledge(self, full_name):
+         try:
+-            return json.loads((self.cache / repo_id(full_name) / "knowledge.json").read_text(encoding="utf-8"))
++            canonical_name(full_name)
++            path=self.cache/repo_id(full_name)/'knowledge.json'
++            if path.stat().st_size>4_000_000:return None
++            data=json.loads(path.read_text(encoding='utf-8'))
++            if not isinstance(data,dict) or data.get('full_name')!=full_name or not isinstance(data.get('summary'),dict) or not isinstance(data.get('modules'),list) or len(data['modules'])>80:return None
++            for row in data['modules']:
++                if not isinstance(row,dict) or not safe_source_path(row.get('path')) or not isinstance(row.get('symbols'),list) or len(row['symbols'])>40:return None
++                if any(not isinstance(s,dict) or not isinstance(s.get('name'),str) or not isinstance(s.get('signature'),str) for s in row['symbols']):return None
++                if type(row.get('lines')) is not int or type(row.get('entry')) is not bool or type(row.get('test')) is not bool:return None
++            return data
+         except (OSError, ValueError):
+             return None
+ 
+@@ -295,16 +377,27 @@
+         row = self.index.get(full_name) or next((v for k, v in self.index.items() if k.casefold() == full_name.casefold()), None)
+         if not row:
+             return None
+-        learned = datetime.fromisoformat(row["learned_at"])
+-        return row if datetime.now(timezone.utc) - learned < timedelta(days=self.refresh_days) else None
++        try:
++            learned = datetime.fromisoformat(row["learned_at"])
++            age=datetime.now(timezone.utc)-learned
++            return row if learned.tzinfo is not None and timedelta(0)<=age<timedelta(days=self.refresh_days) else None
++        except (ValueError,TypeError,KeyError):return None
+ 
+     # --- GitHub ---------------------------------------------------------------------------------------------
+     def get(self, url, params=None, timeout=15, raw=False):
++        origin=urlsplit(url)
++        if origin.scheme!='https' or origin.hostname not in {'api.github.com','codeload.github.com','raw.githubusercontent.com'} or origin.port not in {None,443} or origin.username or origin.password:
++            raise LearningError('Unsupported public repository origin.')
+         headers = dict(HEADERS)
+         secret = token(self.actions.base)
+-        if secret and url.startswith(API):
++        if secret and origin.hostname=='api.github.com':
+             headers["Authorization"] = "Bearer " + secret
+-        response = self.http.get(url, params=params, headers=headers, timeout=(5, timeout), stream=raw)
++        response = self.http.get(url, params=params, headers=headers, timeout=(5, timeout), stream=raw,allow_redirects=False)
++        try:return self._response(response,raw)
++        finally:response.close()
++
++    def _response(self,response,raw):
++        if 300<=response.status_code<400:raise LearningError('Repository redirect refused; inspect the canonical source.')
+         if response.status_code == 404:
+             return None
+         if response.status_code in {403, 429}:
+@@ -314,22 +407,38 @@
+             return response.json()
+         data = bytearray()
+         for chunk in response.iter_content(65536):
++            if self.stop.is_set():raise LearningError('Learning cancelled during download.')
++            if len(data)+len(chunk) > self.max_zip:
++                raise TooLarge("Repository download is larger than " + str(self.max_zip // 1_000_000) + " MB.")
+             data.extend(chunk)
+-            if len(data) > self.max_zip:
+-                raise TooLarge("Repository download is larger than " + str(self.max_zip // 1_000_000) + " MB.")
+         return bytes(data)
+ 
+     def info(self, full_name):
++        canonical_name(full_name)
+         data = self.get(API + "/repos/" + full_name)
+         if not data or not isinstance(data, dict) or not data.get("full_name"):
+             return None
++        canonical_name(data['full_name'])
++        if data.get('private'):raise LearningError('Private repository learning is unsupported.')
+         return data
+ 
+     def search(self, query, language=""):
++        if not isinstance(query,str) or not 1<=len(query)<=200 or not public_query(query):raise LearningError('Use a bounded public non-sensitive search query.')
+         q = query + (" language:" + language if language and re.fullmatch(r"[A-Za-z+#-]{1,20}", language) else "")
+         data = self.get(API + "/search/repositories", {"q": q + " archived:false fork:false", "sort": "stars",
+-                                                       "order": "desc", "per_page": 10}) or {}
+-        rows = [r for r in data.get("items", []) if r.get("size", 0) * 1024 <= self.max_zip * 3]
++                                                       "order": "desc", "per_page": 10})
++        if not isinstance(data,dict) or not isinstance(data.get('items'),list) or len(data['items'])>100:
++            raise LearningError('Invalid bounded repository search result.')
++        rows=[]
++        for row in data['items']:
++            if (not isinstance(row,dict) or not isinstance(row.get('full_name'),str) or
++                    type(row.get('size',0)) is not int or type(row.get('stargazers_count',0)) is not int or
++                    not isinstance(row.get('topics') or [],list) or any(not isinstance(t,str) for t in row.get('topics') or []) or
++                    not isinstance(row.get('description') or '',str)):
++                raise LearningError('Invalid repository candidate schema.')
++            canonical_name(row['full_name'])
++            if not (row.get('private') or row.get('fork') or row.get('archived')) and 0<=row.get('size',0)*1024<=self.max_zip*3:
++                rows.append(row)
+         wanted = words(query)
+ 
+         def relevance(row):
+@@ -396,9 +505,23 @@
+     # --- learning ---------------------------------------------------------------------------------------------
+     def card(self, phase, full_name, subtitle="", detail=""):
+         from .media_player import card
+-        self.actions.report("media_card", card("github", phase, full_name, subtitle, "", 0, 0, detail))
++        event=card("github", phase, full_name, subtitle, "", 0, 0, detail)
++        event['trace_id']=self.trace_id
++        self.actions.report("media_card", event)
+ 
+     def learn(self, full_name, reason="asked", cancelled=lambda: False, info=None, role="research"):
++        canonical_name(full_name)
++        if self.stop.is_set() or cancelled():raise LearningError('Learning cancelled.')
++        with self._learning_lock:
++            if self.stop.is_set() or cancelled():raise LearningError('Learning cancelled.')
++            row=self.known(full_name)
++            data=self.knowledge(full_name) if row else None
++            if data and data.get('commit') and data.get('commit')==row.get('commit'):
++                return row
++            self.trace_id=uuid4().hex
++            return self._learn(full_name,reason,lambda:self.stop.is_set() or cancelled(),info,role)
++
++    def _learn(self, full_name, reason="asked", cancelled=lambda: False, info=None, role="research"):
+         """Download, analyse, understand and save one repository. Returns its index row."""
+         with self.lock:
+             self.current = full_name
+@@ -408,13 +531,21 @@
+             if not info:
+                 raise LearningError(full_name + " was not found on GitHub (or it is private).")
+             full_name = info["full_name"]
++            canonical_name(full_name)
++            if info.get('private'):raise LearningError('Private repository learning is unsupported.')
+             branch = info.get("default_branch") or "main"
++            if not isinstance(branch,str) or not 1<=len(branch)<=200:raise LearningError('Invalid branch metadata.')
++            pinned=self.get(API+'/repos/'+full_name+'/commits/'+quote(branch,safe=''))
++            commit=pinned.get('sha') if isinstance(pinned,dict) else None
++            if not isinstance(commit,str) or not re.fullmatch('[a-f0-9]{40}',commit):
++                raise LearningError('GitHub did not provide an immutable commit SHA.')
++            info={**info,'commit':commit,'html_url':'https://github.com/'+full_name}
+             large = info.get("size", 0) * 1024 > self.max_zip * 3
+             raw = None
+             if not large:
+                 self.card("learning", full_name, "Learning in the background — keep Jarvis open", "Downloading source")
+                 try:
+-                    raw = self.get("https://codeload.github.com/" + full_name + "/zip/refs/heads/" + branch, timeout=60, raw=True)
++                    raw = self.get("https://codeload.github.com/" + full_name + "/zip/" + commit, timeout=60, raw=True)
+                 except TooLarge:
+                     large = True
+                 if raw is None and not large:
+@@ -422,7 +553,7 @@
+             if large:
+                 # Too big to download whole: read the file list, README, manifests and the key source files instead.
+                 self.card("learning", full_name, "Large repository — reading its key files", "Downloading key files")
+-                raw = self.light_source(full_name, branch, cancelled)
++                raw = self.light_source(full_name, commit, cancelled)
+             if cancelled():
+                 raise LearningError("Learning cancelled.")
+             facts = analyze_zip(raw)
+@@ -450,6 +581,14 @@
+                                  payload, SUMMARY_SCHEMA, role=role)
+             if cancelled():
+                 raise LearningError("Learning cancelled.")
++            if not isinstance(summary,dict) or any(not isinstance(summary.get(k),str) for k in ('purpose','architecture','how_to_run','use_when')) or any(not isinstance(summary.get(k),list) for k in ('keywords','patterns','key_modules')):
++                raise LearningError('Invalid repository summary schema.')
++            summary={k:text_data(v)[:2000] if isinstance(v,str) else v for k,v in summary.items()}
++            for key in ('keywords','patterns'):
++                if any(not isinstance(x,str) for x in summary[key]):raise LearningError('Invalid repository summary entries.')
++                summary[key]=[text_data(x)[:240] for x in summary[key]][:12]
++            source_paths={m['path'] for m in ranked}
++            summary['key_modules']=[{'path':m['path'],'role':text_data(m.get('role',''))[:240]} for m in summary['key_modules'][:10] if isinstance(m,dict) and m.get('path') in source_paths and isinstance(m.get('role',''),str)]
+             self.card("learning", full_name, summary.get("purpose", "")[:90], "Saving to memory")
+             row = self._save(full_name, info, facts, ranked, summary, reason)
+             self.card("learned", full_name, row["purpose"][:120],
+@@ -465,16 +604,18 @@
+         except LearningError as exc:
+             self._failed(full_name, str(exc), reason)
+             raise
+-        except (requests.RequestException, zipfile.BadZipFile, ValueError) as exc:
+-            self._failed(full_name, str(exc), reason)
+-            raise LearningError("Could not learn " + full_name + ": " + str(exc)[:200]) from exc
++        except (requests.RequestException, zipfile.BadZipFile, ValueError,RuntimeError,MemoryError,OSError,TypeError,KeyError,AttributeError) as exc:
++            error='Repository learning failed ('+type(exc).__name__+'); inspect local prerequisites.'
++            self._failed(full_name,error,reason)
++            raise LearningError(error) from exc
+         finally:
+             with self.lock:
+                 self.current = None
+ 
+     def _failed(self, full_name, error, reason):
+         """Keep the reason, so "list your abilities" and "repo status" can say why (the card alone is brief)."""
+-        self.failures[full_name] = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "error": error[:300]}
++        error=text_data(error)
++        self.failures[full_name] = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "error": error[:300],'trace_id':self.trace_id}
+         self.card("error", full_name, error[:120], "Not learned")
+         forge = getattr(self.actions, "ability_forge", None)
+         if forge is not None:
+@@ -485,8 +626,14 @@
+         most important source files fetched from raw.githubusercontent.com (no API quota). analyze_zip reads it."""
+         from concurrent.futures import ThreadPoolExecutor
+         from urllib.parse import quote
++        canonical_name(full_name)
++        if not re.fullmatch('[a-f0-9]{40}',branch) or type(limit) is not int or not 1<=limit<=45 or type(budget) is not int or not 1<=budget<=2_500_000:
++            raise LearningError('Use a pinned commit and bounded key-file budget.')
+         tree = self.get(API + "/repos/" + full_name + "/git/trees/" + quote(branch, safe=""), {"recursive": "1"}, timeout=30)
+-        items = [t for t in (tree or {}).get("tree", []) if t.get("type") == "blob" and t.get("path")]
++        if not isinstance(tree,dict) or not isinstance(tree.get('tree'),list) or len(tree['tree'])>20000:
++            raise LearningError('Invalid/oversized repository tree.')
++        if tree.get('truncated'):raise LearningError('GitHub tree is truncated; complete source provenance unavailable.')
++        items = [t for t in tree['tree'] if isinstance(t,dict) and t.get('type')=='blob' and safe_source_path(t.get('path')) and type(t.get('size',0)) is int and 0<=t.get('size',0)<=400000]
+         if not items:
+             raise LearningError("GitHub did not list the files of " + full_name + ".")
+ 
+@@ -499,7 +646,7 @@
+             name, suffix, depth = Path(path).name, Path(path).suffix.casefold(), path.count("/")
+             if re.fullmatch(r"(?i)readme(\.\w+)?", name) and not depth:
+                 return 1000
+-            if name in MANIFESTS and depth <= 1:
++            if name in MANIFESTS and depth <= 1 or re.fullmatch(r'(?i)(?:license|copying)(?:\.\w+)?',name) and not depth:
+                 return 500 - depth
+             if suffix not in CODE or suffix in {".html", ".css", ".scss", ".sql"} or size > 150_000:
+                 return -1
+@@ -520,12 +667,19 @@
+                 return path, b""
+             try:
+                 response = self.http.get("https://raw.githubusercontent.com/" + full_name + "/" + quote(branch, safe="") + "/" +
+-                                         quote(path), headers={"User-Agent": HEADERS["User-Agent"]}, timeout=(5, 30))
+-                return path, response.content[:400_000] if response.status_code == 200 else b""
++                                         quote(path), headers={"User-Agent": HEADERS["User-Agent"]}, timeout=(5, 30),stream=True,allow_redirects=False)
++                try:
++                    if response.status_code!=200:return path,b''
++                    raw=bytearray()
++                    for piece in response.iter_content(65536):
++                        if cancelled() or len(raw)+len(piece)>min(400000,budget//max(1,len(chosen))):return path,b''
++                        raw.extend(piece)
++                    return path,bytes(raw)
++                finally:response.close()
+             except requests.RequestException:
+                 return path, b""
+ 
+-        with ThreadPoolExecutor(6) as pool:
++        with ThreadPoolExecutor(2) as pool:
+             fetched = dict(pool.map(fetch, chosen))
+         if not any(fetched.values()):
+             raise LearningError("Could not download any files of " + full_name + ".")
+@@ -537,6 +691,7 @@
+         return buffer.getvalue()
+ 
+     def _save(self, full_name, info, facts, ranked, summary, reason):
++        if self.stop.is_set():raise LearningError('Learning cancelled before storage.')
+         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+         folder = self.cache / repo_id(full_name)
+         files = folder / "files"
+@@ -546,9 +701,9 @@
+             content = module["_text"][:40000]
+             if total + len(content) > 600_000:
+                 break
+-            name = re.sub(r"[^A-Za-z0-9._-]", "_", module["path"].replace("/", "__"))[:150] + ".txt"
++            name = hashlib.sha256(module['path'].encode('utf-8')).hexdigest()+'.txt'
+             (files / name).write_text(content, encoding="utf-8")
+-            cached.append({"path": module["path"], "file": name})
++            cached.append({"path": module["path"], "file": name,'sha256':hashlib.sha256(content.encode('utf-8')).hexdigest()})
+             total += len(content)
+         modules = [{k: v for k, v in m.items() if k != "_text"} for m in ranked[:80]]
+         knowledge = {"full_name": full_name, "url": info.get("html_url", "https://github.com/" + full_name),
+@@ -559,20 +714,27 @@
+                      "languages": facts["languages"], "tree": facts["tree"], "entry_points": facts["entry_points"],
+                      "manifests": facts["manifests"], "has_tests": facts["has_tests"], "summary": summary,
+                      "modules": modules, "cached_files": cached, "readme": facts["readme"][:6000]}
+-        (folder / "knowledge.json").write_text(json.dumps(knowledge, ensure_ascii=False, indent=1), encoding="utf-8")
++        knowledge.update(commit=info['commit'],trace_id=self.trace_id,license_files=facts['license_files'],platform_notes=facts['platform_notes'],
++                         verification={'source_trust':'untrusted','executed_tests':False,'method':'static symbols/manifests; test-file presence only','summary_trust':'unverified local model'})
++        atomic_json(folder/'knowledge.json',knowledge)
+         keywords = sorted(words(" ".join([full_name.replace("/", " ").replace("-", " ").replace("_", " "),
+                                           knowledge["description"], " ".join(knowledge["topics"]),
+                                           " ".join(summary.get("keywords", [])), summary.get("use_when", ""),
+                                           summary.get("purpose", ""), " ".join(knowledge["languages"])])))[:80]
+         row = {"url": knowledge["url"], "purpose": summary.get("purpose", "")[:400], "use_when": summary.get("use_when", "")[:300],
+                "languages": list(facts["languages"])[:5], "stars": knowledge["stars"], "keywords": keywords,
+-               "learned_at": now, "reason": reason, "used_for": (self.index.get(full_name) or {}).get("used_for", [])}
++               "learned_at": now, "reason": reason,'commit':info['commit'], "used_for": (self.index.get(full_name) or {}).get("used_for", [])}
+         with self.lock:
++            old=self.index.get(full_name)
+             self.index[full_name] = row
+-            self._save_index()
++            try:self._save_index()
++            except Exception:
++                if old is None:self.index.pop(full_name,None)
++                else:self.index[full_name]=old
++                raise
+         note = ["# " + full_name, "", "[[Jarvis Repos/index|Jarvis Repos]] · " + knowledge["url"] + " · ★ " +
+                 str(knowledge["stars"]) + (" · " + knowledge["license"] if knowledge["license"] else "") + " · learned " +
+-                now[:10] + " (" + reason + ")", "", "## Purpose", "", summary.get("purpose", ""), "",
++                now[:10] + " (" + reason + ")", 'Commit: '+info['commit'], 'Validation: static only; repository claims and model summary unverified.', "", "## Purpose", "", summary.get("purpose", ""), "",
+                 "## Architecture", "", summary.get("architecture", ""), "", "## How to run", "", summary.get("how_to_run", ""), "",
+                 "## Use it when", "", summary.get("use_when", ""), "", "## Key modules", ""]
+         note += ["- `" + m.get("path", "") + "` — " + m.get("role", "") for m in summary.get("key_modules", [])]
+@@ -595,8 +757,12 @@
+         if not want:
+             return []
+         scored = []
+-        for name, row in self.index.items():
+-            have = set(row.get("keywords", []))
++        for name, row in list(self.index.items()):
++            signature=tuple(row.get('keywords',[]))
++            saved=self._word_cache.get(name)
++            if saved is None or saved[0]!=signature:
++                saved=(signature,frozenset(signature));self._word_cache[name]=saved
++            have = saved[1]
+             hits = len(want & have)
+             if hits:
+                 scored.append((hits / max(3, min(len(want), 8)), name, row))
+@@ -608,19 +774,28 @@
+         data = self.knowledge(full_name)
+         if not data:
+             return None
++        if type(budget) is not int or not 0<=budget<=10000:raise LearningError('Invalid excerpt budget.')
++        commit=data.get('commit')
++        pinned=isinstance(commit,str) and re.fullmatch('[a-f0-9]{40}',commit)
++        if self.index.get(full_name,{}).get('commit') not in {None,commit}:return None
++        reuse=(pinned and data.get('license') in {'MIT','Apache-2.0','BSD-2-Clause','BSD-3-Clause','ISC','0BSD','Zlib','Unlicense','CC0-1.0'} and bool(data.get('license_files')) and not data.get('platform_notes'))
+         want = words(goal)
+         summary = data.get("summary", {})
+         modules = sorted(data.get("modules", []), key=lambda m: -(len(want & words(m["path"] + " " + " ".join(
+             s["name"] + " " + s.get("doc", "") for s in m["symbols"]))) * 3 + importance(m)))
+         symbols = [{"path": m["path"], "symbols": [s["signature"] for s in m["symbols"][:10]]} for m in modules[:8] if m["symbols"]]
+         excerpts, used = [], 0
+-        cached = {c["path"]: c["file"] for c in data.get("cached_files", [])}
+-        for module in modules[:6]:
+-            name = cached.get(module["path"])
+-            if not name or used > budget:
++        cached = {c["path"]: c for c in data.get("cached_files", []) if isinstance(c,dict)}
++        for module in modules[:6] if reuse else []:
++            item = cached.get(module["path"]);name=item.get('file') if item else None
++            if not name or Path(name).name!=name or '/' in name or '\\' in name or used >= budget:
+                 continue
+             try:
+-                text = (self.cache / repo_id(full_name) / "files" / name).read_text(encoding="utf-8")
++                path=self.cache / repo_id(full_name) / 'files' / name
++                from .skill_memory import linked
++                if any(linked(p) for p in (path,path.parent,path.parent.parent)) or path.stat().st_size>160000:continue
++                text = path.read_text(encoding="utf-8")
++                if hashlib.sha256(text.encode('utf-8')).hexdigest()!=item.get('sha256'):continue
+             except OSError:
+                 continue
+             piece = text[:min(1600, budget - used)]
+@@ -628,14 +803,17 @@
+             used += len(piece)
+             if len(excerpts) >= 3:
+                 break
+-        return {"repository": full_name, "url": data.get("url"), "purpose": summary.get("purpose", ""),
++        return {"repository": full_name, "url": 'https://github.com/'+full_name, "purpose": summary.get("purpose", ""),
+                 "architecture": summary.get("architecture", ""), "how_to_run": summary.get("how_to_run", ""),
+                 "patterns": summary.get("patterns", [])[:6], "key_modules": summary.get("key_modules", [])[:8],
+                 "entry_points": data.get("entry_points", [])[:5], "relevant_symbols": symbols, "code_excerpts": excerpts,
+-                "license": data.get("license", "")}
++                "license": data.get("license", ""),'commit':commit,'source_url':data.get('url','')+'/tree/'+commit if pinned else None,
++                'reuse_review_required':True,'reuse_policy':'Permissive metadata and license file required for excerpts; preserve attribution and review terms. Legacy/unpinned/other licenses: metadata only.',
++                'verification':data.get('verification',{'executed_tests':False,'source_trust':'untrusted'}),'platform_notes':data.get('platform_notes',[])}
+ 
+     def wants_reference(self, goal):
+         lower = goal.casefold()
++        if re.search(r"\b(?:do not|don't|never|without)\b.{0,80}\b(?:search|learn|github|repos?\b|repositories)\b",lower):return False
+         if re.search(r"\b(?:typo|rename|delete|remove|comment|format|indent|readme text|spelling|bump version)\b", lower) \
+                 and not re.search(r"\b(?:build|create|make|implement|develop|write a|add a)\b", lower):
+             return False
+@@ -644,12 +822,12 @@
+ 
+     def prepare(self, goal, cancelled=lambda: False, budget_seconds=240):
+         """References for a coding task: saved knowledge first, otherwise search GitHub and learn."""
+-        if not self.enabled or not self.wants_reference(goal):
++        if self.stop.is_set() or cancelled() or not isinstance(goal,str) or not 1<=len(goal)<=10000 or sensitive(goal) or not self.enabled or not self.wants_reference(goal):
+             return []
+         started = self.clock()
+         chosen = [(name, row) for score, name, row in self.relevant(goal) if score >= .5][:self.repos_per_task]
+         source = "memory"
+-        if not chosen and self.search_for_coding:
++        if not chosen and self.search_for_coding and public_query(goal):
+             source = "github"
+             query, language = self.search_query(goal)
+             self.card("learning", "Searching GitHub", query, "Finding repositories for your task")
+@@ -686,7 +864,9 @@
+ 
+     # --- background ----------------------------------------------------------------------------------------------------
+     def enqueue(self, full_name, reason):
++        canonical_name(full_name)
+         with self.lock:
++            if self.stop.is_set():return False
+             if full_name.casefold() in {q.casefold() for q in self.queued} or (self.current or "").casefold() == full_name.casefold():
+                 return False
+             self.queued.add(full_name)
+@@ -729,7 +909,7 @@
+ 
+     def observe_title(self, title, process_name=""):
+         """Foreground window changed (called every 300 ms; cheap). Queues a repo after it stays open."""
+-        if not (self.enabled and self.auto_browse):
++        if self.stop.is_set() or not (self.enabled and self.auto_browse):
+             return
+         if process_name and process_name.casefold() not in BROWSERS:
+             return
+@@ -754,8 +934,18 @@
+             return
+         if forge is not None:
+             forge.on_viewed(candidate, learned=False)  # Learned long ago (being refreshed) but abilities already exist.
+-        threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
+-        threading.Thread(target=self._verify_and_queue, args=(candidate,), daemon=True, name="Jarvis repo check").start()
++        if not self._verify_slots.acquire(blocking=False):
++            self.viewing['queued']=False
++            return
++        def verify():
++            try:
++                if not self.stop.is_set():self._verify_and_queue(candidate)
++            finally:self._verify_slots.release()
++        try:threading.Thread(target=verify,daemon=True,name='Jarvis repo check').start()
++        except Exception:
++            self._verify_slots.release()
++            self.viewing['queued']=False
++            raise
+ 
+     def _verify_and_queue(self, candidate):
+         cached = self.checked.get(candidate)
+--- before/tests/test_repo_learning.py
++++ after/tests/test_repo_learning.py
+@@ -21,6 +21,7 @@
+ 
+ 
+ SAMPLE = make_zip({
++    "LICENSE": "MIT License\nPermission is hereby granted to use this synthetic fixture. Copyright Fixture.",
+     "README.md": "# Demo\nA tiny snake game.\n\nRun: open index.html",
+     "package.json": '{"name": "demo", "scripts": {"start": "vite"}}',
+     "src/main.js": "import { Snake } from './snake.js'\nexport function start(canvas) {\n  return new Snake(canvas)\n}\n",
+@@ -87,10 +88,12 @@
+     def http_for(self, info, archive=SAMPLE):
+         http = Mock()
+ 
+-        def get(url, params=None, headers=None, timeout=None, stream=False):
++        def get(url, params=None, headers=None, timeout=None, stream=False, **kwargs):
+             response = Mock(status_code=200)
+             response.raise_for_status = lambda: None
+-            if "codeload" in url:
++            if "/commits/" in url:
++                response.json = lambda: {"sha": "a"*40}
++            elif "codeload" in url:
+                 response.iter_content = lambda size: [archive]
+             elif "/search/" in url:
+                 response.json = lambda: {"items": [dict(info, full_name="other/finance-tool", description="stock charts"),
+@@ -126,17 +129,19 @@
+         fetched = []
+         http = Mock()
+ 
+-        def get(url, params=None, headers=None, timeout=None, stream=False):
++        def get(url, params=None, headers=None, timeout=None, stream=False, **kwargs):
+             response = Mock(status_code=200)
+             response.raise_for_status = lambda: None
+-            if "codeload" in url:
++            if "/commits/" in url:
++                response.json = lambda: {"sha": "a"*40}
++            elif "codeload" in url:
+                 raise AssertionError("A large repository is never downloaded whole.")
+-            if "/git/trees/" in url:
++            elif "/git/trees/" in url:
+                 response.json = lambda: {"tree": [{"type": "blob", "path": p, "size": len(b)} for p, b in files.items()]}
+             elif "raw.githubusercontent.com" in url:
+-                path = url.split("/main/", 1)[1]
++                path = url.split("/"+"a"*40+"/", 1)[1]
+                 fetched.append(path)
+-                response.content = files[path]
++                response.iter_content = lambda n: [files[path]]
+             else:
+                 response.json = lambda: info
+             return response
+@@ -157,7 +162,7 @@
+         instance, reports = learner(http=http)
+         with self.assertRaises(rl.LearningError):
+             instance.learn("demo/snake", "you asked")
+-        self.assertIn("offline", instance.failures["demo/snake"]["error"])
++        self.assertIn("ConnectionError", instance.failures["demo/snake"]["error"])
+         self.assertEqual(reports[-1][1]["phase"], "error")
+ 
+     def test_prepare_searches_then_reuses_memory(self):
+--- /dev/null
++++ after/tests/test_repo_learning_audit.py
+@@ -0,0 +1,307 @@
++"""Prompt18: fake public GitHub, owned archives/vaults; never execute downloaded code."""
++import concurrent.futures
++import io
++import json
++from pathlib import Path
++from types import SimpleNamespace
++from unittest.mock import Mock,patch
++import zipfile
++import pytest
++from jarvis import repo_learning as r
++from tests.test_repo_learning import make_zip,SAMPLE,Summary
++
++SHA='a'*40
++INFO={'full_name':'demo/snake','html_url':'https://github.com/demo/snake','description':'Snake game canvas',
++      'stargazers_count':120,'size':50,'default_branch':'main','topics':['game'],'license':{'spdx_id':'MIT'}}
++
++
++@pytest.fixture
++def learner(tmp_path):
++    actions=SimpleNamespace(base=tmp_path,report=Mock(),memory=SimpleNamespace(vault=tmp_path/'vault',record=Mock()))
++    http=Mock()
++    def get(url,**kw):
++        response=Mock(status_code=200);response.raise_for_status=lambda:None
++        name=url.split('/repos/',1)[1] if '/repos/' in url else 'demo/snake'
++        data={'sha':SHA} if '/commits/' in url else {'items':[INFO]} if '/search/' in url else {**INFO,'full_name':name}
++        response.json=lambda:data;response.iter_content=lambda n:[SAMPLE]
++        return response
++    http.get.side_effect=get
++    obj=r.RepoLearner(actions,{},http=http,model_chat=Summary())
++    yield obj
++    obj.close()
++
++
++def learned(learner):learner.learn('demo/snake');return learner.knowledge('demo/snake')
++
++
++def test_JRV_18_001_search_evidence(learner):
++    # Real public repository identity verified through official GitHub search evidence;
++    # stars/size here are authored filter inputs, not a current live metadata census.
++    learner.get=Mock(return_value={'items':[{**INFO,'full_name':'Python-Markdown/markdown',
++        'html_url':'https://github.com/Python-Markdown/markdown','description':'Python Markdown parser','topics':['markdown']}]})
++    rows=learner.search('markdown parser')
++    assert rows[0]['full_name']=='Python-Markdown/markdown'
++    assert rows[0]['html_url']=='https://github.com/Python-Markdown/markdown'
++    assert learner.get.call_args.args[1]['q'].endswith('archived:false fork:false')
++
++
++def test_JRV_18_002_zero_search_no_invention(learner):
++    learner.get=Mock(return_value={'items':[]})
++    assert learner.search('markdown parser')==[] and not learner.index
++
++
++def test_JRV_18_003_claims_are_not_validation(learner):
++    data=learned(learner)
++    assert data['has_tests'] and any(m['path']=='app.py' for m in data['modules'])
++    assert data.get('verification',{}).get('executed_tests') is False
++    pytest.skip('BLOCKED: static symbols/test-file presence and untrusted labels do not behaviorally verify exaggerated README claims; no authorized sandbox test oracle for arbitrary repos.')
++
++
++def test_JRV_18_004_commit_pin(learner):
++    data=learned(learner)
++    assert data.get('commit')==SHA
++    urls=[c.args[0] for c in learner.http.get.call_args_list]
++    assert any('codeload.github.com/demo/snake/zip/'+SHA in u for u in urls)
++    assert not any('/refs/heads/' in u for u in urls)
++
++
++def test_JRV_18_005_absent_license_no_excerpts(learner):
++    learner.learn('demo/snake',info={**INFO,'license':None})
++    assert learner.reference('demo/snake','snake canvas')['code_excerpts']==[]
++
++
++def test_JRV_18_006_malware_is_static_data(learner,tmp_path):
++    sentinel=tmp_path/'executed'
++    raw=make_zip({'setup.py':f"open({str(sentinel)!r},'w').write('bad')\ndef setup(): pass",'package.json':'{"scripts":{"postinstall":"evil-command"}}'})
++    with patch('subprocess.Popen',side_effect=AssertionError('host execution forbidden')):
++        facts=r.analyze_zip(raw)
++    assert not sentinel.exists() and 'postinstall' in facts['manifests']['package.json']
++
++
++def test_JRV_18_007_read_budget_is_strict():
++    raw=make_zip({'a.py':'x='+'1'*100,'b.py':'y='+'2'*100})
++    facts=r.analyze_zip(raw,{'max_read_bytes':100})
++    assert sum(len(m['_text'].encode()) for m in facts['modules'])<=100
++
++
++def test_JRV_18_008_duplicate_reuses_memory(learner):
++    learned(learner);calls=learner.http.get.call_count
++    learner.learn('demo/snake')
++    assert learner.http.get.call_count==calls
++
++
++def test_JRV_18_009_platform_note(learner):
++    raw=make_zip({'main.swift':'import SwiftUI\nstruct App {}'})
++    facts=r.analyze_zip(raw)
++    assert any('Windows' in n for n in facts.get('platform_notes',[]))
++
++
++def test_JRV_18_010_minified_source_excluded():
++    facts=r.analyze_zip(make_zip({'src/app.min.js':'function bad(){}'*1000,'app.py':'def main(): return 1'}))
++    assert 'src/app.min.js' not in [m['path'] for m in facts['modules']]
++
++
++def test_JRV_18_011_offline_reference(learner):
++    learned(learner);learner.http.get.side_effect=r.requests.ConnectionError('offline')
++    ref=learner.reference('demo/snake','snake canvas')
++    assert ref['repository']=='demo/snake' and ref.get('commit')==SHA
++
++
++def test_JRV_18_012_credit_and_restrict_copyleft(learner):
++    learner.learn('demo/snake',info={**INFO,'license':{'spdx_id':'GPL-3.0-only'}})
++    ref=learner.reference('demo/snake','snake')
++    assert ref['url']==INFO['html_url'] and ref['license']=='GPL-3.0-only'
++    assert not ref['code_excerpts'] and ref.get('reuse_review_required') is True
++
++
++def test_JRV_18_013_outage_one_attempt(learner):
++    learner.http.get.side_effect=r.requests.ConnectionError('offline')
++    with pytest.raises(r.LearningError):learner.learn('demo/snake')
++    assert learner.http.get.call_count==1 and not learner.index
++
++
++def test_JRV_18_014_timeout_one_attempt(learner):
++    learner.http.get.side_effect=r.requests.Timeout('timeout')
++    with pytest.raises(r.LearningError):learner.learn('demo/snake')
++    assert learner.http.get.call_count==1 and not learner.index
++
++
++@pytest.mark.parametrize('payload',[None,[],{'items':[None]}])
++def test_JRV_18_015_malformed_search(learner,payload):
++    learner.get=Mock(return_value=payload)
++    with pytest.raises(r.LearningError):learner.search('markdown parser')
++    assert not learner.index
++
++
++def test_JRV_18_016_without_git_still_static(learner):
++    with patch('shutil.which',return_value=None):assert learned(learner)['modules']
++
++
++def test_JRV_18_017_five_concurrent_twenty_rounds(learner):
++    names=[f'demo/repo{i}' for i in range(5)]
++    def request(name):
++        learner.learn(name)
++        return learner.knowledge(name)['full_name']
++    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
++        for _ in range(20):assert list(pool.map(request,names))==names
++    assert learner.http.get.call_count==15
++    assert set(learner.index)==set(names)
++
++
++def test_JRV_18_018_cancel_before_network_and_after_summary(learner):
++    with pytest.raises(r.LearningError):learner.learn('demo/snake',cancelled=lambda:True)
++    learner.http.get.assert_not_called()
++    def chat(*a):learner.stop.set();return Summary()(*a)
++    learner.model_chat=chat
++    with pytest.raises(r.LearningError):learner.learn('demo/snake')
++    assert not learner.index
++
++
++def test_JRV_18_019_restart_readback(learner):
++    data=learned(learner)
++    other=r.RepoLearner(learner.actions,{},http=Mock(),model_chat=Mock())
++    try:
++        assert other.known('demo/snake') and other.knowledge('demo/snake')['commit']==data['commit']
++    finally:other.close()
++    pytest.skip('BLOCKED: completed metadata reopens, but in-flight learning jobs have no durable checkpoint/worker crash-restart contract.')
++
++
++def test_JRV_18_020_injected_readme_is_untrusted(learner):
++    data=learned(learner)
++    assert data.get('verification',{}).get('source_trust')=='untrusted'
++    assert learner.actions.report.called
++
++
++def test_JRV_18_021_credential_origin_gate(learner):
++    with patch.dict('os.environ',{'GITHUB_TOKEN':'A'*25}):
++        with pytest.raises(r.LearningError):learner.get('https://api.github.com.evil.invalid/repos/a/b')
++    learner.http.get.assert_not_called()
++    assert learner.prepare('create a tool api_key=FAKE-CREDENTIAL-001')==[]
++    with patch.dict('os.environ',{'GROQ_ENABLED':'true'}):
++        assert learner.prepare('create a tool for my private notes alice@example.test')==[]
++    learner.http.get.assert_not_called()
++
++
++def test_JRV_18_022_unicode_source_and_bad_id(learner):
++    facts=r.analyze_zip(make_zip({'ગુજરાતી.py':'def café():\n    """हिन्दी 🙂"""\n    return 1'}))
++    assert facts['modules'][0]['symbols'][0]['name']=='café'
++    with pytest.raises(r.LearningError):learner.learn('owner/'+'a'*500)
++
++
++def test_JRV_18_023_negative_task_no_search(learner):
++    assert learner.prepare('do not search GitHub or learn repositories to create a snake game')==[]
++    learner.http.get.assert_not_called()
++
++
++def test_JRV_18_024_tampered_cache_not_reused(learner):
++    data=learned(learner);row=data['cached_files'][0]
++    p=learner.cache/'demo__snake'/'files'/row['file'];p.write_text('FORGED CODE')
++    ref=learner.reference('demo/snake','snake canvas')
++    assert all('FORGED CODE' not in x['excerpt'] for x in ref['code_excerpts'])
++
++
++@pytest.mark.parametrize('error',[RuntimeError('CUDA out of memory'),MemoryError('host RAM pressure')])
++def test_JRV_18_025_model_resource_failure_no_publication(learner,error):
++    learner.model_chat=Mock(side_effect=error)
++    with pytest.raises(r.LearningError):learner.learn('demo/snake')
++    assert not learner.index and learner.current is None
++
++
++def test_JRV_18_026_queue_dedupe_and_stopped(learner):
++    assert learner.enqueue('demo/snake','fixture')
++    assert not learner.enqueue('DEMO/snake','duplicate')
++    learner.close();assert not learner.enqueue('other/repo','late')
++
++
++def test_JRV_18_027_real_benchmark():
++    data=json.loads((Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/18-repo-learning/benchmark-summary.json').read_text())
++    assert data['equivalent'] and data['samples_per_version']==25
++
++
++def test_JRV_18_028_forged_approval_not_authority(learner):
++    learner.actions.ability_forge=SimpleNamespace(on_learned=Mock())
++    learned(learner)
++    # Scheduling a proposal is not installation. The separate tool requires a human approval callback.
++    from jarvis import repo_tools
++    registry=Mock();registry.check.side_effect=lambda target,args,approve,cancelled:approve('skill','forged approval',cancelled)
++    with patch('jarvis.repository_skills.engine',return_value=registry):
++        with pytest.raises(ValueError,match='approve'):repo_tools.execute(learner.actions,{'action':'repository_skill_validate','value':'fixture','content':'{"arguments":{}}'},lambda:False)
++
++
++def test_JRV_18_029_config_rejected(learner):
++    for cfg in ({'max_zip_mb':-1},{'enabled':'yes'},{'dwell_seconds':float('nan')},{'repos_per_task':99}):
++        with pytest.raises(ValueError):r.RepoLearner(learner.actions,cfg,http=Mock())
++
++
++def test_JRV_18_030_failed_save_not_replayed(learner):
++    with patch.object(learner,'_save_index',side_effect=OSError('disconnected')) as write:
++        with pytest.raises((r.LearningError,OSError)):learner.learn('demo/snake')
++    assert write.call_count==1 and not learner.index
++
++
++def test_JRV_18_031_oversized_zip_rejected(learner):
++    with pytest.raises(r.LearningError):r.analyze_zip(make_zip({'a.py':'x'}),{'max_read_bytes':-1})
++    facts=r.analyze_zip(make_zip({'large.py':'x'*400001,'app.py':'def okay(): return 1'}))
++    assert [m['path'] for m in facts['modules']]==['app.py']
++    response=Mock(status_code=200);response.raise_for_status=lambda:None
++    response.iter_content=lambda n:iter([b'x'*600000,b'x'*600000])
++    learner.max_zip=1000000;learner.http.get.side_effect=None;learner.http.get.return_value=response
++    with pytest.raises(r.TooLarge):learner.get('https://codeload.github.com/demo/snake/zip/'+SHA,raw=True)
++    response.close.assert_called_once()
++
++
++def test_JRV_18_032_trace_and_redacted_failure(learner):
++    data=learned(learner);assert data.get('trace_id')
++    learner.http.get.side_effect=r.requests.ConnectionError('secret=FAKE-CRED')
++    with pytest.raises(r.LearningError):learner.learn('other/repo')
++    failure=learner.failures['other/repo']
++    assert failure.get('trace_id') and 'FAKE-CRED' not in json.dumps(failure)
++
++
++def test_redirects_refused_and_token_only_exact_origin(learner):
++    with patch.dict('os.environ',{'GITHUB_TOKEN':'A'*25}):
++        learner.get('https://api.github.com/repos/demo/snake')
++        assert learner.http.get.call_args.kwargs['headers']['Authorization']=='Bearer '+'A'*25
++        assert learner.http.get.call_args.kwargs['allow_redirects'] is False
++        learner.get('https://codeload.github.com/demo/snake/zip/'+SHA,raw=True)
++        assert 'Authorization' not in learner.http.get.call_args.kwargs['headers']
++    response=Mock(status_code=302)
++    learner.http.get.side_effect=None;learner.http.get.return_value=response
++    with pytest.raises(r.LearningError,match='redirect'):learner.get('https://api.github.com/repos/demo/snake')
++    response.close.assert_called_once()
++
++
++def test_model_key_module_must_exist(learner):
++    original=learner.model_chat
++    def model(*args):
++        out=original(*args);out['key_modules'].append({'path':'invented.py','role':'forged capability'});return out
++    learner.model_chat=model
++    assert all(m['path']!='invented.py' for m in learned(learner)['summary']['key_modules'])
++
++
++def test_credential_assignment_redacted_before_model_and_cache():
++    facts=r.analyze_zip(make_zip({'app.py':'api_key="FAKE-CRED-001"\ndef hello(): return 1'}))
++    assert 'FAKE-CRED' not in json.dumps(facts)
++
++
++def test_unsafe_archive_paths_skipped():
++    facts=r.analyze_zip(make_zip({'../escape.py':'def bad(): pass','app.py':'def okay(): return 1'}))
++    assert all('..' not in m['path'] for m in facts['modules'])
++
++
++def test_browser_checks_are_bounded_and_not_duplicated(learner):
++    learner.dwell=0
++    with patch.object(r.threading,'Thread') as thread:
++        for i in range(10):
++            title=f'demo/repo{i}: Reference - Google Chrome'
++            learner.observe_title(title,'chrome.exe');learner.observe_title(title,'chrome.exe')
++        assert thread.call_count==2
++
++
++def test_corrupt_index_is_preserved(learner):
++    learner.vault.mkdir(parents=True,exist_ok=True);path=learner.vault/'index.json';path.write_text('corrupt')
++    other=r.RepoLearner(learner.actions,{},http=Mock())
++    try:
++        with pytest.raises(r.LearningError,match='unreadable'):other._save_index()
++        assert path.read_text()=='corrupt'
++    finally:other.close()
+--- before/scripts/verification/audit_catalog.py
++++ after/scripts/verification/audit_catalog.py
+@@ -71,13 +71,13 @@
+     for path in sorted(paths):
+         for node in ET.parse(path).iter('testcase'):
+             state='FAIL' if node.find('failure') is not None or node.find('error') is not None else ('SKIPPED' if node.find('skipped') is not None else 'PASS')
+-            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit')):
++            if state=='SKIPPED' and node.get('classname','').endswith(('test_audit_completion_cases','test_voice_tts_audit','test_questions_context_audit','test_model_routing_audit','test_gpu_scheduler_audit','test_deliberation_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit', 'test_repo_learning_audit')):
+                 skipped=node.find('skipped')
+                 if 'BLOCKED:' in (skipped.get('message','')+(skipped.text or '')):state='BLOCKED'
+             result={'node':node.get('classname','')+'::'+node.get('name',''),'status':state,'seconds':float(node.get('time','0')),'evidence':path.relative_to(OUT).as_posix()}
+             executed.append(result)
+             # Only dedicated catalog tests authorize case status; incidental test names are not proof.
+-            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit', 'test_tool_registry_audit', 'test_audit_completion_cases')):
++            if path.name=='catalog-tests.xml' or path.name=='cases-and-contracts.xml' and node.get('classname','').endswith(('test_architecture_audit', 'test_perception_cognition_audit', 'test_intent_direct_audit', 'test_voice_stt_audit', 'test_voice_tts_audit', 'test_questions_context_audit', 'test_model_routing_audit', 'test_gpu_scheduler_audit', 'test_deliberation_audit', 'test_dag_planning_audit', 'test_skill_selection_audit', 'test_desktop_control_audit', 'test_browser_playwright_audit', 'test_app_research_audit', 'test_memory_audit', 'test_rag_documents_audit', 'test_repo_learning_audit', 'test_tool_registry_audit', 'test_audit_completion_cases')):
+                 ids=re.findall(r'JRV[-_](\d{2})[-_](\d{3})',result['node'])
+                 for module,case in ids:actual.setdefault(f'JRV-{module}-{case}',[]).append(result)
+     results=[]
+--- before/tests/test_audit_result_accounting.py
++++ after/tests/test_audit_result_accounting.py
+@@ -23,6 +23,7 @@
+     ('tests.test_questions_context_audit', 'BLOCKED: local model not installed', 'BLOCKED'),
+     ('tests.test_model_routing_audit', 'BLOCKED: live entitlement not independently verified', 'BLOCKED'),
+     ('tests.test_gpu_scheduler_audit', 'BLOCKED: speech lease protocol missing', 'BLOCKED'),
++    ('tests.test_repo_learning_audit', 'BLOCKED: arbitrary repository behavior not sandbox validated', 'BLOCKED'),
+     ('tests.test_rag_documents_audit', 'BLOCKED: citation faithfulness oracle missing', 'BLOCKED'),
+     ('tests.test_memory_audit', 'BLOCKED: cross-store erase protocol missing', 'BLOCKED'),
+     ('tests.test_app_research_audit', 'BLOCKED: plugin scope namespace missing', 'BLOCKED'),
+--- /dev/null
++++ after/scripts/verification/verify_repo_learning_audit.py
+@@ -0,0 +1,48 @@
++"""Identical saved-memory relevance A/B, immutable before-source, no repository/network/model execution."""
++import csv
++import importlib.util
++import json
++from pathlib import Path
++import statistics
++import sys
++import tempfile
++import time
++import tracemalloc
++from types import SimpleNamespace
++
++BASE=Path(__file__).resolve().parents[2];sys.path.insert(0,str(BASE))
++from jarvis.repo_learning import RepoLearner
++
++
++def main():
++    spec=importlib.util.spec_from_file_location('jarvis._repo_before',BASE/'.jarvis-runtime/jarvis-audit/module18-pre/jarvis__repo_learning.py')
++    old=importlib.util.module_from_spec(spec);spec.loader.exec_module(old)
++    index={f'fixture/repo{i}':{'keywords':[f'term{j}' for j in range(77)]+(['markdown','parser','python'] if i%10==0 else ['other','game','canvas'])} for i in range(500)}
++    rows=[];expected=None
++    with tempfile.TemporaryDirectory() as tmp:
++        actions=SimpleNamespace(base=tmp,memory=SimpleNamespace(vault=Path(tmp)/'vault'))
++        for version,cls in [('before',old.RepoLearner),('after',RepoLearner)]:
++            warm=cls(actions);warm.index=index;warm.relevant('markdown parser python')
++            for i in range(25):
++                obj=cls(actions) if i<5 else warm;obj.index=index
++                tracemalloc.start();start=time.perf_counter_ns();result=obj.relevant('markdown parser python',3)
++                ms=(time.perf_counter_ns()-start)/1e6;_,peak=tracemalloc.get_traced_memory();tracemalloc.stop()
++                projection=[(s,n) for s,n,r in result]
++                if expected is None:expected=projection
++                assert projection==expected
++                rows.append({'version':version,'mode':'cold' if i<5 else 'warm','sample':i,'ms':ms,'python_peak_bytes':peak})
++            warm.http.close()
++    out=BASE/'artifacts/jarvis-audit/modules/18-repo-learning'
++    summary={'equivalent':True,'samples_per_version':25,'repositories':500,'keywords_each':80,'external_effects':0,
++             'scope':'Saved-memory keyword relevance only: five cold caches,20 warm queries/version; identical scores/top3 names. Construction, disk, source parsing, Git/HTTP/model/audio/GPU excluded. Cold peak includes building derived keyword cache; warm excludes its retained memory.'}
++    for version in ('before','after'):
++        summary[version]={}
++        for mode in ('cold','warm'):
++            selected=[r for r in rows if r['version']==version and r['mode']==mode];values=sorted(r['ms'] for r in selected)
++            summary[version][mode]={'p50_ms':statistics.median(values),'p95_ms':values[__import__('math').ceil(.95*len(values))-1],'python_peak_bytes':max(r['python_peak_bytes'] for r in selected)}
++    with (out/'benchmarks.csv').open('w',newline='') as f:
++        writer=csv.DictWriter(f,fieldnames=rows[0]);writer.writeheader();writer.writerows(rows)
++    (out/'benchmark-summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
++
++
++if __name__=='__main__':main()
+--- /dev/null
++++ after/scripts/verification/verify_repo_learning_journey.py
+@@ -0,0 +1,62 @@
++"""Owned background worker -> pinned static knowledge -> restart -> coding-context readback."""
++import json
++from pathlib import Path
++import sys
++import tempfile
++import time
++from types import SimpleNamespace
++from unittest.mock import Mock,patch
++
++BASE=Path(__file__).resolve().parents[2];sys.path.insert(0,str(BASE))
++from jarvis import repo_learning as r
++from jarvis.agent_context import learned_references
++from tests.test_repo_learning import LearningTests,Summary
++
++
++def main():
++    start=time.perf_counter()
++    with tempfile.TemporaryDirectory(prefix='jarvis-repo-journey-') as tmp:
++        base=Path(tmp);actions=SimpleNamespace(base=base,report=Mock(),memory=SimpleNamespace(vault=base/'vault',record=Mock()))
++        http=LearningTests().http_for(LearningTests.INFO)
++        learner=r.RepoLearner(actions,{},http=http,model_chat=Summary());actions.repo_learner=learner
++        forbidden=Mock(side_effect=AssertionError('real transport/process forbidden'))
++        with patch('requests.sessions.Session.request',forbidden),patch('subprocess.Popen',forbidden):
++            reply=r.execute(actions,r.parse_command('learn demo/snake'),lambda:False)
++            assert 'Learning' in reply
++            deadline=time.monotonic()+5
++            while learner.busy() and time.monotonic()<deadline:time.sleep(.01)
++            assert learner.known('demo/snake')
++            data=learner.knowledge('demo/snake');assert data['commit']=='a'*40 and data['trace_id']
++            assert data['verification']['executed_tests'] is False
++            assert 'Commit: '+data['commit'] in (learner.vault/'demo__snake.md').read_text(encoding='utf-8')
++            learner.close();learner.thread.join(2);assert not learner.thread.is_alive()
++            offline=Mock();offline.get.side_effect=AssertionError('offline restart cannot query GitHub')
++            again=r.RepoLearner(actions,{},http=offline,model_chat=Mock())
++            try:
++                with patch.dict(r.REGISTRY,{'learner':again}):refs=learned_references('create a snake game canvas')
++                assert refs and refs[0]['commit']==data['commit'] and refs[0]['code_excerpts']
++                assert refs[0]['reuse_review_required'] and refs[0]['url']=='https://github.com/demo/snake'
++                assert sum(len(e['excerpt']) for e in refs[0]['code_excerpts'])<=3500
++                offline.get.assert_not_called();forbidden.assert_not_called()
++            finally:again.close()
++        # Exercise the separate trusted Git acquisition boundary using only an owned fixture.
++        from jarvis import repo_acquisition as acq
++        project=base/'owned-project';project.mkdir()
++        assert project.resolve().is_relative_to(base.resolve())
++        acq.git(['init','--template=',str(project)])
++        (project/'main.py').write_text('raise RuntimeError("never import this fixture")\ndef inspect_only(): return 1\n')
++        acq.git(['-C',str(project),'add','main.py'])
++        acq.git(['-C',str(project),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-m','owned fixture'])
++        commit=acq.git(['-C',str(project),'rev-parse','HEAD']).decode().strip()
++        snapshot=acq.acquire(str(project),base/'snapshot-vault')
++        assert snapshot['commit']==commit and snapshot['hashes']['main.py']
++        try:acq.git(['clone','--no-checkout',str(project),str(base/'refused-clone')])
++        except ValueError:pass  # File transport remains disabled even for an owned source.
++        else:raise AssertionError('Unsafe file transport unexpectedly admitted')
++    result={'date':'2026-10-16 IST','passed':True,'seconds':time.perf_counter()-start,'network_calls':0,'repository_code_executions':0,
++        'scope':'Actual command/background worker, fake GitHub/summary, atomic knowledge/index/note readback, Stop, restart and agent_context references. Separate real Git init/commit/rev-parse/local acquisition and denied file-transport clone on an owned fixture. No account/model/downloaded-code execution/ability install.',
++        'git_fixture_commit':commit,'steps':['command','background learn','commit/hash/trace readback','Obsidian-note readback','owned worker Stop','restart','coding-context offline reference','trusted Git read/local source snapshot','unsafe clone transport denied']}
++    (BASE/'artifacts/jarvis-audit/modules/18-repo-learning/repository-journey.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
++
++
++if __name__=='__main__':main()
+--- /dev/null
++++ after/scripts/verification/report_repo_learning_audit.py
+@@ -0,0 +1,182 @@
++"""Publish executed Prompt18 evidence; no inferred passes or live-certification claims."""
++from collections import Counter
++import difflib
++import hashlib
++import json
++from pathlib import Path
++import re
++import sys
++import xml.etree.ElementTree as ET
++
++BASE=Path(__file__).resolve().parents[2];sys.path.insert(0,str(BASE))
++OUT=BASE/'artifacts/jarvis-audit';MOD=OUT/'modules/18-repo-learning';PRE=BASE/'.jarvis-runtime/jarvis-audit/module18-pre'
++def read(name):return json.loads((MOD/name).read_text(encoding='utf-8'))
++def write(name,value):(MOD/name).write_text(value.strip()+'\n',encoding='utf-8')
++def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
++def stats(name):
++    nodes=list(ET.parse(MOD/name).iter('testcase'))
++    return {'PASS':sum(n.find('skipped') is None and n.find('failure') is None and n.find('error') is None for n in nodes),'SKIPPED':sum(n.find('skipped') is not None for n in nodes),'FAIL':sum(n.find('failure') is not None or n.find('error') is not None for n in nodes)}
++
++def main():
++    from scripts.verification import audit_catalog
++    baseline=stats('baseline.xml');target=stats('cases-and-contracts.xml');full=stats('full-regression.xml')
++    assert baseline['FAIL']==target['FAIL']==full['FAIL']==0
++    frozen=read('full-start-source-hashes.json');assert all(sha(BASE/p)==h for p,h in frozen.items())
++    bench=read('benchmark-summary.json');journey=read('repository-journey.json');env=read('environment.json');ready=read('readiness.json')
++    assert bench['equivalent'] and journey['passed'] and journey['network_calls']==journey['repository_code_executions']==0
++    skips=[{'node':n.get('classname','')+'::'+n.get('name',''),'reason':n.find('skipped').get('message','')} for n in ET.parse(MOD/'full-regression.xml').iter('testcase') if n.find('skipped') is not None]
++    write('full-regression-skip-reasons.json',json.dumps(skips,indent=2))
++    modules=json.loads((OUT/'module-map.json').read_text())
++    modules[17].update(sources=['jarvis/repo_learning.py','jarvis/repo_acquisition.py','jarvis/repo_analysis.py','jarvis/repository_skills.py','jarvis/repo_tools.py','jarvis/toolkits.py','jarvis/agent_context.py','jarvis/actions.py','docs/repo-learning.md','docs/repo-abilities.md','docs/repository-skills.md'],test_candidates=['tests/test_repo_learning_audit.py','tests/test_repo_learning.py','tests/test_repo_abilities.py','tests/test_repository_skills.py','tests/test_repository_skill_isolation.py','tests/test_toolkits.py'],status='PARTIAL',reason='30 catalog fixture PASS /2 missing behavior/crash-checkpoint contracts BLOCKED; live validation separate')
++    (OUT/'module-map.json').write_text(json.dumps(modules,indent=2)+'\n')
++    audit_catalog.reconcile()
++    catalog=[json.loads(s) for s in (OUT/'test-results.jsonl').read_text(encoding='utf-8').splitlines()]
++    cases=[r for r in catalog if r['id'].startswith('JRV-18-')]
++    assert len(cases)==32 and Counter(r['status'] for r in cases)=={'PASS':30,'BLOCKED':2}
++    write('tests.jsonl','\n'.join(json.dumps(r,ensure_ascii=False) for r in cases))
++    write('remaining-case-ids.txt','\n'.join(r['id'] for r in catalog if r['status'] not in {'PASS','SKIPPED'}))
++    counts={s:sum(r['status']==s for r in catalog) for s in ('PASS','FAIL','BLOCKED','SKIPPED','NOT RUN')}
++    isolation=[n for n in ET.parse(MOD/'full-regression.xml').iter('testcase') if 'test_repository_skill_isolation' in n.get('classname','')]
++    iso_pass=sum(n.find('skipped') is None and n.find('failure') is None and n.find('error') is None for n in isolation);iso_skip=sum(n.find('skipped') is not None for n in isolation)
++    summary=json.loads((OUT/'summary.json').read_text());before=bench['before']['warm'];after=bench['after']['warm'];cold=bench['after']['cold']
++    measured=f"Saved-memory relevance warm p50/p95 **{before['p50_ms']:.4f}/{before['p95_ms']:.4f} → {after['p50_ms']:.4f}/{after['p95_ms']:.4f} ms**, identical scores/top3 names on 500 repositories with 80 keywords each."
++    scope=f'Synthetic public metadata, fake GitHub/archive/model transports and temporary vault/cache fixtures. Actual command/background worker, trusted Git init/commit/read/local snapshot and refused file-transport clone ran on owned data. Final full suite: {iso_pass} owned Docker kernel fixtures passed /{iso_skip} skipped; Docker availability changed after the initial unavailable baseline without a service-start action by this audit. No live GitHub clone, private repository/vault, native LLM/GPU, GUI/voice trial, real account write, dependency/ability installation or downloaded-third-party-code execution.'
++    blockers='JRV-18-003: static symbols/test-file presence and untrusted labels do not behaviorally validate arbitrary README claims; no authorized general sandbox test oracle. JRV-18-019: completed knowledge reopens, but in-flight learning jobs have no durable checkpoint/process-crash restart contract.'
++    headline=f"""**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. {measured}
++Verification: **{full['PASS']:,} full regression PASS / {full['SKIPPED']} skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **{ready['status']}**."""
++    matrix=f"""| Claim | Actual binding / active configuration | Assertion / boundary |
++| --- | --- | --- |
++| Coding knowledge | Actions creates RepoLearner with memory enabled; commands.parse → execute → enqueue/start/run/learn; Actions coding tasks call RepoLearner.prepare; agent_context.learned_references/reference_for feed coding_context | command→worker→knowledge/index/note→Stop→restart→offline reference journey; no model training |
++| Discovery | repo_learning.search/query/pick; public GitHub metadata API | zero stays empty; malformed items rejected; real Python-Markdown/markdown identity checked through Firecrawl, authored size/star fields; no live Jarvis API census |
++| Source provenance | branch resolved once via commit endpoint; archive/tree/raw URLs use40hex SHA | commit stored in index/knowledge/note/reference; old unpinned cache yields metadata only |
++| Analysis | Python AST, other-language declaration regex, manifests/test paths | no source execution; model key-module paths must exist; source_trust=untrusted, executed_tests=false; tests present is not tests passed |
++| Bounds | archive40MB,20k entries/tree paths, selected source12MB,400KB/file; key-file fallback45 files/2.5MB/2 fetch workers | strict whole-file read budget; pre-append streamed caps; unsafe/link/generated/minified paths excluded; truncated trees refused; parser allocations not a hard process sandbox |
++| Cache/concurrency | repo-knowledge files/knowledge.json and Obsidian Jarvis Repos/index.json/notes | SHA256 snippet names/content, tamper refusal, five independent requests×20 rounds preserve identities; serialized first acquisition and duplicate reuse |
++| Licensing | permissive SPDX metadata + root license artifact required for snippets | unknown/copyleft/unpinned/platform-specific code omitted; origin/SHA/license/review flag retained. Not target-license legal compatibility proof |
++| Platform | SwiftUI/AppKit/Darwin/fcntl static hints | Windows review note suppresses snippets; not complete build/dependency resolution |
++| Privacy | local scheduler/knowledge_worker summary; public query guard; exact parsed API token origin and no redirects | fake credentials/private email goal causes0 HTTP calls even with Groq flag; recognized credential assignments/key material redacted before model/cache; heuristic only |
++| Persistence/Stop | unique atomic JSON via skill_memory.atomic; rollback a fresh-learning index row on failed canonical write; corrupt-index guard | failed save one attempt; prior index preserved; before-transport/after-model Stop checks; derived notes best effort, multi-file transaction absent |
++| Browser backpressure | dwell→verification≤2 workers→queue20; learning serialized | duplicate verifier thread removed; rapid titles admit2 checks; post-Stop observe/enqueue refused; queue not durable |
++| Separate executable skills | repo_acquisition/repo_analysis/repository_skills → repo_tools/toolkits | trusted Git local snapshot/unsafe file-clone refusal; missing human approval denies smoke check;final full kernel fixtures:{iso_pass} PASS /{iso_skip} skips |
++| Ability proposals | existing repo_abilities on_learned callback | proposal is not install/approval; neighboring fake approval/lifecycle tests retained; no real ability installed |
++| Settings | enabled/auto_browse/search_for_coding true;repos_per_task1;min_stars20;dwell8s;refresh30d;max_zip40MB;modelqwen3.5:9b | strict flags/finite bounds; stable config/tool names and manifest/launcher/recovery preserved |"""
++    write('inventory.md',f"""# Prompt 18 repository-learning audit — 2026-10-16 IST
++
++**30 PASS /2 BLOCKED /0 FAIL** offline catalog scope. Baseline {baseline}; focused {target}; full {full}. Focused run includes two catalog blockers and neighboring GPU/Docker fixture results; exact skip reasons in XML. [Commands/results](commands.txt), [32 IDs](tests.jsonl), [targeted XML](cases-and-contracts.xml), [full XML](full-regression.xml), [owned journey](repository-journey.json).
++
++{scope}
++
++{matrix}
++
++{blockers}
++
++Read actual map, repo-learning and linked repo-abilities/repository-skills docs and source/config registrations. Candidate repo_tools/toolkits bind the execution pipeline, not the multi-language reference learner. Optional integrations/repository-runtime was not rebuilt. Historical images/live counts retain dates/scope; no new visible UI/screenshot.
++
++Order: preserve dirty audit/12-tool-registry/preimages → baseline → reproduced assertions → narrow fixes → official current upstream → equivalent A/B → targeted/privacy/permissions/concurrency → owned command/Git journey → frozen full regression and read-only launcher check → ledger/report. Existing dirty branch retained because a fresh checkout would omit user/module14–17 work. No reset/commit/install/deploy.
++
++{measured} [50 raw samples](benchmarks.csv), [scope](benchmark-summary.json), [tradeoffs](changes.md), [upstream](compatibility.md), [rollback](rollback.md).
++""")
++    write('failures.md',f"""# Actual failures and remaining gates
++
++[Baseline](baseline.xml):62 PASS /10 unavailable live skips. [Reproduction](reproduced.xml):27 FAIL /7 PASS. Case027 was missing benchmark artifact sequencing, not a product defect. Other failures exposed missing commit/validation provenance, unrestricted unknown/copyleft snippets, read-budget overshoot, repeated learning, platform/minified gaps, malformed responses, cancellation, origin-prefix credential risk, cache tamper acceptance, raw resource errors, late enqueue, invalid settings, failed-save RAM drift and missing trace/redaction contracts. Overlapping assertions are not distinct bug counts.
++
++[First focused](targeted-first.xml):2 FAIL /43 PASS: benchmark still absent; large-repo fake commit handler overwritten by a later else. Fixed fake protocol control flow, stream/redirect kwargs, pinned raw URL and added synthetic root license. Existing error assertion now expects categorical ConnectionError instead of raw offline payload, preserving failure/readback semantics while preventing diagnostic leakage. [Second focused](targeted-second.xml):124 PASS /10 skips.
++
++Final focused {target}; full {full}, frozen source hashes unchanged. [Exact skips](full-regression-skip-reasons.json). Later supplemental tests cover real independent concurrency, browser caps, redirects/token origin, source redaction/tamper, private queries, corrupt-index preservation and host/GPU resource faults. Case003 static labels are insufficient proof of README behavior;019 completed-record reopen is insufficient proof of in-flight crash recovery.
++
++{blockers}
++
++First full run:1 FAIL /2703 PASS /32 skips in437.75s. Failed full-regression-shared-state.xml and matching source hashes retained. An existing GPU test read state.json during Windows replacement and got PermissionError. Only the fixture observation now retries transient read/share/JSON states for at most1s; permanent failure remains an error. Added transient/permanent regression assertions. No lease liveness, priority assertion, action replay or production scheduler semantics changed. The accepted full rerun uses a new source freeze.
++
++No arbitrary downloaded repository code/postinstall, live GitHub clone or ability install executed. Owned synthetic Docker isolation fixtures executed when the backend became available. Prior module acceptance gates remain separate.
++""")
++    write('changes.md',f"""# Retained implementation and benchmark decision
++
++repo_learning.py: canonical name/path/settings/index/model guards; private public-search rejection and recognized credential redaction; parsed exact-origin authorization, redirects refused, response closure and streamed pre-append caps; immutable commit for archive/tree/raw; generated/minified/link/traversal exclusion; source-grounded module paths and static/untrusted labels; Windows hints; root license artifacts and conservative excerpt transfer; SHA256 cache filenames/content readback; atomic JSON, fresh-learning canonical-index RAM rollback, corrupt-index guard; serialized pinned dedupe; bounded2-worker browser checks and duplicate-thread fix; Stop guards; record/card/failure trace IDs and categorical errors. No dependency/service/config/tool-name or approval/execution-engine change.
++
++Candidates: immutable commit pinning implemented; derived keyword-set cache improves warm relevance; existing static symbols retained; license evidence and literal transfer limits added. General sandbox behavior validation remains BLOCKED, not replaced by parsing. No embeddings/reranker/model download or arbitrary source execution. Pin resolution adds one metadata API call on first/refreshed learning; pinned duplicates avoid network. Live service latency was not measured.
++
++{measured} Warm peak traced Python allocation {before['python_peak_bytes']}→{after['python_peak_bytes']}B. Cold p50 **{bench['before']['cold']['p50_ms']:.4f}→{cold['p50_ms']:.4f}ms**, peak **{bench['before']['cold']['python_peak_bytes']}→{cold['python_peak_bytes']}B**. Keep derived cache for repeated warm requests on32GB target; roughly4.6MB extra fixture allocation and cold slowdown explicitly retained, not called an overall speed/memory win. No privacy/approval correctness regression accepted. Query cache scales with repository keywords; warm excludes retained cache memory. Construction/disk/download/parse/model/TTFT/audio/VRAM excluded.
++
++Test fakes now supply immutable SHA/root license/stream protocol and categorical errors; old baseline/failure XML preserved. App/root README, repo-learning and system-map updated with dated scope; existing art/attribution preserved. [Implementation/doc files](files-changed.json), [generated output paths](generated-files.json), [preimage hashes](source-hashes.json), [complete scoped diff](source.patch).
++""")
++    write('compatibility.md',f"""# Official current upstream — 2026-10-16 IST
++
++Firecrawl [retrieved URLs/dates](upstream-checks.json). Installed Python{env['python']}, Requests{env['requests']}, {env['git']}. [Requests PyPI](https://pypi.org/project/requests/) lists **2.34.2,2026-05-14**, Python>=3.10: current installed version retained, implementation improved. [Official redirect/stream documentation](https://requests.readthedocs.io/en/latest/user/quickstart/#redirection-and-history) supports explicit no-redirect and response streaming.
++
++[Git for Windows](https://git-scm.com/install/windows) lists **2.56.0(2),2026-10-05**, newer than installed2.49.1.windows.1. [Official2.56 notes](https://raw.githubusercontent.com/git/git/v2.56.0/Documentation/RelNotes/2.56.0.adoc) reviewed; no installer/system mutation under prompt boundary. Current protected CLI flags/read commands tested; no claim of current Git security level or executed2.56 compatibility. Upgrade remains maintenance work.
++
++[GitHub commit endpoint](https://docs.github.com/en/rest/commits/commits#get-a-commit) documents SHA/ref resolution; retrieved examples show API version2026-03-10. Learner resolves once then uses immutable SHA; existing unversioned API header retained, not a broad API migration. Alternate API-version URL returned404 and was not used as proof. [GitHub licensing](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository) supports withholding reuse rights without license. Permissive metadata/root-license presence gates snippets; review attribution/terms/target compatibility remains required, not a legal analyzer.
++
++{blockers}
++
++Limits: regex symbols are approximate; README/model purpose/how_to_run remain untrusted, no semantic behavior certificate. Exact origin/redirect refusal may reduce rename availability. Private-query/credential/PII screening is heuristic and may suppress benign search; no retroactive real-cache scrub. Normal JSON response/ZIP central-directory parsing lacks hard process RAM isolation; ZIP metadata may load before entry-count rejection. Key-file equal per-request caps can omit relevant large files; truncated trees refuse completeness. Platform hints incomplete. Hashes verify snippets, not cryptographic authenticity of all local summary/metadata; root license text is not reconciled semantically with SPDX. Old unpinned references are metadata-only; no purge/migration. Knowledge/index/Markdown are not one transaction or multi-process CAS; later note/callback failure can follow saved canonical knowledge. Stop sampled, no native kernel preemption. Derived relevance cache retained memory/cold cost explicit. Fresh-learning row rollback does not cover all legacy usage-history/forget RAM mutations before their commit. Negative-goal screening covers tested English patterns, not universal multilingual negation. Ability pipeline has independent approval/license/runtime limits.
++
++No live GitHub/model/GPU/RAM stress/GUI/voice trial in this run. Final full owned kernel fixtures:{iso_pass} PASS /{iso_skip} skips; baseline10 were skipped when backend unavailable. No Docker start/repair performed. Resource failures use fakes, not native GPU admission certification. Prior pypdf/security/acoustic/system gates unchanged. Readiness {ready['status']}: {ready['missing']}.
++""")
++    write('rollback.md',"""# Scoped rollback and deterministic resume
++
++No audit commit. Preserve inherited dirty audit/12-tool-registry and user/module14–17 changes. Compare source.patch/current hashes before manually restoring only module18 changes from ignored .jarvis-runtime/jarvis-audit/module18-pre (app paths use __; root-README.md for parent). Never reset all, regenerate old preimages, delete user data or overwrite real vault/cache. No production data migration or dependency install. Commit/hash fields additive; legacy unpinned metadata readable with snippets suppressed; never invent old commit IDs.
++
++From app/ with existing .venv/Scripts/python.exe:
++1. scripts/verification/verify_repo_learning_audit.py (immutable before-source A/B).
++2. scripts/verification/verify_repo_learning_journey.py (temporary command/worker/restart/coding context/trusted Git read; no downloaded source execution).
++3. -m pytest tests/test_repo_learning_audit.py tests/test_repo_learning.py tests/test_repo_abilities.py tests/test_repository_skills.py tests/test_repository_skill_isolation.py tests/test_toolkits.py tests/test_audit_result_accounting.py tests/test_gpu_scheduler.py tests/test_gpu_scheduler_audit.py -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/cases-and-contracts.xml
++4. Freeze runtime/test hashes, then -m pytest tests -q --junitxml=artifacts/jarvis-audit/modules/18-repo-learning/full-regression.xml
++5. -m jarvis.launcher --check (read-only); retain raw output locally, publish redacted readiness.json.
++6. scripts/verification/report_repo_learning_audit.py; scripts/verification/verify_repo_learning_artifacts.py.
++
++Next NOT RUN JRV-19-001; earliest older unresolved JRV-04-001. Exact remaining IDs in remaining-case-ids.txt. Module18 open003/019 require authorized sandbox behavior oracle and durable in-flight job checkpoint contract, with actual faults/crash tests. Missing live services require concrete environment; no ability install/arbitrary script/system upgrade/deployment authorized by verification commands.
++""")
++    for path,link in [(BASE/'README.md','artifacts/jarvis-audit/modules/18-repo-learning/inventory.md'),(BASE.parent/'README.md','app/artifacts/jarvis-audit/modules/18-repo-learning/inventory.md'),(BASE/'docs/system-map.md','../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md'),(BASE/'docs/repo-learning.md','../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md')]:
++        text=path.read_text(encoding='utf-8');text=re.sub(r'\n<!-- prompt18-audit -->[\s\S]*?<!-- /prompt18-audit -->\n','\n',text)
++        first,rest=text.split('\n',1);path.write_text(first+'\n\n<!-- prompt18-audit -->\n'+headline+f'\n[Evidence, limits and rollback]({link}).\n<!-- /prompt18-audit -->\n'+rest,encoding='utf-8')
++    table='\n'.join(f"| {m['number']:02d} {m['module']} | "+' / '.join(f'{k}:{v}' for k,v in sorted(Counter(r['status'] for r in catalog if int(r['id'].split('-')[1])==m['number']).items()))+' |' for m in modules)
++    report=f"""# Jarvis audit — Prompt18 follow-up, 2026-10-16 IST
++
++{headline}
++
++{scope}
++
++[Source-map/code/config/assertion matrix](modules/18-repo-learning/inventory.md), [commands/results](modules/18-repo-learning/commands.txt), [all 32 IDs](modules/18-repo-learning/tests.jsonl), [targeted XML](modules/18-repo-learning/cases-and-contracts.xml), [full XML](modules/18-repo-learning/full-regression.xml), [owned journey](modules/18-repo-learning/repository-journey.json), [readiness](modules/18-repo-learning/readiness.json).
++
++HEAD **{env['head']}**, dirty branch **{env['branch']}** retained, no commit, prior work preserved. [Environment](modules/18-repo-learning/environment.json): Windows/Python{env['python']}/Requests{env['requests']}/{env['git']}; target Ryzen7/32GB/RTX3050Laptop4GB. No native GPU/model/audio measurement. {len(frozen)} runtime/test hashes unchanged during acceptance. [Scoped files](modules/18-repo-learning/files-changed.json), [generated outputs](modules/18-repo-learning/generated-files.json), [preimages](modules/18-repo-learning/source-hashes.json), [full scoped diff](modules/18-repo-learning/source.patch).
++
++Baseline {baseline}; focused {target}; full {full}. Counts overlap, not unique catalog totals. [Failure/harness history](modules/18-repo-learning/failures.md), [full skip reasons](modules/18-repo-learning/full-regression-skip-reasons.json). Command/worker/restart/coding-context/trusted-Git journey **{journey['seconds']:.3f}s**,0 real HTTP/downloaded-source executions. Owned Git fixture commit **{journey['git_fixture_commit']}** independently read/snapshotted; unsafe file clone denied. No user GUI/account/model trial.
++
++{measured} Warm traced allocation {before['python_peak_bytes']}→{after['python_peak_bytes']}B; cold p50 {bench['before']['cold']['p50_ms']:.4f}→{cold['p50_ms']:.4f}ms, peak {bench['before']['cold']['python_peak_bytes']}→{cold['python_peak_bytes']}B. [50 raw samples](modules/18-repo-learning/benchmarks.csv), [scope](modules/18-repo-learning/benchmark-summary.json), [keep/tradeoff](modules/18-repo-learning/changes.md). Retain extra cold work/roughly4.6MB derived cache for repeated warm use on32GB target; not an overall memory/end-to-end latency win. Disk/acquisition/source parsing/model/audio/VRAM excluded. Prior module metrics retained [through17](final-report-before-module18.md).
++
++## Open gates, upstream and risk
++
++{blockers}
++
++Firecrawl [official URLs/release dates](modules/18-repo-learning/upstream-checks.json), [compatibility/limits](modules/18-repo-learning/compatibility.md). Requests2.34.2(2026-05-14),Python>=3.10 already current; Git for Windows2.56.0(2)(2026-10-05) newer than installed2.49.1.windows.1, no installer. Static references do not establish arbitrary behavior, legal target-license compatibility, durable job crash resume, universal PII classification, hard parser/process RAM limits or multi-file/multi-process transactions. Existing acoustic/GPU/model/Docker/pypdf/other-module gates remain. Launcher **{ready['status']}**: {', '.join(ready['missing']) or 'no missing prerequisites reported'}; no repair/start/download attempted. No production-ready certificate.
++
++[Rollback/resume](modules/18-repo-learning/rollback.md). Next NOT RUN **JRV-19-001**; earliest unresolved **JRV-04-001**. All 1,184 unique IDs: **{counts}**. [Exact ledger](test-results.jsonl), [tier/category totals](summary.json), [exact remaining IDs](remaining-case-ids.txt). PASS requires dedicated executed assertions; fixture evidence does not silently certify live services.
++
++## Modules
++
++| Module | Catalog statuses |
++| --- | --- |
++{table}
++
++## Tier/category statistics
++
++"""
++    report+=chr(96)*3+'json\n'+json.dumps({k:summary[k] for k in ('by_tier','by_category')},indent=2)+'\n'+chr(96)*3+'\n'
++    (OUT/'final-report.md').write_text(report,encoding='utf-8')
++    files=['tests/test_gpu_scheduler.py','jarvis/repo_learning.py','tests/test_repo_learning.py','tests/test_repo_learning_audit.py','scripts/verification/audit_catalog.py','tests/test_audit_result_accounting.py','scripts/verification/verify_repo_learning_audit.py','scripts/verification/verify_repo_learning_journey.py','scripts/verification/report_repo_learning_audit.py','scripts/verification/verify_repo_learning_artifacts.py','README.md','docs/system-map.md','docs/repo-learning.md','../README.md']
++    changed=[];pairs=[];patch=[]
++    for f in files:
++        new=BASE/f;old=PRE/('root-README.md' if f=='../README.md' else f.replace('/','__'))
++        changed.append({'path':f,'sha256':sha(new)})
++        if old.exists():pairs.append({'path':f,'before':sha(old),'after':sha(new)})
++        patch.extend(difflib.unified_diff(old.read_text(encoding='utf-8').splitlines(True) if old.exists() else [],new.read_text(encoding='utf-8').splitlines(True),fromfile='before/'+f if old.exists() else '/dev/null',tofile='after/'+f))
++    write('files-changed.json',json.dumps(changed,indent=2));write('source-hashes.json',json.dumps(pairs,indent=2));write('source.patch',''.join(patch))
++    generated=['artifacts/jarvis-audit/'+s for s in ('final-report.md','module-map.json','summary.json','test-results.jsonl','executed-tests.jsonl','remaining-case-ids.txt')]
++    generated += [p.relative_to(BASE).as_posix() for p in sorted(MOD.iterdir()) if p.is_file()]
++    generated += ['artifacts/jarvis-audit/modules/18-repo-learning/'+s for s in ('generated-files.json','artifact-verification.json')]
++    write('generated-files.json',json.dumps(sorted(set(generated)),indent=2))
++    print(json.dumps({'module18':dict(Counter(r['status'] for r in cases)),'full':full,'catalog':counts},indent=2))
++
++if __name__=='__main__':main()--- /dev/null
++++ after/scripts/verification/verify_repo_learning_artifacts.py
+@@ -0,0 +1,51 @@
++"""Verify Prompt18 source freeze, catalog evidence, preimages and local report links."""
++import hashlib
++import json
++from pathlib import Path
++import re
++from urllib.parse import unquote
++import xml.etree.ElementTree as ET
++
++BASE=Path(__file__).resolve().parents[2];OUT=BASE/'artifacts/jarvis-audit'
++MOD=OUT/'modules/18-repo-learning';PRE=BASE/'.jarvis-runtime/jarvis-audit/module18-pre'
++
++
++def read(path):return json.loads(path.read_text(encoding='utf-8'))
++def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def main():
++    changed=read(MOD/'files-changed.json');pairs=read(MOD/'source-hashes.json');frozen=read(MOD/'full-start-source-hashes.json')
++    assert all(sha(BASE/r['path'])==r['sha256'] for r in changed)
++    for row in pairs:
++        name='root-README.md' if row['path']=='../README.md' else row['path'].replace('/','__')
++        assert sha(PRE/name)==row['before'] and sha(BASE/row['path'])==row['after']
++    assert all(sha(BASE/p)==h for p,h in frozen.items())
++    rows=[json.loads(s) for s in (OUT/'test-results.jsonl').read_text(encoding='utf-8').splitlines()]
++    assert len(rows)==len({r['id'] for r in rows})==1184
++    module=[r for r in rows if r['id'].startswith('JRV-18-')]
++    assert len(module)==32 and sum(r['status']=='PASS' for r in module)==30
++    assert {r['id'] for r in module if r['status']=='BLOCKED'}=={'JRV-18-003','JRV-18-019'}
++    assert not any(r['status']=='FAIL' for r in rows)
++    assert {r['id'] for r in module}=={json.loads(s)['id'] for s in (MOD/'tests.jsonl').read_text(encoding='utf-8').splitlines()}
++    nodes=list(ET.parse(MOD/'full-regression.xml').iter('testcase'))
++    assert nodes and not any(n.find('failure') is not None or n.find('error') is not None for n in nodes)
++    docs=[BASE.parent/'README.md',BASE/'README.md',BASE/'docs/system-map.md',BASE/'docs/repo-learning.md',OUT/'final-report.md']+list(MOD.glob('*.md'))
++    count=0;broken=[]
++    for doc in docs:
++        for raw in re.findall(r'!?\[[^\]]*\]\(([^\n]*?)\)',doc.read_text(encoding='utf-8')):
++            target=raw.strip().strip('<>').split('#')[0]
++            if not target or re.match(r'^[a-zA-Z][\w+.-]*:',target):continue
++            count+=1
++            if not (doc.parent/unquote(target)).exists():broken.append({'doc':str(doc),'target':target})
++    assert not broken,broken
++    result={'date':'2026-10-16 IST','file_hashes_verified':len(changed),'preimage_pairs_verified':len(pairs),
++        'frozen_source_test_files_verified':len(frozen),'source_changes_during_final_full_run':[],
++        'catalog_unique_ids':1184,'module18_passed':30,'module18_blocked':2,
++        'full_nodes':len(nodes),'full_skipped':sum(n.find('skipped') is not None for n in nodes),
++        'relative_links_checked':count,'broken_links':broken,'scope':'Artifact/hash/accounting assertions, not live feature acceptance.'}
++    (MOD/'artifact-verification.json').write_text(json.dumps(result,indent=2)+'\n')
++    print(json.dumps(result,indent=2))
++
++
++if __name__=='__main__':main()
+--- before/README.md
++++ after/README.md
+@@ -1,4 +1,11 @@
+ # Jarvis — local Windows voice assistant
++
++<!-- prompt18-audit -->
++**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
++Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
++[Evidence, limits and rollback](artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
++<!-- /prompt18-audit -->
++
+ 
+ <!-- prompt17-audit -->
+ **Document audit — 2026-10-16 IST:** Bounded extraction/context, multilingual tokenization, stale-source checks, atomic session writes and drop admission guards added. Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places.
+--- before/docs/system-map.md
++++ after/docs/system-map.md
+@@ -1,4 +1,11 @@
+ # Jarvis system map
++
++<!-- prompt18-audit -->
++**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
++Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
++[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
++<!-- /prompt18-audit -->
++
+ 
+ <!-- prompt17-audit -->
+ **Document audit — 2026-10-16 IST:** Bounded extraction/context, multilingual tokenization, stale-source checks, atomic session writes and drop admission guards added. Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places.
+--- before/docs/repo-learning.md
++++ after/docs/repo-learning.md
+@@ -1,4 +1,11 @@
+ # Learning GitHub repositories for coding, and multi-context awareness
++
++<!-- prompt18-audit -->
++**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
++Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
++[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
++<!-- /prompt18-audit -->
++
+ 
+ Updated 2026-10-10 IST. Jarvis now learns public GitHub repositories and codes with that knowledge, learns repositories you look at in the browser in the background, saves everything to memory for next time, and keeps several live contexts in mind at once.
+ 
+--- before/../README.md
++++ after/../README.md
+@@ -1,4 +1,11 @@
+ # Jarvis — local Windows voice assistant
++
++<!-- prompt18-audit -->
++**Repository-learning audit — 2026-10-16 IST:** Coding references now pin commits, verify cached excerpt hashes, restrict license-sensitive excerpt transfer, bound downloads/browser checks and screen discovery queries for private markers. Pinned duplicate learning reuses memory; corrupt indexes are preserved. Saved-memory relevance warm p50/p95 **1.2128/1.2665 → 0.6546/0.7882 ms**, identical scores/top3 names on 500 repositories with 80 keywords each.
++Verification: **2,706 full regression PASS / 32 skips**; **30 Prompt 18 catalog PASS /2 BLOCKED**. Arbitrary repository behavior validation and durable in-flight job recovery remain incomplete. Derived caching adds cold work/memory; launcher **repair_required**.
++[Evidence, limits and rollback](app/artifacts/jarvis-audit/modules/18-repo-learning/inventory.md).
++<!-- /prompt18-audit -->
++
+ 
+ <!-- prompt17-audit -->
+ **Document audit — 2026-10-16 IST:** Bounded extraction/context, multilingual tokenization, stale-source checks, atomic session writes and drop admission guards added. Warm BM25 lookup p50/p95 **0.8772/0.9154 → 0.0550/0.0591 ms** on 1,500 identical chunks; top5 IDs/pages/text identical; scores match to 10 decimal places.

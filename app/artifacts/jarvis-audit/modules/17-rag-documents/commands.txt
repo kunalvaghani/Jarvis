@@ -1,0 +1,12 @@
+Canonical cwd: app/; existing .venv/Scripts/python.exe; synthetic/owned fixtures only.
+Existing baseline (30 PASS /2 deselected): .venv/Scripts/python.exe -m pytest tests/test_documents.py tests/test_buddy.py -q -k "not RealDrop" --junitxml=artifacts/jarvis-audit/modules/17-rag-documents/baseline.xml
+First catalog reproduction (17 FAIL /16 PASS /3 blocked skips): .venv/Scripts/python.exe -m pytest tests/test_rag_documents_audit.py -q --junitxml=artifacts/jarvis-audit/modules/17-rag-documents/reproduced.xml
+A/B: .venv/Scripts/python.exe scripts/verification/verify_rag_documents_audit.py
+Journey (PASS, forbidden network/account writes): .venv/Scripts/python.exe scripts/verification/verify_rag_documents_journey.py
+Initial full (1 FAIL /2652 PASS /40 skips; citation-format regression): .venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/jarvis-audit/modules/17-rag-documents/full-regression.xml
+Failed full XML copied to full-regression-citation-format.xml with matching failed-source hashes before the corrected rerun.
+Expanded targeted after format fix (156 PASS /11 skips): .venv/Scripts/python.exe -m pytest tests/test_rag_documents_audit.py tests/test_documents.py tests/test_buddy.py tests/test_audit_result_accounting.py tests/test_phase2_gpu_models_voice_ui.py -q --junitxml=artifacts/jarvis-audit/modules/17-rag-documents/cases-and-contracts.xml
+Final full rerun completed: same full command; exit0,2654 PASS /40 skips /1 existing COM warning in406.84s; frozen source hashes in full-start-source-hashes.json.
+Read-only readiness: .venv/Scripts/python.exe -m jarvis.launcher --check; process exit1, repair_required, Docker/Ollama unavailable, no incomplete manifest entries. No repair/install/start attempted.
+Report: .venv/Scripts/python.exe scripts/verification/report_rag_documents_audit.py
+Artifacts: .venv/Scripts/python.exe scripts/verification/verify_rag_documents_artifacts.py

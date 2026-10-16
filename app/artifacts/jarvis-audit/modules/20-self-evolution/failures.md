@@ -1,5 +1,16 @@
-# Status
+# Actual reproductions and remaining gates
 
-{'NOT RUN': 32}
+Baseline:96 PASS in26.65s. New deterministic reproduction:20 FAIL/10 PASS/4 explicit blockers in1.48s. Failures overlapped: lost pause checkpoint, stuck learning on restart, JSON-only forged test flag, absent saver gate, unbounded exploration retries, raw exception secrets, malformed candidate crashes, post-close work, private/negative gap discovery, stale patch metadata and unvalidated settings/source size/trace fields. Count is failed assertions, not20 distinct flaws.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+First targeted:3 FAIL/87 PASS/4 skips. Two fixture issues: exploration test still had a real gap (one gap plus three exploration attempts); owned Git fixture initially committed with global autocrlf settings while evaluation used a sanitized Git environment, making the snapshot dirty. It now uses the same environment for init/add/commit/evaluation. Product over-filtering also rejected benign local 'organize my windows' gap; retained original-topic privacy screening plus public derived-query screening. Second targeted90 PASS/4 skips. Expanded final focused {'PASS': 183, 'FAIL': 0, 'SKIPPED': 4, 'seconds': 36.317}; full {'PASS': 2796, 'FAIL': 0, 'SKIPPED': 36, 'seconds': 455.362}. Runtime/tests unchanged during accepted full run.
+
+Old approval unit fixture now supplies an explicitly fake process-owned evaluation receipt rather than merely editing JSON. Approval rejection, target readback, backup and rollback assertions remain; new forged-JSON and changed-source regressions strengthen the gate. Actual owned Git journey executes a real pytest assertion, refuses initial approval, deploys the hand-written fixture only after fake approval and restores it. No real application patch.
+
+- **JRV-20-002 BLOCKED:** No native game/GPU occupancy sensor or guaranteed kernel preemption. Cooperative busy/activity/resource callbacks are tested; blocking I/O/native kernels may finish before yielding.
+- **JRV-20-003 BLOCKED:** Learner writes lack a transactional completion receipt. Durable `needs_review` prevents uncertain replays, but automatic safe continuation through an interrupted repository write is not proved; no dedicated review/resume UI.
+- **JRV-20-006 BLOCKED:** No independent semantic privacy oracle, hardened host patch execution sandbox, shadow evaluation or canary/automatic post-deploy rollback. A source worktree is not security isolation.
+- **JRV-20-011 BLOCKED:** Only a single eligible Jarvis Python source target is supported; no lockfile/environment migration rollout or reproducible dependency environment test exists. Dependency inputs invalidate receipts, but are not upgraded by this manager.
+
+Other limits: worktree test command executes host Python and has no hostile-code containment. Tracked Git diff validates promoted file scope; untracked/ignored test side-effects are not a hard confinement boundary. Clean-source requirement may conservatively defer under line-ending/config differences. Receipt covers flat source/tests and declared inputs, not all fixtures/native dependencies or complete environment reproducibility. It is process-local, not a cryptographic human-consent signature. Paths/hashes do not prove a patch preserves privacy. Backlog/checkpoint JSON are separate replacements, not one transaction; no fsync/power-failure or multiprocess CAS proof. Rollback metadata/backup is trusted local state. There is no dedicated review UI for needs_review jobs, durable monotonic cooldown restoration, per-job exponential backoff or event-driven polling replacement. Faults use fakes; no native GPU/game/microphone acceptance. Existing Python3.10 end-of-life and global acoustic/retrieval/vault/security gates remain.
+
+Readiness **repair_required**: ['ollama: unavailable (ConnectionError)']. No production-ready certificate.
