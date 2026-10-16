@@ -1,5 +1,12 @@
 # Jarvis — local Windows voice assistant
 
+**Repository consolidation — 2026-10-16 IST:** Development uses exactly three
+branches: `main` (integrated code), `codex`, and `claude`. Use `app/` for all source
+changes; `InsTAREELS` is an ignored local compatibility junction. Historical
+branch work and pending audits were preserved before integration. See the
+[consolidation record](app/artifacts/repository-consolidation/report.md) for
+merge decisions, fresh checks, recovery instructions, and remaining limitations.
+
 <!-- prompt30-audit -->
 **2026-10-16 — Optional planner audit (Prompt 30): partial.** Hermes/Harness proposal and worker boundaries now have stronger configuration, concurrency, cancellation and replay checks; Laya can ask safely when unavailable. Live accuracy/privacy/resource/trace acceptance remains incomplete. [Application details](app/README.md) · [Audit evidence](app/artifacts/jarvis-audit/final-report.md).
 <!-- /prompt30-audit -->

@@ -1,5 +1,19 @@
 # Jarvis — local Windows voice assistant
 
+**Repository consolidation — 2026-10-16 IST:** The maintained branches are `main`,
+`codex`, and `claude`. Start work on the appropriate development branch and merge
+reviewed changes into `main`; additional worktrees are optional local tooling.
+`app/` is the sole tracked application tree. The ignored `InsTAREELS` Windows
+junction remains available locally, with its duplicate Git entries removed.
+Integration preserves the audited worker-confirmed speech retry rule, merges
+voice text normalization and memory-pressure inference fallback, and retains
+the newer dictation release handling. See the [consolidation record](artifacts/repository-consolidation/report.md)
+for current regression results and recovery instructions. Fresh integration
+regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
+**ready** (dependencies/configured services, not live feature certification).
+Historical audit
+results below describe their original source revisions and live-validation gaps.
+
 <!-- prompt30-audit -->
 **2026-10-16 — Prompt 30 optional-planner audit: PARTIAL.** 236 focused assertions passed; 10 explicit catalog blockers. Full regression 3165 passed /147 skipped / 0 failures; launcher ready. Shared-client serialization, bounded protocol/backpressure, strict optional settings, duplicate/unknown/read-only proposal checks and safe Laya degradation added. For 50 replan-schema copies per batch, warm p50/p95 24.2095/25.4175 → 13.9932/14.9647 ms; peak temporary Python allocation 17884 → 76564 bytes. This is schema-copy CPU time with higher temporary allocation, not model/voice latency. Planner flags, model pins and dependencies unchanged. [Evidence and limits](artifacts/jarvis-audit/modules/30-harness-planners/inventory.md) · [Audit report](artifacts/jarvis-audit/final-report.md).
 <!-- /prompt30-audit -->
