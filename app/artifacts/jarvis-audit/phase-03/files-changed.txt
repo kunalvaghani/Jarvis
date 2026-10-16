@@ -1,0 +1,22 @@
+ app/jarvis/actions.py                              |   1 +
+ app/jarvis/mcp_bridge.py                           |  40 +-
+ app/jarvis/mcp_synthesis.py                        | 357 +++++++++++++++
+ app/jarvis/self_evolution.py                       |  39 ++
+ app/jarvis/skill_evolution.py                      | 480 +++++++++++++++++++++
+ app/jarvis/skill_memory.py                         |  88 +++-
+ app/jarvis/skill_store.py                          | 342 +++++++++++++++
+ app/jarvis/task_state.py                           |   6 +
+ app/scripts/setup/setup_mcp_runtime.py             |  46 ++
+ .../verification/phase03_living_benchmark.py       | 118 +++++
+ app/skills/app-navigation/.skill_id                |   1 +
+ app/skills/browser-navigation/.skill_id            |   1 +
+ app/skills/file-operations/.skill_id               |   1 +
+ app/skills/form-entry/.skill_id                    |   1 +
+ app/skills/project-coding/.skill_id                |   1 +
+ app/skills/reverse-engineer-clone/.skill_id        |   1 +
+ app/skills/runtime-questions/.skill_id             |   1 +
+ app/skills/spotify-media/.skill_id                 |   1 +
+ app/skills/web-research/.skill_id                  |   1 +
+ app/skills/youtube-media/.skill_id                 |   1 +
+ app/tests/test_phase03_living_skills.py            | 474 ++++++++++++++++++++
+ 21 files changed, 1992 insertions(+), 9 deletions(-)

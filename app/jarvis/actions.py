@@ -167,6 +167,7 @@ class Actions:
         self.catalog.memory = self.memory
         from .skill_memory import SkillMemory
         self.skills = SkillMemory(self.memory)
+        self.skills.task_id_provider = self.task_state.running_identity  # Living-skill telemetry per running task.
         self.memory.skills = self.skills
         self.task_state.on_finish = self.skills.safe_record
         interrupted = self.task_state.snapshot()

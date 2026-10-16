@@ -19,6 +19,17 @@ VERSION = '2025-11-25'
 
 
 def configurations(base):
+    servers = _configured(base)
+    # Approved generated adapters (mcp_synthesis) join with the same per-call approval;
+    # a user-configured server with the same name always wins.
+    from .mcp_synthesis import configurations as generated
+    for name, config in generated(base).items():
+        if name.startswith('gen-') and name not in servers and len(servers) < 40:
+            servers[name] = config
+    return servers
+
+
+def _configured(base):
     path = scoped(base, '.jarvis/mcp.json')
     if not path.is_file():
         return {}
@@ -41,7 +52,7 @@ class StdioClient:
         if (config.get('trusted') is not True or config.get('enabled') is not True
                 or not isinstance(command, str) or not Path(command).is_absolute()
                 or not Path(command).is_file() or Path(command).suffix.lower() in {'.cmd', '.bat', '.ps1', '.sh'}
-                or not isinstance(args, list) or len(args) > 30 or not all(isinstance(arg, str) for arg in args)
+                or not isinstance(args, list) or len(args) > 64 or not all(isinstance(arg, str) for arg in args)
                 or not isinstance(allowed, list) or not allowed or not all(isinstance(n, str) and n != '*' for n in allowed)):
             raise ValueError('MCP requires an enabled trusted absolute executable, argument list and exact tool allowlist.')
         timeout = config.get('timeout_seconds', 20)
@@ -161,16 +172,29 @@ class StdioClient:
         raise ValueError('MCP tool catalog exceeds pagination limit.')
 
     def close(self):
-        if self.process.poll() is None:
+        # MCP stdio shutdown: close input, wait for a graceful exit, then terminate/kill.
+        # A container client (docker run -i --rm) only removes its container on a clean exit.
+        # Closing a pipe can block on a stuck write, so it happens on a helper thread and
+        # the graceful phase is bounded; callers reap anything that missed it.
+        def close_input():
+            try:
+                if self.process.stdin:
+                    self.process.stdin.close()
+            except (OSError, ValueError):
+                pass
+        closer = threading.Thread(target=close_input, daemon=True, name='jarvis-mcp-close')
+        closer.start()
+        try:
+            self.process.wait(timeout=1.5)
+        except subprocess.TimeoutExpired:
             self.process.terminate()
             try:
                 self.process.wait(timeout=2)
             except subprocess.TimeoutExpired:
                 self.process.kill()
                 self.process.wait(timeout=2)
-        for stream in (self.process.stdin, self.process.stdout):
-            if stream:
-                stream.close()
+        if self.process.stdout:
+            self.process.stdout.close()
         self.thread.join(timeout=1)
 
 
@@ -224,3 +248,9 @@ def execute(actions, step, cancelled):
         return text[:10000] + ('\n[MCP result truncated]' if len(text) > 10000 else '')
     finally:
         client.close()
+        if name.startswith('gen-'):
+            from .mcp_synthesis import reap
+            try:
+                reap(name)  # Only containers labelled for this generated server.
+            except (ValueError, OSError):
+                pass

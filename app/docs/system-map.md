@@ -1,5 +1,9 @@
 # Jarvis system map
 
+<!-- upgrade-phase03 -->
+**Upgrade Phase 3 — 2026-10-17 IST:** `skill_store.py` (SQLite history, `.skill_id` identities), `skill_evolution.py` (living ranking, trust, CAPTURED/FIX/DERIVED) and `mcp_synthesis.py` (generated MCP tools in `jarvis-mcp-runtime:1`) extend `SkillMemory`, `mcp_bridge` and the idle `SelfEvolution` loop; ToolRegistry remains the only executor. [Implementation and provenance](../artifacts/jarvis-audit/phase-03/implementation-and-provenance.md).
+<!-- /upgrade-phase03 -->
+
 <!-- upgrade-phase02 -->
 **Upgrade Phase 2 — 2026-10-17 IST:** `execution_strategy.py` ranks execution methods (API → structured → GUI) from the existing registry and `tool.outcome` evidence; `app_adapters.py` adds Office/PDF/Blender/Unreal/VS Code tools behind `toolkits.TOOLS`; `execution_router` uses `execution_adapters.desktop_order()` (structured UIA first, cyan pointer as fallback). Planner context gains `capability_context.execution_strategy`; `Brain.validate_remaining` rejects GUI steps on named documents while an API/structured method is eligible. [Compatibility matrix](../artifacts/jarvis-audit/phase-02/compatibility-matrix.md).
 <!-- /upgrade-phase02 -->

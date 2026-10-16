@@ -99,6 +99,12 @@ class TaskState:
             current=self.data.get('current') or {}
             return current.get('task_id') or current.get('started_at')
 
+    def running_identity(self):
+        """Task UUID only while a task is running (telemetry must not attach to finished tasks)."""
+        with self.lock:
+            current = self.data.get('current') or {}
+            return current.get('task_id') if current.get('status') == 'running' else None
+
     def require_identity(self, expected):
         if not isinstance(expected,str) or not expected or self.identity()!=expected:
             raise ValueError('Task identity changed; unrelated execution refused.')

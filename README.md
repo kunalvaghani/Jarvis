@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase03 -->
+**2026-10-17 — Upgrade Phase 3 of 8 (living skills + MCP synthesis): PASS for locally executable checks.** Stable skill identities and verified-outcome telemetry, gated CAPTURED/FIX/DERIVED evolution, and sandboxed approval-gated MCP tool generation. Full regression **3,257 passed / 147 skipped / 0 failed**. [Application details](app/README.md) · [Phase 3 evidence](app/artifacts/jarvis-audit/phase-03/README.md).
+<!-- /upgrade-phase03 -->
+
 <!-- upgrade-phase02 -->
 **2026-10-17 — Upgrade Phase 2 of 8 (API/code-first execution): PASS for locally executable checks.** Document, PDF, Blender, Unreal-manifest and VS Code adapters joined the existing tool registry; Jarvis prefers APIs, then structured UI automation, and uses the cyan cursor last (configurable). Full regression **3,223 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 2 evidence](app/artifacts/jarvis-audit/phase-02/README.md).
 <!-- /upgrade-phase02 -->

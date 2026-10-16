@@ -14,6 +14,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase03 -->
+**2026-10-17 — Upgrade Phase 3 of 8 (living skills + MCP synthesis): PASS for locally executable checks.** Skills now have stable OpenSpace-style identities (`.skill_id` in Jarvis-owned folders, SQLite mapping for Obsidian/upstream guides) and a transactional history in `.jarvis-runtime/skills/skill_store.sqlite3` (selected / applied / completed-verified / fallback / failed with causes, counted once per task). Ranking blends relevance with verified reliability, recency, risk and cost; disabled skills are never selected. CAPTURED, FIX and DERIVED evolutions write provisional guides to `.jarvis-runtime/skills/evolved/` only after schema/secret checks and a real verified execution through the ToolRegistry; trust rises only from verified use in other tasks. Genuine capability gaps can be filled by a generated stdlib-only MCP tool (official MCP SDK 2.3.0) tested in a network-less, read-only Docker container and registered only after approval; every call still needs approval. Full regression **3,257 passed / 147 skipped / 0 failed**; launcher ready. Live local-model authoring of new skills/specs was not run. [Evidence, security model and rollback](artifacts/jarvis-audit/phase-03/README.md).
+<!-- /upgrade-phase03 -->
+
 <!-- upgrade-phase02 -->
 **2026-10-17 — Upgrade Phase 2 of 8 (API/code-first execution router): PASS for locally executable checks.** Jarvis now chooses, per request, among discovered, compatible, available and authorized methods in the order **API/code → structured automation (UIA, DOM, native Office object model) → GUI coordinates**, ranked with measured verified outcomes. New registry tools: `office_xlsx` (openpyxl), `office_docx` (python-docx), `pdf_document` (pypdf, new files only), `office_automation` (new hidden Excel/Word instance), `blender_task` (background Blender, fixed templates), `unreal_task` (engine manifest, read-only), `vscode_cli`, plus `execution_methods` (explain) and `strategy_execute` (run with safe fallback). Writes ask for approval, edit a temporary copy, are verified by an independent readback, keep a backup in `.jarvis-runtime/backups/documents/` and are never retried. **Behaviour change:** desktop clicks/menus try UIA patterns before the cyan-cursor tap; set `execution_strategy.desktop_order` to `"pointer_first"` to restore the old order. Real-software tests passed for Excel, Word, Blender 4.4.3, UIA on a disposable window, headless Chrome DOM, openpyxl, python-docx and pypdf; Unreal editor Python and real macro workbooks are BLOCKED. Full regression **3,223 passed / 147 skipped / 0 failed**; launcher ready. [Evidence, matrix, measurements and rollback](artifacts/jarvis-audit/phase-02/README.md).
 <!-- /upgrade-phase02 -->
@@ -1695,6 +1699,15 @@ The recovery design follows [Supervisor's process states and retry behavior](htt
 Ask, for example, "set cell B2 to 42 in budget.xlsx in Documents" or "merge a.pdf and b.pdf into all.pdf". The planner
 uses `strategy_execute`; `execution_methods` explains the ranking without acting. Dependencies: `openpyxl` and
 `python-docx` live in `.venv-skills` (`requirements/skills.txt`).
+
+### Living skills and generated MCP tools
+
+* Skill history: `.jarvis-runtime/skills/skill_store.sqlite3`; evolved guides: `.jarvis-runtime/skills/evolved/<name>/`
+  (`SKILL.md`, `.skill_id`, `provenance.json`). Guides marked provisional say so in planner context.
+* Generated MCP tools: build the runtime once with `.\.venv\Scripts\python.exe scripts\setup\setup_mcp_runtime.py`
+  (Docker Desktop, network only during the build). Approved tools are listed in
+  `.jarvis-runtime/mcp/generated/registry.json` and appear to `mcp_status`/`mcp_call` as `gen-<name>`; `.jarvis/mcp.json`
+  entries with the same name win. Set an entry's `"enabled": false` to disable it.
 
 ## Integrations and toolkits
 

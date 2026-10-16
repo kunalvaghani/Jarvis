@@ -63,9 +63,15 @@ class SkillMemory:
         self.error = None
         self.catalog = []
         self.skill_errors = []
+        self.skill_warnings = []
         self.upstream = None
         self.upstream_error = None
         self._guide_stamp = None
+        # Living skill layer (skill_store.py): telemetry only, never permissions.
+        self.store = None
+        self.living_error = None
+        self.task_id_provider = None
+        self._metrics_cache = (0., {})
         if getattr(memory, 'hermes_skills_enabled', False):
             from .hermes_skills import HermesSkills
             self.upstream = HermesSkills(memory.base)
@@ -100,6 +106,8 @@ class SkillMemory:
             paths += [(p, 'Custom') for p in sorted((self.memory.base / 'custom-skills').glob('*/SKILL.md'))[:50]]
             if self.memory.enabled:
                 paths += [(p, 'Personal') for p in sorted((self.vault / 'Jarvis Skills/Personal').glob('*/SKILL.md'))[:50]]
+            # Evolved (CAPTURED/FIX/DERIVED) guides are Jarvis-owned and start provisional.
+            paths += [(p, 'Evolved') for p in sorted((Path(self.memory.base) / '.jarvis-runtime/skills/evolved').glob('*/SKILL.md'))[:100]]
             stamp = []
             for path, origin in paths:
                 try:
@@ -138,7 +146,30 @@ class SkillMemory:
                                     'origin': origin, 'tools': declared,'provenance':{'origin':origin,'relative_path':path.parent.name+'/SKILL.md','sha256':hashlib.sha256(raw).hexdigest()},'trust':'untrusted_guidance'})
                 except (OSError, ValueError, UnicodeError) as exc:
                     errors.append(clean(path.parent.name,80) + ': ' + (str(exc) if type(exc) is ValueError else 'guide read failed: '+type(exc).__name__))
+            # Discovery diagnostics, separate from guide errors: e.g. an empty local folder without SKILL.md.
+            self.skill_warnings = [clean(folder.name, 80) + ': folder has no SKILL.md; not loaded as a skill.'
+                                   for folder in (sorted(p for p in self.source.iterdir() if p.is_dir()
+                                                         and not (p / 'SKILL.md').exists())[:50] if self.source.is_dir() else [])]
+            self._living_register(catalog, paths)
             self.catalog, self.skill_errors, self._guide_stamp = catalog, errors, stamp
+
+    def _living_register(self, catalog, paths):
+        """Stable identities and lifecycle state; failure leaves guides usable without telemetry."""
+        folders = {(origin, path.parent.name + '/SKILL.md'): path.parent for path, origin in paths}
+        try:
+            if self.store is None:
+                from .skill_store import SkillStore
+                self.store = SkillStore(self.memory.base)
+                self.living_error = self.store.error
+            for row in catalog:
+                if row['origin'] == 'Evolved':
+                    row['trust_state'] = 'provisional'
+                identifier = self.store.register(row, folders.get((row['origin'], row['provenance']['relative_path'])))
+                record = self.store.record(identifier) or {}
+                row.update(skill_id=identifier, trust_state=record.get('trust_state', 'trusted'),
+                           enabled=bool(record.get('enabled', 1)), version=record.get('version', 1))
+        except Exception as exc:  # Broad by design: telemetry storage must never disable guidance.
+            self.living_error = 'Skill telemetry unavailable: ' + type(exc).__name__ + ': ' + str(exc)[:200]
 
     def _path(self, relative):
         if not isinstance(relative,str) or len(relative)>3000 or '\x00' in relative:
@@ -212,10 +243,16 @@ class SkillMemory:
             explicit = set(re.findall(r'\$custom:([a-z0-9-]{1,64})\b', str(goal)))
             from .capabilities import skill_score,skill_ranking
             ranking=skill_ranking(goal)
-            scores={id(item):skill_score(item,goal,ranking) for item in self.catalog}
-            ranked = sorted(self.catalog, key=lambda item: (item['name'] in explicit, scores[id(item)]), reverse=True)
-            selected = [{"name": item["name"], "guidance": item["body"]} for item in ranked[:2]
-                        if item['name'] in explicit or scores[id(item)] > 0]
+            live = [item for item in self.catalog if item.get('enabled', True)]
+            metrics = self._living_metrics()
+            from .skill_evolution import living_score
+            scores={id(item):living_score(skill_score(item,goal,ranking), metrics.get(item.get('skill_id')), item) for item in live}
+            ranked = sorted(live, key=lambda item: (item['name'] in explicit, scores[id(item)]), reverse=True)
+            chosen = [item for item in ranked[:2] if item['name'] in explicit or scores[id(item)] > 0]
+            selected = [{"name": item["name"], "guidance": item["body"],
+                         **({"trust_state": "provisional", "notice": "Provisional evolved guidance: verify every step independently."}
+                            if item.get('trust_state') == 'provisional' else {})} for item in chosen]
+            self._living_selected(chosen)
             matches = []
             for item in self.procedures.values():
                 if kind and item.get("kind") != kind:
@@ -250,10 +287,53 @@ class SkillMemory:
                     "experience_context": self.experiences.context(goal, kind or 'task', project, conditions),
                     "contract": "Historical reference only. Adapt targets, queries and paths to this request and fresh observations. Never reuse IDs, coordinates, approvals or verification. Never replay uncertain actions. Verify the whole goal before success."}
 
+    def _living_metrics(self):
+        import time
+        stamp, cached = self._metrics_cache
+        if self.store is None or time.monotonic() - stamp < 5:
+            return cached
+        try:
+            metrics = self.store.all_metrics()
+        except Exception as exc:  # Broad by design: ranking falls back to relevance only.
+            self.living_error = 'Skill metrics unavailable: ' + type(exc).__name__
+            metrics = {}
+        self._metrics_cache = (time.monotonic(), metrics)
+        return metrics
+
+    def _current_task(self):
+        provider = self.task_id_provider
+        try:
+            value = provider() if callable(provider) else None
+        except Exception:  # Broad by design: identity lookup failure means no telemetry, not a failed context.
+            return None
+        return value if isinstance(value, str) and 0 < len(value) <= 64 else None
+
+    def _living_selected(self, chosen):
+        task_id = self._current_task()
+        if not task_id or self.store is None:
+            return
+        for item in chosen:
+            if item.get('skill_id'):
+                try:
+                    self.store.event(item['skill_id'], 'selected', task_id, {'version': item.get('version')})
+                except Exception as exc:  # Broad by design: telemetry cannot affect planning.
+                    self.living_error = 'Skill telemetry failed: ' + type(exc).__name__
+
+    def living_finish(self, task):
+        """Applied / verified / fallback / failed outcomes for skills selected in this task (idempotent)."""
+        if self.store is None or not isinstance(task, dict):
+            return []
+        from .skill_evolution import finish_outcomes
+        return finish_outcomes(self.store, self.catalog, task)
+
     def record(self, task):
         """Record every attempt; promote only a completed, independently verified goal."""
         if not isinstance(task, dict):
             return
+        try:
+            self.living_finish(task)
+        except Exception as exc:  # Broad by design: telemetry never changes a task outcome.
+            self.living_error = 'Skill outcome telemetry failed: ' + type(exc).__name__ + ': ' + str(exc)[:200]
         self.experiences.safe_record(task)
         with self.lock:
             if not self.memory.enabled or self.closed or self.error:

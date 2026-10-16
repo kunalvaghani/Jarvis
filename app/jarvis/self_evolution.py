@@ -227,6 +227,8 @@ class SelfEvolution:
         self.storage_failed = False
         self.trace_id = uuid.uuid4().hex
         self._resource_checked = (-float('inf'),False)
+        self.skill_repairs = {}         # skill_id -> failure causes awaiting a validated FIX.
+        self._skills_checked_at = -float('inf')
         self._load()
 
     # --- persistence (crash-safe, atomic) --------------------------------------------------------
@@ -439,9 +441,46 @@ class SelfEvolution:
         self.stop.set()
         self.stop_current()
 
+    def skill_maintenance(self):
+        """Idle-time living-skill upkeep: trust from verified outcomes and degraded-skill detection.
+
+        Reports only state changes backed by stored evidence; a degraded skill becomes a FIX
+        candidate, never an unvalidated rewrite.
+        """
+        skills = getattr(self.actions, 'skills', None)
+        store = getattr(skills, 'store', None)
+        if store is None:
+            return []
+        from .skill_evolution import degraded, update_trust
+        notes = []
+        for row in list(getattr(skills, 'catalog', [])):
+            identifier = row.get('skill_id')
+            if not identifier:
+                continue
+            before = row.get('trust_state')
+            after = update_trust(store, identifier)
+            if after and after != before:
+                row['trust_state'] = after
+                notes.append({'skill': row['name'], 'trust_state': after})
+                metrics = store.metrics(identifier)
+                self._card('learned' if after == 'trusted' else 'notice', 'Skill ' + after + ': ' + row['name'][:40],
+                           str(metrics['completed_verified_count']) + ' independently verified uses',
+                           'Trust follows recorded task outcomes; approvals are unchanged')
+            bad, metrics = degraded(store, identifier)
+            if bad and identifier not in self.skill_repairs:
+                self.skill_repairs[identifier] = sorted(metrics['failure_causes'])
+                notes.append({'skill': row['name'], 'fix_candidate': self.skill_repairs[identifier]})
+                self._card('notice', 'Skill needs repair: ' + row['name'][:40],
+                           'Repeated failures: ' + ', '.join(self.skill_repairs[identifier])[:80],
+                           'A repair is applied only after validation')
+        return notes
+
     def _run(self):
         while not self.stop.wait(self.options["poll_seconds"]):
             try:
+                if self._idle() and self.clock() - self._skills_checked_at >= 600:
+                    self._skills_checked_at = self.clock()
+                    self.skill_maintenance()
                 if self._idle():
                     self.refresh_backlog()
                     job = self.next_job()

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "label": "phase03-after",
+  "measured_at": "2026-10-16T20:43:54+00:00",
+  "git": {
+    "commit": "deb998a7295c8b6117b62b96c87be550592ebee7",
+    "worktree_dirty": true
+  },
+  "environment": {
+    "python": "3.10.6",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "cpu_count": 16
+  },
+  "rss_bytes_start": 20598784,
+  "sections": {
+    "intent_routing": {
+      "scope": "authored 800-scenario/2400-phrasing deterministic oracle",
+      "correct": 2400,
+      "total": 2400,
+      "accuracy": 1.0,
+      "error_rate": 0.0,
+      "routing_ms": {
+        "n": 2400,
+        "p50": 0.5006,
+        "p95": 10.7047,
+        "max": 904.4611
+      },
+      "status": "MEASURED",
+      "section_seconds": 4.8939,
+      "peak_traced_bytes": 16010080
+    },
+    "privacy_routing": {
+      "scope": "authored 16-question oracle; classifier only, no cloud call",
+      "cases": 16,
+      "correct": 15,
+      "private_marked_public": 0,
+      "misclassified": [
+        "Who wrote the novel Pride and Prejudice?"
+      ],
+      "classify_ms": {
+        "n": 16,
+        "p50": 0.0332,
+        "p95": 0.069,
+        "max": 0.0809
+      },
+      "status": "MEASURED",
+      "section_seconds": 0.0007,
+      "peak_traced_bytes": 3813
+    },
+    "dag_execution": {
+      "scope": "9-step fixture DAG (8 parallel reads + 1 dependent write) x20; one cancellation run",
+      "success_rate": 1.0,
+      "steps_per_run": 9,
+      "effect_dispatches_per_run": [
+        1
+      ],
+      "checkpoints_per_run": 19.0,
+      "run_ms": {
+        "n": 20,
+        "p50": 11.7231,
+        "p95": 12.8239,
+        "max": 16.8479
+      },
+      "cancellation": {
+        "status": "cancelled",
+        "requested_after_ms": 100,
+        "returned_after_ms": 115.837,
+        "unstarted_step_status": "cancelled"
+      },
+      "status": "MEASURED",
+      "section_seconds": 0.4279,
+      "peak_traced_bytes": 392391
+    },
+    "tool_registry": {
+      "scope": "real ToolRegistry, synthetic actions object; malformed proposals never reach a handler",
+      "catalog_size": 94,
+      "catalog_ms": {
+        "n": 30,
+        "p50": 0.5033,
+        "p95": 0.5723,
+        "max": 2.9119
+      },
+      "search_ms": {
+        "n": 30,
+        "p50": 3.7967,
+        "p95": 4.1492,
+        "max": 40.9547
+      },
+      "malformed_cases": 12,
+      "malformed_outcomes": {
+        "ToolArgumentError": 10,
+        "ValueError": 2
+      },
+      "malformed_dispatched": 0,
+      "contract_error_rate": 0.0,
+      "status": "MEASURED",
+      "section_seconds": 0.234,
+      "peak_traced_bytes": 311792
+    },
+    "skills": {
+      "scope": "bundled skills/ with an empty temporary vault; Hermes disabled",
+      "bundled_skills_loaded": 10,
+      "skill_errors": 0,
+      "cold_load_ms": 146.826,
+      "context_ms": {
+        "n": 20,
+        "p50": 3.2245,
+        "p95": 3.5309,
+        "max": 8.8447
+      },
+      "goals_with_selected_skill": 20,
+      "goals": 20,
+      "status": "MEASURED",
+      "section_seconds": 0.2203,
+      "peak_traced_bytes": 263831
+    }
+  },
+  "rss_bytes_end": 47489024
+}

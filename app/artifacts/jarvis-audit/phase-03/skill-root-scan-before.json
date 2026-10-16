@@ -1,0 +1,125 @@
+{
+ "report": {
+  "Builtins": {
+   "present": true,
+   "count": 11,
+   "with_problems": [
+    {
+     "skill": "repository-assimilation",
+     "problem": "missing SKILL.md"
+    }
+   ]
+  },
+  "Custom": {
+   "present": true,
+   "count": 0,
+   "with_problems": []
+  },
+  "Vault Builtins mirror": {
+   "present": true,
+   "count": 10,
+   "with_problems": []
+  },
+  "Vault Learned": {
+   "present": true,
+   "count": 18,
+   "with_problems": []
+  },
+  "Vault Hermes": {
+   "present": true,
+   "count": 2,
+   "with_problems": [
+    {
+     "skill": "optional-skills",
+     "problem": "missing SKILL.md"
+    },
+    {
+     "skill": "skills",
+     "problem": "missing SKILL.md"
+    }
+   ]
+  },
+  "Vault Personal": {
+   "present": true,
+   "count": 0,
+   "with_problems": []
+  },
+  "DeerFlow public": {
+   "present": true,
+   "count": 23,
+   "with_problems": [
+    {
+     "skill": "academic-paper-review",
+     "bytes": 12138,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "code-documentation",
+     "bytes": 13877,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "consulting-analysis",
+     "bytes": 33637,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "data-analysis",
+     "bytes": 8868,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "image-generation",
+     "bytes": 11444,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "newsletter-generation",
+     "bytes": 12859,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "podcast-generation",
+     "bytes": 8630,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "ppt-generation",
+     "bytes": 28359,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "skill-creator",
+     "bytes": 36683,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    },
+    {
+     "skill": "systematic-literature-review",
+     "bytes": 17256,
+     "problems": [
+      "over 8000 bytes"
+     ]
+    }
+   ]
+  }
+ },
+ "duplicates": {}
+}
