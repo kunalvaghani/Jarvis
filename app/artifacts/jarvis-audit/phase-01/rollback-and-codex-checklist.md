@@ -10,17 +10,17 @@ modified.
 
 ```powershell
 # From the repository root, on branch claude. Creates a new commit; history is preserved.
-git revert <phase-01-commit-sha>
+git revert e847b0012e2097dd007938d61555da6a55568a12
 ```
 
 Partial rollback (one fix) — restore specific files from the parent commit, then commit:
 
 ```powershell
-git checkout <phase-01-commit-sha>~1 -- app/jarvis/tools.py            # D1
-git checkout <phase-01-commit-sha>~1 -- app/jarvis/cognition.py        # D4
-git checkout <phase-01-commit-sha>~1 -- app/jarvis/launcher.py app/jarvis/hierarchical.py   # D2, D3
-git checkout <phase-01-commit-sha>~1 -- app/tests/test_web_development_audit.py             # D5
-git checkout <phase-01-commit-sha>~1 -- app/tests/test_reverse_engineering_audit.py         # D6
+git checkout e847b0012e2097dd007938d61555da6a55568a12~1 -- app/jarvis/tools.py            # D1
+git checkout e847b0012e2097dd007938d61555da6a55568a12~1 -- app/jarvis/cognition.py        # D4
+git checkout e847b0012e2097dd007938d61555da6a55568a12~1 -- app/jarvis/launcher.py app/jarvis/hierarchical.py   # D2, D3
+git checkout e847b0012e2097dd007938d61555da6a55568a12~1 -- app/tests/test_web_development_audit.py             # D5
+git checkout e847b0012e2097dd007938d61555da6a55568a12~1 -- app/tests/test_reverse_engineering_audit.py         # D6
 ```
 
 Rolling back `agent_events.py`/`execution_contracts.py` also removes the `tool.outcome` contract that Phases 2–4 depend
