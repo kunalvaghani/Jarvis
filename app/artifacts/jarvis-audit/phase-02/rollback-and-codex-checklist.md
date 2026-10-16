@@ -5,7 +5,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert <phase-02-commit-sha>          # on branch claude; history preserved
+git revert 16d9b4d591238b292db217357942e74adc96c7eb          # on branch claude; history preserved
 ```
 
 Behaviour-only rollback without reverting code: set `"execution_strategy": {"desktop_order": "pointer_first"}` in
