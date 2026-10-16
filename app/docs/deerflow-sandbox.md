@@ -1,5 +1,10 @@
 # DeerFlow sandbox and free media — 2026-10-14 IST
 
+<!-- prompt28-audit -->
+**Sandbox/DeerFlow audit — 2026-10-16 IST:** Stronger mount/checkpoint/identity/write/timeout guards and media proof added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,065 passed / 124 skipped / 0 failures**, launcher **ready**. Owned offline math, all seven literal media recipes and nonzero/no-replay/cleanup fixtures passed; format proof levels vary. General research/source-quality, approval/quota/privacy/resource/recovery and platform patch acceptance remain incomplete.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/28-sandbox-deerflow/inventory.md).
+<!-- /prompt28-audit -->
+
 Jarvis now offers the real DeerFlow harness a confined Linux workspace for requested
 coding, data analysis and artifact creation. Its existing Windows voice, desktop,
 research and skill tools remain available. This extends the
@@ -170,3 +175,11 @@ Reproduce controlled checks from `app/`:
 
 These create owned test jobs and preserve local outputs; the fault check affects
 only its own test container. They make no account calls or shared-engine restart.
+
+## Current audit boundaries — 2026-10-16 IST
+
+New jobs pin a full immutable container ID; exec, uncertain-failure kill and cleanup use the inspected ID. Legacy checkpoints without that field retain image/label attestation. Mount checks include linked ancestors; this is not race-proof containment against a hostile host/daemon. Checkpoints are bounded to 524,288 characters and validate effect state; pending attempted/uncertain effects stop further dispatch after resume. Writes are locked/exclusive and share the 20-effect budget. Individual exec timeouts accept finite numbers from 1 to 120 seconds. Inventory returns at most 200 rows with platform lexical ordering; a directory over 1,000 entries, depth over 32 or traversal over 5,000 entries refuses bounded inspection. The existing filesystem monitor is not a hard quota. Free-media results now include verification: PNG structure/dimensions, PCM WAV readback, bounded PPTX ZIP/CRC, or PDF/MP4 envelope only. These do not prove document layout, video codecs/frames or factual content. Current actual validation covers all seven literal recipes plus synthetic math and a nonzero command in the already-installed offline image; all nine owned containers were cleaned. Narration used existing stock assets on CPU without playback. No paid service, installer, shared engine change, LLM or GPU work ran. Aggregate job admission, installer approval provenance, paywall/claim support, complete privacy traces and daemon-disconnect recovery remain unfinished. Docker 29.8.2 is older than the official 29.9.1 release checked today; no platform update was attempted.
+
+![Actual rendered synthetic Docker chart fixture](../artifacts/jarvis-audit/modules/28-sandbox-deerflow/fixture-chart.png)
+
+Synthetic PNG rendered and inspected on 2026-10-16; not a desktop screenshot or general model benchmark. Historical 2026-10-14 results above remain historical.

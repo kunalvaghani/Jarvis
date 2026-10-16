@@ -1,0 +1,46 @@
+Prompt23 —2026-10-16 IST. cwd app/, existing .venv. All Gmail/OAuth services faked; no real account/profile calls, token decryption, verification/activation, consent, sends, draft/label/Trash changes or installs.
+
+BASELINE:
+.venv/Scripts/python.exe -m pytest tests/test_gmail_api.py tests/test_gmail_actions.py tests/test_gmail_writes.py tests/test_gmail_workflows.py tests/test_gmail_commands.py tests/test_gmail_drafts.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/baseline.xml
+66 PASS in10.74s. Existing Gmail-like DOM runs on authored intercepted HTML, not a real mailbox.
+
+REPRODUCTION:
+.venv/Scripts/python.exe -m pytest tests/test_gmail_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/reproduced.xml
+Initial harness had one collection error from wrong existing class name; corrected to GmailWorkflowTests before product reproduction. Then11 FAIL/19 PASS/8 BLOCKED skips in4.69s. Approval-wait stale draft writes, explicit False consent, malformed marker/journal assertions reproduced. Failed-assertion count is not distinct-defect count.
+
+NEIGHBORS / ITERATIONS:
+.venv/Scripts/python.exe -m pytest tests/test_gmail_audit.py tests/test_gmail_api.py tests/test_gmail_actions.py tests/test_gmail_writes.py tests/test_gmail_workflows.py tests/test_gmail_commands.py tests/test_gmail_drafts.py tests/test_documents.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/targeted-first.xml
+113 PASS/8 skips in18.17s.
+Same command plus tests/test_audit_result_accounting.py, successive XMLs:
+targeted-second.xml:137 PASS/8 skips in12.10s.
+targeted-third.xml:138 PASS/4 FAIL/8 skips in11.67s. Four failures were missing Mock import in updated owned document fixture, corrected without weakening assertions.
+targeted-fourth.xml:143 PASS/8 skips in11.38s, including successful and uncertain attachment journal/readback.
+
+FINAL MAIN FOCUSED:
+.venv/Scripts/python.exe -m pytest tests/test_gmail_audit.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/focused-main-final.xml
+65 PASS/8 BLOCKED skips in3.72s. Originally written to cases-and-contracts.xml, copied unchanged to focused-main-final.xml before aggregation.
+
+EXACT CONTRACT SUPPLEMENT:
+.venv/Scripts/python.exe -m pytest scripts/verification/test_gmail_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/catalog-supplements.xml
+3 PASS in0.74s: actual fake draft to exact person address never sends, insufficient scopes never refresh, hidden HTML/script content inert/untrusted with GET-only behavior. Supplement source verified separately; outside full tests-directory command.
+report_gmail_audit.py aggregates original main and supplemental suites unchanged into cases-and-contracts.xml:68 PASS/8 skips. Reviewed BLOCKED accounting gives24 PASS/8 BLOCKED across32 catalog IDs; partial proofs are not full privacy/recovery/resource contracts.
+
+EQUIVALENT A/B:
+.venv/Scripts/python.exe scripts/verification/verify_gmail_audit.py
+50 calls on same HTML draft, byte-identical MIME/results, one fake PUT/sample, zero real mailbox writes/external effects. Raw benchmarks.csv and benchmark-summary.json. Five initial calls/twenty warm, one imported process; not fresh-process cold/RSS/VRAM/OAuth/network timing. Current update adds a post-approval GET; end-to-end remote latency may increase.
+
+FULL:
+Freeze385 jarvis/*.py and tests/test_*.py hashes, no runtime/test changes during accepted run.
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/23-gmail/full-regression.xml
+Completed exact totals/timing from XML published in inventory.md/final-report.md. Main suite includes real owned journal-lock/crash fixture and existing local browser/document tests. Separate3-test supplement above.
+Final console:2900 PASS/56 SKIP/0 FAIL, one existing pywinauto STA COM warning in550.37s (9m10s). All385 runtime/test hashes unchanged. Local configured() metadata-only check returnedFalse for the changed adapter marker; no credential/token bytes or mailbox profile were read.
+
+READINESS:
+.venv/Scripts/python.exe -m jarvis.launcher --check
+Read-only exit0, ready; missing[], incomplete[]. Private raw output ignored in .jarvis-runtime/jarvis-audit/module23-readiness-private.json. No repairs, service starts or Gmail profile/activation check. Changed adapter invalidates existing source-bound Gmail marker by design; no --verify-existing invocation.
+
+FINAL EVIDENCE:
+.venv/Scripts/python.exe scripts/verification/report_gmail_audit.py
+.venv/Scripts/python.exe scripts/verification/verify_gmail_artifacts.py
+git diff --check
+Actual artifact/hash/catalog/link results published in artifact-verification.json. No source reset/commit or private account artifacts published.

@@ -18,6 +18,7 @@ import os
 import re
 import time
 import zlib
+from urllib.parse import urlsplit
 from pathlib import Path
 
 TORONTO_URL = ("https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/a3309088-5fd4-4d34-8297-77c8301840ac/resource/"
@@ -26,6 +27,13 @@ ONTARIO_URL = "https://511on.ca/api/v2/get/cameras"
 ONTARIO_ORIGIN = "https://511on.ca"
 MAX_AGE = 24 * 3600
 ENV_KEYS = {"CCTV_FORCE_AUSTIN": "1", "CCTV_MAX_SOURCES": "5000", "CCTV_ONTARIO_ENABLED": "0"}
+
+
+def public_camera(url,hosts):
+    try:
+        parsed=urlsplit(url)
+        return parsed.scheme=='https' and parsed.hostname in hosts and not parsed.username and not parsed.password and parsed.port in (None,443)
+    except ValueError: return False
 
 
 def pack_path(base):
@@ -61,7 +69,7 @@ def toronto(http):
     for row in rows:
         props, point = row.get("properties") or {}, _point(row.get("geometry"))
         url = str(props.get("IMAGEURL") or "").strip()
-        if not point or not url.startswith("https://"):
+        if not point or not public_camera(url,{'opendata.toronto.ca'}):
             continue
         camera_id = "to-" + str(props.get("REC_ID") or props.get("_id"))
         name = " at ".join(x.title() for x in (str(props.get("MAINROAD") or "").strip(), str(props.get("CROSSROAD") or "").strip()) if x)
@@ -79,7 +87,7 @@ DIRECTIONS = {"north": 0, "northbound": 0, "east": 90, "eastbound": 90, "south":
 def ontario(http, key):
     rows = http.get(ONTARIO_URL, params={"key": key, "format": "json", "lang": "en"}, timeout=(5, 60)).json()
     if not isinstance(rows, list):
-        raise ValueError("Ontario 511 refused the key: " + str(rows)[:120])
+        raise ValueError("Ontario 511 refused the key or returned an invalid camera list")
     cameras = []
     for row in rows:
         lat, lon = row.get("Latitude"), row.get("Longitude")
@@ -89,6 +97,7 @@ def ontario(http, key):
         view = next((v for v in views if not re.search(r"\bdown\b", str(v.get("Description", "")), re.I)), views[0])
         url = str(view["Url"])
         url = url if url.startswith("http") else ONTARIO_ORIGIN + "/" + url.lstrip("/")
+        if not public_camera(url,{'511on.ca'}): continue
         camera_id = "on-" + str(row.get("Id"))
         direction = DIRECTIONS.get(str(row.get("Direction") or "").strip().lower())
         place = str(row.get("Location") or row.get("Roadway") or "Ontario 511 camera").strip()

@@ -1,0 +1,66 @@
+[
+  {
+    "path": "jarvis/gmail_api.py",
+    "sha256": "11159eb90d8bf7121da394b1b3a3f2d8662f54e11434ced46b50d7478d487b41"
+  },
+  {
+    "path": "jarvis/gmail_writes.py",
+    "sha256": "414751be503a65282fac7d437f494644fdc75d1c34a2f5dac68c9f28da6e15df"
+  },
+  {
+    "path": "jarvis/file_drop.py",
+    "sha256": "10fc9d9307561c58c1b253b89bd3e879fee709c526638c1957abf391dcc4017c"
+  },
+  {
+    "path": "tests/test_gmail_audit.py",
+    "sha256": "a1b0037e843ddc730114f6ff1055e2ae583d84074e4de9a537257665bd5ea492"
+  },
+  {
+    "path": "tests/test_documents.py",
+    "sha256": "657a5a1162fa0d9e5fbab886fec163122a0b134b58cb24ba71b7f15b7bf84bb9"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "21062560826b0243092f460e192ca37969cd7e13694cf7d75ff27e7612d60d67"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "2e0fe3e0752f78ede6b4976b9c091acad3cacd39daa910ad68f7b7cbe15eded6"
+  },
+  {
+    "path": "scripts/verification/verify_gmail_audit.py",
+    "sha256": "27e0c88fdd104cd90443c4aac94c4a8085e4efc9a69136ebf7de4fe5cdca2b33"
+  },
+  {
+    "path": "scripts/verification/report_gmail_audit.py",
+    "sha256": "795e404e8c7ac40bf9a99c15b5f22c5965fee3a12e26bb8d27ecb2962db06685"
+  },
+  {
+    "path": "scripts/verification/verify_gmail_artifacts.py",
+    "sha256": "19adad2670315712f9e305e0824b3579dd6ea787be14c27ee2ef48a86eb45a8d"
+  },
+  {
+    "path": "scripts/verification/test_gmail_audit.py",
+    "sha256": "42394a4ead0038243eba48c46e9acf90a86194164d6169acfd7fa9a230c18c0a"
+  },
+  {
+    "path": "README.md",
+    "sha256": "511ee2bb1c13c8ee96500c7131d5f5eaa1b487794fd52775d097dfd062cc85e8"
+  },
+  {
+    "path": "docs/gmail-api.md",
+    "sha256": "ba8afd42a38c82c39837b496262fb713a340bd8aeba5c74b1b1c6efc70043735"
+  },
+  {
+    "path": "docs/file-buddy.md",
+    "sha256": "68451ba8f68a1a55443afc07b9d6a0a7848f1c347f7155a1d135662fc323108a"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "fd90220c883cbeefff3a3c30965fa4a2d656cc07bd1606edd28a3269836e5cb2"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "d88aa6b8ae20ab1d42797a80ef88b1f8d5127c28c6f2f68b6386d9a1e78cd8aa"
+  }
+]

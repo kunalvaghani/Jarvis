@@ -1,0 +1,62 @@
+[
+  {
+    "path": "docs/realtime-data.md",
+    "sha256": "6f1c0f57ddaef8f6c6f6708cb35ff01b81d911f44a0af635c84edd95fbd7c786"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "85b65a28ecfad1f70b92041b7768b6ea8d4e771f7fd2a5c07b30cb00d85d7c13"
+  },
+  {
+    "path": "jarvis/realtime.py",
+    "sha256": "de7cdb6b5ed07ab524c687b2ff8f7f28fd670aeaa0fa5680d08bb5e693783f0a"
+  },
+  {
+    "path": "jarvis/realtime_sources.py",
+    "sha256": "5396ec35ab51c3b07e6a90fc233101f2150e9d2be8c8ec1002c5fc7823e23865"
+  },
+  {
+    "path": "jarvis/weather_watch.py",
+    "sha256": "f5b1b494a345fcbdd172bcb5ee8a0957609708405cc383006573b43031a32454"
+  },
+  {
+    "path": "README.md",
+    "sha256": "65e23925ab1e03ecafb6175e5b05c638f16685ed1659444fa4f49fd030dd07cd"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "d6e5c83dae5118e3fdf20db9b3ed5f835ab256d09b5c51d3a193340738949e08"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "f4d59640fb5309cfda739afbf1b6ab82d8cf5a5cfa14d37c636cf1cdc14949cb"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "5c80d5d8028edd534fd356aab5c9914bbdb1bbbcd35edbfc9c280e07a8c0cffb"
+  },
+  {
+    "path": "jarvis/weather_units.py",
+    "sha256": "8b3752baf1b5c993d4695991a37518b816d8089e3e06a277dec095fa3116c8c5"
+  },
+  {
+    "path": "tests/test_realtime_audit.py",
+    "sha256": "76b6f7680ba30c823e25b076ca97b04bf160dcf36aad32de654aa7ba62d0a128"
+  },
+  {
+    "path": "scripts/verification/test_realtime_audit.py",
+    "sha256": "55cb9ca44ad76c0c1337dbf6525e3006b552006ea8ec982252eaf5c8e9ee33f4"
+  },
+  {
+    "path": "scripts/verification/verify_realtime_data_audit.py",
+    "sha256": "1be6996d8ae25670a27c78c5ab6cf81adf41c85445d35e982094e8f21ab4ce1b"
+  },
+  {
+    "path": "scripts/verification/report_realtime_data_audit.py",
+    "sha256": "a0c2137cf4f1ccec1204f5c17ddbea83e46f2b18718b0d8eb7c954d3c8f06b9e"
+  },
+  {
+    "path": "scripts/verification/verify_realtime_data_artifacts.py",
+    "sha256": "93f2ef9075f814cb16f5850fbfd2704d7126ccfed3d3efd049eaf0b6b2378028"
+  }
+]

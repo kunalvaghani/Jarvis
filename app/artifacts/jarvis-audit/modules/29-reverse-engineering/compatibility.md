@@ -1,3 +1,7 @@
-# Compatibility
+# Official upstream review — 2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+[REA 6.5.0 release](https://github.com/morluto/rea/releases/tag/rea-agents-6.5.0) was published 2026-10-14T12:32:45Z at revision 3b79af28e80785afce9f5998d8f03289402a1847; its changelog section is dated 2026-10-13. [Release notes](https://github.com/morluto/rea/blob/rea-agents-6.5.0/CHANGELOG.md) describe selected JavaScript source scope, retained evidence and partial observations. [Official npm metadata](https://registry.npmjs.org/rea-agents/latest) independently reports 6.5.0, MIT, engines ^22.19.0 || ^24.11.0 || >=26.0.0, CLI scripts/rea.mjs. [Dispatcher source](https://github.com/morluto/rea/blob/rea-agents-6.5.0/scripts/rea.mjs) routes dist/mcp/main.js specifically for MCP; it is not an interchangeable CLI entry. The guide is corrected accordingly. An initial guessed v6.5.0 tag URL returned 404; the actual tag is rea-agents-6.5.0.
+
+Local configured REA remains 6.4.0 and Node remains v24.14.0. The existing integration manifest records the historical 6.4.0 review, not a 6.5.0 certification. No npm install, source update or optional native/browser engine ran. No claim of current live 6.5.0 compatibility or upstream Windows clone fidelity follows from Python mocks.
+
+[Node's official release index](https://nodejs.org/dist/index.json), checked today, lists v24.22.0 and v26.12.0 dated 2026-10-14. Installed v24.14.0 satisfies REA's engine range but is older than current 24.x; [its release page](https://nodejs.org/en/blog/release/v24.14.0) is dated 2026-02-24. Platform patch currency remains unresolved; no personal system update was made. Firecrawl retrieval provenance/cache dates are in upstream-checks.json; cached sources are not a live package installation test. No paid API is required.

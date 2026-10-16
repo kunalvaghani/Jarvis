@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="8" time="2.523" timestamp="2026-10-16T16:02:58.786211+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_web_development_audit" name="test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser[?token=FAKE_SECRET22]" time="0.127"><failure message="AssertionError: Regex pattern did not match.&#10; Regex: 'preview|loopback|URL'&#10; Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'">tests\test_web_development_audit.py:91: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    inspect({'project':str(tmp_path),'output':str(output),'url':'http://127.0.0.1:3000'+suffix,'tests':[]})
+jarvis\development_browser.py:99: in inspect
+    raise ValueError('Project-local axe-core is missing; accessibility evidence cannot be omitted.')
+E   ValueError: Project-local axe-core is missing; accessibility evidence cannot be omitted.
+
+During handling of the above exception, another exception occurred:
+tests\test_web_development_audit.py:90: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    with pytest.raises(ValueError,match='preview|loopback|URL') as error:
+E   AssertionError: Regex pattern did not match.
+E    Regex: 'preview|loopback|URL'
+E    Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser[#access_token=FAKE_SECRET22]" time="0.009"><failure message="AssertionError: Regex pattern did not match.&#10; Regex: 'preview|loopback|URL'&#10; Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'">tests\test_web_development_audit.py:91: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    inspect({'project':str(tmp_path),'output':str(output),'url':'http://127.0.0.1:3000'+suffix,'tests':[]})
+jarvis\development_browser.py:99: in inspect
+    raise ValueError('Project-local axe-core is missing; accessibility evidence cannot be omitted.')
+E   ValueError: Project-local axe-core is missing; accessibility evidence cannot be omitted.
+
+During handling of the above exception, another exception occurred:
+tests\test_web_development_audit.py:90: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    with pytest.raises(ValueError,match='preview|loopback|URL') as error:
+E   AssertionError: Regex pattern did not match.
+E    Regex: 'preview|loopback|URL'
+E    Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser[/callback?code=FAKE_SECRET22]" time="0.008"><failure message="AssertionError: Regex pattern did not match.&#10; Regex: 'preview|loopback|URL'&#10; Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'">tests\test_web_development_audit.py:91: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    inspect({'project':str(tmp_path),'output':str(output),'url':'http://127.0.0.1:3000'+suffix,'tests':[]})
+jarvis\development_browser.py:99: in inspect
+    raise ValueError('Project-local axe-core is missing; accessibility evidence cannot be omitted.')
+E   ValueError: Project-local axe-core is missing; accessibility evidence cannot be omitted.
+
+During handling of the above exception, another exception occurred:
+tests\test_web_development_audit.py:90: in test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser
+    with pytest.raises(ValueError,match='preview|loopback|URL') as error:
+E   AssertionError: Regex pattern did not match.
+E    Regex: 'preview|loopback|URL'
+E    Input: 'Project-local axe-core is missing; accessibility evidence cannot be omitted.'</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser[tests0]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_web_development_audit.py:146: in test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser
+    with pytest.raises(ValueError):validate_tests(tests)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser[tests1]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_web_development_audit.py:146: in test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser
+    with pytest.raises(ValueError):validate_tests(tests)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser[tests2]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_web_development_audit.py:146: in test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser
+    with pytest.raises(ValueError):validate_tests(tests)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser[tests3]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tests\test_web_development_audit.py:146: in test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser
+    with pytest.raises(ValueError):validate_tests(tests)
+E   Failed: DID NOT RAISE &lt;class 'ValueError'&gt;</failure></testcase><testcase classname="tests.test_web_development_audit" name="test_browser_context_blocks_service_workers" time="1.803"><failure message="ValueError: Browser inspection failed: D:\Kunals GitHub Repo\Jarvis\app\.venv\Scripts\python.exe: Error while finding module specification for 'jarvis.development_browser' (ModuleNotFoundError: No module named 'jarvis')">tests\test_web_development_audit.py:162: in test_browser_context_blocks_service_workers
+    with patch.object(Browser,'new_context',observed):assert browser(preview)['goal_verified']
+tests\test_web_development_audit.py:40: in browser
+    return tools.inspect(root,url,tests,lambda:False)
+jarvis\development_tools.py:204: in inspect
+    raise ValueError('Browser inspection failed: '+result['output'][-1500:])
+E   ValueError: Browser inspection failed: D:\Kunals GitHub Repo\Jarvis\app\.venv\Scripts\python.exe: Error while finding module specification for 'jarvis.development_browser' (ModuleNotFoundError: No module named 'jarvis')</failure></testcase></testsuite></testsuites>

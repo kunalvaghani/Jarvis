@@ -1,0 +1,30 @@
+{
+  "equivalent": true,
+  "external_effects": 0,
+  "samples_per_version": 25,
+  "scope": "Same fake200 health response, active/dead/closed state assertions; real proxy-free opener construction, mocked network open. Five first calls/twenty warm calls per version in one process. Construction/imports/network/Chrome/build/GPU excluded. Cached opener adds retained per-instance memory and construction work; lock still serializes network.",
+  "before": {
+    "initial": {
+      "p50_ms": 0.4171,
+      "p95_ms": 0.5173,
+      "python_peak_bytes": 15231
+    },
+    "warm": {
+      "p50_ms": 0.38605,
+      "p95_ms": 0.3986,
+      "python_peak_bytes": 7319
+    }
+  },
+  "after": {
+    "initial": {
+      "p50_ms": 0.0191,
+      "p95_ms": 0.0365,
+      "python_peak_bytes": 2120
+    },
+    "warm": {
+      "p50_ms": 0.01765,
+      "p95_ms": 0.0193,
+      "python_peak_bytes": 2352
+    }
+  }
+}

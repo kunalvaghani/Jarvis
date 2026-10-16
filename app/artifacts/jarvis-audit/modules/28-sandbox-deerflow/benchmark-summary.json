@@ -1,0 +1,17 @@
+{
+  "before": {
+    "p50_ms": 717.24235,
+    "p95_ms": 797.7022,
+    "peak_python_bytes": 5313699
+  },
+  "after": {
+    "p50_ms": 646.8883000000001,
+    "p95_ms": 739.1657,
+    "peak_python_bytes": 719966
+  },
+  "equivalent": true,
+  "real_external_actions": 0,
+  "fixture_files": 3000,
+  "inventory_rows": 200,
+  "scope": "Identical first200 lexical inventory rows;20 warm+5 initial per version. Not cold processes, container/render/model/network/RSS/VRAM."
+}

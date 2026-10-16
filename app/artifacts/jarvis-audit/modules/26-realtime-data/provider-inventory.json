@@ -1,0 +1,822 @@
+[
+  {
+    "id": "weather",
+    "name": "Open-Meteo",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.open-meteo.com/v1/forecast",
+    "reference": "https://open-meteo.com/en/docs",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "air",
+    "name": "Open-Meteo Air Quality",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://air-quality-api.open-meteo.com/v1/air-quality",
+    "reference": "https://open-meteo.com/en/docs/air-quality-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "marine",
+    "name": "Open-Meteo Marine",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 1800,
+    "endpoint": "https://marine-api.open-meteo.com/v1/marine",
+    "reference": "https://open-meteo.com/en/docs/marine-weather-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "flood",
+    "name": "Open-Meteo Flood",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://flood-api.open-meteo.com/v1/flood",
+    "reference": "https://open-meteo.com/en/docs/flood-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "met",
+    "name": "MET Norway",
+    "mode": "json",
+    "setup": "contact",
+    "cadence_seconds": 1800,
+    "endpoint": "https://api.met.no/weatherapi/locationforecast/2.0/compact",
+    "reference": "https://api.met.no/doc/TermsOfService",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "nws",
+    "name": "US National Weather Service",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.weather.gov/alerts/active",
+    "reference": "https://www.weather.gov/documentation/services-web-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "earthquakes",
+    "name": "USGS Earthquakes",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
+    "reference": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "space_weather",
+    "name": "NOAA Space Weather",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://services.swpc.noaa.gov/products/alerts.json",
+    "reference": "https://www.swpc.noaa.gov/products-and-data",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "gdacs",
+    "name": "GDACS",
+    "mode": "xml",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://www.gdacs.org/xml/rss.xml",
+    "reference": "https://www.gdacs.org/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "gdelt",
+    "name": "GDELT",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
+    "reference": "https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "hacker_news",
+    "name": "Hacker News",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://hacker-news.firebaseio.com/v0/topstories.json",
+    "reference": "https://github.com/HackerNews/API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "google_news",
+    "name": "Google News RSS",
+    "mode": "xml",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://news.google.com/rss/search",
+    "reference": "https://news.google.com/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "bbc",
+    "name": "BBC News RSS",
+    "mode": "xml",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "reference": "https://www.bbc.co.uk/news/10628494",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "bluesky",
+    "name": "Bluesky Public API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
+    "reference": "https://docs.bsky.app/docs/api/app-bsky-feed-search-posts",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "jetstream",
+    "name": "Bluesky Jetstream",
+    "mode": "ws",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "wss://jetstream2.us-east.bsky.network/subscribe",
+    "reference": "https://github.com/bluesky-social/jetstream",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "wikimedia_events",
+    "name": "Wikimedia EventStreams",
+    "mode": "sse",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://stream.wikimedia.org/v2/stream/recentchange",
+    "reference": "https://wikitech.wikimedia.org/wiki/Event_Platform/EventStreams",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "rsshub",
+    "name": "RSSHub",
+    "mode": "xml",
+    "setup": "self-host",
+    "cadence_seconds": 900,
+    "endpoint": "",
+    "reference": "https://docs.rsshub.app/deploy/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "searxng",
+    "name": "SearXNG",
+    "mode": "json",
+    "setup": "self-host",
+    "cadence_seconds": 60,
+    "endpoint": "",
+    "reference": "https://docs.searxng.org/dev/search_api.html",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "wikipedia",
+    "name": "Wikipedia REST API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://en.wikipedia.org/api/rest_v1/page/summary/",
+    "reference": "https://www.mediawiki.org/wiki/REST_API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "mediawiki",
+    "name": "MediaWiki API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://en.wikipedia.org/w/api.php",
+    "reference": "https://www.mediawiki.org/wiki/API:Main_page",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "wikidata_query",
+    "name": "Wikidata Query",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://query.wikidata.org/sparql",
+    "reference": "https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "wikidata",
+    "name": "Wikidata REST",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/",
+    "reference": "https://www.wikidata.org/wiki/Wikidata:REST_API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "openalex",
+    "name": "OpenAlex",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.openalex.org/works",
+    "reference": "https://help.openalex.org/api/authentication/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "crossref",
+    "name": "Crossref",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.crossref.org/works",
+    "reference": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "semantic_scholar",
+    "name": "Semantic Scholar",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.semanticscholar.org/graph/v1/paper/search",
+    "reference": "https://api.semanticscholar.org/api-docs/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "arxiv",
+    "name": "arXiv",
+    "mode": "xml",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://export.arxiv.org/api/query",
+    "reference": "https://info.arxiv.org/help/api/user-manual.html",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "europe_pmc",
+    "name": "Europe PMC",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+    "reference": "https://europepmc.org/RestfulWebService",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "open_library",
+    "name": "Open Library",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://openlibrary.org/search.json",
+    "reference": "https://openlibrary.org/developers/api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "stack_exchange",
+    "name": "Stack Exchange",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.stackexchange.com/2.3/search/advanced",
+    "reference": "https://api.stackexchange.com/docs",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "datamuse",
+    "name": "Datamuse",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.datamuse.com/words",
+    "reference": "https://www.datamuse.com/api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "dictionary",
+    "name": "Free Dictionary API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.dictionaryapi.dev/api/v2/entries/en/",
+    "reference": "https://dictionaryapi.dev/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "dbpedia",
+    "name": "DBpedia",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://dbpedia.org/sparql",
+    "reference": "https://www.dbpedia.org/resources/sparql/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "internet_archive",
+    "name": "Internet Archive",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://archive.org/advancedsearch.php",
+    "reference": "https://archive.org/developers/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "nominatim",
+    "name": "OpenStreetMap Nominatim",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 2,
+    "endpoint": "https://nominatim.openstreetmap.org/search",
+    "reference": "https://operations.osmfoundation.org/policies/nominatim/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "overpass",
+    "name": "Overpass API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://overpass-api.de/api/interpreter",
+    "reference": "https://wiki.openstreetmap.org/wiki/Overpass_API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "geocoding",
+    "name": "Open-Meteo Geocoding",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://geocoding-api.open-meteo.com/v1/search",
+    "reference": "https://open-meteo.com/en/docs/geocoding-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "osrm",
+    "name": "OSRM",
+    "mode": "json",
+    "setup": "self-host",
+    "cadence_seconds": 60,
+    "endpoint": "",
+    "reference": "https://project-osrm.org/docs/v5.24.0/api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "ipify",
+    "name": "ipify",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://api.ipify.org/",
+    "reference": "https://www.ipify.org/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "ipwho",
+    "name": "ipwho.is",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://ipwho.is/",
+    "reference": "https://ipwhois.io/documentation",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "geojs",
+    "name": "GeoJS",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://get.geojs.io/v1/ip/geo.json",
+    "reference": "https://www.geojs.io/docs/v1/endpoints/geo/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "worldtime",
+    "name": "WorldTimeAPI",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://worldtimeapi.org/api/timezone/",
+    "reference": "https://worldtimeapi.org/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "timeapi",
+    "name": "TimeAPI.io",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://timeapi.io/api/time/current/zone",
+    "reference": "https://timeapi.io/swagger/index.html",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "sunrise",
+    "name": "Sunrise-Sunset",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://api.sunrise-sunset.org/json",
+    "reference": "https://sunrise-sunset.org/api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "postcodes",
+    "name": "Zippopotam.us",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://api.zippopotam.us/",
+    "reference": "https://www.zippopotam.us/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "countries",
+    "name": "REST Countries",
+    "mode": "json",
+    "setup": "free-key",
+    "cadence_seconds": 86400,
+    "endpoint": "https://api.restcountries.com/countries/v5/names.common",
+    "reference": "https://restcountries.com/docs/countries",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "binance",
+    "name": "Binance REST",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.binance.com/api/v3/ticker/price",
+    "reference": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "binance_stream",
+    "name": "Binance WebSocket",
+    "mode": "ws",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "wss://stream.binance.com:9443/ws/",
+    "reference": "https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "coinbase",
+    "name": "Coinbase Exchange REST",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.exchange.coinbase.com/products/",
+    "reference": "https://docs.cdp.coinbase.com/exchange/reference/exchangerestapi_getproductticker",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "coinbase_stream",
+    "name": "Coinbase WebSocket",
+    "mode": "ws",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "wss://ws-feed.exchange.coinbase.com",
+    "reference": "https://docs.cdp.coinbase.com/exchange/websocket-feed/overview",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "kraken",
+    "name": "Kraken REST",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.kraken.com/0/public/Ticker",
+    "reference": "https://docs.kraken.com/api/docs/rest-api/get-ticker-information",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "kraken_stream",
+    "name": "Kraken WebSocket",
+    "mode": "ws",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "wss://ws.kraken.com/v2",
+    "reference": "https://docs.kraken.com/api/docs/websocket-v2/ticker",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "coinpaprika",
+    "name": "CoinPaprika",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.coinpaprika.com/v1/tickers/",
+    "reference": "https://docs.coinpaprika.com/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "dexscreener",
+    "name": "DexScreener",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.dexscreener.com/latest/dex/search",
+    "reference": "https://docs.dexscreener.com/api/reference",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "defillama",
+    "name": "DeFiLlama",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.llama.fi/protocols",
+    "reference": "https://api-docs.defillama.com/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "geckoterminal",
+    "name": "GeckoTerminal",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.geckoterminal.com/api/v2/search/pools",
+    "reference": "https://apiguide.geckoterminal.com/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "frankfurter",
+    "name": "Frankfurter",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://api.frankfurter.dev/v1/latest",
+    "reference": "https://frankfurter.dev/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "ecb",
+    "name": "ECB Data",
+    "mode": "text",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A",
+    "reference": "https://data.ecb.europa.eu/help/api/overview",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "worldbank",
+    "name": "World Bank API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 86400,
+    "endpoint": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD",
+    "reference": "https://datahelpdesk.worldbank.org/knowledgebase/topics/125589",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "opensky",
+    "name": "OpenSky Network",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://opensky-network.org/api/states/all",
+    "reference": "https://openskynetwork.github.io/opensky-api/rest.html",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "adsblol",
+    "name": "ADSB.lol",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.adsb.lol/v2/point/",
+    "reference": "https://api.adsb.lol/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "tfl",
+    "name": "TfL Unified API",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.tfl.gov.uk/Line/Mode/tube/Status",
+    "reference": "https://api.tfl.gov.uk/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "mbta",
+    "name": "MBTA",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api-v3.mbta.com/alerts",
+    "reference": "https://www.mbta.com/developers/v3-api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "gbfs",
+    "name": "GBFS",
+    "mode": "json",
+    "setup": "feed",
+    "cadence_seconds": 60,
+    "endpoint": "",
+    "reference": "https://gbfs.org/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "opentripplanner",
+    "name": "OpenTripPlanner",
+    "mode": "json",
+    "setup": "self-host",
+    "cadence_seconds": 60,
+    "endpoint": "",
+    "reference": "https://docs.opentripplanner.org/en/latest/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "jolpica",
+    "name": "Jolpica F1",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://api.jolpi.ca/ergast/f1/current/last/results.json",
+    "reference": "https://github.com/jolpica/jolpica-f1/blob/main/docs/README.md",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "openligadb",
+    "name": "OpenLigaDB",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.openligadb.de/getmatchdata/bl1",
+    "reference": "https://www.openligadb.de/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "eonet",
+    "name": "NASA EONET",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 1800,
+    "endpoint": "https://eonet.gsfc.nasa.gov/api/v3/events",
+    "reference": "https://eonet.gsfc.nasa.gov/docs/v3",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "epic",
+    "name": "NASA EPIC",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://epic.gsfc.nasa.gov/api/natural",
+    "reference": "https://epic.gsfc.nasa.gov/about/api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "power",
+    "name": "NASA POWER",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 86400,
+    "endpoint": "https://power.larc.nasa.gov/api/temporal/daily/point",
+    "reference": "https://power.larc.nasa.gov/docs/services/api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "open_notify",
+    "name": "Open Notify ISS",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "http://api.open-notify.org/iss-now.json",
+    "reference": "http://open-notify.org/Open-Notify-API/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "whereiss",
+    "name": "WhereTheISS",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.wheretheiss.at/v1/satellites/25544",
+    "reference": "https://wheretheiss.at/w/developer",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "celestrak",
+    "name": "CelesTrak",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 7200,
+    "endpoint": "https://celestrak.org/NORAD/elements/gp.php",
+    "reference": "https://celestrak.org/NORAD/documentation/gp-data-formats.php",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "spaceflight_news",
+    "name": "Spaceflight News",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 900,
+    "endpoint": "https://api.spaceflightnewsapi.net/v4/articles/",
+    "reference": "https://api.spaceflightnewsapi.net/v4/docs/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "spacex",
+    "name": "Launch Library 2 (SpaceX and all launches)",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 3600,
+    "endpoint": "https://ll.thespacedevs.com/2.2.0/launch/upcoming/",
+    "reference": "https://thespacedevs.com/llapi",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "tvmaze",
+    "name": "TVmaze",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.tvmaze.com/search/shows",
+    "reference": "https://www.tvmaze.com/api",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "itunes",
+    "name": "iTunes Search",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://itunes.apple.com/search",
+    "reference": "https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "musicbrainz",
+    "name": "MusicBrainz",
+    "mode": "json",
+    "setup": "contact",
+    "cadence_seconds": 2,
+    "endpoint": "https://musicbrainz.org/ws/2/artist/",
+    "reference": "https://musicbrainz.org/doc/MusicBrainz_API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "listenbrainz",
+    "name": "ListenBrainz",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 60,
+    "endpoint": "https://api.listenbrainz.org/1/user/",
+    "reference": "https://listenbrainz.readthedocs.io/en/latest/users/api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "cover_art",
+    "name": "Cover Art Archive",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://coverartarchive.org/release/",
+    "reference": "https://musicbrainz.org/doc/Cover_Art_Archive/API",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "food",
+    "name": "Open Food Facts",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://world.openfoodfacts.org/api/v2/product/",
+    "reference": "https://openfoodfacts.github.io/openfoodfacts-server/api/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "gbif",
+    "name": "GBIF",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.gbif.org/v1/occurrence/search",
+    "reference": "https://techdocs.gbif.org/en/openapi/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  },
+  {
+    "id": "inaturalist",
+    "name": "iNaturalist",
+    "mode": "json",
+    "setup": "",
+    "cadence_seconds": 300,
+    "endpoint": "https://api.inaturalist.org/v1/observations",
+    "reference": "https://api.inaturalist.org/v1/docs/",
+    "proof": "registered endpoint constructed with fixture operands; not live availability"
+  }
+]

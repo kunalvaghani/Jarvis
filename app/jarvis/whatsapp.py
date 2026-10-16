@@ -13,6 +13,7 @@ import os
 import re
 import threading
 import time
+import unicodedata
 from contextlib import contextmanager
 
 from .media_player import similarity, sound_key
@@ -40,8 +41,11 @@ _local = threading.local()
 def _uia():
     """One IUIAutomation per thread (COM objects are apartment-bound)."""
     if getattr(_local, "uia", None) is None:
-        import comtypes
-        import comtypes.client
+        try:
+            import comtypes
+            import comtypes.client
+        except ImportError:
+            raise WhatsAppError("WhatsApp accessibility dependency is unavailable. Repair the declared comtypes installation before continuing.") from None
         try:
             comtypes.CoInitialize()
         except OSError:
@@ -272,7 +276,9 @@ def match_contacts(query, rows):
             continue
         key = row["name"].casefold()
         if key in seen:
-            continue  # The same person in Chats and Contacts.
+            # UIA supplies no stable account/contact ID. Two rows may be different
+            # people: a display name alone cannot authorize choosing either one.
+            raise WhatsAppError("The contact name is ambiguous. Use a unique saved name in WhatsApp and ask again.")
         seen.add(key)
         scored.append((score, 0 if not row["group"] else -1, -len(scored), row))
     if not scored:
@@ -345,13 +351,15 @@ def is_open(items, name):
     current = open_chat_name(items)
     if not current:
         return False
-    have, want = tokens(current), tokens(name)
+    # Fuzzy phonetics are useful for discovery, never for authorizing a write.
+    have, want = identity(current), identity(name)
     if have == want:
         return True  # Every word, including "(You)", so a same-named contact never passes.
     # Group headers list members after the name ("Family Mom, Dad, You"): the name must be the exact prefix.
     header = open_chat_header(items)
-    group = bool(header) and not header.endswith((" click here for contact info", " Message yourself"))
-    return group and bool(want) and have[:len(want)] == want
+    box = compose_box(items)
+    group = bool(header and box) and box['name'].startswith('Type a message to group ')
+    return group and bool(want) and have.startswith(want + ' ')
 
 
 # --- Conversation ---------------------------------------------------------------------------------------------
@@ -405,16 +413,25 @@ def messages(items, limit=30):
     return rows[-limit:]
 
 
+_SPACE = re.compile(r"\s+")
+
+
+def identity(text):
+    return _SPACE.sub(' ', unicodedata.normalize('NFC', text).casefold()).strip()
+
+
 def normalized(text):
-    return re.sub(r"\s+", " ", (text or "").replace("‎", "").replace("‏", "")).strip()
+    return _SPACE.sub(" ", (text or "").replace("‎", "").replace("‏", "")).strip()
 
 
 def compose_value(box):
+    if box is None:
+        raise WhatsAppError("The compose box could not be read; nothing was sent.")
     uia, U = _uia()
     try:
         return box["el"].GetCurrentPattern(U.UIA_ValuePatternId).QueryInterface(U.IUIAutomationValuePattern).CurrentValue or ""
     except Exception:
-        return ""
+        raise WhatsAppError("The compose box could not be read; check WhatsApp before continuing.") from None
 
 
 def keys(*codes):
@@ -443,6 +460,9 @@ def type_draft(actions, handle, contact, text, cancelled=lambda: False, sleep=ti
     foreground = ctypes.windll.user32.GetForegroundWindow()
     if foreground != handle:
         raise WhatsAppError("WhatsApp lost focus before typing; nothing was typed.")
+    fresh = read(document(handle))
+    if not is_open(fresh, contact) or normalized(compose_value(compose_box(fresh))):
+        raise WhatsAppError("The recipient or draft changed before typing; nothing was typed.")
     desktop = actions.desktop
     previous = desktop.target
     desktop.target = handle
@@ -451,30 +471,42 @@ def type_draft(actions, handle, contact, text, cancelled=lambda: False, sleep=ti
     finally:
         desktop.target = previous
     sleep(.4)
-    typed = normalized(compose_value(compose_box(read(doc))))
+    fresh = read(document(handle))
+    if not is_open(fresh, contact):
+        raise WhatsAppError("The chat changed while typing; inspect the unsent draft. No send attempted.")
+    typed = normalized(compose_value(compose_box(fresh)))
     if typed != normalized(text):
-        if ctypes.windll.user32.GetForegroundWindow() == handle:
-            keys((0x11, 0), (0x41, 0), (0x41, 1), (0x11, 1), (0x2E, 0), (0x2E, 1))  # Remove the partial draft.
-        raise WhatsAppError("The draft in WhatsApp did not match the approved text, so it was removed and not sent.")
+        raise WhatsAppError("The draft did not match the approved text. It was left untouched and not sent; inspect WhatsApp.")
     return box
 
 
-def press_send(handle, contact, text, sleep=time.sleep):
+def press_send(handle, contact, text, sleep=time.sleep, cancelled=lambda: False):
     """Send with Enter once, then confirm the message is in the chat. Never repeated."""
     if ctypes.windll.user32.GetForegroundWindow() != handle:
         raise WhatsAppError("WhatsApp lost focus before sending; the draft is still in the chat box, not sent.")
     doc = document(handle)
-    before = [m for m in messages(read(doc)) if m["outgoing"]]
+    items = read(doc)
+    if not is_open(items, contact):
+        raise WhatsAppError("The recipient changed before sending; nothing was sent.")
+    if not text.strip() or normalized(compose_value(compose_box(items))) != normalized(text):
+        raise WhatsAppError("The draft changed before sending; nothing was sent.")
+    before = [m for m in messages(items) if m["outgoing"]]
+    if cancelled() or ctypes.windll.user32.GetForegroundWindow() != handle:
+        raise WhatsAppError("Cancelled or focus changed before sending; nothing was sent.")
     keys((0x0D, 0), (0x0D, 1))
     want = normalized(text)
     deadline = time.monotonic() + 6
     while time.monotonic() < deadline:
         sleep(.35)
         items = read(doc)
+        if not is_open(items, contact):
+            raise WhatsAppError("The chat changed after Enter; delivery is uncertain. Do not resend blindly.")
         mine = [m for m in messages(items) if m["outgoing"]]
         box = compose_box(items)
-        empty = box is None or not normalized(compose_value(box))
-        if mine and normalized(mine[-1]["text"]) == want and empty and (len(mine) > len(before) or before[-1:] != mine[-1:]):
+        empty = box is not None and not normalized(compose_value(box))
+        if (mine and normalized(mine[-1]["text"]) == want and empty
+                and mine[-1].get("status") in {"Sent", "Delivered", "Read"}
+                and (len(mine) > len(before) or before[-1:] != mine[-1:])):
             return mine[-1]
     raise WhatsAppError("Enter was pressed once for " + contact + ", but the sent message could not be confirmed. "
                         "Check WhatsApp before sending again.")
@@ -539,12 +571,21 @@ class Prompt:
         self.token = "wa-" + str(id(self)) + "-" + str(int(self.created * 1000))
         self.answer = None
         self.ready = threading.Event()
+        self._lock = threading.Lock()
 
     def labels(self):
         return [o["label"] if isinstance(o, dict) else str(o) for o in self.options]
 
     def resolve(self, value):
         """value: an option index, or what the user said. Returns True when it answered this prompt."""
+        with self._lock:
+            return self._resolve(value)
+
+    def _resolve(self, value):
+        if isinstance(value, bool):
+            return False
+        if time.monotonic() - self.created >= self.lifetime:
+            return False
         if self.ready.is_set():
             return False
         if isinstance(value, int):
@@ -581,7 +622,7 @@ class Prompt:
         while not self.ready.wait(.1):
             if cancelled() or time.monotonic() - self.created > self.lifetime:
                 return None
-        return self.answer
+        return None if cancelled() or time.monotonic() - self.created >= self.lifetime else self.answer
 
 
 def ask(actions, prompt, cancelled, speak=None):
@@ -641,6 +682,25 @@ def card(phase, title, subtitle="", detail=""):
 
 
 # --- Flows -------------------------------------------------------------------------------------------------------
+def request_data(query, extra):
+    """Bound public command arguments before JSON parsing or touching a window."""
+    if not isinstance(query, str) or len(query) > 200 or not isinstance(extra, str) or len(extra) > 8192:
+        raise WhatsAppError("Invalid or oversized WhatsApp request; nothing was opened or sent.")
+    try:
+        data = json.loads(extra or '{}')
+    except (ValueError, RecursionError):
+        raise WhatsAppError("Invalid WhatsApp request JSON; nothing was opened or sent.") from None
+    if not isinstance(data, dict) or set(data) - {'instruction', 'preview', 'verbatim', 'auto'}:
+        raise WhatsAppError("Unknown WhatsApp request fields; nothing was opened or sent.")
+    for key in ('instruction', 'preview'):
+        if key in data and (not isinstance(data[key], str) or len(data[key]) > 2000):
+            raise WhatsAppError("WhatsApp text must be at most 2000 characters.")
+    for key in ('verbatim', 'auto'):
+        if key in data and type(data[key]) is not bool:
+            raise WhatsAppError("WhatsApp request flags must be booleans.")
+    return data
+
+
 def find_contact(actions, handle, query, cancelled):
     actions.report(CARD, card("searching", query, "Finding the contact"))
     rows = search(handle, query, cancelled)
@@ -686,14 +746,32 @@ def approve_and_send(actions, handle, contact, text, history, cancelled, instruc
     if cancelled():
         return "Cancelled; nothing was sent."
     actions.report(CARD, card("sending", contact, text, "Typing and sending"))
-    type_draft(actions, handle, contact, text, cancelled)
-    sent = press_send(handle, contact, text)
+    sent = send_approved_text(actions, handle, contact, text, cancelled)
     actions.report(CARD, card("sent", contact, text, "Sent " + sent.get("time", "")))
     return "Sent to " + contact + " on WhatsApp: " + text
 
 
+def send_approved_text(actions, handle, contact, text, cancelled):
+    """Only called after a live preview approval. Journal before any typing."""
+    from .whatsapp_writes import text_send
+    if cancelled():
+        raise WhatsAppError("Cancelled; nothing was sent.")
+    if not isinstance(text, str) or not text.strip() or len(text) > 2000:
+        raise WhatsAppError("WhatsApp text must contain 1–2000 characters; nothing was sent.")
+    base = getattr(actions, 'base', None)
+    if base is None:
+        raise WhatsAppError("WhatsApp needs a durable workspace checkpoint before sending.")
+    try:
+        with text_send(base, contact, text, getattr(actions, 'task_state', None)):
+            type_draft(actions, handle, contact, text, cancelled)
+            return press_send(handle, contact, text, cancelled=cancelled)
+    except ValueError as exc:
+        raise WhatsAppError(str(exc)) from None
+
+
 def send_message(actions, query, instruction, verbatim=False, cancelled=lambda: False):
     """'message Jay saying I'm running late': find, choose, draft, preview, approve, send, verify."""
+    request_data(query, json.dumps({'instruction': instruction, 'verbatim': verbatim}))
     with physical():
         handle = ensure_window(cancelled)
         row = find_contact(actions, handle, query, cancelled)
@@ -853,14 +931,13 @@ def auto_reply(actions, name, preview, cancelled=lambda: False):
         handle = ensure_window(cancelled)
         query = re.sub(r"\s*\(You\)$", "", name)
         rows = [r for r in search(handle, query, cancelled) if tokens(r["name"]) == tokens(name)]
-        if not rows:
+        if len(rows) != 1:
             clear_search(handle)
             raise WhatsAppError("I couldn't reopen " + name + "'s chat; nothing was sent.")
         contact = open_row(handle, rows[0], cancelled)
         clear_search(handle)
         actions.report(CARD, card("sending", contact, text, "Typing and sending"))
-        type_draft(actions, handle, contact, text, cancelled)
-        sent = press_send(handle, contact, text)
+        sent = send_approved_text(actions, handle, contact, text, cancelled)
         actions.report(CARD, card("sent", contact, text, "Sent " + sent.get("time", "")))
         return "Replied to " + contact + " on WhatsApp: " + text
 
@@ -953,7 +1030,7 @@ def handle_call(actions, found, stop):
         actions.report(CARD, card("error", caller, "Call ended before an answer"))
         return
     current = call_controls()
-    if current is None:
+    if current is None or current[0] != caller or current[3] != kind or stop.is_set():
         actions.report(CARD, card("error", caller, "The call stopped ringing"))
         return
     if answer == 0:

@@ -1,0 +1,40 @@
+Prompt21 â€” 2026-10-16 IST. Working directory app/. Existing .venv, no installs.
+
+BASELINE (before implementation changes):
+.venv/Scripts/python.exe -m pytest tests/test_native_coding.py tests/test_coding_workflow.py tests/test_codex_workload.py tests/test_codex_validation.py -q --junitxml=artifacts/jarvis-audit/modules/21-native-coding/baseline.xml
+74 PASS /0 FAIL /0 SKIP;132.77s. baseline.xml.
+
+REPRODUCTION:
+.venv/Scripts/python.exe -m pytest tests/test_native_coding_audit.py -q --junitxml=artifacts/jarvis-audit/modules/21-native-coding/reproduced.xml
+5 FAIL /74 PASS /5 SKIP;83.90s. Original test module accidentally collected imported unittest classes; count is assertions, not catalog IDs. Missing replay/hash/journal guards reproduced. Imported classes subsequently referenced through modules.
+
+TARGETED ITERATION:
+same dedicated pytest command, targeted-first.xml:1 FAIL /26 PASS /5 SKIP;11.88s. Race fixture mutated on Read instead of Write; corrected fixture trigger.
+targeted-second.xml:29 PASS /5 SKIP;11.27s. Added fake loopback private transport and benchmark assertions.
+
+BROAD FOCUSED:
+.venv/Scripts/python.exe -m pytest tests/test_native_coding_audit.py tests/test_native_coding.py tests/test_coding_workflow.py tests/test_codex_workload.py tests/test_codex_validation.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/21-native-coding/cases-and-contracts.xml
+122 PASS /5 SKIP;128.97s. Preserved as broad-focused.xml before final dedicated output replaced cases-and-contracts.xml. Final dedicated adds one extra existing-file edit/test assertion and expands Unicode path check.
+
+FINAL DEDICATED:
+.venv/Scripts/python.exe -m pytest tests/test_native_coding_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/21-native-coding/cases-and-contracts.xml
+Windows sandbox attempt10 FAIL /20 PASS /5 SKIP;3.20s: atomic replacement access denied. Rerun with required isolated-fixture execution permissions:30 PASS /5 explicit BLOCKED skips;13.08s. Final XML is accepted required-permission result. 32 unique catalog IDs:27 PASS/5 BLOCKED; additional assertions do not create case IDs.
+
+EQUIVALENT A/B:
+.venv/Scripts/python.exe scripts/verification/verify_native_coding_audit.py
+50 measured calls, same1000 journal rows, false for confirmed journal and true for appended uncertain mutation in both versions; no external effects. Original preimage is immutable .jarvis-runtime/jarvis-audit/module21-pre/jarvis__coding_files.py. Raw benchmarks.csv and benchmark-summary.json. Initial-five-call label is not a fresh-process cold start.
+
+READINESS (required permissions, no repair/start):
+.venv/Scripts/python.exe -m jarvis.launcher --check
+exit0, ready, missing[], incomplete[]. Private raw output retained in ignored .jarvis-runtime/jarvis-audit/module21-readiness-private.json. Loopback /api/version read returned0.40.0. A sandbox-only read first hit WinError10013; required-permission read succeeded. No model loaded for this check.
+
+FULL REGRESSION:
+Freeze SHA256 of383 jarvis/*.py and tests/test_*.py files.
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/21-native-coding/full-regression.xml
+2827 PASS /41 SKIP /0 FAIL, one existing pywinauto STA COM warning;477.92s console wall time (XML477.819s). Exact results recorded in inventory.md/final-report.md. No runtime/test changes during accepted run.
+
+FINAL EVIDENCE:
+.venv/Scripts/python.exe scripts/verification/report_native_coding_audit.py
+.venv/Scripts/python.exe scripts/verification/verify_native_coding_artifacts.py
+git diff --check
+Executed results published in artifact-verification.json and final-report.md, not inferred from test names. Catalog allowlist counts only dedicated case assertions and reviewed BLOCKED skips.

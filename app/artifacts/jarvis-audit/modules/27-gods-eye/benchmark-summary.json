@@ -1,0 +1,16 @@
+{
+  "before": {
+    "p50_ms": 11.04285,
+    "p95_ms": 11.2198,
+    "peak_python_bytes": 304
+  },
+  "after": {
+    "p50_ms": 4.4158,
+    "p95_ms": 4.4742,
+    "peak_python_bytes": 304
+  },
+  "equivalent": true,
+  "real_external_actions": 0,
+  "points": 5010,
+  "scope": "Exact 40km projection;20 warm+5 initial per version, not cold processes, browser, HTTP, audio, RSS or VRAM"
+}

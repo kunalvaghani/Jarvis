@@ -32,11 +32,14 @@ ACTIVE = {name: '@deepseek-ai/' + package for name, package in {
 
 def audit_profile(text):
     import yaml
+    if not isinstance(text, str) or len(text) > 1_000_000:
+        raise ValueError('Invalid bounded Harness composition.')
     class Loader(yaml.SafeLoader):
         pass
     Loader.add_constructor('tag:yaml.org,2002:js', lambda loader, node: loader.construct_scalar(node))
     rows = yaml.load(text, Loader=Loader)
-    if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+    if not isinstance(rows, list) or len(rows) > 256 or any(not isinstance(row, dict) or not isinstance(row.get('id'), str) or
+            (row.get('disabled') is not True and not isinstance(row.get('name'), str)) for row in rows):
         raise ValueError('Invalid Harness composition.')
     active = {row.get('id'): row.get('name') for row in rows if row.get('disabled') is not True}
     if active != ACTIVE or len(active) != sum(row.get('disabled') is not True for row in rows):
@@ -47,11 +50,19 @@ def audit_profile(text):
 def exclusive_proposal_schema(schema, operation):
     """Constrain clarification, actionable plan and completed replan separately."""
     if operation not in {'plan','replan'}:return schema
+    # These are JSON schemas. Encode once, then use C-backed independent copies;
+    # no shared mutable branches or cached task/private context.
+    try:
+        encoded = json.dumps(schema, allow_nan=False)
+        if len(encoded) > 200000:
+            raise ValueError()
+    except (TypeError, ValueError, RecursionError):
+        raise ValueError('Invalid bounded proposal schema.') from None
     variants=[]
     states=[('',False,True),('clarification',False,False)]
     if operation=='replan':states.append(('',True,False))
     for question,done,actions in states:
-        branch=copy.deepcopy(schema);props=branch['properties']
+        branch=json.loads(encoded);props=branch['properties']
         props['question']={'type':'string','minLength':1} if question else {'type':'string','enum':['']}
         props['steps']={**props['steps'],**({'minItems':1} if actions else {'maxItems':0})}
         if operation=='replan':props['done']={'type':'boolean','enum':[done]}
@@ -60,7 +71,11 @@ def exclusive_proposal_schema(schema, operation):
 
 
 def agent_schema(context):
-    names = [row['action'] for row in context.get('tools', [])]
+    from .agent_session import SESSION_TOOLS
+    tools = context.get('tools', []) if isinstance(context, dict) else []
+    if not isinstance(tools, list) or any(not isinstance(t, dict) or not isinstance(t.get('action'), str) or t['action'] not in SESSION_TOOLS for t in tools):
+        raise ValueError('Read-only agent requires a valid read-only catalogue.')
+    names = [row['action'] for row in tools]
     if not names or not all(isinstance(name, str) for name in names):
         raise ValueError('Read-only agent requires an advertised tool catalogue.')
     return {'type': 'object', 'additionalProperties': False, 'required': ['final', 'calls'],
@@ -189,9 +204,10 @@ class Predictor:
         if operation not in {'plan', 'replan', 'agent', 'code_plan'}:
             raise ValueError('Unsupported Harness inference operation.')
         options = request.get('options', {})
-        settings = options.get('harness', {})
+        from .planner_settings import settings as planner_settings
+        settings = planner_settings(options, 'harness')
         model = settings.get('model') or options.get('planner', 'qwen3.5:4b')
-        seconds = max(10, min(300, float(settings.get('timeout_seconds', 180))))
+        seconds = settings['timeout_seconds']
         self.start(model, seconds)
         if request.get('check_only'):
             return {'status': 'ready', 'sdk_version': SDK_VERSION, 'profile': 'sdk-minimal', 'tools': [], 'active_plugins': self.active}

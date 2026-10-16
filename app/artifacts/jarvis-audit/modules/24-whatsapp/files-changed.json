@@ -1,0 +1,62 @@
+[
+  {
+    "path": "docs/system-map.md",
+    "sha256": "2ec9d47ce607754939c85c32d1726c194f70d8ddf4b852a9e497e7a65b62571c"
+  },
+  {
+    "path": "docs/whatsapp.md",
+    "sha256": "95c48528551849a00dfaf62fbb952a922272c170d39732b73b62f475b59ac8ab"
+  },
+  {
+    "path": "jarvis/actions.py",
+    "sha256": "10f0e5b6030a88d517793fbe706e1fbb2302faad043f1590aecee7de63891d4d"
+  },
+  {
+    "path": "jarvis/whatsapp.py",
+    "sha256": "e6a93f51666eb0f769f37791297b7238a9d4efb528ed6ddec67f4878de8eb33b"
+  },
+  {
+    "path": "README.md",
+    "sha256": "b22e0ebdf2eea8de5681ab494ad8df8e8a671eaede2ffcc8f1e5eba81414510c"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "a64045f55c131934fe344bb39b25b55cb8df8e189b77e4934e05f42a6b5396f4"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "0dda3ab27bd5765e697f4d2c0a8fadbe5a8a8dda930dde4de88fe6f363a675f9"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "77c34886e6741e2c6552e1941fbc0f9d9f4b82c829856099cb5d9ce7e1f2fa35"
+  },
+  {
+    "path": "tests/test_whatsapp.py",
+    "sha256": "f4360416fa7fbbe1964d4e97daf0a9eb428fc0d2bd846bb26a04f270ee42ea2d"
+  },
+  {
+    "path": "jarvis/whatsapp_writes.py",
+    "sha256": "3acdaff2e91befab58777da0a6f1b0bbd0159f4df3902e37a05e1efbb3c00712"
+  },
+  {
+    "path": "tests/test_whatsapp_audit.py",
+    "sha256": "a5ece573a8ab390812ebe4911a67175477b620fa5403c54ce631014dd3695f78"
+  },
+  {
+    "path": "scripts/verification/test_whatsapp_audit.py",
+    "sha256": "8167d61c33803884d2326921b303fded677f1873dc5f9551bf3275043aada265"
+  },
+  {
+    "path": "scripts/verification/verify_whatsapp_audit.py",
+    "sha256": "96841a346c1e924d12fcff15a9f6335d001557bafa2593f7347ae16c3b154a01"
+  },
+  {
+    "path": "scripts/verification/report_whatsapp_audit.py",
+    "sha256": "f10497eb0c99ef7a35051dab6460bb41cb294af303da8e1b7c398e953b605095"
+  },
+  {
+    "path": "scripts/verification/verify_whatsapp_artifacts.py",
+    "sha256": "44771468974c364f7ab6aea4d7e66dd7ced38d4536c182b291a56a19b511372f"
+  }
+]

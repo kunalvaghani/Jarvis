@@ -1,0 +1,62 @@
+[
+  {
+    "path": "jarvis/development_tools.py",
+    "sha256": "f2eb3c6c8d5946f385737f8303d359d23d695bb27691835f0a1fc4e12ec936a2"
+  },
+  {
+    "path": "jarvis/development_browser.py",
+    "sha256": "f67306f92e1656fb92828100829ec99dd83971327a005cf9a930ea4fc47a3381"
+  },
+  {
+    "path": "tests/test_web_development_audit.py",
+    "sha256": "c3f066d6e40627754e2246fa8240931df1e28e3e4b742e6d88734ade96b3d592"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "e7f83c85690f78ea77e4219bca377978df0b936764e436b53e74f31fcb2c3f34"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "daf0a99eeea0bb7e3dbc8a1193223e1cdd4ea80705663d00fd011ce020b94d4e"
+  },
+  {
+    "path": "scripts/verification/verify_web_development_audit.py",
+    "sha256": "9d7514fb2c7b03254e8ff241dd9c29272e59187393a49c498974d737b1c80be9"
+  },
+  {
+    "path": "scripts/verification/report_web_development_audit.py",
+    "sha256": "3a38049ce32b9a30f7a6353275793cdd9546c4288e2816cfade0acfc2e80bf70"
+  },
+  {
+    "path": "scripts/verification/verify_web_development_artifacts.py",
+    "sha256": "5bf236afcc5df2b6e2743de288f882f8c6c30cef583404f44ba3a374c5b2f877"
+  },
+  {
+    "path": "scripts/verification/verify_web_preview_port.py",
+    "sha256": "cf8b5a0788ad3818c5968ee8431a1bcfaf9aed709979caed166603c3bd46cf37"
+  },
+  {
+    "path": "scripts/verification/verify_web_built_preview.py",
+    "sha256": "b8416767671ebeb5e32765a41db146aa71ec9ec2367fc82945c507d194260e92"
+  },
+  {
+    "path": "scripts/verification/test_web_development_audit.py",
+    "sha256": "d97725aeb6a77e911e0aad3ec2e119b7cb6ff226298dc78a21fc8102bed3f5e0"
+  },
+  {
+    "path": "README.md",
+    "sha256": "541bfb5c29b8e38d6aff4050e1666cdb19161466a06d9ca20480041a9e148d57"
+  },
+  {
+    "path": "docs/web-app-development.md",
+    "sha256": "6cc2d22c4bda792752ae7424354cd975d55a4363f7e49e3eec21b686baf0b6e3"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "1419c011d508c6bb767f963f78de454f138b51dc59e73ad37303e4ab71f6134a"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "0e992a505103127492b34aa4f74d0e5b154fd42bd965c031df6ae0ee60a171c5"
+  }
+]

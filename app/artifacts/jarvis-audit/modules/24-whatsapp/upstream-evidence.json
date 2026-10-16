@@ -1,0 +1,31 @@
+{
+  "checked": "2026-10-16 IST",
+  "provider": "Firecrawl public search and page retrieval",
+  "sources": [
+    {
+      "url": "https://pypi.org/project/comtypes/1.4.17/",
+      "version": "1.4.17",
+      "released": "2026-09-21",
+      "requires_python": ">=3.9",
+      "installed_version": "1.4.17",
+      "status": "Retrieved release metadata and current release listing; no installation"
+    },
+    {
+      "url": "https://github.com/enthought/comtypes/releases/tag/1.4.17",
+      "released": "2026-09-21",
+      "status": "Retrieved official notes; latest label observed"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/framework/ui-automation/obtaining-ui-automation-elements",
+      "displayed_updated": "2021-09-15",
+      "retrieval_metadata_updated": "2026-03-30",
+      "status": "Retrieved full page; scoped element searches, not evidence of WhatsApp selectors"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.windows.automation.elementnotavailableexception?view=windowsdesktop-10.0",
+      "status": "Search excerpt inspected; closed or removed elements may become unavailable"
+    }
+  ],
+  "local_registry_request": "PyPI JSON request failed sandbox DNS and provided no metadata",
+  "whatsapp_current_build": "Not independently verified; historical desktop build remains dated, not reused as current proof"
+}

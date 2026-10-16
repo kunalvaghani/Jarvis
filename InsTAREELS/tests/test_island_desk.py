@@ -239,7 +239,7 @@ class ApprovalAndMediaTests(unittest.TestCase):
             writer.detach_stream(); writer.close(); stream.seek(0)
             properties=SimpleNamespace(title='Fixture track',artist='Fixture artist',album_title='Fixture album',
                 thumbnail=SimpleNamespace(open_read_async=AsyncMock(return_value=stream)))
-            spotify=SimpleNamespace(source_app_user_model_id='SpotifyAB.SpotifyMusic!Spotify',
+            spotify=SimpleNamespace(source_app_user_model_id='SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify',
                 try_get_media_properties_async=AsyncMock(return_value=properties),
                 get_timeline_properties=lambda:SimpleNamespace(position=timedelta(seconds=30),end_time=timedelta(seconds=180)),
                 get_playback_info=lambda:SimpleNamespace(playback_status=SimpleNamespace(name='PAUSED')))
@@ -263,7 +263,7 @@ class ApprovalAndMediaTests(unittest.TestCase):
                 creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             self.assertEqual(result.returncode,0,result.stderr)
             return
-        spotify=SimpleNamespace(source_app_user_model_id='Spotify!App')
+        spotify=SimpleNamespace(source_app_user_model_id='SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify')
         factory=SimpleNamespace(request_async=AsyncMock(return_value=SimpleNamespace(get_sessions=lambda:[spotify,spotify])))
         with patch('winrt.windows.media.control.GlobalSystemMediaTransportControlsSessionManager',factory):
             with self.assertRaisesRegex(ValueError,'Multiple Spotify'):

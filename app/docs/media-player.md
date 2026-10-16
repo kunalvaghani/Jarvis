@@ -1,5 +1,10 @@
 # Full YouTube and Spotify control with an island media card
 
+<!-- prompt25-audit -->
+**Media audit — 2026-10-16 IST:** Unrelated/ambiguous selection refuses playback; Spotify song/source/artist checks, Unicode matching and uncertain-playback fallback guards added. **16 Prompt25 fixture PASS/16 BLOCKED**; full regression **2,971 PASS/89 skips/0 failures**, launcher **ready**. No live playback/volume trial. Durable event/tab dedupe, full privacy/resource/recovery contracts and pycaw upgrade validation remain incomplete.
+[Evidence, limits and rollback](../artifacts/jarvis-audit/modules/25-media/inventory.md).
+<!-- /prompt25-audit -->
+
 Updated 2026-10-10 IST. This page covers playing songs and videos by name, controlling both players by voice, and the animated YouTube/Spotify card on the island. The older [media-controls](media-controls.md) and [automation-upgrade](automation-upgrade.md) pages describe the earlier routes this builds on.
 
 ![Rendered island media cards with sample titles and generated placeholder artwork — not a desktop screenshot](../artifacts/media/island-media-card-preview.png)
@@ -21,7 +26,7 @@ Whisper split the sentence into two segments: "open YouTube" and "and play nadan
 **YouTube** (`jarvis/media_player.py`, `browser_worker.play_video`):
 
 1. Search. When a YouTube Data API v3 key is set, Jarvis calls `search.list` (type video) and then `videos.list` for durations. Without a key, or if the key is rejected or out of quota, it reads the same results from YouTube's own results page. No key is needed for this fallback.
-2. Choose. Jarvis keeps YouTube's ranking and drops Shorts and live clips. It takes the first of the top six whose title clearly matches what you said. Matching tolerates Hindi/Urdu transliteration, so "nadan parinde" matches "Nadaan Parinde". Remix, cover, slowed, lofi, 8D and karaoke versions are skipped unless you asked for one.
+2. Choose. Jarvis keeps YouTube's ranking and drops Shorts and live clips. It scores up to six eligible results and requires a clear match. Competing near-equal video IDs require a channel or version before playback; unrelated top results are not played. Matching tolerates Hindi/Urdu transliteration, so "nadan parinde" matches "Nadaan Parinde". Remix, cover, slowed, lofi, 8D and karaoke versions are skipped unless you asked for one.
 3. Play. Jarvis's own Chrome opens that exact video ID and waits until the video is really playing. Skippable ads are skipped with Jarvis's pointer. If playback doesn't start, Jarvis reports it and never replays.
 
 **Spotify** (the "own API" route, no developer account needed):
@@ -29,9 +34,9 @@ Whisper split the sentence into two segments: "open YouTube" and "and play nadan
 1. Open the desktop app's search for the query (`spotify:search:` link).
 2. Read the result rows from the app's accessibility tree: title, type (Song/Album/…), artists and each row's Play button. Jarvis waits until the search box shows your query and a clearly matching song appears, because the old results can linger briefly.
 3. Click that song's Play button with Jarvis's own pointer.
-4. Verify playback through the Windows media session: the title must match and the state must be playing.
+4. Verify playback through the Windows media session: the selected title and available artist text must match after Unicode/case/whitespace normalization, and the state must be playing. An exact already-playing match avoids another Play click.
 
-Starting one service pauses the other, so two songs never play at once. With no service named, "play X" uses the last service Jarvis played on, otherwise `media.default_service` in `config/config.json` (default `youtube`). If that service can't find the song, Jarvis tries the other one. A named service is never switched.
+Starting one service attempts to pause the other as a best-effort step. Failure is currently suppressed, so overlapping playback remains possible. With no service named, "play X" uses the last service Jarvis played on, otherwise `media.default_service` in `config/config.json` (default `youtube`). Before playback dispatch, a search failure can try the other service. An uncertain or unverified playback result stops without switching services. A named service is never switched.
 
 ## Which player a command controls
 
@@ -142,7 +147,7 @@ The keyless search works now. To use the official API instead:
 
    Or set the `JARVIS_YOUTUBE_API_KEY` environment variable.
 
-Each search costs 100 quota units (`search.list`) plus 1 (`videos.list`). The default daily quota is 10,000 units, roughly 99 searches per day. When the quota runs out Jarvis falls back to keyless search automatically. Keys are never written to `config/config.json`.
+Current public contract (checked2026-10-16): [search.list](https://developers.google.com/youtube/v3/docs/search/list), updated2026-10-15, lists1 unit in the Search Queries bucket and100 calls/day. This supersedes the earlier100-unit/roughly99-search calculation. Actual project quotas were not inspected. HTTP quota refusal retains the existing keyless read fallback; keys stay outside config.json.
 
 ## Verification (2026-10-10 IST, this PC)
 

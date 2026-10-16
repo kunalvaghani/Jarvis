@@ -1,5 +1,13 @@
 # Jarvis web and app development
 
+<!-- prompt22-audit -->
+**Web/app audit — 2026-10-16 IST:** Strict preview URL/test-plan validation, service-worker/WebSocket isolation and reused health opener added. **18 Prompt22 fixture PASS /14 BLOCKED**. Full regression **2,855 PASS /48 skips /0 failures**; launcher **ready**. Real authored build and isolated headless browser checks passed; HMR, warning classification, safe restart, host confinement, dependency compatibility, crash continuation and complete redaction remain incomplete.
+[Evidence and rollback](../artifacts/jarvis-audit/modules/22-web-development/inventory.md).
+
+Configured `brain.coding_backend=jarvis` routes ordinary coding through native workload validation before the legacy staged workflow described below. Explicit `development_*` tools remain available through the agent registry; do not assume every native coding task receives these legacy framework/axe checks automatically. Current audit screenshots are of a hand-written minimal test page; existing dashboard images below remain historical authored acceptance captures.
+
+<!-- /prompt22-audit -->
+
 Implemented and checked on **2026-10-02**. This adds knowledge retrieval, staged projects, deliberate design, real tooling and verified experience to the Jarvis runtime. It does not update model weights.
 
 ![Actual headless Chrome screenshot of the authored React/Motion acceptance dashboard — not an autonomous model-generated project](../artifacts/media/development-previews/vite-desktop.png)

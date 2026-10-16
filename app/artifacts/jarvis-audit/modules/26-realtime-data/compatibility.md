@@ -1,3 +1,9 @@
-# Compatibility
+# Compatibility and official review — 2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+Installed requests2.34.2 and websocket-client1.9.2 match current [Requests PyPI](https://pypi.org/project/requests/) and [websocket-client PyPI](https://pypi.org/project/websocket-client/) listings. [Requests notes](https://requests.readthedocs.io/en/latest/community/updates/) date2.34.2 to2026-05-14 (header typing adjustment). [WebSocket1.9.2 notes](https://github.com/websocket-client/websocket-client/releases/tag/v1.9.2),2026-08-31, repair close/run_forever concurrency. No package install; implementation fixes retained. Python3.10.6/psutil7.2.2 unchanged, no new dependency.
+
+[Open-Meteo forecast contract](https://open-meteo.com/en/docs), checked2026-10-16, documents Celsius default/Fahrenheit option, current/hourly/daily units, timezone auto and a fixed utc_offset_seconds throughout a response; DST transitions inside the forecast range are not resolved automatically. [Free API terms/pricing](https://open-meteo.com/en/pricing) list non-commercial use,600/minute and10,000/day, without an uptime guarantee. Existing300s weather cadence is retained; aggregate shared-IP quota/adaptive provider budgets remain unproved. Unit/offset behavior is fixture validation, not current forecast validation.
+
+[RFC9110 Retry-After](https://www.rfc-editor.org/rfc/rfc9110.html#name-retry-after),2022-06, permits delay seconds or an HTTP date. Long cooldowns are scheduled rather than actively slept. Cancellation checks fence the second GET; socket reads still have existing bounded waits. No ETag/Last-Modified conditional GET, new circuit-breaker framework or all-provider schema migration added.
+
+Firecrawl retrieved only public generic documentation/package metadata. The82 provider official URLs/setup requirements are preserved in provider-inventory.json; these are endpoint-registration/fixture evidence, not82 day-of-run upstream availability/terms/credentials validations. No personal IP, coordinates, query, credentials, feed subscription, safety advisory or model inference was sent live. Use official local warning services for real safety decisions; this audit is software-fixture QA.

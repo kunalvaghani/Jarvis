@@ -1,0 +1,50 @@
+[
+  {
+    "path": "jarvis/coding_files.py",
+    "sha256": "9187039b6a1432de19796d3602fb7fd931e4b30f2d18515ca7839c6b3de4bb30"
+  },
+  {
+    "path": "jarvis/codex_workload.py",
+    "sha256": "fe5e940d5344376442394bb990bc8eb8cfcc00dad09209813b1ed8b1922d85c3"
+  },
+  {
+    "path": "tests/test_native_coding_audit.py",
+    "sha256": "055c2e7c3d319ea83ac891e9c6c49143da08e9ceeba2227c90fa2433c1162a26"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "6b635111acd8ed8e4990ba527d535397f73fa79a4fb16ab823687736d6e98ed2"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "b9ae0a9205d313ee70b18478dc920981e8a677172315b4cd3ca5322ce9f3f57a"
+  },
+  {
+    "path": "scripts/verification/verify_native_coding_audit.py",
+    "sha256": "c7a68a0e499d6c0ee4bd5714e040d4c8cb098e5abd0df220b229caaf5daa4077"
+  },
+  {
+    "path": "scripts/verification/report_native_coding_audit.py",
+    "sha256": "a2575df32b21c6f45b0bfeac1e08c9c02017fe1bc31d430e447d77da59041877"
+  },
+  {
+    "path": "scripts/verification/verify_native_coding_artifacts.py",
+    "sha256": "5e220f37a0dc8474b672ce5bfb2d2d808067579e15bee5588a97a6ff7ce74ffc"
+  },
+  {
+    "path": "README.md",
+    "sha256": "41a0f30e984095a20ba8bd30c9f51fbc53fd59f0e09652b6b6c2c59fe2cbdace"
+  },
+  {
+    "path": "docs/native-coding.md",
+    "sha256": "bde855bbf449033034f380c51ec63454c686bf89c2ee4623df63cba3e241934c"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "3f8f0cd8b240632a693ed91b65bc7cac060a3fd88753e649b3fc331539cdd295"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "0c796c06d009bdb6d528876fdd5b8c1cb42dfc5449bc3d466ba7a4ea1b360a29"
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "checked_date": "2026-10-16 IST",
+  "scope": "Official public documentation and release metadata only. No live provider, credential, geolocation or alert trial.",
+  "sources": [
+    {
+      "lookup": "p26source0",
+      "title": "🌦️ Docs | Open-Meteo.com",
+      "url": "https://open-meteo.com/en/docs",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T11:07:28.682Z"
+    },
+    {
+      "lookup": "p26source1",
+      "title": "💰 Pricing | Open-Meteo.com",
+      "url": "https://open-meteo.com/en/pricing",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T11:48:56.767Z"
+    },
+    {
+      "lookup": "p26source2",
+      "type": "Firecrawl package release search",
+      "results": [
+        {
+          "url": "https://pypi.org/project/requests/",
+          "title": "Requests - PyPI"
+        }
+      ]
+    },
+    {
+      "lookup": "p26source3",
+      "type": "Firecrawl package release search",
+      "results": [
+        {
+          "url": "https://pypi.org/project/websocket-client/",
+          "title": "websocket-client - PyPI"
+        }
+      ]
+    },
+    {
+      "lookup": "p26notes0",
+      "title": "Community Updates — Requests 2.34.2 documentation",
+      "url": "https://requests.readthedocs.io/en/latest/community/updates/",
+      "status": 200,
+      "cache_state": "miss"
+    },
+    {
+      "lookup": "p26notes2",
+      "title": "RFC 9110: HTTP Semantics",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#name-retry-after",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T11:35:21.329Z"
+    },
+    {
+      "lookup": "p26wsrelease",
+      "title": "Release v1.9.2 · websocket-client/websocket-client · GitHub",
+      "url": "https://github.com/websocket-client/websocket-client/releases/tag/v1.9.2",
+      "status": 200,
+      "cache_state": "miss"
+    }
+  ]
+}

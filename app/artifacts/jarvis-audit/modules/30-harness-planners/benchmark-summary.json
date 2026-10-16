@@ -1,0 +1,15 @@
+{
+  "equivalent": true,
+  "real_external_actions": 0,
+  "scope": "50 schema copies per sample;5 initial+20 warm. Identical replan branches and100 synthetic tool names; no model/tool accuracy, TTFT/audio, RSS/VRAM or cold process claim.",
+  "before": {
+    "p50_ms": 24.2095,
+    "p95_ms": 25.4175,
+    "peak_python_bytes": 17884
+  },
+  "after": {
+    "p50_ms": 13.9932,
+    "p95_ms": 14.9647,
+    "peak_python_bytes": 76564
+  }
+}

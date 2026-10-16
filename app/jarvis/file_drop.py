@@ -301,6 +301,9 @@ def send_email(actions, files, documents, cancelled):
     actions.report("media_card", card("thinking", "Writing the email", (to or "no recipient yet") + " · " + names))
     subject, body = write_email(actions, files, documents, instruction)
     try:
+        approval=actions._approve('gmail_api_draft',json.dumps({'to':to,'subject':subject,'body':body,
+            'attachments':[Path(path).name for path in files]}),cancelled)
+        if approval is False or cancelled():raise ValueError('Gmail attachment draft approval declined or cancelled.')
         draft_id = draft_with_attachments(actions.base, to, subject, body, files)
     except ValueError as exc:
         actions.report("media_card", card("sad", "Email not drafted", str(exc)[:110]))

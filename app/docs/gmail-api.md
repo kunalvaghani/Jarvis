@@ -1,5 +1,10 @@
 # Gmail API — 2026-10-09 IST
 
+<!-- prompt23-audit -->
+**Gmail audit — 2026-10-16 IST:** Approval now refuses False/changed fields, draft writes recheck freshness after approval, and damaged journals fail closed. FileBuddy attachment drafts now require approval and durable non-replay records. **24 Prompt23 fixture PASS /8 BLOCKED**; full regression **2,900 PASS /56 skips /0 failures**, launcher **ready**. No live Gmail trial. Adapter source verification is stale until separately reviewed; account isolation, complete privacy/resource/replay/observability contracts remain incomplete.
+[Evidence and rollback](../artifacts/jarvis-audit/modules/23-gmail/inventory.md).
+<!-- /prompt23-audit -->
+
 > **Update 2026-10-10 IST:** Jarvis can now also send emails, send and delete drafts,
 > move emails to Trash and restore them, apply labels, archive, mark read/unread/starred,
 > group emails by sender and read emails aloud. See

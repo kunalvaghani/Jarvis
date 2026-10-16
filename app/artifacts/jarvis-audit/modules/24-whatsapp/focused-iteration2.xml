@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="24" tests="64" time="2.547" timestamp="2026-10-16T18:09:37.660208+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_whatsapp.ParsingTests" name="test_chat_rows_skip_cells_and_mark_contacts" time="0.003" /><testcase classname="tests.test_whatsapp.ParsingTests" name="test_first_name_lists_everyone_full_name_is_decisive" time="0.002" /><testcase classname="tests.test_whatsapp.ParsingTests" name="test_messages_and_unread" time="0.001" /><testcase classname="tests.test_whatsapp.ParsingTests" name="test_open_chat_identity_is_strict" time="0.001" /><testcase classname="tests.test_whatsapp.ParsingTests" name="test_parse_row" time="0.001" /><testcase classname="tests.test_whatsapp.CommandTests" name="test_approval_words_and_other_apps" time="0.466" /><testcase classname="tests.test_whatsapp.CommandTests" name="test_send_and_reply_phrases" time="0.029" /><testcase classname="tests.test_whatsapp.CommandTests" name="test_spoken_punctuation_no_longer_hides_player_commands" time="0.047" /><testcase classname="tests.test_whatsapp.PromptTests" name="test_answers_reach_the_newest_prompt" time="0.001" /><testcase classname="tests.test_whatsapp.PromptTests" name="test_resolve" time="0.001" /><testcase classname="tests.test_whatsapp.PromptTests" name="test_submit_routes_answers_before_anything_else" time="0.003" /><testcase classname="tests.test_whatsapp.FlowTests" name="test_declined_preview_types_nothing" time="0.024" /><testcase classname="tests.test_whatsapp.FlowTests" name="test_incoming_call_answer_and_decline" time="0.032" /><testcase classname="tests.test_whatsapp.FlowTests" name="test_send_after_choice_edit_and_approval" time="0.076"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\tmpjfk3mq6x\\.jarvis-runtime\\whatsapp\\writes\\2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\tmpjfk3mq6x\\.jarvis-runtime\\whatsapp\\writes\\2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.json'">self = &lt;tests.test_whatsapp.FlowTests testMethod=test_send_after_choice_edit_and_approval&gt;
+
+    def test_send_after_choice_edit_and_approval(self):
+        actions = self.actions(["2", "make it shorter", "approve"])
+        rows = [dict(wa.parse_row("Jay Vaghani Thursday hi"), section="Chats", el=Mock(), rect=(0, 0, 1, 1), label=""),
+                dict(wa.parse_row("Jay Patel 5:40 pm ok"), section="Chats", el=Mock(), rect=(0, 0, 1, 1), label="")]
+        with patch.object(wa, "physical"), patch.object(wa, "ensure_window", return_value=7), \
+                patch.object(wa, "search", return_value=rows), patch.object(wa, "open_row", return_value="Jay Patel") as opened, \
+                patch.object(wa, "clear_search"), patch.object(wa, "document"), patch.object(wa, "read", return_value=CHAT), \
+                patch.object(wa, "draft", side_effect=["Running 10 minutes late, sorry!", "10 min late!"]) as drafted, \
+                patch.object(wa, "type_draft") as typed, \
+                patch.object(wa, "press_send", return_value={"time": "6:01 pm"}) as sent:
+&gt;           result = wa.send_message(actions, "Jay", "tell him I'm running late", False, lambda: False)
+
+tests\test_whatsapp.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\whatsapp.py:754: in send_message
+    return approve_and_send(actions, handle, contact, text, history, cancelled, instruction)
+jarvis\whatsapp.py:712: in approve_and_send
+    sent = send_approved_text(actions, handle, contact, text, cancelled)
+jarvis\whatsapp.py:728: in send_approved_text
+    with text_send(base, contact, text, getattr(actions, 'task_state', None)):
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/tmpjfk3mq6x/.jarvis-runtime/whatsapp/writes/2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/tmpjfk3mq6x/.jarvis-runtime/whatsapp/writes/2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\tmpjfk3mq6x\\.jarvis-runtime\\whatsapp\\writes\\2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\tmpjfk3mq6x\\.jarvis-runtime\\whatsapp\\writes\\2df92cdf7f5728874c984cdc94cdd941a68f36f0169d164148314af612777fc9.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp.FlowTests" name="test_unsupported_messenger_is_explained" time="0.001" /><testcase classname="tests.test_whatsapp.FlowTests" name="test_watcher_drafts_for_new_messages_only" time="0.004" /><testcase classname="tests.test_whatsapp.IslandTests" name="test_whatsapp_phases_render" time="0.186" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_028_expired_approval[0]" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_028_expired_approval[approve]" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_028_expired_approval[yes send it]" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_018_cancel_after_answer" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_004_duplicate_display_names" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_015_unreadable_compose_is_not_empty" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_024_fresh_before_enter[recipient]" time="0.002" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_024_fresh_before_enter[draft]" time="0.002" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_024_fresh_before_enter[cancelled]" time="0.002" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_011_call_replaced_after_approval" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_023_confirmation_negation" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_022_unicode_exact_preview" time="0.001" /><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_005_timeout_never_replays" time="0.019"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_005_timeout_never_0\\.jarvis-runtime\\whatsapp\\writes\\337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_005_timeout_never_0\\.jarvis-runtime\\whatsapp\\writes\\337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_24_005_timeout_never_0')
+
+    def test_JRV_24_005_timeout_never_replays(tmp_path):
+        actions = SimpleNamespace(base=tmp_path, task_state=Mock())
+        with patch.object(wa, 'type_draft') as typed, patch.object(wa, 'press_send', side_effect=TimeoutError('disconnect')) as send:
+            with pytest.raises(TimeoutError):
+&gt;               wa.send_approved_text(actions, 7, 'Jay', 'private text', lambda: False)
+
+tests\test_whatsapp_audit.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\whatsapp.py:728: in send_approved_text
+    with text_send(base, contact, text, getattr(actions, 'task_state', None)):
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku..._timeout_never_0/.jarvis-runtime/whatsapp/writes/337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...timeout_never_0/.jarvis-runtime/whatsapp/writes/337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_005_timeout_never_0\\.jarvis-runtime\\whatsapp\\writes\\337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_005_timeout_never_0\\.jarvis-runtime\\whatsapp\\writes\\337369f6018d93431ffe2b6f94f6e631f608c8c4d2af0772fbd0c8336aa00359.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_003_approved_text_verified_once" time="0.010"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_003_approved_text_0\\.jarvis-runtime\\whatsapp\\writes\\755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_003_approved_text_0\\.jarvis-runtime\\whatsapp\\writes\\755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_24_003_approved_text_0')
+
+    def test_JRV_24_003_approved_text_verified_once(tmp_path):
+        actions = SimpleNamespace(base=tmp_path, report=Mock(), task_state=Mock())
+        with patch.object(wa, 'ask', return_value=0), patch.object(wa, 'type_draft') as typed, \
+             patch.object(wa, 'press_send', return_value={'time': '6:01 pm'}) as send:
+&gt;           result = wa.approve_and_send(actions, 7, 'Jay Patel', 'exact text', [], lambda: False)
+
+tests\test_whatsapp_audit.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\whatsapp.py:712: in approve_and_send
+    sent = send_approved_text(actions, handle, contact, text, cancelled)
+jarvis\whatsapp.py:728: in send_approved_text
+    with text_send(base, contact, text, getattr(actions, 'task_state', None)):
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku..._approved_text_0/.jarvis-runtime/whatsapp/writes/755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...approved_text_0/.jarvis-runtime/whatsapp/writes/755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_003_approved_text_0\\.jarvis-runtime\\whatsapp\\writes\\755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_24_003_approved_text_0\\.jarvis-runtime\\whatsapp\\writes\\755304baa3135b193ecc5017a36f31c22f1dbefe832d73e042484f1a63940c02.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_JRV_24_019_owned_child_crash" time="0.310"><failure message="assert 1 == 23&#10; +  where 1 = CompletedProcess(args=['D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe', '-c', &quot;import os,sys; from j...\.jarvis-runtime\\\\whatsapp\\\\writes\\\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json\'\r\n').returncode">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_24_019_owned_child_cr0')
+
+    def test_JRV_24_019_owned_child_crash(tmp_path):
+        from jarvis.whatsapp_writes import text_send
+        script = "import os,sys; from jarvis.whatsapp_writes import text_send\nwith text_send(sys.argv[1], 'Jay', 'hello'):\n os._exit(23)"
+        result = subprocess.run([sys.executable, '-c', script, str(tmp_path)], timeout=15, capture_output=True)
+&gt;       assert result.returncode == 23
+E       assert 1 == 23
+E        +  where 1 = CompletedProcess(args=['D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe', '-c', "import os,sys; from j...\.jarvis-runtime\\\\whatsapp\\\\writes\\\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json\'\r\n').returncode
+
+tests\test_whatsapp_audit.py:112: AssertionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_damaged_journal_denies_write[[]]" time="0.010"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_damaged_journal_denies_wr0')
+value = '[]'
+
+    @pytest.mark.parametrize('value', ['[]', '{"pending":1}', '{', 'x' * 1025])
+    def test_damaged_journal_denies_write(tmp_path, value):
+        from jarvis.whatsapp_writes import text_send
+&gt;       with text_send(tmp_path, 'Jay', 'hello'):
+
+tests\test_whatsapp_audit.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...urnal_denies_wr0/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...rnal_denies_wr0/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_damaged_journal_denies_write[{&quot;pending&quot;:1}]" time="0.012"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr1\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr1\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_damaged_journal_denies_wr1')
+value = '{"pending":1}'
+
+    @pytest.mark.parametrize('value', ['[]', '{"pending":1}', '{', 'x' * 1025])
+    def test_damaged_journal_denies_write(tmp_path, value):
+        from jarvis.whatsapp_writes import text_send
+&gt;       with text_send(tmp_path, 'Jay', 'hello'):
+
+tests\test_whatsapp_audit.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...urnal_denies_wr1/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...rnal_denies_wr1/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr1\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr1\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_damaged_journal_denies_write[{]" time="0.012"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr2\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr2\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_damaged_journal_denies_wr2')
+value = '{'
+
+    @pytest.mark.parametrize('value', ['[]', '{"pending":1}', '{', 'x' * 1025])
+    def test_damaged_journal_denies_write(tmp_path, value):
+        from jarvis.whatsapp_writes import text_send
+&gt;       with text_send(tmp_path, 'Jay', 'hello'):
+
+tests\test_whatsapp_audit.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...urnal_denies_wr2/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...rnal_denies_wr2/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr2\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr2\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_damaged_journal_denies_write[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="0.011"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr3\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr3\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_damaged_journal_denies_wr3')
+value = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+    @pytest.mark.parametrize('value', ['[]', '{"pending":1}', '{', 'x' * 1025])
+    def test_damaged_journal_denies_write(tmp_path, value):
+        from jarvis.whatsapp_writes import text_send
+&gt;       with text_send(tmp_path, 'Jay', 'hello'):
+
+tests\test_whatsapp_audit.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...urnal_denies_wr3/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...rnal_denies_wr3/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr3\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_damaged_journal_denies_wr3\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_desktop_lock_excludes_other_contacts" time="0.011"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_desktop_lock_excludes_oth0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_desktop_lock_excludes_oth0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-kunal/pytest-0/test_desktop_lock_excludes_oth0')
+
+    def test_desktop_lock_excludes_other_contacts(tmp_path):
+        from jarvis.whatsapp_writes import text_send
+&gt;       with text_send(tmp_path, 'Jay', 'hello'):
+
+tests\test_whatsapp_audit.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\contextlib.py:135: in __enter__
+    return next(self.gen)
+jarvis\whatsapp_writes.py:58: in text_send
+    save(True)
+jarvis\whatsapp_writes.py:56: in save
+    tmp.replace(path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...ck_excludes_oth0/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp')
+target = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}/AC/Temp/pytest-of-ku...k_excludes_oth0/.jarvis-runtime/whatsapp/writes/6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       self._accessor.replace(self, target)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_desktop_lock_excludes_oth0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.tmp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{8b093ec1-e487-4ae1-9820-cbec1d9cd92d}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_desktop_lock_excludes_oth0\\.jarvis-runtime\\whatsapp\\writes\\6bd9b87f30f625b72511839b427dc42fa48b498700043c5449dac6d7f36cf562.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1247: PermissionError</failure></testcase><testcase classname="tests.test_whatsapp_audit" name="test_send_requires_fresh_status_and_exact_chat[Sent]" time="0.002" /><testcase classname="tests.test_whatsapp_audit" name="test_send_requires_fresh_status_and_exact_chat[Delivered]" time="0.002" /><testcase classname="tests.test_whatsapp_audit" name="test_send_requires_fresh_status_and_exact_chat[Read]" time="0.017" /><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-001]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-002]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-006]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-007]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-008]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-009]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-010]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-011]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-012]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-013]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-014]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-016]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-017]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-018]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-020]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-021]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-025]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-026]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-027]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-028]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-029]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-030]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-031]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase><testcase classname="tests.test_whatsapp_audit" name="test_incomplete_contracts[JRV-24-032]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite">D:\Kunals GitHub Repo\Jarvis\app\tests\test_whatsapp_audit.py:152: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite</skipped></testcase></testsuite></testsuites>

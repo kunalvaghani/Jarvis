@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://playwright.dev/python/docs/network",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "finding": "Official documentation recommends service_workers=block when routing requests; external HTTP interception does not cover all service-worker requests by default."
+  },
+  {
+    "url": "https://playwright.dev/python/docs/api/class-browsercontext#browser-context-route-web-socket",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "finding": "route_web_socket added1.48; install routing before creating pages. Actual1.63/Chrome execution passed."
+  },
+  {
+    "url": "https://pypi.org/project/playwright/",
+    "checked": "2026-10-16 IST",
+    "latest": "1.64.0",
+    "release_date": "2026-10-13",
+    "installed": "1.63.0",
+    "finding": "Registry release history inspected; no installation or1.64 runtime acceptance."
+  },
+  {
+    "url": "https://playwright.dev/python/docs/release-notes",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "finding": "Python release notes currently lead with1.63; no fabricated1.64 notes."
+  },
+  {
+    "url": "https://vite.dev/config/preview-options",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "finding": "strictPort exits on occupied port instead of selecting another silently."
+  },
+  {
+    "url": "https://github.com/vitejs/vite/releases/tag/v8.3.4",
+    "checked": "2026-10-16 IST",
+    "release_date": "2026-10-08 (page display)",
+    "latest": "8.3.4",
+    "installed_fixture": "8.3.2",
+    "finding": "HMR-default/preload/style fixes inspected; existing fixture build retained, no dependency upgrade/comparison performed."
+  }
+]

@@ -1438,7 +1438,7 @@ class Actions:
             return self.execute(Command("task", f"Open playlist {command.value} on Spotify"), cancelled)
         if command.kind in {"whatsapp_send", "whatsapp_reply"}:
             from . import whatsapp
-            data = json.loads(command.extra or "{}")
+            data = whatsapp.request_data(command.value, command.extra or "{}")
             self.task_state.start(command.kind.replace("_", " ") + " " + command.value, command.kind)
             try:
                 if command.kind == "whatsapp_send":

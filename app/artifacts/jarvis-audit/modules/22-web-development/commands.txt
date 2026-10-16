@@ -1,0 +1,54 @@
+Prompt22 —2026-10-16 IST. cwd app/, existing .venv and Node/Chrome; no installs.
+
+BASELINE:
+.venv/Scripts/python.exe -m pytest tests/test_development.py tests/test_development_tools.py tests/test_development_api.py tests/test_development_projects.py tests/test_development_learning.py tests/test_development_design.py tests/test_development_knowledge.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/22-web-development/baseline.xml
+25 PASS /0 FAIL in6.74s.
+
+REPRODUCTIONS:
+.venv/Scripts/python.exe -m pytest tests/test_web_development_audit.py -q --tb=short -k "auth_url or malformed_bounded or context_blocks" --junitxml=artifacts/jarvis-audit/modules/22-web-development/reproduced.xml
+8 FAIL in2.54s,25 deselected. Seven input-boundary assertions, one fixture error launching worker outside actual app base. Corrected fixture base, not product behavior.
+.venv/Scripts/python.exe -m pytest tests/test_web_development_audit.py -q --tb=short -k context_blocks --junitxml=artifacts/jarvis-audit/modules/22-web-development/reproduced-context.xml
+Actual Chrome:1 FAIL in10.54s,32 deselected; missing service-worker/permission context settings.
+
+FIRST EXPANDED:
+.venv/Scripts/python.exe -m pytest tests/test_web_development_audit.py tests/test_development.py tests/test_development_tools.py tests/test_development_api.py tests/test_development_projects.py tests/test_development_learning.py tests/test_development_design.py tests/test_development_knowledge.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/22-web-development/targeted-first.xml
+49 PASS /2 FAIL /7 explicit BLOCKED skips in75.91s. Two failures were Windows cp1252 fixture writes of Hindi PAGE; corrected to UTF-8.
+
+FIRST FOCUSED:
+.venv/Scripts/python.exe -m pytest tests/test_web_development_audit.py tests/test_audit_result_accounting.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/22-web-development/cases-and-contracts.xml
+46 PASS /7 explicit BLOCKED skips in66.42s. Actual installed tsc/Vite on trusted authored dashboard artifact; owned temporary static previews and real headless Chrome DOM/axe/overflow/dead-button/private-context checks. Mock remote API fulfilled locally. Latest source adds evidence-only build output recording, also executed in full regression.
+
+FINAL MALFORMED-ACTION CORRECTION:
+Read-only validate_tests probe with action=[] observed TypeError instead of ValueError, external_effects0 (malformed-action-repro.json). After first full completed2854 PASS/48 skips/0 failures/one COM warning in534.14s, preserved full-before-final.xml and source hashes. Added explicit string-type guard and fifth malformed-plan variant. Re-ran the focused command above:47 PASS /7 BLOCKED skips in67.51s. Final full uses a new384-file hash freeze; no changes during either full execution.
+
+EXACT CATALOG SUPPLEMENT / COVERAGE CORRECTION:
+.venv/Scripts/python.exe -m pytest scripts/verification/test_web_development_audit.py -q --tb=short --junitxml=artifacts/jarvis-audit/modules/22-web-development/catalog-supplements.xml
+3 PASS/7 explicit BLOCKED skips in0.25s. Actual API refuses forged system/approval claims without invoking preview start; multilingual/quotes/emoji JSON roundtrip and500-character title rejection pass. Seven broader contracts lack complete proof despite narrower passing smoke tests:018/021/023/025/026/027/030. Final module18 PASS/14 BLOCKED. Original main focused XML preserved as focused-main-final.xml; report generator aggregates both executed suites unchanged into cases-and-contracts.xml:50 PASS/14 skips. No fabricated test outcomes. Full tests-directory run excludes this separately executed scripts/verification supplement; its source hash is included in files-changed.json.
+
+EXACT PORT3000 SUPPLEMENT:
+.venv/Scripts/python.exe scripts/verification/verify_web_preview_port.py
+First version completed owned child assertions but Windows rejected immediate temporary-file cleanup (WinError32); retained state. Updated script uses a fresh retained owned runtime fixture, not deletion retries. Final PASS: port3000 owned fixture occupied, alternative preview healthy, only owned child stopped, port3000 listener remains. port3000-proof.json. No account data or unrelated process kills.
+
+MATCHING BUILT PREVIEW:
+.venv/Scripts/python.exe scripts/verification/verify_web_built_preview.py
+PASS: actual installed Vite preview served byte-for-byte the authored dist/index.html, assets referenced; owned child stopped. built-preview-proof.json. Separate minimal static fixture has actual Chrome/axe/scenario assertions.
+
+EQUIVALENT BENCHMARK:
+.venv/Scripts/python.exe scripts/verification/verify_web_development_audit.py
+50 calls, fake HTTP200 transport, real proxy-free opener construction; active/dead/closed outcomes match. No network, project execution or external effects. Raw benchmarks.csv and benchmark-summary.json. Construction/import/browser/build/GPU excluded.
+
+READINESS:
+.venv/Scripts/python.exe -m jarvis.launcher --check
+Required fixture permissions; exit0, ready, missing[], incomplete[]. No repairs/service starts. Raw paths kept ignored in .jarvis-runtime/jarvis-audit/module22-readiness-private.json.
+
+FULL:
+Freeze384 jarvis/*.py and tests/test_*.py hashes before execution.
+.venv/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=artifacts/jarvis-audit/modules/22-web-development/full-regression.xml
+Completed exact counts/timing are read from XML into inventory.md and final-report.md. No runtime/test edits during accepted run.
+Final console result2855 PASS/48 SKIP/0 FAIL, one existing pywinauto STA COM warning,532.53s (8m52s). Main runtime/test hash freeze384 files unchanged; supplement added outside tests/ and verified separately.
+
+FINAL:
+.venv/Scripts/python.exe scripts/verification/report_web_development_audit.py
+.venv/Scripts/python.exe scripts/verification/verify_web_development_artifacts.py
+git diff --check
+Executed hash/catalog/artifact/link assertions published in artifact-verification.json. No optimization without original-preimage baseline, no catalog pass from merely reading case IDs.

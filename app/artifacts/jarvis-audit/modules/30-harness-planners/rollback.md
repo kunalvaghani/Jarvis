@@ -1,3 +1,5 @@
-# Rollback / resume
+# Scoped rollback and deterministic resume
 
-[Scoped restoration and exact ID continuation](../../rollback.md). Preserve user changes and credentials.
+Preimages are in `.jarvis-runtime/jarvis-audit/module30-pre/`, application-relative paths flattened with __; root-README.md denotes the parent README. Check source-hashes.json before restoration. Merge specific source.patch hunks if files changed later; never reset this dirty checkout, erase user work or restore unrelated module changes. New files are listed in files-changed.json. Preserve all task/session/effect checkpoints; rolling back a planner is not permission to replay an uncertain action. No dependency, model, personal config or service installation needs reversal.
+
+Resume at JRV-30-007 (oldest module blocker), followed by exact IDs in remaining-case-ids.txt. Build a full SDK/private-data oracle and cross-client generation lease, then matched live outcome/latency, context-overflow, semantic-negation, stale-target, resource and trace tests against authorized owned fixtures. Keep Hermes disabled until a representative outcome evaluation justifies opting in. Follow commands.md, freeze final sources, run focused/full/readiness, reconcile and verify artifacts. Actual account/desktop writes, installations and model downloads retain separate approval.

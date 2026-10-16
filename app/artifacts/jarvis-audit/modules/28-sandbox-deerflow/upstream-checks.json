@@ -1,0 +1,26 @@
+{
+  "checked_date": "2026-10-16 IST",
+  "scope": "Firecrawl public official documentation/release metadata; no research API, credentials, account, or private source sent.",
+  "sources": [
+    {
+      "url": "https://docs.docker.com/engine/release-notes/29/",
+      "title": "Docker Engine version 29 release notes | Docker Docs",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T14:59:48.399Z"
+    },
+    {
+      "url": "https://github.com/bytedance/deer-flow/releases",
+      "title": "Releases · bytedance/deer-flow",
+      "status": 200,
+      "cache_state": "miss"
+    },
+    {
+      "url": "https://docs.docker.com/engine/containers/run/",
+      "title": "Running containers | Docker Docs",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-15T11:33:46.730Z"
+    }
+  ]
+}

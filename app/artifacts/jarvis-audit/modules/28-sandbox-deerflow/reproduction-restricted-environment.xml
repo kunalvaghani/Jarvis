@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="8" time="1.031" timestamp="2026-10-16T21:25:21.616764+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_019_attempted_checkpoint_blocks_different_command" time="0.069"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_019_attempted_chec0\\.jarvis-runtime\\deerflow\\jobs\\61cccbf4a79f40e8acd74e20b211fe4b\\tmpl2mk38xp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_019_attempted_chec0\\.jarvis-runtime\\deerflow\\jobs\\61cccbf4a79f40e8acd74e20b211fe4b\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_019_attempted_chec0')
+
+    def test_JRV_28_019_attempted_checkpoint_blocks_different_command(tmp_path):
+&gt;       obj=job(tmp_path);obj.state['calls']=[{'command':'old','status':'attempted'}];obj.save()
+
+tests\test_sandbox_deerflow_audit.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_019_attempted_chec0/.jarvis-runtime/deerflow/jobs/61cccbf4a79f40e8acd74e20b211fe4b/state.json')
+text = '{\n  "id": "61cccbf4a79f40e8acd74e20b211fe4b",\n  "status": "running",\n  "calls": [\n    {\n      "command": "old",\..._started": 1792166120.399646,\n  "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_019_attempted_chec0\\.jarvis-runtime\\deerflow\\jobs\\61cccbf4a79f40e8acd74e20b211fe4b\\tmpl2mk38xp' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_019_attempted_chec0\\.jarvis-runtime\\deerflow\\jobs\\61cccbf4a79f40e8acd74e20b211fe4b\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_017_write_budget_applies_to_all_effects" time="0.030"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_017_write_budget_a0\\.jarvis-runtime\\deerflow\\jobs\\ed62cc7bd2da422ca36144b16c384cfa\\tmpbtvgthdv' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_017_write_budget_a0\\.jarvis-runtime\\deerflow\\jobs\\ed62cc7bd2da422ca36144b16c384cfa\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_017_write_budget_a0')
+
+    def test_JRV_28_017_write_budget_applies_to_all_effects(tmp_path):
+        obj=job(tmp_path);obj.state['calls']=[{'command':str(i),'status':'completed'} for i in range(20)]
+&gt;       with pytest.raises(ValueError):obj.observe('sandbox_write','extra.txt','fixture')
+
+tests\test_sandbox_deerflow_audit.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:184: in observe
+    self.save()
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_017_write_budget_a0/.jarvis-runtime/deerflow/jobs/ed62cc7bd2da422ca36144b16c384cfa/state.json')
+text = '{\n  "id": "ed62cc7bd2da422ca36144b16c384cfa",\n  "status": "running",\n  "calls": [\n    {\n      "command": "0",\n ..._started": 1792166120.399646,\n  "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_017_write_budget_a0\\.jarvis-runtime\\deerflow\\jobs\\ed62cc7bd2da422ca36144b16c384cfa\\tmpbtvgthdv' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_017_write_budget_a0\\.jarvis-runtime\\deerflow\\jobs\\ed62cc7bd2da422ca36144b16c384cfa\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_006_timeout_stops_only_owned_job" time="0.015"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_006_timeout_stops_0\\.jarvis-runtime\\deerflow\\jobs\\01be5597925f4e6096bf6fa0298a9079\\tmppilli5ws' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_006_timeout_stops_0\\.jarvis-runtime\\deerflow\\jobs\\01be5597925f4e6096bf6fa0298a9079\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_006_timeout_stops_0')
+
+    def test_JRV_28_006_timeout_stops_only_owned_job(tmp_path):
+        obj=job(tmp_path)
+        obj.runtime.cli.side_effect=lambda args,*a,**k: (_ for _ in ()).throw(ValueError('timeout fixture')) if args[0]=='exec' else b''
+&gt;       with pytest.raises(ValueError):obj.execute('sleep 500',timeout=1)
+
+tests\test_sandbox_deerflow_audit.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:152: in execute
+    self.save()
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_006_timeout_stops_0/.jarvis-runtime/deerflow/jobs/01be5597925f4e6096bf6fa0298a9079/state.json')
+text = '{\n  "id": "01be5597925f4e6096bf6fa0298a9079",\n  "status": "running",\n  "calls": [\n    {\n      "command": "sleep ..._started": 1792166120.399646,\n  "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_006_timeout_stops_0\\.jarvis-runtime\\deerflow\\jobs\\01be5597925f4e6096bf6fa0298a9079\\tmppilli5ws' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_006_timeout_stops_0\\.jarvis-runtime\\deerflow\\jobs\\01be5597925f4e6096bf6fa0298a9079\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_031_checkpoint_read_is_bounded" time="0.016"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_031_checkpoint_rea0\\.jarvis-runtime\\deerflow\\jobs\\d33ab6f9940a47288a0e208ac8092413\\tmpohwk96j5' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_031_checkpoint_rea0\\.jarvis-runtime\\deerflow\\jobs\\d33ab6f9940a47288a0e208ac8092413\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_031_checkpoint_rea0')
+
+    def test_JRV_28_031_checkpoint_read_is_bounded(tmp_path):
+&gt;       obj=job(tmp_path);obj.state['padding']='x'*300000;obj.save()
+
+tests\test_sandbox_deerflow_audit.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_031_checkpoint_rea0/.jarvis-runtime/deerflow/jobs/d33ab6f9940a47288a0e208ac8092413/state.json')
+text = '{\n  "id": "d33ab6f9940a47288a0e208ac8092413",\n  "status": "running",\n  "calls": [],\n  "container": "jarvis-deerfl...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_031_checkpoint_rea0\\.jarvis-runtime\\deerflow\\jobs\\d33ab6f9940a47288a0e208ac8092413\\tmpohwk96j5' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_031_checkpoint_rea0\\.jarvis-runtime\\deerflow\\jobs\\d33ab6f9940a47288a0e208ac8092413\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_002_linked_mount_ancestor_refused" time="0.025"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_002_linked_mount_a0\\.jarvis-runtime\\deerflow\\jobs\\0e99f4d6e8a146fba83a55d06f5a94aa\\tmpexnk2oy6' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_002_linked_mount_a0\\.jarvis-runtime\\deerflow\\jobs\\0e99f4d6e8a146fba83a55d06f5a94aa\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_002_linked_mount_a0')
+
+    def test_JRV_28_002_linked_mount_ancestor_refused(tmp_path):
+        obj=job(tmp_path);skills=tmp_path/'integrations/deer-flow-upstream/skills/public';skills.mkdir(parents=True)
+        image=[{'Id':ID,'Os':'linux','Architecture':'amd64','Config':{'Labels':{'org.jarvis.deerflow-runtime':'1'}}}]
+        obj.runtime.cli.return_value=json.dumps(image).encode()
+        with patch('jarvis.deerflow_sandbox.linked',side_effect=lambda p:Path(p)==tmp_path/'.jarvis-runtime'),patch('jarvis.deerflow_sandbox.threading.Thread'):
+&gt;           with pytest.raises(ValueError):obj.create()
+
+tests\test_sandbox_deerflow_audit.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:71: in create
+    self.save()
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_002_linked_mount_a0/.jarvis-runtime/deerflow/jobs/0e99f4d6e8a146fba83a55d06f5a94aa/state.json')
+text = '{\n  "id": "0e99f4d6e8a146fba83a55d06f5a94aa",\n  "status": "starting",\n  "calls": [],\n  "container": "jarvis-deerf..._started": 1792166120.399646,\n  "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_002_linked_mount_a0\\.jarvis-runtime\\deerflow\\jobs\\0e99f4d6e8a146fba83a55d06f5a94aa\\tmpexnk2oy6' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_002_linked_mount_a0\\.jarvis-runtime\\deerflow\\jobs\\0e99f4d6e8a146fba83a55d06f5a94aa\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_029_mutable_image_identity_refused" time="0.030"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_029_mutable_image_0\\.jarvis-runtime\\deerflow\\jobs\\55ac05db9aac420d96694d5f6be2610b\\tmpbb6mfgpq' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_029_mutable_image_0\\.jarvis-runtime\\deerflow\\jobs\\55ac05db9aac420d96694d5f6be2610b\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_029_mutable_image_0')
+
+    def test_JRV_28_029_mutable_image_identity_refused(tmp_path):
+        obj=job(tmp_path);(tmp_path/'integrations/deer-flow-upstream/skills/public').mkdir(parents=True)
+        obj.runtime.cli.return_value=json.dumps([{'Id':'mutable-tag','Os':'linux','Architecture':'amd64','Config':{'Labels':{'org.jarvis.deerflow-runtime':'1'}}}]).encode()
+&gt;       with patch('jarvis.deerflow_sandbox.threading.Thread'),pytest.raises(ValueError):obj.create()
+
+tests\test_sandbox_deerflow_audit.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:71: in create
+    self.save()
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_029_mutable_image_0/.jarvis-runtime/deerflow/jobs/55ac05db9aac420d96694d5f6be2610b/state.json')
+text = '{\n  "id": "55ac05db9aac420d96694d5f6be2610b",\n  "status": "starting",\n  "calls": [],\n  "container": "jarvis-deerf...b9aac420d96694d5f6be2610b",\n  "owner_pid": 39592,\n  "owner_started": 1792166120.399646,\n  "image": "mutable-tag"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_029_mutable_image_0\\.jarvis-runtime\\deerflow\\jobs\\55ac05db9aac420d96694d5f6be2610b\\tmpbb6mfgpq' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_029_mutable_image_0\\.jarvis-runtime\\deerflow\\jobs\\55ac05db9aac420d96694d5f6be2610b\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_026_exclusive_write_refuses_race" time="0.017"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_026_exclusive_writ0\\.jarvis-runtime\\deerflow\\jobs\\7f3c5ce9ca194eb1a88ecfd751c672a0\\tmppucnxom1' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_026_exclusive_writ0\\.jarvis-runtime\\deerflow\\jobs\\7f3c5ce9ca194eb1a88ecfd751c672a0\\state.json'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_026_exclusive_writ0')
+
+    def test_JRV_28_026_exclusive_write_refuses_race(tmp_path):
+        obj=job(tmp_path);path=obj.root/'workspace/new.txt'
+        fake=SimpleNamespace(exists=lambda:False,parent=path.parent,open=path.open,write_text=path.write_text)
+        obj.path=Mock(return_value=fake)
+&gt;       obj.observe('sandbox_write','new.txt','original')
+
+tests\test_sandbox_deerflow_audit.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\deerflow_sandbox.py:184: in observe
+    self.save()
+jarvis\deerflow_sandbox.py:38: in save
+    atomic(self.root / 'state.json', json.dumps(self.state, indent=2))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_026_exclusive_writ0/.jarvis-runtime/deerflow/jobs/7f3c5ce9ca194eb1a88ecfd751c672a0/state.json')
+text = '{\n  "id": "7f3c5ce9ca194eb1a88ecfd751c672a0",\n  "status": "running",\n  "calls": [\n    {\n      "command": "write:..._started": 1792166120.399646,\n  "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n}'
+
+    def atomic(path, text):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise ValueError("Skill memory must use regular files.")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(text)
+                output.flush()
+                os.fsync(output.fileno())
+&gt;           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_026_exclusive_writ0\\.jarvis-runtime\\deerflow\\jobs\\7f3c5ce9ca194eb1a88ecfd751c672a0\\tmppucnxom1' -&gt; 'C:\\Users\\kunal\\AppData\\Local\\Packages\\sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}\\AC\\Temp\\pytest-of-kunal\\pytest-0\\test_JRV_28_026_exclusive_writ0\\.jarvis-runtime\\deerflow\\jobs\\7f3c5ce9ca194eb1a88ecfd751c672a0\\state.json'
+
+jarvis\skill_memory.py:31: PermissionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_007_wrong_media_format_not_success" time="0.033"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0b939c00-6a89-4f11-be22-c271321bc28c}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_28_007_wrong_media_fo0')
+
+    def test_JRV_28_007_wrong_media_format_not_success(tmp_path):
+        from jarvis.deerflow_media import execute
+        obj=job(tmp_path);bad=obj.root/'outputs/chart.png';bad.write_text('not a PNG')
+        obj.inventory=Mock(return_value=[{'path':'outputs/chart.png','bytes':bad.stat().st_size}])
+        with patch.object(SandboxJob,'__enter__',return_value=obj),patch.object(SandboxJob,'__exit__'):
+&gt;           with pytest.raises(ValueError):execute(SimpleNamespace(base=tmp_path),{'value':'chart','content':'{"labels":["A"],"values":[1]}'},lambda:False)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:77: Failed</failure></testcase></testsuite></testsuites>

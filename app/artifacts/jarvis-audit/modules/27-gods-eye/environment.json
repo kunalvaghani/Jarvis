@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-16 IST",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "ram_bytes": 33656832000,
+  "packages": {
+    "requests": "2.34.2",
+    "pytest": "8.4.2",
+    "psutil": "7.2.2"
+  },
+  "node": "v24.14.0",
+  "bundled": {
+    "commit": "591f299d11f38a612629a274463196d57ae3862e",
+    "date": "2026-10-10T03:59:43Z",
+    "message": "Merge pull request #986",
+    "updated_at": "2026-10-11T00:45:25"
+  },
+  "frontend": {
+    "cesium": "1.138.0",
+    "vite": "6.4.3"
+  }
+}

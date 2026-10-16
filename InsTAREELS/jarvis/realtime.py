@@ -21,7 +21,8 @@ from .realtime_sources import Sources, coordinates
 DEFAULTS = {'enabled':False, 'alerts':True, 'model_enabled':True, 'model':'qwen2.5:0.5b',
     'idle_seconds':60, 'model_interval_seconds':600, 'min_available_mb':4096,
     'max_model_bytes':600000000, 'max_cpu_percent':35, 'location_refresh_seconds':3600,
-    'auto_location':True, 'contact':'', 'endpoints':{}, 'location':None}
+    'auto_location':True, 'contact':'', 'endpoints':{}, 'location':None,
+    'model_hazard_cooldown_seconds':0}
 REVIEW_LABELS = ['No serious issue established by these excerpts.',
     'These excerpts need review against the source records.',
     'These excerpts provide insufficient evidence.']
@@ -44,7 +45,8 @@ def settings(raw=None):
         if type(options[key]) is not bool: raise ValueError('realtime.'+key+' must be boolean')
     for key, low, high in [('idle_seconds',30,3600),('model_interval_seconds',300,86400),
         ('min_available_mb',2048,65536),('max_model_bytes',100000000,800000000),
-        ('max_cpu_percent',1,60),('location_refresh_seconds',1800,86400)]:
+        ('max_cpu_percent',1,60),('location_refresh_seconds',1800,86400),
+        ('model_hazard_cooldown_seconds',0,86400)]:
         if type(options[key]) is not int or not low <= options[key] <= high: raise ValueError('Invalid realtime.'+key)
     if not isinstance(options['endpoints'],dict) or set(options['endpoints'])-{'rsshub','searxng','osrm','opentripplanner','gbfs'}:
         raise ValueError('Only selected self-hosted services/feed endpoints can be configured')
@@ -85,6 +87,9 @@ def _serious(row, location, now=None):
     fetched = row.get('fetched_at')
     if row.get('status')!='ok' or row.get('stale') or not fetched or not 0 <= now-fetched <= 900: return []
     key, data, found = row['provider'], row.get('data',{}), []
+    if key in {'weather','air'}:
+        from .weather_units import normalize
+        data = normalize(data)
     def add(identity,text,at):
         if at is not None and 0 <= now-at <= 3600:
             found.append({'id':key+':'+str(identity), 'provider':key, 'message':text[:600],
@@ -406,6 +411,16 @@ class Realtime:
             if row.get('status')=='ok':
                 for alert in serious(row,location,self.clock()):
                     identity=alert['id']+':'+str(alert['event_time'])
+                    cooldown=self.options['model_hazard_cooldown_seconds']
+                    if key in {'weather','air'} and cooldown:
+                        # Opt-in suppression policy; not semantic event identity.
+                        area=hashlib.sha256(json.dumps([location.get('latitude'),location.get('longitude')]).encode()).hexdigest()[:16]
+                        identity=alert['id']+':'+area
+                        previous=self.seen.get(identity)
+                        if previous is not None and self.clock()-previous < cooldown:
+                            continue
+                        if previous is not None:
+                            self.seen.pop(identity,None)
                     if identity not in self.seen: self.pending[identity]=alert
         if cancelled(): return
         signature=hashlib.sha256(json.dumps([r.get('data') for r in self.rows.values()],sort_keys=True).encode()).hexdigest()

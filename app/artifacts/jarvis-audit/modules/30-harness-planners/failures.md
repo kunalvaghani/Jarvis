@@ -1,5 +1,16 @@
-# Status
+# Reproductions and repairs
 
-{'NOT RUN': 32}
+Baseline 49 passed. Initial 12 failures reproduced duplicate acceptance, unhashable actions, eight invalid config/backend combinations, overlapping shared-client requests and an unadvertised read-only tool call. [Initial assertions](reproduction.xml), [log](reproduction.txt). First repaired subset 61 passed; native/context/inference expansion 138 passed. Expanded fixture had one guide read-budget failure (oversized guide was correctly refused); fixture now requests the explicit 60,000-byte maximum. Subsequent fixture mistakenly called nonexistent AgentSession.turn instead of run, then a byte-exact source assertion exposed Windows CRLF writing; write_bytes now preserves the exact synthetic LF payload, and parsed durable events are checked for source-body absence. These were fixture errors, not excuses to weaken product assertions.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+An EOF/backpressure probe reproduced a dead worker being classified as timeout when no EOF sentinel reached the queue. It now detects process exit after an empty queue, with a dedicated regression. A superseded full run was stopped around 15 percent before the fix; its log/hashes are retained and excluded from completed evidence. Final focused 236 PASS / 10 explicit blocked skips. Full final run and frozen-source verification are recorded in final-report.md.
+
+- **JRV-30-007 BLOCKED:** The tested adapters keep private fixture text on local inference routes, but no complete SDK/host-environment/cloud request oracle proves that arbitrary private harness context cannot leak.
+- **JRV-30-008 BLOCKED:** Step/action and protocol limits reject oversized plans; no complete token-overflow compaction and checkpoint-resume acceptance oracle across all optional planners.
+- **JRV-30-009 BLOCKED:** Historical comparisons keep Hermes disabled and the current Harness SDK is pinned. No new matched live-model accuracy/latency trials establish a harness outcome advantage or a production downgrade threshold.
+- **JRV-30-010 BLOCKED:** One BrainClient now serializes its stdio requests, but independent Brain/BrainClient instances sharing one TaskState lack a common task-generation lease.
+- **JRV-30-021 BLOCKED:** No full fake-secret/Groq/telemetry/log/cache oracle. Upstream runtime environment and raw local Harness event exports can contain private task context.
+- **JRV-30-023 BLOCKED:** Plan validation and real execution permissions are tested; no complete semantic do-X versus do-not-do-X model accuracy oracle.
+- **JRV-30-024 BLOCKED:** Current registry and caller validations remain in force; no atomic observation/task-generation receipt binds all optional-planner proposals to execution across independent clients.
+- **JRV-30-025 BLOCKED:** No host RAM-pressure/GPU-allocation failure experiment against concurrent core responsiveness. Fixtures use no GPU/model inference.
+- **JRV-30-027 BLOCKED:** Schema-copy A/B uses20 warm+5 initial batches; no five cold full-planner processes with RSS/VRAM/TTFT/first-audio and matched live outcome accuracy.
+- **JRV-30-032 BLOCKED:** Local task/turn IDs and failure events exist; complete optional-SDK trace correlation, secret redaction and retention/readback guarantees remain incomplete.

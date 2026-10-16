@@ -1,0 +1,47 @@
+[
+  {
+    "path": "docs/gods-eye.md",
+    "before": "d395a894b23992f95351352c80933e56217ed2df32a058e511c2cca90f3555f8",
+    "after": "a9bc6295b1bf9d81398cd8d124a309c4f21ad7bd69ba9aee3144f41eccd85565"
+  },
+  {
+    "path": "docs/system-map.md",
+    "before": "85b65a28ecfad1f70b92041b7768b6ea8d4e771f7fd2a5c07b30cb00d85d7c13",
+    "after": "2c4c2b640b777fd1884a6464a96272bf0da5ba51d9dcaf5d514201396163ea7c"
+  },
+  {
+    "path": "jarvis/gods_eye.py",
+    "before": "c9a3907627fde236306c91ccd599ffcc47ed37483f87359bb5df014617ccb8df",
+    "after": "e512cfd897d51af728251d4cfdc845b47f2e79984284d3d0e6448e28bbead5e4"
+  },
+  {
+    "path": "jarvis/gods_eye_cameras.py",
+    "before": "1957f54ec2e9afc151f0db183946c26ba852700352966dcc165018c59ae85509",
+    "after": "f15977af148bef14a92e92d05d4a0410772ce87eb7fed22da519b583772c76b5"
+  },
+  {
+    "path": "README.md",
+    "before": "65e23925ab1e03ecafb6175e5b05c638f16685ed1659444fa4f49fd030dd07cd",
+    "after": "373d2c2d3485c0c2462239a07050bf67f03e5297909655e96b7172ecc0bb85c2"
+  },
+  {
+    "path": "../README.md",
+    "before": "d6e5c83dae5118e3fdf20db9b3ed5f835ab256d09b5c51d3a193340738949e08",
+    "after": "e2e95dbb3836d48e4f12dd125d474be7852fa944cdd800dd5eb32ec80193144d"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "f4d59640fb5309cfda739afbf1b6ab82d8cf5a5cfa14d37c636cf1cdc14949cb",
+    "after": "5e84a8d70dd6971c1724ef6f1321e1a8842c28c3b4c361fba08221c7103c051c"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "5c80d5d8028edd534fd356aab5c9914bbdb1bbbcd35edbfc9c280e07a8c0cffb",
+    "after": "9a65a104b4d4bd4c738298a18498a567085372ea29cdb8dfd28c0320b60c6664"
+  },
+  {
+    "path": "tests/test_gods_eye.py",
+    "before": "d739b62f4b853d97e1fe9706e5e285839621d8dbf0c98f3a8021503637250711",
+    "after": "ab09a9f0613b8bce2dbcdaff132c5cdf3abdbe18c782d9a4d190d2e62f81382c"
+  }
+]

@@ -55,8 +55,17 @@ def guard(base,name,value,args,state=None):
                 fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except OSError:raise ValueError('This Gmail write is already owned by another request; no duplicate issued.') from None
         try:
-            if path.exists() and json.loads(path.read_text()).get('pending'):
-                raise ValueError('An earlier identical Gmail write has an uncertain outcome. Inspect the actual draft or message before another write; no action replayed.')
+            if path.exists():
+                try:
+                    with path.open(encoding='utf-8') as handle:text=handle.read(65537)
+                    if len(text)>65536:raise ValueError()
+                    row=json.loads(text)
+                    if (not isinstance(row,dict) or type(row.get('pending')) is not bool
+                        or row.get('operation')!=name or row.get('target')!=value):raise ValueError()
+                except (OSError,ValueError,RecursionError):
+                    raise ValueError('Gmail write journal is damaged or oversized; inspect fresh mailbox state before continuing. No replay.') from None
+                if row['pending']:
+                    raise ValueError('An earlier identical Gmail write has an uncertain outcome. Inspect the actual draft or message before another write; no action replayed.')
             yield Journal(path,name,value,state)
         finally:
             lock.seek(0)

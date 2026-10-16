@@ -1,0 +1,14 @@
+{
+  "checked": "2026-10-16 IST",
+  "provider": "Firecrawl public search and retrieval",
+  "sources": [
+    {"url": "https://pypi.org/project/winrt-Windows.Media.Control/", "observed_version": "3.2.1", "installed": "3.2.1", "python310_windows_wheel": "listed"},
+    {"url": "https://github.com/pywinrt/pywinrt/releases/tag/v3.2.1", "released": "2025-06-06", "status": "official notes retrieved"},
+    {"url": "https://learn.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession?view=winrt-28000", "status": "search excerpt reviewed; source ID and requested transport contract, not live app proof"},
+    {"url": "https://pypi.org/project/pycaw/", "observed_version": "20260927", "released": "2026-09-26", "installed": "20260921", "status": "newer wheel not installed/tested"},
+    {"url": "https://github.com/AndreMiras/pycaw/blob/main/CHANGELOG.md", "status": "20260926 and20260927 release sections reviewed; packaging/support and installed-wheel validation changes"},
+    {"url": "https://developers.google.com/youtube/v3/docs/search/list", "updated": "2026-10-15 UTC", "status": "Search Queries bucket1unit and100 calls/day; no personal project quota inspected"}
+  ],
+  "no_installation": true,
+  "no_live_playback_or_account_check": true
+}

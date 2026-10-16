@@ -18,6 +18,7 @@ import os
 from pathlib import Path
 import re
 import time
+import unicodedata
 from urllib.parse import quote
 
 BASE = Path(__file__).resolve().parents[1]
@@ -29,9 +30,16 @@ UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 def sound_key(text):
     """Collapse transliteration variants: nadan/nadaan/naadan, parinde/parindey/parindey."""
     text = re.sub(r"\(.*?\)|\[.*?\]", " ", str(text).lower())
-    text = re.sub(r"[^a-z0-9 ]+", " ", text.replace("&", " and "))
+    text = text.replace('&', ' and ')
+    if text.isascii():
+        text = re.sub(r'[^a-z0-9 ]+', ' ', text)
+    else:
+        text = ''.join(c if c.isalnum() or c.isspace() or unicodedata.category(c).startswith('M') else ' ' for c in text)
     words = []
     for word in text.split():
+        if not word.isascii():
+            words.append(word)
+            continue
         word = word.replace("ee", "i").replace("oo", "u").replace("ph", "f").replace("w", "v")
         word = re.sub(r"(.)\1+", r"\1", word)  # aa -> a, nn -> n
         word = re.sub(r"(?<=[a-z]{3})[ey]$", "", word)  # parinde/parindey -> parind
@@ -42,6 +50,11 @@ def sound_key(text):
 def similarity(query, text):
     """0..1: how well the spoken query matches a title (word coverage + overall shape)."""
     q, t = sound_key(query).split(), sound_key(text).split()
+    return _similarity(q, t)
+
+
+def _similarity(q, t):
+    """Score already normalized tokens without retaining a private-query cache."""
     if not q or not t:
         return 0.0
     covered = sum(1 for word in q if any(SequenceMatcher(None, word, other).ratio() >= .8 for other in t)) / len(q)
@@ -137,16 +150,23 @@ def youtube_search(query, limit=8, session=None, key=None):
 
 def choose_youtube(query, rows):
     """YouTube's ranking first; among the top five prefer a clear title match, skip shorts and live."""
-    playable = [row for row in rows if row["duration"] > 45] or rows
+    playable = [row for row in rows if row["duration"] > 45]
     if not playable:
         return None
     # Remixes, covers and edited versions only when the user asked for one.
     variant = re.compile(r"\b(?:remix|cover|reverb|slowed|sped up|lofi|lo-fi|8d|karaoke|instrumental|mashup|nightcore)\b", re.I)
     wanted = bool(variant.search(query))
-    for row in playable[:6]:
-        if similarity(query, row["title"] + " " + row["channel"]) >= .6 and (wanted or not variant.search(row["title"])):
-            return row  # The first clear match in YouTube's own relevance order.
-    return playable[0]
+    q = sound_key(query).split()
+    candidates = [(row, _similarity(q, sound_key(row['title']+' '+row['channel']).split()))
+                  for row in playable[:6] if wanted or not variant.search(row['title'])]
+    candidates = [(row, score) for row, score in candidates if score >= .6]
+    if not candidates:
+        return None
+    best = max(score for _, score in candidates)
+    matching = [row for row, score in candidates if score >= best - .02]
+    if len({row['id'] for row in matching}) > 1:
+        raise ValueError('Multiple matching YouTube videos; name the channel or version before playback.')
+    return matching[0]
 
 
 def fetch_image(url, size=(96, 96)):
@@ -190,6 +210,10 @@ def pause_other(actions, service):
         pass
 
 
+class PlaybackUncertain(ValueError):
+    """A playback mutation may have occurred: no service fallback or automatic replay."""
+
+
 def play_youtube(actions, query, cancelled):
     query = clean_query(query)
     actions.report("media_card", card("youtube", "searching", query, "Finding the best match"))
@@ -203,9 +227,12 @@ def play_youtube(actions, query, cancelled):
     image = fetch_image(chosen["thumbnail"])
     pause_other(actions, "youtube")
     actions.report("media_card", card("youtube", "loading", chosen["title"], chosen["channel"], image, 0, chosen["duration"]))
-    result = actions._browser().request("play_video", cancelled, video_id=chosen["id"], new_task=True)
+    try:
+        result = actions._browser().request("play_video", cancelled, video_id=chosen["id"], new_task=True)
+    except Exception:
+        raise PlaybackUncertain('YouTube playback outcome is uncertain; inspect the player before repeating.') from None
     if result.get("verified") is not True:
-        raise ValueError("The video opened but playback was not verified; nothing was replayed.")
+        raise PlaybackUncertain("The video opened but playback was not verified; nothing was replayed.")
     state = result.get("state") or {}
     actions.report("media_card", card("youtube", "playing", chosen["title"], chosen["channel"], image,
                                       state.get("position", 0), state.get("duration") or chosen["duration"],
@@ -240,12 +267,16 @@ def spotify_results(controls):
 
 def choose_spotify(query, results):
     """Best-matching song; title (and artists, if named) must clearly match."""
-    songs = [row for row in results if row["kind"] == "Song"] or [row for row in results if row["kind"] in {"", "Album"}]
-    scored = [(max(similarity(query, row["title"]), similarity(query, row["title"] + " " + row["artists"])), -i, row)
+    songs = [row for row in results if row["kind"] == "Song"]
+    q = sound_key(query).split()
+    scored = [(max(_similarity(q, sound_key(row["title"]).split()), _similarity(q, sound_key(row["title"] + " " + row["artists"]).split())), -i, row)
               for i, row in enumerate(songs)]
     if not scored:
         return None
     best = max(scored)
+    near = [row for score, _, row in scored if score >= .55 and score >= best[0] - .02]
+    if len({(row['title'], row['artists']) for row in near}) > 1:
+        raise ValueError('Multiple matching Spotify songs; name the artist or version before playback.')
     return best[2] if best[0] >= .55 else None
 
 
@@ -284,6 +315,8 @@ def spotify_now(cancelled=lambda: False, timeout=3.):
 def play_spotify(actions, query, cancelled, clock=time.monotonic, sleep=time.sleep):
     from .spotify import open_app
     from .window_focus import focus
+    if cancelled():
+        raise ValueError('Spotify request cancelled before search.')
     query = clean_query(query)
     actions.report("media_card", card("spotify", "searching", query, "Finding the best match"))
     if spotify_window() is None:
@@ -291,6 +324,8 @@ def play_spotify(actions, query, cancelled, clock=time.monotonic, sleep=time.sle
         deadline = clock() + 12
         while spotify_window() is None and clock() < deadline:
             sleep(.3)
+    if cancelled():
+        raise ValueError('Spotify request cancelled before search.')
     os.startfile("spotify:search:" + quote(query, safe=""))
     handle, results, snapshot = None, [], {}
     deadline = clock() + 10
@@ -317,20 +352,31 @@ def play_spotify(actions, query, cancelled, clock=time.monotonic, sleep=time.sle
                          "Spotify search results did not load; nothing was played.")
     pause_other(actions, "spotify")
     before = spotify_now()
+    def matches(now):
+        key = lambda text: ' '.join(unicodedata.normalize('NFC', text or '').casefold().split())
+        return (now and now.get('status') == 'playing' and key(chosen['title']) == key(now.get('title'))
+                and (not chosen['artists'] or key(chosen['artists']) == key(now.get('artist'))))
+    if matches(before):
+        actions.last_media = 'spotify'
+        return 'Already playing ' + chosen['title'] + ' on Spotify.'
     snapshot["media_platform"] = "spotify"
-    actions._ui()._activate(handle, snapshot, chosen["play"], "play", cancelled)
+    try:
+        actions._ui()._activate(handle, snapshot, chosen["play"], "play", cancelled)
+    except Exception:
+        raise PlaybackUncertain('Spotify playback outcome is uncertain; inspect the player before repeating.') from None
     deadline = clock() + 8
     while clock() < deadline:
+        if cancelled():
+            raise PlaybackUncertain('Spotify request cancelled after dispatch; inspect playback before repeating.')
         now = spotify_now()
-        if (now and now.get("status") == "playing" and similarity(chosen["title"], now.get("title", "")) >= .7
-                and (not before or before.get("title") != now.get("title") or before.get("status") != "playing")):
+        if matches(now):
             actions.report("media_card", card("spotify", "playing", now["title"], now.get("artist", ""), now.get("image", ""),
                                               now.get("position", 0), now.get("duration", 0)))
             actions.last_media = "spotify"
             return "Playing " + now["title"] + " by " + now.get("artist", "") + " on Spotify."
         sleep(.25)
     actions.report("media_card", card("spotify", "error", chosen["title"], "Playback not confirmed"))
-    raise ValueError("Play was pressed once for " + chosen["title"] + ", but Spotify did not confirm playback. Nothing was replayed.")
+    raise PlaybackUncertain("Play was pressed once for " + chosen["title"] + ", but Spotify did not confirm playback. Nothing was replayed.")
 
 
 CONTROL_TEXT = {"play": "Resumed", "pause": "Paused", "next": "Next", "previous": "Previous", "restart": "From the start",
@@ -438,13 +484,24 @@ def resolve(actions, command):
 
 def play(actions, query, service, cancelled):
     """Play by name on the named service, or the last-used/default one, falling back to the other."""
-    default = actions.config.get("media", {}).get("default_service", "youtube")
+    settings = actions.config.get('media', {})
+    if not isinstance(settings, dict):
+        raise ValueError('Media configuration must be an object.')
+    default = settings.get("default_service", "youtube")
+    if (service is not None and (not isinstance(service, str) or service not in {'youtube', 'spotify'})) or not isinstance(default, str) or default not in {'youtube','spotify'}:
+        raise ValueError('Choose youtube or spotify as the media service.')
+    if not isinstance(query, str) or not query.strip() or len(query) > 300:
+        raise ValueError('Media search must contain1–300 characters.')
     first = service or getattr(actions, "last_media", None) or default
+    if not isinstance(first, str) or first not in {'youtube', 'spotify'}:
+        raise ValueError('The previous media service is invalid; explicitly choose youtube or spotify.')
     order = [first] + ([] if service else [other for other in ("youtube", "spotify") if other != first])
     errors = []
     for name in order:
         try:
             return (play_youtube if name == "youtube" else play_spotify)(actions, query, cancelled)
+        except PlaybackUncertain:
+            raise
         except ValueError as exc:
             if cancelled() or "cancelled" in str(exc):
                 raise

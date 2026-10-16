@@ -28,6 +28,8 @@ NAVIGATION_ACTIONS = {'browse', 'browser_search', 'open', 'media_search', 'open_
 # Effects that cannot be safely re-planned around after an uncertain outcome.
 WRITE_ACTIONS = {'create_file', 'modify_file', 'delete_file', 'save_file', 'append_file',
                  'run_command', 'close_app', 'type_text', 'deerflow_sandbox_task', 'deerflow_free_media'}
+_CLIENT_LOCK = threading.Lock()
+_MAX_WORKER_MESSAGE = 8_000_000
 
 
 class RepeatedAction(ValueError):
@@ -279,7 +281,13 @@ class BrainClient:
     worker_log = ".jarvis-runtime/logs/brain-worker.log"
 
     def __init__(self, base, options):
+        from .planner_settings import settings
+        settings(options, 'hermes')
+        settings(options, 'harness')
+        if 'selector' in options and (not isinstance(options['selector'], str) or options['selector'] not in {'convaiinnovations/laya', 'laya'}):
+            raise ValueError('Unknown local selector configuration.')
         self.base, self.options = Path(base), options
+        self._request_lock = threading.RLock()
         self.process = None
         self.responses = None
         self.log = None
@@ -303,6 +311,27 @@ class BrainClient:
             self.log = None
 
     def request(self, operation, cancelled, **data):
+        # One stdio request owns the response queue until its result is consumed.
+        # Lazy initialization preserves lightweight clients constructed by adapters.
+        if getattr(self, '_request_lock', None) is None:
+            with _CLIENT_LOCK:
+                if getattr(self, '_request_lock', None) is None:
+                    self._request_lock = threading.RLock()
+        while not self._request_lock.acquire(timeout=.05):
+            if cancelled():
+                raise ValueError('Task cancelled while waiting for the inference worker.')
+        try:
+            result = self._request(operation, cancelled, **data)
+            if cancelled():
+                raise ValueError('Task cancelled during inference readback.')
+            return result
+        finally:
+            self._request_lock.release()
+
+    def _request(self, operation, cancelled, **data):
+        from .planner_settings import settings
+        harness_options = settings(self.options, 'harness')
+        hermes_options = settings(self.options, 'hermes')
         provider = getattr(self, 'realtime_provider', None)
         if provider and data.get('goal') and operation in {'plan', 'replan', 'next_step'}:
             data['realtime_context'] = provider(data['goal'], cancelled)
@@ -342,17 +371,25 @@ class BrainClient:
                 skills if isinstance(skills, SkillMemory) else None, data.get('memory_context'),
                 coding=operation in {'code_plan', 'code_edit'})
         if (self.worker_module == "jarvis.brain_worker" and (operation in {"plan", "replan"} or (operation == "code_plan" and data.get("development") is True))
-                and self.options.get("harness", {}).get("enabled", False)):
+                and harness_options['enabled']):
             from .harness import HarnessClient
             if getattr(self, "harness", None) is None:
                 self.harness = HarnessClient(self.base, self.options)
-            return self.harness.request(operation, cancelled, **data)
+            result = self.harness.request(operation, lambda: cancelled() or not settings(self.options, 'harness')['enabled'], **data)
+            if not settings(self.options, 'harness')['enabled']:
+                self.harness.close()
+                raise ValueError('Harness disabled during inference; proposal discarded.')
+            return result
         if (self.worker_module == "jarvis.brain_worker" and operation in {"plan", "replan"}
-                and self.options.get("hermes", {}).get("enabled", False)):
+                and hermes_options['enabled']):
             from .hermes import HermesClient
             if getattr(self, "hermes", None) is None:
                 self.hermes = HermesClient(self.base, self.options)
-            return self.hermes.request(operation, cancelled, **data)
+            result = self.hermes.request(operation, lambda: cancelled() or not settings(self.options, 'hermes')['enabled'], **data)
+            if not settings(self.options, 'hermes')['enabled']:
+                self.hermes.close()
+                raise ValueError('Hermes disabled during inference; proposal discarded.')
+            return result
         for attempt in range(2):
             try:
                 return self._request_once(operation, cancelled, **data)
@@ -381,6 +418,14 @@ class BrainClient:
             data['stream_content'] = True
         if cancelled():
             raise ValueError("Task cancelled.")
+        try:
+            encoded = json.dumps({"operation": operation, "options": self.options, **data}, allow_nan=False)
+            if len(encoded) > _MAX_WORKER_MESSAGE:
+                raise ValueError()
+        except (ValueError, RecursionError, TypeError):
+            raise ValueError('Invalid bounded Brain worker request.') from None
+        if self.worker_module == 'jarvis.brain_worker' and operation == 'choose' and not (self.base / 'models/laya/model.safetensors').is_file():
+            raise TaskClarification('The local selector is unavailable. Which exact visible control should I use?')
         if self.process is None or self.process.poll() is not None:
             self.close()
             executable = self.base / self.worker_environment / "Scripts/python.exe"
@@ -394,7 +439,7 @@ class BrainClient:
                 issue = readiness(self.base)
                 if issue:
                     raise ValueError(issue)
-            elif not executable.is_file() or not (self.base / "models/laya/model.safetensors").is_file():
+            elif not executable.is_file():
                 raise ValueError("Brain models are not ready. Run launchers/Setup Jarvis Brain.cmd, then restart Jarvis.")
             log_path = self.base / self.worker_log
             log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -402,19 +447,39 @@ class BrainClient:
             self.process = subprocess.Popen([str(executable), "-u", "-m", self.worker_module],
                 cwd=self.base, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.log,
                 encoding="utf-8", creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-            responses = self.responses = queue.Queue()
+            responses = self.responses = queue.Queue(maxsize=8)
             process = self.process
             def read():
                 try:
-                    for line in process.stdout:
-                        responses.put(line)
+                    while self.process is process:
+                        line = process.stdout.readline(_MAX_WORKER_MESSAGE + 1)
+                        if not line:
+                            break
+                        if len(line) > _MAX_WORKER_MESSAGE:
+                            line = json.dumps({'error': 'Brain worker response exceeded its message limit.'})
+                        while self.process is process:
+                            try:
+                                responses.put(line, timeout=.1)
+                                break
+                            except queue.Full:
+                                continue
                 except (OSError, ValueError):
                     pass
                 finally:
-                    responses.put(None)
+                    try:
+                        responses.put(None, timeout=.1)
+                    except queue.Full:
+                        pass
             threading.Thread(target=read, daemon=True).start()
-        self.process.stdin.write(json.dumps({"operation": operation, "options": self.options, **data}) + "\n")
-        self.process.stdin.flush()
+        try:
+            self.process.stdin.write(encoded + '\n')
+            self.process.stdin.flush()
+        except OSError:
+            self.close()
+            raise
+        except (ValueError, RecursionError, TypeError):
+            self.close()
+            raise ValueError('Brain worker request could not be sent; inference stopped.') from None
         coding = operation in {'code_plan', 'code_edit'}
         from .inference_limits import planning_worker_timeout, coding_limits, planning_limits
         planning = operation in {'plan', 'replan', 'dag_plan'}
@@ -438,10 +503,19 @@ class BrainClient:
                 try:
                     line = self.responses.get(timeout=.1)
                 except queue.Empty:
+                    if self.process is None or self.process.poll() is not None:
+                        raise ValueError('Brain worker stopped before completing its response.')
                     continue
                 if line is None:
                     raise ValueError("Brain worker stopped. See " + self.worker_log + ".")
-                result = json.loads(line)
+                try:
+                    if not isinstance(line, str) or len(line) > _MAX_WORKER_MESSAGE:
+                        raise ValueError()
+                    result = json.loads(line)
+                except (ValueError, RecursionError):
+                    raise ValueError('Brain worker returned invalid bounded JSON.') from None
+                if not isinstance(result, dict):
+                    raise ValueError('Brain worker response must be an object.')
                 if 'coding_activity' in result:
                     if not coding or result['coding_activity'] not in {'Generating answer', 'Thinking', 'Finishing answer'}:
                         raise ValueError('Invalid coding activity event.')
@@ -453,7 +527,7 @@ class BrainClient:
                     deadline = time.monotonic() + seconds
                     continue
                 if 'progress' in result:
-                    content = result['progress'].get('content')
+                    content = result['progress'].get('content') if isinstance(result['progress'], dict) else None
                     if not callback or not isinstance(content, str) or len(content) > 20000:
                         raise ValueError('Invalid coding stream progress; incomplete draft preserved.')
                     try:
@@ -464,6 +538,10 @@ class BrainClient:
                     continue
                 if result.get("error"):
                     raise ValueError(result["error"])
+                if 'result' not in result:
+                    raise ValueError('Brain worker omitted its result.')
+                if operation == 'choose' and isinstance(result['result'], dict) and result['result'].get('unavailable') is True:
+                    raise TaskClarification('The local selector is unavailable. Which exact visible control should I use?')
                 return result["result"]
         except Exception:
             self.close()

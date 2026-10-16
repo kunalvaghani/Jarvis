@@ -185,5 +185,5 @@ class SandboxTests(unittest.TestCase):
             return original_process(pid)
         with patch('psutil.Process', side_effect=process), patch.object(SandboxJob, 'owned', return_value={'Id': 'owned-id'}), patch('jarvis.deerflow_sandbox.RepositorySandbox.cli', return_value=b'') as cli:
             self.assertEqual(reap_orphans(self.temp.name), 1)
-            cli.assert_called_once_with(['rm', '--force', self.job.name], timeout=10)
+            cli.assert_called_once_with(['rm', '--force', 'owned-id'], timeout=10)
         self.assertEqual(output.read_text(), 'preserve')

@@ -1,3 +1,7 @@
-# Compatibility
+# Compatibility, checked2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+Installed **comtypes1.4.17**, Python3.10.6 on Windows26200. [PyPI1.4.17](https://pypi.org/project/comtypes/1.4.17/) lists release2026-09-21, Windows and Python>=3.9; current project listing and [official release notes](https://github.com/enthought/comtypes/releases/tag/1.4.17) identify1.4.17 as latest. Notes include message-loop API consolidation, GetEvents diagnostics and a structure-packing error fix. No package installed; implementation improvements retained instead. This does not certify every UIA COM binding or native WhatsApp build.
+
+[Microsoft UIA element acquisition](https://learn.microsoft.com/en-us/dotnet/framework/ui-automation/obtaining-ui-automation-elements), displayed2021-09-15 (retrieval metadata updated2026-03-30), advises scoped searches; [ElementNotAvailableException](https://learn.microsoft.com/en-us/dotnet/api/system.windows.automation.elementnotavailableexception?view=windowsdesktop-10.0) documents closed/removed elements. These contracts support fresh observation; they do not prove WhatsApp selectors. Public sources retrieved with Firecrawl. A local PyPI JSON attempt failed DNS; it supplied no release evidence.
+
+No public WhatsApp Desktop release/build census obtained; historical2.2639.100.0 remains dated2026-10-10, not current proof. No WhatsApp API dependency or paid API added. No GPU allocation/model download. Installed requests2.34.2/pytest8.4.2/psutil7.2.2 unchanged. Full COM/GUI/live acceptance and Python patch-version migration remain outside this check.

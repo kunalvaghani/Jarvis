@@ -1,5 +1,10 @@
 # DeerFlow and Jarvis — 2026-10-13–14 IST
 
+<!-- prompt28-audit -->
+**Sandbox/DeerFlow audit — 2026-10-16 IST:** Stronger mount/checkpoint/identity/write/timeout guards and media proof added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,065 passed / 124 skipped / 0 failures**, launcher **ready**. Owned offline math, all seven literal media recipes and nonzero/no-replay/cleanup fixtures passed; format proof levels vary. General research/source-quality, approval/quota/privacy/resource/recovery and platform patch acceptance remain incomplete.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/28-sandbox-deerflow/inventory.md).
+<!-- /prompt28-audit -->
+
 The full ByteDance DeerFlow repository was downloaded locally, including backend,
 frontend, public skills, tests and documentation. The reviewed revision is
 `a5e71751d7a9f8f4a71ca458da3984fc1284d098` (DeerFlow 2, backend `2.2.0-dev`,

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="32" tests="40" time="0.958" timestamp="2026-10-16T19:22:27.001565+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_realtime_audit" name="test_JRV_26_002_failed_checkpoint_never_notifies" time="0.013"><failure message="OSError: fixture disk full">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-304/test_JRV_26_002_failed_checkpo0')
+
+    def test_JRV_26_002_failed_checkpoint_never_notifies(tmp_path):
+        obj=watch(tmp_path)
+        hazard=dict(id='wind:2026-10-16',kind='wind',level='warning',message='fixture',starts='2026-10-16')
+        with patch.object(obj,'_save',side_effect=OSError('fixture disk full')):
+&gt;           assert obj.announce({'name':'Fixture'},[hazard])==[]
+
+tests\test_realtime_audit.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\weather_watch.py:283: in announce
+    self._save()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;MagicMock name='_save' id='1835772919088'&gt;, args = (), kwargs = {}
+effect = OSError('fixture disk full')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               OSError: fixture disk full
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: OSError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_019_damaged_checkpoint_stops" time="0.005"><failure message="AttributeError: 'WeatherWatch' object has no attribute 'storage_failed'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-304/test_JRV_26_019_damaged_checkp0')
+
+    def test_JRV_26_019_damaged_checkpoint_stops(tmp_path):
+        path=tmp_path/'.jarvis-runtime/weather-alerts.json';path.parent.mkdir();path.write_text('{')
+&gt;       assert watch(tmp_path).storage_failed
+E       AttributeError: 'WeatherWatch' object has no attribute 'storage_failed'
+
+tests\test_realtime_audit.py:28: AttributeError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_005_clock_rollback_cannot_be_live" time="0.001"><failure message="assert (False is True)">def test_JRV_26_005_clock_rollback_cannot_be_live():
+        clock=[NOW];http=Mock();http.get.return_value=Response({'current':{'time':'2026-10-16T10:00','temperature_2m':20}})
+        source=Sources(transport=http,clock=lambda:clock[0])
+        assert source.fetch('weather',LOC)['status']=='ok'
+        clock[0]-=3600
+        row=source.fetch('weather',LOC)
+&gt;       assert row['stale'] is True and row.get('status')!='ok'
+E       assert (False is True)
+
+tests\test_realtime_audit.py:37: AssertionError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_006_fahrenheit_not_extreme_heat" time="0.001"><failure message="AssertionError: assert [{'event_time...igured', ...}] == []&#10;  &#10;  Left contains one more item: {'event_time': 1791350000.0, 'fetched_at': 1791350000, 'id': 'weather:heat', 'location_accuracy': 'configured', ...}&#10;  Use -v to get more diff">def test_JRV_26_006_fahrenheit_not_extreme_heat():
+        data={'current':{'time':datetime.fromtimestamp(NOW,timezone.utc).isoformat(),'temperature_2m':95},
+              'current_units':{'temperature_2m':'°F'}}
+&gt;       assert serious(record('weather',data),LOC,NOW)==[]
+E       AssertionError: assert [{'event_time...igured', ...}] == []
+E         
+E         Left contains one more item: {'event_time': 1791350000.0, 'fetched_at': 1791350000, 'id': 'weather:heat', 'location_accuracy': 'configured', ...}
+E         Use -v to get more diff
+
+tests\test_realtime_audit.py:43: AssertionError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_007_midnight_offset" time="0.001"><failure message="ValueError: Invalid isoformat string: '2026-10-15T20:30:00Z'">def test_JRV_26_007_midnight_offset():
+        now=datetime(2026,10,16,0,0,tzinfo=timezone(timedelta(hours=5,minutes=30)))
+&gt;       assert 'today' in ww.when('2026-10-15T20:30:00Z',now)
+
+tests\test_realtime_audit.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+stamp = '2026-10-15T20:30:00Z'
+now = datetime.datetime(2026, 10, 16, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=19800)))
+
+    def when(stamp, now):
+        """'now', 'around 4 PM today', 'tomorrow around 9 AM'."""
+&gt;       moment = datetime.fromisoformat(stamp)
+E       ValueError: Invalid isoformat string: '2026-10-15T20:30:00Z'
+
+jarvis\weather_watch.py:37: ValueError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_009_unavailable_is_not_quiet_weather" time="0.004"><failure message="AssertionError: assert ('No bad weather expected' not in 'No bad weat...h: forecast.'&#10;  &#10;  'No bad weather expected' is contained here:&#10;    No bad weather expected for Fixture in the next 36 hours. I couldn't reach: forecast.&#10;  ? +++++++++++++++++++++++)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-304/test_JRV_26_009_unavailable_is0')
+
+    def test_JRV_26_009_unavailable_is_not_quiet_weather(tmp_path):
+        obj=watch(tmp_path)
+        with patch.object(obj,'check',return_value=({'name':'Fixture'},[],{'forecast':False})):
+            result=obj.summary()
+&gt;           assert 'No bad weather expected' not in result and 'unavailable' in result.lower()
+E           AssertionError: assert ('No bad weather expected' not in 'No bad weat...h: forecast.'
+E             
+E             'No bad weather expected' is contained here:
+E               No bad weather expected for Fixture in the next 36 hours. I couldn't reach: forecast.
+E             ? +++++++++++++++++++++++)
+
+tests\test_realtime_audit.py:55: AssertionError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_010_short_arrays_do_not_crash" time="0.001"><failure message="IndexError: list index out of range">def test_JRV_26_010_short_arrays_do_not_crash():
+&gt;       found=ww.hazards({'daily':{'time':['2026-10-16','2026-10-17'],'precipitation_sum':[0],'uv_index_max':[5]}},now=datetime(2026,10,16))
+
+tests\test_realtime_audit.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+forecast = {'daily': {'precipitation_sum': [0], 'time': ['2026-10-16', '2026-10-17'], 'uv_index_max': [5]}}
+air = None, quakes = None, gdacs = None, eonet = None, flood = None
+location = {}, now = datetime.datetime(2026, 10, 16, 0, 0), hours = 36
+
+    def hazards(forecast, air=None, quakes=None, gdacs=None, eonet=None, flood=None, location=None, now=None, hours=36):
+        """Pure rules over provider JSON -&gt; [{id, kind, level, message, starts}] (most severe first)."""
+        location = location or {}
+        lat, lon = location.get("latitude"), location.get("longitude")
+        found = []
+    
+        def add(kind, level, message, starts, day=None):
+            found.append({"id": kind + ":" + (day or starts[:10]), "kind": kind, "level": level, "message": message,
+                          "starts": starts})
+        hourly = (forecast or {}).get("hourly") or {}
+        times = hourly.get("time") or []
+        now = now or datetime.now()
+        window = [i for i, t in enumerate(times)
+                  if now - timedelta(hours=1) &lt;= datetime.fromisoformat(t) &lt;= now + timedelta(hours=hours)]
+    
+        def series(name):
+            values = hourly.get(name) or []
+            return [(times[i], values[i]) for i in window if i &lt; len(values) and isinstance(values[i], (int, float))]
+        storms = [(t, v) for t, v in series("weather_code") if int(v) in {95, 96, 99}]
+        if storms:
+            worst = max(int(v) for _, v in storms)
+            rain = max((v for t, v in series("precipitation") if t &gt;= storms[0][0]), default=0)
+            gust = max((v for t, v in series("wind_gusts_10m") if t &gt;= storms[0][0]), default=0)
+            add("thunderstorm", "severe" if worst in {96, 99} else "warning",
+                WMO[worst].capitalize() + " expected " + when(storms[0][0], now) +
+                (", with up to " + str(round(rain)) + " mm of rain an hour" if rain &gt;= 2 else "") +
+                (" and gusts near " + str(round(gust)) + " km/h" if gust &gt;= 40 else "") + ".", storms[0][0])
+        bursts = [(t, v) for t, v in series("precipitation") if v &gt;= 10]
+        if bursts and not storms:
+            peak = max(bursts, key=lambda x: x[1])
+            add("heavy_rain_burst", "severe" if peak[1] &gt;= 30 else "warning",
+                "Very heavy rain expected " + when(bursts[0][0], now) + ", up to " + str(round(peak[1])) + " mm in an hour.",
+                bursts[0][0])
+        gusts = [(t, v) for t, v in series("wind_gusts_10m") if v &gt;= 60]
+        if gusts:
+            peak = max(gusts, key=lambda x: x[1])
+            add("wind", "severe" if peak[1] &gt;= 90 else "warning",
+                "Strong winds expected " + when(gusts[0][0], now) + ", gusts up to " + str(round(peak[1])) + " km/h. "
+                "Secure loose things outside.", gusts[0][0])
+        heat = [(t, v) for t, v in series("temperature_2m") if v &gt;= 42]
+        if heat:
+            peak = max(heat, key=lambda x: x[1])
+            add("heat", "severe" if peak[1] &gt;= 45 else "warning",
+                "Heatwave conditions " + when(heat[0][0], now) + ", up to " + str(round(peak[1])) + " °C. "
+                "Drink water and avoid the afternoon sun.", heat[0][0])
+        cold = [(t, v) for t, v in series("temperature_2m") if v &lt;= 4]
+        if cold:
+            low = min(cold, key=lambda x: x[1])
+            add("cold", "severe" if low[1] &lt;= 0 else "warning",
+                "Very cold " + when(cold[0][0], now) + ", down to " + str(round(low[1])) + " °C.", cold[0][0])
+        fog = [(t, v) for t, v in series("visibility") if v &lt; 200]
+        if fog:
+            add("fog", "warning", "Dense fog " + when(fog[0][0], now) + ", visibility under 200 metres. Drive carefully.",
+                fog[0][0])
+        daily = (forecast or {}).get("daily") or {}
+        for i, day in enumerate((daily.get("time") or [])[:2]):
+&gt;           total = (daily.get("precipitation_sum") or [0] * 3)[i] or 0
+E           IndexError: list index out of range
+
+jarvis\weather_watch.py:102: IndexError</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_JRV_26_004_cancel_during_backoff_no_next_request" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'InterruptedError'&gt;">def test_JRV_26_004_cancel_during_backoff_no_next_request():
+        stop=[False];http=Mock();http.get.side_effect=[Response({},status=503),Response({})]
+        source=Sources(transport=http)
+        def wait(_): stop[0]=True
+        with patch('jarvis.realtime_sources.time.sleep',side_effect=wait):
+&gt;           with pytest.raises(InterruptedError):
+E           Failed: DID NOT RAISE &lt;class 'InterruptedError'&gt;
+
+tests\test_realtime_audit.py:68: Failed</failure></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-001]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-002]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-003]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-004]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-005]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-006]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-007]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-008]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-009]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-010]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-011]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-012]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-013]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-014]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-015]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-016]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-017]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-018]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-019]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-020]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-021]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-022]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-023]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-024]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-025]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-026]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-027]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-028]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-029]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-030]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-031]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase><testcase classname="tests.test_realtime_audit" name="test_incomplete_contracts[JRV-26-032]" time="0.001"><skipped type="pytest.skip" message="BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory">D:\Kunals GitHub Repo\Jarvis\app\tests\test_realtime_audit.py:75: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory</skipped></testcase></testsuite></testsuites>

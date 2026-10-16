@@ -1,0 +1,15 @@
+{
+  "before": {
+    "p50_ms": 7.43305,
+    "p95_ms": 8.429,
+    "peak_python_bytes": 238042
+  },
+  "after": {
+    "p50_ms": 6.9249,
+    "p95_ms": 7.8416,
+    "peak_python_bytes": 238042
+  },
+  "equivalent": true,
+  "real_external_actions": 0,
+  "limitation": "Normalization only; initial5 are not cold process starts. No model/GUI/RSS/VRAM latency claim."
+}

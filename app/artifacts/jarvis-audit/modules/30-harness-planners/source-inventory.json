@@ -1,0 +1,45 @@
+{
+  "reviewed_hermes_revision": "cbc569e23cb045b58b067f37cf5514feb44e0828",
+  "sdk_version": "0.1.5rc1",
+  "configured_routes": {
+    "enabled": true,
+    "planner": "qwen3.5:9b",
+    "coder": "qwen3.5:9b",
+    "decision": "qwen3.5:9b",
+    "screen_model": "qwen3.5:9b",
+    "selector": "convaiinnovations/laya",
+    "harness": {
+      "enabled": true,
+      "model": "qwen3.5:9b",
+      "timeout_seconds": 180
+    },
+    "hermes": {
+      "enabled": false,
+      "model": "qwen3.5:9b",
+      "timeout_seconds": 120
+    },
+    "incremental_planning": true,
+    "native_tool_calling": true,
+    "max_task_actions": 20
+  },
+  "guides": 210,
+  "entry_chain": [
+    "BrainClient.request",
+    "BrainClient._request",
+    "HarnessClient/HermesClient/native worker",
+    "caller validators",
+    "ToolRegistry/AgentSession"
+  ],
+  "missing_acceptance_case_ids": [
+    "JRV-30-007",
+    "JRV-30-008",
+    "JRV-30-009",
+    "JRV-30-010",
+    "JRV-30-021",
+    "JRV-30-023",
+    "JRV-30-024",
+    "JRV-30-025",
+    "JRV-30-027",
+    "JRV-30-032"
+  ]
+}

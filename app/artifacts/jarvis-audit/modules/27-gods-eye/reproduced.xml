@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="8" time="1.128" timestamp="2026-10-16T21:04:05.179878+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_010_denial_prevents_lookup" time="0.017"><failure message="AssertionError: Expected 'detect_location' to not have been called. Called 1 times.&#10;Calls: [call(&lt;function GodsEye.here.&lt;locals&gt;.&lt;lambda&gt; at 0x00000130FBD2D3F0&gt;),&#10; call().get('stale')].">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_010_denial_prevent0')
+
+    def test_JRV_27_010_denial_prevents_lookup(tmp_path):
+        obj=eye(tmp_path,{'location_enabled':False});obj.actions.realtime=Mock()
+        assert ge.GodsEye.here(obj) is None
+&gt;       obj.actions.realtime.detect_location.assert_not_called()
+
+tests\test_gods_eye_audit.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock name='mock.detect_location' id='1309894780736'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'detect_location' to not have been called. Called 1 times.
+E           Calls: [call(&lt;function GodsEye.here.&lt;locals&gt;.&lt;lambda&gt; at 0x00000130FBD2D3F0&gt;),
+E            call().get('stale')].
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:880: AssertionError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_011_delayed_positions_not_current" time="0.007"><failure message="assert (1 == 0)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_011_delayed_positi0')
+
+    def test_JRV_27_011_delayed_positions_not_current(tmp_path):
+        obj=eye(tmp_path);obj.api.side_effect=lambda path,*a,**k:{'time':NOW,'states':[state(age=7200)]} if path=='/api/flights' else {}
+        row=obj.poll()
+&gt;       assert row['flights']['count']==0 and obj.alerts()==[]
+E       assert (1 == 0)
+
+tests\test_gods_eye_audit.py:39: AssertionError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_005_empty_is_not_quiet" time="0.080"><failure message="assert 'unavailable' in &quot;god's eye shows nothing unusual around fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. the sound is probably local.&quot;&#10; +  where &quot;god's eye shows nothing unusual around fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. the sound is probably local.&quot; = &lt;built-in method lower of str object at 0x00000130FB9D5ED0&gt;()&#10; +    where &lt;built-in method lower of str object at 0x00000130FB9D5ED0&gt; = &quot;God's Eye shows nothing unusual around Fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. The sound is probably local.&quot;.lower&#10; +      where &quot;God's Eye shows nothing unusual around Fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. The sound is probably local.&quot; = explain('what plane is overhead')&#10; +        where explain = &lt;jarvis.gods_eye.GodsEye object at 0x00000130FBE4A7D0&gt;.explain">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_005_empty_is_not_q0')
+
+    def test_JRV_27_005_empty_is_not_quiet(tmp_path):
+        obj=eye(tmp_path);obj.poll()
+&gt;       assert 'unavailable' in obj.explain('what plane is overhead').lower()
+E       assert 'unavailable' in "god's eye shows nothing unusual around fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. the sound is probably local."
+E        +  where "god's eye shows nothing unusual around fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. the sound is probably local." = &lt;built-in method lower of str object at 0x00000130FB9D5ED0&gt;()
+E        +    where &lt;built-in method lower of str object at 0x00000130FB9D5ED0&gt; = "God's Eye shows nothing unusual around Fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. The sound is probably local.".lower
+E        +      where "God's Eye shows nothing unusual around Fixture (as of 21:04): 0 aircraft within 40 km, none low, no military nearby, no fires or severe weather. The sound is probably local." = explain('what plane is overhead')
+E        +        where explain = &lt;jarvis.gods_eye.GodsEye object at 0x00000130FBE4A7D0&gt;.explain
+
+tests\test_gods_eye_audit.py:44: AssertionError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_018_cancel_before_open" time="0.009"><failure message="AttributeError: 'str' object has no attribute 'get'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_018_cancel_before_0')
+
+    def test_JRV_27_018_cancel_before_open(tmp_path):
+        obj=eye(tmp_path);obj.ensure_server=Mock()
+&gt;       with pytest.raises(InterruptedError):obj.show({'place':'Delhi'},lambda:True)
+
+tests\test_gods_eye_audit.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\gods_eye.py:305: in show
+    spot = self.here() if place == "me" else self.geocode(place)
+jarvis\gods_eye.py:238: in geocode
+    row = max(rows, key=lambda r: float(r.get("importance") or 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+r = 'features'
+
+&gt;   row = max(rows, key=lambda r: float(r.get("importance") or 0))
+E   AttributeError: 'str' object has no attribute 'get'
+
+jarvis\gods_eye.py:238: AttributeError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_019_failed_checkpoint_no_notification" time="0.010"><failure message="AssertionError: assert [('fixture', ...', 'fixture')] == []&#10;  &#10;  Left contains one more item: ('fixture', 'severe', 'fixture')&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_019_failed_checkpo0')
+
+    def test_JRV_27_019_failed_checkpoint_no_notification(tmp_path):
+        obj=eye(tmp_path);obj.alerts=Mock(return_value=[('fixture','severe','fixture')])
+&gt;       with patch.object(obj,'_save_seen',return_value=False,create=True):assert obj.alert()==[]
+E       AssertionError: assert [('fixture', ...', 'fixture')] == []
+E         
+E         Left contains one more item: ('fixture', 'severe', 'fixture')
+E         Use -v to get more diff
+
+tests\test_gods_eye_audit.py:55: AssertionError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_003_reject_untrusted_camera_host" time="0.002"><failure message="AssertionError: assert [{'city': 'On...eg': 56, ...}] == []&#10;  &#10;  Left contains one more item: {'city': 'Ontario 511 camera', 'cityId': 'ontario', 'feedType': 'image', 'fovDeg': 56, ...}&#10;  Use -v to get more diff">def test_JRV_27_003_reject_untrusted_camera_host():
+        http=Mock();http.get.return_value.json.return_value=[{'Id':1,'Latitude':1,'Longitude':1,
+            'Views':[{'Status':'Enabled','Url':'https://private.example/camera'}]}]
+&gt;       assert gc.ontario(http,'fake-key')==[]
+E       AssertionError: assert [{'city': 'On...eg': 56, ...}] == []
+E         
+E         Left contains one more item: {'city': 'Ontario 511 camera', 'cityId': 'ontario', 'feedType': 'image', 'fovDeg': 56, ...}
+E         Use -v to get more diff
+
+tests\test_gods_eye_audit.py:62: AssertionError</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_004_ambiguous_place_requires_choice" time="0.005"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_004_ambiguous_plac0')
+
+    def test_JRV_27_004_ambiguous_place_requires_choice(tmp_path):
+        obj=eye(tmp_path)
+        obj.http.get.return_value.json.return_value=[{'lat':1,'lon':1,'name':'Springfield','importance':.6,'display_name':'Springfield, State A'},
+            {'lat':10,'lon':10,'name':'Springfield','importance':.59,'display_name':'Springfield, State B'}]
+&gt;       with pytest.raises(ValueError,match='ambiguous'):obj.geocode('Springfield')
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_gods_eye_audit.py:69: Failed</failure></testcase><testcase classname="tests.test_gods_eye_audit" name="test_JRV_27_029_invalid_configuration" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{0ae22a10-1f74-4080-9015-6f9ac7272410}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_27_029_invalid_config0')
+
+    def test_JRV_27_029_invalid_configuration(tmp_path):
+        for values in ({'radius_km':float('nan')},{'poll_seconds':-1},{'location_enabled':'yes'}):
+&gt;           with pytest.raises(ValueError):ge.GodsEye(SimpleNamespace(base=tmp_path),values)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_gods_eye_audit.py:74: Failed</failure></testcase></testsuite></testsuites>

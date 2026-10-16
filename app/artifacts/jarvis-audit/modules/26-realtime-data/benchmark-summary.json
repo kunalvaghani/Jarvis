@@ -1,0 +1,15 @@
+{
+  "before": {
+    "p50_ms": 1.08445,
+    "p95_ms": 1.1981,
+    "peak_python_bytes": 208744
+  },
+  "after": {
+    "p50_ms": 0.21575,
+    "p95_ms": 0.2208,
+    "peak_python_bytes": 2407
+  },
+  "equivalent": true,
+  "real_external_actions": 0,
+  "scope": "5000-key projection, identical first40 fields;20warm+5initial, not cold process/HTTP/model/RSS/VRAM"
+}

@@ -1,0 +1,52 @@
+{
+  "checked_date": "2026-10-16 IST",
+  "scope": "Firecrawl public official release/docs retrieval only; no live camera, aircraft, geocode, account or personal payload.",
+  "sources": [
+    {
+      "lookup": "p27up0",
+      "url": "https://openskynetwork.github.io/opensky-api/rest.html",
+      "title": "OpenSky REST API — The OpenSky Network API 1.4.0 documentation",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-15T16:17:08.272Z"
+    },
+    {
+      "lookup": "p27up1",
+      "url": "https://github.com/bilawalsidhu/gods-eye-view/releases",
+      "title": "Releases · bilawalsidhu/gods-eye-view",
+      "status": 200,
+      "cache_state": "miss"
+    },
+    {
+      "lookup": "p27up2",
+      "url": "https://operations.osmfoundation.org/policies/nominatim/",
+      "title": "Nominatim Usage Policy (aka Geocoding Policy)",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T14:30:03.327Z"
+    },
+    {
+      "lookup": "p27release2",
+      "url": "https://github.com/bilawalsidhu/gods-eye-view/releases/tag/v0.2.1",
+      "title": "Release v0.2.1 — God's Eye View through Your Agent (with security fixes and other features) · bilawalsidhu/gods-eye-view · GitHub",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T09:30:13.897Z"
+    },
+    {
+      "lookup": "p27pkg0",
+      "url": "https://github.com/vitejs/vite/releases/tag/v8.3.4",
+      "title": "Release v8.3.4 · vitejs/vite · GitHub",
+      "status": 200,
+      "cache_state": "hit",
+      "cached_at": "2026-10-16T01:04:54.069Z"
+    },
+    {
+      "lookup": "p27pkg1",
+      "url": "https://github.com/CesiumGS/cesium/releases/tag/1.146",
+      "title": "Release CesiumJS 1.146 · CesiumGS/cesium · GitHub",
+      "status": 200,
+      "cache_state": "miss"
+    }
+  ]
+}

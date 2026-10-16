@@ -1,0 +1,109 @@
+[
+  {
+    "url": "https://api.github.com/repos/morluto/rea/releases/latest",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-15T19:38:40.390Z",
+    "tag": "rea-agents-6.5.0",
+    "published_at": "2026-10-14T12:32:45Z",
+    "revision": "3b79af28e80785afce9f5998d8f03289402a1847",
+    "release_url": "https://github.com/morluto/rea/releases/tag/rea-agents-6.5.0"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/morluto/rea/rea-agents-6.5.0/scripts/rea.mjs",
+    "status": 200,
+    "cacheState": "miss"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/morluto/rea/rea-agents-6.5.0/CHANGELOG.md",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-14T21:04:36.213Z"
+  },
+  {
+    "url": "https://nodejs.org/dist/index.json",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-16T15:50:04.331Z",
+    "latest": {
+      "version": "v26.12.0",
+      "date": "2026-10-14",
+      "files": [
+        "aix-ppc64",
+        "headers",
+        "linux-arm64",
+        "linux-ppc64le",
+        "linux-s390x",
+        "linux-x64",
+        "linux-x64-musl",
+        "osx-arm64-tar",
+        "osx-x64-pkg",
+        "osx-x64-tar",
+        "src",
+        "win-arm64-7z",
+        "win-arm64-zip",
+        "win-x64-7z",
+        "win-x64-exe",
+        "win-x64-msi",
+        "win-x64-zip"
+      ],
+      "npm": "11.20.0",
+      "v8": "14.6.202.34",
+      "uv": "1.52.1",
+      "zlib": "1.3.2.1-motley",
+      "openssl": "3.5.9",
+      "modules": "147",
+      "lts": false,
+      "security": false
+    },
+    "latest24": {
+      "version": "v24.22.0",
+      "date": "2026-10-14",
+      "files": [
+        "aix-ppc64",
+        "headers",
+        "linux-arm64",
+        "linux-ppc64le",
+        "linux-s390x",
+        "linux-x64",
+        "linux-x64-musl",
+        "osx-arm64-tar",
+        "osx-x64-pkg",
+        "osx-x64-tar",
+        "src",
+        "win-arm64-7z",
+        "win-arm64-zip",
+        "win-x64-7z",
+        "win-x64-exe",
+        "win-x64-msi",
+        "win-x64-zip"
+      ],
+      "npm": "11.19.1",
+      "v8": "13.6.233.17",
+      "uv": "1.52.1",
+      "zlib": "1.3.2.1-motley",
+      "openssl": "3.5.8",
+      "modules": "137",
+      "lts": "Krypton",
+      "security": false
+    }
+  },
+  {
+    "url": "https://nodejs.org/en/blog/release/v24.14.0",
+    "status": 200,
+    "cacheState": "miss"
+  },
+  {
+    "url": "https://registry.npmjs.org/rea-agents/latest",
+    "status": 200,
+    "version": "6.5.0",
+    "engines": {
+      "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+    },
+    "bin": {
+      "rea": "scripts/rea.mjs",
+      "rea-agents": "scripts/rea.mjs"
+    },
+    "license": "MIT"
+  }
+]

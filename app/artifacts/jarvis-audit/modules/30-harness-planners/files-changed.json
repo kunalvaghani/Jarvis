@@ -1,0 +1,74 @@
+[
+  {
+    "path": "docs/deepseek-harness.md",
+    "sha256": "c3cac58d6c23feb9b766d5e8de4ebb55c25c108e75e59485e34e93cf578f58d2"
+  },
+  {
+    "path": "docs/hermes-agent.md",
+    "sha256": "923200e7397a6fac31e32daf11dd2bbbc3a2807dd3879b08156d0ff366a49cae"
+  },
+  {
+    "path": "docs/hermes-skills-and-comparison.md",
+    "sha256": "efd22969983ad2e821119b603ee1c1222b5c43ea541ca36dceb9ff887143ae39"
+  },
+  {
+    "path": "jarvis/brain.py",
+    "sha256": "d6af04f4b8d83e8d2b661524c58f5388eab6d65a8e51a2f6133a7f2595697c0d"
+  },
+  {
+    "path": "jarvis/brain_worker.py",
+    "sha256": "a16506e1609eac729e8d820cccaf4b189b10b7c12a3d4798c3c866ff57f390a9"
+  },
+  {
+    "path": "jarvis/harness.py",
+    "sha256": "d5db908ca2833249b610a9d7205ac6030152e2781a9b149b3c534eea97cccf48"
+  },
+  {
+    "path": "jarvis/harness_worker.py",
+    "sha256": "8619698f7fc6b87761c416b6108b404144446d25404efad58acfd94e5e29112c"
+  },
+  {
+    "path": "jarvis/hermes.py",
+    "sha256": "a4ab05b3636fc6237492ec2f982dd238aff6debf00de4e7e63651406caab0bc1"
+  },
+  {
+    "path": "jarvis/model_selection.py",
+    "sha256": "345e1a715912a124e4825e9b238493268539b3c5af9e91add977ba0d3a1817fa"
+  },
+  {
+    "path": "README.md",
+    "sha256": "d0f218898b35e03b2047098ee1d52a13f124c76f97411d5f0b9a33f34087ceae"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "d80bd1110c434f5a52278be3d0e97f146ece538f119e1443945713be91fa6319"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "b7f131eb16b602c7cbf376ce67e987d09eeda7f01ac7e711ac43c5f986bf6ff2"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "0d796d251edd4e7502e25f02231fa0e91d30d115d9f5afdc9035e08ed10311f2"
+  },
+  {
+    "path": "jarvis/planner_settings.py",
+    "sha256": "dae5aa01e902bce48bb30614c9f99b6588076275fd094a61d7144f7750441696"
+  },
+  {
+    "path": "tests/test_harness_planners_audit.py",
+    "sha256": "d77ca90b7e21f8b79d8f3471be35b86c7a9d4d12e9ecef0cb24ce0664a634891"
+  },
+  {
+    "path": "scripts/verification/verify_harness_planners_audit.py",
+    "sha256": "b69caadd2f68ef6fbff6b4b8e3d4c82be380eb7d619b259e39e0a26b9a100756"
+  },
+  {
+    "path": "scripts/verification/report_harness_planners_audit.py",
+    "sha256": "50cee1273b9f9a3b050d762753a14efe644c5dc8b3a9001b4a954cef2735e89d"
+  },
+  {
+    "path": "scripts/verification/verify_harness_planners_artifacts.py",
+    "sha256": "391589488b4e810987ad87885dc464c860d28c0967473cb490e07e8e09bb484c"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "PASS": 17,
+    "FAIL": 0,
+    "SKIPPED": 0,
+    "seconds": 1.557
+  },
+  "focused": {
+    "PASS": 79,
+    "FAIL": 0,
+    "SKIPPED": 18,
+    "seconds": 3.24
+  },
+  "full": {
+    "PASS": 2939,
+    "FAIL": 0,
+    "SKIPPED": 73,
+    "seconds": 529.519
+  },
+  "catalog": {
+    "BLOCKED": 18,
+    "PASS": 14
+  },
+  "readiness": "ready"
+}

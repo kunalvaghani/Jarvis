@@ -1,5 +1,9 @@
-# Scope
+# Changes and keep decision
 
-No runtime change retained for this module in this bounded pass; independent baseline/upgrade selection pending.
+1. coding_files.py streams bounded action journals; malformed, unsupported or unconfirmed mutation state halts safely. Previously full JSON lists were allocated and malformed state could raise an ordinary repairable exception or be ignored.
+2. codex_workload.py refuses prior promotion attempts, binds actual run payloads to combined test hashes, freezes source bytes before destination actions and uses those exact bytes. Preserves per-file backups/readback and stale-destination gates.
+3. Dedicated audit tests and explicit reviewed BLOCKED accounting; reproducible benchmark/report/hash verification scripts. README, native guide and system-map updated; no dependency/configuration/UI change. Existing console image and dated upstream artwork remain unchanged.
 
-Existing full regression evidence is separate from completing this module contract.
+Journal inspection warm p50/p95 **6.5127/6.6623 → 6.0438/6.1355 ms**, peak traced allocation **677034 → 143314 bytes**. Same1,000 paired journal rows,25 samples/version (five initial calls,20 warm); same imported process/cache. Complete and uncertain outcomes match. Cold label means first calls, not fresh-process cold start. No inference/audio/GPU/end-to-end latency claim.
+
+Keep: lower measured allocation/latency plus stricter fail-closed behavior. Frozen promotion payloads add up to160×80KB (12.8MB) plus Python/decoded-text overhead, a deliberate bounded tradeoff on32GB RAM; no claim of universally faster builds. No dependency upgrade/install, live model comparison or energy measurement. Baseline {'PASS': 74, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 132.764}; final {'PASS': 30, 'FAIL': 0, 'SKIPPED': 5, 'seconds': 13.064}; full {'PASS': 2827, 'FAIL': 0, 'SKIPPED': 41, 'seconds': 477.819}. [Exact files/hashes](files-changed.json), [before/after pairs](source-hashes.json), [scoped diff](source.patch).

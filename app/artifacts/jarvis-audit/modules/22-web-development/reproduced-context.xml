@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.527" timestamp="2026-10-16T16:03:33.536669+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_web_development_audit" name="test_browser_context_blocks_service_workers" time="10.013"><failure message="KeyError: 'service_workers'">tests\test_web_development_audit.py:165: in test_browser_context_blocks_service_workers
+    assert len(calls)==3 and all(c['service_workers']=='block' and c['permissions']==[] for c in calls)
+tests\test_web_development_audit.py:165: in &lt;genexpr&gt;
+    assert len(calls)==3 and all(c['service_workers']=='block' and c['permissions']==[] for c in calls)
+E   KeyError: 'service_workers'</failure></testcase></testsuite></testsuites>

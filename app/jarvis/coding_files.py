@@ -80,9 +80,22 @@ class FileSession:
     def uncertain(self):
         path=self.run/'file-events.jsonl'
         if not path.exists():return False
-        rows=[json.loads(line) for line in path.read_text().splitlines()]
-        attempted={row['signature'] for row in rows if row['stage']=='attempted'}
-        applied={row['signature'] for row in rows if row['stage']=='applied'}
+        attempted=set();applied=set()
+        try:
+            if path.stat().st_size>8*2**20:raise ValueError('Journal exceeds limit.')
+            with path.open(encoding='utf-8') as handle:
+                for index,line in enumerate(handle):
+                    if index>=4096 or len(line)>262144:raise ValueError('Journal exceeds limit.')
+                    row=json.loads(line)
+                    if not isinstance(row,dict):raise ValueError('Malformed journal row.')
+                    stage=row.get('stage')
+                    if stage in {'attempted','applied'}:
+                        sig=row.get('signature')
+                        if not isinstance(sig,str) or not sig:raise ValueError('Missing action signature.')
+                        (attempted if stage=='attempted' else applied).add(sig)
+                    elif stage!='rejected':raise ValueError('Unknown journal stage.')
+        except (OSError,ValueError,UnicodeError,RecursionError) as exc:
+            raise UncertainCoding('Save journal is damaged or exceeds limits; inspect fresh state before continuing.') from exc
         return bool(attempted-applied)
 
     def protect(self, name):

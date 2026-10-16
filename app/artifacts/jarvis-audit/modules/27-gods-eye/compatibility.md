@@ -1,3 +1,11 @@
-# Compatibility
+# Official upstream review — 2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+Bundled God’s Eye package is 0.2.1, commit 591f299d11f38a612629a274463196d57ae3862e dated 2026-10-10, with a local update receipt dated 2026-10-11. [Official v0.2.1 release](https://github.com/bilawalsidhu/gods-eye-view/releases/tag/v0.2.1), published 2026-10-03, documents origin/Host checks, cost-bearing proxy throttles and security hardening. It matches the package release series, but main has many commits since the tag; neither latest-main parity nor all security fixes is certified. No source swap, npm install or application update ran.
+
+Node v24.14.0 satisfies the bundled engine range. Installed Cesium 1.138.0 and Vite 6.4.3 are retained. [Cesium 1.146](https://github.com/CesiumGS/cesium/releases/tag/1.146), dated 2026-10-01, adds package organization changes; [Vite 8.3.4](https://github.com/vitejs/vite/releases/tag/v8.3.4), dated 2026-10-08, is newer than the bundled Vite major. No compatibility/security/build validation of those upgrades was executed, and no newer-version-equals-safe claim is made. Installed Python requests 2.34.2 remains unchanged. Dependency migration and full frontend production acceptance are open work.
+
+[OpenSky REST/state-vector contract](https://openskynetwork.github.io/opensky-api/rest.html) distinguishes position update and last contact Unix timestamps; the integration now uses actual position age rather than fetch time alone. The 120-second guard is a local conservative policy, not a provider SLA or live latency measurement. ADS-B coverage, receiver gaps and public feed outages do not establish absence of aircraft or cause of a sound.
+
+[Nominatim usage policy](https://operations.osmfoundation.org/policies/nominatim/), checked today, requires at most one request per second, application identification, attribution and caching. The existing independent God's Eye geocoder lacks a complete shared cadence/cache implementation; ambiguity repair does not certify full policy compliance. Do not run bulk geocoding. No live geocode query was made in this audit.
+
+Firecrawl retrieved public official docs/release metadata only; upstream-checks.json records URLs and cache provenance. Camera entries retain agency labels and license text, but this is not legal permission or live coverage validation for every bundled camera. No key/account setup, network camera access or private surveillance bypass occurred.

@@ -39,9 +39,9 @@ class MatchingTests(unittest.TestCase):
         self.assertEqual(choose_youtube("nadan parinde slowed", rows)["id"], "bbbbbbbbbbb")
         self.assertIsNone(choose_youtube("x", []))
 
-    def test_choose_youtube_falls_back_to_top_relevance(self):
+    def test_choose_youtube_refuses_unrelated_top_relevance(self):
         rows = [row("aaaaaaaaaaa", "Something else"), row("bbbbbbbbbbb", "Another")]
-        self.assertEqual(choose_youtube("obscure words", rows)["id"], "aaaaaaaaaaa")
+        self.assertIsNone(choose_youtube("obscure words", rows))
 
 
 class SearchTests(unittest.TestCase):

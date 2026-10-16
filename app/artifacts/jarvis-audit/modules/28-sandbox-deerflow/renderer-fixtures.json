@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-16 IST",
+  "image": "sha256:4e3f9488164e389e24bb969c6eccb99b59d81ebd32ceffa0aea038f127832bf8",
+  "scope": "Sequential owned offline synthetic jobs; no image pull, account/API, shared-engine restart or GPU. Format proof levels are recorded, not general content quality.",
+  "rows": [
+    {
+      "kind": "poster",
+      "status": "PASS",
+      "seconds": 2.7337234999995417,
+      "result": {
+        "recipe": "poster",
+        "job_id": "42ab8e497f81406f992ac536f87d977e",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\42ab8e497f81406f992ac536f87d977e",
+        "artifacts": [
+          {
+            "path": "outputs/poster.png",
+            "bytes": 12816
+          }
+        ],
+        "verification": {
+          "path": "outputs/poster.png",
+          "bytes": 12816,
+          "format": "PNG",
+          "dimensions": [
+            1280,
+            720
+          ],
+          "verification": "Pillow structure verification"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    },
+    {
+      "kind": "pdf",
+      "status": "PASS",
+      "seconds": 2.4715470999999525,
+      "result": {
+        "recipe": "pdf",
+        "job_id": "d7f92c562302425898d57ef806188c44",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\d7f92c562302425898d57ef806188c44",
+        "artifacts": [
+          {
+            "path": "outputs/report.pdf",
+            "bytes": 1549
+          }
+        ],
+        "verification": {
+          "path": "outputs/report.pdf",
+          "bytes": 1549,
+          "format": "PDF",
+          "verification": "header/EOF only; no page rendering or semantic proof"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    },
+    {
+      "kind": "slides",
+      "status": "PASS",
+      "seconds": 2.8105902999996033,
+      "result": {
+        "recipe": "slides",
+        "job_id": "6350b8807fda493ca077e707f0c8cc7a",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\6350b8807fda493ca077e707f0c8cc7a",
+        "artifacts": [
+          {
+            "path": "outputs/slides.pptx",
+            "bytes": 28275
+          }
+        ],
+        "verification": {
+          "path": "outputs/slides.pptx",
+          "bytes": 28275,
+          "format": "PPTX",
+          "verification": "bounded ZIP CRC and required package members; no visual/layout proof"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    },
+    {
+      "kind": "video",
+      "status": "PASS",
+      "seconds": 3.287285000000338,
+      "result": {
+        "recipe": "video",
+        "job_id": "b2a91c92d609437a9433fe16abee3861",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\b2a91c92d609437a9433fe16abee3861",
+        "artifacts": [
+          {
+            "path": "outputs/poster.png",
+            "bytes": 12816
+          },
+          {
+            "path": "outputs/video.mp4",
+            "bytes": 7283
+          }
+        ],
+        "verification": {
+          "path": "outputs/video.mp4",
+          "bytes": 7283,
+          "format": "MP4",
+          "verification": "ftyp envelope only; no codec/duration/frame decoding proof"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    },
+    {
+      "kind": "music",
+      "status": "PASS",
+      "seconds": 2.44033490000038,
+      "result": {
+        "recipe": "music",
+        "job_id": "80c9279b920d452eb958e1c918347159",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\80c9279b920d452eb958e1c918347159",
+        "artifacts": [
+          {
+            "path": "outputs/melody.wav",
+            "bytes": 48044
+          }
+        ],
+        "verification": {
+          "path": "outputs/melody.wav",
+          "bytes": 48044,
+          "format": "WAV",
+          "frames": 24000,
+          "sample_rate": 24000,
+          "verification": "wave PCM readback"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    },
+    {
+      "kind": "narration",
+      "status": "PASS",
+      "seconds": 9.946195700000317,
+      "result": {
+        "recipe": "narration",
+        "job_id": "d101eee3089a4d2089ce648d48cbe61b",
+        "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\d101eee3089a4d2089ce648d48cbe61b",
+        "artifacts": [
+          {
+            "path": "outputs/narration.wav",
+            "bytes": 139308
+          }
+        ],
+        "verification": {
+          "path": "outputs/narration.wav",
+          "bytes": 139308,
+          "format": "WAV",
+          "frames": 69632,
+          "sample_rate": 24000,
+          "verification": "wave PCM readback"
+        },
+        "provider": "Offline local libraries; no API key or account"
+      },
+      "cleaned": true
+    }
+  ]
+}

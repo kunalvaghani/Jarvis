@@ -1,5 +1,18 @@
-# Status
+# Failure and repair history
 
-{'NOT RUN': 32}
+Baseline: 30 passed. Initial restricted-token execution hit Windows atomic-replace permission failures, preserved in reproduction-restricted-environment.xml; these are not all product failures. Re-running with approved temporary fixture permissions reproduced eight failing assertions. They cover pending-checkpoint continuation, write-budget omission, timeout cleanup, unbounded checkpoint load, linked mount ancestors, mutable image identity, nonexclusive writes and accepting a filename as media evidence.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+First repair run: 36 passed / 2 failed. The media fixture’s mocked __exit__ swallowed exceptions; return_value=False makes its rejection observable. The cleanup test expected a mutable name, updated to assert the inspected immutable ID. Next subset: 38 passed. Expanded suite: 81 passed / 1 failed / 12 skips because a fixture base directory was absent; helper now creates it. Final focused: 84 passed / 12 explicit blockers. Worker non-object JSON handling and falsy Docker-config validation were additionally repaired with regressions.
+
+- **JRV-28-005 BLOCKED:** Offline confinement is tested, but untrusted-repository installer provenance and a separate explicit approval event are not enforced by a dedicated sandbox installer gate.
+- **JRV-28-008 BLOCKED:** Wrong PNG structure and missing optional runtime are refused; all seven installed literal recipes were exercised. Uniform per-renderer missing-module/font/codec/voice readiness probes and precise unavailable-capability diagnostics are not implemented.
+- **JRV-28-009 BLOCKED:** Per-container CPU limits are configured and RAM/PID limits inspected. No cross-process admission quota for multiple DeerFlow research/render jobs; each job still requests 2 CPUs/2 GiB independently.
+- **JRV-28-010 BLOCKED:** Failed/unobserved sources cannot authorize a matching receipt. HTTP-200 paywalls, teaser text and incomplete extraction lack a comprehensive paywall/content-availability classifier.
+- **JRV-28-012 BLOCKED:** Unknown/failed/mismatched source-call citations are rejected by existing tests. Resolved citation IDs do not verify claim entailment, source quality or factual correctness.
+- **JRV-28-015 BLOCKED:** Non-object worker JSON now returns a controlled protocol error, and checkpoint/media validation is stronger. A complete typed schema for result/receipt/source/artifact/tool data is absent.
+- **JRV-28-021 BLOCKED:** No host credential env or project mount is offered to the tested container, and public research omits the project field. No full fake-secret/cloud/Groq/telemetry/cache oracle; commands/diagnostics and selected input copies may contain private content locally.
+- **JRV-28-023 BLOCKED:** Cancellation is deterministic, but there is no complete semantic negation oracle for natural-language research/sandbox goals. A model’s interpretation of “do not run X” is not a permission guarantee.
+- **JRV-28-025 BLOCKED:** Per-container limits and bounded filesystem fixtures pass; no full host RAM-pressure/GPU-allocation failure versus responsive core-command test. No GPU workload ran.
+- **JRV-28-027 BLOCKED:** A/B measures 20 warm and five initial inventory iterations with tracemalloc. Not five cold processes/full harness/container jobs with RSS/VRAM, TTFT/audio or general research/render latency.
+- **JRV-28-030 BLOCKED:** Owned worker cancellation and real nonzero-container failure are covered. Full daemon/worker disconnect/crash recovery with task provenance, durable cleanup retry and cross-process leases remains incomplete.
+- **JRV-28-032 BLOCKED:** Job IDs, state, image/container identity and output hashes exist. Raw command/diagnostic/error files and full model/research traces lack a complete private-data redaction/correlation/readback oracle.

@@ -1,7 +1,35 @@
-# PROMPT 23 — Gmail API read/draft/send/labels/expiry and approvals
+# Prompt23 Gmail audit — 2026-10-16 IST
 
-PARTIAL. Sources: ['jarvis/gmail_api.py', 'jarvis/gmail_writes.py', 'docs/gmail-api.md']
+**24 catalog PASS /8 BLOCKED /0 FAIL /0 SKIPPED /0 NOT RUN.** [32 exact IDs](tests.jsonl). Baseline {'PASS': 66, 'FAIL': 0, 'SKIPPED': 0, 'seconds': 10.733}; combined focused {'PASS': 68, 'FAIL': 0, 'SKIPPED': 8, 'seconds': 4.4350000000000005}; full tests-directory {'PASS': 2900, 'FAIL': 0, 'SKIPPED': 56, 'seconds': 550.263}. Main65 PASS/8 skips plus separately executed3 PASS, aggregated without changing original suite outcomes. [Commands](commands.txt), [full XML](full-regression.xml), [all skips](full-regression-skip-reasons.json).
 
-Missing inferred candidates: []
+Owned in-memory Gmail mailboxes and fake OAuth/HTTP, isolated DPAPI-token placeholders, actual durable journal locks/checkpoints, an owned child exiting23 after its write-intent checkpoint, five independent fake-mailbox writes ×20 rounds, and existing headless Gmail-like DOM/document fixtures. No live mailbox/profile read, real draft/send/Trash/label/delete, token decryption, consent/refresh request, credential setup, account verification, service restart, install or model/GPU trial. The Chrome DOM fixture intercepts mail.google.com with authored local HTML; it is not live Gmail. The independently executed supplement adds exact-recipient drafts, insufficient-scope refusal and inert hidden HTML; it is outside the full tests-directory command and included in changed-file hashes.
 
-[Whole inventory](../../inventory.md)
+| Claim | Real source / entry point | Executed proof / boundary |
+| --- | --- | --- |
+| Discovery / routing | toolkits optional catalogue→gmail_api.execute; Brain→gmail_workflows | Actual source-bound configured() gate; exact commands use API before desktop planning; no SMTP/Chrome fallback change |
+| OAuth / scopes | connect_gmail_api manual flow, credentials / API | Existing readonly+compose+modify combined grant, no full mail.google.com scope; fake insufficient scope blocks refresh; fake refresh timeout20; one account per base, not per-operation downscoping |
+| Account / transport | DPAPI per Windows user; API session Authorization, users/me, trust_envFalse, redirects disabled | Injected isolated sessions only; no token/private file read. No live identity binding; missing dependencies produce local Connect action |
+| Search / summaries | run list→message_summary exact IDs and selected metadata | Mock unread/contact filtering and latest3 sender/subject/date grounding; GET-only, raced unread flags; no semantic body-summary quality claim |
+| Pagination / rate limits | bounded list limits10 drafts/25 mail; next_page_available flag; API.call deadlines/2MB | No follow-page-token interface or exhaustive mailbox scan. HTTP429/timeout pauses without automatic replay; no new read retry/backoff cache |
+| Read / untrusted mail | full MIME→bounded walk / MailText; content_is_untrusted | Named file attachments skipped; external ordinary text part supported. Script/style inert; hidden text can remain untrusted, not a sanitizer or universal prompt-injection oracle |
+| Draft/send approvals | run→approved callback→before_write→single write→readback | Explicit False refuses; field changes during callback require new review; sent status/subject readback, exact recipients; no inferred name-to-address guesses |
+| Draft freshness | pre-observe hash; fresh_draft after approval; cancellation check | Changed send/delete/update refused before write; direct send field mutation denied. Google offers no transactional compare-and-set; residual final-read/write race remains |
+| Durable journal | execute guard→begin/accepted/complete; TaskState checkpoints | Pending survives child crash/new caller; malformed/type/oversize state fails closed; lock prevents concurrent same request. Successful-event dedupe and account identity binding remain absent |
+| Attachments / FileBuddy | file_drop.send_email approval→draft_with_attachments guard | FileBuddy retains5-file drop admission; helper cap25, local raw budget24MiB, stat then bounded read; stable per-part hashes avoid random-MIME-boundary retry bypass; fake denial/success/lost-readback proof |
+| Attachment upload limit | helper media upload path and metadata readback | Response now closes; only draft ID/subject verified, not complete uploaded file/body content. No new upload-size/provider-cap guarantee or hardened filesystem sandbox |
+| Observability | hashed request file, operation/target/actual IDs, categorical transport diagnostics | No subject/body in journals; existing local transcripts may contain requested mail text. Not signed consent or power-loss/fsync proof |
+
+- **JRV-23-010 BLOCKED:** One OAuth-selected account per base; no explicit multi-account identity broker or account-bound approval/journal. Separate fake clients are not complete account-switch isolation proof.
+- **JRV-23-012 BLOCKED:** File attachments stay remote on reads, and attachment draft approval/journaling now have fixtures; a complete attachment secret-to-model oracle and attachment/body upload readback are absent.
+- **JRV-23-018 BLOCKED:** Before-write cancellation and Stop during fresh observation are covered; complete TaskState cancellation semantics during readback are unproved.
+- **JRV-23-021 BLOCKED:** Local interpreter context is bounded; no complete fake-cloud/private-context/log-redaction oracle across all mail and attachment flows.
+- **JRV-23-025 BLOCKED:** No complete Gmail RAM/GPU-pressure admission and core-command responsiveness proof. Ordinary adapter operations use no GPU; composition does.
+- **JRV-23-026 BLOCKED:** Uncertain outcomes refuse replay; successfully completed identical events have no durable event-ID deduplication contract. A new explicit approved request can repeat identical mail.
+- **JRV-23-027 BLOCKED:** Draft-update CPU A/B is measured; complete OAuth/workflow cold-start/RSS/VRAM benchmark absent.
+- **JRV-23-032 BLOCKED:** Journals omit body/subject and transport errors are categorical; complete private-data redaction and cross-flow correlation remain unproved.
+
+Actual checked-out system-map and linked Gmail/native/file-buddy documentation were read as dated claims, then checked against registrations, code, scope declarations and existing tests. Retained inherited dirty branch **audit/12-tool-registry**, HEAD **9bf5528e6d490fc3bbe92d0c62bcffae6c0946b6**; a fresh clean checkout would omit user/module21–22 work. No reset/commit. Run order: source/approval/recovery trace→baseline→reproduction→small guards→official upstream→equivalent benchmark→neighbors/faults→frozen full/readiness→catalog/docs. [Environment](environment.json), [changes](changes.md), [compatibility](compatibility.md), [rollback](rollback.md).
+
+Same HTML-draft update CPU warm p50/p95 **10.0738/10.3053 → 8.4738/8.5884 ms**, traced peak **141482 → 123313 bytes**;50 calls, byte-identical MIME and result, one fake PUT/sample, zero real mailbox writes. Initial5 calls are not fresh-process cold starts. OAuth/network/browser/RSS/VRAM excluded. Reusing parsed draft info avoids a second decode; the new freshness guard adds one real GET after approval, so remote end-to-end latency may increase. [Raw samples](benchmarks.csv), [scope](benchmark-summary.json).
+
+Adapter changes intentionally invalidate the existing source-bound Gmail verification marker. It was not rewritten, credentials were not read, and no --verify-existing or OAuth setup ran. Review these diffs before separately authorizing the guide's local verification step. Historical live2026-10-09/10 results retain their dates; this audit provides no new live Gmail/voice acceptance. Existing artwork/screenshots preserved; no UI layout changed or new live-account screenshot taken.

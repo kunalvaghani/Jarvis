@@ -1,0 +1,58 @@
+[
+  {
+    "path": "docs/media-player.md",
+    "sha256": "b595e62028a1c4e6b762c25348d7da8cf419271729f4d0dbfc7838a23c0a6db2"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "c36d2417b1bae74a06e8cc989b3c6292c12a2259ddcbf4034971fd3e38b98a6d"
+  },
+  {
+    "path": "jarvis/media_player.py",
+    "sha256": "fa9e09628f98eb40bfaefde1b7360df2fb06001ba5db017a957227e367abccf9"
+  },
+  {
+    "path": "jarvis/spotify.py",
+    "sha256": "b311185f59767076483d0d648e6959b7662d7b687dca3a35b7158ef2fbf80ac2"
+  },
+  {
+    "path": "README.md",
+    "sha256": "c91f3abe2014775f65ef6272145c8140a55c30d0b20033304770e92caf95083e"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "f2b1ea9d4e92a7774eb24079a5ed3641b290e1f5883fa49481fba0350ff66b5f"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "bd4592747c40df762822c2922707bac0f74aed22249f0196d903ea5589692762"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "f3e726ca4dc6fa5c0c68d868f82c01e3b3fa0757dbd905a7a4eea5f3f8493dbc"
+  },
+  {
+    "path": "tests/test_island_desk.py",
+    "sha256": "1b3a6a8d4500df0d42e207a0087e9f50d2144ba5555fa2d0905d984f0e78713c"
+  },
+  {
+    "path": "tests/test_media_player.py",
+    "sha256": "5dbd20edb97e6de2223f4618a240cfb89156743de44e904531a3c5bce8affdf7"
+  },
+  {
+    "path": "tests/test_media_audit.py",
+    "sha256": "8c258412852dbf6029659dd4b5b5fbf77209381ef69a52103a137ad4a60df6e0"
+  },
+  {
+    "path": "scripts/verification/verify_media_audit.py",
+    "sha256": "925daa85648b6fa30fa3ceee46698969db95a472cd1322e1c868afffad9c3d71"
+  },
+  {
+    "path": "scripts/verification/report_media_audit.py",
+    "sha256": "9bc4c2f2f8e3c2e70f4d913b1413601984dd20849a2fc76546d82d6f0e61dadd"
+  },
+  {
+    "path": "scripts/verification/verify_media_artifacts.py",
+    "sha256": "f7d71329fa5fd44b30934131a552aaced0787ae4e4ee6c661cbeacdc8e697578"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "path": "docs/deerflow-sandbox.md",
+    "sha256": "8fded21801bfe36e41588446c450464c9029acf30572200e6653a9d9e7e82aa2"
+  },
+  {
+    "path": "docs/deerflow.md",
+    "sha256": "63c44d2d96acc1ef33845123d2ce04716ba22f81954cbec3bc21bfe410e7262f"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "5d8ce54ddc8ea2c190ffb62affad76dc903a3afa5fb0d037a285405cd60506b5"
+  },
+  {
+    "path": "jarvis/deerflow.py",
+    "sha256": "750faa8e334fabfa1d2e66053b579f827152cfd745e74c74c0b429aae412f6d0"
+  },
+  {
+    "path": "jarvis/deerflow_media.py",
+    "sha256": "8373cecdf3e7b8cacbb74b366e60db7bdf7047a4fe8ee13839e85dc54d0ba134"
+  },
+  {
+    "path": "jarvis/deerflow_sandbox.py",
+    "sha256": "dac065f2a2b7a04a1cf3045cdeae0fba6cb16d19b4a97c450b46883d6d9b4c35"
+  },
+  {
+    "path": "jarvis/docker_runtime.py",
+    "sha256": "83751d5eecf7fa6d46ac50a701252bae7bab995372eef615ef645efcd4c18938"
+  },
+  {
+    "path": "README.md",
+    "sha256": "95748a27d0bb222d0de48d4d4ea375fab6f27dbee62e93a3db7f5d6cbbf5348f"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "91e0862c4a57ae47b61bc0bfbf2b285f74f9246636f31cea9ff098ff02886dea"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "cac697da2c7905a0cf6ee1fbe3487cd04396990025047a536312d74fc97d13fe"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "3a6260a015cee13ff152745f27354eecf78fd2d248d0f43f42743cf304b87331"
+  },
+  {
+    "path": "tests/test_docker_sandbox.py",
+    "sha256": "d4dccbba3a602d1bda4851f052db0ba8583fb82687f0fbf59bee4166a984363a"
+  },
+  {
+    "path": "tests/test_sandbox_deerflow_audit.py",
+    "sha256": "bc3e7ed98d2bf98be81437b5dfd19e61f0bc3b3370a508ad6622518e599d3189"
+  },
+  {
+    "path": "scripts/verification/verify_sandbox_deerflow_audit.py",
+    "sha256": "9b3a9b0299e3243a548d9b1d645d2bde576eef279eb94e1139a4e647dd89c6c2"
+  },
+  {
+    "path": "scripts/verification/verify_sandbox_deerflow_container.py",
+    "sha256": "f342dc47951bb99dc5bb506cc09ae1ccf24dfead8ebab11ded5dd2bae14ab763"
+  },
+  {
+    "path": "scripts/verification/verify_sandbox_deerflow_renderers.py",
+    "sha256": "5f24354daa72bd352171fca3ef5cb3231692a2247af202732184d34b02084dad"
+  },
+  {
+    "path": "scripts/verification/report_sandbox_deerflow_audit.py",
+    "sha256": "56811bec89fe15960b983c9295a27ab5ef9f90e9e048356d4406dad246e8d1f4"
+  },
+  {
+    "path": "scripts/verification/verify_sandbox_deerflow_artifacts.py",
+    "sha256": "3eb903e9e728f0fbc85d38d774747f651131d693bb485c564fc1edbab0b1e9f9"
+  }
+]

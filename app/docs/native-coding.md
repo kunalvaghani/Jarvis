@@ -1,5 +1,10 @@
 # Native Jarvis coding
 
+<!-- prompt21-audit -->
+**Native coding audit — 2026-10-16 IST:** Promotion now refuses earlier attempts and uses frozen bytes bound to combined test hashes. Damaged or oversized save journals stop safely. **27 Prompt21 fixture PASS /5 BLOCKED**; full regression **2,827 PASS /41 skips**,0 failures. Conflict resolution, semantic retrieval, dependency rollout, crash continuation and credential-redacted journals remain incomplete. Launcher **ready**; live local-model coding acceptance was not run.
+[Evidence and rollback](../artifacts/jarvis-audit/modules/21-native-coding/inventory.md).
+<!-- /prompt21-audit -->
+
 Updated 2026-10-09 IST. The configured default is `brain.coding_backend: "jarvis"`.
 The local Qwen3.5 9B planner and executor run Jarvis's own typed tool loop;
 Codex CLI, its home/configuration, its account and its MCP relay are not used.

@@ -50,17 +50,20 @@ def save_credentials(base, credentials):
 def configured(base=None):
     root = directory(base or Path(__file__).resolve().parent.parent)
     try:
-        state = json.loads((root / 'verified.json').read_text())
-        return (root / 'token.dpapi').exists() and state.get('adapter_hash') == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-    except (OSError, ValueError):
+        with (root / 'verified.json').open(encoding='utf-8') as handle:
+            text=handle.read(32769)
+        if len(text)>32768:return False
+        state = json.loads(text)
+        return isinstance(state,dict) and (root / 'token.dpapi').exists() and state.get('adapter_hash') == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    except (OSError, ValueError, RecursionError):
         return False
 
 
 def credentials(base):
-    import win32crypt
-    from google.oauth2.credentials import Credentials
-    from google.auth.transport.requests import Request
     try:
+        import win32crypt
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
         raw = win32crypt.CryptUnprotectData((directory(base) / 'token.dpapi').read_bytes(), None, None, None, 0)[1]
         result = Credentials.from_authorized_user_info(json.loads(raw), SCOPES)
         if not result.has_scopes(SCOPES):raise ValueError()
@@ -140,7 +143,9 @@ def raw_message(args, send=False):
 
 
 def attachment_message(to, subject, body, paths, limit=24 * 2 ** 20):
-    """An email with files attached (Gmail's limit is 25 MB including encoding)."""
+    """Build a MIME message within a bounded local raw-attachment budget."""
+    if not isinstance(paths,(list,tuple)) or not 1<=len(paths)<=25 or type(limit) is not int or not 1<=limit<=24*2**20:
+        raise ValueError('Select 1..25 attachments within the local size budget.')
     import mimetypes
     message = EmailMessage(); message['Subject'] = str(subject)[:200].replace('\n', ' ').replace('\r', ' ')
     if to:message['To'] = recipients(to)
@@ -148,9 +153,12 @@ def attachment_message(to, subject, body, paths, limit=24 * 2 ** 20):
     total = 0
     for path in paths:
         path = Path(path)
-        data = path.read_bytes()
+        remaining=limit-total
+        if not path.is_file() or path.stat().st_size>remaining:
+            raise ValueError('The attachments are larger than the local budget or not regular files.')
+        with path.open('rb') as handle:data=handle.read(remaining+1)
         total += len(data)
-        if total > limit:raise ValueError('The attachments are larger than Gmail allows (25 MB).')
+        if total > limit:raise ValueError('The attachments exceed the local size budget.')
         kind, _ = mimetypes.guess_type(path.name)
         main, sub = (kind or 'application/octet-stream').split('/', 1)
         message.add_attachment(data, maintype=main, subtype=sub, filename=path.name)
@@ -160,24 +168,35 @@ def attachment_message(to, subject, body, paths, limit=24 * 2 ** 20):
 def draft_with_attachments(base, to, subject, body, paths, api=None):
     """Save one Gmail draft with the files attached (never sends). Returns the draft ID after a read-back."""
     raw = attachment_message(to, subject, body, paths)
+    # Multipart boundaries are randomized; hash normalized part identities, not
+    # the raw MIME boundary, so an uncertain retry cannot get a new journal key.
+    from .gmail_writes import guard
+    message=BytesParser(policy=default).parsebytes(raw)
+    fields={'to':str(message.get('To','')),'subject':str(message.get('Subject','')),
+        'parts':[(part.get_filename(),part.get_content_type(),hashlib.sha256(part.get_payload(decode=True) or b'').hexdigest())
+                 for part in message.walk() if not part.is_multipart()]}
     api = api or API(base)
     try:
-        if len(raw) < 3_500_000:
-            result = api.call('POST', 'drafts', json={'message': {'raw': base64.urlsafe_b64encode(raw).decode()}})
-        else:
-            # Large messages go through Gmail's media upload endpoint.
-            response = api.session.post('https://gmail.googleapis.com/upload/gmail/v1/users/me/drafts?uploadType=media',
-                                        data=raw, headers={'Content-Type': 'message/rfc822'}, timeout=(5, 120))
-            if not 200 <= response.status_code < 300:
-                raise ValueError('Gmail API returned HTTP ' + str(response.status_code) + '; inspect drafts before repeating.')
-            result = response.json()
-        draft_id = identity(result['id'])
-        check = api.call('GET', 'drafts/' + draft_id, params={'format': 'metadata', 'metadataHeaders': ['Subject']})
-        headers = {str(h.get('name', '')).casefold(): str(h.get('value', '')) for h in
-                   check.get('message', {}).get('payload', {}).get('headers', [])}
-        if headers.get('subject', '') != str(subject)[:200].replace('\n', ' ').replace('\r', ' '):
-            raise ValueError('The draft was saved but its read-back differs; check Gmail drafts before repeating.')
-        return draft_id
+        with guard(base,'gmail_api_attachment_draft','new',fields) as journal:
+            journal.begin()
+            if len(raw) < 3_500_000:
+                result = api.call('POST', 'drafts', json={'message': {'raw': base64.urlsafe_b64encode(raw).decode()}})
+            else:
+                response = api.session.post('https://gmail.googleapis.com/upload/gmail/v1/users/me/drafts?uploadType=media',
+                                            data=raw, headers={'Content-Type': 'message/rfc822'}, timeout=(5, 120))
+                try:
+                    if not 200 <= response.status_code < 300:
+                        raise ValueError('Gmail API returned HTTP ' + str(response.status_code) + '; inspect drafts before repeating.')
+                    result = response.json()
+                finally:response.close()
+            draft_id = identity(result['id']);journal.accepted({'draft_id':draft_id})
+            check = api.call('GET', 'drafts/' + draft_id, params={'format': 'metadata', 'metadataHeaders': ['Subject']})
+            headers = {str(h.get('name', '')).casefold(): str(h.get('value', '')) for h in
+                       check.get('message', {}).get('payload', {}).get('headers', [])}
+            if check.get('id')!=draft_id or headers.get('subject', '') != str(message.get('Subject','')):
+                raise ValueError('The draft was saved but its read-back differs; check Gmail drafts before repeating.')
+            journal.complete({'draft_id':draft_id})
+            return draft_id
     finally:
         api.close()
 
@@ -212,6 +231,24 @@ class MailText(HTMLParser):
         if not self.hidden:self.text.append(data)
 
 
+def approved(approve,args):
+    # Actions._approve succeeds with None and raises on refusal. Explicit False
+    # from other trusted adapters must never be treated as consent.
+    before=json.dumps(args,sort_keys=True,ensure_ascii=True)
+    if approve() is False:raise ValueError('Gmail approval declined; no write issued.')
+    if json.dumps(args,sort_keys=True,ensure_ascii=True)!=before:
+        raise ValueError('Gmail fields changed during approval; inspect and approve again.')
+
+
+def fresh_draft(api,draft_id,expected):
+    current=api.call('GET','drafts/'+draft_id,params={'format':'raw'})
+    if current.get('id')!=draft_id:raise ValueError('Gmail draft identity changed; inspect and approve again.')
+    raw=current['message']['raw']
+    content=base64.urlsafe_b64decode(raw+'='*(-len(raw)%4))
+    if hashlib.sha256(content).hexdigest()!=expected:
+        raise ValueError('Draft changed during approval; inspect and approve again before a write.')
+
+
 def run(api, name, value, args, approve=lambda:None, cancelled=lambda:False,
         before_write=lambda:None, accepted_write=lambda result:None, verified_write=lambda result:None):
     if cancelled():raise ValueError('Gmail operation cancelled before dispatch.')
@@ -227,7 +264,11 @@ def run(api, name, value, args, approve=lambda:None, cancelled=lambda:False,
         if not drafts or query:params['q']=query
         key='drafts' if drafts else 'messages'
         result=api.call('GET',key,params=params)
-        rows=result.get(key,[])[:limit]
+        rows=result.get(key,[])
+        if not isinstance(rows,list) or any(not isinstance(row,dict) for row in rows[:limit]):
+            raise ValueError('Invalid Gmail search response rows.')
+        rows=rows[:limit]
+        for row in rows:identity(row.get('id'))
         if summaries:
             rows=[message_summary(api,row,cancelled) for row in rows]
         return {key:rows, 'next_page_available':bool(result.get('nextPageToken')), 'content_is_untrusted':True}
@@ -258,18 +299,21 @@ def run(api, name, value, args, approve=lambda:None, cancelled=lambda:False,
         if existing.get('Cc') or existing.get('Bcc') or any(p.get_content_disposition()=='attachment' for p in existing.walk()):
             raise ValueError('This draft contains CC/BCC or attachments; this adapter cannot preserve them, so no replacement issued.')
         expected=args.get('expected_sha256')
-        if not isinstance(expected,str) or decode(current['message']['raw'])['sha256'] != expected:
+        existing_info=decode(existing_raw)
+        if current.get('id')!=value or not isinstance(expected,str) or existing_info['sha256'] != expected:
             raise ValueError('Draft changed or expected hash missing; inspect it again before replacement.')
         # A partial header edit must not turn an unchanged HTML body into plain
         # text. Reuse its original MIME payload when the inspected body is kept.
-        if args['body']==decode(existing_raw)['body']:
+        if args['body']==existing_info['body']:
             for header,key in (('Subject','subject'),('To','to')):
                 if existing.get(header) is not None:del existing[header]
                 if args.get(key):existing[header]=args[key]
             raw=base64.urlsafe_b64encode(existing.as_bytes()).decode()
     elif 'expected_sha256' in args:raise ValueError('Create does not accept an existing draft hash.')
-    approve()
+    approved(approve,args)
     if cancelled():raise ValueError('Gmail write cancelled before dispatch.')
+    if name=='gmail_api_update_draft':fresh_draft(api,value,expected)
+    if cancelled():raise ValueError('Gmail write cancelled after fresh draft observation.')
     before_write()
     result=api.call(method,route,json={'message':{'raw':raw}})  # Exactly one write.
     draft_id=identity(result['id'])
@@ -294,7 +338,7 @@ def sent_check(api, message_id, subject):
 
 def send_message(api, args, approve, cancelled, before_write, accepted_write, verified_write):
     raw=raw_message(args,send=True)
-    approve()
+    approved(approve,args)
     if cancelled():raise ValueError('Gmail send cancelled before dispatch.')
     before_write()
     result=api.call('POST','messages/send',json={'raw':raw})  # Exactly one send.
@@ -317,8 +361,10 @@ def draft_action(api, name, value, args, approve, cancelled, before_write, accep
         raise ValueError('Draft changed or expected hash missing; inspect it again first.')
     sending=name=='gmail_api_send_draft'
     if sending and not info['to']:raise ValueError('This draft has no recipient. Add one before sending.')
-    approve()
+    approved(approve,args)
     if cancelled():raise ValueError('Gmail draft action cancelled before dispatch.')
+    fresh_draft(api,draft_id,info['sha256'])
+    if cancelled():raise ValueError('Gmail draft action cancelled after fresh observation.')
     before_write()
     if sending:
         result=api.call('POST','drafts/send',json={'id':draft_id})  # Exactly one send.
@@ -348,8 +394,9 @@ def modify_messages(api, name, args, approve, cancelled, before_write, accepted_
     labelling=name=='gmail_api_modify_labels'
     if set(args)-({'ids','preview','add','remove'} if labelling else {'ids','preview'}):raise ValueError('Unsupported Gmail modify argument.')
     ids=args.get('ids')
-    if not isinstance(ids,list) or not 1<=len(ids)<=25 or len(set(ids))!=len(ids):raise ValueError('Select 1..25 distinct observed message IDs.')
+    if not isinstance(ids,list) or not 1<=len(ids)<=25:raise ValueError('Select 1..25 distinct observed message IDs.')
     ids=[identity(item) for item in ids]
+    if len(set(ids))!=len(ids):raise ValueError('Select distinct observed message IDs.')
     preview=args.get('preview',[])
     if not isinstance(preview,list) or len(preview)>25 or any(not isinstance(item,str) or len(item)>300 for item in preview):
         raise ValueError('Preview holds up to 25 short lines.')
@@ -366,7 +413,7 @@ def modify_messages(api, name, args, approve, cancelled, before_write, accepted_
         add_ids=[resolve(label) for label in add if resolve(label)]
         if set(add_ids)&set(remove_ids) or {label.casefold() for label in add}&{label.casefold() for label in remove}:
             raise ValueError('A label cannot be both added and removed.')
-    approve()
+    approved(approve,args)
     if cancelled():raise ValueError('Gmail change cancelled before dispatch.')
     before_write()
     for label in missing:
@@ -452,9 +499,11 @@ def execute(actions, step, cancelled):
     from .gmail_writes import guard
     from .toolkits import arguments
     if not configured(actions.base):raise ValueError('Gmail API is not connected or its adapter changed; run local Connect setup.')
+    content=step.get('content','')
+    if not isinstance(content,str) or len(content)>256000:raise ValueError('Gmail parameters exceed the local budget or are not JSON text.')
+    args=arguments(step)
     api=API(actions.base)
     try:
-        args=arguments(step)
         context=guard(actions.base,step['action'],step['value'],args,state=getattr(actions,'task_state',None)) if step['action'] in WRITES else nullcontext(None)
         with context as journal:
             return json.dumps(run(api,step['action'],step['value'],args,

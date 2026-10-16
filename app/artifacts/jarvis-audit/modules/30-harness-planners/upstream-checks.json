@@ -1,0 +1,111 @@
+[
+  {
+    "key": "hermes-release",
+    "url": "https://api.github.com/repos/NousResearch/hermes-agent/releases/latest",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-16T14:33:37.875Z",
+    "tag": "v0.22.2",
+    "published_at": "2026-10-15T08:21:32Z",
+    "revision": "d923a5eb487a17c0a68801bba9ef0f56c81040a8",
+    "release_url": "https://github.com/NousResearch/hermes-agent/releases/tag/v0.22.2"
+  },
+  {
+    "key": "harness-release",
+    "url": "https://api.github.com/repos/deepseek-ai/deepseek-harness/releases/latest",
+    "status": 404,
+    "cacheState": "miss"
+  },
+  {
+    "key": "harness-tags",
+    "url": "https://api.github.com/repos/deepseek-ai/deepseek-harness/tags?per_page=5",
+    "status": 200,
+    "cacheState": "miss",
+    "tags": [
+      {
+        "name": "dsh-v0.2.1-alpha.5",
+        "sha": "1517a4dbca0a2789ff1d41ba439600f8547d23fa"
+      },
+      {
+        "name": "dsh-v0.2.1-alpha.4",
+        "sha": "86a402200d95fecef4529d969836f1fe13c6cb0d"
+      },
+      {
+        "name": "dsh-v0.2.1-alpha.3",
+        "sha": "2fbf4359b82fb94c03dcce0b831660d87f12ea5c"
+      },
+      {
+        "name": "dsh-v0.2.1-alpha.2",
+        "sha": "d743267388641bc76f17c45ce8b4c231aed1d32c"
+      },
+      {
+        "name": "dsh-v0.2.1-alpha.1",
+        "sha": "5badb15009ae1756c3afe0ae0cef1faafc290ccc"
+      }
+    ]
+  },
+  {
+    "key": "harness-tag-commit",
+    "url": "https://api.github.com/repos/deepseek-ai/deepseek-harness/commits/1517a4dbca0a2789ff1d41ba439600f8547d23fa",
+    "status": 200,
+    "cacheState": "miss",
+    "sha": "1517a4dbca0a2789ff1d41ba439600f8547d23fa",
+    "date": "2026-10-16T11:02:34Z"
+  },
+  {
+    "key": "harness-package",
+    "url": "https://pypi.org/pypi/deepseek-harness-sdk/json",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-15T07:55:25.104Z",
+    "version": "0.1.5rc1",
+    "project_urls": {
+      "Documentation": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/python-sdk.md",
+      "Homepage": "https://github.com/deepseek-ai/deepseek-harness",
+      "Issues": "https://github.com/deepseek-ai/deepseek-harness/issues",
+      "Source": "https://github.com/deepseek-ai/deepseek-harness"
+    },
+    "files": [
+      {
+        "filename": "deepseek_harness_sdk-0.1.5rc1-py3-none-any.whl",
+        "upload_time": "2026-09-10T05:55:48"
+      }
+    ]
+  },
+  {
+    "key": "laya-package",
+    "url": "https://pypi.org/pypi/laya/json",
+    "status": 200,
+    "cacheState": "hit",
+    "cachedAt": "2026-10-15T18:25:24.837Z",
+    "version": "0.4.8",
+    "project_urls": {
+      "Demo": "https://huggingface.co/spaces/convaiinnovations/laya-demo",
+      "Homepage": "https://huggingface.co/convaiinnovations/laya"
+    },
+    "files": [
+      {
+        "filename": "laya-0.4.8-py3-none-any.whl",
+        "upload_time": "2026-10-15T10:52:24"
+      },
+      {
+        "filename": "laya-0.4.8.tar.gz",
+        "upload_time": "2026-10-15T10:52:26"
+      }
+    ]
+  },
+  {
+    "key": "laya-model",
+    "url": "https://huggingface.co/api/models/convaiinnovations/laya",
+    "status": 200,
+    "cacheState": "miss",
+    "sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "lastModified": "2026-10-03T18:00:07.000Z"
+  },
+  {
+    "key": "laya-card",
+    "url": "https://huggingface.co/convaiinnovations/laya/raw/main/README.md",
+    "status": 200,
+    "cacheState": "miss"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "path": "docs/realtime-data.md",
+    "before": "8e4dbcbc58261b8b5400fb2623c0969aa129e7d97884d760a46902fee13a43cc",
+    "after": "6f1c0f57ddaef8f6c6f6708cb35ff01b81d911f44a0af635c84edd95fbd7c786"
+  },
+  {
+    "path": "docs/system-map.md",
+    "before": "c36d2417b1bae74a06e8cc989b3c6292c12a2259ddcbf4034971fd3e38b98a6d",
+    "after": "85b65a28ecfad1f70b92041b7768b6ea8d4e771f7fd2a5c07b30cb00d85d7c13"
+  },
+  {
+    "path": "jarvis/realtime.py",
+    "before": "7c4740d0df7ea1c2fd1a90a8566ce1f8a5f0bfda84811bf4f0b4ee2f8ec985ed",
+    "after": "de7cdb6b5ed07ab524c687b2ff8f7f28fd670aeaa0fa5680d08bb5e693783f0a"
+  },
+  {
+    "path": "jarvis/realtime_sources.py",
+    "before": "6a9e8068c9607ca65d3b571a233f1ceb5bae3178be9d53f0db7890e1461f0de8",
+    "after": "5396ec35ab51c3b07e6a90fc233101f2150e9d2be8c8ec1002c5fc7823e23865"
+  },
+  {
+    "path": "jarvis/weather_watch.py",
+    "before": "e977e05c044cdb79c5e7921ef684a693a677bbbd38e20e04798aa1ff81382333",
+    "after": "f5b1b494a345fcbdd172bcb5ee8a0957609708405cc383006573b43031a32454"
+  },
+  {
+    "path": "README.md",
+    "before": "c91f3abe2014775f65ef6272145c8140a55c30d0b20033304770e92caf95083e",
+    "after": "65e23925ab1e03ecafb6175e5b05c638f16685ed1659444fa4f49fd030dd07cd"
+  },
+  {
+    "path": "../README.md",
+    "before": "f2b1ea9d4e92a7774eb24079a5ed3641b290e1f5883fa49481fba0350ff66b5f",
+    "after": "d6e5c83dae5118e3fdf20db9b3ed5f835ab256d09b5c51d3a193340738949e08"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "bd4592747c40df762822c2922707bac0f74aed22249f0196d903ea5589692762",
+    "after": "f4d59640fb5309cfda739afbf1b6ab82d8cf5a5cfa14d37c636cf1cdc14949cb"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "f3e726ca4dc6fa5c0c68d868f82c01e3b3fa0757dbd905a7a4eea5f3f8493dbc",
+    "after": "5c80d5d8028edd534fd356aab5c9914bbdb1bbbcd35edbfc9c280e07a8c0cffb"
+  }
+]

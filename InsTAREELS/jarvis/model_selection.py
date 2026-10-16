@@ -10,9 +10,14 @@ def required_models(config):
         options = config.get(section, {})
         if options.get("enabled"):
             required.update(options[key] for key in keys if options.get(key))
-    hermes = config.get("brain", {}).get("hermes", {})
-    if config.get("brain", {}).get("enabled") and hermes.get("enabled") and hermes.get("model"):
-        required.add(hermes["model"])
+    from .planner_settings import settings
+    brain = config.get('brain', {})
+    for name in ('hermes', 'harness'):
+        planner = settings(brain, name)
+        if brain.get('enabled') and planner['enabled']:
+            model = planner.get('model') or brain.get('planner') or 'qwen3.5:4b'
+            if model:
+                required.add(model)
     from .command_cleanup import settings
     cleanup = settings(config.get('command_cleanup'))
     if cleanup['enabled']:

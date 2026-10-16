@@ -1,5 +1,53 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt30-audit -->
+**2026-10-16 — Prompt 30 optional-planner audit: PARTIAL.** 236 focused assertions passed; 10 explicit catalog blockers. Full regression 3165 passed /147 skipped / 0 failures; launcher ready. Shared-client serialization, bounded protocol/backpressure, strict optional settings, duplicate/unknown/read-only proposal checks and safe Laya degradation added. For 50 replan-schema copies per batch, warm p50/p95 24.2095/25.4175 → 13.9932/14.9647 ms; peak temporary Python allocation 17884 → 76564 bytes. This is schema-copy CPU time with higher temporary allocation, not model/voice latency. Planner flags, model pins and dependencies unchanged. [Evidence and limits](artifacts/jarvis-audit/modules/30-harness-planners/inventory.md) · [Audit report](artifacts/jarvis-audit/final-report.md).
+<!-- /prompt30-audit -->
+
+<!-- prompt29-audit -->
+**2026-10-16 — Prompt 29 REA audit: PARTIAL.** 131 focused assertions passed; 13 explicit catalog blockers. Full regression: 3107 passed / 137 skipped / 0 failures; launcher readiness ready. Session collision, malformed config/output, uncertainty replay and oversized checkpoint defects fixed; owned Node timeout/child cleanup and checkpoint-crash restart tested. One synthetic 1 MB ledger append: warm p50/p95 15.66780/18.52820 → 7.62825/9.49900 ms; peak temporary Python allocation 13011648 → 12004 bytes. No current third-party REA/clone/GUI fidelity or complete source/privacy isolation claim. [Evidence and limits](artifacts/jarvis-audit/modules/29-reverse-engineering/inventory.md) · [Latest audit](artifacts/jarvis-audit/final-report.md).
+<!-- /prompt29-audit -->
+
+<!-- prompt28-audit -->
+**Sandbox/DeerFlow audit — 2026-10-16 IST:** Stronger mount/checkpoint/identity/write/timeout guards and media proof added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,065 passed / 124 skipped / 0 failures**, launcher **ready**. Owned offline math, all seven literal media recipes and nonzero/no-replay/cleanup fixtures passed; format proof levels vary. General research/source-quality, approval/quota/privacy/resource/recovery and platform patch acceptance remain incomplete.
+[Evidence, limitations and rollback](artifacts/jarvis-audit/modules/28-sandbox-deerflow/inventory.md).
+<!-- /prompt28-audit -->
+
+<!-- prompt27-audit -->
+**God’s Eye audit — 2026-10-16 IST:** Location opt-outs, primary-flight freshness, honest empty-feed answers, safer camera-pack origins, cancellation and durable notification checkpoints added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,036 passed / 112 skipped / 0 failures**, launcher **ready**. Closed-view budgets, complete signal freshness/privacy/schema/renderer acceptance remain incomplete. No live globe/camera/feed validation.
+[Evidence, limitations and rollback](artifacts/jarvis-audit/modules/27-gods-eye/inventory.md).
+<!-- /prompt27-audit -->
+
+<!-- prompt26-audit -->
+**Realtime/weather audit — 2026-10-16 IST:** Monotonic read cadence, explicit temperature units/source age, timezone/day handling and fail-closed notification checkpoints added. Modelled-hazard suppression is opt-in (default 0); default cadence is preserved. **Prompt 26: 20 fixture PASS / 12 BLOCKED**; full regression **3,005 PASS / 100 skips / 0 failures**, launcher **ready**. 82 registered endpoints constructed with fixtures; no live API, geolocation or alert trial. All-provider freshness/schema/privacy/resource/trace contracts remain incomplete.
+[Evidence, limitations and rollback](artifacts/jarvis-audit/modules/26-realtime-data/inventory.md).
+<!-- /prompt26-audit -->
+
+<!-- prompt25-audit -->
+**Media audit — 2026-10-16 IST:** Unrelated/ambiguous selection refuses playback; Spotify song/source/artist checks, Unicode matching and uncertain-playback fallback guards added. **16 Prompt25 fixture PASS/16 BLOCKED**; full regression **2,971 PASS/89 skips/0 failures**, launcher **ready**. No live playback/volume trial. Durable event/tab dedupe, full privacy/resource/recovery contracts and pycaw upgrade validation remain incomplete.
+[Evidence, limits and rollback](artifacts/jarvis-audit/modules/25-media/inventory.md).
+<!-- /prompt25-audit -->
+
+<!-- prompt24-audit -->
+**WhatsApp audit — 2026-10-16 IST:** Fresh recipient/draft checks, expiring serialized approval, bounded request parsing and durable text-send non-replay checkpoints added. **14 Prompt24 fixture PASS /18 BLOCKED**; full regression **2,939 PASS /73 skips /0 failures**, launcher **ready**. No live WhatsApp action. Stable contact IDs, groups, outgoing calls, attachments and complete privacy/resource contracts remain incomplete.
+[Evidence and rollback](artifacts/jarvis-audit/modules/24-whatsapp/inventory.md).
+<!-- /prompt24-audit -->
+
+<!-- prompt23-audit -->
+**Gmail audit — 2026-10-16 IST:** Approval now refuses False/changed fields, draft writes recheck freshness after approval, and damaged journals fail closed. FileBuddy attachment drafts now require approval and durable non-replay records. **24 Prompt23 fixture PASS /8 BLOCKED**; full regression **2,900 PASS /56 skips /0 failures**, launcher **ready**. No live Gmail trial. Adapter source verification is stale until separately reviewed; account isolation, complete privacy/resource/replay/observability contracts remain incomplete.
+[Evidence and rollback](artifacts/jarvis-audit/modules/23-gmail/inventory.md).
+<!-- /prompt23-audit -->
+
+<!-- prompt22-audit -->
+**Web/app audit — 2026-10-16 IST:** Strict preview URL/test-plan validation, service-worker/WebSocket isolation and reused health opener added. **18 Prompt22 fixture PASS /14 BLOCKED**. Full regression **2,855 PASS /48 skips /0 failures**; launcher **ready**. Real authored build and isolated headless browser checks passed; HMR, warning classification, safe restart, host confinement, dependency compatibility, crash continuation and complete redaction remain incomplete.
+[Evidence and rollback](artifacts/jarvis-audit/modules/22-web-development/inventory.md).
+<!-- /prompt22-audit -->
+
+<!-- prompt21-audit -->
+**Native coding audit — 2026-10-16 IST:** Promotion now refuses earlier attempts and uses frozen bytes bound to combined test hashes. Damaged or oversized save journals stop safely. **27 Prompt21 fixture PASS /5 BLOCKED**; full regression **2,827 PASS /41 skips**,0 failures. Conflict resolution, semantic retrieval, dependency rollout, crash continuation and credential-redacted journals remain incomplete. Launcher **ready**; live local-model coding acceptance was not run.
+[Evidence and rollback](artifacts/jarvis-audit/modules/21-native-coding/inventory.md).
+<!-- /prompt21-audit -->
+
 <!-- prompt20-audit -->
 **Idle evolution audit — 2026-10-16 IST:** Interrupted discovery is recoverable; uncertain learning writes stay in `needs_review`. Daily budgets and a three-attempt cap persist, saver/resource failures defer, and private/negative topics are screened before public discovery. Patches require fresh code/test-bound evaluation and approval; rollback refuses later edits.
 Verification: **2,796 full regression PASS /36 skips**; **28 Prompt20 fixture PASS /4 BLOCKED**. Native game preemption, safe automatic write resume, privacy/canary and lockfile rollout remain open. Launcher **repair_required**.
@@ -518,7 +566,7 @@ Mississauga and Brampton. India has no open live camera source. [Details](docs/g
 to upstream `591f299d` (2026-10-10). It now starts with Jarvis, and Jarvis drives it by voice through God's Eye's own
 action runner, with no OpenAI key. "Show me the Eiffel Tower", "show flights near me", "show military over the Persian
 Gulf", "what's the weather doing", "show cameras in London", "show me the route from Vadodara to Ahmedabad" and "switch
-to thermal" fly the globe and switch layers in Jarvis's browser. A side thread polls God's Eye every minute for 25 miles
+to thermal" fly the globe and switch layers in Jarvis's browser. A side thread polls God's Eye every minute within the configured radius (40 km by default)
 around you (aircraft, emergency squawks, military, local SDR, cyclones, fires, weather, earthquakes). It speaks alerts
 and answers "why is it so loud outside?" or "why am I hearing sirens?" from that data before any web search. Without
 keys, photoreal 3D, TomTom traffic and NASA FIRMS stay off, and cyclones, fire perimeters and radar have the coverage
@@ -1772,7 +1820,7 @@ Jarvis/
 | `cognition.py`, `island_mind.py` | The cognitive loop: perception, working memory, long-term recall, the world model's predictions, executive control and learning from outcomes, plus the island's live **Mind** view. |
 | `phrasing.py`, `intent_catalog.py`, `intent_handlers.py` | Everyday phrasing: canonical rewriting of lead-ins and verb synonyms, the catalog mapping request families to real commands, and honest behavior, style, status, PC-fact and camera handlers. |
 | `gods_eye_cameras.py` | Extra God's Eye camera pack: City of Toronto open data, plus Ontario 511 with your key, wired through God's Eye's own `CCTV_SOURCES_FILE`. |
-| `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the 25-mile side-thread cache with alerts and local-first answers, and the in-place updater. |
+| `gods_eye.py`, `gods_eye_update.py` | God's Eye voice commands (places, layers, styles, routes), the configured-radius side-thread cache with alerts and local-first answers, and the in-place updater. |
 | `buddy_engine.py` | Pip's brain: emotion priorities from clicks, drops, Jarvis's state and events, the app in front, your idle time, and its own energy, affection and boredom. |
 | `island_buddy.py`, `file_drop.py`, `documents.py` | Pip's look and its 35 animated emotions. Files dropped on the island: drop target, the ask / WhatsApp / email flow, and the LightRAG- or GraphRAG-style document index with session and long-term memory. |
 | `repo_abilities.py`, `ability_runner.py` | Turning learned repositories into new abilities: a coding model breaks the repository into spoken commands, writes `ability.py`, which is statically checked and tested in its own guarded process and environment, then merged atomically. Also approvals, routing after built-in commands, and running with copied inputs and no-clobber outputs. |
@@ -1797,7 +1845,7 @@ Jarvis/
 | `brain` | Enabled, `qwen3.5:9b` planner/coder/decision/vision, native function calls, no model fallback, Laya selector, adaptive planning/recovery. |
 | `agent_runtime.deferred_tools` | Enabled; show relevant configured toolkit tools and load others through `tool_search`. |
 | `apps`, `folders`, `files`, `file_catalog` | Installed app targets, named path aliases, optional explicit file aliases, and catalog source. |
-| `gods_eye` | Enabled; start the God's Eye server with Jarvis; watch a 40 km (25-mile) radius every 60 s. See [settings](docs/gods-eye.md#settings-configconfigjson--gods_eye). |
+| `gods_eye` | Enabled; start the God's Eye server with Jarvis; watch a 40 km (about 24.85-mile) radius every 60 s. See [settings](docs/gods-eye.md#settings-configconfigjson--gods_eye). |
 | `repo_learning` | Search GitHub for coding tasks (1 repository per task), learn repositories viewed in the browser after 8 s, re-learn after 30 days, `qwen3.5:9b`. See [settings](docs/repo-learning.md#settings-configconfigjson--repo_learning). |
 | `documents`, `ui.buddy` | Dropped files and document questions (`qwen3.5:9b`, GraphRAG-style above 40,000 characters, 12 chunks read by the model, 30-minute focus); Pip in the island. See [settings](docs/file-buddy.md#settings). |
 | `repo_abilities` | Build abilities after learning a repository, `qwen3-coder:30b` when it fits in free RAM, else `qwen3.5:9b`; 2 repairs, 4 automatic builds a day, 120 s test / 180 s run limits, 2 GB memory limit. See [settings](docs/repo-abilities.md#settings-configconfigjson--repo_abilities). |

@@ -1,3 +1,9 @@
-# Compatibility
+# Official compatibility review — 2026-10-16 IST
 
-[Observed versions and checked official contracts](../../compatibility.md). A current upstream/CVE review for every dependency of this module is incomplete.
+Installed PyWinRT media/control/runtime3.2.1. [PyPI media-control listing](https://pypi.org/project/winrt-Windows.Media.Control/) currently lists3.2.1 and CPython3.10 Windows wheels. [Official3.2.1 notes](https://github.com/pywinrt/pywinrt/releases/tag/v3.2.1),2025-06-06, cover per-package versioning and circular-import repair; later Python3.14 wheels uploaded2025-09-20 are not a different base release. [Microsoft GSMTC contract](https://learn.microsoft.com/en-us/uwp/api/windows.media.control.globalsystemmediatransportcontrolssession?view=winrt-28000) defines source app IDs and requested transport operations; an accepted request still needs readback. Search excerpt reviewed, no latest Windows SDK installed.
+
+Installed pycaw20260921 is older than [PyPI20260927](https://pypi.org/project/pycaw/), uploaded2026-09-26. [Official changelog](https://github.com/AndreMiras/pycaw/blob/main/CHANGELOG.md) describes Python3.10–3.14 packaging/minimum-version changes in20260926 and wheel smoke-validation metadata synchronization in20260927. No dependency installation authorized/performed; no assertion of testing the newer wheel. Current Python3.10.6/comtypes1.4.17/psutil7.2.2 retained. Live native-volume acceptance and future upgrade validation remain open.
+
+[YouTube search.list](https://developers.google.com/youtube/v3/docs/search/list), updated2026-10-15 UTC, now describes1 unit in its Search Queries bucket and100 calls/day, maxResults0–50, type=video for video-only search. This differs from the guide's historical100-unit calculation; documentation updated without making a live quota request. No API key/account metadata inspected. Playwright1.63.0 retained; browser package upgrade remains the earlier module14/22 release gate.
+
+Public research used Firecrawl; no private query, title, audio, account or screen data submitted. Current installed Spotify/YouTube UI builds and signed-in/alternate-output behavior were not independently verified. No paid API requirement added.

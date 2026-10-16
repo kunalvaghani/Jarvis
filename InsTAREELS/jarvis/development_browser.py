@@ -8,6 +8,19 @@ ROLES=['button','textbox','combobox','dialog','heading','link','checkbox','statu
 KEYS=['Tab','Shift+Tab','Enter','Escape','Space','ArrowDown','ArrowUp']
 ATTRIBUTES=['data-motion','aria-expanded','aria-invalid','aria-pressed','open','value']
 
+
+def preview_url(value):
+    """Only the credential-free root of an owned loopback preview is admissible."""
+    try:
+        if not isinstance(value,str) or len(value)>2048:raise ValueError()
+        parsed=urlsplit(value)
+        if (parsed.scheme!='http' or parsed.hostname!='127.0.0.1' or not parsed.port
+            or parsed.netloc!=f'127.0.0.1:{parsed.port}' or parsed.path not in {'','/'}
+            or parsed.query or parsed.fragment):raise ValueError()
+    except (ValueError,TypeError):
+        raise ValueError('Only credential-free root loopback preview URLs are allowed.') from None
+    return parsed
+
 def test_plan_schema():
     """Constrain model proposals at decoding, then validate again at execution."""
     variants=[]
@@ -35,12 +48,28 @@ def validate_tests(tests):
         raise ValueError('Provide up to 20 functional scenarios.')
     allowed={'click','fill','select','press','assert_text','assert_count','assert_attribute'}
     assertions=0
+    try:
+        if len(json.dumps(tests))>64000:raise ValueError('Browser plan oversized.')
+    except (TypeError,RecursionError):raise ValueError('Browser plan must be bounded JSON.') from None
     for test in tests:
-        if not isinstance(test,dict) or not isinstance(test.get('name'),str) or not isinstance(test.get('steps'),list) or not 1<=len(test['steps'])<=12:
+        if not isinstance(test,dict) or not isinstance(test.get('name'),str) or not 1<=len(test['name'])<=160 or not isinstance(test.get('steps'),list) or not 1<=len(test['steps'])<=12:
             raise ValueError('Each browser scenario needs a name and bounded steps.')
         for step in test['steps']:
-            if not isinstance(step,dict) or step.get('action') not in allowed:
+            if not isinstance(step,dict) or not isinstance(step.get('action'),str) or step.get('action') not in allowed:
                 raise ValueError('Unsupported browser verification action.')
+            action=step['action']
+            if set(step)-{'action','role','name','value','attribute','exact'}:
+                raise ValueError('Unsupported browser verification field.')
+            if action!='press' and action!='assert_text' and (not isinstance(step.get('name'),str) or not 1<=len(step['name'])<=160):
+                raise ValueError('Browser control requires a bounded name.')
+            if 'name' in step and (not isinstance(step['name'],str) or len(step['name'])>160):
+                raise ValueError('Browser control name oversized.')
+            if action=='assert_count':
+                if type(step.get('value')) is not int or not 0<=step['value']<=1000:raise ValueError('Invalid browser assertion count.')
+            elif action!='click':
+                if not isinstance(step.get('value'),str) or len(step['value'])>500:raise ValueError('Browser step requires bounded text.')
+            if 'exact' in step and type(step['exact']) is not bool:raise ValueError('Browser exact match must be boolean.')
+            if action=='assert_attribute' and step.get('attribute') not in ATTRIBUTES:raise ValueError('Unsupported assertion attribute.')
             if step['action'].startswith('assert_'):
                 assertions+=1
             if step.get('role','button') not in ROLES:
@@ -88,9 +117,7 @@ def inspect(request):
     if not output.is_relative_to(scoped(project,'.jarvis/development')):
         raise ValueError('Evidence must stay inside this project.')
     url=request['url']
-    parsed=urlsplit(url)
-    if parsed.scheme!='http' or parsed.hostname!='127.0.0.1' or parsed.username or parsed.password or not parsed.port:
-        raise ValueError('Only loopback development URLs allowed.')
+    parsed=preview_url(url)
     tests=request.get('tests',[])
     assertions=validate_tests(tests)
     interactions=sum(s['action'] in {'click','fill','select','press'} for t in tests for s in t['steps'])
@@ -103,13 +130,16 @@ def inspect(request):
         browser=pw.chromium.launch(channel='chrome',headless=True)
         try:
             for label,width,height,reduce in [('desktop',1440,1000,False),('mobile',390,844,False),('reduced-motion',1440,1000,True)]:
-                context=browser.new_context(viewport={'width':width,'height':height},reduced_motion='reduce' if reduce else 'no-preference',accept_downloads=False)
+                context=browser.new_context(viewport={'width':width,'height':height},reduced_motion='reduce' if reduce else 'no-preference',accept_downloads=False,
+                    service_workers='block',permissions=[])
                 # Isolate cookies/storage; block external requests and navigation.
                 def route(r):
                     p=urlsplit(r.request.url)
                     if p.scheme in {'data','blob'} or (p.scheme=='http' and p.hostname=='127.0.0.1' and p.port==parsed.port): r.continue_()
                     else: r.abort()
                 context.route('**/*',route)
+                # HTTP routing does not intercept WebSocket connections.
+                context.route_web_socket('**/*',lambda connection:connection.close())
                 page=context.new_page()
                 errors=[]
                 page.on('pageerror',lambda error:errors.append(str(error)[:500]))

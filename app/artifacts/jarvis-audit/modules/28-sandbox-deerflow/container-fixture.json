@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-16 IST",
+  "engine": {
+    "status": "available",
+    "version": "29.8.2",
+    "os": "linux"
+  },
+  "image": "sha256:4e3f9488164e389e24bb969c6eccb99b59d81ebd32ceffa0aea038f127832bf8",
+  "scope": "owned ephemeral jobs, synthetic data only; no Desktop start/pull/build/model/GPU/account actions",
+  "math": {
+    "id": "3677600cfd3e43d3b49517e1af07b0fe",
+    "container_id": "6fce7cafb029ac10555336892c2313943d945d6138c42c755cab4b6a97f5ff47",
+    "observed": {
+      "answer": 4,
+      "uid": 65534
+    },
+    "isolation": {
+      "network": "none",
+      "root_readonly": true,
+      "capabilities": "ALL dropped",
+      "memory": 2147483648,
+      "pids": 128
+    },
+    "cleaned": true
+  },
+  "render": {
+    "recipe": "chart",
+    "job_id": "57818d8b094344aaafbe525eabf21519",
+    "artifact_directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\deerflow\\jobs\\57818d8b094344aaafbe525eabf21519",
+    "artifacts": [
+      {
+        "path": "outputs/chart.png",
+        "bytes": 11264
+      }
+    ],
+    "verification": {
+      "path": "outputs/chart.png",
+      "bytes": 11264,
+      "format": "PNG",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "verification": "Pillow structure verification"
+    },
+    "provider": "Offline local libraries; no API key or account",
+    "cleaned": true
+  },
+  "failure": {
+    "id": "821c2ac8860441b5ab7989c50adfabeb",
+    "status": "uncertain",
+    "calls": 1,
+    "stopped": true,
+    "cleaned": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "ready",
+  "missing": [],
+  "incomplete": [],
+  "scope": "dependencies_and_configured_services",
+  "date": "2026-10-16 IST",
+  "exit_code": 0,
+  "command": ".venv/Scripts/python.exe -m jarvis.launcher --check",
+  "raw_output": "ignored .jarvis-runtime/jarvis-audit/module21-readiness-private.json; no repairs/service starts"
+}

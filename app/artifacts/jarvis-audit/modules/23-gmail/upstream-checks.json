@@ -1,0 +1,55 @@
+[
+  {
+    "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+    "checked": "2026-10-16 IST",
+    "page_updated": "2026-09-10",
+    "finding": "Scopes capabilities verified. Combined app grant retained; no per-operation downscoping or account broker."
+  },
+  {
+    "url": "https://developers.google.com/workspace/gmail/api/guides/handle-errors",
+    "checked": "2026-10-16 IST",
+    "page_updated": "2026-09-15",
+    "finding": "Backoff guidance inspected; HTTP200 is not proof of successful email delivery. Writes remain single attempt with readback, no unknown-outcome resend."
+  },
+  {
+    "url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/list",
+    "checked": "2026-10-16 IST",
+    "page_updated": "2026-04-15",
+    "finding": "pageToken/nextPageToken documented; current adapter only signals more pages exist."
+  },
+  {
+    "url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/create",
+    "checked": "2026-10-16 IST",
+    "page_updated": "2026-04-15",
+    "finding": "Draft creation media endpoint and scope authorization documented; not complete attachment readback proof."
+  },
+  {
+    "url": "https://pypi.org/project/google-auth/",
+    "checked": "2026-10-16 IST",
+    "latest": "2.62.0",
+    "release_date": "2026-10-12",
+    "installed": "2.61.0",
+    "finding": "Official package registry inspected; no install or2.62 compatibility/security certification."
+  },
+  {
+    "url": "https://pypi.org/project/google-auth-oauthlib/",
+    "checked": "2026-10-16 IST",
+    "latest": "1.5.0",
+    "release_date": "2026-09-29",
+    "installed": "1.5.0",
+    "finding": "Official registry metadata inspected; installed bridge retained."
+  },
+  {
+    "url": "https://github.com/googleapis/google-auth-library-python/releases/tag/v2.62.0",
+    "checked": "2026-10-16 IST",
+    "status": "404",
+    "finding": "No verified2.62 release notes from this page."
+  },
+  {
+    "url": "https://raw.githubusercontent.com/googleapis/google-auth-library-python/main/CHANGELOG.md",
+    "checked": "2026-10-16 IST",
+    "latest_displayed": "2.48.0",
+    "displayed_date": "2026-01-22",
+    "finding": "Fetched source changelog appears behind registry metadata. Recorded discrepancy; no invented current2.62 notes."
+  }
+]

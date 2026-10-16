@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="8" time="0.733" timestamp="2026-10-16T21:25:45.542229+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_019_attempted_checkpoint_blocks_different_command" time="0.059"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_019_attempted_chec0')
+
+    def test_JRV_28_019_attempted_checkpoint_blocks_different_command(tmp_path):
+        obj=job(tmp_path);obj.state['calls']=[{'command':'old','status':'attempted'}];obj.save()
+        restored=SandboxJob(tmp_path,obj.identifier);restored.owned=Mock(return_value={'Id':'b'*64,'State':{'Running':True}})
+        restored.runtime.cli=Mock(return_value=b'4')
+&gt;       with pytest.raises(ValueError):restored.execute('different')
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_017_write_budget_applies_to_all_effects" time="0.029"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_017_write_budget_a0')
+
+    def test_JRV_28_017_write_budget_applies_to_all_effects(tmp_path):
+        obj=job(tmp_path);obj.state['calls']=[{'command':str(i),'status':'completed'} for i in range(20)]
+&gt;       with pytest.raises(ValueError):obj.observe('sandbox_write','extra.txt','fixture')
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:31: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_006_timeout_stops_only_owned_job" time="0.015"><failure message="assert False&#10; +  where False = any(&lt;generator object test_JRV_28_006_timeout_stops_only_owned_job.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000155DF41ED50&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_006_timeout_stops_0')
+
+    def test_JRV_28_006_timeout_stops_only_owned_job(tmp_path):
+        obj=job(tmp_path)
+        obj.runtime.cli.side_effect=lambda args,*a,**k: (_ for _ in ()).throw(ValueError('timeout fixture')) if args[0]=='exec' else b''
+        with pytest.raises(ValueError):obj.execute('sleep 500',timeout=1)
+&gt;       assert any(c.args[0]==['kill','b'*64] for c in obj.runtime.cli.call_args_list)
+E       assert False
+E        +  where False = any(&lt;generator object test_JRV_28_006_timeout_stops_only_owned_job.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000155DF41ED50&gt;)
+
+tests\test_sandbox_deerflow_audit.py:39: AssertionError</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_031_checkpoint_read_is_bounded" time="0.045"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_031_checkpoint_rea0')
+
+    def test_JRV_28_031_checkpoint_read_is_bounded(tmp_path):
+        obj=job(tmp_path);obj.state['padding']='x'*300000;obj.save()
+&gt;       with pytest.raises(ValueError):SandboxJob(tmp_path,obj.identifier)
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:45: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_002_linked_mount_ancestor_refused" time="0.020"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_002_linked_mount_a0')
+
+    def test_JRV_28_002_linked_mount_ancestor_refused(tmp_path):
+        obj=job(tmp_path);skills=tmp_path/'integrations/deer-flow-upstream/skills/public';skills.mkdir(parents=True)
+        image=[{'Id':ID,'Os':'linux','Architecture':'amd64','Config':{'Labels':{'org.jarvis.deerflow-runtime':'1'}}}]
+        obj.runtime.cli.return_value=json.dumps(image).encode()
+        with patch('jarvis.deerflow_sandbox.linked',side_effect=lambda p:Path(p)==tmp_path/'.jarvis-runtime'),patch('jarvis.deerflow_sandbox.threading.Thread'):
+&gt;           with pytest.raises(ValueError):obj.create()
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:53: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_029_mutable_image_identity_refused" time="0.019"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_029_mutable_image_0')
+
+    def test_JRV_28_029_mutable_image_identity_refused(tmp_path):
+        obj=job(tmp_path);(tmp_path/'integrations/deer-flow-upstream/skills/public').mkdir(parents=True)
+        obj.runtime.cli.return_value=json.dumps([{'Id':'mutable-tag','Os':'linux','Architecture':'amd64','Config':{'Labels':{'org.jarvis.deerflow-runtime':'1'}}}]).encode()
+&gt;       with patch('jarvis.deerflow_sandbox.threading.Thread'),pytest.raises(ValueError):obj.create()
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:60: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_026_exclusive_write_refuses_race" time="0.023"><failure message="Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'FileExistsError'&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_026_exclusive_writ0')
+
+    def test_JRV_28_026_exclusive_write_refuses_race(tmp_path):
+        obj=job(tmp_path);path=obj.root/'workspace/new.txt'
+        fake=SimpleNamespace(exists=lambda:False,parent=path.parent,open=path.open,write_text=path.write_text)
+        obj.path=Mock(return_value=fake)
+        obj.observe('sandbox_write','new.txt','original')
+&gt;       with pytest.raises((ValueError,FileExistsError)):obj.observe('sandbox_write','new.txt','replacement')
+E       Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'FileExistsError'&gt;)
+
+tests\test_sandbox_deerflow_audit.py:68: Failed</failure></testcase><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_007_wrong_media_format_not_success" time="0.038"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-320/test_JRV_28_007_wrong_media_fo0')
+
+    def test_JRV_28_007_wrong_media_format_not_success(tmp_path):
+        from jarvis.deerflow_media import execute
+        obj=job(tmp_path);bad=obj.root/'outputs/chart.png';bad.write_text('not a PNG')
+        obj.inventory=Mock(return_value=[{'path':'outputs/chart.png','bytes':bad.stat().st_size}])
+        with patch.object(SandboxJob,'__enter__',return_value=obj),patch.object(SandboxJob,'__exit__'):
+&gt;           with pytest.raises(ValueError):execute(SimpleNamespace(base=tmp_path),{'value':'chart','content':'{"labels":["A"],"values":[1]}'},lambda:False)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:77: Failed</failure></testcase></testsuite></testsuites>

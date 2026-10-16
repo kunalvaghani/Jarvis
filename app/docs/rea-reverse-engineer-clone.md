@@ -20,7 +20,7 @@ in [source-manifest.json](../integrations/rea-upstream/source-manifest.json).
 - **Node.js** `^22.19.0 || ^24.11.0 || >=26.0.0` plus npm.
 - **REA installed**, exposing its CLI entry. Install with `npm install --global rea-agents`
   (or keep a local checkout/`npx` install) and point `rea.entry` at the absolute
-  `scripts/rea.mjs` (published packages also ship `dist/mcp/main.js`).
+  `scripts/rea.mjs`. The published `dist/mcp/main.js` is the MCP server entry, not a CLI replacement.
 - **External engines, per target** — REA installs or licenses none of these:
   - Native binaries: Hopper, Ghidra or IDA.
   - Android APK decompilation: headless JADX and a JDK.
@@ -40,7 +40,7 @@ The Jarvis bridge launches REA as an **absolute, non-shim** executable (`node.ex
 | --- | --- | --- |
 | `enabled` | `true` | Master switch for the bridge. |
 | `node_path` | `null` | Absolute Node executable; when null, the bridge resolves `node` from `PATH`. |
-| `entry` | `null` | Absolute path to REA's CLI entry (`scripts/rea.mjs` or a published dist entry). Required before any analysis. |
+| `entry` | `null` | Absolute path to REA's CLI dispatcher (`scripts/rea.mjs` or a separately reviewed compatible CLI wrapper). Required before any analysis. |
 | `allow_commands` | `["analyze-javascript-application"]` | Allowlist of REA subcommands the planner may run. Extend deliberately. |
 | `analysis_timeout_seconds` | `600` | Per-analysis deadline (10–3600). |
 | `max_input_mb` | `200` | Maximum local target file size accepted at ingest. |
@@ -111,3 +111,17 @@ end-to-end run was verified: REA 6.4.0 (installed via npm on Node v24.14.0) stat
 a sample JavaScript application through the bridge in ~3.8s, returning ~73 KB of valid REA JSON
 evidence stored in the session and ledger. Native, Android and website targets still require
 REA's own external engines, which were not exercised.
+
+## Prompt 29 audit — 2026-10-16
+
+UUID session IDs remove same-second collisions. Session-scoped exclusive lock files prevent cross-process overlap and retain crash evidence; a process RLock serializes local operations. Append-only, fsync-backed ledger updates preserve notes without rereading/copying the entire ledger. Ledger append is bounded but not a transactional journal: a disk failure can leave a partial untrusted note.
+
+Configuration now rejects malformed objects, empty/invalid allowlists, nonfinite/bool/invalid timeouts and input limits. Configured timeout range stays 10–3600 seconds; max_input_mb is explicitly 1–200. JSON tool input is bounded before parsing. Session checkpoints have typed identity/state/count validation and a 64 KiB limit. Target/session/evidence/ledger/program ancestors reject symlinks and Windows reparse points. UTF-8 surrogate text is rejected before writes.
+
+Analysis rechecks cancellation, paths and program size/mtime after approval. It atomically persists attempt_id/attempted before launching; errors/cancellation set uncertainty, with generic TaskState uncertainty for caught failures. Successful evidence and ledger are saved before marking completed. Attempted/uncertain/crash-lock sessions refuse a new execution. A hard crash before the catch remains protected by the durable attempt and lock. No cache bypasses a fresh approval or reuses stale analysis.
+
+Node stdout uses a temporary file with periodic size checks and a 200,000-byte accepted readback cap; this is not a hard disk quota between checks. JSON must be a nonempty finite object. Nonzero, offline, malformed, oversized, cancellation and worker-disconnect fixtures never claim success. Windows OwnedJob closes only the tested owned process tree. NODE_PATH is no longer inherited; other user-profile paths remain for existing dependencies and do not provide privacy confinement. A separate actual owned Node fixture read back null for fake GROQ_API_KEY, OPENAI_API_KEY, NODE_PATH and NODE_OPTIONS and REA_DISABLE_TELEMETRY=1. This proves environment filtering, not that third-party REA honors the telemetry flag or lacks network/profile access. Outputs explicitly state untrusted and behavior unverified. Tool names and natural-language routing remain stable.
+
+One synthetic 1 MB ledger append: warm p50/p95 15.66780/18.52820 → 7.62825/9.49900 ms; peak temporary Python allocation 13011648 → 12004 bytes.
+
+Full regression/readiness are fixture and dependency checks, not current live REA/clone acceptance. Installed REA 6.4.0 / Node 24.14.0 remain unchanged; official current versions checked are REA 6.5.0 / Node 24.22.0 on the installed major line. The older live 2026-10-12 result above remains historical. [Current evidence and 13 blockers](../artifacts/jarvis-audit/modules/29-reverse-engineering/inventory.md).

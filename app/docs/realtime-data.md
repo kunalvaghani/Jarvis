@@ -1,10 +1,15 @@
 # Green public APIs, idle reader and serious alerts
 
+<!-- prompt26-audit -->
+**Realtime/weather audit — 2026-10-16 IST:** Monotonic read cadence, explicit temperature units/source age, timezone/day handling and fail-closed notification checkpoints added. Modelled-hazard suppression is opt-in (default 0); default cadence is preserved. **Prompt 26: 20 fixture PASS / 12 BLOCKED**; full regression **3,005 PASS / 100 skips / 0 failures**, launcher **ready**. 82 registered endpoints constructed with fixtures; no live API, geolocation or alert trial. All-provider freshness/schema/privacy/resource/trace contracts remain incomplete.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/26-realtime-data/inventory.md).
+<!-- /prompt26-audit -->
+
 Jarvis has **82 adapters**, matching only the green rows in the supplied
 2026-10-07 screenshots. Blue/orange services are excluded. Screenshots select
 the services; their old access labels are not proof of current availability.
 Jarvis does not create provider accounts, start heavy self-hosted services,
-subscribe to paid plans or substitute another provider without configuration.
+subscribe to paid plans. Built-in read fallbacks name the actual provider and primary failure; they are not consensus checks.
 
 ## Questions and tasks
 
@@ -117,10 +122,10 @@ location, CPU/RAM limits and intervals are configurable. `contact` is the
 verified Jarvis project URL, identifying calls to MET Norway and MusicBrainz.
 No credentials are embedded in this URL.
 
-Five services require a configured `realtime.endpoints` entry: `searxng`,
-`rsshub`, `osrm`, `opentripplanner` and `gbfs`. The first four require your own
-server; GBFS requires a public feed for the relevant bike/scooter network.
-Their adapters are available, but no endpoint or dataset is invented. SearXNG
+Endpoint overrides are available through `realtime.endpoints` for: `searxng`,
+`rsshub`, `osrm`, `opentripplanner` and `gbfs`. SearXNG, RSSHub and OpenTripPlanner require your own
+server; OSRM has a public demo default, and GBFS requires a public feed for the relevant bike/scooter network.
+Their adapters are registered; OSRM has a public demo default in the current source, while the other listed services need explicit setup. This is not live availability proof. SearXNG
 must enable JSON responses; RSSHub additionally needs an exact route. OSRM uses
 the route API; OpenTripPlanner's adapter targets the legacy REST router/plan
 interface, so the configured server must expose that interface. These services
@@ -293,3 +298,7 @@ Intervals are minimum client cadences, not promises about provider updates.
 | `food` | [Open Food Facts](https://openfoodfacts.github.io/openfoodfacts-server/api/) | media | 300 | json | none |
 | `gbif` | [GBIF](https://techdocs.gbif.org/en/openapi/) | media | 300 | json | none |
 | `inaturalist` | [iNaturalist](https://api.inaturalist.org/v1/docs/) | media | 300 | json | none |
+
+## Current reliability boundaries — 2026-10-16 IST
+
+Weather/air source-age checks use current timestamps and the published offset; they do not validate every provider freshness SLA. Temperature°F is converted to°C with explicit metadata before weather summaries/thresholds. ISO offsets and Z are handled in the caller timezone; Open-Meteo fixed-offset responses are not DST-aware across transitions. Optional `realtime.model_hazard_cooldown_seconds` accepts integers 0–86400 and defaults to 0 (off), preserving current alert cadence. If enabled, it suppresses repeated modelled weather/air hazard kinds per coordinate hash; distinct same-kind events or escalation may be hidden. This is not a semantic event tracker. No personal configuration was edited. The separate legacy weather watcher retains per-day severity escalation, uses atomic checkpoints and refuses notification after corrupt/failed storage. Persist-before-notify can lose an alert at crash time, but must not replay an uncertain notification. Unknown/damaged checkpoints require review, not deletion. No ETag/conditional-request layer or complete all-provider circuit-breaker/schema migration was added.

@@ -1,0 +1,181 @@
+FFFFFFFF                                                                 [100%]
+================================== FAILURES ===================================
+__________________ test_JRV_29_017_concurrent_ingest_unique ___________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_017_concurrent_i...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_017_concurrent_ing0/demo'))
+
+    def test_JRV_29_017_concurrent_ingest_unique(fixture):
+        a,t=fixture
+        with patch.object(rea.time,'time',return_value=123):
+            with ThreadPoolExecutor(max_workers=5) as pool:
+>               rows=list(pool.map(lambda _:rea.ingest(a,str(t),{}),range(5)))
+
+tests\test_reverse_engineering_audit.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:621: in result_iterator
+    yield _result_or_cancel(fs.pop())
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:319: in _result_or_cancel
+    return fut.result(timeout)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:458: in result
+    return self.__get_result()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:403: in __get_result
+    raise self._exception
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+tests\test_reverse_engineering_audit.py:27: in <lambda>
+    rows=list(pool.map(lambda _:rea.ingest(a,str(t),{}),range(5)))
+jarvis\rea_tools.py:178: in ingest
+    session_dir.mkdir()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_017_concurrent_ing0/base/.jarvis-runtime/rea/demo-123')
+mode = 511, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           self._accessor.mkdir(self, mode)
+E           FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-326\\test_JRV_29_017_concurrent_ing0\\base\\.jarvis-runtime\\rea\\demo-123'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1175: FileExistsError
+_______________ test_JRV_29_029_invalid_configuration[config0] ________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_conf...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_config0/demo'))
+config = []
+
+    @pytest.mark.parametrize('config',[[],{'allow_commands':[]},{'analysis_timeout_seconds':False},{'max_input_mb':-1}])
+    def test_JRV_29_029_invalid_configuration(fixture,config):
+        a,_=fixture;a.config={'rea':config}
+        with pytest.raises(ValueError,match='config|rea\\.'):
+>           rea.status(a)
+
+tests\test_reverse_engineering_audit.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\rea_tools.py:143: in status
+    node = _node(config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = []
+
+    def _node(config):
+        """Resolve an absolute Node executable; reject shim scripts the bridge can't trust."""
+>       candidate = config.get('node_path') or shutil.which('node') or shutil.which('node.exe')
+E       AttributeError: 'list' object has no attribute 'get'
+
+jarvis\rea_tools.py:63: AttributeError
+_______________ test_JRV_29_029_invalid_configuration[config1] ________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_conf...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_config1/demo'))
+config = {'allow_commands': []}
+
+    @pytest.mark.parametrize('config',[[],{'allow_commands':[]},{'analysis_timeout_seconds':False},{'max_input_mb':-1}])
+    def test_JRV_29_029_invalid_configuration(fixture,config):
+        a,_=fixture;a.config={'rea':config}
+>       with pytest.raises(ValueError,match='config|rea\\.'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_reverse_engineering_audit.py:33: Failed
+_______________ test_JRV_29_029_invalid_configuration[config2] ________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_conf...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_config2/demo'))
+config = {'analysis_timeout_seconds': False}
+
+    @pytest.mark.parametrize('config',[[],{'allow_commands':[]},{'analysis_timeout_seconds':False},{'max_input_mb':-1}])
+    def test_JRV_29_029_invalid_configuration(fixture,config):
+        a,_=fixture;a.config={'rea':config}
+>       with pytest.raises(ValueError,match='config|rea\\.'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_reverse_engineering_audit.py:33: Failed
+_______________ test_JRV_29_029_invalid_configuration[config3] ________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_conf...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_029_invalid_config3/demo'))
+config = {'max_input_mb': -1}
+
+    @pytest.mark.parametrize('config',[[],{'allow_commands':[]},{'analysis_timeout_seconds':False},{'max_input_mb':-1}])
+    def test_JRV_29_029_invalid_configuration(fixture,config):
+        a,_=fixture;a.config={'rea':config}
+>       with pytest.raises(ValueError,match='config|rea\\.'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_reverse_engineering_audit.py:33: Failed
+________________ test_JRV_29_015_malformed_result_not_evidence ________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_015_malformed_re...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_015_malformed_resu0/demo'))
+
+    def test_JRV_29_015_malformed_result_not_evidence(fixture):
+        a,_=fixture;s=session(fixture)
+>       with patch.object(rea,'_run_rea',return_value='not JSON'),pytest.raises(ValueError,match='JSON'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_reverse_engineering_audit.py:38: Failed
+______________ test_JRV_29_019_uncertain_restart_refuses_replay _______________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_019_uncertain_re...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_019_uncertain_rest0/demo'))
+
+    def test_JRV_29_019_uncertain_restart_refuses_replay(fixture):
+        a,_=fixture;s=session(fixture)
+        with patch.object(rea,'_run_rea',side_effect=OSError('disconnect')) as runner:
+            with pytest.raises(OSError):rea.analyze(a,s,{'command':'analyze-javascript-application'},lambda:False)
+            with pytest.raises(ValueError,match='uncertain|inspect|attempt'):
+>               rea.analyze(a,s,{'command':'analyze-javascript-application'},lambda:False)
+
+tests\test_reverse_engineering_audit.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\rea_tools.py:270: in analyze
+    raw = _run_rea(node, entry, argv, record['target'] if record['kind'] == 'application' else str(session_dir),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: in _execute_mock_call
+    raise effect
+tests\test_reverse_engineering_audit.py:45: in test_JRV_29_019_uncertain_restart_refuses_replay
+    with pytest.raises(OSError):rea.analyze(a,s,{'command':'analyze-javascript-application'},lambda:False)
+jarvis\rea_tools.py:270: in analyze
+    raw = _run_rea(node, entry, argv, record['target'] if record['kind'] == 'application' else str(session_dir),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock name='_run_rea' id='2765867922240'>
+args = ('C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-326\\test_JRV_29_019_uncertain_rest0\\node.exe', 'C:...st0\\demo', <function test_JRV_29_019_uncertain_restart_refuses_replay.<locals>.<lambda> at 0x00000283FA88A950>, 600.0)
+kwargs = {}, effect = OSError('disconnect')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+>               raise effect
+E               OSError: disconnect
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: OSError
+_________________ test_JRV_29_031_oversized_session_rejected __________________
+
+fixture = (namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_031_oversized_se...one), WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-326/test_JRV_29_031_oversized_sess0/demo'))
+
+    def test_JRV_29_031_oversized_session_rejected(fixture):
+        a,_=fixture;s=session(fixture);p=rea._session_dir(a,s)/'session.json'
+        p.write_text(' '*300000+'{}')
+>       with pytest.raises(ValueError,match='session|checkpoint|size'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_reverse_engineering_audit.py:53: Failed
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\modules\29-reverse-engineering\reproduction.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_017_concurrent_ingest_unique
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_029_invalid_configuration[config0]
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_029_invalid_configuration[config1]
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_029_invalid_configuration[config2]
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_029_invalid_configuration[config3]
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_015_malformed_result_not_evidence
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_019_uncertain_restart_refuses_replay
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_031_oversized_session_rejected
+8 failed in 1.08s

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-16 IST",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "ram_bytes": 33656832000,
+  "packages": {
+    "requests": "2.34.2",
+    "pytest": "8.4.2",
+    "psutil": "7.2.2",
+    "playwright": "1.63.0"
+  },
+  "git": "git version 2.49.1.windows.1",
+  "commit": "9bf5528e6d490fc3bbe92d0c62bcffae6c0946b6",
+  "branch": "audit/12-tool-registry",
+  "frozen_files": 384,
+  "gpu_scope": "RTX3050 Laptop4GB same-machine prior census; no model/GPU stress",
+  "node": "24.14.0",
+  "npm": "11.11.1",
+  "authored_fixture_packages": {
+    "vite": "8.3.2",
+    "typescript": "7.0.2",
+    "axe-core": "4.13.0"
+  },
+  "coding_backend": "jarvis"
+}

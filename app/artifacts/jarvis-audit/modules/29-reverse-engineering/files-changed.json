@@ -1,0 +1,42 @@
+[
+  {
+    "path": "docs/rea-reverse-engineer-clone.md",
+    "sha256": "0aa417b5b729cf39de70078d5f3ca8f33bd11aed11f5f021868a98a09371fd97"
+  },
+  {
+    "path": "jarvis/rea_tools.py",
+    "sha256": "b1080dd87d88e81e9776b78241473d0c8cdaafae237803747d25f68e2b112375"
+  },
+  {
+    "path": "README.md",
+    "sha256": "05eac5db0f7b7fddf5e60e92c4fdbb3d3e2422aca5236782cf8487cd0fc093d2"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "7d2730f0880244ebebdad3fbde8772d38e7a409d357c2b328a85d822b4a27221"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "8bae8c6790a1d1c90fa0d72c5db0662333317973baf70c4f986328251e7caaa6"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "b22920eff544d8caad92528926e4b5e402ff98bea3e29679d616c3e11d760f5f"
+  },
+  {
+    "path": "tests/test_reverse_engineering_audit.py",
+    "sha256": "02f42063d06c6eeb62201afc82e41c1d77e4e0a6bc43067d582d7a543f7acc8c"
+  },
+  {
+    "path": "scripts/verification/verify_reverse_engineering_audit.py",
+    "sha256": "12520f8959687ca78d08b8a83ceb844106526370fcac742c5a6c7fb5cd2f825f"
+  },
+  {
+    "path": "scripts/verification/report_reverse_engineering_audit.py",
+    "sha256": "1dbb59d66e12021002b8ea51710b41f9beac005f20bb47031f5bd98354dc389a"
+  },
+  {
+    "path": "scripts/verification/verify_reverse_engineering_artifacts.py",
+    "sha256": "56b17f37b41c080032e58e7594297cc6c55e6a2331d591e34963390663843dd7"
+  }
+]

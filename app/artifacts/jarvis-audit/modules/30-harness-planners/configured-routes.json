@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "planner": "qwen3.5:9b",
+  "coder": "qwen3.5:9b",
+  "decision": "qwen3.5:9b",
+  "screen_model": "qwen3.5:9b",
+  "selector": "convaiinnovations/laya",
+  "harness": {
+    "enabled": true,
+    "model": "qwen3.5:9b",
+    "timeout_seconds": 180
+  },
+  "hermes": {
+    "enabled": false,
+    "model": "qwen3.5:9b",
+    "timeout_seconds": 120
+  },
+  "incremental_planning": true,
+  "native_tool_calling": true,
+  "max_task_actions": 20
+}

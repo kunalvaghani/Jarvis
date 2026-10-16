@@ -1,0 +1,52 @@
+[
+  {
+    "path": "docs/media-player.md",
+    "before": "4777a6919dafc78d8655e0a70510540976af8401dc81cd4a9475f3230c0bc071",
+    "after": "b595e62028a1c4e6b762c25348d7da8cf419271729f4d0dbfc7838a23c0a6db2"
+  },
+  {
+    "path": "docs/system-map.md",
+    "before": "2ec9d47ce607754939c85c32d1726c194f70d8ddf4b852a9e497e7a65b62571c",
+    "after": "c36d2417b1bae74a06e8cc989b3c6292c12a2259ddcbf4034971fd3e38b98a6d"
+  },
+  {
+    "path": "jarvis/media_player.py",
+    "before": "a7091b75ee5f12c74fffdfd68724c90c0686ffd301cb0fc98959931d65a593d5",
+    "after": "fa9e09628f98eb40bfaefde1b7360df2fb06001ba5db017a957227e367abccf9"
+  },
+  {
+    "path": "jarvis/spotify.py",
+    "before": "dfb7d3f0645f3819b15d387790a41f23ad05706b1c1d36b93f9acfbfd385d2b9",
+    "after": "b311185f59767076483d0d648e6959b7662d7b687dca3a35b7158ef2fbf80ac2"
+  },
+  {
+    "path": "README.md",
+    "before": "b22e0ebdf2eea8de5681ab494ad8df8e8a671eaede2ffcc8f1e5eba81414510c",
+    "after": "c91f3abe2014775f65ef6272145c8140a55c30d0b20033304770e92caf95083e"
+  },
+  {
+    "path": "../README.md",
+    "before": "a64045f55c131934fe344bb39b25b55cb8df8e189b77e4934e05f42a6b5396f4",
+    "after": "f2b1ea9d4e92a7774eb24079a5ed3641b290e1f5883fa49481fba0350ff66b5f"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "0dda3ab27bd5765e697f4d2c0a8fadbe5a8a8dda930dde4de88fe6f363a675f9",
+    "after": "bd4592747c40df762822c2922707bac0f74aed22249f0196d903ea5589692762"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "77c34886e6741e2c6552e1941fbc0f9d9f4b82c829856099cb5d9ce7e1f2fa35",
+    "after": "f3e726ca4dc6fa5c0c68d868f82c01e3b3fa0757dbd905a7a4eea5f3f8493dbc"
+  },
+  {
+    "path": "tests/test_island_desk.py",
+    "before": "3dc7b66d4c5aa6af56f4e94277440294afada6312457e086a11c40124d49ec31",
+    "after": "1b3a6a8d4500df0d42e207a0087e9f50d2144ba5555fa2d0905d984f0e78713c"
+  },
+  {
+    "path": "tests/test_media_player.py",
+    "before": "bef249f1af38c0030c77ef6a341289b3de6d01683899ba11cead0016a9c98625",
+    "after": "5dbd20edb97e6de2223f4618a240cfb89156743de44e904531a3c5bce8affdf7"
+  }
+]

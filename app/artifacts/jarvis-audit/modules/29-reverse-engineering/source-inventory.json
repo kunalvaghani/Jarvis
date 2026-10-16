@@ -1,0 +1,32 @@
+{
+  "configured_settings": {
+    "enabled": true,
+    "node_path": "C:\\Program Files\\nodejs\\node.exe",
+    "entry": "C:\\Users\\kunal\\AppData\\Roaming\\npm\\node_modules\\rea-agents\\scripts\\rea.mjs",
+    "allow_commands": [
+      "analyze",
+      "analyze-javascript-application",
+      "analyze-web-bundle"
+    ],
+    "analysis_timeout_seconds": 600,
+    "max_input_mb": 200
+  },
+  "entry_exists": true,
+  "tools": [
+    "rea_status",
+    "rea_ingest",
+    "rea_analyze",
+    "rea_ledger",
+    "rea_record"
+  ],
+  "entry_chain": [
+    "commands.command",
+    "toolkits.execute",
+    "rea_tools.execute",
+    "analyze",
+    "_run_rea"
+  ],
+  "configured_rea_version": "6.4.0",
+  "current_upstream": "6.5.0",
+  "external_engines_exercised": false
+}

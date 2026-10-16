@@ -1,0 +1,31 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "real_mailbox_writes": 0,
+  "external_effects": 0,
+  "scope": "Same HTML MIME, expected hash, recipient and result/readback. One fake PUT per sample; byte-identical result MIME. Five initial/twenty warm calls per version in one imported process; no fresh-process cold start, OAuth, network, GUI, RSS/VRAM or full user-journey timing. Current update adds one GET after approval; real HTTP latency may increase despite avoiding repeated MIME parsing.",
+  "before": {
+    "initial": {
+      "p50_ms": 10.3471,
+      "p95_ms": 14.9423,
+      "python_peak_bytes": 196034
+    },
+    "warm": {
+      "p50_ms": 10.073799999999999,
+      "p95_ms": 10.3053,
+      "python_peak_bytes": 141482
+    }
+  },
+  "after": {
+    "initial": {
+      "p50_ms": 8.3813,
+      "p95_ms": 8.646,
+      "python_peak_bytes": 126206
+    },
+    "warm": {
+      "p50_ms": 8.4738,
+      "p95_ms": 8.5884,
+      "python_peak_bytes": 123313
+    }
+  }
+}

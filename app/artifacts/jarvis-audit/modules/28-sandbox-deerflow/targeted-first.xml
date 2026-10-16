@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="38" time="5.741" timestamp="2026-10-16T21:27:39.441691+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_019_attempted_checkpoint_blocks_different_command" time="0.081" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_017_write_budget_applies_to_all_effects" time="0.013" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_006_timeout_stops_only_owned_job" time="0.028" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_031_checkpoint_read_is_bounded" time="0.038" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_002_linked_mount_ancestor_refused" time="0.015" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_029_mutable_image_identity_refused" time="0.014" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_026_exclusive_write_refuses_race" time="0.036" /><testcase classname="tests.test_sandbox_deerflow_audit" name="test_JRV_28_007_wrong_media_format_not_success" time="0.315"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-321/test_JRV_28_007_wrong_media_fo0')
+
+    def test_JRV_28_007_wrong_media_format_not_success(tmp_path):
+        from jarvis.deerflow_media import execute
+        obj=job(tmp_path);bad=obj.root/'outputs/chart.png';bad.write_text('not a PNG')
+        obj.inventory=Mock(return_value=[{'path':'outputs/chart.png','bytes':bad.stat().st_size}])
+        with patch.object(SandboxJob,'__enter__',return_value=obj),patch.object(SandboxJob,'__exit__'):
+&gt;           with pytest.raises(ValueError):execute(SimpleNamespace(base=tmp_path),{'value':'chart','content':'{"labels":["A"],"values":[1]}'},lambda:False)
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_sandbox_deerflow_audit.py:77: Failed</failure></testcase><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_deliberate_shutdown_prevents_start" time="0.002" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_desktop_keeps_profile_paths_but_excludes_secret_environment" time="0.003" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_fault_and_backoff_without_task_replay" time="0.005" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_missing_profile_fails_without_launching_desktop" time="0.003" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_running_shared_engine_is_never_restarted_or_stopped" time="0.030" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_sandbox_task_is_not_replannable_after_uncertain_dispatch" time="0.001" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_startup_lock_excludes_second_owner_and_releases" time="0.010" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_startup_race_does_not_dispatch_second_launch" time="0.004" /><testcase classname="tests.test_docker_sandbox.DockerRecoveryTests" name="test_successful_start_uses_desktop_environment_and_hidden_flag" time="0.005" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_completed_and_uncertain_commands_are_not_replayed" time="0.047" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_dead_owner_reaping_preserves_outputs" time="0.054"><failure message="AssertionError: expected call not found.&#10;Expected: cli(['rm', '--force', 'jarvis-deerflow-49af97a3d34c407b96e6e6574a3bea7c'], timeout=10)&#10;Actual: cli(['rm', '--force', 'owned-id'], timeout=10)">self = &lt;tests.test_docker_sandbox.SandboxTests testMethod=test_dead_owner_reaping_preserves_outputs&gt;
+
+    def test_dead_owner_reaping_preserves_outputs(self):
+        import psutil
+        from jarvis.deerflow_sandbox import reap_orphans
+        self.job.save()
+        output = self.job.root / 'outputs/result.txt'
+        output.write_text('preserve')
+        original_process = psutil.Process
+        owner_pid = self.job.state['owner_pid']
+        def process(pid=None):
+            if pid == owner_pid:
+                raise psutil.NoSuchProcess(pid)
+            return original_process(pid)
+        with patch('psutil.Process', side_effect=process), patch.object(SandboxJob, 'owned', return_value={'Id': 'owned-id'}), patch('jarvis.deerflow_sandbox.RepositorySandbox.cli', return_value=b'') as cli:
+            self.assertEqual(reap_orphans(self.temp.name), 1)
+&gt;           cli.assert_called_once_with(['rm', '--force', self.job.name], timeout=10)
+
+tests\test_docker_sandbox.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:931: in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;MagicMock name='cli' id='1553055176096'&gt;
+args = (['rm', '--force', 'jarvis-deerflow-49af97a3d34c407b96e6e6574a3bea7c'],)
+kwargs = {'timeout': 10}
+expected = call(['rm', '--force', 'jarvis-deerflow-49af97a3d34c407b96e6e6574a3bea7c'], timeout=10)
+actual = call(['rm', '--force', 'owned-id'], timeout=10)
+_error_message = &lt;function NonCallableMock.assert_called_with.&lt;locals&gt;._error_message at 0x000001699945A8C0&gt;
+cause = None
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\nActual: %s'
+                    % (expected, actual))
+            raise AssertionError(error_message)
+    
+        def _error_message():
+            msg = self._format_mock_failure_message(args, kwargs)
+            return msg
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        actual = self._call_matcher(self.call_args)
+        if actual != expected:
+            cause = expected if isinstance(expected, Exception) else None
+&gt;           raise AssertionError(_error_message()) from cause
+E           AssertionError: expected call not found.
+E           Expected: cli(['rm', '--force', 'jarvis-deerflow-49af97a3d34c407b96e6e6574a3bea7c'], timeout=10)
+E           Actual: cli(['rm', '--force', 'owned-id'], timeout=10)
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:919: AssertionError</failure></testcase><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_delivery_uses_actual_json_instead_of_model_claim" time="0.029" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_free_media_spec_rejects_injection_fields_and_nonfinite_values" time="0.013" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_input_copies_are_scoped_and_credentials_are_excluded" time="0.043" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_live_owner_is_not_reaped" time="0.036" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_no_escape_or_overwrite" time="0.047" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_parent_cleanup_preserves_worker_checkpoint" time="0.059" /><testcase classname="tests.test_docker_sandbox.SandboxTests" name="test_storage_guard_stops_only_attested_owned_container" time="2.860" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_citations_resolve_only_current_successful_matching_reads" time="0.002" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_giant_receipt_and_duplicate_citations_are_bounded" time="0.001" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_public_scraper_preserves_observed_links_without_following_them" time="0.003" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_public_skill_catalog_cannot_escape" time="0.037" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_registered_tools_discoverable_without_starting_workers" time="0.058" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_session_supplies_pre_reads_and_withholds_forged_receipts" time="0.139" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_shutdown_before_start_does_not_launch_process" time="0.003" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_upstream_tokens_are_neutralized_without_destroying_source" time="0.001" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_virtual_source_links_require_observed_sources" time="0.002" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_web_tool_does_not_resolve_or_forward_local_project" time="0.002" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_worker_cancel_terminates_owned_process_without_retry" time="0.021" /><testcase classname="tests.test_deerflow.DeerFlowTests" name="test_worker_deadline_is_bounded_and_never_restarts" time="0.023" /></testsuite></testsuites>

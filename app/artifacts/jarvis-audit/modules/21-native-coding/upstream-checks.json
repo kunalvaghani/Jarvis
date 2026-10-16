@@ -1,0 +1,31 @@
+[
+  {
+    "url": "https://docs.ollama.com/capabilities/structured-outputs",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "findings": "Official local JSON schema documentation inspected. Cloud does not currently support structured outputs. Loopback version endpoint returned0.40.0; no live model inference acceptance."
+  },
+  {
+    "url": "https://git-scm.com/install/windows",
+    "checked": "2026-10-16 IST",
+    "release_date": "2026-10-05",
+    "latest": "2.56.0(2)",
+    "installed": "2.49.1.windows.1",
+    "findings": "Official page inspected with Firecrawl. No upgrade installed."
+  },
+  {
+    "url": "https://git-scm.com/docs/git-worktree",
+    "checked": "2026-10-16 IST",
+    "release_date": null,
+    "findings": "Official linked worktree source-isolation/reference inspected; not OS security isolation."
+  },
+  {
+    "url": "https://github.com/ollama/ollama/releases/tag/v0.40.5",
+    "checked": "2026-10-16 IST",
+    "release_date": "2026-10-14 (page display19:45; timezone unstated)",
+    "latest": "0.40.5",
+    "installed": "0.40.0",
+    "findings": "Official release notes inspected. Nemotron support, cloud/Responses fixes and llama.cpp/MLX updates. No measured local9B/4GB win; no upgrade installed. Search excerpt signature date distinguished from release display.",
+    "signature_verification_date": "2026-10-15"
+  }
+]

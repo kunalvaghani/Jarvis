@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="12" time="0.965" timestamp="2026-10-16T22:27:12.919186+05:30" hostname="Kunal-Beast"><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_006_duplicate_actions_rejected" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">def test_JRV_30_006_duplicate_actions_rejected():
+        p=plan();p['steps']*=2
+&gt;       with pytest.raises(ValueError,match='repeat|duplicate'):validate_proposal(p,request())
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:16: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_015_unhashable_action_is_schema_error" time="0.001"><failure message="TypeError: unhashable type: 'list'">def test_JRV_30_015_unhashable_action_is_schema_error():
+        p=plan();p['steps'][0]['action']=[]
+&gt;       with pytest.raises(ValueError):validate_proposal(p,request())
+
+tests\test_harness_planners_audit.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\hermes.py:40: in validate_proposal
+    if any(step.get("action") not in allowed for step in steps if isinstance(step, dict)):
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x0000024365273A90&gt;
+
+&gt;   if any(step.get("action") not in allowed for step in steps if isinstance(step, dict)):
+E   TypeError: unhashable type: 'list'
+
+jarvis\hermes.py:40: TypeError</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad0-hermes-HermesClient]" time="0.021"><failure message="AttributeError: 'list' object has no attribute 'get'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej0')
+kind = 'hermes', klass = &lt;class 'jarvis.hermes.HermesClient'&gt;, bad = []
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+
+tests\test_harness_planners_audit.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.hermes.HermesClient object at 0x00000243652AC790&gt;
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej0')
+options = {'hermes': []}
+
+    def __init__(self, base, options):
+        super().__init__(base, options)
+&gt;       self.timeout_seconds = max(10, min(180, float(options.get("hermes", {}).get("timeout_seconds", 120))))
+E       AttributeError: 'list' object has no attribute 'get'
+
+jarvis\hermes.py:56: AttributeError</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad0-harness-HarnessClient]" time="0.003"><failure message="AttributeError: 'list' object has no attribute 'get'">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej1')
+kind = 'harness', klass = &lt;class 'jarvis.harness.HarnessClient'&gt;, bad = []
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+
+tests\test_harness_planners_audit.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.harness.HarnessClient object at 0x0000024365222260&gt;
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej1')
+options = {'harness': []}
+
+    def __init__(self, base, options):
+        super().__init__(base, options)
+&gt;       self.timeout_seconds = max(10, min(300, float(options.get('harness', {}).get('timeout_seconds', 180))))
+E       AttributeError: 'list' object has no attribute 'get'
+
+jarvis\harness.py:42: AttributeError</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad1-hermes-HermesClient]" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej2')
+kind = 'hermes', klass = &lt;class 'jarvis.hermes.HermesClient'&gt;
+bad = {'enabled': 'false'}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad1-harness-HarnessClient]" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej3')
+kind = 'harness', klass = &lt;class 'jarvis.harness.HarnessClient'&gt;
+bad = {'enabled': 'false'}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad2-hermes-HermesClient]" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej4')
+kind = 'hermes', klass = &lt;class 'jarvis.hermes.HermesClient'&gt;
+bad = {'timeout_seconds': nan}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad2-harness-HarnessClient]" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej5')
+kind = 'harness', klass = &lt;class 'jarvis.harness.HarnessClient'&gt;
+bad = {'timeout_seconds': nan}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad3-hermes-HermesClient]" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej6')
+kind = 'hermes', klass = &lt;class 'jarvis.hermes.HermesClient'&gt;
+bad = {'timeout_seconds': True}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_029_bad_config_rejected[bad3-harness-HarnessClient]" time="0.003"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_029_bad_config_rej7')
+kind = 'harness', klass = &lt;class 'jarvis.harness.HarnessClient'&gt;
+bad = {'timeout_seconds': True}
+
+    @pytest.mark.parametrize('kind,klass',[('hermes',HermesClient),('harness',HarnessClient)])
+    @pytest.mark.parametrize('bad',[[],{'enabled':'false'},{'timeout_seconds':float('nan')},{'timeout_seconds':True}])
+    def test_JRV_30_029_bad_config_rejected(tmp_path,kind,klass,bad):
+&gt;       with pytest.raises(ValueError):klass(tmp_path,{kind:bad})
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:25: Failed</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_010_shared_client_serializes_requests" time="0.036"><failure message="assert 5 == 1">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_010_shared_client_0')
+
+    def test_JRV_30_010_shared_client_serializes_requests(tmp_path):
+        client=BrainClient(tmp_path,{})
+        inside=[0];peak=[0];lock=threading.Lock()
+        def infer(operation,cancelled,**data):
+            with lock:inside[0]+=1;peak[0]=max(peak[0],inside[0])
+            time.sleep(.02)
+            with lock:inside[0]-=1
+            return data['marker']
+        with patch.object(client,'_request_once',side_effect=infer),ThreadPoolExecutor(max_workers=5) as pool:
+            values=list(pool.map(lambda i:client.request('verify',lambda:False,marker=i),range(5)))
+&gt;       assert values==list(range(5));assert peak[0]==1
+E       assert 5 == 1
+
+tests\test_harness_planners_audit.py:37: AssertionError</failure></testcase><testcase classname="tests.test_harness_planners_audit" name="test_JRV_30_015_agent_cannot_propose_unadvertised_tool" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-334/test_JRV_30_015_agent_cannot_p0')
+
+    def test_JRV_30_015_agent_cannot_propose_unadvertised_tool(tmp_path):
+        client=HarnessClient(tmp_path,{})
+        bad={'final':'','calls':[{'action':'run_command','value':'unsafe','content':''}]}
+&gt;       with patch.object(BrainClient,'_request_once',return_value=bad),pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_harness_planners_audit.py:42: Failed</failure></testcase></testsuite></testsuites>

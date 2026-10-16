@@ -28,7 +28,8 @@ def search(query, cancelled=lambda: False):
 
 def _spotify_session(manager):
     sessions = [session for session in manager.get_sessions()
-                if "spotify" in session.source_app_user_model_id.casefold()]
+                if str(session.source_app_user_model_id).casefold() in {
+                    'spotify.exe', 'spotify', 'spotifyab.spotifymusic_zpdnekdrzrea0!spotify'}]
     if not sessions:
         raise ValueError("Spotify has no active playback session. Play a song in Spotify first.")
     if len(sessions) > 1:
@@ -180,7 +181,10 @@ def _on_media_thread(operation, cancelled, timeout=6.):
 
 
 def control(action, cancelled=lambda: False):
-    return _on_media_thread(lambda abort: _control(action, abort), cancelled)
+    try:
+        return _on_media_thread(lambda abort: _control(action, abort), cancelled)
+    except ImportError:
+        raise ValueError('Spotify Windows media dependency is unavailable; repair the declared WinRT installation.') from None
 
 
 async def _is_playing():

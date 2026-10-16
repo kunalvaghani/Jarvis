@@ -126,7 +126,8 @@ def request(base, payload, cancelled=lambda: False, timeout_seconds=180):
                         diagnostic = diagnostic.replace(env[key], '[credential redacted]')
                 (runtime / 'worker-error.log').write_text('exit_code=' + str(process.returncode) + '\nstdout=' + data.decode('utf-8', errors='replace')[:2000] + '\nstderr=' + diagnostic, encoding='utf-8')
                 raise ValueError('DeerFlow worker failed before returning valid JSON (exit ' + str(process.returncode) + '); check isolated dependencies.') from None
-            if process.returncode or not isinstance(result, dict) or result.get('error'):
+            if not isinstance(result,dict):raise ValueError('DeerFlow worker returned an invalid result protocol.')
+            if process.returncode or result.get('error'):
                 raise ValueError('DeerFlow failed: ' + str(result.get('error', 'worker error'))[:300])
             return result
         finally:

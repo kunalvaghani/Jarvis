@@ -1,0 +1,31 @@
+{
+  "equivalent": true,
+  "samples_per_version": 25,
+  "journal_rows": 1000,
+  "external_effects": 0,
+  "scope": "Same1000 paired action rows, five first calls/twenty warm calls per method, same imported process and filesystem cache. False for complete journal; True for an appended uncertain action. Imports/construction excluded. No inference/TTFT/audio/GPU or end-to-end build performance claim.",
+  "before": {
+    "cold": {
+      "p50_ms": 6.7063,
+      "p95_ms": 16.2511,
+      "python_peak_bytes": 696154
+    },
+    "warm": {
+      "p50_ms": 6.512700000000001,
+      "p95_ms": 6.6623,
+      "python_peak_bytes": 677034
+    }
+  },
+  "after": {
+    "cold": {
+      "p50_ms": 6.0927,
+      "p95_ms": 6.2087,
+      "python_peak_bytes": 143866
+    },
+    "warm": {
+      "p50_ms": 6.0438,
+      "p95_ms": 6.1355,
+      "python_peak_bytes": 143314
+    }
+  }
+}

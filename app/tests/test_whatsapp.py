@@ -176,7 +176,11 @@ class PromptTests(unittest.TestCase):
 
 class FlowTests(unittest.TestCase):
     def actions(self, answers):
+        from tempfile import TemporaryDirectory
+        directory = TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
         actions = SimpleNamespace(whatsapp_prompts=[], report=Mock(), config={}, desktop=Mock())
+        actions.base = directory.name
 
         def answer():
             for value in answers:
@@ -203,7 +207,7 @@ class FlowTests(unittest.TestCase):
         self.assertEqual(opened.call_args.args[1]["name"], "Jay Patel")
         self.assertEqual(drafted.call_args_list[1].args[4], "revise")
         typed.assert_called_once_with(actions, 7, "Jay Patel", "10 min late!", unittest.mock.ANY)
-        sent.assert_called_once_with(7, "Jay Patel", "10 min late!")
+        sent.assert_called_once_with(7, "Jay Patel", "10 min late!", cancelled=unittest.mock.ANY)
         self.assertIn("Sent to Jay Patel", result)
         phases = [c.args[1]["phase"] for c in actions.report.call_args_list if c.args[0] == "media_card"]
         self.assertEqual(phases[:2], ["searching", "choose"])

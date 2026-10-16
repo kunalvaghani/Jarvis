@@ -4,6 +4,7 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import Mock
 import zlib
 from pathlib import Path
 from types import SimpleNamespace
@@ -170,6 +171,7 @@ class Indexing(unittest.TestCase):
 class DropFlow(unittest.TestCase):
     def flow(self, answers, files=None, **patches):
         lib, actions, reports = library()
+        actions._approve=Mock()  # Explicit fake approval for this owned drop fixture.
         files = files or [str(make_pdf(Path(tempfile.mkdtemp()) / "brief-client.pdf", BRIEF))]
         script = list(answers)
         asked = []

@@ -1,0 +1,42 @@
+[
+  {
+    "path": "jarvis/development_tools.py",
+    "before": "abce30936f83d31b19bdb07944990ba65414eb702ea146e083e7713a81c91f7c",
+    "after": "f2eb3c6c8d5946f385737f8303d359d23d695bb27691835f0a1fc4e12ec936a2"
+  },
+  {
+    "path": "jarvis/development_browser.py",
+    "before": "64a90d6556b1de8a8168edd7e4c03b5c45cfb40ad001ecf2fa5326d6d636c444",
+    "after": "f67306f92e1656fb92828100829ec99dd83971327a005cf9a930ea4fc47a3381"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "6b635111acd8ed8e4990ba527d535397f73fa79a4fb16ab823687736d6e98ed2",
+    "after": "e7f83c85690f78ea77e4219bca377978df0b936764e436b53e74f31fcb2c3f34"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "b9ae0a9205d313ee70b18478dc920981e8a677172315b4cd3ca5322ce9f3f57a",
+    "after": "daf0a99eeea0bb7e3dbc8a1193223e1cdd4ea80705663d00fd011ce020b94d4e"
+  },
+  {
+    "path": "README.md",
+    "before": "41a0f30e984095a20ba8bd30c9f51fbc53fd59f0e09652b6b6c2c59fe2cbdace",
+    "after": "541bfb5c29b8e38d6aff4050e1666cdb19161466a06d9ca20480041a9e148d57"
+  },
+  {
+    "path": "docs/web-app-development.md",
+    "before": "3d7a67767fd613fc6611ae0492685179e9ca703700671eff722627eb70461b53",
+    "after": "6cc2d22c4bda792752ae7424354cd975d55a4363f7e49e3eec21b686baf0b6e3"
+  },
+  {
+    "path": "docs/system-map.md",
+    "before": "3f8f0cd8b240632a693ed91b65bc7cac060a3fd88753e649b3fc331539cdd295",
+    "after": "1419c011d508c6bb767f963f78de454f138b51dc59e73ad37303e4ab71f6134a"
+  },
+  {
+    "path": "../README.md",
+    "before": "41a0f30e984095a20ba8bd30c9f51fbc53fd59f0e09652b6b6c2c59fe2cbdace",
+    "after": "0e992a505103127492b34aa4f74d0e5b154fd42bd965c031df6ae0ee60a171c5"
+  }
+]

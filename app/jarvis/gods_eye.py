@@ -58,6 +58,23 @@ ME = re.compile(r"(?i)^(?:me|my area|my location|here|overhead|above me|over me|
 LAYER_WORDS = "|".join(sorted((re.escape(k) for k in LAYERS), key=len, reverse=True))
 
 
+def recent(stamp, now, seconds=120):
+    return type(stamp) in (int,float) and math.isfinite(stamp) and 0 <= now-stamp <= seconds
+
+
+def nearby_distance(lat, lon, other_lat, other_lon, radius):
+    """Conservative latitude rejection, then exact spherical distance; inclusive radius."""
+    if (type(lat) not in (int,float) or type(other_lat) not in (int,float)
+            or not -90<=lat<=90 or not -90<=other_lat<=90):
+        return None
+    if abs(other_lat-lat) > radius*180/(6371*math.pi)+1e-10:
+        return None
+    if (type(lon) not in (int,float) or type(other_lon) not in (int,float)
+            or not -180<=lon<=180 or not -180<=other_lon<=180): return None
+    km=distance(lat,lon,other_lat,other_lon)
+    return km if km <= radius else None
+
+
 def distance(lat, lon, lat2, lon2):
     a, b, c, d = map(math.radians, (lat, lon, lat2, lon2))
     h = math.sin((c - a) / 2) ** 2 + math.cos(a) * math.cos(c) * math.sin((d - b) / 2) ** 2
@@ -152,7 +169,14 @@ def parse_command(text):
 # --- server, geocoding and the page ----------------------------------------------------------------------------
 class GodsEye:
     def __init__(self, actions, options=None, http=None, clock=time.time):
-        options = options or {}
+        if options is not None and not isinstance(options,dict): raise ValueError('gods_eye must be an object')
+        options = dict(options or {})
+        for key in ('enabled','autostart','location_enabled'):
+            if key in options and type(options[key]) is not bool: raise ValueError('gods_eye.'+key+' must be boolean')
+        for key,default,low,high in (('radius_km',40,1,500),('poll_seconds',60,10,3600)):
+            value=options.get(key,default)
+            if type(value) not in (int,float) or not math.isfinite(value) or not low<=value<=high:
+                raise ValueError('Invalid gods_eye.'+key)
         self.actions = actions
         self.options = options
         self.enabled = bool(options.get("enabled", True))
@@ -167,6 +191,9 @@ class GodsEye:
         self.stop = threading.Event()
         self.thread = None
         self.path = Path(actions.base) / ".jarvis-runtime" / "gods-eye-cache.json"
+        self.seen_path=self.path.with_name('gods-eye-alerts.json')
+        self.storage_failed=False
+        self._load_seen()
         self.enabled_layers = set()  # Layers Jarvis turned on for the last request.
         self.last_view = None  # {"latitude", "longitude", "altitude", "label"} of the last place shown.
         self.view_history = []  # Earlier views, for "go back to the previous camera position".
@@ -207,15 +234,23 @@ class GodsEye:
         return summary(result, bool(ontario_key(self.actions.base)))
 
     def api(self, path, params=None, timeout=20):
-        response = self.http.get(BASE + path, params=params, timeout=(3, timeout))
-        if response.status_code >= 400:
-            return None
+        if self.stop.is_set(): raise InterruptedError('Map read cancelled')
         try:
-            return response.json()
-        except ValueError:
+            with self.http.get(BASE + path, params=params, timeout=(3, timeout),stream=True) as response:
+                if response.status_code >= 400: return None
+                raw=bytearray();deadline=time.monotonic()+timeout+3
+                for chunk in response.iter_content(8192):
+                    if self.stop.is_set(): raise InterruptedError('Map read cancelled')
+                    if time.monotonic()>deadline: raise requests.Timeout('Map read deadline')
+                    if len(raw)+len(chunk)>1048576: raise ValueError('Map response exceeds 1 MiB')
+                    raw.extend(chunk)
+                data=json.loads(raw)
+                return data if isinstance(data,dict) else None
+        except (requests.RequestException,ValueError,RecursionError):
             return None
 
     def here(self):
+        if not self.location_allowed() or self.stop.is_set(): return None
         realtime = getattr(self.actions, "realtime", None)
         location = realtime.detect_location(lambda: self.stop.is_set()) if realtime is not None else None
         if location and not location.get("stale"):
@@ -223,10 +258,18 @@ class GodsEye:
         city = self.actions.config.get("weather", {}).get("fallback_city", "")
         return self.geocode(city) if city else None
 
+    def location_allowed(self):
+        if not self.enabled or not self.options.get('location_enabled',True): return False
+        options=getattr(getattr(self.actions,'realtime',None),'options',None)
+        if not isinstance(options,dict): options=getattr(self.actions,'config',{}).get('realtime',{})
+        return options.get('auto_location',True) is not False or options.get('location') is not None
+
     def geocode(self, place):
         """Place -> {latitude, longitude, name, span_km}. OpenStreetMap Nominatim ranked by importance handles seas,
         regions and landmarks ("the Persian Gulf", "Eiffel Tower"); God's Eye's geocoder and Open-Meteo are fallbacks."""
         query = re.sub(r"(?i)^(?:the|a|an)\s+", "", place.strip())
+        if not query or len(query)>500: raise ValueError('Place must contain 1–500 characters')
+        ambiguous=False
         # "central London" found a tube line called Central; the city itself is what was meant.
         query = re.sub(r"(?i)^(?:central|downtown|greater|old town of|(?:the )?(?:city )?cent(?:er|re) of|(?:the )?heart of)\s+", "", query) or query
         try:
@@ -235,6 +278,12 @@ class GodsEye:
                                  params={"q": query, "format": "jsonv2", "limit": 5, "namedetails": 1, "accept-language": "en"},
                                  headers={"User-Agent": "JarvisPersonalAssistant/1.0 " + contact}).json()
             if rows:
+                ranked=sorted(rows,key=lambda r:float(r.get('importance') or 0),reverse=True)
+                if len(ranked)>1 and abs(float(ranked[0].get('importance') or 0)-float(ranked[1].get('importance') or 0))<.15:
+                    a,b=ranked[:2]
+                    ambiguous=(str(a.get('name','')).casefold()==str(b.get('name','')).casefold()
+                        and distance(float(a['lat']),float(a['lon']),float(b['lat']),float(b['lon']))>50)
+                if ambiguous: raise ValueError('ambiguous place')
                 row = max(rows, key=lambda r: float(r.get("importance") or 0))
                 south, north, west, east = (float(v) for v in row.get("boundingbox", [0, 0, 0, 0]))
                 name = (row.get("namedetails") or {}).get("name:en") or (row.get("namedetails") or {}).get("name") or row.get("name") \
@@ -244,7 +293,7 @@ class GodsEye:
                     span = 900  # Water bodies are often a single point in OpenStreetMap.
                 return {"latitude": float(row["lat"]), "longitude": float(row["lon"]), "name": name[:80], "span_km": span}
         except (requests.RequestException, ValueError, KeyError):
-            pass
+            if ambiguous: raise ValueError('The place is ambiguous; specify the state or country.') from None
         data = None
         try:
             data = self.api("/api/geocode", {"q": place}, 15)
@@ -277,6 +326,8 @@ class GodsEye:
 
     def show(self, spec, cancelled=lambda: False):
         """Open God's Eye at the requested place with the requested layers and style."""
+        if cancelled() or self.stop.is_set(): raise InterruptedError('Map request cancelled')
+        if not self.enabled: raise ValueError('God\'s Eye integration is disabled')
         self.card("opening", "God's Eye", spec.get("place") or "Opening the globe", "Starting the console")
         self.ensure_server(cancelled)
         actions, view, label = [], None, ""
@@ -337,7 +388,9 @@ class GodsEye:
                            else {"name": "set_hud", "args": {"visible": "on", "layout": value}})
         if not actions:
             actions.append({"name": "get_current_view_state", "args": {}})
+        if cancelled() or self.stop.is_set(): raise InterruptedError('Map request cancelled')
         result = self.actions._browser().request("gods_eye", cancelled, new_task=True, actions=actions, view=view)
+        if cancelled() or self.stop.is_set(): raise InterruptedError('Map readback cancelled')
         if view:
             if self.last_view:
                 self.view_history = (self.view_history + [self.last_view])[-10:]
@@ -370,6 +423,7 @@ class GodsEye:
 
     def camera(self, spec, cancelled=lambda: False):
         """Move or inspect the current God's Eye view: zoom, orbit, pan, overhead, back, label, clear, where, hide."""
+        if cancelled() or self.stop.is_set(): raise InterruptedError('Map request cancelled')
         self.ensure_server(cancelled)
         browser = self.actions._browser()
 
@@ -465,36 +519,42 @@ class GodsEye:
             except Exception as exc:
                 failures += 1
                 with self.lock:
-                    self.cache["error"] = type(exc).__name__ + ": " + str(exc)[:200]
+                    self.cache["error"] = type(exc).__name__
             self.stop.wait(self.interval * (1 if failures < 3 else 5))
 
     def poll(self):
+        if self.stop.is_set() or not self.location_allowed(): return {}
         here = self.here()
         if not here:
             return {}
         lat, lon, radius = here["latitude"], here["longitude"], self.radius_km
         snapshot = {"at": self.clock(), "at_local": datetime.now().strftime("%H:%M"), "location": here, "radius_km": radius}
         flights = self.api("/api/flights", {"lat": round(lat, 4), "lon": round(lon, 4)}) or {}
+        if not isinstance(flights,dict): flights={}
         nearby = []
         for s in flights.get("states") or []:
             try:
+                if not recent(s[3],self.clock()) or not recent(flights.get('time',s[4]),self.clock()): continue
                 if s[6] is None or s[5] is None:
                     continue
-                km = distance(lat, lon, s[6], s[5])
-                if km > radius:
+                km = nearby_distance(lat, lon, s[6], s[5], radius)
+                if km is None:
                     continue
                 nearby.append({"callsign": (s[1] or "").strip() or s[0], "icao24": s[0], "country": s[2], "km": round(km, 1),
                                "altitude_m": round(s[7] or s[13] or 0), "on_ground": bool(s[8]), "speed_kmh": round((s[9] or 0) * 3.6),
                                "heading": round(s[10] or 0), "squawk": s[14] or "", "direction": bearing(lat, lon, s[6], s[5])})
-            except (TypeError, IndexError):
+            except (TypeError, IndexError, ValueError, OverflowError):
                 continue
         nearby.sort(key=lambda f: f["km"])
-        snapshot["flights"] = {"count": len(nearby), "source": "God's Eye /api/flights", "nearest": nearby[:8],
+        snapshot["flights"] = {"count": len(nearby), "status":"current" if nearby else "unavailable_or_empty", "source": "God's Eye /api/flights", "nearest": nearby[:8],
                                "low": [f for f in nearby if not f["on_ground"] and 0 < f["altitude_m"] < 1500][:6],
                                "emergencies": [f for f in nearby if f["squawk"] in SQUAWKS]}
         military = self.api("/api/military") or {}
+        if not isinstance(military,dict): military={}
         mil = []
         for a in military.get("ac") or []:
+            stamp=military.get('now')
+            if not isinstance(a,dict) or type(stamp) not in (int,float) or not recent(stamp/1000,self.clock()) or type(a.get('seen_pos')) not in (int,float) or not 0<=a['seen_pos']<=120: continue
             if not isinstance(a.get("lat"), (int, float)) or not isinstance(a.get("lon"), (int, float)):
                 continue
             km = distance(lat, lon, a["lat"], a["lon"])
@@ -548,6 +608,7 @@ class GodsEye:
             snapshot["regional_brief"] = {"place": (brief.get("place") or {}).get("label"),
                                           "headlines": [a.get("title", "")[:140] for a in (brief.get("articles") or [])[:5]],
                                           "news_source": brief.get("newsSource")}
+        if self.stop.is_set(): raise InterruptedError('Map poll cancelled')
         try:
             quakes = self.http.get("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson", timeout=(3, 15)).json()
             q = []
@@ -562,6 +623,7 @@ class GodsEye:
         tomtom = self.api("/api/tomtom/status") or {}
         snapshot["traffic"] = {"available": bool(tomtom.get("hasKey")),
                                "note": "" if tomtom.get("hasKey") else "Live traffic needs a TomTom key in God's Eye settings."}
+        if self.stop.is_set() or not self.location_allowed(): return {}
         with self.lock:
             self.cache = snapshot
         try:
@@ -573,6 +635,7 @@ class GodsEye:
 
     def alerts(self, snapshot=None):
         snapshot = snapshot or self.cache
+        if not self.location_allowed() or not recent(snapshot.get('at'),self.clock()): return []
         found = []
         for f in (snapshot.get("flights") or {}).get("emergencies", []):
             found.append(("squawk:" + f["icao24"] + ":" + f["squawk"], "severe",
@@ -598,32 +661,63 @@ class GodsEye:
         return found
 
     def alert(self):
-        now = self.clock()
-        self.seen = {k: v for k, v in self.seen.items() if now - v < 6 * 3600}
-        fresh = [a for a in self.alerts() if a[0] not in self.seen]
-        for key, level, message in fresh[:3]:
-            self.seen[key] = now
-            self.actions.report("spoken_reply", "God's Eye alert: " + message)
-            self.card("alert", message[:90], (self.cache.get("location") or {}).get("name", ""), "Severe" if level == "severe" else "Warning")
-            memory = getattr(self.actions, "memory", None)
-            if memory is not None:
-                memory.record("God's Eye alert", message)
-        return fresh
+        with self.lock:
+            if self.stop.is_set() or self.storage_failed or not self.location_allowed(): return []
+            now = self.clock()
+            self.seen = {k: v for k, v in self.seen.items() if now - v < 6 * 3600}
+            fresh = [a for a in self.alerts() if a[0] not in self.seen][:3]
+            for key,_,_ in fresh: self.seen[key]=now
+            if not fresh: return []
+            if not self._save_seen():
+                self.storage_failed=True
+                return []
+            for key, level, message in fresh:
+                if self.stop.is_set() or not self.location_allowed(): break
+                self.actions.report("spoken_reply", "God's Eye alert: " + message)
+                self.card("alert", message[:90], (self.cache.get("location") or {}).get("name", ""), "Severe" if level == "severe" else "Warning")
+                memory = getattr(self.actions, "memory", None)
+                if memory is not None: memory.record("God's Eye alert", message)
+            return fresh
+
+    def _load_seen(self):
+        try:
+            with self.seen_path.open(encoding='utf-8') as stream: raw=stream.read(65537)
+            if len(raw)>65536: raise ValueError('Oversized alert checkpoint')
+            data=json.loads(raw)
+            if not isinstance(data,dict) or len(data)>1000 or any(not isinstance(k,str) or len(k)>200 or type(v) not in (int,float) or not math.isfinite(v) for k,v in data.items()):
+                raise ValueError('Invalid alert checkpoint')
+            self.seen=data
+        except FileNotFoundError: pass
+        except (OSError,ValueError,RecursionError,OverflowError): self.storage_failed=True
+
+    def _save_seen(self):
+        try:
+            if len(self.seen)>1000: raise ValueError('Alert checkpoint capacity reached')
+            self.seen_path.parent.mkdir(parents=True,exist_ok=True)
+            temp=self.seen_path.with_suffix('.tmp')
+            temp.write_text(json.dumps(self.seen),encoding='utf-8');temp.replace(self.seen_path)
+            return True
+        except (OSError,ValueError):
+            self.storage_failed=True
+            return False
 
     def explain(self, question):
         """Answer 'why is it loud / sirens / what's overhead' from the side-thread cache (no web search)."""
+        if not self.location_allowed(): return 'Location access is disabled; God\'s Eye cannot check your area.'
         with self.lock:
             snapshot = dict(self.cache)
-        if not snapshot or self.clock() - snapshot.get("at", 0) > 600:
+        if not snapshot or not recent(snapshot.get('at'),self.clock()):
             try:
                 self.ensure_server()
                 snapshot = self.poll()
             except Exception as exc:
-                return "God's Eye data isn't available right now (" + str(exc)[:120] + "), so I can't check the sky or fires around you."
+                return "God's Eye data isn't available right now (" + type(exc).__name__ + "), so I can't check the sky or fires around you."
         if not snapshot:
             return "I don't know your location yet, so God's Eye can't check your area."
         lower = question.casefold()
         parts = []
+        if (snapshot.get('flights') or {}).get('status')!='current':
+            parts.append('current flight positions are unavailable or the feed is empty; this does not establish clear skies or explain a sound')
         low = (snapshot.get("flights") or {}).get("low", [])
         nearest = (snapshot.get("flights") or {}).get("nearest", [])
         mil = [a for a in (snapshot.get("military") or {}).get("nearest", []) if a["km"] <= 30]
@@ -655,23 +749,23 @@ class GodsEye:
         if quakes:
             parts.append("a magnitude " + str(quakes[0]["magnitude"]) + " earthquake hit " + str(quakes[0]["km"]) + " km away")
         if "siren" in lower and not fires:
-            parts.append("God's Eye shows no fires or emergencies nearby" + ("" if (snapshot.get("traffic") or {}).get("available")
+            parts.append("These feeds cannot establish the cause of sirens" + ("" if (snapshot.get("traffic") or {}).get("available")
                                                                               else ", and live traffic isn't connected (no TomTom key), so a road incident can't be checked"))
         when = snapshot.get("at_local", "")
         place = (snapshot.get("location") or {}).get("name", "your area")
         if not parts:
-            return ("God's Eye shows nothing unusual around " + place + " (as of " + when + "): " +
-                    str((snapshot.get("flights") or {}).get("count", 0)) + " aircraft within 40 km, none low, no military nearby, "
-                    "no fires or severe weather. The sound is probably local.")
+            return "God's Eye found no matching event in the available samples around " + place + "; coverage is incomplete and cannot establish the cause of a sound."
         return "From God's Eye around " + place + " (as of " + when + "): " + "; ".join(parts) + "."
 
     def summary(self):
         """Compact cache summary for the multi-context situation."""
+        if not self.location_allowed(): return None
         with self.lock:
             s = dict(self.cache)
         if not s:
             return None
         return {"as_of": s.get("at_local"), "aircraft_within_40km": (s.get("flights") or {}).get("count"),
+                "stale":not recent(s.get('at'),self.clock()), "radius_km":s.get('radius_km'),
                 "low_aircraft": [(f["callsign"], f["altitude_m"], f["km"]) for f in (s.get("flights") or {}).get("low", [])[:3]],
                 "military_near": (s.get("military") or {}).get("count_near"),
                 "alerts": [a[2][:120] for a in self.alerts(s)][:3]}

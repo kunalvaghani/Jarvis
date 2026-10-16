@@ -1,0 +1,22 @@
+{
+  ".venv-hermes": {
+    "python": "3.14.7 (main, Sep 29 2026, 15:00:37) [MSC v.1944 64 bit (AMD64)]",
+    "packages": {
+      "hermes-agent": "0.0.0"
+    }
+  },
+  ".venv-harness": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "packages": {
+      "deepseek-harness-sdk": "0.1.5rc1",
+      "deepseek-harness-runtime-bin": "0.1.5rc1"
+    }
+  },
+  ".venv-brain": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "packages": {
+      "laya": "0.3.5",
+      "transformers": "4.57.6"
+    }
+  }
+}

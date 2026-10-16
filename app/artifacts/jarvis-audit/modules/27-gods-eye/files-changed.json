@@ -1,0 +1,54 @@
+[
+  {
+    "path": "docs/gods-eye.md",
+    "sha256": "a9bc6295b1bf9d81398cd8d124a309c4f21ad7bd69ba9aee3144f41eccd85565"
+  },
+  {
+    "path": "docs/system-map.md",
+    "sha256": "2c4c2b640b777fd1884a6464a96272bf0da5ba51d9dcaf5d514201396163ea7c"
+  },
+  {
+    "path": "jarvis/gods_eye.py",
+    "sha256": "e512cfd897d51af728251d4cfdc845b47f2e79984284d3d0e6448e28bbead5e4"
+  },
+  {
+    "path": "jarvis/gods_eye_cameras.py",
+    "sha256": "f15977af148bef14a92e92d05d4a0410772ce87eb7fed22da519b583772c76b5"
+  },
+  {
+    "path": "README.md",
+    "sha256": "373d2c2d3485c0c2462239a07050bf67f03e5297909655e96b7172ecc0bb85c2"
+  },
+  {
+    "path": "../README.md",
+    "sha256": "e2e95dbb3836d48e4f12dd125d474be7852fa944cdd800dd5eb32ec80193144d"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "sha256": "5e84a8d70dd6971c1724ef6f1321e1a8842c28c3b4c361fba08221c7103c051c"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "sha256": "9a65a104b4d4bd4c738298a18498a567085372ea29cdb8dfd28c0320b60c6664"
+  },
+  {
+    "path": "tests/test_gods_eye.py",
+    "sha256": "ab09a9f0613b8bce2dbcdaff132c5cdf3abdbe18c782d9a4d190d2e62f81382c"
+  },
+  {
+    "path": "tests/test_gods_eye_audit.py",
+    "sha256": "b2e3584fc2bb971eb7bdfb1fa7300deb239b6c22c9cb592784451b6b75dcce2a"
+  },
+  {
+    "path": "scripts/verification/verify_gods_eye_audit.py",
+    "sha256": "550c28bdccbeb9e7814fb4402533384efc84856bb5eebe9ed72905bcd0d696e2"
+  },
+  {
+    "path": "scripts/verification/report_gods_eye_audit.py",
+    "sha256": "92117298473fff37e26b33b3ffc85cc178148c856070f179d329c0667ef356bb"
+  },
+  {
+    "path": "scripts/verification/verify_gods_eye_artifacts.py",
+    "sha256": "eefa4a0e6bca6cc3053e7255999d18f4a6f4035fdf5a48334dc05a6d22532731"
+  }
+]

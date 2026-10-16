@@ -630,13 +630,19 @@ class Models:
                 {k: request[k] for k in ("goal", "step", "screen")}, operation)
         if operation == "choose":
             candidates = request["candidates"]
-            if not 1 <= len(candidates) <= 8:
+            if (not isinstance(candidates, list) or not 1 <= len(candidates) <= 8
+                    or any(not isinstance(c, dict) or not isinstance(c.get('key'), str) or not isinstance(c.get('name'), str)
+                           or not isinstance(c.get('role', 'control'), str) or not isinstance(c.get('context', ''), str) for c in candidates)
+                    or len({c['key'] for c in candidates}) != len(candidates) or any(c['key'] == 'none' for c in candidates)):
                 raise ValueError("Laya requires between 1 and 8 shortlisted choices.")
             if self.laya is None:
-                import laya
-                import torch
-                torch.set_num_threads(4)
-                self.laya = laya.load(str(BASE / "models/laya"), device="cpu")
+                try:
+                    import laya
+                    import torch
+                    torch.set_num_threads(4)
+                    self.laya = laya.load(str(BASE / "models/laya"), device="cpu")
+                except (ImportError, OSError):
+                    return {'choice': 'none', 'unavailable': True}
             criteria = {item["key"]: (item["name"][:80] + " (" + item.get("role", "control") + ")" +
                 (" in " + item["context"][:80] if item.get("context") else "")) for item in candidates}
             criteria["none"] = "No clear match"
@@ -645,7 +651,13 @@ class Models:
             result = self.laya.predict({"request": task}, {"target": {
                 "type": "choice", "instructions": "Choose the control that fulfills this request in " + context[:80] + ". Choose none if unclear.",
                 "criteria": criteria}})
-            return result["answers"]["target"]
+            try:
+                selection = result['answers']['target']
+                if not isinstance(selection, dict) or selection.get('choice') not in criteria:
+                    raise ValueError('Laya returned an invalid selection.')
+                return selection
+            except (KeyError, TypeError):
+                raise ValueError('Laya returned an invalid selection.') from None
         raise ValueError("Unknown brain operation")
 
 

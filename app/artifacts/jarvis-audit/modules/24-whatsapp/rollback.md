@@ -1,3 +1,3 @@
-# Rollback / resume
+# Rollback
 
-[Scoped restoration and exact ID continuation](../../rollback.md). Preserve user changes and credentials.
+Preserved dirty branch audit/12-tool-registry at commit9bf5528e6d490fc3bbe92d0c62bcffae6c0946b6. No clean worktree was substituted because it would omit inherited audited changes. No commit/reset/install made. Review source.patch against preimages in .jarvis-runtime/jarvis-audit/module24-pre; restore only matched scoped hunks after verifying source-hashes.json. New files are enumerated in files-changed.json. Preserve later/user edits. Keep uncertain WhatsApp journals intact; suspend sending during rollback since earlier code cannot enforce this new guard. Do not clear pending checkpoints or replay actions to test rollback. Human inspection of the actual chat is required. Re-run focused fixtures and launcher --check after any rollback. No live GUI rollback trial performed.

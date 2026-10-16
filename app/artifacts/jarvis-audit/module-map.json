@@ -585,26 +585,25 @@
     "prompt_sha256": "8ceccb080bab2627eec5123c8b3413df5b353f1e14001731b5894e819aee6751",
     "sources": [
       "jarvis/native_coding.py",
-      "jarvis/coding_activity.py",
-      "jarvis/coding_console.py",
-      "jarvis/coding_curriculum.py",
       "jarvis/coding_files.py",
-      "jarvis/coding_languages.py",
-      "jarvis/coding_lessons.py",
-      "jarvis/coding_operations.py",
-      "jarvis/coding_processes.py",
+      "jarvis/codex_workload.py",
       "jarvis/coding_programs.py",
-      "jarvis/coding_training_data.py",
+      "jarvis/coding_processes.py",
+      "jarvis/codex_validation.py",
       "docs/native-coding.md"
     ],
     "unresolved_candidates": [
       "LocalGithub path and integration"
     ],
     "test_candidates": [
-      "tests/test_native_coding.py"
+      "tests/test_native_coding_audit.py",
+      "tests/test_native_coding.py",
+      "tests/test_codex_workload.py",
+      "tests/test_coding_workflow.py",
+      "tests/test_codex_validation.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "27 catalog fixture PASS/5 missing contracts BLOCKED; real local-model coding acceptance not performed"
   },
   {
     "number": 22,
@@ -612,17 +611,28 @@
     "title": "# PROMPT 22 \u2014 Web/app development and live previews",
     "prompt_sha256": "9c19c9065e4d03006798a536e16a54bb331247bf0ebeaf6a363f9a8ec00c6d84",
     "sources": [
-      "jarvis/native_coding.py",
-      "jarvis/browser_automation.py",
-      "jarvis",
+      "jarvis/development.py",
+      "jarvis/development_api.py",
+      "jarvis/development_tools.py",
+      "jarvis/development_browser.py",
+      "jarvis/development_projects.py",
+      "jarvis/development_learning.py",
+      "jarvis/coder.py",
+      "jarvis/agent_tools.py",
+      "main.py",
       "docs/web-app-development.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
-      "tests/test_development.py"
+      "tests/test_web_development_audit.py",
+      "tests/test_development.py",
+      "tests/test_development_tools.py",
+      "tests/test_development_api.py",
+      "tests/test_development_projects.py",
+      "tests/test_development_learning.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "18 catalog fixture PASS/14 incomplete contracts BLOCKED; partial smoke proofs retained separately, actual headless browser/build checks, no native app or autonomous model acceptance"
   },
   {
     "number": 23,
@@ -632,16 +642,27 @@
     "sources": [
       "jarvis/gmail_api.py",
       "jarvis/gmail_writes.py",
-      "docs/gmail-api.md"
+      "jarvis/gmail_workflows.py",
+      "jarvis/file_drop.py",
+      "jarvis/toolkits.py",
+      "jarvis/brain_worker.py",
+      "scripts/setup/connect_gmail_api.py",
+      "docs/gmail-api.md",
+      "docs/file-buddy.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_gmail_audit.py",
+      "scripts/verification/test_gmail_audit.py",
       "tests/test_gmail_api.py",
+      "tests/test_gmail_actions.py",
+      "tests/test_gmail_commands.py",
       "tests/test_gmail_writes.py",
-      "tests/test_gmail_workflows.py"
+      "tests/test_gmail_workflows.py",
+      "tests/test_documents.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "24 catalog fixture PASS/8 incomplete contracts BLOCKED; no live Gmail/profile/OAuth writes or account reads performed"
   },
   {
     "number": 24,
@@ -650,15 +671,21 @@
     "prompt_sha256": "56b7c31ab4b0531dfaeb0861e9bd8f92bc9b2b0eb9f0c0b7afde4d8753c1d344",
     "sources": [
       "jarvis/whatsapp.py",
+      "jarvis/whatsapp_writes.py",
       "jarvis/messengers.py",
+      "jarvis/actions.py",
+      "jarvis/commands.py",
+      "jarvis/knowledge_worker.py",
       "docs/whatsapp.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
-      "tests/test_whatsapp.py"
+      "tests/test_whatsapp.py",
+      "tests/test_whatsapp_audit.py",
+      "scripts/verification/test_whatsapp_audit.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "14 catalog fixture PASS/18 BLOCKED. No live WhatsApp/Telegram account or native window actions."
   },
   {
     "number": 25,
@@ -668,18 +695,23 @@
     "sources": [
       "jarvis/media_player.py",
       "jarvis/spotify.py",
+      "jarvis/media_commands.py",
       "jarvis/actions.py",
+      "jarvis/island_media.py",
+      "jarvis/browser_worker.py",
+      "jarvis/media_ui.py",
       "docs/media-player.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_media_audit.py",
       "tests/test_media_player.py",
-      "tests/test_media_routes.py",
       "tests/test_spotify.py",
+      "tests/test_media_routes.py",
       "tests/test_media_process_ownership.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "16 catalog fixture PASS/16 BLOCKED; no new live media/account/volume trials"
   },
   {
     "number": 26,
@@ -689,16 +721,20 @@
     "sources": [
       "jarvis/realtime.py",
       "jarvis/realtime_sources.py",
+      "jarvis/realtime_catalog.py",
       "jarvis/weather_watch.py",
+      "jarvis/weather_units.py",
       "docs/realtime-data.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_realtime_audit.py",
+      "scripts/verification/test_realtime_audit.py",
       "tests/test_realtime.py",
       "tests/test_memory_weather.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "20 catalog fixture PASS/12 BLOCKED;82 registered endpoints constructed, not82 live integrations"
   },
   {
     "number": 27,
@@ -707,17 +743,20 @@
     "prompt_sha256": "e2193cbd155c6223cfa34c094ed97dd4c498fad9792950f05f7f848411febc1b",
     "sources": [
       "jarvis/gods_eye.py",
-      "integrations/gods-eye-view-src",
-      "docs/gods-eye.md"
+      "jarvis/gods_eye_cameras.py",
+      "jarvis/gods_eye_view.py",
+      "docs/gods-eye.md",
+      "integrations/gods-eye-view-src/gods-eye-view-main"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_gods_eye_audit.py",
       "tests/test_gods_eye.py",
       "tests/test_gods_eye_view.py",
       "tests/test_gods_eye_cameras.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "20 catalog fixture PASS / 12 incomplete contracts; no live globe/camera/feed acceptance"
   },
   {
     "number": 28,
@@ -726,18 +765,23 @@
     "prompt_sha256": "aebf35577f43a9f78fdef2372b6ca4793f693cfa2c8fb6b073595aac9d4bd998",
     "sources": [
       "jarvis/deerflow.py",
+      "jarvis/deerflow_worker.py",
       "jarvis/deerflow_sandbox.py",
       "jarvis/docker_runtime.py",
+      "jarvis/deerflow_media.py",
+      "jarvis/deerflow_media_runner.py",
+      "jarvis/research_evidence.py",
       "docs/deerflow.md",
       "docs/deerflow-sandbox.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
-      "tests/test_deerflow.py",
-      "tests/test_repository_skill_isolation.py"
+      "tests/test_sandbox_deerflow_audit.py",
+      "tests/test_docker_sandbox.py",
+      "tests/test_deerflow.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "20 catalog fixture PASS / 12 incomplete contracts; owned offline math/PNG/nonzero/cleanup checked, no general live research acceptance"
   },
   {
     "number": 29,
@@ -746,15 +790,22 @@
     "prompt_sha256": "5e06606ba0df72975701035f32a018a3fd1cec382a601ec1957fd64aa5b34530",
     "sources": [
       "jarvis/rea_tools.py",
-      "integrations",
-      "docs/rea-reverse-engineer-clone.md"
+      "jarvis/toolkits.py",
+      "jarvis/commands.py",
+      "jarvis/task_state.py",
+      "jarvis/harness_process.py",
+      "skills/reverse-engineer-clone/SKILL.md",
+      "skills/project-coding/SKILL.md",
+      "docs/rea-reverse-engineer-clone.md",
+      "integrations/rea-upstream/source-manifest.json"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_reverse_engineering_audit.py",
       "tests/test_rea_tools.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "19 catalog fixture PASS / 13 explicit incomplete acceptance contracts; no current general REA/clone fidelity certification"
   },
   {
     "number": 30,
@@ -763,19 +814,30 @@
     "prompt_sha256": "23f0bd252d35375bb19b8de386f331fd881867f4aada3ae1e817c96e7105e94e",
     "sources": [
       "jarvis/brain.py",
-      "jarvis",
-      "integrations",
-      "docs/deerflow.md",
-      "config/config.json"
+      "jarvis/hermes.py",
+      "jarvis/harness.py",
+      "jarvis/harness_worker.py",
+      "jarvis/brain_worker.py",
+      "jarvis/model_selection.py",
+      "jarvis/planner_settings.py",
+      "jarvis/hermes_ollama.py",
+      "jarvis/hermes_skills.py",
+      "jarvis/agent_session.py",
+      "jarvis/tools.py",
+      "docs/hermes-agent.md",
+      "docs/deepseek-harness.md",
+      "docs/hermes-skills-and-comparison.md"
     ],
     "unresolved_candidates": [],
     "test_candidates": [
+      "tests/test_harness_planners_audit.py",
       "tests/test_hermes.py",
       "tests/test_harness.py",
-      "tests/test_model_selection.py"
+      "tests/test_model_selection.py",
+      "tests/test_hermes_skills.py"
     ],
     "status": "PARTIAL",
-    "reason": "Sources/tests inventoried; full catalog execution and per-module improvement not complete"
+    "reason": "22 catalog fixture PASS / 10 incomplete acceptance contracts; no live model outcome comparison or production privacy/trace certification"
   },
   {
     "number": 31,

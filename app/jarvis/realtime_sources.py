@@ -2,6 +2,7 @@
 from collections import OrderedDict
 from datetime import datetime, timedelta, timezone
 import hashlib
+from itertools import islice
 import json
 import math
 import os
@@ -227,7 +228,7 @@ def endpoint(provider, args, options, credential_base=None):
 def compact(data, depth=0, limit=10):
     if depth > 7: return '[nested data omitted]'
     if isinstance(data, list): return [compact(x, depth+1, limit) for x in data[:limit]]
-    if isinstance(data, dict): return {str(k)[:100]: compact(v, depth+1, limit) for k, v in list(data.items())[:40]}
+    if isinstance(data, dict): return {str(k)[:100]: compact(v, depth+1, limit) for k, v in islice(data.items(),40)}
     if isinstance(data, str): return re.sub(r'<[^>]+>', '', data)[:1600]
     return data
 
@@ -261,6 +262,8 @@ class Sources:
         self.options = options or {}
         self.http = transport or requests.Session()
         self.clock = clock
+        self.timer = time.monotonic if clock is time.time else clock
+        self.cache_times = {}
         self.credential_base = credential_base
         self.cache = OrderedDict()
         self.next = {}
@@ -279,13 +282,17 @@ class Sources:
     def _fetch(self, key, args=None, cancelled=lambda: False):
         if key not in CATALOG: raise ValueError('Only registered green providers are allowed')
         args = args or {}
-        if not isinstance(args, dict) or len(json.dumps(args)) > 2000: raise ValueError('Invalid bounded API arguments')
+        try:
+            if not isinstance(args, dict) or len(json.dumps(args)) > 2000: raise ValueError()
+        except (ValueError, RecursionError):
+            raise ValueError('Invalid bounded API arguments') from None
         provider = CATALOG[key]
         fingerprint = hashlib.sha256(json.dumps([key,args], sort_keys=True).encode()).hexdigest()
-        now = self.clock()
+        now = self.timer()
         with self.lock:
             cached = self.cache.get(fingerprint)
-            if cached and now-cached['fetched_at'] < provider.interval:
+            if (cached and 0 <= now-self.cache_times.get(fingerprint,now) < provider.interval
+                    and 0 <= self.clock()-cached['fetched_at'] < provider.interval):
                 return {**cached, 'cached': True}
             if now < self.next.get(key, 0):
                 return {**cached, 'stale': True, 'status': 'rate_limited'} if cached else self.failure(provider, 'rate_limited')
@@ -299,6 +306,9 @@ class Sources:
         try:
             headers = {'User-Agent': USER_AGENT + (' '+self.options['contact'] if self.options.get('contact') else ''), **headers}
             data, timestamp = self.read(provider, url, params, headers, subscription, cancelled)
+            if key in {'weather','air'}:
+                from .weather_units import normalize
+                data = normalize(data)
             if cancelled(): return self.failure(provider, 'cancelled')
             if isinstance(data,dict) and (data.get('error') or data.get('errors') or data.get('success') is False or (provider.key=='food' and data.get('status')==0)):
                 raise ValueError('Provider reports an error or no matching record')
@@ -316,18 +326,32 @@ class Sources:
                 data = objects[:5]
             if isinstance(data,dict):
                 timestamp = data.get('time',data.get('timestamp',data.get('date_utc',data.get('date',timestamp))))
+                if key in {'weather','air'} and isinstance(data.get('current'),dict):
+                    timestamp = data['current'].get('time',timestamp)
             row = {'provider': key, 'name': provider.name, 'status': 'ok', 'fetched_at': self.clock(),
                 'fetched_utc':datetime.fromtimestamp(self.clock(),timezone.utc).isoformat(),
                 'source_time': timestamp, 'url': public_url(url, provider.requirement in {'self-host', 'feed'}), 'reference': provider.docs, 'stale': False,
                 'data_kind': 'forecast/model' if key in {'weather','air','marine','flood','met'} else 'daily/reference rate' if key in {'frankfurter','ecb'} else 'on-demand/reference or feed snapshot',
                 'sample': provider.mode in {'sse','ws'}, 'data': compact(data, limit=30 if key in {'earthquakes','nws','eonet','gdacs','space_weather'} else 10)}
+            if key in {'weather','air'}:
+                row['source_freshness'] = 'unknown'
+                if isinstance(timestamp,str):
+                    moment = datetime.fromisoformat(timestamp.replace('Z','+00:00'))
+                    observed = (moment.timestamp() if moment.tzinfo else moment.replace(tzinfo=timezone.utc).timestamp()-float(data.get('utc_offset_seconds',0)))
+                    age = self.clock()-observed
+                    row.update(source_age_seconds=age, source_freshness='current' if 0 <= age <= 900 else 'stale', stale=not 0 <= age <= 900)
             # Bound the cache without cutting serialized JSON in the middle.
             if len(json.dumps(row)) > 24000: row['data'] = compact(row['data'], limit=3)
             with self.lock:
                 self.cache[fingerprint] = row
-                while len(self.cache) > 96: self.cache.popitem(last=False)
+                self.cache_times[fingerprint] = self.timer()
+                while len(self.cache) > 96:
+                    expired,_ = self.cache.popitem(last=False)
+                    self.cache_times.pop(expired,None)
             return row
         except Exception as exc:
+            if cancelled():
+                return self.failure(provider, 'cancelled')
             if getattr(getattr(exc, 'response', None), 'status_code', None) == 404:
                 # The service answered; it just has no record for this lookup (e.g. an unknown word).
                 return self.failure(provider, 'not_found', 'No matching record')
@@ -338,6 +362,8 @@ class Sources:
     def _get(self, provider, url, params, headers, read_seconds, cancelled):
         """One GET, retried once after a dropped connection, a 5xx, or a 429 asking for at most 6 seconds."""
         for attempt in range(2):
+            if cancelled():
+                raise InterruptedError('Read cancelled before retry')
             try:
                 response = self.http.get(url, params=params, headers=headers, timeout=(3, read_seconds), stream=True,
                                          allow_redirects=False)
@@ -425,7 +451,7 @@ class Sources:
                     except (TypeError, ValueError, OverflowError):
                         retry_after = 300
                 with self.lock:
-                    self.next[provider.key] = self.clock()+max(provider.interval, min(3600, max(0, retry_after)))
+                    self.next[provider.key] = self.timer()+max(provider.interval, max(0, retry_after))
             response.raise_for_status()
             if response.status_code != 200: raise ValueError('Unexpected response/redirect: '+str(response.status_code))
             raw, deadline = bytearray(), time.monotonic()+max(8, read_seconds+3)
@@ -456,5 +482,5 @@ class Sources:
                         item.raise_for_status(); stories.append(item.json())
                 data = {'stories':stories}
             if provider.key == 'stack_exchange' and isinstance(data,dict) and data.get('backoff'):
-                with self.lock: self.next[provider.key] = self.clock()+max(provider.interval, float(data['backoff']))
+                with self.lock: self.next[provider.key] = self.timer()+max(provider.interval, float(data['backoff']))
             return data, response.headers.get('Last-Modified')

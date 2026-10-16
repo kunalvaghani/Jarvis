@@ -12,7 +12,7 @@ user's location and speaks an alert once per hazard (again only if it gets worse
 
 These are forecasts and public feeds, not official government warnings; alerts say so and name the source.
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 import math
 from pathlib import Path
@@ -32,9 +32,16 @@ def distance(lat, lon, lat2, lon2):
     return 6371 * 2 * math.asin(min(1, math.sqrt(h)))
 
 
+def _moment(stamp, now):
+    value = datetime.fromisoformat(stamp.replace('Z','+00:00'))
+    if now.tzinfo:
+        return value.replace(tzinfo=now.tzinfo) if value.tzinfo is None else value.astimezone(now.tzinfo)
+    return value.replace(tzinfo=None)
+
+
 def when(stamp, now):
     """'now', 'around 4 PM today', 'tomorrow around 9 AM'."""
-    moment = datetime.fromisoformat(stamp)
+    moment = _moment(stamp, now)
     if moment <= now + timedelta(minutes=59):
         return "now"
     hour = moment.strftime("%I %p").lstrip("0")
@@ -46,6 +53,8 @@ def when(stamp, now):
 def hazards(forecast, air=None, quakes=None, gdacs=None, eonet=None, flood=None, location=None, now=None, hours=36):
     """Pure rules over provider JSON -> [{id, kind, level, message, starts}] (most severe first)."""
     location = location or {}
+    from .weather_units import normalize
+    forecast = normalize(forecast or {})
     lat, lon = location.get("latitude"), location.get("longitude")
     found = []
 
@@ -55,12 +64,20 @@ def hazards(forecast, air=None, quakes=None, gdacs=None, eonet=None, flood=None,
     hourly = (forecast or {}).get("hourly") or {}
     times = hourly.get("time") or []
     now = now or datetime.now()
-    window = [i for i, t in enumerate(times)
-              if now - timedelta(hours=1) <= datetime.fromisoformat(t) <= now + timedelta(hours=hours)]
+    window = []
+    times = list(times)
+    for i,t in enumerate(times):
+        try:
+            moment = _moment(t, now)
+        except (ValueError,TypeError,AttributeError):
+            continue
+        times[i] = moment.isoformat()
+        if now-timedelta(hours=1) <= moment <= now+timedelta(hours=hours):
+            window.append(i)
 
     def series(name):
         values = hourly.get(name) or []
-        return [(times[i], values[i]) for i in window if i < len(values) and isinstance(values[i], (int, float))]
+        return [(times[i], values[i]) for i in window if i < len(values) and type(values[i]) in (int,float) and math.isfinite(values[i])]
     storms = [(t, v) for t, v in series("weather_code") if int(v) in {95, 96, 99}]
     if storms:
         worst = max(int(v) for _, v in storms)
@@ -99,14 +116,16 @@ def hazards(forecast, air=None, quakes=None, gdacs=None, eonet=None, flood=None,
             fog[0][0])
     daily = (forecast or {}).get("daily") or {}
     for i, day in enumerate((daily.get("time") or [])[:2]):
-        total = (daily.get("precipitation_sum") or [0] * 3)[i] or 0
+        totals = daily.get('precipitation_sum') or []
+        total = totals[i] if i < len(totals) and type(totals[i]) in (int,float) and math.isfinite(totals[i]) else 0
         if total >= 64.5:
             level = "severe" if total >= 115.6 else "warning"
             word = "extremely heavy" if total >= 204.5 else "very heavy" if total >= 115.6 else "heavy"
             label = "today" if day == now.date().isoformat() else "tomorrow"
             add("heavy_rain", level, word.capitalize() + " rain forecast " + label + ": about " + str(round(total)) +
                 " mm. Watch for waterlogging and avoid flooded roads.", day + "T06:00", day)
-        uv = (daily.get("uv_index_max") or [0] * 3)[i] or 0
+        uvs = daily.get('uv_index_max') or []
+        uv = uvs[i] if i < len(uvs) and type(uvs[i]) in (int,float) and math.isfinite(uvs[i]) else 0
         if uv >= 11 and day == now.date().isoformat():
             add("uv", "notice", "Extreme UV today (index " + str(round(uv)) + "). Use sunscreen and shade.", day + "T11:00", day)
     if air:
@@ -114,7 +133,7 @@ def hazards(forecast, air=None, quakes=None, gdacs=None, eonet=None, flood=None,
         a_times = a_hourly.get("time") or []
         values = [(a_times[i], v) for i, v in enumerate(a_hourly.get("us_aqi") or [])
                   if isinstance(v, (int, float)) and i < len(a_times)
-                  and now - timedelta(hours=1) <= datetime.fromisoformat(a_times[i]) <= now + timedelta(hours=24)]
+                  and now - timedelta(hours=1) <= _moment(a_times[i],now) <= now + timedelta(hours=24)]
         bad = [(t, v) for t, v in values if v >= 151]
         if bad:
             peak = max(bad, key=lambda x: x[1])
@@ -175,25 +194,38 @@ class WeatherWatch:
         self.http = http or requests.Session()
         self.clock = clock
         self.path = Path(actions.base) / ".jarvis-runtime" / "weather-alerts.json"
+        self.storage_failed = False
         self.seen = self._load()
         self.last = None
         self.stop = threading.Event()
         self.thread = None
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
 
     def _load(self):
+        if not self.path.exists():
+            return {}
         try:
-            data = json.loads(self.path.read_text(encoding="utf-8"))
+            with self.path.open(encoding='utf-8') as stream:
+                text = stream.read(65537)
+            if len(text)>65536: raise ValueError('Oversized weather checkpoint')
+            data = json.loads(text)
+            if not isinstance(data,dict) or any(not isinstance(v,dict) or v.get('level') not in LEVELS or type(v.get('at')) not in (int,float) or not math.isfinite(v['at']) for v in data.values()):
+                raise ValueError('Malformed weather checkpoint')
             return {k: v for k, v in data.items() if self.clock() - v.get("at", 0) < 3 * 86400}
-        except (OSError, ValueError):
+        except (OSError, ValueError, RecursionError, TypeError, OverflowError):
+            self.storage_failed = True
             return {}
 
     def _save(self):
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            self.path.write_text(json.dumps(self.seen), encoding="utf-8")
+            temp = self.path.with_suffix('.tmp')
+            temp.write_text(json.dumps(self.seen), encoding='utf-8')
+            temp.replace(self.path)
+            return True
         except OSError:
-            pass
+            self.storage_failed = True
+            return False
 
     def realtime(self):
         from .capability_guide import live_realtime
@@ -234,6 +266,9 @@ class WeatherWatch:
             "latitude": lat, "longitude": lon, "forecast_days": 3, "timezone": "auto",
             "hourly": "temperature_2m,precipitation,weather_code,wind_gusts_10m,visibility",
             "daily": "precipitation_sum,uv_index_max,temperature_2m_max,temperature_2m_min"})
+        if forecast is not None:
+            from .weather_units import normalize
+            forecast = normalize(forecast)
         air = self.get("https://air-quality-api.open-meteo.com/v1/air-quality",
                        {"latitude": lat, "longitude": lon, "hourly": "us_aqi", "forecast_days": 2, "timezone": "auto"})
         quakes = self.get("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson")
@@ -250,7 +285,7 @@ class WeatherWatch:
                 except Exception:
                     pass
         offset = (forecast or {}).get("utc_offset_seconds")
-        now = (datetime.utcnow() + timedelta(seconds=offset)) if isinstance(offset, (int, float)) else datetime.now()
+        now = datetime.now(timezone(timedelta(seconds=offset))) if type(offset) in (int,float) and math.isfinite(offset) and abs(offset)<86400 else datetime.now()
         found = hazards(forecast, air, quakes, gdacs, eonet, flood, place, now)
         sources = {"forecast": forecast is not None, "air quality": air is not None, "earthquakes": quakes is not None,
                    "disasters": gdacs is not None, "floods": flood is not None}
@@ -269,6 +304,12 @@ class WeatherWatch:
 
     def announce(self, place, found):
         """Speak hazards not yet announced (or that got worse). Returns what was announced."""
+        with self.lock:
+            if self.stop.is_set() or self.storage_failed:
+                return []
+            return self._announce(place, found)
+
+    def _announce(self, place, found):
         fresh = []
         for hazard in found:
             if LEVELS[hazard["level"]] < LEVELS.get(self.min_level, 1):
@@ -280,7 +321,13 @@ class WeatherWatch:
             self.seen[hazard["id"]] = {"level": hazard["level"], "at": self.clock()}
         if not fresh:
             return []
-        self._save()
+        try:
+            if self._save() is not True:
+                self.storage_failed = True
+                return []
+        except OSError:
+            self.storage_failed = True
+            return []
         name = place.get("name") or "your area"
         worst = fresh[0]["level"]
         text = ("Weather alert for " + name + ": " if worst != "notice" else "Heads up for " + name + ": ") + \
@@ -305,6 +352,8 @@ class WeatherWatch:
         failed = [k for k, ok in sources.items() if not ok]
         if found:
             text = "For " + name + " in the next 36 hours: " + " ".join(h["message"] for h in found[:4])
+        elif not sources.get('forecast'):
+            text = 'Weather forecast unavailable for ' + name + '; I cannot establish whether bad weather is expected.'
         else:
             today = (self.last or {}).get("today") or {}
             text = ("No bad weather expected for " + name + " in the next 36 hours" +
@@ -315,7 +364,7 @@ class WeatherWatch:
         return text
 
     def start(self):
-        if self.enabled and not self.thread:
+        if self.enabled and not self.storage_failed and not self.thread:
             self.thread = threading.Thread(target=self.run, name="Jarvis weather watch", daemon=True)
             self.thread.start()
         return self

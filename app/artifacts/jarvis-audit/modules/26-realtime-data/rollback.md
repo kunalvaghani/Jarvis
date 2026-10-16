@@ -1,3 +1,3 @@
-# Rollback / resume
+# Rollback
 
-[Scoped restoration and exact ID continuation](../../rollback.md). Preserve user changes and credentials.
+Dirty audit/12-tool-registry at commit9bf5528e6d490fc3bbe92d0c62bcffae6c0946b6 preserved. Clean HEAD worktree would omit inherited audited fixes; scoped preimages are in .jarvis-runtime/jarvis-audit/module26-pre. Review source.patch and source-hashes.json; restore only matched module26 hunks, preserving user/later changes. New files in files-changed.json. No commit/reset/install or personal config change. Keep existing notification checkpoints; do not clear them/replay alerts to test rollback. Older code lacks optional weather-model suppression and damaged-file refusal, so pause monitoring while reviewing any rollback. Re-run focused/readiness after rollback; no live rollback trial.

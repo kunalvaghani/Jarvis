@@ -1,0 +1,8 @@
+{
+  "case": "JRV-22-003",
+  "PASS": true,
+  "port3000_occupied_by_owned_fixture": true,
+  "owned_preview_stopped": true,
+  "unrelated_processes_killed": 0,
+  "scope": "Actual loopback exact-port collision, no HTTP/account data sent to pre-existing listener."
+}

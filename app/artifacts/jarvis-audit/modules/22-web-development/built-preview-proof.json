@@ -1,0 +1,8 @@
+{
+  "case": "JRV-22-001",
+  "PASS": true,
+  "same_built_html_served": true,
+  "html_sha256": "f04eb76b30fee3b98cea658989f80c112f6230c16c4924e1bddc4c54ec08e38b",
+  "owned_preview_stopped": true,
+  "scope": "Actual authored installed Vite build\u2192Vite preview\u2192HTTP readback; separate minimal static fixture has DOM/axe/scenario assertions. No autonomous model or production acceptance."
+}

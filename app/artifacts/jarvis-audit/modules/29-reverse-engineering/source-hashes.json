@@ -1,0 +1,32 @@
+[
+  {
+    "path": "docs/rea-reverse-engineer-clone.md",
+    "before": "ac45bb9fc953370088c55ea42a69240248ec14f813d8c67e947c5669fdb48421",
+    "after": "0aa417b5b729cf39de70078d5f3ca8f33bd11aed11f5f021868a98a09371fd97"
+  },
+  {
+    "path": "jarvis/rea_tools.py",
+    "before": "07a5739b6bff500d05b0c164129bc5644c706da14d7d3ebf7d9318364e239724",
+    "after": "b1080dd87d88e81e9776b78241473d0c8cdaafae237803747d25f68e2b112375"
+  },
+  {
+    "path": "README.md",
+    "before": "95748a27d0bb222d0de48d4d4ea375fab6f27dbee62e93a3db7f5d6cbbf5348f",
+    "after": "05eac5db0f7b7fddf5e60e92c4fdbb3d3e2422aca5236782cf8487cd0fc093d2"
+  },
+  {
+    "path": "../README.md",
+    "before": "91e0862c4a57ae47b61bc0bfbf2b285f74f9246636f31cea9ff098ff02886dea",
+    "after": "7d2730f0880244ebebdad3fbde8772d38e7a409d357c2b328a85d822b4a27221"
+  },
+  {
+    "path": "scripts/verification/audit_catalog.py",
+    "before": "cac697da2c7905a0cf6ee1fbe3487cd04396990025047a536312d74fc97d13fe",
+    "after": "8bae8c6790a1d1c90fa0d72c5db0662333317973baf70c4f986328251e7caaa6"
+  },
+  {
+    "path": "tests/test_audit_result_accounting.py",
+    "before": "3a6260a015cee13ff152745f27354eecf78fd2d248d0f43f42743cf304b87331",
+    "after": "b22920eff544d8caad92528926e4b5e402ff98bea3e29679d616c3e11d760f5f"
+  }
+]

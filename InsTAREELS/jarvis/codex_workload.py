@@ -507,21 +507,31 @@ def fingerprint(project):
     return result
 
 
-def promote(project, integration, directory, goal, plan, before, changed, cancelled):
+def promote(project, integration, directory, goal, plan, before, changed, cancelled, expected_hashes=None):
     """Apply checked source once; preserve originals and stop on uncertain saves."""
     from .claude_code_guard import decide
+    journal=directory/'promotion.jsonl'
+    if journal.exists():
+        raise ValueError('An earlier promotion attempt exists; inspect fresh state and retained journal before a new reviewed run. No promotion replayed.')
+    if not isinstance(changed,list) or len(changed)>160 or len(changed)!=len(set(changed)):
+        raise ValueError('Invalid bounded promotion paths.')
     if fingerprint(project)!=before:raise ValueError('Destination changed during workers; inspect before applying any result.')
+    payloads={}
     for name in changed:
         target=source_path(project,name)
         if name not in before and target.exists():raise ValueError('New destination path already exists: '+name)
-        decide(project,'Write',{'file_path':name,'content':(integration/name).read_text(encoding='utf-8')})
-    journal=directory/'promotion.jsonl'
+        content=source_path(integration,name).read_bytes()
+        if len(content)>80000:raise ValueError('Promotion source exceeds the snapshot size limit.')
+        if expected_hashes is not None and hashlib.sha256(content).hexdigest()!=expected_hashes.get(name):
+            raise ValueError('Promotion source differs from validated hashes: '+name)
+        payloads[name]=content
+        decide(project,'Write',{'file_path':name,'content':content.decode('utf-8')})
     for name in changed:
         if cancelled():raise ValueError('Stopped during promotion; inspect the journal, no saves replayed.')
         target=source_path(project,name)
         current=hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() else None
         if current!=before.get(name):raise ValueError('Destination changed before save: '+name)
-        content=(integration/name).read_bytes();digest=hashlib.sha256(content).hexdigest()
+        content=payloads[name];digest=hashlib.sha256(content).hexdigest()
         if target.exists():
             backup=directory/'originals'/name;backup.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(target,backup)
         row={'path':name,'before':current,'after':digest}
@@ -680,7 +690,7 @@ def run(coder, project, goal, cancelled=lambda:False, *, executor=None, backend=
         for name,digest in validation['hashes'].items():
             if hashlib.sha256((integration/name).read_bytes()).hexdigest()!=digest:raise ValueError('Combined source changed after testing.')
         save('promoting',validation=validation,changed=all_changed,integration_commit=git.head(integration))
-        promote(project,integration,directory,goal,global_plan,before,all_changed,stopped)
+        promote(project,integration,directory,goal,global_plan,before,all_changed,stopped,expected_hashes=validation['hashes'])
         from .task_state import TaskState
         state=getattr(coder.actions,'task_state',None)
         if isinstance(state,TaskState):

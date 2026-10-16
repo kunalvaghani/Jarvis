@@ -1,0 +1,15 @@
+{
+  "before": {
+    "p50_ms": 22.294800000000002,
+    "p95_ms": 24.011,
+    "peak_python_bytes": 8619
+  },
+  "after": {
+    "p50_ms": 20.822650000000003,
+    "p95_ms": 21.2581,
+    "peak_python_bytes": 8583
+  },
+  "equivalent": true,
+  "real_external_actions": 0,
+  "scope": "31-row unambiguous selection;20warm+5initial/version, not cold-process/GUI/RSS/VRAM"
+}

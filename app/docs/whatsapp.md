@@ -1,5 +1,12 @@
 # WhatsApp automation, other messaging apps, and voice approvals
 
+<!-- prompt24-audit -->
+**WhatsApp audit — 2026-10-16 IST:** Fresh recipient/draft checks, expiring serialized approval, bounded request parsing and durable text-send non-replay checkpoints added. **14 Prompt24 fixture PASS /18 BLOCKED**; full regression **2,939 PASS /73 skips /0 failures**, launcher **ready**. No live WhatsApp action. Stable contact IDs, groups, outgoing calls, attachments and complete privacy/resource contracts remain incomplete.
+[Evidence and rollback](../artifacts/jarvis-audit/modules/24-whatsapp/inventory.md).
+
+Current behavior supersedes historical matching/send statements below: repeated display names refuse automatic selection; phonetic discovery never authorizes a different literal chat name. Texts are bounded to2000 characters, recipient queries to200, command JSON to8192. Unreadable compose state stops; a mismatched partial draft remains for inspection. Sent/Delivered/Read UI status is required; Pending is uncertain. Text checkpoint files live under `.jarvis-runtime/whatsapp/writes/` with hashed recipient/text and pending state, no plaintext. An uncertain identical text cannot be sent again automatically; no automatic journal reset. Successful explicit new approvals may repeat text. This guard covers text sends/replies, not file attachments or call clicks. Private text is still visible in local cards/transcripts; complete redaction is unproved. Historical images/results keep their original dates.
+<!-- /prompt24-audit -->
+
 Updated 2026-10-10 IST. Jarvis now sends and replies to WhatsApp messages through the installed **WhatsApp Desktop** app, watches for new messages and incoming calls, and asks before anything is sent. This update also fixes "play"/"pause" being answered as chat.
 
 ![Rendered island WhatsApp cards with made-up names and messages — not a desktop screenshot](../artifacts/media/island-whatsapp-card-preview.png)

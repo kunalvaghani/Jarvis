@@ -1,0 +1,47 @@
+{
+  "revision": "a5e71751d7a9f8f4a71ca458da3984fc1284d098",
+  "skills": [
+    "academic-paper-review",
+    "bootstrap",
+    "chart-visualization",
+    "claude-to-deerflow",
+    "code-documentation",
+    "consulting-analysis",
+    "data-analysis",
+    "deep-research",
+    "find-skills",
+    "frontend-design",
+    "github-deep-research",
+    "image-generation",
+    "music-generation",
+    "newsletter-generation",
+    "podcast-generation",
+    "ppt-generation",
+    "skill-creator",
+    "skill-reviewer",
+    "surprise-me",
+    "systematic-literature-review",
+    "vercel-deploy",
+    "video-generation",
+    "web-design-guidelines"
+  ],
+  "tools": [
+    "deerflow_status",
+    "deerflow_skill_read",
+    "deerflow_skill_search",
+    "deerflow_research",
+    "deerflow_web_research",
+    "deerflow_sandbox_task",
+    "deerflow_free_media"
+  ],
+  "renderers": [
+    "chart",
+    "music",
+    "narration",
+    "pdf",
+    "poster",
+    "slides",
+    "video"
+  ],
+  "scope": "registration/source discovery only; not live research or every renderer readiness"
+}

@@ -1,5 +1,18 @@
-# Status
+# Reproductions and remaining risk
 
-{'NOT RUN': 32}
+Baseline66 PASS in10.74s. Initial harness collection referred to the wrong existing test class; corrected to GmailWorkflowTests before product reproduction. Reproduction11 FAIL/19 PASS/8 explicit blockers in4.69s. Failed assertions overlap: draft send/delete/update changed during approval; explicit False consent ignored; malformed connection marker; damaged/missing/type-invalid journal state. Eleven failed assertions are not eleven distinct vulnerabilities.
 
-[Observed faults and repros](../../failures-and-fixes.md). Remaining catalog cases are NOT RUN, not presumed healthy.
+First neighbor run113 PASS/8 skips in18.17s. Added approval field binding, post-observation cancellation, optional-dependency handling and attachment bounds: second137 PASS/8 skips in12.10s. Attachment-flow expansion third138 PASS/4 FAIL/8 skips in11.67s: all four failures were missing Mock import in the updated owned document fixture; fixed import, retaining existing assertions and adding actual denial/pending/verified attachment tests. Fourth143 PASS/8 skips in11.38s. Final main65 PASS/8 skips in3.72s, supplement3 PASS in0.74s; final combined {'PASS': 68, 'FAIL': 0, 'SKIPPED': 8, 'seconds': 4.4350000000000005}. Full {'PASS': 2900, 'FAIL': 0, 'SKIPPED': 56, 'seconds': 550.263}; all385 frozen runtime/test hashes unchanged.
+
+- **JRV-23-010 BLOCKED:** One OAuth-selected account per base; no explicit multi-account identity broker or account-bound approval/journal. Separate fake clients are not complete account-switch isolation proof.
+- **JRV-23-012 BLOCKED:** File attachments stay remote on reads, and attachment draft approval/journaling now have fixtures; a complete attachment secret-to-model oracle and attachment/body upload readback are absent.
+- **JRV-23-018 BLOCKED:** Before-write cancellation and Stop during fresh observation are covered; complete TaskState cancellation semantics during readback are unproved.
+- **JRV-23-021 BLOCKED:** Local interpreter context is bounded; no complete fake-cloud/private-context/log-redaction oracle across all mail and attachment flows.
+- **JRV-23-025 BLOCKED:** No complete Gmail RAM/GPU-pressure admission and core-command responsiveness proof. Ordinary adapter operations use no GPU; composition does.
+- **JRV-23-026 BLOCKED:** Uncertain outcomes refuse replay; successfully completed identical events have no durable event-ID deduplication contract. A new explicit approved request can repeat identical mail.
+- **JRV-23-027 BLOCKED:** Draft-update CPU A/B is measured; complete OAuth/workflow cold-start/RSS/VRAM benchmark absent.
+- **JRV-23-032 BLOCKED:** Journals omit body/subject and transport errors are categorical; complete private-data redaction and cross-flow correlation remain unproved.
+
+Other limits: draft freshness is read-then-write, not atomic Google CAS. Mutable args changed and restored entirely inside a trusted callback are not a signed user-event ledger. DPAPI and local journal files are trusted local state, not malicious-host confinement. Journal replacements are atomic per file, not fsync/power-loss transactions or atomic with TaskState. Corrupted journals now require inspection, not deletion/retry. Attachment helper is an internal trusted API; the public FileBuddy caller owns human approval. Its card reviews recipient/body/filenames, not a cryptographically bound file-content approval; selected files can change during approval, and the later part hash binds the journal to bytes read rather than to a signed human event. Large media uploads still have a120s deadline and use a separate response path; complete response/resource/provider attachment validation needs more work. Named files are never fetched by read, but normal external textual MIME parts can be read. Labels/Trash use Google's returned state; this is not a second independent GET after every label response. Private local transcript rendering and complete semantic prompt injection remain unproved.
+
+Launcher **ready**, missing **[]**. Source-bound Gmail remains withheld pending separately reviewed verification; no automatic activation or live profile check. No production-ready certificate.

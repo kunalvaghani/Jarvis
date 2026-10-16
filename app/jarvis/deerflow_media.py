@@ -8,6 +8,52 @@ from .deerflow_sandbox import SandboxJob
 KINDS = {'chart', 'poster', 'pdf', 'slides', 'video', 'music', 'narration'}
 
 
+def verify_artifacts(job,kind,artifacts):
+    """Check the expected file from disk; filenames/model prose are not format evidence."""
+    import wave
+    import zipfile
+    expected={'chart':'chart.png','poster':'poster.png','pdf':'report.pdf','slides':'slides.pptx',
+              'video':'video.mp4','music':'melody.wav','narration':'narration.wav'}[kind]
+    rel='outputs/'+expected
+    row=next((r for r in artifacts if r['path']==rel),None)
+    if row is None:raise ValueError('Renderer did not produce the expected output file.')
+    path=job.path('/mnt/user-data/'+rel)
+    size=path.stat().st_size
+    if not 0<size<=64*1024*1024:raise ValueError('Rendered output exceeds the verification budget.')
+    try:
+        if expected.endswith('.png'):
+            from PIL import Image
+            with Image.open(path) as im:
+                if im.format!='PNG' or not 1<=im.width<=4096 or not 1<=im.height<=4096:raise ValueError('Invalid PNG dimensions/format')
+                dimensions=list(im.size);im.verify()
+            proof={'format':'PNG','dimensions':dimensions,'verification':'Pillow structure verification'}
+        elif expected.endswith('.wav'):
+            with wave.open(str(path),'rb') as sound:
+                frames,rate=sound.getnframes(),sound.getframerate()
+                if not frames or not 8000<=rate<=192000 or sound.getnchannels() not in (1,2) or frames/rate>300:raise ValueError('Invalid WAV parameters')
+                if len(sound.readframes(frames))!=frames*sound.getnchannels()*sound.getsampwidth():raise ValueError('Truncated WAV')
+                proof={'format':'WAV','frames':frames,'sample_rate':rate,'verification':'wave PCM readback'}
+        elif expected.endswith('.pptx'):
+            with zipfile.ZipFile(path) as archive:
+                entries=archive.infolist()
+                if len(entries)>1000 or sum(r.file_size for r in entries)>64*1024*1024 or not {'[Content_Types].xml','ppt/presentation.xml'}<=set(archive.namelist()):raise ValueError('Invalid PPTX package')
+                if archive.testzip() is not None:raise ValueError('Corrupt PPTX entry')
+            proof={'format':'PPTX','verification':'bounded ZIP CRC and required package members; no visual/layout proof'}
+        else:
+            with path.open('rb') as stream:
+                head=stream.read(16)
+                stream.seek(max(0,size-1024));tail=stream.read(1024)
+            if expected.endswith('.pdf'):
+                if not head.startswith(b'%PDF-') or b'%%EOF' not in tail:raise ValueError('Invalid PDF envelope')
+                proof={'format':'PDF','verification':'header/EOF only; no page rendering or semantic proof'}
+            else:
+                if len(head)<12 or head[4:8]!=b'ftyp':raise ValueError('Invalid MP4 envelope')
+                proof={'format':'MP4','verification':'ftyp envelope only; no codec/duration/frame decoding proof'}
+    except (OSError,EOFError,zipfile.BadZipFile,wave.Error,ValueError) as exc:
+        raise ValueError('Renderer output failed format verification: '+type(exc).__name__) from None
+    return {**row,'bytes':size,**proof}
+
+
 def validate(kind, spec):
     if kind not in KINDS or not isinstance(spec, dict) or set(spec) - {'title', 'text', 'labels', 'values', 'slides', 'duration', 'voice'}:
         raise ValueError('Use one documented free-media recipe and literal JSON fields.')
@@ -44,5 +90,7 @@ def execute(actions, step, cancelled):
         artifacts = [r for r in job.inventory() if r['path'].startswith('outputs/') and r['bytes'] > 0]
         if not artifacts:
             raise ValueError('Free renderer produced no artifact; no automatic replay.')
+        verified=verify_artifacts(job,spec['kind'],artifacts)
         return json.dumps({'recipe': spec['kind'], 'job_id': job.identifier,
-            'artifact_directory': str(job.root), 'artifacts': artifacts, 'provider': 'Offline local libraries; no API key or account'}, ensure_ascii=False)
+            'artifact_directory': str(job.root), 'artifacts': artifacts, 'verification':verified,
+            'provider': 'Offline local libraries; no API key or account'}, ensure_ascii=False)

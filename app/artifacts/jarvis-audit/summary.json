@@ -1,91 +1,103 @@
 {
   "catalog_counts": {
-    "PASS": 615,
+    "PASS": 813,
     "FAIL": 0,
-    "BLOCKED": 30,
+    "BLOCKED": 150,
     "SKIPPED": 0,
-    "NOT RUN": 539
+    "NOT RUN": 221
   },
   "by_tier": {
     "P0": {
-      "PASS": 151,
-      "BLOCKED": 10,
-      "NOT RUN": 135
+      "PASS": 205,
+      "BLOCKED": 35,
+      "NOT RUN": 56
     },
     "P1": {
-      "PASS": 329,
-      "BLOCKED": 14,
-      "NOT RUN": 286
+      "PASS": 440,
+      "BLOCKED": 72,
+      "NOT RUN": 117
     },
     "P2": {
-      "PASS": 135,
-      "BLOCKED": 6,
-      "NOT RUN": 118
+      "PASS": 168,
+      "BLOCKED": 43,
+      "NOT RUN": 48
     }
   },
   "by_category": {
     "config": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 29,
+      "BLOCKED": 1,
+      "NOT RUN": 7
     },
     "contract": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 25,
+      "BLOCKED": 5,
+      "NOT RUN": 7
     },
     "edge": {
-      "PASS": 40,
-      "NOT RUN": 34
+      "PASS": 57,
+      "BLOCKED": 3,
+      "NOT RUN": 14
     },
     "fault": {
-      "PASS": 80,
-      "NOT RUN": 68
+      "PASS": 114,
+      "BLOCKED": 6,
+      "NOT RUN": 28
     },
     "idempotency": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 25,
+      "BLOCKED": 5,
+      "NOT RUN": 7
     },
     "load": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 28,
+      "BLOCKED": 2,
+      "NOT RUN": 7
     },
     "observability": {
       "PASS": 18,
-      "BLOCKED": 2,
-      "NOT RUN": 17
+      "BLOCKED": 12,
+      "NOT RUN": 7
     },
     "performance": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 21,
+      "BLOCKED": 9,
+      "NOT RUN": 7
     },
     "privacy": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 21,
+      "BLOCKED": 9,
+      "NOT RUN": 7
     },
     "race": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 25,
+      "BLOCKED": 5,
+      "NOT RUN": 7
     },
     "recovery": {
-      "PASS": 39,
-      "BLOCKED": 1,
-      "NOT RUN": 34
+      "PASS": 50,
+      "BLOCKED": 10,
+      "NOT RUN": 14
     },
     "resource": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 21,
+      "BLOCKED": 9,
+      "NOT RUN": 7
     },
     "scenario": {
-      "PASS": 218,
-      "BLOCKED": 27,
-      "NOT RUN": 199
+      "PASS": 294,
+      "BLOCKED": 69,
+      "NOT RUN": 81
     },
     "security": {
-      "PASS": 40,
-      "NOT RUN": 34
+      "PASS": 59,
+      "BLOCKED": 1,
+      "NOT RUN": 14
     },
     "semantic": {
-      "PASS": 20,
-      "NOT RUN": 17
+      "PASS": 26,
+      "BLOCKED": 4,
+      "NOT RUN": 7
     }
   },
   "runs": {
@@ -256,6 +268,96 @@
     "modules/20-self-evolution/full-regression.xml": {
       "PASS": 2796,
       "BLOCKED": 29,
+      "SKIPPED": 7
+    },
+    "modules/21-native-coding/cases-and-contracts.xml": {
+      "PASS": 30,
+      "BLOCKED": 5
+    },
+    "modules/21-native-coding/full-regression.xml": {
+      "PASS": 2827,
+      "BLOCKED": 34,
+      "SKIPPED": 7
+    },
+    "modules/22-web-development/cases-and-contracts.xml": {
+      "PASS": 50,
+      "BLOCKED": 14
+    },
+    "modules/22-web-development/full-regression.xml": {
+      "PASS": 2855,
+      "BLOCKED": 41,
+      "SKIPPED": 7
+    },
+    "modules/23-gmail/cases-and-contracts.xml": {
+      "PASS": 68,
+      "BLOCKED": 8
+    },
+    "modules/23-gmail/full-regression.xml": {
+      "PASS": 2900,
+      "BLOCKED": 49,
+      "SKIPPED": 7
+    },
+    "modules/24-whatsapp/cases-and-contracts.xml": {
+      "PASS": 79,
+      "BLOCKED": 18
+    },
+    "modules/24-whatsapp/full-regression.xml": {
+      "PASS": 2939,
+      "BLOCKED": 66,
+      "SKIPPED": 7
+    },
+    "modules/25-media/cases-and-contracts.xml": {
+      "PASS": 123,
+      "BLOCKED": 16
+    },
+    "modules/25-media/full-regression.xml": {
+      "PASS": 2971,
+      "BLOCKED": 82,
+      "SKIPPED": 7
+    },
+    "modules/26-realtime-data/cases-and-contracts.xml": {
+      "PASS": 127,
+      "BLOCKED": 12
+    },
+    "modules/26-realtime-data/full-regression.xml": {
+      "PASS": 3005,
+      "BLOCKED": 93,
+      "SKIPPED": 7
+    },
+    "modules/27-gods-eye/cases-and-contracts.xml": {
+      "PASS": 72,
+      "BLOCKED": 12
+    },
+    "modules/27-gods-eye/full-regression.xml": {
+      "PASS": 3036,
+      "BLOCKED": 105,
+      "SKIPPED": 7
+    },
+    "modules/28-sandbox-deerflow/cases-and-contracts.xml": {
+      "PASS": 84,
+      "BLOCKED": 12
+    },
+    "modules/28-sandbox-deerflow/full-regression.xml": {
+      "PASS": 3065,
+      "BLOCKED": 117,
+      "SKIPPED": 7
+    },
+    "modules/29-reverse-engineering/cases-and-contracts.xml": {
+      "PASS": 131,
+      "BLOCKED": 13
+    },
+    "modules/29-reverse-engineering/full-regression.xml": {
+      "PASS": 3107,
+      "BLOCKED": 130,
+      "SKIPPED": 7
+    },
+    "modules/30-harness-planners/cases-and-contracts.xml": {
+      "PASS": 236,
+      "BLOCKED": 10
+    },
+    "modules/30-harness-planners/full-regression.xml": {
+      "PASS": 3165,
+      "BLOCKED": 140,
       "SKIPPED": 7
     },
     "neighbor-tests.xml": {

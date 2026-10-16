@@ -1,0 +1,15 @@
+{
+  "equivalent": true,
+  "real_external_actions": 0,
+  "scope": "One note appended to identical 1 MB ledger. UTC heading structure and prefix/note checked; 20 warm+5 initial samples. Not cold processes or REA/model/RSS/VRAM benchmark.",
+  "before": {
+    "p50_ms": 15.6678,
+    "p95_ms": 18.5282,
+    "peak_python_bytes": 13011648
+  },
+  "after": {
+    "p50_ms": 7.62825,
+    "p95_ms": 9.499,
+    "peak_python_bytes": 12004
+  }
+}

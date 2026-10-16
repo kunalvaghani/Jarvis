@@ -28,9 +28,14 @@ import re
 import shutil
 import subprocess
 import time
+import math
+import threading
+from contextlib import contextmanager
+from uuid import uuid4
 from datetime import datetime, timezone
 
 from .agent_context import bounded_text
+from .skill_memory import linked, atomic
 
 TOOLS = {
     'rea_status': ('rea', 'Report REA reverse-engineering bridge readiness: Node runtime, configured REA entry, allowlisted commands and session count. value dot. Starts nothing and executes no analysis.', (), False),
@@ -45,15 +50,69 @@ _URL = re.compile(r'https://[\w.-]+(?::\d+)?(?:/[\w./%+~&=?#:@-]*)?$', re.I)
 _DEFAULT_COMMANDS = ('analyze-javascript-application',)
 _RECORD_KINDS = {'obligation', 'modification', 'note'}
 _MAX_EVIDENCE = 200000
+_LOCK = threading.RLock()
+_MAX_LEDGER = 2 * 1024 * 1024
 
 
 def _config(actions):
-    return (getattr(actions, 'config', {}) or {}).get('rea', {}) if isinstance(getattr(actions, 'config', {}), dict) else {}
+    settings = getattr(actions, 'config', {})
+    if not isinstance(settings, dict) or not isinstance(settings.get('rea', {}), dict):
+        raise ValueError('REA config must be an object.')
+    config = settings.get('rea', {})
+    for key, default, low, high in (('analysis_timeout_seconds', 600, 10, 3600), ('max_input_mb', 200, 1, 200)):
+        value = config.get(key, default)
+        if type(value) not in {int, float} or not math.isfinite(value) or not low <= value <= high:
+            raise ValueError('Invalid rea.' + key)
+    if 'enabled' in config and type(config['enabled']) is not bool:
+        raise ValueError('Invalid rea.enabled')
+    _commands(config)
+    return config
+
+
+def _unlinked(path):
+    path = Path(path).absolute()
+    if any(linked(p) for p in (path, *path.parents)):
+        raise ValueError('REA paths must not contain links or reparse points.')
+    return path
+
+
+def _read_session(path):
+    path = _unlinked(path / 'session.json')
+    if path.stat().st_size > 65536:
+        raise ValueError('REA session checkpoint size exceeds limit.')
+    try:
+        record = json.loads(path.read_text(encoding='utf-8'))
+        if (not isinstance(record, dict) or record.get('id') != path.parent.name or
+                record.get('kind') not in {'url', 'application', 'binary'} or
+                not isinstance(record.get('target'), str) or len(record['target']) > 4096 or
+                type(record.get('analyses')) is not int or not 0 <= record['analyses'] <= 1000 or
+                record.get('analysis_state', 'idle') not in {'idle', 'attempted', 'uncertain', 'completed'}):
+            raise ValueError('Invalid REA session checkpoint.')
+        return record
+    except (RecursionError, TypeError, UnicodeError, json.JSONDecodeError):
+        raise ValueError('Invalid REA session checkpoint.') from None
+
+
+@contextmanager
+def _exclusive(path):
+    # Cross-process fail-closed fence. A crash leaves the fence for manual inspection.
+    with _LOCK:
+        lock = _unlinked(path / '.operation.lock')
+        try:
+            with lock.open('x', encoding='utf-8') as stream:
+                stream.write(str(os.getpid()))
+        except FileExistsError:
+            raise ValueError('REA session busy or uncertain after interruption; inspect before repeating.') from None
+        try:
+            yield
+        finally:
+            lock.unlink()
 
 
 def _root(actions):
-    base = Path(actions.base).resolve(strict=True)
+    base = _unlinked(actions.base).resolve(strict=True)
     root = base / '.jarvis-runtime' / 'rea'
+    _unlinked(root)
     root.mkdir(parents=True, exist_ok=True)
     return root
 
@@ -82,15 +141,17 @@ def _entry(config):
 
 def _commands(config):
     allowed = config.get('allow_commands')
+    if 'allow_commands' not in config:
+        return _DEFAULT_COMMANDS
     if isinstance(allowed, list) and allowed and all(isinstance(c, str) and re.fullmatch(r'[a-z][a-z0-9-]{1,60}', c) for c in allowed):
         return tuple(dict.fromkeys(allowed))
-    return _DEFAULT_COMMANDS
+    raise ValueError('Invalid rea.allow_commands config; use a nonempty command allowlist.')
 
 
 def _session_dir(actions, session):
     if not isinstance(session, str) or not re.fullmatch(r'[a-z0-9][a-z0-9-]{1,80}', session):
         raise ValueError('Use an existing session id (letters, digits and hyphens).')
-    path = _root(actions) / session
+    path = _unlinked(_root(actions) / session)
     if not path.is_dir() or not (path / 'session.json').is_file():
         raise ValueError('No REA session with that id; run rea_ingest first.')
     return path
@@ -98,7 +159,11 @@ def _session_dir(actions, session):
 
 def _target(actions, value, kind):
     """Validate one target; returns (resolved, kind). Local paths must exist and stay on-host."""
+    if not isinstance(value, str):
+        raise ValueError('REA target must be text.')
     value = value.strip()
+    if not value or len(value) > 4096 or any(0xD800 <= ord(c) <= 0xDFFF for c in value):
+        raise ValueError('REA target must be bounded Unicode text.')
     if _URL.fullmatch(value):
         from .toolkits import public_url
         public_url(value)  # Rejects private, loopback, reserved and credentialed destinations.
@@ -106,8 +171,7 @@ def _target(actions, value, kind):
     path = Path(value)
     if not path.is_absolute():
         raise ValueError('Give an absolute local path or a public HTTPS URL as the target.')
-    if path.is_symlink() or any(p.is_symlink() for p in path.parents):
-        raise ValueError('Symlinked targets are unsupported.')
+    _unlinked(path)
     if not path.exists():
         raise ValueError('The target path does not exist.')
     base = Path(actions.base).resolve()
@@ -129,13 +193,16 @@ def _ledger_path(session_dir):
 
 
 def _append_ledger(session_dir, heading, body):
-    path = _ledger_path(session_dir)
+    path = _unlinked(_ledger_path(session_dir))
     stamp = datetime.now(timezone.utc).isoformat(timespec='seconds')
     entry = f'\n## {heading} — {stamp}\n\n{body.rstrip()}\n'
-    current = path.read_text(encoding='utf-8') if path.is_file() else ''
-    tmp = path.with_suffix('.md.tmp')
-    tmp.write_text(current + entry, encoding='utf-8')
-    os.replace(tmp, path)
+    if (path.stat().st_size if path.exists() else 0) + len(entry.encode('utf-8')) > _MAX_LEDGER:
+        raise ValueError('REA ledger size limit reached; archive this session before continuing.')
+    # Caller holds the session fence. Append avoids copying the entire ledger per note.
+    with path.open('a', encoding='utf-8', newline='') as stream:
+        stream.write(entry)
+        stream.flush()
+        os.fsync(stream.fileno())
 
 
 def status(actions):
@@ -143,7 +210,7 @@ def status(actions):
     node = _node(config)
     entry = _entry(config)
     root = _root(actions)
-    sessions = sorted(p.name for p in root.iterdir() if p.is_dir() and (p / 'session.json').is_file())
+    sessions = sorted(p.name for p in _sessions(root))
     return {
         'enabled': config.get('enabled') is True,
         'node_runtime': node is not None,
@@ -164,16 +231,30 @@ def _slug(text):
     return _SLUG.sub('-', str(text).casefold()).strip('-')[:40] or 'target'
 
 
+def _sessions(root):
+    result = []
+    for count, path in enumerate(root.iterdir()):
+        if count >= 1000:
+            raise ValueError('REA session inventory limit reached; archive old sessions.')
+        _unlinked(path)
+        if path.is_dir() and (path / 'session.json').is_file():
+            result.append(path)
+    return sorted(result)
+
+
 def ingest(actions, value, args):
+    _config(actions)
     kind_hint = args.get('kind')
+    if kind_hint is not None and (not isinstance(kind_hint, str) or kind_hint not in {'url', 'application', 'binary'}):
+        raise ValueError('kind must be url, application or binary.')
     resolved, kind = _target(actions, value, kind_hint)
     if isinstance(kind_hint, str) and kind_hint and kind_hint != kind:
         raise ValueError(f'Target looks like a {kind}; remove or correct the kind field.')
     label = args.get('label')
-    if label is not None and (not isinstance(label, str) or len(label) > 120):
+    if label is not None and (not isinstance(label, str) or len(label) > 120 or any(0xD800 <= ord(c) <= 0xDFFF for c in label)):
         raise ValueError('label must be short text.')
-    seed = _slug(label or Path(resolved).name if kind != 'url' else re.sub(r'^https://', '', resolved))
-    session = f'{seed}-{int(time.time())}'
+    seed = _slug(label or (Path(resolved).name if kind != 'url' else re.sub(r'^https://', '', resolved)))
+    session = f'{seed}-{uuid4().hex}'
     session_dir = _root(actions) / session
     session_dir.mkdir()
     (session_dir / 'evidence').mkdir()
@@ -201,15 +282,17 @@ def _run_rea(node, entry, argv, cwd, cancelled, timeout):
     import tempfile
     env = {k: v for k, v in os.environ.items() if k.upper() in {
         'SYSTEMROOT', 'WINDIR', 'PATH', 'TEMP', 'TMP', 'COMSPEC', 'PATHEXT', 'APPDATA', 'LOCALAPPDATA',
-        'HOME', 'USERPROFILE', 'NODE_PATH'}}
+        'HOME', 'USERPROFILE'}}
     env['REA_DISABLE_TELEMETRY'] = '1'
     if cancelled():
         raise ValueError('REA analysis cancelled before start.')
+    from .harness_process import OwnedJob, hidden_spawn
+    job = OwnedJob()
     with tempfile.TemporaryFile() as sink:
-        process = subprocess.Popen([node, entry, *argv], cwd=cwd, env=env, shell=False,
-                                   stdin=subprocess.DEVNULL, stdout=sink, stderr=subprocess.DEVNULL,
-                                   creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        process = None
         try:
+            process = hidden_spawn(job, subprocess.Popen)([node, entry, *argv], cwd=cwd, env=env, shell=False,
+                                   stdin=subprocess.DEVNULL, stdout=sink, stderr=subprocess.DEVNULL)
             deadline = time.monotonic() + timeout
             while process.poll() is None:
                 if cancelled() or time.monotonic() > deadline:
@@ -225,7 +308,8 @@ def _run_rea(node, entry, argv, cwd, cancelled, timeout):
                 raise ValueError('REA produced more evidence than the bridge accepts; narrow the analysis.')
             return out.decode('utf-8', errors='replace')
         finally:
-            if process.poll() is None:
+            job.close()
+            if process is not None and process.poll() is None:
                 process.terminate()
                 try:
                     process.wait(timeout=2)
@@ -235,6 +319,20 @@ def _run_rea(node, entry, argv, cwd, cancelled, timeout):
 
 
 def analyze(actions, session, args, cancelled):
+    directory = _session_dir(actions, session)
+    with _exclusive(directory):
+        try:
+            return _analyze(actions, session, args, cancelled)
+        except BaseException:
+            from .task_state import TaskState
+            state = getattr(actions, 'task_state', None)
+            if isinstance(state, TaskState) and _read_session(directory).get('analysis_state') in {'attempted', 'uncertain'}:
+                state.checkpoint('uncertain_external_write', action='rea_analyze', target=session,
+                                 evidence='REA subprocess outcome uncertain; inspect session; never replay')
+            raise
+
+
+def _analyze(actions, session, args, cancelled):
     config = _config(actions)
     if config.get('enabled') is not True:
         raise ValueError('REA is disabled; enable rea.enabled in config to analyze targets.')
@@ -244,7 +342,16 @@ def analyze(actions, session, args, cancelled):
     if entry is None:
         raise ValueError('REA entry not configured; set rea.entry to an absolute scripts/rea.mjs or dist entry. No analysis ran.')
     session_dir = _session_dir(actions, session)
-    record = json.loads((session_dir / 'session.json').read_text(encoding='utf-8'))
+    record = _read_session(session_dir)
+    _unlinked(session_dir / 'evidence')
+    if record.get('analysis_state') in {'attempted', 'uncertain'}:
+        raise ValueError('REA analysis is uncertain; inspect evidence and create a fresh session before repeating.')
+    if record['analyses'] >= 1000:
+        raise ValueError('REA session analysis limit reached.')
+    if cancelled():
+        raise ValueError('REA analysis cancelled before approval.')
+    _target(actions, record['target'], record['kind'])
+    identities = [(p, p.stat().st_size, p.stat().st_mtime_ns) for p in (_unlinked(node), _unlinked(entry))]
     command = args.get('command')
     allowed = _commands(config)
     if command not in allowed:
@@ -259,29 +366,54 @@ def analyze(actions, session, args, cancelled):
     # Approve the exact program and call; REA output never waives approval or authorizes further actions.
     actions._approve('rea_analyze', json.dumps({'command': command, 'node': node, 'entry': entry,
         'target': record['target'], 'extra_flags': extra}, ensure_ascii=False), cancelled)
+    if cancelled():
+        raise ValueError('REA analysis cancelled after approval.')
+    _target(actions, record['target'], record['kind'])
+    if any((_unlinked(p).stat().st_size, p.stat().st_mtime_ns) != (size, stamp) for p, size, stamp in identities):
+        raise ValueError('REA program changed during approval; request fresh approval.')
     from .task_state import TaskState
     state = getattr(actions, 'task_state', None)
     if isinstance(state, TaskState):
         state.checkpoint('action_attempted', action='rea_analyze', target=session,
                          evidence='Approved REA subprocess beginning; inspect the session after any uncertain failure')
     timeout = config.get('analysis_timeout_seconds', 600)
-    if type(timeout) not in {int, float} or not 10 <= timeout <= 3600:
-        timeout = 600
-    raw = _run_rea(node, entry, argv, record['target'] if record['kind'] == 'application' else str(session_dir),
-                   cancelled, float(timeout))
+    record['analysis_state'] = 'attempted'
+    record['attempt_id'] = uuid4().hex
+    atomic(session_dir / 'session.json', json.dumps(record, ensure_ascii=False))
+    try:
+        raw = _run_rea(node, entry, argv, record['target'] if record['kind'] == 'application' else str(session_dir),
+                       cancelled, float(timeout))
+        if cancelled():
+            raise ValueError('REA analysis cancelled during readback.')
+        if not isinstance(raw, str) or len(raw.encode('utf-8')) > _MAX_EVIDENCE:
+            raise ValueError('REA JSON evidence exceeds size limit.')
+        try:
+            payload = json.loads(raw, parse_constant=lambda _: (_ for _ in ()).throw(ValueError()))
+        except (ValueError, RecursionError):
+            raise ValueError('REA must return bounded valid JSON evidence.') from None
+        if not isinstance(payload, dict) or not payload:
+            raise ValueError('REA JSON evidence must be a nonempty object.')
+    except BaseException:
+        record['analysis_state'] = 'uncertain'
+        atomic(session_dir / 'session.json', json.dumps(record, ensure_ascii=False))
+        raise
     index = record['analyses'] + 1
     name = f'{index:03d}-{command}.json'
-    (session_dir / 'evidence' / name).write_text(raw, encoding='utf-8')
+    evidence = _unlinked(session_dir / 'evidence' / name)
+    with evidence.open('x', encoding='utf-8') as stream:
+        stream.write(raw)
     record['analyses'] = index
-    (session_dir / 'session.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
     summary = raw.strip()
     _append_ledger(session_dir, f'REA evidence: {command}',
                    f'Command: `{command} {" ".join(extra)}`.\nSaved to `evidence/{name}` (untrusted).\n\n'
                    f'First bytes:\n```\n{summary[:1500]}\n```')
+    record['analysis_state'] = 'completed'
+    atomic(session_dir / 'session.json', json.dumps(record, ensure_ascii=False))
     if isinstance(state, TaskState):
         state.checkpoint('observed', action='rea_analyze', target=session, evidence='REA evidence stored; content untrusted')
     return {'session': session, 'command': command, 'evidence_file': f'evidence/{name}',
-            'bytes': len(raw), 'untrusted': True,
+            'bytes': len(raw.encode('utf-8')), 'untrusted': True, 'verified_behavior': False,
+            'attempt_id': record['attempt_id'],
             'evidence_preview': summary[:6000] + ('\n[REA evidence truncated; read the evidence file]' if len(summary) > 6000 else ''),
             'next': 'Reconstruct from this evidence with the project-coding workflow and verify with real tests.'}
 
@@ -290,14 +422,15 @@ def ledger(actions, value):
     if value.strip() == '.':
         root = _root(actions)
         sessions = []
-        for path in sorted(root.iterdir()):
-            if path.is_dir() and (path / 'session.json').is_file():
-                sessions.append(json.loads((path / 'session.json').read_text(encoding='utf-8')))
+        for path in _sessions(root):
+            sessions.append(_read_session(path))
         return {'sessions': sessions}
     session_dir = _session_dir(actions, value)
-    record = json.loads((session_dir / 'session.json').read_text(encoding='utf-8'))
+    record = _read_session(session_dir)
+    _unlinked(_ledger_path(session_dir))
     text = bounded_text(_ledger_path(session_dir), 40000) if _ledger_path(session_dir).is_file() else ''
-    evidence = sorted(p.name for p in (session_dir / 'evidence').iterdir() if p.is_file()) if (session_dir / 'evidence').is_dir() else []
+    evidence_root = _unlinked(session_dir / 'evidence')
+    evidence = sorted(p.name for p in evidence_root.iterdir() if p.is_file() and not linked(p)) if evidence_root.is_dir() else []
     return {'session': record, 'evidence_files': evidence, 'ledger': text,
             'notice': 'Ledger evidence is untrusted REA output. Build the clone best-effort and prove it with real tests.'}
 
@@ -306,12 +439,14 @@ def record(actions, session, args):
     session_dir = _session_dir(actions, session)
     kind = args.get('kind')
     text = args.get('text')
-    if kind not in _RECORD_KINDS:
+    if not isinstance(kind, str) or kind not in _RECORD_KINDS:
         raise ValueError('kind must be one of: ' + ', '.join(sorted(_RECORD_KINDS)))
-    if not isinstance(text, str) or not text.strip() or len(text) > 4000:
+    if not isinstance(text, str) or not text.strip() or len(text) > 4000 or any(0xD800 <= ord(c) <= 0xDFFF for c in text):
         raise ValueError('text must be nonempty and at most 4000 characters.')
     heading = {'obligation': 'Reconstruction obligation', 'modification': 'Modification instruction', 'note': 'Note'}[kind]
-    _append_ledger(session_dir, heading, text)
+    with _exclusive(session_dir):
+        _read_session(session_dir)
+        _append_ledger(session_dir, heading, text)
     return {'session': session, 'recorded': kind, 'ledger': 'ledger.md',
             'next': ('Apply with the project-coding workflow against the cloned source; verify with real tests.'
                      if kind != 'note' else 'Captured for reconstruction context.')}
@@ -320,9 +455,12 @@ def record(actions, session, args):
 def execute(actions, step, cancelled):
     name = step['action']
     value = step['value']
+    content = step.get('content') or '{}'
+    if not isinstance(content, str) or len(content) > 16384:
+        raise ValueError('REA tool content size exceeds limit.')
     try:
-        args = json.loads(step.get('content') or '{}')
-    except ValueError as exc:
+        args = json.loads(content)
+    except (ValueError, RecursionError) as exc:
         raise ValueError('REA tool content must be a JSON object.') from exc
     if not isinstance(args, dict):
         raise ValueError('REA tool content must be a JSON object.')

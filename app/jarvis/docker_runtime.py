@@ -50,7 +50,7 @@ def desktop_start_lock(base):
 
 
 def settings(value=None):
-    value = value or {}
+    value = {} if value is None else value
     if (not isinstance(value, dict) or set(value) - {'enabled', 'recovery', 'leave_shared_engine_running_on_quit'} or
             type(value.get('enabled', False)) is not bool or value.get('recovery', 'start_only') != 'start_only' or
             value.get('leave_shared_engine_running_on_quit', True) is not True):

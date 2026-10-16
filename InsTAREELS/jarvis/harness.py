@@ -3,23 +3,31 @@ from pathlib import Path
 
 from .brain import BrainClient
 from .hermes import validate_proposal
+from .planner_settings import settings
 
 SDK_VERSION = '0.1.5rc1'
 REVIEWED_REVISION = '639ed015397290b3745d163aafe02ffee4aa3f84'
 
 
 def validate_harness_proposal(proposal, request):
-    result = validate_proposal(proposal, request)
-    from .task_recovery import action_key
-    forbidden = {action_key(row) for row in request.get('completed', []) if isinstance(row, dict)}
-    for failure in request.get('failures', []):
-        if isinstance(failure, dict):
-            step = failure.get('step', failure)
-            if isinstance(step, dict):
-                forbidden.add(action_key(step))
-    if any(action_key(step) in forbidden for step in result['steps']):
-        raise ValueError('Harness repeated a completed or failed action; proposal rejected.')
-    return result
+    return validate_proposal(proposal, request)
+
+
+def validate_agent_response(result, context):
+    from .agent_session import SESSION_TOOLS
+    if (not isinstance(result, dict) or not isinstance(result.get('final'), str) or len(result['final']) > 40000
+            or not isinstance(result.get('calls'), list) or len(result['calls']) > 1):
+        raise ValueError('Harness returned an invalid read-only agent response.')
+    tools = context.get('tools', []) if isinstance(context, dict) else []
+    if not isinstance(tools, list) or any(not isinstance(t, dict) or not isinstance(t.get('action'), str) for t in tools):
+        raise ValueError('Invalid read-only tool catalogue.')
+    allowed = {t['action'] for t in tools} & SESSION_TOOLS
+    for call in result['calls']:
+        if (not isinstance(call, dict) or set(call) != {'action', 'value', 'content'}
+                or not isinstance(call.get('action'), str) or call['action'] not in allowed
+                or any(not isinstance(call.get(k), str) or len(call[k]) > 16000 for k in ('value', 'content'))):
+            raise ValueError('Harness proposed an unavailable or invalid read-only tool call.')
+    return {'final': result['final'], 'calls': result['calls']}
 
 
 def readiness(base):
@@ -39,7 +47,7 @@ class HarnessClient(BrainClient):
 
     def __init__(self, base, options):
         super().__init__(base, options)
-        self.timeout_seconds = max(10, min(300, float(options.get('harness', {}).get('timeout_seconds', 180))))
+        self.timeout_seconds = settings(options, 'harness')['timeout_seconds']
 
     def _request_once(self, operation, cancelled, **data):
         if operation not in {'plan', 'replan', 'agent', 'code_plan'}:
@@ -54,10 +62,10 @@ class HarnessClient(BrainClient):
             if allowed is not None and {s['path'].casefold() for s in result['files']} != {p.casefold() for p in allowed}:
                 raise ValueError('Harness plan exceeded the explicitly allowed output files; no action executed.')
         if operation in {'plan', 'replan'}:
-            result = {**result, **validate_harness_proposal(result, {'operation': operation, **data})}
-        elif operation == 'agent' and (not isinstance(result, dict) or not isinstance(result.get('final'), str)
-              or not isinstance(result.get('calls'), list) or len(result['calls']) > 1):
-            raise ValueError('Harness returned an invalid read-only agent response.')
+            result = {**{k: result[k] for k in ('model_used', 'harness_session_id', 'harness_events') if k in result},
+                      **validate_harness_proposal(result, {'operation': operation, **data})}
+        elif operation == 'agent':
+            result = validate_agent_response(result, data.get('context'))
         return {**result, 'backend': 'deepseek-harness'}
 
 

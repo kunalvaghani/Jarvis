@@ -1,5 +1,10 @@
 # God's Eye View inside Jarvis
 
+<!-- prompt27-audit -->
+**God’s Eye audit — 2026-10-16 IST:** Location opt-outs, primary-flight freshness, honest empty-feed answers, safer camera-pack origins, cancellation and durable notification checkpoints added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,036 passed / 112 skipped / 0 failures**, launcher **ready**. Closed-view budgets, complete signal freshness/privacy/schema/renderer acceptance remain incomplete. No live globe/camera/feed validation.
+[Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/27-gods-eye/inventory.md).
+<!-- /prompt27-audit -->
+
 Updated 2026-10-11 IST. [God's Eye View](https://github.com/bilawalsidhu/gods-eye-view) (Bilawal Sidhu, MIT license) was already bundled in `integrations/gods-eye-view-src/gods-eye-view-main`, but it only opened on request and Jarvis never used it. It's now updated, starts with Jarvis, feeds a background thread whose data Jarvis uses in answers and alerts, and Jarvis drives it by voice.
 
 ![Live God's Eye views opened by Jarvis on 2026-10-11 — military flights and mapped installations over the Persian Gulf, the Statue of Liberty, a live London traffic camera with its view cone, and the Eiffel Tower in satellite view](../artifacts/media/gods-eye-jarvis-live-2026-10-11.jpg)
@@ -31,7 +36,7 @@ Places are geocoded with OpenStreetMap Nominatim, ranked by importance, so seas,
 
 ## Runtime absorption and alerts
 
-Once Jarvis has started, a side thread polls God's Eye's own server every minute for a 25-mile (40 km) radius around you. It also starts the server if it isn't running. Each poll covers:
+Once Jarvis has started, a side thread polls God's Eye's own server every minute for the configured radius (40 km by default) around you. It also starts the server if it isn't running. Each poll covers:
 
 - **Aircraft** (`/api/flights`): count, the nearest ones, low traffic under 1,500 m, and emergency squawks 7700 (emergency), 7600 (radio failure) and 7500 (hijack).
 - **Military aircraft** (`/api/military`, adsb.lol): those nearby and any declaring an emergency.
@@ -100,7 +105,7 @@ Keys go in God's Eye's Provider Settings (its own `.env`), never in Jarvis's con
 | --- | --- | --- |
 | `enabled` | `true` | God's Eye integration and the side thread. |
 | `autostart` | `true` | Start the God's Eye server with Jarvis. |
-| `radius_km` | `40` | Watch radius (25 miles). |
+| `radius_km` | `40` | Watch radius in km (40 km is about 24.85 miles). |
 | `poll_seconds` | `60` | Side-thread interval. |
 
 ## Verification (2026-10-11 IST, this PC)
@@ -121,3 +126,7 @@ Keys go in God's Eye's Provider Settings (its own `.env`), never in Jarvis's con
 Regression and readiness (2026-10-11 IST): **1,477 tests ran, all passed with one skip** (`artifacts/logs/gods-eye-regression-2026-10-11.log`), and `python -m jarvis.launcher --check` reported `ready`. `tests/test_gods_eye.py` covers command parsing (and that existing commands are untouched), the aircraft, military, cyclone and weather cache, alert rules and announce-once, local-first answers, action building (layer replacement, styles, routes), the updater's swap, local-state preservation and reinstall, and the island card.
 
 No real alert fired during testing: no emergency squawk, low military aircraft, cyclone or fire was near you. The alert path is covered by unit tests with sample data.
+
+## Audit configuration and boundaries — 2026-10-16 IST
+
+`gods_eye.location_enabled` defaults to `true`; `false` prevents current-location lookup, poll, alert and summary use. The shared realtime `auto_location: false` is respected unless an explicit location is configured. No personal config was edited. `enabled`, `autostart` and `location_enabled` require booleans; `radius_km` accepts finite numbers 1–500 and `poll_seconds` 10–3600. Default 40 km is about 24.85 miles; exactly 25 miles requires 40.2336 km. Other hazard categories retain separate wider alert rules. Primary flight positions older than 120 seconds are excluded; empty/unavailable samples cannot establish clear skies or explain sirens. Other signal age/schema policies remain incomplete. Notification intent is saved atomically in `.jarvis-runtime/gods-eye-alerts.json` before callbacks, under the instance lock. Damaged/unwritable journals stop notification; do not delete them to force replay. Crash-time notifications can be lost. Six-hour suppression is a policy, not semantic event identity. New Toronto/Ontario pack entries require exact agency HTTPS origins; the full bundled camera proxy/catalog and synthetic-placeholder behavior have not been certified. The bundled renderer dependencies were not upgraded. The historical screenshots/results above remain historical. Current proof is fixture regression, selected Node unit checks and readiness, not live map centering, real feeds, camera licensing or real alerts.

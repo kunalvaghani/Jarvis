@@ -13,7 +13,7 @@ HERE = {"latitude": 22.3, "longitude": 73.2, "name": "Vadodara"}
 
 
 def flight(icao, callsign, lat, lon, alt, squawk="1000", ground=False):
-    return [icao, callsign, "India", 0, 0, lon, lat, alt, ground, 80, 90, 0, None, alt, squawk, False, 0]
+    return [icao, callsign, "India", time.time(), time.time(), lon, lat, alt, ground, 80, 90, 0, None, alt, squawk, False, 0]
 
 
 class ParseTests(unittest.TestCase):
@@ -72,7 +72,7 @@ class FeedTests(unittest.TestCase):
         return Feed({
             "/api/flights": {"states": [flight("a1", "IGO527 ", 22.45, 73.25, 11000), flight("b2", "LOW1 ", 22.32, 73.21, 600),
                                         flight("c3", "EMG77 ", 22.5, 73.3, 2000, "7700"), flight("d4", "FAR ", 28.6, 77.2, 9000)]},
-            "/api/military": {"total": 100, "ac": [{"hex": "m1", "flight": "IAF01 ", "t": "C130", "lat": 22.35, "lon": 73.22,
+            "/api/military": {"now":time.time()*1000,"total": 100, "ac": [{"seen_pos":0,"hex": "m1", "flight": "IAF01 ", "t": "C130", "lat": 22.35, "lon": 73.22,
                                                     "alt_baro": 2500, "squawk": "4000", "emergency": "none"}]},
             "/api/cyclones": {"storms": [{"name": "Vayu", "position": {"latitude": 21.0, "longitude": 70.5}, "forecastPoints": []}]},
             "/api/fire-perimeters": {"rows": []},
@@ -105,7 +105,7 @@ class FeedTests(unittest.TestCase):
     def test_quiet_area_and_sirens(self):
         feed = Feed({"/api/flights": {"states": []}, "/api/military": {"ac": []}, "/api/tomtom/status": {"hasKey": False}})
         feed.poll()
-        self.assertIn("nothing unusual", feed.explain("why is it so loud outside"))
+        self.assertIn("unavailable", feed.explain("why is it so loud outside"))
         self.assertIn("live traffic isn't connected", feed.explain("why am I hearing sirens"))
 
 

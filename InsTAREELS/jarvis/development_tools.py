@@ -41,6 +41,7 @@ class DevelopmentTools:
         self.preview=None
         self.command=None
         self.closed=False
+        self._opener=build_opener(ProxyHandler({}))
 
     def run(self, project, argv, cancelled, seconds=180):
         project=Path(project).resolve(strict=True)
@@ -171,7 +172,7 @@ class DevelopmentTools:
             if item['process'].poll() is not None:
                 return False
             try:
-                with build_opener(ProxyHandler({})).open(item['url'],timeout=.5) as response:
+                with self._opener.open(item['url'],timeout=.5) as response:
                     return response.status==200
             except OSError:
                 return False
