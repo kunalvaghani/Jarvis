@@ -46,8 +46,15 @@ ROUTES = {
     'calendar': (r'\b(calendar|appointment|schedule|event)\b', ('calendar_list', 'calendar_details', 'calendar_create', 'calendar_delete'), ()),
     'jira': (r'\b(jira|ticket|jql)\b', ('jira_projects', 'jira_search', 'jira_create', 'jira_edit'), ()),
     'slack': (r'\bslack\b', ('slack_send',), ()),
+    # API/code-first execution methods (execution_strategy); GUI tools remain the last resort.
+    'documents': (r'\b(?:xlsx|xlsm|excel|spreadsheets?|workbooks?|worksheets?|docx|docm|word documents?|pdfs?|cells?|formulas?)\b|\.(?:xlsx|xlsm|docx|docm|pdf)\b',
+                  ('strategy_execute', 'execution_methods', 'office_xlsx', 'office_docx', 'pdf_document', 'office_automation'), ('file-operations',)),
+    'modeling_3d': (r'\b(?:blender|unreal(?: engine)?|3d (?:model|scene|object)s?|meshe?s?)\b|\.blend\b',
+                    ('strategy_execute', 'execution_methods', 'blender_task', 'unreal_task'), ()),
+    'vscode': (r'\b(?:vs ?code|visual studio code)\b', ('vscode_cli', 'execution_methods'), ('project-coding',)),
 }
 PREREQUISITES = {
+    'strategy_execute': ('execution_methods',),
     'browser_click': ('browser_inspect',), 'browser_fill': ('browser_inspect',),
     'modify_file': ('read_file',), 'append_file': ('read_file',),
     'github_add_file': ('github_read_file',), 'github_delete_file': ('github_read_file',),
@@ -263,7 +270,10 @@ def runtime_context(goal, tool_rows, skills=None, memory_context=None, coding=Fa
     relevant = [name for intent in intents(goal) for name in ROUTES[intent][1] if name in names]
     relevant += [name for row in selected for name in row['tools']]
     relevant += [row['action'] for row in tool_rows if tokens(goal) & tokens(row['action'].replace('_', ' '))]
+    from .execution_strategy import hint
+    strategy = hint(goal, names)
     return {'intents': intents(goal), 'tools': list(dict.fromkeys(relevant))[:16] if not coding else [],
+            **({'execution_strategy': strategy} if strategy else {}),
             'skills': selected, 'programs': apps, 'unavailable': unavailable,
             'preferred_runner': 'Qwen coder with repository inspection and streamed drafts' if coding else 'direct workflow when supported; otherwise fresh-state planner',
             'contract': CONTRACT}

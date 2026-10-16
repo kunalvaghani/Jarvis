@@ -14,6 +14,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase02 -->
+**2026-10-17 — Upgrade Phase 2 of 8 (API/code-first execution router): PASS for locally executable checks.** Jarvis now chooses, per request, among discovered, compatible, available and authorized methods in the order **API/code → structured automation (UIA, DOM, native Office object model) → GUI coordinates**, ranked with measured verified outcomes. New registry tools: `office_xlsx` (openpyxl), `office_docx` (python-docx), `pdf_document` (pypdf, new files only), `office_automation` (new hidden Excel/Word instance), `blender_task` (background Blender, fixed templates), `unreal_task` (engine manifest, read-only), `vscode_cli`, plus `execution_methods` (explain) and `strategy_execute` (run with safe fallback). Writes ask for approval, edit a temporary copy, are verified by an independent readback, keep a backup in `.jarvis-runtime/backups/documents/` and are never retried. **Behaviour change:** desktop clicks/menus try UIA patterns before the cyan-cursor tap; set `execution_strategy.desktop_order` to `"pointer_first"` to restore the old order. Real-software tests passed for Excel, Word, Blender 4.4.3, UIA on a disposable window, headless Chrome DOM, openpyxl, python-docx and pypdf; Unreal editor Python and real macro workbooks are BLOCKED. Full regression **3,223 passed / 147 skipped / 0 failed**; launcher ready. [Evidence, matrix, measurements and rollback](artifacts/jarvis-audit/phase-02/README.md).
+<!-- /upgrade-phase02 -->
+
 <!-- upgrade-phase01 -->
 **2026-10-17 — Upgrade Phase 1 of 8 (audit, repair, baseline): PASS for locally executable checks.** Full regression 3,173 passed / 147 skipped / 1 failed → **3,193 passed / 147 skipped / 0 failed**; launcher **ready**. Fixed: ToolRegistry now rejects non-object proposals with `ToolArgumentError` before identity/policy checks; cognition reports memory-source failures in `snapshot()['memory_source_errors']` instead of swallowing them; the web-development audit test no longer overwrites dated Prompt 22 evidence; a Node cleanup test no longer races interpreter startup under load. Added the shared metadata-only `tool.outcome` contract ([`jarvis/execution_contracts.py`](jarvis/execution_contracts.py)) for upcoming execution/skill/memory phases and a versioned metrics script (`scripts/verification/phase_baseline.py`). No live account, microphone, GPU-contention or desktop acceptance was run. [Evidence, defects, metrics and rollback](artifacts/jarvis-audit/phase-01/README.md).
 <!-- /upgrade-phase01 -->
@@ -1678,6 +1682,20 @@ Crashes preserve task checkpoints and pause unfinished work. File writes, shell 
 
 The recovery design follows [Supervisor's process states and retry behavior](https://supervisord.org/subprocess.html) and [Ollama's service configuration](https://docs.ollama.com/faq). Research also included [Supervisor's restart discussion on GitHub](https://github.com/Supervisor/supervisor/issues/212) and [a Python background watchdog discussion on Reddit](https://www.reddit.com/r/Python/comments/42oy0x/running_watchdog_in_the_background/).
 
+### API/code-first execution (`execution_strategy`)
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `desktop_order` | `structured_first` | `pointer_first` restores the cyan-cursor-first desktop provider order |
+| `blender_executable` | installation path | Background Blender used by `blender_task`; missing → method unavailable |
+| `unreal_engine_root` | installation path | Engine folder whose `Engine/Build/Build.version` `unreal_task` reads |
+| `min_available_ram_mb` | 1536 | High-cost methods (Blender) wait instead of competing with the foreground |
+| `office_timeout_seconds` / `blender_timeout_seconds` | 90 / 120 | Owned-process deadlines; timed-out Office instances owned by Jarvis are stopped by PID |
+
+Ask, for example, "set cell B2 to 42 in budget.xlsx in Documents" or "merge a.pdf and b.pdf into all.pdf". The planner
+uses `strategy_execute`; `execution_methods` explains the ranking without acting. Dependencies: `openpyxl` and
+`python-docx` live in `.venv-skills` (`requirements/skills.txt`).
+
 ## Integrations and toolkits
 
 Jarvis adapts Ultron's memory decay code for recent successful UI suggestions
@@ -1928,7 +1946,7 @@ Additional targeted checks:
 
 `phase_baseline.py` records versioned measurements over the real parser, DAG executor, ToolRegistry, skill loader and
 cloud privacy classifier using synthetic fixtures (no model, network or desktop action) and refuses to overwrite an
-existing measurement file.
+existing measurement file. `phase02_execution_benchmark.py --out <new-file>.json` measures each execution method on disposable fixtures with the real installed software.
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
 

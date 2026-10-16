@@ -2,7 +2,7 @@
 import time
 import uuid
 from contextlib import nullcontext
-from .execution_adapters import PROVIDERS, Unsupported, access_denied
+from .execution_adapters import Unsupported, access_denied, desktop_order
 
 
 def validate(request, control):
@@ -43,7 +43,7 @@ def execute(request, element, control, window, guard, observe=None,
     validate(request, control)
     started, attempts = clock(), []
     trace_id=uuid.uuid4().hex
-    providers = providers if providers is not None else (provider() for provider in PROVIDERS)
+    providers = providers if providers is not None else (provider() for provider in desktop_order())
     for provider in providers:
         guard()
         try:

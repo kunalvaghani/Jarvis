@@ -1535,5 +1535,13 @@
     "enabled": true,
     "recovery": "start_only",
     "leave_shared_engine_running_on_quit": true
+  },
+  "execution_strategy": {
+    "desktop_order": "structured_first",
+    "blender_executable": "D:\\Blender\\blender.exe",
+    "unreal_engine_root": "D:\\UE_5.8",
+    "min_available_ram_mb": 1536,
+    "office_timeout_seconds": 90,
+    "blender_timeout_seconds": 120
   }
 }

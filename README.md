@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase02 -->
+**2026-10-17 — Upgrade Phase 2 of 8 (API/code-first execution): PASS for locally executable checks.** Document, PDF, Blender, Unreal-manifest and VS Code adapters joined the existing tool registry; Jarvis prefers APIs, then structured UI automation, and uses the cyan cursor last (configurable). Full regression **3,223 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 2 evidence](app/artifacts/jarvis-audit/phase-02/README.md).
+<!-- /upgrade-phase02 -->
+
 <!-- upgrade-phase01 -->
 **2026-10-17 — Upgrade Phase 1 of 8 (audit, repair, baseline): PASS for locally executable checks.** Full regression **3,193 passed / 147 skipped / 0 failed** (baseline had 1 load-dependent failure); launcher ready. ToolRegistry input contract, cognition memory-failure visibility and evidence-preserving tests fixed; shared execution-outcome contract added for the next phases. No live account/microphone/desktop acceptance. [Application details](app/README.md) · [Phase 1 evidence](app/artifacts/jarvis-audit/phase-01/README.md).
 <!-- /upgrade-phase01 -->

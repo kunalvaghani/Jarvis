@@ -176,7 +176,10 @@ def test_JRV_01_017_five_way_trace_isolation_twenty_rounds(tmp_path):
         actions.base.mkdir()
         ToolRegistry(actions).execute({'action':'open','value':f'fixture-{i}'},lambda:False)
         rows=[json.loads(s) for s in (actions.base/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
-        assert len(rows)==2 and rows[0]['call_id']==rows[1]['call_id']
+        # Phase 2: one execution-method outcome row may follow the lifecycle pair; it must share the call ID.
+        lifecycle=[r for r in rows if r['event']!='tool.outcome']
+        assert len(lifecycle)==2 and lifecycle[0]['call_id']==lifecycle[1]['call_id']
+        assert all(r['call_id']==lifecycle[0]['call_id'] for r in rows) and len(rows)-len(lifecycle)<=1
         actions.execute.assert_called_once()
         return rows[0]['call_id']
     with ThreadPoolExecutor(max_workers=5) as pool:

@@ -291,4 +291,24 @@ class JarvisPointer:
 
 
 PROVIDERS = (JarvisPointer, UFO, WindowsMCP, CUA, OpenComputerUse, AgentS)
-PRIORITY = tuple(provider.name for provider in PROVIDERS)
+PRIORITY = tuple(provider.name for provider in PROVIDERS)  # Catalogue order (historical, pointer first).
+
+
+def desktop_order(base=None):
+    """Effective order: structured UIA patterns first, the cyan-cursor pointer as fallback.
+
+    execution_strategy.desktop_order = "pointer_first" in config.json restores the
+    earlier pointer-first behaviour. Malformed configuration keeps structured first.
+    """
+    import json
+    from pathlib import Path
+    path = Path(base or Path(__file__).resolve().parents[1]) / 'config/config.json'
+    try:
+        if path.stat().st_size <= 2_000_000:
+            data = json.loads(path.read_text(encoding='utf-8'))
+            section = data.get('execution_strategy', {}) if isinstance(data, dict) else {}
+            if isinstance(section, dict) and section.get('desktop_order') == 'pointer_first':
+                return PROVIDERS
+    except (OSError, ValueError, TypeError, RecursionError):
+        pass
+    return tuple(provider for provider in PROVIDERS if provider is not JarvisPointer) + (JarvisPointer,)

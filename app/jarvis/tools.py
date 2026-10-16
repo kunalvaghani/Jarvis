@@ -3,6 +3,7 @@ from dataclasses import dataclass, replace
 import json
 import os
 import re
+import time
 
 from .commands import Command
 from .desktop_actions import CONTROL_ACTIONS, validate_desktop_step
@@ -146,6 +147,15 @@ class ToolResult:
     call_id: str = ''  # Correlates with .jarvis-runtime/agent-events.jsonl.
 
 
+def _outcome(actions, name, step, call_id, started, result=None, category=None):
+    """Execution-method telemetry (execution_contracts); never affects the tool result."""
+    try:
+        from .execution_strategy import observe
+        observe(actions, name, step, call_id, (time.perf_counter() - started) * 1000, result, category)
+    except Exception:  # Broad by design: telemetry must not turn a completed call into a failure.
+        pass
+
+
 class ToolRegistry:
     def __init__(self, actions):
         self.actions = actions
@@ -211,22 +221,26 @@ class ToolRegistry:
             raise ValueError('Tool is outside the current task scope: ' + str(name))
         check_policy(self.actions, name)
         call_id = event(self.actions, 'tool.started', name)
+        started = time.perf_counter()
         try:
             if name in self.specs:
                 validate_arguments(step)
             result = self._execute(step, cancelled, activate)
         except Exception as exc:
             # Audit failures cannot turn an uncertain write into a retriable action.
+            category = failure_category(exc, cancelled)
             try:
                 event(self.actions, 'tool.failed', name, call_id, error_type=type(exc).__name__,
-                      category=failure_category(exc, cancelled))
+                      category=category)
             except (OSError, ValueError):
                 pass
+            _outcome(self.actions, name, step, call_id, started, category=category)
             raise
         try:
             event(self.actions, 'tool.completed', name, call_id, backend=result.backend)
         except (OSError, ValueError):
             pass
+        _outcome(self.actions, name, step, call_id, started, result=result)
         return replace(result, call_id=call_id) if isinstance(result, ToolResult) else result
 
     def _execute(self, step, cancelled, activate=None):

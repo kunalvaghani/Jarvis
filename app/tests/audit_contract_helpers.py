@@ -33,9 +33,12 @@ def trace_contract(root):
     wire=(root/'.jarvis-runtime/agent-events.jsonl').read_text(encoding='utf-8')
     rows=[json.loads(line) for line in wire.splitlines()]
     assert 'FAKE_PRIVATE_TOKEN' not in wire
-    assert [row['event'] for row in rows]==['tool.started','tool.completed','tool.started','tool.failed']
-    assert rows[0]['call_id']==rows[1]['call_id'] and rows[2]['call_id']==rows[3]['call_id']
-    assert rows[0]['call_id']!=rows[2]['call_id'] and len(rows[0]['call_id'])==32
+    # Phase 2 adds categorical tool.outcome rows; each must correlate with a lifecycle call.
+    lifecycle=[row for row in rows if row['event']!='tool.outcome']
+    assert [row['event'] for row in lifecycle]==['tool.started','tool.completed','tool.started','tool.failed']
+    assert {row['call_id'] for row in rows if row['event']=='tool.outcome'} <= {row['call_id'] for row in lifecycle}
+    assert lifecycle[0]['call_id']==lifecycle[1]['call_id'] and lifecycle[2]['call_id']==lifecycle[3]['call_id']
+    assert lifecycle[0]['call_id']!=lifecycle[2]['call_id'] and len(lifecycle[0]['call_id'])==32
 
 
 def benchmark_contract(module):

@@ -114,7 +114,7 @@ def execute(actions, step, cancelled):
         guides = getattr(skills, 'catalog', [])
         configs = configurations(actions.base)
         providers = status()
-        from .execution_adapters import PRIORITY
+        from .execution_adapters import PRIORITY, desktop_order
         config = getattr(actions, 'config', {})
         return json.dumps({'registered_tools': len(rows), 'tool_groups': sorted({r['backend'] for r in rows}),
             'configured_provider_tools': [r['tool'] for r in providers if r['configured']],
@@ -126,6 +126,7 @@ def execute(actions, step, cancelled):
                              'allowlisted_tools': len(c.get('allow_tools', []))} for n, c in configs.items()],
             'codex_plugin_credentials_exported': False,
             'desktop_execution': {'priority': list(PRIORITY),
+                'effective_order': [provider.name for provider in desktop_order(getattr(actions, 'base', None))],
                 'direct_execution': bool(config.get('agent_runtime', {}).get('direct_execution', False)),
                 'mode': 'Reviewed primitives/ports in the existing UI worker; full agent frameworks are not installed',
                 'fallback': 'Before dispatch only; uncertain input is never repeated',

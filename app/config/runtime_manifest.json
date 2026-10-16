@@ -409,8 +409,18 @@
     "PIL",
     "requests",
     "psutil",
-    "yaml"
+    "yaml",
+    "openpyxl",
+    "docx"
   ],
+  "execution_strategy": {
+    "modules": ["jarvis.execution_strategy", "jarvis.app_adapters", "jarvis.document_worker", "jarvis.office_com_worker"],
+    "policy": "API/code first, structured automation (UIA/DOM/native object model) next, GUI coordinates last; eligibility (registered, in scope, not denied, available, feature-preserving) before measured-reliability ranking.",
+    "telemetry": "tool.outcome rows (execution_contracts) in .jarvis-runtime/agent-events.jsonl; categorical/bounded only.",
+    "dependencies": "openpyxl 3.1.5 and python-docx 1.2.0 in .venv-skills (requirements/skills.txt); pypdf in .venv; pywin32 COM for native Office; Blender/Unreal/VS Code are optional host applications.",
+    "writes": "Runtime approval, temporary copy, independent readback, backup in .jarvis-runtime/backups/documents, atomic replace or no-clobber publication; never retried.",
+    "processes": "Owned short-lived workers in a Windows job object; native Office runs as a new hidden instance whose own PID is the only one that may be stopped."
+  },
   "gmail_api": {
     "module": "jarvis.gmail_api",
     "dependencies": "Optional requirements/gmail.txt installed into .venv by launchers/Connect Jarvis Gmail API.cmd; google.auth and google_auth_oauthlib are loaded only during account setup/use.",

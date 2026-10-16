@@ -23,8 +23,7 @@ import requests
 from .agent_tools import TOOLS as AGENT_TOOLS
 
 
-class ToolUnavailable(ValueError):
-    """Required configuration is missing; nothing was attempted."""
+from .tool_errors import ToolUnavailable  # Re-exported: one class for toolkits and registered adapters.
 
 
 _APPEND_LOCKS = {}
@@ -87,6 +86,10 @@ from .rea_tools import TOOLS as REA_TOOLS
 TOOLS.update(REA_TOOLS)
 from .utility_tools import TOOLS as UTILITY_TOOLS
 TOOLS.update(UTILITY_TOOLS)
+from .app_adapters import TOOLS as APP_TOOLS
+TOOLS.update(APP_TOOLS)
+from .execution_strategy import TOOLS as STRATEGY_TOOLS
+TOOLS.update(STRATEGY_TOOLS)
 from .gmail_api import TOOLS as GMAIL_API_TOOLS
 from .gmail_api import configured as gmail_api_configured
 if gmail_api_configured():TOOLS.update(GMAIL_API_TOOLS)
@@ -318,6 +321,13 @@ def execute(actions, step, cancelled):
     if name in GMAIL_API_TOOLS:
         from .gmail_api import execute as gmail_execute
         return gmail_execute(actions,step,cancelled)
+    if name in APP_TOOLS:
+        # API/code-first adapters approve each write themselves and never retry it.
+        from .app_adapters import execute as app_execute
+        return app_execute(actions, step, cancelled)
+    if name in STRATEGY_TOOLS:
+        from .execution_strategy import strategy_tool
+        return strategy_tool(actions, step, cancelled)
     if name in UTILITY_TOOLS:
         from .utility_tools import execute as utility_execute
         return utility_execute(actions,step,cancelled)

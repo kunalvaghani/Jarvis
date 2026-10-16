@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-10-16T19:24:40+00:00",
+  "scope": "Real software on disposable fixtures; one machine; single sessions; includes process start.",
+  "methods": [
+    {
+      "method": "strategy_execute -> xlsx.openpyxl (API)",
+      "status": "MEASURED",
+      "n": 5,
+      "p50_ms": 2677.2,
+      "max_ms": 2796.2,
+      "errors": []
+    },
+    {
+      "method": "xlsx.excel_com (structured, native Excel)",
+      "status": "MEASURED",
+      "n": 3,
+      "p50_ms": 8284.4,
+      "max_ms": 8335.8,
+      "errors": []
+    },
+    {
+      "method": "docx.python_docx (API)",
+      "status": "MEASURED",
+      "n": 5,
+      "p50_ms": 471.7,
+      "max_ms": 479.7,
+      "errors": []
+    },
+    {
+      "method": "docx.word_com (structured, native Word)",
+      "status": "MEASURED",
+      "n": 2,
+      "p50_ms": 7726.7,
+      "max_ms": 8393.6,
+      "errors": []
+    },
+    {
+      "method": "pdf.pypdf compose (API)",
+      "status": "MEASURED",
+      "n": 5,
+      "p50_ms": 1671.3,
+      "max_ms": 1690.7,
+      "errors": []
+    },
+    {
+      "method": "blender.background create + readback (API)",
+      "status": "MEASURED",
+      "n": 2,
+      "p50_ms": 2142.5,
+      "max_ms": 2175.7,
+      "errors": []
+    },
+    {
+      "method": "windows.uia fill_text (structured, disposable window)",
+      "status": "MEASURED",
+      "n": 5,
+      "p50_ms": 78.2,
+      "max_ms": 125.2,
+      "errors": []
+    }
+  ],
+  "tool_calls": {
+    "api_path_registry_calls_per_edit": [
+      2
+    ],
+    "api_path_note": "Measured tool.started rows per strategy_execute edit (outer call + nested adapter call).",
+    "gui_reference_plan_steps": 8,
+    "gui_reference_plan": [
+      "open budget.xlsx",
+      "observe window",
+      "select Name Box",
+      "fill_text B2",
+      "observe selection",
+      "type_text 42",
+      "shortcut ctrl+s",
+      "observe save state"
+    ],
+    "gui_note": "Authored reference plan, NOT executed; no live GUI latency is claimed."
+  }
+}

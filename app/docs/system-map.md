@@ -1,5 +1,9 @@
 # Jarvis system map
 
+<!-- upgrade-phase02 -->
+**Upgrade Phase 2 — 2026-10-17 IST:** `execution_strategy.py` ranks execution methods (API → structured → GUI) from the existing registry and `tool.outcome` evidence; `app_adapters.py` adds Office/PDF/Blender/Unreal/VS Code tools behind `toolkits.TOOLS`; `execution_router` uses `execution_adapters.desktop_order()` (structured UIA first, cyan pointer as fallback). Planner context gains `capability_context.execution_strategy`; `Brain.validate_remaining` rejects GUI steps on named documents while an API/structured method is eligible. [Compatibility matrix](../artifacts/jarvis-audit/phase-02/compatibility-matrix.md).
+<!-- /upgrade-phase02 -->
+
 <!-- upgrade-phase01 -->
 **Upgrade Phase 1 — 2026-10-17 IST:** Architecture inventory and dependency map re-derived from source; every planned tool call still passes `ToolRegistry.execute`. New metadata-only `tool.outcome` rows (method tier `api`/`structured`/`gui`, idempotency, verification, latency, skill ID) extend the existing `agent-events.jsonl` lifecycle log — no second registry or event bus. Full regression **3,193 passed / 147 skipped / 0 failed**; launcher **ready**. [Inventory, dependency map and limits](../artifacts/jarvis-audit/phase-01/architecture-and-dependency-map.md).
 <!-- /upgrade-phase01 -->

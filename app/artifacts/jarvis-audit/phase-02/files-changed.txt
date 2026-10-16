@@ -1,0 +1,25 @@
+ .../source-inventory.json                          | 2855 +++++++++++---------
+ app/config/config.json                             |    8 +
+ app/config/runtime_manifest.json                   |   12 +-
+ app/jarvis/agent_tools.py                          |    3 +-
+ app/jarvis/app_adapters.py                         |  764 ++++++
+ app/jarvis/brain.py                                |   18 +
+ app/jarvis/brain_worker.py                         |    1 +
+ app/jarvis/capabilities.py                         |   10 +
+ app/jarvis/config_contract.py                      |    2 +-
+ app/jarvis/document_worker.py                      |  181 ++
+ app/jarvis/execution_adapters.py                   |   22 +-
+ app/jarvis/execution_router.py                     |    4 +-
+ app/jarvis/execution_strategy.py                   |  494 ++++
+ app/jarvis/office_com_worker.py                    |  119 +
+ app/jarvis/templates/blender_ops.py                |   78 +
+ app/jarvis/tool_errors.py                          |    5 +
+ app/jarvis/toolkits.py                             |   14 +-
+ app/jarvis/tools.py                                |   16 +-
+ app/requirements/skills.txt                        |    3 +
+ .../verification/phase02_execution_benchmark.py    |  141 +
+ app/tests/audit_contract_helpers.py                |    9 +-
+ app/tests/fixtures/uia_fixture_app.py              |   60 +
+ app/tests/test_architecture_audit.py               |    5 +-
+ app/tests/test_phase02_execution_strategy.py       |  590 ++++
+ 24 files changed, 4192 insertions(+), 1222 deletions(-)

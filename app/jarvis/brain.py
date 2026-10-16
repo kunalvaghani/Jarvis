@@ -853,7 +853,25 @@ class Brain:
 
     def validate_remaining(self, steps, goal):
         low_goal = goal.casefold()
+        from .execution_strategy import ADAPTER_TOOLS, api_alternative
         for pending in steps:
+            better = api_alternative(self.actions, goal, pending)
+            if better:
+                raise ValueError('API/code first: use ' + better[0] + ' (or strategy_execute) for ' + better[1] +
+                                 ' instead of ' + pending['action'] + '; GUI input is the last resort after those '
+                                 'methods report they cannot run.')
+            if pending['action'] in ADAPTER_TOOLS | {'strategy_execute'}:
+                try:
+                    operation = json.loads(pending.get('content') or '{}').get('operation', '')
+                except (ValueError, AttributeError):
+                    operation = ''
+                if operation in {'write', 'create', 'compose', 'export'}:
+                    target = (json.loads(pending['content']).get('output') if operation == 'compose' else pending['value']) or ''
+                    if not re.search(r'\b(?:set|write|put|enter|update|change|edit|fill|add|append|insert|replace|'
+                                     r'create|make|generate|build|merge|combine|split|extract|rotate|export|save)\b', low_goal):
+                        raise ValueError('The plan writes a document, but no change was requested.')
+                    if Path(str(target)).name.casefold() not in low_goal:
+                        raise ValueError('The plan chose a document name you did not give.')
             if pending['action'] == 'application_inspect' and pending['value'].casefold() != 'current' and not any(
                     name.casefold() == pending['value'].casefold() for name in self.actions.apps):
                 raise ValueError('application_inspect requires a configured application name or current, not an object/control name. Use select for visible controls.')
