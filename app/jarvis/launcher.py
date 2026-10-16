@@ -307,14 +307,16 @@ def run():
     crashes = 0
     resume_after_crash = False
     listen = True
+    docker_start = None  # Owned Docker recovery handle; closed on every restart and on exit.
     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
     try:
         while not stop.exists():
             try:
                 config = preflight()
                 from .docker_runtime import start_background
-                if 'docker_start' in locals() and docker_start is not None:
+                if docker_start is not None:
                     docker_start.close()
+                    docker_start = None
                 docker_start = start_background(BASE, config, lambda: stop.exists())
                 python = prepare_runtime(config)
                 session = uuid.uuid4().hex
@@ -386,7 +388,7 @@ def run():
                     break
                 time.sleep(1)
     finally:
-        if 'docker_start' in locals() and docker_start is not None:
+        if docker_start is not None:
             docker_start.close()
         lock.close()
 

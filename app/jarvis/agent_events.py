@@ -78,10 +78,20 @@ def event(actions, kind, name, call_id=None, **metadata):
     identifier = call_id if isinstance(call_id,str) and re.fullmatch(r'[0-9a-f]{32}',call_id) else uuid.uuid4().hex
     if base is None:
         return identifier
-    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(),
-           'event':kind if kind in {'tool.started','tool.completed','tool.failed'} else 'tool.invalid_event',
+    kind = kind if kind in {'tool.started','tool.completed','tool.failed','tool.outcome'} else 'tool.invalid_event'
+    if kind == 'tool.outcome':
+        # Outcome rows (execution_contracts) carry only categorical/bounded fields.
+        from .execution_contracts import OUTCOME_FIELDS, outcome_metadata
+        details = outcome_metadata(metadata)
+        lifecycle = lifecycle_metadata({k: v for k, v in metadata.items() if k not in OUTCOME_FIELDS})
+        dropped = len(metadata) - len(details) - (len(lifecycle) - ('discarded_metadata_fields' in lifecycle))
+        lifecycle.pop('discarded_metadata_fields', None)
+        details = {**lifecycle, **details, **({'discarded_metadata_fields': dropped} if dropped else {})}
+    else:
+        details = lifecycle_metadata(metadata)
+    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
            'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
-           **lifecycle_metadata(metadata)}
+           **details}
     # Never store arguments, source, responses, credentials or private recordings.
     with _LOCK:
         path = scoped(base, '.jarvis-runtime/agent-events.jsonl')

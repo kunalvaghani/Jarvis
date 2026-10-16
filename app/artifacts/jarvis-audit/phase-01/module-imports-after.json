@@ -1,0 +1,1394 @@
+[
+ {
+  "module": "jarvis.ability_runner",
+  "status": "PASS",
+  "seconds": 0.164,
+  "error": ""
+ },
+ {
+  "module": "jarvis.actions",
+  "status": "PASS",
+  "seconds": 0.263,
+  "error": ""
+ },
+ {
+  "module": "jarvis.agent_cli",
+  "status": "PASS",
+  "seconds": 0.673,
+  "error": ""
+ },
+ {
+  "module": "jarvis.agent_context",
+  "status": "PASS",
+  "seconds": 0.2,
+  "error": ""
+ },
+ {
+  "module": "jarvis.agent_events",
+  "status": "PASS",
+  "seconds": 0.197,
+  "error": ""
+ },
+ {
+  "module": "jarvis.agent_session",
+  "status": "PASS",
+  "seconds": 0.634,
+  "error": ""
+ },
+ {
+  "module": "jarvis.agent_tools",
+  "status": "PASS",
+  "seconds": 0.245,
+  "error": ""
+ },
+ {
+  "module": "jarvis.anticipation",
+  "status": "PASS",
+  "seconds": 0.201,
+  "error": ""
+ },
+ {
+  "module": "jarvis.anticipation_worker",
+  "status": "PASS",
+  "seconds": 0.199,
+  "error": ""
+ },
+ {
+  "module": "jarvis.app_knowledge",
+  "status": "PASS",
+  "seconds": 0.154,
+  "error": ""
+ },
+ {
+  "module": "jarvis.application_discovery",
+  "status": "PASS",
+  "seconds": 0.212,
+  "error": ""
+ },
+ {
+  "module": "jarvis.audio",
+  "status": "PASS",
+  "seconds": 0.215,
+  "error": ""
+ },
+ {
+  "module": "jarvis.brain",
+  "status": "PASS",
+  "seconds": 0.577,
+  "error": ""
+ },
+ {
+  "module": "jarvis.brain_worker",
+  "status": "PASS",
+  "seconds": 0.551,
+  "error": ""
+ },
+ {
+  "module": "jarvis.browser",
+  "status": "PASS",
+  "seconds": 0.143,
+  "error": ""
+ },
+ {
+  "module": "jarvis.browser_automation",
+  "status": "PASS",
+  "seconds": 0.171,
+  "error": ""
+ },
+ {
+  "module": "jarvis.browser_cursor",
+  "status": "PASS",
+  "seconds": 0.139,
+  "error": ""
+ },
+ {
+  "module": "jarvis.browser_worker",
+  "status": "PASS",
+  "seconds": 0.197,
+  "error": ""
+ },
+ {
+  "module": "jarvis.buddy_engine",
+  "status": "PASS",
+  "seconds": 0.486,
+  "error": ""
+ },
+ {
+  "module": "jarvis.capabilities",
+  "status": "PASS",
+  "seconds": 0.167,
+  "error": ""
+ },
+ {
+  "module": "jarvis.capability_guide",
+  "status": "PASS",
+  "seconds": 0.188,
+  "error": ""
+ },
+ {
+  "module": "jarvis.catalog",
+  "status": "PASS",
+  "seconds": 0.179,
+  "error": ""
+ },
+ {
+  "module": "jarvis.clarification",
+  "status": "PASS",
+  "seconds": 0.139,
+  "error": ""
+ },
+ {
+  "module": "jarvis.claude_code",
+  "status": "PASS",
+  "seconds": 0.218,
+  "error": ""
+ },
+ {
+  "module": "jarvis.claude_code_guard",
+  "status": "PASS",
+  "seconds": 0.142,
+  "error": ""
+ },
+ {
+  "module": "jarvis.claude_code_permissions",
+  "status": "PASS",
+  "seconds": 0.147,
+  "error": ""
+ },
+ {
+  "module": "jarvis.claude_code_proxy",
+  "status": "PASS",
+  "seconds": 0.293,
+  "error": ""
+ },
+ {
+  "module": "jarvis.cloud_cli",
+  "status": "PASS",
+  "seconds": 0.541,
+  "error": ""
+ },
+ {
+  "module": "jarvis.cloud_policy",
+  "status": "PASS",
+  "seconds": 0.164,
+  "error": ""
+ },
+ {
+  "module": "jarvis.cloud_quota",
+  "status": "PASS",
+  "seconds": 0.208,
+  "error": ""
+ },
+ {
+  "module": "jarvis.code_context",
+  "status": "PASS",
+  "seconds": 0.191,
+  "error": ""
+ },
+ {
+  "module": "jarvis.code_stream",
+  "status": "PASS",
+  "seconds": 0.205,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coder",
+  "status": "PASS",
+  "seconds": 0.285,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_browser_check",
+  "status": "PASS",
+  "seconds": 0.307,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_code",
+  "status": "PASS",
+  "seconds": 0.216,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_files",
+  "status": "PASS",
+  "seconds": 0.203,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_proxy",
+  "status": "PASS",
+  "seconds": 0.266,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_validation",
+  "status": "PASS",
+  "seconds": 0.217,
+  "error": ""
+ },
+ {
+  "module": "jarvis.codex_workload",
+  "status": "PASS",
+  "seconds": 0.273,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_activity",
+  "status": "PASS",
+  "seconds": 0.166,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_console",
+  "status": "PASS",
+  "seconds": 0.197,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_curriculum",
+  "status": "PASS",
+  "seconds": 0.191,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_files",
+  "status": "PASS",
+  "seconds": 0.215,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_languages",
+  "status": "PASS",
+  "seconds": 0.225,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_lessons",
+  "status": "PASS",
+  "seconds": 0.17,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_operations",
+  "status": "PASS",
+  "seconds": 0.145,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_processes",
+  "status": "PASS",
+  "seconds": 0.228,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_programs",
+  "status": "PASS",
+  "seconds": 0.164,
+  "error": ""
+ },
+ {
+  "module": "jarvis.coding_training_data",
+  "status": "PASS",
+  "seconds": 0.146,
+  "error": ""
+ },
+ {
+  "module": "jarvis.cognition",
+  "status": "PASS",
+  "seconds": 0.152,
+  "error": ""
+ },
+ {
+  "module": "jarvis.command_cleanup",
+  "status": "PASS",
+  "seconds": 0.264,
+  "error": ""
+ },
+ {
+  "module": "jarvis.command_reference",
+  "status": "PASS",
+  "seconds": 0.141,
+  "error": ""
+ },
+ {
+  "module": "jarvis.commands",
+  "status": "PASS",
+  "seconds": 0.171,
+  "error": ""
+ },
+ {
+  "module": "jarvis.config_contract",
+  "status": "PASS",
+  "seconds": 0.161,
+  "error": ""
+ },
+ {
+  "module": "jarvis.context_hub",
+  "status": "PASS",
+  "seconds": 0.185,
+  "error": ""
+ },
+ {
+  "module": "jarvis.context_selector",
+  "status": "PASS",
+  "seconds": 0.279,
+  "error": ""
+ },
+ {
+  "module": "jarvis.conversation_intent",
+  "status": "PASS",
+  "seconds": 0.137,
+  "error": ""
+ },
+ {
+  "module": "jarvis.conversation_memory",
+  "status": "PASS",
+  "seconds": 0.177,
+  "error": ""
+ },
+ {
+  "module": "jarvis.dag_execution",
+  "status": "PASS",
+  "seconds": 0.223,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow",
+  "status": "PASS",
+  "seconds": 0.187,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow_cli",
+  "status": "PASS",
+  "seconds": 0.184,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow_media",
+  "status": "PASS",
+  "seconds": 0.238,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow_media_runner",
+  "status": "PASS",
+  "seconds": 0.17,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow_model",
+  "status": "FAIL",
+  "seconds": 0.159,
+  "error": "ModuleNotFoundError: No module named 'langchain_core'"
+ },
+ {
+  "module": "jarvis.deerflow_sandbox",
+  "status": "PASS",
+  "seconds": 0.222,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deerflow_worker",
+  "status": "PASS",
+  "seconds": 0.174,
+  "error": ""
+ },
+ {
+  "module": "jarvis.deliberation",
+  "status": "PASS",
+  "seconds": 0.167,
+  "error": ""
+ },
+ {
+  "module": "jarvis.desktop_actions",
+  "status": "PASS",
+  "seconds": 0.133,
+  "error": ""
+ },
+ {
+  "module": "jarvis.desktop_tasks",
+  "status": "PASS",
+  "seconds": 0.23,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development",
+  "status": "PASS",
+  "seconds": 0.292,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_api",
+  "status": "PASS",
+  "seconds": 0.159,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_browser",
+  "status": "PASS",
+  "seconds": 0.166,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_design",
+  "status": "PASS",
+  "seconds": 0.148,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_knowledge",
+  "status": "PASS",
+  "seconds": 0.143,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_learning",
+  "status": "PASS",
+  "seconds": 0.181,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_native",
+  "status": "PASS",
+  "seconds": 0.311,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_projects",
+  "status": "PASS",
+  "seconds": 0.165,
+  "error": ""
+ },
+ {
+  "module": "jarvis.development_tools",
+  "status": "PASS",
+  "seconds": 0.322,
+  "error": ""
+ },
+ {
+  "module": "jarvis.diagnostics",
+  "status": "PASS",
+  "seconds": 0.163,
+  "error": ""
+ },
+ {
+  "module": "jarvis.direct_execution",
+  "status": "PASS",
+  "seconds": 0.166,
+  "error": ""
+ },
+ {
+  "module": "jarvis.display",
+  "status": "PASS",
+  "seconds": 0.169,
+  "error": ""
+ },
+ {
+  "module": "jarvis.docker_runtime",
+  "status": "PASS",
+  "seconds": 0.242,
+  "error": ""
+ },
+ {
+  "module": "jarvis.documents",
+  "status": "PASS",
+  "seconds": 0.206,
+  "error": ""
+ },
+ {
+  "module": "jarvis.engine",
+  "status": "PASS",
+  "seconds": 0.173,
+  "error": ""
+ },
+ {
+  "module": "jarvis.everyday_runtime",
+  "status": "PASS",
+  "seconds": 0.48,
+  "error": ""
+ },
+ {
+  "module": "jarvis.execution_adapters",
+  "status": "PASS",
+  "seconds": 0.167,
+  "error": ""
+ },
+ {
+  "module": "jarvis.execution_contracts",
+  "status": "PASS",
+  "seconds": 0.142,
+  "error": ""
+ },
+ {
+  "module": "jarvis.execution_router",
+  "status": "PASS",
+  "seconds": 0.176,
+  "error": ""
+ },
+ {
+  "module": "jarvis.experience",
+  "status": "PASS",
+  "seconds": 0.134,
+  "error": ""
+ },
+ {
+  "module": "jarvis.experience_memory",
+  "status": "PASS",
+  "seconds": 0.209,
+  "error": ""
+ },
+ {
+  "module": "jarvis.f5_speech",
+  "status": "PASS",
+  "seconds": 0.158,
+  "error": ""
+ },
+ {
+  "module": "jarvis.fast_workflows",
+  "status": "PASS",
+  "seconds": 0.21,
+  "error": ""
+ },
+ {
+  "module": "jarvis.file_drop",
+  "status": "PASS",
+  "seconds": 0.159,
+  "error": ""
+ },
+ {
+  "module": "jarvis.firecrawl_tools",
+  "status": "PASS",
+  "seconds": 0.139,
+  "error": ""
+ },
+ {
+  "module": "jarvis.folder_lookup",
+  "status": "PASS",
+  "seconds": 0.176,
+  "error": ""
+ },
+ {
+  "module": "jarvis.glass_ui",
+  "status": "PASS",
+  "seconds": 0.309,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gmail_api",
+  "status": "PASS",
+  "seconds": 0.235,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gmail_bridge",
+  "status": "PASS",
+  "seconds": 0.298,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gmail_chrome_worker",
+  "status": "PASS",
+  "seconds": 0.164,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gmail_workflows",
+  "status": "PASS",
+  "seconds": 0.587,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gmail_writes",
+  "status": "PASS",
+  "seconds": 0.178,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gods_eye",
+  "status": "PASS",
+  "seconds": 0.49,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gods_eye_cameras",
+  "status": "PASS",
+  "seconds": 0.139,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gods_eye_update",
+  "status": "PASS",
+  "seconds": 0.48,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gods_eye_view",
+  "status": "PASS",
+  "seconds": 0.273,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gpu_scheduler",
+  "status": "PASS",
+  "seconds": 0.17,
+  "error": ""
+ },
+ {
+  "module": "jarvis.groq_adapter",
+  "status": "PASS",
+  "seconds": 0.501,
+  "error": ""
+ },
+ {
+  "module": "jarvis.grounding",
+  "status": "PASS",
+  "seconds": 0.181,
+  "error": ""
+ },
+ {
+  "module": "jarvis.gui_contract",
+  "status": "PASS",
+  "seconds": 0.142,
+  "error": ""
+ },
+ {
+  "module": "jarvis.harness",
+  "status": "PASS",
+  "seconds": 0.561,
+  "error": ""
+ },
+ {
+  "module": "jarvis.harness_process",
+  "status": "PASS",
+  "seconds": 0.141,
+  "error": ""
+ },
+ {
+  "module": "jarvis.harness_worker",
+  "status": "PASS",
+  "seconds": 0.65,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hermes",
+  "status": "PASS",
+  "seconds": 0.568,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hermes_ollama",
+  "status": "PASS",
+  "seconds": 0.153,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hermes_skills",
+  "status": "PASS",
+  "seconds": 0.557,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hermes_worker",
+  "status": "FAIL",
+  "seconds": 0.16,
+  "error": "ModuleNotFoundError: No module named 'run_agent'"
+ },
+ {
+  "module": "jarvis.hierarchical",
+  "status": "PASS",
+  "seconds": 0.618,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hud",
+  "status": "PASS",
+  "seconds": 0.29,
+  "error": ""
+ },
+ {
+  "module": "jarvis.hybrid_inference",
+  "status": "PASS",
+  "seconds": 0.587,
+  "error": ""
+ },
+ {
+  "module": "jarvis.independent_cursor",
+  "status": "PASS",
+  "seconds": 0.15,
+  "error": ""
+ },
+ {
+  "module": "jarvis.inference_limits",
+  "status": "PASS",
+  "seconds": 0.124,
+  "error": ""
+ },
+ {
+  "module": "jarvis.intent_catalog",
+  "status": "PASS",
+  "seconds": 0.261,
+  "error": ""
+ },
+ {
+  "module": "jarvis.intent_handlers",
+  "status": "PASS",
+  "seconds": 0.206,
+  "error": ""
+ },
+ {
+  "module": "jarvis.interface",
+  "status": "PASS",
+  "seconds": 0.326,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island",
+  "status": "PASS",
+  "seconds": 0.305,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_artwork",
+  "status": "PASS",
+  "seconds": 0.142,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_buddy",
+  "status": "PASS",
+  "seconds": 0.433,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_choices",
+  "status": "PASS",
+  "seconds": 0.16,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_desk",
+  "status": "PASS",
+  "seconds": 0.433,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_games",
+  "status": "PASS",
+  "seconds": 0.303,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_media",
+  "status": "PASS",
+  "seconds": 0.332,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_mind",
+  "status": "PASS",
+  "seconds": 0.183,
+  "error": ""
+ },
+ {
+  "module": "jarvis.island_surface",
+  "status": "PASS",
+  "seconds": 0.248,
+  "error": ""
+ },
+ {
+  "module": "jarvis.jarvis_pointer",
+  "status": "PASS",
+  "seconds": 0.163,
+  "error": ""
+ },
+ {
+  "module": "jarvis.knowledge",
+  "status": "PASS",
+  "seconds": 0.525,
+  "error": ""
+ },
+ {
+  "module": "jarvis.knowledge_acquisition",
+  "status": "PASS",
+  "seconds": 0.549,
+  "error": ""
+ },
+ {
+  "module": "jarvis.knowledge_worker",
+  "status": "PASS",
+  "seconds": 0.464,
+  "error": ""
+ },
+ {
+  "module": "jarvis.kokoro_speech",
+  "status": "PASS",
+  "seconds": 0.162,
+  "error": ""
+ },
+ {
+  "module": "jarvis.launcher",
+  "status": "PASS",
+  "seconds": 0.22,
+  "error": ""
+ },
+ {
+  "module": "jarvis.live_app_context",
+  "status": "PASS",
+  "seconds": 0.151,
+  "error": ""
+ },
+ {
+  "module": "jarvis.mcp_bridge",
+  "status": "PASS",
+  "seconds": 0.179,
+  "error": ""
+ },
+ {
+  "module": "jarvis.media_commands",
+  "status": "PASS",
+  "seconds": 0.171,
+  "error": ""
+ },
+ {
+  "module": "jarvis.media_player",
+  "status": "PASS",
+  "seconds": 0.16,
+  "error": ""
+ },
+ {
+  "module": "jarvis.media_ui",
+  "status": "PASS",
+  "seconds": 0.192,
+  "error": ""
+ },
+ {
+  "module": "jarvis.memory_curator",
+  "status": "PASS",
+  "seconds": 0.195,
+  "error": ""
+ },
+ {
+  "module": "jarvis.memory_index",
+  "status": "PASS",
+  "seconds": 0.143,
+  "error": ""
+ },
+ {
+  "module": "jarvis.messengers",
+  "status": "PASS",
+  "seconds": 0.188,
+  "error": ""
+ },
+ {
+  "module": "jarvis.model_performance",
+  "status": "PASS",
+  "seconds": 0.175,
+  "error": ""
+ },
+ {
+  "module": "jarvis.model_recovery",
+  "status": "PASS",
+  "seconds": 0.152,
+  "error": ""
+ },
+ {
+  "module": "jarvis.model_selection",
+  "status": "PASS",
+  "seconds": 0.141,
+  "error": ""
+ },
+ {
+  "module": "jarvis.names",
+  "status": "PASS",
+  "seconds": 0.143,
+  "error": ""
+ },
+ {
+  "module": "jarvis.native_coding",
+  "status": "PASS",
+  "seconds": 0.25,
+  "error": ""
+ },
+ {
+  "module": "jarvis.native_tools",
+  "status": "PASS",
+  "seconds": 0.468,
+  "error": ""
+ },
+ {
+  "module": "jarvis.natural_conversation",
+  "status": "PASS",
+  "seconds": 0.138,
+  "error": ""
+ },
+ {
+  "module": "jarvis.natural_voice",
+  "status": "PASS",
+  "seconds": 0.184,
+  "error": ""
+ },
+ {
+  "module": "jarvis.notch_widgets",
+  "status": "PASS",
+  "seconds": 0.311,
+  "error": ""
+ },
+ {
+  "module": "jarvis.obsidian_memory",
+  "status": "PASS",
+  "seconds": 0.183,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ollama_models",
+  "status": "PASS",
+  "seconds": 0.172,
+  "error": ""
+ },
+ {
+  "module": "jarvis.paths",
+  "status": "PASS",
+  "seconds": 0.143,
+  "error": ""
+ },
+ {
+  "module": "jarvis.pc_context",
+  "status": "PASS",
+  "seconds": 0.197,
+  "error": ""
+ },
+ {
+  "module": "jarvis.pcm_ring",
+  "status": "PASS",
+  "seconds": 0.227,
+  "error": ""
+ },
+ {
+  "module": "jarvis.phrasing",
+  "status": "PASS",
+  "seconds": 0.145,
+  "error": ""
+ },
+ {
+  "module": "jarvis.piper_speech",
+  "status": "PASS",
+  "seconds": 0.176,
+  "error": ""
+ },
+ {
+  "module": "jarvis.planner_settings",
+  "status": "PASS",
+  "seconds": 0.121,
+  "error": ""
+ },
+ {
+  "module": "jarvis.polyglot_training_data",
+  "status": "PASS",
+  "seconds": 0.122,
+  "error": ""
+ },
+ {
+  "module": "jarvis.progress",
+  "status": "PASS",
+  "seconds": 0.13,
+  "error": ""
+ },
+ {
+  "module": "jarvis.projects",
+  "status": "PASS",
+  "seconds": 0.148,
+  "error": ""
+ },
+ {
+  "module": "jarvis.push_to_write",
+  "status": "PASS",
+  "seconds": 0.166,
+  "error": ""
+ },
+ {
+  "module": "jarvis.question_client",
+  "status": "PASS",
+  "seconds": 0.175,
+  "error": ""
+ },
+ {
+  "module": "jarvis.quick_answers",
+  "status": "PASS",
+  "seconds": 0.49,
+  "error": ""
+ },
+ {
+  "module": "jarvis.rea_tools",
+  "status": "PASS",
+  "seconds": 0.242,
+  "error": ""
+ },
+ {
+  "module": "jarvis.realtime",
+  "status": "PASS",
+  "seconds": 0.524,
+  "error": ""
+ },
+ {
+  "module": "jarvis.realtime_catalog",
+  "status": "PASS",
+  "seconds": 0.161,
+  "error": ""
+ },
+ {
+  "module": "jarvis.realtime_sources",
+  "status": "PASS",
+  "seconds": 0.494,
+  "error": ""
+ },
+ {
+  "module": "jarvis.recovery",
+  "status": "PASS",
+  "seconds": 0.17,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_abilities",
+  "status": "PASS",
+  "seconds": 0.498,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_acquisition",
+  "status": "PASS",
+  "seconds": 0.221,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_analysis",
+  "status": "PASS",
+  "seconds": 0.185,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_learning",
+  "status": "PASS",
+  "seconds": 0.483,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_runtime_runner",
+  "status": "PASS",
+  "seconds": 0.329,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_sandbox",
+  "status": "PASS",
+  "seconds": 0.251,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repo_tools",
+  "status": "PASS",
+  "seconds": 0.135,
+  "error": ""
+ },
+ {
+  "module": "jarvis.repository_skills",
+  "status": "PASS",
+  "seconds": 0.247,
+  "error": ""
+ },
+ {
+  "module": "jarvis.research_evidence",
+  "status": "PASS",
+  "seconds": 0.17,
+  "error": ""
+ },
+ {
+  "module": "jarvis.runtime_health",
+  "status": "PASS",
+  "seconds": 0.117,
+  "error": ""
+ },
+ {
+  "module": "jarvis.screen_awareness",
+  "status": "PASS",
+  "seconds": 0.157,
+  "error": ""
+ },
+ {
+  "module": "jarvis.screen_worker",
+  "status": "PASS",
+  "seconds": 0.196,
+  "error": ""
+ },
+ {
+  "module": "jarvis.self_evolution",
+  "status": "PASS",
+  "seconds": 0.213,
+  "error": ""
+ },
+ {
+  "module": "jarvis.skill_memory",
+  "status": "PASS",
+  "seconds": 0.213,
+  "error": ""
+ },
+ {
+  "module": "jarvis.speech",
+  "status": "PASS",
+  "seconds": 0.205,
+  "error": ""
+ },
+ {
+  "module": "jarvis.speech_normalizer",
+  "status": "PASS",
+  "seconds": 0.188,
+  "error": ""
+ },
+ {
+  "module": "jarvis.spotify",
+  "status": "PASS",
+  "seconds": 0.297,
+  "error": ""
+ },
+ {
+  "module": "jarvis.step_planning",
+  "status": "PASS",
+  "seconds": 0.241,
+  "error": ""
+ },
+ {
+  "module": "jarvis.targeting",
+  "status": "PASS",
+  "seconds": 0.189,
+  "error": ""
+ },
+ {
+  "module": "jarvis.task_graph",
+  "status": "PASS",
+  "seconds": 0.131,
+  "error": ""
+ },
+ {
+  "module": "jarvis.task_queue",
+  "status": "PASS",
+  "seconds": 0.137,
+  "error": ""
+ },
+ {
+  "module": "jarvis.task_recovery",
+  "status": "PASS",
+  "seconds": 0.141,
+  "error": ""
+ },
+ {
+  "module": "jarvis.task_state",
+  "status": "PASS",
+  "seconds": 0.201,
+  "error": ""
+ },
+ {
+  "module": "jarvis.toolkits",
+  "status": "PASS",
+  "seconds": 0.594,
+  "error": ""
+ },
+ {
+  "module": "jarvis.tools",
+  "status": "PASS",
+  "seconds": 0.556,
+  "error": ""
+ },
+ {
+  "module": "jarvis.trained_coder",
+  "status": "PASS",
+  "seconds": 0.151,
+  "error": ""
+ },
+ {
+  "module": "jarvis.trained_pc",
+  "status": "PASS",
+  "seconds": 0.183,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_controls",
+  "status": "PASS",
+  "seconds": 0.2,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_events",
+  "status": "PASS",
+  "seconds": 0.172,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_memory",
+  "status": "PASS",
+  "seconds": 0.145,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_preview",
+  "status": "PASS",
+  "seconds": 0.332,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_transport",
+  "status": "PASS",
+  "seconds": 0.169,
+  "error": ""
+ },
+ {
+  "module": "jarvis.ui_worker",
+  "status": "PASS",
+  "seconds": 0.168,
+  "error": ""
+ },
+ {
+  "module": "jarvis.upstream_windows_patterns",
+  "status": "PASS",
+  "seconds": 0.148,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_audio_worker",
+  "status": "PASS",
+  "seconds": 0.139,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_container_runner",
+  "status": "PASS",
+  "seconds": 0.206,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_core",
+  "status": "PASS",
+  "seconds": 0.203,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_host",
+  "status": "PASS",
+  "seconds": 0.232,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_isolation",
+  "status": "PASS",
+  "seconds": 0.234,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_profiles",
+  "status": "PASS",
+  "seconds": 0.125,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_service_transport",
+  "status": "PASS",
+  "seconds": 0.187,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_services",
+  "status": "PASS",
+  "seconds": 0.478,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_tools",
+  "status": "PASS",
+  "seconds": 0.25,
+  "error": ""
+ },
+ {
+  "module": "jarvis.utility_worker",
+  "status": "PASS",
+  "seconds": 0.211,
+  "error": ""
+ },
+ {
+  "module": "jarvis.visual_fallback",
+  "status": "PASS",
+  "seconds": 0.259,
+  "error": ""
+ },
+ {
+  "module": "jarvis.visual_worker",
+  "status": "PASS",
+  "seconds": 0.185,
+  "error": ""
+ },
+ {
+  "module": "jarvis.voice_input",
+  "status": "PASS",
+  "seconds": 0.229,
+  "error": ""
+ },
+ {
+  "module": "jarvis.weather_units",
+  "status": "PASS",
+  "seconds": 0.125,
+  "error": ""
+ },
+ {
+  "module": "jarvis.weather_watch",
+  "status": "PASS",
+  "seconds": 0.471,
+  "error": ""
+ },
+ {
+  "module": "jarvis.whatsapp",
+  "status": "PASS",
+  "seconds": 0.197,
+  "error": ""
+ },
+ {
+  "module": "jarvis.whatsapp_writes",
+  "status": "PASS",
+  "seconds": 0.168,
+  "error": ""
+ },
+ {
+  "module": "jarvis.whisper_backend",
+  "status": "PASS",
+  "seconds": 0.165,
+  "error": ""
+ },
+ {
+  "module": "jarvis.window_focus",
+  "status": "PASS",
+  "seconds": 0.172,
+  "error": ""
+ },
+ {
+  "module": "jarvis.windows_command_browser",
+  "status": "PASS",
+  "seconds": 0.159,
+  "error": ""
+ },
+ {
+  "module": "jarvis.windows_command_desktop",
+  "status": "PASS",
+  "seconds": 0.148,
+  "error": ""
+ },
+ {
+  "module": "jarvis.windows_commands",
+  "status": "PASS",
+  "seconds": 0.212,
+  "error": ""
+ },
+ {
+  "module": "jarvis.writing",
+  "status": "PASS",
+  "seconds": 0.189,
+  "error": ""
+ }
+]

@@ -201,10 +201,14 @@ def test_JRV_29_012_actual_owned_node_timeout_cleans_children(tmp_path):
     if not node:pytest.skip('BLOCKED: installed Node runtime unavailable')
     entry=tmp_path/'hang.mjs';pidfile=tmp_path/'children.json'
     entry.write_text("import {spawn} from 'node:child_process';import {writeFileSync} from 'node:fs';const child=spawn(process.execPath,['-e','setInterval(()=>{},1000)']);writeFileSync(process.argv[2],JSON.stringify([process.pid,child.pid]));setInterval(()=>{},1000);",encoding='utf-8')
+    # Node must start and record both PIDs before the timeout fires; 0.8s raced
+    # interpreter startup under full-suite CPU load (Phase 1 reproduction).
+    timeout=4.0
     start=time.monotonic()
     with pytest.raises(ValueError,match='timed out'):
-        rea._run_rea(node,str(entry),[str(pidfile)],str(tmp_path),lambda:False,.8)
-    assert time.monotonic()-start<5
+        rea._run_rea(node,str(entry),[str(pidfile)],str(tmp_path),lambda:False,timeout)
+    assert time.monotonic()-start<timeout+5
+    assert pidfile.is_file(),'Node did not start within the timeout; descendant cleanup was not exercised.'
     pids=json.loads(pidfile.read_text());deadline=time.monotonic()+2
     while any(psutil.pid_exists(p) for p in pids) and time.monotonic()<deadline:time.sleep(.02)
     assert all(not psutil.pid_exists(p) for p in pids)

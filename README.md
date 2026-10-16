@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase01 -->
+**2026-10-17 — Upgrade Phase 1 of 8 (audit, repair, baseline): PASS for locally executable checks.** Full regression **3,193 passed / 147 skipped / 0 failed** (baseline had 1 load-dependent failure); launcher ready. ToolRegistry input contract, cognition memory-failure visibility and evidence-preserving tests fixed; shared execution-outcome contract added for the next phases. No live account/microphone/desktop acceptance. [Application details](app/README.md) · [Phase 1 evidence](app/artifacts/jarvis-audit/phase-01/README.md).
+<!-- /upgrade-phase01 -->
+
 <!-- prompt30-audit -->
 **2026-10-16 — Optional planner audit (Prompt 30): partial.** Hermes/Harness proposal and worker boundaries now have stronger configuration, concurrency, cancellation and replay checks; Laya can ask safely when unavailable. Live accuracy/privacy/resource/trace acceptance remains incomplete. [Application details](app/README.md) · [Audit evidence](app/artifacts/jarvis-audit/final-report.md).
 <!-- /prompt30-audit -->

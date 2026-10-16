@@ -151,6 +151,8 @@ class Cognition:
         self.rejected_events = 0
         self.tick_errors = 0
         self.tick_error = None
+        # Best-effort memory sources stay optional, but their failures stay visible.
+        self.memory_source_errors = {}
         self.tick_overruns = 0
         self._last_tick = self._cycle_clock
         self.tick_duration_ms = 0.
@@ -196,6 +198,12 @@ class Cognition:
             with self.lock:
                 self._stats_dirty = True
             raise
+
+    def _memory_failure(self, source, exc):
+        with self.lock:
+            row = self.memory_source_errors.setdefault(source, {'count': 0, 'last_error': None})
+            row['count'] += 1
+            row['last_error'] = type(exc).__name__
 
     def _mark(self, module, started=None):
         now = time.time()
@@ -311,8 +319,8 @@ class Cognition:
                 rows = curator.conversations(query)
                 if rows:
                     found["episodic"] = [r["date"] + ": " + r["title"] for r in rows[-limit:]]
-            except Exception:
-                pass
+            except Exception as exc:
+                self._memory_failure("curator", exc)
         skills = getattr(actions, "skills", None)
         if skills is not None:
             try:
@@ -322,16 +330,16 @@ class Cognition:
                 if names or guidance.get("procedures") or cases:
                     found["procedural_skills"] = {"skills": names, "procedures": len(guidance.get("procedures", [])),
                                                   "past_cases": len(cases)}
-            except Exception:
-                pass
+            except Exception as exc:
+                self._memory_failure("skills", exc)
         learner = getattr(actions, "repo_learner", None)
         if learner is not None and getattr(learner, "enabled", False):
             try:
                 repos = learner.relevant(query, 2)
                 if repos:
                     found["procedural_repositories"] = [name for _, name, _ in repos]
-            except Exception:
-                pass
+            except Exception as exc:
+                self._memory_failure("repositories", exc)
         lessons = self.relevant_lessons(query, limit)
         if lessons:
             found["procedural_lessons"] = lessons[-limit:]
@@ -482,8 +490,8 @@ class Cognition:
         if memory is not None and hasattr(memory, "record"):
             try:
                 memory.record("Jarvis lesson", lesson)
-            except Exception:
-                pass
+            except Exception as exc:
+                self._memory_failure("lesson_record", exc)
         self._mark("long_term_memory")
 
     # --- 6. action (wrapped by Actions.execute) ---------------------------------------------------------------------
@@ -627,6 +635,7 @@ class Cognition:
             'persistence_worker_alive':bool(self.writer_thread and self.writer_thread.is_alive()),
             'persistence_worker_restarts':self._writer_restarts,
             'tick_errors': self.tick_errors, 'tick_error': self.tick_error,
+            'memory_source_errors': {k: dict(v) for k, v in self.memory_source_errors.items()},
             'tick_overruns': self.tick_overruns, 'tick_duration_ms': round(self.tick_duration_ms, 3),
             'tick_degraded': bool(self.tick_error or (self.thread and self.thread.is_alive() and
                 time.monotonic() - self._last_tick > max(1., 3. / self.hz))),

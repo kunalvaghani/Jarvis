@@ -1,0 +1,99 @@
+........................................................................ [  2%]
+................................................................s....... [  4%]
+........................................................................ [  6%]
+.................................................sss.................... [  8%]
+........................................................................ [ 10%]
+................................................................s.s..... [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+...s.................................................s..s............... [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........ssssssss........................................................ [ 39%]
+...........ssssssssssss................................................. [ 41%]
+.........s.............................................................. [ 43%]
+........................................ssssssssss...................... [ 45%]
+........................................................................ [ 47%]
+........................................................................ [ 49%]
+........................................................................ [ 52%]
+....................................................................ssss [ 54%]
+ssssssssssss..........................................................s. [ 56%]
+s......s......................s......................................... [ 58%]
+........................................................................ [ 60%]
+...............sssss.................................................... [ 62%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+.sssssss................................................................ [ 69%]
+..........s......s................................s.s......s............ [ 71%]
+.........s.............................................................. [ 73%]
+..........................................sssssssssss................... [ 75%]
+...................................s.................s.................. [ 78%]
+.......................................sssssssssssss.................... [ 80%]
+.....F......................................ssssssssssss................ [ 82%]
+....................................................................ssss [ 84%]
+......................s................................................. [ 86%]
+........................................................................ [ 88%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+...................................................s....s............... [ 95%]
+............................................sssssss..................... [ 97%]
+..................................sssssssssssssssss..................... [ 99%]
+.........                                                                [100%]
+================================== FAILURES ===================================
+__________ test_JRV_29_012_actual_owned_node_timeout_cleans_children __________
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-348/test_JRV_29_012_actual_owned_n0')
+
+    def test_JRV_29_012_actual_owned_node_timeout_cleans_children(tmp_path):
+        import os,shutil,time
+        import psutil
+        if os.name!='nt':pytest.skip('BLOCKED: Windows OwnedJob descendant cleanup requires Windows')
+        node=shutil.which('node')
+        if not node:pytest.skip('BLOCKED: installed Node runtime unavailable')
+        entry=tmp_path/'hang.mjs';pidfile=tmp_path/'children.json'
+        entry.write_text("import {spawn} from 'node:child_process';import {writeFileSync} from 'node:fs';const child=spawn(process.execPath,['-e','setInterval(()=>{},1000)']);writeFileSync(process.argv[2],JSON.stringify([process.pid,child.pid]));setInterval(()=>{},1000);",encoding='utf-8')
+        start=time.monotonic()
+        with pytest.raises(ValueError,match='timed out'):
+            rea._run_rea(node,str(entry),[str(pidfile)],str(tmp_path),lambda:False,.8)
+        assert time.monotonic()-start<5
+>       pids=json.loads(pidfile.read_text());deadline=time.monotonic()+2
+
+tests\test_reverse_engineering_audit.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-348/test_JRV_29_012_actual_owned_n0/children.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-348\\test_JRV_29_012_actual_owned_n0\\children.json'
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\phase-01\baseline-full-regression.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_reverse_engineering_audit.py::test_JRV_29_012_actual_owned_node_timeout_cleans_children
+1 failed, 3173 passed, 147 skipped, 1 warning in 602.28s (0:10:02)
+exit=1

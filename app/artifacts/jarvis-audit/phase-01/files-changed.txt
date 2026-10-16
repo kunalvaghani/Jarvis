@@ -1,0 +1,11 @@
+ app/jarvis/agent_events.py                  |  16 +-
+ app/jarvis/cognition.py                     |  25 ++-
+ app/jarvis/execution_contracts.py           |  90 +++++++++
+ app/jarvis/hierarchical.py                  |   1 +
+ app/jarvis/launcher.py                      |   6 +-
+ app/jarvis/tools.py                         |   5 +-
+ app/scripts/verification/phase_baseline.py  | 276 ++++++++++++++++++++++++++++
+ app/tests/test_phase01_baseline.py          | 184 +++++++++++++++++++
+ app/tests/test_reverse_engineering_audit.py |   8 +-
+ app/tests/test_web_development_audit.py     |  10 +-
+ 10 files changed, 601 insertions(+), 20 deletions(-)

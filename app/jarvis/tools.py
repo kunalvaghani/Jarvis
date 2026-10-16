@@ -194,6 +194,9 @@ class ToolRegistry:
 
     def execute(self, step, cancelled, activate=None):
         from .agent_events import check_policy, event
+        # Type first: a non-object proposal must not reach identity or policy checks.
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
         if 'task_id' in step:
             from .task_state import TaskState
             state=getattr(self.actions,'task_state',None)
@@ -201,8 +204,6 @@ class ToolRegistry:
                 raise ValueError('Task identity is unavailable; execution refused.')
             state.require_identity(step['task_id'])
             step={key:value for key,value in step.items() if key!='task_id'}
-        if not isinstance(step, dict):
-            raise ToolArgumentError('A tool step must be an object.')
         step = {key: value for key, value in step.items() if key not in APPROVAL_CLAIMS}
         name = step.get('action')
         allowed = getattr(self.actions, 'allowed_tools', None)

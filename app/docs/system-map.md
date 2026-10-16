@@ -1,5 +1,9 @@
 # Jarvis system map
 
+<!-- upgrade-phase01 -->
+**Upgrade Phase 1 — 2026-10-17 IST:** Architecture inventory and dependency map re-derived from source; every planned tool call still passes `ToolRegistry.execute`. New metadata-only `tool.outcome` rows (method tier `api`/`structured`/`gui`, idempotency, verification, latency, skill ID) extend the existing `agent-events.jsonl` lifecycle log — no second registry or event bus. Full regression **3,193 passed / 147 skipped / 0 failed**; launcher **ready**. [Inventory, dependency map and limits](../artifacts/jarvis-audit/phase-01/architecture-and-dependency-map.md).
+<!-- /upgrade-phase01 -->
+
 <!-- prompt28-audit -->
 **Sandbox/DeerFlow audit — 2026-10-16 IST:** Stronger mount/checkpoint/identity/write/timeout guards and media proof added. **20 catalog fixture PASS / 12 BLOCKED**; full regression **3,065 passed / 124 skipped / 0 failures**, launcher **ready**. Owned offline math, all seven literal media recipes and nonzero/no-replay/cleanup fixtures passed; format proof levels vary. General research/source-quality, approval/quota/privacy/resource/recovery and platform patch acceptance remain incomplete.
 [Evidence, limitations and rollback](../artifacts/jarvis-audit/modules/28-sandbox-deerflow/inventory.md).

@@ -14,6 +14,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase01 -->
+**2026-10-17 — Upgrade Phase 1 of 8 (audit, repair, baseline): PASS for locally executable checks.** Full regression 3,173 passed / 147 skipped / 1 failed → **3,193 passed / 147 skipped / 0 failed**; launcher **ready**. Fixed: ToolRegistry now rejects non-object proposals with `ToolArgumentError` before identity/policy checks; cognition reports memory-source failures in `snapshot()['memory_source_errors']` instead of swallowing them; the web-development audit test no longer overwrites dated Prompt 22 evidence; a Node cleanup test no longer races interpreter startup under load. Added the shared metadata-only `tool.outcome` contract ([`jarvis/execution_contracts.py`](jarvis/execution_contracts.py)) for upcoming execution/skill/memory phases and a versioned metrics script (`scripts/verification/phase_baseline.py`). No live account, microphone, GPU-contention or desktop acceptance was run. [Evidence, defects, metrics and rollback](artifacts/jarvis-audit/phase-01/README.md).
+<!-- /upgrade-phase01 -->
+
 <!-- prompt30-audit -->
 **2026-10-16 — Prompt 30 optional-planner audit: PARTIAL.** 236 focused assertions passed; 10 explicit catalog blockers. Full regression 3165 passed /147 skipped / 0 failures; launcher ready. Shared-client serialization, bounded protocol/backpressure, strict optional settings, duplicate/unknown/read-only proposal checks and safe Laya degradation added. For 50 replan-schema copies per batch, warm p50/p95 24.2095/25.4175 → 13.9932/14.9647 ms; peak temporary Python allocation 17884 → 76564 bytes. This is schema-copy CPU time with higher temporary allocation, not model/voice latency. Planner flags, model pins and dependencies unchanged. [Evidence and limits](artifacts/jarvis-audit/modules/30-harness-planners/inventory.md) · [Audit report](artifacts/jarvis-audit/final-report.md).
 <!-- /prompt30-audit -->
@@ -1919,7 +1923,12 @@ Additional targeted checks:
 .\.venv\Scripts\python.exe -m scripts.verification.verify_hardware_models
 .\.venv\Scripts\python.exe -m scripts.verification.verify_clarification
 .\.venv\Scripts\python.exe -m scripts.verification.verify_real_world
+.\.venv\Scripts\python.exe scriptserification\phase_baseline.py --label <name> --out <new-file>.json
 ```
+
+`phase_baseline.py` records versioned measurements over the real parser, DAG executor, ToolRegistry, skill loader and
+cloud privacy classifier using synthetic fixtures (no model, network or desktop action) and refuses to overwrite an
+existing measurement file.
 
 Unit tests use controlled fixtures/mocks for desktop and provider behavior. Readiness checks import declared dependencies and check local assets without launching the main interface. Model checks need installed models; UI checks create their own test window; coding/toolkit smoke checks write only their isolated temporary workspace. Live question/toolkit checks can contact local inference and public web services. Use **Start Jarvis.cmd** for ordinary supervised use; direct `main.py` execution bypasses the supervisor.
 

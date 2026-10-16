@@ -261,6 +261,7 @@ def run(brain, goal, cancelled):
     if graph is None:
         acquisition = getattr(brain.actions, 'acquisition', None)
         learning_context = acquisition.prepare(goal, cancelled) if acquisition is not None else {}
+        error = ''  # Validation feedback from the previous rejected proposal.
         for attempt in range(options['max_repairs']+1):
             if cancelled():
                 return 'Task cancelled before planning.'

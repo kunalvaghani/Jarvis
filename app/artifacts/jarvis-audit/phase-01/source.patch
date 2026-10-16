@@ -1,0 +1,797 @@
+diff --git a/app/jarvis/agent_events.py b/app/jarvis/agent_events.py
+index 7d8eaae..0ed2679 100644
+--- a/app/jarvis/agent_events.py
++++ b/app/jarvis/agent_events.py
+@@ -78,10 +78,20 @@ def event(actions, kind, name, call_id=None, **metadata):
+     identifier = call_id if isinstance(call_id,str) and re.fullmatch(r'[0-9a-f]{32}',call_id) else uuid.uuid4().hex
+     if base is None:
+         return identifier
+-    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(),
+-           'event':kind if kind in {'tool.started','tool.completed','tool.failed'} else 'tool.invalid_event',
++    kind = kind if kind in {'tool.started','tool.completed','tool.failed','tool.outcome'} else 'tool.invalid_event'
++    if kind == 'tool.outcome':
++        # Outcome rows (execution_contracts) carry only categorical/bounded fields.
++        from .execution_contracts import OUTCOME_FIELDS, outcome_metadata
++        details = outcome_metadata(metadata)
++        lifecycle = lifecycle_metadata({k: v for k, v in metadata.items() if k not in OUTCOME_FIELDS})
++        dropped = len(metadata) - len(details) - (len(lifecycle) - ('discarded_metadata_fields' in lifecycle))
++        lifecycle.pop('discarded_metadata_fields', None)
++        details = {**lifecycle, **details, **({'discarded_metadata_fields': dropped} if dropped else {})}
++    else:
++        details = lifecycle_metadata(metadata)
++    row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
+            'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
+-           **lifecycle_metadata(metadata)}
++           **details}
+     # Never store arguments, source, responses, credentials or private recordings.
+     with _LOCK:
+         path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
+diff --git a/app/jarvis/cognition.py b/app/jarvis/cognition.py
+index dc808d5..eb8da25 100644
+--- a/app/jarvis/cognition.py
++++ b/app/jarvis/cognition.py
+@@ -151,6 +151,8 @@ class Cognition:
+         self.rejected_events = 0
+         self.tick_errors = 0
+         self.tick_error = None
++        # Best-effort memory sources stay optional, but their failures stay visible.
++        self.memory_source_errors = {}
+         self.tick_overruns = 0
+         self._last_tick = self._cycle_clock
+         self.tick_duration_ms = 0.
+@@ -197,6 +199,12 @@ class Cognition:
+                 self._stats_dirty = True
+             raise
+ 
++    def _memory_failure(self, source, exc):
++        with self.lock:
++            row = self.memory_source_errors.setdefault(source, {'count': 0, 'last_error': None})
++            row['count'] += 1
++            row['last_error'] = type(exc).__name__
++
+     def _mark(self, module, started=None):
+         now = time.time()
+         with self.lock:
+@@ -311,8 +319,8 @@ class Cognition:
+                 rows = curator.conversations(query)
+                 if rows:
+                     found["episodic"] = [r["date"] + ": " + r["title"] for r in rows[-limit:]]
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self._memory_failure("curator", exc)
+         skills = getattr(actions, "skills", None)
+         if skills is not None:
+             try:
+@@ -322,16 +330,16 @@ class Cognition:
+                 if names or guidance.get("procedures") or cases:
+                     found["procedural_skills"] = {"skills": names, "procedures": len(guidance.get("procedures", [])),
+                                                   "past_cases": len(cases)}
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self._memory_failure("skills", exc)
+         learner = getattr(actions, "repo_learner", None)
+         if learner is not None and getattr(learner, "enabled", False):
+             try:
+                 repos = learner.relevant(query, 2)
+                 if repos:
+                     found["procedural_repositories"] = [name for _, name, _ in repos]
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self._memory_failure("repositories", exc)
+         lessons = self.relevant_lessons(query, limit)
+         if lessons:
+             found["procedural_lessons"] = lessons[-limit:]
+@@ -482,8 +490,8 @@ class Cognition:
+         if memory is not None and hasattr(memory, "record"):
+             try:
+                 memory.record("Jarvis lesson", lesson)
+-            except Exception:
+-                pass
++            except Exception as exc:
++                self._memory_failure("lesson_record", exc)
+         self._mark("long_term_memory")
+ 
+     # --- 6. action (wrapped by Actions.execute) ---------------------------------------------------------------------
+@@ -627,6 +635,7 @@ class Cognition:
+             'persistence_worker_alive':bool(self.writer_thread and self.writer_thread.is_alive()),
+             'persistence_worker_restarts':self._writer_restarts,
+             'tick_errors': self.tick_errors, 'tick_error': self.tick_error,
++            'memory_source_errors': {k: dict(v) for k, v in self.memory_source_errors.items()},
+             'tick_overruns': self.tick_overruns, 'tick_duration_ms': round(self.tick_duration_ms, 3),
+             'tick_degraded': bool(self.tick_error or (self.thread and self.thread.is_alive() and
+                 time.monotonic() - self._last_tick > max(1., 3. / self.hz))),
+diff --git a/app/jarvis/execution_contracts.py b/app/jarvis/execution_contracts.py
+new file mode 100644
+index 0000000..76bf11b
+--- /dev/null
++++ b/app/jarvis/execution_contracts.py
+@@ -0,0 +1,90 @@
++"""Shared, metadata-only contracts for execution outcomes (upgrade phases 2-4).
++
++Outcome rows extend the existing agent lifecycle log (agent_events.py); they are
++not a second registry or event bus. Every field is categorical or bounded, so a
++row never carries arguments, responses, file contents or credentials. A row
++describes what independent verification observed; it never grants approval,
++selects a tool or authorizes a retry.
++"""
++import json
++import math
++import re
++from pathlib import Path
++
++# API/code first -> structured automation (DOM/UIA) -> GUI coordinates last.
++METHOD_TIERS = ('api', 'structured', 'gui')
++# read_only and idempotent effects may be retried by policy; the others never replay.
++IDEMPOTENCY = ('read_only', 'idempotent', 'non_idempotent', 'unknown')
++# verified: an independent postcondition matched. observed_change: state changed,
++# goal not established. unverified: dispatched, no evidence. failed: refuted.
++VERIFICATION = ('verified', 'observed_change', 'unverified', 'failed')
++REPLAYABLE = frozenset({'read_only', 'idempotent'})
++
++_ADAPTER = re.compile(r'[a-z][a-z0-9_.-]{0,39}')
++_SKILL_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_.:-]{0,79}')
++_MAX_LATENCY_MS = 3_600_000
++OUTCOME_FIELDS = frozenset({'method_tier', 'adapter', 'idempotency', 'verification', 'latency_ms', 'attempts', 'skill_id'})
++
++
++def outcome_metadata(metadata):
++    """Keep only well-formed outcome fields; malformed values are dropped, not coerced."""
++    result = {}
++    for name, allowed in (('method_tier', METHOD_TIERS), ('idempotency', IDEMPOTENCY), ('verification', VERIFICATION)):
++        value = metadata.get(name)
++        if isinstance(value, str) and value in allowed:
++            result[name] = value
++    adapter = metadata.get('adapter')
++    if isinstance(adapter, str) and _ADAPTER.fullmatch(adapter):
++        result['adapter'] = adapter
++    skill = metadata.get('skill_id')
++    if isinstance(skill, str) and _SKILL_ID.fullmatch(skill):
++        result['skill_id'] = skill
++    latency = metadata.get('latency_ms')
++    if type(latency) in {int, float} and math.isfinite(latency) and 0 <= latency <= _MAX_LATENCY_MS:
++        result['latency_ms'] = round(float(latency), 3)
++    attempts = metadata.get('attempts')
++    if type(attempts) is int and 0 <= attempts <= 10:
++        result['attempts'] = attempts
++    return result
++
++
++def may_replay(idempotency):
++    """Only read-only or declared-idempotent effects are eligible for automatic retry."""
++    return idempotency in REPLAYABLE
++
++
++def record_outcome(actions, tool, call_id, **metadata):
++    """Append one outcome row correlated with an existing tool lifecycle call_id."""
++    from .agent_events import event
++    if not isinstance(call_id, str) or not re.fullmatch(r'[0-9a-f]{32}', call_id):
++        raise ValueError('An outcome must correlate with an existing tool call_id.')
++    if metadata.get('verification') not in VERIFICATION or metadata.get('method_tier') not in METHOD_TIERS:
++        raise ValueError('An outcome needs a known method tier and verification state.')
++    return event(actions, 'tool.outcome', tool, call_id, **metadata)
++
++
++def read_outcomes(base, limit=500, max_bytes=2_000_000):
++    """Bounded tail of verified-outcome rows for ranking/telemetry consumers.
++
++    Malformed or foreign lines are skipped; a consumer must never trust a row
++    beyond its categorical fields.
++    """
++    path = Path(base) / '.jarvis-runtime' / 'agent-events.jsonl'
++    if type(limit) is not int or not 1 <= limit <= 5000:
++        raise ValueError('Outcome reads are bounded to 1-5000 rows.')
++    if not path.is_file() or path.is_symlink():
++        return []
++    with path.open('rb') as handle:
++        handle.seek(0, 2)
++        size = handle.tell()
++        handle.seek(max(0, size - max_bytes))
++        data = handle.read().decode('utf-8', errors='replace')
++    rows = []
++    for line in data.splitlines()[-limit * 4:]:
++        try:
++            row = json.loads(line)
++        except ValueError:
++            continue
++        if isinstance(row, dict) and row.get('event') == 'tool.outcome' and row.get('version') == 1:
++            rows.append(row)
++    return rows[-limit:]
+diff --git a/app/jarvis/hierarchical.py b/app/jarvis/hierarchical.py
+index abc566c..51c380a 100644
+--- a/app/jarvis/hierarchical.py
++++ b/app/jarvis/hierarchical.py
+@@ -261,6 +261,7 @@ def run(brain, goal, cancelled):
+     if graph is None:
+         acquisition = getattr(brain.actions, 'acquisition', None)
+         learning_context = acquisition.prepare(goal, cancelled) if acquisition is not None else {}
++        error = ''  # Validation feedback from the previous rejected proposal.
+         for attempt in range(options['max_repairs']+1):
+             if cancelled():
+                 return 'Task cancelled before planning.'
+diff --git a/app/jarvis/launcher.py b/app/jarvis/launcher.py
+index 92f10d6..78647b7 100644
+--- a/app/jarvis/launcher.py
++++ b/app/jarvis/launcher.py
+@@ -307,14 +307,16 @@ def run():
+     crashes = 0
+     resume_after_crash = False
+     listen = True
++    docker_start = None  # Owned Docker recovery handle; closed on every restart and on exit.
+     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+     try:
+         while not stop.exists():
+             try:
+                 config = preflight()
+                 from .docker_runtime import start_background
+-                if 'docker_start' in locals() and docker_start is not None:
++                if docker_start is not None:
+                     docker_start.close()
++                    docker_start = None
+                 docker_start = start_background(BASE, config, lambda: stop.exists())
+                 python = prepare_runtime(config)
+                 session = uuid.uuid4().hex
+@@ -386,7 +388,7 @@ def run():
+                     break
+                 time.sleep(1)
+     finally:
+-        if 'docker_start' in locals() and docker_start is not None:
++        if docker_start is not None:
+             docker_start.close()
+         lock.close()
+ 
+diff --git a/app/jarvis/tools.py b/app/jarvis/tools.py
+index 0695ecf..50dd554 100644
+--- a/app/jarvis/tools.py
++++ b/app/jarvis/tools.py
+@@ -194,6 +194,9 @@ class ToolRegistry:
+ 
+     def execute(self, step, cancelled, activate=None):
+         from .agent_events import check_policy, event
++        # Type first: a non-object proposal must not reach identity or policy checks.
++        if not isinstance(step, dict):
++            raise ToolArgumentError('A tool step must be an object.')
+         if 'task_id' in step:
+             from .task_state import TaskState
+             state=getattr(self.actions,'task_state',None)
+@@ -201,8 +204,6 @@ class ToolRegistry:
+                 raise ValueError('Task identity is unavailable; execution refused.')
+             state.require_identity(step['task_id'])
+             step={key:value for key,value in step.items() if key!='task_id'}
+-        if not isinstance(step, dict):
+-            raise ToolArgumentError('A tool step must be an object.')
+         step = {key: value for key, value in step.items() if key not in APPROVAL_CLAIMS}
+         name = step.get('action')
+         allowed = getattr(self.actions, 'allowed_tools', None)
+diff --git a/app/scripts/verification/phase_baseline.py b/app/scripts/verification/phase_baseline.py
+new file mode 100644
+index 0000000..8361977
+--- /dev/null
++++ b/app/scripts/verification/phase_baseline.py
+@@ -0,0 +1,276 @@
++"""Versioned upgrade-phase baseline over real Jarvis components.
++
++Every measurement drives the actual parser, DAG executor, ToolRegistry, skill
++loader and cloud privacy classifier with authored synthetic fixtures. No model,
++network, account, microphone or desktop action runs. Numbers describe this
++machine at run time; they are not live end-user acceptance measurements.
++"""
++import argparse
++from collections import Counter
++from datetime import datetime, timezone
++import json
++import os
++from pathlib import Path
++import platform
++import statistics
++import subprocess
++import sys
++import tempfile
++import threading
++import time
++import tracemalloc
++from types import SimpleNamespace
++
++BASE = Path(__file__).resolve().parents[2]
++if str(BASE) not in sys.path:
++    sys.path.insert(0, str(BASE))
++
++SCHEMA_VERSION = 1
++
++# Authored privacy oracle: expected cloud eligibility, independent of the classifier.
++PRIVACY_CASES = (
++    ('What is the capital of France?', True), ('Explain how photosynthesis works.', True),
++    ('Who wrote the novel Pride and Prejudice?', True), ('How does a binary search tree work?', True),
++    ('What is the boiling point of water at sea level?', True), ('Explain the theory of general relativity.', True),
++    ('Read my latest email from my boss', False), ('What is in my Documents folder?', False),
++    ('Summarize the file on my desktop', False), ('Send a WhatsApp message to Mom', False),
++    ('My password is hunter2, is it strong?', False), ('What did I say to Rahul yesterday?', False),
++    ('Open Chrome and play music', False), ('What is my bank balance?', False),
++    ('api_key=sk-abcdefghijklmnopqrstuvwx is this valid?', False), ('Delete the report in my downloads', False),
++)
++
++
++def summary(values):
++    values = sorted(values)
++    if not values:
++        return {'n': 0}
++    return {'n': len(values), 'p50': round(statistics.median(values), 4),
++            'p95': round(values[int((len(values) - 1) * .95)], 4), 'max': round(values[-1], 4)}
++
++
++def measured(function):
++    """Return (result, peak traced bytes) for one section."""
++    tracemalloc.start()
++    try:
++        result = function()
++        return result, tracemalloc.get_traced_memory()[1]
++    finally:
++        tracemalloc.stop()
++
++
++def rss():
++    try:
++        import psutil
++        return psutil.Process().memory_info().rss
++    except Exception as exc:  # Recorded, never estimated.
++        return 'unavailable: ' + type(exc).__name__
++
++
++def intent_routing():
++    from jarvis.commands import parse
++    from tests.intent_permutations import scenarios
++    expected = json.loads((BASE / 'tests/fixtures/intent_testbook_expected.json').read_text(encoding='utf-8'))
++    counts, latencies = Counter(), []
++    for number, *texts in scenarios():
++        for text in texts:
++            started = time.perf_counter()
++            try:
++                actual = parse(text).kind
++            except ValueError:
++                actual = 'unparsed'
++            latencies.append((time.perf_counter() - started) * 1000)
++            counts['total'] += 1
++            counts['correct'] += actual == expected[number]
++    return {'scope': 'authored 800-scenario/2400-phrasing deterministic oracle',
++            'correct': counts['correct'], 'total': counts['total'],
++            'accuracy': round(counts['correct'] / counts['total'], 6),
++            'error_rate': round(1 - counts['correct'] / counts['total'], 6), 'routing_ms': summary(latencies)}
++
++
++def privacy_routing():
++    from jarvis.cloud_policy import classify
++    latencies, wrong, leaked = [], [], 0
++    for question, public in PRIVACY_CASES:
++        started = time.perf_counter()
++        eligible = classify({'question': question})['privacy'] == 'PUBLIC'
++        latencies.append((time.perf_counter() - started) * 1000)
++        if eligible != public:
++            wrong.append(question)
++            leaked += eligible and not public
++    return {'scope': 'authored 16-question oracle; classifier only, no cloud call',
++            'cases': len(PRIVACY_CASES), 'correct': len(PRIVACY_CASES) - len(wrong),
++            'private_marked_public': leaked, 'misclassified': wrong, 'classify_ms': summary(latencies)}
++
++
++def dag_execution():
++    from jarvis.dag_execution import Executor, Tool, validate_plan
++    with tempfile.TemporaryDirectory() as folder:
++        root = Path(folder)
++        for index in range(8):
++            (root / f'input{index}.txt').write_text(f'value {index}\n', encoding='utf-8')
++        writes = []
++        lock = threading.Lock()
++
++        def read(arguments, cancelled):
++            return (root / arguments['path']).read_text(encoding='utf-8')
++
++        def write(arguments, cancelled):
++            with lock:
++                writes.append(arguments['path'])
++                (root / arguments['path']).write_text(arguments['content'], encoding='utf-8')
++            return 'written'
++
++        def slow(arguments, cancelled):
++            for _ in range(200):
++                if cancelled():
++                    raise InterruptedError('cancelled')
++                time.sleep(.01)
++            return 'slow'
++
++        string = {'type': 'string', 'minLength': 1}
++        tools = {
++            'read': Tool('read', {'type': 'object', 'properties': {'path': string}, 'required': ['path']}, read,
++                         lambda a, out: isinstance(out, str) and out.startswith('value')),
++            'write': Tool('write', {'type': 'object', 'properties': {'path': string, 'content': string},
++                                    'required': ['path', 'content']}, write,
++                          lambda a, out: (root / a['path']).read_text(encoding='utf-8') == a['content'], read_only=False),
++            'slow': Tool('slow', {'type': 'object', 'properties': {}}, slow, lambda a, out: out == 'slow'),
++        }
++
++        def row(identifier, tool, arguments, dependencies=(), read_only=True):
++            return {'id': identifier, 'tool': tool, 'arguments': arguments, 'dependencies': list(dependencies),
++                    'expected': 'Deterministic fixture readback.', 'permission': 'read' if read_only else 'user',
++                    'resources': {'cpu': 1, 'ram_mb': 32, 'gpu_mb': 0},
++                    'retry': {'attempts': 2 if read_only else 1, 'backoff_seconds': .01}, 'timeout_seconds': 5}
++
++        graph = {'version': 1, 'steps': [row(f'r{i}', 'read', {'path': f'input{i}.txt'}) for i in range(8)]
++                 + [row('w0', 'write', {'path': 'out.txt', 'content': 'merged'}, [f'r{i}' for i in range(8)], False)]}
++        runs, checkpoints = [], []
++        for _ in range(20):
++            writes.clear()
++            (root / 'out.txt').unlink(missing_ok=True)
++            steps = validate_plan(graph, tools)
++            started = time.perf_counter()
++            result = Executor(tools, max_concurrency=3, checkpoint=lambda rows: checkpoints.append(1)).run(steps)
++            runs.append({'ms': (time.perf_counter() - started) * 1000, 'status': result['status'],
++                         'steps': len(result['steps']), 'writes': len(writes)})
++        cancel = threading.Event()
++        cancel_graph = {'version': 1, 'steps': [row('s0', 'slow', {}), row('s1', 'slow', {}, ['s0'])]}
++        timer = threading.Timer(.1, cancel.set)
++        timer.start()
++        started = time.perf_counter()
++        cancelled = Executor(tools).run(validate_plan(cancel_graph, tools), cancel.is_set)
++        cancel_ms = (time.perf_counter() - started) * 1000
++        timer.cancel()
++        return {'scope': '9-step fixture DAG (8 parallel reads + 1 dependent write) x20; one cancellation run',
++                'success_rate': sum(r['status'] == 'completed' for r in runs) / len(runs),
++                'steps_per_run': runs[0]['steps'], 'effect_dispatches_per_run': sorted({r['writes'] for r in runs}),
++                'checkpoints_per_run': len(checkpoints) / len(runs), 'run_ms': summary([r['ms'] for r in runs]),
++                'cancellation': {'status': cancelled['status'], 'requested_after_ms': 100,
++                                 'returned_after_ms': round(cancel_ms, 3),
++                                 'unstarted_step_status': cancelled['steps']['s1']['status']}}
++
++
++def tool_registry():
++    from jarvis.tools import ToolArgumentError, ToolRegistry
++    with tempfile.TemporaryDirectory() as folder:
++        actions = SimpleNamespace(base=Path(folder), config={}, allowed_tools=None, skills=None)
++        dispatched = []
++        actions.execute = lambda command, cancelled: dispatched.append(command)
++        actions.report = lambda *args: None
++        registry = ToolRegistry(actions)
++        catalog_ms, search_ms = [], []
++        for _ in range(30):
++            started = time.perf_counter()
++            catalog = registry.catalog('find the latest python file in my project')
++            catalog_ms.append((time.perf_counter() - started) * 1000)
++            started = time.perf_counter()
++            registry.search('search github repository code for a bug')
++            search_ms.append((time.perf_counter() - started) * 1000)
++        malformed = [None, 42, 'task_id', ['task_id'], {}, {'action': 'open'}, {'action': 'open', 'value': ''},
++                     {'action': 'open', 'value': 7}, {'action': 'nope', 'value': 'x'},
++                     {'action': 'create_file', 'value': 'a.txt'}, {'action': 'realtime_query', 'value': 'x', 'content': '['},
++                     {'action': 'open', 'value': 'x' * 5000}]
++        outcomes = Counter()
++        for step in malformed:
++            try:
++                registry.execute(step, lambda: False)
++                outcomes['accepted'] += 1
++            except ToolArgumentError:
++                outcomes['ToolArgumentError'] += 1
++            except ValueError:
++                outcomes['ValueError'] += 1
++            except Exception as exc:
++                outcomes['unexpected:' + type(exc).__name__] += 1
++        return {'scope': 'real ToolRegistry, synthetic actions object; malformed proposals never reach a handler',
++                'catalog_size': len(catalog), 'catalog_ms': summary(catalog_ms), 'search_ms': summary(search_ms),
++                'malformed_cases': len(malformed), 'malformed_outcomes': dict(outcomes),
++                'malformed_dispatched': len(dispatched),
++                'contract_error_rate': round(sum(v for k, v in outcomes.items() if k.startswith('unexpected')
++                                                 or k == 'accepted') / len(malformed), 6)}
++
++
++def skills():
++    from jarvis.skill_memory import SkillMemory
++    with tempfile.TemporaryDirectory() as folder:
++        memory = SimpleNamespace(vault=Path(folder), base=Path(folder), enabled=True, hermes_skills_enabled=False)
++        started = time.perf_counter()
++        loaded = SkillMemory(memory, BASE / 'skills')
++        load_ms = (time.perf_counter() - started) * 1000
++        latencies, selected = [], []
++        for goal in ('play a song on spotify', 'fix the failing unit test in my python project',
++                     'fill the login form in chrome', 'research the latest rust release notes') * 5:
++            started = time.perf_counter()
++            selected.append(len(loaded.context(goal).get('skills', [])))
++            latencies.append((time.perf_counter() - started) * 1000)
++        return {'scope': 'bundled skills/ with an empty temporary vault; Hermes disabled',
++                'bundled_skills_loaded': len(loaded.catalog), 'skill_errors': len(loaded.skill_errors),
++                'cold_load_ms': round(load_ms, 3), 'context_ms': summary(latencies),
++                'goals_with_selected_skill': sum(1 for count in selected if count), 'goals': len(selected)}
++
++
++def git_revision():
++    try:
++        sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=BASE, capture_output=True, text=True, timeout=10).stdout.strip()
++        dirty = bool(subprocess.run(['git', 'status', '--porcelain', '--', '.'], cwd=BASE, capture_output=True,
++                                    text=True, timeout=30).stdout.strip())
++        return {'commit': sha, 'worktree_dirty': dirty}
++    except (OSError, subprocess.SubprocessError) as exc:
++        return {'commit': 'unavailable: ' + type(exc).__name__}
++
++
++def main(argv=None):
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--label', required=True)
++    parser.add_argument('--out', required=True)
++    parser.add_argument('--overwrite', action='store_true')
++    options = parser.parse_args(argv)
++    path = Path(options.out)
++    if path.exists() and not options.overwrite:
++        raise SystemExit('Refusing to overwrite preserved measurements: ' + str(path))
++    result = {'schema_version': SCHEMA_VERSION, 'label': options.label,
++              'measured_at': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'git': git_revision(),
++              'environment': {'python': sys.version.split()[0], 'platform': platform.platform(),
++                              'cpu_count': os.cpu_count()},
++              'rss_bytes_start': rss(), 'sections': {}}
++    for name, function in (('intent_routing', intent_routing), ('privacy_routing', privacy_routing),
++                           ('dag_execution', dag_execution), ('tool_registry', tool_registry), ('skills', skills)):
++        started = time.perf_counter()
++        try:
++            data, peak = measured(function)
++            data['status'] = 'MEASURED'
++        except Exception as exc:  # A failed section is reported, never replaced by an estimate.
++            data, peak = {'status': 'FAILED', 'error': type(exc).__name__ + ': ' + str(exc)[:300]}, None
++        data['section_seconds'] = round(time.perf_counter() - started, 4)
++        data['peak_traced_bytes'] = peak
++        result['sections'][name] = data
++    result['rss_bytes_end'] = rss()
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
++    print(json.dumps({name: {k: v for k, v in data.items() if k in {'status', 'accuracy', 'success_rate', 'correct',
++                                                                    'contract_error_rate', 'malformed_outcomes', 'error'}}
++                      for name, data in result['sections'].items()}, indent=1))
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/app/tests/test_phase01_baseline.py b/app/tests/test_phase01_baseline.py
+new file mode 100644
+index 0000000..3b4d56b
+--- /dev/null
++++ b/app/tests/test_phase01_baseline.py
+@@ -0,0 +1,184 @@
++"""Phase 1 repairs and shared execution-outcome contracts.
++
++Real ToolRegistry, Cognition, launcher loop and event log on temporary
++directories. No model, network, desktop or account action runs.
++"""
++import json
++import subprocess
++import sys
++from pathlib import Path
++from types import SimpleNamespace
++from unittest.mock import Mock, patch
++
++import pytest
++
++from jarvis import execution_contracts as contracts
++from jarvis.agent_events import event
++from jarvis.cognition import Cognition
++from jarvis.tools import ToolArgumentError, ToolRegistry
++
++BASE = Path(__file__).resolve().parents[1]
++
++
++def registry(tmp_path):
++    actions = SimpleNamespace(base=tmp_path, config={}, allowed_tools=None, report=Mock(), execute=Mock())
++    return actions, ToolRegistry(actions)
++
++
++@pytest.mark.parametrize('step', [None, 42, 'task_id', ['task_id'], ('action', 'open')])
++def test_P01_D1_non_object_proposal_is_a_typed_contract_error(tmp_path, step):
++    actions, tools = registry(tmp_path)
++    with pytest.raises(ToolArgumentError, match='must be an object'):
++        tools.execute(step, lambda: False)
++    actions.execute.assert_not_called()
++    # Rejected before any lifecycle row: nothing was started.
++    assert not (tmp_path / '.jarvis-runtime/agent-events.jsonl').exists()
++
++
++def test_P01_D1_object_with_task_id_still_requires_identity(tmp_path):
++    actions, tools = registry(tmp_path)
++    with pytest.raises(ValueError, match='Task identity is unavailable'):
++        tools.execute({'task_id': 'x', 'action': 'open', 'value': 'notepad'}, lambda: False)
++    actions.execute.assert_not_called()
++
++
++def test_P01_D2_launcher_closes_docker_handle_when_loop_exits(tmp_path):
++    from jarvis import launcher
++    handle = Mock()
++    lock = Mock()
++    with patch.object(launcher, 'RUNTIME', tmp_path), patch.object(launcher, 'singleton', return_value=lock), \
++            patch.object(launcher, 'preflight', return_value={}), \
++            patch('jarvis.docker_runtime.start_background', return_value=handle), \
++            patch.object(launcher, 'prepare_runtime', side_effect=InterruptedError):
++        launcher.run()
++    handle.close.assert_called_once_with()
++    lock.close.assert_called_once_with()
++
++
++def test_P01_D2_launcher_without_docker_handle_exits_cleanly(tmp_path):
++    from jarvis import launcher
++    lock = Mock()
++    with patch.object(launcher, 'RUNTIME', tmp_path), patch.object(launcher, 'singleton', return_value=lock), \
++            patch.object(launcher, 'preflight', side_effect=InterruptedError):
++        launcher.run()  # Previously relied on locals() introspection; must not raise NameError.
++    lock.close.assert_called_once_with()
++
++
++def cognition(tmp_path, **extra):
++    actions = SimpleNamespace(base=tmp_path, whatsapp_prompts=[], current_item=None, pending_tasks=[],
++                              approvals_waiting=0, session_style={}, memory=Mock(), **extra)
++    return Cognition(actions)
++
++
++def test_P01_D4_failed_memory_sources_are_counted_not_silent(tmp_path):
++    curator = SimpleNamespace(enabled=True, relevant=Mock(side_effect=OSError('vault offline')), conversations=Mock())
++    skills = SimpleNamespace(context=Mock(side_effect=KeyError('broken')))
++    mind = cognition(tmp_path, curator=curator, skills=skills)
++    try:
++        found = mind.recall('open my notes', 3)
++        mind.recall('open my notes', 3)
++    finally:
++        mind.close()
++    # Recall still degrades gracefully: missing sources are absent, not fabricated.
++    assert 'declarative' not in found and 'procedural_skills' not in found
++    errors = mind.snapshot()['memory_source_errors']
++    assert errors == {'curator': {'count': 2, 'last_error': 'OSError'},
++                      'skills': {'count': 2, 'last_error': 'KeyError'}}
++
++
++def test_P01_D4_healthy_recall_reports_no_errors(tmp_path):
++    mind = cognition(tmp_path)
++    try:
++        mind.recall('weather today', 2)
++        assert mind.snapshot()['memory_source_errors'] == {}
++    finally:
++        mind.close()
++
++
++def test_P01_D3_hierarchical_planner_initializes_validation_feedback():
++    source = (BASE / 'jarvis/hierarchical.py').read_text(encoding='utf-8')
++    assert source.index("error = ''") < source.index("validation_error=error if attempt else ''")
++
++
++def test_P01_D5_web_audit_test_does_not_overwrite_dated_evidence():
++    source = (BASE / 'tests/test_web_development_audit.py').read_text(encoding='utf-8')
++    body = source.split('def test_JRV_22_001_real_authored_build_and_owned_preview', 1)[1].split('\ndef ', 1)[0]
++    assert "JARVIS_CAPTURE_AUDIT_EVIDENCE" in body and 'evidence_dir/' in body
++    assert "BASE/'artifacts/jarvis-audit/modules/22-web-development/build-checks.json'" not in body
++
++
++def test_P01_contract_outcome_round_trip_correlates_with_lifecycle(tmp_path):
++    actions = SimpleNamespace(base=tmp_path)
++    call = event(actions, 'tool.started', 'read_file')
++    contracts.record_outcome(actions, 'read_file', call, method_tier='api', adapter='native_files',
++                             idempotency='read_only', verification='verified', latency_ms=12.5, attempts=1,
++                             skill_id='file-operations')
++    rows = contracts.read_outcomes(tmp_path)
++    assert len(rows) == 1
++    row = rows[0]
++    assert row['call_id'] == call and row['tool'] == 'read_file'
++    assert {k: row[k] for k in ('method_tier', 'adapter', 'idempotency', 'verification', 'latency_ms', 'attempts', 'skill_id')} == {
++        'method_tier': 'api', 'adapter': 'native_files', 'idempotency': 'read_only', 'verification': 'verified',
++        'latency_ms': 12.5, 'attempts': 1, 'skill_id': 'file-operations'}
++    assert 'discarded_metadata_fields' not in row
++
++
++def test_P01_contract_outcome_rejects_payloads_and_malformed_values(tmp_path):
++    actions = SimpleNamespace(base=tmp_path)
++    call = event(actions, 'tool.started', 'read_file')
++    contracts.record_outcome(actions, 'read_file', call, method_tier='gui', verification='unverified',
++                             adapter='Bad Adapter!', latency_ms=float('nan'), attempts=99, skill_id='../../etc',
++                             content='FAKE_PRIVATE', api_key='FAKE_TOKEN', idempotency='sometimes')
++    row = contracts.read_outcomes(tmp_path)[0]
++    assert 'FAKE_' not in json.dumps(row) and '../' not in json.dumps(row)
++    assert set(row) == {'version', 'at', 'event', 'call_id', 'tool', 'method_tier', 'verification',
++                        'discarded_metadata_fields'}
++    assert row['discarded_metadata_fields'] == 7
++
++
++def test_P01_contract_outcome_requires_correlation_and_known_states(tmp_path):
++    actions = SimpleNamespace(base=tmp_path)
++    with pytest.raises(ValueError, match='call_id'):
++        contracts.record_outcome(actions, 'read_file', 'not-a-call', method_tier='api', verification='verified')
++    call = event(actions, 'tool.started', 'read_file')
++    with pytest.raises(ValueError, match='method tier'):
++        contracts.record_outcome(actions, 'read_file', call, method_tier='magic', verification='verified')
++
++
++def test_P01_lifecycle_events_still_drop_outcome_fields(tmp_path):
++    actions = SimpleNamespace(base=tmp_path)
++    event(actions, 'tool.completed', 'read_file', method_tier='api', verification='verified', backend='files')
++    row = json.loads((tmp_path / '.jarvis-runtime/agent-events.jsonl').read_text())
++    assert 'method_tier' not in row and row['backend'] == 'files' and row['discarded_metadata_fields'] == 2
++
++
++def test_P01_contract_replay_policy_matches_no_replay_rule():
++    assert [name for name in contracts.IDEMPOTENCY if contracts.may_replay(name)] == ['read_only', 'idempotent']
++    assert contracts.METHOD_TIERS == ('api', 'structured', 'gui')
++
++
++def test_P01_read_outcomes_is_bounded_and_skips_foreign_lines(tmp_path):
++    path = tmp_path / '.jarvis-runtime/agent-events.jsonl'
++    path.parent.mkdir(parents=True)
++    path.write_text('not json\n' + json.dumps({'version': 1, 'event': 'tool.started'}) + '\n'
++                    + json.dumps({'version': 1, 'event': 'tool.outcome', 'tool': 'open'}) + '\n', encoding='utf-8')
++    assert [r['tool'] for r in contracts.read_outcomes(tmp_path)] == ['open']
++    with pytest.raises(ValueError):
++        contracts.read_outcomes(tmp_path, limit=0)
++
++
++def test_P01_baseline_script_measures_without_failed_sections(tmp_path):
++    out = tmp_path / 'metrics.json'
++    result = subprocess.run([sys.executable, str(BASE / 'scripts/verification/phase_baseline.py'), '--label', 'test',
++                             '--out', str(out)], cwd=BASE, capture_output=True, text=True, timeout=300)
++    assert result.returncode == 0, result.stderr[-2000:]
++    data = json.loads(out.read_text(encoding='utf-8'))
++    assert data['schema_version'] == 1
++    assert all(section['status'] == 'MEASURED' for section in data['sections'].values())
++    registry_section = data['sections']['tool_registry']
++    assert registry_section['malformed_dispatched'] == 0 and registry_section['contract_error_rate'] == 0
++    assert data['sections']['privacy_routing']['private_marked_public'] == 0
++    # Preserved measurements are never silently overwritten.
++    again = subprocess.run([sys.executable, str(BASE / 'scripts/verification/phase_baseline.py'), '--label', 'test',
++                            '--out', str(out)], cwd=BASE, capture_output=True, text=True, timeout=300)
++    assert again.returncode != 0 and 'Refusing to overwrite' in again.stderr
+diff --git a/app/tests/test_reverse_engineering_audit.py b/app/tests/test_reverse_engineering_audit.py
+index 4512661..31cf782 100644
+--- a/app/tests/test_reverse_engineering_audit.py
++++ b/app/tests/test_reverse_engineering_audit.py
+@@ -201,10 +201,14 @@ def test_JRV_29_012_actual_owned_node_timeout_cleans_children(tmp_path):
+     if not node:pytest.skip('BLOCKED: installed Node runtime unavailable')
+     entry=tmp_path/'hang.mjs';pidfile=tmp_path/'children.json'
+     entry.write_text("import {spawn} from 'node:child_process';import {writeFileSync} from 'node:fs';const child=spawn(process.execPath,['-e','setInterval(()=>{},1000)']);writeFileSync(process.argv[2],JSON.stringify([process.pid,child.pid]));setInterval(()=>{},1000);",encoding='utf-8')
++    # Node must start and record both PIDs before the timeout fires; 0.8s raced
++    # interpreter startup under full-suite CPU load (Phase 1 reproduction).
++    timeout=4.0
+     start=time.monotonic()
+     with pytest.raises(ValueError,match='timed out'):
+-        rea._run_rea(node,str(entry),[str(pidfile)],str(tmp_path),lambda:False,.8)
+-    assert time.monotonic()-start<5
++        rea._run_rea(node,str(entry),[str(pidfile)],str(tmp_path),lambda:False,timeout)
++    assert time.monotonic()-start<timeout+5
++    assert pidfile.is_file(),'Node did not start within the timeout; descendant cleanup was not exercised.'
+     pids=json.loads(pidfile.read_text());deadline=time.monotonic()+2
+     while any(psutil.pid_exists(p) for p in pids) and time.monotonic()<deadline:time.sleep(.02)
+     assert all(not psutil.pid_exists(p) for p in pids)
+diff --git a/app/tests/test_web_development_audit.py b/app/tests/test_web_development_audit.py
+index c06ac8c..7171228 100644
+--- a/app/tests/test_web_development_audit.py
++++ b/app/tests/test_web_development_audit.py
+@@ -1,5 +1,6 @@
+ """Prompt22 owned loopback previews, browser fixtures and fake external services."""
+ import json
++import os
+ from pathlib import Path
+ import shutil
+ import socket
+@@ -40,19 +41,22 @@ def browser(preview,tests=TESTS):
+     return tools.inspect(root,url,tests,lambda:False)
+ 
+ 
+-def test_JRV_22_001_real_authored_build_and_owned_preview(preview):
++def test_JRV_22_001_real_authored_build_and_owned_preview(preview,tmp_path):
+     root=BASE/'artifacts/projects/development-dashboard'
+     tools=DevelopmentTools(BASE)
++    # Dated Prompt 22 evidence is refreshed only on an explicit capture run.
++    evidence_dir=(BASE/'artifacts/jarvis-audit/modules/22-web-development'
++                  if os.environ.get('JARVIS_CAPTURE_AUDIT_EVIDENCE')=='22' else tmp_path)
+     try:
+         checks=tools.build(root,'vite',lambda:False)
+         assert len(checks)==2 and all(c['exit_code']==0 for c in checks)
+-        (BASE/'artifacts/jarvis-audit/modules/22-web-development/build-checks.json').write_text(
++        (evidence_dir/'build-checks.json').write_text(
+             json.dumps([{'phase':c['phase'],'exit_code':c['exit_code'],'output':c['output']} for c in checks],indent=2),encoding='utf-8')
+         evidence=browser(preview)
+         assert evidence['goal_verified'] and len(evidence['views'])==3
+         assert all(Path(v['screenshot']).is_file() for v in evidence['views'])
+         for view in evidence['views']:
+-            shutil.copyfile(view['screenshot'],BASE/'artifacts/jarvis-audit/modules/22-web-development'/('fixture-'+view['name']+'.png'))
++            shutil.copyfile(view['screenshot'],evidence_dir/('fixture-'+view['name']+'.png'))
+     finally:tools.close()
+ 
+ 

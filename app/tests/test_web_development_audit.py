@@ -1,5 +1,6 @@
 """Prompt22 owned loopback previews, browser fixtures and fake external services."""
 import json
+import os
 from pathlib import Path
 import shutil
 import socket
@@ -40,19 +41,22 @@ def browser(preview,tests=TESTS):
     return tools.inspect(root,url,tests,lambda:False)
 
 
-def test_JRV_22_001_real_authored_build_and_owned_preview(preview):
+def test_JRV_22_001_real_authored_build_and_owned_preview(preview,tmp_path):
     root=BASE/'artifacts/projects/development-dashboard'
     tools=DevelopmentTools(BASE)
+    # Dated Prompt 22 evidence is refreshed only on an explicit capture run.
+    evidence_dir=(BASE/'artifacts/jarvis-audit/modules/22-web-development'
+                  if os.environ.get('JARVIS_CAPTURE_AUDIT_EVIDENCE')=='22' else tmp_path)
     try:
         checks=tools.build(root,'vite',lambda:False)
         assert len(checks)==2 and all(c['exit_code']==0 for c in checks)
-        (BASE/'artifacts/jarvis-audit/modules/22-web-development/build-checks.json').write_text(
+        (evidence_dir/'build-checks.json').write_text(
             json.dumps([{'phase':c['phase'],'exit_code':c['exit_code'],'output':c['output']} for c in checks],indent=2),encoding='utf-8')
         evidence=browser(preview)
         assert evidence['goal_verified'] and len(evidence['views'])==3
         assert all(Path(v['screenshot']).is_file() for v in evidence['views'])
         for view in evidence['views']:
-            shutil.copyfile(view['screenshot'],BASE/'artifacts/jarvis-audit/modules/22-web-development'/('fixture-'+view['name']+'.png'))
+            shutil.copyfile(view['screenshot'],evidence_dir/('fixture-'+view['name']+'.png'))
     finally:tools.close()
 
 
