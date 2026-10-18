@@ -124,6 +124,11 @@ class Deliberation:
         self.ledger_path = base / ".jarvis-runtime" / "deliberation" / "decisions.jsonl"
         self.lock = threading.RLock()
         self.last_ledger_error = None
+        self.failure_router = FailureRouter(base)  # Phase 5 recovery routing (no recursive escalation)
+
+    def route_failure(self, task_id, failure, context=None):
+        """Advisory recovery route for a failed step; the caller still enforces approvals and no-replay."""
+        return self.failure_router.route(task_id, failure, context or {})
 
     # --- risk classification (single source of truth) --------------------------------------------------------------
     def classify_risk(self, command, prediction=None):
@@ -397,3 +402,72 @@ class Deliberation:
             except ValueError:
                 continue
         return rows[-limit:]
+
+
+# ---- Phase 5: failure classification and recovery routing -------------------------------------------------------------
+FAILURE_PATTERNS = (
+    ('permission', r'approval|denied|permission|not authori[sz]ed|risky|unsafe|not allowed|refused by (?:policy|the user)'),
+    ('missing_tool', r'unsupported tool|tool is outside|not registered|no (?:api|structured) (?:or structured )?method|'
+                     r'configure environment|tool unavailable|is not installed|no tool'),
+    ('planner_structure', r'\bdag\b|plan rejected|plan validation|invalid plan|schema|exceeds .*budget|steps must|cycle in'),
+    ('unknown_ui', r'not found|could not find|cannot find|no (?:visible|named|such) (?:control|button|element|field)|'
+                   r'belongs to another control|covers the target|selector is not unique'),
+    ('reasoning', r'wrong|incorrect|test(?:s)? failed|does not match|did not match|verification failed|'
+                  r'no progress|unexpected (?:result|output)'),
+)
+ROUTES = {'missing_tool': 'pillar_a_capability_discovery', 'broken_skill': 'pillar_a_fix', 'unknown_ui': 'show_me_once',
+          'reasoning': 'local_replan_then_cloud_architect', 'planner_structure': 'pillar_c_evidence',
+          'permission': 'stop_request_authorization', 'unknown': 'stop_request_guidance'}
+MAX_ESCALATIONS_PER_TASK = 3
+
+
+def classify_failure(text, context):
+    """Deterministic category for a failure reason; a degraded skill outranks generic text."""
+    if context.get('skill_degraded'):
+        return 'broken_skill'
+    lowered = str(text).casefold()
+    for category, pattern in FAILURE_PATTERNS:
+        if re.search(pattern, lowered):
+            return category
+    return 'unknown'
+
+
+class FailureRouter:
+    """Routes failures to recovery paths without recursion: one use of each route per task, three escalations max."""
+
+    def __init__(self, base):
+        self.root = Path(base) / '.jarvis-runtime' / 'learning-queues'
+        self.lock = threading.Lock()
+        self.history = {}           # task_id -> routes already taken
+        self.weakness = {}          # goal class -> count of reasoning failures
+
+    def _queue(self, name, row):
+        from .reasoning_bank import generic
+        self.root.mkdir(parents=True, exist_ok=True)
+        clean = {k: generic(v, 300) if isinstance(v, str) else v for k, v in row.items()}
+        with (self.root / name).open('a', encoding='utf-8') as output:
+            output.write(json.dumps({'at': datetime.now(timezone.utc).isoformat(timespec='seconds'), **clean},
+                                    ensure_ascii=False) + '\n')
+
+    def route(self, task_id, failure, context):
+        reason = str((failure or {}).get('reason', ''))[:500]
+        category = classify_failure(reason, context or {})
+        route = ROUTES[category]
+        with self.lock:
+            taken = self.history.setdefault(str(task_id), [])
+            decision = {'category': category, 'route': route, 'escalations': len(taken), 'training_candidate': False}
+            if category != 'permission' and len(taken) >= MAX_ESCALATIONS_PER_TASK:
+                decision.update(route='stop_request_guidance', reason='escalation limit reached for this task')
+            elif category != 'permission' and route in taken:
+                decision.update(route='stop_request_guidance', reason='this recovery route was already tried for this task')
+            taken.append(decision['route'])
+            if category == 'planner_structure':
+                self._queue('planner-failures.jsonl', {'task_id': str(task_id)[:64], 'reason': reason})
+            if category == 'reasoning':
+                goal_class = str((context or {}).get('goal_class', 'general'))[:40]
+                self.weakness[goal_class] = self.weakness.get(goal_class, 0) + 1
+                if self.weakness[goal_class] >= 3:
+                    decision['training_candidate'] = True
+                    self._queue('training-candidates.jsonl', {'goal_class': goal_class, 'reason': reason,
+                                                              'count': self.weakness[goal_class]})
+        return decision

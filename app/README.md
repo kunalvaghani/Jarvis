@@ -14,6 +14,17 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase05 -->
+**2026-10-18 — Upgrade Phase 5 of 8 (cloud architect escalation + Show Me Once): PASS for locally executable checks; real-provider checks BLOCKED (not authorized).**
+- **Cloud architect.** Jarvis can optionally consult a free-tier cloud model after three verified local reasoning failures. This is **disabled by default** and needs a confirmed free plan, consent and quota.
+- **Privacy gate.** It refuses, rather than redacts, any payload with paths, filenames, emails, URLs, secrets, internal names, source, logs or personal context. Advice is untrusted: it is never executed as instructions, and code is only AST-screened and then tested in the network-less Docker sandbox. A passing result becomes a provisional skill candidate.
+- **Show Me Once.** After repeated "can't find this control" failures, Jarvis pauses and asks, with approval, for one user click. It records a RuntimeId-free UIA selector and postcondition from the selected window only, ignoring its own injected input and password fields. It replays structurally and promotes a verified result as a provisional skill.
+- **Failure routing.** A classifier in `deliberation.py` routes each failure at most once per task, with at most three escalations per task.
+- **Results.** 9/9 adversarial privacy cases stayed local with 0 outbound requests (cloud provider mocked). Sandbox verification of advice took 956 ms. Demonstration capture took 3.9 s and verified replay 14.1 s. Full regression **3,315 passed / 147 skipped / 0 failed**; launcher ready.
+
+[Evidence, privacy model and limits](artifacts/jarvis-audit/phase-05/README.md).
+<!-- /upgrade-phase05 -->
+
 <!-- upgrade-phase04 -->
 **2026-10-18 — Upgrade Phase 4 of 8 (exploration + ReasoningBank + OpenViking): PASS for locally executable checks.** Jarvis now distils **ReasoningBank** lessons (strategies from independently verified outcomes, anti-patterns from failures; generic, bounded, with conditions, evidence, confidence, contradiction and supersession) into `.jarvis-runtime/reasoning_bank/` and gives the planner at most three lessons (≤1,200 characters). The Obsidian vault is indexed **read-only** by an unmodified **OpenViking 0.5.0** server (AGPL-3.0, own `.venv-openviking`, loopback port 19330, local `nomic-embed-text` embeddings) with verified links back to source notes, incremental re-indexing, de-duplication and recovery; `Jarvis Skills` stays owned by the skill store. An **exploration curriculum** learns only in isolated environments (fresh headless browser context on an approved loopback origin; background Blender sandbox) — desktop GUI exploration stays disabled without a verified VM. Measured: lesson retrieval precision@1 0.583 → 0.917 (authored oracle); real vault indexed in 63.7 s with 46/49 verified links, search p50 127 ms, vault unchanged; OpenViking ~442 MB RAM. Full regression **3,277 passed / 147 skipped / 0 failed**; launcher ready. [Evidence, safety model and limits](artifacts/jarvis-audit/phase-04/README.md).
 <!-- /upgrade-phase04 -->
@@ -1720,6 +1731,13 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
 | `reasoning_bank` | `enabled` (true), `lessons_per_plan` (3), `char_budget` (1200) | Store: `.jarvis-runtime/reasoning_bank/bank.sqlite3` |
 | `viking_memory` | `enabled` (true), `port` (19330), `processing_mode` (`vectors_only`), `semantic_directories` ([]) | Needs `.venv-openviking` (`requirements/openviking.txt`) and `ollama pull nomic-embed-text`; adds ~442 MB RAM. L0/L1 summaries per listed directory are model-generated hints. |
 | `exploration` | `enabled` (true), `applications` (["blender"]), `max_episodes_per_day` (6) | Idle-only, sandboxed; desktop GUI exploration is not available without a verified VM. |
+
+### Cloud architect and Show Me Once
+
+| Section | Keys (defaults) | Notes |
+| --- | --- | --- |
+| `cloud_architect` | `enabled` (**false**), `consent_minutes` (30) | Optional. Also needs `groq` enabled on a confirmed free plan with dedicated quota, plus per-request or per-scope consent. Only an allowlisted, generic, synthetic/public problem is ever sent; anything uncertain stays local. Log: `.jarvis-runtime/cloud/architect-log.jsonl`. |
+| `demonstration` | `enabled` (true), `max_steps` (10) | Offered only after repeated "can't find this control" failures in one task, and records only after the `demonstration_recording` approval. Captures clicks in the selected window only (no keyboard, no password fields, no RuntimeIds). Sessions: `.jarvis-runtime/demonstrations/`. |
 
 ## Integrations and toolkits
 

@@ -12,7 +12,7 @@ import win32api
 import win32con
 import win32gui
 
-EDIT, BUTTON, LABEL = 1001, 1002, 1003
+EDIT, BUTTON, LABEL, PASSWORD = 1001, 1002, 1003, 1004
 
 
 def main(title):
@@ -45,6 +45,9 @@ def main(title):
                                              10, 10, 380, 24, window, EDIT, instance, None)
     win32gui.CreateWindow('BUTTON', 'Apply', child | win32con.BS_PUSHBUTTON, 10, 44, 100, 30, window, BUTTON, instance, None)
     controls['label'] = win32gui.CreateWindow('STATIC', 'Not applied', child, 10, 84, 380, 24, window, LABEL, instance, None)
+    # Password field: recorders must never capture it (Phase 5 Show Me Once tests).
+    win32gui.CreateWindow('EDIT', '', child | win32con.WS_BORDER | win32con.ES_PASSWORD, 120, 44, 150, 24,
+                          window, PASSWORD, instance, None)
     win32gui.ShowWindow(window, win32con.SW_SHOWNOACTIVATE)
     deadline = time.monotonic() + 60
     while time.monotonic() < deadline:

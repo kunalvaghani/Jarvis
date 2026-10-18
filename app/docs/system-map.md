@@ -1,5 +1,14 @@
 # Jarvis system map
 
+<!-- upgrade-phase05 -->
+**Upgrade Phase 5 — 2026-10-18 IST:**
+- `cloud_architect.py`: off by default; privacy gate, consent and sandbox verification.
+- `demonstration.py`: Show Me Once; `Actions.request_demonstration`, hook process `python -m jarvis.demonstration --hook`.
+- `deliberation.classify_failure` + `FailureRouter`: called from `Brain.recover_task`; queues in `.jarvis-runtime/learning-queues/`.
+
+[Design and security model](../artifacts/jarvis-audit/phase-05/security-and-design.md).
+<!-- /upgrade-phase05 -->
+
 <!-- upgrade-phase04 -->
 **Upgrade Phase 4 — 2026-10-18 IST:** `reasoning_bank.py` (lessons → `BrainClient` `reasoning_lessons`), `viking_memory.py` + `viking_worker.py` (OpenViking vault index → `ObsidianMemory.task_context` `vault_hits`, watchdog service "Hierarchical vault index"), `exploration.py` (isolated curriculum) and `learning_memory.py` (wiring, idle maintenance in `SelfEvolution`). [Architecture and safety model](../artifacts/jarvis-audit/phase-04/architecture-and-provenance.md).
 <!-- /upgrade-phase04 -->

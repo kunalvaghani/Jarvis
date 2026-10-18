@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase05 -->
+**2026-10-18 — Upgrade Phase 5 of 8 (cloud architect escalation + Show Me Once): PASS for locally executable checks; real-provider checks BLOCKED (not authorized).** An optional, off-by-default free-tier cloud consultation sits behind a strict privacy gate and sandbox verification. Consented one-click demonstrations become verified provisional skills. Failure routing is bounded. Full regression **3,315 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 5 evidence](app/artifacts/jarvis-audit/phase-05/README.md).
+<!-- /upgrade-phase05 -->
+
 <!-- upgrade-phase04 -->
 **2026-10-18 — Upgrade Phase 4 of 8 (exploration + ReasoningBank + OpenViking): PASS for locally executable checks.** Verified-outcome lessons for the planner, a read-only hierarchical vault index on a local OpenViking server, and sandbox-only exploration. Full regression **3,277 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 4 evidence](app/artifacts/jarvis-audit/phase-04/README.md).
 <!-- /upgrade-phase04 -->

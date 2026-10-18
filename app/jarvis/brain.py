@@ -710,6 +710,24 @@ class Brain:
             state.record_failure(row)
         self.checkpoint("action_failed", action=step["action"], target=step["value"], evidence=str(failure))
         self.actions.report("repair", "Task failure recorded: " + str(failure)[:300])
+        from .deliberation import Deliberation
+        deliberation = getattr(self.actions, "deliberation", None)
+        if isinstance(deliberation, Deliberation):
+            task_id = state.identity() if isinstance(state, TaskState) else "task"
+            route = deliberation.route_failure(task_id, row, {"skill_degraded": False})
+            self.checkpoint("recovery_route", action=step["action"], evidence=route["category"] + " -> " + route["route"])
+            if route["route"] == "stop_request_authorization":
+                raise ValueError("Task paused: this step needs your authorization before Jarvis tries again. " + str(failure)[:200])
+            if route["route"] == "show_me_once" and len(failures) >= 2 and hasattr(self.actions, "request_demonstration"):
+                # The control could not be found twice: pause (no automation while recording) and ask once.
+                import win32gui
+                handle = win32gui.GetForegroundWindow()
+                threading.Thread(target=self.actions.request_demonstration, args=(step.get("value", "requested"), handle),
+                                 name="jarvis-show-me-once", daemon=True).start()
+                raise ValueError("Task paused: I can't reliably find " + str(step.get("value", "that control"))[:80] +
+                                 ". Click it once while demonstration recording is enabled, then ask me again.")
+            # Other routes (capability discovery, cloud advice) are escalations offered to the user;
+            # ordinary local replanning below keeps its existing max_recoveries bound.
         if cancelled():
             raise ValueError("Task cancelled before recovery.")
         if failure.attempted and not replannable(step, ToolRegistry(self.actions).specs):

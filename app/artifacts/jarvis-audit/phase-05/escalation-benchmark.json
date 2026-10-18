@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-10-18T16:51:37+00:00",
+  "provider": "MOCK recording adapter (no real cloud request)",
+  "privacy_trace": [
+    {
+      "case": "windows_path",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: filename, path, private_context"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "fake_credential",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: secret"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "internal_module_name",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: internal_name"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "source_snippet",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: path, private_context, source_snippet"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "log_excerpt",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: filename, log, private_context"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "email_address",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: email, private_context, secret"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "private_url",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: path, private_context, url"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "personal_context",
+      "status": "local",
+      "reasons": [
+        "Payload refused by the privacy gate: private_context"
+      ],
+      "outbound_requests": 0
+    },
+    {
+      "case": "unclassified_provenance",
+      "status": "local",
+      "reasons": [
+        "Provenance must be classified as public_fact or synthetic; anything else stays local."
+      ],
+      "outbound_requests": 0
+    }
+  ],
+  "adversarial_cases_leaked": 0,
+  "privacy_gate_generic": {
+    "n": 20,
+    "p50_ms": 4.62,
+    "max_ms": 4.94
+  },
+  "refusal_path": {
+    "n": 9,
+    "p50_ms": 11.33,
+    "max_ms": 398.16
+  },
+  "advice_sandbox_verification": {
+    "status": "verified_candidate",
+    "ms": 955.9,
+    "outbound_payload_keys": [
+      "category",
+      "constraints",
+      "examples",
+      "question",
+      "statement"
+    ]
+  },
+  "failure_routing_per_call_ms": 0.0117,
+  "demonstration": {
+    "capture_ms_including_400ms_settle": 3901.6,
+    "replay_ms": 14063.5,
+    "replay_verified": true,
+    "provider": "ufo",
+    "stored_selector_fields": [
+      "ancestry",
+      "automation_id",
+      "class_name",
+      "control_type",
+      "name"
+    ]
+  }
+}

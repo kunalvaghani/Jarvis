@@ -1,0 +1,16 @@
+ README.md                                          |   4 +
+ app/README.md                                      |  18 +
+ app/config/config.json                             |   8 +
+ app/config/runtime_manifest.json                   |   6 +
+ app/docs/system-map.md                             |   9 +
+ app/jarvis/actions.py                              |  18 +
+ app/jarvis/brain.py                                |  18 +
+ app/jarvis/cloud_architect.py                      | 332 +++++++++++++++++
+ app/jarvis/config_contract.py                      |   2 +-
+ app/jarvis/deliberation.py                         |  74 ++++
+ app/jarvis/demonstration.py                        | 358 +++++++++++++++++++
+ .../verification/phase05_escalation_benchmark.py   | 156 ++++++++
+ app/tests/fixtures/uia_fixture_app.py              |   5 +-
+ app/tests/test_phase05_escalation_demonstration.py | 391 +++++++++++++++++++++
+ 14 files changed, 1397 insertions(+), 2 deletions(-)
+artifacts/jarvis-audit/phase-05/ (this evidence packet)

@@ -961,6 +961,24 @@ class Actions:
             self.report("answer_error", "I couldn't answer from " + document.name + ": " + str(exc)[:200])
             self.report("media_card", card("sad", document.name, str(exc)[:110]))
 
+    def request_demonstration(self, action_name, handle, cancelled=lambda: False):
+        """Show Me Once: ask by voice, record one consented click in that window, keep it for verification."""
+        settings = self.config.get('demonstration', {}) if isinstance(self.config, dict) else {}
+        if not settings.get('enabled', False):
+            return None
+        from .demonstration import DemonstrationSession
+        session = DemonstrationSession(self.base, self._approve, lambda text: self.report('spoken_reply', text))
+        try:
+            session.request(str(action_name)[:80], handle, cancelled)
+            session.start_hook()
+            steps = session.pump(timeout=90, cancelled=cancelled)
+        except ValueError as exc:
+            self.report('repair', 'Demonstration not recorded: ' + str(exc)[:200])
+            return None
+        self.report('spoken_reply', ('Thanks. I recorded that ' + str(action_name)[:60] + ' action and will verify it before '
+                                     'trusting it.') if steps else 'No demonstration was recorded.')
+        return session
+
     def _approve(self, kind, detail, cancelled):
         if self.approval_handler is None:
             raise ValueError("Open the Jarvis app to approve this action.")

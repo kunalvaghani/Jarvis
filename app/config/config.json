@@ -1563,5 +1563,13 @@
     "enabled": true,
     "applications": ["blender"],
     "max_episodes_per_day": 6
+  },
+  "cloud_architect": {
+    "enabled": false,
+    "consent_minutes": 30
+  },
+  "demonstration": {
+    "enabled": true,
+    "max_steps": 10
   }
 }
