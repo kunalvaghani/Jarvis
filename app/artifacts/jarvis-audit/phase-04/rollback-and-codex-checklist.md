@@ -5,7 +5,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert <phase-04-commit-sha>     # on claude
+git revert 6691425194dad5d221aa93bdf1b3442df4bc12c4     # on claude
 ```
 
 Disable without reverting (`config/config.json`): `viking_memory.enabled: false` (no OpenViking server),
