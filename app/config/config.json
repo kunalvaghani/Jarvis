@@ -1543,5 +1543,25 @@
     "min_available_ram_mb": 1536,
     "office_timeout_seconds": 90,
     "blender_timeout_seconds": 120
+  },
+  "reasoning_bank": {
+    "enabled": true,
+    "lessons_per_plan": 3,
+    "char_budget": 1200
+  },
+  "viking_memory": {
+    "enabled": true,
+    "port": 19330,
+    "processing_mode": "vectors_only",
+    "semantic_directories": [],
+    "embedding_model": "ollama/nomic-embed-text",
+    "embedding_dimension": 768,
+    "summary_model": "ollama/qwen3.5:0.8b",
+    "timeout_seconds": 900
+  },
+  "exploration": {
+    "enabled": true,
+    "applications": ["blender"],
+    "max_episodes_per_day": 6
   }
 }

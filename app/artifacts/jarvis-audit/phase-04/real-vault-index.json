@@ -1,0 +1,153 @@
+{
+ "vault_files": 1194,
+ "start_ok": true,
+ "start_s": 27.0,
+ "start_error": null,
+ "index_s": 63.7,
+ "report": {
+  "at": "2026-10-18T16:02:23+00:00",
+  "changes": 50,
+  "removed": 0,
+  "duplicates": 1,
+  "directories": [
+   {
+    "directory": ".",
+    "uri": "viking://resources/jarvis_vault/vault_root",
+    "files": 13,
+    "mode": "vectors_only",
+    "seconds": 15.8,
+    "verified_links": 12
+   },
+   {
+    "directory": "Daily",
+    "uri": "viking://resources/jarvis_vault/daily",
+    "files": 16,
+    "mode": "vectors_only",
+    "seconds": 20.9,
+    "verified_links": 16
+   },
+   {
+    "directory": "Jarvis Conversations",
+    "uri": "viking://resources/jarvis_vault/jarvis_conversations",
+    "files": 2,
+    "mode": "vectors_only",
+    "seconds": 4.4,
+    "verified_links": 2
+   },
+   {
+    "directory": "Jarvis Documents",
+    "uri": "viking://resources/jarvis_vault/jarvis_documents",
+    "files": 3,
+    "mode": "vectors_only",
+    "seconds": 3.7,
+    "verified_links": 1
+   },
+   {
+    "directory": "Jarvis Repos",
+    "uri": "viking://resources/jarvis_vault/jarvis_repos",
+    "files": 15,
+    "mode": "vectors_only",
+    "seconds": 18.4,
+    "verified_links": 15
+   }
+  ],
+  "failed": []
+ },
+ "reindex_unchanged_s": 0.51,
+ "reindex_dirs": [],
+ "find_ms_p50": 127.30000000000001,
+ "find_ms": [
+  [
+   368.8,
+   "openviking-find-http",
+   null
+  ],
+  [
+   121.8,
+   "openviking-find-http",
+   null
+  ],
+  [
+   110.8,
+   "openviking-find-http",
+   null
+  ],
+  [
+   132.8,
+   "openviking-find-http",
+   null
+  ]
+ ],
+ "top_hits": [
+  [
+   "which github repositories did jarvis learn",
+   [
+    [
+     "Jarvis Repos/index.md",
+     0.8886
+    ],
+    [
+     "Jarvis Skills.md",
+     0.8709
+    ]
+   ]
+  ],
+  [
+   "what happened in my daily notes",
+   [
+    [
+     "Jarvis Brain.md",
+     0.8305
+    ],
+    [
+     null,
+     0.7486
+    ]
+   ]
+  ],
+  [
+   "documents I dropped on the island",
+   [
+    [
+     "Welcome.md",
+     0.7398
+    ],
+    [
+     "Jarvis Repos/firecrawl__pdf-inspector.md",
+     0.7213
+    ]
+   ]
+  ],
+  [
+   "jarvis memory conversations",
+   [
+    [
+     "Jarvis Conversations/index.md",
+     0.8668
+    ],
+    [
+     "Jarvis Conversations/2026-10-12.md",
+     0.8461
+    ]
+   ]
+  ]
+ ],
+ "diagnostics": {
+  "server_ready": true,
+  "files": 49,
+  "verified_links": 46,
+  "duplicates": 0,
+  "directories": 5,
+  "last_report": {
+   "at": "2026-10-18T16:03:27+00:00",
+   "changes": 1,
+   "removed": 0,
+   "duplicates": 1,
+   "directories": [],
+   "failed": []
+  },
+  "error": null
+ },
+ "server_rss_mb": 441.7,
+ "vault_unchanged": true
+}

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Fixture Reports</title></head>
+<body>
+  <h1>Fixture Reports</h1>
+  <label for="format">Format</label>
+  <input id="format" placeholder="csv or pdf">
+  <button id="export" onclick="exportReport()">Export</button>
+  <button id="help" onclick="document.getElementById('status').textContent='Help shown'">Help</button>
+  <p id="status" role="status"></p>
+  <script>
+    function exportReport() {
+      const format = document.getElementById('format').value.trim();
+      document.getElementById('status').textContent = ['csv', 'pdf'].includes(format)
+        ? 'Exported report.' + format : 'Choose a format first';
+    }
+  </script>
+</body>
+</html>

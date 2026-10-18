@@ -335,6 +335,14 @@ class BrainClient:
         provider = getattr(self, 'realtime_provider', None)
         if provider and data.get('goal') and operation in {'plan', 'replan', 'next_step'}:
             data['realtime_context'] = provider(data['goal'], cancelled)
+        lessons = getattr(self, 'lesson_provider', None)
+        if lessons and data.get('goal') and operation in {'plan', 'replan', 'next_step'}:
+            try:
+                found = lessons(data['goal'], cancelled)
+                if found:
+                    data['reasoning_lessons'] = found  # bounded ReasoningBank items, never raw logs
+            except Exception:  # Broad by design: lesson retrieval is optional context, not a planning dependency.
+                pass
         memory = getattr(self, "memory", None)
         if memory is not None and data.get("goal"):
             if operation in {'code_plan', 'code_edit'}:

@@ -1,0 +1,21 @@
+ app/.gitignore                                     |   1 +
+ app/config/config.json                             |  20 +
+ app/config/runtime_manifest.json                   |   7 +
+ app/jarvis/actions.py                              |   6 +
+ app/jarvis/brain.py                                |   8 +
+ app/jarvis/brain_worker.py                         |   7 +-
+ app/jarvis/config_contract.py                      |   2 +-
+ app/jarvis/exploration.py                          | 318 ++++++++++++++++
+ app/jarvis/learning_memory.py                      | 152 ++++++++
+ app/jarvis/local_embeddings.py                     |  49 +++
+ app/jarvis/obsidian_memory.py                      |   8 +
+ app/jarvis/reasoning_bank.py                       | 374 +++++++++++++++++++
+ app/jarvis/self_evolution.py                       |  27 ++
+ app/jarvis/viking_memory.py                        | 413 +++++++++++++++++++++
+ app/jarvis/viking_worker.py                        |  80 ++++
+ app/main.py                                        |   9 +
+ app/requirements/openviking.txt                    |   2 +
+ .../verification/phase04_memory_benchmark.py       | 131 +++++++
+ app/tests/fixtures/exploration_app.html            |  19 +
+ app/tests/test_phase04_learning_memory.py          | 341 +++++++++++++++++
+ 20 files changed, 1970 insertions(+), 4 deletions(-)

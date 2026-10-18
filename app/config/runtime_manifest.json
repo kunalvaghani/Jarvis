@@ -421,6 +421,13 @@
     "writes": "Runtime approval, temporary copy, independent readback, backup in .jarvis-runtime/backups/documents, atomic replace or no-clobber publication; never retried.",
     "processes": "Owned short-lived workers in a Windows job object; native Office runs as a new hidden instance whose own PID is the only one that may be stopped."
   },
+  "learning_memory": {
+    "modules": ["jarvis.reasoning_bank", "jarvis.viking_memory", "jarvis.viking_worker", "jarvis.exploration", "jarvis.learning_memory", "jarvis.local_embeddings"],
+    "reasoning_bank": ".jarvis-runtime/reasoning_bank/bank.sqlite3; bounded lessons for plan/replan/next_step.",
+    "openviking": "Unmodified openviking==0.5.0 (AGPL-3.0) in .venv-openviking (requirements/openviking.txt), owned loopback server on port 19330, workspace .jarvis-runtime/openviking; registered with the watchdog as 'Hierarchical vault index'. The Obsidian vault is read only.",
+    "embedding_model": "Ollama nomic-embed-text (Apache-2.0), pulled locally.",
+    "exploration": "Isolated environments only (headless browser context on an approved loopback origin, background Blender sandbox); desktop GUI exploration disabled without a verified VM."
+  },
   "gmail_api": {
     "module": "jarvis.gmail_api",
     "dependencies": "Optional requirements/gmail.txt installed into .venv by launchers/Connect Jarvis Gmail API.cmd; google.auth and google_auth_oauthlib are loaded only during account setup/use.",

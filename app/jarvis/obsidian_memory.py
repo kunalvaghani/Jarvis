@@ -63,6 +63,14 @@ class ObsidianMemory:
             facts = [f["text"] for f in curator.relevant(goal, 5)]
             if facts:
                 data = {**data, "memory_facts": facts}  # e.g. "Kunal prefers Arijit Singh songs".
+        vault = getattr(self, "viking_provider", None)
+        if callable(vault) and isinstance(data, dict):
+            try:
+                hits = vault(goal)
+                if hits:
+                    data = {**data, "vault_hits": hits}  # Hierarchical vault index; summaries are hints, paths are sources.
+            except Exception as exc:  # Broad by design: the index is optional; its failure stays visible.
+                self.viking_error = type(exc).__name__
         situation = getattr(self, "situation", None)
         if callable(situation) and isinstance(data, dict):
             try:

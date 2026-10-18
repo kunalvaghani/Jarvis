@@ -219,6 +219,9 @@ class Actions:
                 self.acquisition.finished(task)
             except (ValueError, OSError):
                 pass  # Learning failure never changes an independently verified task.
+            learning = getattr(self, 'learning', None)
+            if learning is not None:
+                learning.learn_from_task(task)  # ReasoningBank strategies/anti-patterns; never raises.
         self.task_state.on_finish = completed_task
         self.hands_free = self.hands_free_state = None  # Set by the app while the microphone is on.
         from .context_hub import prompt_block
@@ -228,6 +231,9 @@ class Actions:
         from .brain import Brain
         self.brain = Brain(self, base, config.get("brain", {}))
         self.brain.client.context_provider = self.knowledge.planning_context
+        from .learning_memory import LearningMemory
+        # ReasoningBank lessons, OpenViking vault index and isolated exploration (each optional).
+        self.learning = LearningMemory(self, config).attach()
         from .live_app_context import LiveAppContext
         self.live_app = LiveAppContext()
         self.brain.client.app_context_provider = self.live_app.snapshot

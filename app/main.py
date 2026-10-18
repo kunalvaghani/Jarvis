@@ -91,6 +91,12 @@ class App:
                 and not self.config.get('_ui_verification', False))
         if self.config.get('docker_runtime', {}).get('enabled', False) and not self.config.get('_ui_verification', False):
             self.docker_service.repair()
+        viking = getattr(getattr(self.actions, 'learning', None), 'viking', None)
+        if viking is not None and not self.config.get('_ui_verification', False):
+            # Owned loopback OpenViking server for the hierarchical vault index (bounded, silent recovery).
+            self.watchdog.register('Hierarchical vault index', viking.healthy, viking.repair_async,
+                lambda: not self.closing)
+            viking.repair_async()
         selector = self.actions.knowledge.context_selector
         if selector:
             self.watchdog.register('Context selector', selector.healthy, selector.repair,
@@ -653,6 +659,9 @@ class App:
             (BASE / ".jarvis-runtime" / "stop").touch()
         self.watchdog.close()
         self.docker_service.close()
+        viking = getattr(getattr(self.actions, 'learning', None), 'viking', None)
+        if viking is not None:
+            viking.stop()  # Only the owned OpenViking server tree; the index stays on disk.
         self.model_recovery.close()
         self.stop()
         self.speech.close()

@@ -229,6 +229,8 @@ class SelfEvolution:
         self._resource_checked = (-float('inf'),False)
         self.skill_repairs = {}         # skill_id -> failure causes awaiting a validated FIX.
         self._skills_checked_at = -float('inf')
+        self._memory_checked_at = -float('inf')
+        self.last_memory_report = None
         self._load()
 
     # --- persistence (crash-safe, atomic) --------------------------------------------------------
@@ -475,12 +477,37 @@ class SelfEvolution:
                            'A repair is applied only after validation')
         return notes
 
+    def memory_maintenance(self):
+        """Idle: incremental vault index, lesson compaction, one isolated exploration episode (all preemptible)."""
+        learning = getattr(self.actions, 'learning', None)
+        if learning is None:
+            return None
+        from .learning_memory import options, sandbox_registry_factory
+        factory = None
+        exploration = options(getattr(self.actions, 'config', {}), 'exploration')
+        explorer = getattr(learning, 'explorer', None)
+        if explorer is not None:
+            day = datetime.now(timezone.utc).date().isoformat()
+            count = explorer.state.get('episodes_today', {}).get(day, 0)
+            if count < exploration['max_episodes_per_day']:
+                factory = sandbox_registry_factory(self.actions)
+                explorer.state['episodes_today'] = {day: count + 1}
+        self.last_memory_report = learning.maintenance(self._cancelled, factory)
+        verified = (self.last_memory_report or {}).get('exploration') or {}
+        if verified.get('status') == 'completed':
+            self._card('learned', 'Explored: ' + str(verified.get('goal_id', ''))[:40],
+                       'Verified in an isolated sandbox', 'Lesson saved; no action taken on your files')
+        return self.last_memory_report
+
     def _run(self):
         while not self.stop.wait(self.options["poll_seconds"]):
             try:
                 if self._idle() and self.clock() - self._skills_checked_at >= 600:
                     self._skills_checked_at = self.clock()
                     self.skill_maintenance()
+                if self._idle() and self.clock() - self._memory_checked_at >= 1800:
+                    self._memory_checked_at = self.clock()
+                    self.memory_maintenance()
                 if self._idle():
                     self.refresh_backlog()
                     job = self.next_job()

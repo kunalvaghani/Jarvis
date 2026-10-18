@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-10-18T15:58:19+00:00",
+  "scope": "Authored retrieval oracle (12 lessons, 12 paraphrased queries) and the isolated loopback fixture app.",
+  "retrieval": {
+    "token_overlap_precision_at_1": 0.583,
+    "reasoning_bank_embedding_precision_at_1": 0.917,
+    "retrieve_latency": {
+      "n": 12,
+      "p50_ms": 101.36,
+      "p95_ms": 116.36
+    }
+  },
+  "exploration": {
+    "with_lessons": {
+      "export_attempts_until_verified": 2,
+      "episode": {
+        "n": 3,
+        "p50_ms": 2132.01,
+        "p95_ms": 2132.01
+      }
+    },
+    "without_lessons": {
+      "export_attempts_until_verified": null,
+      "episode": {
+        "n": 4,
+        "p50_ms": 1906.84,
+        "p95_ms": 2035.6
+      }
+    }
+  }
+}

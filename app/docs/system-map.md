@@ -1,5 +1,9 @@
 # Jarvis system map
 
+<!-- upgrade-phase04 -->
+**Upgrade Phase 4 — 2026-10-18 IST:** `reasoning_bank.py` (lessons → `BrainClient` `reasoning_lessons`), `viking_memory.py` + `viking_worker.py` (OpenViking vault index → `ObsidianMemory.task_context` `vault_hits`, watchdog service "Hierarchical vault index"), `exploration.py` (isolated curriculum) and `learning_memory.py` (wiring, idle maintenance in `SelfEvolution`). [Architecture and safety model](../artifacts/jarvis-audit/phase-04/architecture-and-provenance.md).
+<!-- /upgrade-phase04 -->
+
 <!-- upgrade-phase03 -->
 **Upgrade Phase 3 — 2026-10-17 IST:** `skill_store.py` (SQLite history, `.skill_id` identities), `skill_evolution.py` (living ranking, trust, CAPTURED/FIX/DERIVED) and `mcp_synthesis.py` (generated MCP tools in `jarvis-mcp-runtime:1`) extend `SkillMemory`, `mcp_bridge` and the idle `SelfEvolution` loop; ToolRegistry remains the only executor. [Implementation and provenance](../artifacts/jarvis-audit/phase-03/implementation-and-provenance.md).
 <!-- /upgrade-phase03 -->

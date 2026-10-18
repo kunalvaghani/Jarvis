@@ -14,6 +14,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase04 -->
+**2026-10-18 — Upgrade Phase 4 of 8 (exploration + ReasoningBank + OpenViking): PASS for locally executable checks.** Jarvis now distils **ReasoningBank** lessons (strategies from independently verified outcomes, anti-patterns from failures; generic, bounded, with conditions, evidence, confidence, contradiction and supersession) into `.jarvis-runtime/reasoning_bank/` and gives the planner at most three lessons (≤1,200 characters). The Obsidian vault is indexed **read-only** by an unmodified **OpenViking 0.5.0** server (AGPL-3.0, own `.venv-openviking`, loopback port 19330, local `nomic-embed-text` embeddings) with verified links back to source notes, incremental re-indexing, de-duplication and recovery; `Jarvis Skills` stays owned by the skill store. An **exploration curriculum** learns only in isolated environments (fresh headless browser context on an approved loopback origin; background Blender sandbox) — desktop GUI exploration stays disabled without a verified VM. Measured: lesson retrieval precision@1 0.583 → 0.917 (authored oracle); real vault indexed in 63.7 s with 46/49 verified links, search p50 127 ms, vault unchanged; OpenViking ~442 MB RAM. Full regression **3,277 passed / 147 skipped / 0 failed**; launcher ready. [Evidence, safety model and limits](artifacts/jarvis-audit/phase-04/README.md).
+<!-- /upgrade-phase04 -->
+
 <!-- upgrade-phase03 -->
 **2026-10-17 — Upgrade Phase 3 of 8 (living skills + MCP synthesis): PASS for locally executable checks.** Skills now have stable OpenSpace-style identities (`.skill_id` in Jarvis-owned folders, SQLite mapping for Obsidian/upstream guides) and a transactional history in `.jarvis-runtime/skills/skill_store.sqlite3` (selected / applied / completed-verified / fallback / failed with causes, counted once per task). Ranking blends relevance with verified reliability, recency, risk and cost; disabled skills are never selected. CAPTURED, FIX and DERIVED evolutions write provisional guides to `.jarvis-runtime/skills/evolved/` only after schema/secret checks and a real verified execution through the ToolRegistry; trust rises only from verified use in other tasks. Genuine capability gaps can be filled by a generated stdlib-only MCP tool (official MCP SDK 2.3.0) tested in a network-less, read-only Docker container and registered only after approval; every call still needs approval. Full regression **3,257 passed / 147 skipped / 0 failed**; launcher ready. Live local-model authoring of new skills/specs was not run. [Evidence, security model and rollback](artifacts/jarvis-audit/phase-03/README.md).
 <!-- /upgrade-phase03 -->
@@ -1708,6 +1712,14 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
   (Docker Desktop, network only during the build). Approved tools are listed in
   `.jarvis-runtime/mcp/generated/registry.json` and appear to `mcp_status`/`mcp_call` as `gen-<name>`; `.jarvis/mcp.json`
   entries with the same name win. Set an entry's `"enabled": false` to disable it.
+
+### Reasoning lessons, vault index and exploration
+
+| Section | Keys (defaults) | Notes |
+| --- | --- | --- |
+| `reasoning_bank` | `enabled` (true), `lessons_per_plan` (3), `char_budget` (1200) | Store: `.jarvis-runtime/reasoning_bank/bank.sqlite3` |
+| `viking_memory` | `enabled` (true), `port` (19330), `processing_mode` (`vectors_only`), `semantic_directories` ([]) | Needs `.venv-openviking` (`requirements/openviking.txt`) and `ollama pull nomic-embed-text`; adds ~442 MB RAM. L0/L1 summaries per listed directory are model-generated hints. |
+| `exploration` | `enabled` (true), `applications` (["blender"]), `max_episodes_per_day` (6) | Idle-only, sandboxed; desktop GUI exploration is not available without a verified VM. |
 
 ## Integrations and toolkits
 
