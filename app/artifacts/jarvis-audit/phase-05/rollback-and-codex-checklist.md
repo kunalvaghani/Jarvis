@@ -5,7 +5,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert <phase-05-commit-sha>     # on claude
+git revert 105b97b8475974fe386a57bdcb81de82d0d1acc0     # on claude
 ```
 
 Disable without reverting: `cloud_architect.enabled` is already `false` by default; set `demonstration.enabled: false`
