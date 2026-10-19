@@ -20,7 +20,7 @@ def text(parent, value='', **kw):
                     font=kw.pop('font',('Segoe UI',9)),**kw)
 
 
-from .approval_receipt import approval_digest  # noqa: E402  (identity of the exact request on a card)
+from .approval_receipt import APPROVAL_TTL, approval_digest  # noqa: E402  (identity of the exact request on a card)
 
 
 class Approval:
@@ -35,7 +35,9 @@ class Approval:
         self.kind,self.detail,self.answer,self.ready,self.cancelled = payload
         self.created = time.monotonic() if now is None else now
         self.token = secrets.token_hex(16)
-        self.digest = approval_digest(self.kind, self.detail)
+        # The requester's one-time id, read once at creation; later edits to the answer cannot change it.
+        self.request = str(self.answer.get('request', '')) if isinstance(self.answer, dict) else ''
+        self.digest = approval_digest(self.kind, self.detail, self.request)
         self.done = False
         self.lock = threading.Lock()
 
@@ -45,14 +47,14 @@ class Approval:
                 return False
             now = time.monotonic() if now is None else now
             self.done = True
-            self.answer['approved'] = approved is True and not self.cancelled() and 0 <= now-self.created < 180
+            self.answer['approved'] = approved is True and not self.cancelled() and 0 <= now-self.created < APPROVAL_TTL
             if self.answer['approved']:
                 self.answer['token'], self.answer['digest'] = self.token, self.digest
             self.ready.set()
             return self.answer['approved']
 
     def expired(self, now):
-        return self.cancelled() or now-self.created >= 180
+        return self.cancelled() or now-self.created >= APPROVAL_TTL
 
     def lapse(self):
         """No answer in time, or Jarvis closing: not the same as Deny (a learned ability then stays pending)."""

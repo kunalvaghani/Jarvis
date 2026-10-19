@@ -279,7 +279,9 @@ def test_P06_gate_quarantines_resource_exhaustion(canon, tmp_path):
 
 def test_P06_gate_discards_nondeterministic_results(canon, tmp_path):
     report = gate_run(research_for(canon, tmp_path), {'base_seconds': 0.55, 'max_seconds': 1.0})
-    assert report['decision'] == 'discarded'
+    # Repeats disagree on a computed metric: discarded even when random noise happens to look like a gain
+    # (this test was flaky before the rule existed, when lucky noise could pass the statistical check).
+    assert report['decision'] == 'discarded' and report['reason'] == 'nondeterministic result for a deterministic benchmark'
     assert report['checks']['target']['deterministic'] is False
 
 

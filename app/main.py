@@ -355,16 +355,16 @@ class App:
             self.root.after(0, lambda: self.desk.decide(approved, token))
 
     def request_approval(self, kind, detail, cancelled):
-        from jarvis.approval_receipt import approval_digest
-        answer = {"approved": False}
+        from jarvis.approval_receipt import new_request_id, receipt_valid
+        request, issued = new_request_id(), time.monotonic()  # kept locally: an answer cannot supply them
+        answer = {"approved": False, "request": request}
         ready = threading.Event()
         self.report("approval", (kind, detail, answer, ready, cancelled))
         while not ready.wait(.1):
             if cancelled():
                 return False
-        # Final boundary: only an approval issued for this exact request (kind and detail) authorizes it.
-        return (answer["approved"] is True and answer.get("digest") == approval_digest(kind, detail)
-                and not cancelled())
+        # Final boundary: only a receipt for this exact pending request, within its lifetime, authorizes it.
+        return receipt_valid(answer, kind, detail, request, issued, cancelled)
 
     def show_command_prompt(self):
         self.desk.show('Console')

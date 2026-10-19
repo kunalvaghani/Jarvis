@@ -1243,7 +1243,9 @@ class AbilityForge:
             return self.decider(row, detail)
         if getattr(self.actions, "approval_handler", None) is None:
             return None
-        answer, ready = {"approved": False}, threading.Event()
+        from .approval_receipt import new_request_id, receipt_valid
+        request, issued = new_request_id(), time.monotonic()  # kept locally: an answer cannot supply them
+        answer, ready = {"approved": False, "request": request}, threading.Event()
         self.actions.approvals_waiting = getattr(self.actions, "approvals_waiting", 0) + 1  # Voice "approve"/"reject" too.
         try:
             self.actions.report("approval", ("learned_ability", detail, answer, ready, cancelled))
@@ -1256,9 +1258,8 @@ class AbilityForge:
         if answer.get("expired"):
             return None
         if answer.get("approved") is True:
-            # Only an approval issued for this exact card (kind and detail) authorizes it.
-            from .approval_receipt import approval_digest
-            return answer.get("digest") == approval_digest("learned_ability", detail)
+            # Only a receipt for this exact pending card, within its lifetime, authorizes it.
+            return receipt_valid(answer, "learned_ability", detail, request, issued, cancelled)
         return answer.get("approved") if type(answer.get("approved")) is bool else None
 
     def _approval_digest(self, row):

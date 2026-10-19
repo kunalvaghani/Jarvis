@@ -1,0 +1,150 @@
+FF...                                                                    [100%]
+================================== FAILURES ===================================
+_ test_prior_receipt_cannot_approve_new_request_with_identical_display_text[application] _
+
+requester = 'application'
+
+    @pytest.mark.parametrize('requester', ['application', 'learned_ability'])
+    def test_prior_receipt_cannot_approve_new_request_with_identical_display_text(requester):
+        import main
+        from jarvis.repo_abilities import AbilityForge
+    
+        saved = {}
+        cards = []
+        simulated_effects = []
+    
+        def report(kind, payload):
+            assert kind == 'approval'
+            card = Approval(payload)
+            cards.append(card)
+            if len(cards) == 1:
+                # The first request genuinely receives one approved decision.
+                assert card.decide(True)
+                saved.update(card.answer)
+            else:
+                # Replay the old response; no decision occurs for the new card.
+                assert card.token != saved['token']
+                assert card.digest == saved['digest']
+                card.answer.update(saved)
+                card.ready.set()
+    
+        if requester == 'application':
+            app = SimpleNamespace(report=report)
+            request = lambda: main.App.request_approval(app, 'fixture', 'identical display scope', lambda: False)
+        else:
+            forge = AbilityForge.__new__(AbilityForge)
+            forge.decider = None
+            forge.actions = SimpleNamespace(report=report, approval_handler=object(), approvals_waiting=0)
+            forge.approval_text = lambda row: 'identical display scope'
+            request = lambda: forge.ask({}, lambda: False)
+    
+        first = request()
+        if first:
+            simulated_effects.append('first')
+>       second = request()
+
+tests\test_tmp_codex_original_replay.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_tmp_codex_original_replay.py:39: in <lambda>
+    request = lambda: main.App.request_approval(app, 'fixture', 'identical display scope', lambda: False)
+main.py:362: in request_approval
+    self.report("approval", (kind, detail, answer, ready, cancelled))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kind = 'approval'
+payload = ('fixture', 'identical display scope', {'approved': False, 'request': '6ca3eb58c8b368d1b05870cb46375880'}, <threading....eipt_cannot_approve_new_request_with_identical_display_text.<locals>.<lambda>.<locals>.<lambda> at 0x000001CD7276AB00>)
+
+    def report(kind, payload):
+        assert kind == 'approval'
+        card = Approval(payload)
+        cards.append(card)
+        if len(cards) == 1:
+            # The first request genuinely receives one approved decision.
+            assert card.decide(True)
+            saved.update(card.answer)
+        else:
+            # Replay the old response; no decision occurs for the new card.
+            assert card.token != saved['token']
+>           assert card.digest == saved['digest']
+E           AssertionError: assert '4e9027212ad6...0d3e0986d986c' == '9ac4ef22449b...ce235b7f7f9aa'
+E             
+E             - 9ac4ef22449b1a15d5246004a895f71253ac56937c3f8399e82ce235b7f7f9aa
+E             + 4e9027212ad6b21faee8e54b51c6fc4ba7417604d32c22cc2bc0d3e0986d986c
+
+tests\test_tmp_codex_original_replay.py:33: AssertionError
+_ test_prior_receipt_cannot_approve_new_request_with_identical_display_text[learned_ability] _
+
+requester = 'learned_ability'
+
+    @pytest.mark.parametrize('requester', ['application', 'learned_ability'])
+    def test_prior_receipt_cannot_approve_new_request_with_identical_display_text(requester):
+        import main
+        from jarvis.repo_abilities import AbilityForge
+    
+        saved = {}
+        cards = []
+        simulated_effects = []
+    
+        def report(kind, payload):
+            assert kind == 'approval'
+            card = Approval(payload)
+            cards.append(card)
+            if len(cards) == 1:
+                # The first request genuinely receives one approved decision.
+                assert card.decide(True)
+                saved.update(card.answer)
+            else:
+                # Replay the old response; no decision occurs for the new card.
+                assert card.token != saved['token']
+                assert card.digest == saved['digest']
+                card.answer.update(saved)
+                card.ready.set()
+    
+        if requester == 'application':
+            app = SimpleNamespace(report=report)
+            request = lambda: main.App.request_approval(app, 'fixture', 'identical display scope', lambda: False)
+        else:
+            forge = AbilityForge.__new__(AbilityForge)
+            forge.decider = None
+            forge.actions = SimpleNamespace(report=report, approval_handler=object(), approvals_waiting=0)
+            forge.approval_text = lambda row: 'identical display scope'
+            request = lambda: forge.ask({}, lambda: False)
+    
+        first = request()
+        if first:
+            simulated_effects.append('first')
+>       second = request()
+
+tests\test_tmp_codex_original_replay.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_tmp_codex_original_replay.py:45: in <lambda>
+    request = lambda: forge.ask({}, lambda: False)
+jarvis\repo_abilities.py:1251: in ask
+    self.actions.report("approval", ("learned_ability", detail, answer, ready, cancelled))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kind = 'approval'
+payload = ('learned_ability', 'identical display scope', {'approved': False, 'request': '78231f061ccbd791c6f2fd7ea7b49c9a'}, <th...eipt_cannot_approve_new_request_with_identical_display_text.<locals>.<lambda>.<locals>.<lambda> at 0x000001CD727D2680>)
+
+    def report(kind, payload):
+        assert kind == 'approval'
+        card = Approval(payload)
+        cards.append(card)
+        if len(cards) == 1:
+            # The first request genuinely receives one approved decision.
+            assert card.decide(True)
+            saved.update(card.answer)
+        else:
+            # Replay the old response; no decision occurs for the new card.
+            assert card.token != saved['token']
+>           assert card.digest == saved['digest']
+E           AssertionError: assert '0ab67a8d6960...036f5ce6ff595' == 'ac5150f51235...1d0abade6c2e8'
+E             
+E             - ac5150f512357bb45d39e3857f57a3ef025a0cdd80080bf84ff1d0abade6c2e8
+E             + 0ab67a8d696022de3330e6b8d36e30c6d2c4e30577ad2f61027036f5ce6ff595
+
+tests\test_tmp_codex_original_replay.py:33: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_tmp_codex_original_replay.py::test_prior_receipt_cannot_approve_new_request_with_identical_display_text[application]
+FAILED tests/test_tmp_codex_original_replay.py::test_prior_receipt_cannot_approve_new_request_with_identical_display_text[learned_ability]
+2 failed, 3 passed in 0.79s

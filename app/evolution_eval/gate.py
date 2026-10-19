@@ -220,6 +220,10 @@ class RetentionGate:
             return finish('interrupted', 'cancelled')
         if result['status'] != 'ok':
             return finish('rejected', 'target benchmark failed: ' + result['status'])
+        if not bench.get('timing', False) and not result['deterministic']:
+            # A computed (non-timing) metric must reproduce exactly; if repeats disagree, no result from it can be
+            # trusted, however lucky. Timing benchmarks are noisy by nature and are judged statistically below.
+            return finish('discarded', 'nondeterministic result for a deterministic benchmark')
         improved = (result['relative_delta'] is not None and result['relative_delta'] >= t['min_relative_improvement']
                     and result['ci95'][0] > t['ci_lower_must_exceed'])
         if not improved:

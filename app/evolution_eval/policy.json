@@ -38,7 +38,7 @@
                    "bounds": {"planning": ["str", 600], "coding": ["str", 600], "ui_automation": ["str", 600], "knowledge": ["str", 600], "tool_selection": ["str", 600], "error_recovery": ["str", 600]}}
  },
  "benchmarks": {
-  "dag_makespan": {"objective": "min", "repeats": 5, "timeout": 300},
+  "dag_makespan": {"objective": "min", "repeats": 5, "timeout": 300, "timing": true},
   "tool_selection": {"objective": "max", "repeats": 1, "timeout": 300},
   "lesson_retrieval": {"objective": "max", "repeats": 1, "timeout": 300},
   "salience_retention": {"objective": "max", "repeats": 1, "timeout": 300},
