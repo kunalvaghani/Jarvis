@@ -1,5 +1,12 @@
 # Jarvis system map
 
+<!-- upgrade-phase08 -->
+**Upgrade Phase 8 — 2026-10-19 IST (final):**
+- `cloud_architect_consult` toolkit tool (`cloud_architect.consult_tool`), fed by `FailureRouter` evidence; `Brain.recover_task` offers it once.
+- Consolidated design, schemas, approvals and recovery: [upgrade-architecture.md](upgrade-architecture.md).
+- Actual import graph: [module-dependency-map.json](../artifacts/jarvis-audit/final-codex-handoff/module-dependency-map.json).
+<!-- /upgrade-phase08 -->
+
 <!-- upgrade-phase07 -->
 **Upgrade Phase 7 — 2026-10-19 IST:**
 - Offline training pipeline; nothing in the runtime loads its models.

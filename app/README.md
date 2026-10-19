@@ -14,6 +14,15 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase08 -->
+**2026-10-19 — Upgrade Phase 8 of 8 (final integration and verification): PARTIALLY VERIFIED.** Every locally executable check passed: full regression **3,379 passed / 147 skipped (all BLOCKED environment dependencies) / 0 failed**; launcher ready; 17 cross-pillar scenarios exercised or cited from recorded real runs; 15 red-team categories attacked.
+- **Re-audit repairs.** The cloud architect gained a real, approval-gated, fail-closed entry point (`cloud_architect_consult`). A pre-existing citation regex bug in `documents.py` was fixed.
+- **Still blocked or not run.** Live Groq, the GGUF export, desktop exploration on a VM, Unreal projects, a physical-click demonstration, live voice/planner latency and post-upgrade usage metrics.
+- **Versus Phase 1.** Accuracy and safety metrics are unchanged, the tool contract error rate went from 16.7 % to 0 %, and tool search is 0.6 ms slower with 13 more tools.
+
+[Architecture](docs/upgrade-architecture.md) · [Final Codex handoff](artifacts/jarvis-audit/final-codex-handoff/README.md).
+<!-- /upgrade-phase08 -->
+
 <!-- upgrade-phase07 -->
 **2026-10-19 — Upgrade Phase 7 of 8 (Absolute Zero-inspired self-play + local LoRA training): pipeline PASS; one checkpoint qualified as experimental only.**
 - **Tasks.** Jarvis can generate verifiable reasoning tasks over a simulated computer state: deduction (predict the final state), abduction (plan a dependency-respecting tool DAG, judged by outcome) and induction (write a function that passes hidden cases).
