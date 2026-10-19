@@ -1,5 +1,7 @@
 # Jarvis — local Windows voice assistant
 
+**Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
+
 **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
 branches: `main` (integrated code), `codex`, and `claude`. Use `app/` for all source
 changes; `InsTAREELS` is an ignored local compatibility junction. Historical

@@ -44,13 +44,20 @@ def sha256_file(path):
 
 
 def foreground_gpu_busy():
-    """True when any Jarvis inference holds or waits for the GPU (read-only look at the lease registry)."""
+    """Defer for live inference or unknown lease state; an absent registry is idle."""
     state_path = BASE / '.jarvis-runtime' / 'gpu' / 'state.json'
     try:
-        state = json.loads(state_path.read_text(encoding='utf-8'))
-    except (OSError, ValueError):
+        with state_path.open('r', encoding='utf-8') as stream:
+            text = stream.read(200001)
+        if len(text) > 200000:
+            return True
+        state = json.loads(text)
+        from jarvis.gpu_scheduler import alive, validate_state
+        validate_state(state)
+    except FileNotFoundError:
         return False
-    from jarvis.gpu_scheduler import alive
+    except (OSError, ValueError, TypeError, RecursionError):
+        return True
     rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
     return any(alive(row) for row in rows)
 
@@ -88,6 +95,9 @@ def main(argv=None):
             parser.error('nothing to resume in ' + str(out))
     elif out.exists():
         parser.error('refusing to overwrite ' + str(out))
+    if not args.ignore_foreground and foreground_gpu_busy():
+        print(json.dumps({'status': 'blocked', 'reason': 'foreground GPU lease active or unavailable'}))
+        return 3  # Admission precedes dependency imports, model allocation and output writes.
     out.mkdir(parents=True, exist_ok=True)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', HF_HOME=str(BASE / 'models/hf-training-cache'),
                       USE_TF='0', USE_FLAX='0', TOKENIZERS_PARALLELISM='false')
