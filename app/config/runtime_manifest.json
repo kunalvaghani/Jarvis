@@ -430,7 +430,7 @@
   },
   "escalation_and_demonstration": {
     "modules": ["jarvis.cloud_architect", "jarvis.demonstration"],
-    "cloud_architect": "Disabled by default (config cloud_architect.enabled=false). Advisory only: needs explicit consent per request/scope, a confirmed free Groq account, quota, three distinct verified local reasoning failures and a passing privacy gate; advice code runs only in the network-less sandbox. Log: .jarvis-runtime/cloud/architect-log.jsonl.",
+    "cloud_architect": "Disabled by default (config cloud_architect.enabled=false). Advisory only: needs explicit consent per request/scope, a confirmed free Groq account, quota, three distinct verified local reasoning failures and a passing privacy gate; advice code runs only in the network-less sandbox. Log: .jarvis-runtime/cloud/architect-log.jsonl. Entry point (Phase 8): the approval-gated toolkit tool cloud_architect_consult; Brain only offers it after three distinct verified local reasoning failures.",
     "demonstration": "Show Me Once: consent per demonstration, window-scoped, injected input ignored, no keyboard/field values/passwords/RuntimeIds; low-level mouse hook runs in its own short-lived process. State: .jarvis-runtime/demonstrations/.",
     "failure_routing": "deliberation.FailureRouter: missing tool, broken skill, unknown UI, reasoning, planner structure, repeated weakness, permission; one use of each route and three escalations per task. Queues: .jarvis-runtime/learning-queues/."
   },

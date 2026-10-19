@@ -1,6 +1,6 @@
 {
-  "observed_at": "2026-10-19T08:52:02.398277+05:30",
-  "map_sha256": "f3cb0163863a0c74ea623fd831086b5bcd3971dac26ace52fcad3e47b36bf81b",
+  "observed_at": "2026-10-19T11:49:43.812711+05:30",
+  "map_sha256": "3eebc80b818801954ccbfcaf2701650d9354ec0870b16a6e9614a33f6b256575",
   "modules": {
     "__init__": {
       "source": "jarvis/__init__.py",
@@ -410,7 +410,7 @@
     },
     "autoresearch": {
       "source": "jarvis/autoresearch.py",
-      "sha256": "39adec172895b3be15dd41ef14a48a338ae55b33fdc22a6af0c30e9cf317b419",
+      "sha256": "483e460b3945826667cdb6b237fae08c646c24f5ee292629cbf1b669e1c38247",
       "symbols": {
         "ExperimentCancelled": 36,
         "_gate_class": 40,
@@ -418,17 +418,17 @@
         "AutoResearch.__init__": 49,
         "AutoResearch.seed": 61,
         "AutoResearch.train_score": 75,
-        "AutoResearch.headroom": 83,
-        "AutoResearch.critical_path_ms": 95,
-        "AutoResearch.failure_weights": 104,
-        "AutoResearch.diagnose": 126,
-        "AutoResearch.hypothesis": 145,
-        "AutoResearch.run_experiment": 169,
-        "AutoResearch.evaluate_candidate": 214,
-        "AutoResearch._decide": 259,
-        "AutoResearch._results": 278,
-        "AutoResearch.recover": 291,
-        "AutoResearch.reevaluate": 305
+        "AutoResearch.headroom": 88,
+        "AutoResearch.critical_path_ms": 100,
+        "AutoResearch.failure_weights": 109,
+        "AutoResearch.diagnose": 131,
+        "AutoResearch.hypothesis": 150,
+        "AutoResearch.run_experiment": 174,
+        "AutoResearch.evaluate_candidate": 219,
+        "AutoResearch._decide": 264,
+        "AutoResearch._results": 283,
+        "AutoResearch.recover": 296,
+        "AutoResearch.reevaluate": 310
       },
       "imports": [
         "evolution_archive",
@@ -436,9 +436,94 @@
         "evolution_surfaces"
       ]
     },
+    "azr_dataset": {
+      "source": "jarvis/azr_dataset.py",
+      "sha256": "2609630afc19c75b5474241ed8df5fe8d48805cc5dbd0e5d729daa20b333b3c2",
+      "symbols": {
+        "generate": 28,
+        "build": 71,
+        "write": 88,
+        "load": 105
+      },
+      "imports": [
+        "azr_tasks"
+      ]
+    },
+    "azr_proposer": {
+      "source": "jarvis/azr_proposer.py",
+      "sha256": "c874aad65453fdf992ccff4d9f99281b08e187fe19085825f7e0eee15e828eb2",
+      "symbols": {
+        "ollama": 21,
+        "validate_deduction": 43,
+        "abduction_from": 71,
+        "validate_induction": 85,
+        "Proposer": 104,
+        "Proposer.__init__": 105,
+        "Proposer.learnability": 110,
+        "Proposer.propose_deduction": 121,
+        "Proposer.propose_induction": 132
+      },
+      "imports": [
+        "azr_tasks"
+      ]
+    },
+    "azr_reward": {
+      "source": "jarvis/azr_reward.py",
+      "sha256": "053ebbe9dd66b0433e6a627e0a982bdc1b2e562ebb71627e2cfadfac8d76620c",
+      "symbols": {
+        "score_symbolic": 15,
+        "score_induction_batch": 21,
+        "score_all": 49
+      },
+      "imports": [
+        "azr_tasks"
+      ]
+    },
+    "azr_sandbox": {
+      "source": "jarvis/azr_sandbox.py",
+      "sha256": "8f86488034a1f0ce1302e845e75398e06d11b52f775787c3fac1214f6b826340",
+      "symbols": {
+        "SandboxUnavailable": 88,
+        "run_programs": 92
+      },
+      "imports": [
+        "azr_tasks",
+        "mcp_synthesis"
+      ]
+    },
+    "azr_tasks": {
+      "source": "jarvis/azr_tasks.py",
+      "sha256": "4d281f934485a330b3e1a99d81961d5164f01f016e01a9db4c55ba2b99780f3e",
+      "symbols": {
+        "ExecutionError": 47,
+        "ExecutionError.__init__": 48,
+        "canonical": 53,
+        "apply": 58,
+        "execute": 110,
+        "random_state": 122,
+        "random_call": 130,
+        "deduction_task": 160,
+        "abduction_task": 175,
+        "with_dependencies": 197,
+        "resources": 211,
+        "program_input": 235,
+        "induction_task": 241,
+        "parse_json_answer": 265,
+        "check_deduction": 281,
+        "topological_orders": 296,
+        "check_abduction": 313,
+        "extract_code": 362,
+        "screen_program": 367,
+        "task_id": 387,
+        "signature": 392,
+        "render_prompt": 410,
+        "render_target": 425
+      },
+      "imports": []
+    },
     "brain": {
       "source": "jarvis/brain.py",
-      "sha256": "bfdf04b745b83ac874295dd81469ddf5e68ee3dd27f89498769a1743f72cd8ce",
+      "sha256": "405dcc5b37d5d86cd81ae20367439429690a09179e9158c396a3d6b2f4ab5415",
       "symbols": {
         "RepeatedAction": 35,
         "navigation_step": 39,
@@ -467,18 +552,18 @@
         "Brain.blocked": 692,
         "Brain.dispatch": 697,
         "Brain.recover_task": 708,
-        "Brain.revise_plan": 769,
-        "Brain._revise_once": 785,
-        "Brain._initial_steps": 831,
-        "Brain.validate_remaining": 884,
-        "Brain.observe": 965,
-        "Brain.observe_after_action": 983,
-        "Brain.screen": 1015,
-        "Brain.visual_screen": 1020,
-        "Brain.visual_context": 1066,
-        "Brain.run": 1073,
-        "Brain._run_bound": 1086,
-        "Brain._run": 1114
+        "Brain.revise_plan": 776,
+        "Brain._revise_once": 792,
+        "Brain._initial_steps": 838,
+        "Brain.validate_remaining": 891,
+        "Brain.observe": 973,
+        "Brain.observe_after_action": 991,
+        "Brain.screen": 1023,
+        "Brain.visual_screen": 1028,
+        "Brain.visual_context": 1074,
+        "Brain.run": 1081,
+        "Brain._run_bound": 1094,
+        "Brain._run": 1122
       },
       "imports": [
         "capabilities",
@@ -636,21 +721,21 @@
     },
     "capabilities": {
       "source": "jarvis/capabilities.py",
-      "sha256": "23788cc039bd1e55cc87de47d18e93ce9a78eb7fd057d86df84aeca378069d54",
+      "sha256": "940d23e1f0b9986f90e9dd192c96a838735ee03728256a9684e4138652498268",
       "symbols": {
-        "tokens": 79,
-        "relevant_tool": 111,
-        "intents": 118,
-        "gmail_readiness_question": 122,
-        "_description_tokens": 139,
-        "skill_ranking": 143,
-        "skill_score": 148,
-        "skill_tools": 160,
-        "rank_tools": 167,
-        "launch_target": 219,
-        "program_matches": 236,
-        "runtime_context": 250,
-        "sync_note": 289
+        "tokens": 81,
+        "relevant_tool": 113,
+        "intents": 120,
+        "gmail_readiness_question": 124,
+        "_description_tokens": 141,
+        "skill_ranking": 145,
+        "skill_score": 150,
+        "skill_tools": 162,
+        "rank_tools": 169,
+        "launch_target": 221,
+        "program_matches": 238,
+        "runtime_context": 252,
+        "sync_note": 291
       },
       "imports": [
         "cloud_policy",
@@ -768,7 +853,7 @@
     },
     "cloud_architect": {
       "source": "jarvis/cloud_architect.py",
-      "sha256": "fa1cb853f0caa79c17949b4ac1feca91f7a6022c57a0f2acb61da6a848f462ee",
+      "sha256": "ff98786f84e3e171d23e4f77893ef3fb4ac18bd9436f340456d0052ce0901884",
       "symbols": {
         "now": 52,
         "internal_terms": 56,
@@ -787,12 +872,14 @@
         "CloudArchitect.__init__": 268,
         "CloudArchitect.consult": 276,
         "CloudArchitect.evaluate": 303,
-        "CloudArchitect._record": 329
+        "CloudArchitect._record": 329,
+        "consult_tool": 345
       },
       "imports": [
         "cloud_policy",
         "cloud_quota",
         "groq_adapter",
+        "hybrid_inference",
         "mcp_synthesis",
         "tool_errors",
         "tools"
@@ -1550,7 +1637,7 @@
     },
     "deliberation": {
       "source": "jarvis/deliberation.py",
-      "sha256": "dba03b08c773f0f6ff560c82c8478794ad54cd34e8dd35a4af7dafb2bcb070f9",
+      "sha256": "3186cf653da1f8a8fb36832e2f1b19840c7691cfbb610d89abb65ab55ff60059",
       "symbols": {
         "ledger_text": 61,
         "valid_opinion": 68,
@@ -1576,8 +1663,10 @@
         "classify_failure": 424,
         "FailureRouter": 435,
         "FailureRouter.__init__": 438,
-        "FailureRouter._queue": 444,
-        "FailureRouter.route": 452
+        "FailureRouter.evidence_row": 447,
+        "FailureRouter.evidence_for": 460,
+        "FailureRouter._queue": 464,
+        "FailureRouter.route": 472
       },
       "imports": [
         "cloud_policy",
@@ -1880,7 +1969,7 @@
     },
     "documents": {
       "source": "jarvis/documents.py",
-      "sha256": "2805a5a0b698f699aed62b84b5a56e0db5150d2f5f8f9c46c17ce37876ba19b8",
+      "sha256": "3a56ddf83a485380041d3335ed36ef4647ce75be6ed56722aa7751f04da99b39",
       "symbols": {
         "now_iso": 63,
         "terms": 67,
@@ -3603,6 +3692,20 @@
         "model_selection"
       ]
     },
+    "model_registry": {
+      "source": "jarvis/model_registry.py",
+      "sha256": "f7fa4c39a2f8032cf6bc5ab861f269520813b57dd93c38c2859112eab52b4cd6",
+      "symbols": {
+        "_sha": 15,
+        "ModelRegistry": 19,
+        "ModelRegistry.__init__": 20,
+        "ModelRegistry.entries": 23,
+        "ModelRegistry._save": 29,
+        "ModelRegistry.register": 35,
+        "ModelRegistry.approve": 47
+      },
+      "imports": []
+    },
     "model_selection": {
       "source": "jarvis/model_selection.py",
       "sha256": "345e1a715912a124e4825e9b238493268539b3c5af9e91add977ba0d3a1817fa",
@@ -4879,31 +4982,32 @@
     },
     "toolkits": {
       "source": "jarvis/toolkits.py",
-      "sha256": "9d30862f0aa0f5cff20762ed579eecb92db1b7984d8769dc156b2508e016311f",
+      "sha256": "4e617dae14066d884fae721435e1c413a48f47472b891c6196f630f4f0b3f302",
       "symbols": {
         "_append_lock": 33,
-        "status": 100,
-        "available": 106,
-        "arguments": 114,
-        "validate_step": 127,
-        "scoped_path": 142,
-        "read_text": 152,
-        "file_tool": 162,
-        "_append": 175,
-        "_scan": 209,
-        "public_url": 242,
-        "PageText": 252,
-        "PageText.__init__": 254,
-        "PageText.handle_starttag": 259,
-        "PageText.handle_endtag": 273,
-        "PageText.handle_data": 280,
-        "api": 285,
-        "execute": 309,
-        "remote_tool": 395
+        "status": 102,
+        "available": 108,
+        "arguments": 116,
+        "validate_step": 129,
+        "scoped_path": 144,
+        "read_text": 154,
+        "file_tool": 164,
+        "_append": 177,
+        "_scan": 211,
+        "public_url": 244,
+        "PageText": 254,
+        "PageText.__init__": 256,
+        "PageText.handle_starttag": 261,
+        "PageText.handle_endtag": 275,
+        "PageText.handle_data": 282,
+        "api": 287,
+        "execute": 311,
+        "remote_tool": 401
       },
       "imports": [
         "agent_tools",
         "app_adapters",
+        "cloud_architect",
         "code_context",
         "deerflow",
         "evolution_promotion",
@@ -6540,9 +6644,17 @@
       "provider_configured": true,
       "state": "adapter_present_live_unverified",
       "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "cloud_architect_consult",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
     }
   ],
-  "registered_tool_count": 119,
+  "registered_tool_count": 120,
   "manifest_services": [
     "realtime_observations",
     "context_selector",

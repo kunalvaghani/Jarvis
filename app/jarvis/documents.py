@@ -290,7 +290,7 @@ class Document:
 
         def score(c):
             text = c["text"]
-            citations = len(re.findall(r"\[\d{1,3}\]|(?:19|20)\d{2}|et al\.|arXiv|Proceedings|pp\. ?\d|doi", text))
+            citations = len(re.findall(r"\[\d{1,3}\]|\b(?:19|20)\d{2}\b|et al\.|arXiv|Proceedings|pp\. ?\d|doi", text))
             references = len(re.findall(r"\[\d{1,3}\]\s+[A-Z]", text)) >= 3 or citations >= 8 or (
                 start is not None and c["id"] >= start and citations >= 3)
             return len(ENTITY.findall(text)) * (.1 if references else 1) * (1.3 - .3 * c["id"] / total)

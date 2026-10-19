@@ -52,6 +52,8 @@ ROUTES = {
     'modeling_3d': (r'\b(?:blender|unreal(?: engine)?|3d (?:model|scene|object)s?|meshe?s?)\b|\.blend\b',
                     ('strategy_execute', 'execution_methods', 'blender_task', 'unreal_task'), ()),
     'vscode': (r'\b(?:vs ?code|visual studio code)\b', ('vscode_cli', 'execution_methods'), ('project-coding',)),
+    # Optional anonymised cloud advice after local failures; approval card shows the exact payload.
+    'cloud_architect': (r'\bcloud (?:architect|advice|consult\w*)\b', ('cloud_architect_consult',), ()),
     # Self-evolution proposals are reviewed and deployed only through approval cards.
     'evolution': (r'\b(?:self[- ]?(?:evolution|improvements?)|improvement proposals?|evolution (?:archive|status|proposals?|releases?))\b',
                   ('evolution_status', 'evolution_promote', 'evolution_rollback'), ()),

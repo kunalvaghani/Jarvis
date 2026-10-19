@@ -1760,7 +1760,7 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
 
 | Section | Keys (defaults) | Notes |
 | --- | --- | --- |
-| `cloud_architect` | `enabled` (**false**), `consent_minutes` (30) | Optional. Also needs `groq` enabled on a confirmed free plan with dedicated quota, plus per-request or per-scope consent. Only an allowlisted, generic, synthetic/public problem is ever sent; anything uncertain stays local. Log: `.jarvis-runtime/cloud/architect-log.jsonl`. |
+| `cloud_architect` | `enabled` (**false**), `consent_minutes` (30) | Optional. Reached only through the approval-gated tool `cloud_architect_consult` (say "ask the cloud architect …"); the card shows the exact payload. Also needs `groq` enabled on a confirmed free plan with dedicated quota, plus per-request or per-scope consent. Only an allowlisted, generic, synthetic/public problem is ever sent; anything uncertain stays local. Log: `.jarvis-runtime/cloud/architect-log.jsonl`. |
 | `evolution_lab` | `enabled` (true), `max_experiments_per_day` (1), `budget_seconds` (2400), `check_interval_seconds` (3600) | Idle-only bounded experiments in `.jarvis-runtime/evolution/lab` (separate Git repository). Results are proposals; deploy with "review improvement proposals" → approval card. Rollback: `python -m jarvis.evolution_promotion rollback <release>`. The gate refuses to run if `evolution_eval/` differs from the committed files. |
 | `demonstration` | `enabled` (true), `max_steps` (10) | Offered only after repeated "can't find this control" failures in one task, and records only after the `demonstration_recording` approval. Captures clicks in the selected window only (no keyboard, no password fields, no RuntimeIds). Sessions: `.jarvis-runtime/demonstrations/`. |
 

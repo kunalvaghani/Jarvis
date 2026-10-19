@@ -440,6 +440,26 @@ class FailureRouter:
         self.lock = threading.Lock()
         self.history = {}           # task_id -> routes already taken
         self.weakness = {}          # goal class -> count of reasoning failures
+        self.evidence = {}          # task_id -> failure evidence for cloud-architect eligibility (no raw text)
+        self.latest_task = None
+
+    @staticmethod
+    def evidence_row(category, failure, reason):
+        """Generic evidence: a strategy fingerprint, whether the failure is verified, and its cause class."""
+        import hashlib
+        strategy = hashlib.sha256(json.dumps([str(failure.get('action', '')), str(failure.get('value', ''))]).encode()).hexdigest()[:12]
+        verified = failure.get('outcome') == 'not_executed' or bool(re.search(r'verif|test(?:s)? failed|does not match', reason, re.I))
+        if category == 'reasoning':
+            cause = 'test_failed' if re.search(r'test', reason, re.I) else (
+                'verification_failed' if re.search(r'verif', reason, re.I) else 'wrong_output')
+        else:
+            cause = {'planner_structure': 'plan_invalid', 'permission': 'permission_denied', 'missing_tool': 'tool_unavailable',
+                     'unknown_ui': 'tool_unavailable', 'broken_skill': 'tool_unavailable'}.get(category, 'unknown')
+        return {'strategy': strategy, 'verified_failure': verified, 'cause': cause, 'category': category}
+
+    def evidence_for(self, task_id=None):
+        with self.lock:
+            return list(self.evidence.get(str(task_id if task_id is not None else self.latest_task), []))
 
     def _queue(self, name, row):
         from .reasoning_bank import generic
@@ -456,6 +476,13 @@ class FailureRouter:
         with self.lock:
             taken = self.history.setdefault(str(task_id), [])
             decision = {'category': category, 'route': route, 'escalations': len(taken), 'training_candidate': False}
+            rows = self.evidence.setdefault(str(task_id), [])
+            rows.append(self.evidence_row(category, failure or {}, reason))
+            del rows[:-20]
+            self.latest_task = str(task_id)
+            decision['distinct_verified_reasoning_failures'] = len(
+                {r['strategy'] for r in rows if r['verified_failure'] and r['cause'] in
+                 {'wrong_output', 'test_failed', 'plan_invalid', 'no_progress', 'verification_failed'}})
             if category != 'permission' and len(taken) >= MAX_ESCALATIONS_PER_TASK:
                 decision.update(route='stop_request_guidance', reason='escalation limit reached for this task')
             elif category != 'permission' and route in taken:

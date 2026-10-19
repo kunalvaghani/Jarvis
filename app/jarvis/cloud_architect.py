@@ -330,3 +330,54 @@ class CloudArchitect:
         self.log.parent.mkdir(parents=True, exist_ok=True)
         with self.log.open('a', encoding='utf-8') as output:
             output.write(json.dumps({'at': now().isoformat(timespec='seconds'), **row}, ensure_ascii=False) + '\n')
+
+
+# ---- user-invoked consultation tool (ToolRegistry) ----------------------------------------------------------------------
+TOOLS = {
+    'cloud_architect_consult': ('cloud', 'Ask the optional free-tier cloud architect for advice on an ABSTRACT algorithm, '
+                                'coding or planning problem after local approaches failed. content JSON {category, '
+                                'statement, question, constraints, examples, provenance: public_fact|synthetic}. The '
+                                'privacy gate runs first, the approval card shows the exact payload, and the advice is '
+                                'never executed or trusted. Disabled unless cloud_architect.enabled.', (), True),
+}
+
+
+def consult_tool(actions, step, cancelled):
+    """Fail-closed: privacy gate, every eligibility rule except consent, then an approval card that grants consent."""
+    config = getattr(actions, 'config', {}) or {}
+    options = {**(config.get('cloud_architect') or {}), 'groq': config.get('groq') or {}}
+    try:
+        problem = json.loads(step.get('content') or '{}')
+    except ValueError:
+        return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+    if not isinstance(problem, dict):
+        return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+    base = Path(actions.base)
+    try:
+        payload = privacy_gate(problem, base)
+    except (PrivacyRejected, ValueError) as exc:
+        return json.dumps({'status': 'local', 'reasons': [str(exc)[:300]], 'sent': False})
+    router = getattr(getattr(actions, 'deliberation', None), 'failure_router', None)
+    failures = router.evidence_for() if router is not None else []
+    architect = getattr(actions, 'cloud_architect', None)
+    if architect is None:
+        gateway = None
+        if options.get('enabled') is True:
+            from .hybrid_inference import get_service
+            gateway = get_service(base)
+        architect = CloudArchitect(base, options, getattr(gateway, 'adapter', None), getattr(gateway, 'guardian', None))
+        actions.cloud_architect = architect  # keeps the once-per-problem record for this session
+    request_id = 'consult-' + hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+    snapshot = architect.guardian.snapshot() if architect.guardian else {'state': 'UNKNOWN'}
+    ready = bool(architect.adapter) and architect.adapter.ready(wait_seconds=0)
+    eligible, reasons = eligibility(failures, len(failures), problem.get('category'), options, architect.consent, request_id,
+                                    None, snapshot['state'], ready, request_id in architect.escalated)
+    blocking = [r for r in reasons if not r.startswith('user has not authorized')]
+    if blocking:
+        return json.dumps({'status': 'local', 'reasons': blocking, 'sent': False})
+    if not eligible:
+        actions._approve('cloud_consultation', json.dumps({'will_send_exactly': payload, 'provider': 'Groq free tier',
+                                                           'advice_is_untrusted': True}, ensure_ascii=False), cancelled)
+        architect.consent.grant('request:' + request_id, int(options.get('consent_minutes', 30)))
+    return json.dumps(architect.consult(request_id, problem, failures, len(failures), request_id, cancelled=cancelled),
+                      ensure_ascii=False, default=str)
