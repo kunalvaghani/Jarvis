@@ -1,0 +1,21 @@
+10:24:30 start environment
+10:24:40 done environment (10.5 s): {"python": "3.10.6", "torch": "2.6.0+cu124", "cuda": "12.4", "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU", "bf16": true, "vram_free_mb": 3305, "vram_total_mb": 4095, "transformers": "4.57.6", "peft": "0.18.1", "ram_total_gb": 31.3, "ram_available_gb": 11.9, "unloaded_ollama_models": []}
+10:24:40 start existing_pc_adapter_compatibility
+10:24:53 done existing_pc_adapter_compatibility (13.1 s): {"loaded": true, "generated_tokens": 8, "peft_type": "LORA", "r": 8}
+10:24:53 start baseline_heldout
+10:28:10 done baseline_heldout (197.2 s): {"peak_vram_mb": 1130, "seconds": 181.7, "seconds_per_task_p50": 0.4805, "deduction": {"correct": 0, "total": 60, "accuracy": 0.0, "wilson95": [0.0, 0.0602], "format_ok": 60, "mean_reward": -0.5}, "abduction": {"correct": 0, "total": 60, "accuracy": 0.0, "wilson95": [0.0, 0.0602], "format_ok": 0, "mean_reward": -1.0}, "induction": {"correct": 0, "total": 45, "accuracy": 0.0, "wilson95": [0.0, 0.07
+10:28:10 start cancel_and_resume
+10:29:07 done cancel_and_resume (56.5 s): {"reference_exit": 0, "stopped": {"status": "cancelled", "step": 2, "minutes": 0.05, "peak_vram_mb": 1844}, "resume_exit": 0, "final": {"status": "completed", "step": 4, "minutes": 0.05, "peak_vram_mb": 1841}, "reference_losses": [0.48806, 0.5287, 0.34971, 0.62776], "interrupted_then_resumed_losses": [0.48806, 0.5287, 0.34971, 0.62776], "max_abs_loss_difference": 0.0}
+10:29:07 start foreground_preemption
+10:29:26 foreground lease admitted (role question)
+10:29:28 done foreground_preemption (21.5 s): {"final": {"status": "preempted", "step": 3, "minutes": 0.07, "peak_vram_mb": 1844}, "checkpoints": ["checkpoint-3"], "lease_acquired": true}
+10:29:28 start lora_main_training
+10:39:21 done lora_main_training (592.3 s): {"exit": 0, "final": {"status": "completed", "step": 120, "minutes": 9.61, "peak_vram_mb": 1994}, "first_losses": [0.58207, 0.58498, 0.70019, 0.47608, 0.55158], "last_losses": [0.0875, 0.07161, 0.11581, 0.09197, 0.08966], "steps_logged": 120, "max_peak_vram_mb": 1994, "max_rss_mb": 2598}
+10:39:21 start heldout_gate
+10:42:29 done heldout_gate (187.8 s): {"adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120", "environment": {"python": "3.10.6", "implementation": "CPython", "platform": "Windows-10-10.0.26200-SP0", "machine": "AMD64", "cpu_count": 16, "executable": "python.exe"}, "seal": "8bdee63096280e7c979aa20abffc34f6bd9420827a27f537488bc3d6c75d9125", "base": {"peak_vram_mb": 1130, "seconds": 181.7, "seconds_per_task_p50
+10:42:29 start export_compatibility
+10:46:16 done export_compatibility (227.2 s): {"adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120", "prompts": 24, "exact_match": 20, "exact_match_rate": 0.8333, "merged_dir": "artifacts\\jarvis-audit\\phase-07\\runs\\export\\merged", "merged_reloads_with_transformers": true, "gguf_conversion": "BLOCKED: no GGUF converter (gguf package / llama.cpp) installed", "ollama_registration": "not performed (requires approva
+10:46:16 start grpo_feasibility
+10:46:52 done grpo_feasibility (36.1 s): {"group_size": 4, "tasks": 4, "steps": [{"task": "ded_17ec6a8b379a5902", "mode": "deduction", "rewards": [-0.5, -0.5, -0.5, -0.5], "reward_std": 0.0, "updated": false, "sample_seconds": 7.16, "step_seconds": 7.17}, {"task": "ded_bdf047ba1193cc8e", "mode": "deduction", "rewards": [-0.5, -0.5, -0.5, -0.5], "reward_std": 0.0, "updated": false, "sample_seconds": 5.59, "step_seconds": 5.59}, {"task": "
+10:46:52 start registry_experimental
+10:46:52 done registry_experimental (0.0 s): {"id": "model_ec30d6e86c", "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120", "adapter_sha256": "4c9dc6e3932ec0208e22fd6116c3a9c4d563c95f2a7abd87343e43bd5fd03450", "base_sha256": "f9523886352217ded3aeeef552b381af79d568c6d49a4b9e423288cea56b0a44", "dataset_manifest_sha256": "62a951637d0fb0bfb51144d50b6d23b384bc10cdc0588c9fcdf78d58a3114ddd", "gate_decision": "rejected",

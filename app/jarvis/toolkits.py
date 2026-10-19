@@ -90,6 +90,10 @@ from .app_adapters import TOOLS as APP_TOOLS
 TOOLS.update(APP_TOOLS)
 from .execution_strategy import TOOLS as STRATEGY_TOOLS
 TOOLS.update(STRATEGY_TOOLS)
+from .evolution_promotion import TOOLS as EVOLUTION_TOOLS
+TOOLS.update(EVOLUTION_TOOLS)
+from .cloud_architect import TOOLS as CLOUD_ARCHITECT_TOOLS
+TOOLS.update(CLOUD_ARCHITECT_TOOLS)
 from .gmail_api import TOOLS as GMAIL_API_TOOLS
 from .gmail_api import configured as gmail_api_configured
 if gmail_api_configured():TOOLS.update(GMAIL_API_TOOLS)
@@ -328,6 +332,14 @@ def execute(actions, step, cancelled):
     if name in STRATEGY_TOOLS:
         from .execution_strategy import strategy_tool
         return strategy_tool(actions, step, cancelled)
+    if name in CLOUD_ARCHITECT_TOOLS:
+        # Privacy gate and approval card first; disabled configuration fails closed.
+        from .cloud_architect import consult_tool
+        return consult_tool(actions, step, cancelled)
+    if name in EVOLUTION_TOOLS:
+        # Deploy and rollback ask through the approval card; status is read-only.
+        from .evolution_promotion import execute as evolution_execute
+        return evolution_execute(actions, step, cancelled)
     if name in UTILITY_TOOLS:
         from .utility_tools import execute as utility_execute
         return utility_execute(actions,step,cancelled)

@@ -1,0 +1,84 @@
+{
+ "cases": [
+  {
+   "goal": "plan my week step by step",
+   "slot": "planning"
+  },
+  {
+   "goal": "first back up the folder and then compress it",
+   "slot": "planning"
+  },
+  {
+   "goal": "fix the bug in my python script",
+   "slot": "coding"
+  },
+  {
+   "goal": "refactor the repository code",
+   "slot": "coding"
+  },
+  {
+   "goal": "click the export button in the window",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "open the menu and click save",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "explain how transformers work",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "summarize my notes about the project",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "which tool should i use for this pdf",
+   "slot": "tool_selection"
+  },
+  {
+   "goal": "is there a skill or api adapter for excel",
+   "slot": "tool_selection"
+  },
+  {
+   "goal": "it failed again with an error",
+   "slot": "error_recovery"
+  },
+  {
+   "goal": "the app crashed and is stuck",
+   "slot": "error_recovery"
+  },
+  {
+   "goal": "hello there",
+   "slot": null
+  },
+  {
+   "goal": "thanks",
+   "slot": null
+  },
+  {
+   "goal": "then after lunch schedule the review steps",
+   "slot": "planning"
+  },
+  {
+   "goal": "click on the button labeled next",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "which tool can merge files",
+   "slot": "tool_selection"
+  },
+  {
+   "goal": "set up a multi step plan for moving house",
+   "slot": "planning"
+  },
+  {
+   "goal": "type my name in the field and press tab",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "use the api instead of clicking",
+   "slot": "tool_selection"
+  }
+ ]
+}

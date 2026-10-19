@@ -93,6 +93,11 @@ def effect_of(kind):
     return "an action whose effects aren't modelled yet", False, False
 
 
+# Salience policy: a bounded evolution surface (jarvis/evolution_surfaces.py); the historical values.
+# A spoken user command always keeps full salience; that rule is not part of the surface.
+SALIENCE = {'decay_seconds': 120.0, 'vision': 0.85, 'sensor_cap': 0.7}
+
+
 class Percept:
     __slots__ = ("source", "modality", "content", "salience", "at")
 
@@ -102,7 +107,7 @@ class Percept:
 
     def weight(self, now):
         # Wall-clock corrections cannot amplify salience or overflow exp().
-        return self.salience * math.exp(-max(0., now - self.at) / 120.)
+        return self.salience * math.exp(-max(0., now - self.at) / SALIENCE['decay_seconds'])
 
     def as_dict(self):
         return {"source": self.source, "modality": self.modality, "content": self.content,
@@ -227,7 +232,7 @@ class Cognition:
         salience = salience if type(salience) in (int,float) and math.isfinite(salience) else .5
         # Caller-provided sensor scores cannot eclipse a deliberate voice command
         # or current-window observation. Critical alerts remain in their own UI.
-        salience = 1. if modality == 'speech' and source == 'you' else (.85 if source == 'screen' and modality == 'vision' else min(.7, salience))
+        salience = 1. if modality == 'speech' and source == 'you' else (SALIENCE['vision'] if source == 'screen' and modality == 'vision' else min(SALIENCE['sensor_cap'], salience))
         percept = Percept(source, modality, content, salience)
         with self.lock:
             self._offer(self.percepts, percept)

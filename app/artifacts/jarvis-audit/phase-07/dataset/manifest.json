@@ -1,0 +1,207 @@
+{
+ "schema_version": 1,
+ "created_at": "2026-10-19T04:39:37+00:00",
+ "env_version": 1,
+ "oracle_version": 1,
+ "sha256": {
+  "validation": "e9f6203466cc70523da0f0825dfc6dde50c4bc1df952efde805fbfbec019890c",
+  "train": "56d0a70ece1e7ebffe36712c6bc57c5092c372d6c3ce4a68644d1016963fd642"
+ },
+ "counts": {
+  "validation": 90,
+  "train": 914
+ },
+ "reports": {
+  "heldout": {
+   "split": "heldout",
+   "exact_duplicates": 45,
+   "reserved_signature_rejected": 0,
+   "near_duplicate_rejected": 19915,
+   "deduction": 60,
+   "abduction": 60,
+   "induction": 45
+  },
+  "validation": {
+   "split": "validation",
+   "exact_duplicates": 0,
+   "reserved_signature_rejected": 1,
+   "near_duplicate_rejected": 0,
+   "deduction": 30,
+   "abduction": 30,
+   "induction": 30
+  },
+  "train": {
+   "split": "train",
+   "exact_duplicates": 0,
+   "reserved_signature_rejected": 6294,
+   "near_duplicate_rejected": 9499,
+   "deduction": 400,
+   "abduction": 400,
+   "induction": 99
+  }
+ },
+ "leakage": {
+  "train/validation": {
+   "signatures": 0,
+   "ids": 0
+  },
+  "heldout/train": {
+   "signatures": 0,
+   "ids": 0
+  },
+  "heldout/validation": {
+   "signatures": 0,
+   "ids": 0
+  }
+ },
+ "answerability_dropped": {
+  "heldout": 0,
+  "validation": 0,
+  "train": 0
+ },
+ "proposer": {
+  "attempts_per_mode": 10,
+  "accepted": 15,
+  "rejected": [
+   {
+    "mode": "induction",
+    "reason": "'list' object has no attribute 'get'",
+    "format_reward": -1
+   },
+   {
+    "mode": "deduction",
+    "reason": "schema",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "'list' object has no attribute 'get'",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "inputs",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "'list' object has no attribute 'get'",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "inputs",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "execution failed: NameError",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "inputs",
+    "format_reward": -1
+   },
+   {
+    "mode": "induction",
+    "reason": "inputs",
+    "format_reward": -1
+   }
+  ],
+  "learnability": [
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "abduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "abduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "induction",
+    "solve_rate": null,
+    "r_propose": null
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "induction",
+    "solve_rate": null,
+    "r_propose": null
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "abduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "abduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   },
+   {
+    "mode": "deduction",
+    "solve_rate": 0.0,
+    "r_propose": 0.0,
+    "rollouts": 4
+   }
+  ],
+  "minutes": 13.6,
+  "proposer": "qwen3.5:9b",
+  "solver": "qwen3.5:0.8b",
+  "rollouts": 4
+ }
+}

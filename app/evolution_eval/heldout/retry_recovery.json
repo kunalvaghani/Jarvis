@@ -1,0 +1,364 @@
+{
+ "cases": [
+  {
+   "recover_after_ms": 199,
+   "attempt_ms": 7,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2727,
+   "attempt_ms": 22,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 121,
+   "attempt_ms": 35,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 22,
+   "attempt_ms": 7,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1259,
+   "attempt_ms": 26,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 140,
+   "attempt_ms": 35,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 621,
+   "attempt_ms": 27,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 569,
+   "attempt_ms": 8,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 455,
+   "attempt_ms": 27,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 78,
+   "attempt_ms": 18,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2318,
+   "attempt_ms": 37,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1839,
+   "attempt_ms": 15,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 581,
+   "attempt_ms": 24,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2064,
+   "attempt_ms": 19,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 102,
+   "attempt_ms": 32,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 471,
+   "attempt_ms": 13,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 174,
+   "attempt_ms": 10,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2365,
+   "attempt_ms": 10,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 193,
+   "attempt_ms": 12,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 86,
+   "attempt_ms": 28,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 126,
+   "attempt_ms": 34,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 354,
+   "attempt_ms": 9,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2593,
+   "attempt_ms": 29,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3088,
+   "attempt_ms": 36,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2289,
+   "attempt_ms": 29,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 31,
+   "attempt_ms": 19,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 838,
+   "attempt_ms": 16,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 585,
+   "attempt_ms": 25,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 606,
+   "attempt_ms": 15,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1955,
+   "attempt_ms": 30,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 106,
+   "attempt_ms": 19,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1032,
+   "attempt_ms": 27,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1596,
+   "attempt_ms": 17,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 89,
+   "attempt_ms": 17,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 563,
+   "attempt_ms": 30,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 60,
+   "attempt_ms": 22,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 105,
+   "attempt_ms": 13,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 113,
+   "attempt_ms": 6,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1092,
+   "attempt_ms": 33,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3252,
+   "attempt_ms": 27,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3088,
+   "attempt_ms": 36,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 810,
+   "attempt_ms": 9,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 115,
+   "attempt_ms": 36,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 66,
+   "attempt_ms": 14,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 58,
+   "attempt_ms": 10,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 305,
+   "attempt_ms": 24,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3370,
+   "attempt_ms": 16,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2256,
+   "attempt_ms": 17,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1623,
+   "attempt_ms": 11,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3298,
+   "attempt_ms": 7,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1060,
+   "attempt_ms": 34,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2749,
+   "attempt_ms": 33,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 611,
+   "attempt_ms": 24,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 225,
+   "attempt_ms": 34,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 200,
+   "attempt_ms": 9,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 381,
+   "attempt_ms": 22,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3211,
+   "attempt_ms": 22,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 142,
+   "attempt_ms": 38,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 116,
+   "attempt_ms": 27,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1318,
+   "attempt_ms": 37,
+   "attempts": 5,
+   "budget_ms": 4000
+  }
+ ]
+}

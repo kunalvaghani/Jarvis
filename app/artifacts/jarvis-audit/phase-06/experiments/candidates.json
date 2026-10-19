@@ -1,0 +1,1187 @@
+[
+ {
+  "id": "cand_54d47138836f",
+  "parent_id": null,
+  "surface": "dag_scheduling",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "206679de6af428e9",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:28+00:00",
+  "updated_at": "2026-10-19T03:28:43+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "critical_path_weight": 0.0,
+   "read_only_bias": 0.0
+  },
+  "fitness": {
+   "train_score": -309.5991111111111
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_cfd1dbdcfd7a",
+  "parent_id": null,
+  "surface": "tool_ranking",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "ca1565027c17feed",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:44+00:00",
+  "updated_at": "2026-10-19T03:28:45+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "exact_name_bonus": 20.0,
+   "min_skill_overlap": 2,
+   "preferred_skill_bonus": 8,
+   "route_boost": 8.0,
+   "route_step": 0.4,
+   "route_step_cap": 5,
+   "skill_tool_boost": 5.0
+  },
+  "fitness": {
+   "train_score": 0.4899436052631579
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_63ad737884ec",
+  "parent_id": null,
+  "surface": "lesson_retrieval",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "377a7a11217ddbe1",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:45+00:00",
+  "updated_at": "2026-10-19T03:28:45+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "age_cap": 0.2,
+   "age_days": 365.0,
+   "confidence": 0.3,
+   "fit": 0.15,
+   "min_score": 0.2,
+   "mismatch": 0.3
+  },
+  "fitness": {
+   "train_score": 0.9
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_a22a038cc3de",
+  "parent_id": null,
+  "surface": "percept_salience",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "e8aa30b7de7d7244",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:46+00:00",
+  "updated_at": "2026-10-19T03:28:47+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "decay_seconds": 120.0,
+   "sensor_cap": 0.7,
+   "vision": 0.85
+  },
+  "fitness": {
+   "train_score": 1.0
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_8644c44f8574",
+  "parent_id": null,
+  "surface": "read_retry_backoff",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "ce5da1a4e1acba29",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:47+00:00",
+  "updated_at": "2026-10-19T03:28:48+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "base_seconds": 0.1,
+   "max_seconds": 1.0
+  },
+  "fitness": {
+   "train_score": 0.4699
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_2cb362986959",
+  "parent_id": null,
+  "surface": "prompt_router",
+  "generation": 0,
+  "mutation_type": "seed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "a07153b21297c9283ef98e6e297162a72dcf8618",
+  "values_digest": "d95f9b3636ae3810",
+  "hypothesis": "Approved baseline at canonical 314fad5a8821",
+  "status": "seed",
+  "gate_json": null,
+  "failure_reason": null,
+  "diversity": null,
+  "seed": null,
+  "created_at": "2026-10-19T03:28:48+00:00",
+  "updated_at": "2026-10-19T03:28:48+00:00",
+  "mutation": {},
+  "files": [],
+  "values": {
+   "keyword_weight": 1.0,
+   "min_score": 1.0,
+   "phrase_weight": 2.0,
+   "tool_name_weight": 1.0
+  },
+  "fitness": {
+   "train_score": 1.0
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_dc72ef14b5a0",
+  "parent_id": "cand_54d47138836f",
+  "surface": "dag_scheduling",
+  "generation": 1,
+  "mutation_type": "directed",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "0cf0a16dce48853b482afbc25f147d6a9f09316f",
+  "values_digest": "c352acefd52835e5",
+  "hypothesis": "Admitting ready steps with longer downstream chains first will lower dag_makespan makespan by at least 2% (falsified if the paired 95% CI includes zero).",
+  "status": "qualified",
+  "failure_reason": null,
+  "diversity": 0.05,
+  "seed": 601,
+  "created_at": "2026-10-19T03:29:14+00:00",
+  "updated_at": "2026-10-19T03:33:33+00:00",
+  "mutation": {
+   "from": {
+    "critical_path_weight": 0.0,
+    "read_only_bias": 0.0
+   },
+   "to": {
+    "critical_path_weight": 1.0,
+    "read_only_bias": 0.0
+   },
+   "rng_seed": 601,
+   "attempt": 0
+  },
+  "files": [
+   "jarvis/dag_execution.py"
+  ],
+  "values": {
+   "critical_path_weight": 1.0,
+   "read_only_bias": 0.0
+  },
+  "fitness": {
+   "heldout_ci95": [
+    28.79335,
+    81.5034
+   ],
+   "heldout_relative_delta": 0.151823,
+   "parent_train_score": -308.9316,
+   "train_score": -245.7527777777778
+  },
+  "gate": {
+   "checks": {
+    "changed_files": [
+     "jarvis/dag_execution.py"
+    ],
+    "domains": [
+     {
+      "domain": "voice_routing",
+      "passed": true,
+      "peak_rss_mb": 104.1,
+      "returncode": 0,
+      "seconds": 17.672,
+      "security": false,
+      "status": "completed",
+      "summary": "52 passed in 16.28s"
+     },
+     {
+      "domain": "privacy_cloud",
+      "passed": true,
+      "peak_rss_mb": 58.8,
+      "returncode": 0,
+      "seconds": 13.906,
+      "security": true,
+      "status": "completed",
+      "summary": "17 passed, 67 deselected in 0.94s"
+     },
+     {
+      "domain": "dag_planning",
+      "passed": true,
+      "peak_rss_mb": 98.7,
+      "returncode": 0,
+      "seconds": 5.203,
+      "security": false,
+      "status": "completed",
+      "summary": "47 passed in 3.95s"
+     },
+     {
+      "domain": "coding_files",
+      "passed": true,
+      "peak_rss_mb": 707.8,
+      "returncode": 0,
+      "seconds": 15.469,
+      "security": false,
+      "status": "completed",
+      "summary": "18 passed, 1 deselected in 14.29s"
+     },
+     {
+      "domain": "desktop_browser",
+      "passed": true,
+      "peak_rss_mb": 68.9,
+      "returncode": 0,
+      "seconds": 2.64,
+      "security": false,
+      "status": "completed",
+      "summary": "43 passed in 1.29s"
+     },
+     {
+      "domain": "skill_registry",
+      "passed": true,
+      "peak_rss_mb": 97.4,
+      "returncode": 0,
+      "seconds": 19.5,
+      "security": false,
+      "status": "completed",
+      "summary": "90 passed, 1 skipped, 1 deselected in 18.12s"
+     },
+     {
+      "domain": "memory",
+      "passed": true,
+      "peak_rss_mb": 636.2,
+      "returncode": 0,
+      "seconds": 12.937,
+      "security": false,
+      "status": "completed",
+      "summary": "6 passed, 57 deselected in 11.72s"
+     },
+     {
+      "domain": "recovery",
+      "passed": true,
+      "peak_rss_mb": 98.6,
+      "returncode": 0,
+      "seconds": 5.469,
+      "security": false,
+      "status": "completed",
+      "summary": "34 passed, 1 deselected in 4.24s"
+     },
+     {
+      "domain": "scheduling",
+      "passed": true,
+      "peak_rss_mb": 125.9,
+      "returncode": 0,
+      "seconds": 16.187,
+      "security": false,
+      "status": "completed",
+      "summary": "70 passed, 1 skipped in 15.02s"
+     },
+     {
+      "domain": "integrations",
+      "passed": true,
+      "peak_rss_mb": 115.7,
+      "returncode": 0,
+      "seconds": 26.859,
+      "security": false,
+      "status": "completed",
+      "summary": "83 passed, 1 deselected in 25.27s"
+     }
+    ],
+    "other_benchmarks": {
+     "lesson_retrieval": {
+      "child_mean": 0.9,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "deterministic": true,
+      "examples": 10,
+      "improved_examples": 0,
+      "max_repeat_spread": 0.0,
+      "mean_delta": 0.0,
+      "parent_mean": 0.9,
+      "relative_delta": 0.0,
+      "repeats": 1,
+      "status": "ok",
+      "worse_examples": 0
+     },
+     "prompt_routing": {
+      "child_mean": 1.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "deterministic": true,
+      "examples": 20,
+      "improved_examples": 0,
+      "max_repeat_spread": 0.0,
+      "mean_delta": 0.0,
+      "parent_mean": 1.0,
+      "relative_delta": 0.0,
+      "repeats": 1,
+      "status": "ok",
+      "worse_examples": 0
+     },
+     "retry_recovery": {
+      "child_mean": 0.53045,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "deterministic": true,
+      "examples": 60,
+      "improved_examples": 0,
+      "max_repeat_spread": 0.0,
+      "mean_delta": 0.0,
+      "parent_mean": 0.53045,
+      "relative_delta": 0.0,
+      "repeats": 1,
+      "status": "ok",
+      "worse_examples": 0
+     },
+     "salience_retention": {
+      "child_mean": 1.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "deterministic": true,
+      "examples": 8,
+      "improved_examples": 0,
+      "max_repeat_spread": 0.0,
+      "mean_delta": 0.0,
+      "parent_mean": 1.0,
+      "relative_delta": 0.0,
+      "repeats": 1,
+      "status": "ok",
+      "worse_examples": 0
+     },
+     "tool_selection": {
+      "child_mean": 0.597619,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "deterministic": true,
+      "examples": 38,
+      "improved_examples": 0,
+      "max_repeat_spread": 0.0,
+      "mean_delta": 0.0,
+      "parent_mean": 0.597619,
+      "relative_delta": 0.0,
+      "repeats": 1,
+      "status": "ok",
+      "worse_examples": 0
+     }
+    },
+    "target": {
+     "benchmark": "dag_makespan",
+     "child_mean": 308.130967,
+     "ci95": [
+      28.79335,
+      81.5034
+     ],
+     "deterministic": false,
+     "examples": 12,
+     "improved_examples": 9,
+     "max_repeat_spread": 20.616,
+     "mean_delta": 55.15505,
+     "parent_mean": 363.286017,
+     "relative_delta": 0.151823,
+     "repeats": 5,
+     "status": "ok",
+     "worse_examples": 3
+    }
+   },
+   "child_tree": "702705aa22d706f4e06bd9a3322b15a8f94c90b1606141047254aa4287858134",
+   "decision": "qualified",
+   "environment": {
+    "cpu_count": 16,
+    "executable": "python.exe",
+    "implementation": "CPython",
+    "machine": "AMD64",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.6"
+   },
+   "parent_tree": "dacaad5e4dc87dde804b7d90da9dc64e2c576f1782e3c02bc9c699c39a798e3c",
+   "reason": "verified target improvement with no detected regression",
+   "receipt": "38da77ac61f486f3c61d3d0b1b3ef5af9abdec75ab797651b549287dd5f8d2d5",
+   "seal": "a57e489bbe803b1f98f26f9445fd2da4dda984adea3c00787e85ddcbf95e5ddb",
+   "surface": "dag_scheduling",
+   "values": {
+    "critical_path_weight": 1.0,
+    "read_only_bias": 0.0
+   }
+  },
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_8c7a71b104ec",
+  "parent_id": "cand_cfd1dbdcfd7a",
+  "surface": "tool_ranking",
+  "generation": 1,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "805f5e3349df3ac29431462d2b0fdacc14292e33",
+  "values_digest": "45e7b5dc5cbf2734",
+  "hypothesis": "Changing route_step_cap from 5 to 6 will improve tool_selection by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "discarded",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.015873,
+  "seed": 602,
+  "created_at": "2026-10-19T03:33:57+00:00",
+  "updated_at": "2026-10-19T03:34:30+00:00",
+  "mutation": {
+   "from": {
+    "exact_name_bonus": 20.0,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "to": {
+    "exact_name_bonus": 20.0,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 6,
+    "skill_tool_boost": 5.0
+   },
+   "rng_seed": 602,
+   "attempt": 0
+  },
+  "files": [
+   "jarvis/capabilities.py"
+  ],
+  "values": {
+   "exact_name_bonus": 20.0,
+   "min_skill_overlap": 2,
+   "preferred_skill_bonus": 8,
+   "route_boost": 8.0,
+   "route_step": 0.4,
+   "route_step_cap": 6,
+   "skill_tool_boost": 5.0
+  },
+  "fitness": {
+   "parent_train_score": 0.4899436052631579,
+   "train_score": 0.4855576315789474
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_b10779df1a3c",
+  "parent_id": "cand_cfd1dbdcfd7a",
+  "surface": "tool_ranking",
+  "generation": 1,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "8010210bfb9aa4e11df3b8ef47c9676118d68d12",
+  "values_digest": "0d659057a85a1b92",
+  "hypothesis": "Changing exact_name_bonus from 20.0 to 23.5 will improve tool_selection by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.014286,
+  "seed": 602,
+  "created_at": "2026-10-19T03:34:32+00:00",
+  "updated_at": "2026-10-19T03:35:05+00:00",
+  "mutation": {
+   "from": {
+    "exact_name_bonus": 20.0,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "to": {
+    "exact_name_bonus": 23.5,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "rng_seed": 602,
+   "attempt": 1
+  },
+  "files": [
+   "jarvis/capabilities.py"
+  ],
+  "values": {
+   "exact_name_bonus": 23.5,
+   "min_skill_overlap": 2,
+   "preferred_skill_bonus": 8,
+   "route_boost": 8.0,
+   "route_step": 0.4,
+   "route_step_cap": 5,
+   "skill_tool_boost": 5.0
+  },
+  "fitness": {
+   "parent_train_score": 0.4899436052631579,
+   "train_score": 0.4899436052631579
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_c40f1294a5e6",
+  "parent_id": "cand_b10779df1a3c",
+  "surface": "tool_ranking",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "96a92058931718c3711983db43246cbee8e370ab",
+  "values_digest": "f51eb8ee9c8af714",
+  "hypothesis": "Changing route_boost from 8.0 to 5.2 will improve tool_selection by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.028571,
+  "seed": 602,
+  "created_at": "2026-10-19T03:35:08+00:00",
+  "updated_at": "2026-10-19T03:35:40+00:00",
+  "mutation": {
+   "from": {
+    "exact_name_bonus": 23.5,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "to": {
+    "exact_name_bonus": 23.5,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 5.2,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "rng_seed": 602,
+   "attempt": 2
+  },
+  "files": [
+   "jarvis/capabilities.py"
+  ],
+  "values": {
+   "exact_name_bonus": 23.5,
+   "min_skill_overlap": 2,
+   "preferred_skill_bonus": 8,
+   "route_boost": 5.2,
+   "route_step": 0.4,
+   "route_step_cap": 5,
+   "skill_tool_boost": 5.0
+  },
+  "fitness": {
+   "parent_train_score": 0.4899436052631579,
+   "train_score": 0.4899436052631579
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_7eaa6ce4527d",
+  "parent_id": "cand_b10779df1a3c",
+  "surface": "tool_ranking",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "dc27f50691b1a40a27cda0da92304da6ef4f30b5",
+  "values_digest": "87066ac636ddbb9f",
+  "hypothesis": "Changing skill_tool_boost from 5.0 to 7.4 will improve tool_selection by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.028571,
+  "seed": 602,
+  "created_at": "2026-10-19T03:35:43+00:00",
+  "updated_at": "2026-10-19T03:36:15+00:00",
+  "mutation": {
+   "from": {
+    "exact_name_bonus": 23.5,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 5.0
+   },
+   "to": {
+    "exact_name_bonus": 23.5,
+    "min_skill_overlap": 2,
+    "preferred_skill_bonus": 8,
+    "route_boost": 8.0,
+    "route_step": 0.4,
+    "route_step_cap": 5,
+    "skill_tool_boost": 7.4
+   },
+   "rng_seed": 602,
+   "attempt": 3
+  },
+  "files": [
+   "jarvis/capabilities.py"
+  ],
+  "values": {
+   "exact_name_bonus": 23.5,
+   "min_skill_overlap": 2,
+   "preferred_skill_bonus": 8,
+   "route_boost": 8.0,
+   "route_step": 0.4,
+   "route_step_cap": 5,
+   "skill_tool_boost": 7.4
+  },
+  "fitness": {
+   "parent_train_score": 0.4899436052631579,
+   "train_score": 0.4899436052631579
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_43c3c385cbb5",
+  "parent_id": "cand_8644c44f8574",
+  "surface": "read_retry_backoff",
+  "generation": 1,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "dd88d2563244d34deea0ec2c13917ecbb0a77864",
+  "values_digest": "3c302befd4e55785",
+  "hypothesis": "Changing max_seconds from 1.0 to 0.51 will improve retry_recovery by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no significant improvement",
+  "diversity": 0.05,
+  "seed": 603,
+  "created_at": "2026-10-19T03:36:38+00:00",
+  "updated_at": "2026-10-19T03:37:14+00:00",
+  "mutation": {
+   "from": {
+    "base_seconds": 0.1,
+    "max_seconds": 1.0
+   },
+   "to": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.51
+   },
+   "rng_seed": 603,
+   "attempt": 0
+  },
+  "files": [
+   "jarvis/task_recovery.py"
+  ],
+  "values": {
+   "base_seconds": 0.1,
+   "max_seconds": 0.51
+  },
+  "fitness": {
+   "heldout_ci95": [
+    0.0,
+    0.008458
+   ],
+   "heldout_relative_delta": 0.006834,
+   "parent_train_score": 0.4699,
+   "train_score": 0.4753375
+  },
+  "gate": {
+   "checks": {
+    "changed_files": [
+     "jarvis/task_recovery.py"
+    ],
+    "target": {
+     "benchmark": "retry_recovery",
+     "child_mean": 0.534075,
+     "ci95": [
+      0.0,
+      0.008458
+     ],
+     "deterministic": true,
+     "examples": 60,
+     "improved_examples": 3,
+     "max_repeat_spread": 0.0,
+     "mean_delta": 0.003625,
+     "parent_mean": 0.53045,
+     "relative_delta": 0.006834,
+     "repeats": 2,
+     "status": "ok",
+     "worse_examples": 0
+    }
+   },
+   "child_tree": "321a9c57efab6f0b66a5259be4f1c912bfd413dd71159132470c5489938c92f1",
+   "decision": "discarded",
+   "environment": {
+    "cpu_count": 16,
+    "executable": "python.exe",
+    "implementation": "CPython",
+    "machine": "AMD64",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.6"
+   },
+   "parent_tree": "dacaad5e4dc87dde804b7d90da9dc64e2c576f1782e3c02bc9c699c39a798e3c",
+   "reason": "no significant improvement",
+   "receipt": "17054846b9c6eb3dff48e13668736434fb278473dac1b067f5b11d1315162b79",
+   "seal": "a57e489bbe803b1f98f26f9445fd2da4dda984adea3c00787e85ddcbf95e5ddb",
+   "surface": "read_retry_backoff",
+   "values": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.51
+   }
+  },
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_1e1169a29e9f",
+  "parent_id": "cand_43c3c385cbb5",
+  "surface": "read_retry_backoff",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "b2ea594463c2bfbdd4149344196cb51f6d2e1dfe",
+  "values_digest": "56680b58e0e97184",
+  "hypothesis": "Changing base_seconds from 0.1 to 0.01 will improve retry_recovery by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "discarded",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.045455,
+  "seed": 603,
+  "created_at": "2026-10-19T03:37:17+00:00",
+  "updated_at": "2026-10-19T03:37:34+00:00",
+  "mutation": {
+   "from": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.51
+   },
+   "to": {
+    "base_seconds": 0.01,
+    "max_seconds": 0.51
+   },
+   "rng_seed": 603,
+   "attempt": 1
+  },
+  "files": [
+   "jarvis/task_recovery.py"
+  ],
+  "values": {
+   "base_seconds": 0.01,
+   "max_seconds": 0.51
+  },
+  "fitness": {
+   "parent_train_score": 0.4753375,
+   "train_score": 0.16955
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_4a6abf252130",
+  "parent_id": "cand_43c3c385cbb5",
+  "surface": "read_retry_backoff",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "86627c2bfe67706563c69d519e9f65eecea5699a",
+  "values_digest": "4ac298c7369e3c73",
+  "hypothesis": "Changing max_seconds from 0.51 to 0.1 will improve retry_recovery by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "discarded",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.041837,
+  "seed": 603,
+  "created_at": "2026-10-19T03:37:37+00:00",
+  "updated_at": "2026-10-19T03:37:55+00:00",
+  "mutation": {
+   "from": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.51
+   },
+   "to": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.1
+   },
+   "rng_seed": 603,
+   "attempt": 2
+  },
+  "files": [
+   "jarvis/task_recovery.py"
+  ],
+  "values": {
+   "base_seconds": 0.1,
+   "max_seconds": 0.1
+  },
+  "fitness": {
+   "parent_train_score": 0.4753375,
+   "train_score": 0.30810624999999997
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_f60532cae523",
+  "parent_id": "cand_43c3c385cbb5",
+  "surface": "read_retry_backoff",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "5c729bf3e56b30f1d3c6f7a8b31a82a8d7e39968",
+  "values_digest": "67f12d8add41f3f7",
+  "hypothesis": "Changing max_seconds from 0.51 to 0.265 will improve retry_recovery by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "discarded",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.016837,
+  "seed": 603,
+  "created_at": "2026-10-19T03:37:58+00:00",
+  "updated_at": "2026-10-19T03:38:16+00:00",
+  "mutation": {
+   "from": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.51
+   },
+   "to": {
+    "base_seconds": 0.1,
+    "max_seconds": 0.265
+   },
+   "rng_seed": 603,
+   "attempt": 3
+  },
+  "files": [
+   "jarvis/task_recovery.py"
+  ],
+  "values": {
+   "base_seconds": 0.1,
+   "max_seconds": 0.265
+  },
+  "fitness": {
+   "parent_train_score": 0.4753375,
+   "train_score": 0.4267125
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_cd6fdf4041d9",
+  "parent_id": "cand_63ad737884ec",
+  "surface": "lesson_retrieval",
+  "generation": 1,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "f01d819aaea4cdde7603fd212a8059de0c63d984",
+  "values_digest": "b0a890317cf1776c",
+  "hypothesis": "Changing age_cap from 0.2 to 0.25 will improve lesson_retrieval by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.016667,
+  "seed": 604,
+  "created_at": "2026-10-19T03:38:39+00:00",
+  "updated_at": "2026-10-19T03:39:04+00:00",
+  "mutation": {
+   "from": {
+    "age_cap": 0.2,
+    "age_days": 365.0,
+    "confidence": 0.3,
+    "fit": 0.15,
+    "min_score": 0.2,
+    "mismatch": 0.3
+   },
+   "to": {
+    "age_cap": 0.25,
+    "age_days": 365.0,
+    "confidence": 0.3,
+    "fit": 0.15,
+    "min_score": 0.2,
+    "mismatch": 0.3
+   },
+   "rng_seed": 604,
+   "attempt": 0
+  },
+  "files": [
+   "jarvis/reasoning_bank.py"
+  ],
+  "values": {
+   "age_cap": 0.25,
+   "age_days": 365.0,
+   "confidence": 0.3,
+   "fit": 0.15,
+   "min_score": 0.2,
+   "mismatch": 0.3
+  },
+  "fitness": {
+   "parent_train_score": 0.9,
+   "train_score": 0.9
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_6709bbb68276",
+  "parent_id": "cand_cd6fdf4041d9",
+  "surface": "lesson_retrieval",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "b56de3ad7a6e0d3e0e88cf57abda0d85174ee30a",
+  "values_digest": "382c1f48079ae4e2",
+  "hypothesis": "Changing age_days from 365.0 to 727.0 will improve lesson_retrieval by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "retained",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.016667,
+  "seed": 604,
+  "created_at": "2026-10-19T03:39:07+00:00",
+  "updated_at": "2026-10-19T03:39:32+00:00",
+  "mutation": {
+   "from": {
+    "age_cap": 0.25,
+    "age_days": 365.0,
+    "confidence": 0.3,
+    "fit": 0.15,
+    "min_score": 0.2,
+    "mismatch": 0.3
+   },
+   "to": {
+    "age_cap": 0.25,
+    "age_days": 727.0,
+    "confidence": 0.3,
+    "fit": 0.15,
+    "min_score": 0.2,
+    "mismatch": 0.3
+   },
+   "rng_seed": 604,
+   "attempt": 2
+  },
+  "files": [
+   "jarvis/reasoning_bank.py"
+  ],
+  "values": {
+   "age_cap": 0.25,
+   "age_days": 727.0,
+   "confidence": 0.3,
+   "fit": 0.15,
+   "min_score": 0.2,
+   "mismatch": 0.3
+  },
+  "fitness": {
+   "parent_train_score": 0.9,
+   "train_score": 0.9
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ },
+ {
+  "id": "cand_15d249712dee",
+  "parent_id": "cand_dc72ef14b5a0",
+  "surface": "dag_scheduling",
+  "generation": 2,
+  "mutation_type": "perturbation",
+  "source_commit": "314fad5a88219ca69a2549b394a621b4728790e7",
+  "lab_commit": "9b7c5c460fa4e04d154ed6f18da3d1b8ce35b48e",
+  "values_digest": "b5e3185ac36cc84c",
+  "hypothesis": "Changing critical_path_weight from 1.0 to 1.5 will improve dag_makespan by at least 2% on held-out data (falsified if the paired 95% CI includes zero).",
+  "status": "discarded",
+  "failure_reason": "no train-split improvement",
+  "diversity": 0.025,
+  "seed": 607,
+  "created_at": "2026-10-19T03:44:20+00:00",
+  "updated_at": "2026-10-19T03:45:03+00:00",
+  "mutation": {
+   "from": {
+    "critical_path_weight": 1.0,
+    "read_only_bias": 0.0
+   },
+   "to": {
+    "critical_path_weight": 1.5,
+    "read_only_bias": 0.0
+   },
+   "rng_seed": 607,
+   "attempt": 0
+  },
+  "files": [
+   "jarvis/dag_execution.py"
+  ],
+  "values": {
+   "critical_path_weight": 1.5,
+   "read_only_bias": 0.0
+  },
+  "fitness": {
+   "parent_train_score": -246.61184444444444,
+   "train_score": -246.88415555555557
+  },
+  "gate": null,
+  "environment": {
+   "python": "3.10.6",
+   "implementation": "CPython",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "machine": "AMD64",
+   "cpu_count": 16,
+   "executable": "python.exe"
+  }
+ }
+]

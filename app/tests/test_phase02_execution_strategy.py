@@ -393,8 +393,14 @@ def fixture_window():
             time.sleep(.05)
         if not handle:
             pytest.skip('BLOCKED: disposable Win32 window did not appear (no interactive desktop).')
+        # Diagnostics only: a UIA test once stalled during a full run while the desktop was in active use.
+        # If that recurs, every thread's stack is written to the log (the outcome is not changed).
+        import faulthandler
+        faulthandler.dump_traceback_later(180, repeat=False)
         yield handle
     finally:
+        import faulthandler
+        faulthandler.cancel_dump_traceback_later()
         process.kill()
         process.wait(5)
 

@@ -238,8 +238,14 @@ def fixture_window():
             time.sleep(.05)
         if not handle:
             pytest.skip('BLOCKED: disposable Win32 window did not appear.')
+        # Diagnostics only: a UIA test once stalled during a full run while the desktop was in active use.
+        # If that recurs, every thread's stack is written to the log (the outcome is not changed).
+        import faulthandler
+        faulthandler.dump_traceback_later(180, repeat=False)
         yield handle
     finally:
+        import faulthandler
+        faulthandler.cancel_dump_traceback_later()
         process.kill()
         process.wait(5)
 
@@ -292,6 +298,8 @@ def test_P05_demonstrated_click_is_captured_replayed_and_becomes_provisional_ski
         while not handle and time.monotonic() < deadline:
             handle = win32gui.FindWindow('JarvisUiaFixture', title)
             time.sleep(.05)
+        if not handle:  # never fall back to handle 0 (that would walk the whole desktop tree)
+            pytest.skip('BLOCKED: second disposable Win32 window did not appear.')
         fresh = Desktop(backend='uia').window(handle=handle).wrapper_object()
         next(c for c in fresh.descendants() if c.element_info.control_type == 'Edit').iface_value.SetValue('demo')
         replayed = session.replay(handle, step)

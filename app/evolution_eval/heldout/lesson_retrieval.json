@@ -1,0 +1,202 @@
+{
+ "lessons": [
+  {
+   "label": "xlsx-api",
+   "title": "Spreadsheet cells",
+   "description": "Edit workbook cells",
+   "content": "Edit spreadsheet cells through the workbook API and read values back.",
+   "conditions": {
+    "application": "excel"
+   },
+   "confidence": 0.8
+  },
+  {
+   "label": "xlsx-gui",
+   "title": "Spreadsheet cells by clicking",
+   "description": "Older approach",
+   "content": "Click spreadsheet cells and type values when no API exists.",
+   "conditions": {
+    "application": "excel",
+    "version": "2013"
+   },
+   "confidence": 0.5
+  },
+  {
+   "label": "docx",
+   "title": "Document paragraphs",
+   "description": "Word adapter",
+   "content": "Change document paragraphs with the document adapter and confirm the text.",
+   "conditions": {
+    "application": "word"
+   },
+   "confidence": 0.7
+  },
+  {
+   "label": "pdf",
+   "title": "PDF pages",
+   "description": "Merge split",
+   "content": "Merge or split pdf pages into a new file rather than editing the original.",
+   "conditions": {},
+   "confidence": 0.7
+  },
+  {
+   "label": "blender4",
+   "title": "Blender export",
+   "description": "glTF binary",
+   "content": "Export blender scenes as binary glb files from a disposable scene.",
+   "conditions": {
+    "application": "blender",
+    "version": "4"
+   },
+   "confidence": 0.75
+  },
+  {
+   "label": "blender3",
+   "title": "Blender export legacy",
+   "description": "glTF separate",
+   "content": "Export blender scenes with the legacy gltf separate option.",
+   "conditions": {
+    "application": "blender",
+    "version": "3"
+   },
+   "confidence": 0.6
+  },
+  {
+   "label": "browser",
+   "title": "Required form fields",
+   "description": "Forms",
+   "content": "Fill required form fields before pressing the submit control.",
+   "conditions": {
+    "environment": "browser"
+   },
+   "confidence": 0.7
+  },
+  {
+   "label": "spotify",
+   "title": "Media controls",
+   "description": "Playback",
+   "content": "Use the media session controls to pause or skip tracks.",
+   "conditions": {},
+   "confidence": 0.65
+  },
+  {
+   "label": "gmail",
+   "title": "Email drafts first",
+   "description": "Approval",
+   "content": "Create an email draft first and wait for approval before sending mail.",
+   "conditions": {},
+   "confidence": 0.8
+  },
+  {
+   "label": "vscode",
+   "title": "Editor line jump",
+   "description": "VS Code",
+   "content": "Open source files at a line with the editor command line.",
+   "conditions": {
+    "application": "vscode"
+   },
+   "confidence": 0.7
+  },
+  {
+   "label": "git",
+   "title": "Repository status first",
+   "description": "Git",
+   "content": "Inspect repository status before committing any change.",
+   "conditions": {},
+   "confidence": 0.75
+  },
+  {
+   "label": "docker",
+   "title": "Untrusted code",
+   "description": "Sandbox",
+   "content": "Run untrusted code only in the network-less container sandbox.",
+   "conditions": {},
+   "confidence": 0.85
+  },
+  {
+   "label": "stale-weather",
+   "title": "Weather scraping",
+   "description": "Old lesson",
+   "content": "Scrape weather pages for the forecast.",
+   "conditions": {},
+   "confidence": 0.4,
+   "updated_at": "2024-01-01T00:00:00+00:00"
+  },
+  {
+   "label": "weather",
+   "title": "Weather provider",
+   "description": "Current lesson",
+   "content": "Query the registered weather provider for the forecast instead of scraping pages.",
+   "conditions": {},
+   "confidence": 0.8
+  }
+ ],
+ "cases": [
+  {
+   "query": "update numbers in my excel sheet cells",
+   "conditions": {
+    "application": "excel"
+   },
+   "label": "xlsx-api"
+  },
+  {
+   "query": "rewrite a paragraph of the word document",
+   "conditions": {
+    "application": "word"
+   },
+   "label": "docx"
+  },
+  {
+   "query": "export my blender scene for a game",
+   "conditions": {
+    "application": "blender",
+    "version": "4"
+   },
+   "label": "blender4"
+  },
+  {
+   "query": "the form says a field is required",
+   "conditions": {
+    "environment": "browser"
+   },
+   "label": "browser"
+  },
+  {
+   "query": "send an email for me",
+   "conditions": {},
+   "label": "gmail"
+  },
+  {
+   "query": "commit my changes",
+   "conditions": {},
+   "label": "git"
+  },
+  {
+   "query": "what is the weather forecast",
+   "conditions": {},
+   "label": "weather"
+  },
+  {
+   "query": "blender glb export",
+   "conditions": {
+    "application": "blender",
+    "version": "4"
+   },
+   "label": "blender4"
+  },
+  {
+   "query": "change document text",
+   "conditions": {
+    "application": "word"
+   },
+   "label": "docx"
+  },
+  {
+   "query": "fill the signup form fields",
+   "conditions": {
+    "environment": "browser"
+   },
+   "label": "browser"
+  }
+ ]
+}

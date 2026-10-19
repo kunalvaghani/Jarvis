@@ -77,6 +77,10 @@ def unpack(blob):
     return list(struct.unpack(f'{len(blob) // 4}f', blob)) if blob else None
 
 
+# Retrieval weights: a bounded evolution surface (jarvis/evolution_surfaces.py); the historical values.
+RETRIEVAL = {'fit': 0.15, 'mismatch': 0.3, 'confidence': 0.3, 'age_cap': 0.2, 'age_days': 365.0, 'min_score': 0.2}
+
+
 class ReasoningBank:
     def __init__(self, base, embedder=None):
         self.path = Path(base) / '.jarvis-runtime' / 'reasoning_bank' / 'bank.sqlite3'
@@ -269,12 +273,14 @@ class ReasoningBank:
             fit = sum(1 for key, value in conditions.items() if item_conditions.get(key) == value)
             mismatch = sum(1 for key, value in conditions.items() if key in item_conditions and item_conditions[key] != value)
             age = (datetime.now(timezone.utc) - datetime.fromisoformat(row['updated_at'])).days
-            score = similarity + .15 * fit - .3 * mismatch + .3 * (row['confidence'] - .5) - min(.2, age / 365)
+            w = RETRIEVAL
+            score = (similarity + w['fit'] * fit - w['mismatch'] * mismatch + w['confidence'] * (row['confidence'] - .5)
+                     - min(w['age_cap'], age / w['age_days']))
             scored.append((score, row, method))
         scored.sort(key=lambda item: -item[0])
         winners, dropped, used = [], [], 0
         for score, row, method in scored:
-            if score <= .2 or len(winners) >= k:
+            if score <= RETRIEVAL['min_score'] or len(winners) >= k:
                 continue
             rivals = {r['b'] for r in relations if r['a'] == row['id']} | {r['a'] for r in relations if r['b'] == row['id']}
             if rivals & {w['id'] for w in winners}:

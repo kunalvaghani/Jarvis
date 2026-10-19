@@ -1,0 +1,251 @@
+{
+ "cases": [
+  {
+   "query": "open my downloads folder",
+   "expected": [
+    "open",
+    "list_files"
+   ]
+  },
+  {
+   "query": "read the notes.txt file on my desktop",
+   "expected": [
+    "read_file"
+   ]
+  },
+  {
+   "query": "append a line to my todo list file",
+   "expected": [
+    "append_file"
+   ]
+  },
+  {
+   "query": "search the web for the latest python release",
+   "expected": [
+    "web_search",
+    "google_search",
+    "searx_search",
+    "serp_search"
+   ]
+  },
+  {
+   "query": "play some jazz on spotify",
+   "expected": [
+    "media_search"
+   ]
+  },
+  {
+   "query": "close notepad",
+   "expected": [
+    "close_app"
+   ]
+  },
+  {
+   "query": "show my git status",
+   "expected": [
+    "git_status"
+   ]
+  },
+  {
+   "query": "write a python script that renames photos",
+   "expected": [
+    "write_code"
+   ]
+  },
+  {
+   "query": "refactor this function to be faster",
+   "expected": [
+    "improve_code"
+   ]
+  },
+  {
+   "query": "search github for a markdown parser",
+   "expected": [
+    "github_search"
+   ]
+  },
+  {
+   "query": "put 42 into cell B3 of budget.xlsx",
+   "expected": [
+    "office_xlsx",
+    "strategy_execute"
+   ]
+  },
+  {
+   "query": "merge two pdf files",
+   "expected": [
+    "pdf_document",
+    "strategy_execute"
+   ]
+  },
+  {
+   "query": "open main.py in vs code at line 40",
+   "expected": [
+    "vscode_cli"
+   ]
+  },
+  {
+   "query": "type my address into the form field",
+   "expected": [
+    "fill_text",
+    "type_text",
+    "browser_fill"
+   ]
+  },
+  {
+   "query": "fill the login form in chrome",
+   "expected": [
+    "browser_fill",
+    "browser_inspect"
+   ]
+  },
+  {
+   "query": "scrape the article text from this page",
+   "expected": [
+    "scrape_web",
+    "firecrawl_scrape"
+   ]
+  },
+  {
+   "query": "list the mcp servers",
+   "expected": [
+    "mcp_status",
+    "mcp_list_tools"
+   ]
+  },
+  {
+   "query": "schedule a meeting on my calendar friday",
+   "expected": [
+    "calendar_create"
+   ]
+  },
+  {
+   "query": "send a slack message to the team",
+   "expected": [
+    "slack_send"
+   ]
+  },
+  {
+   "query": "run the command ipconfig",
+   "expected": [
+    "run_command",
+    "windows_command"
+   ]
+  },
+  {
+   "query": "open the file menu in paint",
+   "expected": [
+    "open_menu"
+   ]
+  },
+  {
+   "query": "read these three files together",
+   "expected": [
+    "read_batch",
+    "read_file"
+   ]
+  },
+  {
+   "query": "what integrations are connected",
+   "expected": [
+    "integration_status",
+    "toolkit_status"
+   ]
+  },
+  {
+   "query": "review this pull request",
+   "expected": [
+    "review_pull_request",
+    "github_pr_files"
+   ]
+  },
+  {
+   "query": "show the files changed in pull request 12",
+   "expected": [
+    "github_pr_files"
+   ]
+  },
+  {
+   "query": "search youtube for a cooking video",
+   "expected": [
+    "media_search"
+   ]
+  },
+  {
+   "query": "find installed applications for video editing",
+   "expected": [
+    "application_search"
+   ]
+  },
+  {
+   "query": "create a jira ticket for the login bug",
+   "expected": [
+    "jira_create"
+   ]
+  },
+  {
+   "query": "how should i automate this excel workbook",
+   "expected": [
+    "execution_methods",
+    "office_xlsx"
+   ]
+  },
+  {
+   "query": "look up crypto prices",
+   "expected": [
+    "realtime_query"
+   ]
+  },
+  {
+   "query": "think about the best plan for this",
+   "expected": [
+    "think"
+   ]
+  },
+  {
+   "query": "explain the skill called weather",
+   "expected": [
+    "repository_skill_explain",
+    "skill_read"
+   ]
+  },
+  {
+   "query": "generate a sandboxed chart from data",
+   "expected": [
+    "deerflow_free_media",
+    "deerflow_sandbox_task"
+   ]
+  },
+  {
+   "query": "delete the event from my calendar",
+   "expected": [
+    "calendar_delete"
+   ]
+  },
+  {
+   "query": "search for files named invoice",
+   "expected": [
+    "search_files"
+   ]
+  },
+  {
+   "query": "find people at a company with apollo",
+   "expected": [
+    "apollo_search"
+   ]
+  },
+  {
+   "query": "query the knowledge resource about my vault",
+   "expected": [
+    "query_resource",
+    "knowledge_search"
+   ]
+  },
+  {
+   "query": "check the deerflow status",
+   "expected": [
+    "deerflow_status"
+   ]
+  }
+ ]
+}

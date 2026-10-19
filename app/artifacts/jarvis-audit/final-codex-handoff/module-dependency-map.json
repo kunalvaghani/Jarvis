@@ -1,0 +1,310 @@
+{
+ "modules": 261,
+ "module_level_cycles": [],
+ "upgrade_modules": {
+  "execution_contracts": {
+   "imports": [],
+   "deferred_imports": [
+    "agent_events"
+   ],
+   "imported_by": [
+    "agent_events",
+    "execution_strategy",
+    "skill_evolution"
+   ]
+  },
+  "execution_strategy": {
+   "imports": [
+    "execution_contracts"
+   ],
+   "deferred_imports": [
+    "agent_events",
+    "app_adapters",
+    "toolkits",
+    "tools"
+   ],
+   "imported_by": [
+    "brain",
+    "capabilities",
+    "toolkits",
+    "tools"
+   ]
+  },
+  "app_adapters": {
+   "imports": [
+    "tool_errors"
+   ],
+   "deferred_imports": [
+    "harness_process",
+    "repo_acquisition",
+    "task_state",
+    "toolkits"
+   ],
+   "imported_by": [
+    "execution_strategy",
+    "toolkits"
+   ]
+  },
+  "document_worker": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "office_com_worker": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "tool_errors": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "app_adapters",
+    "cloud_architect",
+    "mcp_synthesis",
+    "toolkits"
+   ]
+  },
+  "skill_store": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "skill_evolution",
+    "skill_memory"
+   ]
+  },
+  "skill_evolution": {
+   "imports": [
+    "skill_store"
+   ],
+   "deferred_imports": [
+    "capabilities",
+    "execution_contracts",
+    "obsidian_memory",
+    "tools"
+   ],
+   "imported_by": [
+    "demonstration",
+    "self_evolution",
+    "skill_memory"
+   ]
+  },
+  "mcp_synthesis": {
+   "imports": [],
+   "deferred_imports": [
+    "capabilities",
+    "mcp_bridge",
+    "repo_sandbox",
+    "tool_errors",
+    "tools"
+   ],
+   "imported_by": [
+    "azr_sandbox",
+    "cloud_architect",
+    "mcp_bridge"
+   ]
+  },
+  "reasoning_bank": {
+   "imports": [],
+   "deferred_imports": [
+    "local_embeddings",
+    "obsidian_memory",
+    "tools"
+   ],
+   "imported_by": [
+    "deliberation",
+    "learning_memory"
+   ]
+  },
+  "viking_memory": {
+   "imports": [],
+   "deferred_imports": [
+    "harness_process",
+    "knowledge_worker"
+   ],
+   "imported_by": [
+    "learning_memory"
+   ]
+  },
+  "viking_worker": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "exploration": {
+   "imports": [],
+   "deferred_imports": [
+    "browser_worker"
+   ],
+   "imported_by": [
+    "learning_memory"
+   ]
+  },
+  "learning_memory": {
+   "imports": [],
+   "deferred_imports": [
+    "exploration",
+    "reasoning_bank",
+    "tools",
+    "viking_memory"
+   ],
+   "imported_by": [
+    "actions",
+    "self_evolution"
+   ]
+  },
+  "local_embeddings": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "reasoning_bank"
+   ]
+  },
+  "cloud_architect": {
+   "imports": [],
+   "deferred_imports": [
+    "cloud_policy",
+    "cloud_quota",
+    "groq_adapter",
+    "mcp_synthesis",
+    "tool_errors",
+    "tools"
+   ],
+   "imported_by": []
+  },
+  "demonstration": {
+   "imports": [],
+   "deferred_imports": [
+    "execution_router",
+    "skill_evolution"
+   ],
+   "imported_by": [
+    "actions"
+   ]
+  },
+  "evolution_surfaces": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "autoresearch",
+    "evolution_lab",
+    "evolution_promotion",
+    "prompt_evolution"
+   ]
+  },
+  "evolution_archive": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "autoresearch",
+    "evolution_promotion"
+   ]
+  },
+  "evolution_lab": {
+   "imports": [
+    "evolution_surfaces"
+   ],
+   "deferred_imports": [],
+   "imported_by": [
+    "autoresearch"
+   ]
+  },
+  "autoresearch": {
+   "imports": [
+    "evolution_archive",
+    "evolution_lab",
+    "evolution_surfaces"
+   ],
+   "deferred_imports": [],
+   "imported_by": [
+    "evolution_promotion",
+    "self_evolution"
+   ]
+  },
+  "evolution_promotion": {
+   "imports": [
+    "evolution_archive",
+    "evolution_surfaces"
+   ],
+   "deferred_imports": [
+    "autoresearch"
+   ],
+   "imported_by": [
+    "toolkits"
+   ]
+  },
+  "prompt_router": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "brain",
+    "prompt_evolution"
+   ]
+  },
+  "prompt_evolution": {
+   "imports": [
+    "evolution_surfaces",
+    "prompt_router"
+   ],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "azr_tasks": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": [
+    "azr_dataset",
+    "azr_proposer",
+    "azr_reward",
+    "azr_sandbox"
+   ]
+  },
+  "azr_sandbox": {
+   "imports": [
+    "azr_tasks"
+   ],
+   "deferred_imports": [
+    "mcp_synthesis"
+   ],
+   "imported_by": []
+  },
+  "azr_dataset": {
+   "imports": [
+    "azr_tasks"
+   ],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "azr_proposer": {
+   "imports": [
+    "azr_tasks"
+   ],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "azr_reward": {
+   "imports": [
+    "azr_tasks"
+   ],
+   "deferred_imports": [],
+   "imported_by": []
+  },
+  "model_registry": {
+   "imports": [],
+   "deferred_imports": [],
+   "imported_by": []
+  }
+ },
+ "unreferenced_upgrade_modules": [
+  "document_worker",
+  "office_com_worker",
+  "viking_worker",
+  "cloud_architect",
+  "prompt_evolution",
+  "azr_sandbox",
+  "azr_dataset",
+  "azr_proposer",
+  "azr_reward",
+  "model_registry"
+ ]
+}

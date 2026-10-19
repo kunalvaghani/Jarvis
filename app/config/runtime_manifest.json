@@ -430,9 +430,16 @@
   },
   "escalation_and_demonstration": {
     "modules": ["jarvis.cloud_architect", "jarvis.demonstration"],
-    "cloud_architect": "Disabled by default (config cloud_architect.enabled=false). Advisory only: needs explicit consent per request/scope, a confirmed free Groq account, quota, three distinct verified local reasoning failures and a passing privacy gate; advice code runs only in the network-less sandbox. Log: .jarvis-runtime/cloud/architect-log.jsonl.",
+    "cloud_architect": "Disabled by default (config cloud_architect.enabled=false). Advisory only: needs explicit consent per request/scope, a confirmed free Groq account, quota, three distinct verified local reasoning failures and a passing privacy gate; advice code runs only in the network-less sandbox. Log: .jarvis-runtime/cloud/architect-log.jsonl. Entry point (Phase 8): the approval-gated toolkit tool cloud_architect_consult; Brain only offers it after three distinct verified local reasoning failures.",
     "demonstration": "Show Me Once: consent per demonstration, window-scoped, injected input ignored, no keyboard/field values/passwords/RuntimeIds; low-level mouse hook runs in its own short-lived process. State: .jarvis-runtime/demonstrations/.",
     "failure_routing": "deliberation.FailureRouter: missing tool, broken skill, unknown UI, reasoning, planner structure, repeated weakness, permission; one use of each route and three escalations per task. Queues: .jarvis-runtime/learning-queues/."
+  },
+  "controlled_self_evolution": {
+    "modules": ["jarvis.evolution_surfaces", "jarvis.evolution_archive", "jarvis.evolution_lab", "jarvis.autoresearch", "jarvis.evolution_promotion", "jarvis.prompt_router"],
+    "evaluator": "evolution_eval/ (sealed: must equal the committed HEAD; excluded from every experiment snapshot). Held-out data in evolution_eval/heldout, proposer data in evolution_eval/train.",
+    "lab": "Separate Git repository .jarvis-runtime/evolution/lab/repo; the canonical repository is only read (rev-parse, archive). Candidate branches cand/<id> and detached worktrees exist only inside the lab.",
+    "archive": ".jarvis-runtime/evolution/archive.sqlite3 (schema_version 1) and results.tsv; releases and snapshots in .jarvis-runtime/evolution/releases/.",
+    "promotion": "Qualified candidates are proposals; deployment needs an approval card, staged health checks and keeps a snapshot. Independent rollback: python -m jarvis.evolution_promotion rollback <release>."
   },
   "gmail_api": {
     "module": "jarvis.gmail_api",

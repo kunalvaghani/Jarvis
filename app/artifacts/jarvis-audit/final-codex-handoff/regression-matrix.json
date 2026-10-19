@@ -1,0 +1,78 @@
+{
+ "totals": {
+  "passed": 3379,
+  "skipped": 147
+ },
+ "domains": {
+  "voice_routing": {
+   "passed": 52
+  },
+  "privacy_cloud": {
+   "passed": 84
+  },
+  "dag_planning": {
+   "passed": 47
+  },
+  "coding_files": {
+   "passed": 19
+  },
+  "desktop_browser": {
+   "passed": 43
+  },
+  "skill_registry": {
+   "passed": 91,
+   "skipped": 1
+  },
+  "memory": {
+   "passed": 59,
+   "skipped": 4
+  },
+  "recovery": {
+   "passed": 35
+  },
+  "scheduling": {
+   "passed": 70,
+   "skipped": 1
+  },
+  "integrations": {
+   "passed": 84
+  }
+ },
+ "phase_test_files": {
+  "phase01": {
+   "passed": 19
+  },
+  "phase02": {
+   "passed": 30
+  },
+  "phase03": {
+   "passed": 34
+  },
+  "phase04": {
+   "passed": 20
+  },
+  "phase05": {
+   "passed": 38
+  },
+  "phase06": {
+   "passed": 25
+  },
+  "phase07": {
+   "passed": 21
+  },
+  "phase08": {
+   "passed": 18
+  }
+ },
+ "skip_reasons": [
+  [
+   "BLOCKED",
+   140
+  ],
+  [
+   "BLOCKED live gate",
+   7
+  ]
+ ],
+ "blocked_skips": 147
+}

@@ -1,0 +1,177 @@
+{
+ "adapter": null,
+ "merged": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\azr\\runs\\phase07\\export\\merged",
+ "environment": {
+  "python": "3.10.6",
+  "implementation": "CPython",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "machine": "AMD64",
+  "cpu_count": 16,
+  "executable": "python.exe"
+ },
+ "seal": "784167da015af26ac807db9ba99e7e545e931950435fa6f4513369bf32082387",
+ "base": {
+  "peak_vram_mb": 1130,
+  "seconds": 210.8,
+  "seconds_per_task_p50": 0.5469,
+  "deduction": {
+   "correct": 0,
+   "total": 60,
+   "accuracy": 0.0,
+   "wilson95": [
+    0.0,
+    0.0602
+   ],
+   "format_ok": 60,
+   "mean_reward": -0.5
+  },
+  "abduction": {
+   "correct": 0,
+   "total": 60,
+   "accuracy": 0.0,
+   "wilson95": [
+    0.0,
+    0.0602
+   ],
+   "format_ok": 0,
+   "mean_reward": -1.0
+  },
+  "induction": {
+   "correct": 0,
+   "total": 45,
+   "accuracy": 0.0,
+   "wilson95": [
+    0.0,
+    0.0787
+   ],
+   "format_ok": 45,
+   "mean_reward": -0.5,
+   "visible_only": 0
+  },
+  "overall": {
+   "correct": 0,
+   "total": 165,
+   "accuracy": 0.0,
+   "wilson95": [
+    0.0,
+    0.0228
+   ]
+  }
+ },
+ "candidate": {
+  "peak_vram_mb": 1130,
+  "seconds": 97.2,
+  "seconds_per_task_p50": 0.4785,
+  "deduction": {
+   "correct": 2,
+   "total": 60,
+   "accuracy": 0.0333,
+   "wilson95": [
+    0.0092,
+    0.1136
+   ],
+   "format_ok": 60,
+   "mean_reward": -0.45
+  },
+  "abduction": {
+   "correct": 0,
+   "total": 60,
+   "accuracy": 0.0,
+   "wilson95": [
+    0.0,
+    0.0602
+   ],
+   "format_ok": 60,
+   "mean_reward": -0.5
+  },
+  "induction": {
+   "correct": 7,
+   "total": 45,
+   "accuracy": 0.1556,
+   "wilson95": [
+    0.0775,
+    0.2878
+   ],
+   "format_ok": 45,
+   "mean_reward": -0.2667,
+   "visible_only": 2
+  },
+  "overall": {
+   "correct": 9,
+   "total": 165,
+   "accuracy": 0.0545,
+   "wilson95": [
+    0.029,
+    0.1004
+   ]
+  }
+ },
+ "comparisons": {
+  "deduction": {
+   "examples": 60,
+   "repeats": 1,
+   "parent_mean": 0.0,
+   "child_mean": 0.033333,
+   "mean_delta": 0.033333,
+   "relative_delta": null,
+   "ci95": [
+    0.0,
+    0.083333
+   ],
+   "improved_examples": 2,
+   "worse_examples": 0,
+   "max_repeat_spread": 0.0,
+   "deterministic": true
+  },
+  "abduction": {
+   "examples": 60,
+   "repeats": 1,
+   "parent_mean": 0.0,
+   "child_mean": 0.0,
+   "mean_delta": 0.0,
+   "relative_delta": null,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "improved_examples": 0,
+   "worse_examples": 0,
+   "max_repeat_spread": 0.0,
+   "deterministic": true
+  },
+  "induction": {
+   "examples": 45,
+   "repeats": 1,
+   "parent_mean": 0.0,
+   "child_mean": 0.155556,
+   "mean_delta": 0.155556,
+   "relative_delta": null,
+   "ci95": [
+    0.066667,
+    0.266667
+   ],
+   "improved_examples": 7,
+   "worse_examples": 0,
+   "max_repeat_spread": 0.0,
+   "deterministic": true
+  },
+  "overall": {
+   "examples": 165,
+   "repeats": 1,
+   "parent_mean": 0.0,
+   "child_mean": 0.054545,
+   "mean_delta": 0.054545,
+   "relative_delta": null,
+   "ci95": [
+    0.024242,
+    0.090909
+   ],
+   "improved_examples": 9,
+   "worse_examples": 0,
+   "max_repeat_spread": 0.0,
+   "deterministic": true
+  }
+ },
+ "decision": "qualified_experimental",
+ "reason": "significant held-out gain with no mode regression"
+}

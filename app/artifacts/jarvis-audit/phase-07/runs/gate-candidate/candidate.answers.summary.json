@@ -1,0 +1,13 @@
+{
+ "model": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+ "tasks": 165,
+ "seconds": 168.5,
+ "peak_vram_mb": 1258,
+ "batch": 8,
+ "decoding": "greedy",
+ "max_new_tokens": {
+  "deduction": 320,
+  "abduction": 384,
+  "induction": 192
+ }
+}

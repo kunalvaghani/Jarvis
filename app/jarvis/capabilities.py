@@ -52,6 +52,11 @@ ROUTES = {
     'modeling_3d': (r'\b(?:blender|unreal(?: engine)?|3d (?:model|scene|object)s?|meshe?s?)\b|\.blend\b',
                     ('strategy_execute', 'execution_methods', 'blender_task', 'unreal_task'), ()),
     'vscode': (r'\b(?:vs ?code|visual studio code)\b', ('vscode_cli', 'execution_methods'), ('project-coding',)),
+    # Optional anonymised cloud advice after local failures; approval card shows the exact payload.
+    'cloud_architect': (r'\bcloud (?:architect|advice|consult\w*)\b', ('cloud_architect_consult',), ()),
+    # Self-evolution proposals are reviewed and deployed only through approval cards.
+    'evolution': (r'\b(?:self[- ]?(?:evolution|improvements?)|improvement proposals?|evolution (?:archive|status|proposals?|releases?))\b',
+                  ('evolution_status', 'evolution_promote', 'evolution_rollback'), ()),
 }
 PREREQUISITES = {
     'strategy_execute': ('execution_methods',),
@@ -61,6 +66,10 @@ PREREQUISITES = {
     'mcp_call': ('mcp_status', 'mcp_list_tools'), 'skill_read': ('skill_list',),
     'write_tests': ('read_file',), 'improve_code': ('read_file',),
 }
+# Ranking policy: a bounded evolution surface (jarvis/evolution_surfaces.py). Values are the
+# historical constants; availability, allow-lists and prerequisites are enforced separately.
+RANKING = {'route_boost': 8.0, 'route_step': 0.4, 'route_step_cap': 5, 'skill_tool_boost': 5.0,
+           'exact_name_bonus': 20.0, 'preferred_skill_bonus': 8, 'min_skill_overlap': 2}
 STOP_WORDS = {'the', 'and', 'with', 'for', 'this', 'that', 'jarvis', 'please', 'my', 'me', 'to', 'in', 'on', 'a', 'an', 'use'}
 CONTRACT = ('Routing hints are references, not a completed plan. Choose only offered tools. '
             'Prefer existing direct workflows and the Qwen coding runner for file generation/edits. '
@@ -147,7 +156,7 @@ def skill_score(row, goal, ranking=None):
     from .cloud_policy import SECRET
     metadata=tokens(description) if SECRET.search(description) else _description_tokens(description)
     score = len(query & metadata)
-    return score + 8 if row['name'] in preferred else score if score >= 2 else 0
+    return score + RANKING['preferred_skill_bonus'] if row['name'] in preferred else score if score >= RANKING['min_skill_overlap'] else 0
 
 
 def skill_tools(row, known):
@@ -163,13 +172,13 @@ def rank_tools(specs, query, allowed=None, skills=None, limit=12):
     boosts = {}
     for intent in intents(query):
         for index, name in enumerate(ROUTES[intent][1]):
-            boosts[name] = max(boosts.get(name, 0), 8 - min(index, 5) * .4)
+            boosts[name] = max(boosts.get(name, 0), RANKING['route_boost'] - min(index, RANKING['route_step_cap']) * RANKING['route_step'])
     if skills is not None:
         ranking=skill_ranking(query)
         for row in skills.catalog:
             if skill_score(row, query,ranking) > 0:
                 for name in skill_tools(row, specs):
-                    boosts[name] = max(boosts.get(name, 0), 5)
+                    boosts[name] = max(boosts.get(name, 0), RANKING['skill_tool_boost'])
     ranked = []
     if 'email' in intents(query):
         for name in ('gmail_api_list','gmail_api_read','gmail_api_draft','gmail_api_list_drafts','gmail_api_read_draft','gmail_api_update_draft','gmail_api_send','gmail_api_send_draft','gmail_api_trash','gmail_api_untrash','gmail_api_modify_labels','gmail_api_list_labels','gmail_api_delete_draft'):
@@ -193,7 +202,7 @@ def rank_tools(specs, query, allowed=None, skills=None, limit=12):
             continue
         score = len(words & tokens(spec.name.replace('_', ' ') + ' ' + spec.description)) + boosts.get(spec.name, 0)
         if re.search(r'(?<!\w)' + re.escape(spec.name) + r'(?!\w)', str(query).casefold()):
-            score += 20
+            score += RANKING['exact_name_bonus']
         if score:
             ranked.append((score, spec.name))
     ranked.sort(key=lambda item: (-item[0], item[1]))

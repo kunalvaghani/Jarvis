@@ -1,0 +1,31 @@
+08:58:11 start diagnosis
+08:58:48 done diagnosis in 37.6 s
+08:58:48 start autoresearch_dag_scheduling
+09:03:33 dag_scheduling cand_dc72ef14b5a0: qualified (verified target improvement with no detected regression)
+09:03:36 done autoresearch_dag_scheduling in 287.2 s
+09:03:36 start autoresearch_tool_ranking
+09:04:30 tool_ranking cand_8c7a71b104ec: discarded (no train-split improvement)
+09:05:05 tool_ranking cand_b10779df1a3c: discarded (no train-split improvement)
+09:05:40 tool_ranking cand_c40f1294a5e6: discarded (no train-split improvement)
+09:06:15 tool_ranking cand_7eaa6ce4527d: discarded (no train-split improvement)
+09:06:18 done autoresearch_tool_ranking in 162.4 s
+09:06:18 start autoresearch_read_retry_backoff
+09:07:14 read_retry_backoff cand_43c3c385cbb5: discarded (no significant improvement)
+09:07:34 read_retry_backoff cand_1e1169a29e9f: discarded (no train-split improvement)
+09:07:55 read_retry_backoff cand_4a6abf252130: discarded (no train-split improvement)
+09:08:16 read_retry_backoff cand_f60532cae523: discarded (no train-split improvement)
+09:08:18 done autoresearch_read_retry_backoff in 120.5 s
+09:08:18 start autoresearch_lesson_retrieval
+09:09:04 lesson_retrieval cand_cd6fdf4041d9: discarded (no train-split improvement)
+09:09:32 lesson_retrieval cand_6709bbb68276: discarded (no train-split improvement)
+09:09:35 done autoresearch_lesson_retrieval in 76.4 s
+09:09:35 start eevee_router_phase
+09:09:35 done eevee_router_phase in 0.0 s
+09:09:35 start eevee_prompt_phase_tool_selection
+09:10:24 done eevee_prompt_phase_tool_selection in 49.1 s
+09:10:24 start reproducibility
+09:14:00 done reproducibility in 215.8 s
+09:14:00 start autoresearch_dag_generation_2
+09:15:03 dag_scheduling cand_15d249712dee: discarded (no train-split improvement)
+09:15:06 done autoresearch_dag_generation_2 in 65.9 s
+09:15:06 lab branches: baseline/314fad5a8821, cand/cand_15d249712dee, cand/cand_1e1169a29e9f, cand/cand_43c3c385cbb5, cand/cand_4a6abf252130, cand/cand_6709bbb68276, cand/cand_7eaa6ce4527d, cand/cand_8c7a71b104ec, cand/cand_b10779df1a3c, cand/cand_c40f1294a5e6, cand/cand_cd6fdf4041d9, cand/cand_dc72ef14b5a0, cand/cand_f60532cae523

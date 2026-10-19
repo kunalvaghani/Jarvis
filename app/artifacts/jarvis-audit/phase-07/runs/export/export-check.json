@@ -1,0 +1,32 @@
+{
+ "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+ "prompts": 24,
+ "exact_match": 20,
+ "exact_match_rate": 0.8333,
+ "merged_dir": "artifacts\\jarvis-audit\\phase-07\\runs\\export\\merged",
+ "merged_reloads_with_transformers": true,
+ "gguf_conversion": "BLOCKED: no GGUF converter (gguf package / llama.cpp) installed",
+ "ollama_registration": "not performed (requires approval and a GGUF export)",
+ "mismatches": [
+  {
+   "id": "abd_0b18d87479fe296c",
+   "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"tmp/readme.txt\", \"src\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"open_app\", \"args\": {\"app\": \"browser\"}, \"deps\": []}]",
+   "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"blue\", \"path\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\": \"s3\", "
+  },
+  {
+   "id": "abd_8737f94fb26f15e9",
+   "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"archive/plan.txt\", \"src\": \"ar",
+   "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": "
+  },
+  {
+   "id": "abd_04db09455f719534",
+   "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"archive/summary.txt\"}, \"deps\": [\"s1\"",
+   "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\":"
+  },
+  {
+   "id": "abd_d9ab44706fc135ba",
+   "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"delta\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"work/ideas.txt\", \"src\": \"a",
+   "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/log.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"green\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\":"
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "cases": [
+  {
+   "goal": "organize the steps to set up a new laptop",
+   "slot": "planning"
+  },
+  {
+   "goal": "prepare a workflow for publishing the video",
+   "slot": "planning"
+  },
+  {
+   "goal": "write unit tests for the parser function",
+   "slot": "coding"
+  },
+  {
+   "goal": "debug the stack trace in my code",
+   "slot": "coding"
+  },
+  {
+   "goal": "fill in the textbox in the dialog",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "scroll the window and click the tab",
+   "slot": "ui_automation"
+  },
+  {
+   "goal": "research the history of rome",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "tell me about black holes",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "what can you do with mcp integrations",
+   "slot": "tool_selection"
+  },
+  {
+   "goal": "best way to use a plugin for this",
+   "slot": "tool_selection"
+  },
+  {
+   "goal": "the export keeps failing, try again",
+   "slot": "error_recovery"
+  },
+  {
+   "goal": "retry the broken download after the timeout",
+   "slot": "error_recovery"
+  },
+  {
+   "goal": "good morning",
+   "slot": null
+  },
+  {
+   "goal": "ok",
+   "slot": null
+  },
+  {
+   "goal": "compile the code and test it",
+   "slot": "coding"
+  },
+  {
+   "goal": "look up the documentation for numpy",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "that did not work, recover the file",
+   "slot": "error_recovery"
+  },
+  {
+   "goal": "find the function causing the bug",
+   "slot": "coding"
+  },
+  {
+   "goal": "why is the sky blue",
+   "slot": "knowledge"
+  },
+  {
+   "goal": "the timeout error keeps happening",
+   "slot": "error_recovery"
+  }
+ ]
+}

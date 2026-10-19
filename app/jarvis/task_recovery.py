@@ -2,6 +2,11 @@
 from .names import common
 import time
 
+# Read-retry backoff: a bounded evolution surface (jarvis/evolution_surfaces.py). The 1-5 attempt
+# budget and the read-only requirement are policy and are not part of the surface.
+BACKOFF = {'base_seconds': 0.1, 'max_seconds': 1.0}
+
+
 def retry_read(operation, *, read_only, cancelled=lambda:False, attempts=5, wait=None):
     """Only explicitly admitted observations/inference may be retried, max five."""
     if read_only is not True or type(attempts) is not int or not 1<=attempts<=5:
@@ -11,7 +16,7 @@ def retry_read(operation, *, read_only, cancelled=lambda:False, attempts=5, wait
         try:return operation()
         except (OSError,TimeoutError):
             if number+1==attempts:raise
-            delay=min(.1*2**number,1.)
+            delay=min(BACKOFF['base_seconds']*2**number,BACKOFF['max_seconds'])
             if wait:wait(delay)
             else:
                 deadline=time.monotonic()+delay
