@@ -1,0 +1,8 @@
+{
+  "probe": {
+    "returncode": 0,
+    "stdout": "{\"bundled_chromium_exists\": false, \"bundled_chromium_name\": \"chrome.exe\"}\r\n",
+    "stderr": ""
+  },
+  "scope": "Owned Playwright driver metadata only; no browser page/profile or download opened."
+}

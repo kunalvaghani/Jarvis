@@ -1,0 +1,13 @@
+{
+  "denominator": 24,
+  "statuses": {
+    "PASS": 10,
+    "FAIL": 0,
+    "BLOCKED": 14,
+    "SKIPPED": 0,
+    "NOT RUN": 0
+  },
+  "verdict": "NOT READY",
+  "all_required_gates_passed": false,
+  "note": "Scenario acceptance denominator is separate from pytest test counts. Missing evidence is not a pass."
+}

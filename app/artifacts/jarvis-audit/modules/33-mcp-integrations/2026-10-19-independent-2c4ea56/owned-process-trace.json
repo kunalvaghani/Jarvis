@@ -1,0 +1,21 @@
+{
+  "scope": "two hidden disposable Job-owned trees; sibling represents a non-Jarvis app",
+  "events": [
+    {
+      "role": "application",
+      "pid": 27464,
+      "created": 1792431919.9121325,
+      "name": "python.exe"
+    },
+    {
+      "role": "sibling",
+      "pid": 38312,
+      "created": 1792431920.1873026,
+      "name": "python.exe"
+    }
+  ],
+  "heartbeat_pid_accepted": false,
+  "sibling_alive_after_application_stop": true,
+  "application_alive_after_stop": false,
+  "cleanup_complete": true
+}

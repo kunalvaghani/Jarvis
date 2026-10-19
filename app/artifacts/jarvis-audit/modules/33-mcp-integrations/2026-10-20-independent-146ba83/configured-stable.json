@@ -1,0 +1,32 @@
+{
+  "configured_label": "account-a@example.test",
+  "token_switched": false,
+  "approval_cards": [
+    {
+      "action": "calendar_create",
+      "value": "primary",
+      "content": "{\"summary\": \"SYNTHETIC_EVENT_FOR_A\", \"start\": {\"date\": \"2026-10-20\"}, \"end\": {\"date\": \"2026-10-21\"}}",
+      "provider": "calendar",
+      "account": "account-a@example.test (configured label, not verified) \u00b7 credential fingerprint c930a2d9",
+      "identity_verified": false,
+      "target": "primary"
+    }
+  ],
+  "intercepted_writes": [
+    {
+      "method": "POST",
+      "actual_mock_account": "A",
+      "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+      "body": {
+        "summary": "SYNTHETIC_EVENT_FOR_A",
+        "start": {
+          "date": "2026-10-20"
+        },
+        "end": {
+          "date": "2026-10-21"
+        }
+      }
+    }
+  ],
+  "actual_network_calls": 0
+}

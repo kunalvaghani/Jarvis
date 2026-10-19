@@ -19,7 +19,6 @@ import json
 import os
 import sys
 import time
-import traceback
 
 PROCESS_EVENTS = {"subprocess.Popen", "os.system", "os.exec", "os.spawn", "os.posix_spawn", "os.startfile",
                   "_winapi.CreateProcess", "os.kill", "os.fork", "os.forkpty", "pty.spawn"}
@@ -32,6 +31,29 @@ WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_TRUNC
 
 class Refused(PermissionError):
     pass
+
+
+def failure_summary(exc, output_validation):
+    """Untrusted messages/traceback source can contain secrets; emit fixed diagnostics only."""
+    if isinstance(exc, Refused):
+        for prefix in ('Learned abilities may not start other programs',
+                       'This ability was not approved for network use',
+                       'Learned abilities may not change the Windows registry',
+                       'Learned abilities may only write inside their run folder',
+                       'Learned abilities may only read their inputs and their own files',
+                       'Learned abilities may only change files inside their run folder'):
+            if str(exc).startswith(prefix):
+                return 'Refused: ' + prefix + '.'
+        return 'Refused: ability permission denied.'
+    # Preserve runner-owned output-contract guidance without preserving generated exception text.
+    contracts = ("run() text must be a string.", "run() must return a dict with 'text' and/or 'files'.",
+                 'run() files must be a list of at most 20 path strings.', 'run() returned no text and no files.')
+    if output_validation and str(exc) in contracts:
+        return str(exc)
+    for category in (RuntimeError, TypeError, ValueError, OSError, ImportError, SyntaxError, SystemExit):
+        if isinstance(exc, category):
+            return category.__name__ + ': untrusted exception details withheld.'
+    return 'Ability failed; untrusted exception details withheld.'
 
 
 def real(path):
@@ -139,9 +161,9 @@ def main(request_path):
         finish({"ok": True, "text": text[:6000], "files": files[:20],
                 "inputs": json.loads(json.dumps(inputs, default=str))})
     except BaseException as exc:  # Report everything (including SystemExit) to Jarvis instead of crashing silently.
-        finish({"ok": False, "error": (type(exc).__name__ + ": " + str(exc))[:600],
+        finish({"ok": False, "error": failure_summary(exc, output_validation),
                 "failure_kind": "output_contract" if output_validation else "execution",
-                "trace": traceback.format_exc()[-3000:]})
+                "trace": "Untrusted exception message and source withheld for privacy."})
 
 
 if __name__ == "__main__":

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.561" timestamp="2026-10-20T03:25:01.969295+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-v2-baseline.app.tests.test_v2_deep_lab" name="test_IR_004_deep_owned_worktree_preserves_canonical_source" time="0.932"><failure message="NotADirectoryError: [WinError 267] The directory name is invalid">canon = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-651/test_IR_004_deep_owned_worktre0/canon')
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-651/test_IR_004_deep_owned_worktre0')
+
+    def test_IR_004_deep_owned_worktree_preserves_canonical_source(canon, tmp_path):
+        deep = tmp_path.joinpath(*['owned-' + 'x' * 64 for _ in range(4)])
+        deep.mkdir(parents=True)
+        assert len(str(deep)) &gt; 260
+        before = repo_state(canon)
+        research = research_for(canon, deep)
+&gt;       identifier, parent = candidate(research, {'base_seconds': 0.1, 'max_seconds': 2.0})
+
+tests\test_v2_deep_lab.py:16: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_phase06_controlled_evolution.py:120: in candidate
+    parent = parent or research.seed('read_retry_backoff')
+jarvis\autoresearch.py:63: in seed
+    lab_commit, source_commit = self.lab.snapshot()
+jarvis\evolution_lab.py:85: in snapshot
+    self.ensure_repo()
+jarvis\evolution_lab.py:79: in ensure_repo
+    self._run(['init', '-q', '-b', 'lab-main'], self.repo)
+jarvis\evolution_lab.py:58: in _run
+    result = subprocess.run(['git', '-c', 'core.longpaths=true', *args], cwd=cwd, env=git_env(),
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\subprocess.py:501: in run
+    with Popen(*popenargs, **kwargs) as process:
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\subprocess.py:969: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Popen: returncode: None args: ['git', '-c', 'core.longpaths=true', 'init', ...&gt;
+args = 'git -c core.longpaths=true init -q -b lab-main', executable = None
+preexec_fn = None, close_fds = False, pass_fds = ()
+cwd = '%USERPROFILE%\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-651\\test_IR_004_deep_owned_worktre0\\owned-xxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\owned-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\lab\\repo'
+env = {'APPDATA': '%USERPROFILE%\\AppData\\Roaming', 'COMSPEC': 'C:\\WINDOWS\\system32\\cmd.exe', 'GIT_CONFIG_GLOBAL': 'nul', 'GIT_CONFIG_NOSYSTEM': '1', ...}
+startupinfo = &lt;subprocess.STARTUPINFO object at 0x0000029F84903340&gt;
+creationflags = 0, shell = False, p2cread = Handle(428), p2cwrite = -1
+c2pread = 11, c2pwrite = Handle(784), errread = 12, errwrite = Handle(852)
+unused_restore_signals = True, unused_gid = None, unused_gids = None
+unused_uid = None, unused_umask = -1, unused_start_new_session = False
+
+    def _execute_child(self, args, executable, preexec_fn, close_fds,
+                       pass_fds, cwd, env,
+                       startupinfo, creationflags, shell,
+                       p2cread, p2cwrite,
+                       c2pread, c2pwrite,
+                       errread, errwrite,
+                       unused_restore_signals,
+                       unused_gid, unused_gids, unused_uid,
+                       unused_umask,
+                       unused_start_new_session):
+        """Execute program (MS Windows version)"""
+    
+        assert not pass_fds, "pass_fds not supported on Windows."
+    
+        if isinstance(args, str):
+            pass
+        elif isinstance(args, bytes):
+            if shell:
+                raise TypeError('bytes args is not allowed on Windows')
+            args = list2cmdline([args])
+        elif isinstance(args, os.PathLike):
+            if shell:
+                raise TypeError('path-like args is not allowed when '
+                                'shell is true')
+            args = list2cmdline([args])
+        else:
+            args = list2cmdline(args)
+    
+        if executable is not None:
+            executable = os.fsdecode(executable)
+    
+        # Process startup details
+        if startupinfo is None:
+            startupinfo = STARTUPINFO()
+        else:
+            # bpo-34044: Copy STARTUPINFO since it is modified above,
+            # so the caller can reuse it multiple times.
+            startupinfo = startupinfo.copy()
+    
+        use_std_handles = -1 not in (p2cread, c2pwrite, errwrite)
+        if use_std_handles:
+            startupinfo.dwFlags |= _winapi.STARTF_USESTDHANDLES
+            startupinfo.hStdInput = p2cread
+            startupinfo.hStdOutput = c2pwrite
+            startupinfo.hStdError = errwrite
+    
+        attribute_list = startupinfo.lpAttributeList
+        have_handle_list = bool(attribute_list and
+                                "handle_list" in attribute_list and
+                                attribute_list["handle_list"])
+    
+        # If we were given an handle_list or need to create one
+        if have_handle_list or (use_std_handles and close_fds):
+            if attribute_list is None:
+                attribute_list = startupinfo.lpAttributeList = {}
+            handle_list = attribute_list["handle_list"] = \
+                list(attribute_list.get("handle_list", []))
+    
+            if use_std_handles:
+                handle_list += [int(p2cread), int(c2pwrite), int(errwrite)]
+    
+            handle_list[:] = self._filter_handle_list(handle_list)
+    
+            if handle_list:
+                if not close_fds:
+                    warnings.warn("startupinfo.lpAttributeList['handle_list'] "
+                                  "overriding close_fds", RuntimeWarning)
+    
+                # When using the handle_list we always request to inherit
+                # handles but the only handles that will be inherited are
+                # the ones in the handle_list
+                close_fds = False
+    
+        if shell:
+            startupinfo.dwFlags |= _winapi.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = _winapi.SW_HIDE
+            comspec = os.environ.get("COMSPEC", "cmd.exe")
+            args = '{} /c "{}"'.format (comspec, args)
+    
+        if cwd is not None:
+            cwd = os.fsdecode(cwd)
+    
+        sys.audit("subprocess.Popen", executable, args, cwd, env)
+    
+        # Start the process
+        try:
+&gt;           hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                                     # no special security
+                                     None, None,
+                                     int(not close_fds),
+                                     creationflags,
+                                     env,
+                                     cwd,
+                                     startupinfo)
+E                                    NotADirectoryError: [WinError 267] The directory name is invalid
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\subprocess.py:1438: NotADirectoryError</failure></testcase></testsuite></testsuites>

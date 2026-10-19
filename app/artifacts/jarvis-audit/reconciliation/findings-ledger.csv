@@ -1,0 +1,6 @@
+finding,prior_base,current_sha,fix_commit,status,fresh_test,remaining
+IR-001,36fbf3ce925080f7f54afa87eaf1d9b88414142d,5b56f84c1604de87bb8845027dffb5ce5943243b,32fdbfe,FIXED_BOUNDARY,test_independent_review.py privacy cases,Independent live/cross-pillar acceptance incomplete; see module verdict
+IR-002,36fbf3ce925080f7f54afa87eaf1d9b88414142d,5b56f84c1604de87bb8845027dffb5ce5943243b,32fdbfe,FIXED_BOUNDARY,test_independent_review.py lease/admission cases,Independent live/cross-pillar acceptance incomplete; see module verdict
+IR-003,36fbf3ce925080f7f54afa87eaf1d9b88414142d,5b56f84c1604de87bb8845027dffb5ce5943243b,32fdbfe,FIXED_BOUNDARY,test_windows_commands.py,Independent live/cross-pillar acceptance incomplete; see module verdict
+IR-004,36fbf3ce925080f7f54afa87eaf1d9b88414142d,5b56f84c1604de87bb8845027dffb5ce5943243b,32fdbfe,UNVERIFIED,NOT RUN deep lab,Independent live/cross-pillar acceptance incomplete; see module verdict
+P31-001,36fbf3ce925080f7f54afa87eaf1d9b88414142d,5b56f84c1604de87bb8845027dffb5ce5943243b,,APPLIES,test_approval_binding.py 3 FAIL,Independent live/cross-pillar acceptance incomplete; see module verdict

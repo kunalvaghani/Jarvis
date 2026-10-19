@@ -1,0 +1,11 @@
+# Prompt 31 audit — 2026-10-19 IST
+
+Pinned current `claude` **5b56f84c1604de87bb8845027dffb5ce5943243b** in the clean, existing `codex-review` worktree. Fast-forward only; original user `app/config/config.json` remains modified and untouched. Runtime is borrowed read-only from the original `.venv`; ignored environments/models were not copied. [Environment/counts](baseline.json), [source hashes](source-hashes.json), [case catalog](tests.jsonl), [actual executions](executed-tests.jsonl).
+
+Actual path: `main.App.report/request_approval` → `UIEventBuffer` → `App` Tk event drain → `IslandDesk`/`Island`/Pip. `Actions._approve` waits for a strict True and rechecks cancellation. `Approval` stores `(kind, detail, answer dict, threading.Event, cancelled)` with a 180-second lifetime starting at card construction. The buttons call `IslandDesk.decide(True/False)` against the current queue head. No UUID/digest/identity receipt is present in that shared payload. ToolRegistry is `jarvis/tools.py`, not a second UI executor.
+
+Other seams: `file_drop.DropTarget` queues WM_DROPFILES paths for Tk polling; `file_drop.handle` asks a data-use question. `demonstration.DemonstrationSession` owns scoped hook/session state. `skill_evolution`, `evolution_promotion`, `cloud_architect`, `gpu_scheduler` remain the implementation owners. Pillar D training is an offline pipeline, not a running UI worker.
+
+Reviewed system map, Phase 1–8 index entries and final handoff matrix, original independent verdict/security/bug register/patch, and reconciliation companion. These are historical claims until specifically re-executed. The previous module-root JSONL has 32 NOT RUN cases. [Stable-ID join](catalog-join.jsonl) preserves the first twelve original user cases and identifies revised targeted IDs 013–022 as changed semantics; no historical status is promoted to a fresh result. The old module-root packet is preserved, hashed in prior-module-hashes.json; this new run uses a dated subdirectory. `00_MASTER_CONTRACT.md` was not found. Reconciliation says Codex confirms in read-only mode and reserves source repair for Claude; no application source repair was applied.
+
+**STOP:** unresolved P1 permission defect [P31-001](failures.md). Prompt 31 is incomplete, NOT READY; Prompt 32 has not started.

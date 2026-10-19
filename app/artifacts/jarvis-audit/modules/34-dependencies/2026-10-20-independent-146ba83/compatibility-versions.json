@@ -1,0 +1,92 @@
+{
+  ".venv": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": null,
+    "pydantic": null,
+    "playwright": "1.63.0",
+    "pypdf": "6.20.0"
+  },
+  ".venv-brain": {
+    "torch": "2.6.0+cpu",
+    "torchaudio": null,
+    "transformers": "4.57.6",
+    "mcp": null,
+    "pydantic": null,
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-deerflow": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": "1.30.0",
+    "pydantic": "2.14.1",
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-f5": {
+    "torch": "2.6.0+cu124",
+    "torchaudio": "2.6.0+cu124",
+    "transformers": "4.44.2",
+    "mcp": null,
+    "pydantic": "2.14.1",
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-harness": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": null,
+    "pydantic": "2.13.5",
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-hermes": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": null,
+    "pydantic": "2.13.4",
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-hermes-bootstrap": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": null,
+    "pydantic": null,
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-openviking": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": "1.30.0",
+    "pydantic": "2.14.1",
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-skills": {
+    "torch": null,
+    "torchaudio": null,
+    "transformers": null,
+    "mcp": null,
+    "pydantic": null,
+    "playwright": null,
+    "pypdf": null
+  },
+  ".venv-training": {
+    "torch": "2.6.0+cu124",
+    "torchaudio": null,
+    "transformers": "4.57.6",
+    "mcp": null,
+    "pydantic": null,
+    "playwright": null,
+    "pypdf": null
+  }
+}

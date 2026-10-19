@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-20",
+  "base_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "source": "base plus Prompt 34 carry-forward and Prompt 35 source.patch",
+  "runs": {
+    "baseline-native": {
+      "PASS": 365,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 341.862
+    },
+    "adversarial-before": {
+      "PASS": 9,
+      "FAIL": 13,
+      "SKIPPED": 1,
+      "seconds": 1.616
+    },
+    "adversarial-before-corrected": {
+      "PASS": 7,
+      "FAIL": 15,
+      "SKIPPED": 1,
+      "seconds": 1.624
+    },
+    "readback-before": {
+      "PASS": 1,
+      "FAIL": 4,
+      "SKIPPED": 0,
+      "seconds": 1.044
+    },
+    "privilege-before": {
+      "PASS": 0,
+      "FAIL": 4,
+      "SKIPPED": 0,
+      "seconds": 0.941
+    },
+    "targeted": {
+      "PASS": 140,
+      "FAIL": 2,
+      "SKIPPED": 1,
+      "seconds": 43.124
+    },
+    "targeted-final": {
+      "PASS": 147,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 45.215
+    },
+    "evaluator-retention": {
+      "PASS": 2,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 19.307
+    },
+    "pre-parser-regression": {
+      "PASS": 534,
+      "FAIL": 0,
+      "SKIPPED": 4,
+      "seconds": 344.068
+    },
+    "parser-before": {
+      "PASS": 0,
+      "FAIL": 3,
+      "SKIPPED": 0,
+      "seconds": 0.958
+    },
+    "parser-targeted-final": {
+      "PASS": 36,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 1.527
+    },
+    "final-regression": {
+      "PASS": 537,
+      "FAIL": 0,
+      "SKIPPED": 4,
+      "seconds": 346.153
+    }
+  },
+  "headline_run": "final-regression",
+  "overlapping_runs_not_summed": true,
+  "restricted_baseline": "Incomplete, stopped owned pytest after WinError 5 temporary rename denials; native baseline supersedes environment failures.",
+  "peak_test_process_memory": "NOT MEASURED",
+  "benchmark_memory": "operation-local tracemalloc only",
+  "real_cloud_requests": 0,
+  "messages_sent": 0,
+  "live_recordings": 0,
+  "installs": 0
+}

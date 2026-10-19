@@ -1,0 +1,15 @@
+{
+  "scope": "Existing pip argument parser only; zero installs/index requests",
+  "observations": [
+    {
+      "isolated": false,
+      "PIP_NO_INDEX": "1",
+      "effective_no_index": true
+    },
+    {
+      "isolated": true,
+      "PIP_NO_INDEX": "1",
+      "effective_no_index": false
+    }
+  ]
+}

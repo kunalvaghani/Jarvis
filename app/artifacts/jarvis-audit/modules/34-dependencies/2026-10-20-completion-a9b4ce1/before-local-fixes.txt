@@ -1,0 +1,197 @@
+FFFFF.FFFFFFFF                                                           [100%]
+================================== FAILURES ===================================
+_ test_lock_cannot_smuggle_pip_options_after_a_hash[ --find-links=https://example.invalid/wheels] _
+
+suffix = ' --find-links=https://example.invalid/wheels'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:20: Failed
+_ test_lock_cannot_smuggle_pip_options_after_a_hash[ --index-url=https://example.invalid/simple] _
+
+suffix = ' --index-url=https://example.invalid/simple'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:20: Failed
+_ test_lock_cannot_smuggle_pip_options_after_a_hash[ --trusted-host=example.invalid] _
+
+suffix = ' --trusted-host=example.invalid'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:20: Failed
+___________ test_dependency_expiry_must_be_finite_and_numeric[nan] ____________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be0')
+bad = nan
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:27: Failed
+___________ test_dependency_expiry_must_be_finite_and_numeric[inf] ____________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be1')
+bad = inf
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:27: Failed
+_________ test_dependency_expiry_must_be_finite_and_numeric[tomorrow] _________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be3')
+bad = 'tomorrow'
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+        with pytest.raises(auth.RepairRefused):
+>           auth.check_dependency_repair(tmp_path,approval,'.venv',disk_usage=lambda _:PLENTY)
+
+tests\test_prompt34_completion.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be3')
+approval = DependencyRepair(environment='.venv', lock='requirements/runtime.lock', lock_sha256='90c4ba02d9c7d429f85c479e6902d3696...al\\pytest-587\\test_dependency_expiry_must_be3\\wheelhouse', max_bytes=1000, expires='tomorrow', approval_id='abc123')
+environment_name = '.venv', now = 1792440951.9405253
+disk_usage = <function test_dependency_expiry_must_be_finite_and_numeric.<locals>.<lambda> at 0x00000218AC10AA70>
+
+    def check_dependency_repair(base, approval, environment_name, now=None, disk_usage=None):
+        """Validate a dependency authorization for ``environment_name``; return (lock path, wheelhouse path)."""
+        now = time.time() if now is None else now
+        disk_usage = disk_usage or shutil.disk_usage
+        if approval.environment != environment_name or environment_name not in ENVIRONMENTS:
+            raise RepairRefused('The authorization is for ' + approval.environment + ', not ' + environment_name + '.')
+>       if not approval.expires or now > approval.expires:
+E       TypeError: '>' not supported between instances of 'float' and 'str'
+
+jarvis\repair_authorization.py:127: TypeError
+____ test_dependency_approval_identifier_cannot_form_paths[../../outside] _____
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident0')
+identifier = '../../outside'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:33: Failed
+_________ test_dependency_approval_identifier_cannot_form_paths[x/y] __________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident1')
+identifier = 'x/y'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:33: Failed
+_________ test_dependency_approval_identifier_cannot_form_paths[x\\y] _________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident2')
+identifier = 'x\\y'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:33: Failed
+___________ test_dependency_approval_identifier_cannot_form_paths[] ___________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident3')
+identifier = ''
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:33: Failed
+_ test_dependency_approval_identifier_cannot_form_paths[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx] _
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident4')
+identifier = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:33: Failed
+_______________ test_model_network_consent_must_be_boolean_true _______________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_model_network_consent_mus0')
+
+    def test_model_network_consent_must_be_boolean_true(tmp_path):
+>       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+
+tests\test_prompt34_completion.py:38: Failed
+______ test_authorization_is_claimed_once_with_two_simultaneous_readers _______
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_authorization_is_claimed_0')
+
+    def test_authorization_is_claimed_once_with_two_simultaneous_readers(tmp_path):
+        approval=locked(tmp_path)
+        path=tmp_path/auth.DEPENDENCY_FILE
+        path.write_text(json.dumps(approval.__dict__))
+        start=threading.Barrier(2)
+        reads=threading.Barrier(2)
+        original=Path.read_text
+        def read(candidate,*args,**kwargs):
+            text=original(candidate,*args,**kwargs)
+            if candidate==path:
+                reads.wait(timeout=3)  # Old read-then-unlink admits both; atomic claim uses a unique path.
+            return text
+        def take():
+            start.wait(timeout=3)
+            return auth.take_dependency_repair(tmp_path)
+        with patch.object(Path,'read_text',read),ThreadPoolExecutor(max_workers=2) as pool:
+            values=list(pool.map(lambda _:take(),range(2)))
+>       assert sum(value is not None for value in values)==1
+E       assert 2 == 1
+E        +  where 2 = sum(<generator object test_authorization_is_claimed_once_with_two_simultaneous_readers.<locals>.<genexpr> at 0x00000218AC0D1C40>)
+
+tests\test_prompt34_completion.py:60: AssertionError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\34-dependencies\2026-10-20-completion-a9b4ce1\before-local-fixes.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt34_completion.py::test_lock_cannot_smuggle_pip_options_after_a_hash[ --find-links=https://example.invalid/wheels]
+FAILED tests\test_prompt34_completion.py::test_lock_cannot_smuggle_pip_options_after_a_hash[ --index-url=https://example.invalid/simple]
+FAILED tests\test_prompt34_completion.py::test_lock_cannot_smuggle_pip_options_after_a_hash[ --trusted-host=example.invalid]
+FAILED tests\test_prompt34_completion.py::test_dependency_expiry_must_be_finite_and_numeric[nan]
+FAILED tests\test_prompt34_completion.py::test_dependency_expiry_must_be_finite_and_numeric[inf]
+FAILED tests\test_prompt34_completion.py::test_dependency_expiry_must_be_finite_and_numeric[tomorrow]
+FAILED tests\test_prompt34_completion.py::test_dependency_approval_identifier_cannot_form_paths[../../outside]
+FAILED tests\test_prompt34_completion.py::test_dependency_approval_identifier_cannot_form_paths[x/y]
+FAILED tests\test_prompt34_completion.py::test_dependency_approval_identifier_cannot_form_paths[x\\y]
+FAILED tests\test_prompt34_completion.py::test_dependency_approval_identifier_cannot_form_paths[]
+FAILED tests\test_prompt34_completion.py::test_dependency_approval_identifier_cannot_form_paths[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+FAILED tests\test_prompt34_completion.py::test_model_network_consent_must_be_boolean_true
+FAILED tests\test_prompt34_completion.py::test_authorization_is_claimed_once_with_two_simultaneous_readers
+13 failed, 1 passed in 0.75s

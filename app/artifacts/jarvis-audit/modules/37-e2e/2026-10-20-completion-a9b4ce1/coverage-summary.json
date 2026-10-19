@@ -1,0 +1,10 @@
+{
+  "numbered_denominator": 26,
+  "PASS": 0,
+  "BLOCKED": 26,
+  "FAIL": 0,
+  "SKIPPED": 0,
+  "NOT RUN": 0,
+  "old_catalog_rows": 32,
+  "explanation": "BLOCKED includes unrun live portions; pytest results are separate and never substituted for full journeys."
+}

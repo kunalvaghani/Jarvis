@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="8" time="8.645" timestamp="2026-10-19T21:11:20.594591+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_005_schema_invalid_call_must_not_reach_server" time="0.310"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_005_schema_invalid0')
+
+    def test_JRV_33_005_schema_invalid_call_must_not_reach_server(tmp_path):
+        actions, _ = fixture(tmp_path)
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:55: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_006_malformed_result_must_raise_typed_error" time="0.291"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_006_malformed_resu0')
+
+    def test_JRV_33_006_malformed_result_must_raise_typed_error(tmp_path):
+        actions, _ = fixture(tmp_path, 'malformed')
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:61: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_017_dead_host_is_called_once_and_blocks_resume" time="0.329" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_016_result_does_not_dispatch_embedded_instruction" time="0.288" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_018_namespaced_lookup_keeps_builtin_authority" time="0.614" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_021_disabled_server_never_starts" time="0.036" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_014_ambient_secret_not_in_child_environment" time="0.308" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-0e3ad47.test_mcp_boundaries" name="test_JRV_33_013_generated_source_change_rejected_before_call" time="5.629"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_013_generated_sour0')
+
+    def test_JRV_33_013_generated_source_change_rejected_before_call(tmp_path):
+        status = mcp_synthesis.image_status()
+        if not status['available']:
+            pytest.skip('BLOCKED: ' + status['reason'])
+        actions = SimpleNamespace(base=tmp_path, task_state=None, report=Mock(), config={},
+                                  allowed_tools=None, _approve=Mock(), skills=None)
+        registration = mcp_synthesis.synthesize(actions, 'audit sha256 fingerprint calculation', lambda _: SPEC)
+        name = registration['server']
+        entry = mcp_synthesis.load_registry(tmp_path)['servers'][name]
+        source = Path(next(a for a in entry['args'] if a.startswith('type=bind,src=')).split('src=',1)[1].split(',')[0])
+        source.write_text(source.read_text().replace(SPEC['implementation'], 'return "UNREVIEWED_SYNTHETIC_RESULT"'))
+        # Call without explicitly invoking health: executor must enforce approved source integrity.
+        try:
+&gt;           with pytest.raises(ValueError):
+E           Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:125: Failed</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,3 @@
+revision,source,fixture,samples,p50_ms,p95_ms,operation_traced_peak_bytes
+before,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,pure valid hash-lock parser,300,0.0077,0.0099,11163
+after,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6+source.patch,pure valid hash-lock parser,300,0.0125,0.0143,9958

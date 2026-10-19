@@ -1,0 +1,241 @@
+diff --git a/app/jarvis/ability_runner.py b/app/jarvis/ability_runner.py
+index f5736f8..5d7f85b 100644
+--- a/app/jarvis/ability_runner.py
++++ b/app/jarvis/ability_runner.py
+@@ -19,7 +19,6 @@ import json
+ import os
+ import sys
+ import time
+-import traceback
+ 
+ PROCESS_EVENTS = {"subprocess.Popen", "os.system", "os.exec", "os.spawn", "os.posix_spawn", "os.startfile",
+                   "_winapi.CreateProcess", "os.kill", "os.fork", "os.forkpty", "pty.spawn"}
+@@ -34,6 +33,29 @@ class Refused(PermissionError):
+     pass
+ 
+ 
++def failure_summary(exc, output_validation):
++    """Untrusted messages/traceback source can contain secrets; emit fixed diagnostics only."""
++    if isinstance(exc, Refused):
++        for prefix in ('Learned abilities may not start other programs',
++                       'This ability was not approved for network use',
++                       'Learned abilities may not change the Windows registry',
++                       'Learned abilities may only write inside their run folder',
++                       'Learned abilities may only read their inputs and their own files',
++                       'Learned abilities may only change files inside their run folder'):
++            if str(exc).startswith(prefix):
++                return 'Refused: ' + prefix + '.'
++        return 'Refused: ability permission denied.'
++    # Preserve runner-owned output-contract guidance without preserving generated exception text.
++    contracts = ("run() text must be a string.", "run() must return a dict with 'text' and/or 'files'.",
++                 'run() files must be a list of at most 20 path strings.', 'run() returned no text and no files.')
++    if output_validation and str(exc) in contracts:
++        return str(exc)
++    for category in (RuntimeError, TypeError, ValueError, OSError, ImportError, SyntaxError, SystemExit):
++        if isinstance(exc, category):
++            return category.__name__ + ': untrusted exception details withheld.'
++    return 'Ability failed; untrusted exception details withheld.'
++
++
+ def real(path):
+     if isinstance(path, int):
+         return None
+@@ -139,9 +161,9 @@ def main(request_path):
+         finish({"ok": True, "text": text[:6000], "files": files[:20],
+                 "inputs": json.loads(json.dumps(inputs, default=str))})
+     except BaseException as exc:  # Report everything (including SystemExit) to Jarvis instead of crashing silently.
+-        finish({"ok": False, "error": (type(exc).__name__ + ": " + str(exc))[:600],
++        finish({"ok": False, "error": failure_summary(exc, output_validation),
+                 "failure_kind": "output_contract" if output_validation else "execution",
+-                "trace": traceback.format_exc()[-3000:]})
++                "trace": "Untrusted exception message and source withheld for privacy."})
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/app/jarvis/azr_proposer.py b/app/jarvis/azr_proposer.py
+index e29b55f..3808009 100644
+--- a/app/jarvis/azr_proposer.py
++++ b/app/jarvis/azr_proposer.py
+@@ -10,6 +10,7 @@ penalty (-1) and are kept only in the rejection log, never in a dataset.
+ """
+ import json
+ import random
++import re
+ import urllib.request
+ 
+ from .azr_tasks import (APPS, TOOLS, canonical, check_abduction, check_deduction, execute, extract_code, parse_json_answer,
+@@ -40,6 +41,14 @@ PROPOSE_INDUCTION = ('Propose one small pure Python function f(x) and 8 differen
+                      'Earlier examples: {references}')
+ 
+ 
++def _screen_training_text(value):
++    """Known sensitive proposal text is quarantined, never sent to the oracle or dataset."""
++    from .cloud_policy import SECRET, privacy_text
++    text = privacy_text(json.dumps(value, ensure_ascii=False))
++    if SECRET.search(text) or re.search(r'\b(?:private|confidential|proprietary|internal.only)\b', text, re.I):
++        raise ValueError('private training proposal quarantined')
++
++
+ def validate_deduction(proposal):
+     """Oracle validation: schema, tools, then execute; the answer is computed, never taken from the model."""
+     initial = proposal.get('initial')
+@@ -62,6 +71,7 @@ def validate_deduction(proposal):
+                                                                         for v in call['args'].values()):
+             raise ValueError('arguments')
+         clean.append({'id': f's{index + 1}', 'tool': call['tool'], 'args': call['args']})
++    _screen_training_text({'initial': state, 'calls': clean})
+     first = execute(state, clean)
+     if execute(state, clean) != first:
+         raise ValueError('nondeterministic')
+@@ -93,6 +103,7 @@ def validate_induction(proposal, base, run_programs):
+                 and all(type(i) is int and -10 ** 6 < i < 10 ** 6 for i in v)) for v in inputs):
+         raise ValueError('inputs')
+     unique = list({json.dumps(v): v for v in inputs}.values())
++    _screen_training_text({'source': source, 'message': message, 'inputs': unique})
+     # Outputs come from sandboxed execution (twice), not from the proposer.
+     probe = run_programs(base, [{'id': 'probe', 'source': source, 'cases': [{'input': v, 'output': None} for v in unique]}])
+     row = probe['probe']
+diff --git a/app/jarvis/cloud_architect.py b/app/jarvis/cloud_architect.py
+index dc980a4..d2ce8bb 100644
+--- a/app/jarvis/cloud_architect.py
++++ b/app/jarvis/cloud_architect.py
+@@ -28,6 +28,7 @@ from datetime import datetime, timedelta, timezone
+ import getpass
+ import hashlib
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -74,6 +75,39 @@ class PrivacyRejected(ValueError):
+     """The problem could not be made generic with confidence; it stays local."""
+ 
+ 
++def _bounded_examples(examples):
++    """Bound work before JSON encoding, including nested/cyclic hostile literals."""
++    pending = [(examples, 0)]
++    remaining = 512
++    while pending:
++        value, depth = pending.pop()
++        remaining -= 1
++        if remaining < 0 or depth > 8:
++            raise PrivacyRejected('Examples exceed the literal work/depth budget.')
++        if type(value) is str:
++            if len(value) > 200:
++                raise PrivacyRejected('Example text exceeds its literal budget.')
++        elif type(value) is bool:
++            continue
++        elif type(value) is int:
++            if value.bit_length() > 256:
++                raise PrivacyRejected('Example integer exceeds its literal budget.')
++        elif type(value) is float:
++            if not math.isfinite(value):
++                raise PrivacyRejected('Example numbers must be finite.')
++        elif type(value) in (list, dict):
++            if len(value) > 64:
++                raise PrivacyRejected('Example container exceeds its literal budget.')
++            if type(value) is dict:
++                if any(type(key) is not str or len(key) > 80 for key in value):
++                    raise PrivacyRejected('Example keys must be bounded text.')
++                pending.extend((item, depth + 1) for item in value.values())
++            else:
++                pending.extend((item, depth + 1) for item in value)
++        else:
++            raise PrivacyRejected('Examples must contain only bounded JSON literals.')
++
++
+ def privacy_gate(problem, base):
+     """Return the exact outbound payload, or raise PrivacyRejected. Inconclusive means local."""
+     from .cloud_policy import PRIVATE, PRIVATE_APP, SECRET, privacy_text
+@@ -87,12 +121,13 @@ def privacy_gate(problem, base):
+     payload = {'category': problem['category']}
+     for key in ('statement', 'question', 'constraints'):
+         value = problem.get(key, '' if key == 'constraints' else None)
+-        if not isinstance(value, str) or not (key == 'constraints' or 20 <= len(value) <= 2000):
++        if not isinstance(value, str) or not (0 if key == 'constraints' else 20) <= len(value) <= 2000:
+             raise PrivacyRejected('Field ' + key + ' must be bounded text.')
+         payload[key] = value
+     examples = problem.get('examples', [])
+     if not isinstance(examples, list) or len(examples) > 8:
+         raise PrivacyRejected('Up to eight synthetic examples.')
++    _bounded_examples(examples)
+     for example in examples:
+         if not isinstance(example, dict) or set(example) != {'input', 'output'}:
+             raise PrivacyRejected('Examples must be {input, output}.')
+@@ -105,6 +140,7 @@ def privacy_gate(problem, base):
+     checks = {
+         'secret': SECRET.search(text),
+         'private_context': PRIVATE.search(text) or PRIVATE_APP.search(text),
++        'confidential_semantics': re.search(r'\b(?:proprietary|confidential|internal.only)\b', text, re.I),
+         'path': re.search(r'[A-Za-z]:[\\/]|\\\\|(?:^|[\s"\'])/(?:home|users|etc|var|mnt|opt)/|~[\\/]', text, re.I),
+         'filename': re.search(r'\b[\w-]+\.(?:py|js|ts|json|md|txt|xlsx|docx|pdf|csv|db|sqlite3|log|env|cfg|ini|yaml|yml)\b', text, re.I),
+         'email': re.search(r'[\w.+-]+@[\w-]+\.[\w.]+', text),
+@@ -346,9 +382,12 @@ def consult_tool(actions, step, cancelled):
+     """Fail-closed: privacy gate, every eligibility rule except consent, then an approval card that grants consent."""
+     config = getattr(actions, 'config', {}) or {}
+     options = {**(config.get('cloud_architect') or {}), 'groq': config.get('groq') or {}}
++    content = step.get('content', '')
++    if not isinstance(content, str) or len(content) > 16000:
++        return json.dumps({'status': 'local', 'reasons': ['content must be bounded JSON text'], 'sent': False})
+     try:
+-        problem = json.loads(step.get('content') or '{}')
+-    except ValueError:
++        problem = json.loads(content or '{}')
++    except (ValueError, RecursionError):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+     if not isinstance(problem, dict):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+diff --git a/app/jarvis/skill_evolution.py b/app/jarvis/skill_evolution.py
+index 8627fbf..851d43a 100644
+--- a/app/jarvis/skill_evolution.py
++++ b/app/jarvis/skill_evolution.py
+@@ -25,7 +25,9 @@ from .skill_store import content_hash
+ 
+ NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
+ FORBIDDEN_FRONTMATTER = frozenset({'allowed-tools', 'allowed_tools', 'disable-model-invocation', 'user-invocable',
+-                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions'})
++                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions',
++                                   'trusted', 'trust', 'trust_state', 'admin', 'role', 'authorization', 'approval',
++                                   'preapproved', 'bypass_approval', 'user_approved', 'requires_approval'})
+ NON_ATTRIBUTABLE = frozenset({'permission_denied', 'cancelled', 'tool_unavailable', 'timeout'})
+ FIXTURE_SAFE_TOOLS = frozenset({'office_xlsx', 'office_docx', 'pdf_document', 'blender_task', 'unreal_task',
+                                 'execution_methods', 'strategy_execute', 'read_file', 'list_files', 'search_files'})
+@@ -228,8 +230,10 @@ def verify_execution(registry, steps, cancelled=lambda: False):
+             data = json.loads(result.evidence)
+         except ValueError:
+             data = {}
+-        outcome = [r for r in read_outcomes(registry.actions.base, 200) if r.get('call_id') == result.call_id]
+-        verified = data.get('verification') == 'verified' or (outcome and outcome[-1].get('verification') == 'verified')
++        outcome = [r for r in read_outcomes(registry.actions.base, 200)
++                   if r.get('call_id') == result.call_id and r.get('tool') == step['action']]
++        # A tool's own success/verification text cannot override or replace correlated host readback.
++        verified = bool(outcome and outcome[-1].get('verification') == 'verified')
+         receipts.append({'action': step['action'], 'call_id': result.call_id, 'verified': bool(verified),
+                          'data': {k: v for k, v in data.items() if k in {'version', 'blender_version', 'sheets', 'pages'}}})
+         if not verified:
+diff --git a/app/jarvis/tools.py b/app/jarvis/tools.py
+index 8c6b709..8c1cf81 100644
+--- a/app/jarvis/tools.py
++++ b/app/jarvis/tools.py
+@@ -66,6 +66,7 @@ _LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
+ APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
+                              'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
+ _SECRET_PATTERNS = (
++    (re.compile(r'''(?i)(["']?\b(?:access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|password|passwd|pwd|authorization)["']?\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]+|[^\s,}\]]+)'''), r'\1[redacted]'),
+     (re.compile(r'(?i)\b(access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|'
+                 r'password|passwd|pwd|sig|signature)=([^&\s#"\']+)'), r'\1=[redacted]'),
+     (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}'), r'\1 [redacted]'),
+diff --git a/app/tests/test_repo_abilities.py b/app/tests/test_repo_abilities.py
+index a2fb911..f301414 100644
+--- a/app/tests/test_repo_abilities.py
++++ b/app/tests/test_repo_abilities.py
+@@ -176,7 +176,8 @@ class Building(unittest.TestCase):
+         built = instance.build_repo("demo/wordcount")
+         self.assertEqual(built[0]["state"], "active")
+         self.assertEqual(built[0]["attempts"], 2)
+-        self.assertIn("RuntimeError: boom", instance.model_chat.calls[-1][1])  # The error went back to the model.
++        # Keep a diagnostic category for repair, without forwarding untrusted exception text/source.
++        self.assertIn("RuntimeError: untrusted exception details withheld.", instance.model_chat.calls[-1][1])
+ 
+         instance, _, reports = forge([BROKEN, BROKEN])
+         self.assertEqual(instance.build_repo("demo/wordcount"), [])

@@ -176,7 +176,8 @@ class Building(unittest.TestCase):
         built = instance.build_repo("demo/wordcount")
         self.assertEqual(built[0]["state"], "active")
         self.assertEqual(built[0]["attempts"], 2)
-        self.assertIn("RuntimeError: boom", instance.model_chat.calls[-1][1])  # The error went back to the model.
+        # Keep a diagnostic category for repair, without forwarding untrusted exception text/source.
+        self.assertIn("RuntimeError: untrusted exception details withheld.", instance.model_chat.calls[-1][1])
 
         instance, _, reports = forge([BROKEN, BROKEN])
         self.assertEqual(instance.build_repo("demo/wordcount"), [])

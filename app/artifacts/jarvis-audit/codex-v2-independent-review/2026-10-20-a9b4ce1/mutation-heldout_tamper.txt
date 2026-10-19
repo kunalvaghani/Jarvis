@@ -1,0 +1,25 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____ test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered ______
+
+canon = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-642/test_P06_gate_refuses_when_its0/canon')
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-642/test_P06_gate_refuses_when_its0')
+
+    def test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered(canon, tmp_path):
+        research = research_for(canon, tmp_path)
+        research.seed('read_retry_backoff')
+        policy = canon / 'app/evolution_eval/policy.json'
+        original = policy.read_text(encoding='utf-8')
+        policy.write_text(original.replace('0.02', '0.0'), encoding='utf-8')
+        report = gate_run(research, {'base_seconds': 0.1, 'max_seconds': 2.0})
+>       assert report['decision'] == 'refused' and 'modified since commit' in report['reason']
+E       AssertionError: assert ('qualified' == 'refused'
+E         
+E         - refused
+E         + qualified)
+
+tests\test_phase06_controlled_evolution.py:313: AssertionError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-a9b4ce1\mutation-heldout_tamper.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_phase06_controlled_evolution.py::test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered
+1 failed in 11.41s

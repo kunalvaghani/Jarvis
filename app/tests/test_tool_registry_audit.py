@@ -375,6 +375,8 @@ def test_catalog(case_id, tmp_path):
         assert [r['event'] for r in rows] == ['tool.started', 'tool.completed', 'tool.started', 'tool.failed']
         assert rows[0]['call_id'] == rows[1]['call_id'] == good.call_id and rows[1]['backend'] == 'toolkit'
         assert rows[3]['error_type'] == 'ToolArgumentError' and rows[3]['category'] == 'invalid_arguments'
-        assert set(rows[3]) <= {'version', 'at', 'event', 'call_id', 'tool', 'error_type', 'category'}
+        assert set(rows[3]) <= {'version', 'at', 'event', 'call_id', 'tool', 'error_type', 'category', 'monotonic_ns', 'clock_id'}
+        assert type(rows[3]['monotonic_ns']) is int and rows[3]['monotonic_ns'] > 0
+        assert isinstance(rows[3]['clock_id'], str) and len(rows[3]['clock_id']) == 32
     else:
         raise AssertionError(case_id)

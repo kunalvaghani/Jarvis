@@ -1,0 +1,20 @@
+{
+  "origin": "literal schema emitted by executed local fixture, see stdio-fixture-server.py",
+  "tools": [
+    {
+      "name": "echo",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}

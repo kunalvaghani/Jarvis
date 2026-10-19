@@ -1,0 +1,29 @@
+{
+  "scope": "Only app/install/profile root spellings normalized; assertions/results untouched.",
+  "files": {
+    "baseline.xml": {
+      "pre_normalization_sha256": "ac597505834e3d702234df6f4fd81968a3175838ec3bc4a799f466519fa27c3c",
+      "saved_sha256": "ac597505834e3d702234df6f4fd81968a3175838ec3bc4a799f466519fa27c3c"
+    },
+    "boundaries.xml": {
+      "pre_normalization_sha256": "39f827dfc9bcc689009710f6fd63725423a4a738b866c5036b881728f399f226",
+      "saved_sha256": "80c23da5da14fc9c15e89804de6208a1d836877178b80368caaee185a7f5445e"
+    },
+    "retention.xml": {
+      "pre_normalization_sha256": "97f2808d7bdb9b0ec581df3d164fed0ce105870239173ae5d6458ee8d8445675",
+      "saved_sha256": "ac518a07675bb356385c63a5acb468cd693fdc313d418079ddff9d81f1de05c2"
+    },
+    "baseline.txt": {
+      "pre_normalization_sha256": "99f6d2a3069a731a0637876d44fbe18169f2531dd082d1a2773c80563f1b998a",
+      "saved_sha256": "090ab0676fc2192e1ebc6b90785485e2751021f8d195e517a43a6652113bf5f7"
+    },
+    "boundaries.txt": {
+      "pre_normalization_sha256": "045f0a258e275224d1a99f9a2252e73d0abeec4142a672d437f771ed5881764f",
+      "saved_sha256": "e038a48534d720e8cccfbcf77fa29a9ae36c4db73b7e7f7b56b5230d921ebc26"
+    },
+    "retention.txt": {
+      "pre_normalization_sha256": "646c05982ea55030a34327418d6c8cd7622a9f3292e19f3ad895a7f553df5005",
+      "saved_sha256": "20c25396112f2327ba2e0739ff9085154da5e87919066f9046716534b20eb092"
+    }
+  }
+}

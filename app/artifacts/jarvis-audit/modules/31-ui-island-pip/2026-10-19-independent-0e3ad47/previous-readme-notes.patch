@@ -1,0 +1,24 @@
+diff --git a/README.md b/README.md
+index c0a40b0..21e286f 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,7 @@
+ # Jarvis — local Windows voice assistant
+ 
++**2026-10-19 — Prompt 31 independent continuation (`ddf3247`): P31-001 callback repair verified; overall NOT READY / BLOCKED.** The original reproduction and repair tests pass. A separate synthetic response-replay test finds that both final requesters accept an old receipt for a new identical-text request without a new decision; external exploitability is unverified. No application source repair was applied by Codex, and Prompt 32 remains gated. [Current verdict](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-ddf3247/verdict.md) · [Reproduction and repair handoff](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-ddf3247/repair-handoff.md).
++
+ **Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
+ 
+ **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
+diff --git a/app/README.md b/app/README.md
+index d0fc7b4..71a5de5 100644
+--- a/app/README.md
++++ b/app/README.md
+@@ -1,5 +1,7 @@
+ # Jarvis — local Windows voice assistant
+ 
++**2026-10-19 — Prompt 31 independent continuation (`ddf3247fd3d5ee6b151287c6cba358e8707090c6`): P31-001 FIXED at the callback boundary; overall NOT READY / BLOCKED.** Claude repair `1dd3e9c` passes the unchanged original four cases and nine repair-test executions (four duplicate scenarios). Two real offscreen Tk request/readback/approve-or-close fixtures pass with synthetic input and no external executor. New P31-002 response-seam fault injection: both `App.request_approval` and `AbilityForge.ask` accept a saved receipt for a later request with identical text, despite no decision on the later card (**2 failed assertions / 3 passing controls**); no remote attack path is established. Relevant regression: **303 passed / 1 failed / 8 skipped**; the missing isolated utility-runtime failure passes with read-only installed-interpreter routing. Ability/registry regression: **114 passed**. The isolated launcher still reports missing runtimes/assets. No Codex application repair, installation, deployment or user-data capture; no visible UI change or new screenshot. **Prompt 32 remains gated.** [Verdict](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-ddf3247/verdict.md) · [Finding and actual evidence](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-ddf3247/failures.md) · [Repair handoff](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-ddf3247/repair-handoff.md).
++
+ ## Independent audit checkpoint (2026-10-19)
+ 
+ The independent review pins `claude` at `36fbf3ce925080f7f54afa87eaf1d9b88414142d` in a separate `codex-review` worktree. This audit branch is an explicit exception to the earlier three-branch convention. No fixes were merged into `claude` or `main`.

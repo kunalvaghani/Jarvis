@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.941" timestamp="2026-10-20T02:09:26.453283+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_014_generated_skill_cannot_declare_privilege[trusted]" time="0.007"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'trusted'
+
+    @pytest.mark.parametrize('field', ['trusted', 'trust_state', 'admin', 'authorization'])
+    def test_JRV_35_014_generated_skill_cannot_declare_privilege(field):
+        from jarvis.skill_evolution import validate_skill
+        body = ('---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\n' +
+                field + ': trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.')
+&gt;       with pytest.raises(ValueError, match='Forbidden'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt35_security.py:181: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_014_generated_skill_cannot_declare_privilege[trust_state]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'trust_state'
+
+    @pytest.mark.parametrize('field', ['trusted', 'trust_state', 'admin', 'authorization'])
+    def test_JRV_35_014_generated_skill_cannot_declare_privilege(field):
+        from jarvis.skill_evolution import validate_skill
+        body = ('---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\n' +
+                field + ': trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.')
+&gt;       with pytest.raises(ValueError, match='Forbidden'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt35_security.py:181: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_014_generated_skill_cannot_declare_privilege[admin]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'admin'
+
+    @pytest.mark.parametrize('field', ['trusted', 'trust_state', 'admin', 'authorization'])
+    def test_JRV_35_014_generated_skill_cannot_declare_privilege(field):
+        from jarvis.skill_evolution import validate_skill
+        body = ('---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\n' +
+                field + ': trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.')
+&gt;       with pytest.raises(ValueError, match='Forbidden'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt35_security.py:181: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_014_generated_skill_cannot_declare_privilege[authorization]" time="0.001"><failure message="AssertionError: Regex pattern did not match.&#10; Regex: 'Forbidden'&#10; Input: 'Candidate contains credential-like or sensitive content.'">field = 'authorization'
+
+    @pytest.mark.parametrize('field', ['trusted', 'trust_state', 'admin', 'authorization'])
+    def test_JRV_35_014_generated_skill_cannot_declare_privilege(field):
+        from jarvis.skill_evolution import validate_skill
+        body = ('---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\n' +
+                field + ': trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.')
+        with pytest.raises(ValueError, match='Forbidden'):
+&gt;           validate_skill(body)
+
+tests\test_prompt35_security.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+body = '---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\nauthorization: trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.'
+expected_name = None
+
+    def validate_skill(body, expected_name=None):
+        """Deterministic schema, policy and secret checks (independent of any model claim)."""
+        from .obsidian_memory import SENSITIVE
+        from .tools import TOOL_NAMES, redact
+        if not isinstance(body, str) or not 50 &lt;= len(body.encode('utf-8')) &lt;= 8000:
+            raise ValueError('Evolved SKILL.md must be 50-8000 bytes.')
+        fields = frontmatter(body)
+        forbidden = sorted(set(fields) &amp; FORBIDDEN_FRONTMATTER)
+        if forbidden:
+            raise ValueError('Forbidden front matter: ' + ', '.join(forbidden))
+        name = fields.get('name', '')
+        if not NAME.fullmatch(name) or len(name) &gt; 50 or (expected_name and name != expected_name):
+            raise ValueError('Skill name must be a safe lowercase slug matching its folder.')
+        if not 10 &lt;= len(fields.get('description', '')) &lt;= 300:
+            raise ValueError('Description must be one line of 10-300 characters.')
+        tools = re.fullmatch(r'\[([a-z0-9_, ]*)\]', fields.get('tools', '[]'))
+        if tools is None:
+            raise ValueError('tools must be a bracketed list.')
+        declared = [t.strip() for t in tools.group(1).split(',') if t.strip()]
+        unknown = [t for t in declared if t not in TOOL_NAMES]
+        if unknown:
+            raise ValueError('Unregistered tools cannot be bound: ' + ', '.join(unknown))
+        if redact(body) != body or SENSITIVE.search(body):
+&gt;           raise ValueError('Candidate contains credential-like or sensitive content.')
+E           ValueError: Candidate contains credential-like or sensitive content.
+
+jarvis\skill_evolution.py:210: ValueError
+
+During handling of the above exception, another exception occurred:
+
+field = 'authorization'
+
+    @pytest.mark.parametrize('field', ['trusted', 'trust_state', 'admin', 'authorization'])
+    def test_JRV_35_014_generated_skill_cannot_declare_privilege(field):
+        from jarvis.skill_evolution import validate_skill
+        body = ('---\nname: fixture-guide\ndescription: A synthetic fixture guide for testing\ntools: []\n' +
+                field + ': trusted\n---\n\nSelect the visible fixture item and independently read back its resulting state.')
+&gt;       with pytest.raises(ValueError, match='Forbidden'):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'Forbidden'
+E        Input: 'Candidate contains credential-like or sensitive content.'
+
+tests\test_prompt35_security.py:181: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,11 @@
+{
+  "commands": [
+    [
+      "%FIXTURE%\\.venv\\Scripts\\python.exe",
+      "-c",
+      "import json"
+    ]
+  ],
+  "real_commands_executed": 0,
+  "approval_granted": false
+}

@@ -1,0 +1,3 @@
+revision,scenario,n,p50_ms,p95_ms,traced_peak_bytes,scope
+5b56f84c1604de87bb8845027dffb5ce5943243b,card_create_approve_positive_control,300,0.0095,0.0219,1160,synthetic; no end-user improvement claim
+ddf3247fd3d5ee6b151287c6cba358e8707090c6,card_create_approve_positive_control,300,0.0142,0.0308,1354,synthetic; no end-user improvement claim

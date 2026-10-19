@@ -1,0 +1,15 @@
+{
+  "bridge_protocol": "2025-11-25",
+  "transports": [
+    "stdio"
+  ],
+  "capabilities": {},
+  "server_requests": "refused; no sampling/elicitation/roots",
+  "image": {
+    "available": true,
+    "image_id": "sha256:0438d6bee255b16e38475c7342d22a00f4fd7b499272ff12b253472a1b2245de",
+    "sdk": "mcp==2.3.0"
+  },
+  "SDK_build_pin": "mcp==2.3.0",
+  "build_pin_scope": "SDK fixed, transitive packages recorded in historical image manifest; not a complete dependency lock"
+}

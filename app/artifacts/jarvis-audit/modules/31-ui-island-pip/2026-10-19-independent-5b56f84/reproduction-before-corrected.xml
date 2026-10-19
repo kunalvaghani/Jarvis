@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="1.074" timestamp="2026-10-19T13:58:59.528889+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_stale_approve_callback_cannot_authorize_next_card" time="0.004"><failure message="AssertionError: stale callback authorized a different request&#10;assert {'approved': True} == {}&#10;  &#10;  Left contains 1 more item:&#10;  {'approved': True}&#10;  Use -v to get more diff">def test_stale_approve_callback_cannot_authorize_next_card():
+        desk, answers = desk_with_cards()
+        first_callback = (desk.approve_button.configure.call_args.kwargs.get('command') if desk.approve_button.configure.call_args else None)
+        # Use the legacy callback when reproducing against the pinned baseline.
+        if first_callback is None:
+            first_callback = lambda: desk.decide(True)
+        first_callback()
+        assert answers[0]['approved'] is True
+        first_callback()
+&gt;       assert answers[1] == {}, 'stale callback authorized a different request'
+E       AssertionError: stale callback authorized a different request
+E       assert {'approved': True} == {}
+E         
+E         Left contains 1 more item:
+E         {'approved': True}
+E         Use -v to get more diff
+
+tests\test_prompt31_approval_binding.py:34: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_callback_for_expired_removed_card_cannot_decide_successor" time="0.002"><failure message="AssertionError: assert {'approved': True} == {}&#10;  &#10;  Left contains 1 more item:&#10;  {'approved': True}&#10;  Use -v to get more diff">def test_callback_for_expired_removed_card_cannot_decide_successor():
+        desk, answers = desk_with_cards()
+        old_callback = (desk.approve_button.configure.call_args.kwargs.get('command') if desk.approve_button.configure.call_args else None)
+        if old_callback is None:
+            old_callback = lambda: desk.decide(True)
+        desk.approvals.pop(0).lapse()
+        desk.render_approval()
+        old_callback()
+        assert answers[0]['approved'] is False
+&gt;       assert answers[1] == {}
+E       AssertionError: assert {'approved': True} == {}
+E         
+E         Left contains 1 more item:
+E         {'approved': True}
+E         Use -v to get more diff
+
+tests\test_prompt31_approval_binding.py:47: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_unbound_decision_is_rejected" time="0.002"><failure message="AssertionError: assert [{'approved': True}, {}] == [{}, {}]&#10;  &#10;  At index 0 diff: {'approved': True} != {}&#10;  Use -v to get more diff">def test_unbound_decision_is_rejected():
+        desk, answers = desk_with_cards()
+        desk.decide(True)
+&gt;       assert answers == [{}, {}]
+E       AssertionError: assert [{'approved': True}, {}] == [{}, {}]
+E         
+E         At index 0 diff: {'approved': True} != {}
+E         Use -v to get more diff
+
+tests\test_prompt31_approval_binding.py:53: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_current_card_callback_decides_once_and_close_denies_remaining" time="0.002"><failure message="assert False&#10; +  where False = callable(None)">def test_current_card_callback_decides_once_and_close_denies_remaining():
+        desk, answers = desk_with_cards()
+        callback = (desk.approve_button.configure.call_args.kwargs.get('command') if desk.approve_button.configure.call_args else None)
+&gt;       assert callable(callback)
+E       assert False
+E        +  where False = callable(None)
+
+tests\test_prompt31_approval_binding.py:59: AssertionError</failure></testcase></testsuite></testsuites>

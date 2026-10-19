@@ -1,0 +1,63 @@
+FFF.                                                                     [100%]
+================================== FAILURES ===================================
+___________ test_stale_approve_callback_cannot_authorize_next_card ____________
+
+    def test_stale_approve_callback_cannot_authorize_next_card():
+        desk, answers = desk_with_cards()
+        first_callback = (desk.approve_button.configure.call_args.kwargs.get('command') if desk.approve_button.configure.call_args else None)
+        # Use the legacy callback when reproducing against the pinned baseline.
+        if first_callback is None:
+            first_callback = lambda: desk.decide(True)
+        first_callback()
+        assert answers[0]['approved'] is True
+        first_callback()
+>       assert answers[1] == {}, 'stale callback authorized a different request'
+E       AssertionError: stale callback authorized a different request
+E       assert {'approved': True} == {}
+E         
+E         Left contains 1 more item:
+E         {'approved': True}
+E         Use -v to get more diff
+
+artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py:34: AssertionError
+_______ test_callback_for_expired_removed_card_cannot_decide_successor ________
+
+    def test_callback_for_expired_removed_card_cannot_decide_successor():
+        desk, answers = desk_with_cards()
+        old_callback = (desk.approve_button.configure.call_args.kwargs.get('command') if desk.approve_button.configure.call_args else None)
+        if old_callback is None:
+            old_callback = lambda: desk.decide(True)
+        desk.approvals.pop(0).lapse()
+        desk.render_approval()
+        old_callback()
+        assert answers[0]['approved'] is False
+>       assert answers[1] == {}
+E       AssertionError: assert {'approved': True} == {}
+E         
+E         Left contains 1 more item:
+E         {'approved': True}
+E         Use -v to get more diff
+
+artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py:47: AssertionError
+______________________ test_unbound_decision_is_rejected ______________________
+
+    def test_unbound_decision_is_rejected():
+        desk, answers = desk_with_cards()
+        desk.decide(True)
+>       assert answers == [{}, {}]
+E       AssertionError: assert [{'approved': True}, {}] == [{}, {}]
+E         
+E         At index 0 diff: {'approved': True} != {}
+E         Use -v to get more diff
+
+artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py:53: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\approval-final.xml -
+=========================== short test summary info ===========================
+FAILED artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py::test_stale_approve_callback_cannot_authorize_next_card
+FAILED artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py::test_callback_for_expired_removed_card_cannot_decide_successor
+FAILED artifacts\jarvis-audit\modules\31-ui-island-pip\test_approval_binding.py::test_unbound_decision_is_rejected
+3 failed, 1 passed in 0.94s
+Exception ignored in: <function Console.__del__ at 0x000001C0D71FB9A0>
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pyreadline3\console\console.py", line 256, in __del__
+OSError: [WinError -1073741816] Windows Error 0xc0000008

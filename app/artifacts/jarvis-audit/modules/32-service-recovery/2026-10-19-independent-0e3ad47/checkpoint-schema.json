@@ -1,0 +1,32 @@
+{
+  "scope": "source-derived description, not a new validator",
+  "path": ".jarvis-runtime/state/task_state.json",
+  "version": 1,
+  "envelope": {
+    "current": "null or current task object",
+    "history": "list, bounded to 20 by start()"
+  },
+  "task": [
+    "task_id",
+    "goal",
+    "kind",
+    "project",
+    "status",
+    "stage",
+    "started_at",
+    "updated_at",
+    "checkpoints",
+    "result"
+  ],
+  "optional": [
+    "plan",
+    "plan_revisions",
+    "dag",
+    "failures",
+    "uncertain_external_writes"
+  ],
+  "commit": "write same-directory temporary; flush/fsync; os.replace; bounded Windows sharing-error retries",
+  "restart": "running -> interrupted; no automatic execution from saved state",
+  "uncertainty": "uncertain_external_write adds action/target; external_write_verified removes matching marker; cannot finish completed while pending",
+  "read_validation": "version == 1 and history list; full schema/migration acceptance is incomplete"
+}

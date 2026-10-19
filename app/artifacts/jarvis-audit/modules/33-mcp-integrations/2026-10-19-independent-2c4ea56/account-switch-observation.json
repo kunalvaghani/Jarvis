@@ -1,0 +1,27 @@
+{
+  "initial_account": "A",
+  "approval_details": [
+    {
+      "action": "calendar_create",
+      "value": "primary",
+      "content": "{\"summary\": \"SYNTHETIC_EVENT_FOR_A\", \"start\": {\"date\": \"2026-10-20\"}, \"end\": {\"date\": \"2026-10-21\"}}"
+    }
+  ],
+  "intercepted_requests": [
+    {
+      "method": "POST",
+      "account": "B",
+      "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+      "body": {
+        "summary": "SYNTHETIC_EVENT_FOR_A",
+        "start": {
+          "date": "2026-10-20"
+        },
+        "end": {
+          "date": "2026-10-21"
+        }
+      }
+    }
+  ],
+  "network_calls": "ZERO; jarvis.toolkits.api replaced by an in-memory ledger"
+}

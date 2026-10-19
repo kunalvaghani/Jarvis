@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.907" timestamp="2026-10-19T13:58:44.563704+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_stale_approve_callback_cannot_authorize_next_card" time="0.003"><failure message="AttributeError: 'NoneType' object has no attribute 'kwargs'">def test_stale_approve_callback_cannot_authorize_next_card():
+        desk, answers = desk_with_cards()
+&gt;       first_callback = desk.approve_button.configure.call_args.kwargs.get('command')
+E       AttributeError: 'NoneType' object has no attribute 'kwargs'
+
+tests\test_prompt31_approval_binding.py:27: AttributeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_callback_for_expired_removed_card_cannot_decide_successor" time="0.002"><failure message="AttributeError: 'NoneType' object has no attribute 'kwargs'">def test_callback_for_expired_removed_card_cannot_decide_successor():
+        desk, answers = desk_with_cards()
+&gt;       old_callback = desk.approve_button.configure.call_args.kwargs.get('command')
+E       AttributeError: 'NoneType' object has no attribute 'kwargs'
+
+tests\test_prompt31_approval_binding.py:40: AttributeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_unbound_decision_is_rejected" time="0.002"><failure message="AssertionError: assert [{'approved': True}, {}] == [{}, {}]&#10;  &#10;  At index 0 diff: {'approved': True} != {}&#10;  Use -v to get more diff">def test_unbound_decision_is_rejected():
+        desk, answers = desk_with_cards()
+        desk.decide(True)
+&gt;       assert answers == [{}, {}]
+E       AssertionError: assert [{'approved': True}, {}] == [{}, {}]
+E         
+E         At index 0 diff: {'approved': True} != {}
+E         Use -v to get more diff
+
+tests\test_prompt31_approval_binding.py:53: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt31_approval_binding" name="test_current_card_callback_decides_once_and_close_denies_remaining" time="0.002"><failure message="AttributeError: 'NoneType' object has no attribute 'kwargs'">def test_current_card_callback_decides_once_and_close_denies_remaining():
+        desk, answers = desk_with_cards()
+&gt;       callback = desk.approve_button.configure.call_args.kwargs.get('command')
+E       AttributeError: 'NoneType' object has no attribute 'kwargs'
+
+tests\test_prompt31_approval_binding.py:58: AttributeError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,773 @@
+diff --git a/app/jarvis/ability_runner.py b/app/jarvis/ability_runner.py
+index f5736f8..5d7f85b 100644
+--- a/app/jarvis/ability_runner.py
++++ b/app/jarvis/ability_runner.py
+@@ -19,7 +19,6 @@ import json
+ import os
+ import sys
+ import time
+-import traceback
+ 
+ PROCESS_EVENTS = {"subprocess.Popen", "os.system", "os.exec", "os.spawn", "os.posix_spawn", "os.startfile",
+                   "_winapi.CreateProcess", "os.kill", "os.fork", "os.forkpty", "pty.spawn"}
+@@ -34,6 +33,29 @@ class Refused(PermissionError):
+     pass
+ 
+ 
++def failure_summary(exc, output_validation):
++    """Untrusted messages/traceback source can contain secrets; emit fixed diagnostics only."""
++    if isinstance(exc, Refused):
++        for prefix in ('Learned abilities may not start other programs',
++                       'This ability was not approved for network use',
++                       'Learned abilities may not change the Windows registry',
++                       'Learned abilities may only write inside their run folder',
++                       'Learned abilities may only read their inputs and their own files',
++                       'Learned abilities may only change files inside their run folder'):
++            if str(exc).startswith(prefix):
++                return 'Refused: ' + prefix + '.'
++        return 'Refused: ability permission denied.'
++    # Preserve runner-owned output-contract guidance without preserving generated exception text.
++    contracts = ("run() text must be a string.", "run() must return a dict with 'text' and/or 'files'.",
++                 'run() files must be a list of at most 20 path strings.', 'run() returned no text and no files.')
++    if output_validation and str(exc) in contracts:
++        return str(exc)
++    for category in (RuntimeError, TypeError, ValueError, OSError, ImportError, SyntaxError, SystemExit):
++        if isinstance(exc, category):
++            return category.__name__ + ': untrusted exception details withheld.'
++    return 'Ability failed; untrusted exception details withheld.'
++
++
+ def real(path):
+     if isinstance(path, int):
+         return None
+@@ -139,9 +161,9 @@ def main(request_path):
+         finish({"ok": True, "text": text[:6000], "files": files[:20],
+                 "inputs": json.loads(json.dumps(inputs, default=str))})
+     except BaseException as exc:  # Report everything (including SystemExit) to Jarvis instead of crashing silently.
+-        finish({"ok": False, "error": (type(exc).__name__ + ": " + str(exc))[:600],
++        finish({"ok": False, "error": failure_summary(exc, output_validation),
+                 "failure_kind": "output_contract" if output_validation else "execution",
+-                "trace": traceback.format_exc()[-3000:]})
++                "trace": "Untrusted exception message and source withheld for privacy."})
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/app/jarvis/actions.py b/app/jarvis/actions.py
+index ab9dd77..1684125 100644
+--- a/app/jarvis/actions.py
++++ b/app/jarvis/actions.py
+@@ -970,11 +970,17 @@ class Actions:
+         session = DemonstrationSession(self.base, self._approve, lambda text: self.report('spoken_reply', text))
+         try:
+             session.request(str(action_name)[:80], handle, cancelled)
+-            session.start_hook()
++            session.start_hook(cancelled=cancelled)
+             steps = session.pump(timeout=90, cancelled=cancelled)
+         except ValueError as exc:
+             self.report('repair', 'Demonstration not recorded: ' + str(exc)[:200])
+             return None
++        finally:
++            if session.hook is not None or session.state.get('status') == 'recording':
++                session.stop('cancelled' if cancelled() else 'failed')
++        if session.state.get('status') != 'complete':
++            self.report('spoken_reply', 'No completed demonstration was recorded.')
++            return None
+         self.report('spoken_reply', ('Thanks. I recorded that ' + str(action_name)[:60] + ' action and will verify it before '
+                                      'trusting it.') if steps else 'No demonstration was recorded.')
+         return session
+@@ -1260,6 +1266,10 @@ class Actions:
+                 paused = result and not isinstance(result, UnreadSearchResult) and any(word in result.casefold() for word in
+                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
+                 self.task_state.finish("paused" if paused else "completed", result, task_id=owned_task_id)
++                durable = self.task_state.snapshot()
++                if durable.get('task_id', durable.get('started_at')) == owned_task_id and durable.get('status') == 'paused':
++                    paused = True
++                    result = durable['result']
+                 if decision_id is not None and engine is not None:
+                     engine.record_outcome(decision_id, not paused, (result or "")[:160])
+                 if paused and engine is not None and getattr(engine, 'enabled', False) and command.extra != 'approved_plan' and not cancelled():
+diff --git a/app/jarvis/agent_events.py b/app/jarvis/agent_events.py
+index 0ed2679..9343d99 100644
+--- a/app/jarvis/agent_events.py
++++ b/app/jarvis/agent_events.py
+@@ -10,10 +10,36 @@ import uuid
+ import re
+ import builtins
+ from functools import lru_cache
++from contextlib import contextmanager
++from contextvars import ContextVar
++import time
+ 
+ from .agent_context import bounded_text, scoped
+ 
+ _LOCK = threading.RLock()
++_CLOCK_ID = uuid.uuid4().hex
++_TRACE_TASK = ContextVar('jarvis_telemetry_task', default=None)
++MAX_JOURNAL_BYTES = 32 * 1024 * 1024
++
++
++@contextmanager
++def task_trace(actions):
++    """Capture the host task once for this call, including nested outcome/cloud events."""
++    from .task_state import TaskState
++    state = getattr(actions, 'task_state', None)
++    task = state.running_identity() if isinstance(state, TaskState) else None
++    token = _TRACE_TASK.set(task if isinstance(task, str) and re.fullmatch('[0-9a-f]{32}', task) else None)
++    try:
++        yield
++    finally:
++        _TRACE_TASK.reset(token)
++
++
++def clock_metadata():
++    result = {'monotonic_ns': time.monotonic_ns(), 'clock_id': _CLOCK_ID}
++    if _TRACE_TASK.get() is not None:
++        result['task_id'] = _TRACE_TASK.get()
++    return result
+ _BACKENDS = frozenset({'files','terminal','browser','desktop','toolkit','dom','realtime','spotify','desktop_observation'})
+ _ERROR_TYPES = frozenset(name for name,value in vars(builtins).items()
+     if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled',
+@@ -91,14 +117,20 @@ def event(actions, kind, name, call_id=None, **metadata):
+         details = lifecycle_metadata(metadata)
+     row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
+            'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
+-           **details}
++           **details, **clock_metadata()}
+     # Never store arguments, source, responses, credentials or private recordings.
+-    with _LOCK:
+-        path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
+-        folder = path.parent
+-        folder.mkdir(parents=True, exist_ok=True)
+-        if path.is_symlink():
+-            raise ValueError('Agent event path must not be linked.')
+-        with path.open('a', encoding='utf-8') as output:
+-            output.write(json.dumps(row, ensure_ascii=False) + '\n')
++    try:
++        with _LOCK:
++            path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
++            folder = path.parent
++            folder.mkdir(parents=True, exist_ok=True)
++            if path.is_symlink():
++                raise ValueError('Agent event path must not be linked.')
++            if path.exists() and path.stat().st_size >= MAX_JOURNAL_BYTES:
++                actions.telemetry_status = 'limited'
++                return identifier  # Preserve old evidence; never delete/rotate user files implicitly.
++            with path.open('a', encoding='utf-8') as output:
++                output.write(json.dumps(row, ensure_ascii=False) + '\n')
++    except OSError:
++        actions.telemetry_status = 'unavailable'  # Diagnosis degrades; no action replay or policy bypass.
+     return identifier
+diff --git a/app/jarvis/azr_proposer.py b/app/jarvis/azr_proposer.py
+index e29b55f..3808009 100644
+--- a/app/jarvis/azr_proposer.py
++++ b/app/jarvis/azr_proposer.py
+@@ -10,6 +10,7 @@ penalty (-1) and are kept only in the rejection log, never in a dataset.
+ """
+ import json
+ import random
++import re
+ import urllib.request
+ 
+ from .azr_tasks import (APPS, TOOLS, canonical, check_abduction, check_deduction, execute, extract_code, parse_json_answer,
+@@ -40,6 +41,14 @@ PROPOSE_INDUCTION = ('Propose one small pure Python function f(x) and 8 differen
+                      'Earlier examples: {references}')
+ 
+ 
++def _screen_training_text(value):
++    """Known sensitive proposal text is quarantined, never sent to the oracle or dataset."""
++    from .cloud_policy import SECRET, privacy_text
++    text = privacy_text(json.dumps(value, ensure_ascii=False))
++    if SECRET.search(text) or re.search(r'\b(?:private|confidential|proprietary|internal.only)\b', text, re.I):
++        raise ValueError('private training proposal quarantined')
++
++
+ def validate_deduction(proposal):
+     """Oracle validation: schema, tools, then execute; the answer is computed, never taken from the model."""
+     initial = proposal.get('initial')
+@@ -62,6 +71,7 @@ def validate_deduction(proposal):
+                                                                         for v in call['args'].values()):
+             raise ValueError('arguments')
+         clean.append({'id': f's{index + 1}', 'tool': call['tool'], 'args': call['args']})
++    _screen_training_text({'initial': state, 'calls': clean})
+     first = execute(state, clean)
+     if execute(state, clean) != first:
+         raise ValueError('nondeterministic')
+@@ -93,6 +103,7 @@ def validate_induction(proposal, base, run_programs):
+                 and all(type(i) is int and -10 ** 6 < i < 10 ** 6 for i in v)) for v in inputs):
+         raise ValueError('inputs')
+     unique = list({json.dumps(v): v for v in inputs}.values())
++    _screen_training_text({'source': source, 'message': message, 'inputs': unique})
+     # Outputs come from sandboxed execution (twice), not from the proposer.
+     probe = run_programs(base, [{'id': 'probe', 'source': source, 'cases': [{'input': v, 'output': None} for v in unique]}])
+     row = probe['probe']
+diff --git a/app/jarvis/cloud_architect.py b/app/jarvis/cloud_architect.py
+index dc980a4..99d6168 100644
+--- a/app/jarvis/cloud_architect.py
++++ b/app/jarvis/cloud_architect.py
+@@ -15,8 +15,8 @@ Privacy gate: classify provenance, build the generic problem, strip paths,
+ filenames, usernames, emails, tokens, source snippets, logs and internal names,
+ reject if sensitive semantics remain, validate the payload against an explicit
+ allowlist, and default to local whenever any check is inconclusive. Redaction is not
+-a privacy guarantee; this gate refuses rather than trusting it. A minimized record
+-of exactly what was sent is kept locally.
++a privacy guarantee; this gate refuses rather than trusting it. Local telemetry stores
++only categorical decisions, payload size/digest and opaque correlation, never the payload.
+ 
+ Cloud output is untrusted text. It never receives tools, files or commands. Code in
+ the advice is statically screened and executed only against the problem's own
+@@ -28,6 +28,7 @@ from datetime import datetime, timedelta, timezone
+ import getpass
+ import hashlib
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -47,6 +48,8 @@ LOG_LINE = re.compile(r'Traceback|File "[^"]+", line \d+|\b(?:ERROR|WARNING|INFO
+ SANDBOX_IMPORTS = frozenset({'math', 'itertools', 'collections', 'heapq', 'bisect', 'functools', 're', 'statistics'})
+ FORBIDDEN_CALLS = frozenset({'eval', 'exec', 'compile', 'open', '__import__', 'getattr', 'setattr', 'delattr', 'globals',
+                              'locals', 'vars', 'input', 'breakpoint', 'exit', 'quit'})
++_LOG_LOCK = threading.RLock()
++MAX_LOG_BYTES = 8 * 1024 * 1024
+ 
+ 
+ def now():
+@@ -74,6 +77,39 @@ class PrivacyRejected(ValueError):
+     """The problem could not be made generic with confidence; it stays local."""
+ 
+ 
++def _bounded_examples(examples):
++    """Bound work before JSON encoding, including nested/cyclic hostile literals."""
++    pending = [(examples, 0)]
++    remaining = 512
++    while pending:
++        value, depth = pending.pop()
++        remaining -= 1
++        if remaining < 0 or depth > 8:
++            raise PrivacyRejected('Examples exceed the literal work/depth budget.')
++        if type(value) is str:
++            if len(value) > 200:
++                raise PrivacyRejected('Example text exceeds its literal budget.')
++        elif type(value) is bool:
++            continue
++        elif type(value) is int:
++            if value.bit_length() > 256:
++                raise PrivacyRejected('Example integer exceeds its literal budget.')
++        elif type(value) is float:
++            if not math.isfinite(value):
++                raise PrivacyRejected('Example numbers must be finite.')
++        elif type(value) in (list, dict):
++            if len(value) > 64:
++                raise PrivacyRejected('Example container exceeds its literal budget.')
++            if type(value) is dict:
++                if any(type(key) is not str or len(key) > 80 for key in value):
++                    raise PrivacyRejected('Example keys must be bounded text.')
++                pending.extend((item, depth + 1) for item in value.values())
++            else:
++                pending.extend((item, depth + 1) for item in value)
++        else:
++            raise PrivacyRejected('Examples must contain only bounded JSON literals.')
++
++
+ def privacy_gate(problem, base):
+     """Return the exact outbound payload, or raise PrivacyRejected. Inconclusive means local."""
+     from .cloud_policy import PRIVATE, PRIVATE_APP, SECRET, privacy_text
+@@ -87,12 +123,13 @@ def privacy_gate(problem, base):
+     payload = {'category': problem['category']}
+     for key in ('statement', 'question', 'constraints'):
+         value = problem.get(key, '' if key == 'constraints' else None)
+-        if not isinstance(value, str) or not (key == 'constraints' or 20 <= len(value) <= 2000):
++        if not isinstance(value, str) or not (0 if key == 'constraints' else 20) <= len(value) <= 2000:
+             raise PrivacyRejected('Field ' + key + ' must be bounded text.')
+         payload[key] = value
+     examples = problem.get('examples', [])
+     if not isinstance(examples, list) or len(examples) > 8:
+         raise PrivacyRejected('Up to eight synthetic examples.')
++    _bounded_examples(examples)
+     for example in examples:
+         if not isinstance(example, dict) or set(example) != {'input', 'output'}:
+             raise PrivacyRejected('Examples must be {input, output}.')
+@@ -105,6 +142,7 @@ def privacy_gate(problem, base):
+     checks = {
+         'secret': SECRET.search(text),
+         'private_context': PRIVATE.search(text) or PRIVATE_APP.search(text),
++        'confidential_semantics': re.search(r'\b(?:proprietary|confidential|internal.only)\b', text, re.I),
+         'path': re.search(r'[A-Za-z]:[\\/]|\\\\|(?:^|[\s"\'])/(?:home|users|etc|var|mnt|opt)/|~[\\/]', text, re.I),
+         'filename': re.search(r'\b[\w-]+\.(?:py|js|ts|json|md|txt|xlsx|docx|pdf|csv|db|sqlite3|log|env|cfg|ini|yaml|yml)\b', text, re.I),
+         'email': re.search(r'[\w.+-]+@[\w-]+\.[\w.]+', text),
+@@ -275,16 +313,19 @@ class CloudArchitect:
+ 
+     def consult(self, problem_id, problem, failures, attempts_used, request_id, scope=None, cancelled=lambda: False):
+         if problem_id in self.escalated:
++            self._record({'problem_id': problem_id, 'decision': 'duplicate_blocked'})
+             return {'status': 'local', 'reasons': ['already consulted for this problem (no recursive escalation)']}
+         snapshot = self.guardian.snapshot() if self.guardian else {'state': 'UNKNOWN'}
+         ready = bool(self.adapter) and self.adapter.ready(wait_seconds=0)
+         eligible, reasons = eligibility(failures, attempts_used, problem.get('category'), self.options, self.consent,
+                                         request_id, scope, snapshot['state'], ready, problem_id in self.escalated)
+         if not eligible:
++            self._record({'problem_id': problem_id, 'decision': 'eligibility_blocked'})
+             return {'status': 'local', 'reasons': reasons}
+         try:
+             payload = privacy_gate(problem, self.base)
+         except (PrivacyRejected, ValueError) as exc:
++            self._record({'problem_id': problem_id, 'decision': 'privacy_blocked'})
+             return {'status': 'local', 'reasons': [str(exc)[:300]]}
+         self.escalated.add(problem_id)
+         messages = [{'role': 'system', 'content': 'You are an advisory algorithm architect. Explain an approach and, '
+@@ -297,6 +338,7 @@ class CloudArchitect:
+         try:
+             reply = self.adapter.complete(messages, 1200, cancelled=cancelled, reasoning='low', request_id=uuid.uuid4().hex)
+         except (CloudFailure, QuotaDenied) as exc:
++            self._record({'problem_id': problem_id, 'decision': 'provider_unavailable'})
+             return {'status': 'local', 'reasons': ['cloud unavailable: ' + str(exc)[:120]]}
+         return self.evaluate(problem_id, reply.get('content', ''), payload, cancelled)
+ 
+@@ -327,9 +369,38 @@ class CloudArchitect:
+         return result
+ 
+     def _record(self, row):
+-        self.log.parent.mkdir(parents=True, exist_ok=True)
+-        with self.log.open('a', encoding='utf-8') as output:
+-            output.write(json.dumps({'at': now().isoformat(timespec='seconds'), **row}, ensure_ascii=False) + '\n')
++        """Categorical v2 decisions only; no sent payload, raw reason or advice persists."""
++        from .agent_events import clock_metadata
++        decision = row.get('decision') or row.get('status')
++        if 'sent' in row:
++            decision = 'sent'
++        if row.get('received') == 'text-only advice':
++            decision = 'advice_only'
++        elif row.get('received') == 'code rejected':
++            decision = 'rejected'
++        allowed = {'sent', 'privacy_blocked', 'eligibility_blocked', 'duplicate_blocked', 'provider_unavailable',
++                   'advice_only', 'rejected', 'verified_candidate', 'unverified'}
++        decision = decision if isinstance(decision, str) and decision in allowed else 'inconclusive'
++        identifier = row.get('problem_id')
++        identifier = identifier if isinstance(identifier, str) and len(identifier) <= 128 else 'unknown'
++        entry = {'version': 2, 'at': now().isoformat(timespec='seconds'), **clock_metadata(),
++                 'problem_id_hash': hashlib.sha256(identifier.encode()).hexdigest(), 'decision': decision}
++        if decision == 'sent' and isinstance(row.get('sent'), dict):
++            entry['payload_bytes'] = len(json.dumps(row['sent'], ensure_ascii=False).encode())
++            entry['sha256'] = hashlib.sha256(json.dumps(row['sent'], sort_keys=True).encode()).hexdigest()
++        try:
++            with _LOG_LOCK:
++                self.log.parent.mkdir(parents=True, exist_ok=True)
++                if self.log.is_symlink():
++                    self.telemetry_status = 'unavailable'
++                    return
++                if self.log.exists() and self.log.stat().st_size >= MAX_LOG_BYTES:
++                    self.telemetry_status = 'limited'
++                    return
++                with self.log.open('a', encoding='utf-8') as output:
++                    output.write(json.dumps(entry, ensure_ascii=False) + '\n')
++        except OSError:
++            self.telemetry_status = 'unavailable'
+ 
+ 
+ # ---- user-invoked consultation tool (ToolRegistry) ----------------------------------------------------------------------
+@@ -346,9 +417,12 @@ def consult_tool(actions, step, cancelled):
+     """Fail-closed: privacy gate, every eligibility rule except consent, then an approval card that grants consent."""
+     config = getattr(actions, 'config', {}) or {}
+     options = {**(config.get('cloud_architect') or {}), 'groq': config.get('groq') or {}}
++    content = step.get('content', '')
++    if not isinstance(content, str) or len(content) > 16000:
++        return json.dumps({'status': 'local', 'reasons': ['content must be bounded JSON text'], 'sent': False})
+     try:
+-        problem = json.loads(step.get('content') or '{}')
+-    except ValueError:
++        problem = json.loads(content or '{}')
++    except (ValueError, RecursionError):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+     if not isinstance(problem, dict):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+@@ -356,6 +430,7 @@ def consult_tool(actions, step, cancelled):
+     try:
+         payload = privacy_gate(problem, base)
+     except (PrivacyRejected, ValueError) as exc:
++        CloudArchitect(base, options)._record({'problem_id': 'tool-privacy', 'decision': 'privacy_blocked'})
+         return json.dumps({'status': 'local', 'reasons': [str(exc)[:300]], 'sent': False})
+     router = getattr(getattr(actions, 'deliberation', None), 'failure_router', None)
+     failures = router.evidence_for() if router is not None else []
+diff --git a/app/jarvis/demonstration.py b/app/jarvis/demonstration.py
+index 1825a4e..44120c7 100644
+--- a/app/jarvis/demonstration.py
++++ b/app/jarvis/demonstration.py
+@@ -216,6 +216,11 @@ class DemonstrationSession:
+                   'window': title, 'records': 'mouse clicks in this window only; no keyboard, no field values, no passwords',
+                   'max_steps': MAX_STEPS}
+         self.approve('demonstration_recording', json.dumps(detail), cancelled)  # raises when declined
++        if cancelled():
++            raise ValueError('Demonstration cancelled before recording.')
++        if (not win32gui.IsWindow(window_handle)
++                or win32process.GetWindowThreadProcessId(window_handle)[1] != pid):
++            raise ValueError('The selected window owner changed; fresh consent is required.')
+         self.window = Desktop(backend='uia').window(handle=window_handle).wrapper_object()
+         self.state.update(status='recording', action=action_name, application=process, window_title=title,
+                           window_class=win32gui.GetClassName(window_handle), consent_at=now())
+@@ -223,18 +228,32 @@ class DemonstrationSession:
+         self.last_state = window_state(self.window)
+         self._save()
+ 
+-    def start_hook(self):
++    def start_hook(self, cancelled=lambda: False):
+         if self.state['status'] != 'recording':
+             raise ValueError('Recording requires fresh consent.')
++        if cancelled():
++            self.stop('cancelled')
++            raise ValueError('Demonstration cancelled before recording.')
++        if self.hook is not None:
++            raise ValueError('A demonstration hook is already active.')
+         self.hook = self.hook_factory(self.events)
+-        self.hook.start()
++        try:
++            self.hook.start()
++        except BaseException:
++            self.stop('failed')
++            raise
+ 
+     def stop(self, status='stopped'):
+-        if self.hook:
+-            self.hook.stop()
+-            self.hook = None
+-        self.state['status'] = status
+-        self._save()
++        try:
++            if self.hook:
++                self.hook.stop()
++                self.hook = None
++        except BaseException:
++            status = 'failed'  # Retain the hook reference so the owner can retry cleanup.
++            raise
++        finally:
++            self.state['status'] = status
++            self._save()
+ 
+     def process(self, x, y, message, flags):
+         """One mouse event. Returns the recorded step, or None when it was ignored."""
+@@ -274,16 +293,25 @@ class DemonstrationSession:
+         return step
+ 
+     def pump(self, timeout=60, until=lambda steps: len(steps) >= 1, cancelled=lambda: False):
++        if self.state['status'] != 'recording':
++            raise ValueError('Recording requires fresh consent.')
+         deadline = time.monotonic() + timeout
+-        while time.monotonic() < deadline and not cancelled() and self.state['status'] == 'recording':
+-            try:
+-                x, y, message, flags, _ = self.events.get(timeout=.1)
+-            except queue.Empty:
+-                continue
+-            self.process(x, y, message, flags)
+-            if until(self.state['steps']):
+-                break
+-        self.stop('cancelled' if cancelled() else 'complete' if self.state['steps'] else 'timed_out')
++        status = 'failed'
++        try:
++            while time.monotonic() < deadline and not cancelled() and self.state['status'] == 'recording':
++                try:
++                    x, y, message, flags, _ = self.events.get(timeout=.1)
++                except queue.Empty:
++                    continue
++                self.process(x, y, message, flags)
++                if until(self.state['steps']):
++                    break
++            if self.state['status'] != 'recording':
++                status = self.state['status']
++            else:
++                status = 'cancelled' if cancelled() else 'complete' if self.state['steps'] else 'timed_out'
++        finally:
++            self.stop(status)
+         return self.state['steps']
+ 
+     # ---- replay and skill candidate -------------------------------------------------------------------------------
+@@ -332,7 +360,9 @@ class DemonstrationSession:
+ 
+ def promote(skills, session, replay, name):
+     """Pillar A hand-off: only a verified replay becomes a provisional CAPTURED skill (never trusted here)."""
+-    if not replay.get('verified'):
++    if session.state.get('status') not in {'recording', 'complete'}:
++        raise ValueError('Demonstration is not eligible for promotion (cancelled, failed or incomplete).')
++    if replay.get('verified') is not True:
+         raise ValueError('Demonstration replay was not verified; no skill created.')
+     from .skill_evolution import SkillEvolution, _write_skill, validate_skill
+     body = session.skill_body(name)
+diff --git a/app/jarvis/repair_authorization.py b/app/jarvis/repair_authorization.py
+index 2e07888..1b5e5a8 100644
+--- a/app/jarvis/repair_authorization.py
++++ b/app/jarvis/repair_authorization.py
+@@ -20,6 +20,7 @@ from dataclasses import asdict, dataclass
+ import argparse
+ import hashlib
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -92,6 +93,15 @@ class ModelDownload:
+     approval_id: str
+ 
+ 
++def _check_lifetime_and_id(approval, now):
++    if (type(approval.expires) not in (int, float) or not math.isfinite(approval.expires)
++            or approval.expires <= now or approval.expires - now > MAX_AGE):
++        raise RepairRefused('The repair authorization has expired or has an invalid lifetime; authorize it again.')
++    if (not isinstance(approval.approval_id, str)
++            or not re.fullmatch(r'[A-Za-z0-9_-]{1,64}', approval.approval_id)):
++        raise RepairRefused('The repair authorization identifier is invalid.')
++
++
+ def locked_requirements(text):
+     """Return pinned requirement names, or raise unless every requirement is pinned and hash-locked."""
+     names, current = [], ''
+@@ -105,7 +115,13 @@ def locked_requirements(text):
+         entry, current = current.strip(), ''
+         if entry.startswith('-'):
+             raise RepairRefused('The approved lock may only contain pinned, hashed requirements (found an option line).')
+-        requirement = entry.split(' --hash', 1)[0].strip()
++        # Consume the entire entry: a valid hash must not hide trailing pip options or remote sources.
++        match = re.fullmatch(r'(.+?)((?:\s+--hash=sha256:[0-9a-f]{64})+)', entry)
++        if match is None:
++            raise RepairRefused('The approved lock needs only exact sha256 hashes after each requirement.')
++        requirement = match.group(1).strip()
++        if re.search(r'(^|\s)--', requirement) or '://' in requirement:
++            raise RepairRefused('The approved lock cannot add pip options or remote sources.')
+         if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*(\[[A-Za-z0-9,._-]+\])?==[A-Za-z0-9.+!_-]+(\s*;.*)?', requirement):
+             raise RepairRefused('The approved lock pins every requirement with ==; ' + requirement[:80] + ' is not pinned.')
+         if not re.search(r'--hash=sha256:[0-9a-f]{64}', entry):
+@@ -122,10 +138,11 @@ def check_dependency_repair(base, approval, environment_name, now=None, disk_usa
+     """Validate a dependency authorization for ``environment_name``; return (lock path, wheelhouse path)."""
+     now = time.time() if now is None else now
+     disk_usage = disk_usage or shutil.disk_usage
++    if not isinstance(approval, DependencyRepair):
++        raise RepairRefused('No valid dependency repair authorization.')
++    _check_lifetime_and_id(approval, now)
+     if approval.environment != environment_name or environment_name not in ENVIRONMENTS:
+         raise RepairRefused('The authorization is for ' + approval.environment + ', not ' + environment_name + '.')
+-    if not approval.expires or now > approval.expires:
+-        raise RepairRefused('The dependency repair authorization has expired; authorize it again.')
+     try:
+         lock = _inside(base, approval.lock)
+     except ValueError:
+@@ -137,7 +154,7 @@ def check_dependency_repair(base, approval, environment_name, now=None, disk_usa
+     if not wheelhouse.is_dir():
+         raise RepairRefused('The approved local artifact set (wheelhouse) is missing.')
+     size = sum(path.stat().st_size for path in wheelhouse.rglob('*') if path.is_file())
+-    if not isinstance(approval.max_bytes, int) or approval.max_bytes <= 0 or size > approval.max_bytes:
++    if type(approval.max_bytes) is not int or approval.max_bytes <= 0 or size > approval.max_bytes:
+         raise RepairRefused('The approved artifact set exceeds its byte budget or the budget is unknown.')
+     # Staging keeps the old environment in place, so room is needed for an unpacked copy beside it.
+     if disk_usage(str(base)).free < 3 * approval.max_bytes + DISK_RESERVE:
+@@ -150,17 +167,16 @@ def check_model_download(approval, missing, model_store, environment=None, now=N
+     """Final pre-launch gate for a model download; raises RepairRefused for anything unknown or insufficient."""
+     now = time.time() if now is None else now
+     disk_usage = disk_usage or shutil.disk_usage
+-    if approval is None:
++    if not isinstance(approval, ModelDownload):
+         raise RepairRefused('No approved model download; nothing was started.')
+-    if not approval.expires or now > approval.expires:
+-        raise RepairRefused('The model download authorization has expired; authorize it again.')
++    _check_lifetime_and_id(approval, now)
+     if approval.model not in missing:
+         raise RepairRefused('The approved model ' + approval.model[:80] + ' is not one of the missing configured models.')
+     if not re.fullmatch(r'sha256:[0-9a-f]{64}', approval.revision or ''):
+         raise RepairRefused('The approved model revision must be an exact sha256 manifest digest.')
+     if approval.source not in MODEL_SOURCES:
+         raise RepairRefused('The approved model source is not a known registry.')
+-    if not approval.network_allowed:
++    if approval.network_allowed is not True:
+         raise RepairRefused('The model download authorization does not permit network use.')
+     blocked = offline_policy(environment)
+     if blocked:
+@@ -202,14 +218,36 @@ def model_store(environment=None):
+ 
+ def _take(runtime, name, kind):
+     path = Path(runtime) / name
+-    try:
+-        data = json.loads(path.read_text(encoding='utf-8'))
+-    except FileNotFoundError:
++    if not path.exists():
+         return None
+-    except (OSError, ValueError):
+-        path.unlink(missing_ok=True)
+-        raise RepairRefused('The repair authorization file is unreadable; it was discarded.') from None
+-    path.unlink(missing_ok=True)  # single use, whether or not it is valid
++    # A persistent lock file has no stale ownership: the OS releases its byte lock on close/crash.
++    # Do not unlink this lock, which could let another process lock a different file at the same path.
++    try:
++        handle = (Path(runtime) / ('.' + name + '.lock')).open('a+b')
++    except OSError:
++        raise RepairRefused('The repair authorization could not be claimed; nothing was started.') from None
++    with handle:
++        if not handle.seek(0, os.SEEK_END):
++            handle.write(b'\0')
++            handle.flush()
++        handle.seek(0)
++        try:
++            if os.name == 'nt':
++                import msvcrt
++                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
++            else:
++                import fcntl
++                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
++        except OSError:
++            return None  # Another consumer owns the grant; never repeat it.
++        try:
++            data = json.loads(path.read_text(encoding='utf-8'))
++        except FileNotFoundError:
++            return None
++        except (OSError, ValueError):
++            path.unlink(missing_ok=True)
++            raise RepairRefused('The repair authorization file is unreadable; it was discarded.') from None
++        path.unlink(missing_ok=True)  # Jarvis-owned single-use grant, while the OS lock is held.
+     try:
+         return kind(**data)
+     except TypeError:
+diff --git a/app/jarvis/skill_evolution.py b/app/jarvis/skill_evolution.py
+index 8627fbf..560aade 100644
+--- a/app/jarvis/skill_evolution.py
++++ b/app/jarvis/skill_evolution.py
+@@ -25,7 +25,9 @@ from .skill_store import content_hash
+ 
+ NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
+ FORBIDDEN_FRONTMATTER = frozenset({'allowed-tools', 'allowed_tools', 'disable-model-invocation', 'user-invocable',
+-                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions'})
++                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions',
++                                   'trusted', 'trust', 'trust_state', 'admin', 'role', 'authorization', 'approval',
++                                   'preapproved', 'bypass_approval', 'user_approved', 'requires_approval'})
+ NON_ATTRIBUTABLE = frozenset({'permission_denied', 'cancelled', 'tool_unavailable', 'timeout'})
+ FIXTURE_SAFE_TOOLS = frozenset({'office_xlsx', 'office_docx', 'pdf_document', 'blender_task', 'unreal_task',
+                                 'execution_methods', 'strategy_execute', 'read_file', 'list_files', 'search_files'})
+@@ -115,10 +117,16 @@ def finish_outcomes(store, catalog, task):
+             continue
+         applied = bool(set(row['tools']) & used)
+         if not applied:
+-            written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
++            if used:  # A different executed route is a fallback; selection without execution is selected only.
++                written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
+             continue
+         written.append((skill_id, 'applied', store.event(skill_id, 'applied', task_id)))
+-        if completed and evidence and not failures:
++        refuted = any(isinstance(step, dict) and step.get('action') in row['tools'] and step.get('verified') is False
++                      for step in (task.get('plan') or {}).get('completed', []) or [])
++        if refuted:
++            written.append((skill_id, 'failed', store.event(skill_id, 'failed', task_id, {'cause': 'verification_failed'})))
++            store.failure(skill_id, task_id, 'verification_failed')
++        elif completed and evidence and not failures:
+             written.append((skill_id, 'completed_verified', store.event(skill_id, 'completed_verified', task_id,
+                                                                          {'evidence': evidence[:3]})))
+         elif completed:
+@@ -228,8 +236,10 @@ def verify_execution(registry, steps, cancelled=lambda: False):
+             data = json.loads(result.evidence)
+         except ValueError:
+             data = {}
+-        outcome = [r for r in read_outcomes(registry.actions.base, 200) if r.get('call_id') == result.call_id]
+-        verified = data.get('verification') == 'verified' or (outcome and outcome[-1].get('verification') == 'verified')
++        outcome = [r for r in read_outcomes(registry.actions.base, 200)
++                   if r.get('call_id') == result.call_id and r.get('tool') == step['action']]
++        # A tool's own success/verification text cannot override or replace correlated host readback.
++        verified = bool(outcome and outcome[-1].get('verification') == 'verified')
+         receipts.append({'action': step['action'], 'call_id': result.call_id, 'verified': bool(verified),
+                          'data': {k: v for k, v in data.items() if k in {'version', 'blender_version', 'sheets', 'pages'}}})
+         if not verified:
+diff --git a/app/jarvis/skill_store.py b/app/jarvis/skill_store.py
+index c2cc40e..339e6c7 100644
+--- a/app/jarvis/skill_store.py
++++ b/app/jarvis/skill_store.py
+@@ -62,6 +62,32 @@ def content_hash(body):
+     return hashlib.sha256(body.encode('utf-8')).hexdigest()
+ 
+ 
++def event_evidence(value):
++    """Metadata only; never truncate serialized JSON or retain arbitrary evidence text."""
++    if not isinstance(value, dict):
++        return {}
++    result = {}
++    if type(value.get('version')) is int and 0 < value['version'] <= 1_000_000:
++        result['version'] = value['version']
++    if isinstance(value.get('cause'), str) and value['cause'] in FAILURE_CAUSES:
++        result['cause'] = value['cause']
++    if value.get('reason') in ('bound tools unused', 'recovered or unverified'):
++        result['reason'] = value['reason']
++    if isinstance(value.get('evidence'), list):
++        result['evidence_count'] = min(len(value['evidence']), 12)
++    elif type(value.get('evidence_count')) is int and 0 <= value['evidence_count'] <= 12:
++        result['evidence_count'] = value['evidence_count']
++    return result
++
++
++def read_event_evidence(raw):
++    try:
++        value = json.loads(raw)
++    except (ValueError, TypeError):
++        return {}, False
++    return event_evidence(value), isinstance(value, dict)
++
++
+ def generate_skill_id(name, kind='imp'):
+     slug = re.sub(r'[^a-z0-9-]', '-', str(name).casefold())[:64].strip('-') or 'skill'
+     return f'{slug}__{kind}_{uuid.uuid4().hex[:8]}'
+@@ -200,7 +226,7 @@ class SkillStore:
+         if event_type not in EVENTS or not isinstance(task_id, str) or not task_id or len(task_id) > 64:
+             raise ValueError('Invalid skill event.')
+         key = hashlib.sha256('\n'.join((task_id, skill_id, event_type)).encode()).hexdigest()
+-        payload = json.dumps(evidence or {}, ensure_ascii=False, default=str)[:4000]
++        payload = json.dumps(event_evidence(evidence), ensure_ascii=False)
+         with self.connect() as db:
+             if db.execute('SELECT 1 FROM skill_records WHERE skill_id=?', (skill_id,)).fetchone() is None:
+                 raise ValueError('Unknown skill identity.')
+@@ -214,7 +240,7 @@ class SkillStore:
+         key = hashlib.sha256('\n'.join((task_id, skill_id, 'failure', cause)).encode()).hexdigest()
+         with self.connect() as db:
+             db.execute('INSERT OR IGNORE INTO skill_failures(event_key,skill_id,task_id,cause,detail,at) VALUES(?,?,?,?,?,?)',
+-                       (key, skill_id, task_id, cause, str(detail)[:500], now()))
++                       (key, skill_id, task_id, cause, '', now()))  # Category only; raw failures can contain private data.
+ 
+     def metrics(self, skill_id, current_version=False):
+         """Lifetime counters, or only evidence since the active version (current_version=True)."""
+@@ -230,9 +256,12 @@ class SkillStore:
+             last = db.execute("SELECT at, evidence_json FROM skill_events WHERE skill_id=? AND id>? AND "
+                               "event_type='completed_verified' ORDER BY id DESC LIMIT 1", (skill_id, since)).fetchone()
+             causes = {}
++            invalid = 0
+             for row in db.execute("SELECT evidence_json FROM skill_events WHERE skill_id=? AND id>? AND event_type='failed'",
+                                   (skill_id, since)):
+-                cause = json.loads(row['evidence_json']).get('cause', 'other')
++                saved, valid = read_event_evidence(row['evidence_json'])
++                invalid += not valid
++                cause = saved.get('cause', 'other')
+                 cause = cause if cause in FAILURE_CAUSES else 'other'
+                 causes[cause] = causes.get(cause, 0) + 1
+             recent = [row['event_type'] for row in db.execute(
+@@ -241,7 +270,8 @@ class SkillStore:
+         return {'selected_count': counts['selected'], 'applied_count': counts['applied'],
+                 'completed_verified_count': counts['completed_verified'], 'fallback_count': counts['fallback'],
+                 'failed_count': counts['failed'], 'last_verified_at': last['at'] if last else None,
+-                'last_verified_evidence': json.loads(last['evidence_json']) if last else None,
++                'last_verified_evidence': read_event_evidence(last['evidence_json'])[0] if last else None,
++                'invalid_evidence_count': invalid + (not read_event_evidence(last['evidence_json'])[1] if last else 0),
+                 'failure_causes': causes, 'recent_outcomes': recent}
+ 
+     def all_metrics(self):
+diff --git a/app/jarvis/tools.py b/app/jarvis/tools.py
+index 8c6b709..7f81b10 100644
+--- a/app/jarvis/tools.py
++++ b/app/jarvis/tools.py
+@@ -66,6 +66,7 @@ _LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
+ APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
+                              'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
+ _SECRET_PATTERNS = (
++    (re.compile(r'''(?i)(["']?\b(?:access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|password|passwd|pwd|authorization)["']?\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]+|[^\s,}\]]+)'''), r'\1[redacted]'),
+     (re.compile(r'(?i)\b(access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|'
+                 r'password|passwd|pwd|sig|signature)=([^&\s#"\']+)'), r'\1=[redacted]'),
+     (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}'), r'\1 [redacted]'),
+@@ -203,6 +204,11 @@ class ToolRegistry:
+                 )+definitions(self.actions,query,min(limit,6)))
+ 
+     def execute(self, step, cancelled, activate=None):
++        from .agent_events import task_trace
++        with task_trace(self.actions):
++            return self._execute_traced(step, cancelled, activate)
++
++    def _execute_traced(self, step, cancelled, activate=None):
+         from .agent_events import check_policy, event
+         # Type first: a non-object proposal must not reach identity or policy checks.
+         if not isinstance(step, dict):

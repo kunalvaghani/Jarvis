@@ -1,0 +1,24 @@
+diff --git a/README.md b/README.md
+index b127281..473d58f 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,7 @@
+ # Jarvis — local Windows voice assistant
+ 
++**2026-10-19 — Prompt 31 independent audit: NOT READY / BLOCKED.** A stale approval callback can authorize a different queued action in the pinned `5b56f84` source. Three synthetic permission assertions fail; no application repair was applied. Baseline instability and incomplete live acceptance remain documented. Prompt 32 has not started because Prompt 31's P1 stop gate is unmet. [Audit verdict](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-5b56f84/verdict.md) · [Application details](app/README.md).
++
+ **Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
+ 
+ **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
+diff --git a/app/README.md b/app/README.md
+index 95c8b52..094bb82 100644
+--- a/app/README.md
++++ b/app/README.md
+@@ -1,3 +1,7 @@
++<!-- prompt31-independent-audit -->
++**2026-10-19 — Prompt 31 independent UI/approval audit: NOT READY / BLOCKED.** Current `claude` commit `5b56f84c1604de87bb8845027dffb5ce5943243b` was pinned in the isolated `codex-review` checkout. Synthetic callback tests reproduce a P1 defect: an old approval callback can approve a different queued request (**3 failed assertions / 1 passing positive control**). No application source repair was applied; the companion reconciliation reserves source repair for Claude. The focused baseline outside the sandbox produced **248 passed / 2 failed / 8 skipped**; both failures passed in isolation, leaving combined-suite stability unproven. Neighbor/reproduction checks produced **85 passed / 3 failed**. These are component and fixture results, not complete live acceptance. The isolated launcher reports missing local runtimes/assets; no dependencies or models were installed. **Prompt 32 remains gated.** [Verdict and blockers](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-5b56f84/verdict.md) · [Inventory and reproduction](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-independent-5b56f84/inventory.md) · [Prior-finding reconciliation](artifacts/jarvis-audit/reconciliation/handoff.md). No visible UI change or new screenshot.
++<!-- /prompt31-independent-audit -->
++
+ # Jarvis — local Windows voice assistant
+ 
+ ## Independent audit checkpoint (2026-10-19)

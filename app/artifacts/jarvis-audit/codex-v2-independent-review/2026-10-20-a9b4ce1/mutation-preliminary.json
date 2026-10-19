@@ -1,0 +1,139 @@
+{
+  "mutants": [
+    {
+      "id": "permission",
+      "test": "tests/test_prompt36_observability.py::test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.3903266999986954,
+        "xml": "mutation-permission-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 3.128112100006547,
+        "xml": "mutation-permission.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "f4d77efb0fea212bbebb606223b3cc831adcbb84722d84e7b5065f283ebd56a9",
+      "mutant_sha256": "e3e65e183b115cdabe8d862d0b4ed72d61a5c10176dc2d8d19ff1b3f4cb134f2",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    },
+    {
+      "id": "false_tool_success",
+      "test": "tests/test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.418383399999584,
+        "xml": "mutation-false_tool_success-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 4,
+        "errors": 0,
+        "seconds": 2.7893072000006214,
+        "xml": "mutation-false_tool_success.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "0a863944eab1427549b2c591dc117bde1a085f0e01894cecbc8d20af243a23cf",
+      "mutant_sha256": "26367912ce77949a861969c0c4120c16b67e47f48100143d704b9d9cfdfa340b",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    },
+    {
+      "id": "stale_selector",
+      "test": "tests/test_ui_controls.py::UITests::test_changed_controls_invalidate_number",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.5413418999960413,
+        "xml": "mutation-stale_selector-control.xml"
+      },
+      "mutant": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.5453160000033677,
+        "xml": "mutation-stale_selector.xml"
+      },
+      "killed": false,
+      "candidate_sha256": "2dcd4ebfec3cfc07eff0c84161a73d95f778be878d0ce635491b85dec13106cc",
+      "mutant_sha256": "9f5fa4c8c5b35a82bd90d589406a58f78ce31306ed8062e4dca9cf7ae6d64137",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    },
+    {
+      "id": "disabled_verify",
+      "test": "tests/test_hierarchical.py::DAGTests::test_read_retry_backoff_and_failure_propagation",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.419066799993743,
+        "xml": "mutation-disabled_verify-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 2.877749799998128,
+        "xml": "mutation-disabled_verify.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "20f68252fc5075c157b19da41c4e9c72d35bcd1d987aa5824af8af597d570ab9",
+      "mutant_sha256": "216086651d2fd6e487460095b37e707bff98ba4658ad860eedd1eaee54995f79",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    },
+    {
+      "id": "heldout_tamper",
+      "test": "tests/test_phase06_controlled_evolution.py::test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 10.70642410000437,
+        "xml": "mutation-heldout_tamper-control.xml"
+      },
+      "mutant": {
+        "returncode": 4,
+        "assertion_failures": 0,
+        "errors": 1,
+        "seconds": 1.9245718999882229,
+        "xml": "mutation-heldout_tamper.xml"
+      },
+      "killed": false,
+      "candidate_sha256": "20874e2727bf966e2df67535c70c7ddfe5c50dc1b27227e88e7e29d3178ea38b",
+      "mutant_sha256": "2adb41057f0d9af9c2a9159ac5108e36c4d915d0e88026aa148ed7e41404ba82",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    },
+    {
+      "id": "duplicate_write",
+      "test": "tests/test_phase08_integration.py::test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.1474576999899,
+        "xml": "mutation-duplicate_write-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 2.4266454000025988,
+        "xml": "mutation-duplicate_write.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "20f68252fc5075c157b19da41c4e9c72d35bcd1d987aa5824af8af597d570ab9",
+      "mutant_sha256": "bc599f20904019b428be34faa61ba20b4ae827837c7349e42455c41330dd2ebc",
+      "scope": "disposable checkout; synthetic/owned fixtures only"
+    }
+  ],
+  "tracked_original_bytes_restored": true,
+  "added_tests_retained_as_owned_overlay": true,
+  "lineage_limit": "Preliminary aggregate/status/source hashes preserved here. Original per-case XML/text filenames were superseded by the corrected rerun and are not retained separately; only final mutation evidence is accepted."
+}

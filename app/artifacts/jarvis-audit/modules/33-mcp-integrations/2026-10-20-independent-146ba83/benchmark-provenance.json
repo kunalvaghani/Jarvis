@@ -1,0 +1,7 @@
+{
+  "before": "cd8861ce720ade303485ee2023430dd8c6b4f0ba",
+  "after": "146ba831e7ae5df1a953b0f910288c41c9ab4689",
+  "warmup": 20,
+  "samples_per_fixture_revision": 300,
+  "scope": "Two fixed-input pairs: bridge+contract with fake transport, and changed provider context with stable synthetic credential/no verifier. Entire respective sources loaded from named revisions. Warm sequential tracemalloc, no provider/process/model latency or improvement claim."
+}

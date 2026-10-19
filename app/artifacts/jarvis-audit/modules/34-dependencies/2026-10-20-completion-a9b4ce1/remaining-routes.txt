@@ -1,0 +1,26 @@
+F..                                                                      [100%]
+================================== FAILURES ===================================
+___ test_JRV_34_014_missing_local_embedding_falls_back_and_reports_lexical ____
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-592/test_JRV_34_014_missing_local_0')
+
+    def test_JRV_34_014_missing_local_embedding_falls_back_and_reports_lexical(tmp_path):
+        from jarvis import local_embeddings
+        from jarvis.reasoning_bank import ReasoningBank
+        row={'kind':'strategy','title':'Spreadsheet export format',
+             'description':'Choose the spreadsheet format before export',
+             'content':'Choose the spreadsheet export format before exporting.',
+             'conditions':{},'failure_conditions':[]}
+        with patch('urllib.request.urlopen',side_effect=urllib.error.URLError('offline fixture')):
+            bank=ReasoningBank(tmp_path,embedder=local_embeddings.embed)
+            bank._add(row,{'source':'synthetic'},'fixture')
+            hits=bank.retrieve('spreadsheet export format')
+        assert local_embeddings.status()['available'] is False
+>       assert hits and hits[0]['retrieval']=='lexical'
+E       KeyError: 0
+
+tests\test_prompt34_remaining_routes.py:24: KeyError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\34-dependencies\2026-10-20-completion-a9b4ce1\remaining-routes.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt34_remaining_routes.py::test_JRV_34_014_missing_local_embedding_falls_back_and_reports_lexical
+1 failed, 2 passed in 0.88s

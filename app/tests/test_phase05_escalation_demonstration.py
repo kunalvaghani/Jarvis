@@ -142,7 +142,9 @@ def test_P05_outbound_payload_is_exactly_the_allowlist_and_is_recorded(tmp_path)
     assert set(payload) == {'category', 'statement', 'question', 'constraints', 'examples'}
     assert 'provenance' not in payload and len(adapter.sent[0]) == 2
     log = [json.loads(line) for line in agent.log.read_text().splitlines()]
-    assert log[0]['sent'] == payload and len(log[0]['sha256']) == 64
+    assert log[0]['decision'] == 'sent' and len(log[0]['sha256']) == 64
+    assert log[0]['payload_bytes'] == len(json.dumps(payload, ensure_ascii=False).encode())
+    assert 'sent' not in log[0] and GENERIC['statement'] not in json.dumps(log)
     assert agent.consult('p1', GENERIC, FAILURES, 3, 'r1')['status'] == 'local'  # once per problem
 
 

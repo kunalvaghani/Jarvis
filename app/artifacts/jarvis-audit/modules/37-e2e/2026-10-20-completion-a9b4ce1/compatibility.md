@@ -1,0 +1,5 @@
+# Compatibility / route limits
+
+No dependency, runtime manifest, launch/stop script or service registration change. Demonstration start_hook adds an optional cancellation callback, preserving existing no-argument callers. Consented direct session recording/replay remains eligible, while cancelled/failed states are refused. Ordinary completed task results, including structured unread-search results, are not replaced; only matching durable paused results override optimistic task text.
+
+Safe regression covers voice/text parsing, typed queue dispatch with simulated Brain, tools/DAG, documents, skill memory, API strategy, cloud off/on/denied, optional service failure, error/recovery and bounded evolution/AZR guards. These are selected relevant routes, not every hardware/provider/flag combination. New demonstration feature-off test proves no session request. Native hook, real voice/speaker, Excel GUI, browser focus, Blender, OpenViking, real account identity/scopes, 0.5B training, Docker/WSL and version rollback E2E remain BLOCKED. See launcher-check.txt for actual isolated readiness.

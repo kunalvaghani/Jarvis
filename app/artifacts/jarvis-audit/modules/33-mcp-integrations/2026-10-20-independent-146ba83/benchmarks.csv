@@ -1,0 +1,5 @@
+revision,sha,samples,fixture,p50_ms,p95_ms,traced_peak_bytes
+before,cd8861ce720ade303485ee2023430dd8c6b4f0ba,300,fixed bridge call; fake transport/approval,0.3818,0.4599,248628
+after,146ba831e7ae5df1a953b0f910288c41c9ab4689,300,fixed bridge call; fake transport/approval,0.37955,0.4458,254394
+before,cd8861ce720ade303485ee2023430dd8c6b4f0ba,300,"provider context capture/recheck, stable synthetic token, no verifier",0.0228,0.0455,41550
+after,146ba831e7ae5df1a953b0f910288c41c9ab4689,300,"provider context capture/recheck, stable synthetic token, no verifier",0.0216,0.0244,39347

@@ -1,0 +1,450 @@
+diff --git a/app/jarvis/agent_events.py b/app/jarvis/agent_events.py
+index 0ed2679..9343d99 100644
+--- a/app/jarvis/agent_events.py
++++ b/app/jarvis/agent_events.py
+@@ -10,10 +10,36 @@ import uuid
+ import re
+ import builtins
+ from functools import lru_cache
++from contextlib import contextmanager
++from contextvars import ContextVar
++import time
+ 
+ from .agent_context import bounded_text, scoped
+ 
+ _LOCK = threading.RLock()
++_CLOCK_ID = uuid.uuid4().hex
++_TRACE_TASK = ContextVar('jarvis_telemetry_task', default=None)
++MAX_JOURNAL_BYTES = 32 * 1024 * 1024
++
++
++@contextmanager
++def task_trace(actions):
++    """Capture the host task once for this call, including nested outcome/cloud events."""
++    from .task_state import TaskState
++    state = getattr(actions, 'task_state', None)
++    task = state.running_identity() if isinstance(state, TaskState) else None
++    token = _TRACE_TASK.set(task if isinstance(task, str) and re.fullmatch('[0-9a-f]{32}', task) else None)
++    try:
++        yield
++    finally:
++        _TRACE_TASK.reset(token)
++
++
++def clock_metadata():
++    result = {'monotonic_ns': time.monotonic_ns(), 'clock_id': _CLOCK_ID}
++    if _TRACE_TASK.get() is not None:
++        result['task_id'] = _TRACE_TASK.get()
++    return result
+ _BACKENDS = frozenset({'files','terminal','browser','desktop','toolkit','dom','realtime','spotify','desktop_observation'})
+ _ERROR_TYPES = frozenset(name for name,value in vars(builtins).items()
+     if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled',
+@@ -91,14 +117,20 @@ def event(actions, kind, name, call_id=None, **metadata):
+         details = lifecycle_metadata(metadata)
+     row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
+            'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
+-           **details}
++           **details, **clock_metadata()}
+     # Never store arguments, source, responses, credentials or private recordings.
+-    with _LOCK:
+-        path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
+-        folder = path.parent
+-        folder.mkdir(parents=True, exist_ok=True)
+-        if path.is_symlink():
+-            raise ValueError('Agent event path must not be linked.')
+-        with path.open('a', encoding='utf-8') as output:
+-            output.write(json.dumps(row, ensure_ascii=False) + '\n')
++    try:
++        with _LOCK:
++            path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
++            folder = path.parent
++            folder.mkdir(parents=True, exist_ok=True)
++            if path.is_symlink():
++                raise ValueError('Agent event path must not be linked.')
++            if path.exists() and path.stat().st_size >= MAX_JOURNAL_BYTES:
++                actions.telemetry_status = 'limited'
++                return identifier  # Preserve old evidence; never delete/rotate user files implicitly.
++            with path.open('a', encoding='utf-8') as output:
++                output.write(json.dumps(row, ensure_ascii=False) + '\n')
++    except OSError:
++        actions.telemetry_status = 'unavailable'  # Diagnosis degrades; no action replay or policy bypass.
+     return identifier
+diff --git a/app/jarvis/cloud_architect.py b/app/jarvis/cloud_architect.py
+index dc980a4..99d6168 100644
+--- a/app/jarvis/cloud_architect.py
++++ b/app/jarvis/cloud_architect.py
+@@ -15,8 +15,8 @@ Privacy gate: classify provenance, build the generic problem, strip paths,
+ filenames, usernames, emails, tokens, source snippets, logs and internal names,
+ reject if sensitive semantics remain, validate the payload against an explicit
+ allowlist, and default to local whenever any check is inconclusive. Redaction is not
+-a privacy guarantee; this gate refuses rather than trusting it. A minimized record
+-of exactly what was sent is kept locally.
++a privacy guarantee; this gate refuses rather than trusting it. Local telemetry stores
++only categorical decisions, payload size/digest and opaque correlation, never the payload.
+ 
+ Cloud output is untrusted text. It never receives tools, files or commands. Code in
+ the advice is statically screened and executed only against the problem's own
+@@ -28,6 +28,7 @@ from datetime import datetime, timedelta, timezone
+ import getpass
+ import hashlib
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -47,6 +48,8 @@ LOG_LINE = re.compile(r'Traceback|File "[^"]+", line \d+|\b(?:ERROR|WARNING|INFO
+ SANDBOX_IMPORTS = frozenset({'math', 'itertools', 'collections', 'heapq', 'bisect', 'functools', 're', 'statistics'})
+ FORBIDDEN_CALLS = frozenset({'eval', 'exec', 'compile', 'open', '__import__', 'getattr', 'setattr', 'delattr', 'globals',
+                              'locals', 'vars', 'input', 'breakpoint', 'exit', 'quit'})
++_LOG_LOCK = threading.RLock()
++MAX_LOG_BYTES = 8 * 1024 * 1024
+ 
+ 
+ def now():
+@@ -74,6 +77,39 @@ class PrivacyRejected(ValueError):
+     """The problem could not be made generic with confidence; it stays local."""
+ 
+ 
++def _bounded_examples(examples):
++    """Bound work before JSON encoding, including nested/cyclic hostile literals."""
++    pending = [(examples, 0)]
++    remaining = 512
++    while pending:
++        value, depth = pending.pop()
++        remaining -= 1
++        if remaining < 0 or depth > 8:
++            raise PrivacyRejected('Examples exceed the literal work/depth budget.')
++        if type(value) is str:
++            if len(value) > 200:
++                raise PrivacyRejected('Example text exceeds its literal budget.')
++        elif type(value) is bool:
++            continue
++        elif type(value) is int:
++            if value.bit_length() > 256:
++                raise PrivacyRejected('Example integer exceeds its literal budget.')
++        elif type(value) is float:
++            if not math.isfinite(value):
++                raise PrivacyRejected('Example numbers must be finite.')
++        elif type(value) in (list, dict):
++            if len(value) > 64:
++                raise PrivacyRejected('Example container exceeds its literal budget.')
++            if type(value) is dict:
++                if any(type(key) is not str or len(key) > 80 for key in value):
++                    raise PrivacyRejected('Example keys must be bounded text.')
++                pending.extend((item, depth + 1) for item in value.values())
++            else:
++                pending.extend((item, depth + 1) for item in value)
++        else:
++            raise PrivacyRejected('Examples must contain only bounded JSON literals.')
++
++
+ def privacy_gate(problem, base):
+     """Return the exact outbound payload, or raise PrivacyRejected. Inconclusive means local."""
+     from .cloud_policy import PRIVATE, PRIVATE_APP, SECRET, privacy_text
+@@ -87,12 +123,13 @@ def privacy_gate(problem, base):
+     payload = {'category': problem['category']}
+     for key in ('statement', 'question', 'constraints'):
+         value = problem.get(key, '' if key == 'constraints' else None)
+-        if not isinstance(value, str) or not (key == 'constraints' or 20 <= len(value) <= 2000):
++        if not isinstance(value, str) or not (0 if key == 'constraints' else 20) <= len(value) <= 2000:
+             raise PrivacyRejected('Field ' + key + ' must be bounded text.')
+         payload[key] = value
+     examples = problem.get('examples', [])
+     if not isinstance(examples, list) or len(examples) > 8:
+         raise PrivacyRejected('Up to eight synthetic examples.')
++    _bounded_examples(examples)
+     for example in examples:
+         if not isinstance(example, dict) or set(example) != {'input', 'output'}:
+             raise PrivacyRejected('Examples must be {input, output}.')
+@@ -105,6 +142,7 @@ def privacy_gate(problem, base):
+     checks = {
+         'secret': SECRET.search(text),
+         'private_context': PRIVATE.search(text) or PRIVATE_APP.search(text),
++        'confidential_semantics': re.search(r'\b(?:proprietary|confidential|internal.only)\b', text, re.I),
+         'path': re.search(r'[A-Za-z]:[\\/]|\\\\|(?:^|[\s"\'])/(?:home|users|etc|var|mnt|opt)/|~[\\/]', text, re.I),
+         'filename': re.search(r'\b[\w-]+\.(?:py|js|ts|json|md|txt|xlsx|docx|pdf|csv|db|sqlite3|log|env|cfg|ini|yaml|yml)\b', text, re.I),
+         'email': re.search(r'[\w.+-]+@[\w-]+\.[\w.]+', text),
+@@ -275,16 +313,19 @@ class CloudArchitect:
+ 
+     def consult(self, problem_id, problem, failures, attempts_used, request_id, scope=None, cancelled=lambda: False):
+         if problem_id in self.escalated:
++            self._record({'problem_id': problem_id, 'decision': 'duplicate_blocked'})
+             return {'status': 'local', 'reasons': ['already consulted for this problem (no recursive escalation)']}
+         snapshot = self.guardian.snapshot() if self.guardian else {'state': 'UNKNOWN'}
+         ready = bool(self.adapter) and self.adapter.ready(wait_seconds=0)
+         eligible, reasons = eligibility(failures, attempts_used, problem.get('category'), self.options, self.consent,
+                                         request_id, scope, snapshot['state'], ready, problem_id in self.escalated)
+         if not eligible:
++            self._record({'problem_id': problem_id, 'decision': 'eligibility_blocked'})
+             return {'status': 'local', 'reasons': reasons}
+         try:
+             payload = privacy_gate(problem, self.base)
+         except (PrivacyRejected, ValueError) as exc:
++            self._record({'problem_id': problem_id, 'decision': 'privacy_blocked'})
+             return {'status': 'local', 'reasons': [str(exc)[:300]]}
+         self.escalated.add(problem_id)
+         messages = [{'role': 'system', 'content': 'You are an advisory algorithm architect. Explain an approach and, '
+@@ -297,6 +338,7 @@ class CloudArchitect:
+         try:
+             reply = self.adapter.complete(messages, 1200, cancelled=cancelled, reasoning='low', request_id=uuid.uuid4().hex)
+         except (CloudFailure, QuotaDenied) as exc:
++            self._record({'problem_id': problem_id, 'decision': 'provider_unavailable'})
+             return {'status': 'local', 'reasons': ['cloud unavailable: ' + str(exc)[:120]]}
+         return self.evaluate(problem_id, reply.get('content', ''), payload, cancelled)
+ 
+@@ -327,9 +369,38 @@ class CloudArchitect:
+         return result
+ 
+     def _record(self, row):
+-        self.log.parent.mkdir(parents=True, exist_ok=True)
+-        with self.log.open('a', encoding='utf-8') as output:
+-            output.write(json.dumps({'at': now().isoformat(timespec='seconds'), **row}, ensure_ascii=False) + '\n')
++        """Categorical v2 decisions only; no sent payload, raw reason or advice persists."""
++        from .agent_events import clock_metadata
++        decision = row.get('decision') or row.get('status')
++        if 'sent' in row:
++            decision = 'sent'
++        if row.get('received') == 'text-only advice':
++            decision = 'advice_only'
++        elif row.get('received') == 'code rejected':
++            decision = 'rejected'
++        allowed = {'sent', 'privacy_blocked', 'eligibility_blocked', 'duplicate_blocked', 'provider_unavailable',
++                   'advice_only', 'rejected', 'verified_candidate', 'unverified'}
++        decision = decision if isinstance(decision, str) and decision in allowed else 'inconclusive'
++        identifier = row.get('problem_id')
++        identifier = identifier if isinstance(identifier, str) and len(identifier) <= 128 else 'unknown'
++        entry = {'version': 2, 'at': now().isoformat(timespec='seconds'), **clock_metadata(),
++                 'problem_id_hash': hashlib.sha256(identifier.encode()).hexdigest(), 'decision': decision}
++        if decision == 'sent' and isinstance(row.get('sent'), dict):
++            entry['payload_bytes'] = len(json.dumps(row['sent'], ensure_ascii=False).encode())
++            entry['sha256'] = hashlib.sha256(json.dumps(row['sent'], sort_keys=True).encode()).hexdigest()
++        try:
++            with _LOG_LOCK:
++                self.log.parent.mkdir(parents=True, exist_ok=True)
++                if self.log.is_symlink():
++                    self.telemetry_status = 'unavailable'
++                    return
++                if self.log.exists() and self.log.stat().st_size >= MAX_LOG_BYTES:
++                    self.telemetry_status = 'limited'
++                    return
++                with self.log.open('a', encoding='utf-8') as output:
++                    output.write(json.dumps(entry, ensure_ascii=False) + '\n')
++        except OSError:
++            self.telemetry_status = 'unavailable'
+ 
+ 
+ # ---- user-invoked consultation tool (ToolRegistry) ----------------------------------------------------------------------
+@@ -346,9 +417,12 @@ def consult_tool(actions, step, cancelled):
+     """Fail-closed: privacy gate, every eligibility rule except consent, then an approval card that grants consent."""
+     config = getattr(actions, 'config', {}) or {}
+     options = {**(config.get('cloud_architect') or {}), 'groq': config.get('groq') or {}}
++    content = step.get('content', '')
++    if not isinstance(content, str) or len(content) > 16000:
++        return json.dumps({'status': 'local', 'reasons': ['content must be bounded JSON text'], 'sent': False})
+     try:
+-        problem = json.loads(step.get('content') or '{}')
+-    except ValueError:
++        problem = json.loads(content or '{}')
++    except (ValueError, RecursionError):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+     if not isinstance(problem, dict):
+         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
+@@ -356,6 +430,7 @@ def consult_tool(actions, step, cancelled):
+     try:
+         payload = privacy_gate(problem, base)
+     except (PrivacyRejected, ValueError) as exc:
++        CloudArchitect(base, options)._record({'problem_id': 'tool-privacy', 'decision': 'privacy_blocked'})
+         return json.dumps({'status': 'local', 'reasons': [str(exc)[:300]], 'sent': False})
+     router = getattr(getattr(actions, 'deliberation', None), 'failure_router', None)
+     failures = router.evidence_for() if router is not None else []
+diff --git a/app/jarvis/skill_evolution.py b/app/jarvis/skill_evolution.py
+index 8627fbf..560aade 100644
+--- a/app/jarvis/skill_evolution.py
++++ b/app/jarvis/skill_evolution.py
+@@ -25,7 +25,9 @@ from .skill_store import content_hash
+ 
+ NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
+ FORBIDDEN_FRONTMATTER = frozenset({'allowed-tools', 'allowed_tools', 'disable-model-invocation', 'user-invocable',
+-                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions'})
++                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions',
++                                   'trusted', 'trust', 'trust_state', 'admin', 'role', 'authorization', 'approval',
++                                   'preapproved', 'bypass_approval', 'user_approved', 'requires_approval'})
+ NON_ATTRIBUTABLE = frozenset({'permission_denied', 'cancelled', 'tool_unavailable', 'timeout'})
+ FIXTURE_SAFE_TOOLS = frozenset({'office_xlsx', 'office_docx', 'pdf_document', 'blender_task', 'unreal_task',
+                                 'execution_methods', 'strategy_execute', 'read_file', 'list_files', 'search_files'})
+@@ -115,10 +117,16 @@ def finish_outcomes(store, catalog, task):
+             continue
+         applied = bool(set(row['tools']) & used)
+         if not applied:
+-            written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
++            if used:  # A different executed route is a fallback; selection without execution is selected only.
++                written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
+             continue
+         written.append((skill_id, 'applied', store.event(skill_id, 'applied', task_id)))
+-        if completed and evidence and not failures:
++        refuted = any(isinstance(step, dict) and step.get('action') in row['tools'] and step.get('verified') is False
++                      for step in (task.get('plan') or {}).get('completed', []) or [])
++        if refuted:
++            written.append((skill_id, 'failed', store.event(skill_id, 'failed', task_id, {'cause': 'verification_failed'})))
++            store.failure(skill_id, task_id, 'verification_failed')
++        elif completed and evidence and not failures:
+             written.append((skill_id, 'completed_verified', store.event(skill_id, 'completed_verified', task_id,
+                                                                          {'evidence': evidence[:3]})))
+         elif completed:
+@@ -228,8 +236,10 @@ def verify_execution(registry, steps, cancelled=lambda: False):
+             data = json.loads(result.evidence)
+         except ValueError:
+             data = {}
+-        outcome = [r for r in read_outcomes(registry.actions.base, 200) if r.get('call_id') == result.call_id]
+-        verified = data.get('verification') == 'verified' or (outcome and outcome[-1].get('verification') == 'verified')
++        outcome = [r for r in read_outcomes(registry.actions.base, 200)
++                   if r.get('call_id') == result.call_id and r.get('tool') == step['action']]
++        # A tool's own success/verification text cannot override or replace correlated host readback.
++        verified = bool(outcome and outcome[-1].get('verification') == 'verified')
+         receipts.append({'action': step['action'], 'call_id': result.call_id, 'verified': bool(verified),
+                          'data': {k: v for k, v in data.items() if k in {'version', 'blender_version', 'sheets', 'pages'}}})
+         if not verified:
+diff --git a/app/jarvis/skill_store.py b/app/jarvis/skill_store.py
+index c2cc40e..339e6c7 100644
+--- a/app/jarvis/skill_store.py
++++ b/app/jarvis/skill_store.py
+@@ -62,6 +62,32 @@ def content_hash(body):
+     return hashlib.sha256(body.encode('utf-8')).hexdigest()
+ 
+ 
++def event_evidence(value):
++    """Metadata only; never truncate serialized JSON or retain arbitrary evidence text."""
++    if not isinstance(value, dict):
++        return {}
++    result = {}
++    if type(value.get('version')) is int and 0 < value['version'] <= 1_000_000:
++        result['version'] = value['version']
++    if isinstance(value.get('cause'), str) and value['cause'] in FAILURE_CAUSES:
++        result['cause'] = value['cause']
++    if value.get('reason') in ('bound tools unused', 'recovered or unverified'):
++        result['reason'] = value['reason']
++    if isinstance(value.get('evidence'), list):
++        result['evidence_count'] = min(len(value['evidence']), 12)
++    elif type(value.get('evidence_count')) is int and 0 <= value['evidence_count'] <= 12:
++        result['evidence_count'] = value['evidence_count']
++    return result
++
++
++def read_event_evidence(raw):
++    try:
++        value = json.loads(raw)
++    except (ValueError, TypeError):
++        return {}, False
++    return event_evidence(value), isinstance(value, dict)
++
++
+ def generate_skill_id(name, kind='imp'):
+     slug = re.sub(r'[^a-z0-9-]', '-', str(name).casefold())[:64].strip('-') or 'skill'
+     return f'{slug}__{kind}_{uuid.uuid4().hex[:8]}'
+@@ -200,7 +226,7 @@ class SkillStore:
+         if event_type not in EVENTS or not isinstance(task_id, str) or not task_id or len(task_id) > 64:
+             raise ValueError('Invalid skill event.')
+         key = hashlib.sha256('\n'.join((task_id, skill_id, event_type)).encode()).hexdigest()
+-        payload = json.dumps(evidence or {}, ensure_ascii=False, default=str)[:4000]
++        payload = json.dumps(event_evidence(evidence), ensure_ascii=False)
+         with self.connect() as db:
+             if db.execute('SELECT 1 FROM skill_records WHERE skill_id=?', (skill_id,)).fetchone() is None:
+                 raise ValueError('Unknown skill identity.')
+@@ -214,7 +240,7 @@ class SkillStore:
+         key = hashlib.sha256('\n'.join((task_id, skill_id, 'failure', cause)).encode()).hexdigest()
+         with self.connect() as db:
+             db.execute('INSERT OR IGNORE INTO skill_failures(event_key,skill_id,task_id,cause,detail,at) VALUES(?,?,?,?,?,?)',
+-                       (key, skill_id, task_id, cause, str(detail)[:500], now()))
++                       (key, skill_id, task_id, cause, '', now()))  # Category only; raw failures can contain private data.
+ 
+     def metrics(self, skill_id, current_version=False):
+         """Lifetime counters, or only evidence since the active version (current_version=True)."""
+@@ -230,9 +256,12 @@ class SkillStore:
+             last = db.execute("SELECT at, evidence_json FROM skill_events WHERE skill_id=? AND id>? AND "
+                               "event_type='completed_verified' ORDER BY id DESC LIMIT 1", (skill_id, since)).fetchone()
+             causes = {}
++            invalid = 0
+             for row in db.execute("SELECT evidence_json FROM skill_events WHERE skill_id=? AND id>? AND event_type='failed'",
+                                   (skill_id, since)):
+-                cause = json.loads(row['evidence_json']).get('cause', 'other')
++                saved, valid = read_event_evidence(row['evidence_json'])
++                invalid += not valid
++                cause = saved.get('cause', 'other')
+                 cause = cause if cause in FAILURE_CAUSES else 'other'
+                 causes[cause] = causes.get(cause, 0) + 1
+             recent = [row['event_type'] for row in db.execute(
+@@ -241,7 +270,8 @@ class SkillStore:
+         return {'selected_count': counts['selected'], 'applied_count': counts['applied'],
+                 'completed_verified_count': counts['completed_verified'], 'fallback_count': counts['fallback'],
+                 'failed_count': counts['failed'], 'last_verified_at': last['at'] if last else None,
+-                'last_verified_evidence': json.loads(last['evidence_json']) if last else None,
++                'last_verified_evidence': read_event_evidence(last['evidence_json'])[0] if last else None,
++                'invalid_evidence_count': invalid + (not read_event_evidence(last['evidence_json'])[1] if last else 0),
+                 'failure_causes': causes, 'recent_outcomes': recent}
+ 
+     def all_metrics(self):
+diff --git a/app/jarvis/tools.py b/app/jarvis/tools.py
+index 8c6b709..7f81b10 100644
+--- a/app/jarvis/tools.py
++++ b/app/jarvis/tools.py
+@@ -66,6 +66,7 @@ _LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
+ APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
+                              'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
+ _SECRET_PATTERNS = (
++    (re.compile(r'''(?i)(["']?\b(?:access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|password|passwd|pwd|authorization)["']?\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]+|[^\s,}\]]+)'''), r'\1[redacted]'),
+     (re.compile(r'(?i)\b(access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|'
+                 r'password|passwd|pwd|sig|signature)=([^&\s#"\']+)'), r'\1=[redacted]'),
+     (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}'), r'\1 [redacted]'),
+@@ -203,6 +204,11 @@ class ToolRegistry:
+                 )+definitions(self.actions,query,min(limit,6)))
+ 
+     def execute(self, step, cancelled, activate=None):
++        from .agent_events import task_trace
++        with task_trace(self.actions):
++            return self._execute_traced(step, cancelled, activate)
++
++    def _execute_traced(self, step, cancelled, activate=None):
+         from .agent_events import check_policy, event
+         # Type first: a non-object proposal must not reach identity or policy checks.
+         if not isinstance(step, dict):
+diff --git a/app/tests/test_phase01_baseline.py b/app/tests/test_phase01_baseline.py
+index 3b4d56b..61b247f 100644
+--- a/app/tests/test_phase01_baseline.py
++++ b/app/tests/test_phase01_baseline.py
+@@ -132,7 +132,7 @@ def test_P01_contract_outcome_rejects_payloads_and_malformed_values(tmp_path):
+     row = contracts.read_outcomes(tmp_path)[0]
+     assert 'FAKE_' not in json.dumps(row) and '../' not in json.dumps(row)
+     assert set(row) == {'version', 'at', 'event', 'call_id', 'tool', 'method_tier', 'verification',
+-                        'discarded_metadata_fields'}
++                        'discarded_metadata_fields', 'clock_id', 'monotonic_ns'}
+     assert row['discarded_metadata_fields'] == 7
+ 
+ 
+diff --git a/app/tests/test_phase03_living_skills.py b/app/tests/test_phase03_living_skills.py
+index f292850..2a9393d 100644
+--- a/app/tests/test_phase03_living_skills.py
++++ b/app/tests/test_phase03_living_skills.py
+@@ -127,7 +127,7 @@ def test_P03_selection_and_outcomes_are_counted_once_per_task(env):
+     metrics = env.skills.store.metrics(by_name(env.skills, 'sheet-editing')['skill_id'])
+     assert (metrics['selected_count'], metrics['applied_count'], metrics['completed_verified_count'],
+             metrics['fallback_count']) == (1, 1, 1, 0)
+-    assert metrics['last_verified_evidence'] == {'evidence': ['cells read back']}
++    assert metrics['last_verified_evidence'] == {'evidence_count': 1}  # Raw readback text is not telemetry.
+ 
+ 
+ def test_P03_failure_cause_and_fallback_are_recorded(env):
+diff --git a/app/tests/test_phase05_escalation_demonstration.py b/app/tests/test_phase05_escalation_demonstration.py
+index bbacb45..c48c892 100644
+--- a/app/tests/test_phase05_escalation_demonstration.py
++++ b/app/tests/test_phase05_escalation_demonstration.py
+@@ -142,7 +142,9 @@ def test_P05_outbound_payload_is_exactly_the_allowlist_and_is_recorded(tmp_path)
+     assert set(payload) == {'category', 'statement', 'question', 'constraints', 'examples'}
+     assert 'provenance' not in payload and len(adapter.sent[0]) == 2
+     log = [json.loads(line) for line in agent.log.read_text().splitlines()]
+-    assert log[0]['sent'] == payload and len(log[0]['sha256']) == 64
++    assert log[0]['decision'] == 'sent' and len(log[0]['sha256']) == 64
++    assert log[0]['payload_bytes'] == len(json.dumps(payload, ensure_ascii=False).encode())
++    assert 'sent' not in log[0] and GENERIC['statement'] not in json.dumps(log)
+     assert agent.consult('p1', GENERIC, FAILURES, 3, 'r1')['status'] == 'local'  # once per problem
+ 
+ 

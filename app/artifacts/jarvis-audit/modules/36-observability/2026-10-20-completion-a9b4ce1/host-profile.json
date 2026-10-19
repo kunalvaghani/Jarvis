@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-20",
+  "python": "3.10.6",
+  "python_build": [
+    "tags/v3.10.6:9c7b4bd",
+    "Aug  1 2022 21:53:49"
+  ],
+  "os": "Windows-10-10.0.26200-SP0",
+  "machine": "AMD64",
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "logical_cpus": 16,
+  "ram_total_bytes": 33656832000,
+  "available_ram_before_bytes": 13613748224,
+  "cpu_percent_before": 26.1,
+  "pressure": "Concurrent regression activity; serial within each randomized pair; one host/session, not independent populations.",
+  "seed": 36,
+  "timing_unit": "milliseconds from perf_counter_ns",
+  "private_roots": "omitted"
+}

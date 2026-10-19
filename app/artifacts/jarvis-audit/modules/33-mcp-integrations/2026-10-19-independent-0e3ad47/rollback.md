@@ -1,0 +1,3 @@
+# Rollback
+
+No source/protocol/dependency changes to roll back. Remove or archive only this dated evidence directory and its README paragraphs if desired; do not alter original module evidence or other pending audit work. Tests use temporary roots, owned stdio children and generated containers labelled for their disposable server; unregister/reap cleanup is in finally. Do not restore stale production registry entries blindly. Any future repair needs versioned config/skill compatibility rollback and a fresh no-replay/account-identity check. Do not run setup_mcp_runtime.py as a rollback: it is a networked build.

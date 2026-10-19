@@ -1,0 +1,7 @@
+{
+  "case": "JRV-35-020",
+  "scope": "owned native junction initial-admission fixture; no document worker or write",
+  "status": "PASS",
+  "out_of_scope_files": 0,
+  "reason": "Resolved junction escape refused at scoped_path"
+}

@@ -1,0 +1,24 @@
+{
+  "python": "3.10.6",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "machine": "AMD64",
+  "logical_cpus": 16,
+  "peak_process_memory": "NOT MEASURED",
+  "interim_OS_working_set_samples": [
+    {
+      "pid": 2964,
+      "rss_bytes": 106360832,
+      "peak_working_set_bytes": 107409408,
+      "sample_kind": "OS lifetime peak working set observed during final test run; process only, excludes children and GPU"
+    },
+    {
+      "pid": 28420,
+      "rss_bytes": 4407296,
+      "peak_working_set_bytes": 4440064,
+      "sample_kind": "OS lifetime peak working set observed during final test run; process only, excludes children and GPU"
+    }
+  ],
+  "memory_limit": "Interim OS lifetime peaks, not final aggregate RSS/child/GPU peak or baseline comparison.",
+  "dependency_routing": "Existing installed main and skills venvs, read-only; source under isolated checkout.",
+  "load_conditions": "Final suite and supplemental/journal commands overlapped; elapsed times are not isolated performance comparisons."
+}

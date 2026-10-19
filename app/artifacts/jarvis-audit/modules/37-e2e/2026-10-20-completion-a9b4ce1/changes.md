@@ -1,0 +1,8 @@
+# Local repairs
+
+- P37-001: pump always stops its owned hook and persists a failed/cancelled/completed state; startup failure cleans up, duplicate start cannot replace an active hook. Pump refuses already terminal sessions and preserves a stop/cancel requested during an event callback. Stop failure persists failed and retains the reference for retry. Errors propagate; cleanup is not reported as successful when stop fails.
+- P37-002: recheck cancellation/window PID after consent and before observation; pass cancellation through hook startup. Actions owner cleans on errors and returns no cancelled/partial demonstration as completed.
+- P37-003: reject cancelled/failed/interrupted sessions and require literal True replay verification before creating a skill. Existing direct consented recording/replay remains compatible; this does not authenticate caller-created replay evidence or replace independent verifier authority.
+- P37-004: after TaskState.finish downgrades an uncertain external write to paused, the matching task's durable result is returned to the worker/speech event and decision outcome. No action retry added; normal completed result objects preserved.
+
+Before fixes: 10 FAIL / 2 PASS, captured in before-fixes.xml. Review then reproduced two terminal-state resurrection failures (before-terminal.xml), fixed before the final rerun. Final targeted neighboring run: 38 PASS, including cleanup-error/feature-off/terminal-state regressions. Staged regression 681 PASS / 5 SKIPPED is superseded by final.xml after the terminal-state fix, not added to it. Production source.patch is P37-only; new test file is separately hashed. No fix commit exists.

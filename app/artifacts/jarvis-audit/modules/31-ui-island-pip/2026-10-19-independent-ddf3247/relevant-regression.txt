@@ -1,0 +1,25 @@
+........................................................................ [ 23%]
+...................................................s.................... [ 46%]
+........................................................................ [ 69%]
+............................................sssssss..................... [ 92%]
+...........F............                                                 [100%]
+================================== FAILURES ===================================
+_ test_P08_flow_A_api_first_capture_degrade_fix_lessons_and_bounded_diagnosis _
+
+env = namespace(base=WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-513/test_P08_flow_A_api_first_cap...als>.<lambda> at 0x000001E0577136D0>), approvals=[], registry=<jarvis.tools.ToolRegistry object at 0x000001E0577FA3B0>)
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-513/test_P08_flow_A_api_first_capt0')
+
+    def test_P08_flow_A_api_first_capture_degrade_fix_lessons_and_bounded_diagnosis(env, tmp_path):  # noqa: F811
+        from jarvis import execution_strategy as strategy
+        from jarvis.skill_evolution import SkillEvolution
+        plan = strategy.plan(env.actions, strategy.request_for('budget.xlsx', 'write'))   # 1-2 discovery + API over GUI
+>       assert plan.selected == 'xlsx.openpyxl'
+E       AssertionError: assert '' == 'xlsx.openpyxl'
+E         
+E         - xlsx.openpyxl
+
+tests\test_phase08_integration.py:147: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\relevant-regression.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_phase08_integration.py::test_P08_flow_A_api_first_capture_degrade_fix_lessons_and_bounded_diagnosis
+1 failed, 303 passed, 8 skipped in 110.72s (0:01:50)

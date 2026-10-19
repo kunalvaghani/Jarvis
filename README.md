@@ -9,8 +9,28 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- prompt37-followup -->
+**2026-10-20 - Prompt 37 follow-up:** 38 focused checks and three bounded workflow journals pass; full E2E acceptance remains blocked. Source unchanged from V2. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-followup -->
+
+<!-- prompt99-review -->
+**2026-10-20 — Prompt 99 independent review: NOT READY FOR DEPLOYMENT.** **1896 PASS / 1 FAIL / 139 SKIPPED** on the uncommitted review candidate; integrated claude verification and full live E2E remain blocked. Six safety mutation controls discriminate deliberate violations. [Evidence](app/artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-a9b4ce1/15-final-verdict.md) · [Application scope](app/README.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt99-review -->
+
+<!-- prompt37-e2e -->
+**2026-10-20 — Prompt 37 local acceptance repairs verified; release NOT READY.** **683 PASS / 0 FAIL / 5 SKIPPED** in the final relevant regression. Demonstration lifecycle/consent checks and truthful uncertain-send completion repaired; native voice/apps/GPU acceptance remains blocked. [Application details](app/README.md) · [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-e2e -->
+
+<!-- prompt36-observability -->
+**2026-10-20 — Prompt 36 telemetry repairs verified locally; release NOT READY.** **631 passed / 0 failed / 5 skipped** in the final relevant run. Repairs cover skill counter/evidence integrity, host task/monotonic correlation, bounded optional journals and metadata-only cloud decisions. Paired synthetic helper measurements are labelled as overhead, not real throughput. [Application details](app/README.md) · [Evidence](app/artifacts/jarvis-audit/modules/36-observability/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt36-observability -->
+
+<!-- prompt35-security -->
+**2026-10-20 — Prompt 35 security repairs verified locally; release NOT READY.** **537 relevant tests passed, four skipped, no failures**, plus two separate evaluator tamper checks passed. Repairs cover cloud payload bounds, credential/error privacy, sensitive training proposals, skill privilege declarations and readback precedence. Semantic provenance and broader live trust gates remain open. [Application details](app/README.md) · [Independent evidence](app/artifacts/jarvis-audit/modules/35-security/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt35-security -->
+
 <!-- prompt34-repair -->
-**2026-10-20 — Prompt 34 P34-001/P34-002 repaired: missing dependencies and models are reported as `repair_required`, and nothing is installed or downloaded without an explicit, bounded, single-use authorization. Still BLOCKED until Codex re-verifies.** Full regression 3,511 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/34-dependencies/2026-10-20-claude-repair-146ba83/repair.md).
+**2026-10-20 — Prompt 34 safe local repairs completed; release NOT READY.** Additional repair-authorization and concurrent-grant fixes pass **227 relevant tests, with one live-CUDA skip and no failures**. Ten installed environments pass dependency checks. Clean installation/rollback, immutable model transport and live hardware acceptance remain incomplete. [Application details](app/README.md) · [Independent evidence](app/artifacts/jarvis-audit/modules/34-dependencies/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md). Earlier Claude-reported full-suite results remain historical.
 <!-- /prompt34-repair -->
 
 <!-- prompt33-p33-004 -->

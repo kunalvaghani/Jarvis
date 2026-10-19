@@ -1,0 +1,38 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+____________ test_pump_cannot_resurrect_cancelled_partial_session _____________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-620/test_pump_cannot_resurrect_can0')
+
+    def test_pump_cannot_resurrect_cancelled_partial_session(tmp_path):
+        session, _ = recording(tmp_path)
+        session.state.update(status='cancelled', steps=[{'partial': True}])
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt37_e2e_boundaries.py:98: Failed
+______________ test_callback_stop_is_not_overwritten_as_complete ______________
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-620/test_callback_stop_is_not_over0')
+
+    def test_callback_stop_is_not_overwritten_as_complete(tmp_path):
+        session, hook = recording(tmp_path)
+        session.start_hook()
+        session.events.put((1, 2, 513, 0, 0))
+        session.process = lambda *args: session.state['steps'].append({'partial': True})
+        def until(steps):
+            session.stop('cancelled')
+            return True
+        session.pump(until=until)
+>       assert session.state['status'] == 'cancelled'
+E       AssertionError: assert 'complete' == 'cancelled'
+E         
+E         - cancelled
+E         + complete
+
+tests\test_prompt37_e2e_boundaries.py:112: AssertionError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\37-e2e\2026-10-20-completion-a9b4ce1\before-terminal.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt37_e2e_boundaries.py::test_pump_cannot_resurrect_cancelled_partial_session
+FAILED tests\test_prompt37_e2e_boundaries.py::test_callback_stop_is_not_overwritten_as_complete
+2 failed in 0.61s

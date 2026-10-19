@@ -132,7 +132,7 @@ def test_P01_contract_outcome_rejects_payloads_and_malformed_values(tmp_path):
     row = contracts.read_outcomes(tmp_path)[0]
     assert 'FAKE_' not in json.dumps(row) and '../' not in json.dumps(row)
     assert set(row) == {'version', 'at', 'event', 'call_id', 'tool', 'method_tier', 'verification',
-                        'discarded_metadata_fields'}
+                        'discarded_metadata_fields', 'clock_id', 'monotonic_ns'}
     assert row['discarded_metadata_fields'] == 7
 
 

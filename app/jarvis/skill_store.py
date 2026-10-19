@@ -62,6 +62,32 @@ def content_hash(body):
     return hashlib.sha256(body.encode('utf-8')).hexdigest()
 
 
+def event_evidence(value):
+    """Metadata only; never truncate serialized JSON or retain arbitrary evidence text."""
+    if not isinstance(value, dict):
+        return {}
+    result = {}
+    if type(value.get('version')) is int and 0 < value['version'] <= 1_000_000:
+        result['version'] = value['version']
+    if isinstance(value.get('cause'), str) and value['cause'] in FAILURE_CAUSES:
+        result['cause'] = value['cause']
+    if value.get('reason') in ('bound tools unused', 'recovered or unverified'):
+        result['reason'] = value['reason']
+    if isinstance(value.get('evidence'), list):
+        result['evidence_count'] = min(len(value['evidence']), 12)
+    elif type(value.get('evidence_count')) is int and 0 <= value['evidence_count'] <= 12:
+        result['evidence_count'] = value['evidence_count']
+    return result
+
+
+def read_event_evidence(raw):
+    try:
+        value = json.loads(raw)
+    except (ValueError, TypeError):
+        return {}, False
+    return event_evidence(value), isinstance(value, dict)
+
+
 def generate_skill_id(name, kind='imp'):
     slug = re.sub(r'[^a-z0-9-]', '-', str(name).casefold())[:64].strip('-') or 'skill'
     return f'{slug}__{kind}_{uuid.uuid4().hex[:8]}'
@@ -200,7 +226,7 @@ class SkillStore:
         if event_type not in EVENTS or not isinstance(task_id, str) or not task_id or len(task_id) > 64:
             raise ValueError('Invalid skill event.')
         key = hashlib.sha256('\n'.join((task_id, skill_id, event_type)).encode()).hexdigest()
-        payload = json.dumps(evidence or {}, ensure_ascii=False, default=str)[:4000]
+        payload = json.dumps(event_evidence(evidence), ensure_ascii=False)
         with self.connect() as db:
             if db.execute('SELECT 1 FROM skill_records WHERE skill_id=?', (skill_id,)).fetchone() is None:
                 raise ValueError('Unknown skill identity.')
@@ -214,7 +240,7 @@ class SkillStore:
         key = hashlib.sha256('\n'.join((task_id, skill_id, 'failure', cause)).encode()).hexdigest()
         with self.connect() as db:
             db.execute('INSERT OR IGNORE INTO skill_failures(event_key,skill_id,task_id,cause,detail,at) VALUES(?,?,?,?,?,?)',
-                       (key, skill_id, task_id, cause, str(detail)[:500], now()))
+                       (key, skill_id, task_id, cause, '', now()))  # Category only; raw failures can contain private data.
 
     def metrics(self, skill_id, current_version=False):
         """Lifetime counters, or only evidence since the active version (current_version=True)."""
@@ -230,9 +256,12 @@ class SkillStore:
             last = db.execute("SELECT at, evidence_json FROM skill_events WHERE skill_id=? AND id>? AND "
                               "event_type='completed_verified' ORDER BY id DESC LIMIT 1", (skill_id, since)).fetchone()
             causes = {}
+            invalid = 0
             for row in db.execute("SELECT evidence_json FROM skill_events WHERE skill_id=? AND id>? AND event_type='failed'",
                                   (skill_id, since)):
-                cause = json.loads(row['evidence_json']).get('cause', 'other')
+                saved, valid = read_event_evidence(row['evidence_json'])
+                invalid += not valid
+                cause = saved.get('cause', 'other')
                 cause = cause if cause in FAILURE_CAUSES else 'other'
                 causes[cause] = causes.get(cause, 0) + 1
             recent = [row['event_type'] for row in db.execute(
@@ -241,7 +270,8 @@ class SkillStore:
         return {'selected_count': counts['selected'], 'applied_count': counts['applied'],
                 'completed_verified_count': counts['completed_verified'], 'fallback_count': counts['fallback'],
                 'failed_count': counts['failed'], 'last_verified_at': last['at'] if last else None,
-                'last_verified_evidence': json.loads(last['evidence_json']) if last else None,
+                'last_verified_evidence': read_event_evidence(last['evidence_json'])[0] if last else None,
+                'invalid_evidence_count': invalid + (not read_event_evidence(last['evidence_json'])[1] if last else 0),
                 'failure_causes': causes, 'recent_outcomes': recent}
 
     def all_metrics(self):

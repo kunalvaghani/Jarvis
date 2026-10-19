@@ -1,0 +1,98 @@
+...................................F.................................... [ 27%]
+..........................................s............................. [ 55%]
+..............................F......................................... [ 83%]
+...................................sssssss                               [100%]
+================================== FAILURES ===================================
+_ DeskWidgetTests.test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget _
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget>
+
+    def setUp(self):
+>       self.root = tk.Tk(); self.root.withdraw()
+
+tests\test_island_desk.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.Tk object .>, screenName = None, baseName = '__main__'
+className = 'Tk', useTk = True, sync = False, use = None
+
+    def __init__(self, screenName=None, baseName=None, className='Tk',
+                 useTk=True, sync=False, use=None):
+        """Return a new Toplevel widget on screen SCREENNAME. A new Tcl interpreter will
+        be created. BASENAME will be used for the identification of the profile file (see
+        readprofile).
+        It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
+        is the name of the widget class."""
+        self.master = None
+        self.children = {}
+        self._tkloaded = False
+        # to avoid recursions in the getattr code in case of failure, we
+        # ensure that self.tk is always _something_.
+        self.tk = None
+        if baseName is None:
+            import os
+            baseName = os.path.basename(sys.argv[0])
+            baseName, ext = os.path.splitext(baseName)
+            if ext not in ('.py', '.pyc'):
+                baseName = baseName + ext
+        interactive = False
+>       self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E       _tkinter.TclError: Can't find a usable tk.tcl in the following directories: 
+E           C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/library
+E       
+E       C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/menu.tcl": no such file or directory
+E       couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/menu.tcl": no such file or directory
+E           while executing
+E       "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/menu.tcl"
+E           (in namespace eval "::" script line 1)
+E           invoked from within
+E       "namespace eval :: [list source -encoding utf-8 [file join $::tk_library $file.tcl]]"
+E           (procedure "SourceLibFile" line 2)
+E           invoked from within
+E       "SourceLibFile menu"
+E           (in namespace eval "::tk" script line 6)
+E           invoked from within
+E       "namespace eval ::tk {
+E       	SourceLibFile icons
+E       	SourceLibFile button
+E       	SourceLibFile entry
+E       	SourceLibFile listbox
+E       	SourceLibFile menu
+E       	SourceLibFile panedw..."
+E           (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl" line 501)
+E           invoked from within
+E       "source C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl"
+E           ("uplevel" body line 1)
+E           invoked from within
+E       "uplevel #0 [list source $file]"
+E       
+E       
+E       This probably means that tk wasn't installed properly.
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: TclError
+_ test_P05_demonstrated_click_is_captured_replayed_and_becomes_provisional_skill _
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-507/test_P05_demonstrated_click_is0')
+fixture_window = 2363546
+
+    def test_P05_demonstrated_click_is_captured_replayed_and_becomes_provisional_skill(tmp_path, fixture_window):
+        from pywinauto import Desktop
+        window = Desktop(backend='uia').window(handle=fixture_window).wrapper_object()
+        edit = next(c for c in window.descendants() if c.element_info.control_type == 'Edit')
+        edit.iface_value.SetValue('demo')
+        session = DemonstrationSession(tmp_path, lambda *a: None)
+        session.request('Apply', fixture_window)
+        x, y, element = button_point(fixture_window, 'Apply')
+        # Synthetic event standing in for the user's physical click (MOCK input); the click effect itself is
+        # produced through UIA so the recorder observes a real before/after change.
+        element.iface_invoke.Invoke()
+        step = session.process(x, y, 0x0201, 0)
+>       assert step is not None and step['selector']['control_type'] == 'Button' and step['selector']['name'] == 'Apply'
+E       assert (None is not None)
+
+tests\test_phase05_escalation_demonstration.py:287: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\baseline-unrestricted.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_island_desk.py::DeskWidgetTests::test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget
+FAILED tests\test_phase05_escalation_demonstration.py::test_P05_demonstrated_click_is_captured_replayed_and_becomes_provisional_skill
+2 failed, 248 passed, 8 skipped in 76.03s (0:01:16)

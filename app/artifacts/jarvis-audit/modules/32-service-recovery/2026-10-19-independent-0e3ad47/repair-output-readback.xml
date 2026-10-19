@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.628" timestamp="2026-10-19T21:04:18.934875+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.32-service-recovery.2026-10-19-independent-0e3ad47.test_recovery_boundaries" name="test_JRV_32_011_repair_record_omits_synthetic_secret[repair failed api_key=SYNTHETIC_REPAIR_CANARY_0123456789]" time="0.035"><failure message="assert 'SYNTHETIC_R...Y_0123456789' not in '{&quot;at&quot;: 1792...23456789&quot;}\n'&#10;  &#10;  'SYNTHETIC_REPAIR_CANARY_0123456789' is contained here:&#10;    d api_key=SYNTHETIC_REPAIR_CANARY_0123456789&quot;}">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{26b76985-c0bd-4660-a2f4-c52fdd9921f9}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_32_011_repair_record_0')
+message = 'repair failed api_key=SYNTHETIC_REPAIR_CANARY_0123456789'
+
+    @pytest.mark.parametrize('message', [
+        'repair failed api_key=SYNTHETIC_REPAIR_CANARY_0123456789',
+        'repair failed Bearer SYNTHETIC_REPAIR_CANARY_0123456789',
+    ])
+    def test_JRV_32_011_repair_record_omits_synthetic_secret(tmp_path, message):
+        from jarvis.recovery import record
+        record(tmp_path, message)
+        output = tmp_path / '.jarvis-runtime/repairs.jsonl'
+        rows = [json.loads(line) for line in output.read_text(encoding='utf-8').splitlines()]
+        copy = Path(__file__).parent / ('synthetic-api-key-repairs.jsonl' if 'api_key=' in message else 'synthetic-bearer-repairs.jsonl')
+        copy.write_bytes(output.read_bytes())  # exact authored fixture output, never a real credential
+        assert rows and all('at' in row and 'message' in row for row in rows)
+&gt;       assert 'SYNTHETIC_REPAIR_CANARY_0123456789' not in output.read_text(encoding='utf-8')
+E       assert 'SYNTHETIC_R...Y_0123456789' not in '{"at": 1792...23456789"}\n'
+E         
+E         'SYNTHETIC_REPAIR_CANARY_0123456789' is contained here:
+E           d api_key=SYNTHETIC_REPAIR_CANARY_0123456789"}
+
+artifacts\jarvis-audit\modules\32-service-recovery\2026-10-19-independent-0e3ad47\test_recovery_boundaries.py:25: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.32-service-recovery.2026-10-19-independent-0e3ad47.test_recovery_boundaries" name="test_JRV_32_011_repair_record_omits_synthetic_secret[repair failed Bearer SYNTHETIC_REPAIR_CANARY_0123456789]" time="0.017"><failure message="assert 'SYNTHETIC_R...Y_0123456789' not in '{&quot;at&quot;: 1792...23456789&quot;}\n'&#10;  &#10;  'SYNTHETIC_REPAIR_CANARY_0123456789' is contained here:&#10;    ed Bearer SYNTHETIC_REPAIR_CANARY_0123456789&quot;}">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{26b76985-c0bd-4660-a2f4-c52fdd9921f9}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_32_011_repair_record_1')
+message = 'repair failed Bearer SYNTHETIC_REPAIR_CANARY_0123456789'
+
+    @pytest.mark.parametrize('message', [
+        'repair failed api_key=SYNTHETIC_REPAIR_CANARY_0123456789',
+        'repair failed Bearer SYNTHETIC_REPAIR_CANARY_0123456789',
+    ])
+    def test_JRV_32_011_repair_record_omits_synthetic_secret(tmp_path, message):
+        from jarvis.recovery import record
+        record(tmp_path, message)
+        output = tmp_path / '.jarvis-runtime/repairs.jsonl'
+        rows = [json.loads(line) for line in output.read_text(encoding='utf-8').splitlines()]
+        copy = Path(__file__).parent / ('synthetic-api-key-repairs.jsonl' if 'api_key=' in message else 'synthetic-bearer-repairs.jsonl')
+        copy.write_bytes(output.read_bytes())  # exact authored fixture output, never a real credential
+        assert rows and all('at' in row and 'message' in row for row in rows)
+&gt;       assert 'SYNTHETIC_REPAIR_CANARY_0123456789' not in output.read_text(encoding='utf-8')
+E       assert 'SYNTHETIC_R...Y_0123456789' not in '{"at": 1792...23456789"}\n'
+E         
+E         'SYNTHETIC_REPAIR_CANARY_0123456789' is contained here:
+E           ed Bearer SYNTHETIC_REPAIR_CANARY_0123456789"}
+
+artifacts\jarvis-audit\modules\32-service-recovery\2026-10-19-independent-0e3ad47\test_recovery_boundaries.py:25: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.32-service-recovery.2026-10-19-independent-0e3ad47.test_recovery_boundaries" name="test_JRV_32_011_launcher_exception_cannot_leak_secret_into_repair_log" time="0.026"><failure message="assert 'SYNTHETIC_L...Y_0123456789' not in '{&quot;at&quot;: 1792...23456789&quot;}\n'&#10;  &#10;  'SYNTHETIC_LAUNCHER_CANARY_0123456789' is contained here:&#10;    d api_key=SYNTHETIC_LAUNCHER_CANARY_0123456789&quot;}">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Packages/sandbox.{26b76985-c0bd-4660-a2f4-c52fdd9921f9}/AC/Temp/pytest-of-kunal/pytest-0/test_JRV_32_011_launcher_excep0')
+
+    def test_JRV_32_011_launcher_exception_cannot_leak_secret_into_repair_log(tmp_path):
+        import jarvis.launcher as launcher
+        runtime = tmp_path / '.jarvis-runtime'
+        runtime.mkdir()
+        def fail_preflight():
+            (runtime / 'stop').touch()  # bounded exit after exactly one injected startup failure
+            raise ValueError('startup failed api_key=SYNTHETIC_LAUNCHER_CANARY_0123456789')
+        with patch.object(launcher, 'BASE', tmp_path), patch.object(launcher, 'RUNTIME', runtime), \
+             patch.object(launcher, 'singleton', return_value=Mock()), \
+             patch.object(launcher, 'preflight', side_effect=fail_preflight):
+            launcher.run()
+        output = (runtime / 'repairs.jsonl').read_text(encoding='utf-8')
+        (Path(__file__).parent / 'synthetic-launcher-repairs.jsonl').write_bytes((runtime / 'repairs.jsonl').read_bytes())
+&gt;       assert 'SYNTHETIC_LAUNCHER_CANARY_0123456789' not in output
+E       assert 'SYNTHETIC_L...Y_0123456789' not in '{"at": 1792...23456789"}\n'
+E         
+E         'SYNTHETIC_LAUNCHER_CANARY_0123456789' is contained here:
+E           d api_key=SYNTHETIC_LAUNCHER_CANARY_0123456789"}
+
+artifacts\jarvis-audit\modules\32-service-recovery\2026-10-19-independent-0e3ad47\test_recovery_boundaries.py:41: AssertionError</failure></testcase></testsuite></testsuites>

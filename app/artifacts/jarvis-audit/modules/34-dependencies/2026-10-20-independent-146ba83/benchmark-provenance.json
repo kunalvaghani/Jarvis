@@ -1,0 +1,7 @@
+{
+  "before": "cd8861ce720ade303485ee2023430dd8c6b4f0ba",
+  "after": "146ba831e7ae5df1a953b0f910288c41c9ab4689",
+  "warmup": 20,
+  "iterations": 300,
+  "scope": "Same fixed readiness fixture; no repair, subprocess, service call, inference or optimization. Not startup/installation latency."
+}
