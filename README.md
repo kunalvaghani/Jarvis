@@ -9,6 +9,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- prompt34-repair -->
+**2026-10-20 — Prompt 34 P34-001/P34-002 repaired: missing dependencies and models are reported as `repair_required`, and nothing is installed or downloaded without an explicit, bounded, single-use authorization. Still BLOCKED until Codex re-verifies.** Full regression 3,511 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/34-dependencies/2026-10-20-claude-repair-146ba83/repair.md).
+<!-- /prompt34-repair -->
+
 <!-- prompt33-p33-004 -->
 **2026-10-20 — Prompt 33 P33-004 completed: account labels are display-only; a credential change during a pending approval is refused unless independently verified (no verifier registered yet, so it fails closed). Still BLOCKED until Codex re-verifies.** Full regression 3,473 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-cd8861c/repair.md).
 <!-- /prompt33-p33-004 -->

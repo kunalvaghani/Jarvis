@@ -32,6 +32,10 @@ def setup():
     from jarvis.model_selection import required_models
     from jarvis.ollama_models import model_plan, cache_roots, restore_cached, create_alias, ALIASES
     required = required_models(configuration)
+    if "--model" in sys.argv:
+        approved_pull(session, endpoint, sys.argv[sys.argv.index("--model") + 1],
+                      sys.argv[sys.argv.index("--revision") + 1], int(sys.argv[sys.argv.index("--max-bytes") + 1]))
+        return
     for model in model_plan(required):
         # Inspect the active server again after each prerequisite/import, rather
         # than assuming a Windows cache is visible to a WSL Ollama process.
@@ -75,6 +79,43 @@ def setup():
                 print("Retrying resumable download for " + model + " (attempt " + str(attempt + 2) + ").", flush=True)
                 time.sleep(2)
     print("All configured Jarvis models are available on the active Ollama server.", flush=True)
+
+
+REGISTRY = "https://registry.ollama.ai/v2/"
+
+
+def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGISTRY):
+    """One approved pull (P34-002): the manifest must match the approved digest and fit the byte budget before the
+    pull starts, and the installed digest is checked afterwards. There is no retry. Partial layers are kept."""
+    import hashlib
+    import requests
+    name, _, tag = model.partition(":")
+    path = name if "/" in name else "library/" + name
+    manifest = requests.get(registry + path + "/manifests/" + (tag or "latest"), timeout=(5, 30),
+                            headers={"Accept": "application/vnd.docker.distribution.manifest.v2+json"})
+    manifest.raise_for_status()
+    if "sha256:" + hashlib.sha256(manifest.content).hexdigest() != revision:
+        raise SystemExit("The registry revision of " + model + " differs from the approved revision; nothing was pulled.")
+    body = manifest.json()
+    size = sum(int(layer.get("size", 0)) for layer in body.get("layers", [])) + int(body.get("config", {}).get("size", 0))
+    if not size or size > max_bytes:
+        raise SystemExit("The download size of " + model + " is unknown or exceeds the approved budget; nothing was pulled.")
+    print("Pulling approved " + model + " (" + str(size) + " bytes, budget " + str(max_bytes) + ").", flush=True)
+    with session.post(endpoint + "/api/pull", json={"model": model, "stream": True}, stream=True, timeout=(5, 90)) as response:
+        response.raise_for_status()
+        succeeded = False
+        for line in response.iter_lines():
+            if line:
+                status = json.loads(line)
+                if status.get("error"):
+                    raise SystemExit("Approved download interrupted; partial layers are kept for an approved resume.")
+                succeeded = status.get("status") == "success" or succeeded
+    tags = session.get(endpoint + "/api/tags", timeout=10)
+    tags.raise_for_status()
+    installed = {row["name"]: row.get("digest", "") for row in tags.json().get("models", [])}
+    if not succeeded or "sha256:" + installed.get(model, "").removeprefix("sha256:") != revision:
+        raise SystemExit("The installed " + model + " could not be confirmed at the approved revision.")
+    print(model + " installed at the approved revision.", flush=True)
 
 
 if __name__ == "__main__":

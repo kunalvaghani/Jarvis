@@ -269,8 +269,19 @@ def runtime_command(args, log, timeout=1800):
                 child.wait(timeout=5)
 
 
-def prepare_runtime(config):
-    """Repair only the project's declared environments and model assets."""
+REPAIR_GUIDANCE = ("Jarvis keeps using what is installed. Run the matching setup launcher yourself, or authorize one locked "
+                   "offline rebuild with: python -m jarvis.repair_authorization dependency --environment <env> --lock "
+                   "<hashed lock> --wheelhouse <approved wheels> --max-bytes <budget>.")
+
+
+def prepare_runtime(config, authorization=None):
+    """Read-only readiness; nothing is installed or downloaded without an explicit bounded authorization (P34-001).
+
+    Each declared environment gets one import check and each declared model file a presence check. Anything absent is
+    reported as ``repair_required``. The one repair this function performs is rebuilding a single environment
+    from a locked local artifact set the user authorized, staged beside the existing environment.
+    """
+    from .repair_authorization import RepairRequired, take_dependency_repair
     RUNTIME.mkdir(exist_ok=True)
     manifest = json.loads((manifest_file(BASE)).read_text(encoding="utf-8"))
     def imports_for(key):
@@ -282,50 +293,68 @@ def prepare_runtime(config):
         def command(args, timeout=1800):
             if runtime_command(args, log, timeout):
                 raise ValueError("Declared runtime repair failed; see .jarvis-runtime/setup.log.")
-        python = BASE / ".venv" / "Scripts" / "python.exe"
-        if not python.is_file():
-            record(BASE, "Jarvis Python environment missing; rebuilding it from declared requirements.")
-            command([sys.executable, "-m", "venv", str(BASE / ".venv")])
-        imports = imports_for("main_imports")
-        if runtime_command([str(python), "-c", imports], log, timeout=60):
-            record(BASE, "Declared Jarvis dependencies missing; repairing the local environment.")
-            command([str(python), "-m", "pip", "--isolated", "install", "-r", "requirements/runtime.txt"])
-            command([str(python), "-c", imports], timeout=60)
-            record(BASE, "Declared Jarvis dependencies repaired.")
+        missing, broken = [], []
+        def environment(folder, key):
+            python = BASE / folder / "Scripts" / "python.exe"
+            if not python.is_file() or runtime_command([str(python), "-c", imports_for(key)], log, timeout=60):
+                broken.append((folder, key))
+                missing.append(folder + " dependencies")
+                return False
+            return True
+        environment(".venv", "main_imports")
         if not (BASE / config["model_path"] / "model.bin").is_file():
-            record(BASE, "Whisper model missing; resuming its declared model download.")
-            command([str(python), '-m', 'scripts.models.download_model', "--parallel", "4"])
-            record(BASE, "Whisper model download repaired.")
-        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
+            missing.append("Whisper model (launchers/Resume Whisper Setup.cmd)")
+        speech = config.get("speech", {})
+        if speech.get("enabled", True) and speech.get("engine") == "kokoro":
             if any(not (BASE / path).is_file() for path in manifest.get("voice_assets", [])):
-                record(BASE, "Kokoro voice assets missing; restoring pinned local voice files.")
-                command([str(python), '-m', 'scripts.setup.setup_voice'])
-        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "f5":
-            f5_python = BASE / '.venv-f5/Scripts/python.exe'
-            if not f5_python.is_file():
-                record(BASE, 'Creating declared F5-TTS environment.')
-                command([str(python), '-m', 'venv', str(BASE / '.venv-f5')])
-            if runtime_command([str(f5_python), '-c', imports_for('f5_imports')], log, timeout=60):
-                record(BASE, 'Repairing declared F5-TTS dependencies.')
-                command([str(f5_python), '-m', 'pip', '--isolated', 'install', '-r', 'requirements/f5.txt'])
-                command([str(f5_python), '-c', imports_for('f5_imports')], timeout=60)
-            if config['speech'].get('f5', {}).get('device') == 'cuda':
-                if runtime_command([str(f5_python), '-c', 'import torch; assert torch.cuda.is_available()'], log, timeout=60):
-                    record(BASE, 'Repairing declared CUDA-enabled F5-TTS dependencies.')
-                    command([str(f5_python), '-m', 'pip', '--isolated', 'install', 'torch==2.6.0+cu124', 'torchaudio==2.6.0+cu124', '--index-url', 'https://download.pytorch.org/whl/cu124'])
+                missing.append("Kokoro voice assets")
+        if speech.get("enabled", True) and speech.get("engine") == "f5":
+            if environment(".venv-f5", "f5_imports") and speech.get("f5", {}).get("device") == "cuda":
+                f5_python = BASE / ".venv-f5/Scripts/python.exe"
+                if runtime_command([str(f5_python), "-c", "import torch; assert torch.cuda.is_available()"], log, timeout=60):
+                    missing.append("CUDA-enabled F5-TTS dependencies")
         if config.get("brain", {}).get("enabled"):
-            brain = BASE / ".venv-brain" / "Scripts" / "python.exe"
-            if not brain.is_file():
-                command([str(python), "-m", "venv", str(BASE / ".venv-brain")])
-            if runtime_command([str(brain), "-c", imports_for("brain_imports")], log, timeout=60):
-                record(BASE, "Brain runtime dependencies missing; restoring declared dependencies.")
-                command([str(brain), "-m", "pip", "--isolated", "install", "torch==2.6.0", "--index-url", "https://download.pytorch.org/whl/cpu"])
-                command([str(brain), "-m", "pip", "--isolated", "install", "-r", "requirements/brain.txt"])
-                command([str(brain), "-c", imports_for("brain_imports")], timeout=60)
+            environment(".venv-brain", "brain_imports")
             if not (BASE / "models/laya/model.safetensors").is_file():
-                record(BASE, "Selector model missing; restoring its pinned checkpoint.")
-                command([str(brain), '-m', 'scripts.setup.setup_brain', "--laya-only"])
+                missing.append("Laya checkpoint (launchers/Setup Jarvis Brain.cmd)")
+        if missing:
+            # Only a single environment rebuild can be authorized; anything else stays repair_required.
+            approval = None
+            if len(broken) == 1 and missing == [broken[0][0] + " dependencies"]:
+                approval = authorization if authorization is not None else take_dependency_repair(RUNTIME)
+            if approval is None:
+                raise RepairRequired(missing, REPAIR_GUIDANCE)
+            stage_environment(approval, broken[0][0], imports_for(broken[0][1]), command)
     return BASE / ".venv" / "Scripts" / "pythonw.exe"
+
+
+def stage_environment(approval, folder, imports, command):
+    """Rebuild ``folder`` from the approved locked artifact set beside the existing one, then swap; keep the old one."""
+    from .repair_authorization import RepairRefused, check_dependency_repair
+    lock, wheelhouse = check_dependency_repair(BASE, approval, folder)
+    target = BASE / folder
+    staging = BASE / (folder + ".staging-" + approval.approval_id)
+    previous = BASE / (folder + ".previous-" + approval.approval_id)
+    if staging.exists() or previous.exists():
+        raise RepairRefused("This authorization was already used; its staged files were kept for inspection.")
+    record(BASE, "Authorized repair " + approval.approval_id + ": staging " + folder + " from the approved local artifact "
+           "set; the existing environment stays in place.")
+    command([sys.executable, "-m", "venv", str(staging)])
+    staged = staging / "Scripts" / "python.exe"
+    # --no-index: the approved wheelhouse is the only source. No --isolated: pip and offline settings stay in force.
+    command([str(staged), "-m", "pip", "install", "--no-index", "--find-links", str(wheelhouse), "--require-hashes",
+             "--only-binary=:all:", "-r", str(lock)])
+    command([str(staged), "-c", imports], timeout=60)
+    if target.exists():
+        target.rename(previous)
+    try:
+        staging.rename(target)
+    except OSError:
+        if previous.exists() and not target.exists():
+            previous.rename(target)
+        raise
+    record(BASE, "Authorized repair " + approval.approval_id + " completed for " + folder + "; the previous environment "
+           "is kept as " + previous.name + ".")
 
 
 def run():
@@ -414,6 +443,15 @@ def run():
                 record(BASE, "Jarvis stopped unexpectedly; background restart scheduled. No task actions will be replayed.")
             except InterruptedError:
                 break
+            except ValueError as exc:
+                from .repair_authorization import RepairRefused, RepairRequired
+                if not isinstance(exc, (RepairRequired, RepairRefused)):
+                    crashes += 1
+                    record(BASE, "Startup repair could not complete (" + type(exc).__name__ + "): " + str(exc))
+                else:
+                    # Waiting for the user: recheck readiness (read-only) at the slowest cadence, never retry repairs.
+                    crashes = 8
+                    record(BASE, str(exc))
             except Exception as exc:
                 crashes += 1
                 # Fixed category plus a screened summary; raw exception text never reaches the repair log.
