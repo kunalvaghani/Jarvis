@@ -333,7 +333,8 @@ def health(actions, server, cancelled=lambda: False):
             if server in current['servers'] and current['servers'][server].get('code_sha256') == entry['code_sha256']:
                 current['servers'][server].update(pins, status=entry.get('status') if entry.get('status') != 'drifted' else 'provisional')
                 save_registry(actions.base, current)
-        return {'server': server, 'healthy': True, 'tests': report, **pins}
+        restored = restore_dependent_skills(getattr(actions, 'skills', None), server)
+        return {'server': server, 'healthy': True, 'tests': report, 'restored_skills': restored, **pins}
     except (ValueError, OSError) as exc:
         return {'server': server, 'healthy': False, 'reason': str(exc)[:300], **unregister(actions.base, server)}
     finally:
@@ -371,8 +372,45 @@ def configurations(base):
             if entry.get('enabled') is True and entry.get('status') in {'provisional', 'trusted'}}
 
 
-def mark_drifted(base, server, reason):
-    """Disable a generated server whose approved identity no longer matches; it needs health/re-approval."""
+def dependent_skills(skills, server):
+    """Skills whose guidance or declared tools call this generated server."""
+    rows = getattr(skills, 'catalog', None) or []
+    return [row for row in rows if row.get('skill_id') and (server in str(row.get('body', ''))
+                                                             or server in [str(t) for t in row.get('tools', [])])]
+
+
+def invalidate_dependent_skills(skills, server):
+    """Disable dependent skills until the server is revalidated; recorded so only these are restored later."""
+    store = getattr(skills, 'store', None)
+    names = []
+    for row in dependent_skills(skills, server):
+        if store is not None:
+            store.set_state(row['skill_id'], enabled=False, compatibility={'disabled_by': 'mcp_drift', 'server': server})
+        row['enabled'] = False
+        names.append(row['name'])
+    return names
+
+
+def restore_dependent_skills(skills, server):
+    store = getattr(skills, 'store', None)
+    restored = []
+    for row in dependent_skills(skills, server):
+        record = store.record(row['skill_id']) if store is not None else None
+        try:
+            marker = json.loads((record or {}).get('compatibility_json') or '{}')
+        except ValueError:
+            marker = {}
+        if marker == {'disabled_by': 'mcp_drift', 'server': server}:
+            store.set_state(row['skill_id'], enabled=True, compatibility={})
+            row['enabled'] = True
+            restored.append(row['name'])
+    return restored
+
+
+def mark_drifted(base, server, reason, skills=None):
+    """Disable a generated server whose approved identity no longer matches, and the skills that depend on it."""
+    if skills is not None:
+        invalidate_dependent_skills(skills, server)
     with _LOCK:
         registry = load_registry(base)
         entry = registry['servers'].get(server)
@@ -390,7 +428,7 @@ def mounted_source(config):
     return Path(next(arg for arg in config['args'] if arg.startswith('type=bind,src=')).split('src=', 1)[1].split(',', 1)[0])
 
 
-def verified_execution_config(base, server, config, cancelled=lambda: False):
+def verified_execution_config(base, server, config, cancelled=lambda: False, skills=None):
     """Verify the approved identity now and return a config that mounts a private copy of the verified bytes.
 
     Editing the registered source after this check cannot change what runs: the container mounts the copy.
@@ -413,7 +451,7 @@ def verified_execution_config(base, server, config, cancelled=lambda: False):
         if not status['available'] or status['image_id'] != identity['image_id']:
             raise ValueError('Approved runtime image is unavailable or changed.')
     except (ValueError, OSError, StopIteration) as exc:
-        mark_drifted(base, server, exc)
+        mark_drifted(base, server, exc, skills)
         raise ValueError('Generated MCP server disabled pending revalidation: ' + str(exc)[:160]) from None
     private = Path(base) / '.jarvis-runtime' / 'mcp' / 'exec' / uuid.uuid4().hex
     private.mkdir(parents=True)

@@ -9,6 +9,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- prompt33-followup -->
+**2026-10-19 — Prompt 33 follow-up: P33-004 (provider account binding), P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,469 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-2c4ea56/repair.md).
+<!-- /prompt33-followup -->
+
 <!-- prompt32-33 -->
 **2026-10-19 — Prompt 32/33 defects P32-001, P32-002, P33-001, P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,449 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair/repair.md).
 <!-- /prompt32-33 -->

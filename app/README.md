@@ -24,6 +24,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- prompt33-followup -->
+**2026-10-19 — Prompt 33 follow-up: P33-004 (approved writes bound to the provider account), P33-002 (whole-value schema validation, JSON-type equality) and P33-003 (strict content/resource shapes) repaired; MCP drift now disables dependent skills. Prompt 33 still BLOCKED pending Codex re-verification.** Approval cards show the account, never the token; an account switch while a card is pending sends nothing, and token rotation for the same configured account is allowed and recorded. Codex tests (unchanged): 9/9 new and 13/13 original replay pass; 48 repair tests pass. Optional identity settings, used to tell token rotation apart from an account switch (non-secret): `JARVIS_GOOGLE_ACCOUNT`, `JARVIS_GITHUB_ACCOUNT`, `JARVIS_SLACK_WORKSPACE`, `JARVIS_TWITTER_ACCOUNT` (Jira and email use their URL/host and user). Without them, any credential change during a pending approval is refused. Full regression **3,469 passed / 147 BLOCKED skips / 0 failed**; launcher ready. [Repair record](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-2c4ea56/repair.md).
+<!-- /prompt33-followup -->
+
 <!-- prompt32-33 -->
 **2026-10-19 — Prompt 32/33 defects repaired; both prompts still BLOCKED pending Codex re-verification.**
 - **P32-001 — process ownership.** The supervisor takes termination authority only over its launched process tree.

@@ -227,7 +227,7 @@ def execute(actions, step, cancelled):
     if identity is not None:
         # P33-001: verify the approved code/spec/image now and run a private copy of the verified bytes.
         from .mcp_synthesis import verified_execution_config
-        config, private = verified_execution_config(base, name, config, cancelled)
+        config, private = verified_execution_config(base, name, config, cancelled, getattr(actions, 'skills', None))
     # Approve the executable plus exact call (and, for generated servers, the approved identity);
     # server annotations cannot waive approval.
     detail = {'server': name, 'command': config.get('command'), 'args': config.get('args', []), 'call': arguments}
@@ -261,7 +261,7 @@ def execute(actions, step, cancelled):
             tool = next(row for row in allowed if row['name'] == arguments['name'])
             if identity is not None and schema_digest(tool) != identity.get('schema_sha256'):
                 from .mcp_synthesis import mark_drifted
-                mark_drifted(base, name, 'advertised schema changed after approval')
+                mark_drifted(base, name, 'advertised schema changed after approval', getattr(actions, 'skills', None))
                 raise ValueError('Generated MCP server disabled: its advertised schema changed after approval.')
             # P33-002: arguments must satisfy the advertised input schema before anything reaches the server.
             validate_schema_value(tool.get('inputSchema', {'type': 'object'}), arguments['arguments'])

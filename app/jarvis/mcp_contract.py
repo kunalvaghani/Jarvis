@@ -31,7 +31,54 @@ def _type_ok(name, value):
     return isinstance(value, TYPES[name]) and not (name in {'object', 'array', 'string'} and isinstance(value, bool))
 
 
-def validate_schema_value(schema, value, path='arguments', depth=0):
+MAX_ITEMS = 10000      # an array or object larger than this is rejected whole, never partially checked
+MAX_NODES = 100000     # total values visited per validation; exceeding it rejects the whole value
+
+
+def json_equal(left, right):
+    """JSON equality: booleans are not numbers (false != 0, true != 1); 1 == 1.0; containers compare deeply."""
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is bool and type(right) is bool and left == right
+    if type(left) in (int, float) and type(right) in (int, float):
+        return left == right
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(json_equal(a, b) for a, b in zip(left, right))
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(json_equal(left[k], right[k]) for k in left)
+    return type(left) is type(right) and left == right
+
+
+def _within_size(value):
+    """Count every node of the whole value (schema-independent), so unconstrained parts cannot exceed the budget."""
+    stack, count = [value], 0
+    while stack:
+        item = stack.pop()
+        count += 1
+        if count > MAX_NODES:
+            return False
+        if isinstance(item, dict):
+            if len(item) > MAX_ITEMS:
+                return False
+            stack.extend(item.values())
+        elif isinstance(item, list):
+            if len(item) > MAX_ITEMS:
+                return False
+            stack.extend(item)
+    return True
+
+
+def validate_schema_value(schema, value, path='arguments'):
+    """Validate the entire value (every item) within fixed budgets; anything over budget is rejected, not sliced."""
+    if not _within_size(value):
+        raise ContractError(path + ' exceeds the validation budget; rejected as a whole.')
+    _validate(schema, value, path, 0, [0])
+    return True
+
+
+def _validate(schema, value, path, depth, visited):
+    visited[0] += 1
+    if visited[0] > MAX_NODES:
+        raise ContractError('Value exceeds the validation budget; rejected as a whole.')
     if depth > MAX_DEPTH:
         raise ContractError('Schema nesting exceeds the supported depth.')
     if not isinstance(schema, dict):
@@ -46,9 +93,10 @@ def validate_schema_value(schema, value, path='arguments', depth=0):
             raise ContractError('Unsupported schema type at ' + path + '.')
         if not any(_type_ok(k, value) for k in kinds):
             raise ContractError(path + ' must be ' + '/'.join(kinds) + '.')
-    if 'enum' in schema and value not in schema['enum']:
-        raise ContractError(path + ' is not one of the allowed values.')
-    if 'const' in schema and value != schema['const']:
+    if 'enum' in schema:
+        if not isinstance(schema['enum'], list) or not any(json_equal(value, option) for option in schema['enum']):
+            raise ContractError(path + ' is not one of the allowed values.')
+    if 'const' in schema and not json_equal(value, schema['const']):
         raise ContractError(path + ' does not match the required constant.')
     if type(value) in (int, float):
         for key, ok in (('minimum', lambda b: value >= b), ('maximum', lambda b: value <= b),
@@ -59,12 +107,16 @@ def validate_schema_value(schema, value, path='arguments', depth=0):
         if len(value) < schema.get('minLength', 0) or ('maxLength' in schema and len(value) > schema['maxLength']):
             raise ContractError(path + ' has an invalid length.')
     if isinstance(value, list):
+        if len(value) > MAX_ITEMS:
+            raise ContractError(path + ' has more items than can be validated; rejected as a whole.')
         if len(value) < schema.get('minItems', 0) or ('maxItems' in schema and len(value) > schema['maxItems']):
             raise ContractError(path + ' has an invalid number of items.')
         if 'items' in schema:
-            for index, item in enumerate(value[:1000]):
-                validate_schema_value(schema['items'], item, f'{path}[{index}]', depth + 1)
+            for index, item in enumerate(value):  # every item, never a prefix
+                _validate(schema['items'], item, path + '[' + str(index) + ']', depth + 1, visited)
     if isinstance(value, dict):
+        if len(value) > MAX_ITEMS:
+            raise ContractError(path + ' has more fields than can be validated; rejected as a whole.')
         properties = schema.get('properties', {})
         if not isinstance(properties, dict):
             raise ContractError('Unsupported properties at ' + path + '.')
@@ -74,18 +126,43 @@ def validate_schema_value(schema, value, path='arguments', depth=0):
         extra = schema.get('additionalProperties', True)
         for key, item in value.items():
             if key in properties:
-                validate_schema_value(properties[key], item, path + '.' + str(key), depth + 1)
+                _validate(properties[key], item, path + '.' + str(key), depth + 1, visited)
             elif extra is False:
                 raise ContractError(path + ' has an unexpected field: ' + str(key)[:60])
             elif isinstance(extra, dict):
-                validate_schema_value(extra, item, path + '.' + str(key), depth + 1)
+                _validate(extra, item, path + '.' + str(key), depth + 1, visited)
             elif extra is not True:
                 raise ContractError('Unsupported additionalProperties at ' + path + '.')
-    return True
 
 
-BLOCK_FIELDS = {'text': {'text': str}, 'image': {'data': str, 'mimeType': str}, 'audio': {'data': str, 'mimeType': str},
-                'resource': {'resource': dict}, 'resource_link': {'uri': str, 'name': str}}
+_OPTIONAL = {'annotations': dict, '_meta': dict}
+BLOCK_FIELDS = {  # required fields per content block type (MCP 2025-11-25 content contract)
+    'text': {'text': str}, 'image': {'data': str, 'mimeType': str}, 'audio': {'data': str, 'mimeType': str},
+    'resource': {'resource': dict}, 'resource_link': {'uri': str, 'name': str}}
+BLOCK_OPTIONAL = {'resource_link': {'title': str, 'description': str, 'mimeType': str, 'size': int}}
+RESOURCE_OPTIONAL = {'mimeType': str, 'title': str, 'name': str, '_meta': dict, 'annotations': dict}
+
+
+def _check_fields(container, required, optional, what):
+    for field, kind in required.items():
+        if not isinstance(container.get(field), kind) or isinstance(container.get(field), bool):
+            raise ContractError('MCP ' + what + ' is missing a valid ' + field + '.')
+    for field, kind in optional.items():
+        if field in container and (not isinstance(container[field], kind) or isinstance(container[field], bool)):
+            raise ContractError('MCP ' + what + ' has an invalid ' + field + '.')
+    unexpected = set(container) - set(required) - set(optional) - {'type'}
+    if unexpected:
+        raise ContractError('MCP ' + what + ' has unsupported field(s): ' + ', '.join(sorted(unexpected))[:120])
+
+
+def _check_embedded_resource(resource):
+    """Embedded resource: a uri plus exactly one of text or (base64) blob, with typed optional fields."""
+    bodies = [key for key in ('text', 'blob') if key in resource]
+    if len(bodies) != 1:
+        raise ContractError('MCP embedded resource needs exactly one of text or blob.')
+    _check_fields(resource, {'uri': str, bodies[0]: str}, RESOURCE_OPTIONAL, 'embedded resource')
+    if not resource['uri'].strip():
+        raise ContractError('MCP embedded resource has an empty uri.')
 
 
 def validate_result(result, output_schema=None):
@@ -100,9 +177,10 @@ def validate_result(result, output_schema=None):
     for block in content:
         if not isinstance(block, dict) or block.get('type') not in BLOCK_FIELDS:
             raise ContractError('MCP result has an unsupported content block.')
-        for field, kind in BLOCK_FIELDS[block['type']].items():
-            if not isinstance(block.get(field), kind):
-                raise ContractError('MCP ' + block['type'] + ' block is missing a valid ' + field + '.')
+        kind = block['type']
+        _check_fields(block, BLOCK_FIELDS[kind], {**_OPTIONAL, **BLOCK_OPTIONAL.get(kind, {})}, kind + ' block')
+        if kind == 'resource':
+            _check_embedded_resource(block['resource'])
     if 'structuredContent' in result and not isinstance(result['structuredContent'], dict):
         raise ContractError('MCP structuredContent must be an object.')
     if output_schema is not None and result.get('isError') is not True:
