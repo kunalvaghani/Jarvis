@@ -1,0 +1,85 @@
+{
+ "model": "qwen3.5:0.8b",
+ "cases": [
+  {
+   "question": "I need to merge two PDF files. Which tool is best?",
+   "choices": {
+    "A": "browse",
+    "B": "pdf_document",
+    "C": "fill_text",
+    "D": "scroll"
+   },
+   "answer": "B"
+  },
+  {
+   "question": "Pause the music. Which tool?",
+   "choices": {
+    "A": "media_control",
+    "B": "delete_file",
+    "C": "git_log",
+    "D": "open_menu"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Write tests for my parser. Which tool?",
+   "choices": {
+    "A": "write_tests",
+    "B": "calendar_list",
+    "C": "scroll",
+    "D": "close_app"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Export the Blender scene as GLB. Which tool?",
+   "choices": {
+    "A": "scroll",
+    "B": "type_text",
+    "C": "blender_task",
+    "D": "read_email"
+   },
+   "answer": "C"
+  },
+  {
+   "question": "Read notes.txt. Which tool?",
+   "choices": {
+    "A": "slack_send",
+    "B": "scroll",
+    "C": "media_control",
+    "D": "read_file"
+   },
+   "answer": "D"
+  },
+  {
+   "question": "List my calendar events today. Which tool?",
+   "choices": {
+    "A": "git_status",
+    "B": "calendar_list",
+    "C": "scroll",
+    "D": "fill_text"
+   },
+   "answer": "B"
+  },
+  {
+   "question": "Send a Slack message. Which tool?",
+   "choices": {
+    "A": "slack_send",
+    "B": "office_docx",
+    "C": "scroll",
+    "D": "git_log"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Run ipconfig. Which tool?",
+   "choices": {
+    "A": "think",
+    "B": "scroll",
+    "C": "run_command",
+    "D": "calendar_create"
+   },
+   "answer": "C"
+  }
+ ]
+}

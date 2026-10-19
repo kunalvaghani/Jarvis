@@ -1,0 +1,58 @@
+{
+ "version": 1,
+ "note": "Evaluator-owned policy. Candidates cannot read or write this directory; the gate refuses to run unless every file here matches the committed HEAD of the canonical repository.",
+ "domains": {
+  "voice_routing": {"tests": ["tests/test_intent_direct_audit.py", "tests/test_cognition_and_routing.py", "tests/test_task_routing.py"], "benchmarks": ["salience_retention", "prompt_routing"]},
+  "privacy_cloud": {"tests": ["tests/test_model_routing_audit.py", "tests/test_phase05_escalation_demonstration.py"], "select": "privacy or adversarial or cloud or architect or paid or quota or malicious", "security": true, "benchmarks": []},
+  "dag_planning": {"tests": ["tests/test_dag_planning_audit.py", "tests/test_task_graph.py"], "benchmarks": ["dag_makespan"]},
+  "coding_files": {"tests": ["tests/test_direct_files.py", "tests/test_native_coding.py"], "benchmarks": [],
+                   "deselect": [{"node": "tests/test_native_coding.py::NativeCoding::test_native_localgithub_assembles_single_worker_after_real_checks", "reason": "needs the sibling LocalGithub checkout next to the canonical repository; covered by the production full regression"}]},
+  "desktop_browser": {"tests": ["tests/test_execution_router.py", "tests/test_ui_controls.py"], "benchmarks": []},
+  "skill_registry": {"tests": ["tests/test_tool_registry_audit.py", "tests/test_skill_selection_audit.py", "tests/test_capabilities.py"], "benchmarks": ["tool_selection"],
+                     "deselect": [{"node": "tests/test_skill_selection_audit.py::test_catalog[JRV-11-007]", "reason": "reads the git-ignored external Hermes agent installation (integrations/hermes-agent); covered by the production full regression"}]},
+  "memory": {"tests": ["tests/test_memory_audit.py", "tests/test_phase04_learning_memory.py"], "select": "reasoning or lesson", "benchmarks": ["lesson_retrieval"]},
+  "recovery": {"tests": ["tests/test_task_recovery.py", "tests/test_crash_resume.py", "tests/test_recovery.py"], "benchmarks": ["retry_recovery"],
+               "deselect": [{"node": "tests/test_crash_resume.py::CrashResumeTests::test_actual_venv_process_is_tracked_and_terminated", "reason": "launches the production .venv interpreter by a path relative to the tree; covered by the production full regression"}]},
+  "scheduling": {"tests": ["tests/test_gpu_scheduler.py", "tests/test_gpu_scheduler_audit.py"], "benchmarks": []},
+  "integrations": {"tests": ["tests/test_architecture_audit.py", "tests/test_toolkits.py", "tests/test_cognition.py"], "benchmarks": [],
+                   "select": "not test_native_localgithub_assembles_single_worker_after_real_checks",
+                   "deselect_reason": "the architecture audit re-runs the LocalGithub case above; it needs the sibling checkout"}
+ },
+ "surfaces": {
+  "dag_scheduling": {"file": "jarvis/dag_execution.py", "symbol": "SCHEDULING", "benchmark": "dag_makespan", "objective": "min",
+                     "bounds": {"critical_path_weight": ["float", 0.0, 10.0], "read_only_bias": ["float", -5.0, 5.0]}},
+  "tool_ranking": {"file": "jarvis/capabilities.py", "symbol": "RANKING", "benchmark": "tool_selection", "objective": "max",
+                   "bounds": {"route_boost": ["float", 2.0, 16.0], "route_step": ["float", 0.0, 2.0], "route_step_cap": ["int", 1, 10],
+                              "skill_tool_boost": ["float", 0.0, 12.0], "exact_name_bonus": ["float", 5.0, 40.0],
+                              "preferred_skill_bonus": ["int", 0, 16], "min_skill_overlap": ["int", 1, 4]}},
+  "lesson_retrieval": {"file": "jarvis/reasoning_bank.py", "symbol": "RETRIEVAL", "benchmark": "lesson_retrieval", "objective": "max",
+                       "bounds": {"fit": ["float", 0.0, 1.0], "mismatch": ["float", 0.0, 1.0], "confidence": ["float", 0.0, 1.0],
+                                  "age_cap": ["float", 0.0, 0.5], "age_days": ["float", 30.0, 3650.0], "min_score": ["float", 0.0, 0.6]}},
+  "percept_salience": {"file": "jarvis/cognition.py", "symbol": "SALIENCE", "benchmark": "salience_retention", "objective": "max",
+                       "bounds": {"decay_seconds": ["float", 10.0, 900.0], "vision": ["float", 0.3, 0.95], "sensor_cap": ["float", 0.1, 0.9]}},
+  "read_retry_backoff": {"file": "jarvis/task_recovery.py", "symbol": "BACKOFF", "benchmark": "retry_recovery", "objective": "max",
+                         "bounds": {"base_seconds": ["float", 0.01, 1.0], "max_seconds": ["float", 0.1, 5.0]}},
+  "prompt_router": {"file": "jarvis/prompt_router.py", "symbol": "ROUTER", "benchmark": "prompt_routing", "objective": "max",
+                    "bounds": {"keyword_weight": ["float", 0.1, 5.0], "phrase_weight": ["float", 0.1, 5.0], "tool_name_weight": ["float", 0.0, 5.0], "min_score": ["float", 0.0, 5.0]}},
+  "prompt_slots": {"file": "jarvis/prompt_router.py", "symbol": "SLOT_PROMPTS", "benchmark": "prompt_slots", "objective": "max",
+                   "bounds": {"planning": ["str", 600], "coding": ["str", 600], "ui_automation": ["str", 600], "knowledge": ["str", 600], "tool_selection": ["str", 600], "error_recovery": ["str", 600]}}
+ },
+ "benchmarks": {
+  "dag_makespan": {"objective": "min", "repeats": 5, "timeout": 300},
+  "tool_selection": {"objective": "max", "repeats": 1, "timeout": 300},
+  "lesson_retrieval": {"objective": "max", "repeats": 1, "timeout": 300},
+  "salience_retention": {"objective": "max", "repeats": 1, "timeout": 300},
+  "retry_recovery": {"objective": "max", "repeats": 1, "timeout": 120},
+  "prompt_routing": {"objective": "max", "repeats": 1, "timeout": 120},
+  "prompt_slots": {"objective": "max", "repeats": 1, "timeout": 1800, "requires": "local Ollama model"}
+ },
+ "thresholds": {
+  "min_relative_improvement": 0.02,
+  "ci_lower_must_exceed": 0.0,
+  "max_relative_regression": 0.02,
+  "deterministic_repeat_check": 2,
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 1729
+ },
+ "limits": {"test_timeout": 600, "benchmark_rss_mb": 2048, "test_rss_mb": 4096}
+}

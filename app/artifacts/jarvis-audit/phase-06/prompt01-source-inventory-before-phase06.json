@@ -1,0 +1,6033 @@
+{
+  "observed_at": "2026-10-17T00:40:34.887396+05:30",
+  "map_sha256": "b5a275fabf0fc10aa325bcceb9f9f8ab71ca7cdb298abd366f9d102c7a619a52",
+  "modules": {
+    "__init__": {
+      "source": "jarvis/__init__.py",
+      "sha256": "13d7892d81b8c39f453cb7ea5710dfde007ca7b9c7147adefc6955292fbdc712",
+      "symbols": {},
+      "imports": []
+    },
+    "ability_runner": {
+      "source": "jarvis/ability_runner.py",
+      "sha256": "f0a38549f355358ad7e646f1a1fd2a1fd3dd0aa2f3ed9edbd61d21a3cf33479c",
+      "symbols": {
+        "Refused": 33,
+        "real": 37,
+        "inside": 49,
+        "guard": 53,
+        "main": 83
+      },
+      "imports": []
+    },
+    "actions": {
+      "source": "jarvis/actions.py",
+      "sha256": "10f0e5b6030a88d517793fbe706e1fbb2302faad043f1590aecee7de63891d4d",
+      "symbols": {
+        "Desktop": 25,
+        "Desktop.__init__": 27,
+        "Desktop.capture": 44,
+        "Desktop.type": 65,
+        "media_session_open": 113,
+        "Actions": 121,
+        "Actions.__init__": 122,
+        "Actions.start": 291,
+        "Actions.cancel": 314,
+        "Actions.submit": 336,
+        "Actions._with_write_target": 548,
+        "Actions._route_unparsed": 563,
+        "Actions._handle_opinion_feedback": 573,
+        "Actions._repropose": 617,
+        "Actions._should_deliberate": 636,
+        "Actions._form_task_opinion": 642,
+        "Actions._suggest_recovery": 674,
+        "Actions._cancel_task": 692,
+        "Actions._queue_control": 724,
+        "Actions._resolve_reply": 758,
+        "Actions.close": 833,
+        "Actions._ui": 890,
+        "Actions.ui_healthy": 898,
+        "Actions.repair_ui": 901,
+        "Actions._browser": 904,
+        "Actions.browser_healthy": 910,
+        "Actions.repair_browser": 913,
+        "Actions._suggest": 916,
+        "Actions._path": 937,
+        "Actions._answer_document": 946,
+        "Actions._approve": 957,
+        "Actions.start_background_memory": 968,
+        "Actions.start_whatsapp_watch": 984,
+        "Actions._task_folder": 991,
+        "Actions._resolve_project": 1019,
+        "Actions.execute": 1026,
+        "Actions._execute": 1069,
+        "Actions._offer_open": 1741,
+        "Actions._open_project": 1747,
+        "Actions._run": 1770
+      },
+      "imports": [
+        "",
+        "agent_events",
+        "anticipation",
+        "brain",
+        "browser",
+        "browser_automation",
+        "capability_guide",
+        "catalog",
+        "clarification",
+        "coder",
+        "coding_processes",
+        "cognition",
+        "commands",
+        "context_hub",
+        "conversation_intent",
+        "deliberation",
+        "desktop_tasks",
+        "direct_execution",
+        "documents",
+        "experience_memory",
+        "fast_workflows",
+        "file_drop",
+        "folder_lookup",
+        "gmail_workflows",
+        "gods_eye",
+        "gods_eye_view",
+        "hybrid_inference",
+        "intent_handlers",
+        "island_choices",
+        "island_media",
+        "knowledge",
+        "knowledge_acquisition",
+        "live_app_context",
+        "media_player",
+        "media_ui",
+        "memory_curator",
+        "memory_index",
+        "messengers",
+        "names",
+        "obsidian_memory",
+        "paths",
+        "progress",
+        "projects",
+        "quick_answers",
+        "realtime",
+        "repo_abilities",
+        "repo_learning",
+        "screen_awareness",
+        "self_evolution",
+        "skill_memory",
+        "spotify",
+        "targeting",
+        "task_queue",
+        "task_state",
+        "tools",
+        "ui_controls",
+        "ui_memory",
+        "utility_host",
+        "weather_watch",
+        "whatsapp",
+        "window_focus",
+        "windows_commands",
+        "writing"
+      ]
+    },
+    "agent_cli": {
+      "source": "jarvis/agent_cli.py",
+      "sha256": "bef785b79ea434ea713652ecc4b18c4e447d57311db3de9757098f497ab9b5ba",
+      "symbols": {
+        "main": 11
+      },
+      "imports": [
+        "agent_session",
+        "harness"
+      ]
+    },
+    "agent_context": {
+      "source": "jarvis/agent_context.py",
+      "sha256": "0100c958fc9cb3ddafe9a9be2c695e480ffaff70105359a2d405da1d237fe9cf",
+      "symbols": {
+        "scoped": 12,
+        "bounded_text": 25,
+        "instruction_context": 33,
+        "skill_catalog": 64,
+        "selected_skills": 106,
+        "repository_map": 125,
+        "coding_context": 158,
+        "learned_abilities": 172,
+        "learned_references": 181,
+        "compact_context": 190
+      },
+      "imports": [
+        "coder",
+        "coding_languages",
+        "development_knowledge",
+        "development_learning",
+        "repo_abilities",
+        "repo_learning"
+      ]
+    },
+    "agent_events": {
+      "source": "jarvis/agent_events.py",
+      "sha256": "62ae3ae1e3c264dc444300ff12403b1baa0f279d84c5ed903b3961ec4c1340c6",
+      "symbols": {
+        "lifecycle_tools": 24,
+        "lifecycle_metadata": 29,
+        "runtime_base": 46,
+        "check_policy": 51,
+        "event": 76
+      },
+      "imports": [
+        "agent_context",
+        "execution_contracts",
+        "tools"
+      ]
+    },
+    "agent_session": {
+      "source": "jarvis/agent_session.py",
+      "sha256": "9b1c22cf002473bc925d9b2e76c91056d50243d8cc15b3c1317b407f18918c06",
+      "symbols": {
+        "missing_observations": 21,
+        "ReadActions": 46,
+        "ReadActions.__init__": 47,
+        "ReadActions.report": 53,
+        "ReadActions._task_folder": 56,
+        "AgentSession": 64,
+        "AgentSession.__init__": 65,
+        "AgentSession._event": 85,
+        "AgentSession.catalog": 98,
+        "AgentSession.fork": 101,
+        "AgentSession.research_parallel": 110,
+        "AgentSession.run": 141,
+        "OllamaProvider": 242,
+        "OllamaProvider.__init__": 244,
+        "OllamaProvider.__call__": 251
+      },
+      "imports": [
+        "agent_context",
+        "agent_tools",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "native_tools",
+        "research_evidence",
+        "tools"
+      ]
+    },
+    "agent_tools": {
+      "source": "jarvis/agent_tools.py",
+      "sha256": "70393eb481e7356d033c0090570f637d5fe24ee99496d4bf30f6df81b09ad0bf",
+      "symbols": {
+        "git_read": 39,
+        "execute": 83
+      },
+      "imports": [
+        "agent_context",
+        "capabilities",
+        "deerflow",
+        "development_api",
+        "development_knowledge",
+        "execution_adapters",
+        "mcp_bridge",
+        "names",
+        "toolkits",
+        "tools",
+        "windows_commands"
+      ]
+    },
+    "anticipation": {
+      "source": "jarvis/anticipation.py",
+      "sha256": "c4fbb4f49c887f35f9254177d3f2bdabd99ae8113cf910511d8c3e907dbcdc25",
+      "symbols": {
+        "command": 48,
+        "settings": 52,
+        "safe_topic": 67,
+        "request_signal": 74,
+        "window_signal": 89,
+        "Anticipation": 112,
+        "Anticipation.__init__": 114,
+        "Anticipation._load": 145,
+        "Anticipation._path": 169,
+        "Anticipation._save": 176,
+        "Anticipation.start": 194,
+        "Anticipation._run": 203,
+        "Anticipation.healthy": 214,
+        "Anticipation.repair": 219,
+        "Anticipation.cancel": 228,
+        "Anticipation.microphone_started": 236,
+        "Anticipation.close": 241,
+        "Anticipation.observe_request": 247,
+        "Anticipation.observe_window": 255,
+        "Anticipation._invalidate": 271,
+        "Anticipation._expire": 282,
+        "Anticipation._feedback": 294,
+        "Anticipation._suppressed": 303,
+        "Anticipation._notify": 307,
+        "Anticipation.snapshot": 310,
+        "Anticipation.handle": 319,
+        "Anticipation.tick": 380,
+        "Anticipation._worker": 474
+      },
+      "imports": [
+        "obsidian_memory"
+      ]
+    },
+    "anticipation_worker": {
+      "source": "jarvis/anticipation_worker.py",
+      "sha256": "71d681b50ba64cf7de1d65cad3cbb3c6ad6cecc8053fca3a838eacafba3f7fc3",
+      "symbols": {
+        "public_url": 9,
+        "search": 28,
+        "synthesize": 33,
+        "prepare": 48,
+        "main": 107
+      },
+      "imports": [
+        "anticipation",
+        "gpu_scheduler",
+        "knowledge_worker"
+      ]
+    },
+    "app_adapters": {
+      "source": "jarvis/app_adapters.py",
+      "sha256": "7358d181ba771327b41d2bb7724c22bb7e9599d2236c40570af5daf192eb395b",
+      "symbols": {
+        "scoped_path": 33,
+        "settings": 70,
+        "_root": 76,
+        "_arguments": 83,
+        "_sha256": 93,
+        "_checked_file": 101,
+        "package_features": 111,
+        "part_hash": 141,
+        "docx_text": 149,
+        "interpreter": 157,
+        "worker": 167,
+        "_temporary": 183,
+        "backup": 187,
+        "_state": 196,
+        "commit": 202,
+        "_approve": 223,
+        "_result": 227,
+        "_cells": 232,
+        "_sheet": 246,
+        "verify_cells": 255,
+        "office_xlsx": 282,
+        "_edits": 324,
+        "verify_document": 344,
+        "office_docx": 358,
+        "_pages": 396,
+        "pdf_document": 404,
+        "_stop_owned": 457,
+        "office_automation": 476,
+        "blender_executable": 551,
+        "resource_budget": 559,
+        "_blender": 570,
+        "blender_task": 589,
+        "unreal_task": 668,
+        "vscode_paths": 687,
+        "vscode": 698,
+        "vscode_cli": 725,
+        "execute": 752
+      },
+      "imports": [
+        "harness_process",
+        "repo_acquisition",
+        "task_state",
+        "toolkits"
+      ]
+    },
+    "app_knowledge": {
+      "source": "jarvis/app_knowledge.py",
+      "sha256": "d20f195f90d19ab1f46a36dc0ab15571448aeed61f68d484045d08d7628fa622",
+      "symbols": {
+        "_exe_name": 213,
+        "profile_for": 217,
+        "category_of": 231,
+        "_executable": 244,
+        "inventory": 250,
+        "AppKnowledge": 263,
+        "AppKnowledge.__init__": 265,
+        "AppKnowledge.inventory": 277,
+        "AppKnowledge.capabilities": 282,
+        "AppKnowledge.invalidate_capabilities": 307,
+        "AppKnowledge.remember_capability": 320,
+        "AppKnowledge.acquired_context": 350,
+        "AppKnowledge.refresh_capability_sources": 364,
+        "AppKnowledge.app_key": 377,
+        "AppKnowledge.learn": 381,
+        "AppKnowledge._save": 399,
+        "AppKnowledge.buttons": 409,
+        "AppKnowledge.describe": 414,
+        "AppKnowledge.summary": 428,
+        "AppKnowledge.explain_current": 441
+      },
+      "imports": [
+        "skill_memory"
+      ]
+    },
+    "application_discovery": {
+      "source": "jarvis/application_discovery.py",
+      "sha256": "b4baf7b911dbc320d81a9def626798be22f59062e94ac237f0c4d84e2c61fc61",
+      "symbols": {
+        "matches": 6,
+        "foreground": 13,
+        "inspect": 20
+      },
+      "imports": [
+        "knowledge_acquisition"
+      ]
+    },
+    "audio": {
+      "source": "jarvis/audio.py",
+      "sha256": "d185137f417a1347b58387492dec9970610425b475d865f6b25454592e750497",
+      "symbols": {
+        "workers_alive": 18,
+        "DecodeJob": 30,
+        "DecodeQueue": 42,
+        "DecodeQueue.__init__": 43,
+        "DecodeQueue.put": 50,
+        "DecodeQueue.get": 67,
+        "command_text": 74,
+        "TranscriptAssembler": 83,
+        "TranscriptAssembler.__init__": 84,
+        "TranscriptAssembler.merge": 89,
+        "Listener": 107,
+        "Listener.__init__": 108,
+        "Listener.start": 136,
+        "Listener.stop": 139,
+        "Listener._fail": 148,
+        "Listener.health": 155,
+        "Listener._decode": 161,
+        "Listener.run": 233
+      },
+      "imports": [
+        "pcm_ring",
+        "whisper_backend"
+      ]
+    },
+    "brain": {
+      "source": "jarvis/brain.py",
+      "sha256": "af1b4a6c9f251f898ed24ac4e5c006f07b0d86c7a68ec91832047c73297d3691",
+      "symbols": {
+        "RepeatedAction": 35,
+        "navigation_step": 39,
+        "replannable": 49,
+        "validate_plan": 58,
+        "normalize_plan": 98,
+        "ground_file_scope": 134,
+        "spotify_media_plan": 178,
+        "youtube_search_plan": 198,
+        "explicit_app_launch_plan": 217,
+        "explicit_file_plan": 231,
+        "explicit_command_plan": 270,
+        "BrainClient": 278,
+        "BrainClient.__init__": 283,
+        "BrainClient.close": 295,
+        "BrainClient.request": 313,
+        "BrainClient._request": 331,
+        "BrainClient._request_once": 410,
+        "Brain": 551,
+        "Brain.__init__": 552,
+        "Brain.planning_request": 567,
+        "Brain.propose_plan": 613,
+        "Brain.planning_context": 656,
+        "Brain.checkpoint": 668,
+        "Brain.save_plan": 675,
+        "Brain.blocked": 680,
+        "Brain.dispatch": 685,
+        "Brain.recover_task": 696,
+        "Brain.revise_plan": 739,
+        "Brain._revise_once": 755,
+        "Brain._initial_steps": 801,
+        "Brain.validate_remaining": 854,
+        "Brain.observe": 933,
+        "Brain.observe_after_action": 951,
+        "Brain.screen": 983,
+        "Brain.visual_screen": 988,
+        "Brain.visual_context": 1034,
+        "Brain.run": 1041,
+        "Brain._run_bound": 1054,
+        "Brain._run": 1082
+      },
+      "imports": [
+        "capabilities",
+        "catalog",
+        "clarification",
+        "coder",
+        "commands",
+        "desktop_actions",
+        "execution_strategy",
+        "experience_memory",
+        "gmail_workflows",
+        "grounding",
+        "harness",
+        "hermes",
+        "hierarchical",
+        "inference_limits",
+        "names",
+        "planner_settings",
+        "recovery",
+        "skill_memory",
+        "spotify",
+        "step_planning",
+        "targeting",
+        "task_graph",
+        "task_recovery",
+        "task_state",
+        "toolkits",
+        "tools",
+        "ui_controls",
+        "visual_fallback"
+      ]
+    },
+    "brain_worker": {
+      "source": "jarvis/brain_worker.py",
+      "sha256": "cc24a318bf2ab1f5b08f246ac234455514eec68f885236188d5fdec4297fe81c",
+      "symbols": {
+        "Models": 141,
+        "Models.__init__": 142,
+        "Models.generate": 146,
+        "Models.predict": 238
+      },
+      "imports": [
+        "agent_context",
+        "capabilities",
+        "code_stream",
+        "development_browser",
+        "hierarchical",
+        "inference_limits",
+        "knowledge_worker",
+        "model_selection",
+        "native_tools",
+        "pc_context",
+        "step_planning",
+        "tools",
+        "trained_coder",
+        "trained_pc"
+      ]
+    },
+    "browser": {
+      "source": "jarvis/browser.py",
+      "sha256": "840373a60a7a359bcf331f0011ff6b3eab25faf86462ac25a0c318ab188431bc",
+      "symbols": {
+        "url_for": 12,
+        "browser_args": 25,
+        "music_search_url": 38
+      },
+      "imports": [
+        "names"
+      ]
+    },
+    "browser_automation": {
+      "source": "jarvis/browser_automation.py",
+      "sha256": "3a55ffdc82083a3c76bb018552f633226ba815592c9cd2fee69cc625cdfc35a3",
+      "symbols": {
+        "BrowserAutomation": 6,
+        "BrowserAutomation.__init__": 7,
+        "BrowserAutomation.request": 14,
+        "BrowserAutomation.owns_handle": 34,
+        "BrowserAutomation.healthy": 46,
+        "BrowserAutomation.repair": 49,
+        "BrowserAutomation.close": 52
+      },
+      "imports": [
+        "browser",
+        "browser_worker",
+        "ui_transport"
+      ]
+    },
+    "browser_cursor": {
+      "source": "jarvis/browser_cursor.py",
+      "sha256": "a4553ced83a8a62f1b4da918bf0a27b7a808fc9894d56638674c5fc565bea9bc",
+      "symbols": {
+        "click": 28
+      },
+      "imports": []
+    },
+    "browser_worker": {
+      "source": "jarvis/browser_worker.py",
+      "sha256": "f5c5275c921a39901d90e81e617417425d5f00912cf3cb5a891e9c71381989e3",
+      "symbols": {
+        "parsed": 14,
+        "player_message": 18,
+        "reveal_controls": 36,
+        "validate_request": 72,
+        "validate_summary": 92,
+        "Session": 106,
+        "Session.__init__": 107,
+        "Session.open": 111,
+        "Session.close": 142,
+        "Session.inspect": 151,
+        "Session.search": 157,
+        "Session.select_video": 175,
+        "Session.play_video": 211,
+        "Session.gods_eye": 244,
+        "Session.control": 332,
+        "Session.perform": 434,
+        "main": 514
+      },
+      "imports": [
+        "browser",
+        "browser_cursor",
+        "ui_controls",
+        "windows_command_browser"
+      ]
+    },
+    "buddy_engine": {
+      "source": "jarvis/buddy_engine.py",
+      "sha256": "c07ff6f60c49565418192721202ebd1f742e441fb4c2601d5d6035289125737a",
+      "symbols": {
+        "categorize": 75,
+        "foreground": 83,
+        "idle_seconds": 103,
+        "Buddy": 117,
+        "Buddy.__init__": 118,
+        "Buddy.react": 142,
+        "Buddy.note": 147,
+        "Buddy.poke": 151,
+        "Buddy.pet": 169,
+        "Buddy.drag": 177,
+        "Buddy.hover": 182,
+        "Buddy.file_over": 188,
+        "Buddy.dropped": 192,
+        "Buddy.event": 198,
+        "Buddy.sense_world": 235,
+        "Buddy.update": 248,
+        "Buddy.choose": 279,
+        "Buddy.outfit": 327,
+        "look_at": 345
+      },
+      "imports": [
+        "island_buddy"
+      ]
+    },
+    "capabilities": {
+      "source": "jarvis/capabilities.py",
+      "sha256": "9a617b467b7d6d3e99fd811ddf13fe4ca313c093c638fc4dd0e288bad519c55a",
+      "symbols": {
+        "tokens": 72,
+        "relevant_tool": 104,
+        "intents": 111,
+        "gmail_readiness_question": 115,
+        "_description_tokens": 132,
+        "skill_ranking": 136,
+        "skill_score": 141,
+        "skill_tools": 153,
+        "rank_tools": 160,
+        "launch_target": 212,
+        "program_matches": 229,
+        "runtime_context": 243,
+        "sync_note": 282
+      },
+      "imports": [
+        "cloud_policy",
+        "execution_strategy",
+        "memory_index",
+        "skill_memory",
+        "toolkits"
+      ]
+    },
+    "capability_guide": {
+      "source": "jarvis/capability_guide.py",
+      "sha256": "b52c24067a642c2989707ae9637e0723f4f78a8a6f3c61ad1d58a388c650c8ea",
+      "symbols": {
+        "capabilities_text": 51,
+        "area_help": 59,
+        "health_path": 68,
+        "apis_text": 72,
+        "live_realtime": 103,
+        "check_apis": 113,
+        "parse_command": 191,
+        "answer": 199
+      },
+      "imports": [
+        "commands",
+        "gmail_api",
+        "media_player",
+        "realtime",
+        "realtime_catalog",
+        "realtime_sources"
+      ]
+    },
+    "catalog": {
+      "source": "jarvis/catalog.py",
+      "sha256": "69c5faeb9526c4b694b3cfb1587e4bd54997f8e4b0d36b0358c1b70059b8af68",
+      "symbols": {
+        "AmbiguousName": 10,
+        "AmbiguousName.__init__": 11,
+        "key": 16,
+        "Catalog": 21,
+        "Catalog.__init__": 22,
+        "Catalog.resolve": 28,
+        "Catalog._choose": 89,
+        "Catalog._exists": 99
+      },
+      "imports": [
+        "folder_lookup",
+        "names"
+      ]
+    },
+    "clarification": {
+      "source": "jarvis/clarification.py",
+      "sha256": "a0ebd2f1021029933eebde8214153b426a20cbc9993f766dba625fc33d93c859",
+      "symbols": {
+        "TaskClarification": 5,
+        "TaskClarification.__init__": 6,
+        "choice_index": 11,
+        "short_reply": 25
+      },
+      "imports": []
+    },
+    "claude_code": {
+      "source": "jarvis/claude_code.py",
+      "sha256": "011ca2c85f9a028fa40ef35d0d864ef61709f4b3203080736a4feeb46e08b1d1",
+      "symbols": {
+        "display_text": 22,
+        "executable": 26,
+        "environment": 35,
+        "event_progress": 47,
+        "run": 86
+      },
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "code_stream",
+        "coder",
+        "gui_contract",
+        "harness_process",
+        "knowledge_worker",
+        "progress",
+        "task_state"
+      ]
+    },
+    "claude_code_guard": {
+      "source": "jarvis/claude_code_guard.py",
+      "sha256": "2cfd02dc32cde1a1d3c30fd1ee2dddaec9c8267668cbce8bb562679a3e313415",
+      "symbols": {
+        "gui_script_target": 6,
+        "decide": 11
+      },
+      "imports": []
+    },
+    "claude_code_permissions": {
+      "source": "jarvis/claude_code_permissions.py",
+      "sha256": "c0c0e329b3827ba01765bf825f5afd56cf68a4818b4258e67b6b137d04410957",
+      "symbols": {
+        "approve": 8,
+        "main": 53
+      },
+      "imports": [
+        "claude_code_guard",
+        "code_context",
+        "gui_contract"
+      ]
+    },
+    "claude_code_proxy": {
+      "source": "jarvis/claude_code_proxy.py",
+      "sha256": "a19c4c29095728ff3817097dd4c2e129219c2edfd5bf2bcd265724b22d67f97d",
+      "symbols": {
+        "prepare": 17,
+        "serve": 34
+      },
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "cloud_cli": {
+      "source": "jarvis/cloud_cli.py",
+      "sha256": "a71b5096e2a032266c3eb7e6531b33ad739efa5a5391dfe800b61ce20784a7d3",
+      "symbols": {
+        "main": 9
+      },
+      "imports": [
+        "hybrid_inference"
+      ]
+    },
+    "cloud_policy": {
+      "source": "jarvis/cloud_policy.py",
+      "sha256": "10f056d2369085c9f2722ffbd66227e88874c2bd2807226bd692d66f3b58a9d1",
+      "symbols": {
+        "settings": 16,
+        "credential": 50,
+        "privacy_text": 75,
+        "classify": 79,
+        "screen_payload": 94
+      },
+      "imports": []
+    },
+    "cloud_quota": {
+      "source": "jarvis/cloud_quota.py",
+      "sha256": "4f5aa42edb8f16f12a3907ad754218185020f2c95b245ada98bd279708dc449f",
+      "symbols": {
+        "QuotaDenied": 13,
+        "duration": 17,
+        "QuotaGuardian": 25,
+        "QuotaGuardian.__init__": 26,
+        "QuotaGuardian.connect": 37,
+        "QuotaGuardian.state": 45,
+        "QuotaGuardian.put": 50,
+        "QuotaGuardian.confirm_clock": 53,
+        "QuotaGuardian._snapshot": 62,
+        "QuotaGuardian.snapshot": 91,
+        "QuotaGuardian.reserve": 105,
+        "QuotaGuardian.finish": 128,
+        "QuotaGuardian.block": 164
+      },
+      "imports": [
+        "cloud_policy"
+      ]
+    },
+    "code_context": {
+      "source": "jarvis/code_context.py",
+      "sha256": "9b4eee4d50ff2dd3ab9abb3ba0d6d7cd7aa4d585d45c07553f6a9064448007ce",
+      "symbols": {
+        "related_context": 17,
+        "bounded_references": 83,
+        "save_change_review": 98,
+        "apply_replacements": 121,
+        "check_python_interfaces": 141
+      },
+      "imports": []
+    },
+    "code_stream": {
+      "source": "jarvis/code_stream.py",
+      "sha256": "a4872a7e205857240eda1850429ba1381309225df11480788b80b7e201486aa2",
+      "symbols": {
+        "content_prefix": 9,
+        "record_path": 72,
+        "owned_draft": 78,
+        "CodeDraft": 93,
+        "CodeDraft.__init__": 94,
+        "CodeDraft.write": 114,
+        "CodeDraft.preview": 164,
+        "CodeDraft.complete": 173
+      },
+      "imports": [
+        "agent_context",
+        "progress",
+        "skill_memory"
+      ]
+    },
+    "coder": {
+      "source": "jarvis/coder.py",
+      "sha256": "d15afd9dab000253d8f735d56631e088ef35e7dfa68be0d69699ff0fa1a7a117",
+      "symbols": {
+        "python_file_request": 28,
+        "named_folder_request": 48,
+        "folder_matches_request": 85,
+        "coding_folder": 93,
+        "workspace_coding_request": 108,
+        "explicit_coding_intent": 125,
+        "simple_folder_request": 137,
+        "requested_new_folder": 142,
+        "single_python_target": 155,
+        "calculator_template": 166,
+        "test_calculator": 172,
+        "create_python_from_goal": 186,
+        "project_files": 272,
+        "relative_parts": 288,
+        "strip_project_prefix": 299,
+        "target_path": 308,
+        "draft_content": 318,
+        "check_content": 330,
+        "comment_markdown_preamble": 347,
+        "generate_checked": 361,
+        "Coder": 415,
+        "Coder.__init__": 416,
+        "Coder.run": 419,
+        "Coder._run": 450
+      },
+      "imports": [
+        "",
+        "agent_context",
+        "clarification",
+        "claude_code",
+        "code_context",
+        "code_stream",
+        "codex_code",
+        "codex_workload",
+        "coding_languages",
+        "coding_lessons",
+        "commands",
+        "desktop_tasks",
+        "development",
+        "development_projects",
+        "experience_memory",
+        "native_coding",
+        "progress",
+        "projects",
+        "task_graph",
+        "task_state"
+      ]
+    },
+    "codex_browser_check": {
+      "source": "jarvis/codex_browser_check.py",
+      "sha256": "53659bdbfb9e5e460b5d09cfa0249a3269d115a31bc50603226c54e7f57312d6",
+      "symbols": {
+        "run": 18
+      },
+      "imports": [
+        "codex_validation",
+        "harness_process"
+      ]
+    },
+    "codex_code": {
+      "source": "jarvis/codex_code.py",
+      "sha256": "9428c8604b28ba53479e9beb6560c05ff3b016f7f817343115032e1391af181b",
+      "symbols": {
+        "executable": 22,
+        "environment": 33,
+        "configuration": 40,
+        "event_progress": 143,
+        "changed_sources": 178,
+        "_turn": 204,
+        "run": 364
+      },
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "code_stream",
+        "coder",
+        "codex_validation",
+        "codex_workload",
+        "gui_contract",
+        "harness_process",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "task_state"
+      ]
+    },
+    "codex_files": {
+      "source": "jarvis/codex_files.py",
+      "sha256": "64f990d5e2f46e90f891d54b0b44defb40f6d06ef9a6c811625c9f005d444f8c",
+      "symbols": {
+        "check_component_markup": 14,
+        "digest": 29,
+        "execute": 33,
+        "tool_specs": 180,
+        "main": 206
+      },
+      "imports": [
+        "claude_code_guard",
+        "code_context",
+        "coder",
+        "codex_validation",
+        "gui_contract"
+      ]
+    },
+    "codex_proxy": {
+      "source": "jarvis/codex_proxy.py",
+      "sha256": "cfcfface2632afeee2a015e97c1798d6151680724fd44fd09aa2559020a5c0a0",
+      "symbols": {
+        "prepare": 14,
+        "worker_scope": 47,
+        "python_context": 152,
+        "tested_peer_styles": 179,
+        "validate": 201,
+        "restore": 216,
+        "serve": 229
+      },
+      "imports": [
+        "codex_validation",
+        "codex_workload",
+        "knowledge_worker"
+      ]
+    },
+    "codex_validation": {
+      "source": "jarvis/codex_validation.py",
+      "sha256": "82bfbd0db817607b33d86dc75d632ec3c02d6102b0614116e305441cfce5aa3c",
+      "symbols": {
+        "source_path": 23,
+        "fullstack": 32,
+        "desktop_gui_target": 36,
+        "contract": 46,
+        "declare": 118,
+        "placeholders": 140,
+        "References": 173,
+        "References.__init__": 174,
+        "References.handle_starttag": 175,
+        "inspect": 183,
+        "execute_check": 212,
+        "test_evidence": 233,
+        "retain_rejected_javascript": 248,
+        "validate_project": 278,
+        "repair_packet": 355,
+        "error_summary": 375
+      },
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "coder",
+        "codex_code",
+        "gui_contract",
+        "harness_process",
+        "progress"
+      ]
+    },
+    "codex_workload": {
+      "source": "jarvis/codex_workload.py",
+      "sha256": "fe5e940d5344376442394bb990bc8eb8cfcc00dad09209813b1ed8b1922d85c3",
+      "symbols": {
+        "localgithub": 25,
+        "planning_schema": 39,
+        "proposal_diagnostics": 58,
+        "static_assignment": 91,
+        "explicit_browser_steps": 130,
+        "single_python_source_goal": 148,
+        "graphical_python_goal": 158,
+        "complete_single_test_ownership": 162,
+        "collapse_unowned_split": 189,
+        "workload_contract": 225,
+        "propose": 283,
+        "fingerprint": 498,
+        "promote": 510,
+        "run": 550
+      },
+      "imports": [
+        "agent_context",
+        "claude_code_guard",
+        "coder",
+        "codex_code",
+        "codex_files",
+        "codex_validation",
+        "coding_activity",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "repo_abilities",
+        "task_state"
+      ]
+    },
+    "coding_activity": {
+      "source": "jarvis/coding_activity.py",
+      "sha256": "f7baade664239b0f833f40ec68d681dcbd8c1e30259175b005a09f3e32274bb1",
+      "symbols": {
+        "emit": 12,
+        "Activity": 26,
+        "Activity.__init__": 27,
+        "Activity.finish": 34,
+        "review": 39
+      },
+      "imports": []
+    },
+    "coding_console": {
+      "source": "jarvis/coding_console.py",
+      "sha256": "5c51ace7f880e5e34bb63c9f2c4fecf6d11363d72c2a440f33cd953c333fdc93",
+      "symbols": {
+        "CodingConsole": 8,
+        "CodingConsole.__init__": 9,
+        "CodingConsole.notify": 30,
+        "CodingConsole.expand": 47,
+        "CodingConsole.open": 59
+      },
+      "imports": []
+    },
+    "coding_curriculum": {
+      "source": "jarvis/coding_curriculum.py",
+      "sha256": "e07665dfa6446218b46be8052649bd7b0a27da13842c756a1ee50088fff34924",
+      "symbols": {
+        "fib": 20,
+        "roman": 25,
+        "intervals": 31,
+        "rle": 38,
+        "brackets": 41,
+        "factor": 49,
+        "edit": 57,
+        "lcs": 65,
+        "coins": 73,
+        "knapsack": 78,
+        "lis": 84,
+        "maxsum": 92,
+        "reachable": 97,
+        "distance": 105,
+        "dijkstra": 113,
+        "topo": 123,
+        "components": 135,
+        "flatten": 141,
+        "merge": 149,
+        "business": 155,
+        "cache": 161,
+        "gridcost": 169,
+        "rpn": 175,
+        "catalogue": 183
+      },
+      "imports": []
+    },
+    "coding_files": {
+      "source": "jarvis/coding_files.py",
+      "sha256": "9187039b6a1432de19796d3602fb7fd931e4b30f2d18515ca7839c6b3de4bb30",
+      "symbols": {
+        "UncertainCoding": 11,
+        "patch_files": 15,
+        "FileSession": 70,
+        "FileSession.__init__": 71,
+        "FileSession.uncertain": 80,
+        "FileSession.protect": 101,
+        "FileSession.check_tests": 105,
+        "FileSession.call": 113,
+        "FileSession.patch": 136,
+        "FileSession.changed": 153
+      },
+      "imports": [
+        "claude_code_guard",
+        "codex_files",
+        "coding_activity"
+      ]
+    },
+    "coding_languages": {
+      "source": "jarvis/coding_languages.py",
+      "sha256": "b4e1dd94ce8b25d8ee3abddc8e9af532e530e85f13dae1d253b15589d0ca656d",
+      "symbols": {
+        "context": 33,
+        "Scripts": 50,
+        "Scripts.__init__": 51,
+        "Scripts.handle_starttag": 57,
+        "Scripts.handle_data": 63,
+        "Scripts.handle_endtag": 66,
+        "check_source": 74,
+        "evidence_label": 113
+      },
+      "imports": []
+    },
+    "coding_lessons": {
+      "source": "jarvis/coding_lessons.py",
+      "sha256": "e92dfb29789f7d13278baeb3776574b54ce6232dfa29ff326c8eda7159a41dea",
+      "symbols": {
+        "record": 24,
+        "recall": 40,
+        "related_cases": 86,
+        "check_learned_imports": 119
+      },
+      "imports": [
+        "coding_curriculum"
+      ]
+    },
+    "coding_operations": {
+      "source": "jarvis/coding_operations.py",
+      "sha256": "308cb76777afc39e6c7fc090f19d957bfa6191bf6562d51fd0b51ce6e0996bd8",
+      "symbols": {
+        "execute": 10
+      },
+      "imports": [
+        "claude_code_guard",
+        "coder",
+        "coding_programs",
+        "command_reference"
+      ]
+    },
+    "coding_processes": {
+      "source": "jarvis/coding_processes.py",
+      "sha256": "af6eedade9ab899a5b6601339acc5807e66030bbf090961502d0e2f7c13bf2c8",
+      "symbols": {
+        "Processes": 16,
+        "Processes.__init__": 17,
+        "Processes.start": 21,
+        "Processes.poll": 43,
+        "Processes._finish": 71,
+        "Processes.close": 79
+      },
+      "imports": [
+        "coding_activity",
+        "coding_files",
+        "coding_programs",
+        "harness_process"
+      ]
+    },
+    "coding_programs": {
+      "source": "jarvis/coding_programs.py",
+      "sha256": "737e1c31c31082610122d8c7bf822b08a845e5b31a8bd65d1c7d90c2b4ba8138",
+      "symbols": {
+        "locate": 69,
+        "inventory": 77,
+        "checked_argv": 83
+      },
+      "imports": []
+    },
+    "coding_training_data": {
+      "source": "jarvis/coding_training_data.py",
+      "sha256": "99fead037281aa34e3242ab9516f5bf66e2d5ba9bfe3b66d8c62490bdeb0c626",
+      "symbols": {
+        "reference_source": 10
+      },
+      "imports": []
+    },
+    "cognition": {
+      "source": "jarvis/cognition.py",
+      "sha256": "c4fea8ec3d215aad3aae3715edc022058449a9bc3b41f94f2b2a5b9913e2f7f3",
+      "symbols": {
+        "recipient": 58,
+        "describe": 68,
+        "effect_of": 76,
+        "Percept": 96,
+        "Percept.__init__": 99,
+        "Percept.weight": 103,
+        "Percept.as_dict": 107,
+        "Cognition": 112,
+        "Cognition.__init__": 113,
+        "Cognition._load_stats": 163,
+        "Cognition._save_stats": 172,
+        "Cognition._write_stats": 184,
+        "Cognition._write_stats_serial": 188,
+        "Cognition._memory_failure": 202,
+        "Cognition._mark": 208,
+        "Cognition.perceive": 217,
+        "Cognition._offer": 237,
+        "Cognition.perceive_command": 247,
+        "Cognition.perceive_window": 258,
+        "Cognition.update_workspace": 275,
+        "Cognition.working_memory": 302,
+        "Cognition.recall": 309,
+        "Cognition.relevant_lessons": 349,
+        "Cognition.predict": 354,
+        "Cognition._stat": 386,
+        "Cognition.procedure_stats": 398,
+        "Cognition._referent": 405,
+        "Cognition.explain": 412,
+        "Cognition.deliberate": 426,
+        "Cognition.evaluate": 439,
+        "Cognition._evaluate_locked": 450,
+        "Cognition.feedback": 469,
+        "Cognition.consolidate": 484,
+        "Cognition.act": 498,
+        "Cognition.start": 529,
+        "Cognition.close": 539,
+        "Cognition.persistence_healthy": 546,
+        "Cognition.repair_persistence": 549,
+        "Cognition._writer": 563,
+        "Cognition.run": 586,
+        "Cognition.tick": 612,
+        "Cognition.measured_hz": 620,
+        "Cognition.snapshot": 624,
+        "Cognition._snapshot_locked": 628,
+        "Cognition.write_state": 651,
+        "Cognition.status_text": 657,
+        "_seconds": 677
+      },
+      "imports": []
+    },
+    "command_cleanup": {
+      "source": "jarvis/command_cleanup.py",
+      "sha256": "403470847d3158e3a1141e192161d4a665f63b47e2002fe54fdbdff15125187f",
+      "symbols": {
+        "proposal_payload": 22,
+        "chosen_text": 36,
+        "settings": 43,
+        "allowed_edit": 60,
+        "propose": 86,
+        "stream_json": 96,
+        "_stream_json": 115,
+        "CommandCleanup": 164,
+        "CommandCleanup.__init__": 165,
+        "CommandCleanup.clean": 170
+      },
+      "imports": [
+        "engine",
+        "gpu_scheduler"
+      ]
+    },
+    "command_reference": {
+      "source": "jarvis/command_reference.py",
+      "sha256": "0a0fc2c8d01ecb8e89d36effff075def1c3ee596ef5d2370be8351163afede48",
+      "symbols": {
+        "search": 32
+      },
+      "imports": []
+    },
+    "commands": {
+      "source": "jarvis/commands.py",
+      "sha256": "05162098e4b464be31b1d8404cbd6f8d49d9950e97627803cd69226c8d2054c4",
+      "symbols": {
+        "Command": 9,
+        "normalize_spoken_code_request": 21,
+        "filename": 32,
+        "spoken_clean": 48,
+        "parse": 67,
+        "_parse_command": 76,
+        "cloud_command": 112,
+        "_parse": 130
+      },
+      "imports": [
+        "anticipation",
+        "capability_guide",
+        "coder",
+        "coding_languages",
+        "conversation_intent",
+        "documents",
+        "folder_lookup",
+        "gmail_workflows",
+        "gods_eye",
+        "intent_catalog",
+        "island_choices",
+        "media_commands",
+        "memory_curator",
+        "messengers",
+        "phrasing",
+        "rea_tools",
+        "realtime",
+        "repo_abilities",
+        "repo_learning",
+        "repo_tools",
+        "toolkits",
+        "weather_watch",
+        "whatsapp",
+        "windows_commands",
+        "writing"
+      ]
+    },
+    "config_contract": {
+      "source": "jarvis/config_contract.py",
+      "sha256": "13b3eab4e3ad58486ba4ccd7a748fb44948f69f7860fd152953edc06445c4078",
+      "symbols": {
+        "ConfigurationWarning": 12,
+        "load_config": 15,
+        "validate_root": 28
+      },
+      "imports": []
+    },
+    "context_hub": {
+      "source": "jarvis/context_hub.py",
+      "sha256": "d865cd88a8689b79a31700482d9d5cd8e581b9dbafb74b08d448630b6fd322ba",
+      "symbols": {
+        "foreground": 14,
+        "situation": 28,
+        "prompt_block": 130
+      },
+      "imports": []
+    },
+    "context_selector": {
+      "source": "jarvis/context_selector.py",
+      "sha256": "e9c406b218b346b7c0aa3039d0c582ef9d2a9d35307dbfdc18994c516abb79c0",
+      "symbols": {
+        "settings": 14,
+        "select_payload": 34,
+        "select": 57,
+        "ContextSelector": 68,
+        "ContextSelector.__init__": 69,
+        "ContextSelector.start": 78,
+        "ContextSelector.prepare": 88,
+        "ContextSelector.run": 99,
+        "ContextSelector.choose": 124,
+        "ContextSelector.healthy": 135,
+        "ContextSelector.repair": 138,
+        "ContextSelector.close": 141
+      },
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "conversation_intent": {
+      "source": "jarvis/conversation_intent.py",
+      "sha256": "04b43f8118f41565c002fd305fbc279dcd4d40e1728d9144912763d142487b3f",
+      "symbols": {
+        "normalize": 26,
+        "quick_kind": 58,
+        "model_kind": 74
+      },
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "conversation_memory": {
+      "source": "jarvis/conversation_memory.py",
+      "sha256": "9a0bfe5f35ad7007a0f70e4911ac9a43d201216294e648f876cf3a8753bb34c1",
+      "symbols": {
+        "terms": 14,
+        "messages": 18,
+        "ConversationMemory": 33,
+        "ConversationMemory.__init__": 34,
+        "ConversationMemory.connect": 48,
+        "ConversationMemory.start_session": 53,
+        "ConversationMemory.begin": 59,
+        "ConversationMemory.finish": 68,
+        "ConversationMemory.turns": 79,
+        "ConversationMemory.matches": 84,
+        "current_context": 116
+      },
+      "imports": [
+        "obsidian_memory"
+      ]
+    },
+    "dag_execution": {
+      "source": "jarvis/dag_execution.py",
+      "sha256": "b22484f3d1eddce998f3e8c547a59c5d37f775bda6f62d6e39bc687ed5a27dc9",
+      "symbols": {
+        "CapabilityError": 20,
+        "Tool": 25,
+        "Step": 36,
+        "bounded_number": 48,
+        "bounded_payload": 52,
+        "step_binding": 73,
+        "references": 78,
+        "argument_shape": 100,
+        "validate_plan": 127,
+        "resolve": 196,
+        "Executor": 219,
+        "Executor.__init__": 220,
+        "Executor.run": 228
+      },
+      "imports": [
+        "repo_analysis"
+      ]
+    },
+    "deerflow": {
+      "source": "jarvis/deerflow.py",
+      "sha256": "750faa8e334fabfa1d2e66053b579f827152cfd745e74c74c0b429aae412f6d0",
+      "symbols": {
+        "skill_root": 23,
+        "status": 27,
+        "read_skill": 38,
+        "search_skills": 46,
+        "normalize_source_links": 64,
+        "request": 78,
+        "execute": 146
+      },
+      "imports": [
+        "_vendor.deerflow_contracts",
+        "agent_context",
+        "capabilities",
+        "deerflow_media",
+        "deerflow_sandbox",
+        "harness_process"
+      ]
+    },
+    "deerflow_cli": {
+      "source": "jarvis/deerflow_cli.py",
+      "sha256": "d78fca1a1e52ca84e2dda0b6f46d773ffb414bf6e87b425e562f97987db3ab0a",
+      "symbols": {
+        "main": 9
+      },
+      "imports": [
+        "deerflow"
+      ]
+    },
+    "deerflow_media": {
+      "source": "jarvis/deerflow_media.py",
+      "sha256": "8373cecdf3e7b8cacbb74b366e60db7bdf7047a4fe8ee13839e85dc54d0ba134",
+      "symbols": {
+        "verify_artifacts": 11,
+        "validate": 57,
+        "execute": 82
+      },
+      "imports": [
+        "deerflow_sandbox"
+      ]
+    },
+    "deerflow_media_runner": {
+      "source": "jarvis/deerflow_media_runner.py",
+      "sha256": "473e7d164c67d49e3cc9bc47818ca5c6c799663ab22d27f680ed47977578d9dc",
+      "symbols": {
+        "render": 9
+      },
+      "imports": []
+    },
+    "deerflow_model": {
+      "source": "jarvis/deerflow_model.py",
+      "sha256": "8c7521008172d1c51078063732d8457e19b5dbf41a0d775858b4a07ad88289c4",
+      "symbols": {
+        "JarvisChatModel": 18,
+        "JarvisChatModel._llm_type": 25,
+        "JarvisChatModel.bind_tools": 28,
+        "JarvisChatModel._generate": 31
+      },
+      "imports": [
+        "gpu_scheduler",
+        "knowledge_worker"
+      ]
+    },
+    "deerflow_sandbox": {
+      "source": "jarvis/deerflow_sandbox.py",
+      "sha256": "dac065f2a2b7a04a1cf3045cdeae0fba6cb16d19b4a97c450b46883d6d9b4c35",
+      "symbols": {
+        "SandboxJob": 18,
+        "SandboxJob.__init__": 19,
+        "SandboxJob._local": 41,
+        "SandboxJob._checkpoint": 47,
+        "SandboxJob.save": 61,
+        "SandboxJob.create": 65,
+        "SandboxJob._storage_guard": 113,
+        "SandboxJob.stage_inputs": 134,
+        "SandboxJob.owned": 162,
+        "SandboxJob.execute": 171,
+        "SandboxJob.observe": 213,
+        "SandboxJob._observe": 217,
+        "SandboxJob.path": 253,
+        "SandboxJob.inventory": 263,
+        "SandboxJob.close": 292,
+        "SandboxJob.__enter__": 307,
+        "SandboxJob.__exit__": 314,
+        "reap_orphans": 318
+      },
+      "imports": [
+        "agent_context",
+        "repo_acquisition",
+        "repo_sandbox",
+        "skill_memory"
+      ]
+    },
+    "deerflow_worker": {
+      "source": "jarvis/deerflow_worker.py",
+      "sha256": "e2b23867c855df554ef07911df7e568ce322745e2b125eb7b2894d3e52021a36",
+      "symbols": {
+        "run": 11,
+        "main": 162
+      },
+      "imports": [
+        "",
+        "_vendor.deerflow_contracts",
+        "agent_context",
+        "agent_session",
+        "deerflow",
+        "deerflow_sandbox",
+        "tools"
+      ]
+    },
+    "deliberation": {
+      "source": "jarvis/deliberation.py",
+      "sha256": "18a214eb8513a7b4aa5c84ef4b92c0439893a2291b4592b4a711b2a857c43be3",
+      "symbols": {
+        "ledger_text": 61,
+        "valid_opinion": 68,
+        "Deliberation": 97,
+        "Deliberation.__init__": 100,
+        "Deliberation.classify_risk": 129,
+        "Deliberation._risk_rank": 156,
+        "Deliberation._context": 160,
+        "Deliberation._confidence": 184,
+        "Deliberation._task_stat": 198,
+        "Deliberation.form_opinion": 207,
+        "Deliberation._model_opinion": 239,
+        "Deliberation._heuristic_opinion": 252,
+        "Deliberation.decide": 277,
+        "Deliberation._phrase": 310,
+        "Deliberation.interpret_feedback": 331,
+        "Deliberation.record": 345,
+        "Deliberation.record_outcome": 362,
+        "Deliberation._append": 368,
+        "Deliberation._append_locked": 372,
+        "Deliberation.decisions": 389
+      },
+      "imports": [
+        "cloud_policy",
+        "cognition"
+      ]
+    },
+    "desktop_actions": {
+      "source": "jarvis/desktop_actions.py",
+      "sha256": "27d4381d8778afff2fd5bde3a8ae7010f22ebbe9d64a87712b211cc2935f2930",
+      "symbols": {
+        "shortcut_key": 15,
+        "validate_desktop_step": 23,
+        "explicit_desktop_plan": 36,
+        "apply_control": 62
+      },
+      "imports": []
+    },
+    "desktop_tasks": {
+      "source": "jarvis/desktop_tasks.py",
+      "sha256": "3afdb03c595964905e3afeb492d34b8717a6baa2b56ba375a31a6a06b92ae90d",
+      "symbols": {
+        "_process_path": 13,
+        "close_app": 31,
+        "write_new_file": 117,
+        "modify_text_file": 132
+      },
+      "imports": [
+        "commands",
+        "experience_memory",
+        "names"
+      ]
+    },
+    "development": {
+      "source": "jarvis/development.py",
+      "sha256": "2f8640252f25190753e7081a0d1340a035fe16f74d7a8487e19484be8042b5bd",
+      "symbols": {
+        "tools_for": 10,
+        "checkpoint": 16,
+        "functional_tests": 22,
+        "verify": 63,
+        "run": 111
+      },
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_browser",
+        "development_design",
+        "development_knowledge",
+        "development_learning",
+        "development_projects",
+        "development_tools",
+        "progress",
+        "task_state"
+      ]
+    },
+    "development_api": {
+      "source": "jarvis/development_api.py",
+      "sha256": "ce548477ee34aa441b58487da28df315a334772327899fc6497ee371cf485f90",
+      "symbols": {
+        "execute": 14
+      },
+      "imports": [
+        "agent_context",
+        "coder",
+        "development",
+        "development_design",
+        "development_knowledge",
+        "development_learning",
+        "development_native",
+        "task_state"
+      ]
+    },
+    "development_browser": {
+      "source": "jarvis/development_browser.py",
+      "sha256": "f67306f92e1656fb92828100829ec99dd83971327a005cf9a930ea4fc47a3381",
+      "symbols": {
+        "preview_url": 12,
+        "test_plan_schema": 24,
+        "validate_tests": 46,
+        "step": 83,
+        "inspect": 112
+      },
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_design": {
+      "source": "jarvis/development_design.py",
+      "sha256": "652ae7a30640cb0c7fd3afa9b57ec9a7f8041dbb3fd17c0108330a1b43a0bac5",
+      "symbols": {
+        "specification": 18,
+        "save_spec": 34
+      },
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_knowledge": {
+      "source": "jarvis/development_knowledge.py",
+      "sha256": "d07a7d2888e7a0a30e4aaee787e57aecdb0d2cae92b33ae61c8bc4ad9a6129f5",
+      "symbols": {
+        "detect_stack": 8,
+        "catalog": 38,
+        "context": 41,
+        "read": 63
+      },
+      "imports": [
+        "agent_context"
+      ]
+    },
+    "development_learning": {
+      "source": "jarvis/development_learning.py",
+      "sha256": "49d53ebd5a01e80845f04b5ab05a90835bc8e0b4cc041ed24f6e7a6526751c46",
+      "symbols": {
+        "fingerprint": 18,
+        "store_path": 38,
+        "record": 41,
+        "recall": 82,
+        "feedback": 99,
+        "preferences": 114
+      },
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_design"
+      ]
+    },
+    "development_native": {
+      "source": "jarvis/development_native.py",
+      "sha256": "1c93c48e38334ead108c93d434aad6e5c1b51808d1550b65901e15d9645eb90a",
+      "symbols": {
+        "readiness": 9,
+        "run": 21
+      },
+      "imports": [
+        "agent_context",
+        "development",
+        "development_tools"
+      ]
+    },
+    "development_projects": {
+      "source": "jarvis/development_projects.py",
+      "sha256": "6aada3298387c23fc55e9f50077443801ce7f0e77e4eee0b5b77348e6985f8f4",
+      "symbols": {
+        "requested": 13,
+        "batches": 18,
+        "scaffold_files": 37,
+        "scaffold": 110
+      },
+      "imports": [
+        "agent_context",
+        "coder",
+        "development_knowledge",
+        "progress"
+      ]
+    },
+    "development_tools": {
+      "source": "jarvis/development_tools.py",
+      "sha256": "f2eb3c6c8d5946f385737f8303d359d23d695bb27691835f0a1fc4e12ec936a2",
+      "symbols": {
+        "executable": 17,
+        "binary": 23,
+        "DevelopmentTools": 36,
+        "DevelopmentTools.__init__": 37,
+        "DevelopmentTools.run": 46,
+        "DevelopmentTools.install": 87,
+        "DevelopmentTools.build": 104,
+        "DevelopmentTools.start_preview": 124,
+        "DevelopmentTools.healthy": 167,
+        "DevelopmentTools.repair": 180,
+        "DevelopmentTools.inspect": 189,
+        "DevelopmentTools.stop_preview": 208,
+        "DevelopmentTools.close": 219
+      },
+      "imports": [
+        "agent_context",
+        "harness_process",
+        "progress",
+        "recovery"
+      ]
+    },
+    "diagnostics": {
+      "source": "jarvis/diagnostics.py",
+      "sha256": "165d6eb538219993f9960255a52e0fdf3097fe76a6b05dc652b5116bd53b88d4",
+      "symbols": {
+        "service_status": 5
+      },
+      "imports": [
+        "cloud_policy",
+        "codex_workload",
+        "docker_runtime",
+        "knowledge_worker",
+        "model_selection"
+      ]
+    },
+    "direct_execution": {
+      "source": "jarvis/direct_execution.py",
+      "sha256": "05fa804cfa097723986e7fa04e6c6c47d97fff60fe22d84821c983b14240e184",
+      "symbols": {
+        "compile_steps": 8,
+        "run": 36,
+        "run_files": 105
+      },
+      "imports": [
+        "brain",
+        "commands",
+        "desktop_actions",
+        "targeting",
+        "tools",
+        "ui_controls"
+      ]
+    },
+    "display": {
+      "source": "jarvis/display.py",
+      "sha256": "3f97d27164aacd7a32685ff8adf15967445cf2b2ecb61c54b234d4b8cc5c3584",
+      "symbols": {
+        "enable_high_dpi": 6,
+        "window_scale": 26,
+        "refresh_rate": 40
+      },
+      "imports": []
+    },
+    "docker_runtime": {
+      "source": "jarvis/docker_runtime.py",
+      "sha256": "83751d5eecf7fa6d46ac50a701252bae7bab995372eef615ef645efcd4c18938",
+      "symbols": {
+        "desktop_environment": 16,
+        "desktop_start_lock": 28,
+        "settings": 52,
+        "engine_status": 61,
+        "DockerService": 73,
+        "DockerService.__init__": 74,
+        "DockerService.disabled": 84,
+        "DockerService.healthy": 87,
+        "DockerService._reap": 97,
+        "DockerService.repair": 106,
+        "DockerService._start": 118,
+        "DockerService.close": 156,
+        "start_background": 160
+      },
+      "imports": [
+        "deerflow_sandbox",
+        "recovery",
+        "repo_acquisition"
+      ]
+    },
+    "document_worker": {
+      "source": "jarvis/document_worker.py",
+      "sha256": "ad29e2c4586dc727767b2aae941655999b04033885528ef4e8fea5d5cbf63177",
+      "symbols": {
+        "_cell_value": 16,
+        "xlsx_read": 22,
+        "xlsx_write": 52,
+        "docx_read": 67,
+        "docx_write": 78,
+        "pdf_inspect": 115,
+        "pdf_text": 125,
+        "pdf_compose": 139,
+        "main": 165
+      },
+      "imports": []
+    },
+    "documents": {
+      "source": "jarvis/documents.py",
+      "sha256": "2805a5a0b698f699aed62b84b5a56e0db5150d2f5f8f9c46c17ce37876ba19b8",
+      "symbols": {
+        "now_iso": 63,
+        "terms": 67,
+        "file_id": 74,
+        "extract": 83,
+        "chunk": 128,
+        "Document": 159,
+        "Document.__init__": 162,
+        "Document.build": 179,
+        "Document._prepare": 204,
+        "Document.id": 217,
+        "Document.name": 221,
+        "Document.light_graph": 224,
+        "Document.merge_graph": 250,
+        "Document.graph_order": 284,
+        "Document.search": 301,
+        "Document.neighbourhood": 320,
+        "Document.context": 345,
+        "Document.relevance": 367,
+        "Document.stats": 373,
+        "Library": 381,
+        "Library.__init__": 382,
+        "Library._index": 410,
+        "Library._write": 420,
+        "Library.spill": 425,
+        "Library.recover_spills": 430,
+        "Library.remember": 441,
+        "Library.load": 476,
+        "Library.remembered": 486,
+        "Library.prepare": 490,
+        "Library.add": 515,
+        "Library.focused": 527,
+        "Library.find": 533,
+        "Library.end": 555,
+        "Library.close": 567,
+        "Library._chat": 577,
+        "Library._summarise": 596,
+        "Library.enrich": 608,
+        "Library.answer": 631,
+        "Library.wants": 669,
+        "parse_command": 683,
+        "execute": 713
+      },
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "skill_memory"
+      ]
+    },
+    "engine": {
+      "source": "jarvis/engine.py",
+      "sha256": "52af3cee2c5e2e704c3b99302197cc93cc07c8bde34169b99a148a60a4ab7e11",
+      "symbols": {
+        "Engine": 33,
+        "Engine.__init__": 34,
+        "Engine.reset": 45,
+        "Engine.activate": 50,
+        "Engine._reset_segment": 58,
+        "Engine.feed": 65,
+        "Engine._feed": 69,
+        "Engine._dispatch": 174
+      },
+      "imports": [
+        "commands",
+        "writing"
+      ]
+    },
+    "everyday_runtime": {
+      "source": "jarvis/everyday_runtime.py",
+      "sha256": "dce498ae0158945b2e8cbe99091de3f84b49a087ed3aba3e286492cc6e481787",
+      "symbols": {
+        "number": 38,
+        "say": 45,
+        "EverydayRuntime": 50,
+        "EverydayRuntime.__init__": 51,
+        "EverydayRuntime.profile": 60,
+        "EverydayRuntime._dates": 65,
+        "EverydayRuntime._remote_time": 120,
+        "EverydayRuntime._profile": 151,
+        "EverydayRuntime._math": 174,
+        "EverydayRuntime._currency": 234,
+        "EverydayRuntime._system": 266,
+        "EverydayRuntime._random": 302,
+        "EverydayRuntime.answer": 315
+      },
+      "imports": []
+    },
+    "execution_adapters": {
+      "source": "jarvis/execution_adapters.py",
+      "sha256": "0bb2dd65f16e74627e8ac3d313bbc5e5486db09eb08fdee773e607570c4e280c",
+      "symbols": {
+        "Unsupported": 10,
+        "access_denied": 14,
+        "Prepared": 22,
+        "pattern": 30,
+        "selection": 38,
+        "UFO": 61,
+        "UFO.prepare": 65,
+        "windows_patterns": 96,
+        "WindowsMCP": 104,
+        "WindowsMCP.prepare": 108,
+        "CUA": 163,
+        "CUA.prepare": 167,
+        "OpenComputerUse": 191,
+        "OpenComputerUse.prepare": 195,
+        "AgentS": 216,
+        "AgentS.prepare": 224,
+        "JarvisPointer": 230,
+        "JarvisPointer.prepare": 242,
+        "desktop_order": 297
+      },
+      "imports": [
+        "",
+        "desktop_actions",
+        "jarvis_pointer"
+      ]
+    },
+    "execution_contracts": {
+      "source": "jarvis/execution_contracts.py",
+      "sha256": "7724d0b8513d3eee0de805a789cbe73e7305d2fc2307ba674b6946e6fe04ec3b",
+      "symbols": {
+        "outcome_metadata": 29,
+        "may_replay": 51,
+        "record_outcome": 56,
+        "read_outcomes": 66
+      },
+      "imports": [
+        "agent_events"
+      ]
+    },
+    "execution_router": {
+      "source": "jarvis/execution_router.py",
+      "sha256": "6d3b9aec0ce6fe5e2afe5830fcaf8686112522950cd088988b97fe0605e1c6b9",
+      "symbols": {
+        "validate": 8,
+        "UncertainAction": 29,
+        "UncertainAction.__init__": 30,
+        "execute": 35
+      },
+      "imports": [
+        "desktop_actions",
+        "execution_adapters"
+      ]
+    },
+    "execution_strategy": {
+      "source": "jarvis/execution_strategy.py",
+      "sha256": "08bbafcd337f51e3230f35caec69aa214bad63578a438280f2855a4512d3eacb",
+      "symbols": {
+        "Method": 39,
+        "_m": 54,
+        "files_in": 106,
+        "Request": 114,
+        "Candidate": 123,
+        "ExecutionPlan": 136,
+        "ExecutionPlan.to_dict": 152,
+        "request_for": 156,
+        "discover": 174,
+        "_requirement": 183,
+        "eligibility": 220,
+        "measured": 248,
+        "score": 278,
+        "plan": 297,
+        "method_for": 323,
+        "observe": 339,
+        "_operation": 370,
+        "_request_from_step": 380,
+        "strategy_tool": 399,
+        "api_alternative": 443,
+        "hint": 467
+      },
+      "imports": [
+        "agent_events",
+        "app_adapters",
+        "execution_contracts",
+        "toolkits",
+        "tools"
+      ]
+    },
+    "experience": {
+      "source": "jarvis/experience.py",
+      "sha256": "33e40b51574789a1d76a2543a8f18a6bb50906f82d725c912f3eafa385126001",
+      "symbols": {
+        "_iso_timestamp": 11,
+        "hotness": 16,
+        "hotness_many": 31,
+        "memory_score": 46,
+        "recall_tasks": 54
+      },
+      "imports": []
+    },
+    "experience_memory": {
+      "source": "jarvis/experience_memory.py",
+      "sha256": "fcf9111ab9fc9da3dd1da993221bb95655fe8c4b380dfa2a2c622d262be4ca78",
+      "symbols": {
+        "tokens": 26,
+        "digest": 30,
+        "scope": 34,
+        "conditions": 38,
+        "observe_conditions": 89,
+        "failure_class": 97,
+        "ExperienceMemory": 111,
+        "ExperienceMemory.__init__": 112,
+        "ExperienceMemory.record": 164,
+        "ExperienceMemory.safe_record": 253,
+        "ExperienceMemory.sync": 261,
+        "ExperienceMemory.context": 284,
+        "ExperienceMemory.blocks_shortcut": 330,
+        "ExperienceMemory.close": 338
+      },
+      "imports": [
+        "desktop_tasks",
+        "obsidian_memory",
+        "skill_memory",
+        "tools"
+      ]
+    },
+    "f5_speech": {
+      "source": "jarvis/f5_speech.py",
+      "sha256": "ffb3597dd1be3f0146fb60e3a07c3c56a29c0da5708ea7765453040d61977e0e",
+      "symbols": {
+        "_wav_duration": 13,
+        "reference_duration": 26,
+        "number": 31,
+        "reference": 39,
+        "readiness": 61,
+        "load_voice": 71,
+        "chunks": 94,
+        "render": 124
+      },
+      "imports": [
+        "gpu_scheduler",
+        "kokoro_speech",
+        "natural_voice",
+        "speech_normalizer"
+      ]
+    },
+    "fast_workflows": {
+      "source": "jarvis/fast_workflows.py",
+      "sha256": "9f95c0af8ed0bdd1a9e4ac414d74a2043dd168cf62734baa6312a45e7895385a",
+      "symbols": {
+        "compile_workflow": 12,
+        "executable": 60,
+        "observe": 67,
+        "search_ready": 72,
+        "choose_result": 86,
+        "run": 104
+      },
+      "imports": [
+        "agent_events",
+        "commands",
+        "experience_memory",
+        "media_ui",
+        "spotify",
+        "ui_controls"
+      ]
+    },
+    "file_drop": {
+      "source": "jarvis/file_drop.py",
+      "sha256": "10fc9d9307561c58c1b253b89bd3e879fee709c526638c1957abf391dcc4017c",
+      "symbols": {
+        "DropTarget": 22,
+        "DropTarget.__init__": 31,
+        "DropTarget._procedure": 59,
+        "DropTarget.poll": 79,
+        "DropTarget.active": 95,
+        "DropTarget.close": 98,
+        "card": 127,
+        "describe": 132,
+        "email_address": 138,
+        "ChoicePrompt": 153,
+        "ChoicePrompt.__init__": 156,
+        "ask_text": 172,
+        "handle": 179,
+        "ask_about": 221,
+        "send_whatsapp": 235,
+        "write_email": 257,
+        "send_email": 276,
+        "start": 317,
+        "parse_paths": 344
+      },
+      "imports": [
+        "gmail_api",
+        "media_player",
+        "whatsapp"
+      ]
+    },
+    "firecrawl_tools": {
+      "source": "jarvis/firecrawl_tools.py",
+      "sha256": "aa29adff8301764b7151794425c885743cd94ac3e05bd996613874041e386747",
+      "symbols": {
+        "execute": 12
+      },
+      "imports": [
+        "toolkits"
+      ]
+    },
+    "folder_lookup": {
+      "source": "jarvis/folder_lookup.py",
+      "sha256": "0b60d3e107f2790975af901198dd25fedeaf7fd207d038dbe71ab91617d0e012",
+      "symbols": {
+        "folder_request": 12,
+        "FolderLookup": 26,
+        "FolderLookup.__init__": 27,
+        "FolderLookup.scoped": 49,
+        "FolderLookup.roots": 52,
+        "FolderLookup.resolve": 59,
+        "FolderLookup.choose": 138,
+        "FolderLookup.record_open": 157
+      },
+      "imports": [
+        "catalog",
+        "names",
+        "obsidian_memory",
+        "skill_memory"
+      ]
+    },
+    "glass_ui": {
+      "source": "jarvis/glass_ui.py",
+      "sha256": "45cb224cd6109052adc348662a15f4f1287f25a032e4d4e62fe8984ab649343b",
+      "symbols": {
+        "_glass_tile": 10,
+        "render_glass": 40,
+        "install_glass": 62,
+        "GlassButton": 111,
+        "GlassButton.__init__": 113,
+        "GlassButton.set_state": 124,
+        "GlassButton.paint": 128
+      },
+      "imports": [
+        "display"
+      ]
+    },
+    "gmail_api": {
+      "source": "jarvis/gmail_api.py",
+      "sha256": "11159eb90d8bf7121da394b1b3a3f2d8662f54e11434ced46b50d7478d487b41",
+      "symbols": {
+        "directory": 37,
+        "save_credentials": 41,
+        "configured": 50,
+        "credentials": 62,
+        "API": 79,
+        "API.__init__": 80,
+        "API.call": 88,
+        "API.close": 110,
+        "identity": 114,
+        "recipients": 120,
+        "raw_message": 130,
+        "attachment_message": 145,
+        "draft_with_attachments": 168,
+        "decode": 204,
+        "MailText": 220,
+        "MailText.__init__": 222,
+        "MailText.handle_starttag": 224,
+        "MailText.handle_endtag": 227,
+        "MailText.handle_data": 230,
+        "approved": 234,
+        "fresh_draft": 243,
+        "run": 252,
+        "sent_check": 331,
+        "send_message": 339,
+        "draft_action": 353,
+        "label_names": 385,
+        "modify_messages": 392,
+        "message_summary": 441,
+        "read_message": 458,
+        "execute": 497
+      },
+      "imports": [
+        "gmail_writes",
+        "toolkits"
+      ]
+    },
+    "gmail_bridge": {
+      "source": "jarvis/gmail_bridge.py",
+      "sha256": "1bbe811e24754d420953c076fa94d79e8a7d8fbcedf0330201a1e2baa815b321",
+      "symbols": {
+        "GmailBridge": 9,
+        "GmailBridge.__init__": 10,
+        "GmailBridge.call": 51,
+        "GmailBridge.close": 62,
+        "configured": 66
+      },
+      "imports": []
+    },
+    "gmail_chrome_worker": {
+      "source": "jarvis/gmail_chrome_worker.py",
+      "sha256": "81524392faaf98b1144a04dd176ade805116d51dd406a75a285891dbffa3d67a",
+      "symbols": {
+        "select_compose": 13,
+        "chrome_window": 23,
+        "unique": 49,
+        "guard": 59,
+        "focus_host": 66,
+        "activate": 74,
+        "set_value": 94,
+        "compose_windows": 102,
+        "expand_compose": 107,
+        "perform": 115,
+        "serve": 226
+      },
+      "imports": [
+        "gmail_bridge",
+        "independent_cursor"
+      ]
+    },
+    "gmail_workflows": {
+      "source": "jarvis/gmail_workflows.py",
+      "sha256": "b3d3ed0a7a558539fc4dd9559d24a2da02ba8c974d449fb1dbfb5101db3f0c1c",
+      "symbols": {
+        "GmailResult": 12,
+        "gmail_request": 40,
+        "spoken_addresses": 52,
+        "literal": 59,
+        "quoted_subject": 65,
+        "explicit_request": 70,
+        "action_request": 102,
+        "validate_request": 173,
+        "sender_name": 219,
+        "spoken_message": 224,
+        "run_gmail": 234,
+        "unread_request": 428,
+        "run_unread": 436
+      },
+      "imports": [
+        "clarification",
+        "gmail_api",
+        "tools"
+      ]
+    },
+    "gmail_writes": {
+      "source": "jarvis/gmail_writes.py",
+      "sha256": "414751be503a65282fac7d437f494644fdc75d1c34a2f5dac68c9f28da6e15df",
+      "symbols": {
+        "Journal": 9,
+        "Journal.__init__": 10,
+        "Journal.save": 13,
+        "Journal.begin": 17,
+        "Journal.accepted": 22,
+        "Journal.complete": 25,
+        "Journal.identities": 30,
+        "guard": 37
+      },
+      "imports": []
+    },
+    "gods_eye": {
+      "source": "jarvis/gods_eye.py",
+      "sha256": "e512cfd897d51af728251d4cfdc845b47f2e79984284d3d0e6448e28bbead5e4",
+      "symbols": {
+        "recent": 61,
+        "nearby_distance": 65,
+        "distance": 78,
+        "bearing": 84,
+        "parse_command": 93,
+        "GodsEye": 170,
+        "GodsEye.__init__": 171,
+        "GodsEye.ensure_server": 202,
+        "GodsEye.prepare_cameras": 212,
+        "GodsEye.refresh_cameras": 220,
+        "GodsEye.api": 236,
+        "GodsEye.here": 252,
+        "GodsEye.location_allowed": 261,
+        "GodsEye.geocode": 267,
+        "GodsEye.card": 323,
+        "GodsEye.show": 327,
+        "GodsEye.camera": 424,
+        "GodsEye.start": 499,
+        "GodsEye.close": 505,
+        "GodsEye.run": 508,
+        "GodsEye.poll": 525,
+        "GodsEye.alerts": 636,
+        "GodsEye.alert": 663,
+        "GodsEye._load_seen": 682,
+        "GodsEye._save_seen": 693,
+        "GodsEye.explain": 704,
+        "GodsEye.summary": 760,
+        "stop_vite": 774,
+        "execute": 787
+      },
+      "imports": [
+        "commands",
+        "gods_eye_cameras",
+        "gods_eye_update",
+        "gods_eye_view",
+        "media_player"
+      ]
+    },
+    "gods_eye_cameras": {
+      "source": "jarvis/gods_eye_cameras.py",
+      "sha256": "f15977af148bef14a92e92d05d4a0410772ce87eb7fed22da519b583772c76b5",
+      "symbols": {
+        "public_camera": 32,
+        "pack_path": 39,
+        "ontario_key": 43,
+        "_heading": 53,
+        "_point": 57,
+        "toronto": 66,
+        "ontario": 87,
+        "configure_env": 112,
+        "build": 125,
+        "summary": 166
+      },
+      "imports": []
+    },
+    "gods_eye_update": {
+      "source": "jarvis/gods_eye_update.py",
+      "sha256": "b4b9edb43f48ca49cc234f94a6ff7a50d4722d764e549c36d76f79dd631a5a25",
+      "symbols": {
+        "digest": 22,
+        "latest": 29,
+        "update": 35
+      },
+      "imports": []
+    },
+    "gods_eye_view": {
+      "source": "jarvis/gods_eye_view.py",
+      "sha256": "154de7748571c3349a48e257479095c8a5141854c16bbcdd2826dbede4ee3e34",
+      "symbols": {
+        "ready": 13,
+        "GodsEyeView": 22,
+        "GodsEyeView.__init__": 23,
+        "GodsEyeView.start": 28,
+        "GodsEyeView.close": 58
+      },
+      "imports": []
+    },
+    "gpu_scheduler": {
+      "source": "jarvis/gpu_scheduler.py",
+      "sha256": "be3c0e0d65a510e5d9b22a61edfed1261ea06746319d8e02a59d9179b2f4f6cd",
+      "symbols": {
+        "runtime_environment": 31,
+        "request_context": 39,
+        "model_label": 49,
+        "validate_state": 55,
+        "replace_state": 88,
+        "settings": 100,
+        "configured": 116,
+        "memory": 125,
+        "allocation": 139,
+        "alive": 155,
+        "status": 164,
+        "Registry": 181,
+        "Registry.__init__": 182,
+        "Registry.state": 188,
+        "Registry.event": 236,
+        "Lease": 256,
+        "Lease.__init__": 257,
+        "Lease.event": 266,
+        "Lease.acquire": 269,
+        "Lease.close": 298,
+        "install": 306,
+        "native_turn": 434
+      },
+      "imports": [
+        "cloud_policy"
+      ]
+    },
+    "groq_adapter": {
+      "source": "jarvis/groq_adapter.py",
+      "sha256": "2f9354c2a83790b7f345746b1000dcab9bacefd3c9e074c2046674172074a51f",
+      "symbols": {
+        "CloudFailure": 17,
+        "CloudFailure.__init__": 18,
+        "GroqAdapter": 22,
+        "GroqAdapter.__init__": 23,
+        "GroqAdapter.close": 31,
+        "GroqAdapter.refresh_async": 34,
+        "GroqAdapter.refresh": 40,
+        "GroqAdapter.ready": 61,
+        "GroqAdapter.complete": 71
+      },
+      "imports": [
+        "cloud_policy",
+        "repo_analysis"
+      ]
+    },
+    "grounding": {
+      "source": "jarvis/grounding.py",
+      "sha256": "e88074db133eecf68bd068d88e4a15bd56635771be71d769dfad2a31c79aae41",
+      "symbols": {
+        "direct_decision": 6
+      },
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "gui_contract": {
+      "source": "jarvis/gui_contract.py",
+      "sha256": "742672b9dba66435efe83a077de048b530ed727c574d750b2bb2b81c675700fd",
+      "symbols": {
+        "requested": 9,
+        "instructions": 21,
+        "check": 32
+      },
+      "imports": []
+    },
+    "harness": {
+      "source": "jarvis/harness.py",
+      "sha256": "d5db908ca2833249b610a9d7205ac6030152e2781a9b149b3c534eea97cccf48",
+      "symbols": {
+        "validate_harness_proposal": 12,
+        "validate_agent_response": 16,
+        "readiness": 33,
+        "HarnessClient": 42,
+        "HarnessClient.__init__": 48,
+        "HarnessClient._request_once": 52,
+        "healthy": 72,
+        "repair": 77,
+        "HarnessProvider": 85,
+        "HarnessProvider.__init__": 87,
+        "HarnessProvider.__call__": 91,
+        "HarnessProvider.close": 95
+      },
+      "imports": [
+        "agent_session",
+        "brain",
+        "development_projects",
+        "hermes",
+        "planner_settings"
+      ]
+    },
+    "harness_process": {
+      "source": "jarvis/harness_process.py",
+      "sha256": "fe04882d3ba1d4dddde24c2c3f492603f559b6caf07862ba8ed4dc788520af72",
+      "symbols": {
+        "OwnedJob": 6,
+        "OwnedJob.__init__": 7,
+        "OwnedJob.attach": 37,
+        "OwnedJob.close": 50,
+        "hidden_spawn": 56
+      },
+      "imports": []
+    },
+    "harness_worker": {
+      "source": "jarvis/harness_worker.py",
+      "sha256": "8619698f7fc6b87761c416b6108b404144446d25404efad58acfd94e5e29112c",
+      "symbols": {
+        "audit_profile": 33,
+        "exclusive_proposal_schema": 50,
+        "agent_schema": 73,
+        "Predictor": 88,
+        "Predictor.__init__": 89,
+        "Predictor.start": 100,
+        "Predictor.generate": 175,
+        "Predictor.predict": 202,
+        "Predictor.stop_runtime": 269,
+        "Predictor.close": 278,
+        "main": 285
+      },
+      "imports": [
+        "agent_context",
+        "agent_session",
+        "brain_worker",
+        "harness",
+        "harness_process",
+        "knowledge_worker",
+        "planner_settings"
+      ]
+    },
+    "hermes": {
+      "source": "jarvis/hermes.py",
+      "sha256": "a4ab05b3636fc6237492ec2f982dd238aff6debf00de4e7e63651406caab0bc1",
+      "symbols": {
+        "readiness": 11,
+        "validate_proposal": 21,
+        "HermesClient": 76,
+        "HermesClient.__init__": 81,
+        "HermesClient._request_once": 85
+      },
+      "imports": [
+        "brain",
+        "planner_settings",
+        "task_graph",
+        "task_recovery"
+      ]
+    },
+    "hermes_ollama": {
+      "source": "jarvis/hermes_ollama.py",
+      "sha256": "44d80cc663842fbc78022375d33ac3a77a411a5781f5da8fd077e93670405dec",
+      "symbols": {
+        "completion": 8,
+        "start_provider": 39
+      },
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "hermes_skills": {
+      "source": "jarvis/hermes_skills.py",
+      "sha256": "4f7327016a9beefa8faec4157def87037039de16f6526d173144b150d1a9bb28",
+      "symbols": {
+        "safe_resource": 20,
+        "HermesSkills": 25,
+        "HermesSkills.__init__": 26,
+        "HermesSkills.compatible": 70,
+        "HermesSkills.search": 73,
+        "HermesSkills.read_bytes": 89,
+        "HermesSkills.read": 102,
+        "HermesSkills.overlap": 121,
+        "HermesSkills.context": 132,
+        "HermesSkills.sync": 153
+      },
+      "imports": [
+        "agent_context",
+        "hermes",
+        "skill_memory"
+      ]
+    },
+    "hermes_worker": {
+      "source": "jarvis/hermes_worker.py",
+      "sha256": "70ba7a2e2470fd5f252625a4e17a872e26b1053c8bfa2997f6a5e4bc4023675f",
+      "symbols": {
+        "predict": 28,
+        "main": 101
+      },
+      "imports": [
+        "agent_context",
+        "brain_worker",
+        "hermes",
+        "hermes_ollama"
+      ]
+    },
+    "hierarchical": {
+      "source": "jarvis/hierarchical.py",
+      "sha256": "aade8ed9866658debdcf3dee2360f3d1714e17a82675ddfef5946bfe18a61502",
+      "symbols": {
+        "settings": 32,
+        "eligible": 50,
+        "schema": 60,
+        "literal_reads": 89,
+        "legacy_step": 104,
+        "adapters": 109,
+        "implementation_hash": 167,
+        "fingerprint": 183,
+        "MacroMemory": 192,
+        "MacroMemory.__init__": 194,
+        "MacroMemory.key": 201,
+        "MacroMemory.lookup": 204,
+        "MacroMemory.remember": 215,
+        "run": 227
+      },
+      "imports": [
+        "agent_context",
+        "agent_events",
+        "brain",
+        "cloud_policy",
+        "dag_execution",
+        "toolkits",
+        "tools"
+      ]
+    },
+    "hud": {
+      "source": "jarvis/hud.py",
+      "sha256": "527c54183e6aa6953c8cd4bb9b845faad989f6bba7ede671fa21ecb6f05bdcaa",
+      "symbols": {
+        "logo_frames": 15,
+        "render_hud": 29
+      },
+      "imports": []
+    },
+    "hybrid_inference": {
+      "source": "jarvis/hybrid_inference.py",
+      "sha256": "eaf608634b516c78f12b74b4df0f623ad92ac05a42bf09ad1f49d6f551fb18b5",
+      "symbols": {
+        "metadata_model": 23,
+        "policy": 31,
+        "configured": 44,
+        "standalone_public": 52,
+        "get_service": 62,
+        "HybridGateway": 78,
+        "HybridGateway.__init__": 79,
+        "HybridGateway.close": 91,
+        "HybridGateway.decide": 95,
+        "HybridGateway.record": 121,
+        "HybridGateway.answer": 132,
+        "maybe_answer": 183,
+        "control": 196
+      },
+      "imports": [
+        "cloud_policy",
+        "cloud_quota",
+        "groq_adapter",
+        "knowledge_worker",
+        "model_performance",
+        "model_selection",
+        "skill_memory"
+      ]
+    },
+    "independent_cursor": {
+      "source": "jarvis/independent_cursor.py",
+      "sha256": "a6bd230d17fd32e91975c62e5b574c30e27564bbe4ac0233a4c86fab9cf47a96",
+      "symbols": {
+        "CursorCue": 13,
+        "CursorCue.__init__": 19,
+        "CursorCue.__enter__": 31,
+        "CursorCue.__exit__": 39,
+        "CursorCue.close": 42,
+        "CursorCue._run": 48,
+        "at_point": 125,
+        "physical_point": 174,
+        "activate_point": 191
+      },
+      "imports": [
+        "execution_adapters",
+        "jarvis_pointer"
+      ]
+    },
+    "inference_limits": {
+      "source": "jarvis/inference_limits.py",
+      "sha256": "9f5fd9ca3646acda57c0eb86fa15d5e45842a5bfa50b563e4128f79e74d4afa4",
+      "symbols": {
+        "planning_read_timeout": 5,
+        "planning_worker_timeout": 18,
+        "question_limits": 23,
+        "coding_limits": 38,
+        "planning_limits": 55
+      },
+      "imports": []
+    },
+    "intent_catalog": {
+      "source": "jarvis/intent_catalog.py",
+      "sha256": "ba3ccf4258e716bcd5c3dda63165ae4c4d6a28e306d441919b2e070b7cf76332",
+      "symbols": {
+        "gev": 25,
+        "cam": 29,
+        "queued": 38,
+        "_mail": 645,
+        "_write": 654,
+        "_layer": 667,
+        "_style": 672,
+        "match": 683
+      },
+      "imports": [
+        "commands",
+        "conversation_intent",
+        "gods_eye",
+        "writing"
+      ]
+    },
+    "intent_handlers": {
+      "source": "jarvis/intent_handlers.py",
+      "sha256": "c84e2b724c819cda608b5d44623270832025e3b666262524486f49e6793489ca",
+      "symbols": {
+        "behavior": 199,
+        "conversation_style": 211,
+        "filter_report": 259,
+        "repeat_last": 272,
+        "_ago": 286,
+        "_ollama": 292,
+        "jarvis_status": 297,
+        "cognition_predict": 453,
+        "_windows": 468,
+        "_process_name": 488,
+        "system_info": 496,
+        "whatsapp_read": 614,
+        "media_related": 652,
+        "messenger_focus": 681,
+        "memory_summarize": 691,
+        "execute": 700
+      },
+      "imports": [
+        "",
+        "capability_guide",
+        "commands",
+        "gmail_api",
+        "gods_eye",
+        "media_player",
+        "whatsapp",
+        "windows_commands"
+      ]
+    },
+    "interface": {
+      "source": "jarvis/interface.py",
+      "sha256": "bba324c0b22ecdb0eaa6069b058837b904026a16c6f7e5104f5c71c881c6c035",
+      "symbols": {
+        "label": 18,
+        "build_interface": 23
+      },
+      "imports": [
+        "coding_console",
+        "display",
+        "file_drop",
+        "glass_ui",
+        "island",
+        "island_desk",
+        "notch_widgets"
+      ]
+    },
+    "island": {
+      "source": "jarvis/island.py",
+      "sha256": "a998a153b6d1bedb550b46b90d93316faa032b81eb6e293df6b0fcf62fa6c2c8",
+      "symbols": {
+        "clock_text": 32,
+        "artwork": 39,
+        "media_progress": 52,
+        "font": 61,
+        "wrap": 68,
+        "fit_text": 85,
+        "_fit_text": 91,
+        "_text_tile": 107,
+        "_curve_tiles": 116,
+        "contour_mask": 132,
+        "status_amplitude": 146,
+        "media_amplitude": 150,
+        "animate_frame": 160,
+        "render_island": 229,
+        "Activity": 422,
+        "Activity.__init__": 424,
+        "Activity.notify": 429,
+        "Activity.caption": 454,
+        "Morph": 467,
+        "Morph.__init__": 468,
+        "Morph.set_target": 473,
+        "Morph.sample": 479,
+        "FrameClock": 486,
+        "FrameClock.__init__": 488,
+        "FrameClock.delay": 492,
+        "Island": 504,
+        "Island.__init__": 505,
+        "Island.set_hover": 556,
+        "Island.on_pip": 559,
+        "Island.pointer": 570,
+        "Island.double_click": 574,
+        "Island.press": 578,
+        "Island.move": 582,
+        "Island.release": 592,
+        "Island.expand": 607,
+        "Island.notify": 621,
+        "Island.layout_target": 670,
+        "Island.tick": 693,
+        "Island.buddy_pose": 793,
+        "Island.watch_drag": 816,
+        "Island.close": 841,
+        "export_preview": 847,
+        "export_animation": 867,
+        "export_hd_preview": 889
+      },
+      "imports": [
+        "buddy_engine",
+        "display",
+        "island_buddy",
+        "island_surface",
+        "media_player",
+        "obsidian_memory"
+      ]
+    },
+    "island_artwork": {
+      "source": "jarvis/island_artwork.py",
+      "sha256": "5aacfca7878737cfe538e9504366f05dd18f25db4a6fd22f9b04304aebe35751",
+      "symbols": {
+        "unobscured": 6,
+        "row_artwork": 17
+      },
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "island_buddy": {
+      "source": "jarvis/island_buddy.py",
+      "sha256": "7a64bf261108c9f2343853b2593f2f6a243f1a115609ea636621b8300ecabe53",
+      "symbols": {
+        "register": 31,
+        "lerp": 59,
+        "mix": 63,
+        "blink": 67,
+        "ease": 73,
+        "superellipse": 78,
+        "body_sprite": 90,
+        "shadow_sprite": 117,
+        "font": 127,
+        "base_pose": 136,
+        "pose_for": 142,
+        "paint": 273,
+        "body_color": 381,
+        "heart": 385,
+        "star": 391,
+        "mouth": 400,
+        "wear": 429,
+        "badge": 476,
+        "particles": 500,
+        "draw_buddy": 577,
+        "mood_for": 585
+      },
+      "imports": []
+    },
+    "island_choices": {
+      "source": "jarvis/island_choices.py",
+      "sha256": "10fd66bad7bd9ce856e6c9c22d774249ed8389e2bfe0f65f44447bf0597b150a",
+      "symbols": {
+        "snapshot": 8,
+        "resolve": 40,
+        "navigation": 62,
+        "task_answer": 80
+      },
+      "imports": [
+        "commands",
+        "whatsapp"
+      ]
+    },
+    "island_desk": {
+      "source": "jarvis/island_desk.py",
+      "sha256": "4dc1a15d030f28fa821a98897a9c7fc11bd73aadc422ee04ef1c1770eedd0ea8",
+      "symbols": {
+        "text": 18,
+        "Approval": 23,
+        "Approval.__init__": 25,
+        "Approval.decide": 31,
+        "Approval.expired": 41,
+        "Approval.lapse": 44,
+        "IslandDesk": 50,
+        "IslandDesk.__init__": 51,
+        "IslandDesk._write": 184,
+        "IslandDesk.ask": 204,
+        "IslandDesk.update_preparations": 208,
+        "IslandDesk.select_preparation": 223,
+        "IslandDesk.preparation_action": 241,
+        "IslandDesk.focus": 247,
+        "IslandDesk.show": 251,
+        "IslandDesk.copy_answer": 274,
+        "IslandDesk.chrome": 279,
+        "IslandDesk.select_game": 291,
+        "IslandDesk.restart_game": 299,
+        "IslandDesk.suspend_game": 305,
+        "IslandDesk.pause_if_unfocused": 309,
+        "IslandDesk.pause_game": 316,
+        "IslandDesk.game_click": 322,
+        "IslandDesk.game_key": 328,
+        "IslandDesk.draw_game": 333,
+        "IslandDesk.notify": 339,
+        "IslandDesk.refresh_overview": 410,
+        "IslandDesk.update_choices": 435,
+        "IslandDesk.choose": 489,
+        "IslandDesk.decode_image": 494,
+        "IslandDesk.update_music": 510,
+        "IslandDesk.transport": 527,
+        "IslandDesk.send_transport": 531,
+        "IslandDesk.add_approval": 537,
+        "IslandDesk.render_approval": 546,
+        "IslandDesk.decide": 560,
+        "IslandDesk.tick": 565,
+        "IslandDesk.cancel_approvals": 605,
+        "IslandDesk.close": 612
+      },
+      "imports": [
+        "commands",
+        "glass_ui",
+        "island_choices",
+        "island_games",
+        "island_media",
+        "island_mind",
+        "notch_widgets"
+      ]
+    },
+    "island_games": {
+      "source": "jarvis/island_games.py",
+      "sha256": "2cc6fa2f9dab1ce28f594fbed5ea311501db6ba61ae43ae9c37d94a7ec6e7d26",
+      "symbols": {
+        "merge": 14,
+        "winner": 28,
+        "best_move": 35,
+        "Game": 57,
+        "Game.__init__": 58,
+        "Game.reset": 64,
+        "Game._food": 82,
+        "Game._spawn": 86,
+        "Game.key": 92,
+        "Game.click": 125,
+        "Game.tick": 158,
+        "Game.render": 203
+      },
+      "imports": [
+        "island"
+      ]
+    },
+    "island_media": {
+      "source": "jarvis/island_media.py",
+      "sha256": "74d00deab2662cf8768366cc8c47eaa527400c3a85ebfd3b57cf16ea6803af38",
+      "symbols": {
+        "thumbnail": 53,
+        "MediaJobs": 65,
+        "MediaJobs.__init__": 67,
+        "MediaJobs.start": 75,
+        "MediaJobs._run": 85,
+        "MediaJobs.healthy": 116,
+        "MediaJobs.repair": 119,
+        "MediaJobs.close": 127,
+        "main": 136
+      },
+      "imports": [
+        "harness_process",
+        "spotify"
+      ]
+    },
+    "island_mind": {
+      "source": "jarvis/island_mind.py",
+      "sha256": "a248b2b7bc18ea2f09123cd06bbbd2ba1bfdd6fea70fe3184f23e10050bb8605",
+      "symbols": {
+        "MindView": 26,
+        "MindView.__init__": 27,
+        "MindView.cognition": 46,
+        "MindView.click": 49,
+        "MindView.refresh": 56,
+        "MindView.draw": 78,
+        "MindView.anchor": 122,
+        "MindView.along": 133,
+        "MindView.describe": 139,
+        "MindView.live": 154
+      },
+      "imports": [
+        "cognition"
+      ]
+    },
+    "island_surface": {
+      "source": "jarvis/island_surface.py",
+      "sha256": "42193a997c313ac822ce9d7937eb08e72c7dce213e9022b602130b47bc8ba068",
+      "symbols": {
+        "AnimationTimer": 13,
+        "AnimationTimer.__init__": 15,
+        "AnimationTimer.close": 27,
+        "EdgeSurface": 33,
+        "EdgeSurface.__init__": 34,
+        "EdgeSurface._signatures": 60,
+        "EdgeSurface._release_bitmap": 81,
+        "EdgeSurface.present": 87,
+        "EdgeSurface.hide": 123,
+        "EdgeSurface.close": 128
+      },
+      "imports": []
+    },
+    "jarvis_pointer": {
+      "source": "jarvis/jarvis_pointer.py",
+      "sha256": "5878b9a4291475a552ab50f0edf5d928f74caf834511a45bc6229d13c4aea9f1",
+      "symbols": {
+        "POINTER_INFO": 17,
+        "POINTER_TOUCH_INFO": 26,
+        "user32": 41,
+        "wait_for_idle_mouse": 45,
+        "physical_pixels": 64,
+        "tap": 75,
+        "enabled": 117
+      },
+      "imports": []
+    },
+    "knowledge": {
+      "source": "jarvis/knowledge.py",
+      "sha256": "1b482fb40e74257cd59708928fee53980ebc318ca022d20b1d2cbb23a8538ef5",
+      "symbols": {
+        "wants_screen": 22,
+        "Knowledge": 30,
+        "Knowledge.__init__": 31,
+        "Knowledge.start": 53,
+        "Knowledge.cancel": 56,
+        "Knowledge.forget": 63,
+        "Knowledge.attach_conversations": 70,
+        "Knowledge.attach_selector": 84,
+        "Knowledge._context": 88,
+        "Knowledge._memory_history": 129,
+        "Knowledge.prepare_context": 137,
+        "Knowledge.planning_context": 165,
+        "Knowledge._saved": 178,
+        "Knowledge.record_pair": 189,
+        "Knowledge.choice_snapshot": 199,
+        "Knowledge.choose_memory": 210,
+        "Knowledge.memory_reply": 229,
+        "Knowledge.close": 246,
+        "Knowledge.submit": 256,
+        "Knowledge.submit_natural": 276,
+        "Knowledge._run": 286
+      },
+      "imports": [
+        "clarification",
+        "context_selector",
+        "conversation_memory",
+        "hybrid_inference",
+        "natural_conversation",
+        "question_client",
+        "quick_answers"
+      ]
+    },
+    "knowledge_acquisition": {
+      "source": "jarvis/knowledge_acquisition.py",
+      "sha256": "58029b2eccc63d73cea9016f76871e157631d675657461938fac9341d305ea88",
+      "symbols": {
+        "settings": 26,
+        "interface_signature": 45,
+        "safe_controls": 53,
+        "source_rank": 64,
+        "reconcile_source": 72,
+        "Acquisition": 83,
+        "Acquisition.__init__": 84,
+        "Acquisition.assess": 96,
+        "Acquisition._scheduled": 132,
+        "Acquisition.proposal": 177,
+        "Acquisition.prepare": 181,
+        "Acquisition._prepare": 193,
+        "Acquisition.repair": 369,
+        "Acquisition.finished": 381
+      },
+      "imports": [
+        "agent_events",
+        "app_knowledge",
+        "dag_execution",
+        "toolkits",
+        "tools"
+      ]
+    },
+    "knowledge_worker": {
+      "source": "jarvis/knowledge_worker.py",
+      "sha256": "6b0792e5e1492e2ceb9541ebcdafb2ba216e7515f0d9fca68836f2127ef1630c",
+      "symbols": {
+        "session": 27,
+        "ensure_server": 34,
+        "local_prompt_format": 62,
+        "chat": 79,
+        "search": 151,
+        "answer_from_screen": 165,
+        "answer": 192,
+        "handle_request": 444,
+        "main": 479
+      },
+      "imports": [
+        "cloud_policy",
+        "code_stream",
+        "conversation_memory",
+        "gpu_scheduler",
+        "hybrid_inference",
+        "inference_limits",
+        "model_selection",
+        "natural_conversation"
+      ]
+    },
+    "kokoro_speech": {
+      "source": "jarvis/kokoro_speech.py",
+      "sha256": "7ede67a84d5b6a5dc8e1c1b68c071e1be0903b393023efd1cf7f7d285acce53b",
+      "symbols": {
+        "speed": 25,
+        "synthesize": 33,
+        "SpeedSession": 48,
+        "SpeedSession.__init__": 50,
+        "SpeedSession.__getattr__": 54,
+        "SpeedSession.run": 57,
+        "load_voice": 67,
+        "render": 80,
+        "Player": 104,
+        "Player.__init__": 106,
+        "Player.add": 123,
+        "Player.finish": 135,
+        "Player.clear": 141,
+        "Player.discard": 149,
+        "Player.callback": 157,
+        "Player.close": 190,
+        "main": 197,
+        "raise_priority": 206,
+        "queued_batch": 216,
+        "serve": 235
+      },
+      "imports": [
+        "natural_voice",
+        "pcm_ring"
+      ]
+    },
+    "launcher": {
+      "source": "jarvis/launcher.py",
+      "sha256": "79c7865b3220a44482c63ed003f10666d3d7f9efa8618833cc68e43edb1dc8b9",
+      "symbols": {
+        "OwnedApplication": 17,
+        "OwnedApplication.__init__": 19,
+        "OwnedApplication.attach": 22,
+        "OwnedApplication.terminate": 38,
+        "OwnedApplication.close": 44,
+        "session_heartbeat": 50,
+        "source_snapshot": 60,
+        "preflight": 73,
+        "singleton": 190,
+        "heartbeat_state": 206,
+        "supervised_restart": 213,
+        "runtime_command": 217,
+        "prepare_runtime": 242,
+        "run": 301,
+        "check_imports": 396,
+        "runtime_status": 413
+      },
+      "imports": [
+        "anticipation",
+        "claude_code",
+        "cloud_policy",
+        "codex_code",
+        "command_cleanup",
+        "config_contract",
+        "context_selector",
+        "diagnostics",
+        "docker_runtime",
+        "f5_speech",
+        "gpu_scheduler",
+        "harness",
+        "harness_process",
+        "hermes",
+        "hierarchical",
+        "knowledge_acquisition",
+        "paths",
+        "realtime",
+        "recovery",
+        "repo_sandbox",
+        "visual_fallback"
+      ]
+    },
+    "live_app_context": {
+      "source": "jarvis/live_app_context.py",
+      "sha256": "e3159826442765d5d880d4d8a22f5ae33ff313176ef29ba8b6323d37076d5aaf",
+      "symbols": {
+        "window_info": 7,
+        "foreground_window": 38,
+        "LiveAppContext": 43,
+        "LiveAppContext.__init__": 44,
+        "LiveAppContext.identity": 52,
+        "LiveAppContext.observe_window": 55,
+        "LiveAppContext.record_controls": 69,
+        "LiveAppContext.snapshot": 81,
+        "LiveAppContext.refresh": 95
+      },
+      "imports": []
+    },
+    "mcp_bridge": {
+      "source": "jarvis/mcp_bridge.py",
+      "sha256": "bd077998362a1df2fee4bf4a2d5c6045b8899be8dcbb447970728d5032014e25",
+      "symbols": {
+        "configurations": 21,
+        "StdioClient": 36,
+        "StdioClient.__init__": 37,
+        "StdioClient._read": 65,
+        "StdioClient.send": 81,
+        "StdioClient._write_message": 92,
+        "StdioClient.request": 112,
+        "StdioClient.initialize": 142,
+        "StdioClient.tools": 149,
+        "StdioClient.close": 163,
+        "execute": 177
+      },
+      "imports": [
+        "agent_context",
+        "task_state"
+      ]
+    },
+    "media_commands": {
+      "source": "jarvis/media_commands.py",
+      "sha256": "950c988104e1682c88ac54f58f0dbb28db33a768e18e423776847a066ee71711",
+      "symbols": {
+        "parse_media": 6
+      },
+      "imports": [
+        "commands"
+      ]
+    },
+    "media_player": {
+      "source": "jarvis/media_player.py",
+      "sha256": "fa9e09628f98eb40bfaefde1b7360df2fb06001ba5db017a957227e367abccf9",
+      "symbols": {
+        "sound_key": 30,
+        "similarity": 50,
+        "_similarity": 56,
+        "clean_query": 65,
+        "youtube_key": 72,
+        "iso_duration": 82,
+        "clock_seconds": 90,
+        "youtube_search": 98,
+        "choose_youtube": 151,
+        "fetch_image": 172,
+        "card": 193,
+        "pause_other": 199,
+        "PlaybackUncertain": 213,
+        "play_youtube": 217,
+        "spotify_results": 249,
+        "choose_spotify": 268,
+        "spotify_window": 283,
+        "spotify_now": 289,
+        "play_spotify": 315,
+        "control_text": 391,
+        "control_card": 405,
+        "youtube_state": 441,
+        "active_service": 452,
+        "resolve": 467,
+        "play": 485
+      },
+      "imports": [
+        "commands",
+        "island_media",
+        "spotify",
+        "window_focus"
+      ]
+    },
+    "media_ui": {
+      "source": "jarvis/media_ui.py",
+      "sha256": "0ff127a35e48c686d01bca84a1ad9b573b3eff7c19fa46aae30afa015a06d609",
+      "symbols": {
+        "platform_of": 29,
+        "find_media_handle": 41,
+        "snapshot_for": 61,
+        "resolve": 79,
+        "search_current": 90,
+        "key_for": 113,
+        "fill_search": 125,
+        "set_range": 157,
+        "control": 180
+      },
+      "imports": [
+        "actions",
+        "ui_controls"
+      ]
+    },
+    "memory_curator": {
+      "source": "jarvis/memory_curator.py",
+      "sha256": "1a91c759efba89338a8fb6d009aa50d4d46b0135eb7ce246b730130b02ff8cbb",
+      "symbols": {
+        "terms": 74,
+        "overlap": 78,
+        "safe": 83,
+        "subject": 88,
+        "preference_slot": 94,
+        "MemoryCurator": 101,
+        "MemoryCurator.__init__": 102,
+        "MemoryCurator.load": 139,
+        "MemoryCurator.save": 175,
+        "MemoryCurator.active": 209,
+        "MemoryCurator.add": 214,
+        "MemoryCurator.forget": 257,
+        "MemoryCurator.relevant": 275,
+        "MemoryCurator.observe": 293,
+        "MemoryCurator.save_now": 310,
+        "MemoryCurator._queue": 321,
+        "MemoryCurator.start": 327,
+        "MemoryCurator.close": 333,
+        "MemoryCurator._run": 344,
+        "MemoryCurator._chat": 366,
+        "MemoryCurator.extract": 382,
+        "MemoryCurator.summarise": 408,
+        "MemoryCurator.conversations": 449,
+        "MemoryCurator.context": 478,
+        "parse_command": 507,
+        "first_person": 526,
+        "execute": 558,
+        "absolute_dates": 590,
+        "guess_category": 608,
+        "describe": 632
+      },
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "obsidian_memory"
+      ]
+    },
+    "memory_index": {
+      "source": "jarvis/memory_index.py",
+      "sha256": "2ee8eaa0e099aece9e1551b40d100f8b9a6857b3701cdb3ed1d040bae3415404",
+      "symbols": {
+        "_tokens": 76,
+        "_safe_line": 80,
+        "_is_link": 89,
+        "_summary": 97,
+        "project_roots": 143,
+        "discover_projects": 151,
+        "installed_windows_apps": 213,
+        "app_entries": 254,
+        "tool_entries": 277,
+        "build_index": 289,
+        "_atomic_text": 296,
+        "write_tools_note": 302,
+        "write_index": 318,
+        "load_index": 348,
+        "context": 364,
+        "project_matches": 428,
+        "catalogue_answer": 437
+      },
+      "imports": [
+        "toolkits",
+        "tools"
+      ]
+    },
+    "messengers": {
+      "source": "jarvis/messengers.py",
+      "sha256": "0a7b6e0dcdb8a904afde02ff72ebb47fc7019bec7465479ce24c192f54da6281",
+      "symbols": {
+        "parse_command": 25,
+        "_window": 43,
+        "send": 49,
+        "_items": 60,
+        "send_telegram": 65
+      },
+      "imports": [
+        "",
+        "commands",
+        "jarvis_pointer",
+        "window_focus"
+      ]
+    },
+    "model_performance": {
+      "source": "jarvis/model_performance.py",
+      "sha256": "dd8fa7b12efdc0a61dc867111aebaf79b553a977b51cf99be19a42f3ff4d3411",
+      "symbols": {
+        "PerformanceTracker": 9,
+        "PerformanceTracker.__init__": 10,
+        "PerformanceTracker.cloud_failed_class": 17,
+        "PerformanceTracker.feedback": 22,
+        "PerformanceTracker.reset": 31
+      },
+      "imports": []
+    },
+    "model_recovery": {
+      "source": "jarvis/model_recovery.py",
+      "sha256": "decf0bc37af672d2126e66a3ddd22382fb1b38b3a094279ce545ac10d66e8ed6",
+      "symbols": {
+        "ModelRecovery": 8,
+        "ModelRecovery.__init__": 9,
+        "ModelRecovery.healthy": 21,
+        "ModelRecovery.repair": 39,
+        "ModelRecovery.download": 51,
+        "ModelRecovery.close": 83
+      },
+      "imports": [
+        "knowledge_worker",
+        "model_selection"
+      ]
+    },
+    "model_selection": {
+      "source": "jarvis/model_selection.py",
+      "sha256": "345e1a715912a124e4825e9b238493268539b3c5af9e91add977ba0d3a1817fa",
+      "symbols": {
+        "required_models": 2,
+        "installed_model": 36
+      },
+      "imports": [
+        "command_cleanup",
+        "context_selector",
+        "planner_settings",
+        "realtime"
+      ]
+    },
+    "names": {
+      "source": "jarvis/names.py",
+      "sha256": "52d684c45b03c29c5aa9278d659454205494a09e3020cba7980f6f44a83e4c0f",
+      "symbols": {
+        "normalize": 13,
+        "common": 22,
+        "rank": 27,
+        "spelling_score": 52,
+        "rank_spelling": 78
+      },
+      "imports": []
+    },
+    "native_coding": {
+      "source": "jarvis/native_coding.py",
+      "sha256": "cf9190757d2490b8958267d87b2b00ca1602a7822b8994fa1aea1af5bf582e61",
+      "symbols": {
+        "specifications": 57,
+        "infer": 74,
+        "run": 119
+      },
+      "imports": [
+        "agent_context",
+        "agent_tools",
+        "codex_files",
+        "codex_validation",
+        "coding_activity",
+        "coding_files",
+        "coding_operations",
+        "coding_processes",
+        "coding_programs",
+        "command_reference",
+        "firecrawl_tools",
+        "knowledge_worker",
+        "ollama_models",
+        "progress",
+        "repo_abilities",
+        "tools"
+      ]
+    },
+    "native_tools": {
+      "source": "jarvis/native_tools.py",
+      "sha256": "b48a497b7d97295aee57712cea710795377e89554bfc106219d8606b163ccbee",
+      "symbols": {
+        "parameter_fields": 14,
+        "functions": 31,
+        "parse": 58,
+        "estimate_tokens": 114,
+        "conversation_key": 119,
+        "step_update": 124,
+        "plan": 150
+      },
+      "imports": [
+        "agent_context",
+        "inference_limits",
+        "knowledge_worker",
+        "repo_analysis"
+      ]
+    },
+    "natural_conversation": {
+      "source": "jarvis/natural_conversation.py",
+      "sha256": "b4c037ece85fb384c7e76ff551cc7e7dece00c4549cc2409b22a689bf92fe7db",
+      "symbols": {
+        "eligible": 10,
+        "generate": 19
+      },
+      "imports": []
+    },
+    "natural_voice": {
+      "source": "jarvis/natural_voice.py",
+      "sha256": "fa1887f0ee0b9e4178cc26518422afc3fca3185b8037cc81d3ee085ff59df49d",
+      "symbols": {
+        "Phrase": 22,
+        "speech_unicode": 30,
+        "number_words": 63,
+        "ordinal_words": 76,
+        "_number": 83,
+        "_money": 94,
+        "_file_name": 104,
+        "_place": 109,
+        "_time": 114,
+        "speakable": 122,
+        "tts_text": 157,
+        "split_phrases": 172,
+        "plan": 204,
+        "breath": 242,
+        "trim": 261,
+        "finish": 271,
+        "voice_style": 287,
+        "language_for": 307
+      },
+      "imports": []
+    },
+    "notch_widgets": {
+      "source": "jarvis/notch_widgets.py",
+      "sha256": "870b25b1fe899aa744516a2baf1de68a740baf33ae2face0bcdd07728c8dbd65",
+      "symbols": {
+        "RoundedCard": 12,
+        "RoundedCard.__init__": 13,
+        "RoundedCard.resize": 22,
+        "NotchPanel": 37,
+        "NotchPanel.__init__": 39,
+        "NotchPanel.state": 48,
+        "NotchPanel.withdraw": 51,
+        "NotchPanel.deiconify": 58,
+        "NotchPanel.present": 65,
+        "NotchPanel.geometry": 82
+      },
+      "imports": [
+        "display",
+        "glass_ui"
+      ]
+    },
+    "obsidian_memory": {
+      "source": "jarvis/obsidian_memory.py",
+      "sha256": "462084635470e2ef777cb22f88c3f12cd5822f03cf1b03008365d7630707d586",
+      "symbols": {
+        "clean": 16,
+        "ObsidianMemory": 22,
+        "ObsidianMemory.__init__": 23,
+        "ObsidianMemory._index": 43,
+        "ObsidianMemory.task_context": 58,
+        "ObsidianMemory.program_matches": 76,
+        "ObsidianMemory.catalogue_answer": 80,
+        "ObsidianMemory.project_matches": 124,
+        "ObsidianMemory.ensure_index": 128,
+        "ObsidianMemory.start": 152,
+        "ObsidianMemory._link_note": 164,
+        "ObsidianMemory._append": 176,
+        "ObsidianMemory.record": 187,
+        "ObsidianMemory.observe_window": 197,
+        "ObsidianMemory.close": 223,
+        "ObsidianMemory.recall": 237,
+        "ObsidianMemory.profile_text": 294
+      },
+      "imports": [
+        "capabilities",
+        "capability_guide",
+        "cloud_policy",
+        "memory_index"
+      ]
+    },
+    "office_com_worker": {
+      "source": "jarvis/office_com_worker.py",
+      "sha256": "5a8b489bb8694c1e0a553f5bc821db97a814b90094810a9a0383a4e0469af473",
+      "symbols": {
+        "_owned_pid": 19,
+        "excel_write": 33,
+        "word_write": 53,
+        "main": 77
+      },
+      "imports": []
+    },
+    "ollama_models": {
+      "source": "jarvis/ollama_models.py",
+      "sha256": "8bfbfd8820192d4237e93529af963378c8ce4a688febb5624c62135b245614c8",
+      "symbols": {
+        "IncompleteCache": 15,
+        "local_endpoint": 19,
+        "installed": 25,
+        "model_plan": 31,
+        "create_alias": 39,
+        "coding_model": 52,
+        "cache_roots": 83,
+        "cached_payload": 90,
+        "restore_cached": 143
+      },
+      "imports": [
+        "gpu_scheduler"
+      ]
+    },
+    "paths": {
+      "source": "jarvis/paths.py",
+      "sha256": "669cc10a79a2f140747656e4e48e6d8f7bf014320b205f95b8883e66e6ff9c80",
+      "symbols": {
+        "linked": 7,
+        "app_root": 15,
+        "config_file": 18,
+        "manifest_file": 21,
+        "state_file": 24,
+        "log_file": 29,
+        "artifact_path": 34
+      },
+      "imports": []
+    },
+    "pc_context": {
+      "source": "jarvis/pc_context.py",
+      "sha256": "464770e3a55a7db15c334a615da4badf8d141714262e3780b64c8df2ffd604e2",
+      "symbols": {
+        "inventory": 21,
+        "query_name": 39,
+        "resolve_entries": 48,
+        "requested_kind": 62,
+        "prompt": 70,
+        "canonical_resolution": 74,
+        "validate_resolution": 82,
+        "context": 94
+      },
+      "imports": [
+        "catalog",
+        "projects"
+      ]
+    },
+    "pcm_ring": {
+      "source": "jarvis/pcm_ring.py",
+      "sha256": "0e3fd6414c066814a5c1313fb631c9dceef18a16265b006fc1b196ccb58954ac",
+      "symbols": {
+        "PCMBuffer": 10,
+        "PCMBuffer.__init__": 11,
+        "PCMBuffer.put": 22,
+        "PCMBuffer.read": 37,
+        "PCMBuffer.size": 46,
+        "PCMBuffer.release": 50,
+        "PCMBuffer.close": 64,
+        "CaptureQueue": 75,
+        "CaptureQueue.__init__": 77,
+        "CaptureQueue.configure": 83,
+        "CaptureQueue.put_nowait": 87,
+        "CaptureQueue.get": 101,
+        "CaptureQueue.get_nowait": 110,
+        "CaptureQueue.qsize": 113,
+        "CaptureQueue.close": 116
+      },
+      "imports": []
+    },
+    "phrasing": {
+      "source": "jarvis/phrasing.py",
+      "sha256": "e0e09258adea9cb21731d10cd2c6949c231a40e8b73e1cdd1700a63b6e1cbedf",
+      "symbols": {
+        "head_rewrite": 88,
+        "keeps_punctuation": 101,
+        "canonical": 110
+      },
+      "imports": []
+    },
+    "piper_speech": {
+      "source": "jarvis/piper_speech.py",
+      "sha256": "9931fd246c5d9c7cb541c8ab983d92aa326d0b44e136aaa39c1a1083c4fc1042",
+      "symbols": {
+        "play_reply": 8,
+        "main": 38
+      },
+      "imports": [
+        "speech"
+      ]
+    },
+    "planner_settings": {
+      "source": "jarvis/planner_settings.py",
+      "sha256": "dae5aa01e902bce48bb30614c9f99b6588076275fd094a61d7144f7750441696",
+      "symbols": {
+        "settings": 5
+      },
+      "imports": []
+    },
+    "polyglot_training_data": {
+      "source": "jarvis/polyglot_training_data.py",
+      "sha256": "4692572302cb02531133e05fe35f528b5545c366ea68716ea7637d44e5823e9a",
+      "symbols": {},
+      "imports": []
+    },
+    "progress": {
+      "source": "jarvis/progress.py",
+      "sha256": "67c7a4d65b072a1b47b1f598f51240b39f23990f1bb12b558dda95183aabfb22",
+      "symbols": {
+        "status": 2
+      },
+      "imports": []
+    },
+    "projects": {
+      "source": "jarvis/projects.py",
+      "sha256": "09f6e89a8ee2c2b7a6551aac2f3eaada6f31c10bb99b4f611247b3399f27c35b",
+      "symbols": {
+        "has_project_marker": 15,
+        "project_paths": 26,
+        "activity": 51,
+        "Projects": 80,
+        "Projects.__init__": 81,
+        "Projects._memory": 86,
+        "Projects.list": 93,
+        "Projects.last": 100,
+        "Projects.resolve": 111,
+        "Projects.remember": 121
+      },
+      "imports": [
+        "names",
+        "paths"
+      ]
+    },
+    "push_to_write": {
+      "source": "jarvis/push_to_write.py",
+      "sha256": "63a4a8bedd8588ca0f4bd5306455cddb87f489707ef8151653dd3056cee1326d",
+      "symbols": {
+        "KBDLLHOOKSTRUCT": 24,
+        "KEYBDINPUT": 29,
+        "MOUSEINPUT": 34,
+        "INPUTUNION": 39,
+        "INPUT": 43,
+        "PushToWrite": 48,
+        "PushToWrite.__init__": 50,
+        "PushToWrite.key": 66,
+        "PushToWrite.latch": 107,
+        "PushToWrite.latched_since": 116,
+        "PushToWrite._arm": 120,
+        "PushToWrite._set": 131,
+        "PushToWrite._send_mask_and_alt_up": 145,
+        "PushToWrite.start": 156,
+        "PushToWrite.stop": 161,
+        "PushToWrite._run": 171
+      },
+      "imports": []
+    },
+    "question_client": {
+      "source": "jarvis/question_client.py",
+      "sha256": "f0fccba9b4ad04d8c2bd2e59a29610ad953269630a95b6322b5e789626740f29",
+      "symbols": {
+        "bounded_request": 12,
+        "QuestionClient": 41,
+        "QuestionClient.__init__": 42,
+        "QuestionClient.snapshot": 48,
+        "QuestionClient.close": 52,
+        "QuestionClient._start": 64,
+        "QuestionClient.request": 98,
+        "QuestionClient._request": 127
+      },
+      "imports": [
+        "hybrid_inference",
+        "inference_limits",
+        "pc_context",
+        "recovery"
+      ]
+    },
+    "quick_answers": {
+      "source": "jarvis/quick_answers.py",
+      "sha256": "94df28f8deebce8b2fc5a3c4ccc730108bac26d9bfc9c9d76a0ba57c4c83a5bc",
+      "symbols": {
+        "WeatherService": 26,
+        "WeatherService.__init__": 27,
+        "WeatherService.saved_city": 38,
+        "WeatherService._get": 43,
+        "WeatherService._location": 48,
+        "WeatherService.current": 68,
+        "WeatherService.air_quality": 108,
+        "QuickAnswers": 120,
+        "QuickAnswers.__init__": 121,
+        "QuickAnswers.name": 127,
+        "QuickAnswers.salutation": 132,
+        "QuickAnswers.time_text": 136,
+        "QuickAnswers.weather_text": 139,
+        "QuickAnswers._weather_text": 143,
+        "QuickAnswers.startup_greeting": 151,
+        "QuickAnswers.answer": 154,
+        "QuickAnswers._weather_detail": 176
+      },
+      "imports": [
+        "everyday_runtime"
+      ]
+    },
+    "rea_tools": {
+      "source": "jarvis/rea_tools.py",
+      "sha256": "b1080dd87d88e81e9776b78241473d0c8cdaafae237803747d25f68e2b112375",
+      "symbols": {
+        "_config": 57,
+        "_unlinked": 72,
+        "_read_session": 79,
+        "_exclusive": 97,
+        "_root": 112,
+        "_node": 120,
+        "_entry": 131,
+        "_commands": 142,
+        "_session_dir": 151,
+        "_target": 160,
+        "_ledger_path": 191,
+        "_append_ledger": 195,
+        "status": 208,
+        "_slug": 230,
+        "_sessions": 234,
+        "ingest": 245,
+        "_run_rea": 275,
+        "analyze": 321,
+        "_analyze": 335,
+        "ledger": 421,
+        "record": 438,
+        "execute": 455,
+        "command": 482
+      },
+      "imports": [
+        "agent_context",
+        "commands",
+        "harness_process",
+        "skill_memory",
+        "task_state",
+        "toolkits"
+      ]
+    },
+    "realtime": {
+      "source": "jarvis/realtime.py",
+      "sha256": "de7cdb6b5ed07ab524c687b2ff8f7f28fd670aeaa0fa5680d08bb5e693783f0a",
+      "symbols": {
+        "command": 31,
+        "settings": 41,
+        "distance": 68,
+        "epoch": 74,
+        "_serious": 84,
+        "serious": 139,
+        "reader": 146,
+        "Realtime": 199,
+        "Realtime.__init__": 200,
+        "Realtime.start": 217,
+        "Realtime._run": 222,
+        "Realtime.healthy": 229,
+        "Realtime.repair": 232,
+        "Realtime.cancel": 236,
+        "Realtime.microphone_started": 240,
+        "Realtime.close": 243,
+        "Realtime.detect_location": 247,
+        "Realtime._detect_location": 251,
+        "Realtime.query": 272,
+        "Realtime.selection": 294,
+        "Realtime.context": 317,
+        "Realtime.controls": 366,
+        "Realtime.save_seen": 386,
+        "Realtime.tick": 399
+      },
+      "imports": [
+        "gpu_scheduler",
+        "realtime_catalog",
+        "realtime_sources",
+        "weather_units"
+      ]
+    },
+    "realtime_catalog": {
+      "source": "jarvis/realtime_catalog.py",
+      "sha256": "2b05b32cb171a7f88b847b2fd3381090e6dbd0693f8e64ea9d0be75c4534d366",
+      "symbols": {
+        "Provider": 10
+      },
+      "imports": []
+    },
+    "realtime_sources": {
+      "source": "jarvis/realtime_sources.py",
+      "sha256": "5396ec35ab51c3b07e6a90fc233101f2150e9d2be8c8ec1002c5fc7823e23865",
+      "symbols": {
+        "countries_key": 31,
+        "public_url": 52,
+        "read_error": 62,
+        "coordinates": 75,
+        "endpoint": 82,
+        "compact": 228,
+        "xml_data": 236,
+        "Sources": 260,
+        "Sources.__init__": 261,
+        "Sources.fetch": 272,
+        "Sources._fetch": 282,
+        "Sources._get": 362,
+        "Sources.failure": 396,
+        "Sources.read": 400
+      },
+      "imports": [
+        "realtime_catalog",
+        "weather_units"
+      ]
+    },
+    "recovery": {
+      "source": "jarvis/recovery.py",
+      "sha256": "1faa10835309be6768c51c65f7bd11498bc0f3ce0a82eef41c3ef6adbc49e2dc",
+      "symbols": {
+        "ui_loop": 11,
+        "record": 37,
+        "restart_thread": 44,
+        "Watchdog": 62,
+        "Watchdog.__init__": 63,
+        "Watchdog.register": 69,
+        "Watchdog.tick": 73,
+        "Watchdog.failed": 105,
+        "Watchdog.start": 112,
+        "Watchdog.run": 115,
+        "Watchdog.close": 120,
+        "OllamaService": 124,
+        "OllamaService.__init__": 125,
+        "OllamaService.healthy": 129,
+        "OllamaService.repair": 136
+      },
+      "imports": [
+        "knowledge_worker"
+      ]
+    },
+    "repo_abilities": {
+      "source": "jarvis/repo_abilities.py",
+      "sha256": "23b7a7388b14b009e1cc13f8baa9cf9408838d0b6c09f7f8cf997eb2462305fb",
+      "symbols": {
+        "AbilityError": 127,
+        "Yield": 131,
+        "memory_refusal": 135,
+        "now_iso": 146,
+        "slug": 150,
+        "stdlib_modules": 154,
+        "extract_code": 158,
+        "check_code": 164,
+        "clean_spec": 210,
+        "trigger_pattern": 266,
+        "needs_approval": 277,
+        "AbilityForge": 288,
+        "AbilityForge.__init__": 289,
+        "AbilityForge._load": 344,
+        "AbilityForge._save": 353,
+        "AbilityForge.abilities": 362,
+        "AbilityForge.find": 366,
+        "AbilityForge.on_learned": 377,
+        "AbilityForge.repo_report": 387,
+        "AbilityForge.names": 410,
+        "AbilityForge.describe_repo": 413,
+        "AbilityForge.on_viewed": 433,
+        "AbilityForge.on_learn_failed": 459,
+        "AbilityForge.enqueue": 471,
+        "AbilityForge.start": 493,
+        "AbilityForge.resume_queued": 511,
+        "AbilityForge.close": 523,
+        "AbilityForge.busy": 527,
+        "AbilityForge.run": 530,
+        "AbilityForge._log": 562,
+        "AbilityForge.card": 580,
+        "AbilityForge._step": 587,
+        "AbilityForge.user_busy": 593,
+        "AbilityForge.runner_priority": 617,
+        "AbilityForge._wait_idle": 644,
+        "AbilityForge.pick_model": 650,
+        "AbilityForge._chat": 667,
+        "AbilityForge._unload_model": 727,
+        "AbilityForge._learner": 736,
+        "AbilityForge._builds_today": 742,
+        "AbilityForge.build_repo": 747,
+        "AbilityForge._build_repo": 752,
+        "AbilityForge._announce": 800,
+        "AbilityForge._repo_modules": 822,
+        "AbilityForge.design": 833,
+        "AbilityForge._reference": 865,
+        "AbilityForge.generate": 872,
+        "AbilityForge.build_ability": 883,
+        "AbilityForge._build_ability": 898,
+        "AbilityForge._stage_update": 958,
+        "AbilityForge._next_version": 973,
+        "AbilityForge._finish": 977,
+        "AbilityForge.usable_triggers": 993,
+        "AbilityForge._python_for": 1013,
+        "AbilityForge._base_env": 1016,
+        "AbilityForge._venv": 1023,
+        "AbilityForge._environment": 1030,
+        "AbilityForge._kill": 1038,
+        "AbilityForge._execute": 1054,
+        "AbilityForge._execute_owned": 1058,
+        "AbilityForge.test": 1104,
+        "AbilityForge._prune_runs": 1116,
+        "AbilityForge.install_approved": 1127,
+        "AbilityForge._install_approved": 1132,
+        "AbilityForge.approval_text": 1210,
+        "AbilityForge.ask": 1239,
+        "AbilityForge._approval_digest": 1260,
+        "AbilityForge.decide": 1266,
+        "AbilityForge.deny": 1301,
+        "AbilityForge.review_pending": 1314,
+        "AbilityForge._fetch_repo": 1323,
+        "AbilityForge.example": 1351,
+        "AbilityForge._compiled": 1356,
+        "AbilityForge._match_one": 1368,
+        "AbilityForge.match": 1375,
+        "AbilityForge._resolve_file": 1384,
+        "AbilityForge.invoke": 1405,
+        "AbilityForge._invoke": 1409,
+        "AbilityForge._deliver": 1510,
+        "AbilityForge.status": 1529,
+        "AbilityForge.waiting": 1535,
+        "AbilityForge.relevant": 1540,
+        "AbilityForge.coding_reference": 1559,
+        "AbilityForge.coding_tool": 1575,
+        "AbilityForge.summary": 1605,
+        "suppressed": 1614,
+        "suppressed.__enter__": 1615,
+        "suppressed.__exit__": 1618,
+        "references_for": 1625,
+        "parse_command": 1637,
+        "parse_learned": 1703,
+        "resolve_repo": 1725,
+        "execute": 1746,
+        "_execute": 1756
+      },
+      "imports": [
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "media_player",
+        "repo_learning"
+      ]
+    },
+    "repo_acquisition": {
+      "source": "jarvis/repo_acquisition.py",
+      "sha256": "b6a1c10869c57821cae41489cb338b918f456e166e27dd74c78e302e63ebd4c3",
+      "symbols": {
+        "environment": 20,
+        "command": 26,
+        "git": 49,
+        "identity": 61,
+        "eligible": 76,
+        "acquire": 82,
+        "verify_snapshot": 143
+      },
+      "imports": [
+        "harness_process",
+        "skill_memory"
+      ]
+    },
+    "repo_analysis": {
+      "source": "jarvis/repo_analysis.py",
+      "sha256": "a4aedd102ac8983ad12e749fb9a1c3e2cbc17d130fd8d1cb658747138234c3dc",
+      "symbols": {
+        "annotation": 12,
+        "validate": 47,
+        "signature": 78,
+        "analyze": 103
+      },
+      "imports": []
+    },
+    "repo_learning": {
+      "source": "jarvis/repo_learning.py",
+      "sha256": "f3d1c5d9c11f35d0ddab0ae806b9c89473e3601ef36127079a7613bbd38c2b9b",
+      "symbols": {
+        "LearningError": 93,
+        "TooLarge": 97,
+        "canonical_name": 101,
+        "safe_source_path": 107,
+        "sensitive": 112,
+        "text_data": 117,
+        "public_query": 125,
+        "atomic_json": 130,
+        "words": 135,
+        "repo_id": 139,
+        "token": 143,
+        "title_repo": 153,
+        "python_symbols": 164,
+        "regex_symbols": 182,
+        "imports_of": 198,
+        "analyze_zip": 211,
+        "importance": 279,
+        "RepoLearner": 284,
+        "RepoLearner.__init__": 285,
+        "RepoLearner._load_index": 326,
+        "RepoLearner._save_index": 341,
+        "RepoLearner.knowledge": 361,
+        "RepoLearner.known": 376,
+        "RepoLearner.get": 387,
+        "RepoLearner._response": 399,
+        "RepoLearner.info": 416,
+        "RepoLearner.search": 425,
+        "RepoLearner.search_query": 454,
+        "RepoLearner.pick": 471,
+        "RepoLearner._chat": 489,
+        "RepoLearner.card": 506,
+        "RepoLearner.learn": 512,
+        "RepoLearner._learn": 524,
+        "RepoLearner._failed": 615,
+        "RepoLearner.light_source": 624,
+        "RepoLearner._save": 693,
+        "RepoLearner.relevant": 755,
+        "RepoLearner.reference": 772,
+        "RepoLearner.wants_reference": 814,
+        "RepoLearner.prepare": 823,
+        "RepoLearner.enqueue": 866,
+        "RepoLearner.start": 881,
+        "RepoLearner.close": 887,
+        "RepoLearner.busy": 890,
+        "RepoLearner.run": 893,
+        "RepoLearner.observe_title": 910,
+        "RepoLearner._verify_and_queue": 950,
+        "RepoLearner.status": 969,
+        "parse_command": 977,
+        "execute": 1001,
+        "reference_for": 1079
+      },
+      "imports": [
+        "cloud_policy",
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "media_player",
+        "obsidian_memory",
+        "skill_memory"
+      ]
+    },
+    "repo_runtime_runner": {
+      "source": "jarvis/repo_runtime_runner.py",
+      "sha256": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+      "symbols": {
+        "harden": 19,
+        "converted": 56,
+        "bind": 70,
+        "serializable": 95,
+        "BoundedOutput": 114,
+        "BoundedOutput.write": 115,
+        "main": 118
+      },
+      "imports": []
+    },
+    "repo_sandbox": {
+      "source": "jarvis/repo_sandbox.py",
+      "sha256": "a6089c1944b228b4757ab97b8837c2cca1a30296682ff5823ad251d4d2706c97",
+      "symbols": {
+        "RepositorySandbox": 17,
+        "RepositorySandbox.__init__": 18,
+        "RepositorySandbox.cli": 23,
+        "RepositorySandbox.status": 28,
+        "RepositorySandbox.run": 48
+      },
+      "imports": [
+        "repo_acquisition",
+        "skill_memory"
+      ]
+    },
+    "repo_tools": {
+      "source": "jarvis/repo_tools.py",
+      "sha256": "d4deb4f953ea6392468e48aae74da5eb2a1441bfda95019096c2466046d71a03",
+      "symbols": {
+        "execute": 17,
+        "definitions": 46,
+        "command": 58
+      },
+      "imports": [
+        "commands",
+        "repository_skills"
+      ]
+    },
+    "repository_skills": {
+      "source": "jarvis/repository_skills.py",
+      "sha256": "3821a6fd938484889fd2b806f5d393a6768f38df01883e48c430484c2c917160",
+      "symbols": {
+        "now": 22,
+        "RepositorySkills": 25,
+        "RepositorySkills.__init__": 26,
+        "RepositorySkills.connect": 54,
+        "RepositorySkills.require_enabled": 59,
+        "RepositorySkills.note": 65,
+        "RepositorySkills.learn": 69,
+        "RepositorySkills.get": 116,
+        "RepositorySkills.transition": 134,
+        "RepositorySkills.fresh": 140,
+        "RepositorySkills.check": 145,
+        "RepositorySkills.activate": 163,
+        "RepositorySkills.invoke": 174,
+        "RepositorySkills.search": 206,
+        "RepositorySkills.lifecycle": 223,
+        "RepositorySkills.health": 245,
+        "engine": 252
+      },
+      "imports": [
+        "repo_acquisition",
+        "repo_analysis",
+        "repo_sandbox",
+        "skill_memory"
+      ]
+    },
+    "research_evidence": {
+      "source": "jarvis/research_evidence.py",
+      "sha256": "359060bdfb462be5317160eca436fbc7bb5b26f671bfa96515d8e535b1a608e5",
+      "symbols": {
+        "receipts": 8,
+        "assess": 19
+      },
+      "imports": [
+        "_vendor.deerflow_contracts"
+      ]
+    },
+    "runtime_health": {
+      "source": "jarvis/runtime_health.py",
+      "sha256": "c0178f238a933a2721a73542d043782a4f8b8be286fa3fbe383b35639e1829a5",
+      "symbols": {
+        "RuntimeHealth": 10,
+        "RuntimeHealth.__init__": 11,
+        "RuntimeHealth.observe": 19,
+        "RuntimeHealth.snapshot": 46
+      },
+      "imports": [
+        "audio",
+        "gpu_scheduler",
+        "question_client",
+        "speech"
+      ]
+    },
+    "screen_awareness": {
+      "source": "jarvis/screen_awareness.py",
+      "sha256": "cc145de90ef8eb241303613e8664d611dda031e6363008fe9af15bd19257ecca",
+      "symbols": {
+        "words": 37,
+        "videos": 45,
+        "match_titles": 52,
+        "ordinal": 77,
+        "safe_sum": 85,
+        "ScreenAwareness": 115,
+        "ScreenAwareness.__init__": 116,
+        "ScreenAwareness.observe": 133,
+        "ScreenAwareness.current": 140,
+        "ScreenAwareness.busy": 144,
+        "ScreenAwareness.tick": 150,
+        "ScreenAwareness.profile": 181,
+        "ScreenAwareness._snapshot": 184,
+        "ScreenAwareness._prepare": 189,
+        "ScreenAwareness.health": 226,
+        "ScreenAwareness.answer": 233,
+        "ScreenAwareness._queue": 290,
+        "ScreenAwareness.act": 297,
+        "ScreenAwareness._front": 346,
+        "ScreenAwareness._press": 353,
+        "ScreenAwareness.start_dictation": 400,
+        "ScreenAwareness._dictation_timeout": 428,
+        "ScreenAwareness.command": 438
+      },
+      "imports": [
+        "actions",
+        "app_knowledge",
+        "commands",
+        "names",
+        "ui_controls",
+        "window_focus"
+      ]
+    },
+    "screen_worker": {
+      "source": "jarvis/screen_worker.py",
+      "sha256": "9a9fe4b1d84d8dc6445bc87134c5dcf901b1f2d6a989377df3578662cfe3a007",
+      "symbols": {
+        "choose_window": 14,
+        "capture": 41
+      },
+      "imports": []
+    },
+    "self_evolution": {
+      "source": "jarvis/self_evolution.py",
+      "sha256": "b895463ed1f97d67bac4b6b1d2ab5f092143104d9427ab9adcecce820657388e",
+      "symbols": {
+        "_now": 77,
+        "_settings": 81,
+        "_battery_saver": 112,
+        "_signature": 126,
+        "CapabilityGapDetector": 130,
+        "CapabilityGapDetector.__init__": 133,
+        "CapabilityGapDetector.detect": 136,
+        "SelfEvolution": 204,
+        "SelfEvolution.__init__": 207,
+        "SelfEvolution._load": 233,
+        "SelfEvolution._save": 256,
+        "SelfEvolution._write_checkpoint": 269,
+        "SelfEvolution._clear_checkpoint": 285,
+        "SelfEvolution.score": 292,
+        "SelfEvolution._learned_names": 302,
+        "SelfEvolution.refresh_backlog": 307,
+        "SelfEvolution._seed_explore": 349,
+        "SelfEvolution.next_job": 369,
+        "SelfEvolution._what": 376,
+        "SelfEvolution._card": 380,
+        "SelfEvolution.note_activity": 389,
+        "SelfEvolution.stop_current": 394,
+        "SelfEvolution._resources_ok": 397,
+        "SelfEvolution._idle": 416,
+        "SelfEvolution.start": 432,
+        "SelfEvolution.close": 438,
+        "SelfEvolution._run": 442,
+        "SelfEvolution._cancelled": 454,
+        "SelfEvolution.run_job": 461,
+        "SelfEvolution._pause": 538,
+        "SelfEvolution._finish": 547,
+        "SelfEvolution._remember": 555,
+        "SelfEvolution.status": 567,
+        "SafeEvolutionManager": 577,
+        "SafeEvolutionManager.__init__": 587,
+        "SafeEvolutionManager._target": 597,
+        "SafeEvolutionManager._folder": 617,
+        "SafeEvolutionManager._binding": 626,
+        "SafeEvolutionManager.propose": 642,
+        "SafeEvolutionManager._git_env": 665,
+        "SafeEvolutionManager._repo_root": 672,
+        "SafeEvolutionManager.evaluate": 679,
+        "SafeEvolutionManager.deploy": 730,
+        "SafeEvolutionManager._deploy": 733,
+        "SafeEvolutionManager.rollback": 762,
+        "SafeEvolutionManager._replace_source": 765,
+        "SafeEvolutionManager._rollback": 771
+      },
+      "imports": [
+        "anticipation",
+        "cognition",
+        "knowledge_acquisition",
+        "media_player",
+        "repo_learning",
+        "skill_memory"
+      ]
+    },
+    "skill_memory": {
+      "source": "jarvis/skill_memory.py",
+      "sha256": "d00f499296058e2af839a9c85db3badebb58fa0e6407db355f1bc466b8f6c12f",
+      "symbols": {
+        "words": 15,
+        "atomic": 20,
+        "linked": 37,
+        "procedure_counts": 44,
+        "procedure_reliability": 50,
+        "SkillMemory": 55,
+        "SkillMemory.__init__": 56,
+        "SkillMemory.refresh": 94,
+        "SkillMemory._path": 143,
+        "SkillMemory.sync": 159,
+        "SkillMemory._index": 187,
+        "SkillMemory.context": 203,
+        "SkillMemory.record": 253,
+        "SkillMemory.close": 329,
+        "SkillMemory.safe_record": 334,
+        "SkillMemory.proposal": 342
+      },
+      "imports": [
+        "capabilities",
+        "experience_memory",
+        "fast_workflows",
+        "hermes_skills",
+        "obsidian_memory"
+      ]
+    },
+    "speech": {
+      "source": "jarvis/speech.py",
+      "sha256": "56ff85632d3acbaec180727b369fbe9550cf4b9689f3b3281a8dd9cb9f5b19fb",
+      "symbols": {
+        "VoiceStartupError": 14,
+        "spoken_text": 18,
+        "speech_parameters": 61,
+        "playback_timeout": 75,
+        "speech_language": 80,
+        "Speech": 89,
+        "Speech.__init__": 95,
+        "Speech.start": 128,
+        "Speech.say": 133,
+        "Speech.stream": 151,
+        "Speech.cancel": 207,
+        "Speech.interrupt": 233,
+        "Speech.output_recent": 238,
+        "Speech.output_references": 242,
+        "Speech.health": 245,
+        "Speech.close": 254,
+        "Speech._enqueue": 261,
+        "Speech._begin_output": 267,
+        "Speech._end_output": 272,
+        "Speech._run": 277,
+        "Speech._dispose_voice": 283,
+        "Speech._ensure_kokoro": 303,
+        "Speech._drain_output": 368,
+        "Speech._event": 376,
+        "Speech._watchdog": 430,
+        "Speech._kokoro_send": 441,
+        "Speech._serve_queue": 460
+      },
+      "imports": [
+        "f5_speech",
+        "natural_voice",
+        "speech_normalizer"
+      ]
+    },
+    "speech_normalizer": {
+      "source": "jarvis/speech_normalizer.py",
+      "sha256": "d2307722b8d0509b6c46679623d66bfb7d255ebd2f30fdbc75caec43e11307d6",
+      "symbols": {
+        "integer": 10,
+        "decimal": 22,
+        "normalize": 27,
+        "opening_clause": 50
+      },
+      "imports": [
+        "natural_voice"
+      ]
+    },
+    "spotify": {
+      "source": "jarvis/spotify.py",
+      "sha256": "b311185f59767076483d0d648e6959b7662d7b687dca3a35b7158ef2fbf80ac2",
+      "symbols": {
+        "open_app": 9,
+        "search": 19,
+        "_spotify_session": 29,
+        "_on_media_thread": 141,
+        "control": 183,
+        "is_playing": 200,
+        "_audio_sessions": 204,
+        "volume": 225
+      },
+      "imports": []
+    },
+    "step_planning": {
+      "source": "jarvis/step_planning.py",
+      "sha256": "0741841afd9a714fcc0b463a8d281e9726f1c45871309412c47f609b16b4d8b1",
+      "symbols": {
+        "compact_image": 54,
+        "wants_image": 74,
+        "StepSession": 86,
+        "StepSession.__init__": 88,
+        "StepSession.capture": 98,
+        "StepSession.scaffold": 109,
+        "StepSession.prepare": 115,
+        "StepSession.consume": 126,
+        "StepSession.images": 130,
+        "StepSession.measure": 134,
+        "StepSession.record": 137,
+        "StepSession.close": 149,
+        "surface": 168,
+        "recipe_control": 179,
+        "fingerprint": 188,
+        "WorkflowMemory": 196,
+        "WorkflowMemory.__init__": 198,
+        "WorkflowMemory.check_path": 216,
+        "WorkflowMemory.key": 221,
+        "WorkflowMemory.validate": 225,
+        "WorkflowMemory.remember": 242,
+        "WorkflowMemory.proposal": 259,
+        "replay": 270
+      },
+      "imports": [
+        "skill_memory",
+        "task_recovery"
+      ]
+    },
+    "targeting": {
+      "source": "jarvis/targeting.py",
+      "sha256": "c09799b13ee400424a92fb431a02495b65a197d27e1d6544f9bae061461d8828",
+      "symbols": {
+        "disambiguate": 6,
+        "scoped_matches": 17
+      },
+      "imports": [
+        "ui_controls"
+      ]
+    },
+    "task_graph": {
+      "source": "jarvis/task_graph.py",
+      "sha256": "5fba6db493f0505f7ccad2fc10ebe08cc8075f2c776e96ac37a0174db60033c9",
+      "symbols": {
+        "action_budget": 11,
+        "resource_dependencies": 18,
+        "validate_dependencies": 30
+      },
+      "imports": []
+    },
+    "task_queue": {
+      "source": "jarvis/task_queue.py",
+      "sha256": "a72bebc4e7b3f8b55b4f6b2e49b42d9853756bf6610580779fa8e561ad6c3e9e",
+      "symbols": {
+        "exact": 23,
+        "words": 31,
+        "score": 40,
+        "describe": 45,
+        "position": 49,
+        "match": 72,
+        "model_choice": 97
+      },
+      "imports": [
+        "command_cleanup"
+      ]
+    },
+    "task_recovery": {
+      "source": "jarvis/task_recovery.py",
+      "sha256": "6f8e7b94c42de5c8e29c23bbca79e8a61026ed4e65a20cb60858fce547205b5c",
+      "symbols": {
+        "retry_read": 5,
+        "TaskFailure": 23,
+        "TaskFailure.__init__": 24,
+        "action_key": 29
+      },
+      "imports": [
+        "names",
+        "toolkits"
+      ]
+    },
+    "task_state": {
+      "source": "jarvis/task_state.py",
+      "sha256": "26b386116decefcbeee574fce88f5c7843b2e454b03821e1f6ec03f84ec9c463",
+      "symbols": {
+        "_now": 18,
+        "TaskState": 22,
+        "TaskState.__init__": 23,
+        "TaskState._read": 37,
+        "TaskState._write": 49,
+        "TaskState.start": 80,
+        "TaskState.identity": 97,
+        "TaskState.require_identity": 102,
+        "TaskState.checkpoint": 106,
+        "TaskState.finish": 127,
+        "TaskState.update_plan": 146,
+        "TaskState.record_failure": 160,
+        "TaskState.update_dag": 169,
+        "TaskState.update_learning": 186,
+        "TaskState.snapshot": 198,
+        "TaskState.ui_snapshot": 202,
+        "TaskState.set_project": 215,
+        "TaskState.set_conditions": 222,
+        "TaskState.unfinished": 232,
+        "TaskState.resume_blocker": 243,
+        "TaskState.previous": 265,
+        "TaskState.recall": 281
+      },
+      "imports": [
+        "experience",
+        "experience_memory",
+        "paths",
+        "task_graph"
+      ]
+    },
+    "toolkits": {
+      "source": "jarvis/toolkits.py",
+      "sha256": "57a74f9bfee1c9eb1b790762c2cf2ac8d10c84432d52af6ecf8c74855afabf14",
+      "symbols": {
+        "ToolUnavailable": 26,
+        "_append_lock": 34,
+        "status": 99,
+        "available": 105,
+        "arguments": 113,
+        "validate_step": 126,
+        "scoped_path": 141,
+        "read_text": 151,
+        "file_tool": 161,
+        "_append": 174,
+        "_scan": 208,
+        "public_url": 241,
+        "PageText": 251,
+        "PageText.__init__": 253,
+        "PageText.handle_starttag": 258,
+        "PageText.handle_endtag": 272,
+        "PageText.handle_data": 279,
+        "api": 284,
+        "execute": 308,
+        "remote_tool": 390
+      },
+      "imports": [
+        "agent_tools",
+        "app_adapters",
+        "code_context",
+        "deerflow",
+        "execution_strategy",
+        "firecrawl_tools",
+        "gmail_api",
+        "knowledge_worker",
+        "rea_tools",
+        "repo_tools",
+        "task_state",
+        "utility_tools"
+      ]
+    },
+    "tools": {
+      "source": "jarvis/tools.py",
+      "sha256": "00cc8aa3a4bed6fd26f6de5975316f6e50e6d8b0ba57b9e20a70c88f163dba9e",
+      "symbols": {
+        "ToolSpec": 14,
+        "ToolArgumentError": 77,
+        "redact": 81,
+        "validate_arguments": 92,
+        "failure_category": 126,
+        "ToolResult": 141,
+        "_outcome": 150,
+        "ToolRegistry": 159,
+        "ToolRegistry.__init__": 160,
+        "ToolRegistry.catalog": 164,
+        "ToolRegistry.search": 188,
+        "ToolRegistry.execute": 205,
+        "ToolRegistry._execute": 246
+      },
+      "imports": [
+        "agent_events",
+        "application_discovery",
+        "capabilities",
+        "commands",
+        "desktop_actions",
+        "execution_strategy",
+        "repo_tools",
+        "skill_memory",
+        "task_state",
+        "toolkits",
+        "utility_profiles"
+      ]
+    },
+    "trained_coder": {
+      "source": "jarvis/trained_coder.py",
+      "sha256": "973df2a7a6fbe0a0910b5ad3dc523901c50e217264893bdcd1427cdd9aae8e59",
+      "symbols": {
+        "generate": 7
+      },
+      "imports": []
+    },
+    "trained_pc": {
+      "source": "jarvis/trained_pc.py",
+      "sha256": "01667123847c22840d2bf5132df9b2ae5c58ef1b1bf28a873cf67d34c34b181a",
+      "symbols": {
+        "resolve": 8
+      },
+      "imports": [
+        "pc_context"
+      ]
+    },
+    "ui_controls": {
+      "source": "jarvis/ui_controls.py",
+      "sha256": "bdd7f12fd5fdf1979be5e7a2bc36746b61670f9bfdf5fb23e7d59f784b7ad4fd",
+      "symbols": {
+        "label_key": 18,
+        "matches": 23,
+        "_safe": 66,
+        "_ordered": 70,
+        "_category": 74,
+        "choice_text": 121,
+        "UIControls": 125,
+        "UIControls.__init__": 126,
+        "UIControls.clear_pending": 136,
+        "UIControls.suggest": 140,
+        "UIControls._activate": 168,
+        "UIControls.answer": 185,
+        "UIControls._island_focused": 201,
+        "UIControls._handle": 210,
+        "UIControls._worker": 222,
+        "UIControls.close": 232,
+        "UIControls.healthy": 236,
+        "UIControls.repair": 239,
+        "UIControls._one_shot_worker": 242,
+        "UIControls.execute": 272
+      },
+      "imports": [
+        "media_ui",
+        "names",
+        "targeting",
+        "ui_transport"
+      ]
+    },
+    "ui_events": {
+      "source": "jarvis/ui_events.py",
+      "sha256": "7d70b4b53d2d7505fc4bbba6eddda2f8f1e3b128eb0eb6acb6d02074879c09c2",
+      "symbols": {
+        "UIEventBuffer": 7,
+        "UIEventBuffer.__init__": 8,
+        "UIEventBuffer.key": 15,
+        "UIEventBuffer._flush": 24,
+        "UIEventBuffer.put": 28,
+        "UIEventBuffer.get_nowait": 56,
+        "UIEventBuffer.qsize": 64,
+        "UIEventBuffer.empty": 68
+      },
+      "imports": []
+    },
+    "ui_memory": {
+      "source": "jarvis/ui_memory.py",
+      "sha256": "ca380dd605fedc39aaccb3885d7b9d09711e2c47e57e3420b947219c3e579452",
+      "symbols": {
+        "UIMemory": 8,
+        "UIMemory.__init__": 9,
+        "UIMemory.read": 12,
+        "UIMemory.save": 20,
+        "UIMemory.remember": 26,
+        "UIMemory.candidate": 40,
+        "UIMemory.clear": 50
+      },
+      "imports": [
+        "experience"
+      ]
+    },
+    "ui_preview": {
+      "source": "jarvis/ui_preview.py",
+      "sha256": "37a62a7ae8efbf1d3c37ad31738ffaa8e498199061fa4363f0899af13b8872c4",
+      "symbols": {
+        "export_preview": 10
+      },
+      "imports": [
+        "display",
+        "glass_ui",
+        "interface"
+      ]
+    },
+    "ui_transport": {
+      "source": "jarvis/ui_transport.py",
+      "sha256": "828b4383c27de6c1a40783852d77ccaf5dfb4bc66b9f6c2f86503b4e388a767a",
+      "symbols": {
+        "UITransport": 11,
+        "UITransport.__init__": 12,
+        "UITransport._start": 24,
+        "UITransport._backoff": 52,
+        "UITransport._stop_process": 56,
+        "UITransport.request": 80,
+        "UITransport.healthy": 121,
+        "UITransport.repair": 124,
+        "UITransport.close": 135
+      },
+      "imports": []
+    },
+    "ui_worker": {
+      "source": "jarvis/ui_worker.py",
+      "sha256": "ac6ff5f9f90f6a1192375204d81acdab10690f70edaed7ad874108ef2cf81da2",
+      "symbols": {
+        "collect": 11,
+        "routed": 87,
+        "perform": 156,
+        "serve": 328
+      },
+      "imports": [
+        "desktop_actions",
+        "execution_router",
+        "independent_cursor",
+        "island_artwork",
+        "media_ui",
+        "windows_command_desktop"
+      ]
+    },
+    "upstream_windows_patterns": {
+      "source": "jarvis/upstream_windows_patterns.py",
+      "sha256": "4f43c44023ec9319533d9ebfad00b89626a5ca7eb53d110e3d2c74f57e192bd9",
+      "symbols": {
+        "ExpandCollapsePattern": 14,
+        "ExpandCollapsePattern.__init__": 15,
+        "ExpandCollapsePattern.ExpandCollapseState": 20,
+        "ExpandCollapsePattern.Collapse": 29,
+        "ExpandCollapsePattern.Expand": 44,
+        "InvokePattern": 59,
+        "InvokePattern.__init__": 60,
+        "InvokePattern.Invoke": 64,
+        "ScrollPattern": 76,
+        "ScrollPattern.__init__": 77,
+        "ScrollPattern.HorizontallyScrollable": 82,
+        "ScrollPattern.HorizontalScrollPercent": 92,
+        "ScrollPattern.HorizontalViewSize": 102,
+        "ScrollPattern.VerticallyScrollable": 112,
+        "ScrollPattern.VerticalScrollPercent": 122,
+        "ScrollPattern.VerticalViewSize": 132,
+        "ScrollPattern.Scroll": 141,
+        "ScrollPattern.SetScrollPercent": 160,
+        "SelectionItemPattern": 179,
+        "SelectionItemPattern.__init__": 180,
+        "SelectionItemPattern.AddToSelection": 184,
+        "SelectionItemPattern.IsSelected": 197,
+        "SelectionItemPattern.RemoveFromSelection": 206,
+        "SelectionItemPattern.Select": 218,
+        "TogglePattern": 230,
+        "TogglePattern.__init__": 231,
+        "TogglePattern.ToggleState": 236,
+        "TogglePattern.Toggle": 245,
+        "ValuePattern": 257,
+        "ValuePattern.__init__": 258,
+        "ValuePattern.IsReadOnly": 263,
+        "ValuePattern.Value": 273,
+        "ValuePattern.SetValue": 282
+      },
+      "imports": []
+    },
+    "utility_audio_worker": {
+      "source": "jarvis/utility_audio_worker.py",
+      "sha256": "4e4b0b5f7d2a95c481fa594c2999b54eb5fc02c2e35200a1f399bf7b776bd5ef",
+      "symbols": {
+        "main": 7
+      },
+      "imports": []
+    },
+    "utility_container_runner": {
+      "source": "jarvis/utility_container_runner.py",
+      "sha256": "d667ca069d8594d0f5d65b6b43660097b76b5c9e7272a8ecd292c6a119fcefd2",
+      "symbols": {
+        "main": 11
+      },
+      "imports": []
+    },
+    "utility_core": {
+      "source": "jarvis/utility_core.py",
+      "sha256": "c6367b0e4802287b14335d2f901d98dc3f9f98274a5f03e8966daea3456cd826",
+      "symbols": {
+        "scoped": 19,
+        "read": 25,
+        "write": 30,
+        "execute": 50
+      },
+      "imports": [
+        "agent_context",
+        "repo_acquisition"
+      ]
+    },
+    "utility_host": {
+      "source": "jarvis/utility_host.py",
+      "sha256": "a1cacc09dd5081dc5f5735f76b12d4baa15d7f6e1fef01543cab4ab2c140c09d",
+      "symbols": {
+        "OwnedServer": 12,
+        "OwnedServer.__init__": 13,
+        "OwnedServer.close": 29,
+        "OwnedServer.healthy": 30,
+        "execute": 33
+      },
+      "imports": [
+        "repo_acquisition",
+        "toolkits",
+        "utility_core",
+        "utility_tools"
+      ]
+    },
+    "utility_isolation": {
+      "source": "jarvis/utility_isolation.py",
+      "sha256": "64351d2f8d6ad96d3ae9d658f63c51d8a959e9995836daef0e72f704d792d383",
+      "symbols": {
+        "run": 10
+      },
+      "imports": [
+        "repo_sandbox"
+      ]
+    },
+    "utility_profiles": {
+      "source": "jarvis/utility_profiles.py",
+      "sha256": "dff8c5905c5476714b8fd6db5a8cc6fb38908caae662ee295a5ff57470832005",
+      "symbols": {
+        "schema": 50,
+        "decorate": 78,
+        "fingerprints": 83,
+        "availability": 94,
+        "tools": 115
+      },
+      "imports": []
+    },
+    "utility_service_transport": {
+      "source": "jarvis/utility_service_transport.py",
+      "sha256": "cd279bb938f1b5aeb08f0281b11cd58cc13efc8dcc66ef74b8ab90dc307b441c",
+      "symbols": {
+        "call": 15
+      },
+      "imports": [
+        "harness_process",
+        "utility_services"
+      ]
+    },
+    "utility_services": {
+      "source": "jarvis/utility_services.py",
+      "sha256": "536fe4273bdaad5412e4bc09cc54c2cb19fafa4adb9abfa726c9888c05b4f4b9",
+      "symbols": {
+        "http": 13,
+        "execute": 29
+      },
+      "imports": []
+    },
+    "utility_tools": {
+      "source": "jarvis/utility_tools.py",
+      "sha256": "d6b1320e90e603a69ddc8a2262cd5f2fb21028c1484e1b255eef6a39cb17be3b",
+      "symbols": {
+        "core_call": 18,
+        "key_for": 29,
+        "run": 41,
+        "execute": 97
+      },
+      "imports": [
+        "browser",
+        "repo_acquisition",
+        "repo_analysis",
+        "ui_transport",
+        "utility_core",
+        "utility_host",
+        "utility_isolation",
+        "utility_profiles",
+        "utility_service_transport"
+      ]
+    },
+    "utility_worker": {
+      "source": "jarvis/utility_worker.py",
+      "sha256": "1a8740825a9b6f46a91c785b36487297e5f31bd0ac1c16c81fa116284a58c1f6",
+      "symbols": {
+        "main": 7
+      },
+      "imports": [
+        "utility_core"
+      ]
+    },
+    "visual_fallback": {
+      "source": "jarvis/visual_fallback.py",
+      "sha256": "1bd6d22d98d86fa5bf1f8531080e362a3a920fc0c75aef844cd812534272ce8e",
+      "symbols": {
+        "readiness": 22,
+        "click_point": 40,
+        "Prepared": 64,
+        "VisualOutcome": 74,
+        "save_plan": 82,
+        "VisualFallback": 92,
+        "VisualFallback.__init__": 93,
+        "VisualFallback.checkpoint": 104,
+        "VisualFallback.capture": 107,
+        "VisualFallback.observe": 114,
+        "VisualFallback.prepare": 121,
+        "VisualFallback.input": 153,
+        "VisualFallback.execute": 191,
+        "VisualFallback.named": 231,
+        "VisualFallback.dialog_kind": 270,
+        "VisualFallback.file_state": 288,
+        "VisualFallback.save_file": 303
+      },
+      "imports": [
+        "_vendor.ui_tars_action_parser",
+        "agent_events",
+        "commands",
+        "names",
+        "skill_memory",
+        "targeting",
+        "task_recovery",
+        "task_state",
+        "visual_worker"
+      ]
+    },
+    "visual_worker": {
+      "source": "jarvis/visual_worker.py",
+      "sha256": "9d2dddd7afc3c0abe6398094102d3fcc7bb1dee9c57a57b7e8a374231ddb7ef7",
+      "symbols": {
+        "image_difference": 13,
+        "unchanged": 26,
+        "point": 31,
+        "WindowsInput": 42,
+        "WindowsInput.__init__": 43,
+        "WindowsInput.state": 53,
+        "WindowsInput.foreground": 59,
+        "WindowsInput.focus": 63,
+        "WindowsInput.held_modifiers": 66,
+        "WindowsInput.screenshot": 69,
+        "WindowsInput.hit": 77,
+        "WindowsInput.inputs": 81,
+        "WindowsInput.click": 129,
+        "WindowsInput.shortcut": 133,
+        "WindowsInput.type": 136,
+        "perform": 140
+      },
+      "imports": [
+        "independent_cursor"
+      ]
+    },
+    "voice_input": {
+      "source": "jarvis/voice_input.py",
+      "sha256": "63d19062bc048644867adc0ceebebb84ee57e00688f9a9840002c098bf064a2b",
+      "symbols": {
+        "echo_match": 9,
+        "VoiceInput": 27,
+        "VoiceInput.__init__": 28,
+        "VoiceInput.filter": 31
+      },
+      "imports": [
+        "audio",
+        "engine"
+      ]
+    },
+    "weather_units": {
+      "source": "jarvis/weather_units.py",
+      "sha256": "8b3752baf1b5c993d4695991a37518b816d8089e3e06a277dec095fa3116c8c5",
+      "symbols": {
+        "normalize": 5
+      },
+      "imports": []
+    },
+    "weather_watch": {
+      "source": "jarvis/weather_watch.py",
+      "sha256": "f5b1b494a345fcbdd172bcb5ee8a0957609708405cc383006573b43031a32454",
+      "symbols": {
+        "distance": 29,
+        "_moment": 35,
+        "when": 42,
+        "hazards": 53,
+        "WeatherWatch": 187,
+        "WeatherWatch.__init__": 188,
+        "WeatherWatch._load": 204,
+        "WeatherWatch._save": 219,
+        "WeatherWatch.realtime": 230,
+        "WeatherWatch.location": 236,
+        "WeatherWatch.get": 250,
+        "WeatherWatch.check": 259,
+        "WeatherWatch._today": 297,
+        "WeatherWatch.announce": 305,
+        "WeatherWatch._announce": 312,
+        "WeatherWatch.summary": 346,
+        "WeatherWatch.start": 366,
+        "WeatherWatch.close": 372,
+        "WeatherWatch.run": 375,
+        "parse_command": 389
+      },
+      "imports": [
+        "capability_guide",
+        "commands",
+        "media_player",
+        "weather_units"
+      ]
+    },
+    "whatsapp": {
+      "source": "jarvis/whatsapp.py",
+      "sha256": "e6a93f51666eb0f769f37791297b7238a9d4efb528ed6ddec67f4878de8eb33b",
+      "symbols": {
+        "WhatsAppError": 33,
+        "_uia": 41,
+        "physical": 61,
+        "window": 72,
+        "unread_total": 79,
+        "ensure_window": 84,
+        "document": 99,
+        "read": 108,
+        "_read": 120,
+        "parse_row": 148,
+        "chat_rows": 175,
+        "search_box": 202,
+        "set_value": 210,
+        "search": 217,
+        "clear_search": 243,
+        "tokens": 253,
+        "match_contacts": 257,
+        "open_row": 290,
+        "names_match": 318,
+        "compose_box": 322,
+        "open_chat_header": 329,
+        "open_chat_name": 340,
+        "is_open": 349,
+        "messages": 366,
+        "identity": 419,
+        "normalized": 423,
+        "compose_value": 427,
+        "keys": 437,
+        "type_draft": 444,
+        "press_send": 483,
+        "draft": 526,
+        "Prompt": 565,
+        "Prompt.__init__": 567,
+        "Prompt.labels": 576,
+        "Prompt.resolve": 579,
+        "Prompt._resolve": 584,
+        "Prompt.wait": 621,
+        "ask": 628,
+        "answer_prompt": 640,
+        "snapshot": 660,
+        "sentence": 673,
+        "card": 679,
+        "request_data": 685,
+        "find_contact": 704,
+        "approve_and_send": 728,
+        "send_approved_text": 754,
+        "send_message": 772,
+        "clipboard_files": 795,
+        "restore_clipboard": 815,
+        "send_files": 830,
+        "unread_chats": 905,
+        "auto_reply": 910,
+        "reply_unread": 945,
+        "call_controls": 978,
+        "press": 1003,
+        "handle_call": 1014,
+        "Watcher": 1048,
+        "Watcher.__init__": 1050,
+        "Watcher.start": 1058,
+        "Watcher.close": 1062,
+        "Watcher.run": 1065,
+        "Watcher.check_messages": 1082,
+        "parse_command": 1127
+      },
+      "imports": [
+        "clarification",
+        "commands",
+        "gpu_scheduler",
+        "jarvis_pointer",
+        "knowledge_worker",
+        "media_player",
+        "whatsapp_writes",
+        "window_focus"
+      ]
+    },
+    "whatsapp_writes": {
+      "source": "jarvis/whatsapp_writes.py",
+      "sha256": "3acdaff2e91befab58777da0a6f1b0bbd0159f4df3902e37a05e1efbb3c00712",
+      "symbols": {
+        "text_send": 14
+      },
+      "imports": []
+    },
+    "whisper_backend": {
+      "source": "jarvis/whisper_backend.py",
+      "sha256": "cc351977157d8f2b028a99ce8d412c374eb56aac864ba582ba1649af6fdce44f",
+      "symbols": {
+        "settings": 11,
+        "WhisperUnavailable": 30,
+        "WhisperUnavailable.__init__": 31,
+        "prepare_cuda": 36,
+        "check_cuda_libraries": 50,
+        "load_model": 59,
+        "CoordinatedWhisper": 81,
+        "CoordinatedWhisper.__init__": 83,
+        "CoordinatedWhisper.__getattr__": 87,
+        "CoordinatedWhisper.transcribe": 90
+      },
+      "imports": [
+        "gpu_scheduler"
+      ]
+    },
+    "window_focus": {
+      "source": "jarvis/window_focus.py",
+      "sha256": "e8031309d57be99e9d30ce8e34a0240b2165d909cd0dbd45e6dc85def09f64bc",
+      "symbols": {
+        "_process_name": 17,
+        "windows": 31,
+        "focus": 53,
+        "focus_app": 84
+      },
+      "imports": []
+    },
+    "windows_command_browser": {
+      "source": "jarvis/windows_command_browser.py",
+      "sha256": "2c7abbd0618a6d41e92609883ac2862c470ecf38ca65e236d56cf960a3a21529",
+      "symbols": {
+        "perform": 5
+      },
+      "imports": [
+        "browser_cursor",
+        "toolkits",
+        "windows_commands"
+      ]
+    },
+    "windows_command_desktop": {
+      "source": "jarvis/windows_command_desktop.py",
+      "sha256": "b0e9bd827e9c480f94dde4af2cba15b872cea6cc3a1ea6e42269b0b91eea7d1d",
+      "symbols": {
+        "matches_app": 8,
+        "perform": 17
+      },
+      "imports": [
+        "independent_cursor",
+        "media_ui",
+        "windows_commands"
+      ]
+    },
+    "windows_commands": {
+      "source": "jarvis/windows_commands.py",
+      "sha256": "c482c715ceb1595d0bde5cc925c7807c1faa573d441e5602f17c2dd6e7e72dcf",
+      "symbols": {
+        "catalog": 18,
+        "search": 29,
+        "match": 40,
+        "parse": 68,
+        "prepare": 107,
+        "ps_literal": 180,
+        "powershell": 184,
+        "run_ps": 224,
+        "execute": 246,
+        "interpret": 272
+      },
+      "imports": [
+        "commands"
+      ]
+    },
+    "writing": {
+      "source": "jarvis/writing.py",
+      "sha256": "539ddeb0f6798f5fddf576cbd2bcebe33f07014f0a948381b19c0038a05f7112",
+      "symbols": {
+        "parse_write": 37,
+        "with_original_case": 69,
+        "target_window": 85,
+        "process_name": 118,
+        "safe_text": 127,
+        "resolve": 137,
+        "write_exact": 149,
+        "spoken_layout": 155,
+        "SpokenWriter": 161,
+        "SpokenWriter.__init__": 163,
+        "SpokenWriter.__call__": 182,
+        "SpokenWriter.close": 188,
+        "SpokenWriter._run": 191,
+        "compose": 221
+      },
+      "imports": [
+        "actions",
+        "audio",
+        "commands",
+        "gpu_scheduler",
+        "knowledge_worker",
+        "names",
+        "window_focus"
+      ]
+    }
+  },
+  "tools": [
+    {
+      "name": "application_inspect",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "realtime_query",
+      "backend": "realtime",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "open",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browse",
+      "backend": "browser",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browser_search",
+      "backend": "browser",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browser_inspect",
+      "backend": "dom",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browser_navigate",
+      "backend": "dom",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browser_click",
+      "backend": "dom",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "browser_fill",
+      "backend": "dom",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "media_search",
+      "backend": "browser",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "media_control",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "select",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "fill_text",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "type_text",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "scroll",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "shortcut",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "open_menu",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "handle_dialog",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "save_file",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "close_app",
+      "backend": "desktop",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "create_file",
+      "backend": "files",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "modify_file",
+      "backend": "files",
+      "approval": "none",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "delete_file",
+      "backend": "files",
+      "approval": "user",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "run_command",
+      "backend": "terminal",
+      "approval": "user",
+      "provider_configured": null,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+    },
+    {
+      "name": "think",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "write_spec",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "write_tests",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "write_code",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "improve_code",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "review_pull_request",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "knowledge_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "list_files",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "read_file",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "append_file",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "search_files",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "query_resource",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "web_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "scrape_web",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_read_file",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_pull_request",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_pr_files",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_add_file",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "github_delete_file",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "google_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "serp_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "searx_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "apollo_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "read_email",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "send_email",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "slack_send",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "twitter_send",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "calendar_list",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "calendar_details",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "calendar_create",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "calendar_delete",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "jira_projects",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "jira_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "jira_create",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "jira_edit",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "toolkit_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "windows_command_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "windows_command",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "integration_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "application_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "runtime_capabilities",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "tool_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_map",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_instructions",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "skill_list",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "skill_read",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "git_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "git_diff",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "git_log",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "read_batch",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "mcp_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "mcp_list_tools",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "mcp_call",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_native",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_verify",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_preview",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_feedback",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "development_practice",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "firecrawl_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "firecrawl_scrape",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "firecrawl_map",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": false,
+      "state": "credential_or_prerequisite_gated",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_skill_read",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_skill_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_research",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_web_research",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_sandbox_task",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "deerflow_free_media",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_learn",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_search",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_explain",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_validate",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_activate",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_run",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_health",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "repository_skill_lifecycle",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "rea_status",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "rea_ingest",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "rea_analyze",
+      "backend": "toolkit",
+      "approval": "user",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "rea_ledger",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "rea_record",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "office_xlsx",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "office_docx",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "pdf_document",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "office_automation",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "blender_task",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "unreal_task",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "vscode_cli",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "execution_methods",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "strategy_execute",
+      "backend": "toolkit",
+      "approval": "none",
+      "provider_configured": true,
+      "state": "adapter_present_live_unverified",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    }
+  ],
+  "registered_tool_count": 116,
+  "manifest_services": [
+    "realtime_observations",
+    "context_selector",
+    "anticipation",
+    "island_media_observations",
+    "interface",
+    "ollama",
+    "models",
+    "microphone",
+    "action_worker",
+    "question_worker",
+    "speech_worker",
+    "kokoro_inference_playback",
+    "ui_automation_worker",
+    "browser_automation_worker",
+    "brain_inference",
+    "hermes_inference",
+    "gods_eye",
+    "harness_inference",
+    "development_preview",
+    "docker_linux_engine",
+    "cognitive_loop",
+    "cognition_persistence"
+  ],
+  "scope": "Static code symbols, registry metadata and prerequisite presence. No app/model/account actions, no capability certification."
+}

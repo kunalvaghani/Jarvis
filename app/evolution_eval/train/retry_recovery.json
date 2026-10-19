@@ -1,0 +1,244 @@
+{
+ "cases": [
+  {
+   "recover_after_ms": 680,
+   "attempt_ms": 14,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1660,
+   "attempt_ms": 19,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1335,
+   "attempt_ms": 8,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3033,
+   "attempt_ms": 31,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 171,
+   "attempt_ms": 30,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 410,
+   "attempt_ms": 28,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 415,
+   "attempt_ms": 40,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1058,
+   "attempt_ms": 13,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 57,
+   "attempt_ms": 10,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2996,
+   "attempt_ms": 18,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 130,
+   "attempt_ms": 26,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 693,
+   "attempt_ms": 26,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 785,
+   "attempt_ms": 25,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 44,
+   "attempt_ms": 40,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 159,
+   "attempt_ms": 16,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2734,
+   "attempt_ms": 11,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 2451,
+   "attempt_ms": 17,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 407,
+   "attempt_ms": 30,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 931,
+   "attempt_ms": 11,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 50,
+   "attempt_ms": 26,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 687,
+   "attempt_ms": 37,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3208,
+   "attempt_ms": 7,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 144,
+   "attempt_ms": 21,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 140,
+   "attempt_ms": 11,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 169,
+   "attempt_ms": 7,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1404,
+   "attempt_ms": 18,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1952,
+   "attempt_ms": 34,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 3347,
+   "attempt_ms": 37,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1997,
+   "attempt_ms": 34,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 533,
+   "attempt_ms": 12,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 962,
+   "attempt_ms": 29,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1686,
+   "attempt_ms": 32,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 451,
+   "attempt_ms": 18,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 754,
+   "attempt_ms": 7,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 829,
+   "attempt_ms": 39,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 131,
+   "attempt_ms": 30,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 133,
+   "attempt_ms": 18,
+   "attempts": 4,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 108,
+   "attempt_ms": 18,
+   "attempts": 3,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 1106,
+   "attempt_ms": 33,
+   "attempts": 5,
+   "budget_ms": 4000
+  },
+  {
+   "recover_after_ms": 874,
+   "attempt_ms": 7,
+   "attempts": 3,
+   "budget_ms": 4000
+  }
+ ]
+}

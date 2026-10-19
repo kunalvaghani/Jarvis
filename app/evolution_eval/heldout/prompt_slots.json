@@ -1,0 +1,85 @@
+{
+ "model": "qwen3.5:0.8b",
+ "cases": [
+  {
+   "question": "I want to change cell B3 in budget.xlsx. Which tool is best?",
+   "choices": {
+    "A": "office_xlsx",
+    "B": "select",
+    "C": "scroll",
+    "D": "type_text"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Show the current git status. Which tool?",
+   "choices": {
+    "A": "web_search",
+    "B": "select",
+    "C": "git_status",
+    "D": "scroll"
+   },
+   "answer": "C"
+  },
+  {
+   "question": "Find files named invoice. Which tool?",
+   "choices": {
+    "A": "scroll",
+    "B": "media_search",
+    "C": "send_email",
+    "D": "search_files"
+   },
+   "answer": "D"
+  },
+  {
+   "question": "What is the weather tomorrow? Which tool?",
+   "choices": {
+    "A": "open_menu",
+    "B": "realtime_query",
+    "C": "git_diff",
+    "D": "append_file"
+   },
+   "answer": "B"
+  },
+  {
+   "question": "Close Notepad. Which tool?",
+   "choices": {
+    "A": "close_app",
+    "B": "create_file",
+    "C": "github_search",
+    "D": "think"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Open main.py at line 40 in VS Code. Which tool?",
+   "choices": {
+    "A": "vscode_cli",
+    "B": "scroll",
+    "C": "pdf_document",
+    "D": "jira_search"
+   },
+   "answer": "A"
+  },
+  {
+   "question": "Search GitHub for a markdown parser. Which tool?",
+   "choices": {
+    "A": "close_app",
+    "B": "scroll",
+    "C": "github_search",
+    "D": "media_control"
+   },
+   "answer": "C"
+  },
+  {
+   "question": "Replace a paragraph in report.docx. Which tool?",
+   "choices": {
+    "A": "scroll",
+    "B": "office_docx",
+    "C": "media_search",
+    "D": "close_app"
+   },
+   "answer": "B"
+  }
+ ]
+}

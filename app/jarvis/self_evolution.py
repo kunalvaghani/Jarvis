@@ -231,6 +231,8 @@ class SelfEvolution:
         self._skills_checked_at = -float('inf')
         self._memory_checked_at = -float('inf')
         self.last_memory_report = None
+        self._research_checked_at = -float('inf')
+        self.last_research = None
         self._load()
 
     # --- persistence (crash-safe, atomic) --------------------------------------------------------
@@ -499,6 +501,46 @@ class SelfEvolution:
                        'Verified in an isolated sandbox', 'Lesson saved; no action taken on your files')
         return self.last_memory_report
 
+    def research_options(self):
+        settings = dict(enabled=True, max_experiments_per_day=1, budget_seconds=2400, check_interval_seconds=3600)
+        settings.update((getattr(self.actions, 'config', {}) or {}).get('evolution_lab', {}) or {})
+        if (type(settings['enabled']) is not bool or type(settings['max_experiments_per_day']) is not int
+                or not 0 <= settings['max_experiments_per_day'] <= 10
+                or type(settings['budget_seconds']) not in (int, float) or not 60 <= settings['budget_seconds'] <= 14400
+                or type(settings['check_interval_seconds']) not in (int, float) or settings['check_interval_seconds'] < 60):
+            raise ValueError('Invalid evolution_lab configuration')
+        return settings
+
+    def research_maintenance(self):
+        """Idle: one bounded autoresearch experiment in the isolated lab. Never touches production.
+
+        A qualified candidate becomes a proposal card; deploying it needs explicit approval later.
+        """
+        settings = self.research_options()
+        if not settings['enabled']:
+            return None
+        state_path = self.directory / 'research-schedule.json'
+        day = datetime.now(timezone.utc).date().isoformat()
+        try:
+            state = json.loads(state_path.read_text(encoding='utf-8')) if state_path.is_file() else {}
+        except (OSError, ValueError):
+            state = {}
+        if state.get('day') == day and state.get('count', 0) >= settings['max_experiments_per_day']:
+            return None
+        self.directory.mkdir(parents=True, exist_ok=True)
+        state_path.write_text(json.dumps({'day': day, 'count': (state.get('count', 0) if state.get('day') == day else 0) + 1}),
+                              encoding='utf-8')
+        from .autoresearch import AutoResearch
+        research = AutoResearch(self.actions.base)
+        research.recover()
+        self._card('learning', 'Improving myself', 'Testing one bounded change in an isolated copy', 'Your files are not touched')
+        self.last_research = research.run_experiment(cancelled=self._cancelled, budget_seconds=settings['budget_seconds'])
+        qualified = [p for p in self.last_research.get('proposals', []) if p.get('decision') == 'qualified']
+        if qualified:
+            self._card('notice', 'Improvement proposal ready', qualified[0]['hypothesis'][:96],
+                       'Say "review improvement proposals"; nothing changes without your approval')
+        return self.last_research
+
     def _run(self):
         while not self.stop.wait(self.options["poll_seconds"]):
             try:
@@ -508,6 +550,10 @@ class SelfEvolution:
                 if self._idle() and self.clock() - self._memory_checked_at >= 1800:
                     self._memory_checked_at = self.clock()
                     self.memory_maintenance()
+                if (self._idle() and self.clock() - self._research_checked_at
+                        >= self.research_options()['check_interval_seconds']):
+                    self._research_checked_at = self.clock()
+                    self.research_maintenance()
                 if self._idle():
                     self.refresh_backlog()
                     job = self.next_job()

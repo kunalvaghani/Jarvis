@@ -378,6 +378,10 @@ class BrainClient:
             data['capability_context'] = runtime_context(data['goal'], rows if isinstance(rows, list) else [],
                 skills if isinstance(skills, SkillMemory) else None, data.get('memory_context'),
                 coding=operation in {'code_plan', 'code_edit'})
+            from .prompt_router import guidance
+            routed = guidance(data['goal'])  # Empty slot prompts (the default) add nothing.
+            if routed and isinstance(data['capability_context'], dict):
+                data['capability_context']['task_guidance'] = routed
         if (self.worker_module == "jarvis.brain_worker" and (operation in {"plan", "replan"} or (operation == "code_plan" and data.get("development") is True))
                 and harness_options['enabled']):
             from .harness import HarnessClient
@@ -905,7 +909,9 @@ class Brain:
                 raise ValueError("Browser typing must use the exact requested text.")
             from .toolkits import TOOLS as toolkit_tools
             if pending["action"] in toolkit_tools and toolkit_tools[pending["action"]][3]:
-                intent = {"github_add_file": r"\b(?:create|add|update|commit|push)\b",
+                intent = {"evolution_promote": r"\b(?:apply|deploy|promote|install|evolution_promote)\b",
+                          "evolution_rollback": r"\b(?:roll ?back|revert|restore|undo|evolution_rollback)\b",
+                          "github_add_file": r"\b(?:create|add|update|commit|push)\b",
                           "github_delete_file": r"\b(?:delete|remove)\b", "calendar_create": r"\b(?:create|add|schedule)\b",
                           "calendar_delete": r"\b(?:delete|remove|cancel)\b", "jira_create": r"\b(?:create|add)\b",
                           "jira_edit": r"\b(?:edit|update|modify)\b",

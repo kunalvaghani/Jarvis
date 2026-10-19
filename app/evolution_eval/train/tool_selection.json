@@ -1,0 +1,244 @@
+{
+ "cases": [
+  {
+   "query": "find every pdf in my documents",
+   "expected": [
+    "search_files",
+    "list_files"
+   ]
+  },
+  {
+   "query": "create a new text file called ideas",
+   "expected": [
+    "create_file"
+   ]
+  },
+  {
+   "query": "delete the old draft file",
+   "expected": [
+    "delete_file"
+   ]
+  },
+  {
+   "query": "what is the weather in toronto tomorrow",
+   "expected": [
+    "realtime_query"
+   ]
+  },
+  {
+   "query": "pause the music",
+   "expected": [
+    "media_control"
+   ]
+  },
+  {
+   "query": "launch blender",
+   "expected": [
+    "open",
+    "blender_task"
+   ]
+  },
+  {
+   "query": "what changed in the last commit",
+   "expected": [
+    "git_log",
+    "git_diff"
+   ]
+  },
+  {
+   "query": "add unit tests for my parser",
+   "expected": [
+    "write_tests"
+   ]
+  },
+  {
+   "query": "map the structure of this repository",
+   "expected": [
+    "repository_map"
+   ]
+  },
+  {
+   "query": "open a pull request on github",
+   "expected": [
+    "github_pull_request"
+   ]
+  },
+  {
+   "query": "replace a paragraph in report.docx",
+   "expected": [
+    "office_docx",
+    "strategy_execute"
+   ]
+  },
+  {
+   "query": "export the blender scene as glb",
+   "expected": [
+    "blender_task",
+    "strategy_execute"
+   ]
+  },
+  {
+   "query": "click the save button in the dialog",
+   "expected": [
+    "select",
+    "handle_dialog"
+   ]
+  },
+  {
+   "query": "scroll down the page",
+   "expected": [
+    "scroll"
+   ]
+  },
+  {
+   "query": "go to example.com in the browser",
+   "expected": [
+    "browser_navigate",
+    "browse"
+   ]
+  },
+  {
+   "query": "what tools can you use",
+   "expected": [
+    "runtime_capabilities",
+    "tool_search"
+   ]
+  },
+  {
+   "query": "search my notes for the project plan",
+   "expected": [
+    "knowledge_search"
+   ]
+  },
+  {
+   "query": "show my calendar events today",
+   "expected": [
+    "calendar_list"
+   ]
+  },
+  {
+   "query": "find jira tickets assigned to me",
+   "expected": [
+    "jira_search"
+   ]
+  },
+  {
+   "query": "which windows command shows the battery report",
+   "expected": [
+    "windows_command_search"
+   ]
+  },
+  {
+   "query": "save this document as final",
+   "expected": [
+    "save_file"
+   ]
+  },
+  {
+   "query": "modify the config file to add a key",
+   "expected": [
+    "modify_file"
+   ]
+  },
+  {
+   "query": "check which skills you have",
+   "expected": [
+    "skill_list"
+   ]
+  },
+  {
+   "query": "research the history of the transistor",
+   "expected": [
+    "deerflow_research",
+    "web_search"
+   ]
+  },
+  {
+   "query": "inspect the elements on this web page",
+   "expected": [
+    "browser_inspect"
+   ]
+  },
+  {
+   "query": "skip to the next track",
+   "expected": [
+    "media_control"
+   ]
+  },
+  {
+   "query": "read my latest email",
+   "expected": [
+    "read_email"
+   ]
+  },
+  {
+   "query": "run my unreal engine export",
+   "expected": [
+    "unreal_task"
+   ]
+  },
+  {
+   "query": "list the files in my projects folder",
+   "expected": [
+    "list_files"
+   ]
+  },
+  {
+   "query": "use the press shortcut ctrl s",
+   "expected": [
+    "shortcut"
+   ]
+  },
+  {
+   "query": "learn this github repository",
+   "expected": [
+    "repository_learn"
+   ]
+  },
+  {
+   "query": "reverse engineer this app",
+   "expected": [
+    "rea_status",
+    "rea_ingest",
+    "rea_analyze"
+   ]
+  },
+  {
+   "query": "summarize this repository instructions file",
+   "expected": [
+    "repository_instructions",
+    "read_file"
+   ]
+  },
+  {
+   "query": "edit the jira issue description",
+   "expected": [
+    "jira_edit"
+   ]
+  },
+  {
+   "query": "tweet this announcement",
+   "expected": [
+    "twitter_send"
+   ]
+  },
+  {
+   "query": "crawl the docs site map",
+   "expected": [
+    "firecrawl_map"
+   ]
+  },
+  {
+   "query": "send an email to my manager",
+   "expected": [
+    "send_email"
+   ]
+  },
+  {
+   "query": "call an mcp tool",
+   "expected": [
+    "mcp_call"
+   ]
+  }
+ ]
+}

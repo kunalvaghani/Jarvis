@@ -1571,5 +1571,11 @@
   "demonstration": {
     "enabled": true,
     "max_steps": 10
+  },
+  "evolution_lab": {
+    "enabled": true,
+    "max_experiments_per_day": 1,
+    "budget_seconds": 2400,
+    "check_interval_seconds": 3600
   }
 }

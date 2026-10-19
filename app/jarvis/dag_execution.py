@@ -45,6 +45,34 @@ class Step:
     timeout_seconds: float
 
 
+# Ready-step admission heuristic: a bounded evolution surface (jarvis/evolution_surfaces.py).
+# All-zero weights keep the planner's own order; a positive critical-path weight admits
+# steps with longer downstream chains first. Safety rules (effect serialization,
+# resource budgets, verification) are applied after ordering and never depend on it.
+SCHEDULING = {'critical_path_weight': 0.0, 'read_only_bias': 0.0}
+
+
+def admission_order(steps, tools, weights=None):
+    """Return steps in admission order; stable on the plan order for equal priority."""
+    weights = SCHEDULING if weights is None else weights
+    children = {s.id: [] for s in steps}
+    for step in steps:
+        for dependency in step.dependencies:
+            children[dependency].append(step.id)
+    depth = {}
+    def chain(identifier):  # validate_plan has already rejected cycles; plans hold at most 40 steps.
+        if identifier not in depth:
+            depth[identifier] = 1 + max((chain(c) for c in children[identifier]), default=0)
+        return depth[identifier]
+    for step in steps:
+        chain(step.id)
+    def priority(pair):
+        index, step = pair
+        bias = weights['read_only_bias'] if tools[step.tool].read_only else 0.
+        return (-(weights['critical_path_weight'] * depth[step.id] + bias), index)
+    return [step for _, step in sorted(enumerate(steps), key=priority)]
+
+
 def bounded_number(value, low, high):
     return type(value) in {int, float} and math.isfinite(value) and low <= value <= high
 
@@ -230,6 +258,7 @@ class Executor:
         from dataclasses import asdict
         graph = {'version': 1, 'steps': [{**asdict(s), 'dependencies': list(s.dependencies)} for s in steps]}
         steps = validate_plan(graph, self.tools, self.budgets)
+        order = admission_order(steps, self.tools)
         rows = {s.id: {'status': 'pending', 'attempts': 0} for s in steps}
         if restored:
             for step in steps:
@@ -301,7 +330,7 @@ class Executor:
                     tokens.pop(step.id)
                     self.progress({'step': step.id, 'tool': step.tool, 'status': row['status'],'trace_id':trace_id})
                     save()
-                for step in steps:
+                for step in order:
                     row = rows[step.id]
                     if row['status'] not in {'pending', 'retry_wait'}:
                         continue

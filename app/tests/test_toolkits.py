@@ -279,7 +279,9 @@ class ToolkitTests(unittest.TestCase):
 
     def test_all_toolkit_operations_dispatch_from_autonomous_plans(self):
         variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
-        intents = {"github_add_file": "add to GitHub", "github_delete_file": "delete from GitHub",
+        intents = {"evolution_promote": "deploy the approved improvement proposal",
+                   "evolution_rollback": "roll back the evolution release",
+                   "github_add_file": "add to GitHub", "github_delete_file": "delete from GitHub",
                    "calendar_create": "schedule a meeting", "calendar_delete": "cancel calendar event",
                    "jira_create": "create Jira issue", "jira_edit": "update Jira issue",
                    "send_email": "send an email", "slack_send": "send a Slack message",
