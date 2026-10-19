@@ -46,47 +46,79 @@ def run_create(tmp_path, start_env, during_approval):
 
 
 # ---- P33-004 -----------------------------------------------------------------------------------------------------------
-def test_verified_account_switch_while_approval_pending_writes_nothing(tmp_path):
-    outcome, ledger, cards, _ = run_create(
-        tmp_path, {'JARVIS_GOOGLE_ACCOUNT': 'account-a@example.test', 'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_0001'},
-        {'JARVIS_GOOGLE_ACCOUNT': 'account-b@example.test', 'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_B_0002'})
-    assert 'account changed' in outcome and ledger == []  # zero writes to B (or anywhere)
-    assert cards[0]['account'] == 'account-a@example.test' and cards[0]['identity_verified'] is True
-    assert cards[0]['provider'] == 'calendar' and cards[0]['target'] == 'primary'
+# Configured labels are not identity evidence (Codex cd8861c). Rotation is only accepted with an independent principal
+# check; these tests use an EXPLICITLY MOCKED read-only verifier for that boundary. Production registers none.
+A = {'JARVIS_GOOGLE_ACCOUNT': 'account-a@example.test', 'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_0001'}
+PRINCIPALS = {'SYNTHETIC_TOKEN_A_0001': ('a-principal', 'workspace-1', {'calendar.events'}),
+              'SYNTHETIC_TOKEN_A_ROTATED': ('a-principal', 'workspace-1', {'calendar.events', 'calendar.readonly'}),
+              'SYNTHETIC_TOKEN_B_0002': ('b-principal', 'workspace-1', {'calendar.events'}),
+              'SYNTHETIC_TOKEN_A_NARROW': ('a-principal', 'workspace-1', {'calendar.readonly'}),
+              'SYNTHETIC_TOKEN_A_OTHER_WS': ('a-principal', 'workspace-2', {'calendar.events'})}
+verifier_calls = []
 
 
-def test_token_rotation_for_the_same_verified_account_proceeds_and_is_recorded(tmp_path):
-    outcome, ledger, cards, actions = run_create(
-        tmp_path, {'JARVIS_GOOGLE_ACCOUNT': 'account-a@example.test', 'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_0001'},
-        {'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_ROTATED'})
-    assert outcome == 'sent' and ledger == [{'method': 'POST', 'auth': 'Bearer SYNTHETIC_TOKEN_A_ROTATED'}]
-    evidence = json.dumps(actions.task_state.snapshot())
-    assert 'credential rotated for the same verified account' in evidence and 'SYNTHETIC_TOKEN' not in evidence
+def mock_principal_verifier(environment):
+    """MOCK of a read-only provider "who am I" lookup; records that only the token was consulted, never a write."""
+    token = environment.get('JARVIS_GOOGLE_ACCESS_TOKEN')
+    verifier_calls.append('lookup')
+    principal, workspace, scopes = PRINCIPALS[token]
+    return {'principal': principal, 'workspace': workspace, 'scopes': sorted(scopes)}
 
 
-def test_unverified_credential_change_is_refused_and_tokens_never_reach_the_card(tmp_path):
-    outcome, ledger, cards, _ = run_create(tmp_path, {'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_0001'},
-                                           {'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_ROTATED'})
-    assert 'cannot be confirmed' in outcome and ledger == []
-    assert cards[0]['identity_verified'] is False and 'SYNTHETIC_TOKEN' not in json.dumps(cards)
+@pytest.fixture
+def mocked_verifier():
+    from jarvis.provider_identity import register_principal_verifier
+    verifier_calls.clear()
+    register_principal_verifier('calendar', mock_principal_verifier)
+    yield
+    register_principal_verifier('calendar', None)
+
+
+def test_labels_are_not_identity_evidence_and_any_credential_change_is_refused(tmp_path):
+    outcome, ledger, cards, _ = run_create(tmp_path, A, {'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_ROTATED'})
+    assert 'could not be independently confirmed' in outcome and ledger == []
+    assert cards[0]['identity_verified'] is False and 'configured label, not verified' in cards[0]['account']
+    assert cards[0]['provider'] == 'calendar' and cards[0]['target'] == 'primary' and 'SYNTHETIC_TOKEN' not in json.dumps(cards)
+
+
+def test_label_switch_while_approval_pending_writes_nothing(tmp_path):
+    outcome, ledger, _, _ = run_create(tmp_path, A, {'JARVIS_GOOGLE_ACCOUNT': 'account-b@example.test',
+                                                     'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_B_0002'})
+    assert 'account changed' in outcome and ledger == []
 
 
 def test_unchanged_context_dispatches_with_the_approved_credential(tmp_path):
-    outcome, ledger, cards, _ = run_create(
-        tmp_path, {'JARVIS_GOOGLE_ACCOUNT': 'account-a@example.test', 'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_0001'}, {})
+    outcome, ledger, _, _ = run_create(tmp_path, A, {})
     assert outcome == 'sent' and ledger == [{'method': 'POST', 'auth': 'Bearer SYNTHETIC_TOKEN_A_0001'}]
 
 
-def test_jira_identity_is_url_and_user_not_the_token():
+def test_verified_same_principal_rotation_proceeds_and_is_recorded(tmp_path, mocked_verifier):
+    outcome, ledger, cards, actions = run_create(tmp_path, A, {'JARVIS_GOOGLE_ACCESS_TOKEN': 'SYNTHETIC_TOKEN_A_ROTATED'})
+    assert cards[0]['identity_verified'] is True and cards[0]['account'] == 'a-principal @ workspace-1'
+    assert outcome == 'sent' and ledger == [{'method': 'POST', 'auth': 'Bearer SYNTHETIC_TOKEN_A_ROTATED'}]
+    evidence = json.dumps(actions.task_state.snapshot())
+    assert 'independently verified account' in evidence and 'SYNTHETIC_TOKEN' not in evidence
+    assert verifier_calls == ['lookup', 'lookup']  # approved credential, then replacement; no write used to discover
+
+
+@pytest.mark.parametrize('replacement,why', [('SYNTHETIC_TOKEN_B_0002', 'other principal under the same label'),
+                                             ('SYNTHETIC_TOKEN_A_OTHER_WS', 'same principal, other workspace'),
+                                             ('SYNTHETIC_TOKEN_A_NARROW', 'scope narrower than approved'),
+                                             ('SYNTHETIC_TOKEN_UNKNOWN', 'verifier cannot establish the principal')])
+def test_rotation_is_refused_unless_the_verifier_confirms_the_approved_principal(tmp_path, mocked_verifier, replacement, why):
+    outcome, ledger, _, _ = run_create(tmp_path, A, {'JARVIS_GOOGLE_ACCESS_TOKEN': replacement})
+    assert 'could not be independently confirmed' in outcome and ledger == [], why
+
+
+def test_jira_labels_are_display_only():
     from jarvis.provider_identity import AccountDrift, ProviderContext
     env = {'JARVIS_JIRA_URL': 'https://a.example.test', 'JARVIS_JIRA_USER': 'alice', 'JARVIS_JIRA_TOKEN': 'SYNTHETIC_JIRA_1'}
     context = ProviderContext('jira', env)
-    assert context.verified and context.account == 'https://a.example.test / alice'
-    assert context.recheck({**env, 'JARVIS_JIRA_TOKEN': 'SYNTHETIC_JIRA_2'}).rotated is True
-    with pytest.raises(AccountDrift):
-        context.recheck({**env, 'JARVIS_JIRA_USER': 'bob'})
-    with pytest.raises(AccountDrift):
-        context.recheck({**env, 'JARVIS_JIRA_URL': 'https://b.example.test'})
+    assert not context.verified and context.account.startswith('https://a.example.test / alice (configured label, not verified)')
+    assert context.recheck(env) is context
+    for change in ({'JARVIS_JIRA_TOKEN': 'SYNTHETIC_JIRA_2'}, {'JARVIS_JIRA_USER': 'bob'}, {'JARVIS_JIRA_URL': 'https://b.example.test'}):
+        with pytest.raises(AccountDrift):
+            context.recheck({**env, **change})
 
 
 # ---- P33-002 / P33-003 ------------------------------------------------------------------------------------------------

@@ -381,7 +381,7 @@ def execute(actions, step, cancelled):
     if data[3] and isinstance(state, TaskState):
         state.checkpoint("action_attempted", action=name, target=step["value"],
                          evidence="approved external request beginning for " + context.account +
-                         ("; credential rotated for the same verified account" if context.rotated else ""))
+                         ("; credential rotated for the same independently verified account" if context.rotated else ""))
     client = requests.Session()
     client.trust_env = False
     try:
