@@ -1,0 +1,83 @@
+FFFFFFFFFF.                                                              [100%]
+================================== FAILURES ===================================
+_______________ test_private_state_elements_are_excluded[Text] ________________
+tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY", "Public status"]}
+_____________ test_private_state_elements_are_excluded[CheckBox] ______________
+tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY=1", "Public status"]}
+____________ test_private_state_elements_are_excluded[RadioButton] ____________
+tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY=1", "Public status"]}
+___________________ test_unknown_state_privacy_is_excluded ____________________
+tests\test_independent_review.py:32: in test_unknown_state_privacy_is_excluded
+    assert window_state(window)['texts'] == []
+E   AssertionError: assert ['SYNTHETIC_UNKNOWN_CANARY'] == []
+E     
+E     Left contains one more item: 'SYNTHETIC_UNKNOWN_CANARY'
+E     Use -v to get more diff
+____________ test_unknown_gpu_lease_state_defers_training[{broken] ____________
+tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = <function foreground_gpu_busy at 0x000002286A336680>()
+E    +    where <function foreground_gpu_busy at 0x000002286A336680> = <module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'>.foreground_gpu_busy
+______________ test_unknown_gpu_lease_state_defers_training[[]] _______________
+tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+scripts\training\train_azr_lora.py:54: in foreground_gpu_busy
+    rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
+E   AttributeError: 'list' object has no attribute 'get'
+_____________ test_unknown_gpu_lease_state_defers_training[null] ______________
+tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+scripts\training\train_azr_lora.py:54: in foreground_gpu_busy
+    rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_unknown_gpu_lease_state_defers_training[{"active":null,"pending":"broken"}] _
+tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = <function foreground_gpu_busy at 0x000002286A336680>()
+E    +    where <function foreground_gpu_busy at 0x000002286A336680> = <module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'>.foreground_gpu_busy
+_ test_unknown_gpu_lease_state_defers_training[{"active":{"pid":123},"pending":[]}] _
+tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = <function foreground_gpu_busy at 0x000002286A336680>()
+E    +    where <function foreground_gpu_busy at 0x000002286A336680> = <module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'>.foreground_gpu_busy
+__________________ test_unreadable_gpu_state_defers_training __________________
+tests\test_independent_review.py:53: in test_unreadable_gpu_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = <function foreground_gpu_busy at 0x000002286A336680>()
+E    +    where <function foreground_gpu_busy at 0x000002286A336680> = <module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'>.foreground_gpu_busy
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-independent-review\reproductions-before.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_independent_review.py::test_private_state_elements_are_excluded[Text]
+FAILED tests\test_independent_review.py::test_private_state_elements_are_excluded[CheckBox]
+FAILED tests\test_independent_review.py::test_private_state_elements_are_excluded[RadioButton]
+FAILED tests\test_independent_review.py::test_unknown_state_privacy_is_excluded
+FAILED tests\test_independent_review.py::test_unknown_gpu_lease_state_defers_training[{broken]
+FAILED tests\test_independent_review.py::test_unknown_gpu_lease_state_defers_training[[]]
+FAILED tests\test_independent_review.py::test_unknown_gpu_lease_state_defers_training[null]
+FAILED tests\test_independent_review.py::test_unknown_gpu_lease_state_defers_training[{"active":null,"pending":"broken"}]
+FAILED tests\test_independent_review.py::test_unknown_gpu_lease_state_defers_training[{"active":{"pid":123},"pending":[]}]
+FAILED tests\test_independent_review.py::test_unreadable_gpu_state_defers_training
+10 failed, 1 passed in 0.73s
+Exception ignored in: <function Console.__del__ at 0x0000022869F8EF80>
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pyreadline3\console\console.py", line 256, in __del__
+OSError: [WinError -1073741816] Windows Error 0xc0000008

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="10" skipped="0" tests="11" time="0.724" timestamp="2026-10-19T12:31:09.751751+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_private_state_elements_are_excluded[Text]" time="0.007"><failure message="assert 'SYNTHETIC_PRIVATE_CANARY' not in '{&quot;title&quot;: &quot;...ic status&quot;]}'&#10;  &#10;  'SYNTHETIC_PRIVATE_CANARY' is contained here:&#10;    texts&quot;: [&quot;SYNTHETIC_PRIVATE_CANARY&quot;, &quot;Public status&quot;]}">tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY", "Public status"]}</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_private_state_elements_are_excluded[CheckBox]" time="0.001"><failure message="assert 'SYNTHETIC_PRIVATE_CANARY' not in '{&quot;title&quot;: &quot;...ic status&quot;]}'&#10;  &#10;  'SYNTHETIC_PRIVATE_CANARY' is contained here:&#10;    texts&quot;: [&quot;SYNTHETIC_PRIVATE_CANARY=1&quot;, &quot;Public status&quot;]}">tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY=1", "Public status"]}</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_private_state_elements_are_excluded[RadioButton]" time="0.001"><failure message="assert 'SYNTHETIC_PRIVATE_CANARY' not in '{&quot;title&quot;: &quot;...ic status&quot;]}'&#10;  &#10;  'SYNTHETIC_PRIVATE_CANARY' is contained here:&#10;    texts&quot;: [&quot;SYNTHETIC_PRIVATE_CANARY=1&quot;, &quot;Public status&quot;]}">tests\test_independent_review.py:24: in test_private_state_elements_are_excluded
+    assert 'SYNTHETIC_PRIVATE_CANARY' not in json.dumps(result)
+E   assert 'SYNTHETIC_PRIVATE_CANARY' not in '{"title": "...ic status"]}'
+E     
+E     'SYNTHETIC_PRIVATE_CANARY' is contained here:
+E       texts": ["SYNTHETIC_PRIVATE_CANARY=1", "Public status"]}</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_state_privacy_is_excluded" time="0.001"><failure message="AssertionError: assert ['SYNTHETIC_UNKNOWN_CANARY'] == []&#10;  &#10;  Left contains one more item: 'SYNTHETIC_UNKNOWN_CANARY'&#10;  Use -v to get more diff">tests\test_independent_review.py:32: in test_unknown_state_privacy_is_excluded
+    assert window_state(window)['texts'] == []
+E   AssertionError: assert ['SYNTHETIC_UNKNOWN_CANARY'] == []
+E     
+E     Left contains one more item: 'SYNTHETIC_UNKNOWN_CANARY'
+E     Use -v to get more diff</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_gpu_lease_state_defers_training[{broken]" time="0.051"><failure message="AssertionError: assert False is True&#10; +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()&#10; +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy">tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()
+E    +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_gpu_lease_state_defers_training[[]]" time="0.009"><failure message="AttributeError: 'list' object has no attribute 'get'">tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+scripts\training\train_azr_lora.py:54: in foreground_gpu_busy
+    rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_gpu_lease_state_defers_training[null]" time="0.007"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+scripts\training\train_azr_lora.py:54: in foreground_gpu_busy
+    rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
+E   AttributeError: 'NoneType' object has no attribute 'get'</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_gpu_lease_state_defers_training[{&quot;active&quot;:null,&quot;pending&quot;:&quot;broken&quot;}]" time="0.049"><failure message="AssertionError: assert False is True&#10; +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()&#10; +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy">tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()
+E    +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unknown_gpu_lease_state_defers_training[{&quot;active&quot;:{&quot;pid&quot;:123},&quot;pending&quot;:[]}]" time="0.014"><failure message="AssertionError: assert False is True&#10; +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()&#10; +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy">tests\test_independent_review.py:43: in test_unknown_gpu_lease_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()
+E    +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_unreadable_gpu_state_defers_training" time="0.004"><failure message="AssertionError: assert False is True&#10; +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()&#10; +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy">tests\test_independent_review.py:53: in test_unreadable_gpu_state_defers_training
+    assert trainer.foreground_gpu_busy() is True
+E   AssertionError: assert False is True
+E    +  where False = &lt;function foreground_gpu_busy at 0x000002286A336680&gt;()
+E    +    where &lt;function foreground_gpu_busy at 0x000002286A336680&gt; = &lt;module 'scripts.training.train_azr_lora' from 'D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review\\app\\scripts\\training\\train_azr_lora.py'&gt;.foreground_gpu_busy</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_independent_review" name="test_missing_gpu_state_is_idle" time="0.005" /></testsuite></testsuites>
