@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase07 -->
+**2026-10-19 — Upgrade Phase 7 of 8 (AZR-inspired self-play + local LoRA): pipeline PASS; one checkpoint qualified as experimental only.** Oracle-verified deduction/abduction/induction tasks, sandboxed execution, leak-free versioned datasets, and preemptible, resumable LoRA training on the 4 GB GPU are in place. Held-out accuracy rose from 0/165 to 9/165; the checkpoint is not promoted, and Ollama export is BLOCKED. Full regression **3,361 passed / 147 skipped / 0 failed**. [Application details](app/README.md) · [Phase 7 evidence](app/artifacts/jarvis-audit/phase-07/README.md).
+<!-- /upgrade-phase07 -->
+
 <!-- upgrade-phase06 -->
 **2026-10-19 — Upgrade Phase 6 of 8 (DGM + autoresearch + EEVEE self-evolution): PASS for locally executable checks.** Bounded, literal-only experiments run in an isolated lab repository and are judged by a sealed ten-domain retention gate. Qualified candidates are approval-gated proposals with rollback; one DAG-ordering proposal qualified and was not deployed. Full regression **3,340 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 6 evidence](app/artifacts/jarvis-audit/phase-06/README.md).
 <!-- /upgrade-phase06 -->

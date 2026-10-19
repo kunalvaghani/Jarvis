@@ -1,0 +1,13 @@
+{
+ "model": "base",
+ "tasks": 165,
+ "seconds": 210.8,
+ "peak_vram_mb": 1130,
+ "batch": 8,
+ "decoding": "greedy",
+ "max_new_tokens": {
+  "deduction": 320,
+  "abduction": 384,
+  "induction": 192
+ }
+}

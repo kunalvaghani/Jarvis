@@ -1,0 +1,22 @@
+ README.md                                          |   4 +
+ app/README.md                                      |  25 ++
+ app/docs/system-map.md                             |  10 +
+ app/evolution_eval/heldout/azr_tasks.jsonl         | 165 ++++++++
+ app/evolution_eval/model_gate.py                   | 142 +++++++
+ app/evolution_eval/policy.json                     |   5 +-
+ app/jarvis/azr_dataset.py                          | 111 ++++++
+ app/jarvis/azr_proposer.py                         | 154 ++++++++
+ app/jarvis/azr_reward.py                           |  60 +++
+ app/jarvis/azr_sandbox.py                          | 128 ++++++
+ app/jarvis/azr_tasks.py                            | 431 +++++++++++++++++++++
+ app/jarvis/model_registry.py                       |  64 +++
+ app/scripts/training/azr_generate.py               |  94 +++++
+ app/scripts/training/build_azr_dataset.py          |  98 +++++
+ app/scripts/training/export_azr_adapter.py         |  81 ++++
+ app/scripts/training/grpo_feasibility.py           | 106 +++++
+ app/scripts/training/train_azr_lora.py             | 252 ++++++++++++
+ app/tests/test_phase02_execution_strategy.py       |   6 +
+ app/tests/test_phase05_escalation_demonstration.py |   8 +
+ app/tests/test_phase07_azr_training.py             | 260 +++++++++++++
+ 20 files changed, 2203 insertions(+), 1 deletion(-)
+artifacts/jarvis-audit/phase-07/ (this evidence packet; diff base 29ad55c = Phase 6 head)

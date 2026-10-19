@@ -1,0 +1,6 @@
+{"at": "2026-10-19T04:59:23+00:00", "status": "training", "examples": 914, "skipped_too_long": 0, "trainable_parameters": 4399104, "start_step": 0, "max_steps": 20}
+{"at": "2026-10-19T04:59:25+00:00", "step": 1, "loss": 0.48806, "lr": 0.00019, "seconds": 1.59, "peak_vram_mb": 1844, "rss_mb": 1507}
+{"at": "2026-10-19T04:59:26+00:00", "step": 2, "loss": 0.5609, "lr": 0.00018, "seconds": 1.06, "peak_vram_mb": 1844, "rss_mb": 1538}
+{"at": "2026-10-19T04:59:27+00:00", "step": 3, "loss": 0.3639, "lr": 0.00017, "seconds": 1.16, "peak_vram_mb": 1844, "rss_mb": 1538}
+{"at": "2026-10-19T04:59:28+00:00", "event": "checkpoint", "step": 3, "reason": "preempted", "adapter_sha256": "8f33cd9abe46d29a0bdb9485b9be12e69af10d6a16f18dc086f57d3217453c1e"}
+{"at": "2026-10-19T04:59:28+00:00", "status": "preempted", "step": 3, "minutes": 0.07, "peak_vram_mb": 1844}

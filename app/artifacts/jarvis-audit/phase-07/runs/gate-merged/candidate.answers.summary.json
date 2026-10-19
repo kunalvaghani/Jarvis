@@ -1,0 +1,13 @@
+{
+ "model": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\azr\\runs\\phase07\\export\\merged",
+ "tasks": 165,
+ "seconds": 97.2,
+ "peak_vram_mb": 1130,
+ "batch": 8,
+ "decoding": "greedy",
+ "max_new_tokens": {
+  "deduction": 320,
+  "abduction": 384,
+  "induction": 192
+ }
+}

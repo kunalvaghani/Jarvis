@@ -1,0 +1,23 @@
+{
+ "state_version": 1,
+ "base_model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+ "base_revision": "ea3f2471cf1b1f0db85067f1ef93848e38e88c25",
+ "base_sha256": "f9523886352217ded3aeeef552b381af79d568c6d49a4b9e423288cea56b0a44",
+ "dataset": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\azr\\datasets\\azr-v1-20261019",
+ "dataset_manifest_sha256": "62a951637d0fb0bfb51144d50b6d23b384bc10cdc0588c9fcdf78d58a3114ddd",
+ "config": {
+  "grad_accum": 2,
+  "lr": 0.0002,
+  "max_len": 896,
+  "lora_r": 8,
+  "checkpoint_every": 5,
+  "vram_limit_mb": 3300,
+  "ram_limit_mb": 6144,
+  "seed": 20261019
+ },
+ "versions": {
+  "torch": "2.6.0+cu124",
+  "cuda": "12.4",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU"
+ }
+}

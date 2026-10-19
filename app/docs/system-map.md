@@ -1,5 +1,15 @@
 # Jarvis system map
 
+<!-- upgrade-phase07 -->
+**Upgrade Phase 7 — 2026-10-19 IST:**
+- Offline training pipeline; nothing in the runtime loads its models.
+- Modules: `azr_tasks.py` (simulated state, tasks, oracle), `azr_sandbox.py` (container execution), `azr_reward.py`, `azr_dataset.py`, `azr_proposer.py` (local Ollama), `model_registry.py` (experimental-only).
+- Scripts: `scripts/training/{build_azr_dataset,train_azr_lora,azr_generate,export_azr_adapter,grpo_feasibility}.py`.
+- Gate: `evolution_eval/model_gate.py`.
+
+[Methodology](../artifacts/jarvis-audit/phase-07/methodology-and-provenance.md).
+<!-- /upgrade-phase07 -->
+
 <!-- upgrade-phase06 -->
 **Upgrade Phase 6 — 2026-10-19 IST:**
 - `evolution_surfaces.py`: bounded literals in `dag_execution`, `capabilities`, `reasoning_bank`, `cognition`, `task_recovery`, `prompt_router`.

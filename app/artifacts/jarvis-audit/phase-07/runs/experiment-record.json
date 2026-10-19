@@ -1,0 +1,488 @@
+{
+ "started_at": "2026-10-19T04:54:30+00:00",
+ "steps": {
+  "environment": {
+   "seconds": 10.5,
+   "result": {
+    "python": "3.10.6",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "bf16": true,
+    "vram_free_mb": 3305,
+    "vram_total_mb": 4095,
+    "transformers": "4.57.6",
+    "peft": "0.18.1",
+    "ram_total_gb": 31.3,
+    "ram_available_gb": 11.9,
+    "unloaded_ollama_models": []
+   }
+  },
+  "existing_pc_adapter_compatibility": {
+   "seconds": 13.1,
+   "result": {
+    "loaded": true,
+    "generated_tokens": 8,
+    "peft_type": "LORA",
+    "r": 8
+   }
+  },
+  "baseline_heldout": {
+   "seconds": 197.2,
+   "result": {
+    "peak_vram_mb": 1130,
+    "seconds": 181.7,
+    "seconds_per_task_p50": 0.4805,
+    "deduction": {
+     "correct": 0,
+     "total": 60,
+     "accuracy": 0.0,
+     "wilson95": [
+      0.0,
+      0.0602
+     ],
+     "format_ok": 60,
+     "mean_reward": -0.5
+    },
+    "abduction": {
+     "correct": 0,
+     "total": 60,
+     "accuracy": 0.0,
+     "wilson95": [
+      0.0,
+      0.0602
+     ],
+     "format_ok": 0,
+     "mean_reward": -1.0
+    },
+    "induction": {
+     "correct": 0,
+     "total": 45,
+     "accuracy": 0.0,
+     "wilson95": [
+      0.0,
+      0.0787
+     ],
+     "format_ok": 45,
+     "mean_reward": -0.5,
+     "visible_only": 0
+    },
+    "overall": {
+     "correct": 0,
+     "total": 165,
+     "accuracy": 0.0,
+     "wilson95": [
+      0.0,
+      0.0228
+     ]
+    }
+   }
+  },
+  "cancel_and_resume": {
+   "seconds": 56.5,
+   "result": {
+    "reference_exit": 0,
+    "stopped": {
+     "status": "cancelled",
+     "step": 2,
+     "minutes": 0.05,
+     "peak_vram_mb": 1844
+    },
+    "resume_exit": 0,
+    "final": {
+     "status": "completed",
+     "step": 4,
+     "minutes": 0.05,
+     "peak_vram_mb": 1841
+    },
+    "reference_losses": [
+     0.48806,
+     0.5287,
+     0.34971,
+     0.62776
+    ],
+    "interrupted_then_resumed_losses": [
+     0.48806,
+     0.5287,
+     0.34971,
+     0.62776
+    ],
+    "max_abs_loss_difference": 0.0
+   }
+  },
+  "foreground_preemption": {
+   "seconds": 21.5,
+   "result": {
+    "final": {
+     "status": "preempted",
+     "step": 3,
+     "minutes": 0.07,
+     "peak_vram_mb": 1844
+    },
+    "checkpoints": [
+     "checkpoint-3"
+    ],
+    "lease_acquired": true
+   }
+  },
+  "lora_main_training": {
+   "seconds": 592.3,
+   "result": {
+    "exit": 0,
+    "final": {
+     "status": "completed",
+     "step": 120,
+     "minutes": 9.61,
+     "peak_vram_mb": 1994
+    },
+    "first_losses": [
+     0.58207,
+     0.58498,
+     0.70019,
+     0.47608,
+     0.55158
+    ],
+    "last_losses": [
+     0.0875,
+     0.07161,
+     0.11581,
+     0.09197,
+     0.08966
+    ],
+    "steps_logged": 120,
+    "max_peak_vram_mb": 1994,
+    "max_rss_mb": 2598
+   }
+  },
+  "heldout_gate": {
+   "seconds": 187.8,
+   "result": {
+    "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+    "environment": {
+     "python": "3.10.6",
+     "implementation": "CPython",
+     "platform": "Windows-10-10.0.26200-SP0",
+     "machine": "AMD64",
+     "cpu_count": 16,
+     "executable": "python.exe"
+    },
+    "seal": "8bdee63096280e7c979aa20abffc34f6bd9420827a27f537488bc3d6c75d9125",
+    "base": {
+     "peak_vram_mb": 1130,
+     "seconds": 181.7,
+     "seconds_per_task_p50": 0.4805,
+     "deduction": {
+      "correct": 0,
+      "total": 60,
+      "accuracy": 0.0,
+      "wilson95": [
+       0.0,
+       0.0602
+      ],
+      "format_ok": 60,
+      "mean_reward": -0.5
+     },
+     "abduction": {
+      "correct": 0,
+      "total": 60,
+      "accuracy": 0.0,
+      "wilson95": [
+       0.0,
+       0.0602
+      ],
+      "format_ok": 0,
+      "mean_reward": -1.0
+     },
+     "induction": {
+      "correct": 0,
+      "total": 45,
+      "accuracy": 0.0,
+      "wilson95": [
+       0.0,
+       0.0787
+      ],
+      "format_ok": 45,
+      "mean_reward": -0.5,
+      "visible_only": 0
+     },
+     "overall": {
+      "correct": 0,
+      "total": 165,
+      "accuracy": 0.0,
+      "wilson95": [
+       0.0,
+       0.0228
+      ]
+     }
+    },
+    "candidate": {
+     "peak_vram_mb": 1258,
+     "seconds": 168.5,
+     "seconds_per_task_p50": 0.834,
+     "deduction": {
+      "correct": 2,
+      "total": 60,
+      "accuracy": 0.0333,
+      "wilson95": [
+       0.0092,
+       0.1136
+      ],
+      "format_ok": 60,
+      "mean_reward": -0.45
+     },
+     "abduction": {
+      "correct": 1,
+      "total": 60,
+      "accuracy": 0.0167,
+      "wilson95": [
+       0.0029,
+       0.0886
+      ],
+      "format_ok": 60,
+      "mean_reward": -0.475
+     },
+     "induction": {
+      "correct": 7,
+      "total": 45,
+      "accuracy": 0.1556,
+      "wilson95": [
+       0.0775,
+       0.2878
+      ],
+      "format_ok": 45,
+      "mean_reward": -0.2667,
+      "visible_only": 2
+     },
+     "overall": {
+      "correct": 10,
+      "total": 165,
+      "accuracy": 0.0606,
+      "wilson95": [
+       0.0332,
+       0.108
+      ]
+     }
+    },
+    "comparisons": {
+     "deduction": {
+      "examples": 60,
+      "repeats": 1,
+      "parent_mean": 0.0,
+      "child_mean": 0.033333,
+      "mean_delta": 0.033333,
+      "relative_delta": null,
+      "ci95": [
+       0.0,
+       0.083333
+      ],
+      "improved_examples": 2,
+      "worse_examples": 0,
+      "max_repeat_spread": 0.0,
+      "deterministic": true
+     },
+     "abduction": {
+      "examples": 60,
+      "repeats": 1,
+      "parent_mean": 0.0,
+      "child_mean": 0.016667,
+      "mean_delta": 0.016667,
+      "relative_delta": null,
+      "ci95": [
+       0.0,
+       0.05
+      ],
+      "improved_examples": 1,
+      "worse_examples": 0,
+      "max_repeat_spread": 0.0,
+      "deterministic": true
+     },
+     "induction": {
+      "examples": 45,
+      "repeats": 1,
+      "parent_mean": 0.0,
+      "child_mean": 0.155556,
+      "mean_delta": 0.155556,
+      "relative_delta": null,
+      "ci95": [
+       0.066667,
+       0.266667
+      ],
+      "improved_examples": 7,
+      "worse_examples": 0,
+      "max_repeat_spread": 0.0,
+      "deterministic": true
+     },
+     "overall": {
+      "examples": 165,
+      "repeats": 1,
+      "parent_mean": 0.0,
+      "child_mean": 0.060606,
+      "mean_delta": 0.060606,
+      "relative_delta": null,
+      "ci95": [
+       0.024242,
+       0.09697
+      ],
+      "improved_examples": 10,
+      "worse_examples": 0,
+      "max_repeat_spread": 0.0,
+      "deterministic": true
+     }
+    },
+    "decision": "rejected",
+    "reason": "budget exceeded: latency"
+   }
+  },
+  "export_compatibility": {
+   "seconds": 227.2,
+   "result": {
+    "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+    "prompts": 24,
+    "exact_match": 20,
+    "exact_match_rate": 0.8333,
+    "merged_dir": "artifacts\\jarvis-audit\\phase-07\\runs\\export\\merged",
+    "merged_reloads_with_transformers": true,
+    "gguf_conversion": "BLOCKED: no GGUF converter (gguf package / llama.cpp) installed",
+    "ollama_registration": "not performed (requires approval and a GGUF export)",
+    "mismatches": [
+     {
+      "id": "abd_0b18d87479fe296c",
+      "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"tmp/readme.txt\", \"src\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"open_app\", \"args\": {\"app\": \"browser\"}, \"deps\": []}]",
+      "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"blue\", \"path\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\": \"s3\", "
+     },
+     {
+      "id": "abd_8737f94fb26f15e9",
+      "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"archive/plan.txt\", \"src\": \"ar",
+      "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": "
+     },
+     {
+      "id": "abd_04db09455f719534",
+      "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"archive/summary.txt\"}, \"deps\": [\"s1\"",
+      "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\":"
+     },
+     {
+      "id": "abd_d9ab44706fc135ba",
+      "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"delta\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"work/ideas.txt\", \"src\": \"a",
+      "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/log.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"green\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\":"
+     }
+    ]
+   }
+  },
+  "grpo_feasibility": {
+   "seconds": 36.1,
+   "result": {
+    "group_size": 4,
+    "tasks": 4,
+    "steps": [
+     {
+      "task": "ded_17ec6a8b379a5902",
+      "mode": "deduction",
+      "rewards": [
+       -0.5,
+       -0.5,
+       -0.5,
+       -0.5
+      ],
+      "reward_std": 0.0,
+      "updated": false,
+      "sample_seconds": 7.16,
+      "step_seconds": 7.17
+     },
+     {
+      "task": "ded_bdf047ba1193cc8e",
+      "mode": "deduction",
+      "rewards": [
+       -0.5,
+       -0.5,
+       -0.5,
+       -0.5
+      ],
+      "reward_std": 0.0,
+      "updated": false,
+      "sample_seconds": 5.59,
+      "step_seconds": 5.59
+     },
+     {
+      "task": "ded_7c994f1c00d62221",
+      "mode": "deduction",
+      "rewards": [
+       -0.5,
+       -0.5,
+       -0.5,
+       -0.5
+      ],
+      "reward_std": 0.0,
+      "updated": false,
+      "sample_seconds": 5.53,
+      "step_seconds": 5.53
+     },
+     {
+      "task": "ded_741c1362940387a6",
+      "mode": "deduction",
+      "rewards": [
+       -0.5,
+       -0.5,
+       -0.5,
+       -0.5
+      ],
+      "reward_std": 0.0,
+      "updated": false,
+      "sample_seconds": 5.11,
+      "step_seconds": 5.12
+     }
+    ],
+    "peak_vram_mb": 1089,
+    "groups_with_signal": 0,
+    "mean_step_seconds": 5.85,
+    "note": "Feasibility probe only: a handful of GRPO-style updates; no claim of improvement."
+   }
+  },
+  "registry_experimental": {
+   "seconds": 0.0,
+   "result": {
+    "id": "model_ec30d6e86c",
+    "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+    "adapter_sha256": "4c9dc6e3932ec0208e22fd6116c3a9c4d563c95f2a7abd87343e43bd5fd03450",
+    "base_sha256": "f9523886352217ded3aeeef552b381af79d568c6d49a4b9e423288cea56b0a44",
+    "dataset_manifest_sha256": "62a951637d0fb0bfb51144d50b6d23b384bc10cdc0588c9fcdf78d58a3114ddd",
+    "gate_decision": "rejected",
+    "gate_seal": "8bdee63096280e7c979aa20abffc34f6bd9420827a27f537488bc3d6c75d9125",
+    "export_check": {
+     "adapter": "artifacts\\jarvis-audit\\phase-07\\runs\\lora-main\\checkpoint-120",
+     "prompts": 24,
+     "exact_match": 20,
+     "exact_match_rate": 0.8333,
+     "merged_dir": "artifacts\\jarvis-audit\\phase-07\\runs\\export\\merged",
+     "merged_reloads_with_transformers": true,
+     "gguf_conversion": "BLOCKED: no GGUF converter (gguf package / llama.cpp) installed",
+     "ollama_registration": "not performed (requires approval and a GGUF export)",
+     "mismatches": [
+      {
+       "id": "abd_0b18d87479fe296c",
+       "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"tmp/readme.txt\", \"src\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"open_app\", \"args\": {\"app\": \"browser\"}, \"deps\": []}]",
+       "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"docs/draft.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"blue\", \"path\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\": \"s3\", "
+      },
+      {
+       "id": "abd_8737f94fb26f15e9",
+       "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"archive/plan.txt\", \"src\": \"ar",
+       "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/plan.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"beta\", \"path\": \"archive/plan.txt\"}, \"deps\": "
+      },
+      {
+       "id": "abd_04db09455f719534",
+       "adapter": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"archive/summary.txt\"}, \"deps\": [\"s1\"",
+       "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/summary.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"move_file\", \"args\": {\"dst\": \"tmp/draft.txt\", \"src\": \"docs/plan.txt\"}, \"deps\": []}, {\"id\":"
+      },
+      {
+       "id": "abd_d9ab44706fc135ba",
+       "adapter": "[{\"id\": \"s1\", \"tool\": \"replace_text\", \"args\": {\"new\": \"green\", \"old\": \"delta\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"copy_file\", \"args\": {\"dst\": \"work/ideas.txt\", \"src\": \"a",
+       "merged": "[{\"id\": \"s1\", \"tool\": \"copy_text\", \"args\": {\"path\": \"archive/log.txt\"}, \"deps\": []}, {\"id\": \"s2\", \"tool\": \"create_file\", \"args\": {\"content\": \"green\", \"path\": \"archive/readme.txt\"}, \"deps\": []}, {\"id\":"
+      }
+     ]
+    },
+    "status": "experimental",
+    "registered_at": "2026-10-19T05:16:52+00:00"
+   }
+  }
+ },
+ "finished_at": "2026-10-19T05:16:52+00:00"
+}
