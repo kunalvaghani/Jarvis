@@ -24,6 +24,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- prompt31-p31-001 -->
+**2026-10-19 — Prompt 31 defect P31-001 repaired (approval request binding); Prompt 31 still BLOCKED pending Codex re-verification.** Island approval cards now carry an immutable token and a digest of the exact request. Approve/Deny buttons and spoken yes/no decide only the card that was on screen. Requesters (`App.request_approval`, learned-ability cards) act only on an approval receipt for their own request. Codex's reproduction: 3 FAIL / 1 PASS → 4 PASS; plus 5 adversarial tests. Full regression 3,402 passed / 1 transient Tcl/Tk failure (passes in isolation; known baseline instability) / 147 BLOCKED skips. [Repair record](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair/repair.md).
+<!-- /prompt31-p31-001 -->
+
 <!-- upgrade-phase08 -->
 **2026-10-19 — Upgrade Phase 8 of 8 (final integration and verification): PARTIALLY VERIFIED.** Every locally executable check passed: full regression **3,379 passed / 147 skipped (all BLOCKED environment dependencies) / 0 failed**; launcher ready; 17 cross-pillar scenarios exercised or cited from recorded real runs; 15 red-team categories attacked.
 - **Re-audit repairs.** The cloud architect gained a real, approval-gated, fail-closed entry point (`cloud_architect_consult`). A pre-existing citation regex bug in `documents.py` was fixed.

@@ -65,7 +65,7 @@ class App:
         build_interface(self)
         self.load_microphones()
         self.actions.approval_handler = self.request_approval
-        self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
+        self.actions.decision_handler = self.voice_decision
         # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
         self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
             getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
@@ -348,14 +348,23 @@ class App:
             self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         self.events.put((kind, message))
 
+    def voice_decision(self, approved):
+        """A spoken yes/no answers the card on screen when it was heard; if that card changes first, nothing is decided."""
+        token = getattr(self.desk, 'displayed_token', None)
+        if token:
+            self.root.after(0, lambda: self.desk.decide(approved, token))
+
     def request_approval(self, kind, detail, cancelled):
+        from jarvis.approval_receipt import approval_digest
         answer = {"approved": False}
         ready = threading.Event()
         self.report("approval", (kind, detail, answer, ready, cancelled))
         while not ready.wait(.1):
             if cancelled():
                 return False
-        return answer["approved"] and not cancelled()
+        # Final boundary: only an approval issued for this exact request (kind and detail) authorizes it.
+        return (answer["approved"] is True and answer.get("digest") == approval_digest(kind, detail)
+                and not cancelled())
 
     def show_command_prompt(self):
         self.desk.show('Console')

@@ -1,0 +1,181 @@
+........................................................................ [  2%]
+................................................................s....... [  4%]
+........................................................................ [  6%]
+.................................................sss.................... [  8%]
+........................................................................ [ 10%]
+................................................................s.s..... [ 12%]
+........................................................................ [ 14%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 24%]
+...s.................................................s..s............... [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+........ssssssss........................................................ [ 36%]
+...........ssssssssssss................................................. [ 38%]
+.........s.............................................................. [ 40%]
+........................................ssssssssss...................... [ 42%]
+........................................................................ [ 44%]
+........................................................................ [ 46%]
+..................F..................................................... [ 48%]
+........................................................................ [ 50%]
+........ssssssssssssssss................................................ [ 52%]
+..........s.s......s......................s............................. [ 54%]
+........................................................................ [ 56%]
+...........................sssss........................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+........................................................................ [ 68%]
+..sssssss............................................................... [ 70%]
+....................s......s................................s.s......s.. [ 73%]
+...................s.................................................... [ 75%]
+....................................................sssssssssss......... [ 77%]
+.............................................s.................s........ [ 79%]
+.................................................sssssssssssss.......... [ 81%]
+......................................................ssssssssssss...... [ 83%]
+........................................................................ [ 85%]
+......ssss......................s....................................... [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+.............................................................s....s..... [ 95%]
+......................................................sssssss........... [ 97%]
+............................................sssssssssssssssss........... [ 99%]
+......................                                                   [100%]
+================================== FAILURES ===================================
+_ DeskWidgetTests.test_background_file_visible_in_every_view_and_code_draft_is_not_saved _
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_background_file_visible_in_every_view_and_code_draft_is_not_saved>
+
+    def setUp(self):
+>       self.root = tk.Tk(); self.root.withdraw()
+
+tests\test_island_desk.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.Tk object .>, screenName = None, baseName = '__main__'
+className = 'Tk', useTk = True, sync = False, use = None
+
+    def __init__(self, screenName=None, baseName=None, className='Tk',
+                 useTk=True, sync=False, use=None):
+        """Return a new Toplevel widget on screen SCREENNAME. A new Tcl interpreter will
+        be created. BASENAME will be used for the identification of the profile file (see
+        readprofile).
+        It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
+        is the name of the widget class."""
+        self.master = None
+        self.children = {}
+        self._tkloaded = False
+        # to avoid recursions in the getattr code in case of failure, we
+        # ensure that self.tk is always _something_.
+        self.tk = None
+        if baseName is None:
+            import os
+            baseName = os.path.basename(sys.argv[0])
+            baseName, ext = os.path.splitext(baseName)
+            if ext not in ('.py', '.pyc'):
+                baseName = baseName + ext
+        interactive = False
+>       self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E       _tkinter.TclError: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/auto.tcl": no such file or directory
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: TclError
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-claude-repair\full-regression.xml -
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_app_research_audit.py:120: BLOCKED: no production plugin identity/version namespace; host UI cannot prove plugin scope.
+SKIPPED [1] tests\test_audit_completion_cases.py:179: BLOCKED: Dedicated medium.en WER/latency session requires free GPU headroom; only 1396 MiB free was observed and no labeled quiet-room corpus is supplied.
+SKIPPED [1] tests\test_audit_completion_cases.py:179: BLOCKED: No labeled background-TV audio corpus with channel/source annotations; textual echo tests cannot measure acoustic false activation rate.
+SKIPPED [1] tests\test_audit_completion_cases.py:179: BLOCKED: No labeled long-pause utterance corpus or reference word timings; 0.8-second VAD endpoint policy cannot certify arbitrary pause intent.
+SKIPPED [1] tests\test_browser_playwright_audit.py:189: BLOCKED: owned fixture download verified, but no production verified-download/save adapter exists; adding an ability requires review/authorization.
+SKIPPED [1] tests\test_browser_playwright_audit.py:196: BLOCKED: multiple tabs fail closed; an explicit reviewed tab-selection adapter is absent. No silent popup retargeting.
+SKIPPED [1] tests\test_deliberation_audit.py:159: BLOCKED: no deterministic unfamiliar-program research-before-action gate exists; model/planner research is advisory, not guaranteed. No program installed or executed.
+SKIPPED [1] tests\test_desktop_control_audit.py:172: BLOCKED: live150% DPI/multi-monitor click validation not authorized; no personal display settings changed. Physical-coordinate fixture passed separately.
+SKIPPED [1] tests\test_desktop_control_audit.py:185: BLOCKED: real UAC/secure-desktop validation would require elevation/personal OS state changes; no bypass attempted. Permission-denial fixture passed separately.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: One OAuth-selected account per base; no explicit multi-account identity broker or approval/journal account binding.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Named attachments stay remote in message reads; FileBuddy approval/journal guards are fixture-tested, but an end-to-end attachment secret-to-model oracle is absent.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Cancellation before writes is covered; full TaskState cancellation while readback is in progress is unproved.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Local interpreter context is bounded; no complete fake-cloud/log-redaction oracle across all Gmail and attachment flows.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: No complete Gmail RAM/GPU-pressure admission and core-command responsiveness proof.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Uncertain writes refuse replay; successful identical event deduplication has no durable event ID contract.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Draft-update CPU A/B is measured; full OAuth/workflow cold-start/RSS/VRAM benchmark absent.
+SKIPPED [1] tests\test_gmail_audit.py:274: BLOCKED: Journal omits body/subject, but complete private-data redaction and cross-flow trace contract are unproved.
+SKIPPED [12] tests\test_gods_eye_audit.py:204: BLOCKED: complete frontend/provider/privacy/lifecycle/resource contract lacks implementation or independent proof; see module inventory
+SKIPPED [1] tests\test_gpu_scheduler_audit.py:113: BLOCKED: forcible interruption of stuck native CUDA kernels requires a separate owned-process live fault test; cooperative shared leases are covered by Phase 2 fixtures.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: The tested adapters keep private fixture text on local inference routes, but no complete SDK/host-environment/cloud request oracle proves that arbitrary private harness context cannot leak.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Step/action and protocol limits reject oversized plans; no complete token-overflow compaction and checkpoint-resume acceptance oracle across all optional planners.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Historical comparisons keep Hermes disabled and the current Harness SDK is pinned. No new matched live-model accuracy/latency trials establish a harness outcome advantage or a production downgrade threshold.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: One BrainClient now serializes its stdio requests, but independent Brain/BrainClient instances sharing one TaskState lack a common task-generation lease.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: No full fake-secret/Groq/telemetry/log/cache oracle. Upstream runtime environment and raw local Harness event exports can contain private task context.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Plan validation and real execution permissions are tested; no complete semantic do-X versus do-not-do-X model accuracy oracle.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Current registry and caller validations remain in force; no atomic observation/task-generation receipt binds all optional-planner proposals to execution across independent clients.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: No host RAM-pressure/GPU-allocation failure experiment against concurrent core responsiveness. Fixtures use no GPU/model inference.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Schema-copy A/B uses20 warm+5 initial batches; no five cold full-planner processes with RSS/VRAM/TTFT/first-audio and matched live outcome accuracy.
+SKIPPED [1] tests\test_harness_planners_audit.py:64: BLOCKED: Local task/turn IDs and failure events exist; complete optional-SDK trace correlation, secret redaction and retention/readback guarantees remain incomplete.
+SKIPPED [16] tests\test_media_audit.py:182: BLOCKED: complete catalog contract still needs additional fixture/native integration, durability, privacy or resource proof; see inventory.md
+SKIPPED [1] tests\test_memory_audit.py:42: BLOCKED: fact forget does not purge raw SQLite turns, summaries, Daily notes or in-flight paraphrased extraction; no cross-store erase/tombstone protocol.
+SKIPPED [1] tests\test_memory_audit.py:60: BLOCKED: no durable unavailable-vault write outbox; bounded model job queue is not durable write recovery.
+SKIPPED [1] tests\test_memory_audit.py:103: BLOCKED: no universal freshness reconciliation between curated facts/summaries and current documents; module06 selector proofs cover only its scoped paths.
+SKIPPED [1] tests\test_memory_audit.py:238: BLOCKED: memory curator errors have no per-operation correlation IDs; redaction passes but end-to-end memory lifecycle trace/readback correlation is incomplete.
+SKIPPED [1] tests\test_native_coding_audit.py:199: BLOCKED: Overlapping worker ownership is rejected before work; automatic same-function conflict resolution is not implemented.
+SKIPPED [1] tests\test_native_coding_audit.py:199: BLOCKED: Bounded path/import context exists; no verified large-repository semantic symbol retrieval oracle.
+SKIPPED [1] tests\test_native_coding_audit.py:199: BLOCKED: Dependency installs are excluded from native commands; approved lockfile/environment rollout is a separate unimplemented coding path.
+SKIPPED [1] tests\test_native_coding_audit.py:199: BLOCKED: Runs retain worktrees/receipts without replay; no durable crash-resume orchestration protocol.
+SKIPPED [1] tests\test_native_coding_audit.py:199: BLOCKED: Source/tool/activity journals retain local code and raw exception text; no complete credential-redacted observability contract.
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify simultaneous_cuda
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify laya_25
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify lora_load
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify legacy_alias
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify ttfa
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_hotkeys
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_mind_dag
+SKIPPED [2] tests\test_questions_context_audit.py:161: BLOCKED: cached native qwen3.5:9b proof predates current knowledge_worker source; fresh local inference validation is required. Historical answers/hashes are preserved, not rehashed. The Prompt14 prerequisite probe found Ollama unavailable; no service start or model download authorized.
+SKIPPED [1] tests\test_rag_documents_audit.py:48: BLOCKED: answer API selects one document; no multi-document conflict arbitration/citations.
+SKIPPED [1] tests\test_rag_documents_audit.py:62: BLOCKED: returned text is bounded; in-process pypdf content-stream parsing has no hard RAM/time sandbox for hostile long PDFs.
+SKIPPED [1] tests\test_rag_documents_audit.py:118: BLOCKED: page-membership checks cannot prove semantic entailment; no independently validated citation-faithfulness oracle.
+SKIPPED [1] tests\test_rag_documents_audit.py:241: BLOCKED: document/model/spill lifecycle has no unified redacted per-operation trace IDs.
+SKIPPED [11] tests\test_realtime_audit.py:265: BLOCKED: full provider/fault/alert/privacy contract requires additional proof; see per-case inventory
+SKIPPED [1] tests\test_repo_learning_audit.py:57: BLOCKED: static symbols/test-file presence and untrusted labels do not behaviorally verify exaggerated README claims; no authorized sandbox test oracle for arbitrary repos.
+SKIPPED [1] tests\test_repo_learning_audit.py:166: BLOCKED: completed metadata reopens, but in-flight learning jobs have no durable checkpoint/worker crash-restart contract.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Owned Node bridge fixture verifies transport/readback, but no current REA analyzer accuracy oracle for an interactive demo app is implemented.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: No remote-page content fingerprint or stale-observation classifier; URL registration does not fetch pages.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Evidence is explicitly untrusted and behavior unverified; screenshot-to-clone fidelity and inference labeling need a coding acceptance adapter.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: REA bridge does not run generated-clone button interactions or require their E2E receipts.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: No semantic secret-extraction request classifier or complete target-content secret filter; approved REA is not a security sandbox.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: No screenshot/layout comparison adapter or visual tolerance oracle in the REA bridge.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Credentialed/private URLs reject, but account-protected analysis has no dedicated authorization capability or isolated browser-profile proof.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Invalid/nonobject/deep/oversized JSON rejects; command-specific required-field and type schemas remain incomplete.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: NODE_PATH and API-key environment injection are absent in fixtures, but HOME/USERPROFILE/appdata and host network remain accessible to approved REA; no full cloud/cache/private-content oracle.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Programs and paths revalidate after approval, but recursive source changes and remote freshness/navigation races lack a content-bound receipt.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: No host RAM/GPU pressure versus responsive core command experiment. No GPU inference is needed by this bridge fixture.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Ledger A/B has 20 warm and five initial samples; not five cold processes with complete REA/analyzer RSS/VRAM latency.
+SKIPPED [1] tests\test_reverse_engineering_audit.py:73: BLOCKED: Session/attempt IDs and untrusted labeling exist; raw local evidence/ledger previews lack complete secret redaction and end-to-end trace correlation.
+SKIPPED [12] tests\test_sandbox_deerflow_audit.py:246: BLOCKED: complete approval/quota/source/privacy/renderer/resource/recovery contract requires additional implementation or independent proof; see inventory
+SKIPPED [1] tests\test_self_evolution_audit.py:340: BLOCKED: No game/GPU occupancy sensor or native kernel preemption contract; cooperative busy callbacks tested separately.
+SKIPPED [1] tests\test_self_evolution_audit.py:340: BLOCKED: Interrupted learner writes lack a transactional completion receipt; durable needs_review is safe but automatic resume is not proved.
+SKIPPED [1] tests\test_self_evolution_audit.py:340: BLOCKED: No independent semantic privacy regression oracle, hardened patch execution sandbox, shadow evaluation or canary rollout.
+SKIPPED [1] tests\test_self_evolution_audit.py:340: BLOCKED: Only one Jarvis Python source target supported; no lockfile/reproducible environment rollout path.
+SKIPPED [1] tests\test_skill_selection_audit.py:135: BLOCKED: no validated arbitrary PDF-edit adapter offered; current real utility proof stale. Missing installer/validation not bypassed. Fixture availability gate is separately tested.
+SKIPPED [1] tests\test_voice_tts_audit.py:117: BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately.
+SKIPPED [1] tests\test_voice_tts_audit.py:168: BLOCKED: STT and F5 are outside the Ollama lease coordinator; Qwen speech reservation is unit-tested, but no shared STT/F5 lease admission or controlled contention calibration exists. No concurrent heavyweight models launched.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Production build previews do not implement a development HMR lifecycle.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Exit codes and raw build output exist; no benign/regression warning classifier.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Watchdog stops owned failed preview and requires continuation; no safe automatic restart contract.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Browser auth context is isolated; project build/server code executes as the host user, without filesystem confinement.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Lock/source guards and reviewed install exist; no reproducible API-break compatibility upgrade oracle.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Owned jobs stop on process exit; no durable preview crash-resume protocol.
+SKIPPED [1] tests\test_web_development_audit.py:192: BLOCKED: Raw build/browser diagnostics may contain credentials; complete redaction/trace contract missing.
+SKIPPED [17] tests\test_whatsapp_audit.py:215: BLOCKED: full catalog contract requires additional scoped identity, durable replay, resource, privacy or live UI proof; see inventory.md for per-case missing prerequisite
+1 failed, 3402 passed, 147 skipped, 1 warning in 1176.29s (0:19:36)
+exit=1

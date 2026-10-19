@@ -9,6 +9,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- prompt31-p31-001 -->
+**2026-10-19 — Prompt 31 P31-001 repaired (approval cards bound to their exact request); Prompt 31 remains BLOCKED until Codex re-verifies.** [Repair record](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair/repair.md).
+<!-- /prompt31-p31-001 -->
+
 <!-- upgrade-phase08 -->
 **2026-10-19 — Upgrade Phase 8 of 8 (final integration and verification): PARTIALLY VERIFIED.** Full regression **3,379 passed / 147 skipped (BLOCKED environment dependencies) / 0 failed**; launcher ready. Re-audit repairs: a cloud architect entry point and a pre-existing citation regex bug. Live Groq, GGUF export, VM exploration, Unreal projects and physical-click demonstrations remain BLOCKED. [Architecture](app/docs/upgrade-architecture.md) · [Final Codex handoff](app/artifacts/jarvis-audit/final-codex-handoff/README.md).
 <!-- /upgrade-phase08 -->

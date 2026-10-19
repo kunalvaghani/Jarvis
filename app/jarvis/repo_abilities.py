@@ -1255,6 +1255,10 @@ class AbilityForge:
             self.actions.approvals_waiting -= 1
         if answer.get("expired"):
             return None
+        if answer.get("approved") is True:
+            # Only an approval issued for this exact card (kind and detail) authorizes it.
+            from .approval_receipt import approval_digest
+            return answer.get("digest") == approval_digest("learned_ability", detail)
         return answer.get("approved") if type(answer.get("approved")) is bool else None
 
     def _approval_digest(self, row):

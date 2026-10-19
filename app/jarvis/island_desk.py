@@ -20,11 +20,22 @@ def text(parent, value='', **kw):
                     font=kw.pop('font',('Segoe UI',9)),**kw)
 
 
+from .approval_receipt import approval_digest  # noqa: E402  (identity of the exact request on a card)
+
+
 class Approval:
-    """Idempotent explicit decision, with cancellation and a bounded lifetime."""
+    """Idempotent explicit decision, with cancellation and a bounded lifetime.
+
+    Every card has an immutable random token (which card) and a digest of its exact kind and detail
+    (which request). A decision only ever applies to the card whose token it carries, and an approval
+    records both so the requester can verify it answered its own request.
+    """
     def __init__(self, payload, now=None):
+        import secrets
         self.kind,self.detail,self.answer,self.ready,self.cancelled = payload
         self.created = time.monotonic() if now is None else now
+        self.token = secrets.token_hex(16)
+        self.digest = approval_digest(self.kind, self.detail)
         self.done = False
         self.lock = threading.Lock()
 
@@ -35,6 +46,8 @@ class Approval:
             now = time.monotonic() if now is None else now
             self.done = True
             self.answer['approved'] = approved is True and not self.cancelled() and 0 <= now-self.created < 180
+            if self.answer['approved']:
+                self.answer['token'], self.answer['digest'] = self.token, self.digest
             self.ready.set()
             return self.answer['approved']
 
@@ -175,9 +188,11 @@ class IslandDesk:
         self.approval_text.pack(fill='both',expand=True)
         bar = tk.Frame(approval,bg=BG)
         bar.pack(fill='x',pady=5)
-        self.approve_button = ttk.Button(bar,text='Approve exact action',command=lambda:self.decide(True))
+        # Commands are re-bound to the displayed card's token in render_approval; unbound clicks decide nothing.
+        self.approve_button = ttk.Button(bar,text='Approve exact action',command=lambda:None)
         self.approve_button.pack(side='left')
-        ttk.Button(bar,text='Deny',command=lambda:self.decide(False)).pack(side='left',padx=5)
+        self.deny_button = ttk.Button(bar,text='Deny',command=lambda:None)
+        self.deny_button.pack(side='left',padx=5)
         self.show('Overview')
 
     @staticmethod
@@ -545,9 +560,16 @@ class IslandDesk:
 
     def render_approval(self):
         if not self.approvals:
+            self.displayed_token = None
             self.show('Overview')
             return
         approval = self.approvals[0]
+        if getattr(self, 'displayed_token', None) != approval.token:
+            self.displayed_token = approval.token
+            token = approval.token  # bound now: a callback can never decide a later card
+            self.approve_button.configure(command=lambda: self.decide(True, token))
+            self.deny_button.configure(command=lambda: self.decide(False, token))
+            self._arm_buttons()
         prompt = ('Review the new ability below. Approve adds it to Jarvis permanently; Deny discards it.'
                   if approval.kind=='learned_ability' else
                   'Move this exact file to the Recycle Bin?' if approval.kind=='delete' else
@@ -557,10 +579,26 @@ class IslandDesk:
         self._write(self.approval_text,prompt+'\n\n'+approval.detail)
         self.show('Approval')
 
-    def decide(self,approved):
-        if self.approvals:
-            self.approvals.pop(0).decide(approved)
-            self.render_approval()
+    def _arm_buttons(self):
+        """Briefly disable the buttons when a new card appears, so a double click cannot land on it."""
+        root = getattr(self.app, 'root', None)
+        if root is None:
+            return
+        for button in (self.approve_button, self.deny_button):
+            button.state(['disabled'])
+        root.after(600, lambda: [button.state(['!disabled']) for button in (self.approve_button, self.deny_button)])
+
+    def decide(self, approved, token=None):
+        """Decide only the card that is currently displayed and whose token the caller holds."""
+        lock = self.__dict__.setdefault('_decision_lock', threading.Lock())
+        with lock:
+            if not token or not self.approvals or self.approvals[0].token != token:
+                return False  # unbound, stale, expired or superseded: never applied to another card
+            approval = self.approvals[0]
+            self.approvals.remove(approval)  # this exact card, never whichever card is now first
+        result = approval.decide(approved)
+        self.render_approval()
+        return result
 
     def tick(self, visible):
         now = time.monotonic()
