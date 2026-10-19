@@ -5,7 +5,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert <phase-06-commits>     # on claude; see commit.txt
+git revert --no-edit 3c96c25 314fad5 40278f9 46c77cd     # on claude, newest first
 ```
 
 Disable without reverting: set `evolution_lab.enabled: false` in `config/config.json`. Deployed evolution releases
