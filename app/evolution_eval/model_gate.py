@@ -89,8 +89,10 @@ class ModelGate:
                              'wilson95': wilson(correct, len(scores))}
         return report
 
-    def evaluate(self, adapter, out_dir, base_cache=None, cancelled=lambda: False):
-        result = {'adapter': str(adapter), 'environment': self.retention.environment()}
+    def evaluate(self, adapter, out_dir, base_cache=None, cancelled=lambda: False, merged=None):
+        """Candidate = base + LoRA adapter, or (merged=dir) a merged full model; same policy either way."""
+        result = {'adapter': str(adapter) if adapter else None, 'merged': str(merged) if merged else None,
+                  'environment': self.retention.environment()}
         try:
             result['seal'] = self.retention.seal()
         except EvaluatorUnsealed as exc:
@@ -110,7 +112,7 @@ class ModelGate:
             base = {'seal': result['seal'], 'scores': scores, 'summary': self.summarize(tasks, scores, answers, summary)}
             if base_cache:
                 Path(base_cache).write_text(json.dumps(base), encoding='utf-8')
-        answers, summary = self.generate('candidate', out_dir, adapter=adapter, cancelled=cancelled)
+        answers, summary = self.generate('candidate', out_dir, adapter=adapter, merged=merged, cancelled=cancelled)
         scores = self.score(tasks, answers)
         candidate = self.summarize(tasks, scores, answers, summary)
         result.update(base=base['summary'], candidate=candidate)
