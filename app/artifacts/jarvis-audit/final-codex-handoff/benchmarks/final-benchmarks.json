@@ -1,0 +1,141 @@
+{
+ "measured_at": "2026-10-19T06:25:11+00:00",
+ "measured": {
+  "phase1_harness": {
+   "phase1_before": {
+    "intent_routing_accuracy": 1.0,
+    "intent_routing_p50_ms": 0.5087,
+    "privacy_private_marked_public": 0,
+    "privacy_classify_p50_ms": 0.0342,
+    "dag_success_rate": 1.0,
+    "dag_run_p50_ms": 13.1532,
+    "dag_cancel_return_ms": 112.399,
+    "tool_catalog_size": 85,
+    "tool_search_p50_ms": 3.264,
+    "tool_contract_error_rate": 0.166667,
+    "skills_goals_with_selection": 20,
+    "skills_context_p50_ms": 3.2494,
+    "rss_end_mb": 43.8
+   },
+   "final": {
+    "intent_routing_accuracy": 1.0,
+    "intent_routing_p50_ms": 0.5155,
+    "privacy_private_marked_public": 0,
+    "privacy_classify_p50_ms": 0.0328,
+    "dag_success_rate": 1.0,
+    "dag_run_p50_ms": 12.5502,
+    "dag_cancel_return_ms": 108.609,
+    "tool_catalog_size": 98,
+    "tool_search_p50_ms": 3.8717,
+    "tool_contract_error_rate": 0.0,
+    "skills_goals_with_selection": 20,
+    "skills_context_p50_ms": 3.0415,
+    "rss_end_mb": 45.3
+   },
+   "phase1_commit": "5b52737b0afa25677f5f82058aefa9656e88a375",
+   "final_commit": "bd8f83760810c588b4704b3d8ab4019487cfd241"
+  },
+  "command_parse": {
+   "n": 50,
+   "p50_ms": 24.8632,
+   "p95_ms": 33.3803,
+   "max_ms": 624.3988,
+   "per_command_p50_ms": 2.4863
+  },
+  "tool_search": {
+   "n": 30,
+   "p50_ms": 1.8223,
+   "p95_ms": 2.4538,
+   "max_ms": 27.1903
+  },
+  "heldout_tool_selection": {
+   "status": "ok",
+   "mean": 0.5976,
+   "meta": {
+    "metric": "reciprocal_rank",
+    "hit_at_5": 0.7895
+   }
+  },
+  "heldout_lesson_retrieval": {
+   "status": "ok",
+   "mean": 0.9,
+   "meta": {
+    "metric": "precision_at_1",
+    "path": "lexical"
+   }
+  },
+  "heldout_prompt_routing": {
+   "status": "ok",
+   "mean": 1.0,
+   "meta": {
+    "metric": "slot_accuracy"
+   }
+  },
+  "heldout_retry_recovery": {
+   "status": "ok",
+   "mean": 0.5304,
+   "meta": {
+    "metric": "success_speed",
+    "simulated_time": true
+   }
+  },
+  "reasoning_bank_lexical_retrieve": {
+   "n": 30,
+   "p50_ms": 1.1892,
+   "p95_ms": 1.4935,
+   "max_ms": 2.2899
+  },
+  "reasoning_bank_embedding_retrieve": {
+   "n": 10,
+   "p50_ms": 102.1901,
+   "p95_ms": 114.0709,
+   "max_ms": 121.8292
+  },
+  "prompt_route": {
+   "n": 50,
+   "p50_ms": 0.3427,
+   "p95_ms": 0.4944,
+   "max_ms": 1.3756
+  },
+  "azr_abduction_oracle": {
+   "n": 5,
+   "p50_ms": 12.3961,
+   "p95_ms": 12.4903,
+   "max_ms": 12.7554
+  },
+  "idle_self_evolution": {
+   "cpu_percent_of_one_core": 0.0,
+   "process_rss_mb": 17.8,
+   "window_s": 20,
+   "note": "research disabled; resource probes and idle checks only"
+  },
+  "gpu_idle": "NVIDIA GeForce RTX 3050 Laptop GPU, 405 MiB, 4096 MiB, 0 %"
+ },
+ "recorded": {
+  "real_usage_before_upgrade": {
+   "window": [
+    "2026-09-27T09:06:55.286653+00:00",
+    "2026-10-14T16:31:04.483342+00:00"
+   ],
+   "tool_started": 313,
+   "tool_failed": 28,
+   "failure_frequency": 0.0895,
+   "source": ".jarvis-runtime/agent-events.jsonl (local, not committed)"
+  },
+  "voice_stt_capture": "artifacts/jarvis-audit/modules/04-voice-stt/benchmark-summary.json (2026-10-15; fixture audio; WER BLOCKED)",
+  "desktop_structured_vs_pointer": "artifacts/jarvis-audit/phase-02 (structured UIA first; pointer last)",
+  "openviking_search_p50_ms": "artifacts/jarvis-audit/phase-04 (127 ms p50, real vault, 2026-10-18)",
+  "demonstration_capture_replay": "artifacts/jarvis-audit/phase-05/escalation-benchmark.json (3.9 s / 14.1 s)",
+  "dag_makespan_proposal": "artifacts/jarvis-audit/phase-06/experiments.md (synthetic DAGs, -15.2 %, not deployed)",
+  "checkpoint_improvement": "artifacts/jarvis-audit/phase-07 (0/165 -> 9/165 merged; qualified_experimental)",
+  "training_resources": "artifacts/jarvis-audit/phase-07 (peak 1,994 MB VRAM, 2.6 GB RSS, 9.6 min)",
+  "resume_and_preemption": "artifacts/jarvis-audit/phase-07/runs/experiment-record.json (exact resume, preempted at step 3)"
+ },
+ "not_run": {
+  "real_usage_after_upgrade": "Jarvis was not run interactively after the upgrade; no post-upgrade user traffic exists",
+  "voice_to_action_latency": "needs a live microphone session and the running app; not measured",
+  "task_planning_latency_live_llm": "needs the running brain worker with qwen3.5:9b; not measured in this phase",
+  "coding_task_success_live": "live coding agent runs not repeated; induction held-out accuracy recorded in Phase 7",
+  "full_app_ram_vram": "the full Jarvis UI was not launched; component RSS above only"
+ }
+}
