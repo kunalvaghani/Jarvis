@@ -1,0 +1,16 @@
+................................................s....................... [ 13%]
+........................................................................ [ 27%]
+......................................................s..s.............. [ 41%]
+........................................................................ [ 54%]
+...............s....s................................................... [ 68%]
+........................................................................ [ 82%]
+........................................................................ [ 96%]
+.....................                                                    [100%]
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\phase-05\pre-upgrade-relevant.xml -
+520 passed, 5 skipped, 1 warning in 293.09s (0:04:53)

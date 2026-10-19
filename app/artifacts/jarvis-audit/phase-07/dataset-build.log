@@ -1,0 +1,27 @@
+{
+ "manifest": {
+  "validation": 90,
+  "train": 914
+ },
+ "heldout": 165,
+ "leakage": {
+  "train/validation": {
+   "signatures": 0,
+   "ids": 0
+  },
+  "heldout/train": {
+   "signatures": 0,
+   "ids": 0
+  },
+  "heldout/validation": {
+   "signatures": 0,
+   "ids": 0
+  }
+ },
+ "answerability_dropped": {
+  "heldout": 0,
+  "validation": 0,
+  "train": 0
+ },
+ "proposer_accepted": 15
+}
