@@ -17,7 +17,7 @@ No Codex review evidence exists for this phase.
 ## Rollback
 
 ```powershell
-git revert --no-edit 1d55c21 b6662ef caffdd8     # on claude, newest first
+git revert --no-edit 1a1e778 1d55c21 b6662ef caffdd8     # on claude, newest first
 ```
 
 Nothing in production loads the new adapter, so no runtime rollback is needed. Local state (ignored by Git):

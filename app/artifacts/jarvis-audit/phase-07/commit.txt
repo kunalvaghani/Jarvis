@@ -2,3 +2,4 @@ Phase 7 commits on branch claude (base 29ad55c):
 caffdd8 Phase 7: AZR-style self-play tasks, independent oracle and resource-aware LoRA pipeline
 b6662ef Phase 7: model gate accepts a merged-model candidate; UIA test stall diagnostics
 1d55c2121d2960563f0ae24b06f760b75830df31 Phase 7: real training runs, held-out gate results, regression evidence and documentation
+1a1e7783d81e5d33f606745f603f082c87f862de Phase 7: add the real-run orchestration script referenced by the packet
