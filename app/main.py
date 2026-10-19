@@ -27,7 +27,7 @@ from jarvis.audio import Listener
 from jarvis.engine import Engine
 from jarvis.commands import Command
 from jarvis.speech import Speech
-from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
+from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, safe_message, ui_loop
 
 BASE = Path(__file__).resolve().parent
 
@@ -225,7 +225,8 @@ class App:
                     source.seek(self.repair_offset)
                     for line in source:
                         try:
-                            self.log_line("repair", json.loads(line)["message"])
+                            # Screen again on read: rows written before the privacy fix may still hold raw text.
+                            self.log_line("repair", safe_message(json.loads(line)["message"]))
                         except (ValueError, KeyError):
                             pass
                     self.repair_offset = source.tell()

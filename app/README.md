@@ -24,6 +24,16 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- prompt32-33 -->
+**2026-10-19 — Prompt 32/33 defects repaired; both prompts still BLOCKED pending Codex re-verification.**
+- **P32-001 — process ownership.** The supervisor takes termination authority only over its launched process tree.
+- **P32-002 — repair-log privacy.** Repair logs and the transcript are privacy-screened before truncation, and the bootstrap records only error categories.
+- **P33-001 — generated MCP integrity.** Generated MCP servers are verified against their approved code/spec/schema/image at every call and run from a private verified copy; drift disables them before approval.
+- **P33-002 / P33-003 — call contract.** Tool arguments are checked against a strict schema subset before a call, and malformed MCP results are typed failures.
+
+Codex tests: 4 FAIL→5 PASS (P32) and 3 FAIL→8 PASS (P33), plus 15 added tests. Full regression **3,449 passed / 147 BLOCKED skips / 0 failed**; launcher ready. [Repair record](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair/repair.md).
+<!-- /prompt32-33 -->
+
 <!-- prompt31-p31-001 -->
 **2026-10-19 — Prompt 31 approval defects P31-001 and P31-002 repaired; Prompt 31 still BLOCKED pending Codex re-verification.** Island approval cards carry an immutable token. Approve/Deny buttons and spoken yes/no decide only the card on screen (P31-001). Every requester creates a one-time request id before the card appears and accepts only a receipt for that exact pending request, within its own lifetime and not cancelled, so a replayed earlier approval cannot authorize a new request with identical text (P31-002). All 27 approval tests pass. A flaky Phase 6 gate test was also fixed: computed benchmarks that do not reproduce are now discarded. Full regression **3,421 passed / 147 BLOCKED skips / 0 failed**. [P31-001 record](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair/repair.md) · [P31-002 record](artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair-p31-002/repair.md).
 <!-- /prompt31-p31-001 -->

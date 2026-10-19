@@ -43,8 +43,10 @@ def main():
         runpy.run_module("jarvis.launcher", run_name="__main__")
     except Exception as exc:
         with (runtime / "repairs.jsonl").open("a", encoding="utf-8") as log:
+            # Fixed category and exception type only: the bootstrap must not depend on the (possibly damaged)
+            # package's redaction code, and raw exception text can carry credentials or private paths.
             log.write(json.dumps({"at": time.time(), "message":
-                "Launcher could not recover: " + str(exc)}) + "\n")
+                "Launcher could not recover (" + type(exc).__name__ + ")."}) + "\n")
 
 
 if __name__ == "__main__":

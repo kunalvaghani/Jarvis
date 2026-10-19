@@ -198,6 +198,13 @@ class StdioClient:
         self.thread.join(timeout=1)
 
 
+def _discard(folder):
+    """Remove a private per-call execution copy created by this module (never anything else)."""
+    if folder is not None:
+        import shutil
+        shutil.rmtree(folder, ignore_errors=True)
+
+
 def execute(actions, step, cancelled):
     base = Path(actions.base).resolve(strict=True)
     configs = configurations(base)
@@ -215,15 +222,32 @@ def execute(actions, step, cancelled):
         if (set(arguments) != {'name', 'arguments'} or arguments['name'] not in config.get('allow_tools', [])
                 or not isinstance(arguments['arguments'], dict)):
             raise ValueError('MCP tool must be exactly allowlisted and have an argument object.')
-    # Approve the executable plus exact call; server annotations cannot waive approval.
-    actions._approve(step['action'], json.dumps({'server': name, 'command': config.get('command'),
-        'args': config.get('args', []), 'call': arguments}, ensure_ascii=False), cancelled)
+    private = None
+    identity = config.get('generated_identity') if name.startswith('gen-') else None
+    if identity is not None:
+        # P33-001: verify the approved code/spec/image now and run a private copy of the verified bytes.
+        from .mcp_synthesis import verified_execution_config
+        config, private = verified_execution_config(base, name, config, cancelled)
+    # Approve the executable plus exact call (and, for generated servers, the approved identity);
+    # server annotations cannot waive approval.
+    detail = {'server': name, 'command': config.get('command'), 'args': config.get('args', []), 'call': arguments}
+    if identity is not None:
+        detail['approved_identity'] = identity
+    try:
+        actions._approve(step['action'], json.dumps(detail, ensure_ascii=False), cancelled)
+    except BaseException:
+        _discard(private)
+        raise
     from .task_state import TaskState
     state = getattr(actions, 'task_state', None)
     if isinstance(state, TaskState):
         state.checkpoint('action_attempted', action=step['action'], target=name,
                          evidence='Approved MCP process/call beginning; effects require fresh inspection after failure')
-    client = StdioClient(config, base, cancelled)
+    try:
+        client = StdioClient(config, base, cancelled)
+    except BaseException:
+        _discard(private)
+        raise
     try:
         client.initialize()
         rows = client.tools()
@@ -233,8 +257,18 @@ def execute(actions, step, cancelled):
         else:
             if arguments['name'] not in {row['name'] for row in allowed}:
                 raise ValueError('Allowlisted tool was not advertised by the server.')
+            from .mcp_contract import schema_digest, validate_result, validate_schema_value
+            tool = next(row for row in allowed if row['name'] == arguments['name'])
+            if identity is not None and schema_digest(tool) != identity.get('schema_sha256'):
+                from .mcp_synthesis import mark_drifted
+                mark_drifted(base, name, 'advertised schema changed after approval')
+                raise ValueError('Generated MCP server disabled: its advertised schema changed after approval.')
+            # P33-002: arguments must satisfy the advertised input schema before anything reaches the server.
+            validate_schema_value(tool.get('inputSchema', {'type': 'object'}), arguments['arguments'])
             result = client.request('tools/call', arguments)
-            if not isinstance(result, dict) or result.get('isError') is True:
+            # P33-003: a malformed result is a typed failure, never evidence (the attempt stays recorded as uncertain).
+            validate_result(result, tool.get('outputSchema'))
+            if result.get('isError') is True:
                 raise ValueError('MCP tool reported failure; no retry.')
         text = json.dumps(result, ensure_ascii=False)
         for key in config.get('env_names', []):
@@ -248,6 +282,7 @@ def execute(actions, step, cancelled):
         return text[:10000] + ('\n[MCP result truncated]' if len(text) > 10000 else '')
     finally:
         client.close()
+        _discard(private)
         if name.startswith('gen-'):
             from .mcp_synthesis import reap
             try:

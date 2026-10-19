@@ -9,6 +9,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- prompt32-33 -->
+**2026-10-19 — Prompt 32/33 defects P32-001, P32-002, P33-001, P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,449 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair/repair.md).
+<!-- /prompt32-33 -->
+
 <!-- prompt31-p31-001 -->
 **2026-10-19 — Prompt 31 approval defects P31-001 (unbound callbacks) and P31-002 (receipt replay) repaired; Prompt 31 remains BLOCKED until Codex re-verifies.** Full regression 3,421 passed / 0 failed. [P31-002 record](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair-p31-002/repair.md).
 <!-- /prompt31-p31-001 -->

@@ -20,8 +20,17 @@ class OwnedApplication:
         self.child, self.handle = child, None
 
     def attach(self, pid):
+        """Take termination authority over the real interpreter only after proving it belongs to our child.
+
+        A heartbeat PID is accepted only if it is the launched child itself or a live descendant of it that was
+        created after the child; the check is repeated after the handle is open (an open handle prevents PID
+        reuse). Anything else (sibling, unrelated or stale PID) is refused before any handle is obtained.
+        """
         if self.handle or pid == self.child.pid or os.name != "nt":
             return
+        if type(pid) is not int or pid <= 0:
+            raise ValueError("Heartbeat PID is invalid; ignored.")
+        created = self._verified_descendant(pid)
         import ctypes
         from ctypes import wintypes
         self.kernel = ctypes.WinDLL("kernel32", use_last_error=True)
@@ -34,6 +43,27 @@ class OwnedApplication:
         self.handle = self.kernel.OpenProcess(0x00100001, False, pid)
         if not self.handle:
             raise OSError("Could not track the owned Jarvis interpreter")
+        try:
+            if self._verified_descendant(pid) != created:
+                raise ValueError("Heartbeat PID identity changed while attaching; ignored.")
+        except ValueError:
+            self.kernel.CloseHandle(self.handle)
+            self.handle = None
+            raise
+        self.owned = (pid, created)
+
+    def _verified_descendant(self, pid):
+        import psutil
+        try:
+            root = psutil.Process(self.child.pid)
+            target = psutil.Process(pid)
+            root_created, created = root.create_time(), target.create_time()
+            descendants = {process.pid for process in root.children(recursive=True)}
+        except psutil.Error:
+            raise ValueError("Heartbeat PID is not a running Jarvis process; ignored.") from None
+        if pid not in descendants or created < root_created:
+            raise ValueError("Heartbeat PID is not part of the launched Jarvis process tree; ignored.")
+        return created
 
     def terminate(self):
         if self.handle:
@@ -334,9 +364,14 @@ def run():
                     try:
                         while child.poll() is None and not stop.exists():
                             state = heartbeat_state(beat)
-                            if session_heartbeat(state, session):
+                            verified = session_heartbeat(state, session)
+                            if verified:
+                                try:
+                                    owned.attach(state["pid"])
+                                except (ValueError, OSError):
+                                    verified = False  # a heartbeat naming a foreign process confers nothing
+                            if verified:
                                 seen = time.time()
-                                owned.attach(state["pid"])
                                 listen = state.get("listening_requested", listen)
                                 limit = 120 if state.get("status") == "starting" else 90
                                 if time.time() - state.get("at", started) > limit:
@@ -381,7 +416,8 @@ def run():
                 break
             except Exception as exc:
                 crashes += 1
-                record(BASE, "Startup repair could not complete: " + str(exc))
+                # Fixed category plus a screened summary; raw exception text never reaches the repair log.
+                record(BASE, "Startup repair could not complete (" + type(exc).__name__ + "): " + str(exc))
             delay = min(300, 2 ** min(crashes, 8))
             for _ in range(delay):
                 if stop.exists():

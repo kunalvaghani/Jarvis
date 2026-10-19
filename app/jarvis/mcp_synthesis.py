@@ -245,7 +245,7 @@ def run_tests(base, config, spec, cancelled=lambda: False):
                 raise ValueError('Generated tool failed a test vector.')
     finally:
         client.close()
-    return {'tests': results, 'seconds': round(time.monotonic() - started, 3)}
+    return {'tests': results, 'seconds': round(time.monotonic() - started, 3), 'tool': tools[0]}
 
 
 # ---- 7/8. registry -----------------------------------------------------------------------------------------------------
@@ -295,7 +295,10 @@ def synthesize(actions, need, author, cancelled=lambda: False):
     actions._approve('mcp_register', json.dumps({'server': server, 'tool': spec['name'], 'code_sha256': digest,
                                                  'mechanism': spec['mechanism'], 'network': 'none',
                                                  'tests_passed': len(report['tests'])}), cancelled)
+    from .mcp_contract import schema_digest
     entry = {**config, 'status': 'provisional', 'code_sha256': digest, 'image_id': status['image_id'],
+             'spec_sha256': hashlib.sha256((folder / 'spec.json').read_bytes()).hexdigest(),
+             'schema_sha256': schema_digest(report.pop('tool')),
              'sdk': status.get('sdk'), 'tests': report['tests'], 'need': str(need)[:300],
              'created_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
     with _LOCK:
@@ -322,7 +325,15 @@ def health(actions, server, cancelled=lambda: False):
             raise ValueError('Generated server code changed after approval.')
         report = run_tests(actions.base, {k: entry[k] for k in ('command', 'args', 'trusted', 'enabled', 'allow_tools',
                                                                  'timeout_seconds')}, spec, cancelled)
-        return {'server': server, 'healthy': True, 'tests': report}
+        from .mcp_contract import schema_digest
+        pins = {'spec_sha256': hashlib.sha256((folder / 'spec.json').read_bytes()).hexdigest(),
+                'schema_sha256': schema_digest(report.pop('tool'))}
+        with _LOCK:
+            current = load_registry(actions.base)
+            if server in current['servers'] and current['servers'][server].get('code_sha256') == entry['code_sha256']:
+                current['servers'][server].update(pins, status=entry.get('status') if entry.get('status') != 'drifted' else 'provisional')
+                save_registry(actions.base, current)
+        return {'server': server, 'healthy': True, 'tests': report, **pins}
     except (ValueError, OSError) as exc:
         return {'server': server, 'healthy': False, 'reason': str(exc)[:300], **unregister(actions.base, server)}
     finally:
@@ -353,5 +364,63 @@ def configurations(base):
     except (OSError, ValueError):
         return {}
     keys = ('command', 'args', 'trusted', 'enabled', 'allow_tools', 'timeout_seconds')
-    return {name: {k: entry[k] for k in keys} for name, entry in registry['servers'].items()
+    identity = ('code_sha256', 'spec_sha256', 'schema_sha256', 'image_id')
+    # The approved identity travels with the configuration so the bridge can enforce it at every call (P33-001).
+    return {name: {**{k: entry[k] for k in keys}, 'generated_identity': {k: entry.get(k) for k in identity}}
+            for name, entry in registry['servers'].items()
             if entry.get('enabled') is True and entry.get('status') in {'provisional', 'trusted'}}
+
+
+def mark_drifted(base, server, reason):
+    """Disable a generated server whose approved identity no longer matches; it needs health/re-approval."""
+    with _LOCK:
+        registry = load_registry(base)
+        entry = registry['servers'].get(server)
+        if entry is None:
+            return False
+        entry['status'] = 'drifted'
+        entry['drift_reason'] = str(reason)[:200]
+        registry['history'] = (registry['history'] + [{'server': server, 'drifted_at':
+                               datetime.now(timezone.utc).isoformat(timespec='seconds'), 'reason': str(reason)[:200]}])[-50:]
+        save_registry(base, registry)
+    return True
+
+
+def mounted_source(config):
+    return Path(next(arg for arg in config['args'] if arg.startswith('type=bind,src=')).split('src=', 1)[1].split(',', 1)[0])
+
+
+def verified_execution_config(base, server, config, cancelled=lambda: False):
+    """Verify the approved identity now and return a config that mounts a private copy of the verified bytes.
+
+    Editing the registered source after this check cannot change what runs: the container mounts the copy.
+    Any mismatch disables the server (status 'drifted') before approval or launch.
+    """
+    identity = config.get('generated_identity') or {}
+    try:
+        if not all(identity.get(k) for k in ('code_sha256', 'spec_sha256', 'schema_sha256', 'image_id')):
+            raise ValueError('Generated server has no pinned contract; run its health check to revalidate.')
+        source = mounted_source(config)
+        # Same definition as registration and health: the digest of the decoded source text.
+        code = source.read_text(encoding='utf-8').encode('utf-8')
+        if hashlib.sha256(code).hexdigest() != identity['code_sha256']:
+            raise ValueError('Generated server code changed after approval.')
+        if hashlib.sha256((source.parent / 'spec.json').read_bytes()).hexdigest() != identity['spec_sha256']:
+            raise ValueError('Generated server spec changed after approval.')
+        if identity['image_id'] not in config['args']:
+            raise ValueError('Generated server configuration no longer pins its approved image.')
+        status = image_status(cancelled)
+        if not status['available'] or status['image_id'] != identity['image_id']:
+            raise ValueError('Approved runtime image is unavailable or changed.')
+    except (ValueError, OSError, StopIteration) as exc:
+        mark_drifted(base, server, exc)
+        raise ValueError('Generated MCP server disabled pending revalidation: ' + str(exc)[:160]) from None
+    private = Path(base) / '.jarvis-runtime' / 'mcp' / 'exec' / uuid.uuid4().hex
+    private.mkdir(parents=True)
+    copy = private / 'server.py'
+    copy.write_bytes(code)
+    if hashlib.sha256(copy.read_bytes()).hexdigest() != identity['code_sha256']:
+        raise ValueError('Private execution copy failed verification.')
+    args = [arg.replace('src=' + str(source) + ',', 'src=' + str(copy.resolve()) + ',') if arg.startswith('type=bind,src=')
+            else arg for arg in config['args']]
+    return {**config, 'args': args}, private
