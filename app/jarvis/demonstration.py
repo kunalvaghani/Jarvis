@@ -156,6 +156,8 @@ def window_state(window):
     """Observed state that a click can change: title and non-editable texts/toggles (no field values)."""
     texts = []
     for child in window.descendants()[:200]:
+        if is_password(child):
+            continue  # Private or unknown privacy must not enter persisted observations.
         info = child.element_info
         if info.control_type == 'Text' and info.name:
             texts.append(info.name[:120])

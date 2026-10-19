@@ -55,7 +55,8 @@ class ExperimentLab:
 
     # ---- git helpers -------------------------------------------------------------------------------------------------
     def _run(self, args, cwd, binary=False, timeout=300):
-        result = subprocess.run(['git', *args], cwd=cwd, env=git_env(), capture_output=True, timeout=timeout)
+        result = subprocess.run(['git', '-c', 'core.longpaths=true', *args], cwd=cwd, env=git_env(),
+                                capture_output=True, timeout=timeout)
         if result.returncode:
             raise LabError('git ' + ' '.join(args[:2]) + ' failed: ' + result.stderr.decode('utf-8', 'replace').strip()[:300])
         return result.stdout if binary else result.stdout.decode('utf-8', 'replace').strip()

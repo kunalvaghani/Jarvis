@@ -1,0 +1,67 @@
+{
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "interpreter": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "cpu_count": 16,
+  "environments_at_original_checkout": {
+    ".venv": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-brain": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-deerflow": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.12.14"
+    },
+    ".venv-f5": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-harness": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-hermes": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.14.7"
+    },
+    ".venv-hermes-bootstrap": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.11.9"
+    },
+    ".venv-openviking": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-skills": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    },
+    ".venv-training": {
+      "exists": true,
+      "python_exists": true,
+      "version": "3.10.6"
+    }
+  },
+  "paths_exist": {
+    "D:/Kunals GitHub Repo/LocalGithub": true,
+    "D:/Phython Project/Jarvis_Memory/Jarvis_Mem": true,
+    "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime": true,
+    "D:\\Kunals GitHub Repo\\Jarvis\\app\\skills": true,
+    "D:\\Kunals GitHub Repo\\Jarvis\\app\\custom-skills": true
+  },
+  "ram_bytes": 33656832000,
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB"
+}

@@ -11,14 +11,17 @@ import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1] / 'integrations/windows-command-reference'
-CATALOG_SHA = '3f0f7102af9d90fc1bcca462e81e0d50a165c4fa2d4c695a83ebac7266687499'
+CATALOG_SHA = '4aa30d24803f01cf43d463af41734fb2dee79d508bda46996e783b74679f5b85'
 SOURCE_SHA = 'e86e22949a53a28b41832e06eebe4080f23d6a1ded0e5486a7edd31076ff91a5'
 
 
 def catalog():
     raw = (ROOT / 'catalog.json').read_bytes()
     source = (ROOT / 'Jarvis_Windows_11_Commands.json').read_bytes()
-    if hashlib.sha256(raw).hexdigest() != CATALOG_SHA or hashlib.sha256(source).hexdigest() != SOURCE_SHA:
+    # Git text checkout conversion must not invalidate pinned JSON recipes.
+    # Normalize only line endings; all other byte changes still fail closed.
+    if (hashlib.sha256(raw.replace(b'\r\n', b'\n')).hexdigest() != CATALOG_SHA
+            or hashlib.sha256(source.replace(b'\r\n', b'\n')).hexdigest() != SOURCE_SHA):
         raise ValueError('Windows command reference changed; review recipes before executing.')
     rows = json.loads(raw)
     if [r['id'] for r in rows] != list(range(1, 494)):

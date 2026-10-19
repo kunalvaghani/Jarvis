@@ -1,5 +1,15 @@
 # Jarvis — local Windows voice assistant
 
+## Independent audit checkpoint (2026-10-19)
+
+The independent review pins `claude` at `36fbf3ce925080f7f54afa87eaf1d9b88414142d` in a separate `codex-review` worktree. This audit branch is an explicit exception to the earlier three-branch convention. No fixes were merged into `claude` or `main`.
+
+Repairs exclude private/unknown UIA elements from demonstration snapshots, defer AZR training on invalid/unreadable GPU state before model loading, preserve pinned Windows recipe integrity across LF/CRLF checkouts, and enable Windows long paths for isolated evolution Git operations. No UI artwork, dependencies, services or model configuration changed.
+
+The [audit verdict](artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md), [test matrix](artifacts/jarvis-audit/codex-independent-review/04-test-matrix.csv), [bug register](artifacts/jarvis-audit/codex-independent-review/06-bug-register.md), and [reproduction guide](artifacts/jarvis-audit/codex-independent-review/14-rollback-and-reproduction.md) distinguish fresh fixtures/containers from historical results and unexecuted live acceptance. Final deduplicated results: **726 passed, 8 failed, 35 blocked, 28 not run**, across 797 planned IDs; 734 checks completed and 749 bodies attempted including runtime skips. The initial selected regression recorded 691 passed, 19 failed and 55 blocked; affected reruns supersede matching rows without duplicate counting. Catalog wrappers may reuse assertions. This is not the entire historical 3,000+ test suite. Remaining failures concern unavailable Hermes metadata and the nested checkout's LocalGithub default path; live acceptance is unfinished. A real headless loopback browser fill/click/readback fixture passed without desktop or account interaction.
+
+From `app/`, run `python scripts/verification/independent_audit.py inventory`, `smoke`, `regression`, `security`, or `documents` (choose one mode argument). The `documents` mode explicitly routes only interpreter dependencies to the original checkout's installed utility environment; reviewed worker source and disposable files remain in the audit checkout. `python scripts/verification/independent_benchmarks.py` records paired synthetic overhead measurements. Use the existing interpreter path when the worktree lacks `.venv`. The worktree launcher check reports `repair_required` because environments/checkpoints are not copied; Docker/Ollama availability is readiness evidence only. Physical voice/desktop acceptance, fresh LoRA training and full end-to-end/soak checks remain pending.
+
 **Repository consolidation — 2026-10-16 IST:** The maintained branches are `main`,
 `codex`, and `claude`. Start work on the appropriate development branch and merge
 reviewed changes into `main`; additional worktrees are optional local tooling.

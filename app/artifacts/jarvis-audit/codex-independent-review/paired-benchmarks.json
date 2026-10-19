@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-19 IST",
+  "baseline_commit": "36fbf3ce925080f7f54afa87eaf1d9b88414142d",
+  "scope": "Paired synthetic microbenchmarks, warm imports; no end-user latency claim.",
+  "measurements": {
+    "state_200_public_elements": {
+      "baseline": {
+        "n": 500,
+        "median_ms": 0.0320999970426783,
+        "p95_ms": 0.03650000144261867,
+        "min_ms": 0.02970000059576705,
+        "max_ms": 0.06340000254567713,
+        "stdev_ms": 0.0031014383392236034
+      },
+      "candidate": {
+        "n": 500,
+        "median_ms": 0.05539999983739108,
+        "p95_ms": 0.060500002291519195,
+        "min_ms": 0.051700000767596066,
+        "max_ms": 0.09139999747276306,
+        "stdev_ms": 0.004280029682919316
+      },
+      "absolute_delta_ms": 0.023300002794712782,
+      "relative_delta_percent": 72.58568517540499
+    },
+    "empty_lease_read": {
+      "baseline": {
+        "n": 500,
+        "median_ms": 0.267100000201026,
+        "p95_ms": 0.3265000050305389,
+        "min_ms": 0.2488999962224625,
+        "max_ms": 0.5985000025248155,
+        "stdev_ms": 0.029241540848519126
+      },
+      "candidate": {
+        "n": 500,
+        "median_ms": 0.274349997198442,
+        "p95_ms": 0.33009999606292695,
+        "min_ms": 0.25350000214530155,
+        "max_ms": 0.5013999980292283,
+        "stdev_ms": 0.026784038525016634
+      },
+      "absolute_delta_ms": 0.0072499969974160194,
+      "relative_delta_percent": 2.7143380726168083
+    }
+  },
+  "first_call_ms": {
+    "state_200_public_elements": {
+      "candidate": 0.07869999535614625,
+      "baseline": 0.03460000152699649
+    },
+    "empty_lease_read": {
+      "candidate": 11.19509999989532,
+      "baseline": 0.3465000045252964
+    }
+  }
+}

@@ -1,0 +1,90 @@
+diff --git a/app/jarvis/demonstration.py b/app/jarvis/demonstration.py
+index c7b0272..1825a4e 100644
+--- a/app/jarvis/demonstration.py
++++ b/app/jarvis/demonstration.py
+@@ -156,6 +156,8 @@ def window_state(window):
+     """Observed state that a click can change: title and non-editable texts/toggles (no field values)."""
+     texts = []
+     for child in window.descendants()[:200]:
++        if is_password(child):
++            continue  # Private or unknown privacy must not enter persisted observations.
+         info = child.element_info
+         if info.control_type == 'Text' and info.name:
+             texts.append(info.name[:120])
+diff --git a/app/jarvis/evolution_lab.py b/app/jarvis/evolution_lab.py
+index e8b7b0e..dbb1618 100644
+--- a/app/jarvis/evolution_lab.py
++++ b/app/jarvis/evolution_lab.py
+@@ -55,7 +55,8 @@ class ExperimentLab:
+ 
+     # ---- git helpers -------------------------------------------------------------------------------------------------
+     def _run(self, args, cwd, binary=False, timeout=300):
+-        result = subprocess.run(['git', *args], cwd=cwd, env=git_env(), capture_output=True, timeout=timeout)
++        result = subprocess.run(['git', '-c', 'core.longpaths=true', *args], cwd=cwd, env=git_env(),
++                                capture_output=True, timeout=timeout)
+         if result.returncode:
+             raise LabError('git ' + ' '.join(args[:2]) + ' failed: ' + result.stderr.decode('utf-8', 'replace').strip()[:300])
+         return result.stdout if binary else result.stdout.decode('utf-8', 'replace').strip()
+diff --git a/app/jarvis/windows_commands.py b/app/jarvis/windows_commands.py
+index b2c89cd..fa04c24 100644
+--- a/app/jarvis/windows_commands.py
++++ b/app/jarvis/windows_commands.py
+@@ -11,14 +11,17 @@ import tempfile
+ import time
+ 
+ ROOT = Path(__file__).resolve().parents[1] / 'integrations/windows-command-reference'
+-CATALOG_SHA = '3f0f7102af9d90fc1bcca462e81e0d50a165c4fa2d4c695a83ebac7266687499'
++CATALOG_SHA = '4aa30d24803f01cf43d463af41734fb2dee79d508bda46996e783b74679f5b85'
+ SOURCE_SHA = 'e86e22949a53a28b41832e06eebe4080f23d6a1ded0e5486a7edd31076ff91a5'
+ 
+ 
+ def catalog():
+     raw = (ROOT / 'catalog.json').read_bytes()
+     source = (ROOT / 'Jarvis_Windows_11_Commands.json').read_bytes()
+-    if hashlib.sha256(raw).hexdigest() != CATALOG_SHA or hashlib.sha256(source).hexdigest() != SOURCE_SHA:
++    # Git text checkout conversion must not invalidate pinned JSON recipes.
++    # Normalize only line endings; all other byte changes still fail closed.
++    if (hashlib.sha256(raw.replace(b'\r\n', b'\n')).hexdigest() != CATALOG_SHA
++            or hashlib.sha256(source.replace(b'\r\n', b'\n')).hexdigest() != SOURCE_SHA):
+         raise ValueError('Windows command reference changed; review recipes before executing.')
+     rows = json.loads(raw)
+     if [r['id'] for r in rows] != list(range(1, 494)):
+diff --git a/app/scripts/training/train_azr_lora.py b/app/scripts/training/train_azr_lora.py
+index f334325..6231525 100644
+--- a/app/scripts/training/train_azr_lora.py
++++ b/app/scripts/training/train_azr_lora.py
+@@ -44,13 +44,20 @@ def sha256_file(path):
+ 
+ 
+ def foreground_gpu_busy():
+-    """True when any Jarvis inference holds or waits for the GPU (read-only look at the lease registry)."""
++    """Defer for live inference or unknown lease state; an absent registry is idle."""
+     state_path = BASE / '.jarvis-runtime' / 'gpu' / 'state.json'
+     try:
+-        state = json.loads(state_path.read_text(encoding='utf-8'))
+-    except (OSError, ValueError):
++        with state_path.open('r', encoding='utf-8') as stream:
++            text = stream.read(200001)
++        if len(text) > 200000:
++            return True
++        state = json.loads(text)
++        from jarvis.gpu_scheduler import alive, validate_state
++        validate_state(state)
++    except FileNotFoundError:
+         return False
+-    from jarvis.gpu_scheduler import alive
++    except (OSError, ValueError, TypeError, RecursionError):
++        return True
+     rows = ([state['active']] if state.get('active') else []) + list(state.get('pending', []))
+     return any(alive(row) for row in rows)
+ 
+@@ -88,6 +95,9 @@ def main(argv=None):
+             parser.error('nothing to resume in ' + str(out))
+     elif out.exists():
+         parser.error('refusing to overwrite ' + str(out))
++    if not args.ignore_foreground and foreground_gpu_busy():
++        print(json.dumps({'status': 'blocked', 'reason': 'foreground GPU lease active or unavailable'}))
++        return 3  # Admission precedes dependency imports, model allocation and output writes.
+     out.mkdir(parents=True, exist_ok=True)
+     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', HF_HOME=str(BASE / 'models/hf-training-cache'),
+                       USE_TF='0', USE_FLAX='0', TOKENIZERS_PARALLELISM='false')
