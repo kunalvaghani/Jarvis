@@ -54,5 +54,8 @@
   "bootstrap_resamples": 2000,
   "bootstrap_seed": 1729
  },
- "limits": {"test_timeout": 600, "benchmark_rss_mb": 2048, "test_rss_mb": 4096}
+ "limits": {"test_timeout": 600, "benchmark_rss_mb": 2048, "test_rss_mb": 4096},
+ "model_gate": {"heldout": "heldout/azr_tasks.jsonl", "min_absolute_improvement": 0.02, "max_mode_regression": 0.02,
+                "max_latency_ratio": 1.5, "vram_limit_mb": 3500, "generation_timeout": 3600, "generation_rss_mb": 8192,
+                "bootstrap_seed": 1729}
 }
