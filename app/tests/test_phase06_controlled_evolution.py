@@ -28,7 +28,7 @@ from jarvis.evolution_lab import ExperimentLab, LabError  # noqa: E402
 from jarvis.evolution_promotion import EvolutionPromotion, PromotionError  # noqa: E402
 
 GIT = ['git', '-c', 'user.name=fixture', '-c', 'user.email=fixture@localhost', '-c', 'commit.gpgsign=false',
-       '-c', 'core.autocrlf=false', '-c', 'init.defaultBranch=main']
+       '-c', 'init.defaultBranch=main']
 
 FIXTURE_BENCHMARKS = '''
 import random

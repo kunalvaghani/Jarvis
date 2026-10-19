@@ -95,8 +95,10 @@ class RetentionGate:
 
     # ---- sealing -----------------------------------------------------------------------------------------------------
     def _git(self, *args, stdin=None):
+        # Read-only queries keep the repository's normal config so hash-object applies the same line-ending
+        # conversion a commit would; nothing here writes to the repository.
         result = subprocess.run(['git', *args], cwd=self.canonical, capture_output=True, text=True, input=stdin, timeout=60,
-                                env=minimal_env({'GIT_CONFIG_NOSYSTEM': '1', 'GIT_TERMINAL_PROMPT': '0'}))
+                                env=minimal_env({'GIT_TERMINAL_PROMPT': '0'}))
         if result.returncode:
             raise EvaluatorUnsealed('git ' + args[0] + ' failed: ' + result.stderr.strip()[:200])
         return result.stdout
