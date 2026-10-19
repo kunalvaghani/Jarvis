@@ -73,11 +73,16 @@ class AutoResearch:
 
     # ---- 1-2: evidence and bottleneck --------------------------------------------------------------------------------
     def train_score(self, root, surface, cancelled=lambda: False):
+        """Fixed-budget train-split score (higher is better), averaged over the policy's repeats for noisy timing."""
         spec = SURFACES[surface]
-        result = self.gate.benchmark(root, spec['benchmark'], split='train', cancelled=cancelled)
-        if result['status'] != 'ok':
-            return None, result
-        mean = statistics.fmean(result['scores'])
+        repeats = self.gate.policy['benchmarks'].get(spec['benchmark'], {}).get('repeats', 1)
+        means = []
+        for _ in range(repeats):
+            result = self.gate.benchmark(root, spec['benchmark'], split='train', cancelled=cancelled)
+            if result['status'] != 'ok':
+                return None, result
+            means.append(statistics.fmean(result['scores']))
+        mean = statistics.fmean(means)
         return (-mean if spec['objective'] == 'min' else mean), result
 
     def headroom(self, surface, score):
