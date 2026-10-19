@@ -153,8 +153,8 @@ class AutoResearch:
         bench = SURFACES[surface]['benchmark']
         if surface == 'dag_scheduling' and values['critical_path_weight'] == 0:
             values['critical_path_weight'] = 1.0
-            return values, 'directed', ('Admitting ready steps with longer downstream chains first will lower ' + bench +
-                                        ' makespan by at least 2% (falsified if the paired 95% CI includes zero).')
+            return values, 'directed', ('Admitting ready steps with longer downstream chains first will lower held-out DAG '
+                                        'makespan by at least 2% (falsified if the paired 95% CI includes zero).')
         numeric = [k for k, b in bounds.items() if b[0] is not str]
         key = rng.choice(numeric)
         kind, low, high = bounds[key]
@@ -173,7 +173,7 @@ class AutoResearch:
     # ---- the experiment ----------------------------------------------------------------------------------------------
     def run_experiment(self, surface=None, cancelled=lambda: False, seed=None, max_proposals=3, budget_seconds=2400):
         started = self.now()
-        run_id = 'run_' + uuid.uuid4().hex[:10]
+        run_id = self.current_run = 'run_' + uuid.uuid4().hex[:10]
         seed = int(seed if seed is not None else self.now() * 1000) % 2 ** 31
         rng = random.Random(seed)
         record = {'run': run_id, 'seed': seed, 'proposals': []}
@@ -287,7 +287,7 @@ class AutoResearch:
             if new:
                 handle.write(RESULTS_HEADER)
             fresh = self.archive.get(row['id'])
-            fields = [time.strftime('%Y-%m-%dT%H:%M:%S'), '', row['id'], (fresh.get('lab_commit') or '')[:7], row['surface'],
+            fields = [time.strftime('%Y-%m-%dT%H:%M:%S'), getattr(self, 'current_run', ''), row['id'], (fresh.get('lab_commit') or '')[:7], row['surface'],
                       row['hypothesis'], '' if parent_score is None else f'{parent_score:.6f}',
                       '' if child_score is None else f'{child_score:.6f}', decision, reason]
             handle.write('\t'.join(str(f).replace('\t', ' ').replace('\n', ' ')[:300] for f in fields) + '\n')

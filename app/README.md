@@ -14,6 +14,18 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- upgrade-phase06 -->
+**2026-10-19 — Upgrade Phase 6 of 8 (DGM + autoresearch + EEVEE controlled self-evolution): PASS for locally executable checks.**
+- **Experiments.** Jarvis can run bounded self-improvement experiments while idle. Each candidate changes one declared tuning literal (DAG admission order, tool ranking, lesson retrieval, salience, read-retry backoff, prompt router and slots) inside a **separate experiment Git repository**; the active repository is only read.
+- **Archive.** A DGM-style archive keeps lineage, fitness, failures and diversity.
+- **Gate.** A **sealed evaluator** (`evolution_eval/`, which must equal the committed files) checks held-out data with paired, repeated, bootstrapped comparisons and all ten domain suites. Security failures quarantine the candidate.
+- **Promotion.** A qualified candidate is only a proposal; deploying it needs an approval card and is followed by staged health checks with automatic and independent rollback.
+- **Results.** Real run: critical-path DAG admission qualified (held-out synthetic makespan −15.2 %, 95 % CI [28.8, 81.5] ms, reproduced) and is **not deployed**. Tool-ranking, retry and lesson mutations were discarded; EEVEE prompt evolution with local models did not beat the empty-prompt floor.
+- **Regression.** **3,340 passed / 147 skipped / 0 failed**; launcher ready.
+
+[Evidence, safety model and limits](artifacts/jarvis-audit/phase-06/README.md).
+<!-- /upgrade-phase06 -->
+
 <!-- upgrade-phase05 -->
 **2026-10-18 — Upgrade Phase 5 of 8 (cloud architect escalation + Show Me Once): PASS for locally executable checks; real-provider checks BLOCKED (not authorized).**
 - **Cloud architect.** Jarvis can optionally consult a free-tier cloud model after three verified local reasoning failures. This is **disabled by default** and needs a confirmed free plan, consent and quota.
@@ -1737,6 +1749,7 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
 | Section | Keys (defaults) | Notes |
 | --- | --- | --- |
 | `cloud_architect` | `enabled` (**false**), `consent_minutes` (30) | Optional. Also needs `groq` enabled on a confirmed free plan with dedicated quota, plus per-request or per-scope consent. Only an allowlisted, generic, synthetic/public problem is ever sent; anything uncertain stays local. Log: `.jarvis-runtime/cloud/architect-log.jsonl`. |
+| `evolution_lab` | `enabled` (true), `max_experiments_per_day` (1), `budget_seconds` (2400), `check_interval_seconds` (3600) | Idle-only bounded experiments in `.jarvis-runtime/evolution/lab` (separate Git repository). Results are proposals; deploy with "review improvement proposals" → approval card. Rollback: `python -m jarvis.evolution_promotion rollback <release>`. The gate refuses to run if `evolution_eval/` differs from the committed files. |
 | `demonstration` | `enabled` (true), `max_steps` (10) | Offered only after repeated "can't find this control" failures in one task, and records only after the `demonstration_recording` approval. Captures clicks in the selected window only (no keyboard, no password fields, no RuntimeIds). Sessions: `.jarvis-runtime/demonstrations/`. |
 
 ## Integrations and toolkits

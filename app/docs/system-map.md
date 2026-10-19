@@ -1,5 +1,16 @@
 # Jarvis system map
 
+<!-- upgrade-phase06 -->
+**Upgrade Phase 6 — 2026-10-19 IST:**
+- `evolution_surfaces.py`: bounded literals in `dag_execution`, `capabilities`, `reasoning_bank`, `cognition`, `task_recovery`, `prompt_router`.
+- `evolution_archive.py`, `evolution_lab.py` (separate repository under `.jarvis-runtime/evolution/lab`), `autoresearch.py` (idle via `SelfEvolution.research_maintenance`), `prompt_evolution.py`.
+- `evolution_eval/` (sealed gate, outside `jarvis/`).
+- `evolution_promotion.py` (toolkit tools `evolution_status` / `evolution_promote` / `evolution_rollback`; approval card; rollback CLI).
+- `prompt_router.guidance` adds `capability_context.task_guidance` only for approved non-empty slot prompts.
+
+[Design and safety model](../artifacts/jarvis-audit/phase-06/design-and-safety.md).
+<!-- /upgrade-phase06 -->
+
 <!-- upgrade-phase05 -->
 **Upgrade Phase 5 — 2026-10-18 IST:**
 - `cloud_architect.py`: off by default; privacy gate, consent and sandbox verification.

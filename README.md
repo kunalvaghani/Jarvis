@@ -7,6 +7,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- upgrade-phase06 -->
+**2026-10-19 — Upgrade Phase 6 of 8 (DGM + autoresearch + EEVEE self-evolution): PASS for locally executable checks.** Bounded, literal-only experiments run in an isolated lab repository and are judged by a sealed ten-domain retention gate. Qualified candidates are approval-gated proposals with rollback; one DAG-ordering proposal qualified and was not deployed. Full regression **3,340 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 6 evidence](app/artifacts/jarvis-audit/phase-06/README.md).
+<!-- /upgrade-phase06 -->
+
 <!-- upgrade-phase05 -->
 **2026-10-18 — Upgrade Phase 5 of 8 (cloud architect escalation + Show Me Once): PASS for locally executable checks; real-provider checks BLOCKED (not authorized).** An optional, off-by-default free-tier cloud consultation sits behind a strict privacy gate and sandbox verification. Consented one-click demonstrations become verified provisional skills. Failure routing is bounded. Full regression **3,315 passed / 147 skipped / 0 failed**; launcher ready. [Application details](app/README.md) · [Phase 5 evidence](app/artifacts/jarvis-audit/phase-05/README.md).
 <!-- /upgrade-phase05 -->
