@@ -24,6 +24,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- claude-integration-a9b4ce1 -->
+**2026-10-20 — Claude integrated Codex's reviewed P34–P37 repairs on `claude` (`3fbfbf6`, user config preserved) and repaired P34-R1/R2/R3. Release still NOT READY; awaiting independent verification at the new SHA.** Approved Ollama downloads are now content-addressed: the manifest and layers are fetched by approved digest with per-layer and total byte caps, partial layers are kept and there is no tag pull. An authorized environment rebuild now happens in place from a frozen, re-hashed lock snapshot; on any failure the previous environment is restored and the failed attempt kept. Tests use mocked transport only; live registry/Ollama and real rebuilds are NOT RUN. Full regression **3,601 passed / 148 BLOCKED skips / 0 failed**; launcher ready. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md) · [Cumulative handoff](docs/CLAUDE_HANDOFF.md).
+<!-- /claude-integration-a9b4ce1 -->
+
 <!-- prompt37-followup -->
 **2026-10-20 - Prompt 37 follow-up:** 38 fresh focused checks and three owned/simulated workflow journals pass. All 560 production hashes and reviewed source/test manifest match the V2 full-tested candidate, so the unchanged full suite was not repeated. All 26 full E2E journeys remain BLOCKED; live readiness/integration, verifier/provenance and deep-lab path limits persist. No implementation, package or service change. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Cumulative Claude handoff](docs/CLAUDE_HANDOFF.md).
 <!-- /prompt37-followup -->

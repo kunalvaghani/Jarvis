@@ -107,27 +107,76 @@ def locked(tmp_path, text=None):
                             str(wheels), 1000, time.time() + 60, 'abc123')
 
 
-def test_authorized_repair_stages_from_the_locked_wheelhouse_and_keeps_the_old_environment(tmp_path):
+def test_authorized_repair_builds_in_place_from_the_frozen_lock_and_keeps_the_old_environment(tmp_path):
     config = fixture(tmp_path)
     approval = locked(tmp_path)
-    checks = iter([1])  # first import check fails; staged commands succeed
+    checks = iter([1])  # first import check fails; repair commands succeed
     outcome, commands, _ = run_prepare(tmp_path, config, lambda args: next(checks, 0), approval)
     assert outcome == tmp_path / '.venv/Scripts/pythonw.exe'
-    install = next(c for c in commands if 'pip' in c)
+    venv = next(c for c in commands if 'venv' in c)
+    assert venv[-1] == str(tmp_path / '.venv')  # built at its final path: no relocation of console scripts (R2)
+    install = next(c for c in commands if 'pip' in c and 'install' in c)
     assert '--isolated' not in install and '--no-index' in install and '--require-hashes' in install
     assert install[install.index('--find-links') + 1] == str((tmp_path / 'wheelhouse').resolve())
-    assert install[0].endswith('.venv.staging-abc123\\Scripts\\python.exe') or '.venv.staging-abc123' in install[0]
+    assert install[0] == str(tmp_path / '.venv/Scripts/python.exe')
+    frozen = Path(install[install.index('-r') + 1])
+    assert frozen == tmp_path / '.jarvis-runtime/repair-staging/abc123/requirements.lock'  # R3 snapshot, not the original
+    assert hashlib.sha256(frozen.read_bytes()).hexdigest() == approval.lock_sha256
+    assert commands[-1][-2:] == ['pip', '--version']  # in-place tooling check after the import check
     assert (tmp_path / '.venv/Scripts/python.exe').read_text() == 'new environment'
     assert (tmp_path / '.venv.previous-abc123/Scripts/python.exe').read_text() == 'old environment'
 
 
-def test_failed_staging_leaves_the_working_environment_untouched(tmp_path):
+@pytest.mark.parametrize('failing', ['pip install', 'import check', 'pip --version'])
+def test_failed_rebuild_restores_the_working_environment_and_keeps_the_attempt(tmp_path, failing):
     config = fixture(tmp_path)
     approval = locked(tmp_path)
-    outcome, commands, _ = run_prepare(tmp_path, config, lambda args: 1 if ('pip' in args or args[1] == '-c') else 0, approval)
+    seen = []
+    def results(args):
+        seen.append(args)
+        if len(seen) == 1:
+            return 1  # the read-only readiness check fails
+        step = ('pip install' if 'install' in args else 'pip --version' if '--version' in args else
+                'import check' if args[1] == '-c' else 'venv')
+        return 1 if step == failing else 0
+    outcome, commands, record = run_prepare(tmp_path, config, results, approval)
     assert isinstance(outcome, ValueError) and not isinstance(outcome, RepairRequired)
     assert (tmp_path / '.venv/Scripts/python.exe').read_text() == 'old environment'
-    assert (tmp_path / '.venv.staging-abc123').exists()  # partial staging kept for inspection, nothing deleted
+    assert (tmp_path / '.venv.failed-abc123/Scripts/python.exe').read_text() == 'new environment'
+    assert not (tmp_path / '.venv.previous-abc123').exists()
+    assert any('was restored' in call.args[1] for call in record.call_args_list)
+
+
+def test_lock_replaced_after_validation_is_refused_before_any_build(tmp_path):
+    from jarvis import repair_authorization
+    config = fixture(tmp_path)
+    approval = locked(tmp_path)
+    lock = tmp_path / 'requirements/runtime.lock'
+    original = repair_authorization.check_dependency_repair
+    def then_swap(*args, **kwargs):
+        result = original(*args, **kwargs)
+        lock.write_text('evil==6.6 --hash=sha256:' + 'e' * 64 + '\n')  # replaced between review and execution
+        return result
+    with patch.object(repair_authorization, 'check_dependency_repair', side_effect=then_swap):
+        outcome, commands, _ = run_prepare(tmp_path, config, lambda args: 1, approval)
+    assert isinstance(outcome, RepairRefused) and len(commands) == 1
+    assert (tmp_path / '.venv/Scripts/python.exe').read_text() == 'old environment'
+
+
+def test_lock_changed_during_the_build_never_reaches_pip(tmp_path):
+    config = fixture(tmp_path)
+    approval = locked(tmp_path)
+    lock = tmp_path / 'requirements/runtime.lock'
+    seen = []
+    def results(args):
+        seen.append(args)
+        if 'venv' in args:
+            lock.write_text('evil==6.6 --hash=sha256:' + 'e' * 64 + '\n')
+        return 1 if len(seen) == 1 else 0
+    outcome, commands, _ = run_prepare(tmp_path, config, results, approval)
+    assert outcome == tmp_path / '.venv/Scripts/pythonw.exe'
+    install = next(c for c in commands if 'install' in c)
+    assert 'evil' not in Path(install[install.index('-r') + 1]).read_text()
 
 
 @pytest.mark.parametrize('problem', ['unhashed lock', 'unpinned lock', 'lock changed', 'expired', 'over budget',
@@ -294,37 +343,102 @@ def test_shutdown_prevents_even_an_approved_download(tmp_path):
 
 # ---- approved pull executor (scripts/setup/setup_brain.approved_pull) --------------------------------------------------
 
-def registry(body):
-    raw = json.dumps(body).encode()
-    response = Mock(content=raw, status_code=200)
-    response.json.return_value = body
-    response.raise_for_status.return_value = None
-    return response, 'sha256:' + hashlib.sha256(raw).hexdigest()
+class Blob:
+    def __init__(self, data, status=200):
+        self.data, self.status_code = data, status
+
+    def raise_for_status(self):
+        pass
+
+    def iter_content(self, size):
+        for index in range(0, len(self.data), 4):
+            yield self.data[index:index + 4]
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
 
 
-def pull_session(installed_digest):
+def fake_registry(layers, served=None, tags_digest=None):
+    """Content-addressed fake registry: returns (revision, get, ollama session, requested URLs)."""
+    descriptors = [{'digest': 'sha256:' + hashlib.sha256(data).hexdigest(), 'size': len(data)} for data in layers]
+    raw = json.dumps({'config': descriptors[0], 'layers': descriptors[1:]}).encode()
+    revision = 'sha256:' + hashlib.sha256(raw).hexdigest()
+    calls = []
+    def get(url, headers=None, stream=False, timeout=None):
+        calls.append(url)
+        if '/manifests/' in url:
+            response = Mock(content=raw if url.endswith(revision) else b'{}', status_code=200)
+            response.raise_for_status.return_value = None
+            return response
+        digest = url.rsplit('sha256:', 1)[1]
+        data = next(d for d in layers if hashlib.sha256(d).hexdigest() == digest)
+        return Blob((served or {}).get(digest, data))
     session = Mock()
-    stream = Mock()
-    stream.iter_lines.return_value = [json.dumps({'status': 'success'}).encode()]
-    session.post.return_value.__enter__ = Mock(return_value=stream)
-    session.post.return_value.__exit__ = Mock(return_value=False)
-    session.get.return_value.json.return_value = {'models': [{'name': 'qwen3.5:27b', 'digest': installed_digest}]}
-    return session
+    session.get.return_value.json.return_value = {'models': [{'name': 'qwen3.5:27b',
+                                                               'digest': tags_digest or revision.removeprefix('sha256:')}]}
+    return revision, get, session, calls
 
 
-def test_approved_pull_checks_revision_and_budget_before_pulling():
+def pull():
     sys.path.insert(0, str(launcher.BASE))
     from scripts.setup.setup_brain import approved_pull
-    response, digest = registry({'config': {'size': 10}, 'layers': [{'size': 1000}]})
-    session = pull_session(digest.removeprefix('sha256:'))
-    with patch('requests.get', return_value=response):
-        approved_pull(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', digest, 2000)
-        assert session.post.call_count == 1
-        for revision, budget, why in ((HASH, 2000, 'revision differs'), (digest, 500, 'over budget')):
-            session = pull_session(digest)
-            with pytest.raises(SystemExit):
-                approved_pull(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', revision, budget)
-            assert session.post.call_count == 0, why
-        session = pull_session('f' * 64)
-        with pytest.raises(SystemExit):
-            approved_pull(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', digest, 2000)  # installed digest differs
+    return approved_pull
+
+
+def test_approved_pull_fetches_only_by_digest_within_budget(tmp_path):
+    layers = [b'config-bytes', b'weights-layer-1', b'weights-layer-2']
+    revision, get, session, calls = fake_registry(layers)
+    with patch('requests.get', side_effect=get):
+        pull()(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', revision, 1000, store=tmp_path)
+    assert calls[0].endswith('/manifests/' + revision)  # never the mutable tag (R1)
+    assert all(url.endswith(revision) or '/blobs/sha256:' in url for url in calls)
+    assert session.post.call_count == 0  # no Ollama /api/pull of the tag
+    for data in layers:
+        assert (tmp_path / 'blobs' / ('sha256-' + hashlib.sha256(data).hexdigest())).read_bytes() == data
+    manifest = tmp_path / 'manifests/registry.ollama.ai/library/qwen3.5/27b'
+    assert 'sha256:' + hashlib.sha256(manifest.read_bytes()).hexdigest() == revision
+
+
+@pytest.mark.parametrize('problem', ['over budget', 'oversized layer', 'tampered layer', 'existing manifest',
+                                     'not listed at revision', 'invalid revision'])
+def test_approved_pull_refuses_and_keeps_partials(tmp_path, problem):
+    layers = [b'config-bytes', b'weights-layer-1']
+    digest = hashlib.sha256(layers[1]).hexdigest()
+    served = {'oversized layer': {digest: layers[1] + b'EXTRA'}, 'tampered layer': {digest: b'weights-layer-X'}}.get(problem)
+    revision, get, session, calls = fake_registry(layers, served, 'f' * 64 if problem == 'not listed at revision' else None)
+    if problem == 'existing manifest':
+        (tmp_path / 'manifests/registry.ollama.ai/library/qwen3.5').mkdir(parents=True)
+        (tmp_path / 'manifests/registry.ollama.ai/library/qwen3.5/27b').write_bytes(b'user manifest')
+    with patch('requests.get', side_effect=get), pytest.raises(SystemExit):
+        pull()(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', 'latest' if problem == 'invalid revision' else revision,
+               10 if problem == 'over budget' else 1000, store=tmp_path)
+    if problem in ('over budget', 'existing manifest', 'invalid revision'):
+        assert not any('/blobs/' in url for url in calls), problem  # refused before any layer transfer
+    if problem in ('oversized layer', 'tampered layer'):
+        assert (tmp_path / 'blobs' / ('sha256-' + digest + '-partial')).exists()  # kept, never published
+        assert not (tmp_path / 'blobs' / ('sha256-' + digest)).exists()
+        assert not (tmp_path / 'manifests').exists()
+    if problem == 'existing manifest':
+        assert (tmp_path / 'manifests/registry.ollama.ai/library/qwen3.5/27b').read_bytes() == b'user manifest'
+    assert session.post.call_count == 0
+
+
+def test_approved_pull_resumes_a_partial_layer_with_a_range_request(tmp_path):
+    layers = [b'config-bytes', b'weights-layer-1']
+    digest = hashlib.sha256(layers[1]).hexdigest()
+    revision, get, session, calls = fake_registry(layers)
+    (tmp_path / 'blobs').mkdir()
+    (tmp_path / 'blobs' / ('sha256-' + digest + '-partial')).write_bytes(layers[1][:7])
+    requested = []
+    def ranged(url, headers=None, stream=False, timeout=None):
+        requested.append(dict(headers or {}))
+        if '/blobs/' in url and digest in url and headers:
+            return Blob(layers[1][int(headers['Range'][6:-1]):], status=206)
+        return get(url, headers=headers, stream=stream, timeout=timeout)
+    with patch('requests.get', side_effect=ranged):
+        pull()(session, 'http://127.0.0.1:11434', 'qwen3.5:27b', revision, 1000, store=tmp_path)
+    assert (tmp_path / 'blobs' / ('sha256-' + digest)).read_bytes() == layers[1]
+    assert {'Range': 'bytes=7-'} in requested

@@ -9,6 +9,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- claude-integration-a9b4ce1 -->
+**2026-10-20 — Codex P34–P37 repairs integrated on `claude` (`3fbfbf6`); P34-R1/R2/R3 repaired (digest-bound model transport, in-place rebuild with rollback, frozen lock). Release NOT READY pending independent verification.** Full regression 3,601 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md).
+<!-- /claude-integration-a9b4ce1 -->
+
 <!-- prompt37-followup -->
 **2026-10-20 - Prompt 37 follow-up:** 38 focused checks and three bounded workflow journals pass; full E2E acceptance remains blocked. Source unchanged from V2. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
 <!-- /prompt37-followup -->
