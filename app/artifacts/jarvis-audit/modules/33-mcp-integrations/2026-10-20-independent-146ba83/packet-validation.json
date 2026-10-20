@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-20",
+  "required_reports": 12,
+  "stable_cases": 22,
+  "checks": 309,
+  "passed": 309,
+  "failed": 0,
+  "source_prior_packet_hashes": "MATCH",
+  "five_independent_repro_files": "BYTE IDENTICAL",
+  "new_report_readme_links": "PASS",
+  "scope": "Packet validation only; wider full-module gates remain BLOCKED"
+}

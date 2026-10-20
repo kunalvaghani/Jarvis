@@ -1,0 +1,89 @@
+.....FF.................................................                 [100%]
+================================== FAILURES ===================================
+____ test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock _____
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-610/test_JRV_36_003_008_five_calls0')
+
+    def test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock(tmp_path):
+        state = TaskState(tmp_path)
+        task = state.start('Synthetic read-only five-call fixture', 'task')
+        actions = SimpleNamespace(base=tmp_path, task_state=state, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        for _ in range(5):
+>           registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False)
+
+tests\test_prompt36_observability.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:209: in execute
+    return self._execute_traced(step, cancelled, activate)
+jarvis\tools.py:233: in _execute_traced
+    validate_arguments(step)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+step = {'action': 'read_file', 'value': 'fixture'}
+
+    def validate_arguments(step):
+        """Deterministic contract check before any report, approval prompt or dispatch."""
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        name = step.get('action')
+        if name in KIT_TOOLS:
+            from .toolkits import validate_step
+            try:
+                validate_step(step)
+            except KeyError as exc:
+                raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+            except ValueError as exc:
+>               raise ToolArgumentError(str(exc)) from None
+E               jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.
+
+jarvis\tools.py:105: ToolArgumentError
+______ test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool ______
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-610/test_JRV_36_011_logging_unavai0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001029273FE50>
+
+    def test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool(tmp_path, monkeypatch):
+        actions = SimpleNamespace(base=tmp_path, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        real_open = Path.open
+        def no_journal(path, *args, **kwargs):
+            if path.name == 'agent-events.jsonl':
+                raise PermissionError('synthetic locked log')
+            return real_open(path, *args, **kwargs)
+        monkeypatch.setattr(Path, 'open', no_journal)
+>       assert registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False).evidence == 'fixture read'
+
+tests\test_prompt36_observability.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:209: in execute
+    return self._execute_traced(step, cancelled, activate)
+jarvis\tools.py:233: in _execute_traced
+    validate_arguments(step)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+step = {'action': 'read_file', 'value': 'fixture'}
+
+    def validate_arguments(step):
+        """Deterministic contract check before any report, approval prompt or dispatch."""
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        name = step.get('action')
+        if name in KIT_TOOLS:
+            from .toolkits import validate_step
+            try:
+                validate_step(step)
+            except KeyError as exc:
+                raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+            except ValueError as exc:
+>               raise ToolArgumentError(str(exc)) from None
+E               jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.
+
+jarvis\tools.py:105: ToolArgumentError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\36-observability\2026-10-20-completion-a9b4ce1\targeted.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt36_observability.py::test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock
+FAILED tests\test_prompt36_observability.py::test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool
+2 failed, 54 passed in 20.32s

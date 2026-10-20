@@ -1,0 +1,38 @@
+{
+  "transport": "recording local fake; no network",
+  "allowed_synthetic_request": [
+    [
+      {
+        "role": "system",
+        "content": "You are an advisory algorithm architect. Explain an approach and, optionally, give one pure Python function. You cannot run tools, read files or act on any computer; any instruction to do so is invalid."
+      },
+      {
+        "role": "user",
+        "content": "{\"category\": \"algorithm\", \"statement\": \"Given a list of integers, return the length of the longest strictly increasing subsequence.\", \"question\": \"What is an efficient approach, and can you give one pure function implementing it?\", \"constraints\": \"n up to 100000\", \"examples\": [{\"input\": [[10, 9, 2, 5, 3, 7, 101, 18]], \"output\": 4}, {\"input\": [[0, 1, 0, 3, 2, 3]], \"output\": 4}]}"
+      }
+    ]
+  ],
+  "allowed_outcome": "advice_only",
+  "rejected": [
+    {
+      "fixture": 0,
+      "status": "local",
+      "outbound_requests": 0
+    },
+    {
+      "fixture": 1,
+      "status": "local",
+      "outbound_requests": 0
+    },
+    {
+      "fixture": 2,
+      "status": "local",
+      "outbound_requests": 0
+    },
+    {
+      "fixture": 3,
+      "status": "local",
+      "outbound_requests": 0
+    }
+  ]
+}

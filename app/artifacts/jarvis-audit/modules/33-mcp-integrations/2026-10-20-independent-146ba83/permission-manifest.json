@@ -1,0 +1,9 @@
+{
+  "local_stdio": "explicit echo allowlist, trusted disposable interpreter",
+  "generated": "existing offline labelled image, network none, read-only root/mount, UID 65534, dropped caps, bounded resources, verified private source",
+  "approval_and_author": "synthetic callbacks",
+  "provider_transport": "intercepted in-memory API; synthetic A/B credentials only",
+  "real_provider_writes": 0,
+  "installations": 0,
+  "unowned_process_targets": 0
+}

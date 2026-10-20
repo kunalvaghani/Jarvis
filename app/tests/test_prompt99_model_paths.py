@@ -1,0 +1,56 @@
+"""Independent downloader containment regressions; only owned files and fake HTTP."""
+import json
+from unittest.mock import patch
+
+import pytest
+
+from jarvis.repair_authorization import RepairRefused, check_model_download
+from tests.test_prompt34_dependency_repair import ONLINE, PLENTY, approval_for, fake_registry
+
+BAD_MODELS = ['fixture:../../../../../escaped', '../fixture:tag', 'a/../../fixture:tag',
+              '/absolute:tag', r'fixture:..\escape', 'fixture:C:escape', 'fixture:',
+              'a//b:tag', 'fixture:tag?query', 'fixture:tag#fragment', 'a/b/c:tag', '', None]
+
+
+@pytest.mark.parametrize('model', BAD_MODELS)
+def test_model_authorization_rejects_non_registry_paths_before_execution(tmp_path, model):
+    with pytest.raises(RepairRefused):
+        check_model_download(approval_for(model=model), [model], tmp_path, environment=ONLINE,
+            disk_usage=lambda path: PLENTY, ram_total=1 << 40)
+
+
+@pytest.mark.parametrize('model', BAD_MODELS)
+def test_approved_transport_rejects_paths_before_network_or_files(tmp_path, model):
+    from scripts.setup.setup_brain import approved_pull
+    revision, get, session, calls = fake_registry([b'owned-config', b'owned-weights'])
+    with patch('requests.get', side_effect=get), pytest.raises((RepairRefused, SystemExit)):
+        approved_pull(session, 'http://127.0.0.1:11434', model, revision, 1000, store=tmp_path / 'store')
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+    assert not list(tmp_path.rglob('*')), 'Invalid reference must leave the owned store untouched'
+
+
+def test_model_path_cannot_publish_a_manifest_outside_owned_store(tmp_path):
+    from scripts.setup.setup_brain import approved_pull
+    revision, get, session, calls = fake_registry([b'owned-config', b'owned-weights'])
+    model = 'fixture:../../../../../escaped'
+    session.get.return_value.json.return_value = {'models': [{'name': model, 'digest': revision}]}
+    with patch('requests.get', side_effect=get):
+        try:
+            approved_pull(session, 'http://127.0.0.1:11434', model, revision, 1000, store=tmp_path / 'store')
+        except (RepairRefused, SystemExit):
+            pass
+    assert not (tmp_path / 'escaped').exists(), 'Model alias escaped its store and published a manifest'
+    assert not calls
+
+
+@pytest.mark.parametrize('model', ['qwen3.5:27b', 'qwen2.5', 'library/qwen:latest', 'owner/model:Q4_K_M'])
+def test_valid_model_aliases_preserve_digest_transport_and_store_readback(tmp_path, model):
+    from scripts.setup.setup_brain import approved_pull
+    revision, get, session, calls = fake_registry([b'owned-config', b'owned-weights'])
+    session.get.return_value.json.return_value = {'models': [{'name': model if ':' in model else model + ':latest', 'digest': revision}]}
+    with patch('requests.get', side_effect=get):
+        approved_pull(session, 'http://127.0.0.1:11434', model, revision, 1000, store=tmp_path)
+    manifests = [p for p in (tmp_path/'manifests').rglob('*') if p.is_file()]
+    assert len(manifests) == 1
+    assert json.loads(manifests[0].read_bytes())['config']['size'] == len(b'owned-config')
+    assert calls[0].endswith('/manifests/' + revision)

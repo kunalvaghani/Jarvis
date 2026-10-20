@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="13" skipped="0" tests="14" time="0.740" timestamp="2026-10-20T01:45:51.336277+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_lock_cannot_smuggle_pip_options_after_a_hash[ --find-links=https://example.invalid/wheels]" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">suffix = ' --find-links=https://example.invalid/wheels'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:20: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_lock_cannot_smuggle_pip_options_after_a_hash[ --index-url=https://example.invalid/simple]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">suffix = ' --index-url=https://example.invalid/simple'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:20: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_lock_cannot_smuggle_pip_options_after_a_hash[ --trusted-host=example.invalid]" time="0.001"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">suffix = ' --trusted-host=example.invalid'
+
+    @pytest.mark.parametrize('suffix', [' --find-links=https://example.invalid/wheels',
+                                        ' --index-url=https://example.invalid/simple',
+                                        ' --trusted-host=example.invalid'])
+    def test_lock_cannot_smuggle_pip_options_after_a_hash(suffix):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:20: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_expiry_must_be_finite_and_numeric[nan]" time="0.028"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be0')
+bad = nan
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:27: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_expiry_must_be_finite_and_numeric[inf]" time="0.010"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be1')
+bad = inf
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:27: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_expiry_must_be_finite_and_numeric[True]" time="0.006" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_expiry_must_be_finite_and_numeric[tomorrow]" time="0.007"><failure message="TypeError: '&gt;' not supported between instances of 'float' and 'str'">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be3')
+bad = 'tomorrow'
+
+    @pytest.mark.parametrize('bad', [float('nan'),float('inf'),True,'tomorrow'])
+    def test_dependency_expiry_must_be_finite_and_numeric(tmp_path,bad):
+        approval=replace(locked(tmp_path),expires=bad)
+        with pytest.raises(auth.RepairRefused):
+&gt;           auth.check_dependency_repair(tmp_path,approval,'.venv',disk_usage=lambda _:PLENTY)
+
+tests\test_prompt34_completion.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_expiry_must_be3')
+approval = DependencyRepair(environment='.venv', lock='requirements/runtime.lock', lock_sha256='90c4ba02d9c7d429f85c479e6902d3696...al\\pytest-587\\test_dependency_expiry_must_be3\\wheelhouse', max_bytes=1000, expires='tomorrow', approval_id='abc123')
+environment_name = '.venv', now = 1792440951.9405253
+disk_usage = &lt;function test_dependency_expiry_must_be_finite_and_numeric.&lt;locals&gt;.&lt;lambda&gt; at 0x00000218AC10AA70&gt;
+
+    def check_dependency_repair(base, approval, environment_name, now=None, disk_usage=None):
+        """Validate a dependency authorization for ``environment_name``; return (lock path, wheelhouse path)."""
+        now = time.time() if now is None else now
+        disk_usage = disk_usage or shutil.disk_usage
+        if approval.environment != environment_name or environment_name not in ENVIRONMENTS:
+            raise RepairRefused('The authorization is for ' + approval.environment + ', not ' + environment_name + '.')
+&gt;       if not approval.expires or now &gt; approval.expires:
+E       TypeError: '&gt;' not supported between instances of 'float' and 'str'
+
+jarvis\repair_authorization.py:127: TypeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_approval_identifier_cannot_form_paths[../../outside]" time="0.009"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident0')
+identifier = '../../outside'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:33: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_approval_identifier_cannot_form_paths[x/y]" time="0.010"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident1')
+identifier = 'x/y'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:33: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_approval_identifier_cannot_form_paths[x\\y]" time="0.009"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident2')
+identifier = 'x\\y'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:33: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_approval_identifier_cannot_form_paths[]" time="0.010"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident3')
+identifier = ''
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:33: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_dependency_approval_identifier_cannot_form_paths[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="0.010"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_dependency_approval_ident4')
+identifier = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+    @pytest.mark.parametrize('identifier',['../../outside','x/y','x\\y','', 'x'*65])
+    def test_dependency_approval_identifier_cannot_form_paths(tmp_path,identifier):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:33: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_model_network_consent_must_be_boolean_true" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_model_network_consent_mus0')
+
+    def test_model_network_consent_must_be_boolean_true(tmp_path):
+&gt;       with pytest.raises(auth.RepairRefused):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.repair_authorization.RepairRefused'&gt;
+
+tests\test_prompt34_completion.py:38: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_completion" name="test_authorization_is_claimed_once_with_two_simultaneous_readers" time="0.019"><failure message="assert 2 == 1&#10; +  where 2 = sum(&lt;generator object test_authorization_is_claimed_once_with_two_simultaneous_readers.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000218AC0D1C40&gt;)">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-587/test_authorization_is_claimed_0')
+
+    def test_authorization_is_claimed_once_with_two_simultaneous_readers(tmp_path):
+        approval=locked(tmp_path)
+        path=tmp_path/auth.DEPENDENCY_FILE
+        path.write_text(json.dumps(approval.__dict__))
+        start=threading.Barrier(2)
+        reads=threading.Barrier(2)
+        original=Path.read_text
+        def read(candidate,*args,**kwargs):
+            text=original(candidate,*args,**kwargs)
+            if candidate==path:
+                reads.wait(timeout=3)  # Old read-then-unlink admits both; atomic claim uses a unique path.
+            return text
+        def take():
+            start.wait(timeout=3)
+            return auth.take_dependency_repair(tmp_path)
+        with patch.object(Path,'read_text',read),ThreadPoolExecutor(max_workers=2) as pool:
+            values=list(pool.map(lambda _:take(),range(2)))
+&gt;       assert sum(value is not None for value in values)==1
+E       assert 2 == 1
+E        +  where 2 = sum(&lt;generator object test_authorization_is_claimed_once_with_two_simultaneous_readers.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000218AC0D1C40&gt;)
+
+tests\test_prompt34_completion.py:60: AssertionError</failure></testcase></testsuite></testsuites>

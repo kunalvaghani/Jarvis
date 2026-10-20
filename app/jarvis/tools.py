@@ -66,6 +66,7 @@ _LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
 APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
                              'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
 _SECRET_PATTERNS = (
+    (re.compile(r'''(?i)(["']?\b(?:access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|password|passwd|pwd|authorization)["']?\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]+|[^\s,}\]]+)'''), r'\1[redacted]'),
     (re.compile(r'(?i)\b(access_token|refresh_token|id_token|client_secret|api[_-]?key|apikey|token|secret|'
                 r'password|passwd|pwd|sig|signature)=([^&\s#"\']+)'), r'\1=[redacted]'),
     (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}'), r'\1 [redacted]'),
@@ -203,6 +204,11 @@ class ToolRegistry:
                 )+definitions(self.actions,query,min(limit,6)))
 
     def execute(self, step, cancelled, activate=None):
+        from .agent_events import task_trace
+        with task_trace(self.actions):
+            return self._execute_traced(step, cancelled, activate)
+
+    def _execute_traced(self, step, cancelled, activate=None):
         from .agent_events import check_policy, event
         # Type first: a non-object proposal must not reach identity or policy checks.
         if not isinstance(step, dict):

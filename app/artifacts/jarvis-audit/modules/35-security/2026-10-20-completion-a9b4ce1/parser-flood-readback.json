@@ -1,0 +1,10 @@
+{
+  "case": "JRV-35-010",
+  "calls": 1500,
+  "fixture_types": 3,
+  "elapsed_seconds": 0.19153660000301898,
+  "operation_tracemalloc_peak_bytes": 75799,
+  "provider_constructions": 0,
+  "outbound_requests": 0,
+  "scope": "Finite synthetic malformed batch; no ingress-rate-limit or whole-process memory claim."
+}

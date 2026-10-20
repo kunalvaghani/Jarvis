@@ -1,0 +1,22 @@
+{
+  "pinned": {
+    "n": 30,
+    "p50_ns": 25200.0,
+    "p95_ns_nearest_rank": 37200,
+    "sample_variance_ns2": 58207367.816091955,
+    "cleanup_successes": 0
+  },
+  "current": {
+    "n": 30,
+    "p50_ns": 3937850.0,
+    "p95_ns_nearest_rank": 6115500,
+    "sample_variance_ns2": 2612743213747.1265,
+    "cleanup_successes": 30
+  },
+  "paired_mean_delta_ns": 4389063.333333333,
+  "approximate_normal_95CI_delta_ns": [
+    3810952.2565481067,
+    4967174.410118559
+  ],
+  "scope": "Synthetic observer-failure cleanup including current durable write; no real command latency, accuracy or throughput claim. No statistical population inference for physical hooks."
+}

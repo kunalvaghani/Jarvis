@@ -1,0 +1,9 @@
+{
+  "stdio": "Trusted local fixture interpreter only; explicit allow_tools echo",
+  "generated": "Existing Docker image, no network, read-only root/server mount, non-root, cap-drop ALL, bounded pids/memory/CPU; private verified execution copy",
+  "approval": "Fixed synthetic callbacks; no live/native approval UI proof",
+  "provider": "jarvis.toolkits.api replaced by in-memory ledger; synthetic A/B credentials only",
+  "real_account_writes": 0,
+  "installations": 0,
+  "production_process_targets": 0
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="2.240" timestamp="2026-10-20T03:07:30.906462+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_architecture_audit" name="test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload" time="0.114"><failure message="AssertionError: assert {'at', 'call_...onic_ns', ...} &lt;= {'at', 'call_...l', 'version'}&#10;  &#10;  Extra items in the left set:&#10;  'clock_id'&#10;  'monotonic_ns'">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-629/test_JRV_01_032_lifecycle_meta0')
+
+    def test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload(tmp_path):
+        actions=SimpleNamespace(base=tmp_path)
+        identifier=event(actions,'tool.started','read_file',content='FAKE_PRIVATE',api_key='FAKE_TOKEN')
+        event(actions,'tool.failed','read_file',identifier,error_type='TimeoutError')
+        rows=[json.loads(s) for s in (tmp_path/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
+        assert rows[0]['call_id']==rows[1]['call_id']==identifier
+        assert rows[1]['error_type']=='TimeoutError'
+        assert 'FAKE_' not in json.dumps(rows)
+&gt;       assert set(rows[0]) &lt;= {'version','at','event','call_id','tool','discarded_metadata_fields'}
+E       AssertionError: assert {'at', 'call_...onic_ns', ...} &lt;= {'at', 'call_...l', 'version'}
+E         
+E         Extra items in the left set:
+E         'clock_id'
+E         'monotonic_ns'
+
+tests\test_architecture_audit.py:37: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_ability_forge_audit" name="test_JRV_19_019_JRV_19_026_uncertain_network_write_persisted_and_never_replayed" time="1.228" /></testsuite></testsuites>

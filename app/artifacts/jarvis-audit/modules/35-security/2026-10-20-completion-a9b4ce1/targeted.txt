@@ -1,0 +1,39 @@
+..........F.....s....................................................... [ 50%]
+.........F.............................................................  [100%]
+================================== FAILURES ===================================
+_ test_JRV_35_024_report_redacts_structured_and_colon_credentials[Authorization: Bearer syntheticFixtureCanary9471] _
+
+message = 'Authorization: Bearer syntheticFixtureCanary9471'
+
+    @pytest.mark.parametrize('message', [
+        'token: ' + CANARY,
+        json.dumps({'access_token': CANARY}),
+        repr({'client_secret': CANARY}),
+        'Authorization: Bearer ' + CANARY,
+    ])
+    def test_JRV_35_024_report_redacts_structured_and_colon_credentials(message):
+>       assert CANARY not in tools.redact(message)
+E       AssertionError: assert 'syntheticFixtureCanary9471' not in 'Authorizati...reCanary9471'
+E         
+E         'syntheticFixtureCanary9471' is contained here:
+E           Authorization: [redacted] syntheticFixtureCanary9471
+
+tests\test_prompt35_security.py:60: AssertionError
+__________ Building.test_failing_ability_is_repaired_or_never_merged __________
+
+self = <tests.test_repo_abilities.Building testMethod=test_failing_ability_is_repaired_or_never_merged>
+
+    def test_failing_ability_is_repaired_or_never_merged(self):
+        instance, _, _ = forge([BROKEN, GOOD])
+        built = instance.build_repo("demo/wordcount")
+        self.assertEqual(built[0]["state"], "active")
+        self.assertEqual(built[0]["attempts"], 2)
+>       self.assertIn("RuntimeError: boom", instance.model_chat.calls[-1][1])  # The error went back to the model.
+E       AssertionError: 'RuntimeError: boom' not found in 'Ability:\n{"name": "word counter", "summary": "Counts words and lines in a text file.", "inputs": [{"name": "file", "type": "file", "description": "a text file"}], "output": "text", "approach": "standalone", "network": false, "plan": "Read the file and count like wordcount.core.count.", "declared_modules": []}\n\nReference repository:\n{"repository": "demo/wordcount", "code_excerpts": [{"path": "wordcount/core.py", "excerpt": "def count(t): ..."}]}\n\nYour previous file failed. Fix it and return the whole corrected file.\nProblem:\nAbility failed; untrusted exception details withheld.\nUntrusted exception message and source withheld for privacy.\n\nPrevious file:\n```python\nimport os\n\ndef run(inputs, workdir):\n    with open(inputs["file"], encoding="utf-8") as handle:\n        text = handle.read()\n    words = len(text.split())\n    out = os.path.join(workdir, "out", "count.txt")\n    os.makedirs(os.path.dirname(out), exist_ok=True)\n    with open(out, "w", encoding="utf-8") as handle:\n        handle.write(str(words))\n    raise RuntimeError("boom")\n    return {"text": str(words) + " words, " + str(text.count("\\n") + 1) + " lines.", "files": ["out/count.txt"]}\n\ndef sample_inputs(workdir):\n    path = os.path.join(workdir, "sample.txt")\n    with open(path, "w", encoding="utf-8") as handle:\n        handle.write("one two three\\nfour")\n    return {"file": path}\n\n```'
+
+tests\test_repo_abilities.py:179: AssertionError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\35-security\2026-10-20-completion-a9b4ce1\targeted.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt35_security.py::test_JRV_35_024_report_redacts_structured_and_colon_credentials[Authorization: Bearer syntheticFixtureCanary9471]
+FAILED tests\test_repo_abilities.py::Building::test_failing_ability_is_repaired_or_never_merged
+2 failed, 140 passed, 1 skipped in 43.14s

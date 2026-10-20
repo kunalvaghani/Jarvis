@@ -1,0 +1,15 @@
+{
+  "baseline": "36fbf3ce925080f7f54afa87eaf1d9b88414142d",
+  "candidate_base": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "source_hashes": {
+    "baseline:jarvis/demonstration.py": "17618337649c1a6955270e8e61b45f34d07ac57c65145e4571a84493be205f02",
+    "baseline:scripts/training/train_azr_lora.py": "5de00b5ba33b71ca688b9fc8bf2cac4eafd9ef5c41fec5c3621d68a6fa26f461",
+    "candidate:jarvis/demonstration.py": "e6aa23d5a65e134a2a8b73b204b37568b06feefc02dcbd54ffa719c4026b3c54",
+    "candidate:scripts/training/train_azr_lora.py": "de0b8afe74f05a66a6f61160d20d0b35a8fa4e4fb76e809135222461ee896d84"
+  },
+  "pairs_per_scenario": 500,
+  "first_pair_separate": true,
+  "order_seed": 36,
+  "scope": "Synthetic UIA objects / empty GPU lease file only; no COM, microphone, model, inference, startup or throughput.",
+  "historical_raw_N500": "NOT FOUND: original script saved aggregates only; fresh raw CSV is not the historical raw samples."
+}

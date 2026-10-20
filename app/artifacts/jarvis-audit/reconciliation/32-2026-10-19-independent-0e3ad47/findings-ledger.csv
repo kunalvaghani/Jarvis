@@ -1,0 +1,3 @@
+finding,severity,pin,fix_sha,status,evidence
+P32-001,P1,0e3ad4706b5120e5d0479d34333e5faa7b0931b5,,APPLIES_FAIL,final-targeted.xml; owned-process-trace.json
+P32-002,P1,0e3ad4706b5120e5d0479d34333e5faa7b0931b5,,APPLIES_FAIL,final-targeted.xml; repair file canaries

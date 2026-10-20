@@ -1,0 +1,38 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__ test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects __
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-644/test_P08_flow_E_cancellation_a0')
+
+    def test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects(tmp_path):
+        import threading
+        from jarvis.dag_execution import Executor, Tool, validate_plan
+        calls = {'read': 0, 'write': 0}
+        started = threading.Event()
+        def read(arguments, cancelled):
+            calls['read'] += 1
+            return 'value'
+        def write(arguments, cancelled):
+            calls['write'] += 1
+            started.set()
+            return 'written'
+        schema = {'type': 'object', 'properties': {}}
+        tools = {'read': Tool('read', schema, read, lambda a, o: o == 'value'),
+                 'write': Tool('write', schema, write, lambda a, o: o == 'written', read_only=False)}
+        def row(identifier, tool, deps=()):
+            return {'id': identifier, 'tool': tool, 'arguments': {}, 'dependencies': list(deps), 'expected': 'ok',
+                    'permission': 'read' if tool == 'read' else 'user', 'resources': {'cpu': 1, 'ram_mb': 32, 'gpu_mb': 0},
+                    'retry': {'attempts': 1, 'backoff_seconds': .01}, 'timeout_seconds': 5}
+        plan = validate_plan({'version': 1, 'steps': [row('r1', 'read'), row('w1', 'write', ['r1']), row('r2', 'read', ['w1'])]}, tools)
+        saved = []
+        Executor(tools, checkpoint=saved.append).run(plan)
+        crashed = json.loads(json.dumps(next(rows for rows in saved if rows['w1']['status'] == 'running')))  # crash point
+        assert crashed['w1']['status'] == 'running'
+>       with pytest.raises(ValueError, match='never replayed'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_phase08_integration.py:240: Failed
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-a9b4ce1\mutation-duplicate_write.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_phase08_integration.py::test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects
+1 failed in 1.13s

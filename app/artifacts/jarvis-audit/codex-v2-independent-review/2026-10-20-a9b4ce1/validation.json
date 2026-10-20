@@ -1,0 +1,24 @@
+{
+  "parent_artifacts_rechecked": 5116,
+  "parent_artifacts_changed": 0,
+  "production_hashes_unchanged_during_V2": true,
+  "mutation_controls": 6,
+  "mutation_kills": 6,
+  "source_restored": true,
+  "candidate_commit": null,
+  "git_diff_check": "PASS",
+  "report_links_checked": 19,
+  "json_jsonl_parse": "PASS",
+  "source_test_patches_apply_to_pinned_index": {
+    "source-only.patch": {
+      "returncode": 0,
+      "diagnostic": ""
+    },
+    "test-change.patch": {
+      "returncode": 0,
+      "diagnostic": ""
+    }
+  },
+  "baseline_tracked_production_clean": true,
+  "patch_manifest_readback": "PASS"
+}

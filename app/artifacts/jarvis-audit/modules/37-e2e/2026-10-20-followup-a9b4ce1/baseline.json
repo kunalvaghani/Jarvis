@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-20",
+  "pinned_claude": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "candidate_commit": null,
+  "fresh_targeted": {
+    "PASS": 38,
+    "FAIL": 0,
+    "SKIPPED": 0
+  },
+  "fresh_journals": 3,
+  "unchanged_production_files_verified": 560,
+  "reviewed_source_test_manifest_verified": true,
+  "retained_full_regression": {
+    "PASS": 1896,
+    "FAIL": 0,
+    "SKIPPED": 139,
+    "seconds": 538.832
+  },
+  "retained_distinct_deep_lab_failure": {
+    "PASS": 0,
+    "FAIL": 1,
+    "SKIPPED": 0,
+    "seconds": 1.641
+  },
+  "full_suite_not_repeated": "No source/test changes since V2 full relevant regression; independent fresh targeted and workflow readbacks, not a new full-run claim.",
+  "full_E2E": {
+    "PASS": 0,
+    "BLOCKED": 26
+  },
+  "physical_hooks_or_mic": 0,
+  "real_sends_or_cloud": 0
+}

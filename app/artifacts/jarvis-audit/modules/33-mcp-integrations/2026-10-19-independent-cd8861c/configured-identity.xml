@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.976" timestamp="2026-10-20T00:00:43.682595+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-cd8861c.test_configured_identity" name="test_JRV_33_022_configured_label_does_not_verify_a_replacement_token[stable-token-control]" time="0.054" /><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.modules.33-mcp-integrations.2026-10-19-independent-cd8861c.test_configured_identity" name="test_JRV_33_022_configured_label_does_not_verify_a_replacement_token[other-account-token]" time="0.040"><failure message="AssertionError: replacement token for B was accepted as verified rotation for label A&#10;assert not True&#10; +  where True = any(&lt;generator object test_JRV_33_022_configured_label_does_not_verify_a_replacement_token.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001D363766F10&gt;)">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-561/test_JRV_33_022_configured_lab1')
+switch_token = True
+
+    @pytest.mark.parametrize('switch_token',[False,True],ids=['stable-token-control','other-account-token'])
+    def test_JRV_33_022_configured_label_does_not_verify_a_replacement_token(tmp_path,switch_token):
+        host=support['actions'](tmp_path)
+        ledger, cards=[],[]
+        def approve(kind,detail,cancelled):
+            cards.append(json.loads(detail))
+            if switch_token:
+                # A stale configured label remains A, while the actual bearer credential belongs to B.
+                os.environ['JARVIS_GOOGLE_ACCESS_TOKEN']='SYNTHETIC_ACCOUNT_B_TOKEN'
+        host._approve=approve
+        def api(client,method,url,cancelled,**kwargs):
+            authorization=kwargs['headers']['Authorization']
+            account='B' if authorization.endswith('B_TOKEN') else 'A'
+            ledger.append({'method':method,'actual_mock_account':account,'url':url,'body':kwargs.get('json')})
+            return json.dumps({'id':'SYNTHETIC_EVENT_'+account})
+        with patch.dict(os.environ,{'JARVIS_GOOGLE_ACCOUNT':'account-a@example.test',
+                                   'JARVIS_GOOGLE_ACCESS_TOKEN':'SYNTHETIC_ACCOUNT_A_TOKEN'},clear=True), \
+             patch('jarvis.toolkits.api',side_effect=api):
+            try:
+                ToolRegistry(host).execute({'action':'calendar_create','value':'primary','content':json.dumps({
+                    'summary':'SYNTHETIC_EVENT_FOR_A','start':{'date':'2026-10-20'},'end':{'date':'2026-10-21'}})},lambda:False)
+            except ValueError:
+                pass  # Refusal after credential drift is safe, even if labels are stale.
+        evidence={'configured_label':'account-a@example.test','token_switched':switch_token,
+                  'approval_cards':cards,'intercepted_writes':ledger,'actual_network_calls':0}
+        (Path(__file__).parent/('configured-switch.json' if switch_token else 'configured-stable.json')).write_text(
+            json.dumps(evidence,indent=2),encoding='utf-8')
+&gt;       assert not any(r['actual_mock_account']=='B' for r in ledger), 'replacement token for B was accepted as verified rotation for label A'
+E       AssertionError: replacement token for B was accepted as verified rotation for label A
+E       assert not True
+E        +  where True = any(&lt;generator object test_JRV_33_022_configured_label_does_not_verify_a_replacement_token.&lt;locals&gt;.&lt;genexpr&gt; at 0x000001D363766F10&gt;)
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-cd8861c\test_configured_identity.py:44: AssertionError</failure></testcase></testsuite></testsuites>

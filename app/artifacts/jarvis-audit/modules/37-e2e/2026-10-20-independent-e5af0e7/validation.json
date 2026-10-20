@@ -1,0 +1,23 @@
+{
+  "pinned_source": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "fresh_full": {
+    "PASS": 1907,
+    "FAIL": 0,
+    "SKIPPED": 139,
+    "seconds": 548.26
+  },
+  "fresh_baseline_pass": 104,
+  "portable_UI_test_pass": 1,
+  "revised_case_pass": 1,
+  "revised_case_blocked": 25,
+  "production_edits": 0,
+  "test_overlay_sha256": "9fad085914965cc53b094a1ca4f873fd6e52f6ba6489bccc52956430d406a980",
+  "git_diff_check": "PASS",
+  "earlier_P34_P37_integration_verified": true,
+  "required_reports": 12,
+  "local_links_checked": 15,
+  "prior_packet_files_unchanged": 79,
+  "current_source_files_checked": 560,
+  "new_test_patch_applies_to_pinned_index": true,
+  "pinned_tracked_tree_clean": true
+}

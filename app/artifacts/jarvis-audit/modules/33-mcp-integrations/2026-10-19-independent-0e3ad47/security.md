@@ -1,0 +1,5 @@
+# Security observations
+
+P33-001 P1 integrity blocker remains unresolved; P33-002/003 P2 contract failures remain unresolved. Real container restrictions pass; tampering changes computation inside that container and does not demonstrate an escape. Trusted configured stdio executables are executable host programs, not a sandbox: an allowlisted tool name cannot narrow their OS/filesystem privileges. `env_names` forwarding is explicit; synthetic ambient secret is excluded; no real secrets collected.
+
+Uncertain-death fixture appends one local marker before exiting, no automatic second call occurs and durable resume is blocked. Built-in namespace remains authoritative, disabled entries fail start checks, injection text stays returned evidence without direct dispatch. This does not certify an LLM against semantic injection. Account identity/version/final authorization uniformity, refresh/scopes, concurrent registration, and dependency transitive locking remain unverified or unsupported. No paid API, live provider write/read, private desktop capture, microphone, shared-service start/stop or package install was used.

@@ -970,10 +970,16 @@ class Actions:
         session = DemonstrationSession(self.base, self._approve, lambda text: self.report('spoken_reply', text))
         try:
             session.request(str(action_name)[:80], handle, cancelled)
-            session.start_hook()
+            session.start_hook(cancelled=cancelled)
             steps = session.pump(timeout=90, cancelled=cancelled)
         except ValueError as exc:
             self.report('repair', 'Demonstration not recorded: ' + str(exc)[:200])
+            return None
+        finally:
+            if session.hook is not None or session.state.get('status') == 'recording':
+                session.stop('cancelled' if cancelled() else 'failed')
+        if session.state.get('status') != 'complete':
+            self.report('spoken_reply', 'No completed demonstration was recorded.')
             return None
         self.report('spoken_reply', ('Thanks. I recorded that ' + str(action_name)[:60] + ' action and will verify it before '
                                      'trusting it.') if steps else 'No demonstration was recorded.')
@@ -1260,6 +1266,10 @@ class Actions:
                 paused = result and not isinstance(result, UnreadSearchResult) and any(word in result.casefold() for word in
                     ("paused", "not verified", "could not be verified", "playback is not active", "stopped", "multiple play buttons"))
                 self.task_state.finish("paused" if paused else "completed", result, task_id=owned_task_id)
+                durable = self.task_state.snapshot()
+                if durable.get('task_id', durable.get('started_at')) == owned_task_id and durable.get('status') == 'paused':
+                    paused = True
+                    result = durable['result']
                 if decision_id is not None and engine is not None:
                     engine.record_outcome(decision_id, not paused, (result or "")[:160])
                 if paused and engine is not None and getattr(engine, 'enabled', False) and command.extra != 'approved_plan' and not cancelled():

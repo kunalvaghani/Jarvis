@@ -1,0 +1,12 @@
+[
+  {
+    "route": "extended_cwd",
+    "error": "NotADirectoryError",
+    "winerror": 267
+  },
+  {
+    "route": "git_C",
+    "returncode": 128,
+    "stderr": "fatal: cannot change to 'C:\\Users\\kunal\\AppData\\Local\\Temp\\v2-long-path-28q35wxk\\owned-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\owned-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\owned-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\owned-"
+  }
+]

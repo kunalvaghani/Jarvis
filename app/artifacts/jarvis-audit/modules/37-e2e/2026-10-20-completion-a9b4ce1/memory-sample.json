@@ -1,0 +1,14 @@
+[
+  {
+    "pid": 2964,
+    "rss_bytes": 106360832,
+    "peak_working_set_bytes": 107409408,
+    "sample_kind": "OS lifetime peak working set observed during final test run; process only, excludes children and GPU"
+  },
+  {
+    "pid": 28420,
+    "rss_bytes": 4407296,
+    "peak_working_set_bytes": 4440064,
+    "sample_kind": "OS lifetime peak working set observed during final test run; process only, excludes children and GPU"
+  }
+]

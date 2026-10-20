@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="9" time="1.427" timestamp="2026-10-20T02:27:12.403302+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_skill_telemetry_stores_metadata_not_raw_evidence" time="0.061"><failure message="assert 'syntheticPr...eFixture9471' not in &quot;[{'evidence...xture9471'}]&quot;&#10;  &#10;  'syntheticPrivateFixture9471' is contained here:&#10;    [{'evidence_json': '{&quot;evidence&quot;: [&quot;syntheticPrivateFixture9471&quot;], &quot;raw&quot;: &quot;syntheticPrivateFixture9471&quot;, &quot;token&quot;: &quot;syntheticPrivateFixture9471&quot;}'}][{'detail': 'token: syntheticPrivateFixture9471'}]&#10;  ?                                    +++++++++++++++++++++++++++">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_024_skill_telemetr0')
+
+    def test_JRV_36_024_skill_telemetry_stores_metadata_not_raw_evidence(tmp_path):
+        store, skill = store_fixture(tmp_path)
+        store.event(skill, 'completed_verified', 'task', {'evidence': [CANARY], 'raw': CANARY, 'token': CANARY})
+        store.failure(skill, 'task', 'other', 'token: ' + CANARY)
+        with store.connect() as db:
+            events = str([dict(r) for r in db.execute('SELECT evidence_json FROM skill_events')])
+            failures = str([dict(r) for r in db.execute('SELECT detail FROM skill_failures')])
+&gt;       assert CANARY not in events + failures
+E       assert 'syntheticPr...eFixture9471' not in "[{'evidence...xture9471'}]"
+E         
+E         'syntheticPrivateFixture9471' is contained here:
+E           [{'evidence_json': '{"evidence": ["syntheticPrivateFixture9471"], "raw": "syntheticPrivateFixture9471", "token": "syntheticPrivateFixture9471"}'}][{'detail': 'token: syntheticPrivateFixture9471'}]
+E         ?                                    +++++++++++++++++++++++++++
+
+tests\test_prompt36_observability.py:33: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_large_skill_evidence_remains_valid_json" time="0.042"><failure message="json.decoder.JSONDecodeError: Unterminated string starting at: line 1 column 27 (char 26)">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_024_large_skill_ev0')
+
+    def test_JRV_36_024_large_skill_evidence_remains_valid_json(tmp_path):
+        store, skill = store_fixture(tmp_path)
+        store.event(skill, 'failed', 'task', {'cause': 'other', 'raw': 'x' * 8000})
+&gt;       assert store.metrics(skill)['failed_count'] == 1
+
+tests\test_prompt36_observability.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\skill_store.py:235: in metrics
+    cause = json.loads(row['evidence_json']).get('cause', 'other')
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000014F3A4C4190&gt;
+s = '{"cause": "other", "raw": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+&gt;           obj, end = self.scan_once(s, idx)
+E           json.decoder.JSONDecodeError: Unterminated string starting at: line 1 column 27 (char 26)
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:353: JSONDecodeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_023_legacy_malformed_evidence_does_not_break_metrics" time="0.052"><failure message="json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_023_legacy_malform0')
+
+    def test_JRV_36_023_legacy_malformed_evidence_does_not_break_metrics(tmp_path):
+        store, skill = store_fixture(tmp_path)
+        store.event(skill, 'failed', 'task', {'cause': 'other'})
+        with store.connect() as db:
+            db.execute("UPDATE skill_events SET evidence_json='not json'")
+&gt;       assert store.metrics(skill)['failure_causes'] == {'other': 1}
+
+tests\test_prompt36_observability.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\skill_store.py:235: in metrics
+    cause = json.loads(row['evidence_json']).get('cause', 'other')
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000014F3A4C4190&gt;, s = 'not json'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:355: JSONDecodeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_014_refuted_bound_step_cannot_earn_verified_skill_credit" time="0.066"><failure message="assert 1 == 0">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_014_refuted_bound_0')
+
+    def test_JRV_36_014_refuted_bound_step_cannot_earn_verified_skill_credit(tmp_path):
+        store, skill = store_fixture(tmp_path)
+        store.event(skill, 'selected', 'task')
+        catalog = [{'skill_id': skill, 'tools': ['office_xlsx']}]
+        task = {'task_id': 'task', 'status': 'completed', 'failures': [],
+                'plan': {'completed': [{'action': 'office_xlsx', 'verified': False}]},
+                'checkpoints': [{'stage': 'goal_verified', 'evidence': 'tool claimed success'}]}
+        finish_outcomes(store, catalog, task)
+&gt;       assert store.metrics(skill)['completed_verified_count'] == 0
+E       assert 1 == 0
+
+tests\test_prompt36_observability.py:60: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_013_015_selection_only_and_restart_are_not_execution" time="0.070" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock" time="0.015"><failure message="jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_003_008_five_calls0')
+
+    def test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock(tmp_path):
+        state = TaskState(tmp_path)
+        task = state.start('Synthetic read-only five-call fixture', 'task')
+        actions = SimpleNamespace(base=tmp_path, task_state=state, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        for _ in range(5):
+&gt;           registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False)
+
+tests\test_prompt36_observability.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:228: in execute
+    validate_arguments(step)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+step = {'action': 'read_file', 'value': 'fixture'}
+
+    def validate_arguments(step):
+        """Deterministic contract check before any report, approval prompt or dispatch."""
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        name = step.get('action')
+        if name in KIT_TOOLS:
+            from .toolkits import validate_step
+            try:
+                validate_step(step)
+            except KeyError as exc:
+                raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+            except ValueError as exc:
+&gt;               raise ToolArgumentError(str(exc)) from None
+E               jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.
+
+jarvis\tools.py:105: ToolArgumentError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool" time="0.007"><failure message="PermissionError: synthetic locked log">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_011_logging_unavai0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014F3D322EF0&gt;
+
+    def test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool(tmp_path, monkeypatch):
+        actions = SimpleNamespace(base=tmp_path, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        real_open = Path.open
+        def no_journal(path, *args, **kwargs):
+            if path.name == 'agent-events.jsonl':
+                raise PermissionError('synthetic locked log')
+            return real_open(path, *args, **kwargs)
+        monkeypatch.setattr(Path, 'open', no_journal)
+&gt;       assert registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False).evidence == 'fixture read'
+
+tests\test_prompt36_observability.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:224: in execute
+    call_id = event(self.actions, 'tool.started', name)
+jarvis\agent_events.py:102: in event
+    with path.open('a', encoding='utf-8') as output:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_011_logging_unavai0/.jarvis-runtime/agent-events.jsonl')
+args = ('a',), kwargs = {'encoding': 'utf-8'}
+
+    def no_journal(path, *args, **kwargs):
+        if path.name == 'agent-events.jsonl':
+&gt;           raise PermissionError('synthetic locked log')
+E           PermissionError: synthetic locked log
+
+tests\test_prompt36_observability.py:97: PermissionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_020_privacy_block_records_categorical_reason_without_payload" time="0.035"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '%USERPROFILE%\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-609\\test_JRV_36_020_privacy_block_0\\.jarvis-runtime\\cloud\\architect-log.jsonl'">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_020_privacy_block_0')
+
+    def test_JRV_36_020_privacy_block_records_categorical_reason_without_payload(tmp_path):
+        agent, adapter = architect(tmp_path)
+        agent.consult(CANARY, {**GENERIC, 'statement': 'Private screenshot: token=' + CANARY}, FAILURES, 3, 'r1')
+        assert adapter.sent == []
+&gt;       rows = [json.loads(s) for s in agent.log.read_text().splitlines()]
+
+tests\test_prompt36_observability.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_020_privacy_block_0/.jarvis-runtime/cloud/architect-log.jsonl')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '%USERPROFILE%\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-609\\test_JRV_36_020_privacy_block_0\\.jarvis-runtime\\cloud\\architect-log.jsonl'
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: FileNotFoundError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_cloud_logs_never_copy_sent_problem_payload" time="0.036"><failure message="assert False&#10; +  where False = all(&lt;generator object test_JRV_36_024_cloud_logs_never_copy_sent_problem_payload.&lt;locals&gt;.&lt;genexpr&gt; at 0x0000014F3D3F0430&gt;)">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-609/test_JRV_36_024_cloud_logs_nev0')
+
+    def test_JRV_36_024_cloud_logs_never_copy_sent_problem_payload(tmp_path):
+        agent, adapter = architect(tmp_path)
+        agent.consult('fixture', GENERIC, FAILURES, 3, 'r1')
+        assert len(adapter.sent) == 1  # local recording fake only
+        rows = [json.loads(s) for s in agent.log.read_text().splitlines()]
+&gt;       assert all('sent' not in r for r in rows)
+E       assert False
+E        +  where False = all(&lt;generator object test_JRV_36_024_cloud_logs_never_copy_sent_problem_payload.&lt;locals&gt;.&lt;genexpr&gt; at 0x0000014F3D3F0430&gt;)
+
+tests\test_prompt36_observability.py:119: AssertionError</failure></testcase></testsuite></testsuites>

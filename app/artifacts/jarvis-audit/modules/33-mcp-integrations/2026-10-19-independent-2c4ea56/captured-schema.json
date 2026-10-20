@@ -1,0 +1,23 @@
+{
+  "origin": "literal advertised schema from executed contract-edge fixture",
+  "tools": [
+    {
+      "name": "echo",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}

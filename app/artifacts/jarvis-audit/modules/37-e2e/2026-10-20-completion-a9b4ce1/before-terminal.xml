@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.607" timestamp="2026-10-20T02:52:48.697758+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_pump_cannot_resurrect_cancelled_partial_session" time="0.011"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-620/test_pump_cannot_resurrect_can0')
+
+    def test_pump_cannot_resurrect_cancelled_partial_session(tmp_path):
+        session, _ = recording(tmp_path)
+        session.state.update(status='cancelled', steps=[{'partial': True}])
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt37_e2e_boundaries.py:98: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_callback_stop_is_not_overwritten_as_complete" time="0.009"><failure message="AssertionError: assert 'complete' == 'cancelled'&#10;  &#10;  - cancelled&#10;  + complete">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-620/test_callback_stop_is_not_over0')
+
+    def test_callback_stop_is_not_overwritten_as_complete(tmp_path):
+        session, hook = recording(tmp_path)
+        session.start_hook()
+        session.events.put((1, 2, 513, 0, 0))
+        session.process = lambda *args: session.state['steps'].append({'partial': True})
+        def until(steps):
+            session.stop('cancelled')
+            return True
+        session.pump(until=until)
+&gt;       assert session.state['status'] == 'cancelled'
+E       AssertionError: assert 'complete' == 'cancelled'
+E         
+E         - cancelled
+E         + complete
+
+tests\test_prompt37_e2e_boundaries.py:112: AssertionError</failure></testcase></testsuite></testsuites>

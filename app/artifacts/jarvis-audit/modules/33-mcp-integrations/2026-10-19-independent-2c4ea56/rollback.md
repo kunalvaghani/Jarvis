@@ -1,0 +1,3 @@
+# Rollback
+
+No Codex application source or dependency change to roll back. Prior audit documentation is preserved byte-for-byte in pre-update; prior packets are hashed. Do not reset the original checkout or overwrite newer Claude work. The audit fast-forward points at the repair commit; preserve its evidence if reviewing another SHA. Tests clean only their owned temporary processes/Job trees and labelled generated servers. Source/protocol rollback for a future repair must preserve generated identity compatibility, stale-skill refusal and uncertain-write checkpoints. Do not rebuild images/install packages as a rollback shortcut.

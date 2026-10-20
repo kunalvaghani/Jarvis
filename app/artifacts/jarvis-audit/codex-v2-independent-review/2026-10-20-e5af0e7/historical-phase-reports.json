@@ -1,0 +1,595 @@
+[
+  {
+    "path": "artifacts/jarvis-audit/phase-01/architecture-and-dependency-map.md",
+    "sha256": "8bb32150378b6610b4a9345385f850e01afb39892ba205eb360d7c100eb21b06",
+    "headings": [
+      "# Phase 1 \u2014 Architecture inventory and upgrade dependency map",
+      "## 1. Inventory (measured from the checkout)",
+      "## 2. Execution architecture as implemented (source-verified)",
+      "## 3. Duplicate / overlapping subsystems (assessed, not merged)",
+      "## 4. Upgrade foundation added in Phase 1",
+      "## 5. Dependency map for the received phase briefs",
+      "## 6. Documentation vs. code differences found"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-01/defects.md",
+    "sha256": "7e924c215980c613320334db65bff18152c0a50215d134f6b11b358bdd52f787",
+    "headings": [
+      "# Phase 1 \u2014 Initial defects, root causes and dispositions",
+      "## Not changed (assessed)"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-01/metrics.md",
+    "sha256": "f87d89fe39fb94b39cd263486f7ae46a370e66010065d3a97a8e0fb844171977",
+    "headings": [
+      "# Phase 1 \u2014 Before/after measurements"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-01/README.md",
+    "sha256": "d6f844f0340908a059ca348d211486bd13c2fc6ab3e030e55924b02e23a16bd3",
+    "headings": [
+      "# Upgrade Phase 1 of 8 \u2014 Audit, repair, verify and trusted baseline",
+      "## Packet contents",
+      "## Changes in one paragraph"
+    ],
+    "limitations": [
+      "Live account, microphone, GPU-contention and desktop acceptance remain BLOCKED/NOT RUN and are not claimed.",
+      "| [test-results.md](test-results.md) | Exact commands, results, PASS/FAIL/BLOCKED/NOT RUN classification |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-01/rollback-and-codex-checklist.md",
+    "sha256": "097ec4cf27344411ea79dfc74261484f6aa645217b45b074a3dc3e419aeac289",
+    "headings": [
+      "# Phase 1 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "# From the repository root, on branch claude. Creates a new commit; history is preserved.",
+      "## Checklist for independent verification"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-01/test-results.md",
+    "sha256": "f8a324ab3078401235c68b71e70315d75801aad9c7ea8eeb9b4f49a7e987b53f",
+    "headings": [
+      "# Phase 1 \u2014 Commands, results and classifications",
+      "## Commands",
+      "# Baseline (before any fix) \u2014 2026-10-16 23:35:15 \u2192 23:45:24 IST",
+      "# Static checks",
+      "# Metrics (real components, synthetic fixtures)",
+      "# Targeted",
+      "# After fixes \u2014 launcher readiness, then full regression (2026-10-17 00:03:20 \u2192 00:13:00 IST)",
+      "## Results",
+      "## Classification for the phase mandate"
+    ],
+    "limitations": [
+      "| Desktop UIA, browser automation, tool fallbacks | PASS (fixture) / live BLOCKED | existing `test_desktop_control_audit.py`, `test_browser_playwright_audit.py` (owned headless browser); no live desktop acceptance this phase |",
+      "| Groq privacy isolation and local fallback | PASS (fixture) / live NOT RUN | 0/16 private\u2192public; `test_groq.py`, `test_model_routing_audit.py` with fake transport; no live cloud call |",
+      "| Resource scheduling and foreground responsiveness | PASS (fixture) / live BLOCKED | `test_gpu_scheduler*.py`; no GPU workload run (would compete with the user's session) |",
+      "| 147 pre-existing skips | BLOCKED (pre-existing) | every skip message begins `BLOCKED:`; reasons recorded by earlier prompts (catalog contracts, live GPU/voice gates, plugin namespace) |",
+      "GPU-contention and desktop acceptance checks are BLOCKED/NOT RUN as listed \u2014 they are not claimed."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/compatibility-matrix.md",
+    "sha256": "48db0effdd74845c4bdbfa2d60f5278df33027f1590d9affdc44f8560e2f41ca",
+    "headings": [
+      "# Phase 2 \u2014 Execution-method compatibility matrix",
+      "## Desktop control provider order (behaviour change)"
+    ],
+    "limitations": [
+      "| Unreal editor Python / commandlet on a project | \u2014 | \u2014 | \u2014 | \u2014 | \u2014 | **not implemented**: needs a configured disposable project | \u2014 | NOT RUN |",
+      "| `vscode.cli` | `vscode_cli` | api | inspect (version, extensions), open | vscode | CLI output (open = unverified) | \u2014 | yes | P02_vscode version/list \u2014 **real**; `open` NOT RUN live (would open a window in the user's session) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/findings.md",
+    "sha256": "5c439c1b1b4b239c63c39acea5f8f4cfbc794a44b0e88acf2cdac2e24d0eaead",
+    "headings": [
+      "# Phase 2 \u2014 Integration evidence, fallback paths, security findings and limitations",
+      "## ToolRegistry integration (no second registry)",
+      "## Planner integration (capabilities.py + brain.py)",
+      "## Tested fallback paths",
+      "## Security and data-preservation findings",
+      "## Defects found and fixed during Phase 2",
+      "## Remaining unsupported cases"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/measurements.md",
+    "sha256": "7513d061182c8e31be998e1fcaa5a25e19d7a2eae13f2281112245d1711b40e8",
+    "headings": [
+      "# Phase 2 \u2014 Measurements",
+      "## Phase 1 metric harness before vs after Phase 2",
+      "## Execution methods (real software, disposable fixtures)",
+      "## Step count",
+      "## Interpretation limits"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/README.md",
+    "sha256": "579df580fc5c52843763020269a11588a38353ee599ada6bd73c04972d709bbd",
+    "headings": [
+      "# Upgrade Phase 2 of 8 \u2014 API/code-first execution router",
+      "## Contents",
+      "## Behaviour changes users will notice"
+    ],
+    "limitations": [
+      "**Status: PASS for all mandatory locally executable checks; BLOCKED items listed in test-results.md.** Date 2026-10-17 IST. Branch `claude`. No Codex review evidence exists yet.",
+      "| [test-results.md](test-results.md) | Commands, results, PASS/FAIL/BLOCKED/NOT RUN classification against the brief |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/rollback-and-codex-checklist.md",
+    "sha256": "9bc0303497852d7e9ae516350cde3b896c7035039535a4029405284aa8693b61",
+    "headings": [
+      "# Phase 2 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": [
+      "   `BLOCKED:` reason, never pass."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-02/test-results.md",
+    "sha256": "a994227de1dd11ba739198e2d2f59c9f08921b0054f76a12121f750ac55af9bc",
+    "headings": [
+      "# Phase 2 \u2014 Commands, results and classifications",
+      "## Commands",
+      "# Pre-upgrade baseline (before any Phase 2 source change)",
+      "# Dependencies (separate utility environment only)",
+      "# Phase 2 tests and measurements",
+      "# Regression",
+      "## Results",
+      "## Required-test classification (Phase 2 brief)"
+    ],
+    "limitations": [
+      "| 10 | Latency and step count vs Phase 1 | **MEASURED** | [measurements.md](measurements.md); GUI path step count is an authored plan (NOT RUN live) |",
+      "| \u2014 | Unreal editor Python on a project | **BLOCKED** | no disposable project; see findings U1 |",
+      "| \u2014 | VS Code `open` live | **NOT RUN** | would open a window in the user's session |",
+      "| \u2014 | Real macro-enabled Office file | **BLOCKED** | requires changing the user's VBA trust setting (U3) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/findings-security-limitations.md",
+    "sha256": "ce42e7c40c27e0c99246394b51cf9458548f8074e728cebcebd89300fc67529d",
+    "headings": [
+      "# Phase 3 \u2014 Pre-existing problems, defects found, security model and remaining blockers",
+      "## Step 1 scan of existing skill roots (before changes)",
+      "## Defects found and fixed during Phase 3",
+      "## Security model (tested)",
+      "## Remaining limitations and blockers (not claimed as done)"
+    ],
+    "limitations": [
+      "| L1 | Mutation drafting by the local model is **not wired**: `SkillEvolution` and `synthesize` take an `author` callable; tests use fixed fixture authors (labelled MOCK). Their output is still validated and executed for real, but no live Qwen-authored skill or MCP spec was produced in this phase. | NOT RUN (live model) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/implementation-and-provenance.md",
+    "sha256": "9a98efa5fe475e0884edfe03479d867c9690364ac4b7fc9d5aaa61abdc1948d8",
+    "headings": [
+      "# Phase 3 \u2014 Implementation notes, upstream provenance and license review",
+      "## Upstream sources actually inspected",
+      "## Architecture (extends, does not replace)",
+      "### Files",
+      "### Telemetry semantics",
+      "### Trust lifecycle (deterministic in evidence since the active version)"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/measurements.md",
+    "sha256": "d561b5abeae1e1c3e2cb9875991986205a9b3679bd5e49670023a1e1b1c745ee",
+    "headings": [
+      "# Phase 3 \u2014 Measurements",
+      "## Living-skill and MCP measurements ([living-benchmark.json](living-benchmark.json))"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/README.md",
+    "sha256": "481a130ac41b4b12b84380da57d995bea7fbc597718c2361dc2be2e5abc0b1e1",
+    "headings": [
+      "# Upgrade Phase 3 of 8 \u2014 Living skill engine (OpenSpace-style) and Alita-inspired MCP synthesis"
+    ],
+    "limitations": [
+      "Live local-model authoring of mutations is NOT RUN (limitation L1); see [findings](findings-security-limitations.md)."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/rollback-and-codex-checklist.md",
+    "sha256": "c4f2c209c7c7d9211f99a69df6f91d29b71ecfd9f33265f4856adb29305d0551",
+    "headings": [
+      "# Phase 3 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": [
+      "   with Docker; without Docker/Blender the affected tests must skip with `BLOCKED:`."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-03/test-results.md",
+    "sha256": "0f94796f09ea380f65021c1bb71e9f9ea1f06e1226025248abca9fd72f2fb212",
+    "headings": [
+      "# Phase 3 \u2014 Commands, results and classification",
+      "# Preflight baseline (before Phase 3 changes)",
+      "# Isolated MCP runtime (network only during this build)",
+      "# Phase 3 tests and measurements",
+      "# Regression",
+      "## Classification against the Phase 3 brief (Step 7)"
+    ],
+    "limitations": [
+      "| Live local-model authoring of skills/MCP specs | NOT RUN | limitation L1 |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/architecture-and-provenance.md",
+    "sha256": "bc936d954dae8e9d6ae6c522f09a307c0c048e7b48b0aa67d98ac8732f38039b",
+    "headings": [
+      "# Phase 4 \u2014 Architecture, upstream provenance, licenses, memory schema and exploration safety model",
+      "## Upstream sources actually inspected",
+      "## Components",
+      "## ReasoningBank schema (`.jarvis-runtime/reasoning_bank/bank.sqlite3`)",
+      "## OpenViking index (`.jarvis-runtime/openviking/`)",
+      "## Exploration safety model"
+    ],
+    "limitations": [
+      "| `IsolatedBrowserEnv` | Headless Chrome, **new context per episode** (no profile, cookies, storage, downloads, permissions; service workers blocked), every request outside one approved `http://127.0.0.1:<port>` origin aborted and recorded | `click`, `fill` on observed named controls via the existing `browser_worker.Session` | Fresh DOM read of the status region / new controls |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/findings-and-limitations.md",
+    "sha256": "03d9b3e7235af6de9778e7188f1a544c2437706419950cebc28c00b46b7765d7",
+    "headings": [
+      "# Phase 4 \u2014 Defects found during the phase, measurements and remaining limitations",
+      "## Defects found and fixed",
+      "## Measurements (actual)",
+      "## Remaining limitations (not claimed)"
+    ],
+    "limitations": [
+      "| H1 | **During this phase's own measurement run, a stray `ollama serve` started with an empty model store.** While it was the active Ollama on 127.0.0.1:11434, Jarvis's Qwen models were invisible to any client. | OpenViking's bootstrap starts `ollama serve` when none is reachable (Ollama was not running after a reboot). My server environment filter dropped `OLLAMA_MODELS`, so that child used `C:\\Users\\kunal\\.ollama\\models` instead of `D:\\Ollama\\models`. | The owned process tree (mine) was stopped; Ollama restarted through Jarvis's existing `knowledge_worker.ensure_server` (models verified present, nothing deleted, the default store stayed 0 bytes). `VikingMemory.start` now starts Ollama the Jarvis way first, refuses to start when the embedding model is absent, and passes every `OLLAMA_*` variable through. | `test_P04_H1_server_never_starts_without_users_ollama_store`; after the full run [processes-after-regression.txt](processes-after-regression.txt) |",
+      "| M1 | **Desktop GUI exploration is BLOCKED**: no verified disposable VM backend. Only the isolated browser and the Blender sandbox explore. |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/measurements.md",
+    "sha256": "ec5a7cd7f8dacf8e3abe5d2846983576806b51b51c738584a5e860db75c096c7",
+    "headings": [
+      "# Phase 4 \u2014 Measurements"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/README.md",
+    "sha256": "dc3605103cc754b83cfc61d793adc94b8b8139a64bc2575f9c7d38de4d3530db",
+    "headings": [
+      "# Upgrade Phase 4 of 8 \u2014 SEAgent-style exploration, ReasoningBank and OpenViking"
+    ],
+    "limitations": [
+      "Desktop GUI exploration is BLOCKED (no verified VM); live model-authored lessons are NOT RUN."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/rollback-and-codex-checklist.md",
+    "sha256": "ec0f2752a89b3f0395b77718800afdeb85ac0113df7119cb05b7c9d356fa5656",
+    "headings": [
+      "# Phase 4 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": [
+      "2. [ ] With Chrome, Blender, `.venv-openviking` and `nomic-embed-text` present: `python -m pytest tests/test_phase04_learning_memory.py -q` \u2192 21 passed; without them the affected tests skip with `BLOCKED:`."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-04/test-results.md",
+    "sha256": "035f78d8474bcbc2cbfd6d02fccfc30493c6a5bdd4a3a844adf9263e817abb48",
+    "headings": [
+      "# Phase 4 \u2014 Commands, results and classification",
+      "# Preflight (before Phase 4 source changes)",
+      "# Environments (separate; nothing added to .venv)",
+      "# Phase 4 tests and measurements",
+      "# Real-vault read-only index measurement (scratch workspace; vault hashed before/after): see real-vault-index.json",
+      "# Regression",
+      "## Classification against the Phase 4 brief"
+    ],
+    "limitations": [
+      "| Full regression | **3,277 passed / 147 skipped / 0 failed**, 887 s ([log](full-regression.log), [xml](full-regression.xml)). An earlier start was stopped at 4% because Docker Desktop was not running after a reboot ([launcher-check-before-docker-start.json](launcher-check-before-docker-start.json)); Docker was started with Jarvis's own `DockerService` and the suite rerun in full. |",
+      "| 4 | UIA/API state verification | PASS for DOM/API (real); desktop UIA exploration BLOCKED (M1) | fresh DOM readback; Blender second-process readback |",
+      "| 10 | Idle CPU/RAM/VRAM behaviour | MEASURED (RAM, latency); GPU contention NOT RUN | server RSS ~442 MB; idle-gated maintenance |",
+      "| \u2014 | Desktop GUI exploration in a VM | BLOCKED | no verified VM backend |",
+      "| \u2014 | Live model-authored lessons / goals | NOT RUN | M3 |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-05/README.md",
+    "sha256": "10a139dd8936b33db104db8983c6bc8ddd75c5391d1a2d1c5140595d25e80d59",
+    "headings": [
+      "# Upgrade Phase 5 of 8 \u2014 Safe cloud architect escalation and Show Me Once",
+      "## What changed",
+      "## Results (2026-10-18)",
+      "## Measurements",
+      "## Limitations"
+    ],
+    "limitations": [
+      "**Verdict: PASS for every locally executable check; real-provider checks BLOCKED (not authorized).**",
+      "| Real Groq request | not made \u2014 no explicit authorization for a real provider test | BLOCKED | \u2014 |",
+      "| Physical user click during demonstration | a UIA `Invoke` stands in for the human click (MOCK input); hook, capture, replay and verification are real | PASS (capture/replay) / NOT RUN (physical click) | benchmark |",
+      "| Desktop exploration (from Phase 4) | still disabled without a verified VM | BLOCKED | Phase 4 |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-05/rollback-and-codex-checklist.md",
+    "sha256": "aee5a7d16e80f921bf231853ec603edb844ee98d1e33bb6b00263b31e2465079",
+    "headings": [
+      "# Phase 5 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": [
+      "2. [ ] `python -m pytest tests/test_phase05_escalation_demonstration.py -q` \u2192 38 passed (Docker sandbox and an interactive desktop needed for two tests; otherwise they skip as `BLOCKED:`)."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-05/security-and-design.md",
+    "sha256": "c670b85d7f80867225d641453fe85297ed27c63e3e75071630094c827c2110f4",
+    "headings": [
+      "# Phase 5 \u2014 Design, security findings and configuration defaults",
+      "## Preflight review (existing behaviour verified from source and tests)",
+      "## Part A \u2014 sanitized cloud architect (`jarvis/cloud_architect.py`)",
+      "## Part B \u2014 Show Me Once (`jarvis/demonstration.py`)",
+      "## Part C \u2014 failure routing (`deliberation.classify_failure`, `FailureRouter`)",
+      "## Security findings",
+      "## Configuration defaults (`config/config.json`)"
+    ],
+    "limitations": [
+      "| J1 | During testing, injected input stopped reaching any low-level hook. Root cause: a system process window (`GameInputSvc.exe`) held the foreground and Windows UIPI withholds injected input from lower-integrity senders. An initial hypothesis that importing `pywinauto` broke the hook was **disproved** (the hook works with `pywinauto` loaded once the disposable window has focus). The test now focuses its own window and skips as BLOCKED if it cannot. | Resolved; documented |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-06/design-and-safety.md",
+    "sha256": "adaadf51d1923db0de7494a202d732a94801ecef7b03cadee480afcfa11385a8",
+    "headings": [
+      "# Phase 6 \u2014 Controlled self-evolution: design, provenance and safety model",
+      "## Pre-upgrade inspection (verified from source)",
+      "## Upstream study (what was adopted and what was redesigned)",
+      "## Architecture",
+      "### Mutation surfaces (`jarvis/evolution_surfaces.py`)",
+      "### Candidate validity is checked twice, independently",
+      "### Retention gate policy (`evolution_eval/policy.json`, sealed)",
+      "### Promotion and rollback",
+      "## Safety findings"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-06/experiments.md",
+    "sha256": "404fa7c72abc4216feb0cbc1d2335b67c1bade99b075b53f887dc0db5ea2a4ee",
+    "headings": [
+      "# Phase 6 \u2014 Real experiment results (2026-10-19 IST)",
+      "## 1\u20132. Evidence and bottleneck (train split, production code)",
+      "## 3\u201310. Experiments",
+      "## Reproducibility",
+      "## Isolation evidence",
+      "## How to deploy the proposal (user decision)"
+    ],
+    "limitations": [
+      "| dag_scheduling | `cand_15d249712dee` (2, parent `dc72\u2026`) | weight 1.0 \u2192 1.5 | 246.6 \u2192 246.9 ms | not run (pre-screen) | discarded |",
+      "| tool_ranking | 4 candidates (gen 1\u20132) | route_step_cap 5\u21926, exact_name_bonus 20\u219223.5, route_boost 8\u21925.2, skill_tool_boost 5\u21927.4 | 0.490 \u2192 \u2264 0.490 | not run (pre-screen) | 1 discarded, 3 retained (neutral, non-dominated) |",
+      "| read_retry_backoff | 3 candidates (gen 2) | base 0.1\u21920.01, max 0.51\u21920.1 / 0.265 | no gain | not run | discarded |",
+      "| lesson_retrieval | 2 candidates (gen 1\u20132) | age_cap 0.2\u21920.25, age_days 365\u2192727 | 0.90 \u2192 0.90 | not run | retained (neutral) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-06/README.md",
+    "sha256": "353cc1929d1ea64194666fb9502f938352070e6fe1e65d6012dbde4278da684e",
+    "headings": [
+      "# Upgrade Phase 6 of 8 \u2014 DGM + autoresearch + EEVEE controlled self-evolution",
+      "## What changed",
+      "## Results (2026-10-19)",
+      "## Measurements",
+      "## Limitations"
+    ],
+    "limitations": [
+      "| Real DAG candidate: held-out makespan | 363.3 \u2192 308.1 ms (\u221215.2 %), 95 % CI [28.8, 81.5] ms; reproduced (\u221215.1 %) | PASS on synthetic DAGs; real-task benefit NOT RUN | [experiments/candidates.json](experiments/candidates.json) |",
+      "| Deployment of the qualified proposal | not performed \u2014 requires the user's approval | NOT RUN (by design) | \u2014 |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-06/rollback-and-codex-checklist.md",
+    "sha256": "a64539d9aee1303e8dcf95d4069bdfba0d8e431543b42b462f7db4a65673e62f",
+    "headings": [
+      "# Phase 6 \u2014 Rollback and independent Codex verification checklist",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-07/methodology-and-provenance.md",
+    "sha256": "1df2c53f2301a3f60301959740529714482f7b4bb11dc4222b06e93417789202",
+    "headings": [
+      "# Phase 7 \u2014 AZR-inspired self-play and local LoRA training: methodology, provenance, licences",
+      "## Pre-upgrade audit (verified on this machine)",
+      "## Upstream study: Absolute Zero (LeapLabTHU/Absolute-Zero-Reasoner, MIT; arXiv 2505.03335)",
+      "## Dataset (version `azr-v1-20261019`, schema 1)",
+      "## Training pipeline",
+      "## Evaluation and promotion",
+      "## Licences"
+    ],
+    "limitations": [
+      "| Ollama export tooling | No GGUF converter (`gguf` package or llama.cpp) is installed, so Ollama registration is BLOCKED; nothing was installed. |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-07/README.md",
+    "sha256": "92dd61ed08aa4db119c222c7aff34712fb312741f7a59e46d4de36556f2e38aa",
+    "headings": [
+      "# Upgrade Phase 7 of 8 \u2014 AZR-inspired self-play tasks and safe local LoRA training",
+      "## What was built",
+      "## Results (2026-10-19, RTX 3050 Laptop 4 GB, Python 3.10.6, torch 2.6.0+cu124)",
+      "## Measurements",
+      "## Limitations",
+      "## Baseline harness"
+    ],
+    "limitations": [
+      "not promoted, not registered with Ollama (BLOCKED: no GGUF converter) and not used by Jarvis.**",
+      "| GGUF / Ollama registration | no converter installed | BLOCKED |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/phase-07/rollback-and-codex-checklist.md",
+    "sha256": "d88931dfb083634aa5205427a136affebb3f51a4e3f71fff1e5e18fe8079ace5",
+    "headings": [
+      "# Phase 7 \u2014 Failure handling, rollback and independent Codex verification checklist",
+      "## Failure handling",
+      "## Rollback",
+      "## Checklist"
+    ],
+    "limitations": [
+      "1. [ ] `python -m pytest tests/test_phase07_azr_training.py -q` \u2192 21 passed (the sandbox test needs Docker and the `jarvis-mcp-runtime:1` image; otherwise it skips as BLOCKED)."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/claims-to-falsify.md",
+    "sha256": "d1fcc6ef10a01813574b41ce8a0b351726018e42bebc229fbe45a4e3bc1bf2a6",
+    "headings": [
+      "# Exact claims Codex should try to falsify"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/commands-executed.md",
+    "sha256": "0d2d0a9345740dabcdfc864e1bf3064c3dfb5cb11bea4555dba9f7d302abd3cb",
+    "headings": [
+      "# Commands executed for the final verification (from `app/`, 2026-10-19)",
+      "# Stage 1: re-audit",
+      "# Stage 4/6/7: Phase 8 tests (cross-pillar flows, red team, D8-1, D8-5)",
+      "# Stage 5: measurements",
+      "# Final launcher check and full regression (skip reasons included with -rs)",
+      "# Manifests and diff against the pre-upgrade baseline 5b52737"
+    ],
+    "limitations": []
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/cross-pillar-scenarios.md",
+    "sha256": "5dd3f7aecc9127078062a25af897d9e1e78b82d51ef4d0313855e7b03a094ca7",
+    "headings": [
+      "# Stage 4 \u2014 Cross-pillar end-to-end scenarios"
+    ],
+    "limitations": [
+      "| 10 | Eligible abstract problem \u2192 optional authorized cloud consultation | `cloud_architect_consult` through ToolRegistry: privacy gate, approval card with exact payload, consent, once per problem, untrusted advice | REAL path, SIMULATED provider | PASS (live Groq BLOCKED) |",
+      "| 11 | Demonstrated UI action \u2192 replayable verified candidate skill | Phase 5 real hook + UIA capture + structured replay + `promote` | REAL (synthetic click) | PASS (physical click NOT RUN) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/defects-and-unresolved.md",
+    "sha256": "8c27a9f030a51f4ffa3b4d53404a2fd33a1dd7b0f8328fd89ab00787fc32ef82",
+    "headings": [
+      "# Stage 1 / 7 \u2014 Defects found, repairs and unresolved issues",
+      "## Phase 8 re-audit findings",
+      "## Unresolved issues and how to reproduce them"
+    ],
+    "limitations": [
+      "# Stage 1 / 7 \u2014 Defects found, repairs and unresolved issues",
+      "## Unresolved issues and how to reproduce them",
+      "1. **Live Groq consultation BLOCKED.** No authorization was given for a real provider call. Reproduce: enable",
+      "2. **GGUF/Ollama export BLOCKED.** Reproduce: `.venv-training\\Scripts\\python.exe -m scripts.training.export_azr_adapter --adapter <checkpoint> --tasks evolution_eval\\heldout\\azr_tasks.jsonl --out <dir>`;",
+      "   the report shows `gguf_conversion: BLOCKED`.",
+      "4. **Desktop GUI exploration BLOCKED** (no verified VM). Reproduce: `exploration.applications` accepts only sandboxed apps.",
+      "5. **Unreal editor Python on a project BLOCKED** (no disposable `.uproject`).",
+      "6. **Physical-click demonstration NOT RUN** (a UIA Invoke stands in for the human click)."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/environment-and-dependencies.md",
+    "sha256": "8ad02a72d0f9b9c20cd8b9520821074f0e18b000da75d3370aa5e02387205d52",
+    "headings": [
+      "# Environment and external dependency requirements"
+    ],
+    "limitations": [
+      "| Unreal Engine | 5.8 manifest only | manifest read; editor projects BLOCKED |",
+      "Optional or blocked: Groq free-tier account (not authorized for live calls), a GGUF converter (absent), a VM for"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/performance.md",
+    "sha256": "f6ff66e8a09cd2594f104a09fc52b136ad8b353719377021f7e60b3d111b7748",
+    "headings": [
+      "# Stage 5 \u2014 Performance and resources versus the Phase 1 baseline",
+      "## Paired harness (identical workload before and after)",
+      "## New measurements (no Phase 1 equivalent)",
+      "## Recorded results from earlier phases (real runs, cited)",
+      "## Not measured (and why)"
+    ],
+    "limitations": [
+      "| Verified task completion and failure frequency after the upgrade | Jarvis was not run interactively after the upgrade; there is no post-upgrade user traffic |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/pillar-verification.md",
+    "sha256": "961fb9737aeb868b7c523302f5614cd71f0945fe75650a729b0ee2485c4b42b5",
+    "headings": [
+      "# Stage 2\u20133 \u2014 Pillar and upgrade verification matrix",
+      "## Pillar A \u2014 OpenSpace + Alita (Phase 3)",
+      "## Pillar B \u2014 SEAgent + ReasoningBank + OpenViking (Phase 4)",
+      "## Pillar C \u2014 DGM + autoresearch + EEVEE (Phase 6)",
+      "## Pillar D \u2014 Absolute Zero (Phase 7)",
+      "## Additional upgrades"
+    ],
+    "limitations": [
+      "**PARTIAL** = verified with a stated gap; **BLOCKED** = needs hardware, credentials or software not available;",
+      "**NOT RUN** = not executed in this upgrade. Test names refer to files in `app/tests/`.",
+      "| New MCP adapters generated and validated safely | Phase 3 MCP synthesis tests with Docker `jarvis-mcp-runtime:1` and the official MCP SDK | VERIFIED where Docker is available; otherwise skipped as BLOCKED |",
+      "| Exploration stays inside isolated environments | Phase 4 tests (headless browser on loopback, background Blender sandbox) | VERIFIED; desktop GUI exploration **BLOCKED** (no verified VM, deliberately disabled) |",
+      "| GGUF/Ollama export | no converter installed | BLOCKED |",
+      "| RLVR/GRPO | feasibility probe only (no reward variance) | NOT RUN beyond the probe |",
+      "| API/code first, GUI last (Phase 2) | `test_phase02_execution_strategy.py` (real openpyxl/python-docx/pypdf, native Word COM on a temporary copy, background Blender, real UIA fixture, cursor last); flow A | VERIFIED (Excel COM chart fallback and Word COM ran with the installed Office); Unreal: engine manifest read only, editor Python on a project **BLOCKED** (no disposable `.uproject`; Phase 2 finding U1) |",
+      "| Cloud architect escalation (Phase 5 + Phase 8 repair) | privacy adversarial tests (9/9 refused, 0 sent), eligibility tests, sandboxed advice, D8-1 entry-point tests | VERIFIED with a SIMULATED provider; live Groq **BLOCKED** (no authorization for a real call) |",
+      "| Show Me Once | real WH_MOUSE_LL hook classification, real UIA capture/replay on the fixture, consent, password/outside/injected filtering, provisional CAPTURED skill | VERIFIED; a physical human click is NOT RUN (UIA Invoke stands in) |"
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/README.md",
+    "sha256": "392a874b63ce59860a009f85285a562b8162938c87b3701b7f03d233960f8694",
+    "headings": [
+      "# Final Codex handoff \u2014 Jarvis upgrade Phases 1\u20138",
+      "## Verdict: **PARTIALLY VERIFIED**",
+      "## Package contents (Stage 9)",
+      "## Test counts (final run, 2026-10-19 11:57\u201312:15 IST)",
+      "## Cross-domain regression matrix (final run; the gate's ten domain suites)",
+      "## What changed in Phase 8",
+      "## Rollback",
+      "## Codex inspection checklist"
+    ],
+    "limitations": [
+      "It is not *fully* verified because some required checks depend on things unavailable here. These are BLOCKED or NOT RUN, with reasons in [defects-and-unresolved.md](defects-and-unresolved.md):",
+      "- post-upgrade real-usage metrics (Jarvis was not run interactively after the upgrade).",
+      "All 147 skips are explicitly labelled `BLOCKED` environment dependencies, the same count as at the Phase 1 baseline.",
+      "| 7 | Pass/fail/blocked/skipped/unrun counts | below and [regression-matrix.json](regression-matrix.json) |",
+      "| 13\u201314 | Unresolved defects and reproduction steps | [defects-and-unresolved.md](defects-and-unresolved.md) |",
+      "| Skipped (all `BLOCKED: \u2026` environment dependencies) | 147 |",
+      "| Blocked outside the suite (live integrations) | Groq live call, GGUF export, VM exploration, Unreal project, physical click |",
+      "| Not run | voice-to-action latency, live planner latency, post-upgrade usage metrics, full-app RAM/VRAM |",
+      "2. [ ] Check that every skip message starts with `BLOCKED` and that the environment really lacks the stated dependency."
+    ]
+  },
+  {
+    "path": "artifacts/jarvis-audit/final-codex-handoff/security-redteam.md",
+    "sha256": "89881cdd7d84fc4565a3d89e278330b111ba2d1573a8dcf8926e57ba6d8fcf13",
+    "headings": [
+      "# Stage 6 \u2014 Security red-team matrix"
+    ],
+    "limitations": []
+  }
+]

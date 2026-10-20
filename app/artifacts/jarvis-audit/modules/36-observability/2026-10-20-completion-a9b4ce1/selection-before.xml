@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.019" timestamp="2026-10-20T02:30:24.546080+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_013_015_selection_only_and_restart_are_not_execution" time="0.076"><failure message="assert 1 == 0">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-611/test_JRV_36_013_015_selection_0')
+
+    def test_JRV_36_013_015_selection_only_and_restart_are_not_execution(tmp_path):
+        store, skill = store_fixture(tmp_path)
+        store.event(skill, 'selected', 'task')
+        reopened = SkillStore(tmp_path)
+        assert reopened.event(skill, 'selected', 'task') is False
+        finish_outcomes(reopened, [{'skill_id': skill, 'tools': ['office_xlsx']}], {'task_id': 'task', 'status': 'completed'})
+        metrics = reopened.metrics(skill)
+        assert metrics['selected_count'] == 1 and metrics['applied_count'] == metrics['completed_verified_count'] == 0
+&gt;       assert metrics['fallback_count'] == 0
+E       assert 1 == 0
+
+tests\test_prompt36_observability.py:72: AssertionError</failure></testcase></testsuite></testsuites>

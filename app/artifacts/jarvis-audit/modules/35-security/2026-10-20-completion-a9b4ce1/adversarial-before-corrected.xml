@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="1" tests="23" time="1.624" timestamp="2026-10-20T02:04:30.364611+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_nested_cloud_literals_are_bounded[value0]" time="0.025"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_nested_cloud_l0')
+value = {'nested': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
+
+    @pytest.mark.parametrize('value', [
+        {'nested': 'x' * 201},
+        {'nested': float('nan')},
+        {'nested': float('inf')},
+        {1: 'non-string key'},
+    ])
+    def test_JRV_35_010_nested_cloud_literals_are_bounded(tmp_path, value):
+        problem = {**GENERIC, 'examples': [{'input': value, 'output': 1}]}
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:26: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_nested_cloud_literals_are_bounded[value1]" time="0.008"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_nested_cloud_l1')
+value = {'nested': nan}
+
+    @pytest.mark.parametrize('value', [
+        {'nested': 'x' * 201},
+        {'nested': float('nan')},
+        {'nested': float('inf')},
+        {1: 'non-string key'},
+    ])
+    def test_JRV_35_010_nested_cloud_literals_are_bounded(tmp_path, value):
+        problem = {**GENERIC, 'examples': [{'input': value, 'output': 1}]}
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:26: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_nested_cloud_literals_are_bounded[value2]" time="0.009"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_nested_cloud_l2')
+value = {'nested': inf}
+
+    @pytest.mark.parametrize('value', [
+        {'nested': 'x' * 201},
+        {'nested': float('nan')},
+        {'nested': float('inf')},
+        {1: 'non-string key'},
+    ])
+    def test_JRV_35_010_nested_cloud_literals_are_bounded(tmp_path, value):
+        problem = {**GENERIC, 'examples': [{'input': value, 'output': 1}]}
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:26: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_nested_cloud_literals_are_bounded[value3]" time="0.009"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_nested_cloud_l3')
+value = {1: 'non-string key'}
+
+    @pytest.mark.parametrize('value', [
+        {'nested': 'x' * 201},
+        {'nested': float('nan')},
+        {'nested': float('inf')},
+        {1: 'non-string key'},
+    ])
+    def test_JRV_35_010_nested_cloud_literals_are_bounded(tmp_path, value):
+        problem = {**GENERIC, 'examples': [{'input': value, 'output': 1}]}
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:26: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_deep_cloud_literal_is_refused_without_recursion" time="0.008"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_deep_cloud_lit0')
+
+    def test_JRV_35_010_deep_cloud_literal_is_refused_without_recursion(tmp_path):
+        value = 1
+        for _ in range(40):
+            value = [value]
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:37: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_cloud_constraints_have_a_field_budget" time="0.028"><failure message="Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_cloud_constrai0')
+
+    def test_JRV_35_010_cloud_constraints_have_a_field_budget(tmp_path):
+&gt;       with pytest.raises(cloud.PrivacyRejected):
+E       Failed: DID NOT RAISE &lt;class 'jarvis.cloud_architect.PrivacyRejected'&gt;
+
+tests\test_prompt35_security.py:42: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_010_cyclic_cloud_literal_fails_closed" time="0.005"><failure message="ValueError: Circular reference detected">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_010_cyclic_cloud_l0')
+
+    def test_JRV_35_010_cyclic_cloud_literal_fails_closed(tmp_path):
+        cycle = []
+        cycle.append(cycle)
+        with pytest.raises(cloud.PrivacyRejected):
+&gt;           cloud.privacy_gate({**GENERIC, 'examples': [{'input': cycle, 'output': 1}]}, tmp_path)
+
+tests\test_prompt35_security.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\cloud_architect.py:103: in privacy_gate
+    text = privacy_text(json.dumps(payload, ensure_ascii=False))
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:238: in dumps
+    **kw).encode(obj)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\encoder.py:199: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.encoder.JSONEncoder object at 0x0000011635DF6230&gt;
+o = {'category': 'algorithm', 'constraints': 'n up to 100000', 'examples': [{'input': [[[[...]]]], 'output': 1}], 'question': 'What is an efficient approach, and can you give one pure function implementing it?', ...}
+_one_shot = True
+
+    def iterencode(self, o, _one_shot=False):
+        """Encode the given object and yield each string
+        representation as available.
+    
+        For example::
+    
+            for chunk in JSONEncoder().iterencode(bigobject):
+                mysocket.write(chunk)
+    
+        """
+        if self.check_circular:
+            markers = {}
+        else:
+            markers = None
+        if self.ensure_ascii:
+            _encoder = encode_basestring_ascii
+        else:
+            _encoder = encode_basestring
+    
+        def floatstr(o, allow_nan=self.allow_nan,
+                _repr=float.__repr__, _inf=INFINITY, _neginf=-INFINITY):
+            # Check for specials.  Note that this type of test is processor
+            # and/or platform-specific, so do tests which don't depend on the
+            # internals.
+    
+            if o != o:
+                text = 'NaN'
+            elif o == _inf:
+                text = 'Infinity'
+            elif o == _neginf:
+                text = '-Infinity'
+            else:
+                return _repr(o)
+    
+            if not allow_nan:
+                raise ValueError(
+                    "Out of range float values are not JSON compliant: " +
+                    repr(o))
+    
+            return text
+    
+    
+        if (_one_shot and c_make_encoder is not None
+                and self.indent is None):
+            _iterencode = c_make_encoder(
+                markers, self.default, _encoder, self.indent,
+                self.key_separator, self.item_separator, self.sort_keys,
+                self.skipkeys, self.allow_nan)
+        else:
+            _iterencode = _make_iterencode(
+                markers, self.default, _encoder, self.indent, floatstr,
+                self.key_separator, self.item_separator, self.sort_keys,
+                self.skipkeys, _one_shot)
+&gt;       return _iterencode(o, 0)
+E       ValueError: Circular reference detected
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\json\encoder.py:257: ValueError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_024_report_redacts_structured_and_colon_credentials[token: syntheticFixtureCanary9471]" time="0.001"><failure message="AssertionError: assert 'syntheticFixtureCanary9471' not in 'token: synt...reCanary9471'&#10;  &#10;  'syntheticFixtureCanary9471' is contained here:&#10;    token: syntheticFixtureCanary9471">message = 'token: syntheticFixtureCanary9471'
+
+    @pytest.mark.parametrize('message', [
+        'token: ' + CANARY,
+        json.dumps({'access_token': CANARY}),
+        repr({'client_secret': CANARY}),
+        'Authorization: Bearer ' + CANARY,
+    ])
+    def test_JRV_35_024_report_redacts_structured_and_colon_credentials(message):
+&gt;       assert CANARY not in tools.redact(message)
+E       AssertionError: assert 'syntheticFixtureCanary9471' not in 'token: synt...reCanary9471'
+E         
+E         'syntheticFixtureCanary9471' is contained here:
+E           token: syntheticFixtureCanary9471
+
+tests\test_prompt35_security.py:60: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_024_report_redacts_structured_and_colon_credentials[{&quot;access_token&quot;: &quot;syntheticFixtureCanary9471&quot;}]" time="0.001"><failure message="assert 'syntheticFixtureCanary9471' not in '{&quot;access_to...Canary9471&quot;}'&#10;  &#10;  'syntheticFixtureCanary9471' is contained here:&#10;    {&quot;access_token&quot;: &quot;syntheticFixtureCanary9471&quot;}">message = '{"access_token": "syntheticFixtureCanary9471"}'
+
+    @pytest.mark.parametrize('message', [
+        'token: ' + CANARY,
+        json.dumps({'access_token': CANARY}),
+        repr({'client_secret': CANARY}),
+        'Authorization: Bearer ' + CANARY,
+    ])
+    def test_JRV_35_024_report_redacts_structured_and_colon_credentials(message):
+&gt;       assert CANARY not in tools.redact(message)
+E       assert 'syntheticFixtureCanary9471' not in '{"access_to...Canary9471"}'
+E         
+E         'syntheticFixtureCanary9471' is contained here:
+E           {"access_token": "syntheticFixtureCanary9471"}
+
+tests\test_prompt35_security.py:60: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_024_report_redacts_structured_and_colon_credentials[{'client_secret': 'syntheticFixtureCanary9471'}]" time="0.001"><failure message="assert 'syntheticFixtureCanary9471' not in &quot;{'client_se...Canary9471'}&quot;&#10;  &#10;  'syntheticFixtureCanary9471' is contained here:&#10;    {'client_secret': 'syntheticFixtureCanary9471'}">message = "{'client_secret': 'syntheticFixtureCanary9471'}"
+
+    @pytest.mark.parametrize('message', [
+        'token: ' + CANARY,
+        json.dumps({'access_token': CANARY}),
+        repr({'client_secret': CANARY}),
+        'Authorization: Bearer ' + CANARY,
+    ])
+    def test_JRV_35_024_report_redacts_structured_and_colon_credentials(message):
+&gt;       assert CANARY not in tools.redact(message)
+E       assert 'syntheticFixtureCanary9471' not in "{'client_se...Canary9471'}"
+E         
+E         'syntheticFixtureCanary9471' is contained here:
+E           {'client_secret': 'syntheticFixtureCanary9471'}
+
+tests\test_prompt35_security.py:60: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_024_report_redacts_structured_and_colon_credentials[Authorization: Bearer syntheticFixtureCanary9471]" time="0.001" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_012_owned_ability_exception_never_persists_message_or_source" time="0.346"><failure message="assert ('syntheticFixtureCanary9471' not in '{&quot;ok&quot;: fals...onds&quot;: 0.01}'&#10;  &#10;  'syntheticFixtureCanary9471' is contained here:&#10;  ?                                       ^^&#10;    {&quot;ok&quot;: false, &quot;error&quot;: &quot;RuntimeError: syntheticFixtureCanary9471&quot;, &quot;failure_kind&quot;: &quot;execution&quot;, &quot;trace&quot;: &quot;Traceback (most recent call last):\n  File \&quot;%AUDIT_APP%\\jarvis\\ability_runner.py\&quot;, line 118, in main\n  File \&quot;%USERPROFILE%\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-598\\test_JRV_35_012_owned_ability_0\\ability\\ability.py\&quot;, line 2, in run\n    raise RuntimeError('syntheticFixtureCanary9471')\nRuntimeError: synth...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show)">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_012_owned_ability_0')
+
+    def test_JRV_35_012_owned_ability_exception_never_persists_message_or_source(tmp_path):
+        ability = tmp_path / 'ability'
+        work = tmp_path / 'run'
+        ability.mkdir(); work.mkdir()
+        # The canary is deliberately not a recognizable credential pattern: all untrusted exception details stay local.
+        (ability / 'ability.py').write_text('def run(i,w):\n    raise RuntimeError(' + repr(CANARY) + ')\n', encoding='utf-8')
+        request = tmp_path / 'request.json'
+        request.write_text(json.dumps({'ability_dir': str(ability), 'workdir': str(work), 'network': False}), encoding='utf-8')
+        runner = Path(tools.__file__).with_name('ability_runner.py')
+        result = subprocess.run([sys.executable, '-I', '-B', str(runner), str(request)],
+                                capture_output=True, text=True, timeout=15)
+        assert result.returncode == 0
+        raw = (work / 'result.json').read_text(encoding='utf-8')
+&gt;       assert CANARY not in raw and CANARY not in result.stdout + result.stderr
+E       assert ('syntheticFixtureCanary9471' not in '{"ok": fals...onds": 0.01}'
+E         
+E         'syntheticFixtureCanary9471' is contained here:
+E         ?                                       ^^
+E           {"ok": false, "error": "RuntimeError: syntheticFixtureCanary9471", "failure_kind": "execution", "trace": "Traceback (most recent call last):\n  File \"%AUDIT_APP%\\jarvis\\ability_runner.py\", line 118, in main\n  File \"%USERPROFILE%\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-598\\test_JRV_35_012_owned_ability_0\\ability\\ability.py\", line 2, in run\n    raise RuntimeError('syntheticFixtureCanary9471')\nRuntimeError: synth...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show)
+
+tests\test_prompt35_security.py:76: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_017_private_deduction_proposals_are_quarantined[token: syntheticFixtureCanary9471]" time="0.008"><failure message="AssertionError: assert {'answer': {'apps': [], 'clipboard': 'token: syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'token: syntheticFix... {'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'token: syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} is None&#10; +  where {'answer': {'apps': [], 'clipboard': 'token: syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'token: syntheticFix... {'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'token: syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} = propose_deduction([])&#10; +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635E71E40&gt;.propose_deduction">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000011635E72EF0&gt;
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_017_private_deduct0')
+text = 'token: syntheticFixtureCanary9471'
+
+    @pytest.mark.parametrize('text', ['token: ' + CANARY, 'confidential customer scoring rule',
+                                    'api_\u200bkey=' + CANARY])
+    def test_JRV_35_017_private_deduction_proposals_are_quarantined(monkeypatch, tmp_path, text):
+        from jarvis import azr_proposer as azr
+        proposal = {'initial': {'files': {'docs/a.txt': text}, 'apps': [], 'clipboard': ''},
+                    'calls': [{'tool': 'copy_text', 'args': {'path': 'docs/a.txt'}}]}
+        monkeypatch.setattr(azr, 'ollama', lambda *a, **kw: json.dumps(proposal))
+        proposer = azr.Proposer(tmp_path)
+&gt;       assert proposer.propose_deduction([]) is None
+E       AssertionError: assert {'answer': {'apps': [], 'clipboard': 'token: syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'token: syntheticFix... {'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'token: syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} is None
+E        +  where {'answer': {'apps': [], 'clipboard': 'token: syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'token: syntheticFix... {'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'token: syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} = propose_deduction([])
+E        +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635E71E40&gt;.propose_deduction
+
+tests\test_prompt35_security.py:89: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_017_private_deduction_proposals_are_quarantined[confidential customer scoring rule]" time="0.004"><failure message="AssertionError: assert {'answer': {'apps': [], 'clipboard': 'confidential customer scoring rule', 'files': {'docs/a.txt': 'confidential custo...{'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'confidential customer scoring rule'}}, 'mode': 'deduction', ...} is None&#10; +  where {'answer': {'apps': [], 'clipboard': 'confidential customer scoring rule', 'files': {'docs/a.txt': 'confidential custo...{'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'confidential customer scoring rule'}}, 'mode': 'deduction', ...} = propose_deduction([])&#10; +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635DF48E0&gt;.propose_deduction">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000011635DF4D30&gt;
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_017_private_deduct1')
+text = 'confidential customer scoring rule'
+
+    @pytest.mark.parametrize('text', ['token: ' + CANARY, 'confidential customer scoring rule',
+                                    'api_\u200bkey=' + CANARY])
+    def test_JRV_35_017_private_deduction_proposals_are_quarantined(monkeypatch, tmp_path, text):
+        from jarvis import azr_proposer as azr
+        proposal = {'initial': {'files': {'docs/a.txt': text}, 'apps': [], 'clipboard': ''},
+                    'calls': [{'tool': 'copy_text', 'args': {'path': 'docs/a.txt'}}]}
+        monkeypatch.setattr(azr, 'ollama', lambda *a, **kw: json.dumps(proposal))
+        proposer = azr.Proposer(tmp_path)
+&gt;       assert proposer.propose_deduction([]) is None
+E       AssertionError: assert {'answer': {'apps': [], 'clipboard': 'confidential customer scoring rule', 'files': {'docs/a.txt': 'confidential custo...{'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'confidential customer scoring rule'}}, 'mode': 'deduction', ...} is None
+E        +  where {'answer': {'apps': [], 'clipboard': 'confidential customer scoring rule', 'files': {'docs/a.txt': 'confidential custo...{'apps': [], 'clipboard': '', 'files': {'docs/a.txt': 'confidential customer scoring rule'}}, 'mode': 'deduction', ...} = propose_deduction([])
+E        +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635DF48E0&gt;.propose_deduction
+
+tests\test_prompt35_security.py:89: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_017_private_deduction_proposals_are_quarantined[api_\u200bkey=syntheticFixtureCanary9471]" time="0.004"><failure message="AssertionError: assert {'answer': {'apps': [], 'clipboard': 'api_\u200bkey=syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'api_\u200bke...': [], 'clipboard': '', 'files': {'docs/a.txt': 'api_\u200bkey=syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} is None&#10; +  where {'answer': {'apps': [], 'clipboard': 'api_\u200bkey=syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'api_\u200bke...': [], 'clipboard': '', 'files': {'docs/a.txt': 'api_\u200bkey=syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} = propose_deduction([])&#10; +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635DD1AB0&gt;.propose_deduction">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000011635DD3C10&gt;
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_017_private_deduct2')
+text = 'api_\u200bkey=syntheticFixtureCanary9471'
+
+    @pytest.mark.parametrize('text', ['token: ' + CANARY, 'confidential customer scoring rule',
+                                    'api_\u200bkey=' + CANARY])
+    def test_JRV_35_017_private_deduction_proposals_are_quarantined(monkeypatch, tmp_path, text):
+        from jarvis import azr_proposer as azr
+        proposal = {'initial': {'files': {'docs/a.txt': text}, 'apps': [], 'clipboard': ''},
+                    'calls': [{'tool': 'copy_text', 'args': {'path': 'docs/a.txt'}}]}
+        monkeypatch.setattr(azr, 'ollama', lambda *a, **kw: json.dumps(proposal))
+        proposer = azr.Proposer(tmp_path)
+&gt;       assert proposer.propose_deduction([]) is None
+E       AssertionError: assert {'answer': {'apps': [], 'clipboard': 'api_\u200bkey=syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'api_\u200bke...': [], 'clipboard': '', 'files': {'docs/a.txt': 'api_\u200bkey=syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} is None
+E        +  where {'answer': {'apps': [], 'clipboard': 'api_\u200bkey=syntheticFixtureCanary9471', 'files': {'docs/a.txt': 'api_\u200bke...': [], 'clipboard': '', 'files': {'docs/a.txt': 'api_\u200bkey=syntheticFixtureCanary9471'}}, 'mode': 'deduction', ...} = propose_deduction([])
+E        +    where propose_deduction = &lt;jarvis.azr_proposer.Proposer object at 0x0000011635DD1AB0&gt;.propose_deduction
+
+tests\test_prompt35_security.py:89: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_017_induction_privacy_checked_before_sandbox" time="0.004"><failure message="TypeError: 'Mock' object is not subscriptable">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_017_induction_priv0')
+
+    def test_JRV_35_017_induction_privacy_checked_before_sandbox(tmp_path):
+        from jarvis.azr_proposer import validate_induction
+        run = Mock()
+        proposal = {'source': 'def f(x):\n    return x', 'inputs': list(range(6)),
+                    'message': 'confidential customer pricing logic'}
+        # Valid string inputs ensure rejection is the privacy boundary, not a separate input schema rule.
+        proposal['inputs'] = [str(i) for i in range(6)]
+        with pytest.raises(ValueError, match='private'):
+&gt;           validate_induction(proposal, tmp_path, run)
+
+tests\test_prompt35_security.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+proposal = {'inputs': ['0', '1', '2', '3', '4', '5'], 'message': 'confidential customer pricing logic', 'source': 'def f(x):\n    return x'}
+base = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-598/test_JRV_35_017_induction_priv0')
+run_programs = &lt;Mock id='1194904732096'&gt;
+
+    def validate_induction(proposal, base, run_programs):
+        source = proposal.get('source')
+        inputs = proposal.get('inputs')
+        message = str(proposal.get('message', ''))[:160]
+        if not isinstance(source, str) or not isinstance(inputs, list) or not 6 &lt;= len(inputs) &lt;= 12:
+            raise ValueError('schema')
+        screen_program(source)
+        if any(not (isinstance(v, str) and len(v) &lt;= 60 or isinstance(v, list) and len(v) &lt;= 10
+                    and all(type(i) is int and -10 ** 6 &lt; i &lt; 10 ** 6 for i in v)) for v in inputs):
+            raise ValueError('inputs')
+        unique = list({json.dumps(v): v for v in inputs}.values())
+        # Outputs come from sandboxed execution (twice), not from the proposer.
+        probe = run_programs(base, [{'id': 'probe', 'source': source, 'cases': [{'input': v, 'output': None} for v in unique]}])
+&gt;       row = probe['probe']
+E       TypeError: 'Mock' object is not subscriptable
+
+jarvis\azr_proposer.py:98: TypeError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_020_api_symlink_escape_has_zero_file_side_effects" time="0.005"><skipped type="pytest.skip" message="BLOCKED: native symlink creation unavailable: OSError">%AUDIT_APP%\tests\test_prompt35_security.py:114: BLOCKED: native symlink creation unavailable: OSError</skipped></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_007_path_traversal_is_refused[../escape.txt]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_007_path_traversal_is_refused[..\\escape.txt]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_011_proposal_cannot_carry_its_own_approval" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_006_018_untrusted_or_private_problem_has_zero_outbound[provenance-document]" time="0.014" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_006_018_untrusted_or_private_problem_has_zero_outbound[statement-Rank records from the screenshot on the desktop.]" time="0.026" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt35_security" name="test_JRV_35_006_018_untrusted_or_private_problem_has_zero_outbound[statement-Optimize proprietary confidential scoring logic for a customer.]" time="0.022" /></testsuite></testsuites>

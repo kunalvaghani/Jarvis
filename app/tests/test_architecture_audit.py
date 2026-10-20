@@ -34,7 +34,9 @@ def test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload(tmp_path):
     assert rows[0]['call_id']==rows[1]['call_id']==identifier
     assert rows[1]['error_type']=='TimeoutError'
     assert 'FAKE_' not in json.dumps(rows)
-    assert set(rows[0]) <= {'version','at','event','call_id','tool','discarded_metadata_fields'}
+    assert set(rows[0]) <= {'version','at','event','call_id','tool','discarded_metadata_fields','monotonic_ns','clock_id'}
+    assert type(rows[0]['monotonic_ns']) is int and rows[0]['monotonic_ns'] > 0
+    assert isinstance(rows[0]['clock_id'], str) and len(rows[0]['clock_id']) == 32
 
 def run_reviewed(module,cls,method):
     from importlib import import_module

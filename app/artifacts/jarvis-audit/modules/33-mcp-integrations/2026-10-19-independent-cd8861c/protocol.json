@@ -1,0 +1,12 @@
+{
+  "stdio_protocol": "2025-11-25",
+  "runtime": {
+    "available": true,
+    "image_id": "sha256:0438d6bee255b16e38475c7342d22a00f4fd7b499272ff12b253472a1b2245de",
+    "sdk": "mcp==2.3.0"
+  },
+  "dependency_change": "NONE",
+  "transport_change": "NONE",
+  "direct_sdk_build_pin": "mcp==2.3.0",
+  "identity_policy": "configured labels marked verified; changed credentials with same label accepted as rotation"
+}

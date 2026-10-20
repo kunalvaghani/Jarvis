@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="10" skipped="0" tests="12" time="2.451" timestamp="2026-10-20T02:45:31.096636+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_pump_exception_stops_hook_and_persists_failure" time="0.009"><failure message="AssertionError: Expected 'stop' to have been called once. Called 0 times.">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_pump_exception_stops_hook0')
+
+    def test_pump_exception_stops_hook_and_persists_failure(tmp_path):
+        session, hook = recording(tmp_path)
+        session.start_hook()
+        session.events.put((1, 2, 513, 0, 0))
+        session.process = Mock(side_effect=RuntimeError('synthetic observation failure'))
+        with pytest.raises(RuntimeError):
+            session.pump()
+&gt;       hook.stop.assert_called_once()
+
+tests\test_prompt37_e2e_boundaries.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock name='mock.stop' id='1877492404464'&gt;
+
+    def assert_called_once(self):
+        """assert that the mock was called only once.
+        """
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to have been called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'stop' to have been called once. Called 0 times.
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:898: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_hook_start_failure_cleans_owned_hook" time="0.004"><failure message="AssertionError: Expected 'stop' to have been called once. Called 0 times.">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_hook_start_failure_cleans0')
+
+    def test_hook_start_failure_cleans_owned_hook(tmp_path):
+        session, hook = recording(tmp_path)
+        hook.start.side_effect = OSError('synthetic start failure')
+        with pytest.raises(OSError):
+            session.start_hook()
+&gt;       hook.stop.assert_called_once()
+
+tests\test_prompt37_e2e_boundaries.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock name='mock.stop' id='1877491951616'&gt;
+
+    def assert_called_once(self):
+        """assert that the mock was called only once.
+        """
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to have been called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'stop' to have been called once. Called 0 times.
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:898: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_second_start_cannot_replace_active_hook" time="0.004"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_second_start_cannot_repla0')
+
+    def test_second_start_cannot_replace_active_hook(tmp_path):
+        session, hook = recording(tmp_path)
+        session.start_hook()
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt37_e2e_boundaries.py:44: Failed</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_cancel_halts_partial_recording_and_blocks_promotion" time="0.015"><failure message="KeyError: 'selector'">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_cancel_halts_partial_reco0')
+
+    def test_cancel_halts_partial_recording_and_blocks_promotion(tmp_path):
+        session, hook = recording(tmp_path)
+        session.state['steps'] = [{'partial': True}]
+        session.start_hook()
+        session.pump(cancelled=lambda: True)
+        hook.stop.assert_called_once()
+        assert session.hook is None
+        assert json.loads(session.path.read_text())['status'] == 'cancelled'
+        with pytest.raises(ValueError, match='cancel|complete|eligible'):
+&gt;           promote(None, session, {'verified': True}, 'synthetic-action')
+
+tests\test_prompt37_e2e_boundaries.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:338: in promote
+    body = session.skill_body(name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;jarvis.demonstration.DemonstrationSession object at 0x000001B52345F2E0&gt;
+name = 'synthetic-action'
+
+    def skill_body(self, name):
+        steps = self.state['steps']
+        lines = []
+        for number, step in enumerate(steps, 1):
+&gt;           s = step['selector']
+E           KeyError: 'selector'
+
+jarvis\demonstration.py:319: KeyError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_promotion_requires_literal_verified_boolean[false]" time="0.004"><failure message="AssertionError: must reject before skill creation">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_promotion_requires_litera0')
+claim = 'false'
+
+    @pytest.mark.parametrize('claim', ['false', 'true', 1, {}, []])
+    def test_promotion_requires_literal_verified_boolean(tmp_path, claim):
+        session, _ = recording(tmp_path)
+        session.skill_body = Mock(side_effect=AssertionError('must reject before skill creation'))
+        with pytest.raises(ValueError, match='verified'):
+&gt;           promote(None, session, {'verified': claim}, 'synthetic-action')
+
+tests\test_prompt37_e2e_boundaries.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:338: in promote
+    body = session.skill_body(name)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1877493592368'&gt;, args = ('synthetic-action',), kwargs = {}
+effect = AssertionError('must reject before skill creation')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: must reject before skill creation
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_promotion_requires_literal_verified_boolean[true]" time="0.004"><failure message="AssertionError: must reject before skill creation">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_promotion_requires_litera1')
+claim = 'true'
+
+    @pytest.mark.parametrize('claim', ['false', 'true', 1, {}, []])
+    def test_promotion_requires_literal_verified_boolean(tmp_path, claim):
+        session, _ = recording(tmp_path)
+        session.skill_body = Mock(side_effect=AssertionError('must reject before skill creation'))
+        with pytest.raises(ValueError, match='verified'):
+&gt;           promote(None, session, {'verified': claim}, 'synthetic-action')
+
+tests\test_prompt37_e2e_boundaries.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:338: in promote
+    body = session.skill_body(name)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1877492485136'&gt;, args = ('synthetic-action',), kwargs = {}
+effect = AssertionError('must reject before skill creation')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: must reject before skill creation
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_promotion_requires_literal_verified_boolean[1]" time="0.004"><failure message="AssertionError: must reject before skill creation">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_promotion_requires_litera2')
+claim = 1
+
+    @pytest.mark.parametrize('claim', ['false', 'true', 1, {}, []])
+    def test_promotion_requires_literal_verified_boolean(tmp_path, claim):
+        session, _ = recording(tmp_path)
+        session.skill_body = Mock(side_effect=AssertionError('must reject before skill creation'))
+        with pytest.raises(ValueError, match='verified'):
+&gt;           promote(None, session, {'verified': claim}, 'synthetic-action')
+
+tests\test_prompt37_e2e_boundaries.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:338: in promote
+    body = session.skill_body(name)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1877491723920'&gt;, args = ('synthetic-action',), kwargs = {}
+effect = AssertionError('must reject before skill creation')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: must reject before skill creation
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_promotion_requires_literal_verified_boolean[claim3]" time="0.004" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_promotion_requires_literal_verified_boolean[claim4]" time="0.004" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_request_revalidates_after_consent_before_observing[cancel]" time="0.004"><failure message="AssertionError: no UI observation after invalid consent">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_request_revalidates_after0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B5232FB190&gt;
+change = 'cancel'
+
+    @pytest.mark.parametrize('change', ['cancel', 'owner'])
+    def test_request_revalidates_after_consent_before_observing(tmp_path, monkeypatch, change):
+        owner = [100]
+        cancelled = [False]
+        desktop = Mock(side_effect=AssertionError('no UI observation after invalid consent'))
+        monkeypatch.setitem(sys.modules, 'win32gui', SimpleNamespace(IsWindow=lambda h: True,
+            GetWindowText=lambda h: 'Owned fixture'))
+        monkeypatch.setitem(sys.modules, 'win32process', SimpleNamespace(GetWindowThreadProcessId=lambda h: (1, owner[0])))
+        monkeypatch.setitem(sys.modules, 'psutil', SimpleNamespace(Process=lambda pid: SimpleNamespace(name=lambda: 'fixture.exe')))
+        monkeypatch.setitem(sys.modules, 'pywinauto', SimpleNamespace(Desktop=desktop))
+        def approve(*args):
+            if change == 'cancel': cancelled[0] = True
+            else: owner[0] = 101
+        session = DemonstrationSession(tmp_path, approve)
+        with pytest.raises(ValueError):
+&gt;           session.request('toggle fixture', 42, lambda: cancelled[0])
+
+tests\test_prompt37_e2e_boundaries.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:219: in request
+    self.window = Desktop(backend='uia').window(handle=window_handle).wrapper_object()
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1877491036896'&gt;, args = (), kwargs = {'backend': 'uia'}
+effect = AssertionError('no UI observation after invalid consent')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: no UI observation after invalid consent
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_request_revalidates_after_consent_before_observing[owner]" time="0.004"><failure message="AssertionError: no UI observation after invalid consent">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_request_revalidates_after1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B523362D10&gt;
+change = 'owner'
+
+    @pytest.mark.parametrize('change', ['cancel', 'owner'])
+    def test_request_revalidates_after_consent_before_observing(tmp_path, monkeypatch, change):
+        owner = [100]
+        cancelled = [False]
+        desktop = Mock(side_effect=AssertionError('no UI observation after invalid consent'))
+        monkeypatch.setitem(sys.modules, 'win32gui', SimpleNamespace(IsWindow=lambda h: True,
+            GetWindowText=lambda h: 'Owned fixture'))
+        monkeypatch.setitem(sys.modules, 'win32process', SimpleNamespace(GetWindowThreadProcessId=lambda h: (1, owner[0])))
+        monkeypatch.setitem(sys.modules, 'psutil', SimpleNamespace(Process=lambda pid: SimpleNamespace(name=lambda: 'fixture.exe')))
+        monkeypatch.setitem(sys.modules, 'pywinauto', SimpleNamespace(Desktop=desktop))
+        def approve(*args):
+            if change == 'cancel': cancelled[0] = True
+            else: owner[0] = 101
+        session = DemonstrationSession(tmp_path, approve)
+        with pytest.raises(ValueError):
+&gt;           session.request('toggle fixture', 42, lambda: cancelled[0])
+
+tests\test_prompt37_e2e_boundaries.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\demonstration.py:219: in request
+    self.window = Desktop(backend='uia').window(handle=window_handle).wrapper_object()
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1104: in __call__
+    return self._mock_call(*args, **kwargs)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1108: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='1877491460912'&gt;, args = (), kwargs = {'backend': 'uia'}
+effect = AssertionError('no UI observation after invalid consent')
+
+    def _execute_mock_call(self, /, *args, **kwargs):
+        # separate from _increment_mock_call so that awaited functions are
+        # executed separately from their call, also AsyncMock overrides this method
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+&gt;               raise effect
+E               AssertionError: no UI observation after invalid consent
+
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\unittest\mock.py:1163: AssertionError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt37_e2e_boundaries" name="test_uncertain_send_truth_reaches_worker_speech_and_restart" time="1.433"><failure message="AssertionError: assert ('spoken_reply', 'Task paused: an external write is uncertain; inspect the actual result. No automatic replay.') in [('task_status', {'active': True, 'phase': 'Planning task', 'target': 'send a synthetic fixture message'}), ('question...nt.'), ('spoken_reply', 'Finished. Message sent.'), ('task_status', {'active': False, 'phase': 'Ready', 'target': ''})]">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-616/test_uncertain_send_truth_reac0')
+
+    def test_uncertain_send_truth_reaches_worker_speech_and_restart(tmp_path):
+        from jarvis.actions import Actions
+        from jarvis.commands import Command
+        from jarvis.task_state import TaskState
+        events, sends, finishes = [], [], []
+        actions = Actions({'files_root': 'files', 'apps': {}}, tmp_path, lambda *args: events.append(args))
+        actions.task_state.on_finish = finishes.append
+        def synthetic_send(goal, cancelled):
+            sends.append('mock delivery attempted')
+            actions.task_state.checkpoint('uncertain_external_write', action='send', target='owned-mock')
+            return 'Finished. Message sent.'
+        actions.brain.run = synthetic_send
+        try:
+            actions.start()
+            actions.submit(Command('task', 'send a synthetic fixture message'))
+            actions.queue.join()
+            saved = actions.task_state.snapshot()
+            assert saved['status'] == 'paused'
+&gt;           assert ('spoken_reply', saved['result']) in events
+E           AssertionError: assert ('spoken_reply', 'Task paused: an external write is uncertain; inspect the actual result. No automatic replay.') in [('task_status', {'active': True, 'phase': 'Planning task', 'target': 'send a synthetic fixture message'}), ('question...nt.'), ('spoken_reply', 'Finished. Message sent.'), ('task_status', {'active': False, 'phase': 'Ready', 'target': ''})]
+
+tests\test_prompt37_e2e_boundaries.py:108: AssertionError</failure></testcase></testsuite></testsuites>

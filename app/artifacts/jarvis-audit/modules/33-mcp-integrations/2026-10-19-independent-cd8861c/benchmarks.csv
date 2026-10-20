@@ -1,0 +1,3 @@
+revision,sha,samples,fixture,p50_ms,p95_ms,traced_peak_bytes
+before,2c4ea56eb7967929e49dad07b0612cb99caaf56e,300,fixed bridge call; fake transport/approval,0.35595,0.4022,249372
+after,cd8861ce720ade303485ee2023430dd8c6b4f0ba,300,fixed bridge call; fake transport/approval,0.3782,0.478,254394

@@ -1,0 +1,5 @@
+# Findings reconciliation
+
+Pinned source `0e3ad4706b5120e5d0479d34333e5faa7b0931b5`. New P33-001 (P1), P33-002 (P2), P33-003 (P2) all APPLIES / OPEN; fix SHA none. Map to exact failed tests in failures.md and boundaries.xml; baseline/neighbor retention results in executed-results.jsonl. Existing Phase 3 G4/G5 independently PASS; its explicit health tamper check passes but does not refute P33-001 dispatch tampering. Original 32-row catalog (including 12 user cases) is retained and joined by stable ID in tests.jsonl for the revised 22 cases; original extras are not relabelled executed.
+
+Prior P32-001/P32-002 remain OPEN at the same SHA; Prompt 31 receipt/callback repairs retain their independent evidence, but full acceptance was partial. Prior independent review and Phase 1–8 evidence are accessible; no screenshot used as proof and no blanket reconciliation-complete claim. Source repairs reserved to Claude by the supplied read-only confirmation contract. Follow-up: repair-handoff.md, fresh exact-SHA replay, then unexecuted mandatory gates.

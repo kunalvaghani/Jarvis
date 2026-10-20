@@ -1,0 +1,9 @@
+{
+  "base_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "fix_sha": null,
+  "patch": "source.patch",
+  "new_test": "../../../../../tests/test_prompt37_e2e_boundaries.py",
+  "earlier_uncommitted_patches": "P34/P35/P36 preserved; source.patch contains only the P37 production files.",
+  "before": "before-source-hashes.json",
+  "current": "source-hashes.json"
+}

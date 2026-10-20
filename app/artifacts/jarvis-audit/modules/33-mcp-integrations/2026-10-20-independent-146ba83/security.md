@@ -1,0 +1,5 @@
+# Security result
+
+All reported P33-001…004 and original P32-001/002 safety reproductions pass independently at the final SHA. In particular, configured labels no longer set identity_verified; a token for B under label A refuses before dispatch, while the stable-token control succeeds once. No verifier is registered by default; unknown replacement identity fails closed. Explicit mock-verifier tests validate same-principal rotation and reject another principal/workspace/narrow scope/failing lookup.
+
+No unapproved effects observed in selected fixtures. API writes are intercepted, all tokens/body/identities are synthetic, and native termination is limited to test-owned Job trees. No real sends/events, paid API, cloud private data, desktop recording, model training, package install or shared-service operation. No application source changes by Codex. Pattern redaction and successful fixtures are not universal privacy or release proof. Wider missing safety gates in remaining-work.md keep the full module NOT READY/BLOCKED.

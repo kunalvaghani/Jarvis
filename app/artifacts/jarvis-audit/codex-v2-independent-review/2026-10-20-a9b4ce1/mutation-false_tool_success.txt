@@ -1,0 +1,89 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_ test_JRV_35_008_021_tool_success_cannot_override_independent_readback[failed] _
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-640/test_JRV_35_008_021_tool_succe0')
+readback = 'failed'
+
+    @pytest.mark.parametrize('readback', ['failed', 'unverified', 'missing', 'wrong_tool'])
+    def test_JRV_35_008_021_tool_success_cannot_override_independent_readback(tmp_path, readback):
+        from jarvis.execution_contracts import record_outcome
+        from jarvis.skill_evolution import verify_execution
+        actions = SimpleNamespace(base=tmp_path)
+        identifier = 'a' * 32
+        if readback != 'missing':
+            record_outcome(actions, 'office_docx' if readback == 'wrong_tool' else 'office_xlsx', identifier,
+                           method_tier='api', verification='verified' if readback == 'wrong_tool' else readback)
+        registry = SimpleNamespace(actions=actions, execute=Mock(return_value=tools.ToolResult(
+            'office_xlsx', 'office', json.dumps({'success': True, 'verification': 'verified'}), call_id=identifier)))
+>       with pytest.raises(ValueError, match='verified'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt35_security.py:153: Failed
+_ test_JRV_35_008_021_tool_success_cannot_override_independent_readback[unverified] _
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-640/test_JRV_35_008_021_tool_succe1')
+readback = 'unverified'
+
+    @pytest.mark.parametrize('readback', ['failed', 'unverified', 'missing', 'wrong_tool'])
+    def test_JRV_35_008_021_tool_success_cannot_override_independent_readback(tmp_path, readback):
+        from jarvis.execution_contracts import record_outcome
+        from jarvis.skill_evolution import verify_execution
+        actions = SimpleNamespace(base=tmp_path)
+        identifier = 'a' * 32
+        if readback != 'missing':
+            record_outcome(actions, 'office_docx' if readback == 'wrong_tool' else 'office_xlsx', identifier,
+                           method_tier='api', verification='verified' if readback == 'wrong_tool' else readback)
+        registry = SimpleNamespace(actions=actions, execute=Mock(return_value=tools.ToolResult(
+            'office_xlsx', 'office', json.dumps({'success': True, 'verification': 'verified'}), call_id=identifier)))
+>       with pytest.raises(ValueError, match='verified'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt35_security.py:153: Failed
+_ test_JRV_35_008_021_tool_success_cannot_override_independent_readback[missing] _
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-640/test_JRV_35_008_021_tool_succe2')
+readback = 'missing'
+
+    @pytest.mark.parametrize('readback', ['failed', 'unverified', 'missing', 'wrong_tool'])
+    def test_JRV_35_008_021_tool_success_cannot_override_independent_readback(tmp_path, readback):
+        from jarvis.execution_contracts import record_outcome
+        from jarvis.skill_evolution import verify_execution
+        actions = SimpleNamespace(base=tmp_path)
+        identifier = 'a' * 32
+        if readback != 'missing':
+            record_outcome(actions, 'office_docx' if readback == 'wrong_tool' else 'office_xlsx', identifier,
+                           method_tier='api', verification='verified' if readback == 'wrong_tool' else readback)
+        registry = SimpleNamespace(actions=actions, execute=Mock(return_value=tools.ToolResult(
+            'office_xlsx', 'office', json.dumps({'success': True, 'verification': 'verified'}), call_id=identifier)))
+>       with pytest.raises(ValueError, match='verified'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt35_security.py:153: Failed
+_ test_JRV_35_008_021_tool_success_cannot_override_independent_readback[wrong_tool] _
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-640/test_JRV_35_008_021_tool_succe3')
+readback = 'wrong_tool'
+
+    @pytest.mark.parametrize('readback', ['failed', 'unverified', 'missing', 'wrong_tool'])
+    def test_JRV_35_008_021_tool_success_cannot_override_independent_readback(tmp_path, readback):
+        from jarvis.execution_contracts import record_outcome
+        from jarvis.skill_evolution import verify_execution
+        actions = SimpleNamespace(base=tmp_path)
+        identifier = 'a' * 32
+        if readback != 'missing':
+            record_outcome(actions, 'office_docx' if readback == 'wrong_tool' else 'office_xlsx', identifier,
+                           method_tier='api', verification='verified' if readback == 'wrong_tool' else readback)
+        registry = SimpleNamespace(actions=actions, execute=Mock(return_value=tools.ToolResult(
+            'office_xlsx', 'office', json.dumps({'success': True, 'verification': 'verified'}), call_id=identifier)))
+>       with pytest.raises(ValueError, match='verified'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt35_security.py:153: Failed
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-a9b4ce1\mutation-false_tool_success.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback[failed]
+FAILED tests\test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback[unverified]
+FAILED tests\test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback[missing]
+FAILED tests\test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback[wrong_tool]
+4 failed in 1.14s

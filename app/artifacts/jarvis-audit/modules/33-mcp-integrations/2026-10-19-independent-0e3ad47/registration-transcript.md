@@ -1,0 +1,7 @@
+# Registration / invocation / unregister evidence
+
+Actual independent Docker trace: generated SPEC → static screen → real tools/list and two test vectors → synthetic registration approval → provisional registry entry. Then host test changes only the generated implementation. ToolRegistry mcp_call → synthetic per-call approval → actual altered structuredContent returned. Exported response and actual call approval are in generated-drift-observation.json; approved source and spec are saved alongside. Finally unregister and labelled reap ran in the test's finally block. The failed safety assertion is retained, not xfailed.
+
+Separate existing test_P03_mcp_workflows_register_call_and_unregister passed: registers SHA256 and Celsius tools, actual Celsius call returns approximately 98.6 for 37, explicit health detects modified SHA256 source and unregisters it, and labelled cleanup reports zero leftover containers. The raw XML records the assertions' result; no packet-level JSON-RPC wire capture was enabled. The fixture source and advertised literal schema are preserved; do not call this a full transport capture.
+
+The realistic supported journey is the offline compute-tool lifecycle with real Docker/SDK/bridge/ToolRegistry and returned data. Author/model and approvals are fixed synthetic callbacks. No live Alita author, native approval UI, account write or production journey is certified.

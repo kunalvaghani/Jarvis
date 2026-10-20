@@ -1,0 +1,54 @@
+{
+  "runs": {
+    "final-full": {
+      "PASS": 1910,
+      "FAIL": 0,
+      "SKIPPED": 139,
+      "seconds": 615.082
+    },
+    "candidate-final": {
+      "PASS": 1941,
+      "FAIL": 0,
+      "SKIPPED": 139,
+      "seconds": 601.502
+    },
+    "prior-findings": {
+      "PASS": 33,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 10.029
+    },
+    "model-paths-before": {
+      "PASS": 4,
+      "FAIL": 27,
+      "SKIPPED": 0,
+      "seconds": 1.631
+    },
+    "model-paths-after": {
+      "PASS": 97,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 3.548
+    },
+    "deep-lab": {
+      "PASS": 0,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 1.658
+    }
+  },
+  "final_distinct_candidate_checks": {
+    "PASS": 1941,
+    "FAIL": 1,
+    "SKIPPED": 139
+  },
+  "counting": "candidate-final plus distinct unchanged-production deep-lab repro; overlapping targeted/prior runs not summed",
+  "full_live_assistant_E2E": 0,
+  "owned_simulated_journals": 3,
+  "revised_37_full_acceptance": {
+    "PASS": 1,
+    "BLOCKED": 25
+  },
+  "original_797_planned_not_execution": true,
+  "performance_runtime_comparison": "NOT VALID: test scope/load differ; paired guard microbenchmark reported separately"
+}

@@ -1,0 +1,3 @@
+# Concrete Claude proposals
+Review/apply source-only.patch against e5af0e7: only jarvis/repair_authorization.py and scripts/setup/setup_brain.py. Add new-test.patch (31 model path variants). Earlier UI and memory regressions remain separately proposed; combined-new-tests.patch includes all three new files (34 test cases total). No source commit/merge/deploy performed.
+Exact SHA-256 manifests identify uncommitted candidate. Prior codex-review repairs already integrated at 3fbfbf6 must not be reapplied wholesale; since-prior-v2.patch/since-original-review.patch are lineage, not new proposals. Review only source-only.patch and new tests for this delta. Preserve user config and historical evidence.

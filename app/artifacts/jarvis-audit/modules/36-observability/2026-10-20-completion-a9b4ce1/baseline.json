@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-20",
+  "base_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "source": "base + retained P34/P35 proposals + P36 local changes",
+  "runs": {
+    "baseline": {
+      "PASS": 128,
+      "FAIL": 1,
+      "SKIPPED": 1,
+      "seconds": 43.27
+    },
+    "before": {
+      "PASS": 1,
+      "FAIL": 8,
+      "SKIPPED": 0,
+      "seconds": 1.427
+    },
+    "selection-before": {
+      "PASS": 0,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 1.019
+    },
+    "targeted": {
+      "PASS": 54,
+      "FAIL": 2,
+      "SKIPPED": 0,
+      "seconds": 20.308
+    },
+    "targeted-final": {
+      "PASS": 59,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 23.11
+    },
+    "supplemental": {
+      "PASS": 72,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 32.109
+    },
+    "final-regression": {
+      "PASS": 631,
+      "FAIL": 0,
+      "SKIPPED": 5,
+      "seconds": 373.618
+    }
+  },
+  "headline_run": "final-regression",
+  "overlapping_runs_not_summed": true,
+  "baseline_failure": "JRV-11-007 missing Hermes metadata at isolated path; final read-only wrapper uses verified existing installed 210-row catalog.",
+  "peak_test_process_memory": "NOT MEASURED",
+  "real_cloud_calls": 0,
+  "messages": 0,
+  "training_runs": 0,
+  "physical_UI_or_mic": false,
+  "installs": 0
+}

@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-20",
+  "scope": "Windows owned disposable processes and grant files only; no executor, install or download",
+  "four_processes": {
+    "PASS": true,
+    "successful_consumers": 1
+  },
+  "crash_releases_lock": {
+    "PASS": true,
+    "owned_child_exit": 17
+  },
+  "posix": "NOT RUN"
+}

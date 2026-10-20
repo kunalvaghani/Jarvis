@@ -1,0 +1,5 @@
+# Prompt 31 independent continuation — 2026-10-19 IST
+
+P31-002 repair proposal (not applied): originate an unpredictable request ID before enqueueing the card, keep the expected receipt state in the requester, and have the UI preserve that ID. Accept a receipt only for the exact still-pending request and consume it once. Bind tool, immutable canonical arguments/digest, identity/scope, skill version, generation, issuance/expiry and cancellation independently of model text. A text hash alone cannot distinguish repeated equal requests. Apply the same protocol to App and learned-ability cards; preserve deny/lapse semantics and existing approved-scope executor checks.
+
+Verify: both new replay assertions must pass, original stale/expired/unbound/voice/concurrent tests must remain green, and genuine same-text requests must each work after their own user decision. Also test forged/missing/wrong IDs, delayed/expired receipts, cancellation/restart and argument/version changes. This is a contract suggestion, not a validated code patch; independent receipt-seam attacker control remains unproven.

@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-19",
+  "claude_sha": "2c4ea56eb7967929e49dad07b0612cb99caaf56e",
+  "prior_sha": "0e3ad4706b5120e5d0479d34333e5faa7b0931b5",
+  "branch": "codex-review",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "interpreter": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "runs": {
+    "repair-replay": {
+      "PASS": 28,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 11.058
+    },
+    "regression": {
+      "PASS": 223,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 189.669
+    },
+    "cross-pillar": {
+      "PASS": 19,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 5.266
+    },
+    "contract-edges": {
+      "PASS": 0,
+      "FAIL": 5,
+      "SKIPPED": 0,
+      "seconds": 1.677
+    },
+    "provider-context": {
+      "PASS": 3,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 1.057
+    }
+  },
+  "totals": {
+    "PASS": 273,
+    "FAIL": 6,
+    "SKIPPED": 0
+  },
+  "memory": "Test process peak memory NOT MEASURED; benchmark allocation peak is fixture-only",
+  "isolated_dependencies": "Existing original .venv/.venv-skills interpreters, audited source/cwd remain isolated",
+  "author_report": "Claude 3449 passed/147 skipped is upstream evidence only, not our fresh count"
+}

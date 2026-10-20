@@ -1,0 +1,20 @@
+{
+  "parent_artifacts_unchanged": 5397,
+  "source_hashes_verified": 560,
+  "candidate_production_files_changed": 2,
+  "patches_apply_to_pinned_index": true,
+  "fresh_counts": {
+    "PASS": 1941,
+    "FAIL": 1,
+    "SKIPPED": 139
+  },
+  "new_tests_in_combined_patch": 3,
+  "prior_production_repairs_already_integrated": true,
+  "json_jsonl": "PASS",
+  "links_checked": 36,
+  "candidate_proposal_matches_review_files": true,
+  "candidate_workflow_journals": 3,
+  "diff_check": "PASS",
+  "pin_tracked_clean": true,
+  "combined_patches_check_root_index": "PASS"
+}

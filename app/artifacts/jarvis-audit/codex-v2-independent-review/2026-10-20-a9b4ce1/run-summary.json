@@ -1,0 +1,83 @@
+{
+  "runs": {
+    "pinned-boundaries": {
+      "PASS": 15,
+      "FAIL": 64,
+      "SKIPPED": 1,
+      "seconds": 10.679
+    },
+    "pinned-prior-findings": {
+      "PASS": 33,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 7.441
+    },
+    "candidate-boundaries": {
+      "PASS": 79,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 4.4
+    },
+    "candidate-full": {
+      "PASS": 1857,
+      "FAIL": 39,
+      "SKIPPED": 139,
+      "seconds": 461.571
+    },
+    "triage": {
+      "PASS": 1,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 2.24
+    },
+    "tool-schema-before": {
+      "PASS": 0,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 0.978
+    },
+    "schema-final": {
+      "PASS": 13,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 1.397
+    },
+    "harness-preflight": {
+      "PASS": 33,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 27.812
+    },
+    "candidate-final": {
+      "PASS": 1896,
+      "FAIL": 0,
+      "SKIPPED": 139,
+      "seconds": 538.832
+    },
+    "deep-lab": {
+      "PASS": 0,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 1.641
+    },
+    "pinned-deep-lab": {
+      "PASS": 0,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 1.561
+    }
+  },
+  "headline": "candidate-final plus distinct deep-lab test",
+  "final_distinct_candidate_checks": {
+    "PASS": 1896,
+    "FAIL": 1,
+    "SKIPPED": 139
+  },
+  "overlaps_not_summed": true,
+  "full_assistant_live_E2E": 0,
+  "owned_component_workflow_journals": 3,
+  "mutation_pairs": 6,
+  "mutation_assertion_failures_are_expected": true,
+  "superseded_partial_run": "interrupted-run.json",
+  "release": "NOT READY FOR DEPLOYMENT"
+}

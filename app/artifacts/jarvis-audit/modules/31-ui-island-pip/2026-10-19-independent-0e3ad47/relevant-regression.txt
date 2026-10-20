@@ -1,0 +1,18 @@
+........................................................................ [ 10%]
+.....................................................................s.. [ 21%]
+........................................................................ [ 32%]
+........................sssssss......................................... [ 43%]
+........................................................................ [ 54%]
+........................................................................ [ 65%]
+......................................................sssss............. [ 76%]
+........................................................................ [ 87%]
+........................................................................ [ 98%]
+.......                                                                  [100%]
+============================== warnings summary ===============================
+Jarvis-codex-review/app/tests/test_phase02_execution_strategy.py::test_P02_06_structured_uia_first_on_disposable_app
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-0e3ad47\relevant-regression.xml -
+642 passed, 13 skipped, 1 warning in 1120.48s (0:18:40)

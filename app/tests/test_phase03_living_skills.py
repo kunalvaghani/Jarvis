@@ -127,7 +127,7 @@ def test_P03_selection_and_outcomes_are_counted_once_per_task(env):
     metrics = env.skills.store.metrics(by_name(env.skills, 'sheet-editing')['skill_id'])
     assert (metrics['selected_count'], metrics['applied_count'], metrics['completed_verified_count'],
             metrics['fallback_count']) == (1, 1, 1, 0)
-    assert metrics['last_verified_evidence'] == {'evidence': ['cells read back']}
+    assert metrics['last_verified_evidence'] == {'evidence_count': 1}  # Raw readback text is not telemetry.
 
 
 def test_P03_failure_cause_and_fallback_are_recorded(env):

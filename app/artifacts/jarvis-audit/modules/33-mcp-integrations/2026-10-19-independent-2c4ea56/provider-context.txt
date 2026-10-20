@@ -1,0 +1,41 @@
+...F                                                                     [100%]
+================================== FAILURES ===================================
+_ test_JRV_33_022_account_switch_during_approval_must_not_write_other_workspace _
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-548/test_JRV_33_022_account_switch0')
+
+    def test_JRV_33_022_account_switch_during_approval_must_not_write_other_workspace(tmp_path):
+        host = actions(tmp_path)
+        ledger = []
+        approvals = []
+        def approve(kind, detail, cancelled):
+            approvals.append(json.loads(detail))
+            # Simulate the configured account switching while this approval was pending.
+            os.environ['JARVIS_GOOGLE_ACCESS_TOKEN']='SYNTHETIC_ACCOUNT_B_TOKEN'
+        host._approve=approve
+        def api(client, method, url, cancelled, **kwargs):
+            token=kwargs['headers']['Authorization']
+            ledger.append({'method':method,'account':'B' if token.endswith('B_TOKEN') else 'A',
+                           'url':url,'body':kwargs.get('json')})
+            return json.dumps({'id':'SYNTHETIC_CREATED_EVENT'})
+        with patch.dict(os.environ,{'JARVIS_GOOGLE_ACCESS_TOKEN':'SYNTHETIC_ACCOUNT_A_TOKEN'},clear=True), \
+             patch('jarvis.toolkits.api',side_effect=api):
+            try:
+                ToolRegistry(host).execute({'action':'calendar_create','value':'primary','content':json.dumps({
+                    'summary':'SYNTHETIC_EVENT_FOR_A','start':{'date':'2026-10-20'},'end':{'date':'2026-10-21'}})},lambda:False)
+            except ValueError:
+                pass  # Refusing after identity drift is a safe outcome; writing as B is not.
+        (Path(__file__).parent/'account-switch-observation.json').write_text(json.dumps({
+            'initial_account':'A','approval_details':approvals,'intercepted_requests':ledger,
+            'network_calls':'ZERO; jarvis.toolkits.api replaced by an in-memory ledger'},indent=2))
+>       assert not any(row['method']=='POST' and row['account']=='B' for row in ledger), \
+            'account A request dispatched as account B after approval'
+E       AssertionError: account A request dispatched as account B after approval
+E       assert not True
+E        +  where True = any(<generator object test_JRV_33_022_account_switch_during_approval_must_not_write_other_workspace.<locals>.<genexpr> at 0x0000026C2255F530>)
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-2c4ea56\test_provider_context.py:80: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-2c4ea56\provider-context.xml -
+=========================== short test summary info ===========================
+FAILED artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-2c4ea56\test_provider_context.py::test_JRV_33_022_account_switch_during_approval_must_not_write_other_workspace
+1 failed, 3 passed in 1.06s

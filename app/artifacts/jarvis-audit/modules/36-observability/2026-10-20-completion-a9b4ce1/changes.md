@@ -1,0 +1,11 @@
+# Local changes and verification
+
+P36-001: SkillStore event evidence now keeps an allowlist of metadata (version, categorical cause/reason, evidence count), never arbitrary readback text or serialized-JSON truncation. Raw failure detail is not written. Metrics safely parse/sanitize old evidence and count malformed records without rewriting historical DBs.
+
+P36-002: explicitly refuted bound tool steps cannot receive completed_verified credit even when a task claims completion/goal_verified. P36-003: selected/no execution means selected only; alternate executed tools still count as fallback. Restart idempotency remains in SQLite unique keys.
+
+P36-004: tool lifecycle/outcome and nested cloud events carry host monotonic_ns/clock_id, with TaskState UUID captured once per registry call via ContextVar. Wall time remains for ordering. P36-005: optional journal OSError cannot block/replay permitted execution or bypass deny policy; storage cap 32 MiB stops append and exposes limited status, without deleting old evidence. P36-006: cloud v2 logs contain decisions, hashed problem identity and payload bytes/digest, not payload/advice/raw reason; blocked privacy/eligibility/duplicate/provider states recorded; 8 MiB cap and OSError degrade diagnosis without retrying consultation.
+
+Baseline 128 pass/1 fail/1 skip: Hermes data missing at isolated path. Original installed 210-row catalog verified and routed read-only in final wrapper; no source install/workaround or expected-xfail. First adverse suite 8 fail/1 pass includes two invalid test fixtures missing a toolkit folder; corrected pinned-source probe with a valid folder independently confirms absent task/monotonic metadata and locked-log dispatch blocking. Six other original failures and separate selected-only failure are genuine. Measurement collector initially missed its old-trace directory; fixed harness, not app.
+
+Updated three explicit legacy assertions for the new privacy/clock schema, preserving dispatch, payload allowlist, counter and idempotency checks. Targeted final 59 pass. Final relevant: **631 PASS / 0 FAIL / 5 SKIPPED**. Supplemental evaluator/GPU admission results are separate in baseline.json; do not sum overlapping runs. No dependency/config/UI-artwork change, screenshot, commit, merge or deployment.

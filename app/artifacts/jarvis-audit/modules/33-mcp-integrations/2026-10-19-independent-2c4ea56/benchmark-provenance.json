@@ -1,0 +1,7 @@
+{
+  "before": "0e3ad4706b5120e5d0479d34333e5faa7b0931b5",
+  "after": "2c4ea56eb7967929e49dad07b0612cb99caaf56e",
+  "iterations": 300,
+  "warmup": 20,
+  "scope": "Warm sequential synthetic bridge overhead including tracemalloc. No subprocess, Docker, provider, model or approval UI latency; no improvement claim."
+}

@@ -1,0 +1,3 @@
+# Changes by Codex
+
+Fast-forwarded only the isolated codex-review checkout to the actual Claude repair commit after preserving pending audit docs under pre-update. Added byte-identical copies of independent repro tests with outputs naturally scoped to this packet, new edge/account tests, XML/text observations, hashes, benchmark and reports. Updated root/app README and recovery guide with current independent status. No application source, dependency, config, visible UI/artwork, service policy, commit, merge into main or deployment changed. Original checkout user config and prior evidence preserved.

@@ -1,0 +1,180 @@
+{
+  "mutants": [
+    {
+      "id": "permission",
+      "test": "tests/test_prompt36_observability.py::test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.45709040001384,
+        "xml": "mutation-permission-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 2.822829000011552,
+        "xml": "mutation-permission.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "f4d77efb0fea212bbebb606223b3cc831adcbb84722d84e7b5065f283ebd56a9",
+      "mutant_sha256": "4bd411e13000bdebedb6b8addc8131a865dec7fce043f5fa6b11ced289a240e2",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.527831600018544,
+        "xml": "mutation-permission-restored.xml"
+      }
+    },
+    {
+      "id": "false_tool_success",
+      "test": "tests/test_prompt35_security.py::test_JRV_35_008_021_tool_success_cannot_override_independent_readback",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.331434799998533,
+        "xml": "mutation-false_tool_success-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 4,
+        "errors": 0,
+        "seconds": 2.7935389000049327,
+        "xml": "mutation-false_tool_success.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "0a863944eab1427549b2c591dc117bde1a085f0e01894cecbc8d20af243a23cf",
+      "mutant_sha256": "91f4189ee1e738bc49e5d196ff41c88a7c10a11b94f6c53fe6d5dac1e3a0f67a",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.1618313000071794,
+        "xml": "mutation-false_tool_success-restored.xml"
+      }
+    },
+    {
+      "id": "stale_selector",
+      "test": "tests/test_ui_controls.py::UITests::test_changed_controls_invalidate_number",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.6942901000147685,
+        "xml": "mutation-stale_selector-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 3.0795731999969576,
+        "xml": "mutation-stale_selector.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "2dcd4ebfec3cfc07eff0c84161a73d95f778be878d0ce635491b85dec13106cc",
+      "mutant_sha256": "cba4a30f328854a9e6acd1c8b34f3b43a12a36d2c0aa44567e52e17c2d8eaaa3",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.363605099992128,
+        "xml": "mutation-stale_selector-restored.xml"
+      }
+    },
+    {
+      "id": "disabled_verify",
+      "test": "tests/test_hierarchical.py::DAGTests::test_read_retry_backoff_and_failure_propagation",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.2586406000191346,
+        "xml": "mutation-disabled_verify-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 2.6191717999754474,
+        "xml": "mutation-disabled_verify.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "20f68252fc5075c157b19da41c4e9c72d35bcd1d987aa5824af8af597d570ab9",
+      "mutant_sha256": "434c4e279491120c7b225876202a796ede6c2ed4b85e124a74f5e4e3cdabb215",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.051602199993795,
+        "xml": "mutation-disabled_verify-restored.xml"
+      }
+    },
+    {
+      "id": "heldout_tamper",
+      "test": "tests/test_phase06_controlled_evolution.py::test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 9.960546999995131,
+        "xml": "mutation-heldout_tamper-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 10.909410699998261,
+        "xml": "mutation-heldout_tamper.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "20874e2727bf966e2df67535c70c7ddfe5c50dc1b27227e88e7e29d3178ea38b",
+      "mutant_sha256": "04100af4951b13ae049d4b689193c427abf10145ee44739ee71172e511706dcc",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 10.080077400023583,
+        "xml": "mutation-heldout_tamper-restored.xml"
+      }
+    },
+    {
+      "id": "duplicate_write",
+      "test": "tests/test_phase08_integration.py::test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects",
+      "control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.7199477000103798,
+        "xml": "mutation-duplicate_write-control.xml"
+      },
+      "mutant": {
+        "returncode": 1,
+        "assertion_failures": 1,
+        "errors": 0,
+        "seconds": 2.839585999987321,
+        "xml": "mutation-duplicate_write.xml"
+      },
+      "killed": true,
+      "candidate_sha256": "20f68252fc5075c157b19da41c4e9c72d35bcd1d987aa5824af8af597d570ab9",
+      "mutant_sha256": "7dd512313213ecddd052c4e44d22a5982b9803879175c35259f09f06fa6cbdac",
+      "scope": "disposable checkout; synthetic/owned fixtures only",
+      "restored_control": {
+        "returncode": 0,
+        "assertion_failures": 0,
+        "errors": 0,
+        "seconds": 2.4683663000178058,
+        "xml": "mutation-duplicate_write-restored.xml"
+      }
+    }
+  ],
+  "tracked_original_bytes_restored": true,
+  "added_tests_retained_as_owned_overlay": true
+}

@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-20",
+  "required_reports": 12,
+  "reconciliation_files": 9,
+  "numbered_denominator": 26,
+  "blocked_cases": 26,
+  "workflow_journals": 3,
+  "benchmark_pairs": 30,
+  "prior_originals_unchanged": true,
+  "P34_P35_P36_source_hashes_retained": true,
+  "current_source_hashes_match": true,
+  "full_live_E2E": "BLOCKED",
+  "release": "NOT READY",
+  "new_packet_readme_handoff_links_checked": 19,
+  "json_jsonl_parse": "PASS",
+  "git_diff_check": "PASS",
+  "source_hash_readback": "PASS"
+}

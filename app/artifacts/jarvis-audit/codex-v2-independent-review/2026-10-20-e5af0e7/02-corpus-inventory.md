@@ -1,0 +1,4 @@
+# Corpus provenance
+Original Master and all 37 prompt documents found under the recorded Jarvis test pack; exact `00_MASTER_CONTRACT.md` is unavailable. Seven revised downloads and Prompt 99 read/imported; unrelated EDITH master excluded.
+1,184 original stable IDs become 1,346 ID+expected-behavior variants after revised cases. [Provenance/hashes](corpus-provenance.json), [mapped specifications](mapped-corpus.jsonl), [coverage](04-coverage.jsonl). Per row: severity, source imports, legacy path, pillar seam and supported environment. Static grouping is explicitly weaker than semantic proof.
+The checked-out older catalog hash differs from supplied companion catalog; supplied pack is the imported specification. Planned IDs and the old 797-row checkpoint never become executed PASS by inference. Most full acceptance remains BLOCKED/NOT RUN, even where fixture checks pass.

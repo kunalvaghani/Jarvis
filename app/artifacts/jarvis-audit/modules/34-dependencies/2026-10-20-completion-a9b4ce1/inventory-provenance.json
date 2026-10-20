@@ -1,0 +1,19 @@
+{
+  "snapshot": "../2026-10-20-independent-146ba83",
+  "snapshot_base": "146ba83",
+  "copied_byte_identically": {
+    "environment-sbom.json": "8b86b772a59e76d4d6e50d9e1c760728604e40d019257b83a92ea75a4a732dd0",
+    "dependency-graph.json": "d74f55235de58cd3757091bfa3b76965d7d18a3f4d395aeccd8ef17910f820c5",
+    "lockfile-map.json": "d6591f9a49593585a91daf4188185dee024f9f60b77b6c3ea42f9796bb41fd2c",
+    "worker-interpreters.json": "9495c83b859495924b7158c96277ea3bf1da9cf0735e41171d634037ecc33691",
+    "os-gpu-tools.json": "c8899933fd50ff8ed9e368857e3e4dbb8dbf39cee1547315f6f88cd0222db2b7",
+    "cve-applicability.json": "16c93c0cdc7b1369b84547f9c15932983114f76c95de038d694cc5b0b30b06c8"
+  },
+  "fresh_checks": [
+    "pip-checks.json",
+    "torch-import-readback.json",
+    "playwright-readback.json",
+    "launcher-check.txt"
+  ],
+  "packages_changed": false
+}

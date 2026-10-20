@@ -10,6 +10,7 @@ penalty (-1) and are kept only in the rejection log, never in a dataset.
 """
 import json
 import random
+import re
 import urllib.request
 
 from .azr_tasks import (APPS, TOOLS, canonical, check_abduction, check_deduction, execute, extract_code, parse_json_answer,
@@ -40,6 +41,14 @@ PROPOSE_INDUCTION = ('Propose one small pure Python function f(x) and 8 differen
                      'Earlier examples: {references}')
 
 
+def _screen_training_text(value):
+    """Known sensitive proposal text is quarantined, never sent to the oracle or dataset."""
+    from .cloud_policy import SECRET, privacy_text
+    text = privacy_text(json.dumps(value, ensure_ascii=False))
+    if SECRET.search(text) or re.search(r'\b(?:private|confidential|proprietary|internal.only)\b', text, re.I):
+        raise ValueError('private training proposal quarantined')
+
+
 def validate_deduction(proposal):
     """Oracle validation: schema, tools, then execute; the answer is computed, never taken from the model."""
     initial = proposal.get('initial')
@@ -62,6 +71,7 @@ def validate_deduction(proposal):
                                                                         for v in call['args'].values()):
             raise ValueError('arguments')
         clean.append({'id': f's{index + 1}', 'tool': call['tool'], 'args': call['args']})
+    _screen_training_text({'initial': state, 'calls': clean})
     first = execute(state, clean)
     if execute(state, clean) != first:
         raise ValueError('nondeterministic')
@@ -93,6 +103,7 @@ def validate_induction(proposal, base, run_programs):
                 and all(type(i) is int and -10 ** 6 < i < 10 ** 6 for i in v)) for v in inputs):
         raise ValueError('inputs')
     unique = list({json.dumps(v): v for v in inputs}.values())
+    _screen_training_text({'source': source, 'message': message, 'inputs': unique})
     # Outputs come from sandboxed execution (twice), not from the proposer.
     probe = run_programs(base, [{'id': 'probe', 'source': source, 'cases': [{'input': v, 'output': None} for v in unique]}])
     row = probe['probe']

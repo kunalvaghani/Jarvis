@@ -20,6 +20,7 @@ from dataclasses import asdict, dataclass
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -47,6 +48,19 @@ class RepairRequired(ValueError):
 
 class RepairRefused(ValueError):
     """An authorization was present but does not satisfy its bounds; nothing was started."""
+
+
+def model_reference(model):
+    """Return a registry-relative name/tag; an approved alias is never a filesystem path."""
+    if not isinstance(model, str) or len(model) > 256:
+        raise RepairRefused('The approved model must be a registry model name, not a path.')
+    name, separator, tag = model.partition(':')
+    parts = name.split('/')
+    component = r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}'
+    if (len(parts) not in (1, 2) or any(re.fullmatch(component, part) is None for part in parts)
+            or (separator and re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9._-]{0,127}', tag) is None)):
+        raise RepairRefused('The approved model must use name[:tag] or namespace/name[:tag], without path traversal.')
+    return (name if len(parts) == 2 else 'library/' + name), (tag if separator else 'latest')
 
 
 def offline_policy(environment=None):
@@ -92,6 +106,15 @@ class ModelDownload:
     approval_id: str
 
 
+def _check_lifetime_and_id(approval, now):
+    if (type(approval.expires) not in (int, float) or not math.isfinite(approval.expires)
+            or approval.expires <= now or approval.expires - now > MAX_AGE):
+        raise RepairRefused('The repair authorization has expired or has an invalid lifetime; authorize it again.')
+    if (not isinstance(approval.approval_id, str)
+            or not re.fullmatch(r'[A-Za-z0-9_-]{1,64}', approval.approval_id)):
+        raise RepairRefused('The repair authorization identifier is invalid.')
+
+
 def locked_requirements(text):
     """Return pinned requirement names, or raise unless every requirement is pinned and hash-locked."""
     names, current = [], ''
@@ -105,7 +128,13 @@ def locked_requirements(text):
         entry, current = current.strip(), ''
         if entry.startswith('-'):
             raise RepairRefused('The approved lock may only contain pinned, hashed requirements (found an option line).')
-        requirement = entry.split(' --hash', 1)[0].strip()
+        # Consume the entire entry: a valid hash must not hide trailing pip options or remote sources.
+        match = re.fullmatch(r'(.+?)((?:\s+--hash=sha256:[0-9a-f]{64})+)', entry)
+        if match is None:
+            raise RepairRefused('The approved lock needs only exact sha256 hashes after each requirement.')
+        requirement = match.group(1).strip()
+        if re.search(r'(^|\s)--', requirement) or '://' in requirement:
+            raise RepairRefused('The approved lock cannot add pip options or remote sources.')
         if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*(\[[A-Za-z0-9,._-]+\])?==[A-Za-z0-9.+!_-]+(\s*;.*)?', requirement):
             raise RepairRefused('The approved lock pins every requirement with ==; ' + requirement[:80] + ' is not pinned.')
         if not re.search(r'--hash=sha256:[0-9a-f]{64}', entry):
@@ -122,10 +151,11 @@ def check_dependency_repair(base, approval, environment_name, now=None, disk_usa
     """Validate a dependency authorization for ``environment_name``; return (lock path, wheelhouse path)."""
     now = time.time() if now is None else now
     disk_usage = disk_usage or shutil.disk_usage
+    if not isinstance(approval, DependencyRepair):
+        raise RepairRefused('No valid dependency repair authorization.')
+    _check_lifetime_and_id(approval, now)
     if approval.environment != environment_name or environment_name not in ENVIRONMENTS:
         raise RepairRefused('The authorization is for ' + approval.environment + ', not ' + environment_name + '.')
-    if not approval.expires or now > approval.expires:
-        raise RepairRefused('The dependency repair authorization has expired; authorize it again.')
     try:
         lock = _inside(base, approval.lock)
     except ValueError:
@@ -137,7 +167,7 @@ def check_dependency_repair(base, approval, environment_name, now=None, disk_usa
     if not wheelhouse.is_dir():
         raise RepairRefused('The approved local artifact set (wheelhouse) is missing.')
     size = sum(path.stat().st_size for path in wheelhouse.rglob('*') if path.is_file())
-    if not isinstance(approval.max_bytes, int) or approval.max_bytes <= 0 or size > approval.max_bytes:
+    if type(approval.max_bytes) is not int or approval.max_bytes <= 0 or size > approval.max_bytes:
         raise RepairRefused('The approved artifact set exceeds its byte budget or the budget is unknown.')
     # Staging keeps the old environment in place, so room is needed for an unpacked copy beside it.
     if disk_usage(str(base)).free < 3 * approval.max_bytes + DISK_RESERVE:
@@ -150,17 +180,17 @@ def check_model_download(approval, missing, model_store, environment=None, now=N
     """Final pre-launch gate for a model download; raises RepairRefused for anything unknown or insufficient."""
     now = time.time() if now is None else now
     disk_usage = disk_usage or shutil.disk_usage
-    if approval is None:
+    if not isinstance(approval, ModelDownload):
         raise RepairRefused('No approved model download; nothing was started.')
-    if not approval.expires or now > approval.expires:
-        raise RepairRefused('The model download authorization has expired; authorize it again.')
+    _check_lifetime_and_id(approval, now)
+    model_reference(approval.model)
     if approval.model not in missing:
         raise RepairRefused('The approved model ' + approval.model[:80] + ' is not one of the missing configured models.')
     if not re.fullmatch(r'sha256:[0-9a-f]{64}', approval.revision or ''):
         raise RepairRefused('The approved model revision must be an exact sha256 manifest digest.')
     if approval.source not in MODEL_SOURCES:
         raise RepairRefused('The approved model source is not a known registry.')
-    if not approval.network_allowed:
+    if approval.network_allowed is not True:
         raise RepairRefused('The model download authorization does not permit network use.')
     blocked = offline_policy(environment)
     if blocked:
@@ -202,14 +232,36 @@ def model_store(environment=None):
 
 def _take(runtime, name, kind):
     path = Path(runtime) / name
-    try:
-        data = json.loads(path.read_text(encoding='utf-8'))
-    except FileNotFoundError:
+    if not path.exists():
         return None
-    except (OSError, ValueError):
-        path.unlink(missing_ok=True)
-        raise RepairRefused('The repair authorization file is unreadable; it was discarded.') from None
-    path.unlink(missing_ok=True)  # single use, whether or not it is valid
+    # A persistent lock file has no stale ownership: the OS releases its byte lock on close/crash.
+    # Do not unlink this lock, which could let another process lock a different file at the same path.
+    try:
+        handle = (Path(runtime) / ('.' + name + '.lock')).open('a+b')
+    except OSError:
+        raise RepairRefused('The repair authorization could not be claimed; nothing was started.') from None
+    with handle:
+        if not handle.seek(0, os.SEEK_END):
+            handle.write(b'\0')
+            handle.flush()
+        handle.seek(0)
+        try:
+            if os.name == 'nt':
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            return None  # Another consumer owns the grant; never repeat it.
+        try:
+            data = json.loads(path.read_text(encoding='utf-8'))
+        except FileNotFoundError:
+            return None
+        except (OSError, ValueError):
+            path.unlink(missing_ok=True)
+            raise RepairRefused('The repair authorization file is unreadable; it was discarded.') from None
+        path.unlink(missing_ok=True)  # Jarvis-owned single-use grant, while the OS lock is held.
     try:
         return kind(**data)
     except TypeError:

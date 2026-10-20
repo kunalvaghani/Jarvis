@@ -1,0 +1,7 @@
+....................................                                     [100%]
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-0e3ad47\approval-reverification.xml -
+36 passed in 1.23s
+Exception ignored in: <function Console.__del__ at 0x0000022EBC55F910>
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pyreadline3\console\console.py", line 256, in __del__
+OSError: [WinError -1073741816] Windows Error 0xc0000008

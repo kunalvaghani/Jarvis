@@ -1,0 +1,57 @@
+{
+  "node": {
+    "executable": "C:\\Program Files\\nodejs\\node.EXE",
+    "probe": {
+      "returncode": 0,
+      "output": "v24.14.0\r\n"
+    }
+  },
+  "npm": {
+    "executable": "C:\\Program Files\\nodejs\\npm.CMD",
+    "probe": {
+      "returncode": 0,
+      "output": "11.11.1\n"
+    }
+  },
+  "ollama": {
+    "executable": "%USERPROFILE%\\AppData\\Local\\Programs\\Ollama\\ollama.EXE",
+    "probe": {
+      "returncode": 0,
+      "output": "ollama version is 0.40.0\n"
+    }
+  },
+  "docker": {
+    "executable": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE",
+    "probe": {
+      "returncode": 0,
+      "output": "Docker version 29.8.2, build 7fc2dff\n"
+    }
+  },
+  "nvcc": {
+    "executable": null,
+    "probe": {
+      "status": "NOT FOUND ON PATH",
+      "limitation": "Does not prove toolkit absent; installed PyTorch wheels bundle their own CUDA runtime."
+    }
+  },
+  "wsl": {
+    "executable": "C:\\windows\\system32\\wsl.EXE",
+    "probe": {
+      "returncode": 0,
+      "output": "WSL version: 2.6.1.0\r\nKernel version: 6.6.87.2-1\r\nWSLg version: 1.0.66\r\nMSRDC version: 1.2.6353\r\nDirect3D version: 1.611.1-81528511\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\nWindows version: 10.0.26200.9711\r\n"
+    }
+  },
+  "gpu": {
+    "returncode": 0,
+    "output": "NVIDIA GeForce RTX 3050 Laptop GPU, 610.74, 4096, 3558\r\n"
+  },
+  "os": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64"
+  },
+  "wheel_cache": {
+    "returncode": 0,
+    "output": "Package index page cache location (pip v23.3+): %USERPROFILE%\\appdata\\local\\pip\\cache\\http-v2\r\nPackage index page cache location (older pips): %USERPROFILE%\\appdata\\local\\pip\\cache\\http\r\nPackage index page cache size: 6559.1 MB\r\nNumber of HTTP files: 1828\r\nLocally built wheels location: %USERPROFILE%\\appdata\\local\\pip\\cache\\wheels\r\nLocally built wheels size: 570 kB\r\nNumber of locally built wheels: 9\r\n"
+  },
+  "wsl_status": "Version queried only; no distro started, Linux path/permission execution not certified."
+}

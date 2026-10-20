@@ -1,0 +1,145 @@
+{
+  "method": "Source references; not a claim every worker launched",
+  "references": [
+    {
+      "path": "jarvis/app_adapters.py",
+      "line": 161,
+      "source": "path = APP / ('.venv-skills' if kind == 'skills' else '.venv') / 'Scripts' / 'python.exe'"
+    },
+    {
+      "path": "jarvis/brain.py",
+      "line": 280,
+      "source": "worker_environment = \".venv-brain\""
+    },
+    {
+      "path": "jarvis/deerflow.py",
+      "line": 32,
+      "source": "return {'revision': REVISION, 'python_available': (base / '.venv-deerflow/Scripts/python.exe').is_file(),"
+    },
+    {
+      "path": "jarvis/deerflow.py",
+      "line": 80,
+      "source": "python = base / '.venv-deerflow/Scripts/python.exe'"
+    },
+    {
+      "path": "jarvis/f5_speech.py",
+      "line": 62,
+      "source": "if not (BASE / \".venv-f5/Scripts/python.exe\").is_file():"
+    },
+    {
+      "path": "jarvis/harness.py",
+      "line": 35,
+      "source": "if not (base / '.venv-harness/Scripts/python.exe').is_file():"
+    },
+    {
+      "path": "jarvis/harness.py",
+      "line": 44,
+      "source": "worker_environment = '.venv-harness'"
+    },
+    {
+      "path": "jarvis/hermes.py",
+      "line": 13,
+      "source": "if not (base / \".venv-hermes/Scripts/python.exe\").is_file():"
+    },
+    {
+      "path": "jarvis/hermes.py",
+      "line": 78,
+      "source": "worker_environment = \".venv-hermes\""
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 285,
+      "source": "python = BASE / \".venv\" / \"Scripts\" / \"python.exe\""
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 304,
+      "source": "f5_python = BASE / '.venv-f5/Scripts/python.exe'"
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 317,
+      "source": "brain = BASE / \".venv-brain\" / \"Scripts\" / \"python.exe\""
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 328,
+      "source": "return BASE / \".venv\" / \"Scripts\" / \"pythonw.exe\""
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 454,
+      "source": "if (BASE/'.venv-skills').exists():environments.append((\".venv-skills\",\"utility_imports\"))"
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 484,
+      "source": "if check_imports(BASE / '.venv-f5/Scripts/python.exe', manifest['f5_imports']).returncode:"
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 487,
+      "source": "result = subprocess.run([str(BASE / '.venv-f5/Scripts/python.exe'), '-m', 'jarvis.f5_speech', '--check'],"
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 504,
+      "source": "check = subprocess.run([str(BASE / '.venv-harness/Scripts/python.exe'),"
+    },
+    {
+      "path": "jarvis/launcher.py",
+      "line": 518,
+      "source": "check = subprocess.run([str(BASE / \".venv-hermes/Scripts/python.exe\"),"
+    },
+    {
+      "path": "jarvis/model_recovery.py",
+      "line": 58,
+      "source": "self.process = subprocess.Popen([str(self.base / \".venv/Scripts/python.exe\"),"
+    },
+    {
+      "path": "jarvis/speech.py",
+      "line": 316,
+      "source": "executable = str(base / \".venv-f5/Scripts/python.exe\") if f5 else sys.executable"
+    },
+    {
+      "path": "jarvis/trained_coder.py",
+      "line": 12,
+      "source": "interpreter = base/'.venv-training/Scripts/python.exe'"
+    },
+    {
+      "path": "jarvis/trained_pc.py",
+      "line": 12,
+      "source": "result=subprocess.run([str(base/'.venv-training/Scripts/python.exe'),'-m', 'scripts.training.qwen_pc_resolver','--checkpoint',str(checkpoint)],"
+    },
+    {
+      "path": "jarvis/utility_profiles.py",
+      "line": 98,
+      "source": "if not (root/'.venv-skills/Scripts/python.exe').is_file():"
+    },
+    {
+      "path": "jarvis/utility_service_transport.py",
+      "line": 17,
+      "source": "python=Path(actions.base)/'.venv-skills/Scripts/python.exe';job=OwnedJob();process=None"
+    },
+    {
+      "path": "jarvis/utility_tools.py",
+      "line": 19,
+      "source": "python=Path(actions.base)/'.venv-skills/Scripts/python.exe'"
+    },
+    {
+      "path": "jarvis/viking_memory.py",
+      "line": 58,
+      "source": "self.python = Path(__file__).resolve().parents[1] / '.venv-openviking' / 'Scripts' / 'python.exe'"
+    },
+    {
+      "path": "jarvis/viking_memory.py",
+      "line": 59,
+      "source": "self.server = Path(__file__).resolve().parents[1] / '.venv-openviking' / 'Scripts' / 'openviking-server.exe'"
+    },
+    {
+      "path": "jarvis/viking_worker.py",
+      "line": 1,
+      "source": "\"\"\"One-shot OpenViking client worker, run with .venv-openviking/Scripts/python.exe."
+    }
+  ]
+}

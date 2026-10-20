@@ -82,39 +82,96 @@ def setup():
 
 
 REGISTRY = "https://registry.ollama.ai/v2/"
+MANIFEST_TYPES = "application/vnd.docker.distribution.manifest.v2+json"
 
 
-def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGISTRY):
-    """One approved pull (P34-002): the manifest must match the approved digest and fit the byte budget before the
-    pull starts, and the installed digest is checked afterwards. There is no retry. Partial layers are kept."""
+def _digest(value):
+    if not isinstance(value, str) or len(value) != 71 or not value.startswith("sha256:") or             any(c not in "0123456789abcdef" for c in value[7:]):
+        raise SystemExit("The approved manifest names an invalid layer digest; nothing was installed.")
+    return value[7:]
+
+
+def _file_sha256(path):
+    import hashlib
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGISTRY, store=None):
+    """One approved download by content address (P34-002, R1).
+
+    The manifest is fetched **by its approved digest**, never by the mutable tag, and every layer is fetched by its
+    own digest into ``<store>/blobs``. No ``/api/pull`` of the tag is made. Bytes are capped per layer and in total by
+    the approved budget, every layer is hash-checked before it is published, and the tag manifest is only written once
+    all layers verify. Partial layers stay as ``-partial`` files for an approved resume; nothing is deleted, and there
+    is no retry. Ollama must then list the model at the approved digest, or the run fails (files kept).
+    """
     import hashlib
     import requests
-    name, _, tag = model.partition(":")
-    path = name if "/" in name else "library/" + name
-    manifest = requests.get(registry + path + "/manifests/" + (tag or "latest"), timeout=(5, 30),
-                            headers={"Accept": "application/vnd.docker.distribution.manifest.v2+json"})
+    from jarvis.repair_authorization import model_reference, model_store
+    path, tag = model_reference(model)  # validate again at this direct CLI/transport boundary, before HTTP
+    _digest(revision)
+    manifest = requests.get(registry + path + "/manifests/" + revision, timeout=(5, 30),
+                            headers={"Accept": MANIFEST_TYPES})
     manifest.raise_for_status()
-    if "sha256:" + hashlib.sha256(manifest.content).hexdigest() != revision:
-        raise SystemExit("The registry revision of " + model + " differs from the approved revision; nothing was pulled.")
-    body = manifest.json()
-    size = sum(int(layer.get("size", 0)) for layer in body.get("layers", [])) + int(body.get("config", {}).get("size", 0))
-    if not size or size > max_bytes:
+    raw = manifest.content
+    if "sha256:" + hashlib.sha256(raw).hexdigest() != revision:
+        raise SystemExit("The registry returned a manifest other than the approved revision; nothing was installed.")
+    body = json.loads(raw)
+    layers = [body.get("config", {})] + list(body.get("layers", []))
+    sizes = [layer.get("size") for layer in layers]
+    if not all(type(size) is int and size > 0 for size in sizes) or sum(sizes) > max_bytes:
         raise SystemExit("The download size of " + model + " is unknown or exceeds the approved budget; nothing was pulled.")
-    print("Pulling approved " + model + " (" + str(size) + " bytes, budget " + str(max_bytes) + ").", flush=True)
-    with session.post(endpoint + "/api/pull", json={"model": model, "stream": True}, stream=True, timeout=(5, 90)) as response:
-        response.raise_for_status()
-        succeeded = False
-        for line in response.iter_lines():
-            if line:
-                status = json.loads(line)
-                if status.get("error"):
-                    raise SystemExit("Approved download interrupted; partial layers are kept for an approved resume.")
-                succeeded = status.get("status") == "success" or succeeded
+    store = Path(store or model_store()).resolve()
+    manifests = store / "manifests" / "registry.ollama.ai"
+    target = manifests / Path(path) / tag
+    if not target.resolve().is_relative_to(manifests.resolve()) or not target.resolve().is_relative_to(store):
+        raise SystemExit("The approved model manifest escapes its store; nothing was installed.")
+    if target.exists():
+        raise SystemExit("A manifest for " + model + " already exists; it was kept and nothing was installed.")
+    (store / "blobs").mkdir(parents=True, exist_ok=True)
+    print("Fetching approved " + model + " by digest (" + str(sum(sizes)) + " bytes, budget " + str(max_bytes) + ").",
+          flush=True)
+    transferred = 0
+    for layer in layers:
+        digest, size = _digest(layer.get("digest")), layer["size"]
+        blob = store / "blobs" / ("sha256-" + digest)
+        if blob.exists() and _file_sha256(blob) == digest:
+            continue
+        partial = blob.with_name(blob.name + "-partial")
+        have = partial.stat().st_size if partial.exists() else 0
+        if have > size:
+            raise SystemExit("A partial layer is larger than its approved size; it was kept and nothing was installed.")
+        if have < size:
+            headers = {"Range": "bytes=" + str(have) + "-"} if have else {}
+            with requests.get(registry + path + "/blobs/sha256:" + digest, headers=headers, stream=True,
+                              timeout=(5, 90)) as response:
+                response.raise_for_status()
+                mode = "ab" if have and response.status_code == 206 else "wb"
+                written = have if mode == "ab" else 0
+                with open(partial, mode) as output:
+                    for chunk in response.iter_content(1 << 20):
+                        written += len(chunk)
+                        transferred += len(chunk)
+                        if written > size or transferred > max_bytes:
+                            raise SystemExit("The registry sent more than the approved bytes; the partial layer is kept.")
+                        output.write(chunk)
+        if _file_sha256(partial) != digest:
+            raise SystemExit("A downloaded layer does not match its approved digest; the partial file is kept.")
+        os.replace(partial, blob)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temporary = target.with_name(target.name + ".approved-partial")
+    temporary.write_bytes(raw)
+    os.replace(temporary, target)
     tags = session.get(endpoint + "/api/tags", timeout=10)
     tags.raise_for_status()
     installed = {row["name"]: row.get("digest", "") for row in tags.json().get("models", [])}
-    if not succeeded or "sha256:" + installed.get(model, "").removeprefix("sha256:") != revision:
-        raise SystemExit("The installed " + model + " could not be confirmed at the approved revision.")
+    listed = installed.get(model if ":" in model else model + ":latest", "")
+    if "sha256:" + listed.removeprefix("sha256:") != revision:
+        raise SystemExit("Ollama does not list " + model + " at the approved revision; the fetched files were kept.")
     print(model + " installed at the approved revision.", flush=True)
 
 

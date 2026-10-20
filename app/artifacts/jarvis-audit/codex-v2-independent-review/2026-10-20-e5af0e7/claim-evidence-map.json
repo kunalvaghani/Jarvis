@@ -1,0 +1,197 @@
+[
+  {
+    "domain": "core",
+    "call_path": "Commands/Engine -> Actions queue -> Brain -> ToolRegistry -> TaskState -> App event consumers",
+    "source_paths": [
+      "jarvis/commands.py",
+      "jarvis/engine.py",
+      "jarvis/actions.py",
+      "jarvis/brain.py",
+      "jarvis/tools.py",
+      "jarvis/task_state.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "A",
+    "call_path": "ToolRegistry outcome -> SkillStore -> SkillEvolution CAPTURED/FIX/DERIVED; generated tools -> MCP bridge",
+    "source_paths": [
+      "jarvis/tools.py",
+      "jarvis/skill_store.py",
+      "jarvis/skill_evolution.py",
+      "jarvis/mcp_synthesis.py",
+      "jarvis/mcp_bridge.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "B",
+    "call_path": "Actions task on_finish -> LearningMemory -> ReasoningBank -> BrainClient lessons; idle -> exploration/viking",
+    "source_paths": [
+      "jarvis/actions.py",
+      "jarvis/learning_memory.py",
+      "jarvis/reasoning_bank.py",
+      "jarvis/exploration.py",
+      "jarvis/viking_memory.py",
+      "jarvis/self_evolution.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "C",
+    "call_path": "SelfEvolution.research_maintenance -> AutoResearch -> ExperimentLab -> sealed gate -> approved promotion/rollback",
+    "source_paths": [
+      "jarvis/self_evolution.py",
+      "jarvis/autoresearch.py",
+      "jarvis/evolution_lab.py",
+      "jarvis/evolution_surfaces.py",
+      "jarvis/evolution_promotion.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "D",
+    "call_path": "Offline AZR generators/oracle -> split data -> training admission -> experimental registry; no runtime replacement",
+    "source_paths": [
+      "jarvis/azr_tasks.py",
+      "jarvis/azr_reward.py",
+      "jarvis/azr_dataset.py",
+      "jarvis/azr_proposer.py",
+      "jarvis/model_registry.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "API-first",
+    "call_path": "Brain.validate_remaining -> execution_strategy -> app_adapters -> worker -> verified readback",
+    "source_paths": [
+      "jarvis/brain.py",
+      "jarvis/execution_strategy.py",
+      "jarvis/app_adapters.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "Cloud",
+    "call_path": "Brain.recover_task -> FailureRouter -> registered consult tool -> consent/privacy/quota -> provider",
+    "source_paths": [
+      "jarvis/brain.py",
+      "jarvis/deliberation.py",
+      "jarvis/cloud_architect.py",
+      "jarvis/cloud_policy.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "ShowMe",
+    "call_path": "Actions request/consent -> DemonstrationSession -> native hook worker -> structured replay -> provisional promote",
+    "source_paths": [
+      "jarvis/actions.py",
+      "jarvis/demonstration.py",
+      "jarvis/skill_evolution.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "31",
+    "call_path": "main App approval/event drain -> interface -> Island/Desk/Pip -> receipt boundaries",
+    "source_paths": [
+      "jarvis/interface.py",
+      "jarvis/island.py",
+      "jarvis/island_desk.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "32",
+    "call_path": "RuntimeHealth -> supervised owned services -> recovery/backoff -> TaskState paused outcome",
+    "source_paths": [
+      "jarvis/runtime_health.py",
+      "jarvis/recovery.py",
+      "jarvis/task_state.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "33",
+    "call_path": "ToolRegistry -> MCP profile/identity/schema validation -> bridge transport",
+    "source_paths": [
+      "jarvis/tools.py",
+      "jarvis/mcp_bridge.py",
+      "jarvis/mcp_synthesis.py",
+      "jarvis/toolkits.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "34",
+    "call_path": "launcher readonly readiness -> explicit Repair authorization -> stage_environment / ModelRecovery -> approved_pull",
+    "source_paths": [
+      "jarvis/launcher.py",
+      "jarvis/repair_authorization.py",
+      "jarvis/model_recovery.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "35",
+    "call_path": "ToolRegistry final policy -> approval/identity -> API/tool execution/readback",
+    "source_paths": [
+      "jarvis/tools.py",
+      "jarvis/cloud_architect.py",
+      "jarvis/ability_runner.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "36",
+    "call_path": "ToolRegistry lifecycle -> AgentEvents -> bounded redaction/clock/traces",
+    "source_paths": [
+      "jarvis/tools.py",
+      "jarvis/agent_events.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  },
+  {
+    "domain": "37",
+    "call_path": "Queued commands -> real worker state/readback -> task/memory/UI with explicitly simulated planner/account",
+    "source_paths": [
+      "jarvis/actions.py",
+      "jarvis/brain.py",
+      "jarvis/tools.py",
+      "jarvis/learning_memory.py",
+      "jarvis/task_state.py"
+    ],
+    "source_review": "actual definitions/call sites plus graph; not whole-code semantic proof",
+    "live_functionality": "BLOCKED / not independently certified",
+    "fixture_tests": "linked in final XML after execution"
+  }
+]

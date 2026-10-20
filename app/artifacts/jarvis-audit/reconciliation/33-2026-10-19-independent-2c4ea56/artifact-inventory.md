@@ -1,0 +1,9 @@
+# Prompt 33 continuation — 2026-10-19
+
+Pinned claude and audit HEAD `2c4ea56eb7967929e49dad07b0612cb99caaf56e` (previous `0e3ad4706b5120e5d0479d34333e5faa7b0931b5`), isolated `codex-review`. All pending audit docs were saved in pre-update before fast-forwarding; original checkout still has its user config modification, untouched. Application instructions read. Master contract remains unavailable; supplied Downloads reconciliation contract requires Codex read-only independent confirmation and source repairs on Claude. No application source edited by Codex.
+
+Source/call chain unchanged: ToolRegistry → toolkits → agent_tools → mcp_bridge. Generated configurations now retain code/spec/schema/image pins, verify before approval, mount a private verified source copy, and compare the advertised schema. Drift removes generated entries from callable configurations. New mcp_contract validates input/output at the call boundary. Explicit health may repin stored spec/schema after tests; dependent skill lineage/version revalidation is still open. Non-generated servers use current advertised schema without a pin.
+
+Reviewed actual diff, upstream repair record/XML/logs, current bridge/synthesis/validator/launcher/recovery/provider source, original independent packet and stable cases. Upstream 3,449 PASS/147 skips is historical author evidence, not our count. Fresh XML is the authority for this run. SDK/image/protocol unchanged; see protocol.json and source hashes. Generated flags, stdio bounds, per-call approval, no-retry policy and direct optional provider architecture remain as in the previous inventory.
+
+No source/model/dependency/protocol change by Codex, no account sends, actual events, installs, desktop captures or shared-process kills. Test process peak memory not measured; paired allocation benchmark is explicitly synthetic.
