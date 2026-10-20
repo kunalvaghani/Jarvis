@@ -1,0 +1,6 @@
+{
+  "warmup": 20,
+  "iterations": 300,
+  "fixture": "fixture==1 --hash=sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "scope": "Pure validator only. No model, install, startup, throughput or end-to-end latency claim."
+}

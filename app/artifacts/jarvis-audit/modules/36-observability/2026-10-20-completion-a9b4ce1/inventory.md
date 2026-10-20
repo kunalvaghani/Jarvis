@@ -1,0 +1,7 @@
+# Prompt 36 inventory — 2026-10-20
+
+Isolated codex-review base a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6 plus retained Prompt 34/35 and new proposed observability changes. review-revisions.json, before-source-hashes.json and source-layers.json distinguish layers; no fix commit invented. User's standing policy authorizes safe fixes and continued work, with cumulative Claude handoff. Root/app AGENTS and supplied reconciliation contract read; master contract unavailable. Original user configuration untouched.
+
+Read current system-map, earlier independent review/security/benchmark records and phase source/tests. Actual telemetry producers/consumers: ToolRegistry / agent_events / execution_contracts / execution_strategy; TaskState and skill memory/store/evolution; cloud_architect; ReasoningBank; evolution evaluator/model gate. Model/voice/UI/background clocks are not uniformly correlated. No new registry/event bus introduced.
+
+Original 36 module catalog: 32 planned IDs; original 001–012 retained, revised 013–024 differ from old generic fault rows. Old originals immutable. Historical independent benchmark aggregate and measurement code found; historical raw per-sample N=500 data not found because original code saved only aggregates. New raw measurements are a fresh replication, not recovered evidence. host-profile.json records runtime/resource provenance without hostname/private roots. No packages/models/services installed or started, real cloud, messages, recordings or training.

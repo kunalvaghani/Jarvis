@@ -25,7 +25,9 @@ from .skill_store import content_hash
 
 NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
 FORBIDDEN_FRONTMATTER = frozenset({'allowed-tools', 'allowed_tools', 'disable-model-invocation', 'user-invocable',
-                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions'})
+                                   'model', 'effort', 'hooks', 'context', 'agent', 'shell', 'approved', 'permissions',
+                                   'trusted', 'trust', 'trust_state', 'admin', 'role', 'authorization', 'approval',
+                                   'preapproved', 'bypass_approval', 'user_approved', 'requires_approval'})
 NON_ATTRIBUTABLE = frozenset({'permission_denied', 'cancelled', 'tool_unavailable', 'timeout'})
 FIXTURE_SAFE_TOOLS = frozenset({'office_xlsx', 'office_docx', 'pdf_document', 'blender_task', 'unreal_task',
                                 'execution_methods', 'strategy_execute', 'read_file', 'list_files', 'search_files'})
@@ -115,10 +117,16 @@ def finish_outcomes(store, catalog, task):
             continue
         applied = bool(set(row['tools']) & used)
         if not applied:
-            written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
+            if used:  # A different executed route is a fallback; selection without execution is selected only.
+                written.append((skill_id, 'fallback', store.event(skill_id, 'fallback', task_id, {'reason': 'bound tools unused'})))
             continue
         written.append((skill_id, 'applied', store.event(skill_id, 'applied', task_id)))
-        if completed and evidence and not failures:
+        refuted = any(isinstance(step, dict) and step.get('action') in row['tools'] and step.get('verified') is False
+                      for step in (task.get('plan') or {}).get('completed', []) or [])
+        if refuted:
+            written.append((skill_id, 'failed', store.event(skill_id, 'failed', task_id, {'cause': 'verification_failed'})))
+            store.failure(skill_id, task_id, 'verification_failed')
+        elif completed and evidence and not failures:
             written.append((skill_id, 'completed_verified', store.event(skill_id, 'completed_verified', task_id,
                                                                          {'evidence': evidence[:3]})))
         elif completed:
@@ -228,8 +236,10 @@ def verify_execution(registry, steps, cancelled=lambda: False):
             data = json.loads(result.evidence)
         except ValueError:
             data = {}
-        outcome = [r for r in read_outcomes(registry.actions.base, 200) if r.get('call_id') == result.call_id]
-        verified = data.get('verification') == 'verified' or (outcome and outcome[-1].get('verification') == 'verified')
+        outcome = [r for r in read_outcomes(registry.actions.base, 200)
+                   if r.get('call_id') == result.call_id and r.get('tool') == step['action']]
+        # A tool's own success/verification text cannot override or replace correlated host readback.
+        verified = bool(outcome and outcome[-1].get('verification') == 'verified')
         receipts.append({'action': step['action'], 'call_id': result.call_id, 'verified': bool(verified),
                          'data': {k: v for k, v in data.items() if k in {'version', 'blender_version', 'sheets', 'pages'}}})
         if not verified:

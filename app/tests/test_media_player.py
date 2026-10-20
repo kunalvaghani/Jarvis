@@ -126,6 +126,7 @@ class PlayFallbackTests(unittest.TestCase):
 
     def test_play_youtube_reports_cards_and_remembers_service(self):
         actions = self.actions()
+        actions.config = {"media": {"youtube_browser": "jarvis"}}  # Jarvis's browser path (user Chrome: test_youtube_user_chrome.py)
         browser = Mock()
         browser.request.return_value = {"verified": True, "state": {"position": 2, "duration": 402}, "ad_skipped": True}
         actions._browser = lambda: browser
@@ -141,6 +142,7 @@ class PlayFallbackTests(unittest.TestCase):
 
     def test_unverified_youtube_playback_is_not_reported_as_playing(self):
         actions = self.actions()
+        actions.config = {"media": {"youtube_browser": "jarvis"}}  # Jarvis's browser path (user Chrome: test_youtube_user_chrome.py)
         actions._browser = lambda: Mock(request=Mock(return_value={"verified": False}))
         with patch.object(media_player, "youtube_search", return_value=[row("6MgsHSAcI9k", "Nadaan Parinde")]), \
                 patch.object(media_player, "fetch_image", return_value=""):

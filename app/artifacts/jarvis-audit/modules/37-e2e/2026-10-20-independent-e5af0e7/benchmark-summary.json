@@ -1,0 +1,17 @@
+{
+  "pinned": {
+    "n": 30,
+    "p50_ns": 23800.0,
+    "p95_ns_nearest_rank": 32600,
+    "sample_variance_ns2": 16525931.034482758,
+    "cleanup_successes": 0
+  },
+  "current": {
+    "n": 30,
+    "p50_ns": 3677550.0,
+    "p95_ns_nearest_rank": 4607500,
+    "sample_variance_ns2": 158459727229.88507,
+    "cleanup_successes": 30
+  },
+  "scope": "a9b4ce1 original demonstration vs e5af0e7 integrated code; fake observer-failure cleanup, durable write overhead, no assistant performance claim"
+}

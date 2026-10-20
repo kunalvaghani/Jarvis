@@ -15,8 +15,8 @@ Privacy gate: classify provenance, build the generic problem, strip paths,
 filenames, usernames, emails, tokens, source snippets, logs and internal names,
 reject if sensitive semantics remain, validate the payload against an explicit
 allowlist, and default to local whenever any check is inconclusive. Redaction is not
-a privacy guarantee; this gate refuses rather than trusting it. A minimized record
-of exactly what was sent is kept locally.
+a privacy guarantee; this gate refuses rather than trusting it. Local telemetry stores
+only categorical decisions, payload size/digest and opaque correlation, never the payload.
 
 Cloud output is untrusted text. It never receives tools, files or commands. Code in
 the advice is statically screened and executed only against the problem's own
@@ -28,6 +28,7 @@ from datetime import datetime, timedelta, timezone
 import getpass
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -47,6 +48,8 @@ LOG_LINE = re.compile(r'Traceback|File "[^"]+", line \d+|\b(?:ERROR|WARNING|INFO
 SANDBOX_IMPORTS = frozenset({'math', 'itertools', 'collections', 'heapq', 'bisect', 'functools', 're', 'statistics'})
 FORBIDDEN_CALLS = frozenset({'eval', 'exec', 'compile', 'open', '__import__', 'getattr', 'setattr', 'delattr', 'globals',
                              'locals', 'vars', 'input', 'breakpoint', 'exit', 'quit'})
+_LOG_LOCK = threading.RLock()
+MAX_LOG_BYTES = 8 * 1024 * 1024
 
 
 def now():
@@ -74,6 +77,39 @@ class PrivacyRejected(ValueError):
     """The problem could not be made generic with confidence; it stays local."""
 
 
+def _bounded_examples(examples):
+    """Bound work before JSON encoding, including nested/cyclic hostile literals."""
+    pending = [(examples, 0)]
+    remaining = 512
+    while pending:
+        value, depth = pending.pop()
+        remaining -= 1
+        if remaining < 0 or depth > 8:
+            raise PrivacyRejected('Examples exceed the literal work/depth budget.')
+        if type(value) is str:
+            if len(value) > 200:
+                raise PrivacyRejected('Example text exceeds its literal budget.')
+        elif type(value) is bool:
+            continue
+        elif type(value) is int:
+            if value.bit_length() > 256:
+                raise PrivacyRejected('Example integer exceeds its literal budget.')
+        elif type(value) is float:
+            if not math.isfinite(value):
+                raise PrivacyRejected('Example numbers must be finite.')
+        elif type(value) in (list, dict):
+            if len(value) > 64:
+                raise PrivacyRejected('Example container exceeds its literal budget.')
+            if type(value) is dict:
+                if any(type(key) is not str or len(key) > 80 for key in value):
+                    raise PrivacyRejected('Example keys must be bounded text.')
+                pending.extend((item, depth + 1) for item in value.values())
+            else:
+                pending.extend((item, depth + 1) for item in value)
+        else:
+            raise PrivacyRejected('Examples must contain only bounded JSON literals.')
+
+
 def privacy_gate(problem, base):
     """Return the exact outbound payload, or raise PrivacyRejected. Inconclusive means local."""
     from .cloud_policy import PRIVATE, PRIVATE_APP, SECRET, privacy_text
@@ -87,12 +123,13 @@ def privacy_gate(problem, base):
     payload = {'category': problem['category']}
     for key in ('statement', 'question', 'constraints'):
         value = problem.get(key, '' if key == 'constraints' else None)
-        if not isinstance(value, str) or not (key == 'constraints' or 20 <= len(value) <= 2000):
+        if not isinstance(value, str) or not (0 if key == 'constraints' else 20) <= len(value) <= 2000:
             raise PrivacyRejected('Field ' + key + ' must be bounded text.')
         payload[key] = value
     examples = problem.get('examples', [])
     if not isinstance(examples, list) or len(examples) > 8:
         raise PrivacyRejected('Up to eight synthetic examples.')
+    _bounded_examples(examples)
     for example in examples:
         if not isinstance(example, dict) or set(example) != {'input', 'output'}:
             raise PrivacyRejected('Examples must be {input, output}.')
@@ -105,6 +142,7 @@ def privacy_gate(problem, base):
     checks = {
         'secret': SECRET.search(text),
         'private_context': PRIVATE.search(text) or PRIVATE_APP.search(text),
+        'confidential_semantics': re.search(r'\b(?:proprietary|confidential|internal.only)\b', text, re.I),
         'path': re.search(r'[A-Za-z]:[\\/]|\\\\|(?:^|[\s"\'])/(?:home|users|etc|var|mnt|opt)/|~[\\/]', text, re.I),
         'filename': re.search(r'\b[\w-]+\.(?:py|js|ts|json|md|txt|xlsx|docx|pdf|csv|db|sqlite3|log|env|cfg|ini|yaml|yml)\b', text, re.I),
         'email': re.search(r'[\w.+-]+@[\w-]+\.[\w.]+', text),
@@ -275,16 +313,19 @@ class CloudArchitect:
 
     def consult(self, problem_id, problem, failures, attempts_used, request_id, scope=None, cancelled=lambda: False):
         if problem_id in self.escalated:
+            self._record({'problem_id': problem_id, 'decision': 'duplicate_blocked'})
             return {'status': 'local', 'reasons': ['already consulted for this problem (no recursive escalation)']}
         snapshot = self.guardian.snapshot() if self.guardian else {'state': 'UNKNOWN'}
         ready = bool(self.adapter) and self.adapter.ready(wait_seconds=0)
         eligible, reasons = eligibility(failures, attempts_used, problem.get('category'), self.options, self.consent,
                                         request_id, scope, snapshot['state'], ready, problem_id in self.escalated)
         if not eligible:
+            self._record({'problem_id': problem_id, 'decision': 'eligibility_blocked'})
             return {'status': 'local', 'reasons': reasons}
         try:
             payload = privacy_gate(problem, self.base)
         except (PrivacyRejected, ValueError) as exc:
+            self._record({'problem_id': problem_id, 'decision': 'privacy_blocked'})
             return {'status': 'local', 'reasons': [str(exc)[:300]]}
         self.escalated.add(problem_id)
         messages = [{'role': 'system', 'content': 'You are an advisory algorithm architect. Explain an approach and, '
@@ -297,6 +338,7 @@ class CloudArchitect:
         try:
             reply = self.adapter.complete(messages, 1200, cancelled=cancelled, reasoning='low', request_id=uuid.uuid4().hex)
         except (CloudFailure, QuotaDenied) as exc:
+            self._record({'problem_id': problem_id, 'decision': 'provider_unavailable'})
             return {'status': 'local', 'reasons': ['cloud unavailable: ' + str(exc)[:120]]}
         return self.evaluate(problem_id, reply.get('content', ''), payload, cancelled)
 
@@ -327,9 +369,38 @@ class CloudArchitect:
         return result
 
     def _record(self, row):
-        self.log.parent.mkdir(parents=True, exist_ok=True)
-        with self.log.open('a', encoding='utf-8') as output:
-            output.write(json.dumps({'at': now().isoformat(timespec='seconds'), **row}, ensure_ascii=False) + '\n')
+        """Categorical v2 decisions only; no sent payload, raw reason or advice persists."""
+        from .agent_events import clock_metadata
+        decision = row.get('decision') or row.get('status')
+        if 'sent' in row:
+            decision = 'sent'
+        if row.get('received') == 'text-only advice':
+            decision = 'advice_only'
+        elif row.get('received') == 'code rejected':
+            decision = 'rejected'
+        allowed = {'sent', 'privacy_blocked', 'eligibility_blocked', 'duplicate_blocked', 'provider_unavailable',
+                   'advice_only', 'rejected', 'verified_candidate', 'unverified'}
+        decision = decision if isinstance(decision, str) and decision in allowed else 'inconclusive'
+        identifier = row.get('problem_id')
+        identifier = identifier if isinstance(identifier, str) and len(identifier) <= 128 else 'unknown'
+        entry = {'version': 2, 'at': now().isoformat(timespec='seconds'), **clock_metadata(),
+                 'problem_id_hash': hashlib.sha256(identifier.encode()).hexdigest(), 'decision': decision}
+        if decision == 'sent' and isinstance(row.get('sent'), dict):
+            entry['payload_bytes'] = len(json.dumps(row['sent'], ensure_ascii=False).encode())
+            entry['sha256'] = hashlib.sha256(json.dumps(row['sent'], sort_keys=True).encode()).hexdigest()
+        try:
+            with _LOG_LOCK:
+                self.log.parent.mkdir(parents=True, exist_ok=True)
+                if self.log.is_symlink():
+                    self.telemetry_status = 'unavailable'
+                    return
+                if self.log.exists() and self.log.stat().st_size >= MAX_LOG_BYTES:
+                    self.telemetry_status = 'limited'
+                    return
+                with self.log.open('a', encoding='utf-8') as output:
+                    output.write(json.dumps(entry, ensure_ascii=False) + '\n')
+        except OSError:
+            self.telemetry_status = 'unavailable'
 
 
 # ---- user-invoked consultation tool (ToolRegistry) ----------------------------------------------------------------------
@@ -346,9 +417,12 @@ def consult_tool(actions, step, cancelled):
     """Fail-closed: privacy gate, every eligibility rule except consent, then an approval card that grants consent."""
     config = getattr(actions, 'config', {}) or {}
     options = {**(config.get('cloud_architect') or {}), 'groq': config.get('groq') or {}}
+    content = step.get('content', '')
+    if not isinstance(content, str) or len(content) > 16000:
+        return json.dumps({'status': 'local', 'reasons': ['content must be bounded JSON text'], 'sent': False})
     try:
-        problem = json.loads(step.get('content') or '{}')
-    except ValueError:
+        problem = json.loads(content or '{}')
+    except (ValueError, RecursionError):
         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
     if not isinstance(problem, dict):
         return json.dumps({'status': 'local', 'reasons': ['content must be an abstract problem as JSON']})
@@ -356,6 +430,7 @@ def consult_tool(actions, step, cancelled):
     try:
         payload = privacy_gate(problem, base)
     except (PrivacyRejected, ValueError) as exc:
+        CloudArchitect(base, options)._record({'problem_id': 'tool-privacy', 'decision': 'privacy_blocked'})
         return json.dumps({'status': 'local', 'reasons': [str(exc)[:300]], 'sent': False})
     router = getattr(getattr(actions, 'deliberation', None), 'failure_router', None)
     failures = router.evidence_for() if router is not None else []

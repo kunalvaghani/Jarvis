@@ -1,0 +1,3 @@
+finding,sha,fix_commit,status,evidence,follow_up
+P31-001,ddf3247fd3d5ee6b151287c6cba358e8707090c6,1dd3e9c841fba8f439be0d1116e9a0c91da8c447,FIXED_CALLBACK_BOUNDARY,approval-reverification.xml,retain all original regression scenarios
+P31-002,ddf3247fd3d5ee6b151287c6cba358e8707090c6,,APPLIES_FAIL_SYNTHETIC,receipt-replay.xml,requester-owned unique identity; independent attacker path unverified

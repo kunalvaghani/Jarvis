@@ -89,7 +89,7 @@ class NaturalNamesTests(unittest.TestCase):
             try:
                 with patch("jarvis.actions.subprocess.Popen") as launch:
                     actions.execute(parse("open youtub"))
-                    launch.assert_called_once_with(["chrome.exe", "https://www.youtube.com/"], shell=False)
+                    launch.assert_called_once_with(["chrome.exe", "--profile-directory=Default", "https://www.youtube.com/"], shell=False)  # YouTube opens in the user's Chrome profile (2026-10-20)
             finally:
                 actions.close()
 
@@ -104,7 +104,7 @@ class NaturalNamesTests(unittest.TestCase):
             actions = Actions({"files_root": "files", "apps": {"chrome": ["chrome.exe"]}}, directory, lambda *args: None)
             with patch("jarvis.actions.subprocess.Popen") as launch:
                 actions.execute(parse("open youtube in chrome"))
-                launch.assert_called_once_with(["chrome.exe", "https://www.youtube.com/"], shell=False)
+                launch.assert_called_once_with(["chrome.exe", "--profile-directory=Default", "https://www.youtube.com/"], shell=False)  # YouTube opens in the user's Chrome profile (2026-10-20)
             actions.close()
 
     def test_file_partial_name_and_numbered_disambiguation(self):

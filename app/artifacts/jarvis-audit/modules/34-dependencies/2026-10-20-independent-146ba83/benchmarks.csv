@@ -1,0 +1,3 @@
+revision,sha,fixture,samples,p50_ms,p95_ms,traced_peak_bytes
+before,cd8861ce720ade303485ee2023430dd8c6b4f0ba,read-only missing-runtime readiness; no services/processes,300,0.46904999999999997,0.5581,21759
+after,146ba831e7ae5df1a953b0f910288c41c9ab4689,read-only missing-runtime readiness; no services/processes,300,0.47595,0.5475,18225

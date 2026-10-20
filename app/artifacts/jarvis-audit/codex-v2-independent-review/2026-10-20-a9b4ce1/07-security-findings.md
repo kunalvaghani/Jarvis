@@ -1,0 +1,7 @@
+# Security and integrity
+
+Fresh tested invariants include deny-policy execution, argument/approval binding, simulated cloud outbound capture, private/unknown UIA snapshot exclusion, generated skill/MCP constraints, independent false-success rejection, held-out/evaluator seals, deterministic no-replay, task identities, native pointer transport fakes and bounded metadata. Six deliberately violating mutants are rejected by assertion failures with passing controls. Owned workbook readback, native/Git/loopback component tests are identified by actual test bodies and journals; successful model text or mock return never establishes full user acceptance.
+
+OPEN P1: universal host verifier/receipt authority and target binding; caller-declared synthetic cloud provenance; approved mutable model tag/byte-budget transport and execution-lock race; full live principal/scopes, shared task-generation/service concurrency and all-sink privacy remain incomplete. See inherited handoff for exact scopes. Existing guards do not establish all-source semantic privacy or native sandbox confinement.
+
+No live personal account write/send/delete, private input capture, paid API, model download/training, installation or deployment. Fixture processes/files only. Superseded audit runner was identified by exact script/XML arguments before stopping its owned tree; shared/user processes untouched. Mutation checkout restored tracked original bytes; independent test overlays retained. No exhaustive current CVE/license/semantic scan or fresh GPU security test claimed.

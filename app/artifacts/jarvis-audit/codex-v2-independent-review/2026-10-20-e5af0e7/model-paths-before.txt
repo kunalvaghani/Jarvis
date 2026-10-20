@@ -1,0 +1,189 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFF....                                          [100%]
+================================== FAILURES ===================================
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:../../../../../escaped] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[../fixture:tag] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[a/../../fixture:tag] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[/absolute:tag] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:..\\escape] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:C:escape] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[a//b:tag] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:tag?query] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[fixture:tag#fragment] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[a/b/c:tag] _
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+___ test_model_authorization_rejects_non_registry_paths_before_execution[] ____
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_model_authorization_rejects_non_registry_paths_before_execution[None] __
+tests\test_prompt99_model_paths.py:17: in test_model_authorization_rejects_non_registry_paths_before_execution
+    with pytest.raises(RepairRefused):
+E   Failed: DID NOT RAISE <class 'jarvis.repair_authorization.RepairRefused'>
+_ test_approved_transport_rejects_paths_before_network_or_files[fixture:../../../../../escaped] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library/fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/library/fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:../../../../../escaped by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[../fixture:tag] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/../fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b8e128...ttps://registry.ollama.ai/v2/../fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved ../fixture:tag by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[a/../../fixture:tag] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/a/../../fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/a/../../fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved a/../../fixture:tag by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[/absolute:tag] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2//absolute/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b8e1283...https://registry.ollama.ai/v2//absolute/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved /absolute:tag by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[fixture:..\\escape] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library/fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/library/fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:..\escape by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[fixture:C:escape] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library/fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/library/fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:C:escape by digest (25 bytes, budget 1000).
+___ test_approved_transport_rejects_paths_before_network_or_files[fixture:] ___
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library/fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/library/fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture: by digest (25 bytes, budget 1000).
+___ test_approved_transport_rejects_paths_before_network_or_files[a//b:tag] ___
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/a//b/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b8e1283b1083...d', 'https://registry.ollama.ai/v2/a//b/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved a//b:tag by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[fixture:tag?query] _
+tests\test_prompt99_model_paths.py:27: in test_approved_transport_rejects_paths_before_network_or_files
+    approved_pull(session, 'http://127.0.0.1:11434', model, revision, 1000, store=tmp_path / 'store')
+scripts\setup\setup_brain.py:165: in approved_pull
+    temporary.write_bytes(raw)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1143: in write_bytes
+    with self.open(mode='wb') as f:
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:1119: in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+E   OSError: [Errno 22] Invalid argument: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\pytest-of-kunal\\pytest-679\\test_approved_transport_reject8\\store\\manifests\\registry.ollama.ai\\library\\fixture\\tag?query.approved-partial'
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:tag?query by digest (25 bytes, budget 1000).
+_ test_approved_transport_rejects_paths_before_network_or_files[fixture:tag#fragment] _
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library/fixture/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b...//registry.ollama.ai/v2/library/fixture/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:tag#fragment by digest (25 bytes, budget 1000).
+__ test_approved_transport_rejects_paths_before_network_or_files[a/b/c:tag] ___
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/a/b/c/manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b8e1283b108...', 'https://registry.ollama.ai/v2/a/b/c/blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved a/b/c:tag by digest (25 bytes, budget 1000).
+_______ test_approved_transport_rejects_paths_before_network_or_files[] _______
+tests\test_prompt99_model_paths.py:28: in test_approved_transport_rejects_paths_before_network_or_files
+    assert not calls, 'Invalid model reference must be rejected before any network access'
+E   AssertionError: Invalid model reference must be rejected before any network access
+E   assert not ['https://registry.ollama.ai/v2/library//manifests/sha256:ad86c8f163320cebd543580faa49f62fe9694111ac6ceb2f1da7b8e1283b...'https://registry.ollama.ai/v2/library//blobs/sha256:27f37cfc5034a03be152b0bccd7be0d205efdb5263099eefa9c1dc97d00225e7']
+---------------------------- Captured stdout call -----------------------------
+Fetching approved  by digest (25 bytes, budget 1000).
+_____ test_approved_transport_rejects_paths_before_network_or_files[None] _____
+tests\test_prompt99_model_paths.py:27: in test_approved_transport_rejects_paths_before_network_or_files
+    approved_pull(session, 'http://127.0.0.1:11434', model, revision, 1000, store=tmp_path / 'store')
+scripts\setup\setup_brain.py:115: in approved_pull
+    name, _, tag = model.partition(":")
+E   AttributeError: 'NoneType' object has no attribute 'partition'
+________ test_model_path_cannot_publish_a_manifest_outside_owned_store ________
+tests\test_prompt99_model_paths.py:42: in test_model_path_cannot_publish_a_manifest_outside_owned_store
+    assert not (tmp_path / 'escaped').exists(), 'Model alias escaped its store and published a manifest'
+E   AssertionError: Model alias escaped its store and published a manifest
+E   assert not True
+E    +  where True = exists()
+E    +    where exists = (WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-679/test_model_path_cannot_publish0') / 'escaped').exists
+---------------------------- Captured stdout call -----------------------------
+Fetching approved fixture:../../../../../escaped by digest (25 bytes, budget 1000).
+fixture:../../../../../escaped installed at the approved revision.
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\model-paths-before.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:../../../../../escaped]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[../fixture:tag]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[a/../../fixture:tag]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[/absolute:tag]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:..\\escape]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:C:escape]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[a//b:tag]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:tag?query]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[fixture:tag#fragment]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[a/b/c:tag]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[]
+FAILED tests\test_prompt99_model_paths.py::test_model_authorization_rejects_non_registry_paths_before_execution[None]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:../../../../../escaped]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[../fixture:tag]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[a/../../fixture:tag]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[/absolute:tag]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:..\\escape]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:C:escape]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[a//b:tag]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:tag?query]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[fixture:tag#fragment]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[a/b/c:tag]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[]
+FAILED tests\test_prompt99_model_paths.py::test_approved_transport_rejects_paths_before_network_or_files[None]
+FAILED tests\test_prompt99_model_paths.py::test_model_path_cannot_publish_a_manifest_outside_owned_store
+27 failed, 4 passed in 1.65s

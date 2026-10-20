@@ -1,0 +1,7 @@
+# Claude dependency repair handoff
+
+At 146ba83, reproduce test_dependency_boundaries.py unchanged. P34-001: separate read-only readiness from installation; absent dependencies should report repair_required until explicit bounded repair authorization exists. Preserve the old working environment and stage replacements from a locked approved artifact set. Do not silently use pip --isolated to override offline settings. No network/package operation should start merely because an import failed.
+
+P34-002: missing-model recovery must default to diagnosis/installed-compatible fallback, not an implicit download. Require approved model identity/revision/source, byte/disk/RAM/VRAM budget and offline/network policy at the final setup/download executor; reject unknown/insufficient budget before launch. Do not treat a configured tag as download consent. Preserve partial artifacts and active user work; no blanket deletion/recreation or silent provider substitution.
+
+Keep the ordinary installed-runtime and deliberate-shutdown controls passing. Run target failures, the 50 baseline and 112 passing retention checks plus applicable model routing/fidelity/manifest regressions. Then prepare exact fix SHA for independent confirmation. Do not silently execute setup/install scripts to fix this audit. Source repairs remain on Claude under the supplied read-only independent-confirmation contract. No module 35 or deployment.

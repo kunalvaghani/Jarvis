@@ -1,0 +1,14 @@
+[
+  {
+    "pid": 36404,
+    "rss_bytes": 4489216,
+    "interim_peak_working_set_bytes": 4526080,
+    "scope": "one owned process, interim OS lifetime peak, excludes aggregate child and GPU memory"
+  },
+  {
+    "pid": 39200,
+    "rss_bytes": 303529984,
+    "interim_peak_working_set_bytes": 387325952,
+    "scope": "one owned process, interim OS lifetime peak, excludes aggregate child and GPU memory"
+  }
+]

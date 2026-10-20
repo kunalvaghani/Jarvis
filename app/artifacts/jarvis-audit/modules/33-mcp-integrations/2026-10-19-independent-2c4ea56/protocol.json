@@ -1,0 +1,19 @@
+{
+  "stdio_protocol": "2025-11-25",
+  "runtime": {
+    "available": true,
+    "image_id": "sha256:0438d6bee255b16e38475c7342d22a00f4fd7b499272ff12b253472a1b2245de",
+    "sdk": "mcp==2.3.0"
+  },
+  "generated_identity": [
+    "code_sha256",
+    "spec_sha256",
+    "schema_sha256",
+    "image_id"
+  ],
+  "transports": [
+    "stdio"
+  ],
+  "setup_dependency_pin": "mcp==2.3.0",
+  "dependency_or_protocol_change": "NONE"
+}

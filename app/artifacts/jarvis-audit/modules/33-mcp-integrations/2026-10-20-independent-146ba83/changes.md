@@ -1,0 +1,3 @@
+# Codex scope
+
+Preserved pending audit docs, fast-forwarded isolated codex-review to the actual Claude fix, and copied five independent repro files byte-for-byte into this new packet. Added four optional-route assertions, raw observations/XML, source/evidence hashes, paired bridge/context benchmarks and reports. Updated both READMEs and the recovery guide with the current independent status. No application source, config, dependency, model, UI/artwork, service policy, commit, deployment or main merge. Original user config and historical packets preserved. No screenshot applies to this nonvisual verification.

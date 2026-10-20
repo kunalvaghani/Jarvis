@@ -1,0 +1,6 @@
+{
+  "MCP_fixture_byte_identical": true,
+  "recovery_fixture_byte_identical": true,
+  "optional_provider_source_unchanged_by_repair": true,
+  "source_changes": "None by Codex; replay fixture output paths relocate naturally via __file__ into this new packet"
+}

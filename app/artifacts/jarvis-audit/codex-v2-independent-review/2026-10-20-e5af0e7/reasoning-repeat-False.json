@@ -1,0 +1,41 @@
+{
+  "case": "JRV-37-017",
+  "memory_enabled": false,
+  "source_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "classification": "real workbook worker, ToolRegistry, SQLite, LearningMemory, BrainClient wire; fake planner ignores hints",
+  "rows": [
+    {
+      "attempt": 1,
+      "verified_goal_success": false,
+      "readback": {
+        "A1": 1,
+        "A2": "=A1*2",
+        "sheets": [
+          "Data"
+        ]
+      },
+      "workbook_bytes_unchanged": true,
+      "learn_result": null,
+      "lesson_count_at_transport": 0,
+      "elapsed_seconds": 2.2825262999976985
+    },
+    {
+      "attempt": 2,
+      "verified_goal_success": false,
+      "readback": {
+        "A1": 1,
+        "A2": "=A1*2",
+        "sheets": [
+          "Data"
+        ]
+      },
+      "workbook_bytes_unchanged": true,
+      "learn_result": null,
+      "lesson_count_at_transport": 0,
+      "elapsed_seconds": 2.1027355999976862
+    }
+  ],
+  "outcome_improved": false,
+  "real_model_requests": 0,
+  "scope_limit": "Task outcome/trajectory supplied by harness; full Actions/Brain orchestration and real planner remain untested."
+}

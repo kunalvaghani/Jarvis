@@ -1,0 +1,11 @@
+{
+  "base_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "pinned_source_sha256": "a7d61850babfebb216815eab3752d8d9bfdfcee6379af41e71dc2032aa9a1cb4",
+  "current_source_sha256": "6d1fdc5ec8e0b05293ea05ec619c49fca1186132dd1c35ce42c86a2705300237",
+  "seed": 37,
+  "pairs": 30,
+  "fixture": "one queued fake event; observer RuntimeError; fake owned hook",
+  "timing_scope": "pump call including current durable cleanup; no E2E latency or performance improvement claim",
+  "baseline_cleanup_successes": 0,
+  "current_cleanup_successes": 30
+}

@@ -1,0 +1,26 @@
+{
+ "intent_routing": {
+  "correct": 2400,
+  "accuracy": 1.0,
+  "status": "MEASURED"
+ },
+ "privacy_routing": {
+  "correct": 15,
+  "status": "MEASURED"
+ },
+ "dag_execution": {
+  "success_rate": 1.0,
+  "status": "MEASURED"
+ },
+ "tool_registry": {
+  "malformed_outcomes": {
+   "ToolArgumentError": 10,
+   "ValueError": 2
+  },
+  "contract_error_rate": 0.0,
+  "status": "MEASURED"
+ },
+ "skills": {
+  "status": "MEASURED"
+ }
+}

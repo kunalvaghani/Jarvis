@@ -1,0 +1,9 @@
+# Prompt 33 continuation — 2026-10-20
+
+Pinned claude/audit `cd8861ce720ade303485ee2023430dd8c6b4f0ba` after `2c4ea56eb7967929e49dad07b0612cb99caaf56e`, isolated codex-review. The directory retains its 2026-10-19 start date; fresh completion results are 2026-10-20 IST. Pending audit docs saved under pre-update before fast-forward; original user config untouched. Application AGENTS and supplied Prompt 33/reconciliation contract read. Master contract still unavailable. Codex confirmation is read-only for application source; repairs reserved to Claude.
+
+Reviewed actual source diff, provider_identity, toolkit dispatcher, MCP contract/bridge/synthesis, follow-up tests and author repair report. Four independent repro files copied byte-for-byte; their outputs relocate by __file__ into this packet. No source edit/test assertion weakening. New configured-identity fixture checks the acknowledged label-only limitation independently.
+
+ProviderContext now captures configured labels, HMAC credential fingerprints and a process-local settings snapshot before approval. Changed labels and unlabelled credential changes reject; identical labels authorize credential replacement as rotation. A nonempty label is marked verified without asking the provider (remaining P33-004). MCP validator now visits whole arrays/objects, rejects over-budget values, uses JSON-aware equality and checks nested resource shape. Generated identity/sandbox/stdio protocol preserved. Drift disables literal-reference dependent skills; health restores matching markers. No full schema/version lineage or multi-process registration claim.
+
+Source/image/schema hashes, raw XML, snapshots and benchmark provenance are adjacent. Earlier independent/author reports remain historical. Author 3469/147 is not our count. No app source/dependency/config/model/UI changes, installs, real account calls, private capture or production process target by Codex.

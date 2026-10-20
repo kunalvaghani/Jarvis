@@ -1,0 +1,9 @@
+# Prompt 33 independent confirmation — 2026-10-20
+
+Pinned claude/audit `146ba831e7ae5df1a953b0f910288c41c9ab4689`, prior `cd8861ce720ade303485ee2023430dd8c6b4f0ba`, isolated codex-review. Pending audit docs preserved under pre-update before fast-forward; original user configuration untouched. Application AGENTS, Prompt 33 and supplied reconciliation contract applied; master contract remains unavailable. Codex performs independent confirmation without application source repairs.
+
+Inspected actual provider_identity/toolkits changes and updated author tests/report. Labels are now display/drift detection only. No production principal verifier is registered, so credential changes while approval is pending reject before dispatch; unchanged approved context uses its captured snapshot. Explicit verifier API may confirm principal/workspace/scopes for rotation, but tests of it are labelled MOCK. Five independent repro files are byte-identical to the prior packet. Four obsolete author tests assuming label-based identity were replaced by explicit verifier/default-refusal controls; original Codex assertions were not weakened.
+
+Actual paths remain ToolRegistry → toolkits → agent_tools → mcp_bridge for MCP, and toolkits → ProviderContext → remote_tool for optional writes. Generated Docker identity/sandbox, schema/result validation and literal-reference dependent-skill invalidation remain. MCP stdio protocol and installed image/dependencies unchanged. New independent Slack intent/approval and stdio token readback/redaction cases add coverage.
+
+Prior packets and author 3473/147 full-suite claims remain historical, not independent totals. Source/image/schema hashes and saved XML are authoritative for this run. Test process peak memory not measured; paired allocation benchmarks are explicitly synthetic. No source/config/dependency/model/UI changes, installs, cloud requests, live provider writes or production process targets by Codex.

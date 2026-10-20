@@ -1,0 +1,7 @@
+{
+  "before": "2c4ea56eb7967929e49dad07b0612cb99caaf56e",
+  "after": "cd8861ce720ade303485ee2023430dd8c6b4f0ba",
+  "warmup": 20,
+  "samples": 300,
+  "limitation": "Bridge and mcp_contract source both loaded from the named revisions. Fake transport/approval and fixed valid scalar fixture; warm sequential tracemalloc run. Not subprocess/provider/model latency, no performance improvement claim."
+}

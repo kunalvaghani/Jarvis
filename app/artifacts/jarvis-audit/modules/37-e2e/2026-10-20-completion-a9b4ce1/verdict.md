@@ -1,0 +1,7 @@
+# Prompt 37 — safe local work complete; release NOT READY
+
+2026-10-20, isolated codex-review at a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6 plus retained P34–P36 and P37 local proposals. Final relevant regression: **683 PASS / 0 FAIL / 5 SKIPPED**. Supplemental: **72 PASS / 0 FAIL / 1 SKIPPED**, separate and overlapping, not added. Baseline 32 PASS; reproduced new tests 10 FAIL / 2 PASS plus two later terminal-state failures; final targeted 38 PASS. No final failures.
+
+Fixed demonstration cleanup/consent/cancellation/admission and durable uncertain-send completion feedback. Three reproducible owned/simulated workflow journals include real workbook worker readback A1=9 with formula preserved; mock send paused speech-event/restart blocker; cloud consent/advice/dedup. Thirty paired pinned/current fake observer-failure fixtures improve cleanup/readback from 0/30 to 30/30. These are safety/postcondition checks, not physical hook or assistant performance proof.
+
+26 revised case denominator: **0 full-journey PASS / 26 BLOCKED**. Physical voice/GPU/native hooks/live apps/accounts, all flags, independent verifier/provenance and training gates remain incomplete. Isolated launcher: repair_required. No installs, live sends/cloud, mic, training, merge or deployment. [Cases](tests.jsonl) · [Actual journals](workflow-journals.jsonl) · [Impact matrix](cross-pillar-matrix.md) · [Reproduction](reproduce.md) · [Cumulative Claude handoff](../../../../../docs/CLAUDE_HANDOFF.md).

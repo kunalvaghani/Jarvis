@@ -1,0 +1,5 @@
+# Security and integrity
+New model-store confinement defect is repaired only in proposed candidate. New failing-before/passing-after cases exercise final grant checks and actual downloader with recording fake HTTP; independent file readback proves the old escape and valid control manifests.
+Six safety mutants (denied policy, false tool success, stale UIA selector, disabled Verify, held-out tamper, duplicate write) all killed by assertion failures, without collection/runtime errors; controls and restored controls pass. All mutated bytes restored before proposing the two-file fix. Guard fix does not modify those six mutation surfaces. [Mutation results](mutation-results.json).
+Global verifier/replay receipt authority and native target/status/hook lifetime remain OPEN P1 (P99-R2). Caller-declared public/synthetic provenance remains OPEN P1 semantic privacy gap (P99-R3). Fake-provider outbound tests do not prove arbitrary private language cannot leak. No real cloud request/private data/account action/native input/model download/install performed.
+No deployment readiness while these safety gates remain open.

@@ -31,6 +31,11 @@ ROUTES = {
     'browser': (r'\b(browser|website|webpage|web page|chrome|edge|firefox|form|textbox)\b',
                 ('browser_inspect', 'browser_navigate', 'browser_fill', 'browser_click'), ('browser-navigation', 'form-entry')),
     'youtube': (r'\b(youtube|you tube)\b', ('media_search', 'media_control', 'browser_inspect'), ('youtube-media',)),
+    # Read-only YouTube connector (integrations/jarvis-connectors, MCP server "youtube") for lookups the
+    # player cannot answer; playback still uses the tools above.
+    'youtube_lookup': (r'(?=.*\b(?:youtube|you tube|youtu\.be)\b)(?=.*\b(?:playlists?|views?|how long|duration|length|'
+                       r'uploaded|uploader|details?|channel|links?|ids?|list|top \d+|results)\b)',
+                       ('mcp_call', 'browser_navigate'), ('youtube-media',)),
     'spotify': (r'\bspotify\b', ('open', 'media_search', 'media_control', 'select', 'fill_text'), ('spotify-media',)),
     'files': (r'\b(files?|folders?|director(?:y|ies)|drive|rename|copy|append)\b',
               ('open', 'list_files', 'search_files', 'read_file'), ('file-operations', 'app-navigation')),

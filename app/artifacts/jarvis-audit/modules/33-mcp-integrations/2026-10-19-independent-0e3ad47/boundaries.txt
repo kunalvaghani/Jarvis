@@ -1,0 +1,49 @@
+FF.....F                                                                 [100%]
+================================== FAILURES ===================================
+__________ test_JRV_33_005_schema_invalid_call_must_not_reach_server __________
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_005_schema_invalid0')
+
+    def test_JRV_33_005_schema_invalid_call_must_not_reach_server(tmp_path):
+        actions, _ = fixture(tmp_path)
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:55: Failed
+___________ test_JRV_33_006_malformed_result_must_raise_typed_error ___________
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_006_malformed_resu0')
+
+    def test_JRV_33_006_malformed_result_must_raise_typed_error(tmp_path):
+        actions, _ = fixture(tmp_path, 'malformed')
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:61: Failed
+________ test_JRV_33_013_generated_source_change_rejected_before_call _________
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-533/test_JRV_33_013_generated_sour0')
+
+    def test_JRV_33_013_generated_source_change_rejected_before_call(tmp_path):
+        status = mcp_synthesis.image_status()
+        if not status['available']:
+            pytest.skip('BLOCKED: ' + status['reason'])
+        actions = SimpleNamespace(base=tmp_path, task_state=None, report=Mock(), config={},
+                                  allowed_tools=None, _approve=Mock(), skills=None)
+        registration = mcp_synthesis.synthesize(actions, 'audit sha256 fingerprint calculation', lambda _: SPEC)
+        name = registration['server']
+        entry = mcp_synthesis.load_registry(tmp_path)['servers'][name]
+        source = Path(next(a for a in entry['args'] if a.startswith('type=bind,src=')).split('src=',1)[1].split(',')[0])
+        source.write_text(source.read_text().replace(SPEC['implementation'], 'return "UNREVIEWED_SYNTHETIC_RESULT"'))
+        # Call without explicitly invoking health: executor must enforce approved source integrity.
+        try:
+>           with pytest.raises(ValueError):
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py:125: Failed
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\boundaries.xml -
+=========================== short test summary info ===========================
+FAILED artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py::test_JRV_33_005_schema_invalid_call_must_not_reach_server
+FAILED artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py::test_JRV_33_006_malformed_result_must_raise_typed_error
+FAILED artifacts\jarvis-audit\modules\33-mcp-integrations\2026-10-19-independent-0e3ad47\test_mcp_boundaries.py::test_JRV_33_013_generated_source_change_rejected_before_call
+3 failed, 5 passed in 8.65s

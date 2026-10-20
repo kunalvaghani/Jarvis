@@ -1,0 +1,59 @@
+{
+  "pin": "0e3ad4706b5120e5d0479d34333e5faa7b0931b5",
+  "date": "2026-10-19 IST",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "executable": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "runs": {
+    "approval-reverification.xml": {
+      "PASS": 36,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "catalog-components.xml": {
+      "PASS": 4,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "relevant-regression.xml": {
+      "PASS": 642,
+      "FAIL": 0,
+      "SKIPPED": 13
+    },
+    "widget-journey.xml": {
+      "PASS": 2,
+      "FAIL": 0,
+      "SKIPPED": 0
+    }
+  },
+  "source_repairs_by_codex": [],
+  "dependencies": "existing original Python and read-only utility interpreter routing; no install",
+  "memory_scope": "synthetic queue traced allocations; no long-duration process/GPU memory profile",
+  "full_repository_regression": "NOT RUN; full relevant selected suite is recorded instead",
+  "original_user_config": "modified by user, untouched",
+  "master_contract": "unavailable in repository and exact Downloads companion path",
+  "reconciliation_contract": "10_CODEX_FINDINGS_RECONCILIATION.md: Codex read-only confirmation",
+  "native_fixture_current_protocol": {
+    "at": "2026-10-19T10:34:24.484527+00:00",
+    "scope": "Hidden native UI + temporary background file fixture; no model, media playback, desktop capture or real-vault writes",
+    "checks": {
+      "background_file_readback_and_syntax": true,
+      "game_navigation_preserved_generation": true,
+      "game_opened_during_background_work": true,
+      "current_file_received": true,
+      "draft_not_claimed_saved": true,
+      "renders_Flappy": true,
+      "renders_Snake": true,
+      "renders_2048": true,
+      "renders_Tic Tac Toe": true,
+      "renders_Memory": true,
+      "approval_nonblocking": true,
+      "approval_denied": true,
+      "microphone_not_started": true,
+      "real_memory_disabled": true
+    },
+    "live_spotify_playback_tested": false,
+    "live_voice_tested": false
+  },
+  "native_fixture_original": "FAIL: old unbound denial call rejected; output retained in native-island.txt"
+}

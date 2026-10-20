@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.405" timestamp="2026-10-20T03:10:44.476258+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-v2-baseline.app.tests.test_phase06_controlled_evolution" name="test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered" time="10.837"><failure message="AssertionError: assert ('qualified' == 'refused'&#10;  &#10;  - refused&#10;  + qualified)">canon = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-642/test_P06_gate_refuses_when_its0/canon')
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-642/test_P06_gate_refuses_when_its0')
+
+    def test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered(canon, tmp_path):
+        research = research_for(canon, tmp_path)
+        research.seed('read_retry_backoff')
+        policy = canon / 'app/evolution_eval/policy.json'
+        original = policy.read_text(encoding='utf-8')
+        policy.write_text(original.replace('0.02', '0.0'), encoding='utf-8')
+        report = gate_run(research, {'base_seconds': 0.1, 'max_seconds': 2.0})
+&gt;       assert report['decision'] == 'refused' and 'modified since commit' in report['reason']
+E       AssertionError: assert ('qualified' == 'refused'
+E         
+E         - refused
+E         + qualified)
+
+tests\test_phase06_controlled_evolution.py:313: AssertionError</failure></testcase></testsuite></testsuites>

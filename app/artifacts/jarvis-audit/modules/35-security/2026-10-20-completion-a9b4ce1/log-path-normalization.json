@@ -1,0 +1,110 @@
+{
+  "adversarial-before-corrected.txt": {
+    "original": "3c80ca813c0a76a595a0d873c988519edff017562d5084fec19b67433da5db05",
+    "saved": "44738a0f6e6d5720f64f76204a12904f4c82f4f1521bdf6f419e310f9abf0472"
+  },
+  "adversarial-before.txt": {
+    "original": "641a0e895afda96f2356961accbbd96018f201a195fa16e7ad3962576127e561",
+    "saved": "1c4b028883d7a94c75bc1cc6b4d5234f711130c55eabc467aac913a2f3b88cd9"
+  },
+  "baseline-native.txt": {
+    "original": "aa323ed1f550b8fcb62fe2a4564cb9164fc5db19d8bad08b916262dee418b3dd",
+    "saved": "2770d9356df2287baeb4d89c4748e4533d616397b7c8cf98d99ee06417a004b0"
+  },
+  "baseline.txt": {
+    "original": "6d6ef2d40c264fb48bc18517739abe87c7d5e5008dc2ca7e3b51c25052ee2368",
+    "saved": "6d6ef2d40c264fb48bc18517739abe87c7d5e5008dc2ca7e3b51c25052ee2368"
+  },
+  "evaluator-retention.txt": {
+    "original": "82721f256bc4f23444bcc13ebda3ed825f5ab90b8f45a1951ad38914979fe18a",
+    "saved": "538b8c18bfdb12f4b757a400bfbb3fa5b7fad1cbf54af213e292083efcb47056"
+  },
+  "final-regression.txt": {
+    "original": "07b9c151773d325f97c7d5b032994439e5669b891104d076234ee5fe9c5a487b",
+    "saved": "57f9ab45d323fb42535a3ab7ef8cd62b1576183b89634a050680068cef3ffd75"
+  },
+  "launcher-check.txt": {
+    "original": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590",
+    "saved": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590"
+  },
+  "privilege-before.txt": {
+    "original": "778d31d6250fab6df7602e91b2578156f23ca14440c42f9926d515f3e7afd111",
+    "saved": "698e54e54ba715e803e8ef07e9f9d2a909140de6ffd62067497345cd314ead09"
+  },
+  "readback-before.txt": {
+    "original": "18b71253440614f625dd2cba89547508dd1df6e600146bc2a8fff3cc19cb4f8b",
+    "saved": "11c0f73fce2f0747160d63d80b31d189f299e30ef581ab348c79768287d7c15d"
+  },
+  "targeted-final.txt": {
+    "original": "f01d1c431b1ee7040c3125952442c7b4673cfca19e55bb189d650713f0f59888",
+    "saved": "b19360321585f069c4e19db93de1d9e9e1a58d741fc7cb824b624253f24660bd"
+  },
+  "targeted.txt": {
+    "original": "1ed40e610f9d5d633972130956268ca343beb5c433475237300945d7985cf3b2",
+    "saved": "a0b13a4e6a7f3e9feed2838210341aa1934713c6bddafd8a00a89220b226f61e"
+  },
+  "adversarial-before-corrected.xml": {
+    "original": "5c63be751f5de7bd35d5577e3cec204156c5d8c97370954c4204f85306257ad3",
+    "saved": "54862c0eb18996731878da54b5666fdbe9f7421d9783b0bc415ffbc062d5bf00"
+  },
+  "adversarial-before.xml": {
+    "original": "babd57cd347d5bf2aa3e64204ef6b5c4b047b395e513c024ca3a5aa0efa04728",
+    "saved": "da32843ec239594a001a21f81e568bac01755664323297d05b1d34e9bdcb6ec7"
+  },
+  "baseline-native.xml": {
+    "original": "ab52f5b51d95d9f0caa093830a5103f9886d1122a5ca9d9e684978cebbfdcb66",
+    "saved": "fc176c783ba934f68c5531e1353c9eedbdf8b429075c7d71b0e892f4730d323a"
+  },
+  "evaluator-retention.xml": {
+    "original": "99d5b62db65c366c2724f290bee7a6e573b0da75ad9292be019a8268042089ea",
+    "saved": "99d5b62db65c366c2724f290bee7a6e573b0da75ad9292be019a8268042089ea"
+  },
+  "final-regression.xml": {
+    "original": "9f712638dbfb2b3915155306b584dad752c3ede8f8b54fb6090e34dfb2e460db",
+    "saved": "7d51fc561c7d16cd22a20cce42412bc771f92cf9d3ceb055740a99ff91f2588e"
+  },
+  "privilege-before.xml": {
+    "original": "fa7a66b294dbb689fedbc2def975946fa38e7469dab7e31a66c89311f45cdd9a",
+    "saved": "fa7a66b294dbb689fedbc2def975946fa38e7469dab7e31a66c89311f45cdd9a"
+  },
+  "readback-before.xml": {
+    "original": "3d99444cd2d241a677aa2aeab9c48220f339fe2cd90719c5e5d8a66488c71117",
+    "saved": "7e8b4093282a29676921557adb27e46dfb74eede9e2fd3628a90a9711e88857d"
+  },
+  "targeted-final.xml": {
+    "original": "0c8b8603857ee75d5b10a95b4136123c3bf6fdc3344c20d9fe2d8d971ce7f13e",
+    "saved": "4764d126a04265ec3f747703116ffa057d57f36588ab37a5ba9f5548b6ad2c2e"
+  },
+  "targeted.xml": {
+    "original": "ff0eec158e1c335583a543cb916c5136e43b0019f9c117d1b3e5517a01289081",
+    "saved": "3c2802d5d876b77c7b7956091b8abbab5c1bf99525d8126651bec42e2592e96b"
+  },
+  "parser-before.txt": {
+    "original": "8c796f79e76dcd2c6a504fdf3cbf940a929b00c0ab269ab64017072fe8161f9d",
+    "saved": "b25c37b1d383f5e4782d0998723c777dfeb685d6989157cb89cbd6577e050ac0"
+  },
+  "parser-targeted-final.txt": {
+    "original": "f9f357e4911f90194d1ac06a6f5879e7cd9ee74e2e790d05ff8b4a09ca277331",
+    "saved": "cee7744c79fc5309a04c1c6b7a98bf6b72f452b77b8e018ee1399d951da8a49f"
+  },
+  "pre-parser-regression.txt": {
+    "original": "73e75c13506e64a02dcd2473facebfd0e771e4bcd628a47ce8665195c04afffc",
+    "saved": "73e75c13506e64a02dcd2473facebfd0e771e4bcd628a47ce8665195c04afffc"
+  },
+  "evaluator-pre-parser.xml": {
+    "original": "dc110c84d592bad967b12a8c7a019061729828260a18f597b153f250bf1d7ebf",
+    "saved": "dc110c84d592bad967b12a8c7a019061729828260a18f597b153f250bf1d7ebf"
+  },
+  "parser-before.xml": {
+    "original": "ee711354edbf77545e1f8612fcdf3a0da156948f6d288ab7d8217105420317d5",
+    "saved": "75d7f4aa0f9e43cd1d7e899c65f3420c6774dcf52399c0e64df2ad98bcc3e1da"
+  },
+  "parser-targeted-final.xml": {
+    "original": "8a178a47ac280bf8dac27b5427dc1e63024a4d17622099e03512a19a90db58e5",
+    "saved": "564101ba95b23107b1e0f5c12c9190b768210d286567a33f87d361feca847fca"
+  },
+  "pre-parser-regression.xml": {
+    "original": "6993418e7cf6674a780a93a5ce35b6be651410eaf78c58c86b706927102c1209",
+    "saved": "6993418e7cf6674a780a93a5ce35b6be651410eaf78c58c86b706927102c1209"
+  }
+}

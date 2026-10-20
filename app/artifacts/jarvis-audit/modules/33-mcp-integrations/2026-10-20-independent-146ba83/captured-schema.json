@@ -1,0 +1,20 @@
+{
+  "origin": "literal schema in executed stdio fixture",
+  "tools": [
+    {
+      "name": "echo",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}

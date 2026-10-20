@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import re
 import threading
 import time
 from functools import wraps
@@ -34,11 +35,35 @@ def ui_loop(interval):
     return decorate
 
 
+# Applied to the WHOLE message before truncation, so a secret cannot survive by sitting past the cut.
+_REDACTIONS = (
+    # Credential schemes first, so "Authorization: Bearer <token>" redacts the token itself.
+    (re.compile(r'(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{6,}'), lambda m: m.group(1) + ' [redacted]'),
+    (re.compile(r'(?i)\b(api[_-]?key|access[_-]?key|secret|token|password|passwd|pwd|auth|authorization|'
+                r'client[_-]?secret|refresh[_-]?token|session[_-]?id|cookie)\b(\s*[:=]\s*|\s+)("[^"]*"|\'[^\']*\'|\S+)'),
+     lambda m: m.group(1) + m.group(2) + '[redacted]'),
+    (re.compile(r'\b(?:sk|gsk|ghp|gho|ghu|ghs|github_pat|hf|xox[abprs]|AKIA|AIza)[-_A-Za-z0-9]{10,}'), lambda m: '[redacted]'),
+    (re.compile(r'(?i)\b([a-z][a-z0-9+.-]*://)[^/\s:@]+:[^@\s/]+@'), lambda m: m.group(1) + '[redacted]@'),
+    (re.compile(r'(?i)(\bhttps?://[^\s?#]+)[?#]\S*'), lambda m: m.group(1) + '?[redacted]'),
+    (re.compile(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+'), lambda m: '[email]'),
+    (re.compile(r'(?i)\b[A-Z]:[\\/]+Users[\\/]+[^\\/\s]+'), lambda m: '%USERPROFILE%'),
+    (re.compile(r'\b[A-Fa-f0-9]{32,}\b|\b[A-Za-z0-9+/_-]{40,}={0,2}'), lambda m: '[redacted]'),
+)
+
+
+def safe_message(message, limit=300):
+    """Privacy-safe one-line repair text: redact credentials, URLs' queries, emails and user paths, then bound it."""
+    text = ' '.join(str(message).split())
+    for pattern, replacement in _REDACTIONS:
+        text = pattern.sub(replacement, text)
+    return text[:limit]
+
+
 def record(base, message):
     path = Path(base) / ".jarvis-runtime" / "repairs.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as output:
-        output.write(json.dumps({"at": time.time(), "message": str(message)[:1000]}) + "\n")
+        output.write(json.dumps({"at": time.time(), "message": safe_message(message)}) + "\n")
 
 
 def restart_thread(owner, name):

@@ -1,0 +1,69 @@
+.............F......................................                     [100%]
+================================== FAILURES ===================================
+______ test_authorization_is_claimed_once_with_two_simultaneous_readers _______
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-588/test_authorization_is_claimed_0')
+
+    def test_authorization_is_claimed_once_with_two_simultaneous_readers(tmp_path):
+        approval=locked(tmp_path)
+        path=tmp_path/auth.DEPENDENCY_FILE
+        path.write_text(json.dumps(approval.__dict__))
+        start=threading.Barrier(2)
+        reads=threading.Barrier(2)
+        original=Path.read_text
+        def read(candidate,*args,**kwargs):
+            text=original(candidate,*args,**kwargs)
+            if candidate==path:
+                reads.wait(timeout=3)  # Old read-then-unlink admits both; atomic claim uses a unique path.
+            return text
+        def take():
+            start.wait(timeout=3)
+            return auth.take_dependency_repair(tmp_path)
+        with patch.object(Path,'read_text',read),ThreadPoolExecutor(max_workers=2) as pool:
+>           values=list(pool.map(lambda _:take(),range(2)))
+
+tests\test_prompt34_completion.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:621: in result_iterator
+    yield _result_or_cancel(fs.pop())
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:319: in _result_or_cancel
+    return fut.result(timeout)
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:451: in result
+    return self.__get_result()
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\_base.py:403: in __get_result
+    raise self._exception
+%USERPROFILE%\AppData\Local\Programs\Python\Python310\lib\concurrent\futures\thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+tests\test_prompt34_completion.py:59: in <lambda>
+    values=list(pool.map(lambda _:take(),range(2)))
+tests\test_prompt34_completion.py:57: in take
+    return auth.take_dependency_repair(tmp_path)
+jarvis\repair_authorization.py:242: in take_dependency_repair
+    return _take(runtime, DEPENDENCY_FILE, DependencyRepair)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+runtime = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-588/test_authorization_is_claimed_0')
+name = 'dependency-repair-authorization.json'
+kind = <class 'jarvis.repair_authorization.DependencyRepair'>
+
+    def _take(runtime, name, kind):
+        path = Path(runtime) / name
+        # Claim by an atomic same-directory rename before reading. Two readers cannot consume the same grant.
+        claimed = Path(runtime) / ('.claimed-' + secrets.token_hex(16) + '-' + name)
+        try:
+            path.replace(claimed)
+        except FileNotFoundError:
+            return None
+        except OSError:
+            raise RepairRefused('The repair authorization could not be claimed; nothing was started.') from None
+        try:
+            data = json.loads(claimed.read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+>           raise RepairRefused('The repair authorization file is unreadable; it was discarded.') from None
+E           jarvis.repair_authorization.RepairRefused: The repair authorization file is unreadable; it was discarded.
+
+jarvis\repair_authorization.py:232: RepairRefused
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\modules\34-dependencies\2026-10-20-completion-a9b4ce1\targeted.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt34_completion.py::test_authorization_is_claimed_once_with_two_simultaneous_readers
+1 failed, 51 passed in 1.56s

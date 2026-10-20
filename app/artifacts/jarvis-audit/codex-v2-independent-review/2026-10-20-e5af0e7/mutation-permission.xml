@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.198" timestamp="2026-10-20T13:53:24.902134+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-v2-mutants-e5af0e7.app.tests.test_prompt36_observability" name="test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy" time="0.037"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-668/test_JRV_36_011_unavailable_te0')
+
+    def test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy(tmp_path):
+        policy = tmp_path / '.jarvis/policy.json'
+        policy.parent.mkdir(); policy.write_text(json.dumps({'deny_tools': ['read_file']}))
+        actions = SimpleNamespace(base=tmp_path, telemetry_status='unavailable', allowed_tools={'read_file'})
+        registry = ToolRegistry(actions); registry._execute = Mock()
+&gt;       with pytest.raises(ValueError, match='denied'):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_prompt36_observability.py:143: Failed</failure></testcase></testsuite></testsuites>

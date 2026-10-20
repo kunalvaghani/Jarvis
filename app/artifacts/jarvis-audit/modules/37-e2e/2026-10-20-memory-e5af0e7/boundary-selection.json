@@ -1,0 +1,20 @@
+{
+  "source_root_kind": "candidate",
+  "selected": [
+    "%SOURCE_APP%/tests/test_prompt37_reasoning_repeat.py",
+    "%SOURCE_APP%/tests/test_prompt37_ui_restart.py",
+    "%SOURCE_APP%/tests/test_prompt37_e2e_boundaries.py",
+    "%SOURCE_APP%/tests/test_prompt36_observability.py",
+    "%SOURCE_APP%/tests/test_prompt35_security.py",
+    "%SOURCE_APP%/tests/test_prompt34_completion.py",
+    "%SOURCE_APP%/tests/test_task_state.py",
+    "%SOURCE_APP%/tests/test_task_recovery.py",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_success_and_failure_lessons_are_generic_bounded_and_idempotent",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_raw_logs_and_secrets_never_become_lessons",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_upstream_markdown_format_is_parsed_and_capped",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_retrieval_resolves_contradictions_and_supersession",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_damaged_bank_is_preserved_and_replaced",
+    "%SOURCE_APP%/tests/test_phase04_learning_memory.py::test_P04_lessons_reach_planner_and_tasks_feed_the_bank"
+  ],
+  "excluded": []
+}

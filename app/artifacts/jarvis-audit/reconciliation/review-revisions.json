@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-19 IST",
+  "head": "5b56f84c1604de87bb8845027dffb5ce5943243b",
+  "branch": "codex-review",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "executable": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "source_mutations": [],
+  "original_user_config_preserved": true,
+  "master_contract": "unavailable in repository and exact companion Downloads path",
+  "reconciliation_contract": "C:/Users/kunal/Downloads/10_CODEX_FINDINGS_RECONCILIATION.md",
+  "prior_review_base": "36fbf3ce925080f7f54afa87eaf1d9b88414142d",
+  "prior_fix_commit": "32fdbfe",
+  "current_merge": "5b56f84c1604de87bb8845027dffb5ce5943243b",
+  "restricted_baseline": {
+    "PASS": 225,
+    "FAIL": 24,
+    "SKIPPED": 9
+  },
+  "unrestricted_baseline": {
+    "PASS": 248,
+    "FAIL": 2,
+    "SKIPPED": 8
+  },
+  "isolated_failure_retest": {
+    "PASS": 2,
+    "FAIL": 0,
+    "SKIPPED": 0
+  },
+  "targeted_final": {
+    "PASS": 85,
+    "FAIL": 3,
+    "SKIPPED": 0
+  },
+  "approval_final": {
+    "PASS": 1,
+    "FAIL": 3,
+    "SKIPPED": 0
+  },
+  "full_repository_regression": "NOT RUN: unresolved P1 stop gate",
+  "source_fix_sha": null,
+  "timing": "per-case seconds retained in XML; no baseline process RSS measurement"
+}

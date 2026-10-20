@@ -1,0 +1,113 @@
+FF...                                                                    [100%]
+================================== FAILURES ===================================
+_ test_prior_receipt_cannot_approve_new_request_with_identical_display_text[application] _
+
+requester = 'application'
+
+    @pytest.mark.parametrize('requester', ['application', 'learned_ability'])
+    def test_prior_receipt_cannot_approve_new_request_with_identical_display_text(requester):
+        import main
+        from jarvis.repo_abilities import AbilityForge
+    
+        saved = {}
+        cards = []
+        simulated_effects = []
+    
+        def report(kind, payload):
+            assert kind == 'approval'
+            card = Approval(payload)
+            cards.append(card)
+            if len(cards) == 1:
+                # The first request genuinely receives one approved decision.
+                assert card.decide(True)
+                saved.update(card.answer)
+            else:
+                # Replay the old response; no decision occurs for the new card.
+                assert card.token != saved['token']
+                assert card.digest == saved['digest']
+                card.answer.update(saved)
+                card.ready.set()
+    
+        if requester == 'application':
+            app = SimpleNamespace(report=report)
+            request = lambda: main.App.request_approval(app, 'fixture', 'identical display scope', lambda: False)
+        else:
+            forge = AbilityForge.__new__(AbilityForge)
+            forge.decider = None
+            forge.actions = SimpleNamespace(report=report, approval_handler=object(), approvals_waiting=0)
+            forge.approval_text = lambda row: 'identical display scope'
+            request = lambda: forge.ask({}, lambda: False)
+    
+        first = request()
+        if first:
+            simulated_effects.append('first')
+        second = request()
+        if second:
+            simulated_effects.append('second')
+        assert first is True and cards[0].done
+        assert cards[1].done is False, 'new card must have received no user decision'
+>       assert second is False, f'{requester} accepted an old token for a new card'
+E       AssertionError: application accepted an old token for a new card
+E       assert True is False
+
+artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\test_receipt_replay.py:55: AssertionError
+_ test_prior_receipt_cannot_approve_new_request_with_identical_display_text[learned_ability] _
+
+requester = 'learned_ability'
+
+    @pytest.mark.parametrize('requester', ['application', 'learned_ability'])
+    def test_prior_receipt_cannot_approve_new_request_with_identical_display_text(requester):
+        import main
+        from jarvis.repo_abilities import AbilityForge
+    
+        saved = {}
+        cards = []
+        simulated_effects = []
+    
+        def report(kind, payload):
+            assert kind == 'approval'
+            card = Approval(payload)
+            cards.append(card)
+            if len(cards) == 1:
+                # The first request genuinely receives one approved decision.
+                assert card.decide(True)
+                saved.update(card.answer)
+            else:
+                # Replay the old response; no decision occurs for the new card.
+                assert card.token != saved['token']
+                assert card.digest == saved['digest']
+                card.answer.update(saved)
+                card.ready.set()
+    
+        if requester == 'application':
+            app = SimpleNamespace(report=report)
+            request = lambda: main.App.request_approval(app, 'fixture', 'identical display scope', lambda: False)
+        else:
+            forge = AbilityForge.__new__(AbilityForge)
+            forge.decider = None
+            forge.actions = SimpleNamespace(report=report, approval_handler=object(), approvals_waiting=0)
+            forge.approval_text = lambda row: 'identical display scope'
+            request = lambda: forge.ask({}, lambda: False)
+    
+        first = request()
+        if first:
+            simulated_effects.append('first')
+        second = request()
+        if second:
+            simulated_effects.append('second')
+        assert first is True and cards[0].done
+        assert cards[1].done is False, 'new card must have received no user decision'
+>       assert second is False, f'{requester} accepted an old token for a new card'
+E       AssertionError: learned_ability accepted an old token for a new card
+E       assert True is False
+
+artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\test_receipt_replay.py:55: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\receipt-replay.xml -
+=========================== short test summary info ===========================
+FAILED artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\test_receipt_replay.py::test_prior_receipt_cannot_approve_new_request_with_identical_display_text[application]
+FAILED artifacts\jarvis-audit\modules\31-ui-island-pip\2026-10-19-independent-ddf3247\test_receipt_replay.py::test_prior_receipt_cannot_approve_new_request_with_identical_display_text[learned_ability]
+2 failed, 3 passed in 1.35s
+Exception ignored in: <function Console.__del__ at 0x000002264A8EB910>
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pyreadline3\console\console.py", line 255, in __del__
+OSError: [WinError -1073741816] Windows Error 0xc0000008

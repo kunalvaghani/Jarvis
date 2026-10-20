@@ -1,0 +1,7 @@
+# Prompt 32 independent audit — 2026-10-19 IST
+
+P32-001 proposal (not applied): establish trusted child ownership independently of heartbeat contents. Accept only the actual spawned PID or a verified descendant/job member with pinned creation identity, retain a handle after that proof, and reject unrelated or stale/mismatched identities before obtaining termination authority. Preserve Windows venv redirector compatibility. Prefer launching the application tree inside an ownership fence; never kill by executable name. Re-run wrong-PID, stale/PID-reuse, normal redirected startup, Stop/Quit and unrelated same-name process cases.
+
+P32-002 proposal (not applied): use fixed error categories or a bounded privacy-safe serializer before every repairs.jsonl and transcript sink, including launcher/bootstrap exception paths. Scan before truncation; preserve useful service/error class without raw user content/tokens/URLs. Bootstrap must retain its independence if package imports are damaged. Re-run canaries in real output files, multiline/oversized cases and normal repair diagnostics.
+
+Then finish circuit-breaking budgets, optional-worker registration/health/cancellation, durable uncertainty across cloud/API/GUI paths, state migrations and complete live startup/audio/restart acceptance. The Codex companion reconciliation requires read-only confirmation; implementation is reserved for Claude. No code patch is asserted verified here.

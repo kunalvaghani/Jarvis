@@ -1,0 +1,45 @@
+{
+  "completed_date": "2026-10-20",
+  "packet_started_date": "2026-10-19",
+  "date_note": "Run crossed midnight IST; directory retains start date.",
+  "source_sha": "cd8861ce720ade303485ee2023430dd8c6b4f0ba",
+  "prior_sha": "2c4ea56eb7967929e49dad07b0612cb99caaf56e",
+  "branch": "codex-review",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "executable": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "runs": {
+    "repair-replay": {
+      "PASS": 57,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 12.83
+    },
+    "regression": {
+      "PASS": 223,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 168.479
+    },
+    "cross-pillar": {
+      "PASS": 19,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 5.151
+    },
+    "configured-identity": {
+      "PASS": 1,
+      "FAIL": 1,
+      "SKIPPED": 0,
+      "seconds": 0.976
+    }
+  },
+  "totals": {
+    "PASS": 300,
+    "FAIL": 1,
+    "SKIPPED": 0
+  },
+  "test_process_peak_memory": "NOT MEASURED; synthetic benchmark allocation peak only",
+  "dependencies": "Existing original .venv and .venv-skills interpreters; audited source/cwd remain isolated",
+  "upstream_claim": "3469 passed/147 skips is author evidence, not independently added to totals"
+}

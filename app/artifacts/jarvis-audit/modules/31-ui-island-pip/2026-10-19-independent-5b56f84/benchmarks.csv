@@ -1,0 +1,5 @@
+commit,scenario,metric,value,scope
+5b56f84c1604de87bb8845027dffb5ce5943243b,five_producer_queue,elapsed_seconds,0.01204130000405712,"same pinned commit, synthetic five-producer queue; not event-to-render latency"
+5b56f84c1604de87bb8845027dffb5ce5943243b,five_producer_queue,tracemalloc_peak_bytes,37791,"same pinned commit, synthetic five-producer queue; not event-to-render latency"
+5b56f84c1604de87bb8845027dffb5ce5943243b,five_producer_queue,dequeue_p50_ms,0.0022,"same pinned commit, synthetic five-producer queue; not event-to-render latency"
+5b56f84c1604de87bb8845027dffb5ce5943243b,five_producer_queue,dequeue_p95_ms,0.0076,"same pinned commit, synthetic five-producer queue; not event-to-render latency"

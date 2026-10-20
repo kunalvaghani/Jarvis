@@ -1,0 +1,26 @@
+{
+  "name": "audit_sha256",
+  "description": "Compute a SHA256 digest for audit fixture text.",
+  "parameters": {
+    "text": "str"
+  },
+  "returns": "str",
+  "mechanism": [
+    "hashlib"
+  ],
+  "implementation": "return hashlib.sha256(text.encode(\"utf-8\")).hexdigest()",
+  "tests": [
+    {
+      "arguments": {
+        "text": "abc"
+      },
+      "expected": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "arguments": {
+        "text": 5
+      },
+      "error": true
+    }
+  ]
+}

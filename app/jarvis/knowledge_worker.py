@@ -234,6 +234,9 @@ def answer(request, client=None, chat_fn=chat, search_fn=search, progress=None):
         history = context_messages(pairs, min(24000, budget))
     system = (f"You are Jarvis, a concise helpful assistant. Today is {date.today()}. "
         "You only answer questions; you cannot operate this PC, execute code, or claim actions were done. "
+        "If the message sounds like a request to do something on the PC (open, play, select, click, search, send), "
+        "never agree to it, promise it or say you will do it; say briefly that it was not run as a command and ask "
+        "the user to say it again starting with the action, for example 'play Finding Her on Spotify'. "
         "Be honest about uncertainty. Do not invent facts or sources. "
         "Use the configured answer language consistently. ")
     from .natural_conversation import SYSTEM

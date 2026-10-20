@@ -1,0 +1,26 @@
+F.                                                                       [100%]
+================================== FAILURES ===================================
+_______ test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload _______
+
+tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-629/test_JRV_01_032_lifecycle_meta0')
+
+    def test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload(tmp_path):
+        actions=SimpleNamespace(base=tmp_path)
+        identifier=event(actions,'tool.started','read_file',content='FAKE_PRIVATE',api_key='FAKE_TOKEN')
+        event(actions,'tool.failed','read_file',identifier,error_type='TimeoutError')
+        rows=[json.loads(s) for s in (tmp_path/'.jarvis-runtime/agent-events.jsonl').read_text().splitlines()]
+        assert rows[0]['call_id']==rows[1]['call_id']==identifier
+        assert rows[1]['error_type']=='TimeoutError'
+        assert 'FAKE_' not in json.dumps(rows)
+>       assert set(rows[0]) <= {'version','at','event','call_id','tool','discarded_metadata_fields'}
+E       AssertionError: assert {'at', 'call_...onic_ns', ...} <= {'at', 'call_...l', 'version'}
+E         
+E         Extra items in the left set:
+E         'clock_id'
+E         'monotonic_ns'
+
+tests\test_architecture_audit.py:37: AssertionError
+- generated xml file: %AUDIT_APP%\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-a9b4ce1\triage.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_architecture_audit.py::test_JRV_01_032_lifecycle_metadata_does_not_store_extra_payload
+1 failed, 1 passed in 2.25s

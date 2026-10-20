@@ -1,0 +1,33 @@
+{
+  "id": "JRV-37-021",
+  "source_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "classification": "real owned child crash, Actions restart/queue, App report/drain and Tk widgets; simulated send and speech sink",
+  "input": "queued mock send; child exits 27 after uncertain checkpoint; restart; resume task",
+  "actual_components": [
+    "Actions.submit",
+    "Actions worker",
+    "TaskState.checkpoint",
+    "process os._exit(27)",
+    "TaskState reload",
+    "Actions resume_task",
+    "App.report",
+    "App.drain",
+    "Island.notify",
+    "Desk.notify",
+    "Tk Text readback"
+  ],
+  "postconditions": {
+    "child_exit": 27,
+    "mock_outbox_rows": 1,
+    "restored_state": "interrupted",
+    "ui_overview": "Task paused: An external write is uncertain. Inspect the actual result before continuing; no automatic replay is permitted.",
+    "live_text": "Task paused: An external write is uncertain. Inspect the actual result before continuing; no automatic replay is permitted.",
+    "speech_sink_calls": 1,
+    "planner_calls_after_restart": 0,
+    "uncertain_writes_retained": true
+  },
+  "real_sends": 0,
+  "real_audio_or_mic": 0,
+  "desktop_capture": false,
+  "status": "PASS"
+}

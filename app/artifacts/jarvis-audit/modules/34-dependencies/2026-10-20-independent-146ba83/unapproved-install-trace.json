@@ -1,0 +1,25 @@
+{
+  "commands": [
+    [
+      "%FIXTURE%\\.venv\\Scripts\\python.exe",
+      "-c",
+      "import json"
+    ],
+    [
+      "%FIXTURE%\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "--isolated",
+      "install",
+      "-r",
+      "requirements/runtime.txt"
+    ],
+    [
+      "%FIXTURE%\\.venv\\Scripts\\python.exe",
+      "-c",
+      "import json"
+    ]
+  ],
+  "real_commands_executed": 0,
+  "approval_granted": false
+}

@@ -1,0 +1,45 @@
+diff --git a/README.md b/README.md
+index 04f9cb7..c1349f3 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,7 @@
+ # Jarvis — local Windows voice assistant
+ 
++**2026-10-20 — Prompt 33 independent continuation (`cd8861c`): 300 passed / 1 failed; NOT READY / BLOCKED.** Reported MCP integrity, array/equality and result/resource defects now pass. **P33-004 P1 remains partial:** keeping account label A while replacing its token with B's is accepted as verified rotation, so the intercepted calendar write targets B. The stable-token control passes; zero real events or provider requests occurred. Earlier ownership/privacy fixes retain passing reproductions. No Codex application source repair or deployment. [Current verdict](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/verdict.md) · [Remaining repair](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/repair-handoff.md).
++
+ **Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
+ 
+ **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
+@@ -10,7 +12,7 @@ branch work and pending audits were preserved before integration. See the
+ merge decisions, fresh checks, recovery instructions, and remaining limitations.
+ 
+ <!-- prompt33-followup -->
+-**2026-10-19 — Prompt 33 follow-up: P33-004 (provider account binding), P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,469 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-2c4ea56/repair.md).
++**2026-10-19 — Historical Claude follow-up report, before the independent continuation above.** Claude recorded 3,469 passed / 0 failed; those author results do not close the remaining P33-004 identity blocker. [Author repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-2c4ea56/repair.md).
+ <!-- /prompt33-followup -->
+ 
+ <!-- prompt32-33 -->
+diff --git a/app/README.md b/app/README.md
+index 61d4f30..4056301 100644
+--- a/app/README.md
++++ b/app/README.md
+@@ -1,5 +1,7 @@
+ # Jarvis — local Windows voice assistant
+ 
++**2026-10-20 — Prompt 33 independent continuation (`cd8861ce720ade303485ee2023430dd8c6b4f0ba`): 300 passed / 1 failed / 0 skipped; NOT READY / BLOCKED.** All 57 original/follow-up repair checks pass, along with 223 directly affected regressions and 19 focused cross-pillar checks. The stable-token account control also passes. Reported P33-001/002/003 defects are verified fixed within the tested subset; original Prompt 32 ownership/privacy controls retain passing results. **P33-004 P1 remains partial:** a configured account label is marked `identity_verified` without establishing the credential's actual principal. With label A unchanged, a replacement token assigned to mock account B is accepted as rotation and the intercepted POST uses B for A's approved event. This independently reproduces the limitation acknowledged in the author repair notes; zero real provider calls or events occurred. Refusing unlabelled credential changes and changed labels now works, but label equality does not verify rotation. Literal-reference dependent-skill invalidation/retrieval/restore and 16-thread drift-update controls pass; full schema migration, registration during task execution, memory/account scope/refresh and live acceptance remain blocked. The isolated launcher remains `repair_required`. No Codex application source repair, installation, visible UI change or deployment. Source repairs remain with Claude under the supplied independent read-only confirmation contract. [Verdict](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/verdict.md) · [Finding](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/failures.md) · [Remaining repair handoff](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/repair-handoff.md). The packet directory retains its pre-midnight 2026-10-19 start date; these results completed on 2026-10-20 IST. [Previous continuation](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-2c4ea56/verdict.md) · [Preserved pre-update notes](artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/pre-update/app-README.md).
++
+ ## Independent audit checkpoint (2026-10-19)
+ 
+ The independent review pins `claude` at `36fbf3ce925080f7f54afa87eaf1d9b88414142d` in a separate `codex-review` worktree. This audit branch is an explicit exception to the earlier three-branch convention. No fixes were merged into `claude` or `main`.
+diff --git a/app/docs/CRASH_RECOVERY.md b/app/docs/CRASH_RECOVERY.md
+index 7b78296..acb1822 100644
+--- a/app/docs/CRASH_RECOVERY.md
++++ b/app/docs/CRASH_RECOVERY.md
+@@ -1,5 +1,7 @@
+ # Crash recovery
+ 
++**2026-10-20 independent retention check (`cd8861c`):** The original P32 heartbeat-ownership and repair-log privacy failures still pass the native/synthetic reproductions, along with the affected recovery suites. This confirms those fixes within tested scope; full live recovery, optional-worker/circuit-breaking gates and universal redaction remain unverified. The isolated launcher reports `repair_required`. Prompt 33 remains blocked by a separate account identity finding. [Current reconciliation](../artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-independent-cd8861c/codex-findings-reconciliation.md).
++
+ Jarvis on Windows uses a virtual environment redirector which can have a different
+ PID from the actual Python interpreter. Checking its heartbeat against the
+ redirector PID caused false startup timeouts and repeated restarts.

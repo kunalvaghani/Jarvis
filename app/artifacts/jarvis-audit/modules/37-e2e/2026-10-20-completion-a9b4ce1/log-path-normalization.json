@@ -1,0 +1,82 @@
+{
+  "baseline.txt": {
+    "original": "84c91d175fce2f8830a6fd53b1825eba621808a583df1e131075df51093fe4d8",
+    "saved": "57de72379d80cc47a04c5cab298005af9cf4b481172cfcacd7d0439e52c45f5d"
+  },
+  "before-fixes.txt": {
+    "original": "af5bef2b9a670148d5a23f30d10ac276d3ed838e153576b7d6d6d17e4829569e",
+    "saved": "072a98c40ca75950e6d0f35d83d8d33d1936dd513291ad9727128d0d661ffcde"
+  },
+  "before-terminal.txt": {
+    "original": "609a29ee226eb2299c1e5e68eed4b754b1473f50439a56781dd11af343d41181",
+    "saved": "f71d8527d2e3f8d3c247fdee6a2609d238ea9c24236ade9a7371892fd76f5a53"
+  },
+  "final.txt": {
+    "original": "097481ead9478e048a074a5f0e71f3b2a89e4ed5ff71cef30c2c7ae6dd6b3273",
+    "saved": "60802fbf59cba55bb60a86819420b8fbbbb2ca066c076a0da22d2cb342211efa"
+  },
+  "historical-retention.txt": {
+    "original": "c15f0059eb40d392947a2b2a9128969804a43ae45fbf559c3372307015f10ad7",
+    "saved": "71818c97757e9511ea762dd3e555e947e0f4835d792e57867d333a68e5328ad1"
+  },
+  "journeys.txt": {
+    "original": "9746594826675d73e67469ef0e24b25dc18baf8f12dc5f5b31a28bb38f9a714d",
+    "saved": "9746594826675d73e67469ef0e24b25dc18baf8f12dc5f5b31a28bb38f9a714d"
+  },
+  "launcher-check.txt": {
+    "original": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590",
+    "saved": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590"
+  },
+  "staged-regression.txt": {
+    "original": "dab6f69d884fc04261710fd4784e1e5e79b39cf29b0129ea126ccf003aee46e0",
+    "saved": "9e33e396a6f690e58ba8e03145df3ba97b79c7528cfc1ad0566eebdab3d4c77e"
+  },
+  "supplemental.txt": {
+    "original": "eec18526baf029559bd0ffcd7151ef638a1b6f4f041dba8b7339efa59b0b7135",
+    "saved": "91f6a218322f97d063ab4ecc07d44a2c3edb78e2bb154ec74da89990791fd0f1"
+  },
+  "targeted-final.txt": {
+    "original": "54f2fa41c433bdd35c4ed0e36d097e2174d78ad154ad0d7ba988e2235e28ad54",
+    "saved": "c09bebf39b967eff9695fefb386aa2b8c1f9b5f6227afb5e09e34d59d141cfab"
+  },
+  "targeted.txt": {
+    "original": "97959eaa05a253bb39c36dd3de36b55c83ae394922f2599bd71ec336b45e7138",
+    "saved": "107562dc32e7cd9474c9c9f18c433101dda3dc357b6c9185d1918d26e18b1110"
+  },
+  "baseline.xml": {
+    "original": "f1a9c8f323dc9cb347f31d0617fd45d7778d8cab1e90b7814e5172cd14cca824",
+    "saved": "f1a9c8f323dc9cb347f31d0617fd45d7778d8cab1e90b7814e5172cd14cca824"
+  },
+  "before-fixes.xml": {
+    "original": "0db636e95b609da75238780774ec66b09cd047904cd5611127cfb331a80a7ac2",
+    "saved": "288369bd5529506b0fd1613ad169b7a7517400c378e9b9d215bcd96a12216cb6"
+  },
+  "before-terminal.xml": {
+    "original": "4474bccb435832d464a0f775b68af1cc3bc3fb353f32c31b5c8ded4268d624cf",
+    "saved": "f7beaaee1abcc60c015872e3b221f948f26e71003ae4d62388c6787f905ab800"
+  },
+  "final.xml": {
+    "original": "7b7d48931ecad5f85eb297a4c84a833058ddff09e12067aad41cbcc407f33453",
+    "saved": "603396a01ee79f19a24b0710aad1db797e5ba0d31fe69fe13bdf6c80214684c8"
+  },
+  "historical-retention.xml": {
+    "original": "f4c338bc13469f83c2f6393e78e7e833903a5e5b884388d8d9392c000550d596",
+    "saved": "f4c338bc13469f83c2f6393e78e7e833903a5e5b884388d8d9392c000550d596"
+  },
+  "staged-regression.xml": {
+    "original": "62d8cc212e8ab69de64884159fd4ba68e7b8fa1979a70a2306e3c66b8cee579c",
+    "saved": "9e8b3dc081076f7693fd636f88cbc17fec05c1b9039768040b2b471eb3ead393"
+  },
+  "supplemental.xml": {
+    "original": "2d4bdb1bac511081f6e798873af05459b641c8ec49c7d48ea2ff1534fd2452af",
+    "saved": "313a6e5e264290eafae788498ddecc42506e1c7a46a46aa601ebefc9dbe8f1e5"
+  },
+  "targeted-final.xml": {
+    "original": "ecab2f7f1fec837eeee9044fa2afd2ec8b2797c9cb870b70af0b2771c716c44d",
+    "saved": "ecab2f7f1fec837eeee9044fa2afd2ec8b2797c9cb870b70af0b2771c716c44d"
+  },
+  "targeted.xml": {
+    "original": "de426e2516d11abe890d7de8a7083fa28e6cf8f3c7857a400c23a3e323de911e",
+    "saved": "de426e2516d11abe890d7de8a7083fa28e6cf8f3c7857a400c23a3e323de911e"
+  }
+}

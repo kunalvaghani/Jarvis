@@ -1,0 +1,5 @@
+# Compatibility and realistic bounded journey
+
+The repair journey remains functional: an owned ability fails, the local repair loop receives a fixed diagnostic category, a second candidate is tested and activated under existing assertions. Raw generated exception/source content is intentionally withheld. Structured credential logs retain non-secret context. Existing public synthetic architect payload still reaches a recording fake and returns inert advice; private/untrusted/malformed payloads stay local with zero fake outbound requests. Real ReasoningBank retrieval plus the actual scoped executor refuses contaminated-memory privilege claims.
+
+No packages or runtime configuration changed. Windows native temporary-file access was needed because restricted sandbox rename operations failed. No global security setting changed. The native symlink fixture is unavailable without privilege; owned junction initial admission check passes. Isolated launcher --check exit 1 / repair_required: missing local env/assets, Docker/Ollama endpoints unavailable in this checkout. No setup/repair triggered. Physical desktop, cloud, training, WSL and engine acceptance remain blocked.

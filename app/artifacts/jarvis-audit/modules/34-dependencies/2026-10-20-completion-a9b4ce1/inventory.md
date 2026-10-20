@@ -1,0 +1,7 @@
+# Prompt 34 inventory — 2026-10-20
+
+Isolated codex-review, base a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6 plus local source.patch and new tests (source-hashes.json). The original checkout and user config were not edited. The user's latest policy authorizes safe local repairs and continued independent work; it supersedes earlier read-only/first-blocker stop instructions. Root/app AGENTS apply. Master contract was unavailable; supplied reconciliation contract and numbered prompt were read.
+
+Ten installed environments are mapped by exact executable suffix and distribution metadata in environment-sbom.json, dependency-graph.json, lockfile-map.json and worker-interpreters.json. Those files are byte-identical earlier 2026-10-20 snapshots, not a new metadata scan; inventory-provenance.json identifies them. Fresh pip checks passed in all ten; pip-less UV workers used existing main pip with --python, without installing pip. Fresh brain/F5/training imports passed; F5/training report CUDA 12.4 available, brain is CPU. No tensor/kernel/model/training workload was run.
+
+Snapshot: RTX 3050 Laptop 4096 MiB, driver 610.74, Node 24.14.0, npm 11.11.1, Ollama 0.40.0, Docker 29.8.2, WSL 2.6.1. nvcc not found on PATH is not proof toolkit absent. Eighteen local Ollama tags were previously enumerated; no inference. Pip cache/nine wheels are not a complete approved wheelhouse. No package/model/driver mutation. Private roots are aliased; suffixes retain interpreter routing.

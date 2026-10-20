@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="56" time="20.308" timestamp="2026-10-20T02:29:06.542290+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_skill_telemetry_stores_metadata_not_raw_evidence" time="0.063" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_large_skill_evidence_remains_valid_json" time="0.049" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_023_legacy_malformed_evidence_does_not_break_metrics" time="0.058" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_014_refuted_bound_step_cannot_earn_verified_skill_credit" time="0.089" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_013_015_selection_only_and_restart_are_not_execution" time="0.065" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock" time="0.014"><failure message="jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-610/test_JRV_36_003_008_five_calls0')
+
+    def test_JRV_36_003_008_five_calls_correlate_to_task_and_monotonic_clock(tmp_path):
+        state = TaskState(tmp_path)
+        task = state.start('Synthetic read-only five-call fixture', 'task')
+        actions = SimpleNamespace(base=tmp_path, task_state=state, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        for _ in range(5):
+&gt;           registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False)
+
+tests\test_prompt36_observability.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:209: in execute
+    return self._execute_traced(step, cancelled, activate)
+jarvis\tools.py:233: in _execute_traced
+    validate_arguments(step)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+step = {'action': 'read_file', 'value': 'fixture'}
+
+    def validate_arguments(step):
+        """Deterministic contract check before any report, approval prompt or dispatch."""
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        name = step.get('action')
+        if name in KIT_TOOLS:
+            from .toolkits import validate_step
+            try:
+                validate_step(step)
+            except KeyError as exc:
+                raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+            except ValueError as exc:
+&gt;               raise ToolArgumentError(str(exc)) from None
+E               jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.
+
+jarvis\tools.py:105: ToolArgumentError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool" time="0.009"><failure message="jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-610/test_JRV_36_011_logging_unavai0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001029273FE50&gt;
+
+    def test_JRV_36_011_logging_unavailable_does_not_replay_or_block_tool(tmp_path, monkeypatch):
+        actions = SimpleNamespace(base=tmp_path, allowed_tools={'read_file'})
+        registry = ToolRegistry(actions)
+        registry._execute = Mock(return_value=ToolResult('read_file', 'files', 'fixture read'))
+        real_open = Path.open
+        def no_journal(path, *args, **kwargs):
+            if path.name == 'agent-events.jsonl':
+                raise PermissionError('synthetic locked log')
+            return real_open(path, *args, **kwargs)
+        monkeypatch.setattr(Path, 'open', no_journal)
+&gt;       assert registry.execute({'action': 'read_file', 'value': 'fixture'}, lambda: False).evidence == 'fixture read'
+
+tests\test_prompt36_observability.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\tools.py:209: in execute
+    return self._execute_traced(step, cancelled, activate)
+jarvis\tools.py:233: in _execute_traced
+    validate_arguments(step)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+step = {'action': 'read_file', 'value': 'fixture'}
+
+    def validate_arguments(step):
+        """Deterministic contract check before any report, approval prompt or dispatch."""
+        if not isinstance(step, dict):
+            raise ToolArgumentError('A tool step must be an object.')
+        name = step.get('action')
+        if name in KIT_TOOLS:
+            from .toolkits import validate_step
+            try:
+                validate_step(step)
+            except KeyError as exc:
+                raise ToolArgumentError('Missing tool argument: ' + str(exc.args[0])) from None
+            except ValueError as exc:
+&gt;               raise ToolArgumentError(str(exc)) from None
+E               jarvis.tools.ToolArgumentError: Toolkit file operations need an explicit folder.
+
+jarvis\tools.py:105: ToolArgumentError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_020_privacy_block_records_categorical_reason_without_payload" time="0.038" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt36_observability" name="test_JRV_36_024_cloud_logs_never_copy_sent_problem_payload" time="0.032" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_non_object_proposal_is_a_typed_contract_error[None]" time="0.004" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_non_object_proposal_is_a_typed_contract_error[42]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_non_object_proposal_is_a_typed_contract_error[task_id]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_non_object_proposal_is_a_typed_contract_error[step3]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_non_object_proposal_is_a_typed_contract_error[step4]" time="0.003" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D1_object_with_task_id_still_requires_identity" time="0.012" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D2_launcher_closes_docker_handle_when_loop_exits" time="0.012" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D2_launcher_without_docker_handle_exits_cleanly" time="0.004" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D4_failed_memory_sources_are_counted_not_silent" time="0.783" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D4_healthy_recall_reports_no_errors" time="0.005" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D3_hierarchical_planner_initializes_validation_feedback" time="0.001" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_D5_web_audit_test_does_not_overwrite_dated_evidence" time="0.001" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_contract_outcome_round_trip_correlates_with_lifecycle" time="0.015" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_contract_outcome_rejects_payloads_and_malformed_values" time="0.016" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_contract_outcome_requires_correlation_and_known_states" time="0.006" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_lifecycle_events_still_drop_outcome_fields" time="0.012" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_contract_replay_policy_matches_no_replay_rule" time="0.001" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_read_outcomes_is_bounded_and_skips_foreign_lines" time="0.007" /><testcase classname="Jarvis-codex-review.app.tests.test_phase01_baseline" name="test_P01_baseline_script_measures_without_failed_sections" time="7.415" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_coder_bad_nested_guidance_does_not_create_draft" time="0.080" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_coder_receives_guidance_and_skills_before_generation" time="0.117" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_compaction_preserves_user_goal_and_source_and_marks_excerpts" time="0.009" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_conflicting_final_and_call_is_corrected_without_dispatch" time="0.061" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_deferred_search_loads_configured_tool_without_executing_it" time="0.022" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_deny_policy_blocks_dispatch_and_events_omit_payload" time="0.036" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_explicit_skills_and_enabled_plugin_bundles_are_data_only" time="0.118" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_explicit_source_is_read_before_model_can_answer" time="0.077" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_hierarchical_guidance_stops_at_repository_and_nested_target" time="0.031" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_instructions_fail_closed_on_budget_and_invalid_encoding" time="0.019" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_malformed_policy_and_executable_hooks_fail_closed" time="0.017" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_parallel_research_has_separate_context_budgets_and_fork_has_no_calls" time="0.081" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_read_batch_preserves_order_and_captures_individual_failure" time="0.023" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_read_batch_rejects_writes_network_nested_calls_and_cross_scope" time="0.008" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_real_git_observation_and_diff_scope" time="0.749" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_session_loop_observes_then_finishes_and_resume_never_replays" time="0.080" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_session_rejects_writes_repetition_wrong_project_and_budget" time="0.093" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.AgentRuntimeTests" name="test_source_map_never_imports_code_and_excludes_credentials" time="0.011" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_cancellation_and_malformed_stdout_close_without_retry" time="0.346" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_denied_approval_prevents_process_start" time="0.024" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_real_handshake_tools_and_call_with_exact_approval" time="0.453" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_status_never_starts_server_or_discloses_config_values" time="0.020" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_timeout_calls_once_closes_owned_process_and_preserves_uncertainty" time="2.737" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_unlisted_tool_and_untrusted_process_never_execute" time="0.033" /><testcase classname="Jarvis-codex-review.app.tests.test_agent_runtime.MCPTests" name="test_unresponsive_stdin_and_oversized_output_are_bounded" time="4.275" /><testcase classname="Jarvis-codex-review.app.tests.test_phase03_living_skills" name="test_P03_selection_and_outcomes_are_counted_once_per_task" time="0.285" /><testcase classname="Jarvis-codex-review.app.tests.test_phase03_living_skills" name="test_P03_failure_cause_and_fallback_are_recorded" time="0.202" /><testcase classname="Jarvis-codex-review.app.tests.test_phase05_escalation_demonstration" name="test_P05_outbound_payload_is_exactly_the_allowlist_and_is_recorded" time="0.037" /></testsuite></testsuites>

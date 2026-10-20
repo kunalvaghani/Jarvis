@@ -1,0 +1,25 @@
+{
+  "scope": "one interim snapshot of owned Python regression runners; excludes child aggregate and GPU; not end-user peak RAM",
+  "samples": [
+    {
+      "pid": 7004,
+      "rss_bytes": 4411392,
+      "os_lifetime_peak_working_set_bytes": 4440064
+    },
+    {
+      "pid": 32812,
+      "rss_bytes": 4358144,
+      "os_lifetime_peak_working_set_bytes": 4431872
+    },
+    {
+      "pid": 36696,
+      "rss_bytes": 299917312,
+      "os_lifetime_peak_working_set_bytes": 386850816
+    },
+    {
+      "pid": 41680,
+      "rss_bytes": 179093504,
+      "os_lifetime_peak_working_set_bytes": 187072512
+    }
+  ]
+}

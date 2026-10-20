@@ -1,0 +1,13 @@
+{
+ "note": "Output of an F5 benchmark run on 2026-10-20 (Jarvis stopped, GPU otherwise idle), RTX 3050 Laptop 4 GB, .venv-f5, no playback. Copied from the run's stdout.",
+ "engine": "F5TTS_v1_Base CUDA",
+ "load_and_warm_s": 36.65,
+ "runs": [
+  {"nfe_step": 32, "text": "Got it. I'm keeping an eye on things while you loo", "first_audio_s": 4.54, "synth_s": 8.93, "audio_s": 3.46, "real_time_factor": 2.58},
+  {"nfe_step": 32, "text": "Which one? Say select option number: 1.", "first_audio_s": 4.53, "synth_s": 8.47, "audio_s": 2.76, "real_time_factor": 3.07},
+  {"nfe_step": 32, "text": "Oh, nice! Playing Finding Her on Spotify now. Hone", "first_audio_s": 4.7, "synth_s": 9.32, "audio_s": 5.15, "real_time_factor": 1.81},
+  {"nfe_step": 16, "text": "Got it. I'm keeping an eye on things while you loo", "first_audio_s": 2.3, "synth_s": 4.52, "audio_s": 3.46, "real_time_factor": 1.31},
+  {"nfe_step": 16, "text": "Which one? Say select option number: 1.", "first_audio_s": 2.31, "synth_s": 4.33, "audio_s": 2.76, "real_time_factor": 1.57},
+  {"nfe_step": 16, "text": "Oh, nice! Playing Finding Her on Spotify now. Hone", "first_audio_s": 2.38, "synth_s": 4.72, "audio_s": 5.15, "real_time_factor": 0.92}
+ ]
+}

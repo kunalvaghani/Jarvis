@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-19 IST",
+  "claude_pinned": "ddf3247fd3d5ee6b151287c6cba358e8707090c6",
+  "fix_commit": "1dd3e9c841fba8f439be0d1116e9a0c91da8c447",
+  "previous_pin": "5b56f84c1604de87bb8845027dffb5ce5943243b",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "interpreter": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "scope": "independent source unchanged; fixtures/native offscreen components, not whole-assistant acceptance",
+  "runs": {
+    "approval-reverification.xml": {
+      "PASS": 13,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "receipt-replay.xml": {
+      "PASS": 3,
+      "FAIL": 2,
+      "SKIPPED": 0
+    },
+    "relevant-regression.xml": {
+      "PASS": 303,
+      "FAIL": 1,
+      "SKIPPED": 8
+    },
+    "ability-registry-regression.xml": {
+      "PASS": 114,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "cross-pillar-dependency-retest.xml": {
+      "PASS": 1,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "widget-journey.xml": {
+      "PASS": 2,
+      "FAIL": 0,
+      "SKIPPED": 0
+    }
+  },
+  "source_fix_applied_by_codex": false,
+  "full_repository_regression": "NOT RUN: renewed safety acceptance stop gate",
+  "master_contract": "unavailable in repository and exact Downloads companion path",
+  "reconciliation_contract": "Downloads/10_CODEX_FINDINGS_RECONCILIATION.md read-only Codex confirmation",
+  "source_memory_measurement": "per-operation synthetic traced allocation; no process/GPU soak measurement"
+}

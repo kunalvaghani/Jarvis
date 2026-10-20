@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-19",
+  "mandatory_reports": 12,
+  "stable_cases": 22,
+  "checks": 279,
+  "passed": 273,
+  "failed": 6,
+  "source_and_prior_packet_hashes": "MATCH",
+  "copied_repro_assertions": "BYTE IDENTICAL",
+  "new_report_readme_links": "PASS",
+  "scope": "packet validation, not application acceptance"
+}

@@ -1,0 +1,393 @@
+{
+  "source_root_kind": "candidate",
+  "selected": [
+    "%SOURCE_APP%\\tests\\test_prompt34_completion.py",
+    "%SOURCE_APP%\\tests\\test_prompt34_remaining_routes.py",
+    "%SOURCE_APP%\\tests\\test_prompt35_security.py",
+    "%SOURCE_APP%\\tests\\test_prompt36_observability.py",
+    "%SOURCE_APP%\\tests\\test_prompt37_e2e_boundaries.py",
+    "%SOURCE_APP%\\tests\\test_ability_forge_audit.py",
+    "%SOURCE_APP%\\tests\\test_agent_runtime.py",
+    "%SOURCE_APP%\\tests\\test_app_research_audit.py",
+    "%SOURCE_APP%\\tests\\test_architecture_audit.py",
+    "%SOURCE_APP%\\tests\\test_browser_playwright_audit.py",
+    "%SOURCE_APP%\\tests\\test_buddy.py",
+    "%SOURCE_APP%\\tests\\test_cognition_and_routing.py",
+    "%SOURCE_APP%\\tests\\test_dag_planning_audit.py",
+    "%SOURCE_APP%\\tests\\test_deliberation_audit.py",
+    "%SOURCE_APP%\\tests\\test_desktop_actions.py",
+    "%SOURCE_APP%\\tests\\test_desktop_control_audit.py",
+    "%SOURCE_APP%\\tests\\test_desktop_tasks.py",
+    "%SOURCE_APP%\\tests\\test_everyday_runtime.py",
+    "%SOURCE_APP%\\tests\\test_f5_speech.py",
+    "%SOURCE_APP%\\tests\\test_gmail_audit.py",
+    "%SOURCE_APP%\\tests\\test_gods_eye_audit.py",
+    "%SOURCE_APP%\\tests\\test_gpu_scheduler.py",
+    "%SOURCE_APP%\\tests\\test_gpu_scheduler_audit.py",
+    "%SOURCE_APP%\\tests\\test_groq.py",
+    "%SOURCE_APP%\\tests\\test_harness_planners_audit.py",
+    "%SOURCE_APP%\\tests\\test_independent_review.py",
+    "%SOURCE_APP%\\tests\\test_intent_direct_audit.py",
+    "%SOURCE_APP%\\tests\\test_intent_testbook.py",
+    "%SOURCE_APP%\\tests\\test_island.py",
+    "%SOURCE_APP%\\tests\\test_island_desk.py",
+    "%SOURCE_APP%\\tests\\test_launcher_readiness.py",
+    "%SOURCE_APP%\\tests\\test_media_audit.py",
+    "%SOURCE_APP%\\tests\\test_memory_audit.py",
+    "%SOURCE_APP%\\tests\\test_model_routing_audit.py",
+    "%SOURCE_APP%\\tests\\test_native_coding_audit.py",
+    "%SOURCE_APP%\\tests\\test_natural_voice.py",
+    "%SOURCE_APP%\\tests\\test_perception_cognition_audit.py",
+    "%SOURCE_APP%\\tests\\test_phase01_baseline.py",
+    "%SOURCE_APP%\\tests\\test_prompt31_approval_binding.py",
+    "%SOURCE_APP%\\tests\\test_prompt33_followup.py",
+    "%SOURCE_APP%\\tests\\test_prompt33_mcp_boundaries.py",
+    "%SOURCE_APP%\\tests\\test_prompt34_dependency_repair.py",
+    "%SOURCE_APP%\\tests\\test_questions_context_audit.py",
+    "%SOURCE_APP%\\tests\\test_rag_documents_audit.py",
+    "%SOURCE_APP%\\tests\\test_realtime_audit.py",
+    "%SOURCE_APP%\\tests\\test_recovery.py",
+    "%SOURCE_APP%\\tests\\test_repo_abilities.py",
+    "%SOURCE_APP%\\tests\\test_repo_learning_audit.py",
+    "%SOURCE_APP%\\tests\\test_repository_skill_isolation.py",
+    "%SOURCE_APP%\\tests\\test_reverse_engineering_audit.py",
+    "%SOURCE_APP%\\tests\\test_runtime_health.py",
+    "%SOURCE_APP%\\tests\\test_sandbox_deerflow_audit.py",
+    "%SOURCE_APP%\\tests\\test_self_evolution_audit.py",
+    "%SOURCE_APP%\\tests\\test_skill_selection_audit.py",
+    "%SOURCE_APP%\\tests\\test_speech.py",
+    "%SOURCE_APP%\\tests\\test_task_recovery.py",
+    "%SOURCE_APP%\\tests\\test_task_state.py",
+    "%SOURCE_APP%\\tests\\test_tool_registry_audit.py",
+    "%SOURCE_APP%\\tests\\test_toolkits.py",
+    "%SOURCE_APP%\\tests\\test_ui_controls.py",
+    "%SOURCE_APP%\\tests\\test_voice_stt_audit.py",
+    "%SOURCE_APP%\\tests\\test_voice_tts_audit.py",
+    "%SOURCE_APP%\\tests\\test_whatsapp_audit.py",
+    "%SOURCE_APP%\\tests\\test_windows_commands.py",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_01_xlsx_write_preserves_formulas_and_other_cells",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_01b_unknown_sheet_and_bad_cells_change_nothing",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_07_chart_workbook_falls_back_to_native_excel_and_keeps_chart",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_07b_plan_selects_structured_when_api_cannot_preserve_features",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_07c_simulated_api_outage_falls_back_only_before_dispatch",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_07d_all_methods_unavailable_reports_gui_fallback_without_acting",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_07e_read_only_retry_is_bounded_and_writes_are_single_attempt",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_02_docx_edits_verify_structure",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_02b_tracked_changes_and_signatures_refuse_api_write",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_02c_native_word_edit_on_temporary_copy",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_03_pdf_text_and_new_file_composition",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_04_blender_creates_verified_disposable_scene",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_04b_blender_rejects_code_and_bad_arguments_before_launch",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_unreal_manifest_is_read_only",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_vscode_cli_read_only_operations",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_05_dom_fill_and_click_on_controlled_loopback_page",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_05b_web_methods_rank_documented_api_before_dom",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_06_structured_uia_first_on_disposable_app",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_09_cyan_cursor_order_is_configurable_and_remains_the_fallback",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_09b_pointer_still_prepares_when_no_uia_pattern_exists",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_09c_router_uses_pointer_only_after_structured_providers_decline",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_08_approval_denial_changes_nothing",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_08b_scope_policy_and_paths_are_enforced",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_08c_outcome_telemetry_carries_no_document_content",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_08d_locked_or_concurrently_changed_file_is_never_overwritten",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_planner_rejects_gui_typing_when_api_method_is_eligible",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_planner_requires_named_file_and_write_intent",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_capability_context_carries_strategy_order",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_measured_failures_demote_api_but_never_enable_ineligible_methods",
+    "%SOURCE_APP%\\tests\\test_phase02_execution_strategy.py::test_P02_execution_methods_tool_explains_without_running",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_identity_is_stable_and_sidecars_only_in_owned_roots",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_invalid_sidecar_is_preserved_and_identity_stays_stable",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_missing_metadata_duplicates_and_non_skill_folders_are_reported",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_corrupt_store_is_preserved_and_replaced",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_selection_and_outcomes_are_counted_once_per_task",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_failure_cause_and_fallback_are_recorded",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_ranking_uses_verified_reliability_within_relevant_skills",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_malicious_or_invalid_candidates_are_rejected",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_audit_only_mode_records_no_mutation",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_captured_keeps_only_verified_steps_with_provenance",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_provisional_becomes_trusted_only_after_independent_verified_uses",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_capture_refuses_workflows_an_existing_skill_already_covers",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_capture_refuses_unverified_or_uncorrelated_traces",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_fix_repairs_degraded_skill_minimally_and_rolls_back",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_failed_or_oversized_fix_keeps_previous_version",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_fix_for_bundled_guides_is_only_a_proposal",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_derived_specializes_with_observed_application_version",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_mcp_existing_tool_is_discovered_before_generation",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_malicious_generated_code_is_rejected_before_any_container",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_spec_must_use_allowlisted_mechanism_and_error_tests",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_mcp_workflows_register_call_and_unregister",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_wrong_or_hanging_generated_tools_are_never_registered",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_generated_server_container_has_no_network_or_host_files",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_idle_maintenance_reports_only_evidence_backed_changes",
+    "%SOURCE_APP%\\tests\\test_phase03_living_skills.py::test_P03_running_identity_only_while_task_runs",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_sandbox_approver_refuses_writes_outside_the_sandbox",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_cancellation_dispatches_nothing",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_restart_marks_inflight_step_uncertain_without_replay",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_success_and_failure_lessons_are_generic_bounded_and_idempotent",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_raw_logs_and_secrets_never_become_lessons",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_upstream_markdown_format_is_parsed_and_capped",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_retrieval_resolves_contradictions_and_supersession",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_damaged_bank_is_preserved_and_replaced",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_lessons_reach_planner_and_tasks_feed_the_bank",
+    "%SOURCE_APP%\\tests\\test_phase04_learning_memory.py::test_P04_H1_server_never_starts_without_users_ollama_store",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_cloud_architect_is_disabled_by_default",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_eligibility_requires_every_condition",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_no_consent_or_paid_plan_stays_local",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_consent_expires_and_is_scoped",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_privacy_gate_rejects_sensitive_payloads_and_nothing_is_sent",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_unclassified_provenance_and_extra_fields_stay_local",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_outbound_payload_is_exactly_the_allowlist_and_is_recorded",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_malicious_cloud_output_is_inert",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_correct_advice_is_verified_in_sandbox_then_only_provisional",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_quota_exhaustion_and_offline_provider_fall_back_locally",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_static_screen_rules",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_failure_classification_routes",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_broken_skill_and_repeated_weakness_routes_and_no_loops",
+    "%SOURCE_APP%\\tests\\test_phase05_escalation_demonstration.py::test_P05_repeated_unknown_ui_pauses_and_offers_show_me_once",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_production_surfaces_match_modules_and_evaluator_policy",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_mutation_is_literal_only_and_bounded",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_protected_sources_can_never_be_surfaces",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_gate_quarantines_code_or_test_or_evaluator_changes",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_gate_refuses_when_its_policy_or_heldout_data_are_tampered",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_independent_gate_rule_matches_but_does_not_trust_the_worker",
+    "%SOURCE_APP%\\tests\\test_phase06_controlled_evolution.py::test_P06_eevee_phases_keep_floor_pareto_front_and_reject_unsafe_prompts",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_generators_are_deterministic_and_answers_come_from_the_simulation",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_deduction_halts_at_first_failure_and_scores_outcomes",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_abduction_accepts_any_valid_dag_and_rejects_unsafe_ordering",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_reference_plans_are_verified_by_the_oracle",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_static_screen_rejects_unsafe_programs",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_sandbox_scores_generalization_and_contains_hostile_code",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_dataset_splits_are_leak_free_versioned_and_tamper_evident",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_training_targets_are_oracle_answers_not_model_text",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_proposer_validation_ignores_model_answers_and_penalizes_bad_proposals",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_trainer_rejects_unbounded_budgets_and_overwrites",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_foreground_gpu_check_reads_the_shared_lease_registry",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_registry_keeps_checkpoints_experimental_until_gated_exported_and_approved",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_model_gate_refuses_an_unsealed_evaluator",
+    "%SOURCE_APP%\\tests\\test_phase07_azr_training.py::test_P07_wilson_interval_and_policy_are_bounded",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_D8_1_failure_router_keeps_generic_evidence_for_cloud_eligibility",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_D8_1_consult_tool_fails_closed_without_sending",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_D8_1_consult_requires_the_approval_card_and_treats_advice_as_untrusted",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_D8_1_brain_offers_cloud_advice_once_and_only_when_enabled",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_D8_5_reference_chunks_with_years_are_recognised",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_flow_A_api_first_capture_degrade_fix_lessons_and_bounded_diagnosis",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_flow_D_azr_validation_and_recorded_checkpoint_comparison",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_flow_E_cancellation_and_restart_resume_without_replaying_effects",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_previous_voice_desktop_memory_and_coding_paths_remain_registered",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_redteam_injected_or_unrequested_external_writes_are_refused",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_redteam_skill_file_injection_cannot_grant_approval_or_tools",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_redteam_training_labels_never_come_from_models",
+    "%SOURCE_APP%\\tests\\test_phase08_integration.py::test_P08_redteam_evolution_cannot_target_policy_evaluator_or_branches",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_009_JRV_22_021_auth_url_refused_before_browser",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_existing_tools",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_existing_workflow",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_024_stale_source_cannot_be_learned",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_013_JRV_22_025_JRV_22_030_preview_failure_not_replayed",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_016_missing_dependency_no_install",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_017_five_independent_status_sessions_twenty_rounds",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_015_JRV_22_031_malformed_bounded_before_browser",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_029_invalid_preview_stack_never_launches",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_JRV_22_027_benchmark_artifact",
+    "%SOURCE_APP%\\tests\\test_web_development_audit.py::test_missing_contract",
+    "%SOURCE_APP%\\tests\\test_prompt37_ui_restart.py",
+    "%SOURCE_APP%\\tests\\test_prompt37_reasoning_repeat.py",
+    "%SOURCE_APP%\\tests\\test_prompt99_model_paths.py"
+  ],
+  "excluded": [
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_browser_exploration_learns_and_lessons_prevent_repeat_failure",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_browser_sandbox_blocks_other_origins_and_desktop_is_disabled",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_blender_sandbox_curriculum_with_api_verification",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_local_embedding_retrieval_is_semantic_when_available",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_vault_index_links_dedupes_and_preserves_sources",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_incremental_reindex_versions_and_removal",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_damaged_manifest_is_preserved_and_links_rebuilt",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase04_learning_memory.py::test_P04_vault_hits_reach_task_context_and_are_bounded",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase05_escalation_demonstration.py::test_P05_demonstration_requires_consent_and_speaks_request",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase05_escalation_demonstration.py::test_P05_demonstrated_click_is_captured_replayed_and_becomes_provisional_skill",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase05_escalation_demonstration.py::test_P05_demonstration_ignores_injected_outside_and_password_events",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase05_escalation_demonstration.py::test_P05_real_hook_classifies_injected_input_and_cancellation_stops",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase05_escalation_demonstration.py::test_P05_restart_recovery_keeps_steps_but_needs_fresh_consent",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_archive_persists_lineage_selection_diversity_and_pareto",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_lab_never_touches_the_canonical_repository",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_real_repository_snapshot_is_read_only",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_gate_qualifies_only_a_verified_improvement",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_gate_rejects_cross_domain_benchmark_regression",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_gate_rejects_a_candidate_that_fails_domain_tests",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_gate_quarantines_resource_exhaustion",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_gate_discards_nondeterministic_results",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_autoresearch_experiment_end_to_end_and_reproducible",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_interrupted_experiment_recovers_without_replay",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_promotion_requires_approval_snapshot_and_health",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_failed_health_check_restores_the_snapshot",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_promotion_refuses_stale_production_or_changed_evaluator",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_independent_rollback_refuses_to_overwrite_later_edits",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_dag_admission_default_keeps_plan_order_and_critical_path_is_bounded",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_prompt_router_defaults_change_nothing_and_skip_deterministic_commands",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_evolution_tools_are_registered_and_status_is_read_only",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase06_controlled_evolution.py::test_P06_self_evolution_research_is_idle_bounded_and_configurable",
+      "status": "BLOCKED",
+      "reason": "Broader evolution/promotion lab excluded; sealed/tamper and ownership checks selected explicitly."
+    },
+    {
+      "id": "test_phase08_integration.py::test_P08_flow_C_planner_mutation_in_isolation_and_cross_domain_rejection",
+      "status": "BLOCKED",
+      "reason": "Broad real-source mutation experiment deferred; independent gate tests retained."
+    },
+    {
+      "id": "test_phase08_integration.py::test_P08_redteam_obsidian_vault_is_read_only_for_indexing",
+      "status": "BLOCKED",
+      "reason": "Native hook/model/vault/browser/engine acceptance excluded; dedicated fake boundary tests run separately."
+    },
+    {
+      "id": "test_web_development_audit.py::test_JRV_22_001_real_authored_build_and_owned_preview",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    },
+    {
+      "id": "test_web_development_audit.py::test_JRV_22_003_JRV_22_012_busy_port_owned_stop",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    },
+    {
+      "id": "test_web_development_audit.py::test_JRV_22_005_remote_api_mocked_in_browser",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    },
+    {
+      "id": "test_web_development_audit.py::test_JRV_22_006_JRV_22_007_browser_flags_overflow_and_dead_button",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    },
+    {
+      "id": "test_web_development_audit.py::test_JRV_22_022_unicode_dom",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    },
+    {
+      "id": "test_web_development_audit.py::test_browser_context_blocks_service_workers",
+      "status": "BLOCKED",
+      "reason": "Owned authored browser/build prerequisites absent in audit checkout; no install/download."
+    }
+  ]
+}

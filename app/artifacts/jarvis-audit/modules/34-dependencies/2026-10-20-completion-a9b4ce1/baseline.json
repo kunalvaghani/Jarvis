@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-20",
+  "base_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "source": "a9b4ce1 + source.patch and source-hashes.json",
+  "runs": {
+    "before-local-fixes": {
+      "PASS": 1,
+      "FAIL": 13,
+      "SKIPPED": 0,
+      "seconds": 0.74
+    },
+    "targeted-final": {
+      "PASS": 52,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 1.407
+    },
+    "remaining-routes-final": {
+      "PASS": 3,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 0.679
+    },
+    "baseline-replay": {
+      "PASS": 54,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 15.287
+    },
+    "final-regression": {
+      "PASS": 227,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 32.755
+    }
+  },
+  "headline_run": "final-regression",
+  "overlapping_runs_not_summed": true,
+  "test_process_peak_memory": "NOT MEASURED",
+  "real_installs": 0,
+  "real_model_downloads": 0,
+  "scope": "Installed-dependency test runner, mocks/disposable fixtures; read-only native imports/metadata separately recorded.",
+  "separate_process_probe": "grant-process-readback.json: four Windows consumers, one grant; crash release passes; not added to pytest total"
+}

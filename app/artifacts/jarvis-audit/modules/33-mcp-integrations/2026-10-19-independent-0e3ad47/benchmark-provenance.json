@@ -1,0 +1,7 @@
+{
+  "prior_source_sha256": "042dcc88653b7905648cb146600c301190e24994713c522e366baaf36f6211f2",
+  "current_source_sha256": "2471960bfc6d26ef475a31d5dea04e7829d522ea4f5e3c3a4dac23ce3b695324",
+  "scope": "warm sequential microbenchmark including tracemalloc; not MCP latency or performance improvement",
+  "prior_commit": "6f880332610cc1a5c483f702c5f33b43d1537aa0",
+  "no_source_optimization": true
+}

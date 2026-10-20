@@ -1,0 +1,11 @@
+# Prompt 31 audit — 2026-10-19 IST
+
+**P31-001 — P1 / APPLIES: stale approval callback can authorize the next request.** Repeated legacy `lambda: desk.decide(True)` approves card A, removes it, then approves B. If A expires or is removed first, the same callback approves B. An unbound direct decision also succeeds. This is synthetic callback dispatch into actual `IslandDesk`/`Approval`, with separate answer/event objects; no account/file mutation was attempted. The observed unauthorized effect is B's approval result becoming True. External executor side effects were not tested.
+
+Root cause: `IslandDesk.__init__` binds buttons without card identity; `IslandDesk.decide` pops the queue head. Request identity, signed/host-owned argument digest and final-boundary receipt remain separate missing requirements. [Final reproduction](approval-final.xml): **3 FAIL / 1 positive-control PASS**. Source repair: NOT APPLIED; no fix SHA. Minimum repair proposal: bind each rendered callback to its immutable card/request identity; reject stale/unbound decisions; independently bind execution to tool, arguments, identity, version, expiry and cancellation. Re-run this reproduction plus adversarial final-executor tests after Claude's source repair.
+
+Initial test-authoring run `reproduction-before.xml` had callback-introspection errors; it is not defect proof. `reproduction-before-corrected.xml` demonstrated stale/unbound approval but included an overstrict positive-control assertion. Final `test_approval_binding.py` corrects that assertion. Earlier paths under tests/ were moved into this packet to avoid adding intentional failures to the default application suite.
+
+Restricted baseline: 24 failures, including denied fixture atomic replacements and WinRT subprocess timeouts. Outside sandbox: 248 PASS / 2 FAIL / 8 SKIPPED. Failures were a transient Tcl/Tk library lookup and a demonstration capture returning None. Both passed in isolation (2 PASS); this does not erase the initial failures or establish combined-suite stability. No source was changed to hide them.
+
+Other acceptance blockers: missing unified verified UI terminal receipt, full immutable approval scope binding, optional-worker integration and real secure-field/DPI/cancellation/crash acceptance. Full relevant regression acceptance remains unmet; no next-module execution.

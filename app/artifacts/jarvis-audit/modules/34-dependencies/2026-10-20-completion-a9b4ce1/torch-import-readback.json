@@ -1,0 +1,20 @@
+{
+  "scope": "Native library import/driver availability only; no model, tensor, CUDA kernels or training allocated.",
+  "environments": {
+    ".venv-brain": {
+      "returncode": 0,
+      "stdout": "{\"torch\": \"2.6.0+cpu\", \"cuda_runtime\": null, \"cuda_available\": false}\r\n",
+      "stderr": ""
+    },
+    ".venv-f5": {
+      "returncode": 0,
+      "stdout": "{\"torch\": \"2.6.0+cu124\", \"cuda_runtime\": \"12.4\", \"cuda_available\": true}\r\n",
+      "stderr": ""
+    },
+    ".venv-training": {
+      "returncode": 0,
+      "stdout": "{\"torch\": \"2.6.0+cu124\", \"cuda_runtime\": \"12.4\", \"cuda_available\": true}\r\n",
+      "stderr": ""
+    }
+  }
+}

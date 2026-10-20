@@ -1,0 +1,5 @@
+# Reproduction and rollback
+
+No production deployment, package/model migration or database schema migration occurred. New stored rows use bounded metadata; raw evidence is intentionally not recoverable from new logs. Existing historical files remain; no destructive migration/rollback performed or claimed. Reverse only accepted Prompt 36 code hunks in a review branch if needed, preserving Prompt 34/35 work and immutable evidence. source.patch is cumulative versus base at overlapping files; consult source-layers.json and prior packet before applying/reversing.
+
+run_regressions.py runs current audited source with existing installed dependency/metadata roots read-only; tests/test_prompt36_observability.py is the new suite. measure.py writes only owned temporary fixtures and this packet, reads pinned source with git show, and saves raw CSV. Never run the original historical benchmark writer directly: it overwrites its old output path. No setup/install script is needed to reproduce safe fixtures; unavailable live checks stay blocked.

@@ -1,0 +1,11 @@
+{
+  "base": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "fix_sha": null,
+  "patch_scope": "Tracked-file diff versus base includes overlapping Prompt 35 tool/cloud/skill repairs. New P36 test file is separately hashed. Do not discard retained changes.",
+  "pre_P36_hashes": "before-source-hashes.json",
+  "current": "source-hashes.json",
+  "earlier_packets": [
+    "../../35-security/2026-10-20-completion-a9b4ce1",
+    "../../34-dependencies/2026-10-20-completion-a9b4ce1"
+  ]
+}

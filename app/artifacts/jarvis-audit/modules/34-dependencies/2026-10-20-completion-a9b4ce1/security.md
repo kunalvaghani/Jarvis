@@ -1,0 +1,7 @@
+# Security — scope and remaining gates
+
+Final executor authorization tests reject trailing pip option injection, malformed IDs, invalid expiry and non-boolean network permission; concurrent grant consumers admit one. All real install/download executors in these tests are intercepted. Read-only pip checks/imports/driver metadata were executed; no credentials, private recording or unrelated desktop contents exported. App/profile roots in raw logs are aliased with original/saved hashes recorded.
+
+Earlier same-day limited advisory review is carried with provenance, not presented as a fresh exhaustive vulnerability scan: [pypdf maintainer record](https://github.com/py-pdf/pypdf/security/advisories/GHSA-9m86-7pmv-2852) affects versions below 6.7.5; main 6.20.0 is outside that particular range. [Transformers reviewed record](https://github.com/advisories/GHSA-x9r9-c232-4q39) includes installed brain/training 4.57.6; F5 4.44.2 is outside its reported range. Source reachability remains unverified, not proven exploited or safe; no speculative upgrade or exploit performed. Review exact call paths and supported remediation in staged envs. Full CVE/license/transitive scan remains blocked.
+
+Approved mutable-tag download and mutable lock execution still need final-boundary work (P34-R1/R3). Single-use grant lock passes thread and separate Windows process contention/crash-release probes (grant-process-readback.json). POSIX branch and adversarial local filesystem access were not independently executed.

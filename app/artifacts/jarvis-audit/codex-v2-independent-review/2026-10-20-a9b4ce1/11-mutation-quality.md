@@ -1,0 +1,5 @@
+# Mutation controls
+
+Six actual disposable-checkout mutations: deny policy bypass; accepting tool-success instead of host readback; stale final UI selection signature guard removed; deterministic DAG Verify disabled; heldout seal check disabled; uncertain effect restore barrier removed. Each has a passing unmodified control, then assertion failures with pytest exit 1 and zero collection errors. All source bytes restored after each mutation and pinned tracked bytes restored after candidate mirror testing.
+
+mutation-results.json includes exact old/mutant hashes, test IDs, control/mutant XML and durations. Six kills prove these six checks discriminate those violations, not that the entire suite detects every bug. Preliminary wrong-branch/CRLF-invalid aggregate/status/hashes are recorded in mutation-preliminary.json and excluded. Preliminary per-case XML/text filenames were superseded, not separately preserved; only final corrected evidence is used. Added independent tests remain owned overlays; no user worktree mutated.

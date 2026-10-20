@@ -20,8 +20,17 @@ class OwnedApplication:
         self.child, self.handle = child, None
 
     def attach(self, pid):
+        """Take termination authority over the real interpreter only after proving it belongs to our child.
+
+        A heartbeat PID is accepted only if it is the launched child itself or a live descendant of it that was
+        created after the child; the check is repeated after the handle is open (an open handle prevents PID
+        reuse). Anything else (sibling, unrelated or stale PID) is refused before any handle is obtained.
+        """
         if self.handle or pid == self.child.pid or os.name != "nt":
             return
+        if type(pid) is not int or pid <= 0:
+            raise ValueError("Heartbeat PID is invalid; ignored.")
+        created = self._verified_descendant(pid)
         import ctypes
         from ctypes import wintypes
         self.kernel = ctypes.WinDLL("kernel32", use_last_error=True)
@@ -34,6 +43,27 @@ class OwnedApplication:
         self.handle = self.kernel.OpenProcess(0x00100001, False, pid)
         if not self.handle:
             raise OSError("Could not track the owned Jarvis interpreter")
+        try:
+            if self._verified_descendant(pid) != created:
+                raise ValueError("Heartbeat PID identity changed while attaching; ignored.")
+        except ValueError:
+            self.kernel.CloseHandle(self.handle)
+            self.handle = None
+            raise
+        self.owned = (pid, created)
+
+    def _verified_descendant(self, pid):
+        import psutil
+        try:
+            root = psutil.Process(self.child.pid)
+            target = psutil.Process(pid)
+            root_created, created = root.create_time(), target.create_time()
+            descendants = {process.pid for process in root.children(recursive=True)}
+        except psutil.Error:
+            raise ValueError("Heartbeat PID is not a running Jarvis process; ignored.") from None
+        if pid not in descendants or created < root_created:
+            raise ValueError("Heartbeat PID is not part of the launched Jarvis process tree; ignored.")
+        return created
 
     def terminate(self):
         if self.handle:
@@ -239,8 +269,19 @@ def runtime_command(args, log, timeout=1800):
                 child.wait(timeout=5)
 
 
-def prepare_runtime(config):
-    """Repair only the project's declared environments and model assets."""
+REPAIR_GUIDANCE = ("Jarvis keeps using what is installed. Run the matching setup launcher yourself, or authorize one locked "
+                   "offline rebuild with: python -m jarvis.repair_authorization dependency --environment <env> --lock "
+                   "<hashed lock> --wheelhouse <approved wheels> --max-bytes <budget>.")
+
+
+def prepare_runtime(config, authorization=None):
+    """Read-only readiness; nothing is installed or downloaded without an explicit bounded authorization (P34-001).
+
+    Each declared environment gets one import check and each declared model file a presence check. Anything absent is
+    reported as ``repair_required``. The one repair this function performs is rebuilding a single environment
+    from a locked local artifact set the user authorized, staged beside the existing environment.
+    """
+    from .repair_authorization import RepairRequired, take_dependency_repair
     RUNTIME.mkdir(exist_ok=True)
     manifest = json.loads((manifest_file(BASE)).read_text(encoding="utf-8"))
     def imports_for(key):
@@ -252,50 +293,88 @@ def prepare_runtime(config):
         def command(args, timeout=1800):
             if runtime_command(args, log, timeout):
                 raise ValueError("Declared runtime repair failed; see .jarvis-runtime/setup.log.")
-        python = BASE / ".venv" / "Scripts" / "python.exe"
-        if not python.is_file():
-            record(BASE, "Jarvis Python environment missing; rebuilding it from declared requirements.")
-            command([sys.executable, "-m", "venv", str(BASE / ".venv")])
-        imports = imports_for("main_imports")
-        if runtime_command([str(python), "-c", imports], log, timeout=60):
-            record(BASE, "Declared Jarvis dependencies missing; repairing the local environment.")
-            command([str(python), "-m", "pip", "--isolated", "install", "-r", "requirements/runtime.txt"])
-            command([str(python), "-c", imports], timeout=60)
-            record(BASE, "Declared Jarvis dependencies repaired.")
+        missing, broken = [], []
+        def environment(folder, key):
+            python = BASE / folder / "Scripts" / "python.exe"
+            if not python.is_file() or runtime_command([str(python), "-c", imports_for(key)], log, timeout=60):
+                broken.append((folder, key))
+                missing.append(folder + " dependencies")
+                return False
+            return True
+        environment(".venv", "main_imports")
         if not (BASE / config["model_path"] / "model.bin").is_file():
-            record(BASE, "Whisper model missing; resuming its declared model download.")
-            command([str(python), '-m', 'scripts.models.download_model', "--parallel", "4"])
-            record(BASE, "Whisper model download repaired.")
-        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "kokoro":
+            missing.append("Whisper model (launchers/Resume Whisper Setup.cmd)")
+        speech = config.get("speech", {})
+        if speech.get("enabled", True) and speech.get("engine") == "kokoro":
             if any(not (BASE / path).is_file() for path in manifest.get("voice_assets", [])):
-                record(BASE, "Kokoro voice assets missing; restoring pinned local voice files.")
-                command([str(python), '-m', 'scripts.setup.setup_voice'])
-        if config.get("speech", {}).get("enabled", True) and config.get("speech", {}).get("engine") == "f5":
-            f5_python = BASE / '.venv-f5/Scripts/python.exe'
-            if not f5_python.is_file():
-                record(BASE, 'Creating declared F5-TTS environment.')
-                command([str(python), '-m', 'venv', str(BASE / '.venv-f5')])
-            if runtime_command([str(f5_python), '-c', imports_for('f5_imports')], log, timeout=60):
-                record(BASE, 'Repairing declared F5-TTS dependencies.')
-                command([str(f5_python), '-m', 'pip', '--isolated', 'install', '-r', 'requirements/f5.txt'])
-                command([str(f5_python), '-c', imports_for('f5_imports')], timeout=60)
-            if config['speech'].get('f5', {}).get('device') == 'cuda':
-                if runtime_command([str(f5_python), '-c', 'import torch; assert torch.cuda.is_available()'], log, timeout=60):
-                    record(BASE, 'Repairing declared CUDA-enabled F5-TTS dependencies.')
-                    command([str(f5_python), '-m', 'pip', '--isolated', 'install', 'torch==2.6.0+cu124', 'torchaudio==2.6.0+cu124', '--index-url', 'https://download.pytorch.org/whl/cu124'])
+                missing.append("Kokoro voice assets")
+        if speech.get("enabled", True) and speech.get("engine") == "f5":
+            if environment(".venv-f5", "f5_imports") and speech.get("f5", {}).get("device") == "cuda":
+                f5_python = BASE / ".venv-f5/Scripts/python.exe"
+                if runtime_command([str(f5_python), "-c", "import torch; assert torch.cuda.is_available()"], log, timeout=60):
+                    missing.append("CUDA-enabled F5-TTS dependencies")
         if config.get("brain", {}).get("enabled"):
-            brain = BASE / ".venv-brain" / "Scripts" / "python.exe"
-            if not brain.is_file():
-                command([str(python), "-m", "venv", str(BASE / ".venv-brain")])
-            if runtime_command([str(brain), "-c", imports_for("brain_imports")], log, timeout=60):
-                record(BASE, "Brain runtime dependencies missing; restoring declared dependencies.")
-                command([str(brain), "-m", "pip", "--isolated", "install", "torch==2.6.0", "--index-url", "https://download.pytorch.org/whl/cpu"])
-                command([str(brain), "-m", "pip", "--isolated", "install", "-r", "requirements/brain.txt"])
-                command([str(brain), "-c", imports_for("brain_imports")], timeout=60)
+            environment(".venv-brain", "brain_imports")
             if not (BASE / "models/laya/model.safetensors").is_file():
-                record(BASE, "Selector model missing; restoring its pinned checkpoint.")
-                command([str(brain), '-m', 'scripts.setup.setup_brain', "--laya-only"])
+                missing.append("Laya checkpoint (launchers/Setup Jarvis Brain.cmd)")
+        if missing:
+            # Only a single environment rebuild can be authorized; anything else stays repair_required.
+            approval = None
+            if len(broken) == 1 and missing == [broken[0][0] + " dependencies"]:
+                approval = authorization if authorization is not None else take_dependency_repair(RUNTIME)
+            if approval is None:
+                raise RepairRequired(missing, REPAIR_GUIDANCE)
+            stage_environment(approval, broken[0][0], imports_for(broken[0][1]), command)
     return BASE / ".venv" / "Scripts" / "pythonw.exe"
+
+
+def stage_environment(approval, folder, imports, command):
+    """Rebuild ``folder`` from the approved locked artifact set; keep the old environment (P34-001, R2/R3).
+
+    The reviewed lock is frozen into a Jarvis-owned snapshot and re-hashed before pip reads it, so replacing the
+    lock after approval cannot change what is installed (wheels are bound by its hashes). The environment is built
+    at its final path rather than relocated, because venv console scripts embed their absolute interpreter path.
+    The old environment is moved aside first and restored if any step fails; the failed attempt is kept.
+    """
+    from .repair_authorization import RepairRefused, _sha256, check_dependency_repair, locked_requirements
+    lock, wheelhouse = check_dependency_repair(BASE, approval, folder)
+    target = BASE / folder
+    previous = BASE / (folder + ".previous-" + approval.approval_id)
+    failed = BASE / (folder + ".failed-" + approval.approval_id)
+    snapshot = RUNTIME / "repair-staging" / approval.approval_id
+    if previous.exists() or failed.exists() or snapshot.exists():
+        raise RepairRefused("This authorization was already used; its files were kept for inspection.")
+    snapshot.mkdir(parents=True)
+    frozen = snapshot / "requirements.lock"
+    shutil.copyfile(lock, frozen)
+    if _sha256(frozen) != approval.lock_sha256:
+        raise RepairRefused("The approved lock changed after approval; nothing was installed.")
+    locked_requirements(frozen.read_text(encoding="utf-8"))
+    record(BASE, "Authorized repair " + approval.approval_id + ": rebuilding " + folder + " from the approved local "
+           "artifact set; the existing environment is kept as " + previous.name + " until the rebuild passes.")
+    if target.exists():
+        target.rename(previous)
+    try:
+        command([sys.executable, "-m", "venv", str(target)])
+        python = target / "Scripts" / "python.exe"
+        # --no-index: the approved wheelhouse is the only source. No --isolated: pip and offline settings stay in force.
+        command([str(python), "-m", "pip", "install", "--no-index", "--find-links", str(wheelhouse), "--require-hashes",
+                 "--only-binary=:all:", "-r", str(frozen)])
+        command([str(python), "-c", imports], timeout=60)
+        command([str(python), "-m", "pip", "--version"], timeout=60)  # the environment's own tooling works in place
+    except BaseException:
+        try:
+            if target.exists():
+                target.rename(failed)
+            if previous.exists() and not target.exists():
+                previous.rename(target)
+        finally:
+            record(BASE, "Authorized repair " + approval.approval_id + " did not complete; the previous " + folder +
+                   (" was restored" if not previous.exists() else " is still at " + previous.name) +
+                   " and the failed attempt was kept for inspection.")
+        raise
+    record(BASE, "Authorized repair " + approval.approval_id + " completed for " + folder + "; the previous environment "
+           "is kept as " + previous.name + ".")
 
 
 def run():
@@ -334,9 +413,14 @@ def run():
                     try:
                         while child.poll() is None and not stop.exists():
                             state = heartbeat_state(beat)
-                            if session_heartbeat(state, session):
+                            verified = session_heartbeat(state, session)
+                            if verified:
+                                try:
+                                    owned.attach(state["pid"])
+                                except (ValueError, OSError):
+                                    verified = False  # a heartbeat naming a foreign process confers nothing
+                            if verified:
                                 seen = time.time()
-                                owned.attach(state["pid"])
                                 listen = state.get("listening_requested", listen)
                                 limit = 120 if state.get("status") == "starting" else 90
                                 if time.time() - state.get("at", started) > limit:
@@ -379,9 +463,19 @@ def run():
                 record(BASE, "Jarvis stopped unexpectedly; background restart scheduled. No task actions will be replayed.")
             except InterruptedError:
                 break
+            except ValueError as exc:
+                from .repair_authorization import RepairRefused, RepairRequired
+                if not isinstance(exc, (RepairRequired, RepairRefused)):
+                    crashes += 1
+                    record(BASE, "Startup repair could not complete (" + type(exc).__name__ + "): " + str(exc))
+                else:
+                    # Waiting for the user: recheck readiness (read-only) at the slowest cadence, never retry repairs.
+                    crashes = 8
+                    record(BASE, str(exc))
             except Exception as exc:
                 crashes += 1
-                record(BASE, "Startup repair could not complete: " + str(exc))
+                # Fixed category plus a screened summary; raw exception text never reaches the repair log.
+                record(BASE, "Startup repair could not complete (" + type(exc).__name__ + "): " + str(exc))
             delay = min(300, 2 ** min(crashes, 8))
             for _ in range(delay):
                 if stop.exists():

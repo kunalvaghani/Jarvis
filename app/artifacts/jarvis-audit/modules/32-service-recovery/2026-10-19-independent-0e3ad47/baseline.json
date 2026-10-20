@@ -1,0 +1,38 @@
+{
+  "pin": "0e3ad4706b5120e5d0479d34333e5faa7b0931b5",
+  "date": "2026-10-19 IST",
+  "branch": "codex-review",
+  "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+  "executable": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "runs": {
+    "baseline.xml": {
+      "PASS": 72,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "boundary-reproductions.xml": {
+      "PASS": 0,
+      "FAIL": 4,
+      "SKIPPED": 0
+    },
+    "final-targeted.xml": {
+      "PASS": 5,
+      "FAIL": 4,
+      "SKIPPED": 0
+    },
+    "repair-output-readback.xml": {
+      "PASS": 0,
+      "FAIL": 3,
+      "SKIPPED": 0
+    }
+  },
+  "source_fix_sha": null,
+  "memory_during_baseline": "NOT MEASURED; per-case timing retained in XML",
+  "full_relevant_release_regression": "NOT RUN after unresolved P1 stop gate",
+  "scope": "72 selected recovery baseline checks; explicit native-owned-process and synthetic-secret failures",
+  "master_contract": "unavailable in repository and exact Downloads companion path",
+  "reconciliation_contract": "10_CODEX_FINDINGS_RECONCILIATION.md reserves repairs for Claude; Codex read-only confirmation",
+  "user_override": "explicitly requested start 32 despite incomplete Prompt 31 acceptance",
+  "original_config": "existing user modification preserved, not copied into audit worktree"
+}

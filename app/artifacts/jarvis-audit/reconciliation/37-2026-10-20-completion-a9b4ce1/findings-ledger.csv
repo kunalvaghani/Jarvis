@@ -1,0 +1,9 @@
+finding,status,base,fix,evidence,reviewer_followup
+P37-001,FIXED bounded scope,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,uncommitted source hashes/patch,before-fixes.xml;final.xml,reverify accepted claude SHA; retain R1-R4
+P37-002,FIXED bounded scope,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,uncommitted source hashes/patch,before-fixes.xml;final.xml,reverify accepted claude SHA; retain R1-R4
+P37-003,FIXED bounded scope,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,uncommitted source hashes/patch,before-fixes.xml;final.xml,reverify accepted claude SHA; retain R1-R4
+P37-004,FIXED bounded scope,a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,uncommitted source hashes/patch,before-fixes.xml;final.xml,reverify accepted claude SHA; retain R1-R4
+IR-001,FIXED bounded retention,36fbf3ce925080f7f54afa87eaf1d9b88414142d,32fdbfe (historical repair); current base a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,historical-retention.xml,live acceptance remains blocked
+IR-002,FIXED bounded retention,36fbf3ce925080f7f54afa87eaf1d9b88414142d,32fdbfe (historical repair); current base a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,historical-retention.xml,live acceptance remains blocked
+IR-003,FIXED bounded retention,36fbf3ce925080f7f54afa87eaf1d9b88414142d,32fdbfe (historical repair); current base a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6,historical-retention.xml,live acceptance remains blocked
+IR-004,UNVERIFIED fresh deep-lab check,36fbf3ce925080f7f54afa87eaf1d9b88414142d,historical recorded repair,codex-independent-review/lab-final.xml (historical),fresh disposable deep-path worktree reproduction required

@@ -1,0 +1,3 @@
+# Prompt 31 independent continuation — 2026-10-19 IST
+
+benchmarks.csv and resource-profile.json compare the exact old 5b56f84 Approval class to pinned ddf3247 with 300 interleaved warm positive-control samples per version. Both construct and approve one synthetic safe card. This measures entropy/hash/receipt overhead, not event-to-render, voice latency or improved user performance. One traced operation per version reports temporary Python allocation, not RSS or GPU memory. No performance threshold or speedup claim. Real rendering/readback is separately captured in widget-readback files; no long-lived memory/flicker soak.

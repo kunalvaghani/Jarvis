@@ -1,0 +1,45 @@
+{
+  "scope": "tracked pinned configuration only; live dirty config excluded; credentials/paths omitted",
+  "flags": {
+    "brain": {
+      "enabled": true,
+      "planner": "qwen3.5:9b",
+      "screen_model": "qwen3.5:9b"
+    },
+    "knowledge": {
+      "enabled": true,
+      "model": "qwen3.5:9b",
+      "screen_model": "qwen3.5:9b"
+    },
+    "speech": {
+      "enabled": true
+    },
+    "reasoning_bank": {
+      "enabled": true
+    },
+    "viking_memory": {
+      "enabled": true
+    },
+    "exploration": {
+      "enabled": true
+    },
+    "cloud_architect": {
+      "enabled": false
+    },
+    "self_evolution": {
+      "enabled": true
+    },
+    "evolution_lab": {
+      "enabled": true
+    },
+    "groq": {
+      "enabled": true,
+      "model": "qwen/qwen3.8-27b"
+    },
+    "demonstration": {
+      "enabled": true
+    },
+    "execution_strategy": {}
+  },
+  "absent_sections": []
+}

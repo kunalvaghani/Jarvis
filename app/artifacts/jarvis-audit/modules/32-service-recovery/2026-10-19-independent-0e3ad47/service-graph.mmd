@@ -1,0 +1,13 @@
+flowchart TD
+  Bootstrap[jarvis_bootstrap: entrypoint validation] --> Launcher[launcher: session and heartbeat supervision]
+  Launcher --> Owned[OwnedApplication: native handle tracking]
+  Owned --> App[main.App]
+  App --> Watchdog[Watchdog: enabled health/repair callbacks]
+  Watchdog --> Threads[Action / Question / Speech threads]
+  Watchdog --> Mic[Requested microphone]
+  Watchdog --> Transports[UIA / Browser / Harness / media]
+  Watchdog --> Optional[Cognition / vault index / anticipation / realtime / previews]
+  Watchdog --> Models[Ollama / configured models]
+  App --> TaskState[TaskState v1 checkpoints: context, not replay queue]
+  TaskState --> Writes[Gmail journal and external-write uncertainty]
+  Pipeline[Offline evolution and AZR pipelines] -. incomplete common lifecycle .-> Watchdog

@@ -63,7 +63,12 @@ class ModelRecoveryTests(unittest.TestCase):
             self.assertFalse(recovery.repair())
             thread.assert_not_called()
 
-    def test_failed_download_reports_real_cooldown_and_preserves_other_work(self):
+    def test_failed_approved_download_reports_cooldown_keeps_partials_and_does_not_retry(self):
+        # Prompt 34: only an explicitly approved, budgeted download reaches the executor (see test_prompt34_*).
+        import shutil
+        import time as clock
+        from jarvis.repair_authorization import OFFLINE_FLAGS, ModelDownload
+        approval = ModelDownload("coder", "sha256:" + "a" * 64, "ollama", 10, 0, 0, True, clock.time() + 60, "t")
         with tempfile.TemporaryDirectory() as directory:
             (Path(directory) / ".jarvis-runtime").mkdir()
             recovery = self.create(directory)
@@ -71,9 +76,14 @@ class ModelRecoveryTests(unittest.TestCase):
             process = Mock()
             process.poll.return_value = 1
             process.returncode = 1
-            with patch("jarvis.model_recovery.subprocess.Popen", return_value=process), patch("jarvis.model_recovery.time.monotonic", return_value=100):
-                recovery.download()
+            with patch("jarvis.model_recovery.subprocess.Popen", return_value=process) as launch, \
+                    patch("jarvis.model_recovery.time.monotonic", return_value=100), \
+                    patch("shutil.disk_usage", return_value=shutil._ntuple_diskusage(1, 0, 1 << 40)), \
+                    patch.dict("os.environ", dict.fromkeys(OFFLINE_FLAGS, "0")):
+                recovery.download(approval)
+            self.assertEqual(launch.call_count, 1)
             self.assertEqual(recovery.next_attempt, 400)
             self.assertIsNone(recovery.process)
-            self.assertIn("next attempt in 300 seconds", recovery.report.call_args.args[1])
+            self.assertIn("partial downloads are kept", recovery.report.call_args.args[1])
+            self.assertIn("not retried automatically", recovery.report.call_args.args[1])
             process.kill.assert_not_called()

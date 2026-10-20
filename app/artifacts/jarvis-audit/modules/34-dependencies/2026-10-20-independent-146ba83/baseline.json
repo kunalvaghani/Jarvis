@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-20",
+  "sha": "146ba831e7ae5df1a953b0f910288c41c9ab4689",
+  "prior_comparison": "cd8861ce720ade303485ee2023430dd8c6b4f0ba",
+  "runs": {
+    "baseline": {
+      "PASS": 50,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 11.691
+    },
+    "boundaries": {
+      "PASS": 2,
+      "FAIL": 2,
+      "SKIPPED": 0,
+      "seconds": 0.663
+    },
+    "retention": {
+      "PASS": 112,
+      "FAIL": 0,
+      "SKIPPED": 1,
+      "seconds": 18.978
+    }
+  },
+  "totals": {
+    "PASS": 164,
+    "FAIL": 2,
+    "SKIPPED": 1
+  },
+  "source_tree": "isolated codex-review",
+  "interpreter": "%INSTALL_APP%/.venv/Scripts/python.exe",
+  "test_process_peak_memory": "NOT MEASURED",
+  "benchmark_memory": "operation-local tracemalloc only",
+  "install_or_download_execution": 0,
+  "log_paths": "normalized; see log-path-normalization.json"
+}

@@ -216,6 +216,11 @@ class DemonstrationSession:
                   'window': title, 'records': 'mouse clicks in this window only; no keyboard, no field values, no passwords',
                   'max_steps': MAX_STEPS}
         self.approve('demonstration_recording', json.dumps(detail), cancelled)  # raises when declined
+        if cancelled():
+            raise ValueError('Demonstration cancelled before recording.')
+        if (not win32gui.IsWindow(window_handle)
+                or win32process.GetWindowThreadProcessId(window_handle)[1] != pid):
+            raise ValueError('The selected window owner changed; fresh consent is required.')
         self.window = Desktop(backend='uia').window(handle=window_handle).wrapper_object()
         self.state.update(status='recording', action=action_name, application=process, window_title=title,
                           window_class=win32gui.GetClassName(window_handle), consent_at=now())
@@ -223,18 +228,32 @@ class DemonstrationSession:
         self.last_state = window_state(self.window)
         self._save()
 
-    def start_hook(self):
+    def start_hook(self, cancelled=lambda: False):
         if self.state['status'] != 'recording':
             raise ValueError('Recording requires fresh consent.')
+        if cancelled():
+            self.stop('cancelled')
+            raise ValueError('Demonstration cancelled before recording.')
+        if self.hook is not None:
+            raise ValueError('A demonstration hook is already active.')
         self.hook = self.hook_factory(self.events)
-        self.hook.start()
+        try:
+            self.hook.start()
+        except BaseException:
+            self.stop('failed')
+            raise
 
     def stop(self, status='stopped'):
-        if self.hook:
-            self.hook.stop()
-            self.hook = None
-        self.state['status'] = status
-        self._save()
+        try:
+            if self.hook:
+                self.hook.stop()
+                self.hook = None
+        except BaseException:
+            status = 'failed'  # Retain the hook reference so the owner can retry cleanup.
+            raise
+        finally:
+            self.state['status'] = status
+            self._save()
 
     def process(self, x, y, message, flags):
         """One mouse event. Returns the recorded step, or None when it was ignored."""
@@ -274,16 +293,25 @@ class DemonstrationSession:
         return step
 
     def pump(self, timeout=60, until=lambda steps: len(steps) >= 1, cancelled=lambda: False):
+        if self.state['status'] != 'recording':
+            raise ValueError('Recording requires fresh consent.')
         deadline = time.monotonic() + timeout
-        while time.monotonic() < deadline and not cancelled() and self.state['status'] == 'recording':
-            try:
-                x, y, message, flags, _ = self.events.get(timeout=.1)
-            except queue.Empty:
-                continue
-            self.process(x, y, message, flags)
-            if until(self.state['steps']):
-                break
-        self.stop('cancelled' if cancelled() else 'complete' if self.state['steps'] else 'timed_out')
+        status = 'failed'
+        try:
+            while time.monotonic() < deadline and not cancelled() and self.state['status'] == 'recording':
+                try:
+                    x, y, message, flags, _ = self.events.get(timeout=.1)
+                except queue.Empty:
+                    continue
+                self.process(x, y, message, flags)
+                if until(self.state['steps']):
+                    break
+            if self.state['status'] != 'recording':
+                status = self.state['status']
+            else:
+                status = 'cancelled' if cancelled() else 'complete' if self.state['steps'] else 'timed_out'
+        finally:
+            self.stop(status)
         return self.state['steps']
 
     # ---- replay and skill candidate -------------------------------------------------------------------------------
@@ -332,7 +360,9 @@ class DemonstrationSession:
 
 def promote(skills, session, replay, name):
     """Pillar A hand-off: only a verified replay becomes a provisional CAPTURED skill (never trusted here)."""
-    if not replay.get('verified'):
+    if session.state.get('status') not in {'recording', 'complete'}:
+        raise ValueError('Demonstration is not eligible for promotion (cancelled, failed or incomplete).')
+    if replay.get('verified') is not True:
         raise ValueError('Demonstration replay was not verified; no skill created.')
     from .skill_evolution import SkillEvolution, _write_skill, validate_skill
     body = session.skill_body(name)

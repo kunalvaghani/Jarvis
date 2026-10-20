@@ -1,0 +1,50 @@
+{
+  "baseline.txt": {
+    "original_sha256": "cd66b2d3c20dd15eb8a71a189d5511c7d52fe71534e820aa9a8ab2e9b61075e3",
+    "saved_sha256": "0c9116637802ebdbf9d8724e2e45f474e88de5b2a7b4fa8a8691dc5ff6a99971"
+  },
+  "full.txt": {
+    "original_sha256": "0e2a4e30abf24b087602945a234ef56954e6c7ae8086724e1ed1af0f3603e94a",
+    "saved_sha256": "c68cb3daf9feedc7c57a1e5165804bebb8c78a69e05022340a9e7a24aeb51d41"
+  },
+  "launcher-check.txt": {
+    "original_sha256": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590",
+    "saved_sha256": "117a862f9c97ff9e1048c55aeb1f8d3bff5e2d72e8b67825c362c8331908f590"
+  },
+  "ui-restart-portable.txt": {
+    "original_sha256": "d2476a85e1d1da24c8314efa22e304df0365e33bcfac7dbbc47f9e2221a1c1e8",
+    "saved_sha256": "cc76ff6c85ec3be06398ed6b8384dbb42d487e6d406008e7534112a464680752"
+  },
+  "ui-restart.txt": {
+    "original_sha256": "ad55286af3c5feacbe52dd595abc16fed68e5a9c1ae0729a55bf280d00756061",
+    "saved_sha256": "eeb06296f918ff5a233204e8f18460d731507b321dfd0bfe6d6c4a70ffb85d8e"
+  },
+  "ui-test-setup-error.txt": {
+    "original_sha256": "0e0d66266dad26ab262320a1cd98b383adee55137b405e242f1e9e53a645e45e",
+    "saved_sha256": "0dce0ea68c8529ab271198e35fc910b8ea2b7d99616ae03827b7e356233703ad"
+  },
+  "workflows.txt": {
+    "original_sha256": "9746594826675d73e67469ef0e24b25dc18baf8f12dc5f5b31a28bb38f9a714d",
+    "saved_sha256": "9746594826675d73e67469ef0e24b25dc18baf8f12dc5f5b31a28bb38f9a714d"
+  },
+  "baseline.xml": {
+    "original_sha256": "e17c09df1cadaf6db31a7db25a9ae153a1efe1c58a873b503e6fd8eb5b62d1d3",
+    "saved_sha256": "e17c09df1cadaf6db31a7db25a9ae153a1efe1c58a873b503e6fd8eb5b62d1d3"
+  },
+  "full.xml": {
+    "original_sha256": "c3e10445d4213df7722a6060b0a9e7cdb09514f6ce72f294956200afbf5e2153",
+    "saved_sha256": "c677115e170cb006398b91e9c2cf96df4cc0945fc6d4f911ce99b01d5820a7ad"
+  },
+  "ui-restart-portable.xml": {
+    "original_sha256": "5e7a4f1d509e3b22ad3ec6b696ae1d452dcf6162c1d9ec582e33337e39e8aaf9",
+    "saved_sha256": "5e7a4f1d509e3b22ad3ec6b696ae1d452dcf6162c1d9ec582e33337e39e8aaf9"
+  },
+  "ui-restart.xml": {
+    "original_sha256": "9e8d9787d79cf1ff9df868d0213da390b4d9cae0bafe3f509ba800e5eaad7f89",
+    "saved_sha256": "9e8d9787d79cf1ff9df868d0213da390b4d9cae0bafe3f509ba800e5eaad7f89"
+  },
+  "ui-test-setup-error.xml": {
+    "original_sha256": "91cb762b5e0c069e724065e6859ff9a6750d57109b2af144c33a36efdb20eef9",
+    "saved_sha256": "91cb762b5e0c069e724065e6859ff9a6750d57109b2af144c33a36efdb20eef9"
+  }
+}

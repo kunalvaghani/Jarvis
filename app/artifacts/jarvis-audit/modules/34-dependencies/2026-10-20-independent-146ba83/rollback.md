@@ -1,0 +1,3 @@
+# Rollback status
+
+No package/source/model migration took place, so no uninstall rollback was executed or needed. The new evidence folder and its README paragraphs are the only Prompt 34 additions. Preserve earlier audit work and never reset the original user checkout. A future migration must stage beside the old env, validate/pin interpreter/native wheels/model revisions, retain old assets and switch only after approved postconditions. Revert the switch rather than deleting/recreating envs blindly. Tested upgrade/uninstall/rollback path remains BLOCKED until explicitly authorized; a written plan is not execution proof.

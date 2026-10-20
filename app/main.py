@@ -27,7 +27,7 @@ from jarvis.audio import Listener
 from jarvis.engine import Engine
 from jarvis.commands import Command
 from jarvis.speech import Speech
-from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, ui_loop
+from jarvis.recovery import Watchdog, OllamaService, restart_thread, record, safe_message, ui_loop
 
 BASE = Path(__file__).resolve().parent
 
@@ -65,7 +65,7 @@ class App:
         build_interface(self)
         self.load_microphones()
         self.actions.approval_handler = self.request_approval
-        self.actions.decision_handler = lambda approved: self.root.after(0, lambda: self.desk.decide(approved))
+        self.actions.decision_handler = self.voice_decision
         # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
         self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
             getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
@@ -225,7 +225,8 @@ class App:
                     source.seek(self.repair_offset)
                     for line in source:
                         try:
-                            self.log_line("repair", json.loads(line)["message"])
+                            # Screen again on read: rows written before the privacy fix may still hold raw text.
+                            self.log_line("repair", safe_message(json.loads(line)["message"]))
                         except (ValueError, KeyError):
                             pass
                     self.repair_offset = source.tell()
@@ -348,14 +349,23 @@ class App:
             self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         self.events.put((kind, message))
 
+    def voice_decision(self, approved):
+        """A spoken yes/no answers the card on screen when it was heard; if that card changes first, nothing is decided."""
+        token = getattr(self.desk, 'displayed_token', None)
+        if token:
+            self.root.after(0, lambda: self.desk.decide(approved, token))
+
     def request_approval(self, kind, detail, cancelled):
-        answer = {"approved": False}
+        from jarvis.approval_receipt import new_request_id, receipt_valid
+        request, issued = new_request_id(), time.monotonic()  # kept locally: an answer cannot supply them
+        answer = {"approved": False, "request": request}
         ready = threading.Event()
         self.report("approval", (kind, detail, answer, ready, cancelled))
         while not ready.wait(.1):
             if cancelled():
                 return False
-        return answer["approved"] and not cancelled()
+        # Final boundary: only a receipt for this exact pending request, within its lifetime, authorizes it.
+        return receipt_valid(answer, kind, detail, request, issued, cancelled)
 
     def show_command_prompt(self):
         self.desk.show('Console')

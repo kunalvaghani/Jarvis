@@ -10,10 +10,36 @@ import uuid
 import re
 import builtins
 from functools import lru_cache
+from contextlib import contextmanager
+from contextvars import ContextVar
+import time
 
 from .agent_context import bounded_text, scoped
 
 _LOCK = threading.RLock()
+_CLOCK_ID = uuid.uuid4().hex
+_TRACE_TASK = ContextVar('jarvis_telemetry_task', default=None)
+MAX_JOURNAL_BYTES = 32 * 1024 * 1024
+
+
+@contextmanager
+def task_trace(actions):
+    """Capture the host task once for this call, including nested outcome/cloud events."""
+    from .task_state import TaskState
+    state = getattr(actions, 'task_state', None)
+    task = state.running_identity() if isinstance(state, TaskState) else None
+    token = _TRACE_TASK.set(task if isinstance(task, str) and re.fullmatch('[0-9a-f]{32}', task) else None)
+    try:
+        yield
+    finally:
+        _TRACE_TASK.reset(token)
+
+
+def clock_metadata():
+    result = {'monotonic_ns': time.monotonic_ns(), 'clock_id': _CLOCK_ID}
+    if _TRACE_TASK.get() is not None:
+        result['task_id'] = _TRACE_TASK.get()
+    return result
 _BACKENDS = frozenset({'files','terminal','browser','desktop','toolkit','dom','realtime','spotify','desktop_observation'})
 _ERROR_TYPES = frozenset(name for name,value in vars(builtins).items()
     if isinstance(value,type) and issubclass(value,BaseException)) | frozenset({'UncertainCoding','AbilityError','CloudFailure','QuotaDenied','Unsupported','Cancelled',
@@ -91,14 +117,20 @@ def event(actions, kind, name, call_id=None, **metadata):
         details = lifecycle_metadata(metadata)
     row = {'version': 1, 'at': datetime.now(timezone.utc).isoformat(), 'event': kind,
            'call_id': identifier, 'tool':name if isinstance(name,str) and name in lifecycle_tools() else 'invalid_tool',
-           **details}
+           **details, **clock_metadata()}
     # Never store arguments, source, responses, credentials or private recordings.
-    with _LOCK:
-        path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
-        folder = path.parent
-        folder.mkdir(parents=True, exist_ok=True)
-        if path.is_symlink():
-            raise ValueError('Agent event path must not be linked.')
-        with path.open('a', encoding='utf-8') as output:
-            output.write(json.dumps(row, ensure_ascii=False) + '\n')
+    try:
+        with _LOCK:
+            path = scoped(base, '.jarvis-runtime/agent-events.jsonl')
+            folder = path.parent
+            folder.mkdir(parents=True, exist_ok=True)
+            if path.is_symlink():
+                raise ValueError('Agent event path must not be linked.')
+            if path.exists() and path.stat().st_size >= MAX_JOURNAL_BYTES:
+                actions.telemetry_status = 'limited'
+                return identifier  # Preserve old evidence; never delete/rotate user files implicitly.
+            with path.open('a', encoding='utf-8') as output:
+                output.write(json.dumps(row, ensure_ascii=False) + '\n')
+    except OSError:
+        actions.telemetry_status = 'unavailable'  # Diagnosis degrades; no action replay or policy bypass.
     return identifier

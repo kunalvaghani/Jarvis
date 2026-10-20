@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.874" timestamp="2026-10-20T01:50:38.907397+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_remaining_routes" name="test_JRV_34_014_missing_local_embedding_falls_back_and_reports_lexical" time="0.073"><failure message="KeyError: 0">tmp_path = WindowsPath('%USERPROFILE%/AppData/Local/Temp/pytest-of-kunal/pytest-592/test_JRV_34_014_missing_local_0')
+
+    def test_JRV_34_014_missing_local_embedding_falls_back_and_reports_lexical(tmp_path):
+        from jarvis import local_embeddings
+        from jarvis.reasoning_bank import ReasoningBank
+        row={'kind':'strategy','title':'Spreadsheet export format',
+             'description':'Choose the spreadsheet format before export',
+             'content':'Choose the spreadsheet export format before exporting.',
+             'conditions':{},'failure_conditions':[]}
+        with patch('urllib.request.urlopen',side_effect=urllib.error.URLError('offline fixture')):
+            bank=ReasoningBank(tmp_path,embedder=local_embeddings.embed)
+            bank._add(row,{'source':'synthetic'},'fixture')
+            hits=bank.retrieve('spreadsheet export format')
+        assert local_embeddings.status()['available'] is False
+&gt;       assert hits and hits[0]['retrieval']=='lexical'
+E       KeyError: 0
+
+tests\test_prompt34_remaining_routes.py:24: KeyError</failure></testcase><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_remaining_routes" name="test_JRV_34_018_unsupported_xlsx_features_are_not_rewritten[xl/vbaProject.bin-macros]" time="0.318" /><testcase classname="Jarvis-codex-review.app.tests.test_prompt34_remaining_routes" name="test_JRV_34_018_unsupported_xlsx_features_are_not_rewritten[_xmlsignatures/sig1.xml-signatures]" time="0.021" /></testsuite></testsuites>

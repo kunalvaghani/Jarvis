@@ -366,13 +366,22 @@ def execute(actions, step, cancelled):
     if name == "web_search":
         from .knowledge_worker import search
         return json.dumps(search(step["value"]), ensure_ascii=False)
+    context = None
     if data[3]:
-        actions._approve(name, json.dumps({key: step.get(key, "") for key in ("action", "value", "content")}, ensure_ascii=False), cancelled)
+        # P33-004: bind the approval to the provider account (never the credential) and dispatch with that context.
+        from .provider_identity import ProviderContext
+        context = ProviderContext(data[0])
+        detail = {key: step.get(key, "") for key in ("action", "value", "content")}
+        detail.update(context.approval_fields(step.get("value", "")))
+        actions._approve(name, json.dumps(detail, ensure_ascii=False), cancelled)
+        context = context.recheck()  # raises before dispatch on an account switch or unconfirmable credential change
     from .task_state import TaskState
     state = getattr(actions, "task_state", None)
     # Record uncertainty BEFORE any network write. Never retry these operations.
     if data[3] and isinstance(state, TaskState):
-        state.checkpoint("action_attempted", action=name, target=step["value"], evidence="approved external request beginning")
+        state.checkpoint("action_attempted", action=name, target=step["value"],
+                         evidence="approved external request beginning for " + context.account +
+                         ("; credential rotated for the same independently verified account" if context.rotated else ""))
     client = requests.Session()
     client.trust_env = False
     try:
@@ -380,10 +389,11 @@ def execute(actions, step, cancelled):
             from .firecrawl_tools import execute as firecrawl_execute
             result = firecrawl_execute(client, step, cancelled)
         else:
-            result = remote_tool(client, step, cancelled)
+            result = remote_tool(client, step, cancelled, context.environment if context is not None else None)
         if data[3] and isinstance(state, TaskState):
             state.checkpoint("observed", action=name, target=step["value"], evidence="service acknowledged request")
-        for key, secret in os.environ.items():
+        settings = list(os.environ.items()) + (list(context.environment.items()) if context is not None else [])
+        for key, secret in settings:  # current and approved-context credentials
             if key.startswith("JARVIS_") and any(word in key for word in ("TOKEN", "PASSWORD", "KEY")) and len(secret) >= 8:
                 result = result.replace(secret, "[credential redacted]")
         return result[:12000] + ("\n[Tool response truncated]" if len(result) > 12000 else "")
@@ -398,9 +408,10 @@ def execute(actions, step, cancelled):
         client.close()
 
 
-def remote_tool(client, step, cancelled):
+def remote_tool(client, step, cancelled, env=None):
+    """env: the approved provider context's settings for writes; reads use the current environment."""
     name, value, content = step["action"], step["value"], step.get("content", "")
-    env = os.environ
+    env = os.environ if env is None else env
     call = lambda method, url, **kwargs: api(client, method, url, cancelled, **kwargs)
     if name == "scrape_web":
         text = call("GET", value)

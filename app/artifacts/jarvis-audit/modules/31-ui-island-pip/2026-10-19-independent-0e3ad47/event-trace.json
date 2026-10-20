@@ -1,0 +1,55 @@
+{
+  "scope": "5 synthetic producers, 5000 cumulative updates and 5 terminal events",
+  "events": [
+    {
+      "kind": "answer_stream",
+      "task_id": "0",
+      "characters": 1000
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "0",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "1",
+      "characters": 1000
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "1",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "2",
+      "characters": 1000
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "2",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "3",
+      "characters": 1000
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "3",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "4",
+      "characters": 1000
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "4",
+      "characters": 0
+    }
+  ]
+}

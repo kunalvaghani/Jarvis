@@ -21,6 +21,7 @@ LABELS = {'play': ['Play (k)', 'Play'], 'pause': ['Pause (k)', 'Pause'],
           'theater': ['Theater mode (t)', 'Theater mode'], 'default_view': ['Default view (t)', 'Default view'],
           'captions': ['Subtitles/closed captions (c)', 'Subtitles/closed captions', 'Captions'],
           'lyrics': ['Lyrics', 'Show lyrics'], 'add_queue': ['Add to queue'],
+          'skip_ad': ['Skip', 'Skip Ad', 'Skip Ads', 'Skip ad', 'Skip ads'],
           'like': ['Save to your Liked Songs', 'Add to Liked Songs', 'Save to Your Library', 'Add to your library']}
 OPPOSITE = {'play': 'pause', 'pause': 'play', 'mute': 'unmute', 'unmute': 'mute',
             'fullscreen': 'exit_fullscreen', 'exit_fullscreen': 'fullscreen', 'theater': 'default_view'}

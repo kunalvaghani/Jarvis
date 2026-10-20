@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.658" timestamp="2026-10-20T13:53:22.256687+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-codex-review.app.artifacts.jarvis-audit.codex-v2-independent-review.2026-10-20-e5af0e7.test_deep_lab" name="test_IR_004_deep_owned_worktree_preserves_canonical_source" time="0.979"><failure message="NotADirectoryError: [WinError 267] The directory name is invalid">..\..\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\test_deep_lab.py:16: in test_IR_004_deep_owned_worktree_preserves_canonical_source
+    identifier, parent = candidate(research, {'base_seconds': 0.1, 'max_seconds': 2.0})
+tests\test_phase06_controlled_evolution.py:120: in candidate
+    parent = parent or research.seed('read_retry_backoff')
+jarvis\autoresearch.py:63: in seed
+    lab_commit, source_commit = self.lab.snapshot()
+jarvis\evolution_lab.py:85: in snapshot
+    self.ensure_repo()
+jarvis\evolution_lab.py:79: in ensure_repo
+    self._run(['init', '-q', '-b', 'lab-main'], self.repo)
+jarvis\evolution_lab.py:58: in _run
+    result = subprocess.run(['git', '-c', 'core.longpaths=true', *args], cwd=cwd, env=git_env(),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:501: in run
+    with Popen(*popenargs, **kwargs) as process:
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:969: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:1438: in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+E   NotADirectoryError: [WinError 267] The directory name is invalid</failure></testcase></testsuite></testsuites>

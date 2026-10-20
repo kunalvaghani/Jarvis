@@ -1,5 +1,11 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt99-e5af-review -->
+**2026-10-20 independent final review — NOT READY FOR DEPLOYMENT:** Claude `e5af0e7`; candidate full 1941 pass/139 skip plus one separate unresolved deep-cwd failure. New proposed fix rejects malformed model aliases at authorization and direct downloader boundaries, preventing manifest path escape; supported `name[:tag]` and `namespace/name[:tag]` retain digest-bound transport. Failing-before/passing-after fixtures, 6/6 safety mutants and 10 environment consistency checks recorded. No live assistant certification/install/merge. [Verdict](app/artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+
+<!-- prompt37-memory-continuation -->
+**2026-10-20 ReasoningBank continuation:** pinned `e5af0e7`; fresh neighboring fixtures **109 pass / 1 skip**. Real workbook/SQLite/BrainClient wire with simulated planner: retrieved anti-pattern reaches repeat request, task outcome honestly does not improve; memory-off comparison also checked. No production change or live inference claim. JRV-37-017 remains blocked for full orchestration/real planner. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/verdict.md); [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+
 **Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
 
 **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
@@ -8,6 +14,78 @@ changes; `InsTAREELS` is an ignored local compatibility junction. Historical
 branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
+
+<!-- voice-continuity-2026-10-20 -->
+**2026-10-20 — Continuous voice: Kokoro replaces F5 on this 4 GB GPU (F5 was slower than real time), and gaps between sentences no longer cancel a reply.** Full regression 3,668 passed / 0 failed. [Record](app/artifacts/jarvis-audit/voice-continuity/2026-10-20/README.md).
+<!-- /voice-continuity-2026-10-20 -->
+
+<!-- youtube-user-chrome-2026-10-20 -->
+**2026-10-20 — YouTube in your own Chrome profile, with Jarvis's browser as the fallback:** real playlist playback, "play the second one" from the spoken and island-listed results, "skip ad" plus automatic ad skipping in Jarvis's browser, and the "select first video clicks the YouTube logo" bug fixed. Targeted regression 2,288 passed; live check in your Chrome not run. [Details](app/README.md#configuration-and-relocation).
+<!-- /youtube-user-chrome-2026-10-20 -->
+
+<!-- youtube-connector-2026-10-20 -->
+**2026-10-20 — First app connector: YouTube, read-only, integrated as MCP server `youtube`:** search videos and playlists, video details and playlist contents; playback stays on Jarvis's player. Connector tests 89 passed / 1 skipped (live included); targeted Jarvis regression 865 passed / 0 failed; qwen3.5:9b 9/9 direct, 8/10 planner-format. [Evidence](app/artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+<!-- /youtube-connector-2026-10-20 -->
+
+<!-- custom-connectors-2026-10-20 -->
+**2026-10-20 — Custom MCP connector base added:** [`app/integrations/jarvis-connectors/`](app/integrations/jarvis-connectors/README.md) provides `BaseConnector` for app- and task-specific local connectors, plus a read-only notes child and a template. 47 passed / 1 skipped, including end-to-end calls through the real MCP bridge. SDK v2 runtime not run; no connector enabled.
+<!-- /custom-connectors-2026-10-20 -->
+
+<!-- command-routing-2026-10-20 -->
+**2026-10-20 — Command routing repaired: websites open in Google Chrome; "select the second video", misheard "Jarvis" and Spotify play phrasings now reach their actions.** Full regression 3,661 passed / 0 failed. [Record](app/artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
+<!-- /command-routing-2026-10-20 -->
+
+<!-- claude-integration-e5af0e7 -->
+**2026-10-20 — Codex e5af0e7 model-path fix (P99-R8) and new UI/memory tests integrated on `claude`; release NOT READY.** Full regression 3,635 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
+<!-- /claude-integration-e5af0e7 -->
+
+<!-- prompt37-e5af-verification -->
+**2026-10-20 - Fresh E2E verification at claude e5af0e7:** **1907 PASS / 0 FAIL / 139 SKIPPED**. The queued mock-send crash/restart journey now passes actual Tk UI readback; full acceptance still has 25 blocked cases. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-e5af-verification -->
+
+<!-- claude-integration-a9b4ce1 -->
+**2026-10-20 — Codex P34–P37 repairs integrated on `claude` (`3fbfbf6`); P34-R1/R2/R3 repaired (digest-bound model transport, in-place rebuild with rollback, frozen lock). Release NOT READY pending independent verification.** Full regression 3,601 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md).
+<!-- /claude-integration-a9b4ce1 -->
+
+<!-- prompt37-followup -->
+**2026-10-20 - Prompt 37 follow-up:** 38 focused checks and three bounded workflow journals pass; full E2E acceptance remains blocked. Source unchanged from V2. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-followup -->
+
+<!-- prompt99-review -->
+**2026-10-20 — Prompt 99 independent review: NOT READY FOR DEPLOYMENT.** **1896 PASS / 1 FAIL / 139 SKIPPED** on the uncommitted review candidate; integrated claude verification and full live E2E remain blocked. Six safety mutation controls discriminate deliberate violations. [Evidence](app/artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-a9b4ce1/15-final-verdict.md) · [Application scope](app/README.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt99-review -->
+
+<!-- prompt37-e2e -->
+**2026-10-20 — Prompt 37 local acceptance repairs verified; release NOT READY.** **683 PASS / 0 FAIL / 5 SKIPPED** in the final relevant regression. Demonstration lifecycle/consent checks and truthful uncertain-send completion repaired; native voice/apps/GPU acceptance remains blocked. [Application details](app/README.md) · [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-e2e -->
+
+<!-- prompt36-observability -->
+**2026-10-20 — Prompt 36 telemetry repairs verified locally; release NOT READY.** **631 passed / 0 failed / 5 skipped** in the final relevant run. Repairs cover skill counter/evidence integrity, host task/monotonic correlation, bounded optional journals and metadata-only cloud decisions. Paired synthetic helper measurements are labelled as overhead, not real throughput. [Application details](app/README.md) · [Evidence](app/artifacts/jarvis-audit/modules/36-observability/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt36-observability -->
+
+<!-- prompt35-security -->
+**2026-10-20 — Prompt 35 security repairs verified locally; release NOT READY.** **537 relevant tests passed, four skipped, no failures**, plus two separate evaluator tamper checks passed. Repairs cover cloud payload bounds, credential/error privacy, sensitive training proposals, skill privilege declarations and readback precedence. Semantic provenance and broader live trust gates remain open. [Application details](app/README.md) · [Independent evidence](app/artifacts/jarvis-audit/modules/35-security/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt35-security -->
+
+<!-- prompt34-repair -->
+**2026-10-20 — Prompt 34 safe local repairs completed; release NOT READY.** Additional repair-authorization and concurrent-grant fixes pass **227 relevant tests, with one live-CUDA skip and no failures**. Ten installed environments pass dependency checks. Clean installation/rollback, immutable model transport and live hardware acceptance remain incomplete. [Application details](app/README.md) · [Independent evidence](app/artifacts/jarvis-audit/modules/34-dependencies/2026-10-20-completion-a9b4ce1/verdict.md) · [Cumulative Claude handoff](app/docs/CLAUDE_HANDOFF.md). Earlier Claude-reported full-suite results remain historical.
+<!-- /prompt34-repair -->
+
+<!-- prompt33-p33-004 -->
+**2026-10-20 — Prompt 33 P33-004 completed: account labels are display-only; a credential change during a pending approval is refused unless independently verified (no verifier registered yet, so it fails closed). Still BLOCKED until Codex re-verifies.** Full regression 3,473 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-cd8861c/repair.md).
+<!-- /prompt33-p33-004 -->
+
+<!-- prompt33-followup -->
+**2026-10-19 — Prompt 33 follow-up: P33-004 (provider account binding), P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,469 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair-2c4ea56/repair.md).
+<!-- /prompt33-followup -->
+
+<!-- prompt32-33 -->
+**2026-10-19 — Prompt 32/33 defects P32-001, P32-002, P33-001, P33-002 and P33-003 repaired; still BLOCKED until Codex re-verifies.** Full regression 3,449 passed / 0 failed. [Repair record](app/artifacts/jarvis-audit/modules/33-mcp-integrations/2026-10-19-claude-repair/repair.md).
+<!-- /prompt32-33 -->
+
+<!-- prompt31-p31-001 -->
+**2026-10-19 — Prompt 31 approval defects P31-001 (unbound callbacks) and P31-002 (receipt replay) repaired; Prompt 31 remains BLOCKED until Codex re-verifies.** Full regression 3,421 passed / 0 failed. [P31-002 record](app/artifacts/jarvis-audit/modules/31-ui-island-pip/2026-10-19-claude-repair-p31-002/repair.md).
+<!-- /prompt31-p31-001 -->
 
 <!-- upgrade-phase08 -->
 **2026-10-19 — Upgrade Phase 8 of 8 (final integration and verification): PARTIALLY VERIFIED.** Full regression **3,379 passed / 147 skipped (BLOCKED environment dependencies) / 0 failed**; launcher ready. Re-audit repairs: a cloud architect entry point and a pre-existing citation regex bug. Live Groq, GGUF export, VM exploration, Unreal projects and physical-click demonstrations remain BLOCKED. [Architecture](app/docs/upgrade-architecture.md) · [Final Codex handoff](app/artifacts/jarvis-audit/final-codex-handoff/README.md).

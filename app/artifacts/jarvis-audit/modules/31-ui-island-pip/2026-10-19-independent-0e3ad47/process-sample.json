@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-19 IST",
+  "scope": "One read-only sample of the independent regression runner during local Docker checks; no peak or leak inference",
+  "runner_pid": 6084,
+  "runner_age_seconds": 504,
+  "runner_rss_mb": 238,
+  "observed_child_processes": ["docker.exe", "conhost.exe"],
+  "source": "Live psutil process readback via exec_command; only exact audit-wrapper processes selected"
+}

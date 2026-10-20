@@ -1,0 +1,5 @@
+# Rollback and reproduction
+
+Review source.patch and new test source hashes against base a9b4ce1. Prompt 34 changes are separate carry-forward and must not be reverted accidentally. No dependency migration, install, uninstall, model/state schema migration, merge or deployment occurred. No live rollback needed or claimed. To reject this source proposal, reverse only accepted Prompt 35 hunks in a clean review branch, preserving user work and immutable audit packets.
+
+Reproduce via run_security.py --final --junitxml=<owned output> -q with the installed main interpreter, or run tests/test_prompt35_security.py directly. Wrapper routes skills workers to existing installed interpreters read-only. Additional evaluator-retention.xml runs two named Phase 6 tamper tests in disposable Git fixtures. probe_security.py uses fake cloud and disposable SQLite plus a pure validator benchmark. Do not run installation/setup scripts to clear a skipped runtime. Actual production rollout/rollback acceptance remains NOT RUN.

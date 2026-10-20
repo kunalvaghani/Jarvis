@@ -1,0 +1,56 @@
+{
+  "scope": "five synthetic producers; no renderer/executor",
+  "coalesced": 995,
+  "events": [
+    {
+      "kind": "answer_stream",
+      "task_id": "0",
+      "characters": 200
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "0",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "1",
+      "characters": 200
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "1",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "2",
+      "characters": 200
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "2",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "3",
+      "characters": 200
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "3",
+      "characters": 0
+    },
+    {
+      "kind": "answer_stream",
+      "task_id": "4",
+      "characters": 200
+    },
+    {
+      "kind": "answer_error",
+      "task_id": "4",
+      "characters": 0
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+2026-10-20T01:20:46+05:30
+........................................................................ [ 29%]
+........................................................................ [ 58%]
+.......................sssssss.......................................... [ 88%]
+.............................                                            [100%]
+- generated xml file: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\modules\34-dependencies\2026-10-20-claude-repair-146ba83\model-routing-fidelity-manifest.xml -
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify simultaneous_cuda
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify laya_25
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify lora_load
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify legacy_alias
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify ttfa
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_hotkeys
+SKIPPED [1] tests\test_phase2_gpu_models_voice_ui.py:445: BLOCKED live gate: run scripts.verification.phase2_gpu_voice_probe; fixtures do not certify live_mind_dag
+238 passed, 7 skipped in 45.37s
+exit=0
