@@ -1,5 +1,13 @@
 # Jarvis — local Windows voice assistant
 
+## Repository consolidation (2026-10-20)
+
+`main` is the sole maintained local and remote branch. Work directly in the primary checkout; the four former audit worktrees were consolidated and removed. Every former branch tip and worktree commit was already an ancestor of `main` at `fc19fbb`, so no merge commit or conflict resolution was needed. The worktrees' modified tracked source and duplicated untracked tests matched `main`; the unique untracked deep-path audit test was preserved verbatim as [audit source](artifacts/repository-consolidation/2026-10-20/test_v2_deep_lab.py.txt), outside active test discovery because its fresh check failed.
+
+Before removal, local ignored/untracked files, original HEAD identifiers and binary tracked-change patches were preserved under the ignored, private `.jarvis-runtime/repository-consolidation-2026-10-20/` directory, grouped by former worktree name. The `preserved-local-files/` subdirectory holds the authoritative local files, moved within the same disk and checked for successful relocation (individual files were hash-verified); sibling copies are partial earlier backup material. These files are local recovery material and are not published. Historical audit references below retain their original revision and validation context.
+
+Fresh verification — 2026-10-20 IST: all former branch/worktree HEADs are ancestors of integrated `main`; modified tracked worktree source matched `main` byte-for-byte. The recovered audit test recorded **1 failure**, `NotADirectoryError [WinError 267]` when spawning Git in its >260-character lab directory. It is retained as historical audit source, without changing application code. `python -m jarvis.launcher --check` reported **repair_required**: Docker unavailable (`DockerEngineUnavailable`) and Ollama unavailable (`ConnectionError`). This is repository/readiness verification, not live voice or desktop acceptance; no full regression rerun was required for this source-preserving consolidation.
+
 <!-- youtube-user-chrome-2026-10-20 -->
 **2026-10-20 — YouTube opens in your own Chrome; playlists, numbered picks, skip ads and the logo bug fixed.** "Open YouTube", YouTube searches and "play X on YouTube" now use your Chrome profile (`media.youtube_chrome_profile`, default `Default`, the "Comedy with - Chrome" shortcut). Playback there is confirmed through the Windows media session. If nothing starts in your Chrome, Jarvis's own browser takes over; if something started but could not be confirmed, nothing is replayed. Chrome 136+ blocks automation of the default profile, so in your Chrome Jarvis opens exact URLs and uses the media session and accessibility to control the tab. "Play hindi lofi playlist from YouTube" plays a real playlist, not a mix video named "playlist". After a search, "play the second one", "play the third playlist" or "number 3" plays exactly that item from the list Jarvis spoke and shows on the island. "Skip ad" presses YouTube's Skip button; Jarvis's own browser also skips skippable ads automatically (`media.youtube_auto_skip_ads`). Fixed: "select first video" could click the YouTube logo ("YouTube Home" was treated as video 1). 37 new tests; targeted regression **2,288 passed / 1 failed**; the failure, a git-snapshot test, passes alone (25/25) and collided with a temporary worktree. Live in a throwaway browser: playlist search, playlist playback and skip-ad readback passed. **Not run live in your Chrome** (it would open a tab and pause your music). Restart Jarvis to apply.
 <!-- /youtube-user-chrome-2026-10-20 -->
@@ -18,7 +26,7 @@
 <!-- prompt37-memory-continuation -->
 **2026-10-20 ReasoningBank continuation:** pinned `e5af0e7`; fresh neighboring fixtures **109 pass / 1 skip**. Real workbook/SQLite/BrainClient wire with simulated planner: retrieved anti-pattern reaches repeat request, task outcome honestly does not improve; memory-off comparison also checked. No production change or live inference claim. JRV-37-017 remains blocked for full orchestration/real planner. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/verdict.md); [Claude handoff](docs/CLAUDE_HANDOFF.md).
 
-## Independent audit checkpoint (2026-10-19)
+## Historical independent audit checkpoint (2026-10-19)
 
 The independent review pins `claude` at `36fbf3ce925080f7f54afa87eaf1d9b88414142d` in a separate `codex-review` worktree. This audit branch is an explicit exception to the earlier three-branch convention. No fixes were merged into `claude` or `main`.
 
@@ -28,9 +36,9 @@ The [audit verdict](artifacts/jarvis-audit/codex-independent-review/15-final-ver
 
 From `app/`, run `python scripts/verification/independent_audit.py inventory`, `smoke`, `regression`, `security`, or `documents` (choose one mode argument). The `documents` mode explicitly routes only interpreter dependencies to the original checkout's installed utility environment; reviewed worker source and disposable files remain in the audit checkout. `python scripts/verification/independent_benchmarks.py` records paired synthetic overhead measurements. Use the existing interpreter path when the worktree lacks `.venv`. The worktree launcher check reports `repair_required` because environments/checkpoints are not copied; Docker/Ollama availability is readiness evidence only. Physical voice/desktop acceptance, fresh LoRA training and full end-to-end/soak checks remain pending.
 
-**Repository consolidation — 2026-10-16 IST:** The maintained branches are `main`,
-`codex`, and `claude`. Start work on the appropriate development branch and merge
-reviewed changes into `main`; additional worktrees are optional local tooling.
+**Historical repository consolidation — 2026-10-16 IST:** The maintained branches then were `main`,
+`codex`, and `claude`, with separate development branches and optional worktrees.
+The 2026-10-20 consolidation below supersedes that branch convention.
 `app/` is the sole tracked application tree. The ignored `InsTAREELS` Windows
 junction remains available locally, with its duplicate Git entries removed.
 Integration preserves the audited worker-confirmed speech retry rule, merges
