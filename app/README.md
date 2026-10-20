@@ -30,6 +30,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- command-routing-2026-10-20 -->
+**2026-10-20 — Spoken command routing repaired: websites open in Google Chrome, and natural phrasings reach the action.** "Open YouTube" (and Google, Gmail, GitHub, Drive, ChatGPT) now opens in Chrome, never the Windows default browser; YouTube uses the Jarvis-controlled Chrome so "select the second video" works on that page. Phrasings that used to fall into chat now run: "so I will / shall we select the second video", "Jarvis" misheard as "there is", "opens spotify and play ...", and corrections such as "it's obviously Finding Her on Spotify". Chat replies no longer promise actions they cannot perform. 26 new routing tests; full regression **3,661 passed / 148 BLOCKED skips / 0 failed**. Live browser/Spotify checks NOT RUN; restart Jarvis to apply. [Record](artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
+<!-- /command-routing-2026-10-20 -->
+
 <!-- claude-integration-e5af0e7 -->
 **2026-10-20 — Claude integrated Codex's e5af0e7 proposals: P99-R8/V2-004 model-path containment and three new tests (model paths, mock-send UI restart, ReasoningBank repeat). Release NOT READY pending independent verification.** An approved model alias must now be `name[:tag]` or `namespace/name[:tag]`, checked at authorization and again before any download request, and the manifest must resolve inside the model store. Three-segment names such as `hf.co/user/model` are refused. Against unfixed e5af0e7 the path test fails 27 cases; with the patch, 31/31 pass. Full regression **3,635 passed / 148 BLOCKED skips / 0 failed**. The launcher check timed out once on the F5 probe directly after the run and was `ready` on rerun; both results are kept. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
 <!-- /claude-integration-e5af0e7 -->

@@ -1,0 +1,40 @@
+'Open youtube'                                -> [Command(kind='open', value='youtube', extra='')]
+'open youtube'                                -> [Command(kind='open', value='youtube', extra='')]
+'jarvis open youtube'                         -> [Command(kind='open', value='youtube', extra='')]
+'open youtube and play lofi music'            -> [Command(kind='play_media', value='lofi music', extra='youtube')]
+'play despacito on youtube'                   -> [Command(kind='play_media', value='despacito', extra='youtube')]
+'search youtube for lofi music'               -> [Command(kind='media_search', value='lofi music', extra='youtube')]
+'so i will select the second video'           -> [Command(kind='select_context', value='2:video', extra='select')]
+'shall we select the second video'            -> [Command(kind='select_context', value='2:video', extra='select')]
+'select the second video'                     -> [Command(kind='select_context', value='2:video', extra='select')]
+'play the second video'                       -> [Command(kind='select_context', value='2:video', extra='select')]
+'click the first video'                       -> [Command(kind='select_context', value='1:video', extra='select')]
+'select option 2'                             -> [Command(kind='choose_control', value='2', extra='')]
+'there is play finding her on spotify'        -> [Command(kind='play_media', value='finding her', extra='spotify')]
+'jarvis play finding her on spotify'          -> [Command(kind='play_media', value='finding her', extra='spotify')]
+'play finding her on spotify'                 -> [Command(kind='play_media', value='finding her', extra='spotify')]
+"it's obviously finding her on spotify"       -> [Command(kind='play_media', value='finding her', extra='spotify')]
+'opens spotify and play adhd'                 -> [Command(kind='play_media', value='adhd', extra='spotify')]
+'open spotify and play adhd'                  -> [Command(kind='play_media', value='adhd', extra='spotify')]
+'play adhd on spotify'                        -> [Command(kind='play_media', value='adhd', extra='spotify')]
+'play finding her'                            -> [Command(kind='play_media', value='finding her', extra='')]
+'pause the music'                             -> [Command(kind='spotify_control', value='pause', extra='auto')]
+'next song'                                   -> [Command(kind='spotify_control', value='next', extra='auto')]
+
+'there is a problem with my code'      -> [Command(kind='task', value='there is a problem with my code', extra='unparsed')] | quick_kind: None
+'so i will be late today'              -> [Command(kind='task', value='so i will be late today', extra='unparsed')] | quick_kind: None
+"it's obviously raining"               -> [Command(kind='task', value="it's obviously raining", extra='unparsed')] | quick_kind: chat
+"i'll be back soon"                    -> [Command(kind='task', value="i'll be back soon", extra='unparsed')] | quick_kind: None
+"it's a nice song on spotify"          -> [Command(kind='task', value="it's a nice song on spotify", extra='unparsed')] | quick_kind: chat
+'next week i have exams'               -> [Command(kind='task', value='next week i have exams', extra='unparsed')] | quick_kind: None
+'i will call you later'                -> [Command(kind='task', value='i will call you later', extra='unparsed')] | quick_kind: None
+"there's nothing to do"                -> [Command(kind='task', value="there's nothing to do", extra='unparsed')] | quick_kind: None
+'it is what it is'                     -> [Command(kind='task', value='it is what it is', extra='unparsed')] | quick_kind: chat
+'thank you very much'                  -> [Command(kind='task', value='thank you very much', extra='unparsed')] | quick_kind: chat
+'hello'                                -> [Command(kind='ask', value='hello', extra='')] | quick_kind: None
+'what are my plans today'              -> [Command(kind='ask', value='what are my plans today', extra='')] | quick_kind: None
+'can you hear me'                      -> [Command(kind='task', value='can you hear me', extra='unparsed')] | quick_kind: None
+'i said hello'                         -> [Command(kind='task', value='i said hello', extra='unparsed')] | quick_kind: None
+'just kidding'                         -> [Command(kind='task', value='just kidding', extra='unparsed')] | quick_kind: None
+'so what do you think'                 -> [Command(kind='ask', value='what do you think', extra='')] | quick_kind: None
+'okay cool'                            -> [Command(kind='task', value='okay cool', extra='unparsed')] | quick_kind: chat

@@ -15,6 +15,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- command-routing-2026-10-20 -->
+**2026-10-20 — Command routing repaired: websites open in Google Chrome; "select the second video", misheard "Jarvis" and Spotify play phrasings now reach their actions.** Full regression 3,661 passed / 0 failed. [Record](app/artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
+<!-- /command-routing-2026-10-20 -->
+
 <!-- claude-integration-e5af0e7 -->
 **2026-10-20 — Codex e5af0e7 model-path fix (P99-R8) and new UI/memory tests integrated on `claude`; release NOT READY.** Full regression 3,635 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
 <!-- /claude-integration-e5af0e7 -->

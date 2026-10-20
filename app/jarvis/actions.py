@@ -1143,6 +1143,12 @@ class Actions:
         if command.kind == 'open':
             from .windows_commands import match as windows_match, execute as windows_execute
             ident=windows_match('open '+command.value)
+            # Websites always open in Google Chrome, never the Windows default browser; YouTube uses the
+            # Jarvis-controlled Chrome so "select the second video" and playback controls can act on that page.
+            site = {87: 'google', 88: 'youtube', 89: 'gmail', 90: 'github', 91: 'drive.google.com', 92: 'chatgpt'}.get(ident)
+            if site:
+                from .commands import Command
+                return self._execute(Command('browse', site, 'chrome'), cancelled)
             if ident and ident<=94 and command.value.casefold() not in self.apps:
                 self.open_target_pending=True
                 self.typing_failed=True
