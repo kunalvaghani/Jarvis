@@ -94,6 +94,10 @@ def _category(controls, category, title=""):
                    or 'play on google' in label_key(c['name'])]
         choices = [c for c in choices if not c['name'].lstrip().startswith('@')
                    and not re.search(r'\b(?:channel|avatar|profile picture)\b', c.get('context', ''), re.I)]
+        # The masthead logo ("YouTube Home", "YouTube Premium"...) is the top-most link, so it once became "video 1".
+        choices = [c for c in choices if not re.fullmatch(
+            r'(?:youtube|yt)(?: (?:home|premium|music|kids|studio|tv|logo|shorts|india|in))*(?: [a-z]{2})?', label_key(c['name']))
+            and not (c.get('href') and re.fullmatch(r'https?://(?:www\.|m\.)?youtube\.com/?(?:\?.*)?', c['href'], re.I))]
     if category == "result":
         choices = [c for c in choices if label_key(c["name"]) not in NAVIGATION]
     if category == 'track':

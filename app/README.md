@@ -1,5 +1,17 @@
 # Jarvis — local Windows voice assistant
 
+<!-- youtube-user-chrome-2026-10-20 -->
+**2026-10-20 — YouTube opens in your own Chrome; playlists, numbered picks, skip ads and the logo bug fixed.** "Open YouTube", YouTube searches and "play X on YouTube" now use your Chrome profile (`media.youtube_chrome_profile`, default `Default`, the "Comedy with - Chrome" shortcut). Playback there is confirmed through the Windows media session. If nothing starts in your Chrome, Jarvis's own browser takes over; if something started but could not be confirmed, nothing is replayed. Chrome 136+ blocks automation of the default profile, so in your Chrome Jarvis opens exact URLs and uses the media session and accessibility to control the tab. "Play hindi lofi playlist from YouTube" plays a real playlist, not a mix video named "playlist". After a search, "play the second one", "play the third playlist" or "number 3" plays exactly that item from the list Jarvis spoke and shows on the island. "Skip ad" presses YouTube's Skip button; Jarvis's own browser also skips skippable ads automatically (`media.youtube_auto_skip_ads`). Fixed: "select first video" could click the YouTube logo ("YouTube Home" was treated as video 1). 37 new tests; targeted regression **2,288 passed / 1 failed**; the failure, a git-snapshot test, passes alone (25/25) and collided with a temporary worktree. Live in a throwaway browser: playlist search, playlist playback and skip-ad readback passed. **Not run live in your Chrome** (it would open a tab and pause your music). Restart Jarvis to apply.
+<!-- /youtube-user-chrome-2026-10-20 -->
+
+<!-- youtube-connector-2026-10-20 -->
+**2026-10-20 — First app connector: YouTube (read-only), integrated.** [`integrations/jarvis-connectors/connectors/apps/youtube/`](integrations/jarvis-connectors/connectors/apps/youtube/README.md) adds `search_videos`, `search_playlists`, `video_details`, `playlist_videos` and `parse_link` as MCP server `youtube`, enabled in `.jarvis/mcp.json`. A new `youtube_lookup` capability route and the [youtube-media guide](skills/youtube-media/SKILL.md) send playlist, details and top-N requests to it; every call shows an approval card. Playback stays on Jarvis's existing verified player, because the bridge runs connectors per call. Base-class fix: result size is now measured as Jarvis receives it, so results can no longer be truncated into invalid JSON. Connector tests: 89 passed / 1 skipped, including live YouTube through the bridge. Targeted Jarvis regression: 865 passed / 20 skipped / 0 failed. qwen3.5:9b: 9/9 with the tools directly; 8/10 in a planner-format harness (not the full Brain), where two prompts are answered from memory. Full regression not run. [Evidence](artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+<!-- /youtube-connector-2026-10-20 -->
+
+<!-- custom-connectors-2026-10-20 -->
+**2026-10-20 — Custom MCP connector base added.** [`integrations/jarvis-connectors/`](integrations/jarvis-connectors/README.md) provides `BaseConnector`, a parent class for local stdio MCP connectors. It generates schemas inside the bridge's contract subset, validates arguments strictly, hides write tools unless `--allow-write` is passed, bounds results and confines file access. It runs on the official MCP SDK v2 `MCPServer` or on a stdlib runtime. It includes a read-only `notes` child, ported from the user's connector starter, and a `template` child. Connector tests: **47 passed / 1 skipped** (symlink creation is not permitted on this account), including real stdio and end-to-end `ToolRegistry` → `mcp_bridge` calls. Existing MCP boundary suite: 8/8 passed. SDK v2 runtime NOT RUN because `mcp` 2.x is not installed. No connector is enabled in `.jarvis/mcp.json`.
+<!-- /custom-connectors-2026-10-20 -->
+
 <!-- prompt99-e5af-review -->
 **2026-10-20 independent final review — NOT READY FOR DEPLOYMENT:** Claude `e5af0e7`; candidate full 1941 pass/139 skip plus one separate unresolved deep-cwd failure. New proposed fix rejects malformed model aliases at authorization and direct downloader boundaries, preventing manifest path escape; supported `name[:tag]` and `namespace/name[:tag]` retain digest-bound transport. Failing-before/passing-after fixtures, 6/6 safety mutants and 10 environment consistency checks recorded. No live assistant certification/install/merge. [Verdict](artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [Claude handoff](docs/CLAUDE_HANDOFF.md).
 
@@ -30,9 +42,25 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- voice-continuity-2026-10-20 -->
+**2026-10-20 — Voice made continuous: speech engine switched from F5 to Kokoro, and gaps no longer cancel replies.** On this RTX 3050 4 GB laptop, F5 took 1.8–3.1× longer to synthesize than to speak (4.5 s before the first sound), so Jarvis went silent after every sentence. Kokoro renders about 3.4× faster than speech, with first audio in about 1 s, and plays with no stalls. Natural delivery (phrasing, pauses, breaths, emotional pacing) is kept. A reply now stays protected between its sentences, so only "Jarvis ..." can interrupt it. Set `speech.engine` back to `f5` for the cloned voice. 7 new tests; full regression **3,668 passed / 148 BLOCKED skips / 0 failed**. Live playback NOT RUN; restart Jarvis to apply. [Record](artifacts/jarvis-audit/voice-continuity/2026-10-20/README.md).
+<!-- /voice-continuity-2026-10-20 -->
+
+<!-- command-routing-2026-10-20 -->
+**2026-10-20 — Spoken command routing repaired: websites open in Google Chrome, and natural phrasings reach the action.** "Open YouTube" (and Google, Gmail, GitHub, Drive, ChatGPT) now opens in Chrome, never the Windows default browser; YouTube uses the Jarvis-controlled Chrome so "select the second video" works on that page. Phrasings that used to fall into chat now run: "so I will / shall we select the second video", "Jarvis" misheard as "there is", "opens spotify and play ...", and corrections such as "it's obviously Finding Her on Spotify". Chat replies no longer promise actions they cannot perform. 26 new routing tests; full regression **3,661 passed / 148 BLOCKED skips / 0 failed**. Live browser/Spotify checks NOT RUN; restart Jarvis to apply. [Record](artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
+<!-- /command-routing-2026-10-20 -->
+
+<!-- claude-integration-e5af0e7 -->
+**2026-10-20 — Claude integrated Codex's e5af0e7 proposals: P99-R8/V2-004 model-path containment and three new tests (model paths, mock-send UI restart, ReasoningBank repeat). Release NOT READY pending independent verification.** An approved model alias must now be `name[:tag]` or `namespace/name[:tag]`, checked at authorization and again before any download request, and the manifest must resolve inside the model store. Three-segment names such as `hf.co/user/model` are refused. Against unfixed e5af0e7 the path test fails 27 cases; with the patch, 31/31 pass. Full regression **3,635 passed / 148 BLOCKED skips / 0 failed**. The launcher check timed out once on the F5 probe directly after the run and was `ready` on rerun; both results are kept. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
+<!-- /claude-integration-e5af0e7 -->
+
 <!-- prompt37-e5af-verification -->
 **2026-10-20 - Independent Prompt 37 verification of committed claude e5af0e7:** **1907 PASS / 0 FAIL / 139 SKIPPED** in the fresh full relevant run; 104 focused checks pass. Earlier P34-P37 production repairs are integrated in 3fbfbf6. New JRV-37-021 regression passes a real owned child crash/restart through the task queue and actual App/Island/Desk/Tk text consumers: uncertain mock send stays paused, one outbox row, no planner replay, speech sink once. No real account send or audio. New portable test awaits integration; no production behavior changed here. Revised cases: **1 owned mock-send/UI PASS / 25 BLOCKED**. Other verifier/provenance/native/live/training gates and isolated repair_required remain. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md) · [Journal](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/ui-restart-journal.json) · [Claude handoff](docs/CLAUDE_HANDOFF.md).
 <!-- /prompt37-e5af-verification -->
+
+<!-- claude-integration-a9b4ce1 -->
+**2026-10-20 — Claude integrated Codex's reviewed P34–P37 repairs on `claude` (`3fbfbf6`, user config preserved) and repaired P34-R1/R2/R3. Release still NOT READY; awaiting independent verification at the new SHA.** Approved Ollama downloads are now content-addressed: the manifest and layers are fetched by approved digest with per-layer and total byte caps, partial layers are kept and there is no tag pull. An authorized environment rebuild now happens in place from a frozen, re-hashed lock snapshot; on any failure the previous environment is restored and the failed attempt kept. Tests use mocked transport only; live registry/Ollama and real rebuilds are NOT RUN. Full regression **3,601 passed / 148 BLOCKED skips / 0 failed**; launcher ready. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md) · [Cumulative handoff](docs/CLAUDE_HANDOFF.md).
+<!-- /claude-integration-a9b4ce1 -->
 
 <!-- prompt37-followup -->
 **2026-10-20 - Prompt 37 follow-up:** 38 fresh focused checks and three owned/simulated workflow journals pass. All 560 production hashes and reviewed source/test manifest match the V2 full-tested candidate, so the unchanged full suite was not repeated. All 26 full E2E journeys remain BLOCKED; live readiness/integration, verifier/provenance and deep-lab path limits persist. No implementation, package or service change. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Cumulative Claude handoff](docs/CLAUDE_HANDOFF.md).
@@ -1838,6 +1866,10 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
   (Docker Desktop, network only during the build). Approved tools are listed in
   `.jarvis-runtime/mcp/generated/registry.json` and appear to `mcp_status`/`mcp_call` as `gen-<name>`; `.jarvis/mcp.json`
   entries with the same name win. Set an entry's `"enabled": false` to disable it.
+* Custom connectors: write a child of `BaseConnector` in
+  [`integrations/jarvis-connectors/`](integrations/jarvis-connectors/README.md) (see `connectors/template/`), then add a
+  trusted entry to `.jarvis/mcp.json` with an absolute `python.exe`, the server script and its `--root`/settings in `args`,
+  and an exact `allow_tools` list ([example](integrations/jarvis-connectors/mcp.example.json)).
 
 ### Reasoning lessons, vault index and exploration
 
@@ -2060,6 +2092,9 @@ Jarvis/
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |
 | `media.default_service` | `youtube`; where "play X" goes when no service is named and Jarvis has not played anything yet. The optional YouTube Data API v3 key goes in gitignored `secrets/youtube.json` (`{"api_key": "..."}`) or `JARVIS_YOUTUBE_API_KEY`, never here. |
+| `media.youtube_browser` | Not set, so the default `user_chrome` applies: YouTube opens in your own Chrome profile, and Jarvis's browser is used automatically if that fails. Set it to `jarvis` to always use Jarvis's controlled browser. |
+| `media.youtube_chrome_profile` | Not set, so the default `Default` applies (the "Comedy with - Chrome" desktop shortcut). Use a Chrome profile folder name such as `Profile 1`. |
+| `media.youtube_auto_skip_ads` | Not set, so the default `true` applies: Jarvis's own browser presses YouTube's Skip button whenever a skippable ad appears. In your Chrome, say "skip ad". |
 
 Current application location: `D:\Kunals GitHub Repo\Jarvis\app`. Launchers use their own directory; application/model paths derive from source locations. Run commands from the app directory so Python resolves the `jarvis` package. The **open project folder** command uses the first existing non-drive-root entry in `project_roots`, rather than relying on the old folder name.
 

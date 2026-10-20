@@ -1,0 +1,25 @@
+{
+  "servers": {
+    "youtube": {
+      "enabled": true,
+      "trusted": true,
+      "command": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
+      "args": [
+        "D:\\Kunals GitHub Repo\\Jarvis\\app\\integrations\\jarvis-connectors\\connectors\\apps\\youtube\\server.py",
+        "--runtime",
+        "builtin"
+      ],
+      "allow_tools": [
+        "search_videos",
+        "search_playlists",
+        "video_details",
+        "playlist_videos",
+        "parse_link"
+      ],
+      "env_names": [
+        "JARVIS_YOUTUBE_API_KEY"
+      ],
+      "timeout_seconds": 30
+    }
+  }
+}

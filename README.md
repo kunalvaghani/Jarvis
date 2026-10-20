@@ -15,9 +15,37 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- voice-continuity-2026-10-20 -->
+**2026-10-20 — Continuous voice: Kokoro replaces F5 on this 4 GB GPU (F5 was slower than real time), and gaps between sentences no longer cancel a reply.** Full regression 3,668 passed / 0 failed. [Record](app/artifacts/jarvis-audit/voice-continuity/2026-10-20/README.md).
+<!-- /voice-continuity-2026-10-20 -->
+
+<!-- youtube-user-chrome-2026-10-20 -->
+**2026-10-20 — YouTube in your own Chrome profile, with Jarvis's browser as the fallback:** real playlist playback, "play the second one" from the spoken and island-listed results, "skip ad" plus automatic ad skipping in Jarvis's browser, and the "select first video clicks the YouTube logo" bug fixed. Targeted regression 2,288 passed; live check in your Chrome not run. [Details](app/README.md#configuration-and-relocation).
+<!-- /youtube-user-chrome-2026-10-20 -->
+
+<!-- youtube-connector-2026-10-20 -->
+**2026-10-20 — First app connector: YouTube, read-only, integrated as MCP server `youtube`:** search videos and playlists, video details and playlist contents; playback stays on Jarvis's player. Connector tests 89 passed / 1 skipped (live included); targeted Jarvis regression 865 passed / 0 failed; qwen3.5:9b 9/9 direct, 8/10 planner-format. [Evidence](app/artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+<!-- /youtube-connector-2026-10-20 -->
+
+<!-- custom-connectors-2026-10-20 -->
+**2026-10-20 — Custom MCP connector base added:** [`app/integrations/jarvis-connectors/`](app/integrations/jarvis-connectors/README.md) provides `BaseConnector` for app- and task-specific local connectors, plus a read-only notes child and a template. 47 passed / 1 skipped, including end-to-end calls through the real MCP bridge. SDK v2 runtime not run; no connector enabled.
+<!-- /custom-connectors-2026-10-20 -->
+
+<!-- command-routing-2026-10-20 -->
+**2026-10-20 — Command routing repaired: websites open in Google Chrome; "select the second video", misheard "Jarvis" and Spotify play phrasings now reach their actions.** Full regression 3,661 passed / 0 failed. [Record](app/artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
+<!-- /command-routing-2026-10-20 -->
+
+<!-- claude-integration-e5af0e7 -->
+**2026-10-20 — Codex e5af0e7 model-path fix (P99-R8) and new UI/memory tests integrated on `claude`; release NOT READY.** Full regression 3,635 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
+<!-- /claude-integration-e5af0e7 -->
+
 <!-- prompt37-e5af-verification -->
 **2026-10-20 - Fresh E2E verification at claude e5af0e7:** **1907 PASS / 0 FAIL / 139 SKIPPED**. The queued mock-send crash/restart journey now passes actual Tk UI readback; full acceptance still has 25 blocked cases. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
 <!-- /prompt37-e5af-verification -->
+
+<!-- claude-integration-a9b4ce1 -->
+**2026-10-20 — Codex P34–P37 repairs integrated on `claude` (`3fbfbf6`); P34-R1/R2/R3 repaired (digest-bound model transport, in-place rebuild with rollback, frozen lock). Release NOT READY pending independent verification.** Full regression 3,601 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md).
+<!-- /claude-integration-a9b4ce1 -->
 
 <!-- prompt37-followup -->
 **2026-10-20 - Prompt 37 follow-up:** 38 focused checks and three bounded workflow journals pass; full E2E acceptance remains blocked. Source unchanged from V2. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-followup-a9b4ce1/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).

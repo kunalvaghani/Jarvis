@@ -1,0 +1,5 @@
+# Optional: only for the official SDK runtime (--runtime sdk) and client_smoke.py.
+# The built-in runtime and the tests need only the Python standard library (+ pytest).
+# Requires Python 3.11+; install into a separate connector venv, never into Jarvis's .venv.
+# Pin the exact validated version (e.g. mcp==2.3.0) after client_smoke.py passes.
+mcp>=2,<3

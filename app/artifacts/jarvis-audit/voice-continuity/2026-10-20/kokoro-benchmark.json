@@ -1,0 +1,41 @@
+{
+ "engine": "kokoro-v1.0 onnx CPU",
+ "load_s": 2.28,
+ "rows": [
+  {
+   "text": "Got it. I'm keeping an eye on things while you look into tha",
+   "first_audio_s": 1.549,
+   "synth_s": 1.549,
+   "audio_s": 3.685,
+   "real_time_factor": 0.42
+  },
+  {
+   "text": "None of the videos on screen has 'post' in its title. I can ",
+   "first_audio_s": 1.039,
+   "synth_s": 2.038,
+   "audio_s": 6.705,
+   "real_time_factor": 0.304
+  },
+  {
+   "text": "Which one? Say select option number: 1.",
+   "first_audio_s": 0.349,
+   "synth_s": 1.085,
+   "audio_s": 3.551,
+   "real_time_factor": 0.306
+  },
+  {
+   "text": "Oh, nice! Playing Finding Her on Spotify now. Honestly, it's",
+   "first_audio_s": 0.92,
+   "synth_s": 1.755,
+   "audio_s": 5.894,
+   "real_time_factor": 0.298
+  },
+  {
+   "text": "Good evening. Your systems are ready, and I'm here to help. ",
+   "first_audio_s": 1.06,
+   "synth_s": 2.952,
+   "audio_s": 10.175,
+   "real_time_factor": 0.29
+  }
+ ]
+}

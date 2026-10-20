@@ -3,9 +3,38 @@ import re
 from .commands import Command
 
 
+ORDINALS = {'first': 1, 'second': 2, 'third': 3, 'fourth': 4, 'fifth': 5, 'sixth': 6, 'seventh': 7,
+            'eighth': 8, 'ninth': 9, 'tenth': 10, 'last': 'last'}
+NUMBERED = re.compile(
+    r'(?:(?:so |ok(?:ay)? |now |then |jarvis,? )?(?:i will |i want to |let\'s |please )?)'
+    r'(?:play|select|open|choose|start|pick)(?: me)? (?:the )?'
+    r'(?:(?P<word>first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last)|(?P<digit>\d{1,2})(?:st|nd|rd|th)?|number (?P<number>\d{1,2}))'
+    r'(?: (?P<kind>one|playlist|video|result|song|track))?(?: (?:from|in|on) (?:the )?(?:results|list|youtube))?(?: please)?')
+
+
+def numbered_choice(low):
+    """'play the second one', 'play number 3', 'select the third playlist' -> Command('select_context', 'N:kind', ...)."""
+    match = NUMBERED.fullmatch(low)
+    if not match:
+        return None
+    if match['digit'] and not match['kind'] and not low.startswith(('play ', 'select ', 'pick ')):
+        return None
+    value = ORDINALS.get(match['word']) if match['word'] else int(match['digit'] or match['number'])
+    if value != 'last' and not 1 <= value <= 20:
+        return None
+    kind = {'one': 'one', 'playlist': 'playlist', 'video': 'video', 'result': 'result', 'song': 'track',
+            'track': 'track', None: 'one'}[match['kind']]
+    return Command('select_context', str(value) + ':' + kind, 'select')  # existing contract: ordinals carry 'select'
+
+
 def parse_media(text):
     text = text.strip().rstrip('.!?').strip()
     low = text.casefold()
+    if re.fullmatch(r'(?:please |jarvis,? )?skip (?:the |this |that )?(?:youtube )?(?:ads?|advert(?:isement)?s?)(?: please)?', low):
+        return Command('media_control', 'skip_ad', 'youtube')
+    choice = numbered_choice(low)
+    if choice is not None and not choice.value.endswith(':track'):
+        return choice  # song/track ordinals keep the Spotify rule below; YouTube is chosen at execution time
     ordinal = re.fullmatch(r'(play|select|open|choose) (?:the )?(first|second|third|fourth|fifth|\d+(?:st|nd|rd|th)?) (?:song|track)(?: (?:on|in) spotify)?', low)
     if ordinal:
         number = {'first': '1', 'second': '2', 'third': '3', 'fourth': '4', 'fifth': '5'}.get(ordinal[2]) or re.match(r'\d+', ordinal[2])[0]

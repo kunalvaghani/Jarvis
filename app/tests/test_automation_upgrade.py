@@ -129,7 +129,8 @@ class WorkflowTests(unittest.TestCase):
         from jarvis.actions import Actions
         from jarvis.commands import Command
         actions = Actions.__new__(Actions)
-        actions.config = {"agent_runtime": {"dom_browser": True}}
+        # 2026-10-20: YouTube defaults to the user's Chrome profile; this pins Jarvis's browser explicitly.
+        actions.config = {"agent_runtime": {"dom_browser": True}, "media": {"youtube_browser": "jarvis"}}
         actions.browser_automation = None
         actions.projects = SimpleNamespace(pending=None)
         actions.report = Mock()
@@ -139,7 +140,8 @@ class WorkflowTests(unittest.TestCase):
         actions._browser.return_value.request.return_value = {"message": "verified search"}
         actions._ui = Mock(side_effect=AssertionError("unexpected UIA attempt"))
         self.assertEqual(actions._execute(Command("media_search", "cats", "youtube")), "verified search")
-        actions._browser.return_value.request.assert_called_once_with("search", unittest.mock.ANY, value="cats", new_task=True)
+        actions._browser.return_value.request.assert_called_once_with("search", unittest.mock.ANY, value="cats",
+                                                                      kind="video", new_task=True)
 
     def test_browser_volume_acknowledgement_requires_actual_readback(self):
         session = Session()

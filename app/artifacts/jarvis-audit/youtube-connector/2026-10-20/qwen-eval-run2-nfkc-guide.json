@@ -1,0 +1,513 @@
+{
+  "model": "qwen3.5:9b",
+  "date": "2026-10-20T18:28:27",
+  "approvals_granted_by_harness": 7,
+  "results": {
+    "direct": "9/9",
+    "jarvis": "3/10"
+  },
+  "runs": [
+    {
+      "scenario": "playlists",
+      "mode": "direct",
+      "prompt": "Find me three lofi hip hop playlists on YouTube.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "search_playlists",
+          "arguments": {
+            "query": "lofi hip hop",
+            "limit": 3
+          },
+          "ok": true
+        }
+      ],
+      "answer": "Here are three lofi hip hop playlists on YouTube:\n\n1. **Lofi Loft** by YouTube Music - 86 videos  \n   Play URL: https://www.youtube.com/watch?v=qboQlr7lAAk&list=RDCLAK5uy_kb7EBi6y3GrtJri4_ZH56Ms786DFEimbM\n\n2. **RAINING (Lofi HipHop)** by the bootleg boy - 29 videos  \n   Play URL: https://www.youtube.com/watch?v=YOJsKatW-Ts&list=PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si\n\n3. **🎧 Japanese Lofi Study Music – Focus, Work & Reading Beats** by Lo-Fi Japan - 21 videos  \n   Play URL: https://www.youtube.com/watch?v=ivjHhLQE9J4&list=PLzndUNluf6ohyc1HKtVxSlJFo70mB16wK",
+      "seconds": 56.28200000000652
+    },
+    {
+      "scenario": "playlists",
+      "mode": "jarvis",
+      "prompt": "Find me three lofi hip hop playlists on YouTube.",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"server\": \"youtube\", \"content\": {\"name\": \"search_playlists\", \"arguments\": {\"query\": \"lofi hip hop\", \"limit\": 10}}}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "media_search",
+          "value": "lofi hip hop playlist",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 32.01600000000326,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "videos",
+      "mode": "direct",
+      "prompt": "Search YouTube for videos about Blender material nodes.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "search_videos",
+          "arguments": {
+            "query": "Blender material nodes",
+            "limit": 10
+          },
+          "ok": true
+        }
+      ],
+      "answer": "Here are the top 10 YouTube videos about Blender material nodes:\n\n1. **\"All 80+ Blender material nodes explained in under 30 minutes\"** by Daniel Krafft (Duration: 28 min 53 sec) - https://www.youtube.com/watch?v=cQ0qtcSymDI\n2. **\"Every Shader Node You NEED to Know in Blender\"** by SouthernShotty (Duration: 11 min 28 sec) - https://www.youtube.com/watch?v=3-_zyiBk0JI\n3. **\"Blender Shader Nodes (beginner → advanced)\"** by CGMatter (Duration: 87 min 47 sec) - https://www.youtube.com/watch?v=HDBZ7CwlfIs\n4. **\"Introduction to Procedural Shader Nodes for Complete Beginners (Blender Tutorial)\"** by Ryan King Art (Duration: 23 min 34 sec) - https://www.youtube.com/watch?v=J5t7gzIfTt0\n5. **\"Procedural Nodes For Beginners (Blender Tutorial)\"** by Ryan King Art (Duration: 69 min 2 sec) - https://www.youtube.com/watch?v=5B244CYX1Tw\n6. **\"Top 6 Blender Nodes To Make Any Material in Blender\"** by CG Cookie – Learn Blender (Duration: 9 min 35 sec) - https://www.youtube.com/watch?v=yffWd4kI51Q\n7. **\"Beginners Guide To Texturing In Blender | How To Procedural Texture ANYTHING!\"** by NoPoly (Duration: 25 min 19 sec) - https://www.youtube.com/watch?v=nQaUsgf9ZUg\n8. **\"Learn the BASICS of Material Shading in BLENDER (Part 1)\"** by Brandon 3D (Duration: 29 min 6 sec) - https://www.youtube.com/watch?v=Wg244y2f9Fw\n9. **\"Shader nodes for beginners in Blender || Nodes tutorial 2024\"** by CG Aman (Duration: 11 min 24 sec) - https://www.youtube.com/watch?v=Ufhk1Jg8d-4\n10. **\"How to Create Professional Materials\"** by Kaizen (Duration: 11 min 23 sec) - https://www.youtube.com/watch?v=-x-b2U-MSgc",
+      "seconds": 115.01600000000326
+    },
+    {
+      "scenario": "videos",
+      "mode": "jarvis",
+      "prompt": "Search YouTube for videos about Blender material nodes.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "steps": [
+        {
+          "action": "media_search",
+          "value": "Blender material nodes",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 12.84299999999348,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "strategy_execute",
+        "execution_methods",
+        "blender_task",
+        "unreal_task"
+      ]
+    },
+    {
+      "scenario": "duration",
+      "mode": "direct",
+      "prompt": "How long is this YouTube video: https://youtu.be/YOJsKatW-Ts ?",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "video_details",
+          "arguments": {
+            "video": "https://youtu.be/YOJsKatW-Ts"
+          },
+          "ok": true
+        }
+      ],
+      "answer": "The video is 1151 seconds long.",
+      "seconds": 10.14100000000326
+    },
+    {
+      "scenario": "duration",
+      "mode": "jarvis",
+      "prompt": "How long is this YouTube video: https://youtu.be/YOJsKatW-Ts ?",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"server\": \"youtube\", \"content\": {\"name\": \"video_details\", \"arguments\": {\"video\": \"YOJsKatW-Ts\"}}}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "browser_navigate",
+          "value": "https://youtu.be/YOJsKatW-Ts",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 30.26600000000326,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "playlist_contents",
+      "mode": "direct",
+      "prompt": "What videos are in the YouTube playlist PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si? List the first five.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "playlist_videos",
+          "arguments": {
+            "playlist": "PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si",
+            "limit": 5
+          },
+          "ok": true
+        }
+      ],
+      "answer": "The first five videos in the playlist \"RAINING (Lofi HipHop)\" are:\n\n1. **RAINING IN OSAKA (Lofi HipHop)** by the bootleg boy - 19 minutes 11 seconds\n2. **RAINING IN PARIS (Lofi HipHop)** by the bootleg boy - 18 minutes 38 seconds\n3. **RAINING IN TOKYO (Lofi HipHop)** by the bootleg boy - 17 minutes 46 seconds\n4. **RAINING IN KYOTO (Lofi HipHop)** by the bootleg boy - 18 minutes 40 seconds\n5. **RAINING IN NAGOYA (Lofi HipHop)** by the bootleg boy - 19 minutes 15 seconds",
+      "seconds": 46.720000000001164
+    },
+    {
+      "scenario": "playlist_contents",
+      "mode": "jarvis",
+      "prompt": "What videos are in the YouTube playlist PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si? List the first five.",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"content\": {\"name\": \"youtube\", \"arguments\": {\"tool\": \"playlist_videos\", \"playlist\": \"PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si\", \"limit\": 5}}, \"server\": \"youtube\"}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "browser_navigate",
+          "value": "https://www.youtube.com/playlist?list=PLOzDu-MXXLlgKMA3S2FXY_XVyDrukc0si",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 38.437000000005355,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "fake_link",
+      "mode": "direct",
+      "prompt": "Is https://www.youtube.com.evil.example/watch?v=YOJsKatW-Ts a real YouTube link?",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [],
+      "answer": "No, that is not a real YouTube link. The domain \"evil.example\" is not a valid YouTube domain. Real YouTube links use the domain \"youtube.com\".",
+      "seconds": 6.76600000000326
+    },
+    {
+      "scenario": "fake_link",
+      "mode": "jarvis",
+      "prompt": "Is https://www.youtube.com.evil.example/watch?v=YOJsKatW-Ts a real YouTube link?",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "steps": [],
+      "answer": "No, that is not a real YouTube link. The domain 'evil.example' is not a valid YouTube domain (which should be youtube.com). Additionally, the video ID format appears malformed for a standard YouTube URL.",
+      "seconds": 12.10899999999674,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "uploader_views",
+      "mode": "direct",
+      "prompt": "Who uploaded the YouTube video dQw4w9WgXcQ and how many views does it have?",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "video_details",
+          "arguments": {
+            "video": "dQw4w9WgXcQ"
+          },
+          "ok": true
+        }
+      ],
+      "answer": "The video was uploaded by Rick Astley and has 1,828,569,991 views.",
+      "seconds": 12.48499999998603
+    },
+    {
+      "scenario": "uploader_views",
+      "mode": "jarvis",
+      "prompt": "Who uploaded the YouTube video dQw4w9WgXcQ and how many views does it have?",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"server\": \"youtube\", \"content\": {\"name\": \"video_details\", \"arguments\": {\"video\": \"dQw4w9WgXcQ\"}}}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "browser_navigate",
+          "value": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 31.046999999991385,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "top5",
+      "mode": "direct",
+      "prompt": "Show me the top 5 YouTube results for python asyncio tutorial.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "search_videos",
+          "arguments": {
+            "query": "python asyncio tutorial",
+            "limit": 5
+          },
+          "ok": true
+        }
+      ],
+      "answer": "Here are the top 5 YouTube results for \"python asyncio tutorial\":\n\n1. **Asyncio in Python - Full Tutorial** by Tech With Tim (24:59)  \n   https://www.youtube.com/watch?v=Qb9s3UiMSTA\n\n2. **Python Tutorial: AsyncIO - Complete Guide to Asynchronous Programming with Animations** by Corey Schafer (102:41)  \n   https://www.youtube.com/watch?v=oAkLSJNr5zY\n\n3. **AsyncIO in Python | Python Tutorial - Day #96** by CodeWithHarry (10:29)  \n   https://www.youtube.com/watch?v=lgoB3_-ejnI\n\n4. **AsyncIO & Asynchronous Programming in Python** by NeuralNine (12:28)  \n   https://www.youtube.com/watch?v=6RbJYN7SoRs\n\n5. **AsyncIO, await, and async - Concurrency in Python** by Socratica (9:12)  \n   https://www.youtube.com/watch?v=K56nNuBEd0c",
+      "seconds": 55.109000000025844
+    },
+    {
+      "scenario": "top5",
+      "mode": "jarvis",
+      "prompt": "Show me the top 5 YouTube results for python asyncio tutorial.",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"name\": \"search_videos\", \"arguments\": {\"query\": \"python asyncio tutorial\", \"limit\": 5}}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "media_search",
+          "value": "python asyncio tutorial",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 27.53200000000652,
+      "offered": [
+        "repository_instructions",
+        "repository_map",
+        "read_file",
+        "read_batch",
+        "skill_list",
+        "skill_read",
+        "git_status",
+        "write_code",
+        "write_tests",
+        "improve_code",
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "playlist_count",
+      "mode": "direct",
+      "prompt": "Find an Arijit Singh playlist on YouTube and tell me how many videos it has.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [
+        {
+          "tool": "search_playlists",
+          "arguments": {
+            "query": "Arijit Singh",
+            "limit": 1
+          },
+          "ok": true
+        }
+      ],
+      "answer": "The Arijit Singh playlist \"Ishq Hai Sukoon\" has 50 videos.",
+      "seconds": 12.40600000001723
+    },
+    {
+      "scenario": "playlist_count",
+      "mode": "jarvis",
+      "prompt": "Find an Arijit Singh playlist on YouTube and tell me how many videos it has.",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "mcp_call",
+          "value": "{\"server\": \"youtube\", \"content\": {\"name\": \"search_playlists\", \"arguments\": {\"query\": \"Arijit Singh\", \"limit\": 10}}}",
+          "content": "",
+          "executed": true,
+          "ok": false,
+          "tool": null,
+          "arguments": null
+        },
+        {
+          "action": "media_search",
+          "value": "platform=youtube&value=Arijit Singh playlist",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 29.203000000008615,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "play_playlist",
+      "mode": "jarvis",
+      "prompt": "Play a lofi hip hop playlist on YouTube.",
+      "tool_ok": false,
+      "args_ok": false,
+      "grounded": false,
+      "passed": false,
+      "steps": [
+        {
+          "action": "media_search",
+          "value": "lofi hip hop playlist",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 11.187000000005355,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect",
+        "mcp_call",
+        "mcp_status",
+        "mcp_list_tools",
+        "browser_navigate"
+      ]
+    },
+    {
+      "scenario": "pause_negative",
+      "mode": "direct",
+      "prompt": "Pause the YouTube video.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "calls": [],
+      "answer": "I'm sorry, but I don't have the ability to control playback actions like pausing videos. My capabilities are limited to searching for videos, getting details about them, and listing playlist contents.",
+      "seconds": 8.562999999994645
+    },
+    {
+      "scenario": "pause_negative",
+      "mode": "jarvis",
+      "prompt": "Pause the YouTube video.",
+      "tool_ok": true,
+      "args_ok": true,
+      "grounded": true,
+      "passed": true,
+      "steps": [
+        {
+          "action": "media_control",
+          "value": "pause",
+          "content": "",
+          "executed": false
+        }
+      ],
+      "answer": "",
+      "seconds": 12.687000000005355,
+      "offered": [
+        "media_search",
+        "media_control",
+        "browser_inspect"
+      ]
+    }
+  ]
+}

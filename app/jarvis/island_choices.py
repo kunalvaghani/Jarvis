@@ -18,13 +18,13 @@ def snapshot(actions, now=None):
             return card
     groups = [('open', actions.pending_open, 45), ('project', actions.projects.pending, 180),
               ('control', actions.ui_controls.pending if actions.ui_controls else None, 45),
-              ('task', actions.pending_question, 180)]
+              ('task', actions.pending_question, 180), ('youtube', getattr(actions, 'youtube_results', None), 300)]
     for kind, pending, lifetime in groups:
         if not pending or not pending.get('choices') or now-pending['time'] > lifetime:
             continue
         choices = pending['choices']
         labels = [str(c.value) if kind=='open' else str(c.name) if kind=='project'
-                  else str(c['name']) if kind=='control' else str(c) for c in choices]
+                  else str(c['name']) if kind=='control' else str(c['title']) if kind=='youtube' else str(c) for c in choices]
         identity = {'kind': kind, 'time': pending['time'], 'generation': actions.generation,
                     'handle': pending.get('handle'), 'signature': pending.get('signature'),
                     'verb': pending.get('verb'), 'labels': labels}
@@ -56,6 +56,8 @@ def resolve(actions, token, index):
         return Command('open_project',str(selected))
     if current['kind']=='control':
         return Command('island_control_choice',str(index),token)
+    if current['kind']=='youtube':
+        return Command('select_context', str(index + 1) + ':one', 'select')  # plays that exact remembered result
     return actions._resolve_reply(Command('choose_control',str(index+1)),task_pending=actions.pending_question)
 
 

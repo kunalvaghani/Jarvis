@@ -4,6 +4,79 @@ Updated **2026-10-20**. This is the continuing handoff for numbered prompts, inc
 
 The isolated `codex-review` checkout retains historical uncommitted repairs at base `a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6`. Those earlier production repairs were integrated on Claude at `3fbfbf6` and independently reverified at pinned `e5af0e7` in a separate checkout. Newly proposed UI/memory tests still await review/integration. Preserve the original checkout's user configuration and all prior evidence. No automatic merge/deployment.
 
+## YouTube in the user's Chrome, playlists, numbered picks, skip ads — 2026-10-20
+
+The user reported that skip-ads was missing, that "play hindi lofi playlist or song from youtube" failed, that "play the first/2nd/3rd playlist or song" got confused, and that "select first video" clicked the YouTube logo. They also asked that YouTube always open in their own Chrome (the "Comedy with - Chrome" shortcut, `--profile-directory="Default"`), falling back to another browser only on error.
+
+- **Root causes (reproduced):**
+  - Playlist requests had no playlist path and played a mix video titled "…playlist…".
+  - Ordinals for playlists, "one" and numbers did not parse; "play number 3" played a song called "number 3".
+  - "Skip ad" did not parse, and ads were skipped only once, at video start.
+  - In the accessibility path, "YouTube Home" passed the video filter and, as the top-most link, became video 1.
+  - The user's Chrome currently exposes only browser chrome to accessibility (27 controls, no page content), so on-screen selection there is unreliable.
+- **Design:**
+  - New `jarvis/youtube_chrome.py`. Chrome 136+ blocks automating the default profile, so Jarvis opens exact URLs (`--profile-directory`) and confirms or controls playback through the Windows media session (the source "Chrome" reports the title).
+  - Fallback to Jarvis's browser happens only when nothing new played. If something new played but was not confirmed, that is `PlaybackUncertain`, with no replay.
+  - Search results are remembered (20 min), spoken, and shown as an island choice list. Ordinals play that exact ID.
+  - The browser worker gained playlist search/play, `skip_ad`, and an opt-out auto-skip init script.
+- **Tests:**
+  - `tests/test_youtube_user_chrome.py`: 37 PASS.
+  - Legacy expectations updated in `test_automation_upgrade`, `test_media_player` (pinned to `youtube_browser: jarvis`) and `test_natural_names` (profile argument).
+  - Targeted regression: 2,288 PASS / 1 FAIL. The git-snapshot test collided with a temporary worktree and passes alone (25/25).
+  - `test_speech` failed once in a long run with an onnxruntime DLL-initialization error; it passes alone and passed in the re-run. It is intermittent and not caused by this change.
+- **Live:**
+  - In a throwaway headless Chrome: playlist search, playlist playback (identity and playlist verified, 24.6 s), skip-ad readback and the auto-skip install all PASS.
+  - **NOT RUN:** the user's real Chrome (it would open a tab and pause their music); auto-skip during a real skippable ad (ads are random); `media_ui` "Skip" button labels against a live ad.
+- **Launcher:** `repair_required` because Docker and Ollama were not running at check time (no processes); unrelated to this change.
+- **Next action:** after restarting Jarvis, say "play hindi lofi playlist from YouTube", then "find hindi lofi playlists on YouTube", "play the second one", "pause", "next" and "skip ad" during an ad. Confirm each happens in the Comedy-with Chrome window.
+
+## YouTube app connector — 2026-10-20
+
+First app connector, created from `D:\Phython Project\Connectors\jarvis_youtube_connector`: a read-only child of `BaseConnector` (`integrations/jarvis-connectors/connectors/apps/youtube/`). It is registered as server `youtube` in `app/.jarvis/mcp.json`, reached through the new `youtube_lookup` route in `capabilities.py` and the updated `skills/youtube-media/SKILL.md`. Full record: [evidence](../artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+
+- **Architecture:** the starter's own Playwright playback was rejected. The bridge runs connectors per call, so a connector-owned browser would close after every call and would compete with Jarvis's verified player. Playback stays native.
+- **Fixed:**
+  - The base result cap now covers the whole MCP envelope. Before, 6,000-character notes or 15-item playlists would reach Jarvis as truncated, invalid JSON.
+  - NFKC titles: qwen invented titles for full-width text.
+  - Guide fixes for planner tool choice and the `mcp_call` field format.
+- **Evidence:**
+  - Connector suite: 89 PASS / 1 SKIPPED, live YouTube included.
+  - Targeted Jarvis regression: 865 PASS / 20 SKIPPED / 0 FAIL, plus 395 PASS / 2 SKIPPED after the final guide text.
+  - MCP boundary suite: 8/8. Launcher: ready.
+  - qwen3.5:9b: direct 9/9; planner-format harness 8/10 in 3 of 3 trials.
+- **Open defects:**
+  - In the planner-format harness, "How long is this video <link>?" and "top 5 results for …" get `done=true` with an invented answer on step 1 and no tool call (3 of 3 trials). Live Jarvis sends a first-step `done` to the independent goal verifier, which speaks "Task paused…" or a fixed "Finished…" message, never the planner's text. The likely effect is a stalled request, not a wrong answer; this has not been verified live.
+  - Suggested fix: for `youtube_lookup` intents, reject a first-step `done` that has no observation and ask the planner again.
+- **NOT RUN:**
+  - The full Jarvis Brain with voice or typed requests through the connector.
+  - The playback hand-off (`browser_navigate` with `play_url`, then verify).
+  - Data API mode against a live key.
+  - The SDK v2 runtime.
+  - The full ~3,600-test regression.
+- **Next action:** run "Jarvis, find me a lofi hip hop playlist on YouTube" live, approve the card, and confirm the spoken answer cites real titles. Then implement the first-step-`done` guard and re-run `evals/youtube_qwen_eval.py --mode jarvis`.
+
+## Custom MCP connector base — 2026-10-20
+
+Added [`integrations/jarvis-connectors/`](../integrations/jarvis-connectors/README.md), a `BaseConnector` parent class with a read-only `notes` child (ported from the user's `jarvis_custom_connector_starter`) and a `template` child. Production Jarvis code was not changed. Connectors plug into the existing `.jarvis/mcp.json` → `mcp_bridge` path.
+
+- **Evidence:** connector suite 47 PASS / 1 SKIPPED (symlink creation is not permitted for this Windows account). It includes a raw JSON-RPC stdio subprocess and an end-to-end `ToolRegistry` → `mcp_bridge` → notes connector run with a mocked approval callback. `tests/test_prompt33_mcp_boundaries.py`: 8 PASS.
+- **Fixed during the work:** the starter's exact-substring search missed "Blender material" when the words were not adjacent. `search_notes` now requires every query word, in any order.
+- **NOT RUN:** the official SDK v2 runtime (`--runtime sdk`) and `client_smoke.py`. `mcp` 2.x is installed in no local venv, and installation needs user authorization. The adapter in `sdk_runtime.py` depends on upstream signatures that have not been verified locally.
+- **Not done:** no connector is enabled in `app/.jarvis/mcp.json`. Natural requests such as "search my notes for Blender" do not reach the `mcp` capability, because `capabilities.py` routes only "mcp/plugin/integration" wording. A live voice/brain → connector acceptance run is therefore NOT RUN.
+- **Next action:** with user approval, create `.venv-connectors` (Python 3.11), install `mcp>=2,<3`, run `client_smoke.py --runtime sdk` and pin the version. Then enable the notes entry with a real notes folder, add a routing hint for configured connectors, and run a live acceptance request.
+
+## Claude integration — 2026-10-20 (P99-R8 / V2-004 and new tests)
+
+Claude reviewed and accepted Codex's e5af0e7 proposals and applied them on `claude` in the commit after `e5af0e7`:
+
+- The two-file model-path source patch: `model_reference` is enforced at final authorization and again in `approved_pull` before any HTTP request, and the resolved manifest must stay inside the store.
+- `test_prompt99_model_paths.py`, `test_prompt37_ui_restart.py` and `test_prompt37_reasoning_repeat.py`.
+- The three evidence packets: `codex-v2-independent-review/2026-10-20-e5af0e7`, `37-e2e/2026-10-20-independent-e5af0e7` and `37-e2e/2026-10-20-memory-e5af0e7`.
+
+Source and tests match Codex's mutants and e2e checkouts (the tests differ only in line endings); the packets were copied byte-identically. The user's `config/config.json` was excluded, and the doc blocks were three-way merged so both sides' entries are kept. Claude reproduced the finding against unfixed `e5af0e7`: 27 failed / 4 valid controls passed; with the patch, 31/31 pass.
+
+This closes P99-R8 locally, pending independent verification. Results: [claude-integration/2026-10-20-e5af0e7](../artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md). All other open items below are unchanged: the global verifier/replay/target P1, cloud provenance P1, deep-cwd P2, and the 25 BLOCKED P37 journeys including the real ReasoningBank planner loop.
+
 ## Prompt 99 - committed e5af0e7 independent re-audit and model-path repair
 
 **2026-10-20:** [fresh verdict](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [two-file source proposal](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/source-only.patch), [three new test files](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/combined-new-tests.patch), [ledger](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/05-findings-ledger.csv).
@@ -29,6 +102,10 @@ Fresh full relevant run: **1907 PASS / 0 FAIL / 139 SKIPPED**. Focused baseline:
 **JRV-37-021 PASS in the specified mock-send/UI scope.** Actual child process exits 27 after one temporary mock-outbox row and durable uncertain checkpoint. Fresh Actions reloads interrupted state; queued resume refuses planner/external replay. Real App.report/drain, Island/Desk consumers and Tk Text/StringVar read back Task paused. Speech sink called once, planner zero, outbox one, marker retained. [Journal](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/ui-restart-journal.json), [test](../tests/test_prompt37_ui_restart.py). Fake send/speech transports; no account send, microphone, physical playback or desktop capture. Portable regression is new and awaits Claude integration; production files unchanged in this continuation.
 
 **Remaining:** 25 revised cases still BLOCKED. Keep global host verifier/replay receipt and selected target authority, semantic cloud provenance, native hook lifetime, real voice/TTS/GPU/preemption, account/app/engine/services, training and all flag/rollback gates open. IR-004/V2-003 long process-cwd remains OPEN P2; use shorter explicit owned lab_root. Isolated launcher repair_required; no install/download to clear it. Do not interpret one actual mock/UI journey as full real-user acceptance. No merge/deployment. Keep all historical sections below.
+
+## Claude integration — 2026-10-20 (P99-R1)
+
+Claude reviewed the codex-review patch against `a9b4ce1` and accepted all of it: P34 grant hardening, P35 security, P36 observability, P37 demonstration/paused-result repairs, Codex's new tests, this handoff and the 16 evidence packets. It was applied on `claude` **byte-identically, with the user's `config/config.json` excluded**, as commit `3fbfbf68b6e5cd964191db2c3245efbc2f5a3772`. Targeted run: Codex's new P34–P37 tests plus the affected suites, 317 passed / 1 BLOCKED skip (native symlink privilege). A follow-up commit repairs P34-R1/R2/R3 (see the Prompt 34 section) and adds the full regression in [claude-integration/2026-10-20-a9b4ce1](../artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/). No P35–P37 or P99-R2..R6 item is marked closed by this integration. Those need independent verification at the new SHA, and their live acceptance gates remain BLOCKED as listed below.
 
 ## Prompt 37 follow-up - unchanged source, refreshed checks
 
@@ -144,6 +221,13 @@ Uncompleted exact cases: 001 document ingestion-to-plan injection; 002 webpage/e
 | **P34-R2 UNVERIFIED — staged venv relocation** | `launcher.stage_environment` builds a venv at a staging path and renames it. Import-only validation does not establish console-entrypoint correctness after relocation. No authorized real package rebuild available, so an actual executable failure is not claimed. | Test pip and representative console scripts after promotion in disposable envs. Prefer stable env paths plus routing switch if relocation is unsupported. Keep old env; verify failed-promotion rollback. |
 | **P34-R3 UNVERIFIED — approved lock snapshot** | Lock/wheelhouse are checked before pip reopens them. Local parser rejects option smuggling and enforces hashes, but does not freeze the reviewed lock against concurrent replacement. No exploit performed. | Snapshot and validate the exact execution lock/artifacts in an owned immutable staging area; inject mutation after validation and prove refusal or unchanged approved execution. Preserve the original working env. |
 | **P34-R4 PARTIAL — platform grant contention** | Thread regression passes. Fresh Windows four-process readback consumed the grant exactly once; a child exiting with code 17 released its lock and the next consumer succeeded. See packet `grant-process-readback.json`. No install/download executor involved. | Windows checks are complete; POSIX/WSL branch remains NOT RUN. Repeat contention/crash-release there when available; keep persistent lock inode. |
+
+**Claude repair, 2026-10-20 (commit after `3fbfbf6`; awaiting independent verification; rows above kept as the finding record):**
+
+- **P34-R1 REPAIRED (mock-verified only).** `approved_pull` no longer posts the tag to Ollama. It fetches the manifest **by the approved digest** and re-hashes it, rejects non-positive sizes or a total over budget before any layer request, and fetches each layer **by its digest** into `<store>/blobs`. Each layer is byte-capped per layer and in total, resumes with HTTP Range, and is hash-checked before an atomic publish. The tag manifest is written only after every layer verifies, and an existing manifest is never overwritten. Ollama must then list the model at the approved digest. A size overrun, tampered layer, existing manifest, invalid revision or unlisted digest refuses; partial layers are kept and there is no retry. NOT RUN live: real registry/CDN transport, and whether the running Ollama server, especially one in WSL, reads a manifest written into `OLLAMA_MODELS`. If it doesn't, the post-check fails closed and the files are kept.
+- **P34-R2 REPAIRED (mock-verified only).** There is no relocation. The old environment is moved to `<env>.previous-<id>`, the new one is built at its final path, then `pip install` (frozen lock), the import check and `python -m pip --version` run in place. Any failure moves the attempt to `<env>.failed-<id>` and restores the previous environment. A real console-script check needs an authorized locked rebuild, which is still NOT RUN.
+- **P34-R3 REPAIRED.** The reviewed lock is copied to `.jarvis-runtime/repair-staging/<id>/requirements.lock` and re-hashed against the approval before anything is built; pip reads only that copy. Wheels are bound by its hashes (`--require-hashes`). Tests replace the lock after validation (refused, zero builds) and during the build (pip still reads the approved copy).
+- P34-R4 unchanged (POSIX/WSL NOT RUN).
 
 ## Prompt 34 — acceptance gates still blocked
 

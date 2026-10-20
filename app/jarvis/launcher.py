@@ -329,29 +329,49 @@ def prepare_runtime(config, authorization=None):
 
 
 def stage_environment(approval, folder, imports, command):
-    """Rebuild ``folder`` from the approved locked artifact set beside the existing one, then swap; keep the old one."""
-    from .repair_authorization import RepairRefused, check_dependency_repair
+    """Rebuild ``folder`` from the approved locked artifact set; keep the old environment (P34-001, R2/R3).
+
+    The reviewed lock is frozen into a Jarvis-owned snapshot and re-hashed before pip reads it, so replacing the
+    lock after approval cannot change what is installed (wheels are bound by its hashes). The environment is built
+    at its final path rather than relocated, because venv console scripts embed their absolute interpreter path.
+    The old environment is moved aside first and restored if any step fails; the failed attempt is kept.
+    """
+    from .repair_authorization import RepairRefused, _sha256, check_dependency_repair, locked_requirements
     lock, wheelhouse = check_dependency_repair(BASE, approval, folder)
     target = BASE / folder
-    staging = BASE / (folder + ".staging-" + approval.approval_id)
     previous = BASE / (folder + ".previous-" + approval.approval_id)
-    if staging.exists() or previous.exists():
-        raise RepairRefused("This authorization was already used; its staged files were kept for inspection.")
-    record(BASE, "Authorized repair " + approval.approval_id + ": staging " + folder + " from the approved local artifact "
-           "set; the existing environment stays in place.")
-    command([sys.executable, "-m", "venv", str(staging)])
-    staged = staging / "Scripts" / "python.exe"
-    # --no-index: the approved wheelhouse is the only source. No --isolated: pip and offline settings stay in force.
-    command([str(staged), "-m", "pip", "install", "--no-index", "--find-links", str(wheelhouse), "--require-hashes",
-             "--only-binary=:all:", "-r", str(lock)])
-    command([str(staged), "-c", imports], timeout=60)
+    failed = BASE / (folder + ".failed-" + approval.approval_id)
+    snapshot = RUNTIME / "repair-staging" / approval.approval_id
+    if previous.exists() or failed.exists() or snapshot.exists():
+        raise RepairRefused("This authorization was already used; its files were kept for inspection.")
+    snapshot.mkdir(parents=True)
+    frozen = snapshot / "requirements.lock"
+    shutil.copyfile(lock, frozen)
+    if _sha256(frozen) != approval.lock_sha256:
+        raise RepairRefused("The approved lock changed after approval; nothing was installed.")
+    locked_requirements(frozen.read_text(encoding="utf-8"))
+    record(BASE, "Authorized repair " + approval.approval_id + ": rebuilding " + folder + " from the approved local "
+           "artifact set; the existing environment is kept as " + previous.name + " until the rebuild passes.")
     if target.exists():
         target.rename(previous)
     try:
-        staging.rename(target)
-    except OSError:
-        if previous.exists() and not target.exists():
-            previous.rename(target)
+        command([sys.executable, "-m", "venv", str(target)])
+        python = target / "Scripts" / "python.exe"
+        # --no-index: the approved wheelhouse is the only source. No --isolated: pip and offline settings stay in force.
+        command([str(python), "-m", "pip", "install", "--no-index", "--find-links", str(wheelhouse), "--require-hashes",
+                 "--only-binary=:all:", "-r", str(frozen)])
+        command([str(python), "-c", imports], timeout=60)
+        command([str(python), "-m", "pip", "--version"], timeout=60)  # the environment's own tooling works in place
+    except BaseException:
+        try:
+            if target.exists():
+                target.rename(failed)
+            if previous.exists() and not target.exists():
+                previous.rename(target)
+        finally:
+            record(BASE, "Authorized repair " + approval.approval_id + " did not complete; the previous " + folder +
+                   (" was restored" if not previous.exists() else " is still at " + previous.name) +
+                   " and the failed attempt was kept for inspection.")
         raise
     record(BASE, "Authorized repair " + approval.approval_id + " completed for " + folder + "; the previous environment "
            "is kept as " + previous.name + ".")
