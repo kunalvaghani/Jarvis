@@ -1,0 +1,107 @@
+[
+  {
+    "file": "auth_login.py",
+    "sha256": "a6e022cffbd982edc8e230910975ace129a4436145f5cb4a1e6556ae488120b9",
+    "bytes": 3070
+  },
+  {
+    "file": "auth_logout.py",
+    "sha256": "196fc87178b9a034f9b2a16b8176faf0c6e15ae2e658a168fd4cf6723276018a",
+    "bytes": 456
+  },
+  {
+    "file": "client_smoke.py",
+    "sha256": "90643f740b5058715bd4499c4479f95c749f0035114bf1c577a3d95725108ae1",
+    "bytes": 1064
+  },
+  {
+    "file": "CODEX_INTEGRATION_PROMPT.md",
+    "sha256": "c2bca5e5b0c91f9a9628f91eaa9d86e60c3e6dc0eb00c1080f12373f4db895dc",
+    "bytes": 10368
+  },
+  {
+    "file": "COMMANDS.md",
+    "sha256": "8152b6274ed981794596ac6e4ad9388e2f125d6de4a7d0692314b631ddee9ea3",
+    "bytes": 7393
+  },
+  {
+    "file": "connector_manifest.example.json",
+    "sha256": "fcd1b9fe8d0afc3997fb064c202da520d8e95c7b6591fc58344d6a0088e95f35",
+    "bytes": 3632
+  },
+  {
+    "file": "install_windows.ps1",
+    "sha256": "00506b53eed665df676523d6aa6aa4a3c5e00e5a2789f9256de7fe27036b495d",
+    "bytes": 792
+  },
+  {
+    "file": "README.md",
+    "sha256": "7a71ea9eb9d17aa91475e4926570ae2d25c4c2eb861c745de3e033a84c4f9b0e",
+    "bytes": 10262
+  },
+  {
+    "file": "requirements-windows.txt",
+    "sha256": "a2ed701bd633680da3c1e038751d1ab3c6762646584da0283ae2bb2ff48973f2",
+    "bytes": 74
+  },
+  {
+    "file": "requirements.txt",
+    "sha256": "7b1e18fb3cbebadf630c73975cc96a7754f5555cb63ee557b27932f4b8b0d94d",
+    "bytes": 26
+  },
+  {
+    "file": "server.py",
+    "sha256": "97d4e47636ebf08a9b99fbb2a7169bd502a84e89e3a0f65453fb92797cec1436",
+    "bytes": 18016
+  },
+  {
+    "file": "TEST_REPORT.md",
+    "sha256": "c17d18a00dceba9f987bfdfe872a1c01c7feb3a9d6c2b80cd03f7501866f91c2",
+    "bytes": 3911
+  },
+  {
+    "file": "spotify_connector/api.py",
+    "sha256": "1dab7079000ea62626743d11e8e5993305a4d2d06592f8c55b98ede869a58794",
+    "bytes": 4540
+  },
+  {
+    "file": "spotify_connector/auth.py",
+    "sha256": "077fb7a2f4e16b084d2b77e97e175088b2b654f9341bfb18d09fba8e0b432067",
+    "bytes": 6215
+  },
+  {
+    "file": "spotify_connector/base.py",
+    "sha256": "9ac05cd8064a3a58e562848fdfd2e13f365101e448f6be6cdb5c3f42c776ea15",
+    "bytes": 1387
+  },
+  {
+    "file": "spotify_connector/identifiers.py",
+    "sha256": "50f08123a3bcaf299a7f4a66b2945322f753e0906e7959db4880e853b67c3720",
+    "bytes": 2932
+  },
+  {
+    "file": "spotify_connector/spotify.py",
+    "sha256": "e4189b1b508b88cc9f70c805ea5431337a9e10375f1d8c84f49695816447ea77",
+    "bytes": 25894
+  },
+  {
+    "file": "spotify_connector/windows_media.py",
+    "sha256": "045c002346a87fb1e3a27bc79f5a31539ea2ec99659c772671c4217bd466b925",
+    "bytes": 5302
+  },
+  {
+    "file": "spotify_connector/windows_volume.py",
+    "sha256": "ac70402400a8f2a68884d5d41ec0a2a20629be51c1316eed5c9ddec1c71ee84d",
+    "bytes": 2627
+  },
+  {
+    "file": "spotify_connector/__init__.py",
+    "sha256": "62bf5df8daeac2cb014f67cff7b4c8e69712fad05b5c0700e728f982c176fa2f",
+    "bytes": 218
+  },
+  {
+    "file": "tests/test_spotify.py",
+    "sha256": "b9a4808d2f58f59a3cf93641f8da03f6182c214b5ad7ff305f1f724f82c32f32",
+    "bytes": 21217
+  }
+]

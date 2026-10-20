@@ -1,5 +1,13 @@
 # Jarvis — local Windows voice assistant
 
+## Spotify connector candidate (2026-10-20)
+
+The supplied Spotify package now composes its backend service under Jarvis's actual production BaseConnector child, exposing 86 namespaced tools through the existing ToolRegistry and an opt-in persistent MCP child. Deterministic spoken controls, last-provider routing, Spotify-only Windows sessions/app volume, bounded reconnect/backoff, typed schema adaptation, scope/owner checks and account-bound approval are integrated. The YouTube connector source and registration remain unchanged.
+
+Fresh final targeted regression: **246 passed / 16 pre-existing catalog-contract skips**; adapted package: **39 passed**. Real MCP stdio discovers all 86 tools; valid dispatch/invalid families use explicit fixtures, never claimed live. Human-consented Windows open/status/transport/seek and app-volume/mute were exercised; app volume/mute readbacks passed and previous levels were restored. A subsequent local play readback was verified; pause was accepted, and a separate fresh observation confirmed the final paused state without repeating transport. API/OAuth/library edits and full physical voice/cross-provider acceptance remain NOT TESTED. The isolated checkout's readiness reports missing environments/models and unavailable Docker/Ollama; primary checkout startup was not changed.
+
+This candidate is on `codex/spotify-integration`, based on `98cf46f`, with no push/merge/deployment. See the [setup, natural commands, security and rollback guide](docs/spotify-connector.md), [86-tool matrix](artifacts/jarvis-audit/spotify-connector/feature-matrix.md) and [baseline/after audit](artifacts/jarvis-audit/spotify-connector/README.md). Optional dependencies are declared in `requirements/spotify.txt`; none were installed. The official SDK-v2 runtime is untested/uninstalled here; real wire tests use the existing built-in MCP protocol runtime.
+
 ## Folder organization and cleanup (2026-10-20)
 
 The [folder map and cleanup policy](docs/project-structure.md#current-folder-policy-2026-10-20) identify the canonical locations for source, configuration, scripts, tests, documentation, integrations and artifact groups. Existing launcher, import, environment and model paths remain stable. Regenerable developer caches are ignored at repository level. Models, installed environments, training outputs, browser profiles, user files, secrets, logs and authoritative recovery material are retained.

@@ -1,0 +1,172 @@
+[
+  {
+    "file": "app/.jarvis/mcp.json",
+    "sha256": "50e07dc5846684ec3f0f23abd12f88662bad7e8c8829ceb5ea4167862adb1a3f",
+    "bytes": 4013
+  },
+  {
+    "file": "app/config/runtime_manifest.json",
+    "sha256": "5c10e1fad321cc352e6da6dfd95feb05ec92ccb5ac2e681eff9dfc76b20a2ea4",
+    "bytes": 76721
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/auth_login.py",
+    "sha256": "80309562d3bdbaf04bc557c19480b00f595e6caf69be6c1bcdeceac9c32646c3",
+    "bytes": 3185
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/auth_logout.py",
+    "sha256": "196fc87178b9a034f9b2a16b8176faf0c6e15ae2e658a168fd4cf6723276018a",
+    "bytes": 456
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/catalog.json",
+    "sha256": "f37c7837f24ce1b654f01549db5edc31a293fdf1acaa4af5fd66a240983b1fc8",
+    "bytes": 88556
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/client_smoke.py",
+    "sha256": "04b7f4f5d4a228c0b0fbd2e47332f5a4654936c1b1b41017c5e59fcb554f7435",
+    "bytes": 970
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/connector_manifest.example.json",
+    "sha256": "989918193271be507fc95cece32cb731b5b76c8d2e7f6f1191ac66c6217c8da4",
+    "bytes": 3407
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/install_windows.ps1",
+    "sha256": "50dd91edce70c331dc04ded81a6d4068254c289c1cdddb35e387963d3b72e103",
+    "bytes": 849
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/server.py",
+    "sha256": "69e09f604c3066ce6f3d559d3645500c554a14ed43fb8a95c9af7555e60f1b12",
+    "bytes": 42057
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/__init__.py",
+    "sha256": "86acc269b75535a9553f897add4d784b287beef08682e8dbdbc3c0493598f94b",
+    "bytes": 107
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/api.py",
+    "sha256": "0d0062da38805c9f368c0a5842fbb235e69e18e74e85e4b842a70485264f1dd5",
+    "bytes": 5158
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/auth.py",
+    "sha256": "49b8d934f76dff15b27c9b36de74674916cf0ef432865fbcd782b26185b6d454",
+    "bytes": 11108
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/base.py",
+    "sha256": "9f36bc7bf1ef444d58732370e9ff2af736977f69566220472e86586ef12e33a4",
+    "bytes": 545
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/identifiers.py",
+    "sha256": "0f0b50936cb1bffdd6d23dc61fa4006566f82f4d2a99c5cd6e47a238cb1167b1",
+    "bytes": 3128
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/spotify.py",
+    "sha256": "d0b66007d2513a548b98415a975c55696fe8e28a98949d32849301a0ed268470",
+    "bytes": 29863
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/windows_media.py",
+    "sha256": "0fe1f894866898c7eacf21b266fd9339f4c2bb89b3d46bc9ec065cf23cc96ae3",
+    "bytes": 7037
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/spotify_connector/windows_volume.py",
+    "sha256": "ab4de4451411ece9228d4d75b7c03f7ebbb0cf7dfce8c3335423fc74cf83966a",
+    "bytes": 2675
+  },
+  {
+    "file": "app/integrations/jarvis-connectors/connectors/apps/spotify/tests/test_spotify.py",
+    "sha256": "b59ca1067bf475a10e96208271f640a7e47fa4d012469c13016c59c769ca4b02",
+    "bytes": 21847
+  },
+  {
+    "file": "app/jarvis/actions.py",
+    "sha256": "f240efea08471883ddaadd7eaa02bcda5fa1666eb483f35f1de32797d994bed8",
+    "bytes": 115614
+  },
+  {
+    "file": "app/jarvis/brain.py",
+    "sha256": "1372bfffd8d160282704a2aff54e7cb8ed232a96b1aa07d17bc889c90129c12e",
+    "bytes": 119636
+  },
+  {
+    "file": "app/jarvis/capabilities.py",
+    "sha256": "36fea7d831558aa32c37e541f314ba0a0ccbfafd2378ab342479f18e813f7bd7",
+    "bytes": 22201
+  },
+  {
+    "file": "app/jarvis/commands.py",
+    "sha256": "851c6e5395c463b1269463b41636d0fd589d1703cbb99656387f0f6d56f5b23d",
+    "bytes": 35053
+  },
+  {
+    "file": "app/jarvis/engine.py",
+    "sha256": "0cb6094e46f0a6fed41c186f9baa3f13ed496ed308ff45559c8ab8b376a4a98a",
+    "bytes": 9010
+  },
+  {
+    "file": "app/jarvis/mcp_bridge.py",
+    "sha256": "13467d437086430e5cab4344ed57cff2e5abda72eb48977851af28df9542dbc8",
+    "bytes": 17806
+  },
+  {
+    "file": "app/jarvis/mcp_persistent.py",
+    "sha256": "ad46945962ecce6ad7b1ba8bab2cab8a78c2e96ccd68a0e02a42af45902b5568",
+    "bytes": 5352
+  },
+  {
+    "file": "app/jarvis/media_player.py",
+    "sha256": "87ea13cf04de5257ba19a49be23360ba822ae9eacb3260553ab43f50c171b902",
+    "bytes": 38520
+  },
+  {
+    "file": "app/jarvis/spotify_host.py",
+    "sha256": "f417f266760af8879e2688f8d4c9f63288732399144be6e2ef60f18559fe84d5",
+    "bytes": 18258
+  },
+  {
+    "file": "app/main.py",
+    "sha256": "5d201b98cde97918b0344b2fce4a28889de286f23412ff9069af8ba484f414e0",
+    "bytes": 37716
+  },
+  {
+    "file": "app/requirements/spotify.txt",
+    "sha256": "2c9d7013063b5a77f2c8ef67cec6a346f77fbf47a885ef84ab761d2284f3c25a",
+    "bytes": 157
+  },
+  {
+    "file": "app/scripts/setup/register_spotify_connector.py",
+    "sha256": "a717f9b26f33df59cbdc4cf0e01d5e5440b7950888bc66783c4f8c1d570d8d7c",
+    "bytes": 2413
+  },
+  {
+    "file": "app/scripts/verification/benchmark_spotify_connector.py",
+    "sha256": "cda83357dad3906dfb6989c1605f7ce1c9a7439890a3dc5cfc7c9fb1c114828c",
+    "bytes": 3074
+  },
+  {
+    "file": "app/scripts/verification/verify_spotify_connector.py",
+    "sha256": "9f1f0148e0c75ce4fec85d935e160ce4f118d118fab14ebe7c24642d9731ad12",
+    "bytes": 4989
+  },
+  {
+    "file": "app/tests/fixtures/spotify_uncertain_mcp.py",
+    "sha256": "421fd0741fd39077b8c0fc62801de2c09e0ae072bd34d8f0ccfbcc4bc729f080",
+    "bytes": 935
+  },
+  {
+    "file": "app/tests/test_spotify_connector_integration.py",
+    "sha256": "544e9b3dfefac6327e5ec6e610eb670c04655a14c484355751aaa0800f489517",
+    "bytes": 18755
+  }
+]

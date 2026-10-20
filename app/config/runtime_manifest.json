@@ -487,7 +487,8 @@
     "development_preview",
     "docker_linux_engine",
     "cognitive_loop",
-    "cognition_persistence"
+    "cognition_persistence",
+    "spotify_mcp"
   ],
   "ui_assets": [],
   "optional_audit": {
@@ -1058,5 +1059,19 @@
     "limits": "A fill can trigger site input/autosave handlers. Auth heuristic is not complete. No universal transaction safety or atomicity between DOM checks and input.",
     "new_dependencies": [],
     "new_services": []
+  },
+  "spotify_connector": {
+    "date": "2026-10-20 IST",
+    "modules": [
+      "jarvis.spotify_host",
+      "jarvis.mcp_persistent",
+      "jarvis.mcp_bridge"
+    ],
+    "connector": "integrations/jarvis-connectors/connectors/apps/spotify/server.py",
+    "contract": "Existing production BaseConnector; 86 namespaced tools; bounded serialized stdio; six default schemas; per-call approval and no action replay.",
+    "dependencies": "Optional requirements/spotify.txt: keyring for OAuth; MCP SDK v2 optional on Python >=3.11. Existing WinRT and pycaw runtime declarations retained. Builtin MCP protocol runtime needs no new dependency.",
+    "service": "Lazy owned Spotify MCP child; main Watchdog ping/repair/backoff, Actions.close teardown; no Spotify desktop-app auto-restart.",
+    "privacy": "Human-only PKCE and OS keyring; account consent/scopes required; no credential values in manifest, prompt or telemetry.",
+    "rollback": "python scripts/setup/register_spotify_connector.py --disable; restart Jarvis; existing YouTube and legacy media paths remain."
   }
 }

@@ -940,6 +940,9 @@ class Brain:
                     intent = r'\b(?:analy[sz]e|reverse[- ]engineer|decompile|deconstruct|inspect|clone|rea_analyze)\b'
                 if pending['action'] in {'mcp_list_tools', 'mcp_call'}:
                     intent = r'\bmcp\b'
+                    if pending.get('value') == 'spotify':
+                        from .spotify_host import plan_intent
+                        if plan_intent(low_goal, pending): intent = r'\bspotify\b'
                 if not re.search(intent, low_goal):
                     raise ValueError("External toolkit write was not explicitly requested.")
             if pending["action"] == "append_file":

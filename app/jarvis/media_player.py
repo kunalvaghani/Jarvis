@@ -646,6 +646,9 @@ def youtube_state(actions):
 
 def active_service(actions):
     """The service that is playing now; otherwise the one Jarvis used last; otherwise Spotify."""
+    from .spotify_host import enabled as spotify_connector_enabled
+    if spotify_connector_enabled(actions) and getattr(actions, 'last_media', None) in {'spotify','youtube'}:
+        return actions.last_media
     spotify = spotify_now()
     youtube = youtube_state(actions)
     if not youtube and getattr(actions, "youtube_target", "") == "user_chrome":
@@ -698,6 +701,11 @@ def play(actions, query, service, cancelled):
     first = service or getattr(actions, "last_media", None) or default
     if not isinstance(first, str) or first not in {'youtube', 'spotify'}:
         raise ValueError('The previous media service is invalid; explicitly choose youtube or spotify.')
+    from .spotify_host import enabled as spotify_connector_enabled, route as spotify_route
+    if first == 'spotify' and spotify_connector_enabled(actions):
+        from .commands import Command
+        handled, result = spotify_route(actions, Command('play_media', query, 'spotify'), cancelled)
+        if handled: return result
     order = [first] + ([] if service else [other for other in ("youtube", "spotify") if other != first])
     errors = []
     for name in order:

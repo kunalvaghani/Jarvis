@@ -1,0 +1,45 @@
+test_api_json_success_empty_success (test_spotify.APIRequests) ... ok
+test_error_does_not_include_secrets (test_spotify.APIRequests) ... ok
+test_forbidden_does_not_fallback (test_spotify.APIRequests) ... ok
+test_host_override_and_path_rejected (test_spotify.APIRequests) ... ok
+test_no_retry_mutating_429 (test_spotify.APIRequests) ... ok
+test_refresh_once_on_401 (test_spotify.APIRequests) ... ok
+test_retry_get_429_once (test_spotify.APIRequests) ... ok
+test_close_fail_closed (test_spotify.ConnectorTests) ... ok
+test_get_reads_2026 (test_spotify.ConnectorTests) ... ok
+test_library_generic_new_endpoints (test_spotify.ConnectorTests) ... ok
+test_no_api_fallback_only_subset (test_spotify.ConnectorTests) ... ok
+test_no_api_status (test_spotify.ConnectorTests) ... ok
+test_parent_contract_and_info (test_spotify.ConnectorTests) ... ok
+test_play_commands_payloads_and_safe_targeting (test_spotify.ConnectorTests) ... ok
+test_play_search_ambiguous_and_unique (test_spotify.ConnectorTests) ... ok
+test_playback_operations_paths_2026 (test_spotify.ConnectorTests) ... ok
+test_playlist_current_paths_and_write_payload (test_spotify.ConnectorTests) ... ok
+test_playlist_write_invalid_never_hits_api (test_spotify.ConnectorTests) ... ok
+test_save_current (test_spotify.ConnectorTests) ... ok
+test_search_limit_2026_and_validation (test_spotify.ConnectorTests) ... ok
+test_seek_relative_bounds (test_spotify.ConnectorTests) ... ok
+test_volume_relative_bounds (test_spotify.ConnectorTests) ... ok
+test_batch_rejections (test_spotify.IdentifierTests) ... ok
+test_fuzz_random_identifiers_fail_closed (test_spotify.IdentifierTests) ... ok
+test_limit_bool_rejected (test_spotify.IdentifierTests) ... ok
+test_malicious_urls_and_malformed (test_spotify.IdentifierTests) ... ok
+test_valid_spotify_ids_for_all_kinds (test_spotify.IdentifierTests) ... ok
+test_fake_mcp_registration_and_call (test_spotify.MCPInterfaceTests)
+Interface test without package dependency; not a real MCP protocol test. ... ok
+test_no_plaintext_token_fallback (test_spotify.OAuthTests) ... ok
+test_oauth_url_and_csrf (test_spotify.OAuthTests) ... ok
+test_pkce_challenge (test_spotify.OAuthTests) ... ok
+test_redirect_must_be_loopback (test_spotify.OAuthTests) ... ok
+test_no_spotify_volume_session (test_spotify.VolumeTests) ... ok
+test_per_app_spotify_only_and_readback (test_spotify.VolumeTests) ... ok
+test_remote_verify_playback (test_spotify.VolumeTests) ... ok
+test_deeplink_safe (test_spotify.WindowsTests) ... ok
+test_exact_spotify_only (test_spotify.WindowsTests) ... ok
+test_multi_spotify_ambiguous (test_spotify.WindowsTests) ... ok
+test_other_player_not_controlled (test_spotify.WindowsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 2.462s
+
+OK

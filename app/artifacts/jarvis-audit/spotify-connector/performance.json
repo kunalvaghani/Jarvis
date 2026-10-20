@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-20 IST",
+  "routing_no_llm": {
+    "median_ms": 3.364,
+    "p95_ms": 3.9374,
+    "samples": 600
+  },
+  "cold_initialize_health_ms": 596.661,
+  "warm_mcp_health": {
+    "median_ms": 0.5865,
+    "p95_ms": 0.6724,
+    "samples": 40
+  },
+  "resources": {
+    "process_tree_rss_bytes": 40423424,
+    "idle_cpu_seconds": 0.0,
+    "idle_sample_seconds": 0.515,
+    "owned_process_count": 3
+  },
+  "scope": "Local routing/stdio only; no Spotify API latency, no playback latency guarantee."
+}

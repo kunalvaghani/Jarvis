@@ -1,5 +1,9 @@
 # Jarvis system map
 
+## Spotify child integration — 2026-10-20 IST
+
+`commands` → `spotify_host` → existing `ToolRegistry` → `mcp_bridge` → per-call approval → `mcp_persistent` → production `BaseConnector` child at `integrations/jarvis-connectors/connectors/apps/spotify/server.py`. The main watchdog registers Spotify MCP ping/repair, and Actions closes it. The child composes one async/MTA backend with API PKCE/WinVault storage and exact Windows Spotify media/audio sessions. All 86 tools are discoverable; six common schemas load by default. YouTube keeps its original short-lived connector path. [Architecture, setup and limitations](spotify-connector.md) · [Evidence](../artifacts/jarvis-audit/spotify-connector/README.md).
+
 <!-- upgrade-phase08 -->
 **Upgrade Phase 8 — 2026-10-19 IST (final):**
 - `cloud_architect_consult` toolkit tool (`cloud_architect.consult_tool`), fed by `FailureRouter` evidence; `Brain.recover_task` offers it once.

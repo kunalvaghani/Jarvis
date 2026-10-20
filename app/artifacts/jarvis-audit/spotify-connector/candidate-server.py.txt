@@ -1,0 +1,441 @@
+"""Spotify MCP v2 adapter. Stdout reserved for JSON-RPC."""
+from __future__ import annotations
+from mcp.server import MCPServer
+from typing import Any
+from spotify_connector.spotify import SpotifyConnector
+
+mcp = MCPServer("jarvis-spotify")
+connector = SpotifyConnector()
+
+@mcp.tool()
+async def spotify_health() -> Any:
+    """Spotify health; obey ToolRegistry authorization."""
+    return await connector.health()
+
+@mcp.tool()
+async def spotify_status() -> Any:
+    """Spotify status; obey ToolRegistry authorization."""
+    return await connector.status()
+
+@mcp.tool()
+async def spotify_currently_playing() -> Any:
+    """Spotify currently playing; obey ToolRegistry authorization."""
+    return await connector.currently_playing()
+
+@mcp.tool()
+async def spotify_devices() -> Any:
+    """Spotify devices; obey ToolRegistry authorization."""
+    return await connector.devices()
+
+@mcp.tool()
+async def spotify_queue() -> Any:
+    """Spotify queue; obey ToolRegistry authorization."""
+    return await connector.queue()
+
+@mcp.tool()
+async def spotify_recently_played(limit: int = 20) -> Any:
+    """Spotify recently played; obey ToolRegistry authorization."""
+    return await connector.recently_played(limit=limit)
+
+@mcp.tool()
+async def spotify_pause() -> Any:
+    """Spotify pause; obey ToolRegistry authorization."""
+    return await connector.pause()
+
+@mcp.tool()
+async def spotify_resume() -> Any:
+    """Spotify resume; obey ToolRegistry authorization."""
+    return await connector.resume()
+
+@mcp.tool()
+async def spotify_toggle() -> Any:
+    """Spotify toggle; obey ToolRegistry authorization."""
+    return await connector.toggle()
+
+@mcp.tool()
+async def spotify_next() -> Any:
+    """Spotify next; obey ToolRegistry authorization."""
+    return await connector.next()
+
+@mcp.tool()
+async def spotify_previous() -> Any:
+    """Spotify previous; obey ToolRegistry authorization."""
+    return await connector.previous()
+
+@mcp.tool()
+async def spotify_stop() -> Any:
+    """Spotify stop; obey ToolRegistry authorization."""
+    return await connector.stop()
+
+@mcp.tool()
+async def spotify_seek(position_ms: int, device: str | None = None) -> Any:
+    """Spotify seek; obey ToolRegistry authorization."""
+    return await connector.seek(position_ms=position_ms, device=device)
+
+@mcp.tool()
+async def spotify_seek_relative(delta_ms: int, device: str | None = None) -> Any:
+    """Spotify seek relative; obey ToolRegistry authorization."""
+    return await connector.seek_relative(delta_ms=delta_ms, device=device)
+
+@mcp.tool()
+async def spotify_volume(percent: int, device: str | None = None) -> Any:
+    """Spotify volume; obey ToolRegistry authorization."""
+    return await connector.volume(percent=percent, device=device)
+
+@mcp.tool()
+async def spotify_volume_relative(delta: int, device: str | None = None) -> Any:
+    """Spotify volume relative; obey ToolRegistry authorization."""
+    return await connector.volume_relative(delta=delta, device=device)
+
+@mcp.tool()
+async def spotify_shuffle(enabled: bool, device: str | None = None) -> Any:
+    """Spotify shuffle; obey ToolRegistry authorization."""
+    return await connector.shuffle(enabled=enabled, device=device)
+
+@mcp.tool()
+async def spotify_repeat(mode: str, device: str | None = None) -> Any:
+    """Spotify repeat; obey ToolRegistry authorization."""
+    return await connector.repeat(mode=mode, device=device)
+
+@mcp.tool()
+async def spotify_transfer(device: str, play: bool = False) -> Any:
+    """Spotify transfer; obey ToolRegistry authorization."""
+    return await connector.transfer(device=device, play=play)
+
+@mcp.tool()
+async def spotify_play_track(track: str, device: str | None = None) -> Any:
+    """Spotify play track; obey ToolRegistry authorization."""
+    return await connector.play_track(track=track, device=device)
+
+@mcp.tool()
+async def spotify_play_album(album: str, device: str | None = None) -> Any:
+    """Spotify play album; obey ToolRegistry authorization."""
+    return await connector.play_album(album=album, device=device)
+
+@mcp.tool()
+async def spotify_play_artist(artist: str, device: str | None = None) -> Any:
+    """Spotify play artist; obey ToolRegistry authorization."""
+    return await connector.play_artist(artist=artist, device=device)
+
+@mcp.tool()
+async def spotify_play_playlist(playlist: str, device: str | None = None, offset: int | None = None) -> Any:
+    """Spotify play playlist; obey ToolRegistry authorization."""
+    return await connector.play_playlist(playlist=playlist, device=device, offset=offset)
+
+@mcp.tool()
+async def spotify_play_show(show: str) -> Any:
+    """Spotify play show; obey ToolRegistry authorization."""
+    return await connector.play_show(show=show)
+
+@mcp.tool()
+async def spotify_play_episode(episode: str, device: str | None = None) -> Any:
+    """Spotify play episode; obey ToolRegistry authorization."""
+    return await connector.play_episode(episode=episode, device=device)
+
+@mcp.tool()
+async def spotify_play_uris(items: list[str], device: str | None = None, position_ms: int | None = None) -> Any:
+    """Spotify play uris; obey ToolRegistry authorization."""
+    return await connector.play_uris(items=items, device=device, position_ms=position_ms)
+
+@mcp.tool()
+async def spotify_play_saved_tracks(limit: int = 30, device: str | None = None) -> Any:
+    """Spotify play saved tracks; obey ToolRegistry authorization."""
+    return await connector.play_saved_tracks(limit=limit, device=device)
+
+@mcp.tool()
+async def spotify_add_to_queue(ref: str, device: str | None = None) -> Any:
+    """Spotify add to queue; obey ToolRegistry authorization."""
+    return await connector.add_to_queue(ref=ref, device=device)
+
+@mcp.tool()
+async def spotify_search(query: str, kind: str = 'track', limit: int = 5, offset: int = 0) -> Any:
+    """Spotify search; obey ToolRegistry authorization."""
+    return await connector.search(query=query, kind=kind, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_search_tracks(query: str, limit: int = 5) -> Any:
+    """Spotify search tracks; obey ToolRegistry authorization."""
+    return await connector.search_tracks(query=query, limit=limit)
+
+@mcp.tool()
+async def spotify_search_albums(query: str, limit: int = 5) -> Any:
+    """Spotify search albums; obey ToolRegistry authorization."""
+    return await connector.search_albums(query=query, limit=limit)
+
+@mcp.tool()
+async def spotify_search_artists(query: str, limit: int = 5) -> Any:
+    """Spotify search artists; obey ToolRegistry authorization."""
+    return await connector.search_artists(query=query, limit=limit)
+
+@mcp.tool()
+async def spotify_search_playlists(query: str, limit: int = 5) -> Any:
+    """Spotify search playlists; obey ToolRegistry authorization."""
+    return await connector.search_playlists(query=query, limit=limit)
+
+@mcp.tool()
+async def spotify_search_episodes(query: str, limit: int = 5) -> Any:
+    """Spotify search episodes; obey ToolRegistry authorization."""
+    return await connector.search_episodes(query=query, limit=limit)
+
+@mcp.tool()
+async def spotify_get_track(ref: str) -> Any:
+    """Spotify get track; obey ToolRegistry authorization."""
+    return await connector.get_track(ref=ref)
+
+@mcp.tool()
+async def spotify_get_album(ref: str) -> Any:
+    """Spotify get album; obey ToolRegistry authorization."""
+    return await connector.get_album(ref=ref)
+
+@mcp.tool()
+async def spotify_get_artist(ref: str) -> Any:
+    """Spotify get artist; obey ToolRegistry authorization."""
+    return await connector.get_artist(ref=ref)
+
+@mcp.tool()
+async def spotify_get_playlist(ref: str) -> Any:
+    """Spotify get playlist; obey ToolRegistry authorization."""
+    return await connector.get_playlist(ref=ref)
+
+@mcp.tool()
+async def spotify_get_episode(ref: str) -> Any:
+    """Spotify get episode; obey ToolRegistry authorization."""
+    return await connector.get_episode(ref=ref)
+
+@mcp.tool()
+async def spotify_get_show(ref: str) -> Any:
+    """Spotify get show; obey ToolRegistry authorization."""
+    return await connector.get_show(ref=ref)
+
+@mcp.tool()
+async def spotify_album_tracks(album: str, limit: int = 30, offset: int = 0) -> Any:
+    """Spotify album tracks; obey ToolRegistry authorization."""
+    return await connector.album_tracks(album=album, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_artist_albums(artist: str, limit: int = 20, offset: int = 0) -> Any:
+    """Spotify artist albums; obey ToolRegistry authorization."""
+    return await connector.artist_albums(artist=artist, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_show_episodes(show: str, limit: int = 20, offset: int = 0) -> Any:
+    """Spotify show episodes; obey ToolRegistry authorization."""
+    return await connector.show_episodes(show=show, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_playlist_items(playlist: str, limit: int = 50, offset: int = 0) -> Any:
+    """Spotify playlist items; obey ToolRegistry authorization."""
+    return await connector.playlist_items(playlist=playlist, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_my_playlists(limit: int = 20, offset: int = 0) -> Any:
+    """Spotify my playlists; obey ToolRegistry authorization."""
+    return await connector.my_playlists(limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_create_playlist(name: str, public: bool = False, description: str = '') -> Any:
+    """Spotify create playlist; obey ToolRegistry authorization."""
+    return await connector.create_playlist(name=name, public=public, description=description)
+
+@mcp.tool()
+async def spotify_update_playlist(playlist: str, name: str = '', description: str = '', public: bool | None = None) -> Any:
+    """Spotify update playlist; obey ToolRegistry authorization."""
+    return await connector.update_playlist(playlist=playlist, name=name, description=description, public=public)
+
+@mcp.tool()
+async def spotify_add_playlist_items(playlist: str, items: list[str], position: int | None = None) -> Any:
+    """Spotify add playlist items; obey ToolRegistry authorization."""
+    return await connector.add_playlist_items(playlist=playlist, items=items, position=position)
+
+@mcp.tool()
+async def spotify_remove_playlist_items(playlist: str, items: list[str], snapshot_id: str = '') -> Any:
+    """Spotify remove playlist items; obey ToolRegistry authorization."""
+    return await connector.remove_playlist_items(playlist=playlist, items=items, snapshot_id=snapshot_id)
+
+@mcp.tool()
+async def spotify_replace_playlist_items(playlist: str, items: list[str]) -> Any:
+    """Spotify replace playlist items; obey ToolRegistry authorization."""
+    return await connector.replace_playlist_items(playlist=playlist, items=items)
+
+@mcp.tool()
+async def spotify_reorder_playlist_items(playlist: str, range_start: int, insert_before: int, range_length: int = 1, snapshot_id: str = '') -> Any:
+    """Spotify reorder playlist items; obey ToolRegistry authorization."""
+    return await connector.reorder_playlist_items(playlist=playlist, range_start=range_start, insert_before=insert_before, range_length=range_length, snapshot_id=snapshot_id)
+
+@mcp.tool()
+async def spotify_save_items(items: list[str]) -> Any:
+    """Spotify save items; obey ToolRegistry authorization."""
+    return await connector.save_items(items=items)
+
+@mcp.tool()
+async def spotify_remove_saved_items(items: list[str]) -> Any:
+    """Spotify remove saved items; obey ToolRegistry authorization."""
+    return await connector.remove_saved_items(items=items)
+
+@mcp.tool()
+async def spotify_contains_saved(items: list[str]) -> Any:
+    """Spotify contains saved; obey ToolRegistry authorization."""
+    return await connector.contains_saved(items=items)
+
+@mcp.tool()
+async def spotify_saved_tracks(limit: int = 20, offset: int = 0) -> Any:
+    """Spotify saved tracks; obey ToolRegistry authorization."""
+    return await connector.saved_tracks(limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_saved_albums(limit: int = 20, offset: int = 0) -> Any:
+    """Spotify saved albums; obey ToolRegistry authorization."""
+    return await connector.saved_albums(limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_saved_shows(limit: int = 20, offset: int = 0) -> Any:
+    """Spotify saved shows; obey ToolRegistry authorization."""
+    return await connector.saved_shows(limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_saved_episodes(limit: int = 20, offset: int = 0) -> Any:
+    """Spotify saved episodes; obey ToolRegistry authorization."""
+    return await connector.saved_episodes(limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_followed_artists(limit: int = 20) -> Any:
+    """Spotify followed artists; obey ToolRegistry authorization."""
+    return await connector.followed_artists(limit=limit)
+
+@mcp.tool()
+async def spotify_top_tracks(time_range: str = 'medium_term', limit: int = 20) -> Any:
+    """Spotify top tracks; obey ToolRegistry authorization."""
+    return await connector.top_tracks(time_range=time_range, limit=limit)
+
+@mcp.tool()
+async def spotify_top_artists(time_range: str = 'medium_term', limit: int = 20) -> Any:
+    """Spotify top artists; obey ToolRegistry authorization."""
+    return await connector.top_artists(time_range=time_range, limit=limit)
+
+@mcp.tool()
+async def spotify_get_profile() -> Any:
+    """Spotify get profile; obey ToolRegistry authorization."""
+    return await connector.get_profile()
+
+@mcp.tool()
+async def spotify_open_desktop() -> Any:
+    """Spotify open desktop; obey ToolRegistry authorization."""
+    return await connector.open_desktop()
+
+@mcp.tool()
+async def spotify_open_resource(ref: str) -> Any:
+    """Spotify open resource; obey ToolRegistry authorization."""
+    return await connector.open_resource(ref=ref)
+
+@mcp.tool()
+async def spotify_open_search(query: str) -> Any:
+    """Spotify open search; obey ToolRegistry authorization."""
+    return await connector.open_search(query=query)
+
+@mcp.tool()
+async def spotify_local_status() -> Any:
+    """Spotify local status; obey ToolRegistry authorization."""
+    return await connector.local_status()
+
+@mcp.tool()
+async def spotify_local_play() -> Any:
+    """Spotify local play; obey ToolRegistry authorization."""
+    return await connector.local_play()
+
+@mcp.tool()
+async def spotify_local_pause() -> Any:
+    """Spotify local pause; obey ToolRegistry authorization."""
+    return await connector.local_pause()
+
+@mcp.tool()
+async def spotify_local_next() -> Any:
+    """Spotify local next; obey ToolRegistry authorization."""
+    return await connector.local_next()
+
+@mcp.tool()
+async def spotify_local_previous() -> Any:
+    """Spotify local previous; obey ToolRegistry authorization."""
+    return await connector.local_previous()
+
+@mcp.tool()
+async def spotify_local_seek(position_ms: int) -> Any:
+    """Spotify local seek; obey ToolRegistry authorization."""
+    return await connector.local_seek(position_ms=position_ms)
+
+@mcp.tool()
+async def spotify_local_shuffle(enabled: bool) -> Any:
+    """Spotify local shuffle; obey ToolRegistry authorization."""
+    return await connector.local_shuffle(enabled=enabled)
+
+@mcp.tool()
+async def spotify_local_stop() -> Any:
+    """Spotify local stop; obey ToolRegistry authorization."""
+    return await connector.local_stop()
+
+@mcp.tool()
+async def spotify_play_search(query: str, artist: str = '', device: str | None = None) -> Any:
+    """Spotify play search; obey ToolRegistry authorization."""
+    return await connector.play_search(query=query, artist=artist, device=device)
+
+@mcp.tool()
+async def spotify_queue_search(query: str, artist: str = '', device: str | None = None) -> Any:
+    """Spotify queue search; obey ToolRegistry authorization."""
+    return await connector.queue_search(query=query, artist=artist, device=device)
+
+@mcp.tool()
+async def spotify_save_current() -> Any:
+    """Spotify save current; obey ToolRegistry authorization."""
+    return await connector.save_current()
+
+@mcp.tool()
+async def spotify_remove_current_saved() -> Any:
+    """Spotify remove current saved; obey ToolRegistry authorization."""
+    return await connector.remove_current_saved()
+
+@mcp.tool()
+async def spotify_add_current_to_playlist(playlist: str) -> Any:
+    """Spotify add current to playlist; obey ToolRegistry authorization."""
+    return await connector.add_current_to_playlist(playlist=playlist)
+
+@mcp.tool()
+async def spotify_get_audiobook(ref: str) -> Any:
+    """Spotify get audiobook; obey ToolRegistry authorization."""
+    return await connector.get_audiobook(ref=ref)
+
+@mcp.tool()
+async def spotify_get_chapter(ref: str) -> Any:
+    """Spotify get chapter; obey ToolRegistry authorization."""
+    return await connector.get_chapter(ref=ref)
+
+@mcp.tool()
+async def spotify_audiobook_chapters(ref: str, limit: int = 20, offset: int = 0) -> Any:
+    """Spotify audiobook chapters; obey ToolRegistry authorization."""
+    return await connector.audiobook_chapters(ref=ref, limit=limit, offset=offset)
+
+@mcp.tool()
+async def spotify_playlist_images(playlist: str) -> Any:
+    """Spotify playlist images; obey ToolRegistry authorization."""
+    return await connector.playlist_images(playlist=playlist)
+
+@mcp.tool()
+async def spotify_verify_playback(expected_uri: str = '', expected_is_playing: bool | None = None) -> Any:
+    """Spotify verify playback; obey ToolRegistry authorization."""
+    return await connector.verify_playback(expected_uri=expected_uri, expected_is_playing=expected_is_playing)
+
+@mcp.tool()
+async def spotify_local_volume(percent: int) -> Any:
+    """Spotify local volume; obey ToolRegistry authorization."""
+    return await connector.local_volume(percent=percent)
+
+@mcp.tool()
+async def spotify_local_mute(enabled: bool) -> Any:
+    """Spotify local mute; obey ToolRegistry authorization."""
+    return await connector.local_mute(enabled=enabled)
+
+@mcp.tool()
+async def spotify_local_volume_status() -> Any:
+    """Spotify local volume status; obey ToolRegistry authorization."""
+    return await connector.local_volume_status()
+
+if __name__ == "__main__":
+    mcp.run()

@@ -1,0 +1,2946 @@
+[
+  {
+    "tool": "spotify_health",
+    "operation": "health",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_status",
+    "operation": "status",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_currently_playing",
+    "operation": "currently_playing",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-currently-playing"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_devices",
+    "operation": "devices",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_queue",
+    "operation": "queue",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_recently_played",
+    "operation": "recently_played",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-recently-played"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_pause",
+    "operation": "pause",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_resume",
+    "operation": "resume",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_toggle",
+    "operation": "toggle",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_next",
+    "operation": "next",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_previous",
+    "operation": "previous",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_stop",
+    "operation": "stop",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_seek",
+    "operation": "seek",
+    "access": "write",
+    "destructive": false,
+    "input": "position_ms: int, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "position_ms": {
+          "type": "integer"
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "position_ms"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_seek_relative",
+    "operation": "seek_relative",
+    "access": "write",
+    "destructive": false,
+    "input": "delta_ms: int, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state",
+      "user-modify-playback-state"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "delta_ms": {
+          "type": "integer"
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "delta_ms"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_volume",
+    "operation": "volume",
+    "access": "write",
+    "destructive": false,
+    "input": "percent: int, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "integer"
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "percent"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_volume_relative",
+    "operation": "volume_relative",
+    "access": "write",
+    "destructive": false,
+    "input": "delta: int, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "delta": {
+          "type": "integer"
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "delta"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_shuffle",
+    "operation": "shuffle",
+    "access": "write",
+    "destructive": false,
+    "input": "enabled: bool, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_repeat",
+    "operation": "repeat",
+    "access": "write",
+    "destructive": false,
+    "input": "mode: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_transfer",
+    "operation": "transfer",
+    "access": "write",
+    "destructive": false,
+    "input": "device: Annotated[str, Param(max_length=500)], play: bool = False, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state",
+      "user-modify-playback-state; exact active unrestricted device"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "device": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "play": {
+          "type": "boolean",
+          "default": false
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "device"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_track",
+    "operation": "play_track",
+    "access": "write",
+    "destructive": false,
+    "input": "track: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows deep link (no verified playback; offsets/remote devices require API)"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "track": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "track"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_album",
+    "operation": "play_album",
+    "access": "write",
+    "destructive": false,
+    "input": "album: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows deep link (no verified playback; offsets/remote devices require API)"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "album": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "album"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_artist",
+    "operation": "play_artist",
+    "access": "write",
+    "destructive": false,
+    "input": "artist: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows deep link (no verified playback; offsets/remote devices require API)"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "artist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "artist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_playlist",
+    "operation": "play_playlist",
+    "access": "write",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', offset: int = -1, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows deep link (no verified playback; offsets/remote devices require API)"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "offset": {
+          "type": "integer",
+          "default": -1
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_show",
+    "operation": "play_show",
+    "access": "write",
+    "destructive": false,
+    "input": "show: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows deep link"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "show": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "show"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_episode",
+    "operation": "play_episode",
+    "access": "write",
+    "destructive": false,
+    "input": "episode: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API",
+      "Windows deep link (no verified playback; offsets/remote devices require API)"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "episode": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "episode"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_uris",
+    "operation": "play_uris",
+    "access": "write",
+    "destructive": false,
+    "input": "items: Annotated[list[str], Param(max_items=100)], device: Annotated[str, Param(max_length=500)] = '', position_ms: int = -1, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "position_ms": {
+          "type": "integer",
+          "default": -1
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_play_saved_tracks",
+    "operation": "play_saved_tracks",
+    "access": "write",
+    "destructive": false,
+    "input": "limit: int = 30, device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read",
+      "user-modify-playback-state"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 30
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_add_to_queue",
+    "operation": "add_to_queue",
+    "access": "write",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search",
+    "operation": "search",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], kind: Annotated[str, Param(max_length=500)] = 'track', limit: int = 5, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "kind": {
+          "type": "string",
+          "maxLength": 500,
+          "default": "track"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search_tracks",
+    "operation": "search_tracks",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], limit: int = 5, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search_albums",
+    "operation": "search_albums",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], limit: int = 5, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search_artists",
+    "operation": "search_artists",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], limit: int = 5, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search_playlists",
+    "operation": "search_playlists",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], limit: int = 5, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; private playlist read scopes where applicable"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_search_episodes",
+    "operation": "search_episodes",
+    "access": "read",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], limit: int = 5, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 5
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_track",
+    "operation": "get_track",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_album",
+    "operation": "get_album",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_artist",
+    "operation": "get_artist",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_playlist",
+    "operation": "get_playlist",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; private playlist read scopes where applicable"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_episode",
+    "operation": "get_episode",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_show",
+    "operation": "get_show",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_album_tracks",
+    "operation": "album_tracks",
+    "access": "read",
+    "destructive": false,
+    "input": "album: Annotated[str, Param(max_length=500)], limit: int = 30, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "album": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 30
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "album"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_artist_albums",
+    "operation": "artist_albums",
+    "access": "read",
+    "destructive": false,
+    "input": "artist: Annotated[str, Param(max_length=500)], limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "artist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "artist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_show_episodes",
+    "operation": "show_episodes",
+    "access": "read",
+    "destructive": false,
+    "input": "show: Annotated[str, Param(max_length=500)], limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "show": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "show"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_playlist_items",
+    "operation": "playlist_items",
+    "access": "read",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], limit: int = 50, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; private playlist read scopes where applicable"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 50
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_my_playlists",
+    "operation": "my_playlists",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-read-private"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_create_playlist",
+    "operation": "create_playlist",
+    "access": "write",
+    "destructive": false,
+    "input": "name: Annotated[str, Param(max_length=500)], public: bool = False, description: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "public": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_update_playlist",
+    "operation": "update_playlist",
+    "access": "write",
+    "destructive": true,
+    "input": "playlist: Annotated[str, Param(max_length=500)], name: Annotated[str, Param(max_length=500)] = '', description: Annotated[str, Param(max_length=500)] = '', public: Annotated[str, Param(enum=('unchanged', 'true', 'false'))] = 'unchanged', account_binding: str = \"\" (host-bound, never a credential), collaborative: str = \"unchanged\"",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "public": {
+          "type": "string",
+          "enum": [
+            "unchanged",
+            "true",
+            "false"
+          ],
+          "default": "unchanged"
+        },
+        "collaborative": {
+          "type": "string",
+          "enum": [
+            "unchanged",
+            "true",
+            "false"
+          ],
+          "default": "unchanged"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_add_playlist_items",
+    "operation": "add_playlist_items",
+    "access": "write",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], items: Annotated[list[str], Param(max_items=100)], position: int = -1, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "position": {
+          "type": "integer",
+          "default": -1
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist",
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_remove_playlist_items",
+    "operation": "remove_playlist_items",
+    "access": "write",
+    "destructive": true,
+    "input": "playlist: Annotated[str, Param(max_length=500)], items: Annotated[list[str], Param(max_items=100)], snapshot_id: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "snapshot_id": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist",
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_replace_playlist_items",
+    "operation": "replace_playlist_items",
+    "access": "write",
+    "destructive": true,
+    "input": "playlist: Annotated[str, Param(max_length=500)], items: Annotated[list[str], Param(max_items=100)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist",
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_reorder_playlist_items",
+    "operation": "reorder_playlist_items",
+    "access": "write",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], range_start: int, insert_before: int, range_length: int = 1, snapshot_id: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "playlist-modify-private/public; existing playlist owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "range_start": {
+          "type": "integer"
+        },
+        "insert_before": {
+          "type": "integer"
+        },
+        "range_length": {
+          "type": "integer",
+          "default": 1
+        },
+        "snapshot_id": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist",
+        "range_start",
+        "insert_before"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_save_items",
+    "operation": "save_items",
+    "access": "write",
+    "destructive": false,
+    "input": "items: Annotated[list[str], Param(max_items=100)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-modify (playlist URI also playlist-modify-public)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_remove_saved_items",
+    "operation": "remove_saved_items",
+    "access": "write",
+    "destructive": true,
+    "input": "items: Annotated[list[str], Param(max_items=100)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-modify (playlist URI also playlist-modify-public)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_contains_saved",
+    "operation": "contains_saved",
+    "access": "read",
+    "destructive": false,
+    "input": "items: Annotated[list[str], Param(max_items=100)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "items"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_saved_tracks",
+    "operation": "saved_tracks",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_saved_albums",
+    "operation": "saved_albums",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_saved_shows",
+    "operation": "saved_shows",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_saved_episodes",
+    "operation": "saved_episodes",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-library-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_followed_artists",
+    "operation": "followed_artists",
+    "access": "read",
+    "destructive": false,
+    "input": "limit: int = 20, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-follow-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_top_tracks",
+    "operation": "top_tracks",
+    "access": "read",
+    "destructive": false,
+    "input": "time_range: Annotated[str, Param(max_length=500)] = 'medium_term', limit: int = 20, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-top-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time_range": {
+          "type": "string",
+          "maxLength": 500,
+          "default": "medium_term"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_top_artists",
+    "operation": "top_artists",
+    "access": "read",
+    "destructive": false,
+    "input": "time_range: Annotated[str, Param(max_length=500)] = 'medium_term', limit: int = 20, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-top-read"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time_range": {
+          "type": "string",
+          "maxLength": 500,
+          "default": "medium_term"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_get_profile",
+    "operation": "get_profile",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_open_desktop",
+    "operation": "open_desktop",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows deep link"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_open_resource",
+    "operation": "open_resource",
+    "access": "write",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows deep link"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_open_search",
+    "operation": "open_search",
+    "access": "write",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows deep link"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_local_status",
+    "operation": "local_status",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_play",
+    "operation": "local_play",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "Live Windows: play verified; pause accepted, fresh final paused state observed; see live-local-readback.json",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_pause",
+    "operation": "local_pause",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "Live Windows: play verified; pause accepted, fresh final paused state observed; see live-local-readback.json",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_next",
+    "operation": "local_next",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_previous",
+    "operation": "local_previous",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_seek",
+    "operation": "local_seek",
+    "access": "write",
+    "destructive": false,
+    "input": "position_ms: int, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "position_ms": {
+          "type": "integer"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "position_ms"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_local_shuffle",
+    "operation": "local_shuffle",
+    "access": "write",
+    "destructive": false,
+    "input": "enabled: bool, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_local_stop",
+    "operation": "local_stop",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_play_search",
+    "operation": "play_search",
+    "access": "write",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], artist: Annotated[str, Param(max_length=500)] = '', device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "artist": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_queue_search",
+    "operation": "queue_search",
+    "access": "write",
+    "destructive": false,
+    "input": "query: Annotated[str, Param(max_length=500)], artist: Annotated[str, Param(max_length=500)] = '', device: Annotated[str, Param(max_length=500)] = '', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-modify-playback-state (readback/device queries also user-read-playback-state)"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "artist": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "device": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_save_current",
+    "operation": "save_current",
+    "access": "write",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-currently-playing",
+      "user-library-modify"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_remove_current_saved",
+    "operation": "remove_current_saved",
+    "access": "write",
+    "destructive": true,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-currently-playing",
+      "user-library-modify"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_add_current_to_playlist",
+    "operation": "add_current_to_playlist",
+    "access": "write",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-currently-playing",
+      "playlist-modify-private/public; owner must match"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_audiobook",
+    "operation": "get_audiobook",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_get_chapter",
+    "operation": "get_chapter",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_audiobook_chapters",
+    "operation": "audiobook_chapters",
+    "access": "read",
+    "destructive": false,
+    "input": "ref: Annotated[str, Param(max_length=500)], limit: int = 20, offset: int = 0, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; no additional OAuth scope"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_playlist_images",
+    "operation": "playlist_images",
+    "access": "read",
+    "destructive": false,
+    "input": "playlist: Annotated[str, Param(max_length=500)], account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "authorized token; private playlist read scopes where applicable"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "playlist": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "playlist"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_verify_playback",
+    "operation": "verify_playback",
+    "access": "read",
+    "destructive": false,
+    "input": "expected_uri: Annotated[str, Param(max_length=500)] = '', expected_is_playing: Annotated[str, Param(enum=('unchanged', 'true', 'false'))] = 'unchanged', account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [
+      "user-read-playback-state"
+    ],
+    "modes": [
+      "API"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "expected_uri": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "expected_is_playing": {
+          "type": "string",
+          "enum": [
+            "unchanged",
+            "true",
+            "false"
+          ],
+          "default": "unchanged"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "tool": "spotify_local_volume",
+    "operation": "local_volume",
+    "access": "write",
+    "destructive": false,
+    "input": "percent: int, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "integer"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "percent"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_local_mute",
+    "operation": "local_mute",
+    "access": "write",
+    "destructive": false,
+    "input": "enabled: bool, account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ]
+    }
+  },
+  {
+    "tool": "spotify_local_volume_status",
+    "operation": "local_volume_status",
+    "access": "read",
+    "destructive": false,
+    "input": "account_binding: str = \"\" (host-bound, never a credential)",
+    "live": "NOT TESTED (API); see live-local.json for accepted local transports and verified app volume/mute",
+    "contract": "PASS: typed dispatch and invalid parameter families; real stdio discovery/invalid dispatch",
+    "scopes": [],
+    "modes": [
+      "Windows local"
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "account_binding": {
+          "type": "string",
+          "maxLength": 32,
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+]

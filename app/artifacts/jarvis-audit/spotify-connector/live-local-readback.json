@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-20 IST",
+  "mode": "human-consented live Windows control/readback",
+  "results": [
+    {
+      "operation": "local_play",
+      "accepted": true,
+      "verified": true,
+      "playing_verified": true,
+      "status": "playing_verified"
+    },
+    {
+      "operation": "local_pause",
+      "accepted": true,
+      "verified": false,
+      "playing_verified": false,
+      "status": "accepted"
+    }
+  ],
+  "fresh_final_state_paused": true
+}

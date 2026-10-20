@@ -479,10 +479,11 @@ class Actions:
         if command.kind == 'island_choice' and self.task_active:
             self.report('question', 'The task is still running. Select its option once it pauses for an answer.')
             return
-        if command.kind=='spotify_control' and command.value=='status':
+        from .spotify_host import enabled as spotify_connector_enabled
+        if command.kind=='spotify_control' and command.value=='status' and not spotify_connector_enabled(self):
             self.report('island_navigation',('Music',''))
             return
-        if command.kind=='spotify_control' and (self.task_active or command.extra=='island'):
+        if command.kind=='spotify_control' and (self.task_active or command.extra=='island') and not spotify_connector_enabled(self):
             from .island_media import TRANSPORT
             if command.value in TRANSPORT:
                 from .agent_events import check_policy
@@ -838,6 +839,9 @@ class Actions:
         return command
 
     def close(self):
+        spotify_mcp = getattr(self, '_spotify_mcp', None)
+        if spotify_mcp is not None:
+            spotify_mcp.close()
         from .utility_host import OwnedServer
         watcher = getattr(self, 'whatsapp_watcher', None)
         if watcher is not None:
@@ -1115,6 +1119,10 @@ class Actions:
             from .media_player import resolve
             command = resolve(self, command)
             self.media_resolved = command  # The island card shows the service that was actually controlled.
+        from .spotify_host import route as spotify_route
+        handled, spotify_evidence = spotify_route(self, command, cancelled)
+        if handled:
+            return spotify_evidence
         if command.kind == "media_control" and not command.extra:
             # "pause", "next", "play it again": whichever service is playing (or Jarvis last played on).
             from .media_player import active_service

@@ -1,0 +1,9 @@
+........................................................................ [ 42%]
+...........s....s....................................................... [ 85%]
+........ssssssssssssssss                                                 [100%]
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-spotify-integration\app\artifacts\jarvis-audit\spotify-connector\voice-final.xml -
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_voice_tts_audit.py:117: BLOCKED: French accents/Hindi-name pronunciation acceptability requires a labeled listening evaluation; text preservation is tested separately.
+SKIPPED [1] tests\test_voice_tts_audit.py:168: BLOCKED: STT and F5 are outside the Ollama lease coordinator; Qwen speech reservation is unit-tested, but no shared STT/F5 lease admission or controlled contention calibration exists. No concurrent heavyweight models launched.
+SKIPPED [16] tests\test_media_audit.py:182: BLOCKED: complete catalog contract still needs additional fixture/native integration, durability, privacy or resource proof; see inventory.md
+150 passed, 18 skipped in 21.27s

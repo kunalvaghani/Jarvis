@@ -143,6 +143,12 @@ class App:
             lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
             lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
             lambda: not self.closing and not self.actions.closed.is_set())
+        from jarvis.spotify_host import enabled as spotify_enabled
+        self.watchdog.register('Spotify MCP',
+            lambda: getattr(self.actions, '_spotify_mcp', None) is None or self.actions._spotify_mcp.healthy(),
+            lambda: getattr(self.actions, '_spotify_mcp', None) is not None and self.actions._spotify_mcp.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set()
+                and spotify_enabled(self.actions))
         if not self.config.get('_ui_verification', False):
             self.watchdog.start()
             self.root.after(100, self.runtime_tick)
