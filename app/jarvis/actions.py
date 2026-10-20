@@ -912,6 +912,9 @@ class Actions:
         if self.browser_automation is None:
             from .browser_automation import BrowserAutomation
             self.browser_automation = BrowserAutomation(self.apps, self.base)
+            media = self.config.get("media", {}) if isinstance(self.config, dict) else {}
+            # Skippable YouTube ads are skipped automatically in Jarvis's own browser unless media.youtube_auto_skip_ads is false.
+            self.browser_automation.settings["auto_skip_ads"] = not (isinstance(media, dict) and media.get("youtube_auto_skip_ads") is False)
         return self.browser_automation
 
     def browser_healthy(self):
@@ -1153,13 +1156,28 @@ class Actions:
                 self.open_target_pending=True
                 self.typing_failed=True
                 return windows_execute(self,[ident],{},cancelled)
+        if command.kind == "select_context":
+            # "play the second one / third playlist / number 3": the exact item from the YouTube results Jarvis showed.
+            from .media_player import play_result, recent_results
+            ordinal, _, category = command.value.partition(":")
+            youtube_last = getattr(self, "last_media_search", None) == "youtube"
+            if (recent_results(self) is not None and (ordinal.isdigit() or ordinal == "last")
+                    and (category in {"playlist", "video", "result", "one"} or (category == "track" and youtube_last))):
+                return play_result(self, -1 if ordinal == "last" else int(ordinal), category, cancelled)
+        if (command.kind == "media_control" and command.extra == "youtube"
+                and getattr(self, "youtube_target", "") == "user_chrome"):
+            from .media_player import control_user_chrome
+            return control_user_chrome(self, command.value, cancelled)
         browser = getattr(self, "browser_automation", None)
         if browser is not None and command.kind in {"context_search", "media_search", "media_control", "select_context", "click_control"}:
             handle = self.external_handle() or (self.desktop.user.GetForegroundWindow() if self.desktop else None)
             owned_player = (command.kind == "media_control" and command.extra == "youtube"
                             and getattr(self, "last_media", None) == "youtube" and "youtube.com/watch" in browser.last_url)
             if (owned_player or browser.owns_handle(handle)) and "youtube.com" in browser.last_url:
-                if command.kind in {"context_search", "media_search"} and (command.kind == "context_search" or command.extra == "youtube"):
+                if command.kind == "media_search" and command.extra == "youtube":
+                    from .media_player import search_youtube
+                    return search_youtube(self, command.value, cancelled)
+                if command.kind == "context_search":
                     return browser.request("search", cancelled, value=command.value)["message"]
                 if command.kind == "select_context":
                     ordinal, category = command.value.split(":", 1)
@@ -1543,8 +1561,10 @@ class Actions:
                 if self.desktop:
                     self.desktop.target = None
                 return result
-            if self.config.get("agent_runtime", {}).get("dom_browser", False):
-                return self._browser().request("search", cancelled, value=command.value, new_task=True)["message"]
+            if command.extra == "youtube":
+                # Your Chrome profile first (media.youtube_browser), Jarvis's browser as fallback; results are remembered.
+                from .media_player import search_youtube
+                return search_youtube(self, command.value, cancelled)
             from .browser import browser_args, music_search_url
             from .media_ui import search_current
             current = search_current(self._ui(), 'youtube', command.value, cancelled)
@@ -1562,10 +1582,19 @@ class Actions:
         if command.kind in {"browse", "browser_search"}:
             from .browser import browser_args, url_for
             if (command.kind == "browse" and command.value.casefold() == "youtube"
-                    and command.extra in {"", "chrome", "google chrome"}
-                    and self.config.get("agent_runtime", {}).get("dom_browser", False)):
-                self.last_media = "youtube"
-                return self._browser().request("navigate", cancelled, value="youtube", new_task=True)["message"]
+                    and command.extra in {"", "chrome", "google chrome"}):
+                from . import youtube_chrome
+                profile = youtube_chrome.settings(self)
+                if profile is not None:
+                    try:
+                        youtube_chrome.open_url(self, "https://www.youtube.com/", profile, cancelled)
+                        self.last_media, self.youtube_target = "youtube", "user_chrome"
+                        return "Opened YouTube in your Chrome."
+                    except youtube_chrome.ChromeUnavailable as exc:
+                        self.report("brain", "Your Chrome could not open YouTube (" + str(exc)[:100] + "); using Jarvis's browser.")
+                if profile is not None or self.config.get("agent_runtime", {}).get("dom_browser", False):
+                    self.last_media, self.youtube_target = "youtube", "jarvis"
+                    return self._browser().request("navigate", cancelled, value="youtube", new_task=True)["message"]
             args = browser_args(self.apps, command.extra or "chrome")
             url = url_for(command.value, command.kind == "browser_search")
             if cancelled():

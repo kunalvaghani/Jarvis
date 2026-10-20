@@ -11,6 +11,22 @@ from .browser_cursor import click as cursor_click
 from .ui_controls import label_key, UNSAFE_INFERRED
 
 
+SKIP_AD = ".ytp-skip-ad-button:visible, .ytp-ad-skip-button-modern:visible, .ytp-ad-skip-button:visible"
+PLAYLIST_ID = re.compile(r"(?:PL|UU|LL|FL|RD|OL)[A-Za-z0-9_-]{8,80}")
+PLAYLIST_FILTER = "&sp=EgIQAw%3D%3D"  # YouTube's own "Type: Playlist" results filter
+RESULT_TITLES = {"video": "ytd-video-renderer a#video-title",
+                 "playlist": "yt-lockup-view-model a.ytLockupMetadataViewModelTitle"}
+# Clicks YouTube's own Skip button when a skippable ad shows (owned browser only, YouTube pages only).
+AUTO_SKIP_ADS = """(() => {
+  if (!/(^|\\.)youtube\\.com$/.test(location.hostname) || window.__jarvisSkipAds) return;
+  window.__jarvisSkipAds = setInterval(() => {
+    if (!document.querySelector('.ad-showing')) return;
+    const b = document.querySelector('.ytp-skip-ad-button, .ytp-ad-skip-button-modern, .ytp-ad-skip-button');
+    if (b && b.offsetParent !== null) b.click();
+  }, 1000);
+})();"""
+
+
 def parsed(url):
     return url if hasattr(url, "scheme") and hasattr(url, "path") else urlsplit(str(url))
 
@@ -75,8 +91,12 @@ def validate_request(request):
     if 'new_task' in request and type(request['new_task']) is not bool:
         raise ValueError('new_task must be a boolean; implicit browser restart is not allowed.')
     settings=request.get('settings',{})
-    if not isinstance(settings,dict) or ('headless' in settings and type(settings['headless']) is not bool):
+    if not isinstance(settings,dict) or any(key in settings and type(settings[key]) is not bool for key in ('headless','auto_skip_ads')):
         raise ValueError('Use valid owned browser settings.')
+    if request.get('kind', 'video') not in {'video', 'playlist'}:
+        raise ValueError('YouTube search kind must be video or playlist.')
+    if 'playlist_id' in request and (not isinstance(request['playlist_id'], str) or not PLAYLIST_ID.fullmatch(request['playlist_id'])):
+        raise ValueError('A valid YouTube playlist ID is required.')
     for key in ('value','content','url'):
         if key in request and (not isinstance(request[key],str) or len(request[key])>10000 or '\x00' in request[key]
                                or any(0xd800<=ord(c)<=0xdfff for c in request[key])):
@@ -133,6 +153,8 @@ class Session:
             raise
         self.context.set_default_timeout(5000)
         self.context.set_default_navigation_timeout(15000)
+        if settings.get("auto_skip_ads", True):
+            self.context.add_init_script(AUTO_SKIP_ADS)
         self.page = self.context.pages[0] if self.context.pages else self.context.new_page()
         def closed(*_):
             self.user_closed = True
@@ -154,10 +176,10 @@ class Session:
         snapshot['open_tabs']=sum(not page.is_closed() for page in self.context.pages) if self.context else 1
         return snapshot
 
-    def search(self, query):
+    def search(self, query, kind="video"):
         page = self.page
-        destination = music_search_url(query, "youtube")
-        if urlsplit(page.url).hostname in {"www.youtube.com", "youtube.com"}:
+        destination = music_search_url(query, "youtube") + (PLAYLIST_FILTER if kind == "playlist" else "")
+        if kind == "video" and urlsplit(page.url).hostname in {"www.youtube.com", "youtube.com"}:
             field = page.locator("input[name=search_query]:visible")
             if field.count() == 1:
                 field.fill(query)
@@ -169,8 +191,36 @@ class Session:
         else:
             page.goto(destination, wait_until="domcontentloaded")
         page.wait_for_url(lambda url: parsed(url).path == "/results" and parse_qs(parsed(url).query).get("search_query") == [query], timeout=8000)
-        page.locator("ytd-video-renderer a#video-title").first.wait_for(state="visible", timeout=10000)
-        return {**self.inspect(), "verified": True, "message": "YouTube search query and visible results verified."}
+        page.locator(RESULT_TITLES[kind]).first.wait_for(state="visible", timeout=10000)
+        results = self.visible_results(kind)
+        listed = "; ".join(str(r["position"]) + ". " + r["title"][:70] for r in results[:3])
+        return {**self.inspect(), "verified": True, "kind": kind, "results": results,
+                "message": ("Found these YouTube " + kind + "s: " + listed + ". Say play the first, second or third "
+                            + kind + ".") if results else "YouTube search query and visible results verified."}
+
+    def visible_results(self, kind, limit=10):
+        """Visible search results in on-screen order: [{position, kind, title, video_id, playlist_id}]."""
+        links, rows, seen = self.page.locator(RESULT_TITLES[kind]), [], set()
+        for i in range(min(40, links.count())):
+            link = links.nth(i)
+            if not link.is_visible():
+                continue
+            href = link.get_attribute("href") or ""
+            query = parse_qs(urlsplit(href).query)
+            video, playlist = (query.get("v") or [""])[0], (query.get("list") or [""])[0]
+            if not href.startswith("/watch?") or not re.fullmatch(r"[A-Za-z0-9_-]{11}", video):
+                continue
+            if kind == "playlist" and not PLAYLIST_ID.fullmatch(playlist):
+                continue
+            key = playlist if kind == "playlist" else video
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append({"position": len(rows) + 1, "kind": kind, "title": " ".join(link.inner_text().split())[:200],
+                         "video_id": video, "playlist_id": playlist if kind == "playlist" else ""})
+            if len(rows) >= limit:
+                break
+        return rows
 
     def select_video(self, query, position=None):
         page = self.page
@@ -208,12 +258,15 @@ class Session:
         page.wait_for_function("() => {const v=document.querySelector('video');return v && !v.paused && v.readyState>=2 && !document.querySelector('.ad-showing')}", timeout=12000)
         return {**self.inspect(), "verified": True, "message": "Selected video identity and active playback verified: " + title[:160]}
 
-    def play_video(self, video_id):
-        """Open one exact video and verify real playback; skippable ads are skipped once each."""
+    def play_video(self, video_id, playlist_id=None):
+        """Open one exact video (optionally inside a playlist) and verify real playback; skippable ads are skipped."""
         if not isinstance(video_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
             raise ValueError("A YouTube video ID is required.")
+        if playlist_id is not None and not PLAYLIST_ID.fullmatch(str(playlist_id)):
+            raise ValueError("A valid YouTube playlist ID is required.")
         page = self.page
-        page.goto("https://www.youtube.com/watch?v=" + video_id, wait_until="domcontentloaded")
+        page.goto("https://www.youtube.com/watch?v=" + video_id + ("&list=" + playlist_id if playlist_id else ""),
+                  wait_until="domcontentloaded")
         page.wait_for_url(lambda url: parse_qs(parsed(url).query).get("v") == [video_id], timeout=10000)
         page.locator("video").first.wait_for(state="attached", timeout=15000)
         deadline, skipped, nudged, state = time.monotonic() + 35, False, False, None
@@ -225,7 +278,7 @@ class Session:
             if state and state["playing"] and not state["ad"]:
                 break
             if state and state["ad"]:
-                skip = page.locator(".ytp-skip-ad-button:visible, .ytp-ad-skip-button-modern:visible, .ytp-ad-skip-button:visible")
+                skip = page.locator(SKIP_AD)
                 if skip.count():
                     cursor_click(skip.first, page)
                     skipped = True
@@ -238,8 +291,23 @@ class Session:
             raise ValueError("The video opened but playback did not start" +
                              (" (an unskippable ad is still playing)" if state and state.get("ad") else "") + "; nothing was replayed.")
         title = page.title().removesuffix(" - YouTube")
-        return {**self.inspect(), "verified": True, "video_id": video_id, "state": state, "ad_skipped": skipped,
-                "message": "Playing " + title[:160] + " (video identity and playback verified)."}
+        return {**self.inspect(), "verified": True, "video_id": video_id, "playlist_id": playlist_id or "", "state": state,
+                "ad_skipped": skipped, "message": "Playing " + title[:160] + (" from the playlist" if playlist_id else "")
+                + " (video identity and playback verified)."}
+
+    def skip_ad(self):
+        """Press YouTube's own Skip button for the current ad and verify the ad ended."""
+        page = self.page
+        if not page.locator(".ad-showing").count():
+            return {"verified": True, "skipped": False, "message": "No ad is playing right now."}
+        skip = page.locator(SKIP_AD)
+        try:
+            skip.first.wait_for(state="visible", timeout=8000)
+        except Exception:
+            raise ValueError("This ad has no Skip button yet; YouTube will end it on its own.") from None
+        cursor_click(skip.first, page)
+        page.wait_for_function("() => !document.querySelector('.ad-showing')", timeout=6000)
+        return {"verified": True, "skipped": True, "message": "Ad skipped."}
 
     def gods_eye(self, actions, timeout=90, view=None):
         """Run God's Eye View's own voice actions (fly_to_location, set_layer_visibility, ...) in its page.
@@ -333,6 +401,8 @@ class Session:
         page = self.page
         if urlsplit(page.url).hostname not in {"youtube.com", "www.youtube.com"}:
             raise ValueError("YouTube player controls require the owned YouTube page.")
+        if action == "skip_ad":
+            return self.skip_ad()
         video = page.locator("video").first
         video.wait_for(state="attached")
         before = video.evaluate("v => ({position:v.currentTime,duration:v.duration,volume:v.volume,speed:v.playbackRate})")
@@ -463,10 +533,10 @@ class Session:
             snapshot=self.inspect()
             return {**snapshot,"message":"Browser requires sign-in; authenticate manually in the owned browser." if snapshot.get('authentication_required') else "Opened requested website in Jarvis browser."}
         if operation == "search":
-            return self.search(request["value"])
+            return self.search(request["value"], request.get("kind", "video"))
         if operation == "play_video":
             self.page.bring_to_front()
-            return self.play_video(request.get("video_id"))
+            return self.play_video(request.get("video_id"), request.get("playlist_id"))
         if operation == "gods_eye":
             self.page.bring_to_front()
             result = self.gods_eye(request.get("actions") or [], request.get("timeout", 90), request.get("view"))

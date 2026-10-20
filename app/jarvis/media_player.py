@@ -214,9 +214,217 @@ class PlaybackUncertain(ValueError):
     """A playback mutation may have occurred: no service fallback or automatic replay."""
 
 
+def youtube_request(text):
+    """``(query, kind)``: a request naming a playlist (even 'playlist or song') plays a real playlist."""
+    kind = "playlist" if re.search(r"\bplaylists?\b", text, re.I) else "video"
+    text = re.sub(r"\b(?:or|and) (?:a |some )?(?:songs?|videos?|playlists?)\b", " ", text, flags=re.I)
+    text = re.sub(r"\b(?:some|a|an|any|the)\b|\b(?:playlists?|songs|videos|tracks)\b", " ", text, flags=re.I)
+    return clean_query(" ".join(text.split()) or text), kind
+
+
+def _pages():
+    """The YouTube connector's page parser (one implementation for Jarvis and the connector)."""
+    import importlib.util
+    import sys
+    name = "jarvis_youtube_pages"
+    if name not in sys.modules:
+        path = BASE / "integrations" / "jarvis-connectors" / "connectors" / "apps" / "youtube" / "youtube_pages.py"
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        sys.modules[name] = module
+    return sys.modules[name]
+
+
+def _youtube_data(path, params, variable="ytInitialData", session=None):
+    import requests
+    page = (session or requests).get("https://www.youtube.com/" + path, timeout=10, params={**params, "hl": "en"},
+                                     headers={"User-Agent": UA, "Accept-Language": "en-US,en;q=0.9"})
+    try:
+        return _pages().embedded_json(page.text, variable)
+    except ValueError as exc:
+        raise ValueError(str(exc)) from None
+
+
+def youtube_playlists(query, limit=8, session=None):
+    """[{playlist_id, title, channel, video_count, first_video_id, first_title}] in YouTube's ranking order."""
+    pages = _pages()
+    rows = pages.search_playlists(_youtube_data("results", {"search_query": query, "sp": "EgIQAw=="}, session=session), limit)
+    out = []
+    for row in rows:
+        first = pages.parse_link(row["play_url"]) if row["play_url"] else None
+        if first and first["video_id"]:
+            out.append({**row, "first_video_id": first["video_id"]})
+    return out
+
+
+def first_playlist_title(playlist_id, session=None):
+    _, items = _pages().playlist_items(_youtube_data("playlist", {"list": playlist_id}, session=session), playlist_id, 1)
+    return items[0]["title"] if items else ""
+
+
+def remember_results(actions, kind, rows):
+    """Results Jarvis just showed, so 'play the second one' plays exactly that item."""
+    now = time.monotonic()
+    actions.youtube_results = {"kind": kind, "rows": rows[:10], "at": now, "time": now, "choices": rows[:10],
+                               "question": "Which YouTube " + kind + "? Say play the first, second or third " + kind + "."}
+    actions.last_media_search = "youtube"
+
+
+def recent_results(actions, max_age=20 * 60):
+    found = getattr(actions, "youtube_results", None)
+    if not isinstance(found, dict) or time.monotonic() - found.get("at", -1e9) > max_age or not found.get("rows"):
+        return None
+    return found
+
+
+def spoken_list(kind, rows):
+    listed = "; ".join(str(i) + ". " + row["title"][:70] for i, row in enumerate(rows[:3], 1))
+    return "Found these YouTube " + kind + "s: " + listed + ". Say play the first, second or third " + kind + "."
+
+
+def search_youtube(actions, text, cancelled):
+    """Search YouTube, show the results, remember them and speak the top three."""
+    query, kind = youtube_request(text)
+    from . import youtube_chrome
+    profile = youtube_chrome.settings(actions)
+    url = ("https://www.youtube.com/results?search_query=" + quote(query) + ("&sp=EgIQAw%3D%3D" if kind == "playlist" else ""))
+    rows = []
+    if profile is not None:
+        try:
+            # Your Chrome cannot be read reliably, so Jarvis's own ranked list is spoken, shown and numbered.
+            try:
+                rows = youtube_playlists(query) if kind == "playlist" else [
+                    {**row, "video_id": row["id"]} for row in youtube_search(query, limit=10)]
+            except Exception as exc:  # network/page-layout failure: still show the page, just without a numbered list
+                actions.report("brain", "YouTube results could not be listed (" + type(exc).__name__ + ").")
+                rows = []
+            if cancelled():
+                raise ValueError("YouTube search cancelled.")
+            youtube_chrome.open_url(actions, url, profile, cancelled)
+            actions.youtube_target = "user_chrome"
+            remember_results(actions, kind, rows)
+            return spoken_list(kind, rows) if rows else "Opened YouTube " + kind + " results for " + query + " in your Chrome."
+        except youtube_chrome.ChromeUnavailable as exc:
+            actions.report("brain", "Your Chrome could not open YouTube (" + str(exc)[:100] + "); using Jarvis's browser.")
+    result = actions._browser().request("search", cancelled, value=query, kind=kind, new_task=True)
+    actions.youtube_target = "jarvis"
+    shown = result.get("results") or rows
+    remember_results(actions, kind, shown)
+    return result["message"]
+
+
+def play_result(actions, position, category, cancelled):
+    """Play item ``position`` (1-based) of the YouTube results Jarvis last showed."""
+    found = recent_results(actions)
+    if found is None:
+        raise ValueError("There are no recent YouTube results to choose from; search YouTube first.")
+    if category == "playlist" and found["kind"] != "playlist":
+        raise ValueError("The last YouTube search showed videos, not playlists. Say find playlists on YouTube first.")
+    rows = found["rows"]
+    if position == -1:
+        position = len(rows)
+    if not 1 <= position <= len(rows):
+        raise ValueError("Choose a number from 1 to " + str(len(rows)) + ".")
+    row = rows[position - 1]
+    if found["kind"] == "playlist":
+        return play_youtube_item(actions, row["first_video_id"] if "first_video_id" in row else row["video_id"],
+                                 row["title"], row.get("channel", ""), cancelled, playlist_id=row["playlist_id"])
+    return play_youtube_item(actions, row["video_id"], row["title"], row.get("channel", ""), cancelled,
+                             duration=row.get("duration", 0))
+
+
+def play_youtube_item(actions, video_id, title, channel, cancelled, playlist_id="", duration=0):
+    """Play one exact video (or a playlist from its first video): your Chrome first, Jarvis's browser as fallback."""
+    from . import youtube_chrome
+    image = fetch_image("https://i.ytimg.com/vi/%s/mqdefault.jpg" % video_id)
+    pause_other(actions, "youtube")
+    actions.report("media_card", card("youtube", "loading", title, channel, image, 0, duration))
+    label = ("the playlist " if playlist_id else "") + title
+    profile = youtube_chrome.settings(actions)
+    if profile is not None:
+        expected = first_playlist_title(playlist_id) if playlist_id else title
+        url = "https://www.youtube.com/watch?v=" + video_id + ("&list=" + playlist_id if playlist_id else "")
+        try:
+            row = youtube_chrome.play(actions, url, expected or title, cancelled)
+        except youtube_chrome.PlaybackUncertain as exc:
+            raise PlaybackUncertain(str(exc)) from None
+        except youtube_chrome.ChromeUnavailable as exc:
+            actions.report("brain", "Your Chrome did not start YouTube (" + str(exc)[:100] + "); using Jarvis's browser.")
+        else:
+            actions.report("media_card", card("youtube", "playing", row["title"] or title, row["artist"] or channel, image,
+                                              row["position"], row["duration"] or duration))
+            actions.last_media, actions.youtube_target = "youtube", "user_chrome"
+            actions.last_youtube = {"title": row["title"] or title, "channel": row["artist"] or channel, "image": image}
+            return "Playing " + label + " on YouTube in your Chrome."
+    try:
+        request = {"video_id": video_id, **({"playlist_id": playlist_id} if playlist_id else {})}
+        result = actions._browser().request("play_video", cancelled, new_task=True, **request)
+    except Exception:
+        raise PlaybackUncertain('YouTube playback outcome is uncertain; inspect the player before repeating.') from None
+    if result.get("verified") is not True:
+        raise PlaybackUncertain("The video opened but playback was not verified; nothing was replayed.")
+    state = result.get("state") or {}
+    actions.report("media_card", card("youtube", "playing", title, channel, image,
+                                      state.get("position", 0), state.get("duration") or duration,
+                                      "Ad skipped" if result.get("ad_skipped") else ""))
+    actions.last_media, actions.youtube_target = "youtube", "jarvis"
+    actions.last_youtube = {"title": title, "channel": channel, "image": image}
+    return "Playing " + label + " on YouTube."
+
+
+def control_user_chrome(actions, action, cancelled, clock=time.monotonic, sleep=time.sleep):
+    """YouTube controls for the tab Jarvis started in your Chrome; each result is read back before it is reported."""
+    from . import youtube_chrome
+    if action in {"play", "pause", "next", "previous", "status"}:
+        title = (getattr(actions, "last_youtube", None) or {}).get("title", "")
+        rows = youtube_chrome.sessions()
+        mine = [row for row in rows if title and youtube_chrome.matches(title, row["title"])] or (rows if len(rows) == 1 else [])
+        if not mine:
+            raise ValueError("I can't find the YouTube tab I started in your Chrome; bring it to the front and say it again.")
+        row = mine[0]
+        if action == "status":
+            return ("Playing: " if row["status"] == "playing" else "Paused: ") + row["title"] + " on YouTube in your Chrome."
+        if action in {"play", "pause"} and row["status"] == ("playing" if action == "play" else "paused"):
+            return "YouTube is already " + row["status"] + "."
+        if cancelled():
+            raise ValueError("YouTube control cancelled before sending.")
+        if not youtube_chrome.act(action, row["title"]):
+            raise ValueError("Chrome did not accept the " + action + " request; nothing else was tried.")
+        started = clock()
+        while clock() - started < 6:
+            sleep(.4)
+            now = youtube_chrome.sessions()
+            if action in {"play", "pause"}:
+                same = [r for r in now if r["title"] == row["title"]]
+                if same and same[0]["status"] == ("playing" if action == "play" else "paused"):
+                    return ("Resumed " if action == "play" else "Paused ") + row["title"] + "."
+            else:
+                changed = [r for r in now if r["title"] and r["title"] != row["title"] and r["status"] == "playing"]
+                if changed:
+                    actions.last_youtube = {**(getattr(actions, "last_youtube", None) or {}), "title": changed[0]["title"],
+                                            "channel": changed[0]["artist"], "image": ""}
+                    return ("Next: " if action == "next" else "Previous: ") + changed[0]["title"] + "."
+        raise PlaybackUncertain("The " + action + " request was sent to your Chrome but the change was not confirmed; "
+                                "check the tab before repeating.")
+    from .media_ui import control  # skip ad, captions, seek, volume...: accessibility on your Chrome tab
+    return control(actions._ui(), "youtube", action, cancelled)
+
+
 def play_youtube(actions, query, cancelled):
-    query = clean_query(query)
-    actions.report("media_card", card("youtube", "searching", query, "Finding the best match"))
+    query, kind = youtube_request(query)
+    actions.report("media_card", card("youtube", "searching", query, "Finding the best " + kind))
+    if kind == "playlist":
+        rows = youtube_playlists(query)
+        if cancelled():
+            raise ValueError("YouTube request cancelled before playback.")
+        if not rows:
+            actions.report("media_card", card("youtube", "error", query, "No YouTube playlists"))
+            raise ValueError("YouTube found no playlist for " + query + ".")
+        remember_results(actions, "playlist", rows)
+        chosen = rows[0]  # YouTube's own ranking; the rest stay available as 'play the second playlist'
+        return play_youtube_item(actions, chosen["first_video_id"], chosen["title"], chosen["channel"], cancelled,
+                                 playlist_id=chosen["playlist_id"])
     rows = youtube_search(query)
     if cancelled():
         raise ValueError("YouTube request cancelled before playback.")
@@ -224,22 +432,9 @@ def play_youtube(actions, query, cancelled):
     if not chosen:
         actions.report("media_card", card("youtube", "error", query, "No YouTube results"))
         raise ValueError("YouTube found no video for " + query + ".")
-    image = fetch_image(chosen["thumbnail"])
-    pause_other(actions, "youtube")
-    actions.report("media_card", card("youtube", "loading", chosen["title"], chosen["channel"], image, 0, chosen["duration"]))
-    try:
-        result = actions._browser().request("play_video", cancelled, video_id=chosen["id"], new_task=True)
-    except Exception:
-        raise PlaybackUncertain('YouTube playback outcome is uncertain; inspect the player before repeating.') from None
-    if result.get("verified") is not True:
-        raise PlaybackUncertain("The video opened but playback was not verified; nothing was replayed.")
-    state = result.get("state") or {}
-    actions.report("media_card", card("youtube", "playing", chosen["title"], chosen["channel"], image,
-                                      state.get("position", 0), state.get("duration") or chosen["duration"],
-                                      "Ad skipped" if result.get("ad_skipped") else ""))
-    actions.last_media = "youtube"
-    actions.last_youtube = {"title": chosen["title"], "channel": chosen["channel"], "image": image}
-    return "Playing " + chosen["title"] + " on YouTube."
+    remember_results(actions, "video", [{**row, "video_id": row["id"]} for row in rows])
+    return play_youtube_item(actions, chosen["id"], chosen["title"], chosen["channel"], cancelled,
+                             duration=chosen["duration"])
 
 
 # --- Spotify ----------------------------------------------------------------------
@@ -453,6 +648,14 @@ def active_service(actions):
     """The service that is playing now; otherwise the one Jarvis used last; otherwise Spotify."""
     spotify = spotify_now()
     youtube = youtube_state(actions)
+    if not youtube and getattr(actions, "youtube_target", "") == "user_chrome":
+        try:  # YouTube that Jarvis started in your own Chrome counts too
+            from . import youtube_chrome
+            title = (getattr(actions, "last_youtube", None) or {}).get("title", "")
+            rows = [r for r in youtube_chrome.sessions() if title and youtube_chrome.matches(title, r["title"])]
+            youtube = {"paused": rows[0]["status"] != "playing"} if rows else {}
+        except ValueError:
+            youtube = {}
     playing = [name for name, ok in (("spotify", bool(spotify and spotify.get("status") == "playing")),
                                      ("youtube", bool(youtube and youtube.get("paused") is False))) if ok]
     last = getattr(actions, "last_media", None)

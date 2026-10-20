@@ -4,6 +4,67 @@ Updated **2026-10-20**. This is the continuing handoff for numbered prompts, inc
 
 The isolated `codex-review` checkout retains historical uncommitted repairs at base `a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6`. Those earlier production repairs were integrated on Claude at `3fbfbf6` and independently reverified at pinned `e5af0e7` in a separate checkout. Newly proposed UI/memory tests still await review/integration. Preserve the original checkout's user configuration and all prior evidence. No automatic merge/deployment.
 
+## YouTube in the user's Chrome, playlists, numbered picks, skip ads — 2026-10-20
+
+The user reported that skip-ads was missing, that "play hindi lofi playlist or song from youtube" failed, that "play the first/2nd/3rd playlist or song" got confused, and that "select first video" clicked the YouTube logo. They also asked that YouTube always open in their own Chrome (the "Comedy with - Chrome" shortcut, `--profile-directory="Default"`), falling back to another browser only on error.
+
+- **Root causes (reproduced):**
+  - Playlist requests had no playlist path and played a mix video titled "…playlist…".
+  - Ordinals for playlists, "one" and numbers did not parse; "play number 3" played a song called "number 3".
+  - "Skip ad" did not parse, and ads were skipped only once, at video start.
+  - In the accessibility path, "YouTube Home" passed the video filter and, as the top-most link, became video 1.
+  - The user's Chrome currently exposes only browser chrome to accessibility (27 controls, no page content), so on-screen selection there is unreliable.
+- **Design:**
+  - New `jarvis/youtube_chrome.py`. Chrome 136+ blocks automating the default profile, so Jarvis opens exact URLs (`--profile-directory`) and confirms or controls playback through the Windows media session (the source "Chrome" reports the title).
+  - Fallback to Jarvis's browser happens only when nothing new played. If something new played but was not confirmed, that is `PlaybackUncertain`, with no replay.
+  - Search results are remembered (20 min), spoken, and shown as an island choice list. Ordinals play that exact ID.
+  - The browser worker gained playlist search/play, `skip_ad`, and an opt-out auto-skip init script.
+- **Tests:**
+  - `tests/test_youtube_user_chrome.py`: 37 PASS.
+  - Legacy expectations updated in `test_automation_upgrade`, `test_media_player` (pinned to `youtube_browser: jarvis`) and `test_natural_names` (profile argument).
+  - Targeted regression: 2,288 PASS / 1 FAIL. The git-snapshot test collided with a temporary worktree and passes alone (25/25).
+  - `test_speech` failed once in a long run with an onnxruntime DLL-initialization error; it passes alone and passed in the re-run. It is intermittent and not caused by this change.
+- **Live:**
+  - In a throwaway headless Chrome: playlist search, playlist playback (identity and playlist verified, 24.6 s), skip-ad readback and the auto-skip install all PASS.
+  - **NOT RUN:** the user's real Chrome (it would open a tab and pause their music); auto-skip during a real skippable ad (ads are random); `media_ui` "Skip" button labels against a live ad.
+- **Launcher:** `repair_required` because Docker and Ollama were not running at check time (no processes); unrelated to this change.
+- **Next action:** after restarting Jarvis, say "play hindi lofi playlist from YouTube", then "find hindi lofi playlists on YouTube", "play the second one", "pause", "next" and "skip ad" during an ad. Confirm each happens in the Comedy-with Chrome window.
+
+## YouTube app connector — 2026-10-20
+
+First app connector, created from `D:\Phython Project\Connectors\jarvis_youtube_connector`: a read-only child of `BaseConnector` (`integrations/jarvis-connectors/connectors/apps/youtube/`). It is registered as server `youtube` in `app/.jarvis/mcp.json`, reached through the new `youtube_lookup` route in `capabilities.py` and the updated `skills/youtube-media/SKILL.md`. Full record: [evidence](../artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+
+- **Architecture:** the starter's own Playwright playback was rejected. The bridge runs connectors per call, so a connector-owned browser would close after every call and would compete with Jarvis's verified player. Playback stays native.
+- **Fixed:**
+  - The base result cap now covers the whole MCP envelope. Before, 6,000-character notes or 15-item playlists would reach Jarvis as truncated, invalid JSON.
+  - NFKC titles: qwen invented titles for full-width text.
+  - Guide fixes for planner tool choice and the `mcp_call` field format.
+- **Evidence:**
+  - Connector suite: 89 PASS / 1 SKIPPED, live YouTube included.
+  - Targeted Jarvis regression: 865 PASS / 20 SKIPPED / 0 FAIL, plus 395 PASS / 2 SKIPPED after the final guide text.
+  - MCP boundary suite: 8/8. Launcher: ready.
+  - qwen3.5:9b: direct 9/9; planner-format harness 8/10 in 3 of 3 trials.
+- **Open defects:**
+  - In the planner-format harness, "How long is this video <link>?" and "top 5 results for …" get `done=true` with an invented answer on step 1 and no tool call (3 of 3 trials). Live Jarvis sends a first-step `done` to the independent goal verifier, which speaks "Task paused…" or a fixed "Finished…" message, never the planner's text. The likely effect is a stalled request, not a wrong answer; this has not been verified live.
+  - Suggested fix: for `youtube_lookup` intents, reject a first-step `done` that has no observation and ask the planner again.
+- **NOT RUN:**
+  - The full Jarvis Brain with voice or typed requests through the connector.
+  - The playback hand-off (`browser_navigate` with `play_url`, then verify).
+  - Data API mode against a live key.
+  - The SDK v2 runtime.
+  - The full ~3,600-test regression.
+- **Next action:** run "Jarvis, find me a lofi hip hop playlist on YouTube" live, approve the card, and confirm the spoken answer cites real titles. Then implement the first-step-`done` guard and re-run `evals/youtube_qwen_eval.py --mode jarvis`.
+
+## Custom MCP connector base — 2026-10-20
+
+Added [`integrations/jarvis-connectors/`](../integrations/jarvis-connectors/README.md), a `BaseConnector` parent class with a read-only `notes` child (ported from the user's `jarvis_custom_connector_starter`) and a `template` child. Production Jarvis code was not changed. Connectors plug into the existing `.jarvis/mcp.json` → `mcp_bridge` path.
+
+- **Evidence:** connector suite 47 PASS / 1 SKIPPED (symlink creation is not permitted for this Windows account). It includes a raw JSON-RPC stdio subprocess and an end-to-end `ToolRegistry` → `mcp_bridge` → notes connector run with a mocked approval callback. `tests/test_prompt33_mcp_boundaries.py`: 8 PASS.
+- **Fixed during the work:** the starter's exact-substring search missed "Blender material" when the words were not adjacent. `search_notes` now requires every query word, in any order.
+- **NOT RUN:** the official SDK v2 runtime (`--runtime sdk`) and `client_smoke.py`. `mcp` 2.x is installed in no local venv, and installation needs user authorization. The adapter in `sdk_runtime.py` depends on upstream signatures that have not been verified locally.
+- **Not done:** no connector is enabled in `app/.jarvis/mcp.json`. Natural requests such as "search my notes for Blender" do not reach the `mcp` capability, because `capabilities.py` routes only "mcp/plugin/integration" wording. A live voice/brain → connector acceptance run is therefore NOT RUN.
+- **Next action:** with user approval, create `.venv-connectors` (Python 3.11), install `mcp>=2,<3`, run `client_smoke.py --runtime sdk` and pin the version. Then enable the notes entry with a real notes folder, add a routing hint for configured connectors, and run a live acceptance request.
+
 ## Claude integration — 2026-10-20 (P99-R8 / V2-004 and new tests)
 
 Claude reviewed and accepted Codex's e5af0e7 proposals and applied them on `claude` in the commit after `e5af0e7`:

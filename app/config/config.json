@@ -1389,7 +1389,7 @@
     "noise_scale": 0.667,
     "noise_w_scale": 0.8,
     "sentence_silence": 0.0,
-    "engine": "f5",
+    "engine": "kokoro",
     "f5": {
       "device": "cuda",
       "reference_audio": "models/voices/f5/reference.wav",
@@ -1561,7 +1561,9 @@
   },
   "exploration": {
     "enabled": true,
-    "applications": ["blender"],
+    "applications": [
+      "blender"
+    ],
     "max_episodes_per_day": 6
   },
   "cloud_architect": {

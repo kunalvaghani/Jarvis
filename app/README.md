@@ -1,5 +1,17 @@
 # Jarvis — local Windows voice assistant
 
+<!-- youtube-user-chrome-2026-10-20 -->
+**2026-10-20 — YouTube opens in your own Chrome; playlists, numbered picks, skip ads and the logo bug fixed.** "Open YouTube", YouTube searches and "play X on YouTube" now use your Chrome profile (`media.youtube_chrome_profile`, default `Default`, the "Comedy with - Chrome" shortcut). Playback there is confirmed through the Windows media session. If nothing starts in your Chrome, Jarvis's own browser takes over; if something started but could not be confirmed, nothing is replayed. Chrome 136+ blocks automation of the default profile, so in your Chrome Jarvis opens exact URLs and uses the media session and accessibility to control the tab. "Play hindi lofi playlist from YouTube" plays a real playlist, not a mix video named "playlist". After a search, "play the second one", "play the third playlist" or "number 3" plays exactly that item from the list Jarvis spoke and shows on the island. "Skip ad" presses YouTube's Skip button; Jarvis's own browser also skips skippable ads automatically (`media.youtube_auto_skip_ads`). Fixed: "select first video" could click the YouTube logo ("YouTube Home" was treated as video 1). 37 new tests; targeted regression **2,288 passed / 1 failed**; the failure, a git-snapshot test, passes alone (25/25) and collided with a temporary worktree. Live in a throwaway browser: playlist search, playlist playback and skip-ad readback passed. **Not run live in your Chrome** (it would open a tab and pause your music). Restart Jarvis to apply.
+<!-- /youtube-user-chrome-2026-10-20 -->
+
+<!-- youtube-connector-2026-10-20 -->
+**2026-10-20 — First app connector: YouTube (read-only), integrated.** [`integrations/jarvis-connectors/connectors/apps/youtube/`](integrations/jarvis-connectors/connectors/apps/youtube/README.md) adds `search_videos`, `search_playlists`, `video_details`, `playlist_videos` and `parse_link` as MCP server `youtube`, enabled in `.jarvis/mcp.json`. A new `youtube_lookup` capability route and the [youtube-media guide](skills/youtube-media/SKILL.md) send playlist, details and top-N requests to it; every call shows an approval card. Playback stays on Jarvis's existing verified player, because the bridge runs connectors per call. Base-class fix: result size is now measured as Jarvis receives it, so results can no longer be truncated into invalid JSON. Connector tests: 89 passed / 1 skipped, including live YouTube through the bridge. Targeted Jarvis regression: 865 passed / 20 skipped / 0 failed. qwen3.5:9b: 9/9 with the tools directly; 8/10 in a planner-format harness (not the full Brain), where two prompts are answered from memory. Full regression not run. [Evidence](artifacts/jarvis-audit/youtube-connector/2026-10-20/README.md).
+<!-- /youtube-connector-2026-10-20 -->
+
+<!-- custom-connectors-2026-10-20 -->
+**2026-10-20 — Custom MCP connector base added.** [`integrations/jarvis-connectors/`](integrations/jarvis-connectors/README.md) provides `BaseConnector`, a parent class for local stdio MCP connectors. It generates schemas inside the bridge's contract subset, validates arguments strictly, hides write tools unless `--allow-write` is passed, bounds results and confines file access. It runs on the official MCP SDK v2 `MCPServer` or on a stdlib runtime. It includes a read-only `notes` child, ported from the user's connector starter, and a `template` child. Connector tests: **47 passed / 1 skipped** (symlink creation is not permitted on this account), including real stdio and end-to-end `ToolRegistry` → `mcp_bridge` calls. Existing MCP boundary suite: 8/8 passed. SDK v2 runtime NOT RUN because `mcp` 2.x is not installed. No connector is enabled in `.jarvis/mcp.json`.
+<!-- /custom-connectors-2026-10-20 -->
+
 <!-- prompt99-e5af-review -->
 **2026-10-20 independent final review — NOT READY FOR DEPLOYMENT:** Claude `e5af0e7`; candidate full 1941 pass/139 skip plus one separate unresolved deep-cwd failure. New proposed fix rejects malformed model aliases at authorization and direct downloader boundaries, preventing manifest path escape; supported `name[:tag]` and `namespace/name[:tag]` retain digest-bound transport. Failing-before/passing-after fixtures, 6/6 safety mutants and 10 environment consistency checks recorded. No live assistant certification/install/merge. [Verdict](artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [Claude handoff](docs/CLAUDE_HANDOFF.md).
 
@@ -1854,6 +1866,10 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
   (Docker Desktop, network only during the build). Approved tools are listed in
   `.jarvis-runtime/mcp/generated/registry.json` and appear to `mcp_status`/`mcp_call` as `gen-<name>`; `.jarvis/mcp.json`
   entries with the same name win. Set an entry's `"enabled": false` to disable it.
+* Custom connectors: write a child of `BaseConnector` in
+  [`integrations/jarvis-connectors/`](integrations/jarvis-connectors/README.md) (see `connectors/template/`), then add a
+  trusted entry to `.jarvis/mcp.json` with an absolute `python.exe`, the server script and its `--root`/settings in `args`,
+  and an exact `allow_tools` list ([example](integrations/jarvis-connectors/mcp.example.json)).
 
 ### Reasoning lessons, vault index and exploration
 
@@ -2076,6 +2092,9 @@ Jarvis/
 | `memory.long_term`, `weather_alerts` | Learned facts and conversation summaries with `qwen3.5:9b` (15-minute idle summaries); weather and emergency alerts every 30 min at `warning` level. See [settings](docs/memory-apis-alerts.md#settings-configconfigjson). |
 | `whatsapp` | Enabled; watch messages and calls every 2 s, draft replies for approval, skip groups and muted chats, at most 5 replies per request. See [WhatsApp settings](docs/whatsapp.md#settings-configconfigjson--whatsapp). |
 | `media.default_service` | `youtube`; where "play X" goes when no service is named and Jarvis has not played anything yet. The optional YouTube Data API v3 key goes in gitignored `secrets/youtube.json` (`{"api_key": "..."}`) or `JARVIS_YOUTUBE_API_KEY`, never here. |
+| `media.youtube_browser` | Not set, so the default `user_chrome` applies: YouTube opens in your own Chrome profile, and Jarvis's browser is used automatically if that fails. Set it to `jarvis` to always use Jarvis's controlled browser. |
+| `media.youtube_chrome_profile` | Not set, so the default `Default` applies (the "Comedy with - Chrome" desktop shortcut). Use a Chrome profile folder name such as `Profile 1`. |
+| `media.youtube_auto_skip_ads` | Not set, so the default `true` applies: Jarvis's own browser presses YouTube's Skip button whenever a skippable ad appears. In your Chrome, say "skip ad". |
 
 Current application location: `D:\Kunals GitHub Repo\Jarvis\app`. Launchers use their own directory; application/model paths derive from source locations. Run commands from the app directory so Python resolves the `jarvis` package. The **open project folder** command uses the first existing non-drive-root entry in `project_roots`, rather than relying on the old folder name.
 
