@@ -107,6 +107,7 @@ class Speech:
         self.lock = threading.RLock()
         self.reference_texts = []
         self.output_until = 0.
+        self.stream_until = 0.  # An answer is still being written and spoken sentence by sentence.
         self.responses = None
         self.voice_log = None
         self.outstanding = {}  # Kokoro request id -> generation
@@ -156,6 +157,7 @@ class Speech:
         if not active:
             self.cancel()
             return
+        self.stream_until = time.monotonic() + 4.0  # Gaps between streamed sentences are still mid-answer.
         f5 = self.options.get('engine') == 'f5'
         if f5 and phase not in {None, 'Conversing', 'Groq public answer', 'Generating verified answer'}:
             # Keep research drafts on the island until verification selects an answer.
@@ -222,6 +224,7 @@ class Speech:
             self.submitted_at.clear()
             self.audio_committed.clear()
             self.streamed = None
+            self.stream_until = 0.
             self._end_output()
             while True:
                 try:
@@ -236,8 +239,12 @@ class Speech:
                 self.cancel()
 
     def output_recent(self):
-        # Capture callback must not wait for voice process disposal/synthesis locks.
-        return self.speaking.is_set() or time.monotonic() < self.output_until
+        # Capture callback must not wait for voice process disposal/synthesis locks. An answer counts as
+        # ongoing between its sentences too (next one still synthesizing, queued or being written), so room
+        # noise or the speaker's own tail heard in a gap cannot cancel the rest of the reply without "Jarvis".
+        now = time.monotonic()
+        return (self.speaking.is_set() or now < self.output_until or bool(self.outstanding)
+                or not self.queue.empty() or now < self.stream_until)
 
     def output_references(self):
         return tuple(self.reference_texts)  # Replaced as a whole under the writer lock.

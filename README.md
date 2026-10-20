@@ -15,6 +15,10 @@ branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
 
+<!-- voice-continuity-2026-10-20 -->
+**2026-10-20 — Continuous voice: Kokoro replaces F5 on this 4 GB GPU (F5 was slower than real time), and gaps between sentences no longer cancel a reply.** Full regression 3,668 passed / 0 failed. [Record](app/artifacts/jarvis-audit/voice-continuity/2026-10-20/README.md).
+<!-- /voice-continuity-2026-10-20 -->
+
 <!-- command-routing-2026-10-20 -->
 **2026-10-20 — Command routing repaired: websites open in Google Chrome; "select the second video", misheard "Jarvis" and Spotify play phrasings now reach their actions.** Full regression 3,661 passed / 0 failed. [Record](app/artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
 <!-- /command-routing-2026-10-20 -->

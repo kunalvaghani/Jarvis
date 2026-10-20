@@ -30,6 +30,10 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 Historical audit
 results below describe their original source revisions and live-validation gaps.
 
+<!-- voice-continuity-2026-10-20 -->
+**2026-10-20 — Voice made continuous: speech engine switched from F5 to Kokoro, and gaps no longer cancel replies.** On this RTX 3050 4 GB laptop, F5 took 1.8–3.1× longer to synthesize than to speak (4.5 s before the first sound), so Jarvis went silent after every sentence. Kokoro renders about 3.4× faster than speech, with first audio in about 1 s, and plays with no stalls. Natural delivery (phrasing, pauses, breaths, emotional pacing) is kept. A reply now stays protected between its sentences, so only "Jarvis ..." can interrupt it. Set `speech.engine` back to `f5` for the cloned voice. 7 new tests; full regression **3,668 passed / 148 BLOCKED skips / 0 failed**. Live playback NOT RUN; restart Jarvis to apply. [Record](artifacts/jarvis-audit/voice-continuity/2026-10-20/README.md).
+<!-- /voice-continuity-2026-10-20 -->
+
 <!-- command-routing-2026-10-20 -->
 **2026-10-20 — Spoken command routing repaired: websites open in Google Chrome, and natural phrasings reach the action.** "Open YouTube" (and Google, Gmail, GitHub, Drive, ChatGPT) now opens in Chrome, never the Windows default browser; YouTube uses the Jarvis-controlled Chrome so "select the second video" works on that page. Phrasings that used to fall into chat now run: "so I will / shall we select the second video", "Jarvis" misheard as "there is", "opens spotify and play ...", and corrections such as "it's obviously Finding Her on Spotify". Chat replies no longer promise actions they cannot perform. 26 new routing tests; full regression **3,661 passed / 148 BLOCKED skips / 0 failed**. Live browser/Spotify checks NOT RUN; restart Jarvis to apply. [Record](artifacts/jarvis-audit/command-routing/2026-10-20/README.md).
 <!-- /command-routing-2026-10-20 -->
