@@ -1,5 +1,11 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt99-e5af-review -->
+**2026-10-20 independent final review — NOT READY FOR DEPLOYMENT:** Claude `e5af0e7`; candidate full 1941 pass/139 skip plus one separate unresolved deep-cwd failure. New proposed fix rejects malformed model aliases at authorization and direct downloader boundaries, preventing manifest path escape; supported `name[:tag]` and `namespace/name[:tag]` retain digest-bound transport. Failing-before/passing-after fixtures, 6/6 safety mutants and 10 environment consistency checks recorded. No live assistant certification/install/merge. [Verdict](artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [Claude handoff](docs/CLAUDE_HANDOFF.md).
+
+<!-- prompt37-memory-continuation -->
+**2026-10-20 ReasoningBank continuation:** pinned `e5af0e7`; fresh neighboring fixtures **109 pass / 1 skip**. Real workbook/SQLite/BrainClient wire with simulated planner: retrieved anti-pattern reaches repeat request, task outcome honestly does not improve; memory-off comparison also checked. No production change or live inference claim. JRV-37-017 remains blocked for full orchestration/real planner. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/verdict.md); [Claude handoff](docs/CLAUDE_HANDOFF.md).
+
 ## Independent audit checkpoint (2026-10-19)
 
 The independent review pins `claude` at `36fbf3ce925080f7f54afa87eaf1d9b88414142d` in a separate `codex-review` worktree. This audit branch is an explicit exception to the earlier three-branch convention. No fixes were merged into `claude` or `main`.
@@ -23,6 +29,14 @@ regression: **3,174 passed, 147 skipped, zero failures**; launcher readiness
 **ready** (dependencies/configured services, not live feature certification).
 Historical audit
 results below describe their original source revisions and live-validation gaps.
+
+<!-- claude-integration-e5af0e7 -->
+**2026-10-20 — Claude integrated Codex's e5af0e7 proposals: P99-R8/V2-004 model-path containment and three new tests (model paths, mock-send UI restart, ReasoningBank repeat). Release NOT READY pending independent verification.** An approved model alias must now be `name[:tag]` or `namespace/name[:tag]`, checked at authorization and again before any download request, and the manifest must resolve inside the model store. Three-segment names such as `hf.co/user/model` are refused. Against unfixed e5af0e7 the path test fails 27 cases; with the patch, 31/31 pass. Full regression **3,635 passed / 148 BLOCKED skips / 0 failed**. The launcher check timed out once on the F5 probe directly after the run and was `ready` on rerun; both results are kept. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
+<!-- /claude-integration-e5af0e7 -->
+
+<!-- prompt37-e5af-verification -->
+**2026-10-20 - Independent Prompt 37 verification of committed claude e5af0e7:** **1907 PASS / 0 FAIL / 139 SKIPPED** in the fresh full relevant run; 104 focused checks pass. Earlier P34-P37 production repairs are integrated in 3fbfbf6. New JRV-37-021 regression passes a real owned child crash/restart through the task queue and actual App/Island/Desk/Tk text consumers: uncertain mock send stays paused, one outbox row, no planner replay, speech sink once. No real account send or audio. New portable test awaits integration; no production behavior changed here. Revised cases: **1 owned mock-send/UI PASS / 25 BLOCKED**. Other verifier/provenance/native/live/training gates and isolated repair_required remain. [Evidence](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md) · [Journal](artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/ui-restart-journal.json) · [Claude handoff](docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-e5af-verification -->
 
 <!-- claude-integration-a9b4ce1 -->
 **2026-10-20 — Claude integrated Codex's reviewed P34–P37 repairs on `claude` (`3fbfbf6`, user config preserved) and repaired P34-R1/R2/R3. Release still NOT READY; awaiting independent verification at the new SHA.** Approved Ollama downloads are now content-addressed: the manifest and layers are fetched by approved digest with per-layer and total byte caps, partial layers are kept and there is no tag pull. An authorized environment rebuild now happens in place from a frozen, re-hashed lock snapshot; on any failure the previous environment is restored and the failed attempt kept. Tests use mocked transport only; live registry/Ollama and real rebuilds are NOT RUN. Full regression **3,601 passed / 148 BLOCKED skips / 0 failed**; launcher ready. [Record](artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md) · [Cumulative handoff](docs/CLAUDE_HANDOFF.md).

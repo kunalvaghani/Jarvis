@@ -1,0 +1,3 @@
+# Mutation quality
+Six paired controls/mutants/restored controls: permission deny, false tool success, stale selector, disabled Verify, altered held-out files and duplicate write. 6/6 killed with assertion failures; zero error-only kills. Every prior source byte restored in disposable checkout before candidate patch. Six mutated modules match pinned/candidate hashes, so the later two-file fix does not invalidate this scope.
+New model-path suite separately fails on unmodified pin and passes with guard. Neither tests nor mutants establish complete semantic/privacy/hostile-code coverage. [Raw results](mutation-results.json).

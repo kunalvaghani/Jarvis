@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-20",
+  "pinned_claude": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "tested_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "review_sha": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "candidate_commit": null,
+  "new_production_changes": 0,
+  "review_branch": "codex-review",
+  "live_dirty": "M app/config/config.json",
+  "source_dirty": "?? tests/test_prompt37_reasoning_repeat.py\n?? tests/test_prompt37_ui_restart.py",
+  "source_checkout": "D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-e2e-e5af0e7",
+  "historical_review_checkout": "D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-codex-review",
+  "lineage": "Prior production repairs integrated at 3fbfbf6; P34 transport/rebuild/lock added at e5af0e7. Detached source/test overlays only; historical codex-review changes preserved.",
+  "live_final_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "live_final_dirty": "M app/config/config.json",
+  "candidate_parent_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "candidate_tracked_changes": [
+    "app/jarvis/repair_authorization.py",
+    "app/scripts/setup/setup_brain.py"
+  ],
+  "branch_preservation": "codex-review occupied by retained dirty earlier review; authored proposals there and validated exact e5af0e7-relative diff in detached candidate, without resetting/rebasing old branch"
+}

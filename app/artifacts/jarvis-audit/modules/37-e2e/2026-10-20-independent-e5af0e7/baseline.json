@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-20",
+  "pinned_claude": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "integrated_repairs_commit": "3fbfbf68b6e5cd964191db2c3245efbc2f5a3772",
+  "prior_review_parent": "a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6",
+  "runs": {
+    "baseline": {
+      "PASS": 104,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 8.552
+    },
+    "full": {
+      "PASS": 1907,
+      "FAIL": 0,
+      "SKIPPED": 139,
+      "seconds": 548.26
+    },
+    "ui-restart": {
+      "PASS": 1,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 5.131
+    },
+    "ui-restart-portable": {
+      "PASS": 1,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "seconds": 4.963
+    }
+  },
+  "headline_run": "full",
+  "additional_nonoverlapping_UI_case": 1,
+  "overlapping_runs_not_summed": true,
+  "fresh_full_run": true,
+  "production_changes": 0,
+  "new_test_only": true,
+  "runtime_readiness": "repair_required",
+  "real_account_sends": 0,
+  "real_cloud_requests": 0,
+  "microphone_or_native_hook": 0,
+  "initial_test_file_setup_error": "ui-test-setup-error.xml: missing file after shell quoting error, not an application failure; corrected before test execution"
+}

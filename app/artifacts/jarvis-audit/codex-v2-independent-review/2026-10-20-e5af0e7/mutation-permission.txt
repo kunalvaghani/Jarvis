@@ -1,0 +1,19 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy ______
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-668/test_JRV_36_011_unavailable_te0')
+
+    def test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy(tmp_path):
+        policy = tmp_path / '.jarvis/policy.json'
+        policy.parent.mkdir(); policy.write_text(json.dumps({'deny_tools': ['read_file']}))
+        actions = SimpleNamespace(base=tmp_path, telemetry_status='unavailable', allowed_tools={'read_file'})
+        registry = ToolRegistry(actions); registry._execute = Mock()
+>       with pytest.raises(ValueError, match='denied'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\test_prompt36_observability.py:143: Failed
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\mutation-permission.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_prompt36_observability.py::test_JRV_36_011_unavailable_telemetry_cannot_override_deny_policy
+1 failed in 1.21s

@@ -1,5 +1,9 @@
 # Crash recovery
 
+## Uncertain-send UI restart verification - 2026-10-20
+
+At claude e5af0e7, the owned mock-send journey now verifies an actual child crash, fresh TaskState/Actions reload, queued resume and real App/Island/Desk/Tk readback of Task paused. The planner is not invoked and the mock outbox remains one row. This proves that bounded UI path; it does not authorize replay or certify real account delivery/physical speech. [Evidence](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/ui-restart-journal.json) and [remaining blockers](CLAUDE_HANDOFF.md).
+
 ## Demonstration and uncertain task completion â€” 2026-10-20
 
 Recording startup/observation failures stop the owned hook and persist failed state. Cancellation stops recording and cannot create a provisional skill; if hook cleanup itself fails, the failure is persisted and the owned reference retained for retry. Fresh cancellation/PID checks occur after consent before observation. Native hook exit and HWND/PID lifetime acceptance remain unverified.

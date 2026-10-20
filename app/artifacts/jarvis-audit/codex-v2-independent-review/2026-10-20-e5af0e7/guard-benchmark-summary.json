@@ -1,0 +1,27 @@
+{
+  "pinned": {
+    "n": 200,
+    "p50_ns": 169700.0,
+    "p95_ns": 238800,
+    "sample_variance_ns2": 1747020512.3115578,
+    "first_call_ns": 436100
+  },
+  "candidate": {
+    "n": 200,
+    "p50_ns": 174350.0,
+    "p95_ns": 260300,
+    "sample_variance_ns2": 1624698516.5829146,
+    "first_call_ns": 401400
+  },
+  "paired_mean_delta_ns": 6983.5,
+  "bootstrap_95pct_mean_delta_ns": [
+    -180,
+    14000
+  ],
+  "pinned_source_sha256": "a1d50bbcbb81e29df1d3e7518379750b8c86e49d23b28b6d8468054210d38b95",
+  "candidate_source_sha256": "217846b1dd791a112c82194cc568322cda80c70513dc604259c568960eb1d130",
+  "scope": "valid authorization preflight CPU-only, fixed fake disk/RAM, seed99, randomized 200 warm pairs; no task/model/GPU/voice performance claim",
+  "cold_model_and_foreground_latency": "NOT RUN",
+  "regression_threshold": "candidate p95 <= pinned p95 + 1ms; security invariant takes precedence",
+  "threshold_pass": true
+}

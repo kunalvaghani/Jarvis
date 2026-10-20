@@ -1,0 +1,26 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_________ test_IR_004_deep_owned_worktree_preserves_canonical_source __________
+..\..\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\test_deep_lab.py:16: in test_IR_004_deep_owned_worktree_preserves_canonical_source
+    identifier, parent = candidate(research, {'base_seconds': 0.1, 'max_seconds': 2.0})
+tests\test_phase06_controlled_evolution.py:120: in candidate
+    parent = parent or research.seed('read_retry_backoff')
+jarvis\autoresearch.py:63: in seed
+    lab_commit, source_commit = self.lab.snapshot()
+jarvis\evolution_lab.py:85: in snapshot
+    self.ensure_repo()
+jarvis\evolution_lab.py:79: in ensure_repo
+    self._run(['init', '-q', '-b', 'lab-main'], self.repo)
+jarvis\evolution_lab.py:58: in _run
+    result = subprocess.run(['git', '-c', 'core.longpaths=true', *args], cwd=cwd, env=git_env(),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:501: in run
+    with Popen(*popenargs, **kwargs) as process:
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:969: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\subprocess.py:1438: in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+E   NotADirectoryError: [WinError 267] The directory name is invalid
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\deep-lab.xml -
+=========================== short test summary info ===========================
+FAILED ..\..\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\test_deep_lab.py::test_IR_004_deep_owned_worktree_preserves_canonical_source
+1 failed in 1.67s

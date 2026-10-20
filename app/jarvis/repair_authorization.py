@@ -50,6 +50,19 @@ class RepairRefused(ValueError):
     """An authorization was present but does not satisfy its bounds; nothing was started."""
 
 
+def model_reference(model):
+    """Return a registry-relative name/tag; an approved alias is never a filesystem path."""
+    if not isinstance(model, str) or len(model) > 256:
+        raise RepairRefused('The approved model must be a registry model name, not a path.')
+    name, separator, tag = model.partition(':')
+    parts = name.split('/')
+    component = r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}'
+    if (len(parts) not in (1, 2) or any(re.fullmatch(component, part) is None for part in parts)
+            or (separator and re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9._-]{0,127}', tag) is None)):
+        raise RepairRefused('The approved model must use name[:tag] or namespace/name[:tag], without path traversal.')
+    return (name if len(parts) == 2 else 'library/' + name), (tag if separator else 'latest')
+
+
 def offline_policy(environment=None):
     environment = os.environ if environment is None else environment
     return [flag for flag in OFFLINE_FLAGS if str(environment.get(flag, '')).strip().lower() in {'1', 'true', 'yes', 'on'}]
@@ -170,6 +183,7 @@ def check_model_download(approval, missing, model_store, environment=None, now=N
     if not isinstance(approval, ModelDownload):
         raise RepairRefused('No approved model download; nothing was started.')
     _check_lifetime_and_id(approval, now)
+    model_reference(approval.model)
     if approval.model not in missing:
         raise RepairRefused('The approved model ' + approval.model[:80] + ' is not one of the missing configured models.')
     if not re.fullmatch(r'sha256:[0-9a-f]{64}', approval.revision or ''):

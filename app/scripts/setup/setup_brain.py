@@ -111,9 +111,8 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
     """
     import hashlib
     import requests
-    from jarvis.repair_authorization import model_store
-    name, _, tag = model.partition(":")
-    path = name if "/" in name else "library/" + name
+    from jarvis.repair_authorization import model_reference, model_store
+    path, tag = model_reference(model)  # validate again at this direct CLI/transport boundary, before HTTP
     _digest(revision)
     manifest = requests.get(registry + path + "/manifests/" + revision, timeout=(5, 30),
                             headers={"Accept": MANIFEST_TYPES})
@@ -126,8 +125,11 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
     sizes = [layer.get("size") for layer in layers]
     if not all(type(size) is int and size > 0 for size in sizes) or sum(sizes) > max_bytes:
         raise SystemExit("The download size of " + model + " is unknown or exceeds the approved budget; nothing was pulled.")
-    store = Path(store or model_store())
-    target = store / "manifests" / "registry.ollama.ai" / Path(path) / (tag or "latest")
+    store = Path(store or model_store()).resolve()
+    manifests = store / "manifests" / "registry.ollama.ai"
+    target = manifests / Path(path) / tag
+    if not target.resolve().is_relative_to(manifests.resolve()) or not target.resolve().is_relative_to(store):
+        raise SystemExit("The approved model manifest escapes its store; nothing was installed.")
     if target.exists():
         raise SystemExit("A manifest for " + model + " already exists; it was kept and nothing was installed.")
     (store / "blobs").mkdir(parents=True, exist_ok=True)
@@ -167,7 +169,7 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
     tags = session.get(endpoint + "/api/tags", timeout=10)
     tags.raise_for_status()
     installed = {row["name"]: row.get("digest", "") for row in tags.json().get("models", [])}
-    listed = installed.get(model if tag else model + ":latest", "")
+    listed = installed.get(model if ":" in model else model + ":latest", "")
     if "sha256:" + listed.removeprefix("sha256:") != revision:
         raise SystemExit("Ollama does not list " + model + " at the approved revision; the fetched files were kept.")
     print(model + " installed at the approved revision.", flush=True)

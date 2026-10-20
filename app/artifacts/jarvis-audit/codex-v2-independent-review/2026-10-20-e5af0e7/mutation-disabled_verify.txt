@@ -1,0 +1,31 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ DAGTests.test_read_retry_backoff_and_failure_propagation ___________
+
+self = <tests.test_hierarchical.DAGTests testMethod=test_read_retry_backoff_and_failure_propagation>
+
+    def test_read_retry_backoff_and_failure_propagation(self):
+        calls = []
+        def flaky(args, cancelled):
+            calls.append(time.monotonic())
+            if len(calls) == 1:
+                raise OSError('Transient read failure')
+            return {'text': args['value']}
+        row = step()
+        row['retry']['attempts'] = 2
+        result = Executor(tools(flaky)).run(validate_plan(graph(row), tools(flaky)))
+        self.assertEqual(result['status'], 'completed')
+        self.assertEqual(result['steps']['a']['attempts'], 2)
+        self.assertGreaterEqual(calls[1]-calls[0], .01)
+        bad = tools(verify=lambda args, result: False)
+        result = Executor(bad).run(validate_plan(graph(step(), step('b', dependencies=['a'])), bad))
+>       self.assertEqual(result['steps']['b']['status'], 'blocked')
+E       AssertionError: 'succeeded' != 'blocked'
+E       - succeeded
+E       + blocked
+
+tests\test_hierarchical.py:84: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\mutation-disabled_verify.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_hierarchical.py::DAGTests::test_read_retry_backoff_and_failure_propagation
+1 failed in 1.03s

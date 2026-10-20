@@ -2,7 +2,45 @@
 
 Updated **2026-10-20**. This is the continuing handoff for numbered prompts, including future prompts. User policy: finish safe work and fixes, verify them, continue independent work despite individual blockers, and append everything that cannot be completed here. Keep fixed defects separate from incomplete acceptance. Do not interpret a blocker as permission to install packages, download models, change drivers, publish, delete user files or replay uncertain writes.
 
-Current work is in the isolated `codex-review` checkout at base `a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6` with uncommitted local fixes. Preserve the original checkout's user configuration. No merge/deployment has been requested. Claude should review the patch, apply accepted changes on `claude`, and provide its resulting SHA for independent verification. Never discard prior audit evidence.
+The isolated `codex-review` checkout retains historical uncommitted repairs at base `a9b4ce1e06cd384f6862bbea8c19cb99b97c42f6`. Those earlier production repairs were integrated on Claude at `3fbfbf6` and independently reverified at pinned `e5af0e7` in a separate checkout. Newly proposed UI/memory tests still await review/integration. Preserve the original checkout's user configuration and all prior evidence. No automatic merge/deployment.
+
+## Claude integration — 2026-10-20 (P99-R8 / V2-004 and new tests)
+
+Claude reviewed and accepted Codex's e5af0e7 proposals and applied them on `claude` in the commit after `e5af0e7`:
+
+- The two-file model-path source patch: `model_reference` is enforced at final authorization and again in `approved_pull` before any HTTP request, and the resolved manifest must stay inside the store.
+- `test_prompt99_model_paths.py`, `test_prompt37_ui_restart.py` and `test_prompt37_reasoning_repeat.py`.
+- The three evidence packets: `codex-v2-independent-review/2026-10-20-e5af0e7`, `37-e2e/2026-10-20-independent-e5af0e7` and `37-e2e/2026-10-20-memory-e5af0e7`.
+
+Source and tests match Codex's mutants and e2e checkouts (the tests differ only in line endings); the packets were copied byte-identically. The user's `config/config.json` was excluded, and the doc blocks were three-way merged so both sides' entries are kept. Claude reproduced the finding against unfixed `e5af0e7`: 27 failed / 4 valid controls passed; with the patch, 31/31 pass.
+
+This closes P99-R8 locally, pending independent verification. Results: [claude-integration/2026-10-20-e5af0e7](../artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md). All other open items below are unchanged: the global verifier/replay/target P1, cloud provenance P1, deep-cwd P2, and the 25 BLOCKED P37 journeys including the real ReasoningBank planner loop.
+
+## Prompt 99 - committed e5af0e7 independent re-audit and model-path repair
+
+**2026-10-20:** [fresh verdict](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [two-file source proposal](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/source-only.patch), [three new test files](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/combined-new-tests.patch), [ledger](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/05-findings-ledger.csv).
+
+Pin `e5af0e700517bac5fb48dcebc8f6cc9c9df9a369`; full candidate 1941 PASS / 0 FAIL / 139 SKIPPED plus distinct IR-004 deep-cwd FAIL (WinError267), so 1941 PASS / 1 FAIL / 139 SKIPPED distinct checks. Original 33 finding checks pass; 6/6 safety mutants killed with controls/restored controls; 10 environments consistent. Prior integration P99-R1 resolved at 3fbfbf6/e5af0e7 for earlier production proposals. Historical evidence immutable; no live config edit.
+
+**V2-004/P99-R8 P1 fixed locally:** malformed explicitly approved/configured model alias could publish a manifest outside its model store. Actual owned fake-registry file readback reproduced; 27 failing path variants/4 valid controls before, 97 targeted/P34 pass after. Proposed shared alias parser at final authorization and downloader, plus resolved manifest containment. Only two production files differ from e5af0e7; exact patch applies to pin. This is not an unauthenticated remote exploit. Review/integrate source proposal and model-path/UI/memory tests on claude, commit and independently rerun.
+
+**Still open:** global verifier/replay/native target P1; semantic cloud provenance P1; deep cwd P2; full principal/concurrency/transport/native/voice/account/GPU/training/service/version rollback/feature-off acceptance. Revised P37 remains one scoped mock UI PASS/25 BLOCKED; real ReasoningBank planner loop NOT RUN. [All remaining gates](../artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/13-unresolved-blockers.md). No installs/downloads/OS mutations/auto-merge/deploy. STOP at independent review boundary.
+
+## Prompt 37 - ReasoningBank repeat continuation at e5af0e7
+
+**2026-10-20:** [packet](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/verdict.md), [new portable test](../tests/test_prompt37_reasoning_repeat.py), [patch](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/new-test.patch). Fresh final neighboring **109 pass/1 skip**, including memory on/off. Production source remains identical across 560 hashes to prior e5af0e7 full run (1907 pass/139 skip); no new full-run claim. Real worker workbook readback/hash, ToolRegistry, LearningMemory/SQLite and BrainClient JSON serialization show second request has one anti-pattern. Simulated planner ignores it; both attempts fail with original workbook intact. Retrieval is proven; improvement is honestly absent. No production fix needed.
+
+**Remaining:** JRV-37-017 full Actions/Brain task orchestration and available real planner NOT RUN/BLOCKED. Acceptance stays one scoped mock UI PASS/25 BLOCKED. Review/integrate newly proposed UI and memory tests on claude, return committed SHA; stage approved real planner/disposable orchestration journey. All prior global verifier/target/replay P1, cloud provenance P1, deep-cwd P2 and native/voice/account/GPU/training/principal/concurrency/transport gates remain open. No auto-install/merge/deploy. [Full gaps](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/failures.md).
+
+## Prompt 37 - independent committed-source continuation at e5af0e7
+
+**2026-10-20:** pin `e5af0e700517bac5fb48dcebc8f6cc9c9df9a369`, fresh isolated checkout. Claude integrated the prior reviewed P34-P37 production changes at `3fbfbf68b6e5cd964191db2c3245efbc2f5a3772`; P99-R1 is resolved for those earlier repairs. The old review checkout is retained separately; its historical a9b4ce1 statuses are not the current integration verdict. [Packet](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md), [26 cases](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/tests.jsonl), [source hashes](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/source-hashes.json), [new portable test patch](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/new-test.patch).
+
+Fresh full relevant run: **1907 PASS / 0 FAIL / 139 SKIPPED**. Focused baseline: 104 pass, including 66 new P34 dependency-repair cases; overlapped counts not summed. Three API/skill/memory and simulated send/cloud journals pass. P34-R1/R2/R3 original code cases independently pass with intercepted commands/requests; live registry/Ollama and real approved rebuild/rollback/console-script gates remain NOT RUN.
+
+**JRV-37-021 PASS in the specified mock-send/UI scope.** Actual child process exits 27 after one temporary mock-outbox row and durable uncertain checkpoint. Fresh Actions reloads interrupted state; queued resume refuses planner/external replay. Real App.report/drain, Island/Desk consumers and Tk Text/StringVar read back Task paused. Speech sink called once, planner zero, outbox one, marker retained. [Journal](../artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/ui-restart-journal.json), [test](../tests/test_prompt37_ui_restart.py). Fake send/speech transports; no account send, microphone, physical playback or desktop capture. Portable regression is new and awaits Claude integration; production files unchanged in this continuation.
+
+**Remaining:** 25 revised cases still BLOCKED. Keep global host verifier/replay receipt and selected target authority, semantic cloud provenance, native hook lifetime, real voice/TTS/GPU/preemption, account/app/engine/services, training and all flag/rollback gates open. IR-004/V2-003 long process-cwd remains OPEN P2; use shorter explicit owned lab_root. Isolated launcher repair_required; no install/download to clear it. Do not interpret one actual mock/UI journey as full real-user acceptance. No merge/deployment. Keep all historical sections below.
 
 ## Claude integration — 2026-10-20 (P99-R1)
 

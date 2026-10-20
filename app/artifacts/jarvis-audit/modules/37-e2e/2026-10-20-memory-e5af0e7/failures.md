@@ -1,0 +1,4 @@
+# Failures and gaps
+No regression assertion failures. The task itself fails twice per variant as deliberately induced: Unknown worksheet. A1 remains 1 rather than requested 5; formula and workbook hash unchanged. Memory-on repeat receives one provisional anti-pattern but simulated planner ignores it. This is honest no improvement, not assistant success.
+JRV-37-017 full journey remains BLOCKED: available real planner and actual Actions/Brain task completion loop were not exercised. Fresh launcher reports repair_required; no install/download performed.
+Carry forward all prior open issues: global verifier/replay receipts/target identity (P1), caller-declared cloud provenance (P1), deep process cwd WinError267 (P2), principal/concurrency/real dependency transport gates, native/voice/account/GPU/training and broad feature-off gates. No blocker closed by retrieval alone.

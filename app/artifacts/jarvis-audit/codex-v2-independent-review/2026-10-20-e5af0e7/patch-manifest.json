@@ -1,0 +1,13 @@
+{
+  "base_sha": "e5af0e700517bac5fb48dcebc8f6cc9c9df9a369",
+  "candidate_sha": null,
+  "branch_proposal": "codex-review",
+  "candidate_test_checkout": "D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-v2-mutants-e5af0e7",
+  "changed_production": {
+    "jarvis/repair_authorization.py": "217846b1dd791a112c82194cc568322cda80c70513dc604259c568960eb1d130",
+    "scripts/setup/setup_brain.py": "a1ef0ff8b4dfcbf7c1ce7c2b9c213b3a7a00a0ec183ff94eb900f4508f1bfbbf"
+  },
+  "new_test_sha256": "b29b46ffed087b974f11ab0a5e6ecce4a3aa16f63ffdbc457fa25f3e44ae1cae",
+  "source_patch_sha256": "356e04e6705de4d8fcadc0c025d1b9326fcfebfe7f18c68ebded5b3d09c022a9",
+  "test_patch_sha256": "704916a53cbe6e0b7cba50d84cc9b6d6452ebd48bd2fefa71ecaf1d2c669d3da"
+}

@@ -1,0 +1,71 @@
+diff --git a/app/jarvis/repair_authorization.py b/app/jarvis/repair_authorization.py
+index 1b5e5a8..616fd89 100644
+--- a/app/jarvis/repair_authorization.py
++++ b/app/jarvis/repair_authorization.py
+@@ -50,6 +50,19 @@ class RepairRefused(ValueError):
+     """An authorization was present but does not satisfy its bounds; nothing was started."""
+ 
+ 
++def model_reference(model):
++    """Return a registry-relative name/tag; an approved alias is never a filesystem path."""
++    if not isinstance(model, str) or len(model) > 256:
++        raise RepairRefused('The approved model must be a registry model name, not a path.')
++    name, separator, tag = model.partition(':')
++    parts = name.split('/')
++    component = r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}'
++    if (len(parts) not in (1, 2) or any(re.fullmatch(component, part) is None for part in parts)
++            or (separator and re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9._-]{0,127}', tag) is None)):
++        raise RepairRefused('The approved model must use name[:tag] or namespace/name[:tag], without path traversal.')
++    return (name if len(parts) == 2 else 'library/' + name), (tag if separator else 'latest')
++
++
+ def offline_policy(environment=None):
+     environment = os.environ if environment is None else environment
+     return [flag for flag in OFFLINE_FLAGS if str(environment.get(flag, '')).strip().lower() in {'1', 'true', 'yes', 'on'}]
+@@ -170,6 +183,7 @@ def check_model_download(approval, missing, model_store, environment=None, now=N
+     if not isinstance(approval, ModelDownload):
+         raise RepairRefused('No approved model download; nothing was started.')
+     _check_lifetime_and_id(approval, now)
++    model_reference(approval.model)
+     if approval.model not in missing:
+         raise RepairRefused('The approved model ' + approval.model[:80] + ' is not one of the missing configured models.')
+     if not re.fullmatch(r'sha256:[0-9a-f]{64}', approval.revision or ''):
+diff --git a/app/scripts/setup/setup_brain.py b/app/scripts/setup/setup_brain.py
+index 7b217b1..bc22c4e 100644
+--- a/app/scripts/setup/setup_brain.py
++++ b/app/scripts/setup/setup_brain.py
+@@ -111,9 +111,8 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
+     """
+     import hashlib
+     import requests
+-    from jarvis.repair_authorization import model_store
+-    name, _, tag = model.partition(":")
+-    path = name if "/" in name else "library/" + name
++    from jarvis.repair_authorization import model_reference, model_store
++    path, tag = model_reference(model)  # validate again at this direct CLI/transport boundary, before HTTP
+     _digest(revision)
+     manifest = requests.get(registry + path + "/manifests/" + revision, timeout=(5, 30),
+                             headers={"Accept": MANIFEST_TYPES})
+@@ -126,8 +125,11 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
+     sizes = [layer.get("size") for layer in layers]
+     if not all(type(size) is int and size > 0 for size in sizes) or sum(sizes) > max_bytes:
+         raise SystemExit("The download size of " + model + " is unknown or exceeds the approved budget; nothing was pulled.")
+-    store = Path(store or model_store())
+-    target = store / "manifests" / "registry.ollama.ai" / Path(path) / (tag or "latest")
++    store = Path(store or model_store()).resolve()
++    manifests = store / "manifests" / "registry.ollama.ai"
++    target = manifests / Path(path) / tag
++    if not target.resolve().is_relative_to(manifests.resolve()) or not target.resolve().is_relative_to(store):
++        raise SystemExit("The approved model manifest escapes its store; nothing was installed.")
+     if target.exists():
+         raise SystemExit("A manifest for " + model + " already exists; it was kept and nothing was installed.")
+     (store / "blobs").mkdir(parents=True, exist_ok=True)
+@@ -167,7 +169,7 @@ def approved_pull(session, endpoint, model, revision, max_bytes, registry=REGIST
+     tags = session.get(endpoint + "/api/tags", timeout=10)
+     tags.raise_for_status()
+     installed = {row["name"]: row.get("digest", "") for row in tags.json().get("models", [])}
+-    listed = installed.get(model if tag else model + ":latest", "")
++    listed = installed.get(model if ":" in model else model + ":latest", "")
+     if "sha256:" + listed.removeprefix("sha256:") != revision:
+         raise SystemExit("Ollama does not list " + model + " at the approved revision; the fetched files were kept.")
+     print(model + " installed at the approved revision.", flush=True)

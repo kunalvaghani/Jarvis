@@ -1,0 +1,18 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ UITests.test_changed_controls_invalidate_number _______________
+
+self = <tests.test_ui_controls.UITests testMethod=test_changed_controls_invalidate_number>
+
+    def test_changed_controls_invalidate_number(self):
+        ui, runner = self.make_ui([control("Save", 1)])
+        ui.execute(parse("list buttons"))
+        runner.signature = "changed"
+>       with self.assertRaisesRegex(ValueError, "changed"):
+E       AssertionError: ValueError not raised
+
+tests\test_ui_controls.py:137: AssertionError
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-codex-review\app\artifacts\jarvis-audit\codex-v2-independent-review\2026-10-20-e5af0e7\mutation-stale_selector.xml -
+=========================== short test summary info ===========================
+FAILED tests\test_ui_controls.py::UITests::test_changed_controls_invalidate_number
+1 failed in 1.45s

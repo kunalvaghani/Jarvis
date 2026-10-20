@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.446" timestamp="2026-10-20T13:53:40.237926+05:30" hostname="Kunal-Beast"><testcase classname="Jarvis-v2-mutants-e5af0e7.app.tests.test_ui_controls.UITests" name="test_changed_controls_invalidate_number" time="0.783"><failure message="AssertionError: ValueError not raised">self = &lt;tests.test_ui_controls.UITests testMethod=test_changed_controls_invalidate_number&gt;
+
+    def test_changed_controls_invalidate_number(self):
+        ui, runner = self.make_ui([control("Save", 1)])
+        ui.execute(parse("list buttons"))
+        runner.signature = "changed"
+&gt;       with self.assertRaisesRegex(ValueError, "changed"):
+E       AssertionError: ValueError not raised
+
+tests\test_ui_controls.py:137: AssertionError</failure></testcase></testsuite></testsuites>

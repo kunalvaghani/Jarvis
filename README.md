@@ -1,5 +1,11 @@
 # Jarvis — local Windows voice assistant
 
+<!-- prompt99-e5af-review -->
+**2026-10-20 independent final review — NOT READY FOR DEPLOYMENT:** Claude `e5af0e7`; candidate full 1941 pass/139 skip plus one separate unresolved deep-cwd failure. New proposed fix rejects malformed model aliases at authorization and direct downloader boundaries, preventing manifest path escape; supported `name[:tag]` and `namespace/name[:tag]` retain digest-bound transport. Failing-before/passing-after fixtures, 6/6 safety mutants and 10 environment consistency checks recorded. No live assistant certification/install/merge. [Verdict](app/artifacts/jarvis-audit/codex-v2-independent-review/2026-10-20-e5af0e7/15-final-verdict.md), [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+
+<!-- prompt37-memory-continuation -->
+**2026-10-20 ReasoningBank continuation:** pinned `e5af0e7`; fresh neighboring fixtures **109 pass / 1 skip**. Real workbook/SQLite/BrainClient wire with simulated planner: retrieved anti-pattern reaches repeat request, task outcome honestly does not improve; memory-off comparison also checked. No production change or live inference claim. JRV-37-017 remains blocked for full orchestration/real planner. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-memory-e5af0e7/verdict.md); [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+
 **Independent audit checkpoint — 2026-10-19 IST:** `claude` commit `36fbf3ce925080f7f54afa87eaf1d9b88414142d` was pinned in a separate `codex-review` worktree, an audit-specific exception to the earlier three-branch convention. Four narrow repairs and fresh test evidence are isolated for review; nothing was merged into `claude` or `main`. See the [independent verdict](app/artifacts/jarvis-audit/codex-independent-review/15-final-verdict.md) and [application audit notes](app/README.md#independent-audit-checkpoint-2026-10-19). Full live acceptance remains unfinished.
 
 **Repository consolidation — 2026-10-16 IST:** Development uses exactly three
@@ -8,6 +14,14 @@ changes; `InsTAREELS` is an ignored local compatibility junction. Historical
 branch work and pending audits were preserved before integration. See the
 [consolidation record](app/artifacts/repository-consolidation/report.md) for
 merge decisions, fresh checks, recovery instructions, and remaining limitations.
+
+<!-- claude-integration-e5af0e7 -->
+**2026-10-20 — Codex e5af0e7 model-path fix (P99-R8) and new UI/memory tests integrated on `claude`; release NOT READY.** Full regression 3,635 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-e5af0e7/repair.md).
+<!-- /claude-integration-e5af0e7 -->
+
+<!-- prompt37-e5af-verification -->
+**2026-10-20 - Fresh E2E verification at claude e5af0e7:** **1907 PASS / 0 FAIL / 139 SKIPPED**. The queued mock-send crash/restart journey now passes actual Tk UI readback; full acceptance still has 25 blocked cases. [Evidence](app/artifacts/jarvis-audit/modules/37-e2e/2026-10-20-independent-e5af0e7/verdict.md) · [Claude handoff](app/docs/CLAUDE_HANDOFF.md).
+<!-- /prompt37-e5af-verification -->
 
 <!-- claude-integration-a9b4ce1 -->
 **2026-10-20 — Codex P34–P37 repairs integrated on `claude` (`3fbfbf6`); P34-R1/R2/R3 repaired (digest-bound model transport, in-place rebuild with rollback, frozen lock). Release NOT READY pending independent verification.** Full regression 3,601 passed / 0 failed. [Record](app/artifacts/jarvis-audit/claude-integration/2026-10-20-a9b4ce1/repair.md).

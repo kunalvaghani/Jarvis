@@ -1,0 +1,28 @@
+{
+  "required_reports": 12,
+  "cases": 26,
+  "source_hashes_unchanged": 560,
+  "patch_check": "PASS",
+  "diff_check": "PASS",
+  "production_edits": 0,
+  "fresh_results": {
+    "focused": {
+      "PASS": 2,
+      "FAIL": 0,
+      "SKIPPED": 0
+    },
+    "neighbors": {
+      "PASS": 109,
+      "FAIL": 0,
+      "SKIPPED": 1
+    }
+  },
+  "packet_links_checked": 11,
+  "tracked_source_clean": true,
+  "explicit_skips": [
+    {
+      "id": "Jarvis-e2e-e5af0e7.app.tests.test_prompt35_security::test_JRV_35_020_api_symlink_escape_has_zero_file_side_effects",
+      "reason": "BLOCKED: native symlink creation unavailable: OSError"
+    }
+  ]
+}
