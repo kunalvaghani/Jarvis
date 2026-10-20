@@ -1,0 +1,146 @@
+{
+  "mode": "live_windows_local",
+  "human_consent_required": true,
+  "results": [
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 1049.67
+    },
+    {
+      "operation": "local_play",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 10.33
+    },
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 11.77
+    },
+    {
+      "operation": "local_pause",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 11.1
+    },
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 12.67
+    },
+    {
+      "operation": "local_next",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 10.72
+    },
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 11.96
+    },
+    {
+      "operation": "local_previous",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 12.08
+    },
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 13.35
+    },
+    {
+      "operation": "local_seek",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 10.53
+    },
+    {
+      "operation": "local_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 11.67
+    },
+    {
+      "operation": "local_seek",
+      "status": "response_received",
+      "accepted": true,
+      "verified": false,
+      "latency_ms": 11.28
+    },
+    {
+      "operation": "local_volume_status",
+      "status": "response_received",
+      "accepted": null,
+      "verified": null,
+      "latency_ms": 244.55
+    },
+    {
+      "operation": "local_volume",
+      "status": "response_received",
+      "accepted": true,
+      "verified": true,
+      "latency_ms": 174.52
+    },
+    {
+      "operation": "local_mute",
+      "status": "response_received",
+      "accepted": true,
+      "verified": true,
+      "latency_ms": 188.96
+    },
+    {
+      "operation": "local_volume",
+      "status": "response_received",
+      "accepted": true,
+      "verified": true,
+      "latency_ms": 202.07
+    },
+    {
+      "operation": "local_mute",
+      "status": "response_received",
+      "accepted": true,
+      "verified": true,
+      "latency_ms": 177.26
+    }
+  ],
+  "all_planned_operations_completed": true,
+  "account_and_library_operations": "NOT TESTED",
+  "approvals": [
+    "local_status",
+    "local_play",
+    "local_status",
+    "local_pause",
+    "local_status",
+    "local_next",
+    "local_status",
+    "local_previous",
+    "local_status",
+    "local_seek",
+    "local_status",
+    "local_seek",
+    "local_volume_status",
+    "local_volume",
+    "local_mute",
+    "local_volume",
+    "local_mute"
+  ]
+}

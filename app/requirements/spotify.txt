@@ -1,0 +1,3 @@
+# Optional Spotify OAuth and official MCP SDK runtime. Local controls use existing runtime dependencies.
+keyring>=25,<27
+mcp>=2,<3; python_version >= "3.11"

@@ -89,13 +89,21 @@ def _parse_command(text: str) -> Command:
         return Command("approval_answer", "no")
     if spoken_clean(text) in NOW_PLAYING:
         return Command("spotify_control", "status", "auto")  # Answered by whichever player is in use.
+    from .spotify_host import parse_request as spotify_parse_request
+    spotify_request = spotify_parse_request(text)
     try:
         command = _parse(text)
     except ValueError:
+        if spotify_request is not None:
+            return spotify_request
         cleaned = spoken_clean(text)
         if not cleaned or cleaned == text.strip().lower():
             raise
         command = _parse(cleaned)  # Second attempt only; a matched command is never reinterpreted.
+    if spotify_request is not None and command.kind in {'ask','task','play_media','open','browser_search','context_search','spotify_open_playlist'}:
+        return spotify_request
+    if spotify_request is not None and command.kind=='queue_status' and re.search(r'\bspotify\b',text,re.I):
+        return spotify_request
     if command.kind == "ask" and command.extra != "web":
         # A general question is the catch-all; a phrase learned from a repository is more specific.
         from .repo_abilities import parse_learned

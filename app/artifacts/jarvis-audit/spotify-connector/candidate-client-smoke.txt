@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Phython Project\Connectors\jarvis_spotify_connector\client_smoke.py", line 5, in <module>
+    from mcp import Client, StdioServerParameters
+ModuleNotFoundError: No module named 'mcp'

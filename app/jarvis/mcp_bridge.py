@@ -70,6 +70,7 @@ class StdioClient:
         self.process = subprocess.Popen([command, *args], cwd=base, env=env, shell=False,
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        self.max_stream_bytes = 64 * 1048576 if config.get('persistent') is True else 1048576
         self.thread = threading.Thread(target=self._read, daemon=True, name='jarvis-mcp-reader')
         self.thread.start()
 
@@ -79,7 +80,7 @@ class StdioClient:
             while True:
                 line = self.process.stdout.readline(262145)
                 total += len(line)
-                if not line or len(line) > 262144 or total > 1048576:
+                if not line or len(line) > 262144 or total > self.max_stream_bytes:
                     self.responses.put_nowait(None)
                     return
                 self.responses.put_nowait(json.loads(line))
@@ -222,6 +223,8 @@ def execute(actions, step, cancelled):
         if (set(arguments) != {'name', 'arguments'} or arguments['name'] not in config.get('allow_tools', [])
                 or not isinstance(arguments['arguments'], dict)):
             raise ValueError('MCP tool must be exactly allowlisted and have an argument object.')
+    if config.get('persistent') is True and name != 'spotify':
+        raise ValueError('Persistent MCP is currently restricted to the Spotify integration.')
     private = None
     identity = config.get('generated_identity') if name.startswith('gen-') else None
     if identity is not None:
@@ -243,17 +246,29 @@ def execute(actions, step, cancelled):
     if isinstance(state, TaskState):
         state.checkpoint('action_attempted', action=step['action'], target=name,
                          evidence='Approved MCP process/call beginning; effects require fresh inspection after failure')
+    persistent = config.get('persistent') is True
+    session = None
     try:
-        client = StdioClient(config, base, cancelled)
+        if persistent:
+            from .mcp_persistent import owner
+            session = owner(actions).session(config, cancelled)
+            client, rows = session.__enter__()
+        else:
+            client = StdioClient(config, base, cancelled)
+            client.initialize()
+            rows = client.tools()
     except BaseException:
+        if not persistent and 'client' in locals(): client.close()
         _discard(private)
         raise
     try:
-        client.initialize()
-        rows = client.tools()
         allowed = [row for row in rows if isinstance(row, dict) and row.get('name') in config.get('allow_tools', [])]
         if step['action'] == 'mcp_list_tools':
-            result = allowed
+            if name == 'spotify':
+                from .spotify_host import discovery
+                result = discovery(allowed, arguments)
+            else:
+                result = allowed
         else:
             if arguments['name'] not in {row['name'] for row in allowed}:
                 raise ValueError('Allowlisted tool was not advertised by the server.')
@@ -265,10 +280,35 @@ def execute(actions, step, cancelled):
                 raise ValueError('Generated MCP server disabled: its advertised schema changed after approval.')
             # P33-002: arguments must satisfy the advertised input schema before anything reaches the server.
             validate_schema_value(tool.get('inputSchema', {'type': 'object'}), arguments['arguments'])
+            if name == 'spotify':
+                # Inspect only local credential availability after the approved child start.
+                # No OAuth token or Spotify metadata leaves the child in this handshake.
+                operation = arguments['name'][8:]
+                local_only = operation.startswith('local_') or operation in {'health','open_desktop','open_resource','open_search'}
+                if not local_only:
+                    identity_result = client.request('tools/call', {'name':'spotify_health','arguments':{}})
+                    validate_result(identity_result)
+                    if identity_result.get('isError'):
+                        raise ValueError('Spotify account availability could not be read; no action sent.')
+                    context = identity_result.get('structuredContent', {}).get('result', {}).get('untrusted_data', {})
+                    binding = context.get('account_binding', '')
+                    if not isinstance(binding, str) or (binding and not re.fullmatch('[0-9a-f]{32}', binding)):
+                        raise ValueError('Spotify account binding is invalid; no action sent.')
+                    if binding:
+                        # Preserve the host's fresh, exact approval rule and fail on relinking while it waits.
+                        account_detail = dict(detail, account='unverified Spotify account · credential fingerprint '+binding[:8],
+                                              identity_verified=False)
+                        actions._approve('mcp_call', json.dumps(account_detail, ensure_ascii=False),
+                                         lambda: cancelled() or bool(getattr(getattr(actions,'_spotify_mcp',None),'closed',False)))
+                    arguments = dict(arguments, arguments=dict(arguments['arguments'], account_binding=binding))
             result = client.request('tools/call', arguments)
             # P33-003: a malformed result is a typed failure, never evidence (the attempt stays recorded as uncertain).
             validate_result(result, tool.get('outputSchema'))
             if result.get('isError') is True:
+                if name == 'spotify':
+                    message = ' '.join(str(r.get('text','')) for r in result.get('content',[]) if isinstance(r,dict))
+                    from .recovery import safe_message
+                    raise ValueError('Spotify connector: ' + safe_message(message, 400) + '; no retry.')
                 raise ValueError('MCP tool reported failure; no retry.')
         text = json.dumps(result, ensure_ascii=False)
         for key in config.get('env_names', []):
@@ -281,7 +321,11 @@ def execute(actions, step, cancelled):
             state.checkpoint('observed', action=step['action'], target=name, evidence='MCP response received; content remains untrusted')
         return text[:10000] + ('\n[MCP result truncated]' if len(text) > 10000 else '')
     finally:
-        client.close()
+        if session is not None:
+            import sys
+            session.__exit__(*sys.exc_info())
+        else:
+            client.close()
         _discard(private)
         if name.startswith('gen-'):
             from .mcp_synthesis import reap

@@ -36,7 +36,7 @@ ROUTES = {
     'youtube_lookup': (r'(?=.*\b(?:youtube|you tube|youtu\.be)\b)(?=.*\b(?:playlists?|views?|how long|duration|length|'
                        r'uploaded|uploader|details?|channel|links?|ids?|list|top \d+|results)\b)',
                        ('mcp_call', 'browser_navigate'), ('youtube-media',)),
-    'spotify': (r'\bspotify\b', ('open', 'media_search', 'media_control', 'select', 'fill_text'), ('spotify-media',)),
+    'spotify': (r'\bspotify\b', ('mcp_call', 'mcp_list_tools', 'open', 'media_search', 'media_control'), ('spotify-media',)),
     'files': (r'\b(files?|folders?|director(?:y|ies)|drive|rename|copy|append)\b',
               ('open', 'list_files', 'search_files', 'read_file'), ('file-operations', 'app-navigation')),
     'apps': (r'\b(open|launch|start|close|applications|installed apps)\b', ('open', 'close_app', 'application_search'), ('app-navigation',)),

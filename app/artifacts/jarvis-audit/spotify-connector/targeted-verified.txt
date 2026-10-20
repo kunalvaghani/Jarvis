@@ -1,0 +1,14 @@
+........................................................................ [ 29%]
+.......................................ssssssssssssssss................. [ 58%]
+........................................................................ [ 87%]
+...............................                                          [100%]
+============================== warnings summary ===============================
+Jarvis-spotify-integration/app/tests/test_media_routes.py::MediaRoutesTests::test_search_focus_change_does_not_submit
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: D:\Kunals GitHub Repo\LocalGithub\Jarvis-spotify-integration\app\artifacts\jarvis-audit\spotify-connector\targeted.xml -
+=========================== short test summary info ===========================
+SKIPPED [16] tests\test_media_audit.py:182: BLOCKED: complete catalog contract still needs additional fixture/native integration, durability, privacy or resource proof; see inventory.md
+231 passed, 16 skipped, 1 warning in 29.59s
