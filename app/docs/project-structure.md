@@ -5,6 +5,18 @@ Python imports and supervised Start/Stop entry points remain stable. Relative
 model, workspace and configuration values resolve from the application directory,
 including when settings are read from `config/`.
 
+## Current folder policy (2026-10-20)
+
+Use the repository root for `README.md`, `AGENTS.md`, Git metadata and the canonical `app/` directory. `InsTAREELS` is a local compatibility junction; do not move it or traverse it during cleanup. Start and Stop shortcuts stay inside `app/`.
+
+Keep application code in `jarvis/`, configuration in `config/`, tests in `tests/`, dependency declarations in `requirements/`, maintenance commands in the existing `scripts/` subfolders, user guides in `docs/`, and generated deliverables in the existing `artifacts/` groups below. Keep upstream integrations, attribution and licenses together in `integrations/`. These established paths already separate the project by purpose and remain stable.
+
+Models, `.venv*/` environments, custom skills, secrets, `JarvisFiles/`, conversation/state databases, recordings, browser profiles, training checkpoints and audit evidence are retained. Python bytecode and test/lint caches are regenerable; installer download caches can be cleared with the installer's own cache-clean command. Future setup may need to download cleared packages again. Do not treat all ignored files, logs, fixture directories or old training runs as disposable.
+
+Local cleanup inventories and deletion receipts belong in `.jarvis-runtime/folder-cleanup-2026-10-20/`; private filenames and contents stay out of published documentation. The authoritative worktree recovery material remains in `.jarvis-runtime/repository-consolidation-2026-10-20/preserved-local-files/`. Only byte-identical files from its incomplete sibling copy are disposable.
+
+Fresh cleanup verification — 2026-10-20 IST: removed **1,098** regenerable Python/test/lint cache directories, **12,057** hash-verified duplicate backup files, the empty repository-root `state/` directory, the disposable consolidation test scratch directory, and four accidentally tracked Windows cache databases under the literal `%SystemDrive%/` folder. UV's own offline cache-clean operation removed 788.9 MiB from the DeerFlow installer cache and 171.5 MiB from the Hermes installer cache. The observed D: free-space increase was **460.5 MiB**; logical file sizes and physical space recovered differ because of shared storage and concurrent disk activity. The authoritative consolidation backup remains intact. Folder-layout regression: **7 passed** outside the sandbox (initial sandbox execution had three filesystem/permission failures). Launcher readiness remains **repair_required** because Docker and Ollama are unavailable, as before cleanup; no live voice/desktop acceptance was performed.
+
 ## Where files belong
 
 | Folder | Contents |

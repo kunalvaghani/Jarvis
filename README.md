@@ -1,5 +1,7 @@
 # Jarvis — local Windows voice assistant
 
+**Folder organization and cleanup — 2026-10-20 IST:** The canonical project is `app/`; source, configuration, scripts, documentation and artifact groups retain their established paths. Use the [folder map and cleanup policy](app/docs/project-structure.md#current-folder-policy-2026-10-20). Models, environments and private/runtime data stay local. Verified cache/duplicate cleanup increased observed D: free space by about 461 MiB; folder-layout regression: 7 passed. See the [dated cleanup details](app/README.md#folder-organization-and-cleanup-2026-10-20).
+
 **Repository consolidation — 2026-10-20 IST:** `main` is the sole maintained local and remote branch; the primary checkout is the only worktree. All former branch tips and worktree commits were already ancestors of `main`. The unique untracked deep-path audit test was preserved as an audit artifact. Local audit/runtime files and worktree patches were preserved privately under `app/.jarvis-runtime/repository-consolidation-2026-10-20/`. See the [application consolidation notes](app/README.md#repository-consolidation-2026-10-20). Historical checkpoints below describe their original dates.
 
 <!-- prompt99-e5af-review -->

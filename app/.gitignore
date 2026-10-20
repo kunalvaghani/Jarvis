@@ -110,3 +110,6 @@ artifacts/**/.expo/
 integrations/deer-flow-upstream/
 integrations/deer-flow/
 .venv-openviking/
+
+# Windows cache accidentally generated with an unexpanded environment variable.
+/%SystemDrive%/

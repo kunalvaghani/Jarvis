@@ -1,2 +1,9 @@
 # Local compatibility junction; app/ is canonical.
 /InsTAREELS/
+
+# Regenerable developer caches; application/runtime data has its own ignore rules.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
