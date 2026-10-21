@@ -7,13 +7,15 @@ from pathlib import Path
 
 
 class Journal:
-    def __init__(self,path,name,target,state=None):
+    def __init__(self,path,name,target,state=None,report=None):
         self.path,self.name,self.target=path,name,target
         self.state=state
+        self.report=report
     def save(self,row):
         temporary=self.path.with_suffix('.tmp')
         temporary.write_text(json.dumps(row)+'\n')
-        temporary.replace(self.path)
+        from .checkpoint_io import replace_checkpoint
+        replace_checkpoint(temporary, self.path, self.path.parent, report=self.report)
     def begin(self):
         self.save({'pending':True,'operation':self.name,'target':self.target})
         if self.state:
@@ -34,7 +36,7 @@ class Journal:
 
 
 @contextmanager
-def guard(base,name,value,args,state=None):
+def guard(base,name,value,args,state=None,report=None):
     fields={key:item for key,item in args.items() if key!='expected_sha256'}
     digest=hashlib.sha256(json.dumps([name,value,fields],sort_keys=True,ensure_ascii=False).encode()).hexdigest()
     root=Path(base)/'.jarvis-runtime/gmail-api/writes'
@@ -66,7 +68,7 @@ def guard(base,name,value,args,state=None):
                     raise ValueError('Gmail write journal is damaged or oversized; inspect fresh mailbox state before continuing. No replay.') from None
                 if row['pending']:
                     raise ValueError('An earlier identical Gmail write has an uncertain outcome. Inspect the actual draft or message before another write; no action replayed.')
-            yield Journal(path,name,value,state)
+            yield Journal(path,name,value,state,report)
         finally:
             lock.seek(0)
             if os.name=='nt':msvcrt.locking(lock.fileno(),msvcrt.LK_UNLCK,1)

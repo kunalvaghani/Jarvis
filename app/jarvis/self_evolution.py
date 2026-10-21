@@ -268,7 +268,8 @@ class SelfEvolution:
             tmp.write_text(json.dumps({"version": 1, "updated": _now(),
                                        "jobs_today":self.jobs_today[-100:], "items": self.backlog[-self.options["max_backlog"]:]},
                                       ensure_ascii=True, indent=1), encoding="utf-8")
-            tmp.replace(self.backlog_path)
+            from .checkpoint_io import replace_checkpoint
+            replace_checkpoint(tmp,self.backlog_path,self.directory,wait=self.stop.wait,report=getattr(self.actions,'report',None))
         except OSError:
             self.storage_failed = True
 
@@ -282,7 +283,8 @@ class SelfEvolution:
             tmp = self.checkpoint_path.with_suffix(".tmp")
             tmp.write_text(json.dumps({"signature": item["signature"], "stage": stage,
                                        "trace_id":self.trace_id,"at": _now(), **(extra or {})}, ensure_ascii=True), encoding="utf-8")
-            tmp.replace(self.checkpoint_path)
+            from .checkpoint_io import replace_checkpoint
+            replace_checkpoint(tmp,self.checkpoint_path,self.directory,wait=self.stop.wait,report=getattr(self.actions,'report',None))
             return True
         except OSError:
             self.storage_failed=True

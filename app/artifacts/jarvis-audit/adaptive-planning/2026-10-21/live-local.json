@@ -1,0 +1,46 @@
+{
+  "name": "notes",
+  "plan_lines": 2,
+  "passed": true,
+  "seconds": 58.781,
+  "goal": "Prepare the notes workflow in this folder in this exact order, then finish:\n1. Create notes1.txt containing pending\n2. Read notes1.txt",
+  "planner_calls": 1,
+  "completed_actions": 2,
+  "exact_order_and_arguments": true,
+  "disk_content_verified": true,
+  "state_status": "completed",
+  "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+  "generated_plans": [
+    {
+      "question": "",
+      "steps": [
+        {
+          "action": "create_file",
+          "value": "notes1.txt",
+          "browser": "chrome",
+          "expected": "File notes1.txt created with content pending",
+          "folder": "this folder",
+          "content": "pending",
+          "find": "",
+          "platform": ""
+        },
+        {
+          "action": "read_file",
+          "value": "notes1.txt",
+          "browser": "chrome",
+          "expected": "Content of notes1.txt read successfully",
+          "folder": "this folder",
+          "content": "",
+          "find": "",
+          "platform": ""
+        }
+      ],
+      "model_used": "qwen3.5:9b"
+    }
+  ],
+  "final_files": {
+    "notes1.txt": "pending"
+  },
+  "dispatched_actions": 2,
+  "scope": "Real local qwen3.5:9b initial plan; actual owned file tools; deterministic decision and independent disk/action-count verifier. Not a live vision, voice, native-tool or cloud acceptance check."
+}

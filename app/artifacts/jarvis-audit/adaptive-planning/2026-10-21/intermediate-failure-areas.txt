@@ -1,0 +1,16 @@
+......................F................................................. [ 27%]
+........................................................................ [ 54%]
+........ssssssss........................................................ [ 81%]
+.....................ssss.......................                         [100%]
+================================== FAILURES ===================================
+_______ test_real_file_chains_keep_quality_and_remove_redundant_replans _______
+tests\test_adaptive_planning.py:199: in test_real_file_chains_keep_quality_and_remove_redundant_replans
+    result = measure()
+scripts\verification\verify_adaptive_planning.py:49: in measure
+    'planner_calls': sum(row['planner_calls'] for row in results),
+scripts\verification\verify_adaptive_planning.py:49: in <genexpr>
+    'planner_calls': sum(row['planner_calls'] for row in results),
+E   KeyError: 'planner_calls'
+=========================== short test summary info ===========================
+FAILED tests/test_adaptive_planning.py::test_real_file_chains_keep_quality_and_remove_redundant_replans
+1 failed, 251 passed, 12 skipped in 89.02s (0:01:29)

@@ -356,8 +356,14 @@ class AbilityForge:
             self.root.mkdir(parents=True, exist_ok=True)
             temp = self.root / "registry.tmp"
             temp.write_text(json.dumps(self.registry, ensure_ascii=False, indent=1), encoding="utf-8")
-            temp.replace(self.root / "registry.json")
+            self._replace_checkpoint(temp, self.root / "registry.json")
             self._patterns = None
+
+    def _replace_checkpoint(self, source, target):
+        """Only unchanged owned metadata can retry; never ability execution/delivery."""
+        from .checkpoint_io import replace_checkpoint
+        replace_checkpoint(source, target, self.root, wait=self.stop.wait,
+                           report=getattr(getattr(self, 'actions', None), 'report', None))
 
     def abilities(self, state=None):
         rows = list(self.registry["abilities"].values())
@@ -959,7 +965,7 @@ class AbilityForge:
         """An update that needs approval waits beside the working version, which stays live meanwhile."""
         version = self._next_version(live)
         target = self.root / live["id"] / version
-        staging.replace(target)
+        self._replace_checkpoint(staging, target)
         live = {**live, "rebuilding": False, "candidate": {**{k: v for k, v in candidate.items() if k != "candidate"},
                                                            "version": version, "folder": str(target.relative_to(self.root)),
                                                            "state": "awaiting_approval",
@@ -979,7 +985,7 @@ class AbilityForge:
         target = self.root / row["id"] / version
         if target.exists():
             target = self.root / row["id"] / (version + "-" + str(int(self.clock())))
-        staging.replace(target)
+        self._replace_checkpoint(staging, target)
         row["triggers"] = self.usable_triggers(row)
         row.update(state=state, version=target.name, folder=str(target.relative_to(self.root)), updated_at=now_iso(),
                    rebuilding=False, last_test=(result or {}).get("text", "")[:300], model=self.used_model or self.model,

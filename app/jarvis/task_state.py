@@ -32,6 +32,12 @@ class TaskState:
             current["status"] = "interrupted"
             current["updated_at"] = _now()
             current["result"] = "Jarvis stopped before this task was completed. Inspect the last checkpoint before retrying."
+            adaptive = current.get('adaptive')
+            if isinstance(adaptive, dict):
+                adaptive['interrupted_state'] = adaptive.get('state')
+                adaptive['state'] = 'BLOCKED'
+                adaptive['goal_verified'] = False
+                adaptive['blockers'] = ['Process interrupted; fresh inspection required before continuing']
             self._write()
 
     def _read(self):
@@ -142,6 +148,18 @@ class TaskState:
             if status == 'completed' and current.get('uncertain_external_writes'):
                 status = 'paused'
                 result = 'Task paused: an external write is uncertain; inspect the actual result. No automatic replay.'
+            adaptive = current.get('adaptive')
+            if status == 'completed' and adaptive and (adaptive.get('state') != 'COMPLETE'
+                    or adaptive.get('goal_verified') is not True or adaptive.get('remaining')
+                    or not adaptive.get('acceptance')
+                    or any(row.get('verified') is not True for row in adaptive['acceptance'])):
+                status = 'paused'
+                result = 'Task paused: the original objective has not passed whole-goal verification.'
+            if adaptive and status != 'completed':
+                adaptive['state'] = 'BLOCKED'
+                adaptive['goal_verified'] = False
+                if not adaptive.get('blockers'):
+                    adaptive['blockers'] = [str(result)[:500]]
             current["status"] = status
             current["updated_at"] = _now()
             current["result"] = str(result)[:1000]
@@ -189,6 +207,19 @@ class TaskState:
             current['updated_at'] = _now()
             self._write()
 
+    def update_adaptive(self, payload, *, task_id):
+        """Persist task-owned planning metadata using the existing atomic checkpoint."""
+        encoded = json.dumps(payload, allow_nan=False)
+        if len(encoded) > 400000:
+            raise ValueError('Adaptive checkpoint exceeds metadata budget.')
+        with self.lock:
+            self.require_identity(task_id)
+            current = self.data.get('current')
+            if current and current.get('status') == 'running':
+                current['adaptive'] = json.loads(encoded)
+                current['updated_at'] = _now()
+                self._write()
+
     def update_learning(self, payload):
         """Acquisition participates in the current task, not a separate state DB."""
         encoded = json.dumps(payload, allow_nan=False)
@@ -214,6 +245,11 @@ class TaskState:
             steps=(current.get('dag') or {}).get('steps') or {}
             return {'task_id':str(current.get('task_id',''))[:36],
                     'status':str(current.get('status','idle'))[:32],
+                    **({'adaptive': {'state': current['adaptive'].get('state', 'UNDERSTAND'),
+                        'completed': len(current['adaptive'].get('completed', [])),
+                        'remaining': len(current['adaptive'].get('remaining', [])),
+                        'planning_cycles': current['adaptive'].get('planning_cycles', 0)}}
+                       if current.get('adaptive') else {}),
                     'steps':[{'id':str(key)[:32],'status':str(value.get('status','pending'))[:32]}
                              for key,value in islice(steps.items(),32) if isinstance(value,dict)]}
         finally:self.lock.release()
@@ -281,6 +317,7 @@ class TaskState:
             return {"status": task["status"], "stage": task.get("stage", ""),
                     "result": task.get("result", "")[:500],
                     "plan": task.get("plan"),
+                    **({'adaptive': task['adaptive']} if task.get('adaptive') else {}),
                     "failures": task.get("failures", [])[-12:],
                     "checkpoints": task.get("checkpoints", [])[-12:]}
 

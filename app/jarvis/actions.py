@@ -1895,15 +1895,17 @@ class Actions:
                         threading.Thread(target=control_card, args=(self, command), daemon=True,
                                          name="jarvis-media-card").start()
                     if result and not cancelled():
+                        history_status = 'done'
                         if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                             state = self.task_state.snapshot() or {}
+                            history_status = 'done' if state.get('status') == 'completed' else state.get('status', 'paused')
                             self.knowledge.record_pair(state.get('goal') or command.value, str(result), kind='task')
                         elif command.kind not in QUIET_KINDS:
                             from .memory_curator import describe
                             self.knowledge.record_pair(describe(command), str(result), kind='task')
                         self.report("action", result)
                         getattr(self, "task_history", []).append({"what": (command.value or command.kind).splitlines()[0][:80] if command.kind not in {
-                            "gods_eye_show", "gods_eye_camera"} else command.kind.replace("_", " "), "status": "done",
+                            "gods_eye_show", "gods_eye_camera"} else command.kind.replace("_", " "), "status": history_status,
                                                   "result": str(result)[:400], "at": time.time()})
                         if command.kind == "write_text":
                             self.last_typed = command.value

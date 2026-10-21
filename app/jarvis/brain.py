@@ -572,6 +572,8 @@ class Brain:
         self.visual_fallback = VisualFallback(self)
         self.step_session = None
         self.workflows = None
+        self.adaptive_controller = None
+        self._run_lock = threading.Lock()
         if options.get('incremental_planning', False) and options.get('reuse_navigation_workflows', False):
             from .step_planning import WorkflowMemory
             self.workflows = WorkflowMemory(base)
@@ -627,7 +629,23 @@ class Brain:
         state=getattr(self.actions,'task_state',None)
         identity=state.identity() if isinstance(state,TaskState) else None
         for attempt in range(2):
+            controller = self.adaptive_controller
+            if controller is not None and not controller.admit(operation, data):
+                # A repeated prompt cannot create information. Inspect once, then
+                # stop if the state is unchanged; never manufacture an input action.
+                _, observed = self.observe(cancelled)
+                fresh = self.planning_context(self.screen(observed))
+                if fresh == data.get('screen'):
+                    controller.transition('BLOCKED', 'Planning stagnated with unchanged observations; clarify the next prerequisite')
+                    raise ValueError('Task paused: repeated planning has no new evidence; fresh observation is unchanged.')
+                data['screen'] = fresh
+                if not controller.admit(operation, data):
+                    controller.transition('BLOCKED', 'Planning cycle revisited an already observed state')
+                    raise ValueError('Task paused: planning revisited an unchanged state.')
+            started = time.monotonic()
             result = self.client.request(operation, cancelled, **data)
+            if controller is not None:
+                controller.proposal(result, time.monotonic() - started)
             if identity is not None:
                 state.require_identity(identity)
             if isinstance(result,dict):
@@ -678,6 +696,15 @@ class Brain:
         return {**screen, "tool_results": list(reversed(rows))} if rows else screen
 
     def checkpoint(self, stage, **details):
+        controller = self.adaptive_controller
+        if controller is not None:
+            transitions = {'observing': 'OBSERVE', 'acting': 'EXECUTE',
+                           'action_attempted': 'OBSERVE', 'verified': 'VERIFY',
+                           'action_failed': 'REPLAN'}
+            if stage in transitions:
+                controller.transition(transitions[stage], stage)
+            if stage == 'goal_verified' and not controller.verify_goal(details.get('evidence')):
+                raise ValueError('Task paused: ' + controller.ledger['blockers'][-1])
         if self.step_session is not None and stage == 'goal_verified':
             self.step_session.goal_verified = True
         state = getattr(self.actions, "task_state", None)
@@ -685,6 +712,8 @@ class Brain:
             state.checkpoint(stage, **details)
 
     def save_plan(self, remaining, completed, reason):
+        if self.adaptive_controller is not None:
+            self.adaptive_controller.progress(remaining, completed)
         state = getattr(self.actions, "task_state", None)
         if isinstance(state, TaskState):
             state.update_plan(remaining, completed, reason)
@@ -1085,6 +1114,32 @@ class Brain:
                 "controls": observation.get("controls", [])}
 
     def run(self, goal, cancelled, approach=None):
+        if not self._run_lock.acquire(blocking=False):
+            raise ValueError('Task paused: this execution worker already owns another task.')
+        try:
+            return self._run_owned(goal, cancelled, approach)
+        except Exception as exc:
+            controller = self.adaptive_controller
+            if controller is not None and controller.ledger['state'] != 'BLOCKED':
+                from .recovery import safe_message
+                try:
+                    controller.transition('BLOCKED', safe_message(exc, 500))
+                except ValueError:
+                    pass  # Task replacement refuses all late checkpoints.
+            raise
+        finally:
+            try:
+                controller = self.adaptive_controller
+                if controller is not None and controller.ledger['state'] not in {'COMPLETE', 'BLOCKED'}:
+                    try:
+                        controller.transition('BLOCKED', 'Execution stopped before whole-goal verification; inspect checkpoint')
+                    except ValueError:
+                        pass  # A replacement task must never receive the old worker's state.
+            finally:
+                self.adaptive_controller = None
+                self._run_lock.release()
+
+    def _run_owned(self, goal, cancelled, approach=None):
         reference=re.fullmatch(r"open (?:my |the )?(?:latest|most recent) (spreadsheet|document|file|report)", goal.strip(), re.I)
         if reference:
             raise TaskClarification('Which '+reference[1].lower()+' should I open? Say its filename or full path, or specify a folder.', 'file')
@@ -1172,6 +1227,10 @@ class Brain:
             result = run_hierarchical(self, goal, cancelled)
             if result is not None:
                 return result
+        from .adaptive_planning import AdaptivePlanningController
+        identity = state.identity() if isinstance(state, TaskState) else None
+        persist = (lambda payload: state.update_adaptive(payload, task_id=identity)) if identity else (lambda payload: None)
+        self.adaptive_controller = AdaptivePlanningController(spoken_goal, persist)
         fixed_media_plan = spotify_media_plan(goal) or youtube_search_plan(goal)
         initial_launch_plan = explicit_app_launch_plan(goal, self.actions.apps) if self.options.get("screen_aware", False) else None
         has_progress = bool(prior and ((prior.get("plan") or {}).get("completed") or
@@ -1619,6 +1678,14 @@ class Brain:
                             self.actions.report("plan", "Next from current screen: " + steps[0]["action"] + " " + steps[0]["value"])
                         continue
                     if adaptive or toolkit_step:
+                        controller = self.adaptive_controller
+                        if (controller is not None and not screen_aware and not incremental_plan
+                                and controller.ready(steps[1:], completed, failures)):
+                            self.validate_remaining(steps[1:], goal)
+                            validate_dependencies(steps[1:], completed)
+                            controller.transition('EXECUTE', 'Verified prerequisites and literal file operands; continue retained plan')
+                            steps = steps[1:]
+                            continue
                         steps = self.revise_plan(goal, self.visual_context(captured) if screen_aware else self.screen(after),
                             apps, completed, steps[1:], number, cancelled, failures=failures)
                         if not steps:
@@ -1706,14 +1773,7 @@ class Brain:
             evidence.append("Approved file deletion: " + str(self.actions.last_deleted))
         if self.actions.last_command and any(s["action"] == "run_command" for s in executed_steps):
             evidence.append("Approved command exit code: " + str(self.actions.last_command[1]) + "; output: " + self.actions.last_command[2][:1000])
-        done = getattr(self, 'planner_done', None)
-        if (incremental_plan and done and completed and done['after'] == len(completed)
-                and completed[-1].get('confirmed', True) is not False):
-            # The planner just inspected the fresh state after a confirmed step; a second
-            # model pass over the same evidence adds ~20 s and no new information.
-            self.checkpoint("goal_verified", source='next_step_planner',
-                            evidence="Planner judged the whole goal complete from fresh state: " + done['reason'])
-            return "Finished. " + (done['reason'] or "The requested result is on screen.")
+        self.adaptive_controller.transition('VERIFY', 'Independent whole-goal verification')
         final = self.client.request("verify", cancelled, goal=goal,
             step={"action": "goal", "value": goal, "expected": "The ENTIRE user goal is satisfied: " + goal},
             screen=self.planning_context({**(self.visual_context(captured) if screen_aware else self.screen(after)), "trusted_evidence": evidence}))

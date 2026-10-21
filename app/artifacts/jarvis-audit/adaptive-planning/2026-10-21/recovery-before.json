@@ -1,0 +1,234 @@
+{
+  "scope": "Real owned-file effects with injected failure/cancellation; simulated planner",
+  "source": "pinned 0199c16 task_state/brain/actions loaded without checkout mutation",
+  "cases": [
+    {
+      "incremental": false,
+      "fault": "uncertain_write",
+      "safe_checkpoint_no_replay": true,
+      "result": {
+        "name": "notes",
+        "plan_lines": 5,
+        "passed": false,
+        "seconds": 0.375,
+        "error_type": "ValueError",
+        "error": "Task paused: the last action may have taken effect; inspect it before continuing. Injected failure after the real file effect",
+        "goal": "Prepare the notes workflow in this folder in this exact order, then finish:\n1. Create notes1.txt containing pending\n2. Modify notes1.txt: replace pending with reviewed\n3. Modify notes1.txt: replace reviewed with complete\n4. Create notes2.txt containing pending\n5. Read notes2.txt",
+        "generated_plans": [
+          {
+            "question": "",
+            "steps": [
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "create_file",
+                "value": "notes1.txt",
+                "content": "pending",
+                "find": "",
+                "expected": "notes1.txt contains pending"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "modify_file",
+                "value": "notes1.txt",
+                "find": "pending",
+                "content": "reviewed",
+                "expected": "notes1.txt contains reviewed"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "modify_file",
+                "value": "notes1.txt",
+                "find": "reviewed",
+                "content": "complete",
+                "expected": "notes1.txt contains complete"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "create_file",
+                "value": "notes2.txt",
+                "content": "pending",
+                "find": "",
+                "expected": "notes2.txt contains pending"
+              },
+              {
+                "action": "read_file",
+                "value": "notes2.txt",
+                "expected": "Read final pending",
+                "browser": "chrome",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "platform": ""
+              }
+            ]
+          }
+        ],
+        "completed_actions": 1,
+        "dispatched_actions": 2,
+        "remaining_actions": 4,
+        "state_status": "paused",
+        "failures": [
+          {
+            "browser": "chrome",
+            "folder": "this folder",
+            "platform": "",
+            "action": "modify_file",
+            "value": "notes1.txt",
+            "find": "pending",
+            "content": "reviewed",
+            "expected": "notes1.txt contains reviewed",
+            "reason": "Injected failure after the real file effect",
+            "attempted": true,
+            "verified": false,
+            "outcome": "uncertain"
+          }
+        ],
+        "resume_blocker": "A previous action has an uncertain result. Inspect it before issuing the remaining task."
+      }
+    },
+    {
+      "incremental": true,
+      "fault": "uncertain_write",
+      "safe_checkpoint_no_replay": true,
+      "result": {
+        "name": "todo",
+        "plan_lines": 5,
+        "passed": false,
+        "seconds": 0.375,
+        "error_type": "ValueError",
+        "error": "Task paused: the last action may have taken effect; inspect it before continuing. Injected failure after the real file effect",
+        "goal": "Prepare the todo workflow in this folder in this exact order, then finish:\n1. Create todo1.txt containing pending\n2. Modify todo1.txt: replace pending with reviewed\n3. Modify todo1.txt: replace reviewed with complete\n4. Create todo2.txt containing pending\n5. Read todo2.txt",
+        "generated_plans": [],
+        "completed_actions": 1,
+        "dispatched_actions": 2,
+        "remaining_actions": 1,
+        "state_status": "paused",
+        "failures": [
+          {
+            "browser": "chrome",
+            "folder": "this folder",
+            "platform": "",
+            "action": "modify_file",
+            "value": "todo1.txt",
+            "find": "pending",
+            "content": "reviewed",
+            "expected": "todo1.txt contains reviewed",
+            "reason": "Injected failure after the real file effect",
+            "attempted": true,
+            "verified": false,
+            "outcome": "uncertain"
+          }
+        ],
+        "resume_blocker": "A previous action has an uncertain result. Inspect it before issuing the remaining task."
+      }
+    },
+    {
+      "incremental": false,
+      "fault": "cancellation",
+      "safe_checkpoint_no_replay": true,
+      "result": {
+        "name": "inventory",
+        "plan_lines": 5,
+        "passed": false,
+        "seconds": 0.234,
+        "error_type": "ValueError",
+        "error": "Task cancelled.",
+        "goal": "Prepare the inventory workflow in this folder in this exact order, then finish:\n1. Create inventory1.txt containing pending\n2. Modify inventory1.txt: replace pending with reviewed\n3. Modify inventory1.txt: replace reviewed with complete\n4. Create inventory2.txt containing pending\n5. Read inventory2.txt",
+        "generated_plans": [
+          {
+            "question": "",
+            "steps": [
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "create_file",
+                "value": "inventory1.txt",
+                "content": "pending",
+                "find": "",
+                "expected": "inventory1.txt contains pending"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "modify_file",
+                "value": "inventory1.txt",
+                "find": "pending",
+                "content": "reviewed",
+                "expected": "inventory1.txt contains reviewed"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "modify_file",
+                "value": "inventory1.txt",
+                "find": "reviewed",
+                "content": "complete",
+                "expected": "inventory1.txt contains complete"
+              },
+              {
+                "browser": "chrome",
+                "folder": "this folder",
+                "platform": "",
+                "action": "create_file",
+                "value": "inventory2.txt",
+                "content": "pending",
+                "find": "",
+                "expected": "inventory2.txt contains pending"
+              },
+              {
+                "action": "read_file",
+                "value": "inventory2.txt",
+                "expected": "Read final pending",
+                "browser": "chrome",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "platform": ""
+              }
+            ]
+          }
+        ],
+        "completed_actions": 1,
+        "dispatched_actions": 1,
+        "remaining_actions": 4,
+        "state_status": "cancelled",
+        "failures": [],
+        "resume_blocker": null
+      }
+    },
+    {
+      "incremental": true,
+      "fault": "cancellation",
+      "safe_checkpoint_no_replay": true,
+      "result": {
+        "name": "journal",
+        "plan_lines": 5,
+        "passed": false,
+        "seconds": 0.219,
+        "error_type": "ValueError",
+        "error": "Task cancelled before replanning.",
+        "goal": "Prepare the journal workflow in this folder in this exact order, then finish:\n1. Create journal1.txt containing pending\n2. Modify journal1.txt: replace pending with reviewed\n3. Modify journal1.txt: replace reviewed with complete\n4. Create journal2.txt containing pending\n5. Read journal2.txt",
+        "generated_plans": [],
+        "completed_actions": 1,
+        "dispatched_actions": 1,
+        "remaining_actions": 0,
+        "state_status": "cancelled",
+        "failures": [],
+        "resume_blocker": null
+      }
+    }
+  ],
+  "safe_recoveries": 4,
+  "total": 4
+}

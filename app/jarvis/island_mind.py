@@ -68,6 +68,11 @@ class MindView:
                 rows=task['steps']
                 text=('DAG · '+task['status']+' · '+str(len(rows))+' nodes\n'+
                       ' · '.join(row['id']+': '+row['status'] for row in rows[:8])) if rows else 'DAG · '+task['status']
+                adaptive = task.get('adaptive')
+                if adaptive:
+                    text = ('Task · ' + adaptive['state'] + ' · ' + str(adaptive['completed']) +
+                            ' verified · ' + str(adaptive['remaining']) + ' remaining · ' +
+                            str(adaptive['planning_cycles']) + ' planning calls')
                 if text!=self.dag_text:
                     self.dag.configure(text=text)
                     self.dag_text=text

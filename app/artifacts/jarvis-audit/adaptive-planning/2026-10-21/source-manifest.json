@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-21 IST",
+  "baseline_revision": "0199c16317a882e6d9ec8224507473cf2cc50eb7",
+  "branch": "codex/adaptive-planning",
+  "python": "3.10.6",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "candidate_source_sha256": {
+    "app/jarvis/adaptive_planning.py": "200227d36eabd9506243a620408b5814471f2603d74e937aa6fe20ddd2f170b4",
+    "app/jarvis/checkpoint_io.py": "ed025b3fa2970cb9774e123249c350109b18dbfc945b365139e26db55f562df9",
+    "app/jarvis/brain.py": "17c2c2bf9a82dc5deaf72dd836bf354747910173095286e6ab7aa06b19b6e0d5",
+    "app/jarvis/task_state.py": "6d2269304fbb1a2477e8354d9120cc12ab1c5eb96d39136e4907d4b1bb7595f8",
+    "app/jarvis/actions.py": "6d469a8153aaec5583034865a0c072c68d58ccfba1fd1c3da7058e6e1354fe0e",
+    "app/jarvis/island_mind.py": "d9d8f3a9d969d2f3eb9687fd71df41d83d9aa6ac1b1bc58a38eefcd3ae40a9f2",
+    "app/jarvis/repo_abilities.py": "56889d3934f42adeaf7f1345f3616f7af31a8f7f170fc5cfd6b42184566f56f9",
+    "app/jarvis/gmail_api.py": "a36498e7dc60063c9b96d84a26ff8314c7e704380be68ca4491b0a303b978b3d",
+    "app/jarvis/gmail_writes.py": "bcff0efc755210d5a0458bc41a26a8e48ea1880f3732c3ebc4c68e8e534afefd",
+    "app/jarvis/repo_acquisition.py": "df7839d0b3804e8aff56f2afa63284c608c9642f506e81675ac6ff823ce04de3",
+    "app/jarvis/repository_skills.py": "f684a60ce07925e12d5fcb91903e30b567407f46d052c9e8116d92f2ffd06142",
+    "app/jarvis/self_evolution.py": "5a33446c207e54724f23bd8574ae181c7085b25ba64b985e34bac99d7bfd8356",
+    "app/tests/test_adaptive_planning.py": "40b23db51fce2dd79bff480b6519a020b4755d65a7b00c337d9bbf380f8b3ee8",
+    "app/scripts/verification/verify_adaptive_planning.py": "cde127365b599c76b04e3dc27c065ae446e6f7117fe5b2802a7b91d6525a4f11",
+    "app/scripts/verification/verify_adaptive_live.py": "e949b7f0edc10d692d0b7a8ef251bd0e09ca1d2f618a3694d2ba5a00db497deb",
+    "app/scripts/verification/verify_adaptive_recovery.py": "e4356bea42650ac74d52711bf80fc7f15d45b390bc9826d403719c74cc5519c4"
+  },
+  "baseline_source_sha256": {
+    "app/jarvis/brain.py": "cf49fc567c2ce49d23c9d395dcdf6d6135e49d44424fee7254529a734e1f9099",
+    "app/jarvis/task_state.py": "f43497aa1d6648cbc2ee7c5e95b29a3eb75020bddc6df61b899051235191ee7a",
+    "app/jarvis/actions.py": "e05235cd75016dfcbf684fba73eaed4fb7baa88ec757114e158009bbd27efe61",
+    "app/jarvis/island_mind.py": "606b2c4274d27dbb6ab6b685712f750d46868c34a549beb73c441617b542a2f2",
+    "app/jarvis/repo_abilities.py": "6dd3774c9cfd937ee26b5935b0b827bd5966924a9b15a69d8d9ec96a210f9220",
+    "app/jarvis/gmail_api.py": "2521ed91ade3f4107e08d07f068dc799d8098b649ad9cb5fca8762732a310167",
+    "app/jarvis/gmail_writes.py": "30f4bd252cb8caad58e7c86df10994e9e23d38b279790e29a13b2e7aa6afc14f",
+    "app/jarvis/repo_acquisition.py": "b6a1c10869c57821cae41489cb338b918f456e166e27dd74c78e302e63ebd4c3",
+    "app/jarvis/repository_skills.py": "3821a6fd938484889fd2b806f5d393a6768f38df01883e48c430484c2c917160",
+    "app/jarvis/self_evolution.py": "2e569cb78bdf8f3a4cacbc9cbfcde3ec39e96449ccc9bf9f031fb5905691d2d9"
+  },
+  "final_combined": {
+    "passed": 595,
+    "skipped": 19,
+    "failed": 0,
+    "seconds": 177.11
+  },
+  "lineage": "Full suite started before final deltas: 3777 pass/150 skip/6 fail. Final source has combined relevant and affected reruns, not an exact-final-source full-suite rerun. Planning benchmark baseline was recorded before production edits; recovery baseline is a retrospective pinned-source rerun. Final timing sample predates only the final silent reporting/backoff-revalidation delta; its 14-file source snapshot is preserved separately."
+}
