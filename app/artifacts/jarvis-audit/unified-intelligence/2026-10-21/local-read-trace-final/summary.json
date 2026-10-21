@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-21",
+  "scope": "real ToolRegistry and real disk; synthetic public fixture; no UI/model/connector",
+  "reads": 20,
+  "exact_matches": 20,
+  "model_calls": 0,
+  "tool_completion_events": 20,
+  "p50_ms": 15.28765,
+  "p95_ms": 18.2548,
+  "fixture_sha256": "050a4ddf3416903456dce27aaa6920590f127d6165211f502b5e958c010e868b"
+}

@@ -172,6 +172,20 @@ def skill_tools(row, known):
     return sorted(set(declared) & set(known) | (body_names & set(known)))
 
 
+@lru_cache(maxsize=8)
+def _tool_index(descriptions):
+    """Immutable postings from actual registrations, never from saved guidance.
+
+    The key includes descriptions so registering/replacing a tool invalidates the
+    index. Availability and task scope deliberately remain outside this cache.
+    """
+    postings = {}
+    for name, description in descriptions:
+        for word in tokens(name.replace('_', ' ') + ' ' + description):
+            postings.setdefault(word, set()).add(name)
+    return {word: frozenset(names) for word, names in postings.items()}
+
+
 def rank_tools(specs, query, allowed=None, skills=None, limit=12):
     from .toolkits import TOOLS, available
     words = tokens(query)
@@ -194,7 +208,17 @@ def rank_tools(specs, query, allowed=None, skills=None, limit=12):
         if re.search(r'\b(?:find|search)\b',str(query),re.I) and re.search(r'\bsubject\b',str(query),re.I):
             boosts['gmail_api_list'] = 24
             boosts['gmail_api_list_drafts'] = 2
-    for spec in specs.values():
+    index = _tool_index(tuple((s.name, s.description) for s in specs.values()))
+    overlap = {}
+    for word in words:
+        for name in index.get(word, ()):
+            overlap[name] = overlap.get(name, 0) + 1
+    exact = set(re.findall(r'\w+', str(query).casefold())) & specs.keys()
+    candidates = overlap.keys() | boosts.keys() | exact
+    for name in candidates:
+        if name not in specs:
+            continue
+        spec = specs[name]
         if (spec.name=='gmail_api_list_drafts'
                 and re.search(r'\b(?:find|search)\b',str(query),re.I)
                 and re.search(r'\bsubject\b',str(query),re.I)
@@ -206,8 +230,8 @@ def rank_tools(specs, query, allowed=None, skills=None, limit=12):
             continue
         if spec.name in TOOLS and not available(spec.name):
             continue
-        score = len(words & tokens(spec.name.replace('_', ' ') + ' ' + spec.description)) + boosts.get(spec.name, 0)
-        if re.search(r'(?<!\w)' + re.escape(spec.name) + r'(?!\w)', str(query).casefold()):
+        score = overlap.get(spec.name, 0) + boosts.get(spec.name, 0)
+        if spec.name in exact:
             score += RANKING['exact_name_bonus']
         if score:
             ranked.append((score, spec.name))

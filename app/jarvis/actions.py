@@ -230,6 +230,8 @@ class Actions:
         self.knowledge.quick = QuickAnswers(self.memory, config.get("weather", {}), settings=config)
         from .brain import Brain
         self.brain = Brain(self, base, config.get("brain", {}))
+        from .tools import ToolRegistry
+        ToolRegistry(self).self_model([])  # Reconcile the persisted metadata view at startup.
         self.brain.client.context_provider = self.knowledge.planning_context
         from .learning_memory import LearningMemory
         # ReasoningBank lessons, OpenViking vault index and isolated exploration (each optional).
@@ -642,10 +644,12 @@ class Actions:
                     ("I'd try instead: " + opinion['recommendation'].rstrip('.') + ". Go ahead?"))
 
     def _should_deliberate(self, goal):
-        """Only deliberate on non-trivial, free-form tasks; simple imperatives stay fast."""
-        from .deliberation import TRIVIAL_TASK
-        goal = (goal or '').strip()
-        return len(goal) >= 12 and not TRIVIAL_TASK.match(goal)
+        """Recognize exact workflows before paying for an opinion model call."""
+        from .commands import Command
+        from .deliberation import execution_path
+        config = getattr(self, 'config', {})
+        return execution_path(Command('task', goal), config.get('agent_runtime', {}),
+                              getattr(self, 'apps', {}))['path'] == 'DEEP'
 
     def _form_task_opinion(self, command, cancelled):
         """Form an opinion before a task. Returns a message to wait on, or None to proceed."""
@@ -1270,6 +1274,10 @@ class Actions:
             finally:
                 self.resume_source = None
         if command.kind == "task":
+            from .deliberation import execution_path
+            route = execution_path(command, self.config.get('agent_runtime', {}),
+                                   getattr(self, 'apps', {}), bool(getattr(self, 'resume_source', None)))
+            self.last_execution_route = route
             engine = getattr(self, 'deliberation', None)
             approach = None
             decision_id = None
@@ -1279,7 +1287,7 @@ class Actions:
                 self._agreed_approach = None
                 self._agreed_decision_id = None
             elif (engine is not None and getattr(engine, 'enabled', False) and not self.pending_question
-                  and not getattr(self, 'resume_source', None) and self._should_deliberate(command.value)):
+                  and not getattr(self, 'resume_source', None) and route['path'] == 'DEEP'):
                 proposal = self._form_task_opinion(command, cancelled)
                 if proposal is not None:
                     return proposal  # Recommendation voiced; waiting for the user's go-ahead before acting.
@@ -1298,6 +1306,8 @@ class Actions:
             owned_task_id = ''  # A failed checkpoint start must not finish an older task.
             try:
                 owned_task_id = self.task_state.start(command.value, "task")
+                self.task_state.checkpoint('executive_route', source='deterministic_grammar',
+                                           evidence=route['path'] + ':' + route['reason'])
                 result = None
                 if self.config.get('agent_runtime', {}).get('direct_execution', False):
                     from .direct_execution import run as run_direct

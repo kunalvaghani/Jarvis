@@ -1,4 +1,5 @@
 .venv/
+artifacts/verification-tmp/
 # Runtime configuration backups, process state and all per-user trials stay local.
 .jarvis-runtime/
 .jarvis-runtime/logs/question-worker.log

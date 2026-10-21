@@ -285,6 +285,15 @@ def replay(brain, goal, cancelled, clock=time.monotonic, sleep=time.sleep):
     row = brain.workflows.proposal(goal, snapshot)
     if not row:
         return None
+    # The navigation cache and skill memory must consult the same negative
+    # experience gate. A later failed/corrected task must not keep replaying an
+    # older success merely because its initial UI fingerprint still matches.
+    from .experience_memory import ExperienceMemory, observe_conditions
+    experiences = getattr(getattr(brain.actions, 'skills', None), 'experiences', None)
+    if isinstance(experiences, ExperienceMemory):
+        current = observe_conditions(brain.actions, snapshot=snapshot, handle=handle)
+        if experiences.blocks_shortcut(goal, snapshot.get('title', ''), current):
+            return None  # No action attempted; ordinary planning inspects fresh state.
     completed = []
     brain.actions.report('brain', 'Using remembered navigation with fresh control and outcome checks')
     for saved in row['steps']:

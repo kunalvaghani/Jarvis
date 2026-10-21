@@ -264,7 +264,8 @@ def save_registry(base, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name('.registry-' + uuid.uuid4().hex[:8])
     temporary.write_text(json.dumps(data, indent=1), encoding='utf-8')
-    temporary.replace(path)
+    from .checkpoint_io import replace_checkpoint
+    replace_checkpoint(temporary, path, path.parent)
 
 
 def synthesize(actions, need, author, cancelled=lambda: False):

@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-21",
+  "scope": "offline warm Python microbenchmark",
+  "tool_count": 120,
+  "queries_per_search_sample": 7,
+  "timings": [
+    {
+      "operation": "tool_search",
+      "iterations": 100,
+      "p50_ms": 1.2856999999999998,
+      "p95_ms": 1.5287
+    },
+    {
+      "operation": "command_parse",
+      "iterations": 100,
+      "p50_ms": 0.0014,
+      "p95_ms": 0.0015
+    }
+  ],
+  "selections": {
+    "Debug Python script": [
+      "repository_map",
+      "repository_instructions",
+      "read_file",
+      "read_batch",
+      "skill_list",
+      "git_status",
+      "improve_code",
+      "skill_read",
+      "write_code",
+      "write_tests",
+      "application_inspect",
+      "blender_task"
+    ],
+    "Research official documentation": [
+      "web_search",
+      "scrape_web",
+      "github_search",
+      "firecrawl_search",
+      "firecrawl_scrape",
+      "deerflow_research",
+      "deerflow_web_research",
+      "repository_skill_explain"
+    ],
+    "Find files in a folder": [
+      "list_files",
+      "search_files",
+      "open",
+      "read_file",
+      "deerflow_sandbox_task",
+      "execution_methods",
+      "office_docx",
+      "append_file",
+      "create_file",
+      "git_diff",
+      "github_pr_files",
+      "improve_code"
+    ],
+    "Play first video on YouTube": [
+      "media_control",
+      "media_search",
+      "browser_inspect",
+      "application_search",
+      "cloud_architect_consult",
+      "deerflow_free_media",
+      "execution_methods",
+      "realtime_query",
+      "save_file",
+      "windows_command"
+    ],
+    "browser_click": [
+      "browser_click",
+      "browser_inspect"
+    ],
+    "blender scene": [
+      "mcp_list_tools",
+      "blender_task",
+      "strategy_execute",
+      "execution_methods",
+      "mcp_call",
+      "unreal_task",
+      "mcp_status"
+    ],
+    "runtime capabilities": [
+      "runtime_capabilities",
+      "skill_list",
+      "skill_read",
+      "tool_search",
+      "repository_skill_search",
+      "deerflow_status",
+      "rea_status",
+      "repository_skill_health",
+      "repository_skill_validate",
+      "save_file"
+    ]
+  },
+  "model_calls": 0,
+  "external_actions": 0
+}

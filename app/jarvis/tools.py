@@ -162,6 +162,11 @@ class ToolRegistry:
         self.actions = actions
         self.specs = {spec.name: spec for spec in SPECS}
 
+    def self_model(self, names):
+        from .capability_model import model_for
+        model = model_for(self.actions)
+        return model.describe(self.specs, names, getattr(self.actions, 'allowed_tools', None)) if model else {}
+
     def catalog(self, goal=None):
         from .toolkits import available
         rows = [{"action": spec.name, "backend": spec.backend,
