@@ -12,6 +12,15 @@ class BrowserAutomation:
         self.last_url = ""
 
     def request(self, operation, cancelled=lambda: False, **args):
+        if self.settings.get('youtube_profile_only') is True:
+            from .browser import url_for
+            from .youtube_chrome import YOUTUBE_HOSTS
+            from urllib.parse import urlsplit
+            youtube = operation in {'search', 'play_video', 'select_video', 'control'}
+            if operation == 'navigate':
+                youtube = urlsplit(url_for(args.get('value', ''))).hostname in YOUTUBE_HOSTS
+            if youtube:
+                raise ValueError('YouTube is restricted to your Chrome profile; the separate Jarvis browser will not open or control it.')
         from .browser_worker import validate_request
         request={"operation":operation,**args,"settings":self.settings}
         validate_request(request)

@@ -1,0 +1,43 @@
+test_real_watch_play_pause_seek_volume_speed_reload (test_live_web.LiveYouTubeTests) ... Executing <Task pending name='Task-1' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:101> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.187 seconds
+Executing <Task pending name='Task-2' coro=<Connection.run() running at D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\_impl\_connection.py:354> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\async_api\_context_manager.py:37> took 0.110 seconds
+Executing <Task pending name='Task-1' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:101> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> cb=[ProtocolCallback.__init__.<locals>.cb() at D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\_impl\_connection.py:264] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.125 seconds
+ERROR
+
+======================================================================
+ERROR: test_real_watch_play_pause_seek_volume_speed_reload (test_live_web.LiveYouTubeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py", line 61, in _callSetUp
+    self._callAsync(self.asyncSetUp)
+  File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py", line 79, in _callAsync
+    return self._asyncioTestLoop.run_until_complete(fut)
+  File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py", line 101, in _asyncioLoopRunner
+    ret = await awaitable
+  File "D:\Phython Project\Connectors\jarvis_youtube_connector\tests\test_live_web.py", line 15, in asyncSetUp
+    await self.c.connect()
+  File "D:\Phython Project\Connectors\jarvis_youtube_connector\youtube_connector\youtube.py", line 98, in connect
+    self._context = await self._pw.chromium.launch_persistent_context(
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\async_api\_generated.py", line 17155, in launch_persistent_context
+    await self._impl_obj.launch_persistent_context(
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\_impl\_browser_type.py", line 169, in launch_persistent_context
+    result = await self._channel.send_return_as_dict(
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\_impl\_connection.py", line 103, in send_return_as_dict
+    return await self._connection.wrap_api_call(
+  File "D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserType.launch_persistent_context: Executable doesn't exist at C:\Users\kunal\AppData\Local\ms-playwright\chromium-1243\chrome-win64\chrome.exe
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551 Looks like Playwright was just installed or updated.       \u2551
+\u2551 Please run the following command to download new browsers: \u2551
+\u2551                                                            \u2551
+\u2551     playwright install                                     \u2551
+\u2551                                                            \u2551
+\u2551 <3 Playwright Team                                         \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
+
+----------------------------------------------------------------------
+Ran 1 test in 1.046s
+
+FAILED (errors=1)

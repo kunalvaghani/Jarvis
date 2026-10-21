@@ -16,6 +16,7 @@ unskippable ad), the outcome is reported as uncertain and nothing is replayed.
 
 Configuration (config.json ``media``): ``youtube_browser`` "user_chrome" (default)
 or "jarvis"; ``youtube_chrome_profile`` the Chrome profile folder, default "Default".
+``youtube_profile_only: true`` overrides the browser mode and forbids fallback.
 """
 import asyncio
 from difflib import SequenceMatcher
@@ -26,7 +27,37 @@ import time
 from urllib.parse import urlsplit
 
 PROFILE = re.compile(r'(?:Default|Profile \d{1,3}|Guest Profile)')
-YOUTUBE_HOSTS = {'www.youtube.com', 'youtube.com', 'm.youtube.com'}
+YOUTUBE_HOSTS = {'www.youtube.com', 'youtube.com', 'm.youtube.com', 'youtu.be'}
+
+
+def profile_only(actions):
+    """A user preference, never a model-supplied claim or permission waiver."""
+    config = getattr(actions, 'config', {})
+    media = config.get('media', {}) if isinstance(config, dict) else {}
+    value = media.get('youtube_profile_only', False) if isinstance(media, dict) else False
+    if type(value) is not bool:
+        raise ValueError('media.youtube_profile_only must be a boolean.')
+    return value
+
+
+def open_requested(actions, value, cancelled=lambda: False):
+    """Route explicit YouTube navigation to the pinned profile; never infer playback."""
+    if not profile_only(actions):
+        return None
+    from .browser import url_for
+    try:
+        url = url_for(value)
+        host = urlsplit(url).hostname
+    except ValueError:
+        return None
+    if host not in YOUTUBE_HOSTS:
+        return None
+    profile = settings(actions)
+    open_url(actions, url, profile, cancelled)
+    actions.youtube_target = 'user_chrome'
+    actions.last_media = 'youtube'
+    return {'outcome':'opened_only', 'url':url, 'profile':profile,
+            'playing_verified':False, 'message':'Opened YouTube in your Chrome profile '+profile+'. Playback has not been verified.'}
 
 
 class ChromeUnavailable(ValueError):
@@ -41,7 +72,7 @@ def settings(actions):
     """``(profile_folder)`` when YouTube should use the user's Chrome, else ``None``."""
     media = actions.config.get('media', {}) if isinstance(getattr(actions, 'config', None), dict) else {}
     media = media if isinstance(media, dict) else {}
-    if media.get('youtube_browser', 'user_chrome') != 'user_chrome':
+    if not profile_only(actions) and media.get('youtube_browser', 'user_chrome') != 'user_chrome':
         return None
     profile = media.get('youtube_chrome_profile', 'Default')
     if not isinstance(profile, str) or not PROFILE.fullmatch(profile):
@@ -52,8 +83,16 @@ def settings(actions):
 def open_url(actions, url, profile, cancelled=lambda: False):
     """Open one YouTube URL in the user's Chrome profile (no shell, no automation)."""
     parts = urlsplit(url)
-    if parts.scheme != 'https' or parts.hostname not in YOUTUBE_HOSTS:
+    try:
+        authority_ok = not (parts.username or parts.password) and parts.port in (None, 443)
+    except ValueError:
+        authority_ok = False
+    if parts.scheme != 'https' or parts.hostname not in YOUTUBE_HOSTS or not authority_ok:
         raise ChromeUnavailable('Only https YouTube addresses are opened in your Chrome.')
+    if not isinstance(profile, str) or not PROFILE.fullmatch(profile):
+        raise ChromeUnavailable('A valid Chrome profile folder is required.')
+    if profile_only(actions) and profile != settings(actions):
+        raise ChromeUnavailable('YouTube is locked to your configured Chrome profile.')
     from .browser import browser_args
     try:
         executable = browser_args(getattr(actions, 'apps', None) or {}, 'chrome')[0]

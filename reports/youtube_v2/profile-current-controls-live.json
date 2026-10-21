@@ -1,0 +1,78 @@
+{
+  "profile": "Default",
+  "shortcut": "Comedy with - Chrome",
+  "scope": "Real commands.parse -> ToolRegistry -> Actions -> Chrome/Windows media session; harness bookkeeping, not running GUI or v2 MCP",
+  "session_observed": [
+    {
+      "status": "playing",
+      "title": "[selected YouTube session]"
+    }
+  ],
+  "results": [
+    {
+      "text": "pause on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Paused [selected YouTube session].",
+      "elapsed_ms": 654.056
+    },
+    {
+      "text": "resume on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Resumed [selected YouTube session].",
+      "elapsed_ms": 451.479
+    },
+    {
+      "text": "what is playing on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Playing: [selected YouTube session] on YouTube in your Chrome.",
+      "elapsed_ms": 18.243
+    },
+    {
+      "text": "what is playing on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Playing: [selected YouTube session] on YouTube in your Chrome.",
+      "elapsed_ms": 18.137
+    },
+    {
+      "text": "what is playing on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Playing: [selected YouTube session] on YouTube in your Chrome.",
+      "elapsed_ms": 18.509
+    },
+    {
+      "text": "what is playing on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Playing: [selected YouTube session] on YouTube in your Chrome.",
+      "elapsed_ms": 18.683
+    },
+    {
+      "text": "what is playing on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Playing: [selected YouTube session] on YouTube in your Chrome.",
+      "elapsed_ms": 20.677
+    },
+    {
+      "text": "pause on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Paused [selected YouTube session].",
+      "elapsed_ms": 443.531
+    },
+    {
+      "text": "resume on youtube",
+      "parsed": "media_control",
+      "tool": "media_control",
+      "evidence": "Resumed [selected YouTube session].",
+      "elapsed_ms": 449.49
+    }
+  ],
+  "warm_status_p50_ms": 18.509,
+  "alternate_browser_started": false
+}

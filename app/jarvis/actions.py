@@ -925,6 +925,8 @@ class Actions:
             media = self.config.get("media", {}) if isinstance(self.config, dict) else {}
             # Skippable YouTube ads are skipped automatically in Jarvis's own browser unless media.youtube_auto_skip_ads is false.
             self.browser_automation.settings["auto_skip_ads"] = not (isinstance(media, dict) and media.get("youtube_auto_skip_ads") is False)
+        from .youtube_chrome import profile_only
+        self.browser_automation.settings['youtube_profile_only'] = profile_only(self)
         return self.browser_automation
 
     def browser_healthy(self):
@@ -1182,8 +1184,10 @@ class Actions:
             if (recent_results(self) is not None and (ordinal.isdigit() or ordinal == "last")
                     and (category in {"playlist", "video", "result", "one"} or (category == "track" and youtube_last))):
                 return play_result(self, -1 if ordinal == "last" else int(ordinal), category, cancelled)
+        from .youtube_chrome import profile_only as youtube_profile_only
         if (command.kind == "media_control" and command.extra == "youtube"
-                and getattr(self, "youtube_target", "") == "user_chrome"):
+                and (getattr(self, "youtube_target", "") == "user_chrome"
+                     or youtube_profile_only(self))):
             from .media_player import control_user_chrome
             return control_user_chrome(self, command.value, cancelled)
         browser = getattr(self, "browser_automation", None)
@@ -1599,6 +1603,11 @@ class Actions:
             return f"Opened {command.extra} search for {command.value}; playback has not started yet."
         if command.kind in {"browse", "browser_search"}:
             from .browser import browser_args, url_for
+            if command.kind == 'browse':
+                from .youtube_chrome import open_requested
+                pinned = open_requested(self, command.value, cancelled)
+                if pinned is not None:
+                    return pinned['message']
             if (command.kind == "browse" and command.value.casefold() == "youtube"
                     and command.extra in {"", "chrome", "google chrome"}):
                 from . import youtube_chrome
@@ -1851,7 +1860,11 @@ class Actions:
         subprocess.Popen([codex, "app", str(path)], shell=False, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         if cancelled():
             return f"Opened {path} in File Explorer and sent it to Codex; YouTube launch cancelled."
-        subprocess.Popen([*chrome, url_for("youtube")], shell=False)
+        from . import youtube_chrome
+        if youtube_chrome.profile_only(self):
+            youtube_chrome.open_requested(self, 'youtube', cancelled)
+        else:
+            subprocess.Popen([*chrome, url_for("youtube")], shell=False)
         self.projects.remember(path)
         return f"Opened {path.name} in File Explorer and Codex, and opened YouTube in Chrome."
 

@@ -270,6 +270,11 @@ class ToolRegistry:
             if name == "browser_fill" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
                 raise ValueError("Browser filling requires bounded exact content.")
             operation = {"browser_inspect": "inspect", "browser_navigate": "navigate", "browser_click": "click", "browser_fill": "fill"}[name]
+            if name == 'browser_navigate':
+                from .youtube_chrome import open_requested
+                pinned = open_requested(self.actions, step.get('value', ''), cancelled)
+                if pinned is not None:
+                    return ToolResult(name, 'browser', json.dumps(pinned, ensure_ascii=False))
             result = self.actions._browser().request(operation, cancelled, value=step.get("value", ""),
                         url=step.get("folder", ""), content=step.get("content", ""))
             return ToolResult(name, "dom", json.dumps(result, ensure_ascii=False)[:12000])

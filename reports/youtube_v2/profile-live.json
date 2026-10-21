@@ -1,0 +1,17 @@
+{
+  "profile": "Default",
+  "shortcut": "Comedy with - Chrome",
+  "scope": "Real commands.parse -> ToolRegistry -> Actions -> Chrome/Windows media session; harness bookkeeping, not running GUI or v2 MCP",
+  "public_session_observed": [],
+  "results": [
+    {
+      "text": "open https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "parsed": "open",
+      "tool": "browse",
+      "evidence": "Opened YouTube in your Chrome profile Default. Playback has not been verified.",
+      "elapsed_ms": 233.992
+    }
+  ],
+  "warm_status_p50_ms": null,
+  "alternate_browser_started": false
+}

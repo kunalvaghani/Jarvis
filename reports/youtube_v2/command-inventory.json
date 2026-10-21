@@ -1,0 +1,1032 @@
+[
+  {
+    "name": "youtube_health",
+    "method": "health",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_search_videos",
+    "method": "search_videos",
+    "signature": "query: 'str', limit: 'int'=5",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_search_playlists",
+    "method": "search_playlists",
+    "signature": "query: 'str', limit: 'int'=5",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_play_video",
+    "method": "play_video",
+    "signature": "video: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_play_playlist",
+    "method": "play_playlist",
+    "signature": "playlist: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_pause",
+    "method": "pause",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_resume",
+    "method": "resume",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_next_video",
+    "method": "next_video",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_previous_video",
+    "method": "previous_video",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_status",
+    "method": "get_status",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_seek",
+    "method": "seek",
+    "signature": "seconds: 'float'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_seek_relative",
+    "method": "seek_relative",
+    "signature": "seconds: 'float'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_skip_forward",
+    "method": "skip_forward",
+    "signature": "seconds: 'float'=10",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_skip_back",
+    "method": "skip_back",
+    "signature": "seconds: 'float'=10",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_seek_percent",
+    "method": "seek_percent",
+    "signature": "percent: 'float'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_seek_to_start",
+    "method": "seek_to_start",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_restart_video",
+    "method": "restart_video",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_set_volume",
+    "method": "set_volume",
+    "signature": "percent: 'float'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_volume_up",
+    "method": "volume_up",
+    "signature": "percent: 'float'=10",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_volume_down",
+    "method": "volume_down",
+    "signature": "percent: 'float'=10",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_mute",
+    "method": "mute",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_unmute",
+    "method": "unmute",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_mute",
+    "method": "toggle_mute",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_set_speed",
+    "method": "set_speed",
+    "signature": "rate: 'float'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_speed_up",
+    "method": "speed_up",
+    "signature": "delta: 'float'=0.25",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_speed_down",
+    "method": "speed_down",
+    "signature": "delta: 'float'=0.25",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_set_video_loop",
+    "method": "set_video_loop",
+    "signature": "enabled: 'bool'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_media_status",
+    "method": "media_status",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_fullscreen",
+    "method": "toggle_fullscreen",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_theater",
+    "method": "toggle_theater",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_captions",
+    "method": "toggle_captions",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_settings",
+    "method": "open_settings",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_miniplayer",
+    "method": "toggle_miniplayer",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_toggle_autoplay",
+    "method": "toggle_autoplay",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_next_frame",
+    "method": "next_frame",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_previous_frame",
+    "method": "previous_frame",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_title",
+    "method": "get_video_title",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_current_video_id",
+    "method": "get_current_video_id",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_current_playlist_id",
+    "method": "get_current_playlist_id",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_current_url",
+    "method": "get_current_url",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_playback_time",
+    "method": "get_playback_time",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_volume",
+    "method": "get_volume",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_speed",
+    "method": "get_speed",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_reconnect_browser",
+    "method": "reconnect_browser",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_browser_reload",
+    "method": "browser_reload",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_youtube_home",
+    "method": "open_youtube_home",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_subscriptions",
+    "method": "open_subscriptions",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_history",
+    "method": "open_history",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_watch_later",
+    "method": "open_watch_later",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_library",
+    "method": "open_library",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_channel",
+    "method": "open_channel",
+    "signature": "channel: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_playlist",
+    "method": "open_playlist",
+    "signature": "playlist: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_search",
+    "method": "open_search",
+    "signature": "query: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_open_video",
+    "method": "open_video",
+    "signature": "video: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_browser_back",
+    "method": "browser_back",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_browser_forward",
+    "method": "browser_forward",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_page_diagnostics",
+    "method": "get_page_diagnostics",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_add",
+    "method": "queue_add",
+    "signature": "video: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_add_many",
+    "method": "queue_add_many",
+    "signature": "videos: 'list[str]'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_list",
+    "method": "queue_list",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_clear",
+    "method": "queue_clear",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_remove",
+    "method": "queue_remove",
+    "signature": "index: 'int'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_move",
+    "method": "queue_move",
+    "signature": "old_index: 'int', new_index: 'int'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_play_next",
+    "method": "queue_play_next",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_set_repeat",
+    "method": "queue_set_repeat",
+    "signature": "enabled: 'bool'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_set_shuffle",
+    "method": "queue_set_shuffle",
+    "signature": "enabled: 'bool'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_shuffle_now",
+    "method": "queue_shuffle_now",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_status",
+    "method": "queue_status",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_queue_play_previous",
+    "method": "queue_play_previous",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_search_channels",
+    "method": "search_channels",
+    "signature": "query: 'str', limit: 'int'=5",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_search_videos_filtered",
+    "method": "search_videos_filtered",
+    "signature": "query: 'str', limit: 'int'=5, order: 'str'='relevance', video_duration: 'str'='any'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_details",
+    "method": "get_video_details",
+    "signature": "video: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_statistics",
+    "method": "get_video_statistics",
+    "signature": "video: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_captions_metadata",
+    "method": "get_video_captions_metadata",
+    "signature": "video: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_channel_details",
+    "method": "get_channel_details",
+    "signature": "channel_id: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_channel_videos",
+    "method": "get_channel_videos",
+    "signature": "channel_id: 'str', limit: 'int'=10",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_playlist_details",
+    "method": "get_playlist_details",
+    "signature": "playlist: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_playlist_items",
+    "method": "get_playlist_items",
+    "signature": "playlist: 'str', limit: 'int'=50, page_token: 'str'=''",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_channel_playlists",
+    "method": "get_channel_playlists",
+    "signature": "channel_id: 'str', limit: 'int'=25",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_comments",
+    "method": "get_video_comments",
+    "signature": "video: 'str', limit: 'int'=20",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_comment_replies",
+    "method": "get_comment_replies",
+    "signature": "parent_id: 'str', limit: 'int'=20",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_video_categories",
+    "method": "get_video_categories",
+    "signature": "region_code: 'str'='US'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_trending_videos",
+    "method": "get_trending_videos",
+    "signature": "region_code: 'str'='US', limit: 'int'=20",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_my_channel",
+    "method": "get_my_channel",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_my_playlists",
+    "method": "get_my_playlists",
+    "signature": "limit: 'int'=25",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_my_subscriptions",
+    "method": "get_my_subscriptions",
+    "signature": "limit: 'int'=25",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_my_liked_videos",
+    "method": "get_my_liked_videos",
+    "signature": "limit: 'int'=25",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_my_video_rating",
+    "method": "get_my_video_rating",
+    "signature": "video: 'str'",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_rate_video",
+    "method": "rate_video",
+    "signature": "video: 'str', rating: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_create_playlist",
+    "method": "create_playlist",
+    "signature": "title: 'str', privacy: 'str'='private', description: 'str'=''",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_update_playlist",
+    "method": "update_playlist",
+    "signature": "playlist: 'str', title: 'str', description: 'str'='', privacy: 'str'='private'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_delete_playlist",
+    "method": "delete_playlist",
+    "signature": "playlist: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_add_video_to_playlist",
+    "method": "add_video_to_playlist",
+    "signature": "playlist: 'str', video: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_remove_playlist_item",
+    "method": "remove_playlist_item",
+    "signature": "item_id: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_subscribe_channel",
+    "method": "subscribe_channel",
+    "signature": "channel_id: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_unsubscribe_channel",
+    "method": "unsubscribe_channel",
+    "signature": "subscription_id: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_add_comment",
+    "method": "add_comment",
+    "signature": "video: 'str', channel_id: 'str', text: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_reply_comment",
+    "method": "reply_comment",
+    "signature": "parent_id: 'str', text: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_delete_my_comment",
+    "method": "delete_my_comment",
+    "signature": "comment_id: 'str'",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_get_quota_hint",
+    "method": "get_quota_hint",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_next",
+    "method": "next_video",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_previous",
+    "method": "previous_video",
+    "signature": "",
+    "access": "write",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  },
+  {
+    "name": "youtube_status",
+    "method": "get_status",
+    "signature": "",
+    "access": "read",
+    "source": "supplied",
+    "unit": "catalog only; see test-specific evidence",
+    "live_standalone": "unaccepted",
+    "live_jarvis": "not run"
+  }
+]

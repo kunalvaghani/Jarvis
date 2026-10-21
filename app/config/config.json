@@ -1380,7 +1380,10 @@
     "poll_seconds": 2
   },
   "media": {
-    "default_service": "youtube"
+    "default_service": "youtube",
+    "youtube_browser": "user_chrome",
+    "youtube_chrome_profile": "Default",
+    "youtube_profile_only": true
   },
   "speech": {
     "enabled": true,
