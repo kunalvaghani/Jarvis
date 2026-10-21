@@ -79,7 +79,7 @@ class RepositorySkills:
                     known=json.loads(retained[0]);remote=git(['ls-remote','--',canonical,'HEAD'],cancelled,20).decode().split()
                     if remote and remote[0]==known['commit']:
                         verify_snapshot(known,self.vault);snapshot=known
-            if snapshot is None:snapshot=acquire(target,self.vault,cancelled)
+            if snapshot is None:snapshot=acquire(target,self.vault,cancelled,report=self.report)
             root=verify_snapshot(snapshot,self.vault)
             with self.connect() as db:
                 found=db.execute('SELECT knowledge FROM revisions WHERE repo_id=? AND revision=?',(snapshot['repo_id'],snapshot['revision'])).fetchone()

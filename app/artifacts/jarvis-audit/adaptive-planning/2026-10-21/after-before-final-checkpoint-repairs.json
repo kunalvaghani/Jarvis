@@ -1,0 +1,490 @@
+{
+  "scope": "simulated planner and deterministic verifier; real owned file tools",
+  "cases": [
+    {
+      "name": "notes",
+      "plan_lines": 2,
+      "passed": true,
+      "seconds": 0.594,
+      "goal": "Prepare the notes workflow in this folder in this exact order, then finish:\n1. Create notes1.txt containing pending\n2. Read notes1.txt",
+      "planner_calls": 2,
+      "completed_actions": 2,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "notes1.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "notes1.txt contains pending"
+            },
+            {
+              "action": "read_file",
+              "value": "notes1.txt",
+              "expected": "Read final pending",
+              "browser": "chrome",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ]
+        }
+      ],
+      "final_files": {
+        "notes1.txt": "pending"
+      },
+      "dispatched_actions": 2
+    },
+    {
+      "name": "todo",
+      "plan_lines": 5,
+      "passed": true,
+      "seconds": 1.266,
+      "goal": "Prepare the todo workflow in this folder in this exact order, then finish:\n1. Create todo1.txt containing pending\n2. Modify todo1.txt: replace pending with reviewed\n3. Modify todo1.txt: replace reviewed with complete\n4. Create todo2.txt containing pending\n5. Read todo2.txt",
+      "planner_calls": 2,
+      "completed_actions": 5,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "todo1.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "todo1.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "todo1.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "todo1.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "todo1.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "todo1.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "todo2.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "todo2.txt contains pending"
+            },
+            {
+              "action": "read_file",
+              "value": "todo2.txt",
+              "expected": "Read final pending",
+              "browser": "chrome",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ]
+        }
+      ],
+      "final_files": {
+        "todo1.txt": "complete",
+        "todo2.txt": "pending"
+      },
+      "dispatched_actions": 5
+    },
+    {
+      "name": "inventory",
+      "plan_lines": 10,
+      "passed": true,
+      "seconds": 2.39,
+      "goal": "Prepare the inventory workflow in this folder in this exact order, then finish:\n1. Create inventory1.txt containing pending\n2. Modify inventory1.txt: replace pending with reviewed\n3. Modify inventory1.txt: replace reviewed with complete\n4. Create inventory2.txt containing pending\n5. Modify inventory2.txt: replace pending with reviewed\n6. Modify inventory2.txt: replace reviewed with complete\n7. Create inventory3.txt containing pending\n8. Modify inventory3.txt: replace pending with reviewed\n9. Modify inventory3.txt: replace reviewed with complete\n10. Read inventory3.txt",
+      "planner_calls": 2,
+      "completed_actions": 10,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "inventory1.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "inventory1.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory1.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "inventory1.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory1.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "inventory1.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "inventory2.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "inventory2.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory2.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "inventory2.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory2.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "inventory2.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "inventory3.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "inventory3.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory3.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "inventory3.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "inventory3.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "inventory3.txt contains complete"
+            },
+            {
+              "action": "read_file",
+              "value": "inventory3.txt",
+              "expected": "Read final complete",
+              "browser": "chrome",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ]
+        }
+      ],
+      "final_files": {
+        "inventory1.txt": "complete",
+        "inventory2.txt": "complete",
+        "inventory3.txt": "complete"
+      },
+      "dispatched_actions": 10
+    },
+    {
+      "name": "journal",
+      "plan_lines": 20,
+      "passed": true,
+      "seconds": 5.656,
+      "goal": "Prepare the journal workflow in this folder in this exact order, then finish:\n1. Create journal1.txt containing pending\n2. Modify journal1.txt: replace pending with reviewed\n3. Modify journal1.txt: replace reviewed with complete\n4. Create journal2.txt containing pending\n5. Modify journal2.txt: replace pending with reviewed\n6. Modify journal2.txt: replace reviewed with complete\n7. Create journal3.txt containing pending\n8. Modify journal3.txt: replace pending with reviewed\n9. Modify journal3.txt: replace reviewed with complete\n10. Create journal4.txt containing pending\n11. Modify journal4.txt: replace pending with reviewed\n12. Modify journal4.txt: replace reviewed with complete\n13. Create journal5.txt containing pending\n14. Modify journal5.txt: replace pending with reviewed\n15. Modify journal5.txt: replace reviewed with complete\n16. Create journal6.txt containing pending\n17. Modify journal6.txt: replace pending with reviewed\n18. Modify journal6.txt: replace reviewed with complete\n19. Create journal7.txt containing pending\n20. Read journal7.txt",
+      "planner_calls": 1,
+      "completed_actions": 20,
+      "exact_order_and_arguments": true,
+      "disk_content_verified": true,
+      "state_status": "completed",
+      "reply": "Finished. I checked the observed results and confirmed your request is complete.",
+      "generated_plans": [
+        {
+          "question": "",
+          "steps": [
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal1.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal1.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal1.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal1.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal1.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal1.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal2.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal2.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal2.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal2.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal2.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal2.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal3.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal3.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal3.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal3.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal3.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal3.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal4.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal4.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal4.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal4.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal4.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal4.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal5.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal5.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal5.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal5.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal5.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal5.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal6.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal6.txt contains pending"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal6.txt",
+              "find": "pending",
+              "content": "reviewed",
+              "expected": "journal6.txt contains reviewed"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "modify_file",
+              "value": "journal6.txt",
+              "find": "reviewed",
+              "content": "complete",
+              "expected": "journal6.txt contains complete"
+            },
+            {
+              "browser": "chrome",
+              "folder": "this folder",
+              "platform": "",
+              "action": "create_file",
+              "value": "journal7.txt",
+              "content": "pending",
+              "find": "",
+              "expected": "journal7.txt contains pending"
+            },
+            {
+              "action": "read_file",
+              "value": "journal7.txt",
+              "expected": "Read final pending",
+              "browser": "chrome",
+              "folder": "this folder",
+              "content": "",
+              "find": "",
+              "platform": ""
+            }
+          ]
+        }
+      ],
+      "final_files": {
+        "journal1.txt": "complete",
+        "journal2.txt": "complete",
+        "journal3.txt": "complete",
+        "journal4.txt": "complete",
+        "journal5.txt": "complete",
+        "journal6.txt": "complete",
+        "journal7.txt": "pending"
+      },
+      "dispatched_actions": 20
+    }
+  ],
+  "time_to_first_dispatch_seconds": [
+    1.7187074999965262,
+    0.5546597000065958,
+    0.6645018999988679,
+    0.5326645000022836
+  ],
+  "planning_seconds": 0.00312689998827409,
+  "planner_calls": 7,
+  "verified_successes": 4,
+  "quality_exact_order": true
+}

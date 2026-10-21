@@ -79,7 +79,7 @@ def eligible(relative):
         and (relative.suffix.lower() in {'.py','.pyi','.toml','.cfg'} or relative.name in {'requirements.txt','LICENSE','LICENSE.txt','LICENSE.md','COPYING','README.md','README.rst'}))
 
 
-def acquire(target,vault,cancelled=lambda:False):
+def acquire(target,vault,cancelled=lambda:False,*,report=None):
     canonical,local=identity(target);vault=Path(vault)
     if any(linked(p) for p in [vault,*vault.parents]):raise ValueError('Repository vault must not be linked.')
     repo_id=hashlib.sha256(canonical.encode()).hexdigest()[:20]
@@ -133,7 +133,13 @@ def acquire(target,vault,cancelled=lambda:False):
             'source':str(destination/'source'),'hashes':records,'bytes':total,'diagnostics':diagnostics,
             'trust':'untrusted','provenance':'Git commit and source hashes' if commit else 'Local content hashes; no Git commit'}
         (stage/'snapshot.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
-        os.replace(stage,destination)
+        from .checkpoint_io import replace_checkpoint
+        def checkpoint_wait(seconds):
+            if cancelled():
+                return True
+            time.sleep(seconds)
+            return cancelled()
+        replace_checkpoint(stage,destination,stage.parent,wait=checkpoint_wait,report=report)
         return manifest
     except Exception:
         # Retain partial acquisitions for inspection. Never recursively delete.

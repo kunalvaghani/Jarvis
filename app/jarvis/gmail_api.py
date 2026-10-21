@@ -504,7 +504,7 @@ def execute(actions, step, cancelled):
     args=arguments(step)
     api=API(actions.base)
     try:
-        context=guard(actions.base,step['action'],step['value'],args,state=getattr(actions,'task_state',None)) if step['action'] in WRITES else nullcontext(None)
+        context=guard(actions.base,step['action'],step['value'],args,state=getattr(actions,'task_state',None),report=getattr(actions,'report',None)) if step['action'] in WRITES else nullcontext(None)
         with context as journal:
             return json.dumps(run(api,step['action'],step['value'],args,
                 lambda:actions._approve(step['action'],json.dumps({'action':step['action'],'id':step['value'],'fields':args}),cancelled),cancelled,
