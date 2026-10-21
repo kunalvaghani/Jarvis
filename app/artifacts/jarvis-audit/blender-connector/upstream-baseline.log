@@ -1,0 +1,87 @@
+test_accept_validation_and_pump (test_bridge.BridgeTests) ... ok
+test_auth (test_bridge.BridgeTests) ... ok
+test_clean_expired_only (test_bridge.BridgeTests) ... ok
+test_config_written_and_removed (test_bridge.BridgeTests) ... ok
+test_errors_in_job (test_bridge.BridgeTests) ... ok
+test_health (test_bridge.BridgeTests) ... ok
+test_jobs_not_confused (test_bridge.BridgeTests) ... ok
+test_missing_job (test_bridge.BridgeTests) ... ok
+test_no_untrusted_paths (test_bridge.BridgeTests) ... ok
+test_queue_full_returns_429 (test_bridge.BridgeTests) ... ok
+test_rejects_bad_action_before_queue (test_bridge.BridgeTests) ... ok
+test_token_timing_comparison_and_bind_local (test_bridge.BridgeTests) ... ok
+test_action_count_and_uniqueness (test_catalog.CatalogTests) ... ok
+test_all_action_names_have_dispatch_paths (test_catalog.CatalogTests) ... ok
+test_batch_excludes_risky_and_recursion (test_catalog.CatalogTests) ... ok
+test_every_action_has_real_handler (test_catalog.CatalogTests) ... ok
+test_filesystem_denied_without_root (test_catalog.CatalogTests) ... ERROR
+test_filesystem_root_and_traversal (test_catalog.CatalogTests) ... ok
+test_json_custom_property_valid_and_nested_invalid (test_catalog.CatalogTests) ... ok
+test_num_validation (test_catalog.CatalogTests) ... ok
+test_primitive_not_root (test_catalog.CatalogTests) ... ok
+test_reject_extra_arg (test_catalog.CatalogTests) ... ok
+test_reject_unknown_action (test_catalog.CatalogTests) ... ok
+test_required_arg (test_catalog.CatalogTests) ... ok
+test_type_confusion (test_catalog.CatalogTests) ... ok
+test_validate_defaults_all (test_catalog.CatalogTests) ... ok
+test_vec_validation (test_catalog.CatalogTests) ... ok
+test_async_approval_callback (test_connector.ConnectorTests) ... ok
+test_bad_job_id (test_connector.ConnectorTests) ... ok
+test_client_rejects_unknown_param (test_connector.ConnectorTests) ... ok
+test_connect_health (test_connector.ConnectorTests) ... ok
+test_denied_destructive (test_connector.ConnectorTests) ... ok
+test_denied_filesystem (test_connector.ConnectorTests) ... ok
+test_failed_job (test_connector.ConnectorTests) ... ok
+test_info (test_connector.ConnectorTests) ... ok
+test_job_status (test_connector.ConnectorTests) ... ok
+test_no_retry_on_timeout (test_connector.ConnectorTests) ... ok
+test_permitted_approval_callback (test_connector.ConnectorTests) ... ok
+test_queued_result (test_connector.ConnectorTests) ... ok
+test_read (test_connector.ConnectorTests) ... ok
+test_rejected_approval_callback (test_connector.ConnectorTests) ... ok
+test_safe_write (test_connector.ConnectorTests) ... ok
+test_timed_out_job (test_connector.ConnectorTests) ... ok
+test_error_job_from_blender (test_e2e_http.HttpIntegrationTests) ... Executing <Task pending name='Task-49' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:95> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.468 seconds
+ok
+test_full_lifecycle_and_state (test_e2e_http.HttpIntegrationTests) ... Executing <Task pending name='Task-53' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:95> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.437 seconds
+ok
+test_health_after_disconnect (test_e2e_http.HttpIntegrationTests) ... Executing <Task pending name='Task-57' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:101> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\futures.py:385, Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.500 seconds
+ok
+test_unknown_command_refused_before_network (test_e2e_http.HttpIntegrationTests) ... Executing <Task pending name='Task-61' coro=<IsolatedAsyncioTestCase._asyncioLoopRunner() running at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:95> wait_for=<Future pending cb=[Task.task_wakeup()] created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py:429> created at C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\unittest\async_case.py:117> took 0.484 seconds
+ok
+test_discovery_and_signed_call (test_mcp_mock.MCPToolTests) ... ok
+test_add_empty (test_operations_mock.OperationsTests) ... ok
+test_batch_all_validation_before_mutating (test_operations_mock.OperationsTests) ... ok
+test_batch_limit (test_operations_mock.OperationsTests) ... ok
+test_batch_partial_truth (test_operations_mock.OperationsTests) ... ok
+test_batch_success (test_operations_mock.OperationsTests) ... ok
+test_delete_object (test_operations_mock.OperationsTests) ... ok
+test_frame_and_fps (test_operations_mock.OperationsTests) ... ok
+test_get_object_and_transform (test_operations_mock.OperationsTests) ... ok
+test_health_and_version (test_operations_mock.OperationsTests) ... ok
+test_invalid_parent (test_operations_mock.OperationsTests) ... ok
+test_keyframe (test_operations_mock.OperationsTests) ... ok
+test_mesh_stats_and_vertices (test_operations_mock.OperationsTests) ... ok
+test_missing_objects (test_operations_mock.OperationsTests) ... ok
+test_risky_names_cannot_trigger_exec (test_operations_mock.OperationsTests) ... ok
+test_scene_summary (test_operations_mock.OperationsTests) ... ok
+test_visibility_and_shading (test_operations_mock.OperationsTests) ... ok
+test_every_command_exposed (test_server_generated.ServerGenerationTests) ... ok
+test_individual_signed_mcp_tools (test_server_generated.ServerGenerationTests) ... ok
+test_no_arbitrary_interpreter (test_server_generated.ServerGenerationTests) ... ok
+test_no_duplicate_names (test_server_generated.ServerGenerationTests) ... ok
+
+======================================================================
+ERROR: test_filesystem_denied_without_root (test_catalog.CatalogTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Phython Project\Connectors\jarvis_blender_connector\tests\test_catalog.py", line 63, in test_filesystem_denied_without_root
+    with patch.dict('os.environ',{},clear=True),self.assertRaises(PermissionError):_path('/tmp/a.blend','write')
+  File "D:\Phython Project\Connectors\jarvis_blender_connector\blender_connector\operations.py", line 77, in _path
+    raise ValueError('Absolute file path required')
+ValueError: Absolute file path required
+
+----------------------------------------------------------------------
+Ran 68 tests in 10.858s
+
+FAILED (errors=1)

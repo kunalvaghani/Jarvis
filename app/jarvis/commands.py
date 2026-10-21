@@ -136,6 +136,10 @@ def cloud_command(text: str) -> Command | None:
 
 
 def _parse(text: str) -> Command:
+    from .blender_host import parse_request as blender_request
+    blender = blender_request(text)
+    if blender:
+        return blender
     cloud = cloud_command(text)
     if cloud:
         return cloud

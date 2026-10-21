@@ -1,0 +1,61 @@
+{
+  "classification": "LIVE disposable Blender, real stdio/ToolRegistry; synthetic test approvals; no microphone/UI certification",
+  "wait_helper": {
+    "provider": "blender",
+    "scope_id": "f464c15f75d24ce8a9e504ef95392be4",
+    "untrusted_data": {
+      "ok": true,
+      "status": "done",
+      "job_id": "3de0ec532f164bfb977d4b99d93ff39d",
+      "result": {
+        "action": "add_cube",
+        "data": {
+          "name": "Benchmark0",
+          "type": "MESH"
+        }
+      }
+    }
+  },
+  "medium": {
+    "action": "get_mesh_stats",
+    "data": {
+      "vertices": 15876,
+      "edges": 31500,
+      "polygons": 15625,
+      "triangles": 31250
+    }
+  },
+  "large": {
+    "action": "get_mesh_stats",
+    "data": {
+      "vertices": 251001,
+      "edges": 501000,
+      "polygons": 250000,
+      "triangles": 500000
+    }
+  },
+  "approval_count": 414,
+  "completed_notifications": 340,
+  "parse_ms": {
+    "p50": 0.23529999816673808,
+    "p95": 0.42240000038873404,
+    "p99": 0.4793999978573993
+  },
+  "dispatch_ms": {
+    "p50": 80.46920000197133,
+    "p95": 246.48940000042785,
+    "p99": 262.7001000000746
+  },
+  "completion_ms": {
+    "p50": 154.82479999991483,
+    "p95": 327.27770000201417,
+    "p99": 346.0269999995944
+  },
+  "resource_samples": {
+    "count": 349,
+    "peak_blender_rss_bytes": 420626432,
+    "peak_blender_cpu_percent": 917.4,
+    "gpu": "Not measured; Workbench/background geometry does not certify Cycles GPU behavior.",
+    "main_thread": "Host dispatch benchmark only; live voice and Dynamic Island frame responsiveness not measured."
+  }
+}

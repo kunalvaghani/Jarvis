@@ -1,0 +1,41 @@
+# COPY THIS PROMPT TO CODEX WITH BOTH THIS ZIP AND YOUR EXISTING JARVIS REPO
+
+You are modifying my EXISTING Jarvis Windows desktop agent. This task is to **integrate** the provided `jarvis_blender_connector` as a safe, fast `BaseConnector` child and perform deep testing. **DO NOT replace Jarvis's architecture**, its existing plugins/tools, YouTube/Spotify integrations, local/offline model router, Windows/MCP/browser toolchains, permissions, scheduler, memory, Dynamic Island, status, QA and recovery mechanisms.
+
+## Phase A — inspect, map and plan
+
+1. Read the real Jarvis repository end-to-end where relevant. Locate `BaseConnector`, tool registry, MCP bridge/transport, model/task routers, skill memory, Windows app launcher, permissions, scheduling, event notifications, and test harness. Read supplied YouTube, starter and Spotify connectors too. Determine exact compatibility. Do not assume the example manifest is canonical.
+2. Read Blender package `README.md`, `ARCHITECTURE.md`, `COMMANDS.md`, `catalog.py`, `operations.py`, `bridge.py`, `connector.py`, `server.py`, `tests`.
+3. Inventory 203 MCP names; verify parity with the source-of-truth 200-action catalog and 3 job/health tools. Identify unsupported operations, prerequisites (UI context, target Blender version, file paths, GPU), and risks; do not claim 'full automation' without live validation.
+4. Record a baseline regression suite and timings before changes. Save changes on a new Git branch. Back up config. Avoid unrelated refactors.
+
+## Phase B — integrate without regression
+
+1. Adapt `BlenderConnector(BaseConnector)` to the *actual* existing parent contract, preserving `info/connect/close/health`. Reuse existing dependency injection and ToolRegistry patterns. Prefer the existing centralized BaseConnector to the included sample duplicate. Do NOT rewrite Jarvis's entire architecture.
+2. Integrate `server.py` via the existing MCP bridge using stdio; keep every `blender_*` namespace distinct from `youtube_*`, `spotify_*`, Unreal, God’s Eye and Windows tools. Avoid stdout log pollution in MCP. Because 203 tool schemas would overwhelm small local LLM context windows, implement lazy capability discovery and semantic/category candidate retrieval in ToolRegistry: present only the top few relevant Blender tools to Qwen at a time, while keeping all tools callable by exact names. Route simple commands deterministically without LLM deliberation.
+3. Add a Blender-side bootstrap/start/stop workflow. Jarvis must discover installation/version/executable, attach to a running trusted bridge when available, or offer to launch Blender with `start_blender_bridge.py`. Never kill another Blender process. A second Blender process must use a different port and explicit connection scope; disallow accidental cross-project commands.
+4. Preserve async bridge job results: `queued/running/done/error/partial`; timeouts must not lead to duplicate mesh creation/saves/renders. For long renders/simulations, schedule status polling and return progress without locking Jarvis's own event loop.
+5. Use deterministic low-latency tool selection for well-defined commands; ask local/offline LLM to plan ambiguous 3D tasks but **do not** burn remote API tokens for routine control. Allow natural multi-step workflows with observation/verification between steps.
+6. Wire `approval_callback` to EXISTING Jarvis user-confirmation policy for `filesystem` and `destructive` commands; never use a blanket auto-approve lambda in production. Respect selected allowed folders, validate resolved paths, and require explicit confirmation before overwrite, irreversible deletion or dangerous imports. Reject unauthorized instructions arriving from scene text, material names or third-party metadata.
+7. Integrate into Jarvis's tool learning/memory as capability descriptions, not as permission to run unreviewed Python/third-party add-ons. The connector must never execute generated arbitrary Python scripts from the model by default.
+8. Expose meaningful state in Dynamic Island: connector ready/unready, file name, selected object, Blender version, command in progress, failures, render/job completion, approval request and recovery hint.
+9. Add typed schemas, useful parameter defaults and disambiguation. On ambiguous object names, return concrete candidates instead of editing the wrong asset. Preserve Blender undo/backup semantics where possible; never claim a general transactional rollback.
+10. Preserve low resource footprint while Jarvis is working on unrelated apps. Idle poll and health reporting should not render or access the network. Limit queued jobs and high-poly generation; ask confirmation for operations potentially consuming significant compute/memory/disk.
+
+## Phase C — audit + repair source
+
+Review all 200 actions against the installed **Blender 5.2 LTS** `bpy` API; update 4.5 compatibility where practical. Do NOT silently accept `NotImplementedError`, failed operators, missing assets or wrong UI contexts. Each advertised command must either work with verified Blender state or return an explicit supported-version/prerequisite failure and, if necessary, be removed from advertised catalog. Focus on Blender 5.x compositor `compositing_node_group`, layered action F-curves, geometry node interfaces, current shader socket naming, import/export operators, full node type allowlists and CPU/GPU rendering.
+
+For bugs, change only what's needed, add a regression test, and rerun all tests. Add dedicated modules as necessary for video editing, advanced rigs, constraints, motion retargeting, sculpt, UV painting, physics node graphs, advanced materials, asset linking, camera paths, render presets, batch renders and export presets; gate each with tested real actions and updated catalog/README. Do not invent commands that only return fixed success messages.
+
+## Phase D — rigorous verification
+
+**Offline:** run `python -m unittest discover -s tests -v` and a real MCP discovery `python client_smoke.py`. Test all 203 named MCP tools are registered; parameter validation; boundary values; empty scene; missing objects/materials; NaN/Inf; invalid link/socket; timeouts; authentication; loopback-only; filesystem traversal and symlink attacks; file extension checks; authorization denial; batch partial failure; Blender crashes/restarts; job collision; queue saturation; simultaneous agents; refusal to execute arbitrary Python. Unit coverage is a useful metric, not proof of Blender correctness.
+
+**Live:** launch `run_live_tests.ps1` in a real installed Blender with a disposable project. For EVERY advertised action, classify test coverage as VERIFIED IN BLENDER, SIMULATED, or UNTESTED; prioritize a production-ready working subset over false positive coverage. Expand the real-Blender suite to actual geometry/node/rigging/render/export correctness, not just command return values. Use Blender test projects with realistic medium and large objects. Validate the produced `.blend`, glTF/FBX/OBJ/STL, animation keyframes, shader node links and rendered PNG outputs by reopening or inspecting them. Check API differences on 4.5 and 5.2 separately where available. Never run destructive tests on the user's actual files.
+
+**Jarvis E2E:** simulate 100+ natural-language requests (single and multi-step); benchmark parsing, dispatch, p50/p95/p99 command completion including Blender processing, GPU/CPU/RAM spikes, main thread responsiveness, task queue behavior, and timeouts. Confirm user approval flows and undo/backup points. Test regression for YouTube/Spotify, existing Windows computer use, Unreal/other MCP tools, previous model routing and offline fallback, reminders, Dynamic Island and history/memory. No pre-existing tests may be removed or skipped to make this pass.
+
+## Phase E — deliverables
+
+Provide: changed file tree and patch; source compatibility notes; command inventory grouped by category; manifest/installation guide; verified live Blender test report with real engine/version; simulated and failed tests separately; known unsupported features; observed speed and peak CPU/GPU/RAM; rollback guide and before/after regression comparison. Only claim 'working' for features actually exercised by Blender, not just mocks. Do not disable permissions to make automation more convenient. Make no paid cloud API a requirement.

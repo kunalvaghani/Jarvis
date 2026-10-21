@@ -552,9 +552,10 @@ PRIMITIVES = {'cube', 'sphere', 'cylinder', 'cone', 'plane', 'torus'}
 
 def blender_executable(actions):
     configured = settings(actions).get('blender_executable')
-    for candidate in (configured, shutil.which('blender')):
-        if isinstance(candidate, str) and candidate and Path(candidate).is_file() and Path(candidate).name.casefold() == 'blender.exe':
-            return Path(candidate)
+    from .blender_installation import executables
+    candidates = executables(configured)
+    if candidates:
+        return candidates[0]
     raise ToolUnavailable('Blender is not configured; set execution_strategy.blender_executable.')
 
 

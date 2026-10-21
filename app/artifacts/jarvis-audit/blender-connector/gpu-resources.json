@@ -1,0 +1,67 @@
+{
+  "scope": "64x64 one-sample disposable Cycles CPU/OptiX; GPU device totals include other desktop processes; only matching Blender PID is used for process memory",
+  "nvidia_smi_available": true,
+  "samples": [
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 405.0,
+      "blender_gpu_memory_mib": "Unavailable from driver (WDDM/N/A)"
+    },
+    {
+      "device_gpu_percent": 0.0,
+      "device_memory_mib": 468.0,
+      "blender_gpu_memory_mib": "Unavailable from driver (WDDM/N/A)"
+    },
+    {
+      "device_gpu_percent": 1.0,
+      "device_memory_mib": 498.0,
+      "blender_gpu_memory_mib": "Unavailable from driver (WDDM/N/A)"
+    },
+    {
+      "device_gpu_percent": 1.0,
+      "device_memory_mib": 405.0
+    }
+  ],
+  "baseline": {
+    "device_gpu_percent": 0.0,
+    "device_memory_mib": 405.0
+  },
+  "blender_exit_code": 0,
+  "peak_device_gpu_percent": 1.0,
+  "peak_device_memory_mib": 498.0,
+  "peak_blender_gpu_memory_mib": null,
+  "attribution": "Device totals are observed aggregates, not Blender-only usage. Missing per-process values are unavailable, never zero.",
+  "sample_count": 11,
+  "commands": [
+    "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader,nounits",
+    "nvidia-smi --query-compute-apps=pid,used_gpu_memory --format=csv,noheader,nounits (filtered to owned Blender PID)"
+  ]
+}

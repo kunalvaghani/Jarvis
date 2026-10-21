@@ -165,7 +165,9 @@ def test_catalog(case_id,tmp_path):
         catalog=HermesSkills(base)
         assert not catalog.error and census['hermes_manifest_rows']==len(catalog.rows)
         assert census['hermes_guides_verified']==len(catalog.rows) and census['hermes_errors']==[]
-        assert census['builtin_guides']==len(SkillMemory(ObsidianMemory(tmp_path,{'enabled':False})).catalog)
+        # Preserve the historical census while comparing against its dated current update.
+        current=census.get('current_snapshot',census)
+        assert current['builtin_guides']==len(SkillMemory(ObsidianMemory(tmp_path,{'enabled':False})).catalog)
     elif n==8:
         assert u.availability(tmp_path)['status']=='missing_environment'
         assert 'setup' in u.availability(tmp_path)['notice'] and u.tools(tmp_path)=={}

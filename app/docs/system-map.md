@@ -375,7 +375,7 @@ ToolRegistry executes. Unknown tool names never become executable.
 
 | Skill source | What it is | Count / location |
 | --- | --- | --- |
-| Bundled skills | app-navigation, browser-navigation, file-operations, form-entry, project-coding, reverse-engineer-clone, runtime-questions, spotify-media, web-research, youtube-media | 10 readable SKILL.md files; repository-assimilation directory lacks SKILL.md in this checkout; [`skills/`](../skills/) |
+| Bundled skills | app-navigation, blender-modeling, browser-navigation, file-operations, form-entry, project-coding, reverse-engineer-clone, runtime-questions, spotify-media, web-research, youtube-media | 11 readable SKILL.md files as of 2026-10-21 (previous map: 10); repository-assimilation directory lacks SKILL.md in this checkout; [`skills/`](../skills/) |
 | Personal skills | Your own `SKILL.md` in the Obsidian vault `Jarvis Skills/Personal/` | hot-reloaded |
 | Custom skills | `custom-skills/<name>/SKILL.md` | local, ignored by git |
 | Hermes guides | Pinned Nous Research Hermes skill references | 210 guides |

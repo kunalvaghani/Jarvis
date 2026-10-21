@@ -21,7 +21,7 @@ class CustomSkillTests(unittest.TestCase):
     def test_create_discover_context_and_vault_copy(self):
         create(self.base, 'focus-session', 'Start a focus work session', '# Steps\nOpen the requested project and verify the folder.')
         skills = SkillMemory(self.memory)
-        self.assertEqual(len(skills.catalog), 11)
+        self.assertEqual(len(skills.catalog), 12)
         skills.sync()
         self.assertTrue((self.memory.vault / 'Jarvis Skills/Custom/focus-session/SKILL.md').is_file())
         self.assertIn('Jarvis Skills/Custom/focus-session', (self.memory.vault / 'Jarvis Skills.md').read_text())
@@ -50,7 +50,7 @@ class CustomSkillTests(unittest.TestCase):
         huge.mkdir()
         (huge / 'SKILL.md').write_text('x' * 9000)
         skills = SkillMemory(self.memory)
-        self.assertEqual(len(skills.catalog), 10)
+        self.assertEqual(len(skills.catalog), 11)
         self.assertEqual(len(skills.skill_errors), 2)
         skills.sync()
         self.assertIn('Guides needing correction', (self.memory.vault / 'Jarvis Skills.md').read_text())

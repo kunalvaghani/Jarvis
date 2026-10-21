@@ -65,6 +65,13 @@ class StdioClient:
             raise ValueError('MCP env_names must name environment variables, never contain secret values.')
         env = {key: value for key, value in os.environ.items() if key.upper() in {
             'SYSTEMROOT', 'WINDIR', 'PATH', 'TEMP', 'TMP', 'COMSPEC', 'PATHEXT', 'APPDATA', 'LOCALAPPDATA'} or key in env_names}
+        self.blender_approval_key = None
+        self.catalog_limit = 100
+        if config.get('approval_binding') == 'blender-v1':
+            import secrets
+            self.blender_approval_key = secrets.token_hex(32)
+            env['JARVIS_BLENDER_APPROVAL_KEY'] = self.blender_approval_key
+            self.catalog_limit = 256
         if cancelled():
             raise ValueError('MCP cancelled before process start.')
         self.process = subprocess.Popen([command, *args], cwd=base, env=env, shell=False,
@@ -165,7 +172,7 @@ class StdioClient:
             if not isinstance(result, dict) or not isinstance(result.get('tools'), list):
                 raise ValueError('Invalid MCP tool catalog.')
             rows.extend(result['tools'])
-            if len(rows) > 100:
+            if len(rows) > self.catalog_limit:
                 raise ValueError('MCP tool catalog exceeds one hundred entries.')
             cursor = result.get('nextCursor')
             if not cursor:
@@ -223,8 +230,8 @@ def execute(actions, step, cancelled):
         if (set(arguments) != {'name', 'arguments'} or arguments['name'] not in config.get('allow_tools', [])
                 or not isinstance(arguments['arguments'], dict)):
             raise ValueError('MCP tool must be exactly allowlisted and have an argument object.')
-    if config.get('persistent') is True and name != 'spotify':
-        raise ValueError('Persistent MCP is currently restricted to the Spotify integration.')
+    if config.get('persistent') is True and name not in {'spotify','blender'}:
+        raise ValueError('Persistent MCP is restricted to the reviewed Spotify/Blender integrations.')
     private = None
     identity = config.get('generated_identity') if name.startswith('gen-') else None
     if identity is not None:
@@ -251,7 +258,7 @@ def execute(actions, step, cancelled):
     try:
         if persistent:
             from .mcp_persistent import owner
-            session = owner(actions).session(config, cancelled)
+            session = (owner(actions,'blender') if name=='blender' else owner(actions)).session(config, cancelled)
             client, rows = session.__enter__()
         else:
             client = StdioClient(config, base, cancelled)
@@ -267,6 +274,9 @@ def execute(actions, step, cancelled):
             if name == 'spotify':
                 from .spotify_host import discovery
                 result = discovery(allowed, arguments)
+            elif name == 'blender':
+                from .blender_host import discovery
+                result = discovery(allowed, arguments)
             else:
                 result = allowed
         else:
@@ -274,6 +284,10 @@ def execute(actions, step, cancelled):
                 raise ValueError('Allowlisted tool was not advertised by the server.')
             from .mcp_contract import schema_digest, validate_result, validate_schema_value
             tool = next(row for row in allowed if row['name'] == arguments['name'])
+            validate_schema_value(tool.get('inputSchema', {'type': 'object'}), arguments['arguments'])
+            if name == 'blender':
+                from .blender_host import authorize
+                arguments = authorize(actions, client, tool, arguments, detail, cancelled)
             if identity is not None and schema_digest(tool) != identity.get('schema_sha256'):
                 from .mcp_synthesis import mark_drifted
                 mark_drifted(base, name, 'advertised schema changed after approval', getattr(actions, 'skills', None))
@@ -304,11 +318,14 @@ def execute(actions, step, cancelled):
             result = client.request('tools/call', arguments)
             # P33-003: a malformed result is a typed failure, never evidence (the attempt stays recorded as uncertain).
             validate_result(result, tool.get('outputSchema'))
+            if name == 'blender' and not result.get('isError'):
+                from .blender_host import observe
+                observe(actions, result)
             if result.get('isError') is True:
-                if name == 'spotify':
+                if name in {'spotify','blender'}:
                     message = ' '.join(str(r.get('text','')) for r in result.get('content',[]) if isinstance(r,dict))
                     from .recovery import safe_message
-                    raise ValueError('Spotify connector: ' + safe_message(message, 400) + '; no retry.')
+                    raise ValueError(name.title()+' connector: ' + safe_message(message, 400) + '; no retry.')
                 raise ValueError('MCP tool reported failure; no retry.')
         text = json.dumps(result, ensure_ascii=False)
         for key in config.get('env_names', []):

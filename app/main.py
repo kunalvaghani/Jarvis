@@ -144,6 +144,14 @@ class App:
             lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
             lambda: not self.closing and not self.actions.closed.is_set())
         from jarvis.spotify_host import enabled as spotify_enabled
+        self.watchdog.register('Blender MCP',
+            lambda: getattr(self.actions, '_blender_mcp', None) is None or self.actions._blender_mcp.healthy(),
+            lambda: getattr(self.actions, '_blender_mcp', None) is not None and self.actions._blender_mcp.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register('Blender job observations',
+            lambda: getattr(self.actions, '_blender_jobs', None) is None or self.actions._blender_jobs.healthy(),
+            lambda: getattr(self.actions, '_blender_jobs', None) is not None and self.actions._blender_jobs.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
         self.watchdog.register('Spotify MCP',
             lambda: getattr(self.actions, '_spotify_mcp', None) is None or self.actions._spotify_mcp.healthy(),
             lambda: getattr(self.actions, '_spotify_mcp', None) is not None and self.actions._spotify_mcp.repair(),

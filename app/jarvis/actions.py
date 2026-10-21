@@ -839,6 +839,12 @@ class Actions:
         return command
 
     def close(self):
+        blender_jobs = getattr(self, '_blender_jobs', None)
+        if blender_jobs is not None:
+            blender_jobs.close()
+        blender_mcp = getattr(self, '_blender_mcp', None)
+        if blender_mcp is not None:
+            blender_mcp.close()
         spotify_mcp = getattr(self, '_spotify_mcp', None)
         if spotify_mcp is not None:
             spotify_mcp.close()
@@ -1120,6 +1126,10 @@ class Actions:
             command = resolve(self, command)
             self.media_resolved = command  # The island card shows the service that was actually controlled.
         from .spotify_host import route as spotify_route
+        from .blender_host import route as blender_route
+        handled, blender_evidence = blender_route(self, command, cancelled)
+        if handled:
+            return blender_evidence
         handled, spotify_evidence = spotify_route(self, command, cancelled)
         if handled:
             return spotify_evidence
