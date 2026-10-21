@@ -306,6 +306,8 @@ def search_youtube(actions, text, cancelled):
             remember_results(actions, kind, rows)
             return spoken_list(kind, rows) if rows else "Opened YouTube " + kind + " results for " + query + " in your Chrome."
         except youtube_chrome.ChromeUnavailable as exc:
+            if youtube_chrome.profile_only(actions):
+                raise ValueError('YouTube could not open in your required Chrome profile; no other browser was opened.') from exc
             actions.report("brain", "Your Chrome could not open YouTube (" + str(exc)[:100] + "); using Jarvis's browser.")
     result = actions._browser().request("search", cancelled, value=query, kind=kind, new_task=True)
     actions.youtube_target = "jarvis"
@@ -350,6 +352,8 @@ def play_youtube_item(actions, video_id, title, channel, cancelled, playlist_id=
         except youtube_chrome.PlaybackUncertain as exc:
             raise PlaybackUncertain(str(exc)) from None
         except youtube_chrome.ChromeUnavailable as exc:
+            if youtube_chrome.profile_only(actions):
+                raise PlaybackUncertain('YouTube playback was not confirmed in your required Chrome profile; no other browser was opened.') from exc
             actions.report("brain", "Your Chrome did not start YouTube (" + str(exc)[:100] + "); using Jarvis's browser.")
         else:
             actions.report("media_card", card("youtube", "playing", row["title"] or title, row["artist"] or channel, image,

@@ -1,0 +1,320 @@
+--- upstream/youtube_connector/__init__.py
++++ candidate/youtube_connector/__init__.py
+@@ -1,6 +1,6 @@
+ """YouTube connector v2 export; original v1 is preserved for regression."""
+-from .base import BaseConnector, ConnectorError, ConnectorInfo, UnsupportedAction
++from .base import ConnectorError, ConnectorInfo, UnsupportedAction
+ from .youtube import YouTubeConnector as LegacyYouTubeConnector
+ from .youtube_v2 import YouTubeConnector
+-__all__ = ['BaseConnector','ConnectorError','ConnectorInfo','UnsupportedAction',
++__all__ = ['ConnectorError','ConnectorInfo','UnsupportedAction',
+            'YouTubeConnector','LegacyYouTubeConnector']
+--- upstream/youtube_connector/base.py
++++ candidate/youtube_connector/base.py
+@@ -1,5 +1,4 @@
+ """Reusable base for Jarvis connector implementations."""
+-from abc import ABC, abstractmethod
+ from dataclasses import dataclass
+ from typing import Any
+ 
+@@ -20,30 +19,3 @@
+     capabilities: tuple[str, ...]
+ 
+ 
+-class BaseConnector(ABC):
+-    """Minimal parent interface; replace/adapt to your existing Jarvis base."""
+-
+-    @property
+-    @abstractmethod
+-    def info(self) -> ConnectorInfo:
+-        raise NotImplementedError
+-
+-    @abstractmethod
+-    async def connect(self) -> None:
+-        raise NotImplementedError
+-
+-    @abstractmethod
+-    async def close(self) -> None:
+-        raise NotImplementedError
+-
+-    @abstractmethod
+-    async def health(self) -> dict[str, Any]:
+-        raise NotImplementedError
+-
+-    def require_text(self, value: str, label: str, limit: int = 200) -> str:
+-        if not isinstance(value, str) or not value.strip():
+-            raise ConnectorError(f"{label} must be a nonempty string")
+-        value = value.strip()
+-        if len(value) > limit:
+-            raise ConnectorError(f"{label} too long (maximum {limit} characters)")
+-        return value
+--- upstream/youtube_connector/youtube.py
++++ candidate/youtube_connector/youtube.py
+@@ -17,7 +17,7 @@
+ from urllib.parse import parse_qs, urlencode, urlsplit
+ from urllib.request import urlopen
+ 
+-from .base import BaseConnector, ConnectorError, ConnectorInfo, UnsupportedAction
++from .base import ConnectorError, ConnectorInfo, UnsupportedAction
+ 
+ VIDEO_ID = re.compile(r"^[a-zA-Z0-9_-]{11}$")
+ PLAYLIST_ID = re.compile(r"^[a-zA-Z0-9_-]{10,128}$")
+@@ -38,7 +38,12 @@
+     if url.scheme != "https":
+         return None
+     host = (url.hostname or "").lower()
+-    if host not in {"youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"}:
++    if host not in {"youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"} or url.username or url.password:
++        return None
++    try:
++        if url.port not in (None, 443):
++            return None
++    except ValueError:
+         return None
+     qs = parse_qs(url.query)
+     if kind == "playlist":
+@@ -51,6 +56,8 @@
+         identifier = qs.get("v", [""])[0]
+     elif url.path.startswith("/shorts/"):
+         identifier = url.path.split("/")[2]
++    elif re.fullmatch(r'/embed/[A-Za-z0-9_-]{11}', url.path):
++        identifier = url.path.split('/')[2]
+     else:
+         identifier = ""
+     check = PLAYLIST_ID if kind == "playlist" else VIDEO_ID
+@@ -64,8 +71,16 @@
+     return "https://www.youtube.com/watch?" + urlencode(q)
+ 
+ 
+-class YouTubeConnector(BaseConnector):
++class YouTubeConnector:
+     """App-specific child exposing the YouTube media control contract."""
++
++    def require_text(self, value: str, label: str, limit: int = 200) -> str:
++        if not isinstance(value, str) or not value.strip():
++            raise ConnectorError(f'{label} must be a nonempty string')
++        value = value.strip()
++        if len(value) > limit:
++            raise ConnectorError(f'{label} too long (maximum {limit} characters)')
++        return value
+ 
+     def __init__(self, page: Any | None = None, profile_dir: str | None = None,
+                  api_key: str | None = None) -> None:
+@@ -88,21 +103,7 @@
+     async def connect(self) -> None:
+         if self._page is not None:
+             return
+-        try:
+-            from playwright.async_api import async_playwright
+-        except ImportError as exc:
+-            raise ConnectorError("Playwright is not installed; install requirements and run playwright install chromium") from exc
+-        self._profile_dir.mkdir(parents=True, exist_ok=True)
+-        self._pw = await async_playwright().start()
+-        try:
+-            self._context = await self._pw.chromium.launch_persistent_context(
+-                user_data_dir=str(self._profile_dir), headless=False, accept_downloads=False,
+-            )
+-            self._page = self._context.pages[0] if self._context.pages else await self._context.new_page()
+-        except Exception:
+-            await self._pw.stop()
+-            self._pw = None
+-            raise
++        raise UnsupportedAction('Chrome Default profile only: inject the accepted Jarvis profile adapter; no separate browser is launched')
+ 
+     async def close(self) -> None:
+         if not self._external_page:
+@@ -221,11 +222,13 @@
+         """Best-effort autoplay with truthful observed state; caller holds lock."""
+         try:
+             state = await self._video_state()
+-            if not state["paused"]:
+-                return True
+-            await self._page.locator(".html5-video-player .ytp-play-button").click(timeout=4_000)
++            if state.get('ad'):
++                return False
++            if state["paused"]:
++                await self._page.locator(".html5-video-player .ytp-play-button").click(timeout=4_000)
+             await self._page.wait_for_function(
+-                "() => { const v=document.querySelector('video.html5-main-video'); return v && !v.paused; }",
++                "start => { const v=document.querySelector('video.html5-main-video'); return v && !document.querySelector('.ad-showing') && !v.paused && v.readyState>=3 && v.currentTime>start+.1; }",
++                arg=state['current_time'],
+                 timeout=5_000,
+             )
+             return True
+@@ -269,7 +272,9 @@
+         if urlsplit(self._page.url).hostname not in {"youtube.com", "www.youtube.com", "m.youtube.com"}:
+             raise UnsupportedAction("Active page is not YouTube")
+         try:
+-            return await self._page.locator("video.html5-main-video").evaluate("""v => ({paused: v.paused, current_time: v.currentTime, duration: Number.isFinite(v.duration) ? v.duration : null})""")
++            return await self._page.locator("video.html5-main-video").evaluate("""v => ({paused: v.paused, current_time: v.currentTime, duration: Number.isFinite(v.duration) ? v.duration : null,
++              ready_state:v.readyState,ad:!!document.querySelector('.ad-showing'),buffering:!v.paused&&v.readyState<3,
++              video_id:new URL(location.href).searchParams.get('v')})""")
+         except Exception as exc:
+             raise UnsupportedAction("No accessible YouTube video element in active page") from exc
+ 
+--- upstream/youtube_connector/youtube_v2.py
++++ candidate/youtube_connector/youtube_v2.py
+@@ -24,7 +24,8 @@
+ class YouTubeConnector(LegacyYouTubeConnector):
+     def __init__(self, *args, oauth_token: str = '', approval_callback: Callable[[str, dict], Awaitable[bool]] | None = None, **kwargs):
+         super().__init__(*args, **kwargs)
+-        self.data_api = YouTubeDataAPI(key=self._api_key, token=oauth_token)
++        token_path = os.environ.get('YOUTUBE_OAUTH_TOKEN_PATH') or str(self._profile_dir.parent/'youtube-oauth-token.json')
++        self.data_api = YouTubeDataAPI(key=self._api_key, token=oauth_token, token_path=token_path)
+         self._queue: deque[str] = deque()
+         self._history: deque[str] = deque(maxlen=100)
+         self._repeat_queue = False
+@@ -58,6 +59,8 @@
+         result = await self._dom('''async ({action, values}) => {
+           const v=document.querySelector('video.html5-main-video');
+           if (!v) return {ok:false, reason:'no_video'};
++          const ad=!!document.querySelector('.ad-showing');
++          if (ad && !['status','pause'].includes(action)) return {ok:false,reason:'ad_active_control_unsupported'};
+           try {
+             if (action==='seek') v.currentTime=Math.max(0, Math.min(Number(values.seconds), Number.isFinite(v.duration)?v.duration:1e9));
+             if (action==='seek_relative') v.currentTime=Math.max(0, Math.min(v.currentTime + Number(values.seconds), Number.isFinite(v.duration)?v.duration:1e9));
+@@ -74,6 +77,8 @@
+                     duration:Number.isFinite(v.duration)?v.duration:null,
+                     volume:Math.round(v.volume*100),muted:v.muted,speed:v.playbackRate,
+                     loop:v.loop,ended:v.ended,ready_state:v.readyState,
++                    ad,buffering:!v.paused && v.readyState<3,
++                    loading:v.readyState===0,video_id:new URL(location.href).searchParams.get('v'),
+                     title:document.title};
+           } catch(e){ return {ok:false,reason:'browser_media_rejected',error:String(e).slice(0,140)}; }
+         }''', {'action':action, 'values':values})
+@@ -125,10 +130,7 @@
+             if before['paused'] != (not play):
+                 # Start with native media controls, then use the visible site button
+                 # when browsers block script-driven play and gesture is necessary.
+-                try:
+-                    await self._media('play' if play else 'pause')
+-                except (ConnectorError, UnsupportedAction):
+-                    await self._page.locator('.ytp-play-button').first.click(timeout=4000)
++                await self._media('play' if play else 'pause')
+                 try:
+                     await self._page.wait_for_function(
+                         'wanted => {const v=document.querySelector("video.html5-main-video"); return v && v.paused === wanted}',
+@@ -237,10 +239,13 @@
+         for selector in selectors:
+             loc = self._page.locator(selector).first
+             try:
+-                if await loc.is_visible():
+-                    await loc.click(timeout=3500)
+-                    return {'ok':True,'action':description,'control':selector,'verified':False}
+-            except Exception: continue
++                visible = await loc.is_visible()
++            except Exception:
++                continue  # Read-only discovery may try another selector.
++            if visible:
++                # A click timeout may occur after the effect: never click another selector.
++                await loc.click(timeout=3500)
++                return {'ok':True,'action':description,'control':selector,'verified':False}
+         raise UnsupportedAction(f'{description} control not currently available on page')
+ 
+     async def toggle_fullscreen(self) -> dict:
+@@ -424,17 +429,16 @@
+     async def queue_play_next(self) -> dict:
+         async with self._lock:
+             if not self._queue:raise ConnectorError('Jarvis queue empty')
+-            video=self._queue.popleft()
++            video=self._queue[0]
+             old=extract_id(getattr(self._page,'url',''),'video') if self._page else None
+-            try:
+-                await self._navigate(youtube_watch_url(video))
+-            except Exception:
+-                self._queue.appendleft(video)
+-                raise
+-            if old:self._history.append(old)
++            await self._navigate(youtube_watch_url(video))
+             verified=await self._attempt_start_unlocked()
+-            if self._repeat_queue:self._queue.append(video)
++            if verified:
++                self._queue.popleft()
++                if old:self._history.append(old)
++                if self._repeat_queue:self._queue.append(video)
+             return {'ok':True,'opened':True,'playing_verified':verified,'video_id':video,
++                    'outcome':'confirmed' if verified else 'opened_only',
+                     'size':len(self._queue),'queue_type':'jarvis_local'}
+     async def queue_set_repeat(self, enabled: bool) -> dict:
+         if not isinstance(enabled,bool):raise ConnectorError('enabled must be boolean')
+@@ -459,9 +463,10 @@
+     async def queue_play_previous(self) -> dict:
+         async with self._lock:
+             if not self._history:raise ConnectorError('Jarvis queue playback history empty')
+-            video=self._history.pop()
++            video=self._history[-1]
+             await self._navigate(youtube_watch_url(video))
+             verified=await self._attempt_start_unlocked()
++            if verified:self._history.pop()
+             return {'ok':True,'opened':True,'playing_verified':verified,'video_id':video}
+ 
+     # Official YouTube Data API: public metadata and optional OAuth account operations.
+--- upstream/youtube_connector/data_api.py
++++ candidate/youtube_connector/data_api.py
+@@ -11,19 +11,28 @@
+ import re
+ from pathlib import Path
+ from urllib.parse import urlencode
+-from urllib.request import Request, urlopen
++from urllib.request import Request, build_opener, HTTPRedirectHandler, ProxyHandler
+ from urllib.error import HTTPError, URLError
+ from .base import ConnectorError
+ 
+ YT_BASE = 'https://www.googleapis.com/youtube/v3/'
+ SAFE_RESOURCE = re.compile(r'^(?:[a-zA-Z][a-zA-Z0-9]*|videos/(?:getRating|rate))$')
+ SAFE_ID = re.compile(r'^[A-Za-z0-9_-]{1,150}$')
++RESOURCES = {'captions', 'channels', 'comments', 'commentThreads', 'playlistItems',
++             'playlists', 'search', 'subscriptions', 'videoCategories', 'videos',
++             'videos/getRating', 'videos/rate'}
++
++
++class NoRedirect(HTTPRedirectHandler):
++    def redirect_request(self, req, fp, code, msg, headers, newurl):
++        raise ConnectorError('YouTube API redirect refused; credentials were not forwarded')
+ 
+ class YouTubeDataAPI:
+     def __init__(self, key: str = '', token: str = '', token_path: str = ''):
+         self.key = key or os.environ.get('YOUTUBE_DATA_API_KEY', '')
+         self.token = token or os.environ.get('YOUTUBE_OAUTH_ACCESS_TOKEN', '')
+-        self.token_path = Path(token_path or os.environ.get('YOUTUBE_OAUTH_TOKEN_PATH', str(Path.home()/'.jarvis'/'youtube-oauth-token.json')))
++        configured_path = token_path or os.environ.get('YOUTUBE_OAUTH_TOKEN_PATH', '')
++        self.token_path = Path(configured_path) if configured_path else Path.home()/'.jarvis'/'youtube-oauth-token.json'
+ 
+     def _oauth_token(self) -> str:
+         if self.token:
+@@ -57,23 +66,28 @@
+             data = json.dumps(body, ensure_ascii=False).encode('utf-8')
+         req = Request(url, data=data, headers=headers, method=method)
+         try:
+-            with urlopen(req, timeout=18) as response:
+-                raw = response.read(2_000_000)
++            with build_opener(ProxyHandler({}), NoRedirect()).open(req, timeout=18) as response:
++                raw = response.read(2_000_001)
++                if len(raw) > 2_000_000:
++                    raise ConnectorError('YouTube API response exceeds two megabytes')
+                 return json.loads(raw) if raw else {'ok': True, 'http_status': response.status}
+         except HTTPError as exc:
+             try:
+                 info = json.loads(exc.read(20000))
+                 err = info.get('error', {})
+-                detail = err.get('message', '') if isinstance(err, dict) else str(err)
+-            except Exception: detail = 'API request rejected'
+-            # Avoid logging tokens (in URL or response).
+-            raise ConnectorError(f'YouTube API HTTP {exc.code}: {detail[:260]}') from exc
++                reasons = [item.get('reason') for item in err.get('errors', []) if isinstance(item, dict)] if isinstance(err, dict) else []
++            except Exception: reasons = []
++            outcome = ('quota_exhausted' if any(r in {'quotaExceeded','dailyLimitExceeded'} for r in reasons)
++                       else 'blocked_by_auth' if exc.code == 401
++                       else 'retriable' if exc.code == 429 or exc.code >= 500 else 'failed')
++            # Never reflect response text or request URLs: either can contain credentials.
++            raise ConnectorError(f'YouTube API HTTP {exc.code}: {outcome}; inspect before retrying writes') from None
+         except (URLError, TimeoutError, ValueError) as exc:
+             raise ConnectorError(f'YouTube API connection/format error: {type(exc).__name__}') from exc
+ 
+     async def request(self, resource: str, *, method: str = 'GET', params: dict | None = None,
+                       body: dict | None = None, oauth: bool = False) -> dict:
+-        if not SAFE_RESOURCE.fullmatch(resource):
++        if resource not in RESOURCES:
+             raise ConnectorError('Invalid API resource')
+         if method not in {'GET','POST','PUT','DELETE'}:
+             raise ConnectorError('Invalid API method')

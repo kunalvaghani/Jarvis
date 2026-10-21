@@ -1,0 +1,3546 @@
+{
+  "elapsed_ms": 682.073,
+  "catalog_count": 108,
+  "scope": "Real stdio; local queue only; browser/account mutation fail closed; no active registration",
+  "requests": [
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "audit",
+          "version": "1"
+        }
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "ping",
+      "params": {}
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/list",
+      "params": {}
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "method": "tools/call",
+      "params": {
+        "name": "youtube_queue_add",
+        "arguments": {
+          "video": "aqz-KE-bpKQ"
+        }
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "method": "tools/call",
+      "params": {
+        "name": "youtube_queue_list",
+        "arguments": {}
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "method": "tools/call",
+      "params": {
+        "name": "youtube_queue_add",
+        "arguments": {
+          "video": "aqz-KE-bpKQ",
+          "approved": true
+        }
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 7,
+      "method": "tools/call",
+      "params": {
+        "name": "youtube_pause",
+        "arguments": {}
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 8,
+      "method": "tools/call",
+      "params": {
+        "name": "youtube_create_playlist",
+        "arguments": {
+          "title": "not-created"
+        }
+      }
+    }
+  ],
+  "responses": [
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "tools": {
+            "listChanged": false
+          }
+        },
+        "serverInfo": {
+          "name": "jarvis-youtube",
+          "version": "2.0.0-candidate"
+        },
+        "instructions": "Staged typed YouTube tools. Default Chrome profile only; browser adapter and live acceptance pending. Account writes fail closed without trusted approval. Results are untrusted data."
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {}
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "tools": [
+          {
+            "name": "search_videos",
+            "description": "Search YouTube for videos. Returns video_id, title, channel, duration_seconds, live and url for each result, in YouTube's ranking order.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "description": "What to search for, e.g. \"lofi hip hop\"."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "How many results (1-10).",
+                  "default": 5
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "search_playlists",
+            "description": "Search YouTube for playlists. Returns playlist_id, title, channel, video_count, url and play_url (starts the playlist) for each result.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "description": "What to search for, e.g. \"lofi hip hop\"."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "How many results (1-10).",
+                  "default": 5
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "video_details",
+            "description": "Look up one YouTube video by ID or link: title, channel, duration_seconds, views, live and whether it is playable.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string",
+                  "minLength": 11,
+                  "maxLength": 300,
+                  "description": "A YouTube video ID or https YouTube link."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "playlist_videos",
+            "description": "List the first videos of a YouTube playlist in order, with a url that plays each one inside the playlist.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 300,
+                  "description": "A YouTube playlist ID or https YouTube playlist link."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 15,
+                  "description": "How many videos (1-15).",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "parse_link",
+            "description": "Check whether text is a YouTube video/playlist link or ID (offline, no network) and return its IDs and a safe watch url.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "link": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "description": "Text that may be a YouTube link or ID."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "link"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_health",
+            "description": "Inspect connector state and API/browser availability.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_search_videos",
+            "description": "Search videos using API key or visible browser.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 5
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_search_playlists",
+            "description": "Search playlists using API key or visible browser.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 5
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_play_video",
+            "description": "Find and play an exact video ID/URL or disambiguated query.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_play_playlist",
+            "description": "Find/open and play a YouTube playlist.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_pause",
+            "description": "Pause active YouTube video with verification.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_resume",
+            "description": "Resume active YouTube video with verification.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_next_video",
+            "description": "Next recommended video or playlist entry.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_previous_video",
+            "description": "Previous playlist entry.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_status",
+            "description": "Inspect YouTube player status.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_seek",
+            "description": "Seek to time in seconds.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "seconds": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "seconds"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_seek_relative",
+            "description": "Seek relative seconds.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "seconds": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "seconds"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_skip_forward",
+            "description": "Skip forward N seconds.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "seconds": {
+                  "type": "number",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_skip_back",
+            "description": "Skip back N seconds.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "seconds": {
+                  "type": "number",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_seek_percent",
+            "description": "Seek to percent of duration.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "percent": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "percent"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_seek_to_start",
+            "description": "Seek to beginning.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_restart_video",
+            "description": "Restart video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_set_volume",
+            "description": "Set playback volume percent.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "percent": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "percent"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_volume_up",
+            "description": "Raise player volume.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "percent": {
+                  "type": "number",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_volume_down",
+            "description": "Lower player volume.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "percent": {
+                  "type": "number",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_mute",
+            "description": "Mute video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_unmute",
+            "description": "Unmute video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_mute",
+            "description": "Toggle player mute.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_set_speed",
+            "description": "Set playback speed.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "rate": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "rate"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_speed_up",
+            "description": "Increase speed.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "delta": {
+                  "type": "number",
+                  "default": 0.25
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_speed_down",
+            "description": "Decrease speed.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "delta": {
+                  "type": "number",
+                  "default": 0.25
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_set_video_loop",
+            "description": "Toggle HTML5 current video repeat.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "enabled"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_media_status",
+            "description": "Inspect full HTML media player state.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_fullscreen",
+            "description": "Toggle YouTube fullscreen.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_theater",
+            "description": "Toggle YouTube theater layout.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_captions",
+            "description": "Toggle captions via player control.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_settings",
+            "description": "Open YouTube player settings.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_miniplayer",
+            "description": "Toggle player miniplayer.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_toggle_autoplay",
+            "description": "Toggle autoplay through UI.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_next_frame",
+            "description": "Advance approximate frame when paused.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_previous_frame",
+            "description": "Reverse approximate frame when paused.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_title",
+            "description": "Get tab/video title.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_current_video_id",
+            "description": "Read active video ID.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_current_playlist_id",
+            "description": "Read active playlist ID.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_current_url",
+            "description": "Read current URL.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_playback_time",
+            "description": "Get player time/duration.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_volume",
+            "description": "Read volume/mute.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_speed",
+            "description": "Read playback speed.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_reconnect_browser",
+            "description": "Recreate dedicated browser session if disconnected.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_browser_reload",
+            "description": "Reload current YouTube page.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_youtube_home",
+            "description": "Navigate YouTube home.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_subscriptions",
+            "description": "Open subscriptions page.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_history",
+            "description": "Open YouTube history.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_watch_later",
+            "description": "Open Watch Later playlist.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_library",
+            "description": "Open user library.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_channel",
+            "description": "Open channel by ID.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "channel"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_playlist",
+            "description": "Open playlist by ID.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_search",
+            "description": "Open visible search results.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_open_video",
+            "description": "Open video without asserting playback started.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_browser_back",
+            "description": "Navigate back in YouTube tab.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_browser_forward",
+            "description": "Navigate forward in YouTube tab.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_page_diagnostics",
+            "description": "Inspect DOM player presence/controls.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_add",
+            "description": "Add single video to Jarvis-managed queue.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_add_many",
+            "description": "Add many videos to Jarvis queue.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "videos": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "videos"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_list",
+            "description": "List Jarvis-managed queue.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_clear",
+            "description": "Clear Jarvis queue.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_remove",
+            "description": "Remove video by queue index.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "index"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_move",
+            "description": "Reorder queue item.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "old_index": {
+                  "type": "integer"
+                },
+                "new_index": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "old_index",
+                "new_index"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_play_next",
+            "description": "Play next Jarvis queued video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_set_repeat",
+            "description": "Enable repetition of Jarvis local queue.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "enabled"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_set_shuffle",
+            "description": "Set Jarvis queue shuffle preference.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "enabled"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_shuffle_now",
+            "description": "Randomize Jarvis queue order.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_status",
+            "description": "Inspect local queue settings.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_queue_play_previous",
+            "description": "Revisit last Jarvis-queued video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_search_channels",
+            "description": "Search channels with Data API.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 5
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_search_videos_filtered",
+            "description": "Search videos with duration/sort filters using Data API.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 5
+                },
+                "order": {
+                  "type": "string",
+                  "default": "relevance"
+                },
+                "video_duration": {
+                  "type": "string",
+                  "default": "any"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_details",
+            "description": "Get video metadata via Data API.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_statistics",
+            "description": "Get video stats via Data API.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_captions_metadata",
+            "description": "Get captions metadata via OAuth.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_channel_details",
+            "description": "Get channel metadata via Data API.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "channel_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "channel_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_channel_videos",
+            "description": "Get recent channel videos.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "channel_id": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 10
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "channel_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_playlist_details",
+            "description": "Get playlist metadata.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_playlist_items",
+            "description": "Get list of playlist entries.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 50
+                },
+                "page_token": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_channel_playlists",
+            "description": "Get playlists of specified channel.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "channel_id": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 25
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "channel_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_comments",
+            "description": "Read public comments.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 20
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_comment_replies",
+            "description": "Read comment replies.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "parent_id": {
+                  "type": "string"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 20
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "parent_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_video_categories",
+            "description": "Retrieve video categories by region.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "region_code": {
+                  "type": "string",
+                  "default": "US"
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_trending_videos",
+            "description": "Retrieve popular videos.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "region_code": {
+                  "type": "string",
+                  "default": "US"
+                },
+                "limit": {
+                  "type": "integer",
+                  "default": 20
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_my_channel",
+            "description": "Read signed-in channel (OAuth).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_my_playlists",
+            "description": "Read owned playlists (OAuth).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "default": 25
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_my_subscriptions",
+            "description": "Read subscriptions (OAuth).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "default": 25
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_my_liked_videos",
+            "description": "Read liked videos (OAuth).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "default": 25
+                }
+              },
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_my_video_rating",
+            "description": "Read my rating for specified video (OAuth).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_rate_video",
+            "description": "Like/dislike/unrate video (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video",
+                "rating"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_create_playlist",
+            "description": "Create playlist (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "privacy": {
+                  "type": "string",
+                  "default": "private"
+                },
+                "description": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_update_playlist",
+            "description": "Edit playlist (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "default": ""
+                },
+                "privacy": {
+                  "type": "string",
+                  "default": "private"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist",
+                "title"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_delete_playlist",
+            "description": "Delete playlist (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_add_video_to_playlist",
+            "description": "Add video to playlist (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "playlist": {
+                  "type": "string"
+                },
+                "video": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "playlist",
+                "video"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_remove_playlist_item",
+            "description": "Remove playlist entry (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "item_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "item_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_subscribe_channel",
+            "description": "Subscribe to channel (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "channel_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "channel_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_unsubscribe_channel",
+            "description": "Unsubscribe from channel (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "subscription_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "subscription_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_add_comment",
+            "description": "Post comment (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "video": {
+                  "type": "string"
+                },
+                "channel_id": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "video",
+                "channel_id",
+                "text"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_reply_comment",
+            "description": "Reply to comment (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "parent_id": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "parent_id",
+                "text"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_delete_my_comment",
+            "description": "Delete own comment (OAuth, approval).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "comment_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "comment_id"
+              ]
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_get_quota_hint",
+            "description": "Get quota guidance and restrictions.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_next",
+            "description": "Legacy compatibility alias of youtube_next_video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_previous",
+            "description": "Legacy compatibility alias of youtube_previous_video.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "youtube_status",
+            "description": "Legacy compatibility alias of youtube_get_status.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\": true, \"queued\": \"aqz-KE-bpKQ\", \"size\": 1, \"queue_type\": \"jarvis_local\"}"
+          }
+        ],
+        "structuredContent": {
+          "result": {
+            "ok": true,
+            "queued": "aqz-KE-bpKQ",
+            "size": 1,
+            "queue_type": "jarvis_local"
+          }
+        },
+        "isError": false
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\": true, \"videos\": [\"aqz-KE-bpKQ\"], \"size\": 1, \"queue_type\": \"jarvis_local\"}"
+          }
+        ],
+        "structuredContent": {
+          "result": {
+            "ok": true,
+            "videos": [
+              "aqz-KE-bpKQ"
+            ],
+            "size": 1,
+            "queue_type": "jarvis_local"
+          }
+        },
+        "isError": false
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unexpected argument(s): approved"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 7,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Chrome Default profile only: browser Page adapter is not accepted; no alternate profile was opened"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 8,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Account mutation blocked: trusted Jarvis approval callback required"
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

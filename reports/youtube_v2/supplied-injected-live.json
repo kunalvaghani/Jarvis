@@ -1,0 +1,240 @@
+{
+  "python": "3.10.6",
+  "playwright": "1.63.0",
+  "results": [
+    {
+      "command": "play_video exact public ID",
+      "result": {
+        "ok": true,
+        "opened": true,
+        "playing_verified": true,
+        "video_id": "aqz-KE-bpKQ",
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        "source": "youtube_browser",
+        "note": "Playback confirmed"
+      },
+      "elapsed_ms": 4968.45
+    },
+    {
+      "command": "get_status",
+      "result": {
+        "ok": true,
+        "video_loaded": true,
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        "video_id": "aqz-KE-bpKQ",
+        "playlist_id": null,
+        "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube",
+        "paused": false,
+        "current_time": 0,
+        "duration": 635
+      },
+      "elapsed_ms": 540.94
+    },
+    {
+      "command": "pause",
+      "result": {
+        "ok": true,
+        "action": "pause",
+        "paused": true,
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      },
+      "elapsed_ms": 238.27
+    },
+    {
+      "command": "seek 12",
+      "result": {
+        "ok": true,
+        "action": "seek",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 12,
+          "duration": 635,
+          "volume": 100,
+          "muted": false,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 39.52
+    },
+    {
+      "command": "skip_forward 10",
+      "result": {
+        "ok": true,
+        "action": "seek_relative",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 22,
+          "duration": 635,
+          "volume": 100,
+          "muted": false,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 18.44
+    },
+    {
+      "command": "skip_back 5",
+      "result": {
+        "ok": true,
+        "action": "seek_relative",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 17,
+          "duration": 635,
+          "volume": 100,
+          "muted": false,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 18.86
+    },
+    {
+      "command": "set_volume 35",
+      "result": {
+        "ok": true,
+        "action": "volume",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 17,
+          "duration": 635,
+          "volume": 35,
+          "muted": false,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 30.68
+    },
+    {
+      "command": "mute",
+      "result": {
+        "ok": true,
+        "action": "mute",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 17,
+          "duration": 635,
+          "volume": 35,
+          "muted": true,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 23.84
+    },
+    {
+      "command": "unmute",
+      "result": {
+        "ok": true,
+        "action": "unmute",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 17,
+          "duration": 635,
+          "volume": 35,
+          "muted": false,
+          "speed": 1,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 4.16
+    },
+    {
+      "command": "set_speed 1.25",
+      "result": {
+        "ok": true,
+        "action": "speed",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": true,
+          "seconds": 17,
+          "duration": 635,
+          "volume": 35,
+          "muted": false,
+          "speed": 1.25,
+          "loop": false,
+          "ended": false,
+          "ready_state": 0,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 4.21
+    },
+    {
+      "command": "resume",
+      "result": {
+        "ok": true,
+        "action": "resume",
+        "paused": false,
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      },
+      "elapsed_ms": 2668.85
+    },
+    {
+      "command": "media_status",
+      "result": {
+        "ok": true,
+        "action": "status",
+        "source": "dom_media",
+        "state": {
+          "ok": true,
+          "paused": false,
+          "seconds": 17,
+          "duration": 634.601,
+          "volume": 100,
+          "muted": false,
+          "speed": 1.25,
+          "loop": false,
+          "ended": false,
+          "ready_state": 4,
+          "title": "Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film - YouTube"
+        }
+      },
+      "elapsed_ms": 4.11
+    },
+    {
+      "command": "pause cleanup",
+      "result": {
+        "ok": true,
+        "action": "pause",
+        "paused": true,
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      },
+      "elapsed_ms": 60.99
+    }
+  ]
+}

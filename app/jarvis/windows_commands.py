@@ -248,6 +248,14 @@ def run_ps(script, cancelled, timeout=25):
 
 def execute(actions, ids, bindings, cancelled=lambda:False):
     prepared=prepare(ids,bindings)  # Entire batch validated before the first effect.
+    from .youtube_chrome import profile_only, open_requested
+    if 88 in ids and profile_only(actions):
+        if len(ids) != 1:
+            raise ValueError('Open YouTube separately so the required Chrome profile can be preserved; no batch actions dispatched.')
+        if any(r['approval'] for r,_ in prepared):
+            actions._approve('windows_command',json.dumps([{'id':r['id'],'task':r['task'],'parameters':p} for r,p in prepared]),cancelled)
+        if cancelled():raise ValueError('Cancelled before YouTube profile dispatch.')
+        return open_requested(actions, 'youtube', cancelled)['message']
     detail=json.dumps([{'id':r['id'],'task':r['task'],'parameters':p} for r,p in prepared],ensure_ascii=False)
     if any(r['approval'] for r,_ in prepared):
         actions._approve('windows_command',detail,cancelled)
