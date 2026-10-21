@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\integrations\jarvis-connectors\connectors\apps\blender\upstream\tests\run_inside_blender.py", line 85, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "D:\Kunals GitHub Repo\Jarvis\app\integrations\jarvis-connectors\connectors\apps\blender\upstream\tests\run_inside_blender.py", line 33, in main
+    step('add_cube',name='Jarvis_Test_Cube',location=[0,0,1],size=2.0)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: main.<locals>.step() got multiple values for argument 'name'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit

@@ -1,0 +1,235 @@
+{
+  "version": "5.2.2 LTS",
+  "temporary_directory": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-integration-rx5s96az",
+  "checks": [
+    {
+      "name": "health",
+      "pass": true,
+      "result": "{'action': 'health', 'data': {'version': '5.2.2 LTS', 'file': '', 'scene': 'Scene', 'ready': True, 'blender_main_thread': True}}"
+    },
+    {
+      "name": "scene_summary",
+      "pass": true,
+      "result": "{'action': 'scene_summary', 'data': {'scene': 'Scene', 'file': '', 'objects': 3, 'materials': 2, 'collections': 1, 'frame': 1, 'fps': 24, 'engine': 'BLENDER_EEVEE', 'camera': 'Came"
+    },
+    {
+      "name": "list_objects",
+      "pass": true,
+      "result": "{'action': 'list_objects', 'data': [{'name': 'Cube', 'type': 'MESH'}, {'name': 'Light', 'type': 'LIGHT'}, {'name': 'Camera', 'type': 'CAMERA'}]}"
+    },
+    {
+      "name": "list_materials",
+      "pass": true,
+      "result": "{'action': 'list_materials', 'data': ['Dots Stroke', 'Material']}"
+    },
+    {
+      "name": "add_cube",
+      "pass": true,
+      "result": "{'action': 'add_cube', 'data': {'name': 'Jarvis_Test_Cube', 'type': 'MESH'}}"
+    },
+    {
+      "name": "get_mesh_stats",
+      "pass": true,
+      "result": "{'action': 'get_mesh_stats', 'data': {'vertices': 8, 'edges': 12, 'polygons': 6, 'triangles': 12}}"
+    },
+    {
+      "name": "set_transform",
+      "pass": true,
+      "result": "{'action': 'set_transform', 'data': {'name': 'Jarvis_Test_Cube', 'location': [0.0, 0.0, 1.0], 'rotation': [0.0, 0.0, 0.0], 'scale': [1.0, 2.0, 1.0]}}"
+    },
+    {
+      "name": "add_uv_sphere",
+      "pass": true,
+      "result": "{'action': 'add_uv_sphere', 'data': {'name': 'Jarvis_Sphere', 'type': 'MESH'}}"
+    },
+    {
+      "name": "add_cylinder",
+      "pass": true,
+      "result": "{'action': 'add_cylinder', 'data': {'name': 'Jarvis_Cylinder', 'type': 'MESH'}}"
+    },
+    {
+      "name": "add_plane",
+      "pass": true,
+      "result": "{'action': 'add_plane', 'data': {'name': 'Jarvis_Plane', 'type': 'MESH'}}"
+    },
+    {
+      "name": "create_material",
+      "pass": true,
+      "result": "{'action': 'create_material', 'data': {'name': 'Jarvis_Gold'}}"
+    },
+    {
+      "name": "assign_material",
+      "pass": true,
+      "result": "{'action': 'assign_material', 'data': {'object': 'Jarvis_Test_Cube', 'material': 'Jarvis_Gold', 'slot': 0}}"
+    },
+    {
+      "name": "set_material",
+      "pass": true,
+      "result": "{'action': 'set_material', 'data': {'material': 'Jarvis_Gold'}}"
+    },
+    {
+      "name": "list_shader_nodes",
+      "pass": true,
+      "result": "{'action': 'list_shader_nodes', 'data': [{'name': 'Principled BSDF', 'type': 'ShaderNodeBsdfPrincipled', 'inputs': ['Base Color', 'Metallic', 'Roughness', 'IOR', 'Alpha', 'Thin Wal"
+    },
+    {
+      "name": "get_material",
+      "pass": true,
+      "result": "{'action': 'get_material', 'data': {'name': 'Jarvis_Gold', 'nodes': [{'name': 'Principled BSDF', 'type': 'ShaderNodeBsdfPrincipled'}, {'name': 'Material Output', 'type': 'ShaderNod"
+    },
+    {
+      "name": "add_bevel",
+      "pass": true,
+      "result": "{'action': 'add_bevel', 'data': {'modifier': 'Jarvis BEVEL', 'type': 'BEVEL', 'object': 'Jarvis_Test_Cube'}}"
+    },
+    {
+      "name": "add_subdivision",
+      "pass": true,
+      "result": "{'action': 'add_subdivision', 'data': {'modifier': 'Jarvis SUBSURF', 'type': 'SUBSURF', 'object': 'Jarvis_Sphere'}}"
+    },
+    {
+      "name": "list_modifiers",
+      "pass": true,
+      "result": "{'action': 'list_modifiers', 'data': [{'name': 'Jarvis SUBSURF', 'type': 'SUBSURF'}]}"
+    },
+    {
+      "name": "smooth_shading",
+      "pass": true,
+      "result": "{'action': 'smooth_shading', 'data': {'name': 'Jarvis_Sphere', 'smooth': True}}"
+    },
+    {
+      "name": "new_collection",
+      "pass": true,
+      "result": "{'action': 'new_collection', 'data': {'collection': 'Jarvis_Test_Collection'}}"
+    },
+    {
+      "name": "move_to_collection",
+      "pass": true,
+      "result": "{'action': 'move_to_collection', 'data': {'object': 'Jarvis_Test_Cube', 'collection': 'Jarvis_Test_Collection'}}"
+    },
+    {
+      "name": "list_collections",
+      "pass": true,
+      "result": "{'action': 'list_collections', 'data': [{'name': 'Collection', 'objects': 7}, {'name': 'Jarvis_Test_Collection', 'objects': 1}]}"
+    },
+    {
+      "name": "set_frame_range",
+      "pass": true,
+      "result": "{'action': 'set_frame_range', 'data': {'start': 1, 'end': 24, 'fps': 24}}"
+    },
+    {
+      "name": "animate_transform",
+      "pass": true,
+      "result": "{'action': 'animate_transform', 'data': {'name': 'Jarvis_Test_Cube', 'keyed': ['location'], 'frame': 1}}"
+    },
+    {
+      "name": "animate_transform",
+      "pass": true,
+      "result": "{'action': 'animate_transform', 'data': {'name': 'Jarvis_Test_Cube', 'keyed': ['location'], 'frame': 24}}"
+    },
+    {
+      "name": "set_interpolation",
+      "pass": true,
+      "result": "{'action': 'set_interpolation', 'data': {'keyframes': 6, 'mode': 'LINEAR'}}"
+    },
+    {
+      "name": "add_text",
+      "pass": true,
+      "result": "{'action': 'add_text', 'data': {'name': 'Jarvis_Test_Text'}}"
+    },
+    {
+      "name": "add_bezier_curve",
+      "pass": true,
+      "result": "{'action': 'add_bezier_curve', 'data': {'curve': 'Jarvis_Test_Curve', 'points': 3}}"
+    },
+    {
+      "name": "add_light",
+      "pass": true,
+      "result": "{'action': 'add_light', 'data': {'light': 'Jarvis_Test_Light', 'type': 'AREA'}}"
+    },
+    {
+      "name": "add_camera",
+      "pass": true,
+      "result": "{'action': 'add_camera', 'data': {'camera': 'Jarvis_Test_Camera'}}"
+    },
+    {
+      "name": "set_active_camera",
+      "pass": true,
+      "result": "{'action': 'set_active_camera', 'data': {'camera': 'Jarvis_Test_Camera'}}"
+    },
+    {
+      "name": "create_geometry_nodes",
+      "pass": true,
+      "result": "{'action': 'create_geometry_nodes', 'data': {'group': 'Jarvis_TestGeo', 'modifier': 'Jarvis Geometry Nodes'}}"
+    },
+    {
+      "name": "list_geometry_nodes",
+      "pass": true,
+      "result": "{'action': 'list_geometry_nodes', 'data': [{'name': 'Group Input', 'type': 'NodeGroupInput'}, {'name': 'Group Output', 'type': 'NodeGroupOutput'}]}"
+    },
+    {
+      "name": "add_geometry_node",
+      "pass": true,
+      "result": "{'action': 'add_geometry_node', 'data': {'node': 'Cube', 'type': 'GeometryNodeMeshCube'}}"
+    },
+    {
+      "name": "create_compositor",
+      "pass": true,
+      "result": "{'action': 'create_compositor', 'data': {'enabled': True}}"
+    },
+    {
+      "name": "list_compositor_nodes",
+      "pass": true,
+      "result": "{'action': 'list_compositor_nodes', 'data': [{'name': 'Render Layers', 'type': 'CompositorNodeRLayers'}, {'name': 'Group Output', 'type': 'NodeGroupOutput'}]}"
+    },
+    {
+      "name": "set_render_engine",
+      "pass": true,
+      "result": "{'action': 'set_render_engine', 'data': {'engine': 'BLENDER_WORKBENCH'}}"
+    },
+    {
+      "name": "set_render_resolution",
+      "pass": true,
+      "result": "{'action': 'set_render_resolution', 'data': {'resolution': [64, 64, 100]}}"
+    },
+    {
+      "name": "set_render_output",
+      "pass": true,
+      "result": "{'action': 'set_render_output', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\render.png'}}"
+    },
+    {
+      "name": "render_still",
+      "pass": true,
+      "result": "{'action': 'render_still', 'data': {'rendered': True, 'saved': True, 'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\render.png'}}"
+    },
+    {
+      "name": "export_obj",
+      "pass": true,
+      "result": "{'action': 'export_obj', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\model.obj', 'format': 'obj', 'export': True}}"
+    },
+    {
+      "name": "import_obj",
+      "pass": true,
+      "result": "{'action': 'import_obj', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\model.obj', 'format': 'obj', 'export': False}}"
+    },
+    {
+      "name": "export_gltf",
+      "pass": true,
+      "result": "{'action': 'export_gltf', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\model.glb', 'format': 'gltf', 'export': True}}"
+    },
+    {
+      "name": "save_project_copy",
+      "pass": true,
+      "result": "{'action': 'save_project_copy', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-integration-rx5s96az\\\\jarvis_test.blend', 'saved_copy': True}}"
+    }
+  ],
+  "effects": {
+    "render_png_exists": true,
+    "obj_exists": true,
+    "glb_exists": true,
+    "blend_exists": true,
+    "cube_has_material": true
+  },
+  "passed": 44,
+  "failed": 0
+}

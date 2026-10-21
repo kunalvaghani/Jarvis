@@ -26,7 +26,8 @@ from jarvis.tools import ToolRegistry
 
 BASE = Path(__file__).resolve().parents[1]
 SKILLS = BASE / '.venv-skills' / 'Scripts' / 'python.exe'
-BLENDER = Path(r'D:\Blender\blender.exe')
+from jarvis.blender_installation import executables as blender_installations
+BLENDER = next(iter(blender_installations(r'D:\Blender\blender.exe')), Path(r'D:\Blender\blender.exe'))
 
 
 def skills(code, *args):

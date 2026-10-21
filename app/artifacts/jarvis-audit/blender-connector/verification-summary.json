@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-21 IST",
+  "branch": "codex/blender-integration",
+  "base_commit": "32011da",
+  "unittest": {
+    "passed": 1831,
+    "seconds": 415.539,
+    "failures": 0
+  },
+  "pytest": {
+    "passed": 3747,
+    "existing_gated_skips": 150,
+    "warnings": 1,
+    "failures": 0,
+    "seconds": 1195.15
+  },
+  "adapted_package": {
+    "passed": 68
+  },
+  "live_smoke": {
+    "passed_actions": 44,
+    "effect_checks": 5
+  },
+  "engine": "Blender 5.2.2 LTS d13f752e3b9c",
+  "tool_count": 203,
+  "independently_verified_action_fixtures": 104,
+  "verified_bridge_helpers": 3,
+  "remaining_action_acceptance": 96,
+  "explicitly_disabled_actions": [
+    "render_animation",
+    "unpack_resources"
+  ],
+  "source_patch_sha256": "be049f844126872e01687d3ae34a9b494bc0bda6c1e69c4fe42ce4c22eff79a4",
+  "activation": "Not enabled; explicit approval pending after automatic review rejection. Main and active MCP config preserved.",
+  "merge_or_push": false
+}

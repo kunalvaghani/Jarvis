@@ -1,0 +1,9 @@
+00:02.141  cycles           | WARNING HIPEW initialization failed: Error opening HIP dynamic library
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+UR adapter initialization failed: 43 (UR_RESULT_ERROR_UNSUPPORTED_VERSION)
+UR adapter initialization failed: 43 (UR_RESULT_ERROR_UNSUPPORTED_VERSION)
+00:02.750  render           | Saved: 'C:\Users\kunal\AppData\Local\Temp\jarvis-cycles-audit-kh4xgsj4\cpu.png'
+00:03.938  render           | Saved: 'C:\Users\kunal\AppData\Local\Temp\jarvis-cycles-audit-kh4xgsj4\gpu.png'
+JARVIS_RENDER_AUDIT {'version': '5.2.2 LTS', 'renders': [{'device': 'CPU', 'elapsed_ms': 589.7413999991841, 'coverage': 'VERIFIED IN BLENDER', 'png_bytes': 4822, 'resolution': [64, 64], 'nonzero_rgb': True}, {'device': 'GPU', 'backend': 'OPTIX', 'devices': ['NVIDIA GeForce RTX 3050 Laptop GPU'], 'elapsed_ms': 1172.161700000288, 'coverage': 'VERIFIED IN BLENDER', 'png_bytes': 4822, 'resolution': [64, 64], 'nonzero_rgb': True}], 'initial_devices': [{'name': 'NVIDIA GeForce RTX 3050 Laptop GPU', 'type': 'CUDA'}, {'name': 'AMD Ryzen 7 5800H', 'type': 'CPU'}, {'name': 'NVIDIA GeForce RTX 3050 Laptop GPU', 'type': 'OPTIX'}]}
+
+Blender quit

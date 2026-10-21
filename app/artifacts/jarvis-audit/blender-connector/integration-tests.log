@@ -1,0 +1,19 @@
+test_203_tools_real_wire_and_bounded_discovery (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_bad_parameters_no_external_effect (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_fresh_scope_approval_denial_no_edit (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_host_approval_bound_write_and_job_scope (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_host_denial_dispatches_no_mutation (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_jobs_need_original_scope (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_model_cannot_forge_approval (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_namespace_and_other_config_preserved_in_registration (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_nan_nested_and_type_confusion (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_no_arbitrary_python_tool (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_path_traversal_extension_symlink_and_overwrite (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_read_only_mode_hides_writes (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_scope_mismatch_never_dispatches (tests.test_blender_connector_integration.BlenderIntegration) ... ok
+test_120_phrasings_through_actual_parser (tests.test_blender_connector_integration.BlenderLanguage) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 11.205s
+
+OK

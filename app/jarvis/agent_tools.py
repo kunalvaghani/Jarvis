@@ -26,7 +26,7 @@ TOOLS = {
     'git_log': ('agent', 'Read latest ten Git commit subjects; folder project, value dot.', (), False),
     'read_batch': ('agent', 'Run up to four independent local read tools in parallel; folder scope, value dot, content JSON {calls:[{action,value}]}. No writes, shell, network or nested batches.', (), False),
     'mcp_status': ('mcp', 'List configured MCP server names without starting them; value dot.', (), False),
-    'mcp_list_tools': ('mcp', 'Discover tools from a trusted configured stdio MCP server after approval; value server name.', (), True),
+    'mcp_list_tools': ('mcp', 'Discover tools from a trusted configured stdio MCP server after approval; value server name. Blender content may select {query,category,limit}; returns bounded candidate schemas.', (), True),
     'mcp_call': ('mcp', 'Call an allowlisted tool on a trusted stdio MCP server after approval; value server, content JSON {name,arguments}. Never retries.', (), True),
 }
 from .development_api import TOOLS as DEVELOPMENT_TOOLS

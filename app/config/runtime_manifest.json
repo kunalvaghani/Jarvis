@@ -414,7 +414,12 @@
     "docx"
   ],
   "execution_strategy": {
-    "modules": ["jarvis.execution_strategy", "jarvis.app_adapters", "jarvis.document_worker", "jarvis.office_com_worker"],
+    "modules": [
+      "jarvis.execution_strategy",
+      "jarvis.app_adapters",
+      "jarvis.document_worker",
+      "jarvis.office_com_worker"
+    ],
     "policy": "API/code first, structured automation (UIA/DOM/native object model) next, GUI coordinates last; eligibility (registered, in scope, not denied, available, feature-preserving) before measured-reliability ranking.",
     "telemetry": "tool.outcome rows (execution_contracts) in .jarvis-runtime/agent-events.jsonl; categorical/bounded only.",
     "dependencies": "openpyxl 3.1.5 and python-docx 1.2.0 in .venv-skills (requirements/skills.txt); pypdf in .venv; pywin32 COM for native Office; Blender/Unreal/VS Code are optional host applications.",
@@ -422,20 +427,37 @@
     "processes": "Owned short-lived workers in a Windows job object; native Office runs as a new hidden instance whose own PID is the only one that may be stopped."
   },
   "learning_memory": {
-    "modules": ["jarvis.reasoning_bank", "jarvis.viking_memory", "jarvis.viking_worker", "jarvis.exploration", "jarvis.learning_memory", "jarvis.local_embeddings"],
+    "modules": [
+      "jarvis.reasoning_bank",
+      "jarvis.viking_memory",
+      "jarvis.viking_worker",
+      "jarvis.exploration",
+      "jarvis.learning_memory",
+      "jarvis.local_embeddings"
+    ],
     "reasoning_bank": ".jarvis-runtime/reasoning_bank/bank.sqlite3; bounded lessons for plan/replan/next_step.",
     "openviking": "Unmodified openviking==0.5.0 (AGPL-3.0) in .venv-openviking (requirements/openviking.txt), owned loopback server on port 19330, workspace .jarvis-runtime/openviking; registered with the watchdog as 'Hierarchical vault index'. The Obsidian vault is read only.",
     "embedding_model": "Ollama nomic-embed-text (Apache-2.0), pulled locally.",
     "exploration": "Isolated environments only (headless browser context on an approved loopback origin, background Blender sandbox); desktop GUI exploration disabled without a verified VM."
   },
   "escalation_and_demonstration": {
-    "modules": ["jarvis.cloud_architect", "jarvis.demonstration"],
+    "modules": [
+      "jarvis.cloud_architect",
+      "jarvis.demonstration"
+    ],
     "cloud_architect": "Disabled by default (config cloud_architect.enabled=false). Advisory only: needs explicit consent per request/scope, a confirmed free Groq account, quota, three distinct verified local reasoning failures and a passing privacy gate; advice code runs only in the network-less sandbox. Log: .jarvis-runtime/cloud/architect-log.jsonl. Entry point (Phase 8): the approval-gated toolkit tool cloud_architect_consult; Brain only offers it after three distinct verified local reasoning failures.",
     "demonstration": "Show Me Once: consent per demonstration, window-scoped, injected input ignored, no keyboard/field values/passwords/RuntimeIds; low-level mouse hook runs in its own short-lived process. State: .jarvis-runtime/demonstrations/.",
     "failure_routing": "deliberation.FailureRouter: missing tool, broken skill, unknown UI, reasoning, planner structure, repeated weakness, permission; one use of each route and three escalations per task. Queues: .jarvis-runtime/learning-queues/."
   },
   "controlled_self_evolution": {
-    "modules": ["jarvis.evolution_surfaces", "jarvis.evolution_archive", "jarvis.evolution_lab", "jarvis.autoresearch", "jarvis.evolution_promotion", "jarvis.prompt_router"],
+    "modules": [
+      "jarvis.evolution_surfaces",
+      "jarvis.evolution_archive",
+      "jarvis.evolution_lab",
+      "jarvis.autoresearch",
+      "jarvis.evolution_promotion",
+      "jarvis.prompt_router"
+    ],
     "evaluator": "evolution_eval/ (sealed: must equal the committed HEAD; excluded from every experiment snapshot). Held-out data in evolution_eval/heldout, proposer data in evolution_eval/train.",
     "lab": "Separate Git repository .jarvis-runtime/evolution/lab/repo; the canonical repository is only read (rev-parse, archive). Candidate branches cand/<id> and detached worktrees exist only inside the lab.",
     "archive": ".jarvis-runtime/evolution/archive.sqlite3 (schema_version 1) and results.tsv; releases and snapshots in .jarvis-runtime/evolution/releases/.",
@@ -1073,5 +1095,27 @@
     "service": "Lazy owned Spotify MCP child; main Watchdog ping/repair/backoff, Actions.close teardown; no Spotify desktop-app auto-restart.",
     "privacy": "Human-only PKCE and OS keyring; account consent/scopes required; no credential values in manifest, prompt or telemetry.",
     "rollback": "python scripts/setup/register_spotify_connector.py --disable; restart Jarvis; existing YouTube and legacy media paths remain."
+  },
+  "blender_connector": {
+    "date": "2026-10-21 IST",
+    "modules": [
+      "jarvis.blender_host",
+      "jarvis.blender_jobs",
+      "jarvis.mcp_persistent",
+      "jarvis.mcp_bridge",
+      "jarvis.blender_installation",
+      "jarvis.app_adapters",
+      "jarvis.capabilities"
+    ],
+    "connector": "integrations/jarvis-connectors/connectors/apps/blender/server.py",
+    "contract": "Actual centralized BaseConnector; 200 actions plus 3 helpers; 3 default candidate schemas, at most 6/9000 characters; exact names remain callable. Per-call host approvals bind a private Blender scope.",
+    "dependencies": "Builtin stdio/loopback use the standard library. Benchmark uses already declared psutil. No package installation, cloud API or bpy wheel required.",
+    "services": [
+      "Lazy owned Blender MCP child: existing Watchdog ping/repair/backoff; Actions.close; never owns or restarts Blender itself.",
+      "Blender job observations: bounded read-only receipt polling, stop/idle shutdown, five failures with backoff; Watchdog repairs observations only."
+    ],
+    "activation": "Registration helper prepared; active MCP configuration was not modified. Explicit approval required to enable the write-capable registration.",
+    "rollback": "scripts/setup/register_blender_connector.py --disable; restart Jarvis. Stop bridge from its own Blender instance only.",
+    "capability_guide": "skills/blender-modeling/SKILL.md; existing SkillMemory guidance, never execution authorization."
   }
 }

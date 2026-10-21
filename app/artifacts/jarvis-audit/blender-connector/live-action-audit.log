@@ -1,0 +1,67 @@
+Info: File exported successfully
+
+FBX export starting... 'C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.fbx'
+export finished in 0.0114 sec.
+INFO Draco is available, use library at D:\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at D:\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+14:15:04 | INFO: Starting glTF 2.0 export
+14:15:04 | INFO: Extracting primitive: Cube
+14:15:04 | INFO: Primitives created: 1
+14:15:04 | INFO: Finished glTF 2.0 export in 0.0165712833404541 s
+00:15.578  render           | Saved: 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\render_still.png'
+
+Info: File exported successfully
+Info: Removed 0 vertices
+Warning: Unwrap failed to solve 1 of 1 island(s), edge seams may need to be added
+Info: Applied modifier was not first, result may not be as expected
+Info: Saved as "save_project.blend"
+Info: Saved copy as "save_project_copy.blend"
+FBX version: 7400
+14:15:20 | INFO: Data are loaded, start creating Blender stuff
+14:15:20 | INFO: Blender create Mesh node Cube
+14:15:20 | INFO: glTF import finished in 0.00s
+Info: File exported successfully
+
+FBX export starting... 'C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_fbx.fbx'
+export finished in 0.0150 sec.
+14:15:20 | INFO: Starting glTF 2.0 export
+14:15:20 | INFO: Extracting primitive: Curve
+14:15:20 | INFO: Primitives created: 1
+14:15:20 | INFO: Extracting primitive: Cube
+14:15:20 | INFO: Primitives created: 1
+14:15:20 | INFO: Extracting primitive: Cube.001
+14:15:20 | INFO: Primitives created: 1
+14:15:20 | INFO: Extracting primitive: Text
+14:15:20 | INFO: Primitives created: 1
+14:15:20 | INFO: Finished glTF 2.0 export in 0.01346731185913086 s
+
+Info: File exported successfully
+Info: No new files have been packed
+Info: Deleted 1 data-block(s)
+FBX version: 7400
+14:15:22 | INFO: Data are loaded, start creating Blender stuff
+14:15:22 | INFO: Blender create Mesh node Cube
+14:15:22 | INFO: glTF import finished in 0.00s
+00:19.766  blend            | Read blend: "C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\reopen.blend"
+Info: Saved copy as "reopen.blend"
+JARVIS_LIVE_AUDIT {'VERIFIED IN BLENDER': 104, 'SIMULATED': 0, 'UNTESTED': 96, 'explicit_failures': 2}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+Writing to C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\input.obj
+OBJ export of 'input.obj' took 1.71 ms
+Timer 'STL Export' took 4.25 ms
+USD export of 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\input.usdc' took 113.65 ms
+Alembic export of 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\input.abc' took 19.14 ms
+OBJ import of 'input.obj' took 0.86 ms
+Timer 'STL Import' took 0.41 ms
+USD import of 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\input.usdc' took 14.61 ms
+Alembic import C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\input.abc took 3.86 ms
+Alembic import took 3.92 ms
+Writing to C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\export_obj.obj
+OBJ export of 'export_obj.obj' took 2.62 ms
+Timer 'STL Export' took 2.66 ms
+USD export of 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\export_usd.usdc' took 29.45 ms
+Alembic export of 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-audit-m9iprih4\export_alembic.abc' took 18.96 ms
+OBJ import of 'input.obj' took 1.09 ms
+Timer 'STL Import' took 0.37 ms
+
+Blender quit

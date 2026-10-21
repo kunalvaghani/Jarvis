@@ -1,0 +1,622 @@
+{
+  "scope": "Final staged source, tests and documentation; raw working bytes plus LF and Git index hashes",
+  "base_commit": "32011da",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 50006,
+      "sha256": "951f3f799f4ee91371b1d7aec910aa220813c1a72631c1696a75b6931acfcbbf",
+      "normalized_lf_sha256": "61b8f093dcd8255ebecd5c2efa499a5e0a24a6c4c430df1cbdfffa4391626473",
+      "git_index_sha256": "61b8f093dcd8255ebecd5c2efa499a5e0a24a6c4c430df1cbdfffa4391626473"
+    },
+    {
+      "path": "app/README.md",
+      "bytes": 285598,
+      "sha256": "8776cf16ea45d6ee76b959552a92fa43195bccd870322c12525e2e76a1d783e9",
+      "normalized_lf_sha256": "9f36669bee61e6dfab63555c81075415e06523089a277ea603e499a7c639e62f",
+      "git_index_sha256": "9f36669bee61e6dfab63555c81075415e06523089a277ea603e499a7c639e62f"
+    },
+    {
+      "path": "app/artifacts/jarvis-audit/modules/11-skill-selection/census.json",
+      "bytes": 667,
+      "sha256": "01c76babe410b50a216ad5eb05512f5e2d4326df0cafbdcd268076fdfb4445ca",
+      "normalized_lf_sha256": "0f968ffa29a0230a0e68c23af0efcd3a67f39676798012d383e2456a01bd5c0e",
+      "git_index_sha256": "0f968ffa29a0230a0e68c23af0efcd3a67f39676798012d383e2456a01bd5c0e"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "bytes": 78399,
+      "sha256": "877d95949722b7b0a13097687ff2b64536b4dbc3744f1c4de4dae5696e37565b",
+      "normalized_lf_sha256": "bbd46c201ec753261d24f0abdae5e8a97f9c2e45696d3d12d251be922294dbb2",
+      "git_index_sha256": "bbd46c201ec753261d24f0abdae5e8a97f9c2e45696d3d12d251be922294dbb2"
+    },
+    {
+      "path": "app/docs/CLAUDE_HANDOFF.md",
+      "bytes": 58241,
+      "sha256": "760dfe01ad1dcfd29c068df64d5678b227d4de5eaee9a3d0f17bd7757df40a38",
+      "normalized_lf_sha256": "244ee92b230e8fbeeb5573c45bc2178ac2f71bdaa8b3030cfaa2b60889cd291e",
+      "git_index_sha256": "244ee92b230e8fbeeb5573c45bc2178ac2f71bdaa8b3030cfaa2b60889cd291e"
+    },
+    {
+      "path": "app/docs/blender-connector.md",
+      "bytes": 11288,
+      "sha256": "996e079e87eaa107a49cb5dffb764c9f2c2ae62bd7e7e44355bbbd19db83f8cc",
+      "normalized_lf_sha256": "119b994dafcaffe1894a0039c0b606ce59333ff10235905bd2f40acd46c1d122",
+      "git_index_sha256": "119b994dafcaffe1894a0039c0b606ce59333ff10235905bd2f40acd46c1d122"
+    },
+    {
+      "path": "app/docs/system-map.md",
+      "bytes": 45264,
+      "sha256": "4d0b1d39f7469fa3db975a291e3df7b4912c954960462e5389ac76931cda6a51",
+      "normalized_lf_sha256": "37cdb18256bb8770669db0d2e003b4755ba632f68ef5273ff0121cc146d2d7f1",
+      "git_index_sha256": "37cdb18256bb8770669db0d2e003b4755ba632f68ef5273ff0121cc146d2d7f1"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/COMMANDS.md",
+      "bytes": 12505,
+      "sha256": "1502031c5f7c2689a83a7017e851897881050997e3932086cf633f6e2e3c6af8",
+      "normalized_lf_sha256": "55e27df1e4e77985be067469034e6aec50deda1850718a6bad5ca307b4f51354",
+      "git_index_sha256": "55e27df1e4e77985be067469034e6aec50deda1850718a6bad5ca307b4f51354"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/README.md",
+      "bytes": 1408,
+      "sha256": "b160212bfbb7379ac192cb3e7d741ce51bb863876642fba7f0fbb555dde59ea3",
+      "normalized_lf_sha256": "b160212bfbb7379ac192cb3e7d741ce51bb863876642fba7f0fbb555dde59ea3",
+      "git_index_sha256": "b160212bfbb7379ac192cb3e7d741ce51bb863876642fba7f0fbb555dde59ea3"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/adapter.py",
+      "bytes": 5474,
+      "sha256": "e831c3594c88a09ef47180ecb04acebbe5310d0d24087ec0a2090ac84123138d",
+      "normalized_lf_sha256": "7959ef40d499481f2c68a92517b828d0a73151999d3dc120fd27a7c92f0326a3",
+      "git_index_sha256": "7959ef40d499481f2c68a92517b828d0a73151999d3dc120fd27a7c92f0326a3"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/audit_live.py",
+      "bytes": 21896,
+      "sha256": "cc1d1541106fee10225bb953b894b2a09739c3b3b92fd1b68a6959273a56d474",
+      "normalized_lf_sha256": "dc1ad5133163d6cdae3740e1afc17684715421fb80fbe66708260c11fcc564fa",
+      "git_index_sha256": "dc1ad5133163d6cdae3740e1afc17684715421fb80fbe66708260c11fcc564fa"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/__init__.py",
+      "bytes": 99,
+      "sha256": "003480a2c311675129519390f1092b473182be3fa1b041fbad384882973dc36d",
+      "normalized_lf_sha256": "21ff01c6f60d4afc0c160e0675a0b83623c9c04182bf14f7f02aea18098cb4ab",
+      "git_index_sha256": "21ff01c6f60d4afc0c160e0675a0b83623c9c04182bf14f7f02aea18098cb4ab"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/base.py",
+      "bytes": 199,
+      "sha256": "762986beea520fc7484ff0d9770280673f819487e85648a9f6bbed8b02daa721",
+      "normalized_lf_sha256": "9c29e60f3432fd775da444cfd51a7b2a0a104a0d59774e3ff4c70b11c8bb151c",
+      "git_index_sha256": "9c29e60f3432fd775da444cfd51a7b2a0a104a0d59774e3ff4c70b11c8bb151c"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/bridge.py",
+      "bytes": 9463,
+      "sha256": "a3fcabc2f5f042b13121bf246684746942f557f4d3670cce06fff29d841dabfe",
+      "normalized_lf_sha256": "ae4da86c70164a473942ebb9530ed957265a0de2b6d66a5ebf7894ab01c416d2",
+      "git_index_sha256": "ae4da86c70164a473942ebb9530ed957265a0de2b6d66a5ebf7894ab01c416d2"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/catalog.py",
+      "bytes": 24766,
+      "sha256": "888fc3d942404bc00faf3edf08247cf58a1a0464538551ef17f756a09ded71dd",
+      "normalized_lf_sha256": "7e8e6d95164cb03c3299695e34d36c473c83b44c7bd952ef36846c31ad20f8c3",
+      "git_index_sha256": "7e8e6d95164cb03c3299695e34d36c473c83b44c7bd952ef36846c31ad20f8c3"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/connector.py",
+      "bytes": 7333,
+      "sha256": "a9e341d92987191e53d2b865be2b980a164eacdc1ded4f0b375212baa77b6b74",
+      "normalized_lf_sha256": "5e031e9f8eed80d5f1ccc98975fbee486420d971ccc28a8ee6257ada12e63c21",
+      "git_index_sha256": "5e031e9f8eed80d5f1ccc98975fbee486420d971ccc28a8ee6257ada12e63c21"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/blender_connector/operations.py",
+      "bytes": 68275,
+      "sha256": "f765ac2a52f20f944d12a9057ac619ad537609be54e10cfffa235949ee640959",
+      "normalized_lf_sha256": "3d4f7c5b3b8e7356b4ba05b632de2b19f1b379f62fc04078086006e5561e5c34",
+      "git_index_sha256": "3d4f7c5b3b8e7356b4ba05b632de2b19f1b379f62fc04078086006e5561e5c34"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/catalog.json",
+      "bytes": 79119,
+      "sha256": "0ff6ab7e9d1d9ab624fd53d82c523c74b42233e2212581b0a09f800e2ec7157f",
+      "normalized_lf_sha256": "966db2da6a53917fee86dd200f837bbc3293058b7f2efa6771e0081fde1cd458",
+      "git_index_sha256": "966db2da6a53917fee86dd200f837bbc3293058b7f2efa6771e0081fde1cd458"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/client_smoke.py",
+      "bytes": 1485,
+      "sha256": "abeff2c6e2a573dd67d2e9b2cb53ef57cfb281a5cb0e1e521156ec4a1f6daed6",
+      "normalized_lf_sha256": "abeff2c6e2a573dd67d2e9b2cb53ef57cfb281a5cb0e1e521156ec4a1f6daed6",
+      "git_index_sha256": "abeff2c6e2a573dd67d2e9b2cb53ef57cfb281a5cb0e1e521156ec4a1f6daed6"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/launch_blender.ps1",
+      "bytes": 1568,
+      "sha256": "9df3349da83f0d341f4930720185d90e5ca35f53bdfb9f9a88d7de029a01f1bf",
+      "normalized_lf_sha256": "cc664947f782caf290efaba9563fc07659248b62c880b0812d3f18a48e9f820d",
+      "git_index_sha256": "cc664947f782caf290efaba9563fc07659248b62c880b0812d3f18a48e9f820d"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/live_bridge_fixture.py",
+      "bytes": 801,
+      "sha256": "9c8337d190382e02e952d91828105d05d3b98d7b47138e72e7053fdab428beca",
+      "normalized_lf_sha256": "9c8337d190382e02e952d91828105d05d3b98d7b47138e72e7053fdab428beca",
+      "git_index_sha256": "9c8337d190382e02e952d91828105d05d3b98d7b47138e72e7053fdab428beca"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/render_live.py",
+      "bytes": 2621,
+      "sha256": "260a356935c69470931e9ab79484d0a8e5d2c1482c3968fc9e98e9c350ce6858",
+      "normalized_lf_sha256": "260a356935c69470931e9ab79484d0a8e5d2c1482c3968fc9e98e9c350ce6858",
+      "git_index_sha256": "260a356935c69470931e9ab79484d0a8e5d2c1482c3968fc9e98e9c350ce6858"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/run_live_tests.ps1",
+      "bytes": 824,
+      "sha256": "8000efedd5853fdfcb4c44681c44000861765ffbacd220bfab27b13a11473585",
+      "normalized_lf_sha256": "8000efedd5853fdfcb4c44681c44000861765ffbacd220bfab27b13a11473585",
+      "git_index_sha256": "8000efedd5853fdfcb4c44681c44000861765ffbacd220bfab27b13a11473585"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/run_live_tests.py",
+      "bytes": 5233,
+      "sha256": "c7b7970634819554a787eede176c186acc7bee54dafdf08722bd0309e01ede8c",
+      "normalized_lf_sha256": "8dc4b91082cbddf0c342514cbb43960d560d8dc7e36ead743a6eb77f0d986540",
+      "git_index_sha256": "8dc4b91082cbddf0c342514cbb43960d560d8dc7e36ead743a6eb77f0d986540"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/server.py",
+      "bytes": 84865,
+      "sha256": "72aaa191d9af6eb42b427ff106e374e086c4f2c88eeeb6df5e091e0c7a026193",
+      "normalized_lf_sha256": "21f07ea06013d7357373bc8abd599e47ef78f568f0a8d9d10d3143227ee58d45",
+      "git_index_sha256": "21f07ea06013d7357373bc8abd599e47ef78f568f0a8d9d10d3143227ee58d45"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/start_blender_bridge.py",
+      "bytes": 1055,
+      "sha256": "3045d6a007ad1a3bb4cd0f441e15610f315b4c0066d2e83be716e395dd0ccde5",
+      "normalized_lf_sha256": "59e64cc5e6de7e6e423e7f142ab6ebb1dfef97416048b68c76c8934fbd851d52",
+      "git_index_sha256": "59e64cc5e6de7e6e423e7f142ab6ebb1dfef97416048b68c76c8934fbd851d52"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/stop_blender_bridge.py",
+      "bytes": 144,
+      "sha256": "536339980c68c819fc097220f75648fd2c6a6bbe38a096a6c0586b1f7bac65cc",
+      "normalized_lf_sha256": "e91ba78207b7d8903671e5953f19f96938633c8fd3a7270b547a87ef86b644b1",
+      "git_index_sha256": "e91ba78207b7d8903671e5953f19f96938633c8fd3a7270b547a87ef86b644b1"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_bridge.py",
+      "bytes": 5095,
+      "sha256": "2819cba10bdf1c0e4613b7359e3fa91f5da6435b74233530f070249aa0616d11",
+      "normalized_lf_sha256": "14ae7db7663499f167a168469aae03db3ef045297d6e5c636cd52610cf5409e2",
+      "git_index_sha256": "14ae7db7663499f167a168469aae03db3ef045297d6e5c636cd52610cf5409e2"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_catalog.py",
+      "bytes": 5162,
+      "sha256": "840364994bb4d7830a981c6c02d2f71e7fdfa3de840c5fe741915d1839a31b69",
+      "normalized_lf_sha256": "e6e0b66b4e2d5948ae94020fce8f84bfe5e5b7dbcd01cbaf0cf17eb8af1a4087",
+      "git_index_sha256": "e6e0b66b4e2d5948ae94020fce8f84bfe5e5b7dbcd01cbaf0cf17eb8af1a4087"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_connector.py",
+      "bytes": 3857,
+      "sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54",
+      "normalized_lf_sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54",
+      "git_index_sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_e2e_http.py",
+      "bytes": 2890,
+      "sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668",
+      "normalized_lf_sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668",
+      "git_index_sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_mcp_mock.py",
+      "bytes": 1404,
+      "sha256": "d7f31dfb51a5fddd32a875c2b3711cc1fdfa4f2d8db9ad8966a4ca277ba6dfc3",
+      "normalized_lf_sha256": "eed9807dce7881c5317a51a16b159aef5cbc831b53123795ec88fa8bb175a8d9",
+      "git_index_sha256": "eed9807dce7881c5317a51a16b159aef5cbc831b53123795ec88fa8bb175a8d9"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_operations_mock.py",
+      "bytes": 7549,
+      "sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a",
+      "normalized_lf_sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a",
+      "git_index_sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/tests/test_server_generated.py",
+      "bytes": 1724,
+      "sha256": "c6242d7d97c43609098e05121c774f40336b96bd8e51642331f51b5e28d30eae",
+      "normalized_lf_sha256": "aee1e140625b4e6471ca49447aaa4c3c1f2b83a28002c3003d37a1201683e91e",
+      "git_index_sha256": "aee1e140625b4e6471ca49447aaa4c3c1f2b83a28002c3003d37a1201683e91e"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/ARCHITECTURE.md",
+      "bytes": 3807,
+      "sha256": "3c5f893929662371ad625c7a257bb96a5b1e6071ab76988ab16a6f74a7a9b393",
+      "normalized_lf_sha256": "3c5f893929662371ad625c7a257bb96a5b1e6071ab76988ab16a6f74a7a9b393",
+      "git_index_sha256": "3c5f893929662371ad625c7a257bb96a5b1e6071ab76988ab16a6f74a7a9b393"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/BUILD_MANIFEST.json",
+      "bytes": 3124,
+      "sha256": "265ece2528ac9d90af799572625297e6047bd63cab0c064d41c87541481edac2",
+      "normalized_lf_sha256": "265ece2528ac9d90af799572625297e6047bd63cab0c064d41c87541481edac2",
+      "git_index_sha256": "265ece2528ac9d90af799572625297e6047bd63cab0c064d41c87541481edac2"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/CODEX_INTEGRATION_PROMPT.md",
+      "bytes": 8334,
+      "sha256": "c99863a9d124cb027882131cdb4c35abbc162b6a92146257730d2beea57c631e",
+      "normalized_lf_sha256": "c99863a9d124cb027882131cdb4c35abbc162b6a92146257730d2beea57c631e",
+      "git_index_sha256": "c99863a9d124cb027882131cdb4c35abbc162b6a92146257730d2beea57c631e"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/COMMANDS.md",
+      "bytes": 23697,
+      "sha256": "f45c15218fd0a7c95ce8bf84b16a04ab9c26f52208cf2f015f47d59f2fc05ffb",
+      "normalized_lf_sha256": "f45c15218fd0a7c95ce8bf84b16a04ab9c26f52208cf2f015f47d59f2fc05ffb",
+      "git_index_sha256": "f45c15218fd0a7c95ce8bf84b16a04ab9c26f52208cf2f015f47d59f2fc05ffb"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/README.md",
+      "bytes": 10019,
+      "sha256": "bcdb27c7dd4eb318c9738f8cea88cfe87ad8b5273343728292c0bd763d33abce",
+      "normalized_lf_sha256": "bcdb27c7dd4eb318c9738f8cea88cfe87ad8b5273343728292c0bd763d33abce",
+      "git_index_sha256": "bcdb27c7dd4eb318c9738f8cea88cfe87ad8b5273343728292c0bd763d33abce"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/TEST_REPORT.md",
+      "bytes": 4165,
+      "sha256": "8103ff1131b30a295137b925a00b58feb0beb346c0c38dff6596e30d050a5d2d",
+      "normalized_lf_sha256": "8103ff1131b30a295137b925a00b58feb0beb346c0c38dff6596e30d050a5d2d",
+      "git_index_sha256": "8103ff1131b30a295137b925a00b58feb0beb346c0c38dff6596e30d050a5d2d"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/__init__.py",
+      "bytes": 290,
+      "sha256": "1ac1a354d43bb5da01160946897f6c0461652eef99b6418442b265bd22ebc13d",
+      "normalized_lf_sha256": "1ac1a354d43bb5da01160946897f6c0461652eef99b6418442b265bd22ebc13d",
+      "git_index_sha256": "1ac1a354d43bb5da01160946897f6c0461652eef99b6418442b265bd22ebc13d"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/base.py",
+      "bytes": 1387,
+      "sha256": "9ac05cd8064a3a58e562848fdfd2e13f365101e448f6be6cdb5c3f42c776ea15",
+      "normalized_lf_sha256": "9ac05cd8064a3a58e562848fdfd2e13f365101e448f6be6cdb5c3f42c776ea15",
+      "git_index_sha256": "9ac05cd8064a3a58e562848fdfd2e13f365101e448f6be6cdb5c3f42c776ea15"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/bridge.py",
+      "bytes": 7485,
+      "sha256": "e17260d727f2359443c29af70f1f8666cc752b71ab698b6e74eec347e7b9428b",
+      "normalized_lf_sha256": "e17260d727f2359443c29af70f1f8666cc752b71ab698b6e74eec347e7b9428b",
+      "git_index_sha256": "e17260d727f2359443c29af70f1f8666cc752b71ab698b6e74eec347e7b9428b"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/catalog.py",
+      "bytes": 23545,
+      "sha256": "346da1c405e89aa33ecf3a439ddeb0ce3b6a86f0a4d2fb432f9d410a4c76864c",
+      "normalized_lf_sha256": "346da1c405e89aa33ecf3a439ddeb0ce3b6a86f0a4d2fb432f9d410a4c76864c",
+      "git_index_sha256": "346da1c405e89aa33ecf3a439ddeb0ce3b6a86f0a4d2fb432f9d410a4c76864c"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/connector.py",
+      "bytes": 6543,
+      "sha256": "583d206d555684bc3a94a692e7a7af70f4a7534051b78fecf8ef03f1617f69c3",
+      "normalized_lf_sha256": "583d206d555684bc3a94a692e7a7af70f4a7534051b78fecf8ef03f1617f69c3",
+      "git_index_sha256": "583d206d555684bc3a94a692e7a7af70f4a7534051b78fecf8ef03f1617f69c3"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/blender_connector/operations.py",
+      "bytes": 65340,
+      "sha256": "8c240960a849e5f6765aa78c8efb688ed8906332c8088e4f1d21318162c1df37",
+      "normalized_lf_sha256": "8c240960a849e5f6765aa78c8efb688ed8906332c8088e4f1d21318162c1df37",
+      "git_index_sha256": "8c240960a849e5f6765aa78c8efb688ed8906332c8088e4f1d21318162c1df37"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/client_smoke.py",
+      "bytes": 1241,
+      "sha256": "8eacd9fd1b01a53ce8ba732e1e70a327f1069606e050f0e8b159db4b36b31696",
+      "normalized_lf_sha256": "8eacd9fd1b01a53ce8ba732e1e70a327f1069606e050f0e8b159db4b36b31696",
+      "git_index_sha256": "8eacd9fd1b01a53ce8ba732e1e70a327f1069606e050f0e8b159db4b36b31696"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/connector_manifest.example.json",
+      "bytes": 668,
+      "sha256": "3b48bcfc6933b9f07384204b7f7fde80b7f7a87dc2390f5be22ea84a0928edd9",
+      "normalized_lf_sha256": "3b48bcfc6933b9f07384204b7f7fde80b7f7a87dc2390f5be22ea84a0928edd9",
+      "git_index_sha256": "3b48bcfc6933b9f07384204b7f7fde80b7f7a87dc2390f5be22ea84a0928edd9"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/generate_server.py",
+      "bytes": 3127,
+      "sha256": "b63b8e93275ead36385606240648c1032589351b00049e90e1cabdf3b4dee1dc",
+      "normalized_lf_sha256": "b63b8e93275ead36385606240648c1032589351b00049e90e1cabdf3b4dee1dc",
+      "git_index_sha256": "b63b8e93275ead36385606240648c1032589351b00049e90e1cabdf3b4dee1dc"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/install_windows.ps1",
+      "bytes": 1282,
+      "sha256": "23e91fe7e7a4966f1b4c5cc40076087555469ffb1c2746a6f6c7bce58975121d",
+      "normalized_lf_sha256": "23e91fe7e7a4966f1b4c5cc40076087555469ffb1c2746a6f6c7bce58975121d",
+      "git_index_sha256": "23e91fe7e7a4966f1b4c5cc40076087555469ffb1c2746a6f6c7bce58975121d"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/launch_blender.ps1",
+      "bytes": 983,
+      "sha256": "94431c4faf41a1bb45832dc71374b4a546bf7231b94b9a3c90af81591f62bdb7",
+      "normalized_lf_sha256": "94431c4faf41a1bb45832dc71374b4a546bf7231b94b9a3c90af81591f62bdb7",
+      "git_index_sha256": "94431c4faf41a1bb45832dc71374b4a546bf7231b94b9a3c90af81591f62bdb7"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/requirements.txt",
+      "bytes": 148,
+      "sha256": "20ec6a29f5fac5bc26f512f7717415f649cd0f4046ce5eadca981ec47e08fdf2",
+      "normalized_lf_sha256": "20ec6a29f5fac5bc26f512f7717415f649cd0f4046ce5eadca981ec47e08fdf2",
+      "git_index_sha256": "20ec6a29f5fac5bc26f512f7717415f649cd0f4046ce5eadca981ec47e08fdf2"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/run_live_tests.ps1",
+      "bytes": 836,
+      "sha256": "1d2195a4f2dbea909360f6b4beffdf32797718407a7cb6dbbf06d3df6bde0e7a",
+      "normalized_lf_sha256": "1d2195a4f2dbea909360f6b4beffdf32797718407a7cb6dbbf06d3df6bde0e7a",
+      "git_index_sha256": "1d2195a4f2dbea909360f6b4beffdf32797718407a7cb6dbbf06d3df6bde0e7a"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/server.py",
+      "bytes": 53810,
+      "sha256": "1fc89f73278f604db41e7f6d237268c6dc2de9285556f9ac04465139f44dc5da",
+      "normalized_lf_sha256": "1fc89f73278f604db41e7f6d237268c6dc2de9285556f9ac04465139f44dc5da",
+      "git_index_sha256": "1fc89f73278f604db41e7f6d237268c6dc2de9285556f9ac04465139f44dc5da"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/start_blender_bridge.py",
+      "bytes": 838,
+      "sha256": "8a4be6e5eae50b84aa2a201b92c03b452d6a975f66921a7faff554aea7c62532",
+      "normalized_lf_sha256": "8a4be6e5eae50b84aa2a201b92c03b452d6a975f66921a7faff554aea7c62532",
+      "git_index_sha256": "8a4be6e5eae50b84aa2a201b92c03b452d6a975f66921a7faff554aea7c62532"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/stop_blender_bridge.py",
+      "bytes": 140,
+      "sha256": "e91ba78207b7d8903671e5953f19f96938633c8fd3a7270b547a87ef86b644b1",
+      "normalized_lf_sha256": "e91ba78207b7d8903671e5953f19f96938633c8fd3a7270b547a87ef86b644b1",
+      "git_index_sha256": "e91ba78207b7d8903671e5953f19f96938633c8fd3a7270b547a87ef86b644b1"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/run_inside_blender.py",
+      "bytes": 5088,
+      "sha256": "3e1d0306231616d2c9a7eb5963c5661244325c2f72af6a791bb656f811f06bfc",
+      "normalized_lf_sha256": "3e1d0306231616d2c9a7eb5963c5661244325c2f72af6a791bb656f811f06bfc",
+      "git_index_sha256": "3e1d0306231616d2c9a7eb5963c5661244325c2f72af6a791bb656f811f06bfc"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_bridge.py",
+      "bytes": 4899,
+      "sha256": "010cd0919c1a35ee9f709f64d3b29f9f632b39a0e1c339fca448e34dfbcd7cf0",
+      "normalized_lf_sha256": "010cd0919c1a35ee9f709f64d3b29f9f632b39a0e1c339fca448e34dfbcd7cf0",
+      "git_index_sha256": "010cd0919c1a35ee9f709f64d3b29f9f632b39a0e1c339fca448e34dfbcd7cf0"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_catalog.py",
+      "bytes": 5058,
+      "sha256": "f60e0b946137aa417007fc503892b3df2a0ebb3acd3805c3dda340c7e909c5c7",
+      "normalized_lf_sha256": "f60e0b946137aa417007fc503892b3df2a0ebb3acd3805c3dda340c7e909c5c7",
+      "git_index_sha256": "f60e0b946137aa417007fc503892b3df2a0ebb3acd3805c3dda340c7e909c5c7"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_connector.py",
+      "bytes": 3857,
+      "sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54",
+      "normalized_lf_sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54",
+      "git_index_sha256": "6a77f23a804bf521a6b603949797269f61962cf9a9d71482ef3fb829d1c59e54"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_e2e_http.py",
+      "bytes": 2890,
+      "sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668",
+      "normalized_lf_sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668",
+      "git_index_sha256": "4f011dc51220c3fd75fe77c4b8dc10c266f92fb4b02d2c3dbc58099c8527b668"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_mcp_mock.py",
+      "bytes": 1724,
+      "sha256": "42483336f520d7abd55e9df6d420bb36ebbe0a8ce8099ce44d004b932f60477c",
+      "normalized_lf_sha256": "42483336f520d7abd55e9df6d420bb36ebbe0a8ce8099ce44d004b932f60477c",
+      "git_index_sha256": "42483336f520d7abd55e9df6d420bb36ebbe0a8ce8099ce44d004b932f60477c"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_operations_mock.py",
+      "bytes": 7549,
+      "sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a",
+      "normalized_lf_sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a",
+      "git_index_sha256": "233cf966c157bd50c8d586d1f7e1e581c77403918b4c357b70dacb323085bf0a"
+    },
+    {
+      "path": "app/integrations/jarvis-connectors/connectors/apps/blender/upstream/tests/test_server_generated.py",
+      "bytes": 1497,
+      "sha256": "353ddd0f7c42e34f83fa38254f830d58fda4d4cd58745672bab71bb50335edc6",
+      "normalized_lf_sha256": "353ddd0f7c42e34f83fa38254f830d58fda4d4cd58745672bab71bb50335edc6",
+      "git_index_sha256": "353ddd0f7c42e34f83fa38254f830d58fda4d4cd58745672bab71bb50335edc6"
+    },
+    {
+      "path": "app/jarvis/actions.py",
+      "bytes": 116069,
+      "sha256": "8ef1e0d73132a288d2a096b043326ca7324753894664ed208a9335def0798051",
+      "normalized_lf_sha256": "2469a659edff2f5abba83989a8f6c128c82517bee1a7e106cee9be65e011ee50",
+      "git_index_sha256": "2469a659edff2f5abba83989a8f6c128c82517bee1a7e106cee9be65e011ee50"
+    },
+    {
+      "path": "app/jarvis/agent_tools.py",
+      "bytes": 16333,
+      "sha256": "98919337296db8a199c8877995626d0095de75b35c742f673b35ba93bcd87be9",
+      "normalized_lf_sha256": "e75121be0773c885e2ba39d1e0c9a90ee623eefe1da197ddec060588b38d3973",
+      "git_index_sha256": "e75121be0773c885e2ba39d1e0c9a90ee623eefe1da197ddec060588b38d3973"
+    },
+    {
+      "path": "app/jarvis/app_adapters.py",
+      "bytes": 42457,
+      "sha256": "65a4d7cfd85af27383f445fb74b493e5ad1edff4203182b235d7dcce7f631efa",
+      "normalized_lf_sha256": "65c1b542b2f8db9da7c694ab13524c4eb3aae235631247fdc8e789a30fcd07dc",
+      "git_index_sha256": "65c1b542b2f8db9da7c694ab13524c4eb3aae235631247fdc8e789a30fcd07dc"
+    },
+    {
+      "path": "app/jarvis/blender_host.py",
+      "bytes": 8012,
+      "sha256": "9b477a8e84f77d573e1f00278c26ab1aa4852dea24cc46c6aa8cfccb0e3edfa9",
+      "normalized_lf_sha256": "df210440a0515c6edd7a6fb9e8a153136f539c8c70c497d53c25ef10360c8947",
+      "git_index_sha256": "df210440a0515c6edd7a6fb9e8a153136f539c8c70c497d53c25ef10360c8947"
+    },
+    {
+      "path": "app/jarvis/blender_installation.py",
+      "bytes": 871,
+      "sha256": "00e40b1395d615ec2bb41df0094fa85c7e18fa09bf8062082ceefd476d486978",
+      "normalized_lf_sha256": "00e40b1395d615ec2bb41df0094fa85c7e18fa09bf8062082ceefd476d486978",
+      "git_index_sha256": "00e40b1395d615ec2bb41df0094fa85c7e18fa09bf8062082ceefd476d486978"
+    },
+    {
+      "path": "app/jarvis/blender_jobs.py",
+      "bytes": 6653,
+      "sha256": "84b4bed476510f972c4b3f654667622f3bae4684df6295d81e0b6deac8c4f9de",
+      "normalized_lf_sha256": "84b4bed476510f972c4b3f654667622f3bae4684df6295d81e0b6deac8c4f9de",
+      "git_index_sha256": "84b4bed476510f972c4b3f654667622f3bae4684df6295d81e0b6deac8c4f9de"
+    },
+    {
+      "path": "app/jarvis/brain.py",
+      "bytes": 119863,
+      "sha256": "e41f1bb962804154e2367186c8a79a6a4cf52e80f7496859e62058abc7353216",
+      "normalized_lf_sha256": "cf49fc567c2ce49d23c9d395dcdf6d6135e49d44424fee7254529a734e1f9099",
+      "git_index_sha256": "cf49fc567c2ce49d23c9d395dcdf6d6135e49d44424fee7254529a734e1f9099"
+    },
+    {
+      "path": "app/jarvis/capabilities.py",
+      "bytes": 22300,
+      "sha256": "b570a63cdb8f21b2e302f824020a291c12ad0599f0e07014727b33d819be9def",
+      "normalized_lf_sha256": "2ee3b6b9523067b9522646c2ba4e6e444f44fa910192d7c3ceddf7f8d4eab3b2",
+      "git_index_sha256": "2ee3b6b9523067b9522646c2ba4e6e444f44fa910192d7c3ceddf7f8d4eab3b2"
+    },
+    {
+      "path": "app/jarvis/commands.py",
+      "bytes": 35195,
+      "sha256": "220438d6b9ddc23318f1214b89efac25ada7221f255db8743c93b427f931840d",
+      "normalized_lf_sha256": "cab272e36c25b1e84a2e0b31aeabe125dc6cb17d79b10130b8f6e442186cd2f9",
+      "git_index_sha256": "cab272e36c25b1e84a2e0b31aeabe125dc6cb17d79b10130b8f6e442186cd2f9"
+    },
+    {
+      "path": "app/jarvis/engine.py",
+      "bytes": 9029,
+      "sha256": "cb57ba6a90bc72cc6bbe606d396df60143c94169da68dd9020a390afac071975",
+      "normalized_lf_sha256": "b1f755021cece6f111c4c16a6309e94f5626fa94601654c2969c9d984f15e915",
+      "git_index_sha256": "b1f755021cece6f111c4c16a6309e94f5626fa94601654c2969c9d984f15e915"
+    },
+    {
+      "path": "app/jarvis/mcp_bridge.py",
+      "bytes": 18843,
+      "sha256": "20fd2aaa60c1844d40db411cdb129cb9d311b324dacc1fd617ff0c423c866aeb",
+      "normalized_lf_sha256": "cb065266b2474854fd9a00d07dc46276fe1bd54cf83021d7447e871db4d78d42",
+      "git_index_sha256": "cb065266b2474854fd9a00d07dc46276fe1bd54cf83021d7447e871db4d78d42"
+    },
+    {
+      "path": "app/jarvis/mcp_persistent.py",
+      "bytes": 5756,
+      "sha256": "479bac3f31da472fedeb85c50dd4312d95a61be7259a2de2a13211ea6f1b43c0",
+      "normalized_lf_sha256": "5bd0f57fa65fc573f286ad7ac913feecf48393284e688768d6e54fac721e4792",
+      "git_index_sha256": "5bd0f57fa65fc573f286ad7ac913feecf48393284e688768d6e54fac721e4792"
+    },
+    {
+      "path": "app/main.py",
+      "bytes": 38439,
+      "sha256": "0bea8c460edc6644b1ddff2b5f6480d85a87ace07c87e0f3b9dc1d7af0a37075",
+      "normalized_lf_sha256": "d74732da6c1f09668d365e2719d2be6f1510ce55e8a049feeba8877db6194713",
+      "git_index_sha256": "d74732da6c1f09668d365e2719d2be6f1510ce55e8a049feeba8877db6194713"
+    },
+    {
+      "path": "app/scripts/benchmarks/blender_e2e.py",
+      "bytes": 8129,
+      "sha256": "b33748c0c58f4bf6eea582bb9c5cd2f7cb0c0b6ff4f0163b4165d368e3f4a0dc",
+      "normalized_lf_sha256": "7d028a0f866937bb232e750257f025675b46a4697659f4c785f7d7159a7947a4",
+      "git_index_sha256": "7d028a0f866937bb232e750257f025675b46a4697659f4c785f7d7159a7947a4"
+    },
+    {
+      "path": "app/scripts/setup/discover_blender.py",
+      "bytes": 857,
+      "sha256": "a43b7115f4886ba50976cace9317e785976ab82d2f059f0fb656865c936b49df",
+      "normalized_lf_sha256": "a43b7115f4886ba50976cace9317e785976ab82d2f059f0fb656865c936b49df",
+      "git_index_sha256": "a43b7115f4886ba50976cace9317e785976ab82d2f059f0fb656865c936b49df"
+    },
+    {
+      "path": "app/scripts/setup/generate_blender_adapter.py",
+      "bytes": 3349,
+      "sha256": "48d4ca2d8708ff90cc1f47857f212f8ea486f844b0405c719ad41ffa1303c597",
+      "normalized_lf_sha256": "14de293366a6adbe3111846e4ce1531a37f7973fb86e355d5ace87e416ae61d9",
+      "git_index_sha256": "14de293366a6adbe3111846e4ce1531a37f7973fb86e355d5ace87e416ae61d9"
+    },
+    {
+      "path": "app/scripts/setup/register_blender_connector.py",
+      "bytes": 2264,
+      "sha256": "387b8b7b1421b6f21c46675aaa1aad67ed0ef9f7ab51a2166dd3157fbfd25476",
+      "normalized_lf_sha256": "0c27dd67a5073f422d553d02849a7b99a0c9ee08fe5728ec34a678e6f57455ff",
+      "git_index_sha256": "0c27dd67a5073f422d553d02849a7b99a0c9ee08fe5728ec34a678e6f57455ff"
+    },
+    {
+      "path": "app/skills/blender-modeling/.skill_id",
+      "bytes": 32,
+      "sha256": "bee4d087783252ee387077b28dfbb17f73278caca0a4dca49f0a20b7d9f2adfe",
+      "normalized_lf_sha256": "db361588fdabd519438ef50c2ae12c5f1c1a281e33f518645fafa4d4a2c63768",
+      "git_index_sha256": "db361588fdabd519438ef50c2ae12c5f1c1a281e33f518645fafa4d4a2c63768"
+    },
+    {
+      "path": "app/skills/blender-modeling/SKILL.md",
+      "bytes": 2557,
+      "sha256": "d3159234fe983530d4e948388eb074c6a9f469c35925e23480d83475a269391d",
+      "normalized_lf_sha256": "d3159234fe983530d4e948388eb074c6a9f469c35925e23480d83475a269391d",
+      "git_index_sha256": "d3159234fe983530d4e948388eb074c6a9f469c35925e23480d83475a269391d"
+    },
+    {
+      "path": "app/tests/test_blender_connector_integration.py",
+      "bytes": 15088,
+      "sha256": "24f8b8dda15924b3bcc378984cd768d716a57dfb91ff38ecb72807ac1f310fb9",
+      "normalized_lf_sha256": "a90454bdd5bdf697fab4f08c2eb18463ed148850334fef6d3c3bd1a456c53598",
+      "git_index_sha256": "a90454bdd5bdf697fab4f08c2eb18463ed148850334fef6d3c3bd1a456c53598"
+    },
+    {
+      "path": "app/tests/test_custom_skills.py",
+      "bytes": 3069,
+      "sha256": "9b8d82dae6d2ccd6e6e676dae77e7b79d9ece26f3fa784aa7dc68447d9a0a319",
+      "normalized_lf_sha256": "84369313e422aedf13c1cb18d4ed7a7d5e1208df58a1f75f4c00784d294762ae",
+      "git_index_sha256": "84369313e422aedf13c1cb18d4ed7a7d5e1208df58a1f75f4c00784d294762ae"
+    },
+    {
+      "path": "app/tests/test_phase02_execution_strategy.py",
+      "bytes": 33718,
+      "sha256": "9f300644790b26cf30daba1d70466961fd73bff8696c0afa2b3f47725ccfc3c8",
+      "normalized_lf_sha256": "8d186c8cc90bc0ac09f2411e63e3082e7e3ccd4db9a26de641cc86688627a937",
+      "git_index_sha256": "8d186c8cc90bc0ac09f2411e63e3082e7e3ccd4db9a26de641cc86688627a937"
+    },
+    {
+      "path": "app/tests/test_skill_memory.py",
+      "bytes": 8246,
+      "sha256": "9fe7fb31b7ba78142eca87f1103bb545bd5ae95e398d097adcc1c6356beeda7a",
+      "normalized_lf_sha256": "bb5e00cf09605b342eb0428d5746e932a61085cd54e8539407c9d9d7cf4dd6e6",
+      "git_index_sha256": "bb5e00cf09605b342eb0428d5746e932a61085cd54e8539407c9d9d7cf4dd6e6"
+    },
+    {
+      "path": "app/tests/test_skill_selection_audit.py",
+      "bytes": 15553,
+      "sha256": "59c68d0bc6b5fe1570133e1d426c59de01e5f3d6df6705c6c30271ac3e92df8c",
+      "normalized_lf_sha256": "10cc887eb4332edacbcca9c6e66837a527af8d1f0b54a0f2c4a9a326f59450cb",
+      "git_index_sha256": "10cc887eb4332edacbcca9c6e66837a527af8d1f0b54a0f2c4a9a326f59450cb"
+    }
+  ]
+}

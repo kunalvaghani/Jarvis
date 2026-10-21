@@ -1,4 +1,4 @@
-"""One opt-in Spotify MCP child per Actions owner; repair never replays a tool."""
+"""One opt-in MCP child per provider/Actions owner; repair never replays a tool."""
 from contextlib import contextmanager
 import json
 import threading
@@ -8,8 +8,9 @@ _OWNER_LOCK = threading.Lock()
 
 
 class PersistentMCP:
-    def __init__(self, base, stopped=lambda: False, clock=time.monotonic):
+    def __init__(self, base, stopped=lambda: False, clock=time.monotonic, label="Spotify"):
         self.base, self.stopped, self.clock = base, stopped, clock
+        self.label = label
         self.lock = threading.RLock()
         self.client = None
         self.rows = None
@@ -27,14 +28,14 @@ class PersistentMCP:
             self.failures += 1
             self.next_start = self.clock() + min(60, 2 ** min(self.failures, 6))
             from .recovery import record
-            record(self.base, 'Spotify MCP stopped; no command replayed; bounded restart backoff.')
+            record(self.base, self.label+' MCP stopped; no command replayed; bounded restart backoff.')
 
     def _start(self, config, cancelled):
         from .mcp_bridge import StdioClient
         if self.closed or self.stopped() or cancelled():
-            raise ValueError('Spotify MCP stopped or cancelled; no start.')
+            raise ValueError(self.label+' MCP stopped or cancelled; no start.')
         if self.clock() < self.next_start:
-            raise ValueError('Spotify MCP restart backoff; inspect the last action before repeating.')
+            raise ValueError(self.label+' MCP restart backoff; inspect the last action before repeating.')
         self.config = dict(config)
         client = StdioClient(config, self.base, cancelled)
         try:
@@ -48,16 +49,16 @@ class PersistentMCP:
         self.fingerprint = json.dumps(config, sort_keys=True)
         self.failures, self.next_start = 0, 0
         from .recovery import record
-        record(self.base, 'Spotify MCP initialized; no previous command replayed.')
+        record(self.base, self.label+' MCP initialized; no previous command replayed.')
 
     @contextmanager
     def session(self, config, cancelled):
         while not self.lock.acquire(timeout=.05):
             if cancelled() or self.closed or self.stopped():
-                raise ValueError('Spotify MCP admission cancelled; nothing dispatched.')
+                raise ValueError(self.label+' MCP admission cancelled; nothing dispatched.')
         try:
             if self.closed or self.stopped() or cancelled():
-                raise ValueError('Spotify MCP admission cancelled; nothing dispatched.')
+                raise ValueError(self.label+' MCP admission cancelled; nothing dispatched.')
             if self.client is not None and (self.client.process.poll() is not None
                     or self.fingerprint != json.dumps(config, sort_keys=True)):
                 self._drop(failed=self.client.process.poll() is not None)
@@ -128,10 +129,13 @@ class PersistentMCP:
                 client.close()
 
 
-def owner(actions):
+def owner(actions, provider="spotify"):
+    if provider not in {"spotify","blender"}:raise ValueError("Unsupported persistent provider")
+    attribute="_"+provider+"_mcp"
     with _OWNER_LOCK:
-        current = getattr(actions, '_spotify_mcp', None)
+        current = getattr(actions, attribute, None)
         if current is None:
             stopped = lambda: bool(getattr(getattr(actions, 'closed', None), 'is_set', lambda: False)())
-            current = actions._spotify_mcp = PersistentMCP(actions.base, stopped)
+            current = PersistentMCP(actions.base, stopped, label=provider.title())
+            setattr(actions,attribute,current)
         return current

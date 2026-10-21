@@ -1,0 +1,3 @@
+# In the Jarvis MCP sidecar venv only (NOT Blender built-in Python).
+# Version 2 is preferred; version 1 FastMCP fallback supported.
+mcp>=1.12,<3.0

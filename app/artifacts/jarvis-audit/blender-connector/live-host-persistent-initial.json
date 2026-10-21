@@ -1,0 +1,900 @@
+{
+  "classification": "LIVE disposable Blender, real stdio/ToolRegistry; synthetic test approvals; no microphone/UI certification",
+  "requests": [
+    {
+      "text": "create a cube named Benchmark0 in Blender",
+      "parse_ms": 20.698299998912262,
+      "dispatch_ms": 1008.5381000026246,
+      "completion_ms": 1107.0002999986173,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark1 in Blender",
+      "parse_ms": 0.42190000021946616,
+      "dispatch_ms": 122.72690000099828,
+      "completion_ms": 191.07690000237199,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark2 in Blender",
+      "parse_ms": 0.2916999983426649,
+      "dispatch_ms": 64.26170000122511,
+      "completion_ms": 179.83810000077938,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark3 in Blender",
+      "parse_ms": 0.25019999884534627,
+      "dispatch_ms": 79.04649999909452,
+      "completion_ms": 137.4389999982668,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark4 in Blender",
+      "parse_ms": 0.2358999990974553,
+      "dispatch_ms": 82.07659999970929,
+      "completion_ms": 154.3033000016294,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark5 in Blender",
+      "parse_ms": 0.2213000007031951,
+      "dispatch_ms": 87.39179999975022,
+      "completion_ms": 168.23419999855105,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark6 in Blender",
+      "parse_ms": 0.22489999901154079,
+      "dispatch_ms": 69.40779999786173,
+      "completion_ms": 155.24679999725777,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark7 in Blender",
+      "parse_ms": 0.24190000112866983,
+      "dispatch_ms": 64.97360000139452,
+      "completion_ms": 129.82670000201324,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark8 in Blender",
+      "parse_ms": 0.22159999934956431,
+      "dispatch_ms": 80.88340000176686,
+      "completion_ms": 139.98960000026273,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark9 in Blender",
+      "parse_ms": 0.21940000078757294,
+      "dispatch_ms": 75.82429999820306,
+      "completion_ms": 158.2200999982888,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark10 in Blender",
+      "parse_ms": 0.2620999985083472,
+      "dispatch_ms": 69.94380000105593,
+      "completion_ms": 143.7340000011318,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark11 in Blender",
+      "parse_ms": 0.23380000129691325,
+      "dispatch_ms": 82.7026000006299,
+      "completion_ms": 162.19910000290838,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark12 in Blender",
+      "parse_ms": 0.22879999960423447,
+      "dispatch_ms": 76.45309999861638,
+      "completion_ms": 143.1936000008136,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark13 in Blender",
+      "parse_ms": 0.22499999977299012,
+      "dispatch_ms": 80.30460000009043,
+      "completion_ms": 141.6797999991104,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark14 in Blender",
+      "parse_ms": 0.22390000231098384,
+      "dispatch_ms": 77.87520000056247,
+      "completion_ms": 151.40140000221436,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark15 in Blender",
+      "parse_ms": 0.22679999892716296,
+      "dispatch_ms": 63.052800000150455,
+      "completion_ms": 149.1037999985565,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark16 in Blender",
+      "parse_ms": 0.225499999942258,
+      "dispatch_ms": 58.262200000172015,
+      "completion_ms": 116.36300000100164,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark17 in Blender",
+      "parse_ms": 0.2691000008780975,
+      "dispatch_ms": 62.52929999754997,
+      "completion_ms": 120.20059999849764,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark18 in Blender",
+      "parse_ms": 0.22810000155004673,
+      "dispatch_ms": 73.6112000013236,
+      "completion_ms": 157.94480000113253,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark19 in Blender",
+      "parse_ms": 0.3279000011389144,
+      "dispatch_ms": 67.70980000146665,
+      "completion_ms": 134.38780000069528,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark20 in Blender",
+      "parse_ms": 0.23460000011255033,
+      "dispatch_ms": 72.47339999958058,
+      "completion_ms": 147.25729999918258,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark21 in Blender",
+      "parse_ms": 0.24029999985941686,
+      "dispatch_ms": 73.8725000010163,
+      "completion_ms": 142.60250000006636,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark22 in Blender",
+      "parse_ms": 0.24699999994481914,
+      "dispatch_ms": 68.1272000001627,
+      "completion_ms": 149.49239999987185,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark23 in Blender",
+      "parse_ms": 0.238199998420896,
+      "dispatch_ms": 81.61870000185445,
+      "completion_ms": 154.7625999992306,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark24 in Blender",
+      "parse_ms": 0.22570000146515667,
+      "dispatch_ms": 72.82090000080643,
+      "completion_ms": 143.69860000078916,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark25 in Blender",
+      "parse_ms": 0.22779999926569872,
+      "dispatch_ms": 78.50340000004508,
+      "completion_ms": 166.12940000050003,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark26 in Blender",
+      "parse_ms": 0.2457999980833847,
+      "dispatch_ms": 116.38630000015837,
+      "completion_ms": 204.9535999976797,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark27 in Blender",
+      "parse_ms": 0.370699999621138,
+      "dispatch_ms": 103.50870000183932,
+      "completion_ms": 161.08770000209915,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark28 in Blender",
+      "parse_ms": 0.3366999990248587,
+      "dispatch_ms": 84.17600000029779,
+      "completion_ms": 148.73529999749735,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark29 in Blender",
+      "parse_ms": 0.25269999969168566,
+      "dispatch_ms": 86.3037000017357,
+      "completion_ms": 151.9064000021899,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark30 in Blender",
+      "parse_ms": 0.23439999858965166,
+      "dispatch_ms": 61.56669999836595,
+      "completion_ms": 130.39159999971162,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark31 in Blender",
+      "parse_ms": 0.24219999977503903,
+      "dispatch_ms": 83.50699999937206,
+      "completion_ms": 167.1091999996861,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark32 in Blender",
+      "parse_ms": 0.25270000332966447,
+      "dispatch_ms": 110.48219999793218,
+      "completion_ms": 190.37670000034268,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark33 in Blender",
+      "parse_ms": 0.39590000233147293,
+      "dispatch_ms": 84.71239999926183,
+      "completion_ms": 174.8144000011962,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark34 in Blender",
+      "parse_ms": 0.4131999994569924,
+      "dispatch_ms": 76.30439999775263,
+      "completion_ms": 167.83619999841903,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark35 in Blender",
+      "parse_ms": 0.40810000064084306,
+      "dispatch_ms": 73.95530000212602,
+      "completion_ms": 146.0428000027605,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark36 in Blender",
+      "parse_ms": 0.29039999935775995,
+      "dispatch_ms": 77.37760000236449,
+      "completion_ms": 141.05790000030538,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark37 in Blender",
+      "parse_ms": 0.42439999742782675,
+      "dispatch_ms": 94.81260000029579,
+      "completion_ms": 167.18419999961043,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark38 in Blender",
+      "parse_ms": 0.240100001974497,
+      "dispatch_ms": 89.13530000063474,
+      "completion_ms": 167.94840000147815,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark39 in Blender",
+      "parse_ms": 0.42919999759760685,
+      "dispatch_ms": 68.26510000246344,
+      "completion_ms": 150.49989999897662,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark40 in Blender",
+      "parse_ms": 0.2282999994349666,
+      "dispatch_ms": 65.64220000291243,
+      "completion_ms": 137.76539999889792,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark41 in Blender",
+      "parse_ms": 0.2172999993490521,
+      "dispatch_ms": 83.46309999978985,
+      "completion_ms": 136.25759999922593,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark42 in Blender",
+      "parse_ms": 0.23349999901256524,
+      "dispatch_ms": 81.512600001588,
+      "completion_ms": 142.64639999964857,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark43 in Blender",
+      "parse_ms": 0.22030000036465935,
+      "dispatch_ms": 72.30340000023716,
+      "completion_ms": 119.8934999993071,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark44 in Blender",
+      "parse_ms": 0.22460000036517158,
+      "dispatch_ms": 60.50669999967795,
+      "completion_ms": 125.94720000197412,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark45 in Blender",
+      "parse_ms": 0.21800000104121864,
+      "dispatch_ms": 80.04189999701339,
+      "completion_ms": 129.29570000051172,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark46 in Blender",
+      "parse_ms": 0.21750000087195076,
+      "dispatch_ms": 72.94329999785987,
+      "completion_ms": 143.5496999984025,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark47 in Blender",
+      "parse_ms": 0.2781000002869405,
+      "dispatch_ms": 71.45540000055917,
+      "completion_ms": 132.66210000074352,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark48 in Blender",
+      "parse_ms": 0.2362000013818033,
+      "dispatch_ms": 85.59560000139754,
+      "completion_ms": 161.31400000085705,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark49 in Blender",
+      "parse_ms": 0.2272000019729603,
+      "dispatch_ms": 83.26619999934337,
+      "completion_ms": 165.65099999934318,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark50 in Blender",
+      "parse_ms": 0.2147999985027127,
+      "dispatch_ms": 62.36899999930756,
+      "completion_ms": 139.86250000016298,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark51 in Blender",
+      "parse_ms": 0.23019999935058877,
+      "dispatch_ms": 73.14620000033756,
+      "completion_ms": 156.1080999999831,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark52 in Blender",
+      "parse_ms": 0.22650000028079376,
+      "dispatch_ms": 68.92169999991893,
+      "completion_ms": 153.1812000030186,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark53 in Blender",
+      "parse_ms": 0.22610000087297522,
+      "dispatch_ms": 89.7052000000258,
+      "completion_ms": 161.4015000013751,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark54 in Blender",
+      "parse_ms": 0.2275000006193295,
+      "dispatch_ms": 59.699599998566555,
+      "completion_ms": 157.72029999789083,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cube named Benchmark55 in Blender",
+      "parse_ms": 0.2268999996886123,
+      "dispatch_ms": 65.82470000284957,
+      "completion_ms": 127.47410000156378,
+      "independent_readback": true
+    },
+    {
+      "text": "create a sphere named Benchmark56 in Blender",
+      "parse_ms": 0.23839999994379468,
+      "dispatch_ms": 84.98930000132532,
+      "completion_ms": 139.21130000017,
+      "independent_readback": true
+    },
+    {
+      "text": "create a plane named Benchmark57 in Blender",
+      "parse_ms": 0.24910000138334,
+      "dispatch_ms": 64.51739999829442,
+      "completion_ms": 136.88539999930072,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cylinder named Benchmark58 in Blender",
+      "parse_ms": 0.24149999808287248,
+      "dispatch_ms": 67.33270000040648,
+      "completion_ms": 123.83279999994556,
+      "independent_readback": true
+    },
+    {
+      "text": "create a cone named Benchmark59 in Blender",
+      "parse_ms": 0.2523000002838671,
+      "dispatch_ms": 61.88780000229599,
+      "completion_ms": 122.38510000315728,
+      "independent_readback": true
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.22809999791206792,
+      "dispatch_ms": 63.00019999980577,
+      "completion_ms": 63.254999997298,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.22399999943445437,
+      "dispatch_ms": 232.0304999993823,
+      "completion_ms": 342.82729999904404,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.29319999885046855,
+      "dispatch_ms": 92.52720000222325,
+      "completion_ms": 169.35069999817642,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.22949999765842222,
+      "dispatch_ms": 95.0276000003214,
+      "completion_ms": 172.6983000007749,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.21180000112508424,
+      "dispatch_ms": 234.99090000041178,
+      "completion_ms": 293.7123000010615,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.2004000016313512,
+      "dispatch_ms": 42.728899999929126,
+      "completion_ms": 42.954000000463566,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.20709999807877466,
+      "dispatch_ms": 231.0859999997774,
+      "completion_ms": 294.9411000008695,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.22639999951934442,
+      "dispatch_ms": 88.16360000128043,
+      "completion_ms": 166.18840000228374,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.22629999875789508,
+      "dispatch_ms": 217.94189999855007,
+      "completion_ms": 294.3831999982649,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.20669999867095612,
+      "dispatch_ms": 270.3058000006422,
+      "completion_ms": 345.9495999995852,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.21220000053290278,
+      "dispatch_ms": 40.80229999817675,
+      "completion_ms": 41.038399998797104,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21710000146413222,
+      "dispatch_ms": 259.80540000091423,
+      "completion_ms": 328.0493000020215,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.25630000163801014,
+      "dispatch_ms": 87.96779999829596,
+      "completion_ms": 142.34080000096583,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.2100000019709114,
+      "dispatch_ms": 109.08609999751206,
+      "completion_ms": 169.4545000027574,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.24820000180625357,
+      "dispatch_ms": 87.87869999650866,
+      "completion_ms": 160.65119999984745,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.2027000009547919,
+      "dispatch_ms": 66.85509999806527,
+      "completion_ms": 67.08529999741586,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21569999807979912,
+      "dispatch_ms": 78.81740000084392,
+      "completion_ms": 137.98529999985476,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.30699999842909165,
+      "dispatch_ms": 63.25899999865214,
+      "completion_ms": 141.95549999931245,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.2553999984229449,
+      "dispatch_ms": 249.21959999846877,
+      "completion_ms": 315.95109999761917,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.2096999996865634,
+      "dispatch_ms": 79.25410000098054,
+      "completion_ms": 151.71859999827575,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.2117000003636349,
+      "dispatch_ms": 41.02190000048722,
+      "completion_ms": 41.25900000144611,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21180000112508424,
+      "dispatch_ms": 100.78319999956875,
+      "completion_ms": 157.39409999878262,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.3217999983462505,
+      "dispatch_ms": 82.40790000127163,
+      "completion_ms": 150.53500000067288,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.20529999892460182,
+      "dispatch_ms": 86.79730000221753,
+      "completion_ms": 169.4141000007221,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.20450000010896474,
+      "dispatch_ms": 86.07439999832422,
+      "completion_ms": 141.36369999687304,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.19869999960064888,
+      "dispatch_ms": 47.5667999999132,
+      "completion_ms": 47.79019999841694,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.20960000256309286,
+      "dispatch_ms": 79.57809999788878,
+      "completion_ms": 148.47850000296603,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.24750000011408702,
+      "dispatch_ms": 93.50410000115517,
+      "completion_ms": 178.83400000209804,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.20370000129332766,
+      "dispatch_ms": 76.56499999939115,
+      "completion_ms": 148.36389999982202,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.20780000340892002,
+      "dispatch_ms": 59.397299999545794,
+      "completion_ms": 143.79570000164676,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.20289999883971177,
+      "dispatch_ms": 46.295500000269385,
+      "completion_ms": 46.52409999835072,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21500000002561137,
+      "dispatch_ms": 80.42250000289641,
+      "completion_ms": 136.88159999946947,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.30619999961345457,
+      "dispatch_ms": 208.8407000010193,
+      "completion_ms": 282.23849999994854,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.29429999995045364,
+      "dispatch_ms": 212.81220000309986,
+      "completion_ms": 271.78940000158036,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.20220000078552403,
+      "dispatch_ms": 215.37859999807552,
+      "completion_ms": 281.7801999990479,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.24360000315937214,
+      "dispatch_ms": 62.73879999935161,
+      "completion_ms": 63.006600001244806,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21100000230944715,
+      "dispatch_ms": 84.20230000047013,
+      "completion_ms": 172.238400002243,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.2634999982547015,
+      "dispatch_ms": 106.19249999945168,
+      "completion_ms": 189.84999999884167,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.21180000112508424,
+      "dispatch_ms": 83.83020000110264,
+      "completion_ms": 147.4798000017472,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.21980000019539148,
+      "dispatch_ms": 95.93989999848418,
+      "completion_ms": 149.15819999805535,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.20080000103916973,
+      "dispatch_ms": 73.27960000111489,
+      "completion_ms": 73.50570000198786,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21829999968758784,
+      "dispatch_ms": 58.82089999795426,
+      "completion_ms": 126.76329999885638,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.21579999884124845,
+      "dispatch_ms": 79.67089999874588,
+      "completion_ms": 154.37699999893084,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.21840000044903718,
+      "dispatch_ms": 217.86319999955595,
+      "completion_ms": 287.07569999824045,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.2573000019765459,
+      "dispatch_ms": 243.6061999978847,
+      "completion_ms": 301.8112999998266,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.23739999960525893,
+      "dispatch_ms": 45.31190000125207,
+      "completion_ms": 45.57410000052187,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.21070000002509914,
+      "dispatch_ms": 241.11549999724957,
+      "completion_ms": 318.08819999787374,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.21919999926467426,
+      "dispatch_ms": 229.420100000425,
+      "completion_ms": 284.4330000007176,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.21660000129486434,
+      "dispatch_ms": 264.3342000010307,
+      "completion_ms": 326.5114999994694,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.31830000079935417,
+      "dispatch_ms": 89.38130000024103,
+      "completion_ms": 170.47879999881843,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.2082999999402091,
+      "dispatch_ms": 60.42810000144527,
+      "completion_ms": 60.664799999358365,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.28640000164159574,
+      "dispatch_ms": 107.80679999879794,
+      "completion_ms": 178.1991999996535,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.21039999774075113,
+      "dispatch_ms": 105.03000000244356,
+      "completion_ms": 198.02789999812376,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.22529999841935933,
+      "dispatch_ms": 269.1630000008445,
+      "completion_ms": 327.1905000001425,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.20629999926313758,
+      "dispatch_ms": 60.284900002443464,
+      "completion_ms": 131.2199000021792,
+      "independent_readback": false
+    },
+    {
+      "text": "status in Blender",
+      "parse_ms": 0.22049999824957922,
+      "dispatch_ms": 59.215299999777926,
+      "completion_ms": 59.460299999045674,
+      "independent_readback": false
+    },
+    {
+      "text": "list objects in Blender",
+      "parse_ms": 0.23909999799798243,
+      "dispatch_ms": 91.2133999991056,
+      "completion_ms": 145.76079999824287,
+      "independent_readback": false
+    },
+    {
+      "text": "show selection in Blender",
+      "parse_ms": 0.2091999995172955,
+      "dispatch_ms": 86.35489999869606,
+      "completion_ms": 138.34850000057486,
+      "independent_readback": false
+    },
+    {
+      "text": "show scene in Blender",
+      "parse_ms": 0.20699999731732532,
+      "dispatch_ms": 98.71120000025257,
+      "completion_ms": 178.78419999760808,
+      "independent_readback": false
+    },
+    {
+      "text": "version in Blender",
+      "parse_ms": 0.1961999987543095,
+      "dispatch_ms": 93.50760000234004,
+      "completion_ms": 161.8412999996508,
+      "independent_readback": false
+    }
+  ],
+  "medium": {
+    "action": "get_mesh_stats",
+    "data": {
+      "vertices": 15876,
+      "edges": 31500,
+      "polygons": 15625,
+      "triangles": 31250
+    }
+  },
+  "large": {
+    "action": "get_mesh_stats",
+    "data": {
+      "vertices": 251001,
+      "edges": 501000,
+      "polygons": 250000,
+      "triangles": 500000
+    }
+  },
+  "bridge": {
+    "ok": true,
+    "connected": true,
+    "uptime_seconds": 34.87,
+    "queue_depth": 0,
+    "scope_id": "607fe60720c74221b78362373214acf8",
+    "main_thread_age": 0.01,
+    "state": {
+      "version": "5.2.2 LTS",
+      "file": "",
+      "selected": "Benchmark59"
+    }
+  },
+  "approval_count": 413,
+  "completed_notifications": 337,
+  "parse_ms": {
+    "p50": 0.2272000019729603,
+    "p95": 0.40810000064084306,
+    "p99": 0.42919999759760685
+  },
+  "dispatch_ms": {
+    "p50": 80.88340000176686,
+    "p95": 249.21959999846877,
+    "p99": 270.3058000006422
+  },
+  "completion_ms": {
+    "p50": 151.40140000221436,
+    "p95": 326.5114999994694,
+    "p99": 345.9495999995852
+  },
+  "resource_samples": {
+    "count": 346,
+    "peak_blender_rss_bytes": 400572416,
+    "peak_blender_cpu_percent": 468.7,
+    "gpu": "Not measured; Workbench/background geometry does not certify Cycles GPU behavior.",
+    "main_thread": "Host dispatch benchmark only; live voice and Dynamic Island frame responsiveness not measured."
+  }
+}

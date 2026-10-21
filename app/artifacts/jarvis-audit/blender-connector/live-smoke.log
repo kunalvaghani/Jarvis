@@ -1,0 +1,49 @@
+00:03.438  render           | Saved: 'C:\Users\kunal\AppData\Local\Temp\jarvis-blender-integration-rx5s96az\render.png'
+Info: File exported successfully
+INFO Draco is available, use library at D:\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at D:\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+01:22:14 | INFO: Starting glTF 2.0 export
+01:22:14 | INFO: Extracting primitive: Cube
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Cube.002
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Cylinder
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Cylinder
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Plane
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Plane
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Sphere
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Sphere
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Cube.001
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Cube
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Curve
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Curve
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Curve.001
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Text
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Extracting primitive: Jarvis_Test_Text
+01:22:14 | INFO: Primitives created: 1
+01:22:14 | INFO: Finished glTF 2.0 export in 0.05438590049743652 s
+00:03.797  reports          | WARNING Path 'D:\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+Writing to C:\Users\kunal\AppData\Local\Temp\jarvis-blender-integration-rx5s96az\model.obj
+OBJ export of 'model.obj' took 3.29 ms
+OBJ import of 'model.obj' took 10.65 ms
+00:03.797  reports          | WARNING Path 'D:\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+
+Info: Saved copy as "jarvis_test.blend"
+JARVIS_BLENDER_TEST_REPORT: D:\Kunals GitHub Repo\Jarvis\app\artifacts\jarvis-audit\blender-connector\live-smoke.json
+JARVIS_BLENDER_TEST_SUMMARY: 44/44 checks, 5 effects, 0 failures
+
+Blender quit
+Verified live smoke: 44 actions plus 1 1 1 1 1 effect checks. Full catalog acceptance is separate.

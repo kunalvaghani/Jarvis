@@ -1,0 +1,15 @@
+{
+  "connectors": {
+    "jarvis_blender": {
+      "transport": "stdio",
+      "command": "C:\\ABSOLUTE_PATH\\jarvis_blender_connector\\.venv-blender\\Scripts\\python.exe",
+      "args": ["C:\\ABSOLUTE_PATH\\jarvis_blender_connector\\server.py"],
+      "namespace": "blender",
+      "enabled": true,
+      "read_only": false,
+      "auth_source": "user-profile/.jarvis/blender-bridge.json",
+      "requires_confirmation_for_risk": ["destructive", "filesystem"],
+      "notes": "Illustrative only; integrate using actual Jarvis MCPBridge/ToolRegistry schema. Standalone MCP denies destructive/filesystem actions until host approval integration is attached."
+    }
+  }
+}

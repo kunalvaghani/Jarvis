@@ -1,0 +1,4078 @@
+[
+  {
+    "tool": "blender_health",
+    "category": "system",
+    "risk": "read",
+    "description": "Check live Blender connection, version and current file",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_version",
+    "category": "system",
+    "risk": "read",
+    "description": "Get installed Blender version and build info",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_capabilities",
+    "category": "system",
+    "risk": "read",
+    "description": "List supported commands and approval classes",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_scene_summary",
+    "category": "system",
+    "risk": "read",
+    "description": "Summarize objects, materials, collections, frame and render settings",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_scenes",
+    "category": "system",
+    "risk": "read",
+    "description": "List scenes",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_objects",
+    "category": "system",
+    "risk": "read",
+    "description": "List named objects with optional type filter",
+    "coverage": "UNTESTED",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      },
+      "limit": {
+        "kind": "int",
+        "nullable": false,
+        "default": 250
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_materials",
+    "category": "system",
+    "risk": "read",
+    "description": "List materials",
+    "coverage": "UNTESTED",
+    "fields": {
+      "limit": {
+        "kind": "int",
+        "nullable": false,
+        "default": 250
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_images",
+    "category": "system",
+    "risk": "read",
+    "description": "List loaded images",
+    "coverage": "UNTESTED",
+    "fields": {
+      "limit": {
+        "kind": "int",
+        "nullable": false,
+        "default": 250
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_actions",
+    "category": "system",
+    "risk": "read",
+    "description": "List animation actions",
+    "coverage": "UNTESTED",
+    "fields": {
+      "limit": {
+        "kind": "int",
+        "nullable": false,
+        "default": 250
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_collections",
+    "category": "system",
+    "risk": "read",
+    "description": "List collections",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_object",
+    "category": "system",
+    "risk": "read",
+    "description": "Inspect object, transforms and optional mesh statistics",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_material",
+    "category": "system",
+    "risk": "read",
+    "description": "Inspect a material and its nodes",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_scene",
+    "category": "system",
+    "risk": "read",
+    "description": "Inspect scene configuration",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_selection",
+    "category": "system",
+    "risk": "read",
+    "description": "Read selected and active objects",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_dependencies",
+    "category": "system",
+    "risk": "read",
+    "description": "Get object linked dependencies",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_mesh_stats",
+    "category": "system",
+    "risk": "read",
+    "description": "Get polygon/edge/vertex statistics",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_render_status",
+    "category": "system",
+    "risk": "read",
+    "description": "Inspect render output/settings",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_get_job_hint",
+    "category": "system",
+    "risk": "read",
+    "description": "Explain asynchronous long-running operation behavior",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_new_scene",
+    "category": "scene",
+    "risk": "write",
+    "description": "Create a new scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_scene",
+    "category": "scene",
+    "risk": "write",
+    "description": "Switch active scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_rename_scene",
+    "category": "scene",
+    "risk": "write",
+    "description": "Rename scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "old_name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_scene",
+    "category": "scene",
+    "risk": "destructive",
+    "description": "Delete named scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_frame",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set current frame",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_frame_range",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set frame start/end and optional FPS",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "start": {
+        "kind": "int",
+        "nullable": false
+      },
+      "end": {
+        "kind": "int",
+        "nullable": false
+      },
+      "fps": {
+        "kind": "int",
+        "nullable": false,
+        "default": 24
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_units",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set units system and length scale",
+    "coverage": "UNTESTED",
+    "fields": {
+      "system": {
+        "kind": "str",
+        "nullable": false,
+        "default": "METRIC"
+      },
+      "scale": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_world_color",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set world background color",
+    "coverage": "UNTESTED",
+    "fields": {
+      "color": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_new_collection",
+    "category": "scene",
+    "risk": "write",
+    "description": "Create collection",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "parent": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_collection",
+    "category": "scene",
+    "risk": "destructive",
+    "description": "Delete collection; objects remain if linked elsewhere",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "delete_objects": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_rename_collection",
+    "category": "scene",
+    "risk": "write",
+    "description": "Rename a collection",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "old_name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_move_to_collection",
+    "category": "scene",
+    "risk": "write",
+    "description": "Link object to collection, optionally unlink others",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "collection": {
+        "kind": "str",
+        "nullable": false
+      },
+      "exclusive": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_hide_collection",
+    "category": "scene",
+    "risk": "write",
+    "description": "Hide collection in renders and viewports",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "hidden": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_select_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Select object and make it active",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "add": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_select_all",
+    "category": "scene",
+    "risk": "write",
+    "description": "Select all objects",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_deselect_all",
+    "category": "scene",
+    "risk": "write",
+    "description": "Deselect every object",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_select_by_type",
+    "category": "scene",
+    "risk": "write",
+    "description": "Select objects of type",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "add": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_active_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Make object active",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_rename_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Rename object",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "old_name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_object",
+    "category": "scene",
+    "risk": "destructive",
+    "description": "Delete object",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_selected",
+    "category": "scene",
+    "risk": "destructive",
+    "description": "Delete selected objects",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_duplicate_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Duplicate object, linked data optional",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      },
+      "linked": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_transform",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set absolute location/rotation/scale",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "location": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "rotation": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "scale": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_move_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Move object relative to current location",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "offset": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_rotate_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Rotate object relative to Euler rotation",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "degrees_xyz": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_scale_object",
+    "category": "scene",
+    "risk": "write",
+    "description": "Multiply object scale",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "factor": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_visibility",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set hide viewport/render on object",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "viewport": {
+        "kind": "bool",
+        "nullable": true,
+        "default": null
+      },
+      "render": {
+        "kind": "bool",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_parent",
+    "category": "scene",
+    "risk": "write",
+    "description": "Parent to object, preserving world matrix",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "child": {
+        "kind": "str",
+        "nullable": false
+      },
+      "parent": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_clear_parent",
+    "category": "scene",
+    "risk": "write",
+    "description": "Remove object parenting, preserving world transform",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_custom_property",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set a JSON-compatible custom property value",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "key": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "json",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_custom_property",
+    "category": "scene",
+    "risk": "write",
+    "description": "Remove custom property",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "key": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_join_objects",
+    "category": "scene",
+    "risk": "destructive",
+    "description": "Join mesh objects into active mesh",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "names": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_apply_transform",
+    "category": "scene",
+    "risk": "write",
+    "description": "Apply location, rotation, or scale to object data",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "location": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      },
+      "rotation": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      },
+      "scale": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_origin",
+    "category": "scene",
+    "risk": "write",
+    "description": "Set object origin to geometry or cursor",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "mode": {
+        "kind": "str",
+        "nullable": false,
+        "default": "ORIGIN_GEOMETRY"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_smooth_shading",
+    "category": "scene",
+    "risk": "write",
+    "description": "Smooth or flat shade mesh faces",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "smooth": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_empty",
+    "category": "scene",
+    "risk": "write",
+    "description": "Create an Empty object",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Empty"
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_cube",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create cube",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Cube"
+      },
+      "size": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_uv_sphere",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create UV sphere",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "UVSphere"
+      },
+      "segments": {
+        "kind": "int",
+        "nullable": false,
+        "default": 32
+      },
+      "rings": {
+        "kind": "int",
+        "nullable": false,
+        "default": 16
+      },
+      "radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_ico_sphere",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create Icosphere",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Icosphere"
+      },
+      "subdivisions": {
+        "kind": "int",
+        "nullable": false,
+        "default": 2
+      },
+      "radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_cylinder",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create cylinder",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Cylinder"
+      },
+      "vertices": {
+        "kind": "int",
+        "nullable": false,
+        "default": 32
+      },
+      "radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "depth": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_cone",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create cone",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Cone"
+      },
+      "vertices": {
+        "kind": "int",
+        "nullable": false,
+        "default": 32
+      },
+      "radius1": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "radius2": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.0
+      },
+      "depth": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_torus",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create torus",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Torus"
+      },
+      "major_radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "minor_radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.25
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_plane",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create plane",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Plane"
+      },
+      "size": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_grid",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create subdivided grid",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Grid"
+      },
+      "x_subdivisions": {
+        "kind": "int",
+        "nullable": false,
+        "default": 10
+      },
+      "y_subdivisions": {
+        "kind": "int",
+        "nullable": false,
+        "default": 10
+      },
+      "size": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_circle",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create mesh circle",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Circle"
+      },
+      "vertices": {
+        "kind": "int",
+        "nullable": false,
+        "default": 32
+      },
+      "radius": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_monkey",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create Suzanne mesh",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Suzanne"
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_mesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create custom mesh from vertices and face lists",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "vertices": {
+        "kind": "list",
+        "nullable": false
+      },
+      "faces": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_mesh_vertices",
+    "category": "mesh",
+    "risk": "read",
+    "description": "Get mesh vertex coordinates (limited)",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "limit": {
+        "kind": "int",
+        "nullable": false,
+        "default": 200
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_vertex",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Update mesh vertex coordinate",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "index": {
+        "kind": "int",
+        "nullable": false
+      },
+      "coordinate": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_transform_vertices",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Offset vertices of mesh",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "indices": {
+        "kind": "list",
+        "nullable": false
+      },
+      "offset": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_flip_normals",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Reverse mesh polygon winding",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_recalculate_normals",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Recalculate normals",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_subdivide_mesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Subdivide selected mesh",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "cuts": {
+        "kind": "int",
+        "nullable": false,
+        "default": 1
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_merge_by_distance",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Remove coincident vertices",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "threshold": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.0001
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_triangulate_mesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Triangulate mesh faces",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_quadrangulate_mesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Convert eligible triangles to quads",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_extrude_region",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Extrude all mesh regions",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "offset": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_inset_faces",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Inset all mesh faces",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "thickness": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.05
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_bevel_edges",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Bevel mesh edges",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "offset": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.05
+      },
+      "segments": {
+        "kind": "int",
+        "nullable": false,
+        "default": 2
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_unwrap_uv",
+    "category": "mesh",
+    "risk": "write",
+    "description": "UV unwrap mesh faces",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "method": {
+        "kind": "str",
+        "nullable": false,
+        "default": "ANGLE_BASED"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_smart_uv_project",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Smart UV project mesh",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "island_margin": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.02
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_voxel_remesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Voxel remesh mesh",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "voxel_size": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.1
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_decimate_mesh",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Create decimate modifier",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "ratio": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.5
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_make_single_user",
+    "category": "mesh",
+    "risk": "write",
+    "description": "Make selected object mesh data unique",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_modifier",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add allowlisted modifier by enum name",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "modifier_name": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_modifier",
+    "category": "modifier",
+    "risk": "destructive",
+    "description": "Remove named modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "modifier_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_modifier",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Set whitelisted modifier properties",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "modifier_name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "properties": {
+        "kind": "dict",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_apply_modifier",
+    "category": "modifier",
+    "risk": "destructive",
+    "description": "Apply named modifier destructively",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "modifier_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_modifiers",
+    "category": "modifier",
+    "risk": "read",
+    "description": "Read mesh modifiers",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_subdivision",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add subdivision modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "levels": {
+        "kind": "int",
+        "nullable": false,
+        "default": 2
+      },
+      "render_levels": {
+        "kind": "int",
+        "nullable": false,
+        "default": 2
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_bevel",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add bevel modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "width": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.05
+      },
+      "segments": {
+        "kind": "int",
+        "nullable": false,
+        "default": 3
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_solidify",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add solidify modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "thickness": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.05
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_mirror",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add mirror modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "axis": {
+        "kind": "str",
+        "nullable": false,
+        "default": "X"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_array",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add array modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "count": {
+        "kind": "int",
+        "nullable": false,
+        "default": 3
+      },
+      "offset": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_boolean",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add Boolean modifier between mesh objects",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "target": {
+        "kind": "str",
+        "nullable": false
+      },
+      "operation": {
+        "kind": "str",
+        "nullable": false,
+        "default": "DIFFERENCE"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_remesh",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add remesh modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "octree_depth": {
+        "kind": "int",
+        "nullable": false,
+        "default": 4
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_wireframe",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add wireframe modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "thickness": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.02
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_constraint",
+    "category": "modifier",
+    "risk": "write",
+    "description": "Add allowlisted constraint type",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "target": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_constraint",
+    "category": "modifier",
+    "risk": "destructive",
+    "description": "Remove named constraint",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "constraint": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_constraints",
+    "category": "modifier",
+    "risk": "read",
+    "description": "List constraints",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_create_material",
+    "category": "material",
+    "risk": "write",
+    "description": "Create principled material",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "color": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0.8,
+          0.8,
+          0.8,
+          1.0
+        ]
+      },
+      "metallic": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.0
+      },
+      "roughness": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.5
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_assign_material",
+    "category": "material",
+    "risk": "write",
+    "description": "Assign material to object",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "slot": {
+        "kind": "int",
+        "nullable": false,
+        "default": 0
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_material",
+    "category": "material",
+    "risk": "write",
+    "description": "Update principled PBR values",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "color": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "metallic": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "roughness": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "alpha": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_material",
+    "category": "material",
+    "risk": "destructive",
+    "description": "Delete material datablock if unused or forced",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "force": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_duplicate_material",
+    "category": "material",
+    "risk": "write",
+    "description": "Duplicate existing material",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_clear_material_slots",
+    "category": "material",
+    "risk": "destructive",
+    "description": "Clear all material slots of object",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_new_shader_node",
+    "category": "material",
+    "risk": "write",
+    "description": "Add shader node from allowlist",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node_type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "label": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_shader_nodes",
+    "category": "material",
+    "risk": "read",
+    "description": "List nodes and sockets in shader material",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_link_shader_nodes",
+    "category": "material",
+    "risk": "write",
+    "description": "Link shader nodes by node and socket names",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "from_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "from_socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_socket": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_unlink_shader_nodes",
+    "category": "material",
+    "risk": "write",
+    "description": "Remove shader link by target node socket",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_socket": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_shader_input",
+    "category": "material",
+    "risk": "write",
+    "description": "Set a shader node socket default value",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_shader_attribute",
+    "category": "material",
+    "risk": "write",
+    "description": "Set safe scalar/enum attribute on shader node",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "attribute": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_load_image",
+    "category": "material",
+    "risk": "filesystem",
+    "description": "Load image into Blender",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_assign_image_texture",
+    "category": "material",
+    "risk": "filesystem",
+    "description": "Create image texture node for material",
+    "coverage": "UNTESTED",
+    "fields": {
+      "material": {
+        "kind": "str",
+        "nullable": false
+      },
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_object_color",
+    "category": "material",
+    "risk": "write",
+    "description": "Set viewport RGBA object color",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "color": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_create_geometry_nodes",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Create geometry node group and modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "group_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_geometry_nodes",
+    "category": "nodes",
+    "risk": "read",
+    "description": "Inspect geometry node tree on object",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_geometry_node",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Add allowlisted node to geometry tree",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node_type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "label": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_link_geometry_nodes",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Connect sockets in object geometry node group",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "from_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "from_socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_socket": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_geometry_input",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Set geometry node socket value",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_geometry_node",
+    "category": "nodes",
+    "risk": "destructive",
+    "description": "Remove node from geometry node tree",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "node": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_create_compositor",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Enable compositor scene nodes",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_compositor_nodes",
+    "category": "nodes",
+    "risk": "read",
+    "description": "List compositor nodes",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_compositor_node",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Add allowlisted compositor node",
+    "coverage": "UNTESTED",
+    "fields": {
+      "node_type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "label": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_link_compositor_nodes",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Link compositor nodes",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "from_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "from_socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "to_socket": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_compositor_input",
+    "category": "nodes",
+    "risk": "write",
+    "description": "Set compositor node input",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "node": {
+        "kind": "str",
+        "nullable": false
+      },
+      "socket": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_compositor_node",
+    "category": "nodes",
+    "risk": "destructive",
+    "description": "Remove compositor node",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "node": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_camera",
+    "category": "studio",
+    "risk": "write",
+    "description": "Create camera",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Camera"
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          -6,
+          3
+        ]
+      },
+      "rotation": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          1.25,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_active_camera",
+    "category": "studio",
+    "risk": "write",
+    "description": "Set camera used for scene rendering",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_camera_lens",
+    "category": "studio",
+    "risk": "write",
+    "description": "Set lens in millimeters",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "lens": {
+        "kind": "float",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_camera_dof",
+    "category": "studio",
+    "risk": "write",
+    "description": "Set depth of field focus/aperture",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "focus_distance": {
+        "kind": "float",
+        "nullable": false
+      },
+      "fstop": {
+        "kind": "float",
+        "nullable": false,
+        "default": 2.8
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_aim_at",
+    "category": "studio",
+    "risk": "write",
+    "description": "Rotate object toward target point",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "target": {
+        "kind": "list",
+        "nullable": false
+      },
+      "track_axis": {
+        "kind": "str",
+        "nullable": false,
+        "default": "-Z"
+      },
+      "up_axis": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Y"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_light",
+    "category": "studio",
+    "risk": "write",
+    "description": "Add POINT/SUN/SPOT/AREA light",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Light"
+      },
+      "type": {
+        "kind": "str",
+        "nullable": false,
+        "default": "AREA"
+      },
+      "energy": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1000.0
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          4
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_light",
+    "category": "studio",
+    "risk": "write",
+    "description": "Modify light energy and color",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "energy": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "color": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "size": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_text",
+    "category": "studio",
+    "risk": "write",
+    "description": "Add text object",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Text"
+      },
+      "body": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Jarvis"
+      },
+      "size": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      },
+      "extrude": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.0
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_edit_text",
+    "category": "studio",
+    "risk": "write",
+    "description": "Change font object text",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "body": {
+        "kind": "str",
+        "nullable": false
+      },
+      "size": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "extrude": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_bezier_curve",
+    "category": "studio",
+    "risk": "write",
+    "description": "Create 3D Bezier curve",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Curve"
+      },
+      "points": {
+        "kind": "list",
+        "nullable": false
+      },
+      "bevel_depth": {
+        "kind": "float",
+        "nullable": false,
+        "default": 0.02
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_curve_bevel",
+    "category": "studio",
+    "risk": "write",
+    "description": "Adjust curve bevel",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "depth": {
+        "kind": "float",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_armature",
+    "category": "studio",
+    "risk": "write",
+    "description": "Create single-bone armature",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false,
+        "default": "Armature"
+      },
+      "location": {
+        "kind": "list",
+        "nullable": false,
+        "default": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_bone",
+    "category": "studio",
+    "risk": "write",
+    "description": "Add armature edit bone",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "armature": {
+        "kind": "str",
+        "nullable": false
+      },
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "head": {
+        "kind": "list",
+        "nullable": false
+      },
+      "tail": {
+        "kind": "list",
+        "nullable": false
+      },
+      "parent": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_parent_to_armature",
+    "category": "studio",
+    "risk": "write",
+    "description": "Parent mesh to armature, creating modifier optionally",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "armature": {
+        "kind": "str",
+        "nullable": false
+      },
+      "add_modifier": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_vertex_group",
+    "category": "studio",
+    "risk": "write",
+    "description": "Add vertex group",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "group": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_assign_vertices_group",
+    "category": "studio",
+    "risk": "write",
+    "description": "Assign vertices with weight",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "group": {
+        "kind": "str",
+        "nullable": false
+      },
+      "indices": {
+        "kind": "list",
+        "nullable": false
+      },
+      "weight": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_bones",
+    "category": "studio",
+    "risk": "read",
+    "description": "List bones in armature",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_insert_keyframe",
+    "category": "animation",
+    "risk": "write",
+    "description": "Insert keyframe for object property",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "property": {
+        "kind": "str",
+        "nullable": false,
+        "default": "location"
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      },
+      "index": {
+        "kind": "int",
+        "nullable": false,
+        "default": -1
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_keyframe",
+    "category": "animation",
+    "risk": "destructive",
+    "description": "Delete keyframe",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "property": {
+        "kind": "str",
+        "nullable": false
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      },
+      "index": {
+        "kind": "int",
+        "nullable": false,
+        "default": -1
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_animate_transform",
+    "category": "animation",
+    "risk": "write",
+    "description": "Keyframe location/rotation/scale at frame",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      },
+      "location": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "rotation": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      },
+      "scale": {
+        "kind": "list",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_interpolation",
+    "category": "animation",
+    "risk": "write",
+    "description": "Set keyframe interpolation in action",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "mode": {
+        "kind": "str",
+        "nullable": false,
+        "default": "BEZIER"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_rename_action",
+    "category": "animation",
+    "risk": "write",
+    "description": "Rename animation action",
+    "coverage": "UNTESTED",
+    "fields": {
+      "old_name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "new_name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_assign_action",
+    "category": "animation",
+    "risk": "write",
+    "description": "Assign named action to object",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "action": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_clear_animation",
+    "category": "animation",
+    "risk": "destructive",
+    "description": "Clear object animation",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_create_shape_key",
+    "category": "animation",
+    "risk": "write",
+    "description": "Create shape key on mesh",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "key": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_shape_key",
+    "category": "animation",
+    "risk": "write",
+    "description": "Set shape key value and optional keyframe",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "key": {
+        "kind": "str",
+        "nullable": false
+      },
+      "value": {
+        "kind": "float",
+        "nullable": false
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_shape_keys",
+    "category": "animation",
+    "risk": "read",
+    "description": "Inspect mesh shape keys",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_nla_strip",
+    "category": "animation",
+    "risk": "write",
+    "description": "Create NLA strip from action",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "action": {
+        "kind": "str",
+        "nullable": false
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_marker",
+    "category": "animation",
+    "risk": "write",
+    "description": "Create timeline marker",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "frame": {
+        "kind": "int",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_delete_marker",
+    "category": "animation",
+    "risk": "destructive",
+    "description": "Delete timeline marker",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_list_markers",
+    "category": "animation",
+    "risk": "read",
+    "description": "List timeline markers",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_fps",
+    "category": "animation",
+    "risk": "write",
+    "description": "Set scene FPS",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "fps": {
+        "kind": "int",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_engine",
+    "category": "render",
+    "risk": "write",
+    "description": "Select BLENDER_EEVEE_NEXT / CYCLES / BLENDER_WORKBENCH",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "engine": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_resolution",
+    "category": "render",
+    "risk": "write",
+    "description": "Set resolution pixels and percentage",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "width": {
+        "kind": "int",
+        "nullable": false
+      },
+      "height": {
+        "kind": "int",
+        "nullable": false
+      },
+      "percentage": {
+        "kind": "int",
+        "nullable": false,
+        "default": 100
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_samples",
+    "category": "render",
+    "risk": "write",
+    "description": "Set render samples",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "samples": {
+        "kind": "int",
+        "nullable": false
+      },
+      "preview": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_format",
+    "category": "render",
+    "risk": "write",
+    "description": "Set PNG/JPEG/OPEN_EXR/etc output format",
+    "coverage": "UNTESTED",
+    "fields": {
+      "format": {
+        "kind": "str",
+        "nullable": false,
+        "default": "PNG"
+      },
+      "color_mode": {
+        "kind": "str",
+        "nullable": false,
+        "default": "RGBA"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_output",
+    "category": "render",
+    "risk": "filesystem",
+    "description": "Set render output path",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_render_still",
+    "category": "render",
+    "risk": "filesystem",
+    "description": "Render current frame and optionally save image",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_render_animation",
+    "category": "render",
+    "risk": "filesystem",
+    "description": "Render animation to configured output",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "explicit_failure",
+    "live_error": "Prerequisite: this action is disabled on a live bridge; use reviewed per-file launcher or new output paths."
+  },
+  {
+    "tool": "blender_set_transparent_film",
+    "category": "render",
+    "risk": "write",
+    "description": "Enable transparent-film rendering",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "enabled": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_camera_clip",
+    "category": "render",
+    "risk": "write",
+    "description": "Set camera near/far clipping planes",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "start": {
+        "kind": "float",
+        "nullable": false
+      },
+      "end": {
+        "kind": "float",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_cycles_device",
+    "category": "render",
+    "risk": "write",
+    "description": "Set cycles scene device CPU or GPU",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "device": {
+        "kind": "str",
+        "nullable": false,
+        "default": "CPU"
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_render_border",
+    "category": "render",
+    "risk": "write",
+    "description": "Set normalized crop border for scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "min_x": {
+        "kind": "float",
+        "nullable": false
+      },
+      "min_y": {
+        "kind": "float",
+        "nullable": false
+      },
+      "max_x": {
+        "kind": "float",
+        "nullable": false
+      },
+      "max_y": {
+        "kind": "float",
+        "nullable": false
+      },
+      "enabled": {
+        "kind": "bool",
+        "nullable": false,
+        "default": true
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_render_preview",
+    "category": "render",
+    "risk": "filesystem",
+    "description": "Render still at temporary low resolution",
+    "coverage": "UNTESTED",
+    "fields": {
+      "percentage": {
+        "kind": "int",
+        "nullable": false,
+        "default": 25
+      },
+      "samples": {
+        "kind": "int",
+        "nullable": false,
+        "default": 16
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_save_project",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Save current blend file",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false,
+        "default": ""
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_save_project_copy",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Save a copy preserving current working file",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_obj",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import Wavefront OBJ",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_fbx",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import FBX",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_gltf",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import glTF/GLB",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_stl",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import STL",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_usd",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import USD asset",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_import_alembic",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Import Alembic asset",
+    "coverage": "UNTESTED",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_obj",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export Wavefront OBJ",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      },
+      "selected_only": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_fbx",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export FBX",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      },
+      "selected_only": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_gltf",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export GLB/glTF",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      },
+      "selected_only": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_stl",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export STL",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      },
+      "selected_only": {
+        "kind": "bool",
+        "nullable": false,
+        "default": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_usd",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export USD scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_export_alembic",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Export Alembic scene",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "filepath": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_pack_resources",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Pack external resources in blend file",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_unpack_resources",
+    "category": "file",
+    "risk": "filesystem",
+    "description": "Unpack resources (writes filesystem)",
+    "coverage": "UNTESTED",
+    "fields": {
+      "method": {
+        "kind": "str",
+        "nullable": false,
+        "default": "USE_LOCAL"
+      }
+    },
+    "live_execution": "explicit_failure",
+    "live_error": "Prerequisite: this action is disabled on a live bridge; use reviewed per-file launcher or new output paths."
+  },
+  {
+    "tool": "blender_add_rigidbody",
+    "category": "physics",
+    "risk": "write",
+    "description": "Attach active/passive rigid body",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "type": {
+        "kind": "str",
+        "nullable": false,
+        "default": "ACTIVE"
+      },
+      "mass": {
+        "kind": "float",
+        "nullable": false,
+        "default": 1.0
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_remove_rigidbody",
+    "category": "physics",
+    "risk": "destructive",
+    "description": "Remove rigid body",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_rigidbody",
+    "category": "physics",
+    "risk": "write",
+    "description": "Set rigid body physics settings",
+    "coverage": "UNTESTED",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "mass": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "friction": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      },
+      "restitution": {
+        "kind": "float",
+        "nullable": true,
+        "default": null
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_collision",
+    "category": "physics",
+    "risk": "write",
+    "description": "Add collision modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_cloth",
+    "category": "physics",
+    "risk": "write",
+    "description": "Add cloth modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_fluid",
+    "category": "physics",
+    "risk": "write",
+    "description": "Add fluid modifier (requires configuration)",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_soft_body",
+    "category": "physics",
+    "risk": "write",
+    "description": "Add soft-body modifier",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_gravity",
+    "category": "physics",
+    "risk": "write",
+    "description": "Set scene gravity vector",
+    "coverage": "UNTESTED",
+    "fields": {
+      "gravity": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_rigidbody_world",
+    "category": "physics",
+    "risk": "write",
+    "description": "Configure rigid body scene substeps/iterations",
+    "coverage": "UNTESTED",
+    "fields": {
+      "substeps": {
+        "kind": "int",
+        "nullable": false,
+        "default": 10
+      },
+      "iterations": {
+        "kind": "int",
+        "nullable": false,
+        "default": 10
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_mark_asset",
+    "category": "assets",
+    "risk": "write",
+    "description": "Mark local datablock as asset",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_clear_asset",
+    "category": "assets",
+    "risk": "destructive",
+    "description": "Clear local asset mark",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "name": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_set_asset_description",
+    "category": "assets",
+    "risk": "write",
+    "description": "Set asset description",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "description": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_add_asset_tag",
+    "category": "assets",
+    "risk": "write",
+    "description": "Add asset catalog tag",
+    "coverage": "VERIFIED IN BLENDER",
+    "fields": {
+      "type": {
+        "kind": "str",
+        "nullable": false
+      },
+      "name": {
+        "kind": "str",
+        "nullable": false
+      },
+      "tag": {
+        "kind": "str",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_purge_orphans",
+    "category": "assets",
+    "risk": "destructive",
+    "description": "Remove unused datablocks",
+    "coverage": "UNTESTED",
+    "fields": {},
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_batch",
+    "category": "system",
+    "risk": "write",
+    "description": "Execute safe bounded sequence of other actions",
+    "coverage": "UNTESTED",
+    "fields": {
+      "steps": {
+        "kind": "list",
+        "nullable": false
+      }
+    },
+    "live_execution": "completed_in_Blender",
+    "live_error": ""
+  },
+  {
+    "tool": "blender_bridge_health",
+    "category": "bridge",
+    "risk": "read",
+    "description": "bridge_health",
+    "coverage": "VERIFIED IN BLENDER",
+    "live_execution": "All three helpers exercised in real host E2E"
+  },
+  {
+    "tool": "blender_job_status",
+    "category": "bridge",
+    "risk": "read",
+    "description": "job_status",
+    "coverage": "VERIFIED IN BLENDER",
+    "live_execution": "All three helpers exercised in real host E2E"
+  },
+  {
+    "tool": "blender_wait_job",
+    "category": "bridge",
+    "risk": "read",
+    "description": "wait_job",
+    "coverage": "VERIFIED IN BLENDER",
+    "live_execution": "All three helpers exercised in real host E2E"
+  }
+]

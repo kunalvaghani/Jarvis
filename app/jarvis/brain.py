@@ -940,6 +940,9 @@ class Brain:
                     intent = r'\b(?:analy[sz]e|reverse[- ]engineer|decompile|deconstruct|inspect|clone|rea_analyze)\b'
                 if pending['action'] in {'mcp_list_tools', 'mcp_call'}:
                     intent = r'\bmcp\b'
+                    if pending.get('value') == 'blender':
+                        from .blender_host import plan_intent as blender_intent
+                        if blender_intent(low_goal, pending): intent = r'\bblender\b'
                     if pending.get('value') == 'spotify':
                         from .spotify_host import plan_intent
                         if plan_intent(low_goal, pending): intent = r'\bspotify\b'

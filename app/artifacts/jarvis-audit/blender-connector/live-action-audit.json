@@ -1,0 +1,2810 @@
+{
+  "version": "5.2.2 LTS",
+  "hash": "d13f752e3b9c",
+  "temporary_directory": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4",
+  "actions": [
+    {
+      "tool": "blender_health",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'health', 'data': {'version': '5.2.2 LTS', 'file': '', 'scene': 'Scene', 'ready': True, 'blender_main_thread': True}}",
+      "elapsed_ms": 0.032
+    },
+    {
+      "tool": "blender_version",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'version', 'data': {'version': '5.2.2 LTS', 'version_tuple': [5, 2, 2], 'binary_path': 'D:\\\\blender.exe', 'background': True}}",
+      "elapsed_ms": 0.039
+    },
+    {
+      "tool": "blender_capabilities",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'capabilities', 'data': {'count': 200, 'actions': [{'name': 'health', 'risk': 'read', 'group': 'system'}, {'name': 'version', 'risk': 'read', 'group': 'system'}, {'name': 'capabilities', 'risk': 'read', 'group': 'system'}, {'name",
+      "elapsed_ms": 0.35
+    },
+    {
+      "tool": "blender_scene_summary",
+      "category": "system",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'scene_summary', 'data': {'scene': 'Scene', 'file': '', 'objects': 7, 'materials': 1, 'collections': 1, 'frame': 1, 'fps': 24, 'engine': 'BLENDER_WORKBENCH', 'camera': 'Camera'}}",
+      "elapsed_ms": 0.093
+    },
+    {
+      "tool": "blender_list_scenes",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_scenes', 'data': ['Scene']}",
+      "elapsed_ms": 0.027
+    },
+    {
+      "tool": "blender_list_objects",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_objects', 'data': [{'name': 'Subject', 'type': 'MESH'}, {'name': 'Target', 'type': 'MESH'}, {'name': 'Camera', 'type': 'CAMERA'}, {'name': 'Armature', 'type': 'ARMATURE'}, {'name': 'Light', 'type': 'LIGHT'}, {'name': 'Text'",
+      "elapsed_ms": 0.061
+    },
+    {
+      "tool": "blender_list_materials",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_materials', 'data': ['Material']}",
+      "elapsed_ms": 0.035
+    },
+    {
+      "tool": "blender_list_images",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_images', 'data': []}",
+      "elapsed_ms": 0.032
+    },
+    {
+      "tool": "blender_list_actions",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_actions', 'data': ['SubjectAction']}",
+      "elapsed_ms": 0.04
+    },
+    {
+      "tool": "blender_list_collections",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_collections', 'data': [{'name': 'Collection', 'objects': 0}]}",
+      "elapsed_ms": 0.029
+    },
+    {
+      "tool": "blender_get_object",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_object', 'data': {'name': 'Subject', 'type': 'MESH', 'location': [0.0, 0.0, 0.0], 'rotation': [0.0, 0.0, 0.0], 'scale': [1.0, 1.0, 1.0], 'parent': None, 'materials': ['Material'], 'modifiers': ['Jarvis Geometry Nodes']}}",
+      "elapsed_ms": 0.061
+    },
+    {
+      "tool": "blender_get_material",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Material"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_material', 'data': {'name': 'Material', 'nodes': [{'name': 'Principled BSDF', 'type': 'ShaderNodeBsdfPrincipled'}, {'name': 'Material Output', 'type': 'ShaderNodeOutputMaterial'}], 'diffuse_color': [0.800000011920929, 0.8000",
+      "elapsed_ms": 0.08
+    },
+    {
+      "tool": "blender_get_scene",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_scene', 'data': {'name': 'Scene', 'frame_start': 1, 'frame_end': 250, 'frame_current': 1, 'fps': 24, 'render_engine': 'BLENDER_WORKBENCH', 'gravity': [0.0, 0.0, -9.8100004196167], 'unit_system': 'METRIC'}}",
+      "elapsed_ms": 0.053
+    },
+    {
+      "tool": "blender_get_selection",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_selection', 'data': {'active': 'Subject', 'selected': ['Subject']}}",
+      "elapsed_ms": 0.041
+    },
+    {
+      "tool": "blender_get_dependencies",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_dependencies', 'data': {'data': 'Cube', 'parent': None, 'children': [], 'modifiers': [{'name': 'Jarvis Geometry Nodes', 'type': 'NODES'}], 'constraints': []}}",
+      "elapsed_ms": 0.071
+    },
+    {
+      "tool": "blender_get_mesh_stats",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_mesh_stats', 'data': {'vertices': 8, 'edges': 12, 'polygons': 6, 'triangles': 12}}",
+      "elapsed_ms": 0.058
+    },
+    {
+      "tool": "blender_get_render_status",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_render_status', 'data': {'engine': 'BLENDER_WORKBENCH', 'resolution_x': 64, 'resolution_y': 64, 'resolution_percentage': 100, 'filepath': '/tmp\\\\', 'image_format': 'PNG'}}",
+      "elapsed_ms": 0.08
+    },
+    {
+      "tool": "blender_get_job_hint",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'get_job_hint', 'data': {'note': 'Long renders and file loads run on Blender main thread. Poll bridge jobs; request timeouts do not cancel running Blender operators.'}}",
+      "elapsed_ms": 0.04
+    },
+    {
+      "tool": "blender_new_scene",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'new_scene', 'data': {'scene': 'Subject', 'note': 'Scene created; use set_scene to switch'}}",
+      "elapsed_ms": 0.113
+    },
+    {
+      "tool": "blender_set_scene",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Scene"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_scene', 'data': {'scene': 'Scene'}}",
+      "elapsed_ms": 0.077
+    },
+    {
+      "tool": "blender_rename_scene",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "old_name": "Scene",
+        "new_name": "Renamed"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'rename_scene', 'data': {'scene': 'Renamed'}}",
+      "elapsed_ms": 0.069
+    },
+    {
+      "tool": "blender_delete_scene",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Extra"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_scene', 'data': {'deleted': 'Extra'}}",
+      "elapsed_ms": 0.121
+    },
+    {
+      "tool": "blender_set_frame",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "frame": 5
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_frame', 'data': {'frame': 5}}",
+      "elapsed_ms": 0.073
+    },
+    {
+      "tool": "blender_set_frame_range",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "start": 1,
+        "end": 10
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_frame_range', 'data': {'start': 1, 'end': 10, 'fps': 24}}",
+      "elapsed_ms": 0.092
+    },
+    {
+      "tool": "blender_set_units",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_units', 'data': {'system': 'METRIC'}}",
+      "elapsed_ms": 0.073
+    },
+    {
+      "tool": "blender_set_world_color",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "color": [
+          0.1,
+          0.2,
+          0.3
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_world_color', 'data': {'color': [0.10000000149011612, 0.20000000298023224, 0.30000001192092896]}}",
+      "elapsed_ms": 0.086
+    },
+    {
+      "tool": "blender_new_collection",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'new_collection', 'data': {'collection': 'Subject'}}",
+      "elapsed_ms": 0.073
+    },
+    {
+      "tool": "blender_delete_collection",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Collection"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_collection', 'data': {'deleted': 'Collection'}}",
+      "elapsed_ms": 0.119
+    },
+    {
+      "tool": "blender_rename_collection",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "old_name": "Collection",
+        "new_name": "Renamed"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'rename_collection', 'data': {'name': 'Renamed'}}",
+      "elapsed_ms": 0.054
+    },
+    {
+      "tool": "blender_move_to_collection",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "collection": "Collection"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'move_to_collection', 'data': {'object': 'Subject', 'collection': 'Collection'}}",
+      "elapsed_ms": 0.088
+    },
+    {
+      "tool": "blender_hide_collection",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Collection"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'hide_collection', 'data': {'hidden': True}}",
+      "elapsed_ms": 0.074
+    },
+    {
+      "tool": "blender_select_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'select_object', 'data': {'active': 'Subject'}}",
+      "elapsed_ms": 0.081
+    },
+    {
+      "tool": "blender_select_all",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'select_all', 'data': {'selected': 7}}",
+      "elapsed_ms": 0.067
+    },
+    {
+      "tool": "blender_deselect_all",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'deselect_all', 'data': {'selected': 0}}",
+      "elapsed_ms": 0.036
+    },
+    {
+      "tool": "blender_select_by_type",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "type": "MESH"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'select_by_type', 'data': {'selected': 2}}",
+      "elapsed_ms": 0.095
+    },
+    {
+      "tool": "blender_set_active_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_active_object', 'data': {'active': 'Subject'}}",
+      "elapsed_ms": 0.053
+    },
+    {
+      "tool": "blender_rename_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "old_name": "Subject",
+        "new_name": "Renamed"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'rename_object', 'data': {'name': 'Renamed'}}",
+      "elapsed_ms": 0.081
+    },
+    {
+      "tool": "blender_delete_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_object', 'data': {'deleted': 'Subject'}}",
+      "elapsed_ms": 0.128
+    },
+    {
+      "tool": "blender_delete_selected",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_selected', 'data': {'deleted': ['Subject']}}",
+      "elapsed_ms": 0.162
+    },
+    {
+      "tool": "blender_duplicate_object",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'duplicate_object', 'data': {'name': 'Subject.001', 'linked_data': False}}",
+      "elapsed_ms": 0.194
+    },
+    {
+      "tool": "blender_set_transform",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "location": [
+          1,
+          2,
+          3
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_transform', 'data': {'name': 'Subject', 'location': [1.0, 2.0, 3.0], 'rotation': [0.0, 0.0, 0.0], 'scale': [1.0, 1.0, 1.0]}}",
+      "elapsed_ms": 0.1
+    },
+    {
+      "tool": "blender_move_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "offset": [
+          0,
+          0,
+          1
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'move_object', 'data': {'location': [0.0, 0.0, 1.0]}}",
+      "elapsed_ms": 0.088
+    },
+    {
+      "tool": "blender_rotate_object",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "degrees_xyz": [
+          0,
+          0,
+          45
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'rotate_object', 'data': {'rotation': [0.0, 0.0, 0.7853981852531433]}}",
+      "elapsed_ms": 0.095
+    },
+    {
+      "tool": "blender_scale_object",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "factor": [
+          2,
+          2,
+          2
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'scale_object', 'data': {'scale': [2.0, 2.0, 2.0]}}",
+      "elapsed_ms": 0.086
+    },
+    {
+      "tool": "blender_set_visibility",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_visibility', 'data': {'hide_viewport': False, 'hide_render': False}}",
+      "elapsed_ms": 0.035
+    },
+    {
+      "tool": "blender_set_parent",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "child": "Subject",
+        "parent": "Target"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_parent', 'data': {'child': 'Subject', 'parent': 'Target'}}",
+      "elapsed_ms": 0.095
+    },
+    {
+      "tool": "blender_clear_parent",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'clear_parent', 'data': {'name': 'Subject', 'parent': None}}",
+      "elapsed_ms": 0.053
+    },
+    {
+      "tool": "blender_set_custom_property",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "key": "audit",
+        "value": 1
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_custom_property', 'data': {'name': 'Subject', 'key': 'audit'}}",
+      "elapsed_ms": 0.075
+    },
+    {
+      "tool": "blender_remove_custom_property",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "key": "audit"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_custom_property', 'data': {'key': 'audit'}}",
+      "elapsed_ms": 0.049
+    },
+    {
+      "tool": "blender_join_objects",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "names": [
+          "Subject",
+          "Target"
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'join_objects', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 0.931
+    },
+    {
+      "tool": "blender_apply_transform",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'apply_transform', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 0.356
+    },
+    {
+      "tool": "blender_set_origin",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_origin', 'data': {'name': 'Subject', 'mode': 'ORIGIN_GEOMETRY'}}",
+      "elapsed_ms": 0.313
+    },
+    {
+      "tool": "blender_smooth_shading",
+      "category": "scene",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'smooth_shading', 'data': {'name': 'Subject', 'smooth': True}}",
+      "elapsed_ms": 0.105
+    },
+    {
+      "tool": "blender_add_empty",
+      "category": "scene",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_empty', 'data': {'name': 'Empty', 'type': 'EMPTY'}}",
+      "elapsed_ms": 0.068
+    },
+    {
+      "tool": "blender_add_cube",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "NewCube"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_cube', 'data': {'name': 'NewCube', 'type': 'MESH'}}",
+      "elapsed_ms": 0.817
+    },
+    {
+      "tool": "blender_add_uv_sphere",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_uv_sphere', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 5.411
+    },
+    {
+      "tool": "blender_add_ico_sphere",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_ico_sphere', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.856
+    },
+    {
+      "tool": "blender_add_cylinder",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_cylinder', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.891
+    },
+    {
+      "tool": "blender_add_cone",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_cone', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.83
+    },
+    {
+      "tool": "blender_add_torus",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_torus', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 5.515
+    },
+    {
+      "tool": "blender_add_plane",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_plane', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.792
+    },
+    {
+      "tool": "blender_add_grid",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_grid', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.774
+    },
+    {
+      "tool": "blender_add_circle",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_circle', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 0.673
+    },
+    {
+      "tool": "blender_add_monkey",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "VerifiedPrimitive"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_monkey', 'data': {'name': 'VerifiedPrimitive', 'type': 'MESH'}}",
+      "elapsed_ms": 1.048
+    },
+    {
+      "tool": "blender_add_mesh",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "CustomMesh",
+        "vertices": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "faces": [
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_mesh', 'data': {'name': 'CustomMesh', 'vertices': 3, 'faces': 1}}",
+      "elapsed_ms": 0.357
+    },
+    {
+      "tool": "blender_mesh_vertices",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'mesh_vertices', 'data': {'count': 8, 'vertices': [[-1.0, -1.0, -1.0], [-1.0, -1.0, 1.0], [-1.0, 1.0, -1.0], [-1.0, 1.0, 1.0], [1.0, -1.0, -1.0], [1.0, -1.0, 1.0], [1.0, 1.0, -1.0], [1.0, 1.0, 1.0]]}}",
+      "elapsed_ms": 0.14
+    },
+    {
+      "tool": "blender_set_vertex",
+      "category": "mesh",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "index": 0,
+        "coordinate": [
+          0,
+          0,
+          1
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_vertex', 'data': {'index': 0, 'coordinate': [0.0, 0.0, 1.0]}}",
+      "elapsed_ms": 0.114
+    },
+    {
+      "tool": "blender_transform_vertices",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "indices": [
+          0,
+          1
+        ],
+        "offset": [
+          0,
+          0,
+          1
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'transform_vertices', 'data': {'changed': 2}}",
+      "elapsed_ms": 0.115
+    },
+    {
+      "tool": "blender_flip_normals",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'flip_normals', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 0.08
+    },
+    {
+      "tool": "blender_recalculate_normals",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'recalculate_normals', 'data': {'name': 'Subject', 'operation': 'recalculate_normals'}}",
+      "elapsed_ms": 0.856
+    },
+    {
+      "tool": "blender_subdivide_mesh",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'subdivide_mesh', 'data': {'name': 'Subject', 'operation': 'subdivide_mesh'}}",
+      "elapsed_ms": 0.859
+    },
+    {
+      "tool": "blender_merge_by_distance",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'merge_by_distance', 'data': {'name': 'Subject', 'operation': 'merge_by_distance'}}",
+      "elapsed_ms": 0.742
+    },
+    {
+      "tool": "blender_triangulate_mesh",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'triangulate_mesh', 'data': {'name': 'Subject', 'operation': 'triangulate_mesh'}}",
+      "elapsed_ms": 0.851
+    },
+    {
+      "tool": "blender_quadrangulate_mesh",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'quadrangulate_mesh', 'data': {'name': 'Subject', 'operation': 'quadrangulate_mesh'}}",
+      "elapsed_ms": 0.822
+    },
+    {
+      "tool": "blender_extrude_region",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'extrude_region', 'data': {'name': 'Subject', 'operation': 'extrude_region'}}",
+      "elapsed_ms": 1.234
+    },
+    {
+      "tool": "blender_inset_faces",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'inset_faces', 'data': {'name': 'Subject', 'operation': 'inset_faces'}}",
+      "elapsed_ms": 0.835
+    },
+    {
+      "tool": "blender_bevel_edges",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'bevel_edges', 'data': {'name': 'Subject', 'operation': 'bevel_edges'}}",
+      "elapsed_ms": 1.586
+    },
+    {
+      "tool": "blender_unwrap_uv",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'unwrap_uv', 'data': {'name': 'Subject', 'operation': 'unwrap_uv'}}",
+      "elapsed_ms": 1.145
+    },
+    {
+      "tool": "blender_smart_uv_project",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'smart_uv_project', 'data': {'name': 'Subject', 'operation': 'smart_uv_project'}}",
+      "elapsed_ms": 0.93
+    },
+    {
+      "tool": "blender_voxel_remesh",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'voxel_remesh', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 24.796
+    },
+    {
+      "tool": "blender_decimate_mesh",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'decimate_mesh', 'data': {'modifier': 'Jarvis Decimate', 'type': 'DECIMATE', 'object': 'Subject'}}",
+      "elapsed_ms": 0.17
+    },
+    {
+      "tool": "blender_make_single_user",
+      "category": "mesh",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'make_single_user', 'data': {'data': 'Cube.002'}}",
+      "elapsed_ms": 0.076
+    },
+    {
+      "tool": "blender_add_modifier",
+      "category": "modifier",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "type": "BEVEL"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_modifier', 'data': {'modifier': 'Jarvis BEVEL', 'type': 'BEVEL', 'object': 'Subject'}}",
+      "elapsed_ms": 0.1
+    },
+    {
+      "tool": "blender_remove_modifier",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "modifier_name": "AuditModifier"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_modifier', 'data': {'removed': 'AuditModifier'}}",
+      "elapsed_ms": 0.071
+    },
+    {
+      "tool": "blender_set_modifier",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "modifier_name": "AuditModifier",
+        "properties": {
+          "levels": 1
+        }
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_modifier', 'data': {'name': 'AuditModifier', 'updated': ['levels']}}",
+      "elapsed_ms": 0.114
+    },
+    {
+      "tool": "blender_apply_modifier",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "modifier_name": "AuditModifier"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'apply_modifier', 'data': {'applied': 'AuditModifier'}}",
+      "elapsed_ms": 2.528
+    },
+    {
+      "tool": "blender_list_modifiers",
+      "category": "modifier",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_modifiers', 'data': [{'name': 'Jarvis Geometry Nodes', 'type': 'NODES'}]}",
+      "elapsed_ms": 0.043
+    },
+    {
+      "tool": "blender_add_subdivision",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_subdivision', 'data': {'modifier': 'Jarvis SUBSURF', 'type': 'SUBSURF', 'object': 'Subject'}}",
+      "elapsed_ms": 0.087
+    },
+    {
+      "tool": "blender_add_bevel",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_bevel', 'data': {'modifier': 'Jarvis BEVEL', 'type': 'BEVEL', 'object': 'Subject'}}",
+      "elapsed_ms": 0.11
+    },
+    {
+      "tool": "blender_add_solidify",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_solidify', 'data': {'modifier': 'Jarvis SOLIDIFY', 'type': 'SOLIDIFY', 'object': 'Subject'}}",
+      "elapsed_ms": 0.127
+    },
+    {
+      "tool": "blender_add_mirror",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_mirror', 'data': {'modifier': 'Jarvis MIRROR', 'type': 'MIRROR', 'object': 'Subject'}}",
+      "elapsed_ms": 0.123
+    },
+    {
+      "tool": "blender_add_array",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_array', 'data': {'modifier': 'Jarvis ARRAY', 'type': 'ARRAY', 'object': 'Subject'}}",
+      "elapsed_ms": 0.178
+    },
+    {
+      "tool": "blender_add_boolean",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "target": "Target"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_boolean', 'data': {'modifier': 'Jarvis BOOLEAN', 'type': 'BOOLEAN', 'object': 'Subject'}}",
+      "elapsed_ms": 0.2
+    },
+    {
+      "tool": "blender_add_remesh",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_remesh', 'data': {'modifier': 'Jarvis REMESH', 'type': 'REMESH', 'object': 'Subject'}}",
+      "elapsed_ms": 0.147
+    },
+    {
+      "tool": "blender_add_wireframe",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_wireframe', 'data': {'modifier': 'Jarvis WIREFRAME', 'type': 'WIREFRAME', 'object': 'Subject'}}",
+      "elapsed_ms": 0.118
+    },
+    {
+      "tool": "blender_add_constraint",
+      "category": "modifier",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "type": "COPY_LOCATION"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_constraint', 'data': {'name': 'Copy Location', 'type': 'COPY_LOCATION'}}",
+      "elapsed_ms": 0.155
+    },
+    {
+      "tool": "blender_remove_constraint",
+      "category": "modifier",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "constraint": "AuditConstraint"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_constraint', 'data': {'removed': 'AuditConstraint'}}",
+      "elapsed_ms": 0.058
+    },
+    {
+      "tool": "blender_list_constraints",
+      "category": "modifier",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_constraints', 'data': []}",
+      "elapsed_ms": 0.035
+    },
+    {
+      "tool": "blender_create_material",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'create_material', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 0.291
+    },
+    {
+      "tool": "blender_assign_material",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "material": "Material"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'assign_material', 'data': {'object': 'Subject', 'material': 'Material', 'slot': 0}}",
+      "elapsed_ms": 0.07
+    },
+    {
+      "tool": "blender_set_material",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Material",
+        "roughness": 0.3
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_material', 'data': {'material': 'Material'}}",
+      "elapsed_ms": 0.113
+    },
+    {
+      "tool": "blender_remove_material",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Material",
+        "force": true
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_material', 'data': {'deleted': 'Material'}}",
+      "elapsed_ms": 0.137
+    },
+    {
+      "tool": "blender_duplicate_material",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Material",
+        "new_name": "Renamed"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'duplicate_material', 'data': {'name': 'Renamed'}}",
+      "elapsed_ms": 0.157
+    },
+    {
+      "tool": "blender_clear_material_slots",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'clear_material_slots', 'data': {'object': 'Subject', 'slots': 0}}",
+      "elapsed_ms": 0.062
+    },
+    {
+      "tool": "blender_new_shader_node",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material",
+        "node_type": "ShaderNodeValue"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'new_shader_node', 'data': {'node': 'Value', 'type': 'ShaderNodeValue'}}",
+      "elapsed_ms": 0.187
+    },
+    {
+      "tool": "blender_list_shader_nodes",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_shader_nodes', 'data': [{'name': 'Principled BSDF', 'type': 'ShaderNodeBsdfPrincipled', 'inputs': ['Base Color', 'Metallic', 'Roughness', 'IOR', 'Alpha', 'Thin Wall', 'Normal', 'Weight', 'Diffuse Roughness', 'Subsurface Wei",
+      "elapsed_ms": 0.135
+    },
+    {
+      "tool": "blender_link_shader_nodes",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material",
+        "from_node": "Principled BSDF",
+        "from_socket": "BSDF",
+        "to_node": "Material Output",
+        "to_socket": "Surface"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'link_shader_nodes', 'data': {'linked': True}}",
+      "elapsed_ms": 0.162
+    },
+    {
+      "tool": "blender_unlink_shader_nodes",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material",
+        "to_node": "Material Output",
+        "to_socket": "Surface"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'unlink_shader_nodes', 'data': {'unlinked': 1}}",
+      "elapsed_ms": 0.158
+    },
+    {
+      "tool": "blender_set_shader_input",
+      "category": "material",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "material": "Material",
+        "node": "Principled BSDF",
+        "socket": "Roughness",
+        "value": [
+          0.2
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_shader_input', 'data': {'node': 'Principled BSDF', 'socket': 'Roughness'}}",
+      "elapsed_ms": 0.151
+    },
+    {
+      "tool": "blender_set_shader_attribute",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material",
+        "node": "Math",
+        "attribute": "operation",
+        "value": "MULTIPLY"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_shader_attribute', 'data': {'node': 'Math', 'attribute': 'operation'}}",
+      "elapsed_ms": 0.099
+    },
+    {
+      "tool": "blender_load_image",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.png"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'load_image', 'data': {'image': 'input.png'}}",
+      "elapsed_ms": 1.867
+    },
+    {
+      "tool": "blender_assign_image_texture",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "material": "Material",
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.png"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'assign_image_texture', 'data': {'image': 'input.png', 'node': 'Image Texture'}}",
+      "elapsed_ms": 1.679
+    },
+    {
+      "tool": "blender_set_object_color",
+      "category": "material",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "color": [
+          0.2,
+          0.4,
+          0.6,
+          1
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_object_color', 'data': {'color': [0.20000000298023224, 0.4000000059604645, 0.6000000238418579, 1.0]}}",
+      "elapsed_ms": 0.063
+    },
+    {
+      "tool": "blender_create_geometry_nodes",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "group_name": "Geometry"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'create_geometry_nodes', 'data': {'group': 'Geometry.001', 'modifier': 'Jarvis Geometry Nodes'}}",
+      "elapsed_ms": 0.264
+    },
+    {
+      "tool": "blender_list_geometry_nodes",
+      "category": "nodes",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_geometry_nodes', 'data': [{'name': 'Group Input', 'type': 'NodeGroupInput'}, {'name': 'Group Output', 'type': 'NodeGroupOutput'}]}",
+      "elapsed_ms": 0.073
+    },
+    {
+      "tool": "blender_add_geometry_node",
+      "category": "nodes",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "node_type": "ShaderNodeValue"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_geometry_node', 'data': {'node': 'Value', 'type': 'ShaderNodeValue'}}",
+      "elapsed_ms": 0.107
+    },
+    {
+      "tool": "blender_link_geometry_nodes",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "from_node": "Group Input",
+        "from_socket": "Geometry",
+        "to_node": "Group Output",
+        "to_socket": "Geometry"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'link_geometry_nodes', 'data': {'linked': True}}",
+      "elapsed_ms": 0.107
+    },
+    {
+      "tool": "blender_set_geometry_input",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "node": "Math",
+        "socket": "Value",
+        "value": [
+          0.3
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_geometry_input', 'data': {'node': 'Math', 'socket': 'Value'}}",
+      "elapsed_ms": 0.101
+    },
+    {
+      "tool": "blender_remove_geometry_node",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "node": "Math"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_geometry_node', 'data': {'removed': 'Math'}}",
+      "elapsed_ms": 0.072
+    },
+    {
+      "tool": "blender_create_compositor",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'create_compositor', 'data': {'enabled': True}}",
+      "elapsed_ms": 0.04
+    },
+    {
+      "tool": "blender_list_compositor_nodes",
+      "category": "nodes",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_compositor_nodes', 'data': [{'name': 'Render Layers', 'type': 'CompositorNodeRLayers'}, {'name': 'Group Output', 'type': 'NodeGroupOutput'}]}",
+      "elapsed_ms": 0.034
+    },
+    {
+      "tool": "blender_add_compositor_node",
+      "category": "nodes",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "node_type": "CompositorNodeBlur"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_compositor_node', 'data': {'node': 'Blur'}}",
+      "elapsed_ms": 0.147
+    },
+    {
+      "tool": "blender_link_compositor_nodes",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "from_node": "Render Layers",
+        "from_socket": "Image",
+        "to_node": "Group Output",
+        "to_socket": "Image"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'link_compositor_nodes', 'data': {'linked': True}}",
+      "elapsed_ms": 0.08
+    },
+    {
+      "tool": "blender_set_compositor_input",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "node": "Math",
+        "socket": "Value",
+        "value": [
+          0.4
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_compositor_input', 'data': {'node': 'Math'}}",
+      "elapsed_ms": 0.081
+    },
+    {
+      "tool": "blender_remove_compositor_node",
+      "category": "nodes",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "node": "Math"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_compositor_node', 'data': {'removed': 'Math'}}",
+      "elapsed_ms": 0.062
+    },
+    {
+      "tool": "blender_add_camera",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_camera', 'data': {'camera': 'Camera.001'}}",
+      "elapsed_ms": 0.086
+    },
+    {
+      "tool": "blender_set_active_camera",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Camera"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_active_camera', 'data': {'camera': 'Camera'}}",
+      "elapsed_ms": 0.068
+    },
+    {
+      "tool": "blender_set_camera_lens",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Camera",
+        "lens": 45
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_camera_lens', 'data': {'lens': 45.0}}",
+      "elapsed_ms": 0.097
+    },
+    {
+      "tool": "blender_set_camera_dof",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Camera",
+        "focus_distance": 4
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_camera_dof', 'data': {'focus_distance': 4.0}}",
+      "elapsed_ms": 0.105
+    },
+    {
+      "tool": "blender_aim_at",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Camera",
+        "target": [
+          0,
+          0,
+          0
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'aim_at', 'data': {'rotation': [1.1071487665176392, -0.0, 0.0]}}",
+      "elapsed_ms": 0.104
+    },
+    {
+      "tool": "blender_add_light",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_light', 'data': {'light': 'Light.001', 'type': 'AREA'}}",
+      "elapsed_ms": 0.109
+    },
+    {
+      "tool": "blender_set_light",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Light",
+        "energy": 100
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_light', 'data': {'light': 'Light'}}",
+      "elapsed_ms": 0.052
+    },
+    {
+      "tool": "blender_add_text",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_text', 'data': {'name': 'Text.001'}}",
+      "elapsed_ms": 0.078
+    },
+    {
+      "tool": "blender_edit_text",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Text",
+        "body": "Audit"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'edit_text', 'data': {'name': 'Text', 'body': 'Audit'}}",
+      "elapsed_ms": 0.059
+    },
+    {
+      "tool": "blender_add_bezier_curve",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "points": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_bezier_curve', 'data': {'curve': 'Curve.001', 'points': 2}}",
+      "elapsed_ms": 0.17
+    },
+    {
+      "tool": "blender_set_curve_bevel",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Curve",
+        "depth": 0.02
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_curve_bevel', 'data': {'bevel_depth': 0.019999999552965164}}",
+      "elapsed_ms": 0.055
+    },
+    {
+      "tool": "blender_add_armature",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_armature', 'data': {'armature': 'Armature.001'}}",
+      "elapsed_ms": 1.031
+    },
+    {
+      "tool": "blender_add_bone",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "armature": "Armature",
+        "name": "AuditBone",
+        "head": [
+          0,
+          0,
+          0
+        ],
+        "tail": [
+          0,
+          0,
+          1
+        ],
+        "parent": "Bone"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_bone', 'data': {'bone': 'AuditBone'}}",
+      "elapsed_ms": 0.761
+    },
+    {
+      "tool": "blender_parent_to_armature",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "armature": "Armature"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'parent_to_armature', 'data': {'mesh': 'Subject', 'armature': 'Armature'}}",
+      "elapsed_ms": 0.143
+    },
+    {
+      "tool": "blender_add_vertex_group",
+      "category": "studio",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "group": "AuditGroup"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_vertex_group', 'data': {'group': 'AuditGroup'}}",
+      "elapsed_ms": 0.111
+    },
+    {
+      "tool": "blender_assign_vertices_group",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "group": "AuditGroup",
+        "indices": [
+          0,
+          1
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'assign_vertices_group', 'data': {'assigned': 2}}",
+      "elapsed_ms": 0.08
+    },
+    {
+      "tool": "blender_list_bones",
+      "category": "studio",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Armature"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_bones', 'data': [{'name': 'Bone', 'head': [0.0, 0.0, 0.0], 'tail': [0.0, 0.0, 1.0], 'parent': None}]}",
+      "elapsed_ms": 0.086
+    },
+    {
+      "tool": "blender_insert_keyframe",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "frame": 5
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'insert_keyframe', 'data': {'name': 'Subject', 'frame': 5, 'property': 'location'}}",
+      "elapsed_ms": 0.069
+    },
+    {
+      "tool": "blender_delete_keyframe",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "frame": 1,
+        "property": "location"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_keyframe', 'data': {'name': 'Subject', 'frame': 1, 'property': 'location'}}",
+      "elapsed_ms": 0.05
+    },
+    {
+      "tool": "blender_animate_transform",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "frame": 5,
+        "location": [
+          2,
+          0,
+          0
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'animate_transform', 'data': {'name': 'Subject', 'keyed': ['location'], 'frame': 5}}",
+      "elapsed_ms": 0.089
+    },
+    {
+      "tool": "blender_set_interpolation",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "mode": "LINEAR"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_interpolation', 'data': {'keyframes': 6, 'mode': 'LINEAR'}}",
+      "elapsed_ms": 0.13
+    },
+    {
+      "tool": "blender_rename_action",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "old_name": "AuditAction",
+        "new_name": "Renamed"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'rename_action', 'data': {'action': 'Renamed'}}",
+      "elapsed_ms": 0.04
+    },
+    {
+      "tool": "blender_assign_action",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "action": "AuditAction"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'assign_action', 'data': {'name': 'Subject', 'action': 'AuditAction'}}",
+      "elapsed_ms": 0.045
+    },
+    {
+      "tool": "blender_clear_animation",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'clear_animation', 'data': {'cleared': 'Subject'}}",
+      "elapsed_ms": 0.047
+    },
+    {
+      "tool": "blender_create_shape_key",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "key": "audit"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'create_shape_key', 'data': {'key': 'audit'}}",
+      "elapsed_ms": 0.13
+    },
+    {
+      "tool": "blender_set_shape_key",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "key": "AuditShape",
+        "value": 0.3
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_shape_key', 'data': {'key': 'AuditShape', 'value': 0.30000001192092896}}",
+      "elapsed_ms": 0.053
+    },
+    {
+      "tool": "blender_list_shape_keys",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_shape_keys', 'data': [{'name': 'Basis', 'value': 1.0}, {'name': 'AuditShape', 'value': 1.0}]}",
+      "elapsed_ms": 0.036
+    },
+    {
+      "tool": "blender_set_nla_strip",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject",
+        "action": "AuditAction",
+        "frame": 5
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_nla_strip', 'data': {'strip': 'AuditAction', 'track': 'Jarvis NLA'}}",
+      "elapsed_ms": 0.157
+    },
+    {
+      "tool": "blender_add_marker",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject",
+        "frame": 5
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_marker', 'data': {'name': 'Subject', 'frame': 5}}",
+      "elapsed_ms": 0.109
+    },
+    {
+      "tool": "blender_delete_marker",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'delete_marker', 'data': {'deleted': 'Subject'}}",
+      "elapsed_ms": 0.042
+    },
+    {
+      "tool": "blender_list_markers",
+      "category": "animation",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'list_markers', 'data': []}",
+      "elapsed_ms": 0.024
+    },
+    {
+      "tool": "blender_set_fps",
+      "category": "animation",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "fps": 24
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_fps', 'data': {'fps': 24}}",
+      "elapsed_ms": 0.043
+    },
+    {
+      "tool": "blender_set_render_engine",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "engine": "CYCLES"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_engine', 'data': {'engine': 'CYCLES'}}",
+      "elapsed_ms": 0.183
+    },
+    {
+      "tool": "blender_set_render_resolution",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "width": 96,
+        "height": 80
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_resolution', 'data': {'resolution': [96, 80, 100]}}",
+      "elapsed_ms": 0.078
+    },
+    {
+      "tool": "blender_set_render_samples",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "samples": 1
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_samples', 'data': {'samples': 1}}",
+      "elapsed_ms": 0.042
+    },
+    {
+      "tool": "blender_set_render_format",
+      "category": "render",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_format', 'data': {'format': 'PNG', 'color_mode': 'RGBA'}}",
+      "elapsed_ms": 0.062
+    },
+    {
+      "tool": "blender_set_render_output",
+      "category": "render",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\set_render_output.png"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_output', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\set_render_output.png'}}",
+      "elapsed_ms": 1.656
+    },
+    {
+      "tool": "blender_render_still",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\render_still.png"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'render_still', 'data': {'rendered': True, 'saved': True, 'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\render_still.png'}}",
+      "elapsed_ms": 2113.484
+    },
+    {
+      "tool": "blender_render_animation",
+      "category": "render",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "explicit_failure",
+      "error_type": "RuntimeError",
+      "error": "Prerequisite: this action is disabled on a live bridge; use reviewed per-file launcher or new output paths.",
+      "elapsed_ms": 0.019
+    },
+    {
+      "tool": "blender_set_transparent_film",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_transparent_film', 'data': {'transparent': True}}",
+      "elapsed_ms": 0.038
+    },
+    {
+      "tool": "blender_set_camera_clip",
+      "category": "render",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Camera",
+        "start": 0.1,
+        "end": 100
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_camera_clip', 'data': {'start': 0.1, 'end': 100}}",
+      "elapsed_ms": 0.058
+    },
+    {
+      "tool": "blender_set_cycles_device",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_cycles_device', 'data': {'device': 'CPU', 'note': 'GPU requires configured Blender Cycles compute backend; hardware availability not verified'}}",
+      "elapsed_ms": 0.147
+    },
+    {
+      "tool": "blender_set_render_border",
+      "category": "render",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "min_x": 0,
+        "min_y": 0,
+        "max_x": 1,
+        "max_y": 1
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_render_border', 'data': {'border': [0, 0, 1, 1], 'enabled': True}}",
+      "elapsed_ms": 0.075
+    },
+    {
+      "tool": "blender_render_preview",
+      "category": "render",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'render_preview', 'data': {'rendered': True, 'resolution_percentage': 25}}",
+      "elapsed_ms": 8.799
+    },
+    {
+      "tool": "blender_save_project",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\save_project.blend"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'save_project', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\save_project.blend', 'saved': True}}",
+      "elapsed_ms": 757.612
+    },
+    {
+      "tool": "blender_save_project_copy",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\save_project_copy.blend"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'save_project_copy', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\save_project_copy.blend', 'saved_copy': True}}",
+      "elapsed_ms": 291.146
+    },
+    {
+      "tool": "blender_import_obj",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.obj"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_obj', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.obj', 'format': 'obj', 'export': False}}",
+      "elapsed_ms": 2.517
+    },
+    {
+      "tool": "blender_import_fbx",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.fbx"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_fbx', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.fbx', 'format': 'fbx', 'export': False}}",
+      "elapsed_ms": 15.46
+    },
+    {
+      "tool": "blender_import_gltf",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.glb"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_gltf', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.glb', 'format': 'gltf', 'export': False}}",
+      "elapsed_ms": 40.522
+    },
+    {
+      "tool": "blender_import_stl",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.stl"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_stl', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.stl', 'format': 'stl', 'export': False}}",
+      "elapsed_ms": 1.997
+    },
+    {
+      "tool": "blender_import_usd",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.usdc"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_usd', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.usdc', 'format': 'usd', 'export': False}}",
+      "elapsed_ms": 17.011
+    },
+    {
+      "tool": "blender_import_alembic",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\input.abc"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'import_alembic', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\input.abc', 'format': 'alembic', 'export': False}}",
+      "elapsed_ms": 7.466
+    },
+    {
+      "tool": "blender_export_obj",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_obj.obj"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_obj', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_obj.obj', 'format': 'obj', 'export': True}}",
+      "elapsed_ms": 4.473
+    },
+    {
+      "tool": "blender_export_fbx",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_fbx.fbx"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_fbx', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_fbx.fbx', 'format': 'fbx', 'export': True}}",
+      "elapsed_ms": 18.177
+    },
+    {
+      "tool": "blender_export_gltf",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_gltf.glb"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_gltf', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_gltf.glb', 'format': 'gltf', 'export': True}}",
+      "elapsed_ms": 17.024
+    },
+    {
+      "tool": "blender_export_stl",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_stl.stl"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_stl', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_stl.stl', 'format': 'stl', 'export': True}}",
+      "elapsed_ms": 4.628
+    },
+    {
+      "tool": "blender_export_usd",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_usd.usdc"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_usd', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_usd.usdc', 'format': 'usd', 'export': True}}",
+      "elapsed_ms": 32.069
+    },
+    {
+      "tool": "blender_export_alembic",
+      "category": "file",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "filepath": "C:\\Users\\kunal\\AppData\\Local\\Temp\\jarvis-blender-audit-m9iprih4\\export_alembic.abc"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'export_alembic', 'data': {'filepath': 'C:\\\\Users\\\\kunal\\\\AppData\\\\Local\\\\Temp\\\\jarvis-blender-audit-m9iprih4\\\\export_alembic.abc', 'format': 'alembic', 'export': True}}",
+      "elapsed_ms": 21.18
+    },
+    {
+      "tool": "blender_pack_resources",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'pack_resources', 'data': {'packed': True}}",
+      "elapsed_ms": 0.18
+    },
+    {
+      "tool": "blender_unpack_resources",
+      "category": "file",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "explicit_failure",
+      "error_type": "RuntimeError",
+      "error": "Prerequisite: this action is disabled on a live bridge; use reviewed per-file launcher or new output paths.",
+      "elapsed_ms": 0.022
+    },
+    {
+      "tool": "blender_add_rigidbody",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_rigidbody', 'data': {'name': 'Subject', 'type': 'ACTIVE'}}",
+      "elapsed_ms": 2.281
+    },
+    {
+      "tool": "blender_remove_rigidbody",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'remove_rigidbody', 'data': {'removed': 'Subject'}}",
+      "elapsed_ms": 0.72
+    },
+    {
+      "tool": "blender_set_rigidbody",
+      "category": "physics",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_rigidbody', 'data': {'name': 'Subject'}}",
+      "elapsed_ms": 0.034
+    },
+    {
+      "tool": "blender_add_collision",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_collision', 'data': {'modifier': 'Jarvis COLLISION', 'type': 'COLLISION'}}",
+      "elapsed_ms": 0.112
+    },
+    {
+      "tool": "blender_add_cloth",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_cloth', 'data': {'modifier': 'Jarvis CLOTH', 'type': 'CLOTH'}}",
+      "elapsed_ms": 0.105
+    },
+    {
+      "tool": "blender_add_fluid",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_fluid', 'data': {'modifier': 'Jarvis FLUID', 'type': 'FLUID'}}",
+      "elapsed_ms": 0.124
+    },
+    {
+      "tool": "blender_add_soft_body",
+      "category": "physics",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_soft_body', 'data': {'modifier': 'Jarvis SOFT_BODY', 'type': 'SOFT_BODY'}}",
+      "elapsed_ms": 0.124
+    },
+    {
+      "tool": "blender_set_gravity",
+      "category": "physics",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "gravity": [
+          0,
+          0,
+          -9.81
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_gravity', 'data': {'gravity': [0.0, 0.0, -9.8100004196167]}}",
+      "elapsed_ms": 0.059
+    },
+    {
+      "tool": "blender_set_rigidbody_world",
+      "category": "physics",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_rigidbody_world', 'data': {'substeps': 10, 'iterations': 10}}",
+      "elapsed_ms": 0.558
+    },
+    {
+      "tool": "blender_mark_asset",
+      "category": "assets",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "type": "OBJECT",
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'mark_asset', 'data': {'marked': 'Subject'}}",
+      "elapsed_ms": 0.092
+    },
+    {
+      "tool": "blender_clear_asset",
+      "category": "assets",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "type": "OBJECT",
+        "name": "Subject"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'clear_asset', 'data': {'cleared': 'Subject'}}",
+      "elapsed_ms": 0.051
+    },
+    {
+      "tool": "blender_set_asset_description",
+      "category": "assets",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "type": "OBJECT",
+        "name": "Subject",
+        "description": "Audit asset"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'set_asset_description', 'data': {'description': 'Audit asset'}}",
+      "elapsed_ms": 0.09
+    },
+    {
+      "tool": "blender_add_asset_tag",
+      "category": "assets",
+      "coverage": "VERIFIED IN BLENDER",
+      "parameters": {
+        "type": "OBJECT",
+        "name": "Subject",
+        "tag": "fixture"
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'add_asset_tag', 'data': {'tag': 'fixture'}}",
+      "elapsed_ms": 0.152
+    },
+    {
+      "tool": "blender_purge_orphans",
+      "category": "assets",
+      "coverage": "UNTESTED",
+      "parameters": {},
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'purge_orphans', 'data': {'purged': True}}",
+      "elapsed_ms": 0.543
+    },
+    {
+      "tool": "blender_batch",
+      "category": "system",
+      "coverage": "UNTESTED",
+      "parameters": {
+        "steps": [
+          {
+            "action": "add_empty",
+            "params": {
+              "name": "Batch"
+            }
+          }
+        ]
+      },
+      "execution": "completed_in_Blender",
+      "result_excerpt": "{'action': 'batch', 'data': {'partial': False, 'completed': 1, 'results': [{'action': 'add_empty', 'result': {'action': 'add_empty', 'data': {'name': 'Batch', 'type': 'EMPTY'}}}]}}",
+      "elapsed_ms": 0.116
+    }
+  ],
+  "node_types": [
+    {
+      "category": "shader",
+      "type": "ShaderNodeAddShader",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeAttribute",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeBsdfDiffuse",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeBsdfGlossy",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeBsdfPrincipled",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeBsdfTransparent",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeBump",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeCombineColor",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeCombineXYZ",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeDisplacement",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeEmission",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeFresnel",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeLayerWeight",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeMapping",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeMath",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeMix",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeMixShader",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeNormalMap",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeOutputMaterial",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeRGB",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeSeparateColor",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeSeparateXYZ",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexChecker",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexCoord",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexGradient",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexImage",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexNoise",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeTexVoronoi",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeValToRGB",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeValue",
+      "supported": true
+    },
+    {
+      "category": "shader",
+      "type": "ShaderNodeVectorMath",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "FunctionNodeCompare",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeCurvePrimitiveLine",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeCurveToMesh",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeDeleteGeometry",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeDistributePointsOnFaces",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeExtrudeMesh",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeGeometryToInstance",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInputIndex",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInputNamedAttribute",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInputNormal",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInputPosition",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInputSceneTime",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeInstanceOnPoints",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeJoinGeometry",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMergeByDistance",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshBoolean",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshCircle",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshCube",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshCylinder",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshGrid",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshIcoSphere",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshToCurve",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeMeshUVSphere",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeRealizeInstances",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeSetMaterial",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeSetPosition",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeSetShadeSmooth",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeStoreNamedAttribute",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeSubdivideMesh",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeSwitch",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "GeometryNodeTransform",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "ShaderNodeCombineXYZ",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "ShaderNodeMath",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "ShaderNodeSeparateXYZ",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "ShaderNodeValue",
+      "supported": true
+    },
+    {
+      "category": "geometry",
+      "type": "ShaderNodeVectorMath",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeAlphaOver",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeBlur",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeBrightContrast",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeColorBalance",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeComposite",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeDenoise",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeGlare",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeHueSat",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeImage",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeLensdist",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeMapRange",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeMath",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeMixRGB",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeNormalize",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeRGB",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeRLayers",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeScale",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeTransform",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeTranslate",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeValToRGB",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeValue",
+      "supported": true
+    },
+    {
+      "category": "compositor",
+      "type": "CompositorNodeViewer",
+      "supported": true
+    }
+  ],
+  "effects": {
+    "reopened_obj": true,
+    "reopened_fbx": true,
+    "reopened_gltf": true,
+    "reopened_stl": true,
+    "reopened_blend_subject_mesh": true
+  },
+  "summary": {
+    "VERIFIED IN BLENDER": 104,
+    "SIMULATED": 0,
+    "UNTESTED": 96,
+    "explicit_failures": 2
+  }
+}
