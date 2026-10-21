@@ -240,6 +240,11 @@ def fixture_window():
             time.sleep(.05)
         if not handle:
             pytest.skip('BLOCKED: disposable Win32 window did not appear.')
+        from pywinauto import Desktop
+        Desktop(backend='uia').window(handle=handle).wrapper_object().set_focus()
+        time.sleep(.15)
+        if win32gui.GetForegroundWindow() != handle:
+            pytest.skip('BLOCKED: the owned demonstration fixture could not obtain foreground focus.')
         # Diagnostics only: a UIA test once stalled during a full run while the desktop was in active use.
         # If that recurs, every thread's stack is written to the log (the outcome is not changed).
         import faulthandler
@@ -257,7 +262,17 @@ def button_point(handle, name):
     window = Desktop(backend='uia').window(handle=handle).wrapper_object()
     element = next(c for c in window.descendants() if c.element_info.name == name)
     rect = element.rectangle()
-    return (rect.left + rect.right) // 2, (rect.top + rect.bottom) // 2, element
+    x, y = (rect.left + rect.right) // 2, (rect.top + rect.bottom) // 2
+    require_fixture_point(handle, x, y)
+    return x, y, element
+
+
+def require_fixture_point(handle, x, y):
+    """Admission oracle for a native fixture, never a substitute for recorder assertions."""
+    import win32gui
+    target = win32gui.WindowFromPoint((x, y))
+    if not target or win32gui.GetAncestor(target, 2) != handle:
+        pytest.skip('BLOCKED: the owned demonstration fixture point is occluded or the desktop changed.')
 
 
 def test_P05_demonstration_requires_consent_and_speaks_request(tmp_path, fixture_window):
@@ -331,6 +346,7 @@ def test_P05_demonstration_ignores_injected_outside_and_password_events(tmp_path
                   if c.element_info.control_type == 'Edit' and c.element_info.element.CurrentIsPassword)
     rect = secret.rectangle()
     px, py = (rect.left + rect.right) // 2, (rect.top + rect.bottom) // 2
+    require_fixture_point(fixture_window, px, py)
     assert session.process(px, py, 0x0201, 0) is None  # password field: never recorded
     reasons = [d['reason'] for d in session.state['discarded']]
     assert reasons == ['injected input (Jarvis cursor or automation)', 'outside the selected window', 'password or private field']

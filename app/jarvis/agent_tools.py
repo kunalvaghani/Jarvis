@@ -138,9 +138,11 @@ def execute(actions, step, cancelled):
     if name == 'runtime_capabilities':
         from .tools import ToolRegistry
         from .capabilities import runtime_context
-        rows = ToolRegistry(actions).search(step['value'])
+        registry = ToolRegistry(actions)
+        rows = registry.search(step['value'])
         result = runtime_context(step['value'], rows, getattr(actions, 'skills', None),
                                  actions.memory.task_context(step['value']))
+        result['self_model'] = registry.self_model(row['action'] for row in rows)
         loaded = getattr(actions, '_discovered_tools', None)
         if not isinstance(loaded, set):
             loaded = actions._discovered_tools = set()

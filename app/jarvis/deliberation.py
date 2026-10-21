@@ -58,6 +58,42 @@ EXPLICIT_APPROVAL = re.compile(APPROVE.pattern + r"(?:[,.! ]*(?:please|thanks|th
 RISKY_AMBIGUITY = re.compile(r"\b(?:maybe|perhaps|possibly|not sure|might|do not|don't|never)\b", re.I)
 
 
+def execution_path(command, runtime=None, apps=None, resuming=False):
+    """Select existing executors without inference, I/O or granting authority.
+
+    REFLEX means a known grammar, not permission or verified completion. FAST
+    uses the existing lightweight question/simple-task path. DEEP preserves
+    planning quality, clarification and progress-aware recovery.
+    """
+    kind, goal = command.kind, (command.value or '').strip()
+    if kind not in {'task', 'code_task', 'ask'}:
+        return {'path': 'REFLEX', 'reason': 'registered_command'}
+    if resuming or kind == 'code_task':
+        return {'path': 'DEEP', 'reason': 'checkpoint_or_code'}
+    if kind == 'ask':
+        return {'path': 'FAST', 'reason': 'question'}
+    if HIGH_RISK_TEXT.search(goal) or RISKY_AMBIGUITY.search(goal):
+        return {'path': 'DEEP', 'reason': 'risk_or_ambiguity'}
+    runtime = runtime if isinstance(runtime, dict) else {}
+    try:
+        if runtime.get('direct_execution', False):
+            from .direct_execution import compile_steps
+            from .brain import explicit_file_plan, explicit_command_plan
+            if compile_steps(goal) or explicit_file_plan(goal) or explicit_command_plan(goal):
+                return {'path': 'REFLEX', 'reason': 'exact_direct_workflow'}
+        if runtime.get('fast_workflows', False):
+            from .fast_workflows import compile_workflow
+            if compile_workflow(goal, apps or {}):
+                return {'path': 'REFLEX', 'reason': 'exact_fast_workflow'}
+    except (ValueError, TypeError, KeyError):
+        # Recognition is preparation only. Invalid/unknown inputs go through the
+        # original validation/clarification path; no action has been attempted.
+        return {'path': 'DEEP', 'reason': 'recognition_declined'}
+    if len(goal) < 12 or TRIVIAL_TASK.match(goal):
+        return {'path': 'FAST', 'reason': 'simple_task'}
+    return {'path': 'DEEP', 'reason': 'open_ended_task'}
+
+
 def ledger_text(value, limit=300):
     """Keep readback local and omit recognized private/credential text."""
     from .cloud_policy import SECRET, PRIVATE, PRIVATE_APP

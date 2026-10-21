@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-21",
+  "scope": "one live installed local model call through existing GPU admission; public arithmetic only",
+  "model": "qwen2.5:0.5b",
+  "answer_matches_four": true,
+  "elapsed_seconds": 2.5438411999998607,
+  "done": true,
+  "total_duration": 2378718500,
+  "load_duration": 2193015700,
+  "prompt_eval_count": 43,
+  "prompt_eval_duration": 154973000,
+  "eval_count": 2,
+  "eval_duration": 13066000
+}

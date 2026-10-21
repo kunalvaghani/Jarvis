@@ -229,10 +229,13 @@ class SelfEvolution:
         self._resource_checked = (-float('inf'),False)
         self.skill_repairs = {}         # skill_id -> failure causes awaiting a validated FIX.
         self._skills_checked_at = -float('inf')
+        self._capabilities_checked_at = -float('inf')
         self._memory_checked_at = -float('inf')
         self.last_memory_report = None
         self._research_checked_at = -float('inf')
         self.last_research = None
+        from .technology_watch import TechnologyWatch
+        self.technology_watch = TechnologyWatch(actions.base, getattr(actions, 'config', {}).get('technology_watch'))
         self._load()
 
     # --- persistence (crash-safe, atomic) --------------------------------------------------------
@@ -447,6 +450,24 @@ class SelfEvolution:
         self.stop.set()
         self.stop_current()
 
+    def capability_maintenance(self):
+        """Warm existing discovery during true idle; no providers or inference."""
+        if not self._idle():
+            return False
+        from .tools import ToolRegistry
+        from .capabilities import _tool_index
+        from .capability_model import model_for
+        registry = ToolRegistry(self.actions)
+        cancelled = lambda: (self.stop.is_set() or self.busy()
+                             or self.clock() - self.last_activity < self.options['idle_seconds'])
+        model = model_for(self.actions)
+        if model is None or not model.refresh(registry.specs, cancelled, force=True):
+            return False
+        if cancelled():
+            return False
+        _tool_index(tuple((s.name, s.description) for s in registry.specs.values()))
+        return True
+
     def skill_maintenance(self):
         """Idle-time living-skill upkeep: trust from verified outcomes and degraded-skill detection.
 
@@ -546,6 +567,16 @@ class SelfEvolution:
     def _run(self):
         while not self.stop.wait(self.options["poll_seconds"]):
             try:
+                if self._idle() and self.clock() - self._capabilities_checked_at >= 600:
+                    self._capabilities_checked_at = self.clock()
+                    self.capability_maintenance()
+                if self._idle() and self.technology_watch.enabled:
+                    finding = self.technology_watch.tick(cancelled=lambda: (
+                        self.stop.is_set() or self.busy()
+                        or self.clock() - self.last_activity < self.options['idle_seconds']))
+                    if finding:
+                        self.notify('notice', 'Official release changed: ' + finding['source'] + ' ' + finding['release']
+                                    + '. Compatibility is untested; review ' + finding['url'])
                 if self._idle() and self.clock() - self._skills_checked_at >= 600:
                     self._skills_checked_at = self.clock()
                     self.skill_maintenance()
