@@ -23,6 +23,23 @@ class DirectFileTests(unittest.TestCase):
     def run_task(self, goal):
         return self.actions.execute(Command('task', goal), lambda: False)
 
+    def test_read_exact_scoped_file_returns_independently_verified_bytes(self):
+        (self.folder / 'one.txt').write_bytes('café\r\npublic'.encode('utf-8'))
+        self.assertEqual(self.run_task('Read one.txt in this folder.'), 'café\r\npublic')
+        state = self.actions.task_state.snapshot()
+        self.assertEqual(state['status'], 'completed')
+        self.assertTrue(state['plan']['completed'][0]['verified'])
+        self.actions.brain.run.assert_not_called()
+
+    def test_read_incorrect_receipt_cannot_complete(self):
+        from types import SimpleNamespace
+        (self.folder / 'one.txt').write_text('public', encoding='utf-8')
+        with patch('jarvis.tools.ToolRegistry.execute', return_value=SimpleNamespace(evidence='wrong')) as execute:
+            result = self.run_task('Read one.txt in this folder.')
+        self.assertIn('not verified', result)
+        execute.assert_called_once()
+        self.assertEqual(self.actions.task_state.snapshot()['status'], 'paused')
+
     def test_create_and_modify_preserve_unicode_without_inference(self):
         result = self.run_task('create file hello.txt in fixture containing café हिन्दी')
         path = self.folder / 'hello.txt'

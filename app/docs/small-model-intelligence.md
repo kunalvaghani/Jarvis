@@ -44,22 +44,31 @@ An explicit `--train --base <local-original-base> --base-manifest <manifest.json
 
 ## Measurements and acceptance
 
-Latest serial desktop-schema comparison (`final-native-planning/`, 18 cases per configuration):
+Final source verification: **3,936 passed / 150 gated skips / zero failures**, 1,155.80 seconds; 104 focused tests passed. Launcher ready and actual native App startup/owned close passed without starting the microphone. Full release acceptance is separate.
 
-| Scope | 9B p50 / p95 | 2B-first p50 / p95 | Expected tool |
-|---|---:|---:|---:|
-| Routine Windows / YouTube / Spotify, six proposals each | 10.72 / 13.41 s | 4.17 / 13.39 s | 6/6 each; all six hierarchy calls used 2B |
-| All nine categories, eighteen proposals each | 9.36 / 13.41 s | 9.59 / 30.37 s | 16/18 each |
-| Actual scoped file execution, six tasks each | 14.86 / 21.33 s | 9.94 / 16.86 s | 6/6 independently verified each |
+Latest quiet controls are `release-native-planning/`, `release-file-2b/`, `release-file-4b/` and `release-recovery/`. These compare configurations on the candidate runtime, not an original-source checkout. Nine identical public categories cover Windows, YouTube, Spotify, Blender, Unreal, coding, research, autonomous file work and an unfamiliar capability. Two repetitions per category are descriptive, not a robust quality study. First-proposal grading does not dispatch external apps. All numbers below use median p50 and nearest-rank p95.
 
-Routine planning median improved about 61%, and the bounded real-tool file median about 33%. **Mixed-workload median was slightly worse and p95 more than doubled.** Four observed model transitions had Ollama load timers p50 7.19 s / p95 19.81 s; this is not isolated switch overhead. The file harness exercises model→ToolRegistry→byte oracle. The desktop schema benchmark predates the subsequent headless compatibility and CPU-embedding fixes; desktop schema semantics are unchanged. No old-source checkout or equal-intelligence claim is implied.
+| Scope | 9B p50 / p95 | 2B-first p50 / p95 | Independent check |
+|---|---:|---:|---|
+| Routine Windows / YouTube / Spotify proposals, 6 each | 10.85 / 34.22 s | 3.72 / 10.85 s | Expected tool 6/6 each; all hierarchy calls used 2B |
+| Mixed proposals, 18 each | 9.02 / 34.22 s | 9.72 / 59.70 s | Expected tool 16/18; exact literals 14/18 each |
+| Model→ToolRegistry files, 6 each | 15.84 / 20.86 s | 16.36 / 58.14 s | Exact bytes / completion 6/6 each |
+| Routine subset of those files, 2 each | 15.84 / 19.18 s | 6.89 / 10.91 s | Exact bytes 2/2 each |
 
-Routine GPU snapshot medians were 2,600 MB (9B) and 1,734 MB (hierarchy); mixed maxima 2,600 / 2,598 MB because difficult tasks still use 9B. Aggregate Ollama-process RSS medians were 7,897 / 5,682 MB and system-used-RAM medians 23,349 / 21,066 MB. These include shared host activity and multiple Ollama processes; they are neither exclusive Jarvis usage nor allocator peaks. See `final-derived-metrics.json` for definitions.
+Routine proposal median improved about **66%**. Mixed proposal median worsened about **8%**, p95 about **74%**; mixed real-tool execution also regressed. One actual invalid student proposal was rejected before dispatch, repaired by 9B and followed by 2B on remaining work. It preserved quality on that task but incurred switching cost. No equal-intelligence, general recovery-rate or overall faster-system claim is supported.
 
-Live checks added on 2026-10-22 IST:
+Direct-model controls (18 each) were 9B **9.02/34.22 s**, 4B **6.42/20.54 s**, 2B **3.41/15.16 s**; expected tools 16/18, 17/18, 18/18 and exact literals 14/18, 17/18, 16/18. Direct 2B success here does not justify removing difficult-task 9B routing. The separate 4B-first real-tool control verified 6/6 each but regressed mixed **14.90/37.62 → 21.55/72.20 s**. This host keeps 2B selected.
+
+Three observed hierarchy model transitions had load timers p50 **7.51 s**, p95 **49.50 s**; this is not isolated switch overhead. Actual file-tool latency p50/p95 was **12.36/38.57 ms** (9B control) and **12.03/12.26 ms** (hierarchy), eight dispatched reads each. Load/prefill/generation seconds and token rates are in [release-metrics.json](../artifacts/jarvis-audit/small-model/2026-10-21/release-metrics.json), derived from raw rows. Routine post-inference GPU medians were **2,180/1,341 MB**; mixed GPU p95 **2,195/2,193 MB**. Mixed aggregate Ollama RSS medians **6,472/5,224 MB**, system-used RAM **23,013/21,832 MB**. These are shared-host snapshots, not exclusive Jarvis usage or allocator peaks.
+
+The most recent complete build verdict and bounded live checks are in [FINAL_BUILD.md](../artifacts/jarvis-audit/small-model/2026-10-21/FINAL_BUILD.md). Earlier `final-*` packets remain historical: their favorable 33% mixed file median improvement did **not** reproduce in the quiet release control. Those earlier results are not the latest performance verdict.
+
+Late live checks exposed a whole-request filename from 2B and repeated 9B recovery. Exact `Read one.txt in this folder.` requests now compile directly, bind the resolved folder once, reject traversal/symlinks, compare fresh disk bytes with the actual tool result, and return the contents. Four complete application repeats passed with zero inference (0.063–0.125 s). Wrong tool receipts cannot complete. Initial and repaired evidence are retained separately. Actual configured generated speech transcribed “Jarvis, show CPU usage.” as “Jarvis shows CPU usage.”; a narrowly scoped read-only CPU alias now handles it. The repeated TTS→Whisper→Engine→OS→TTS check passed with zero LLM calls. It used no microphone, speaker playback or private recording.
+
+Earlier bounded live checks added on 2026-10-22 IST follow. Their shared-host timings are functional evidence, not the latest quiet comparative distributions.
 
 - Both configurations saved and independently reopened a disposable Blender scene: PublicCube, eight vertices, six polygons, location `[1,2,3]`. Times 22.65 / 25.66 s; both used 9B. Unreal returned installed build 5.8.2 in 6.90 / 7.00 s; **only its manifest was inspected**, not an editor/project workflow.
-- The injected invalid-inference recovery probe retained a verified prerequisite and read only the unfinished file: 1/1 each, 10.59 / 10.48 s. This is a deliberate inference fault, not a natural-failure recovery rate.
+- The injected invalid-inference recovery probe retained a verified prerequisite and read only the unfinished file: 1/1 each, 10.40 / 9.99 s. This is a deliberate inference fault, not a natural-failure recovery rate.
 - Complete Actions→Brain→DAG→ToolRegistry runs passed a single-file read, two-file workflow and unfamiliar documented-device task: **3/3 each**. The single-file request initially failed because 9B emitted empty operands. Strict operand constraints and an exact literal-read compiler fixed it; repeated single reads completed in 0.172 / 0.063 s without inference. Workflow/unfamiliar paths retained 9B. Concurrent host verification means these are functional timings, not isolated performance estimates.
 - Exact public YouTube playback passed in pinned Chrome `Default`, then paused. YouTube and Spotify play/pause/status passed through Actions and ToolRegistry with Windows media readbacks, zero model calls and original playback states restored. Initial named YouTube search stopped on ambiguity; exact-video acceptance does not certify all search queries or expanded MCP/OAuth tools.
 - Installed Kokoro→configured GPU Whisper recognized the generated public sentence correctly: synthesis 10.06 s, recognition load 50.61 s, decode 1.94 s. This is synthetic local PCM, not physical microphone/speaker, acoustic WER or audible latency acceptance.

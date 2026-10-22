@@ -1,0 +1,22 @@
+usage: student_lora.py [-h] --examples EXAMPLES --out OUT [--allow-private]
+                       [--train] [--base BASE] [--base-manifest BASE_MANIFEST]
+                       [--steps STEPS] [--max-minutes MAX_MINUTES]
+                       [--ram-limit-mb RAM_LIMIT_MB]
+
+Explicit, offline teacher/student LoRA candidate pipeline; never auto-
+promotes. No network, installs, runtime-data collection or deletion. Local
+trainable base weights must match a user-supplied SHA256 manifest. Default
+invocation prepares curated family-separated examples only. --train is an
+explicit offline run.
+
+options:
+  -h, --help            show this help message and exit
+  --examples EXAMPLES
+  --out OUT
+  --allow-private       Explicitly authorize these curated private examples
+  --train
+  --base BASE
+  --base-manifest BASE_MANIFEST
+  --steps STEPS
+  --max-minutes MAX_MINUTES
+  --ram-limit-mb RAM_LIMIT_MB

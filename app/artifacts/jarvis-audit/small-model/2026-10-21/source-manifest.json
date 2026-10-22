@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-22T04:35:18.875952+00:00",
+  "at": "2026-10-22T07:31:00.094780+00:00",
   "baseline_commit": "df713f1",
   "branch": "codex/small-model-intelligence",
   "scope": "Runtime/evaluator/configuration and changed verification source hashes; not a ModelRegistry promotion seal or release approval.",
@@ -57,7 +57,7 @@
     "jarvis/blender_host.py": "9b477a8e84f77d573e1f00278c26ab1aa4852dea24cc46c6aa8cfccb0e3edfa9",
     "jarvis/blender_installation.py": "6a0aab80c1a61cb2228b3caae2551a26d0f685deddbcfa99b548e4169cee3074",
     "jarvis/blender_jobs.py": "eba55cd59c05e9c5146c75ec1239b9acac223fb883edf3b6269bfc9971847894",
-    "jarvis/brain.py": "a2ec675f51e324b9f4edfb66a9a27597ff72202993760493f0d9bed6b73a9526",
+    "jarvis/brain.py": "26f53f27ce629c4196c45d754026d0881fb6c5e2ae7167c45c421f7cbca07b87",
     "jarvis/brain_worker.py": "314d48a3c01d9d5df8eabb355387e881c3f747854c35688b37699be605a40cb1",
     "jarvis/browser.py": "840373a60a7a359bcf331f0011ff6b3eab25faf86462ac25a0c318ab188431bc",
     "jarvis/browser_automation.py": "53296e005256bb7959297caeebe69974832363298b6d0e9eeaa0d533d21d5532",
@@ -128,7 +128,7 @@
     "jarvis/development_projects.py": "6aada3298387c23fc55e9f50077443801ce7f0e77e4eee0b5b77348e6985f8f4",
     "jarvis/development_tools.py": "f2eb3c6c8d5946f385737f8303d359d23d695bb27691835f0a1fc4e12ec936a2",
     "jarvis/diagnostics.py": "165d6eb538219993f9960255a52e0fdf3097fe76a6b05dc652b5116bd53b88d4",
-    "jarvis/direct_execution.py": "05fa804cfa097723986e7fa04e6c6c47d97fff60fe22d84821c983b14240e184",
+    "jarvis/direct_execution.py": "51877c0dabd5ff786c52b74dc95727d285ce9feeb850057966a25c959e61f44f",
     "jarvis/display.py": "3f97d27164aacd7a32685ff8adf15967445cf2b2ecb61c54b234d4b8cc5c3584",
     "jarvis/docker_runtime.py": "83751d5eecf7fa6d46ac50a701252bae7bab995372eef615ef645efcd4c18938",
     "jarvis/document_worker.py": "2820429aaf561771752394ac0b3e00fe9945a5bb3d4b34fa2d4b4b75872ffc67",
@@ -177,7 +177,7 @@
     "jarvis/hybrid_inference.py": "eaf608634b516c78f12b74b4df0f623ad92ac05a42bf09ad1f49d6f551fb18b5",
     "jarvis/independent_cursor.py": "a6bd230d17fd32e91975c62e5b574c30e27564bbe4ac0233a4c86fab9cf47a96",
     "jarvis/inference_limits.py": "9f5fd9ca3646acda57c0eb86fa15d5e45842a5bfa50b563e4128f79e74d4afa4",
-    "jarvis/intent_catalog.py": "ba3ccf4258e716bcd5c3dda63165ae4c4d6a28e306d441919b2e070b7cf76332",
+    "jarvis/intent_catalog.py": "ed056e8e915f1575041e6a5a49121f0a24425d028f7ea42ddcc2feb5e6c9b487",
     "jarvis/intent_handlers.py": "c84e2b724c819cda608b5d44623270832025e3b666262524486f49e6793489ca",
     "jarvis/interface.py": "bba324c0b22ecdb0eaa6069b058837b904026a16c6f7e5104f5c71c881c6c035",
     "jarvis/island.py": "a998a153b6d1bedb550b46b90d93316faa032b81eb6e293df6b0fcf62fa6c2c8",
@@ -319,13 +319,15 @@
     "scripts/verification/student_application_benchmark.py": "8a117c50962756be4b3b4730bea1252507ecbbb5bcba0c7908dce4f8ee3b54db",
     "scripts/verification/student_execution_benchmark.py": "a2e2cc2f61ab0230da98c139d69bf03f73e8b6afcc8a21839fabc5c9dbea8773",
     "scripts/verification/student_system_live.py": "7ac4dddcfe742771c3bdcf6e05187d30e113bf03233efe005f0bb7edfb5e5812",
+    "tests/test_direct_files.py": "f90dd595886cc7a32829909eeea4d9dc1582e8ad65d3fbf50ac85a47fd370b1e",
+    "tests/test_gods_eye.py": "f2762c74a1e382d9d2f7a8b4c23009a643f4be74c44202983982e73dd701a6c1",
     "tests/test_hierarchical.py": "3cda5ef7f59b97c1101f0d037ce7d31abb44701003a77ebefaefcf4aa7aa28a1",
     "tests/test_hud.py": "3c3b9c3a200256272b80d17f56fabd38f25eea3422dc0c4978488d6d977cc3ec",
+    "tests/test_intent_testbook.py": "941fd72e09411bd54210a7c6f52bef721f406211b547aab7ee6891f42ccfa4ca",
     "tests/test_native_coding.py": "f8ce2733edcc24317bcee72556b3e6117f2ba71031fddd95d42d7c463d993ea8",
     "tests/test_native_tools.py": "adb4c48384da566541954a70d5a2ca1e27ed0ae6339413599cb55ed7f1d5a11d",
     "tests/test_phase02_execution_strategy.py": "5c628158d433759d65c370807845e328127d7f3af45fb926e980ee8cf669e835",
     "tests/test_small_model.py": "0e93931acc8d3129cba017d6f185e4d4aaf9e4d5508eafc7e783e7af4d8f9267",
-    "tests/test_teacher_student.py": "b656b3a5a6390daeebbb379425abd5fbd89d06f02066cf6d7dd61e738e34f76d",
-    "tests/test_gods_eye.py": "f2762c74a1e382d9d2f7a8b4c23009a643f4be74c44202983982e73dd701a6c1"
+    "tests/test_teacher_student.py": "b656b3a5a6390daeebbb379425abd5fbd89d06f02066cf6d7dd61e738e34f76d"
   }
 }

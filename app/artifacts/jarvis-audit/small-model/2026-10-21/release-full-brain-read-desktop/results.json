@@ -1,0 +1,131 @@
+{
+  "scope": "Actual text-only native Brain loop, ToolRegistry, durable task state and independent exact-byte observation. No screen, microphone or cloud. Functional timing on shared host.",
+  "rows": [
+    {
+      "configuration": "baseline",
+      "repetition": 0,
+      "passed": true,
+      "status": "completed",
+      "exact_verified_read": true,
+      "calls": [
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": null
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": null
+        },
+        {
+          "operation": "verify",
+          "model": "qwen3.5:9b",
+          "route": null
+        }
+      ],
+      "expected_public_text_reported": true,
+      "seconds": 40.64100000000326
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 0,
+      "passed": false,
+      "error_type": "ValueError",
+      "error": "Text-only file check did not complete; private runtime retains diagnostics",
+      "calls": [
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:2b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:2b",
+            "reason": "routine"
+          }
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:9b",
+            "reason": "recovery_or_complexity"
+          }
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:9b",
+            "reason": "recovery_or_complexity"
+          }
+        }
+      ],
+      "seconds": 78.95300000000134
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 1,
+      "passed": false,
+      "error_type": "ValueError",
+      "error": "Text-only file check did not complete; private runtime retains diagnostics",
+      "calls": [
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:2b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:2b",
+            "reason": "routine"
+          }
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:9b",
+            "reason": "recovery_or_complexity"
+          }
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": {
+            "category": "files",
+            "model": "qwen3.5:9b",
+            "reason": "recovery_or_complexity"
+          }
+        }
+      ],
+      "seconds": 65.65600000000268
+    },
+    {
+      "configuration": "baseline",
+      "repetition": 1,
+      "passed": true,
+      "status": "completed",
+      "exact_verified_read": true,
+      "calls": [
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": null
+        },
+        {
+          "operation": "next_step",
+          "model": "qwen3.5:9b",
+          "route": null
+        },
+        {
+          "operation": "verify",
+          "model": "qwen3.5:9b",
+          "route": null
+        }
+      ],
+      "expected_public_text_reported": true,
+      "seconds": 35.671000000002095
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\.jarvis-runtime\windows_direct_live.py", line 16, in <module>
+    started=time.monotonic();command=parse(text);answer=str(actions.execute(command))
+  File "D:\Kunals GitHub Repo\Jarvis\app\jarvis\actions.py", line 1095, in execute
+    result = cognition.act(command, run) if cognition is not None else run()  # Predict, act, evaluate, feed back.
+  File "D:\Kunals GitHub Repo\Jarvis\app\jarvis\cognition.py", line 515, in act
+    result = run()
+  File "D:\Kunals GitHub Repo\Jarvis\app\jarvis\actions.py", line 1094, in <lambda>
+    run = lambda: self._execute(command, cancelled)
+  File "D:\Kunals GitHub Repo\Jarvis\app\jarvis\actions.py", line 1851, in _execute
+    raise ValueError(f"Unsupported action: {command.kind}")
+ValueError: Unsupported action: system_info

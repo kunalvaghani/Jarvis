@@ -239,6 +239,10 @@ def explicit_file_plan(goal):
     opening = re.match(r"^open (?:the )?folder (.+?)(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?=(?:create|make)\b)", goal, re.I)
     if opening:
         destination, goal = destination or opening[1].strip(), goal[opening.end():]
+    read = re.fullmatch(r'read ([^<>:"/\\|?*\r\n]+?\.[A-Za-z0-9]{1,10}) in (this folder|the current folder)\.?', goal, re.I)
+    if read and not destination and not re.search(r'\b(?:and|then|or)\b', read[1], re.I):
+        return {"steps": [{"action": "read_file", "value": read[1],
+            "folder": read[2], "expected": "Named file contents read from the explicitly selected folder"}]}
     create = re.fullmatch(r"(?:create|make) (?:a |the )?file (?:called |named )?(.+?)"
         r"(?:\s+(?:in|inside) (?:the )?(.+?)|\s+there)?"
         r"(?:\s*(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?:write|put)\s+(.+?)(?:\s+(?:in|into) it[.!?]?)?|\s+(?:containing|with content)\s+(.+))?", goal, re.I)

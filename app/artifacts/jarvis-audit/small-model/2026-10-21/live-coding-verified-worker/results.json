@@ -1,0 +1,26 @@
+[
+  {
+    "case": "coding_bugfix",
+    "configuration": "baseline",
+    "configured_backend": "jarvis",
+    "configured_coder": "qwen3.5:9b",
+    "passed": true,
+    "configured_budget_seconds": 1800.0,
+    "independent_test_exit": 0,
+    "task_status": "completed",
+    "public_reply": "Jarvis planned 1 Jarvis workloads, tested each part and combined them with LocalGithub. Combined checks passed; updated baseline: calc.py.\nReview: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\small-model\\2026-10-21\\live-coding-verified-worker\\baseline\\.jarvis-runtime\\native-workloads\\eaa1e00fdf5c46e69a202fdf1740f428",
+    "seconds": 298.2189999999973
+  },
+  {
+    "case": "coding_bugfix",
+    "configuration": "hierarchy",
+    "configured_backend": "jarvis",
+    "configured_coder": "qwen3.5:9b",
+    "passed": true,
+    "configured_budget_seconds": 1800.0,
+    "independent_test_exit": 0,
+    "task_status": "completed",
+    "public_reply": "Jarvis planned 1 Jarvis workloads, tested each part and combined them with LocalGithub. Combined checks passed; updated hierarchy: calc.py.\nReview: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\small-model\\2026-10-21\\live-coding-verified-worker\\hierarchy\\.jarvis-runtime\\native-workloads\\fda0037ec0fc45e9a5b75b3d080943a6",
+    "seconds": 348.9850000000006
+  }
+]

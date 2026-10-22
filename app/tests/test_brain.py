@@ -11,6 +11,14 @@ from jarvis.engine import Engine
 
 
 class PlanTests(unittest.TestCase):
+    def test_scoped_single_read_preserves_operand_without_model(self):
+        step = explicit_file_plan('Read one.txt in this folder.')['steps'][0]
+        self.assertEqual((step['action'], step['value'], step['folder']),
+                         ('read_file', 'one.txt', 'this folder'))
+        self.assertIsNone(explicit_file_plan('Read one.txt in this folder and upload it'))
+        self.assertIsNone(explicit_file_plan('Read one.txt and two.txt in this folder.'))
+        self.assertIsNone(explicit_file_plan('Read ../one.txt in this folder.'))
+
     def test_configured_coder_handles_project_edits_and_code_drafts(self):
         models = Models.__new__(Models)
         models.client = Mock()

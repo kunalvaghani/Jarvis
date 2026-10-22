@@ -173,7 +173,7 @@ RULES = [
      lambda m: C("system_info", "running", (m[1] or m[2]).strip())),
     (r"(?:show |show me |tell me )?(?:my |the )?(?:battery(?: level| status)?|battery percentage)|(?:what is|what's|check) (?:my |the )?battery(?: level| status| percentage)?",
      lambda m: C("system_info", "battery")),
-    (r"show (?:me )?(?:the )?cpu (?:usage|load)", lambda m: C("system_info", "quick_cpu")),
+    (r"shows? (?:me )?(?:the )?cpu (?:usage|load)", lambda m: C("system_info", "quick_cpu")),
     (r"(?:show me |tell me )?how much (?:cpu|processor) (?:i'?m|am i|is being|are we) using(?: right now)?|(?:what'?s|what is) (?:my |the )?cpu (?:usage|load)|cpu usage",
      lambda m: C("system_info", "cpu")),
     (r"how much (?:memory|ram) is (?:free|available|used|left)(?: right now)?|(?:what'?s|what is) (?:my |the )?(?:memory|ram) usage|(?:memory|ram) usage",

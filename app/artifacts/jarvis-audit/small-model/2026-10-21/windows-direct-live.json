@@ -1,0 +1,59 @@
+{
+  "scope": "Real Engine, parser, Actions.submit status dispatcher and native read-only OS facts; no private process list, GUI input or microphone.",
+  "rows": [
+    {
+      "configuration": "baseline",
+      "command": "show cpu usage",
+      "parsed_kind": "system_info",
+      "topic": "quick_cpu",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.31300000000192085
+    },
+    {
+      "configuration": "baseline",
+      "command": "memory usage",
+      "parsed_kind": "system_info",
+      "topic": "memory",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.0
+    },
+    {
+      "configuration": "baseline",
+      "command": "what is my windows version",
+      "parsed_kind": "system_info",
+      "topic": "windows",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.014999999999417923
+    },
+    {
+      "configuration": "hierarchy",
+      "command": "show cpu usage",
+      "parsed_kind": "system_info",
+      "topic": "quick_cpu",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.14099999999598367
+    },
+    {
+      "configuration": "hierarchy",
+      "command": "memory usage",
+      "parsed_kind": "system_info",
+      "topic": "memory",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.01600000000325963
+    },
+    {
+      "configuration": "hierarchy",
+      "command": "what is my windows version",
+      "parsed_kind": "system_info",
+      "topic": "windows",
+      "passed": true,
+      "model_calls": 0,
+      "seconds": 0.014999999999417923
+    }
+  ]
+}

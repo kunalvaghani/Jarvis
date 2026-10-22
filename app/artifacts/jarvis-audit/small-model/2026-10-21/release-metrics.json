@@ -1,0 +1,499 @@
+{
+  "scope": "Latest quiet paired configuration controls on candidate source, not an original-source checkout. First proposals do not dispatch apps. p50 median, p95 nearest rank; tiny samples are descriptive. RAM/GPU snapshots include shared host activity, not exclusive usage or allocator peaks. Load after an observed model change is not isolated switching overhead.",
+  "native": {
+    "qwen3.5:9b": {
+      "wall_s": {
+        "n": 18,
+        "p50": 9.020511449998594,
+        "p95": 34.220113099996524
+      },
+      "routine_wall_s": {
+        "n": 6,
+        "p50": 10.849028349999571,
+        "p95": 34.220113099996524
+      },
+      "expected_tool": 16,
+      "routine_expected_tool": 6,
+      "literal_preserved": 14,
+      "student_calls": 0,
+      "teacher_calls": 18,
+      "observed_transition_load_s": null,
+      "errors": 0,
+      "load_s": {
+        "n": 18,
+        "p50": 0.09,
+        "p95": 22.1
+      },
+      "prompt_s": {
+        "n": 18,
+        "p50": 1.545,
+        "p95": 5.13
+      },
+      "output_s": {
+        "n": 18,
+        "p50": 6.15,
+        "p95": 8.2
+      },
+      "prompt_tokens_per_s": {
+        "n": 18,
+        "p50": 1198.2373678025851,
+        "p95": 8543.478260869564
+      },
+      "output_tokens_per_s": {
+        "n": 18,
+        "p50": 7.2571172495184655,
+        "p95": 7.751937984496124
+      },
+      "ollama_process_rss_mb": {
+        "n": 18,
+        "p50": 6471.50390625,
+        "p95": 6474.6328125
+      },
+      "system_ram_used_mb": {
+        "n": 18,
+        "p50": 23012.544921875,
+        "p95": 23187.078125
+      },
+      "benchmark_rss_mb": {
+        "n": 18,
+        "p50": 35.333984375,
+        "p95": 35.64453125
+      },
+      "gpu_after_used_mb": {
+        "n": 18,
+        "p50": 2195.0,
+        "p95": 2195
+      },
+      "routine_gpu_after_used_mb": {
+        "n": 6,
+        "p50": 2180.0,
+        "p95": 2195
+      }
+    },
+    "qwen3.5:4b": {
+      "wall_s": {
+        "n": 18,
+        "p50": 6.424767450000218,
+        "p95": 20.54201810000086
+      },
+      "routine_wall_s": {
+        "n": 6,
+        "p50": 7.540125399998942,
+        "p95": 20.54201810000086
+      },
+      "expected_tool": 17,
+      "routine_expected_tool": 6,
+      "literal_preserved": 17,
+      "student_calls": 0,
+      "teacher_calls": 0,
+      "observed_transition_load_s": null,
+      "errors": 0,
+      "load_s": {
+        "n": 18,
+        "p50": 0.09,
+        "p95": 14.3
+      },
+      "prompt_s": {
+        "n": 18,
+        "p50": 1.05,
+        "p95": 3.36
+      },
+      "output_s": {
+        "n": 18,
+        "p50": 3.9299999999999997,
+        "p95": 5.93
+      },
+      "prompt_tokens_per_s": {
+        "n": 18,
+        "p50": 1760.150580551524,
+        "p95": 11744.444444444445
+      },
+      "output_tokens_per_s": {
+        "n": 18,
+        "p50": 12.466708582651023,
+        "p95": 13.584905660377359
+      },
+      "ollama_process_rss_mb": {
+        "n": 18,
+        "p50": 4823.029296875,
+        "p95": 4847.8359375
+      },
+      "system_ram_used_mb": {
+        "n": 18,
+        "p50": 21422.009765625,
+        "p95": 21484.6171875
+      },
+      "benchmark_rss_mb": {
+        "n": 18,
+        "p50": 35.705078125,
+        "p95": 35.83203125
+      },
+      "gpu_after_used_mb": {
+        "n": 18,
+        "p50": 1329.0,
+        "p95": 1329
+      },
+      "routine_gpu_after_used_mb": {
+        "n": 6,
+        "p50": 1314.0,
+        "p95": 1329
+      }
+    },
+    "qwen3.5:2b": {
+      "wall_s": {
+        "n": 18,
+        "p50": 3.40667824999764,
+        "p95": 15.158548300001712
+      },
+      "routine_wall_s": {
+        "n": 6,
+        "p50": 3.789477199999965,
+        "p95": 15.158548300001712
+      },
+      "expected_tool": 18,
+      "routine_expected_tool": 6,
+      "literal_preserved": 16,
+      "student_calls": 18,
+      "teacher_calls": 0,
+      "observed_transition_load_s": null,
+      "errors": 0,
+      "load_s": {
+        "n": 18,
+        "p50": 0.09,
+        "p95": 11.72
+      },
+      "prompt_s": {
+        "n": 18,
+        "p50": 0.46499999999999997,
+        "p95": 1.51
+      },
+      "output_s": {
+        "n": 18,
+        "p50": 1.8,
+        "p95": 2.66
+      },
+      "prompt_tokens_per_s": {
+        "n": 18,
+        "p50": 3975.7400555041627,
+        "p95": 32583.333333333336
+      },
+      "output_tokens_per_s": {
+        "n": 18,
+        "p50": 26.073781291172594,
+        "p95": 26.875
+      },
+      "ollama_process_rss_mb": {
+        "n": 18,
+        "p50": 3273.765625,
+        "p95": 3295.0
+      },
+      "system_ram_used_mb": {
+        "n": 18,
+        "p50": 19925.810546875,
+        "p95": 19994.7734375
+      },
+      "benchmark_rss_mb": {
+        "n": 18,
+        "p50": 35.861328125,
+        "p95": 35.89453125
+      },
+      "gpu_after_used_mb": {
+        "n": 18,
+        "p50": 1347.0,
+        "p95": 1347
+      },
+      "routine_gpu_after_used_mb": {
+        "n": 6,
+        "p50": 1341.0,
+        "p95": 1347
+      }
+    },
+    "hierarchy": {
+      "wall_s": {
+        "n": 18,
+        "p50": 9.724484250000387,
+        "p95": 59.69707709999784
+      },
+      "routine_wall_s": {
+        "n": 6,
+        "p50": 3.7235551999983727,
+        "p95": 10.854588900001545
+      },
+      "expected_tool": 16,
+      "routine_expected_tool": 6,
+      "literal_preserved": 14,
+      "student_calls": 6,
+      "teacher_calls": 12,
+      "observed_transition_load_s": {
+        "n": 3,
+        "p50": 7.51,
+        "p95": 49.5
+      },
+      "errors": 0,
+      "load_s": {
+        "n": 18,
+        "p50": 0.09,
+        "p95": 49.5
+      },
+      "prompt_s": {
+        "n": 18,
+        "p50": 1.5750000000000002,
+        "p95": 4.54
+      },
+      "output_s": {
+        "n": 18,
+        "p50": 5.325,
+        "p95": 7.18
+      },
+      "prompt_tokens_per_s": {
+        "n": 18,
+        "p50": 1173.345158429412,
+        "p95": 32583.333333333336
+      },
+      "output_tokens_per_s": {
+        "n": 18,
+        "p50": 7.735786766750069,
+        "p95": 27.27272727272727
+      },
+      "ollama_process_rss_mb": {
+        "n": 18,
+        "p50": 5224.236328125,
+        "p95": 5919.82421875
+      },
+      "system_ram_used_mb": {
+        "n": 18,
+        "p50": 21831.720703125,
+        "p95": 22513.7734375
+      },
+      "benchmark_rss_mb": {
+        "n": 18,
+        "p50": 35.923828125,
+        "p95": 36.0
+      },
+      "gpu_after_used_mb": {
+        "n": 18,
+        "p50": 2193.0,
+        "p95": 2193
+      },
+      "routine_gpu_after_used_mb": {
+        "n": 6,
+        "p50": 1341.0,
+        "p95": 1347
+      }
+    }
+  },
+  "file": {
+    "release-file-2b": {
+      "baseline": {
+        "wall_s": {
+          "n": 6,
+          "p50": 15.836219299999357,
+          "p95": 20.86221579999983
+        },
+        "verified": 6,
+        "dispatched_tool_wall_s": {
+          "n": 8,
+          "p50": 0.012362900000880472,
+          "p95": 0.03856910000467906
+        },
+        "dispatched_steps": 8,
+        "fault_injected": 0,
+        "routine_wall_s": {
+          "n": 2,
+          "p50": 15.836219299999357,
+          "p95": 19.17955339999753
+        },
+        "coding_wall_s": {
+          "n": 2,
+          "p50": 9.585624950002966,
+          "p95": 9.820527700001549
+        },
+        "workflow_wall_s": {
+          "n": 2,
+          "p50": 20.795217949998914,
+          "p95": 20.86221579999983
+        },
+        "attempt_models": [
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b"
+        ]
+      },
+      "hierarchy": {
+        "wall_s": {
+          "n": 6,
+          "p50": 16.361932350002462,
+          "p95": 58.13796349999757
+        },
+        "verified": 6,
+        "dispatched_tool_wall_s": {
+          "n": 8,
+          "p50": 0.01203439999881084,
+          "p95": 0.01226390000374522
+        },
+        "dispatched_steps": 8,
+        "fault_injected": 0,
+        "routine_wall_s": {
+          "n": 2,
+          "p50": 6.8895277500014345,
+          "p95": 10.908996999998635
+        },
+        "coding_wall_s": {
+          "n": 2,
+          "p50": 18.55811955000172,
+          "p95": 18.574776200002816
+        },
+        "workflow_wall_s": {
+          "n": 2,
+          "p50": 36.160182650000934,
+          "p95": 58.13796349999757
+        },
+        "attempt_models": [
+          "qwen3.5:2b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:2b",
+          "qwen3.5:2b",
+          "qwen3.5:9b",
+          "qwen3.5:2b",
+          "qwen3.5:2b"
+        ]
+      }
+    },
+    "release-file-4b": {
+      "baseline": {
+        "wall_s": {
+          "n": 6,
+          "p50": 14.903381250001985,
+          "p95": 37.6178540999972
+        },
+        "verified": 6,
+        "dispatched_tool_wall_s": {
+          "n": 8,
+          "p50": 0.012069799999153474,
+          "p95": 0.01801020000129938
+        },
+        "dispatched_steps": 8,
+        "fault_injected": 0,
+        "routine_wall_s": {
+          "n": 2,
+          "p50": 14.903381250001985,
+          "p95": 19.05650969999988
+        },
+        "coding_wall_s": {
+          "n": 2,
+          "p50": 9.293732350000937,
+          "p95": 9.396935400000075
+        },
+        "workflow_wall_s": {
+          "n": 2,
+          "p50": 29.34955374999845,
+          "p95": 37.6178540999972
+        },
+        "attempt_models": [
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:9b"
+        ]
+      },
+      "hierarchy": {
+        "wall_s": {
+          "n": 6,
+          "p50": 21.54960684999969,
+          "p95": 72.20098609999695
+        },
+        "verified": 6,
+        "dispatched_tool_wall_s": {
+          "n": 8,
+          "p50": 0.013014050000492716,
+          "p95": 0.016441800005850382
+        },
+        "dispatched_steps": 8,
+        "fault_injected": 0,
+        "routine_wall_s": {
+          "n": 2,
+          "p50": 13.640721950003353,
+          "p95": 21.67282520000299
+        },
+        "coding_wall_s": {
+          "n": 2,
+          "p50": 20.656308049998188,
+          "p95": 21.426388499996392
+        },
+        "workflow_wall_s": {
+          "n": 2,
+          "p50": 71.37885654999991,
+          "p95": 72.20098609999695
+        },
+        "attempt_models": [
+          "qwen3.5:4b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:4b",
+          "qwen3.5:4b",
+          "qwen3.5:9b",
+          "qwen3.5:9b",
+          "qwen3.5:4b"
+        ]
+      }
+    },
+    "release-recovery": {
+      "baseline": {
+        "wall_s": {
+          "n": 1,
+          "p50": 10.400827799996478,
+          "p95": 10.400827799996478
+        },
+        "verified": 1,
+        "dispatched_tool_wall_s": {
+          "n": 1,
+          "p50": 0.02409629999601748,
+          "p95": 0.02409629999601748
+        },
+        "dispatched_steps": 2,
+        "fault_injected": 1,
+        "workflow_wall_s": {
+          "n": 1,
+          "p50": 10.400827799996478,
+          "p95": 10.400827799996478
+        },
+        "attempt_models": [
+          "qwen3.5:9b"
+        ]
+      },
+      "hierarchy": {
+        "wall_s": {
+          "n": 1,
+          "p50": 9.98815409999952,
+          "p95": 9.98815409999952
+        },
+        "verified": 1,
+        "dispatched_tool_wall_s": {
+          "n": 1,
+          "p50": 0.014512200003082398,
+          "p95": 0.014512200003082398
+        },
+        "dispatched_steps": 2,
+        "fault_injected": 1,
+        "workflow_wall_s": {
+          "n": 1,
+          "p50": 9.98815409999952,
+          "p95": 9.98815409999952
+        },
+        "attempt_models": [
+          "qwen3.5:9b"
+        ]
+      }
+    }
+  }
+}

@@ -2,7 +2,11 @@
 
 Started 2026-10-21 UTC / 2026-10-22 IST. Baseline repository commit `df713f1`; candidate branch `codex/small-model-intelligence`. [Architecture and limits](../../../../docs/small-model-intelligence.md).
 
-Latest primary evidence (2026-10-22 IST):
+Latest authoritative report: [FINAL_BUILD.md](FINAL_BUILD.md), with [derived quiet metrics](release-metrics.json). `release-*` comparisons supersede the earlier `final-*` performance headlines: routine work improved, mixed latency regressed. The final complete application verdict is `release-complete-build-tests.txt`; the earlier green 3,932/150 checkpoint predates the last scoped-read/speech fixes. `release-full-brain-read-verified-fixed/` and `live-speech-command-loop-fixed.json` record the final zero-inference integration checks, with preceding failures retained.
+
+Earlier development evidence follows; its dates, measurements and limitations retain their original scope.
+
+Earlier primary evidence (2026-10-22 IST):
 
 - `final-native-planning/`: eighteen native proposals each; routine p50/p95 10.72/13.41 → 4.17/13.39 s (6/6 correct each), mixed 9.36/13.41 → 9.59/30.37 s (16/18 each). **Mixed tail latency regressed.** `final-derived-metrics.json` contains derived resource/switch statistics; raw rows retain load/prefill/generation timing.
 - `final-owned-file-execution/`: actual model→ToolRegistry public reads, 6/6 verified each, p50/p95 14.86/21.33 → 9.94/16.86 s. `final-recovery-probe/`: deliberate invalid-inference injection, verified prerequisite preserved, 1/1 each; not natural recovery reliability.
