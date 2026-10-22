@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-23 IST",
+  "approval": "User approved model download and local tests in this chat",
+  "repo": "Systran/faster-whisper-medium",
+  "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+  "files": [
+    {
+      "name": "README.md",
+      "size": 2005,
+      "digest": "68a6ff5e20f337a8b4e27e4ea4cca73afb9a40fb",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "config.json",
+      "size": 2257,
+      "digest": "242aa06a480a7b5509375c645097e87af5136774",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "model.bin",
+      "size": 1527906378,
+      "digest": "9b45e1009dcc4ab601eff815b61d80e60ce3fd8c74c1a14f4a282258286b51ae",
+      "algorithm": "sha256",
+      "verified": true
+    },
+    {
+      "name": "tokenizer.json",
+      "size": 2203239,
+      "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "vocabulary.txt",
+      "size": 459861,
+      "digest": "c9074644d9d1205686f16d411564729461324b75",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    }
+  ],
+  "runtime_configuration_changed": false
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Alternating in-process transcript assembly/normalization before versus assembly plus revision/language/endpoint policy after; 100 warmup and 4900 measured synthetic updates per path. No audio capture, inference, UI, tool effects or acoustic latency.",
+  "before": {
+    "p50_microseconds": 6.6,
+    "p95_microseconds": 12.5,
+    "worst_microseconds": 65.9,
+    "samples": 4900
+  },
+  "after": {
+    "p50_microseconds": 33.1,
+    "p95_microseconds": 62.0,
+    "worst_microseconds": 291.9,
+    "samples": 4900
+  }
+}

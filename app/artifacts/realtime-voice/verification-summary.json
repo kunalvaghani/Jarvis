@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-23 IST",
+  "branch": "codex/realtime-multilingual-voice",
+  "regression": {
+    "passed": 3989,
+    "skipped": 150,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 1099.37
+  },
+  "focused": {
+    "passed": 481,
+    "skipped": 9,
+    "failed": 0,
+    "seconds": 26.32
+  },
+  "launcher": "ready",
+  "source_mismatches": [],
+  "release_acceptance": "NOT ACCEPTED: Gujarati/mixed ASR quality failed; physical full-duplex/AEC, latency/resource endurance, precise resume and segment-level response behavior remain open.",
+  "runtime_asr": "Existing English medium.en remains selected. Two user-approved optional model assets verified, not activated.",
+  "privacy": "No physical capture/playback, private transcript upload, package/driver installation or publication."
+}

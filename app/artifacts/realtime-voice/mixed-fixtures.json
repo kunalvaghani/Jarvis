@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-23 IST",
+  "fixtures": [
+    {
+      "language": "hi",
+      "path": "mixed-en-hi.wav",
+      "reference": "Jarvis, Chrome खोलो और Python tutorial search करो।",
+      "source": "Generated Piper Hindi public mixed fixture"
+    },
+    {
+      "language": "fr",
+      "path": "mixed-en-fr.wav",
+      "reference": "Jarvis, ouvre Chrome and search for French lessons.",
+      "source": "Generated Kokoro French public mixed fixture"
+    },
+    {
+      "language": "gu",
+      "path": "mixed-en-gu-spliced.wav",
+      "reference": "Jarvis open calculator. છોડ ઓક્સિજન બનાવે છે જેનેથી મનુષ્ય શ્વાસ લે છે અને તેઓ કાર્બન-ડાયોક્સાઇડ લે છે જેને મનુષ્ય શ્વાસથી બહાર કાઢે છે એટલે ​​કે શ્વાસ બહાર કાઢે ",
+      "source": "Spliced generated English plus public CC-BY-4.0 FLEURS Gujarati; different speakers, not natural code-switching"
+    }
+  ]
+}

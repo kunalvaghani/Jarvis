@@ -91,12 +91,24 @@
     "direct_execution": true
   },
   "model_path": "models/faster-whisper-medium.en",
+  "voice": {
+    "full_duplex": {
+      "enabled": false,
+      "barge_in": true,
+      "audio_mode": "speakers"
+    }
+  },
   "whisper": {
     "model": "medium.en",
     "repo": "Systran/faster-whisper-medium.en",
     "device": "cuda",
     "compute_type": "int8_float16",
     "language": "en",
+    "frame_ms": 32,
+    "streaming_enabled": true,
+    "adaptive_endpointing": true,
+    "endpoint_mode": "balanced",
+    "max_utterance_seconds": 120,
     "partial_interval_seconds": 1.0,
     "silence_seconds": 0.8,
     "vad_threshold": 0.45

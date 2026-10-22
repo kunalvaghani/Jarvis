@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Generated public English sentence; no microphone/playback or multilingual corpus. Application regression suite may run concurrently; this is not an isolated contention benchmark.",
+  "configurations": [
+    {
+      "device": "cpu",
+      "precision": "int8",
+      "decode_options": "Production final decode options including ASR_PROMPT",
+      "model": "models/faster-whisper-medium.en",
+      "audio_seconds": 2.197375,
+      "load_seconds": 4.403733200000261,
+      "samples": [
+        {
+          "seconds": 5.350267799999983,
+          "cpu_seconds": 21.484375,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 901128192
+        },
+        {
+          "seconds": 5.227058200000101,
+          "cpu_seconds": 20.5,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 901419008
+        },
+        {
+          "seconds": 5.09381650000023,
+          "cpu_seconds": 20.359375,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 905814016
+        }
+      ],
+      "p50_seconds": 5.227058200000101,
+      "worst_seconds": 5.350267799999983,
+      "p95_seconds": null,
+      "note": "Three-sample pilot; insufficient for a reliable p95. RSS sampled, not peak."
+    },
+    {
+      "device": "cuda",
+      "precision": "int8_float16",
+      "decode_options": "Production final decode options including ASR_PROMPT",
+      "model": "models/faster-whisper-medium.en",
+      "audio_seconds": 2.197375,
+      "load_seconds": 6.563494600000013,
+      "samples": [
+        {
+          "seconds": 0.7613894999999502,
+          "cpu_seconds": 0.796875,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 846147584
+        },
+        {
+          "seconds": 0.4553918000001431,
+          "cpu_seconds": 1.0,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 848084992
+        },
+        {
+          "seconds": 0.4611064999999144,
+          "cpu_seconds": 1.0,
+          "exact_match": true,
+          "public_fixture_hypothesis": " Jarvis Open Calculator.",
+          "input_scope": "Known synthesized public fixture only",
+          "rss_bytes_sampled": 848228352
+        }
+      ],
+      "p50_seconds": 0.4611064999999144,
+      "worst_seconds": 0.7613894999999502,
+      "p95_seconds": null,
+      "note": "Three-sample pilot; insufficient for a reliable p95. RSS sampled, not peak."
+    }
+  ]
+}

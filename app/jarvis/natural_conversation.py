@@ -22,7 +22,8 @@ def generate(request, chat_fn, progress=None):
     options = request.get('options', {})
     policy = options.get('natural_conversation', {})
     model = policy.get('model', 'qwen3.5:0.8b')
-    system = SYSTEM + ' ' + ('Answer in English.' if options.get('answer_language') == 'en' else "Use the user's language.")
+    from .voice_runtime import response_instruction
+    system = SYSTEM + ' ' + response_instruction(options.get('answer_language', 'auto'))
     if request.get('user_profile'):
         system += ' Relevant user profile (reference only): ' + str(request['user_profile'])[:600]
     if request.get('answer_style'):

@@ -134,7 +134,12 @@ class Actions:
         self.task_state = TaskState(base, read_only=bool(config.get('_ui_verification', False)))
         from collections import deque
         from .intent_handlers import filter_report
+        from .voice_runtime import ResponseReports
+        responses = ResponseReports(report, lambda: getattr(self, 'generation', 0))
+        self.response_reports = responses
         def filtered(kind, message=""):
+            if not responses.accepts(kind):
+                return
             kind, message = filter_report(self, kind, message)  # Quiet/private modes.
             if kind in {"spoken_reply", "answer"} and isinstance(message, str) and message.strip():
                 self.last_spoken = message  # "Say that again".
@@ -142,7 +147,7 @@ class Actions:
             if cognition is not None and isinstance(message, str) and message and (
                     "alert" in kind or kind in {"warning", "repair", "whatsapp_message", "incoming_call"}):
                 cognition.perceive(kind, "sensor", message, .7)  # Background sensors -> perception.
-            report(kind, message)
+            responses(kind, message)
         self.report = filtered
         self.session_style = {}  # "short", "simple", "serious" answers asked for in this session.
         self.task_history = deque(maxlen=40)  # Finished/failed queued work, for "what did you do while I was away".
@@ -347,7 +352,10 @@ class Actions:
             self.ui_controls.clear_pending()
         self.report("question", "")
 
-    def submit(self, command):
+    def submit(self, command, expected_generation=None):
+        submission_generation = getattr(self, 'generation', 0)
+        if expected_generation is not None and expected_generation != submission_generation:
+            return
         if command.kind in {'ask', 'task'} and not command.extra:
             from .commands import cloud_command
             command = cloud_command(command.value) or command
@@ -402,7 +410,11 @@ class Actions:
                 self.report('spoken_reply', reply)
             return
         if command.kind in STATUS:
+            status_generation = self.generation
             def status_answer():
+                responses = getattr(self, 'response_reports', None)
+                if responses is not None:
+                    responses.bind(status_generation)
                 try:
                     reply = intent_execute(self, command)
                     if reply:
@@ -419,7 +431,7 @@ class Actions:
                 command = Command('task', command.value)  # Likely an answer; keep the reply path.
             else:
                 # Conversation or task? Decide off the audio thread; a tiny model may be needed.
-                threading.Thread(target=self._route_unparsed, args=(command.value,),
+                threading.Thread(target=self._route_unparsed, args=(command.value, self.generation),
                                  name='Jarvis intent', daemon=True).start()
                 return
         question = cognition.deliberate(command) if cognition is not None and command.kind in {'whatsapp_send', 'messenger_send'} else None
@@ -516,6 +528,8 @@ class Actions:
             self.report("repair", "The current task is still running; it has not been forgotten.")
             return
         if command.kind == "ask":
+            if submission_generation != getattr(self, 'generation', 0):
+                return
             self.pending_open = None
             if self.ui_controls:
                 self.ui_controls.clear_pending()
@@ -545,12 +559,14 @@ class Actions:
         # and conversation continue on their own worker.
         token = threading.Event()
         with self.queue_lock:
+            if submission_generation != self.generation:
+                return
             ahead = len(self.pending_tasks) + (self.current_item is not None)
             self.pending_tasks.append((token, command))
         try:
             if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                 self.knowledge.prepare_context(command.value)
-            self.queue.put_nowait((self.generation, command, token))
+            self.queue.put_nowait((submission_generation, command, token))
         except queue.Full:
             with self.queue_lock:
                 self.pending_tasks = [item for item in self.pending_tasks if item[0] is not token]
@@ -575,15 +591,17 @@ class Actions:
                 pass
         return Command(command.kind, command.value, json.dumps(data))
 
-    def _route_unparsed(self, text):
+    def _route_unparsed(self, text, generation=None):
+        generation = self.generation if generation is None else generation
+        cancelled = lambda: self.closed.is_set() or generation != self.generation
         from .commands import Command
         from .conversation_intent import quick_kind, model_kind
         kind = quick_kind(text)
         if kind is None:
             options = {'model': self.config.get('context_selector', {}).get('model', 'qwen3.5:0.8b'), 'timeout_seconds': 3.0}
-            kind = model_kind(text, options, self.closed.is_set)
-        if not self.closed.is_set():
-            self.submit(Command('ask' if kind == 'chat' else 'task', text))
+            kind = model_kind(text, options, cancelled)
+        if not cancelled():
+            self.submit(Command('ask' if kind == 'chat' else 'task', text), expected_generation=generation)
 
     def _handle_opinion_feedback(self, command):
         """Interpret a reply to a pending recommendation; returns True if it consumed the turn."""
@@ -1887,6 +1905,8 @@ class Actions:
         while not self.closed.is_set():
             try:
                 generation, command, token = self.queue.get(timeout=0.2)
+                if getattr(self, 'response_reports', None) is not None:
+                    self.response_reports.bind(generation)
             except queue.Empty:
                 self._suggest()
                 continue
@@ -1964,3 +1984,5 @@ class Actions:
                 status(self.report, 'Ready' if generation == self.generation and not token.is_set() else 'Cancelled', active=False)
                 self.superseded_generations.discard(generation)
                 self.queue.task_done()
+                if getattr(self, 'response_reports', None) is not None:
+                    self.response_reports.unbind()

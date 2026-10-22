@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Three existing configured 9B planner-worker public eight-token requests without ASR, then three while one owned medium.en ASR child decodes the generated public fixture. Existing GPU scheduler and model store; no tools, capture/playback, cloud, packages or model downloads. First baseline may be cold; tiny ordered pilot is not causal before/after upgrade evidence. Global GPU samples are not allocator peaks.",
+  "requests": [
+    {
+      "mode": "no_asr",
+      "index": 0,
+      "completed": true,
+      "seconds": 26.81625520000034,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 11,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    {
+      "mode": "no_asr",
+      "index": 1,
+      "completed": true,
+      "seconds": 1.7772728999998435,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 11,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    {
+      "mode": "no_asr",
+      "index": 2,
+      "completed": true,
+      "seconds": 1.9832419999993363,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 11,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    {
+      "mode": "asr_active",
+      "index": 0,
+      "asr_alive_before": true,
+      "asr_alive_after": true,
+      "completed": true,
+      "seconds": 9.38910660000056,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 10,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    {
+      "mode": "asr_active",
+      "index": 1,
+      "asr_alive_before": true,
+      "asr_alive_after": true,
+      "completed": true,
+      "seconds": 1.6120579000007638,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 10,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    },
+    {
+      "mode": "asr_active",
+      "index": 2,
+      "asr_alive_before": true,
+      "asr_alive_after": true,
+      "completed": true,
+      "seconds": 1.5406388999999763,
+      "tokens": 8,
+      "model": "qwen3.5:9b",
+      "policy": {
+        "role": "planner",
+        "num_gpu": 10,
+        "context_tokens": 4096,
+        "gpu_slot": true
+      }
+    }
+  ],
+  "asr_child_metadata": "{\"decode_count\": 4, \"seconds\": 14.5}\n",
+  "gpu_samples": 257,
+  "gpu_peak_mb_sampled": 3446,
+  "gpu_peak_utilization_sampled": 100
+}

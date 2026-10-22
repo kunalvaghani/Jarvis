@@ -13,6 +13,12 @@ class UIEventBuffer:
 
     @staticmethod
     def key(kind, value):
+        if kind == 'response_guard':
+            inner, message, guard = value
+            key = UIEventBuffer.key(inner, message)
+            return ('response_guard', getattr(guard, 'voice_key', None), key) if key else None
+        if kind in {'voice_transcript', 'voice_prepared'} and isinstance(value, dict):
+            return (kind, value.get('session_id'), value.get('utterance_id')) if value.get('state') != 'FINAL' else None
         if kind in {'level', 'partial'}:
             return kind
         if kind == 'answer_stream' and isinstance(value, dict) and value.get('active', True):
@@ -28,6 +34,26 @@ class UIEventBuffer:
     def put(self, row):
         kind, value = row
         key = self.key(kind, value)
+        if kind == 'response_guard' and key is not None:
+            # Keep streamed snapshots bounded while preserving a cancellation fence.
+            with self.lock:
+                previous = self.pending.get(key)
+                inner, message, guard = value
+                other = any(item[0] == 'response_guard' and pending_key != key
+                            for pending_key, item in self.pending.items())
+                old = previous[1][1] if previous else {}
+                replacement = previous and 'text' in message and 'text' in old and not str(message['text'] or '').startswith(str(old['text'] or ''))
+                if other or replacement:
+                    self._flush()
+                    previous = None
+                elif previous:
+                    row = kind, (inner, {**old, **message}, guard)
+                if previous:
+                    self.coalesced += 1
+                self.pending[key] = row
+                if len(self.pending) >= 64:
+                    self._flush()
+            return
         with self.lock:
             if key is None:
                 self._flush()

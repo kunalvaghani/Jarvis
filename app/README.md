@@ -1,5 +1,13 @@
 # Jarvis — local Windows voice assistant
 
+## Incremental multilingual voice candidate — 2026-10-23 IST
+
+The existing voice pipeline now has transcript revisions/stable prefixes, adaptive endpoints, final-only command effects, stale-response cancellation fences and opt-in headphone no-wake interruption. English/Hindi/Gujarati/French response settings and installed Piper capability discovery preserve text when a voice is unavailable. Dynamic Island shows language/state and the existing answer view styles provisional words subtly.
+
+**Acceptance remains open:** two separately approved multilingual models were installed and measured on public en/hi/gu/fr clips, but both failed Gujarati and mixed-language quality gates, so English medium.en remains selected. The installed French Kokoro voice is now reused; Gujarati synthesis is unavailable. There is no acoustic AEC or physical duplex certification. Headphone duplex is disabled by default. The common-fixture CPU/CUDA pilot measured decode p50 **5.227 / 0.461 s**, 3/3 exact English sentences each; this is not a before/after or live latency claim. The exact final candidate passed **3,989 tests / 150 gated skips** in the complete application suite; **481 focused tests / 9 gated skips** also passed. These regression results do not close the measured language/acoustic gates. [Architecture, configuration, component comparison and evidence](docs/realtime-voice.md) · [Baseline](docs/realtime-voice-baseline.md) · [Unresolved gates](docs/CLAUDE_HANDOFF.md).
+
+![Rendered runtime header previews with synthetic captions; not a live screenshot](artifacts/realtime-voice/voice-states-rendered.png)
+
 ## Spotify registration repair (2026-10-22 IST)
 
 Corrected the local Spotify MCP registration in `.jarvis/mcp.json` to use this checkout's connector instead of the removed `LocalGithub/Jarvis-spotify-integration` checkout. The setup command in the [Spotify guide](docs/spotify-connector.md#registration-oauth-and-permissions) regenerates paths after relocation and preserves a private backup and other servers.

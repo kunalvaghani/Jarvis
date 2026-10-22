@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Three licensed FLEURS test clips per language; weighted word error rate with Unicode NFKC/case/punctuation normalization. This is a tiny diagnostic sample, not general accuracy or release acceptance. Synthetic clips are separate.",
+  "models": {
+    "medium": {
+      "en": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 4,
+        "reference_words": 73,
+        "weighted_wer": 0.0547945205479452,
+        "decode_p50_seconds": 1.275405800000044,
+        "audio_seconds": 30.78
+      },
+      "hi": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 31,
+        "reference_words": 93,
+        "weighted_wer": 0.3333333333333333,
+        "decode_p50_seconds": 3.0943692000000738,
+        "audio_seconds": 37.92
+      },
+      "gu": {
+        "clips": 3,
+        "correct_language": 1,
+        "word_errors": 140,
+        "reference_words": 82,
+        "weighted_wer": 1.7073170731707317,
+        "decode_p50_seconds": 8.573090599999887,
+        "audio_seconds": 38.64
+      },
+      "fr": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 4,
+        "reference_words": 109,
+        "weighted_wer": 0.03669724770642202,
+        "decode_p50_seconds": 1.2916149000002406,
+        "audio_seconds": 41.879999999999995
+      }
+    },
+    "turbo": {
+      "en": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 5,
+        "reference_words": 73,
+        "weighted_wer": 0.0684931506849315,
+        "decode_p50_seconds": 1.1134850000007646,
+        "audio_seconds": 30.78
+      },
+      "hi": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 29,
+        "reference_words": 93,
+        "weighted_wer": 0.3118279569892473,
+        "decode_p50_seconds": 1.6797574000001987,
+        "audio_seconds": 37.92
+      },
+      "gu": {
+        "clips": 3,
+        "correct_language": 0,
+        "word_errors": 91,
+        "reference_words": 82,
+        "weighted_wer": 1.1097560975609757,
+        "decode_p50_seconds": 1.7576714999995602,
+        "audio_seconds": 38.64
+      },
+      "fr": {
+        "clips": 3,
+        "correct_language": 3,
+        "word_errors": 3,
+        "reference_words": 109,
+        "weighted_wer": 0.027522935779816515,
+        "decode_p50_seconds": 1.0379464999996344,
+        "audio_seconds": 41.879999999999995
+      }
+    }
+  },
+  "mixed": [
+    {
+      "fixture": "mixed-en-hi.wav",
+      "expected_language": "hi",
+      "detected_language": "hi",
+      "wer": 0.375,
+      "decode_seconds": 1.005651399999806
+    },
+    {
+      "fixture": "mixed-en-fr.wav",
+      "expected_language": "fr",
+      "detected_language": "fr",
+      "wer": 0.625,
+      "decode_seconds": 0.9502702999998291
+    },
+    {
+      "fixture": "mixed-en-gu-spliced.wav",
+      "expected_language": "gu",
+      "detected_language": "en",
+      "wer": 0.896551724137931,
+      "decode_seconds": 0.9212058000002799
+    }
+  ],
+  "acceptance": {
+    "gujarati": "FAILED: incorrect language/script and high WER on both tested models, including explicit-language diagnostic.",
+    "configuration": "Existing English medium.en remains selected; downloaded multilingual candidates are optional and not activated.",
+    "physical_audio": "Not tested; deliberately stopped microphone was preserved."
+  }
+}
