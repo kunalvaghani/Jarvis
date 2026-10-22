@@ -1428,6 +1428,11 @@
     "trained_pc_checkpoint": "artifacts/training/qwen-pc-training-20260927T161836Z/round-2",
     "selector": "convaiinnovations/laya",
     "planner": "qwen3.5:9b",
+    "model_hierarchy": {
+      "enabled": true,
+      "execution_model": "qwen3.5:2b",
+      "reasoning_model": "qwen3.5:9b"
+    },
     "coder": "qwen3.5:9b",
     "coding_timeout_seconds": 900,
     "decision": "qwen3.5:9b",

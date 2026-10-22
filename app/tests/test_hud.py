@@ -34,24 +34,45 @@ class HudTests(unittest.TestCase):
 
 
 class InterfaceTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Production keeps one Tcl interpreter. Repeated interpreter teardown
+        # intermittently fails Tk's own script loading on this Windows host.
+        # Exercise one interface instance, as the actual app does; layout cases
+        # set their own inputs and handler call counts are reset between cases.
+        cls.interface_root = tk.Tk()
+        cls.interface_root.withdraw()
+        cls.interface_app = Mock()
+        cls.interface_app.root = cls.interface_root
+        cls.interface_app.config = {"whisper": {"model": "test"}, "knowledge": {"answer_language": "en"}}
+        cls.interface_app.speech.options = {"enabled": True}
+        build_interface(cls.interface_app)
+        cls.interface_root.update_idletasks()
+        cls.initial_panel_state = cls.interface_app.panel.state()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.interface_app.island.close()
+        cls.interface_root.destroy()
+        cls.interface_app = None
+        cls.interface_root = None
+        gc.collect()
+
     def setUp(self):
-        self.root = tk.Tk()
+        self.root = self.interface_root
         self.root.withdraw()
         self.addCleanup(self.close_interface)
-        self.app = Mock()
-        self.app.root = self.root
-        self.app.config = {"whisper": {"model": "test"}, "knowledge": {"answer_language": "en"}}
-        self.app.speech.options = {"enabled": True}
-        build_interface(self.app)
+        self.app = self.interface_app
+        self.app.reset_mock()
+        self.app.panel.withdraw()
+        self.app.live.set('')
+        self.app.question.set('')
         self.root.update_idletasks()
 
     def close_interface(self):
-        # Tk variables and callback cycles must be collected on the thread that
-        # owns Tcl, before later worker tests trigger garbage collection.
-        self.root.destroy()
+        self.app.panel.withdraw()
         self.app = None
         self.root = None
-        gc.collect()
 
     def buttons(self, parent):
         for child in parent.winfo_children():
@@ -60,6 +81,7 @@ class InterfaceTests(unittest.TestCase):
             yield from self.buttons(child)
 
     def test_controls_preserve_handlers_and_initially_hide_panel(self):
+        self.assertEqual(self.initial_panel_state, "withdrawn")
         self.assertEqual(self.app.panel.state(), "withdrawn")
         controls = {button.cget("text"): button for button in self.buttons(self.app.panel)}
         for text, handler in (("Start listening", self.app.toggle_listening), ("Stop tasks", self.app.stop),

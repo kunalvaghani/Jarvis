@@ -1,0 +1,5 @@
+{
+  "status": "diagnostic_stopped",
+  "task_completion_claimed": false,
+  "reason": "Correct staged arithmetic implementation and successful tests observed, but the model repeatedly attempted blocked inline execution and an unassigned README write. Diagnostic stopped; worktrees retained, no automatic promotion or write replay. Fresh paired run uses concrete safe recovery guidance."
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "case": "youtube",
+    "passed": false,
+    "public_query": "Big Buck Bunny Blender Foundation",
+    "error_type": "ValueError",
+    "reason": "Public playback not accepted; no retry after uncertain media effect.",
+    "seconds": 1.1560000000026776
+  },
+  {
+    "case": "spotify",
+    "passed": false,
+    "public_query": "Never Gonna Give You Up Rick Astley",
+    "error_type": "ValueError",
+    "reason": "Public playback not accepted; no retry after uncertain media effect.",
+    "seconds": 15.656999999999243
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "configuration": "baseline",
+    "application": "blender",
+    "proposal": {
+      "action": "blender_task",
+      "browser": "chrome",
+      "folder": ".",
+      "content": "{\"operation\":\"create\",\"objects\":[{\"type\":\"cube\",\"name\":\"PublicCube\",\"location\":[1,2,3]}]}",
+      "find": "",
+      "platform": "",
+      "expected": "scene.blend created with cube",
+      "value": "scene.blend"
+    },
+    "status": "failed",
+    "verified": false,
+    "error_type": "ValueError",
+    "error": "Outside disposable application scope.",
+    "wall_s": 18.909369699998933
+  },
+  {
+    "configuration": "baseline",
+    "application": "unreal",
+    "proposal": {
+      "action": "unreal_task",
+      "browser": "chrome",
+      "folder": "",
+      "content": "",
+      "find": "",
+      "platform": "",
+      "expected": "inspect",
+      "value": "inspect"
+    },
+    "status": "completed",
+    "verified": true,
+    "model_used": "qwen3.5:9b",
+    "route": null,
+    "inference": {
+      "load_s": 0.1,
+      "prompt_tokens": 1717,
+      "prompt_s": 4.22,
+      "output_tokens": 39,
+      "output_s": 5.08,
+      "images": 0,
+      "continued": false,
+      "fresh_reason": "no conversation"
+    },
+    "evidence": {
+      "returned_version": "5.8.2",
+      "independent_manifest_version": "5.8.2"
+    },
+    "wall_s": 9.960537800001475
+  },
+  {
+    "configuration": "hierarchy",
+    "application": "blender",
+    "proposal": {
+      "action": "blender_task",
+      "browser": "chrome",
+      "folder": ".",
+      "content": "{\"operation\":\"create\",\"objects\":[{\"type\":\"cube\",\"name\":\"PublicCube\",\"location\":[1,2,3]}]}",
+      "find": "",
+      "platform": "",
+      "expected": "scene.blend created with cube",
+      "value": "scene.blend"
+    },
+    "status": "failed",
+    "verified": false,
+    "error_type": "ValueError",
+    "error": "Outside disposable application scope.",
+    "wall_s": 17.00940310000078
+  },
+  {
+    "configuration": "hierarchy",
+    "application": "unreal",
+    "proposal": {
+      "action": "unreal_task",
+      "browser": "chrome",
+      "folder": "",
+      "content": "",
+      "find": "",
+      "platform": "",
+      "expected": "inspect",
+      "value": "inspect"
+    },
+    "status": "completed",
+    "verified": true,
+    "model_used": "qwen3.5:9b",
+    "route": {
+      "category": "desktop",
+      "model": "qwen3.5:9b",
+      "reason": "recovery_or_complexity"
+    },
+    "inference": {
+      "load_s": 0.1,
+      "prompt_tokens": 1717,
+      "prompt_s": 0.32,
+      "output_tokens": 39,
+      "output_s": 6.75,
+      "images": 0,
+      "continued": false,
+      "fresh_reason": "no conversation"
+    },
+    "evidence": {
+      "returned_version": "5.8.2",
+      "independent_manifest_version": "5.8.2"
+    },
+    "wall_s": 7.9641259999989416
+  }
+]

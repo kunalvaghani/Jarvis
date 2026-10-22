@@ -1,0 +1,21 @@
+[
+  {
+    "case": "youtube",
+    "passed": true,
+    "chrome_session_count": 1,
+    "initial_state": "paused",
+    "changed_state_verified": true,
+    "restored_state_verified": true,
+    "model_calls": 0,
+    "seconds": 1.1869999999980791
+  },
+  {
+    "case": "spotify",
+    "passed": true,
+    "initial_state": "playing",
+    "changed_state_verified": true,
+    "restored_state_verified": true,
+    "model_calls": 0,
+    "seconds": 2.0
+  }
+]

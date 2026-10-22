@@ -1,0 +1,6 @@
+{"configuration": "baseline", "case": "read", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 17.781000000002678}
+{"configuration": "baseline", "case": "workflow", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 16.70300000000134}
+{"configuration": "baseline", "case": "unfamiliar", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 16.639999999999418}
+{"configuration": "hierarchy", "case": "read", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 16.843999999997322}
+{"configuration": "hierarchy", "case": "workflow", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 16.79699999999866}
+{"configuration": "hierarchy", "case": "unfamiliar", "passed": false, "error_type": "ValueError", "error": "Ollama did not start. Open Ollama and try again.", "seconds": 17.125}

@@ -1,0 +1,1 @@
+Public arithmetic fixture. Run python -m unittest -q. Only calc.py may change. No dependencies or network required.

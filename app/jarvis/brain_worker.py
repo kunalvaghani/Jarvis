@@ -230,6 +230,9 @@ class Models:
         result = json.loads(chat(self.client, settings,
             [{"role": "system", "content": (CODE_RULES if operation in {'code_plan', 'code_edit'} else GMAIL_RULES if operation=='gmail_request' else RULES) + prompt},
              user_message], structured=True))
+        if operation in {'plan', 'replan', 'next_step'}:
+            from .mcp_contract import validate_schema_value
+            validate_schema_value(schema, result, 'proposal')
         if operation != 'dag_plan':
             result["model_used"] = model
         if operation == 'code_edit' and getattr(self, 'stream_content', False) and isinstance(result.get('content'), str):
@@ -237,6 +240,29 @@ class Models:
         return result
 
     def predict(self, request):
+        """At most one teacher correction, entirely before external dispatch."""
+        from .small_model import SMALL, settings
+        import requests
+        self.routing_trace = None
+        try:
+            result = self._predict(request)
+        except (ValueError, requests.RequestException) as error:
+            trace = self.routing_trace
+            if not trace or trace.get('model') not in SMALL:
+                raise
+            teacher = settings(request['options'])['reasoning_model']
+            retry = {**request, 'options': {**request['options'],
+                'planner': teacher, 'decision': teacher,
+                'model_hierarchy': {**settings(request['options']), 'enabled': False}},
+                'plan_validation_error': 'The local executor proposal failed validation or inference. No action from it was dispatched. Use completed observations and solve only the unfinished work.'}
+            result = self._predict(retry)
+            self.routing_trace = {**trace, 'model': teacher, 'reason': 'executor_rejected',
+                                  'previous_model': trace['model'], 'error_type': type(error).__name__}
+        if self.routing_trace and isinstance(result, dict):
+            result['model_route'] = dict(self.routing_trace)
+        return result
+
+    def _predict(self, request):
         options = dict(request["options"])
         self.coding_options = options
         self.stream_content = bool(request.get('stream_content')) and callable(getattr(self, 'progress', None))
@@ -266,6 +292,17 @@ class Models:
         if operation != "choose":
             installed = ensure_server(self.client)
             names = {item["name"] for item in installed.get("models", [])}
+            from .small_model import Outcomes, route
+            import sqlite3
+            try:
+                selected = route(operation, request, options, names,
+                    Outcomes(BASE / '.jarvis-runtime/model-outcomes.sqlite3'))
+            except (OSError, sqlite3.Error):
+                selected = {'model': 'qwen3.5:9b', 'category': 'desktop', 'reason': 'history_unavailable'}
+            if selected['model']:
+                options['planner'] = options['decision'] = selected['model']
+                self.routing_trace = selected
+                options['_hierarchy_single_attempt'] = selected['model'] in {'qwen3.5:2b', 'qwen3.5:4b'}
             coding_tool = operation == "tool_text" and request.get("tool") in {"write_code", "improve_code", "write_tests"}
             keys = ("screen_model",) if operation in {"visual", "visual_ground", "visual_field", "visual_dialog"} else (("planner", "decision") if operation in {"plan", "replan"} else
                 (("coder",) if operation in {"code_plan", "code_edit"} or coding_tool else

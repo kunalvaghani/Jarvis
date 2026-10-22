@@ -1,0 +1,16 @@
+[
+  {
+    "case": "youtube",
+    "passed": false,
+    "error_type": "ValueError",
+    "reason": "Media check did not complete; inspect the current app/session before retrying.",
+    "seconds": 0.4690000000045984
+  },
+  {
+    "case": "spotify",
+    "passed": false,
+    "error_type": "ValueError",
+    "reason": "Media check did not complete; inspect the current app/session before retrying.",
+    "seconds": 0.046999999998661224
+  }
+]

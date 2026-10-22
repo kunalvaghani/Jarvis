@@ -36,6 +36,30 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(validate_plan(result)[0]['action'], 'open')
         self.assertFalse(result['done'])
 
+    def test_scoped_native_schemas_require_folder_and_reject_omission_before_dispatch(self):
+        rows = [{'action': 'blender_task', 'description': 'Create a scoped scene'}, *self.rows]
+        definitions = {r['function']['name']: r['function']['parameters'] for r in functions(rows)}
+        for name in ('blender_task', 'read_file'):
+            self.assertIn('folder', definitions[name]['required'])
+            self.assertEqual(definitions[name]['properties']['folder']['minLength'], 1)
+            for extra in ({}, {'folder': ''}):
+                with self.subTest(name=name, extra=extra), self.assertRaises(ValueError):
+                    parse(call(name, value='scene.blend', expected='verified output', **extra), rows)
+        parsed = parse(call('blender_task', value='scene.blend', expected='verified cube',
+                            folder='this folder', content='{"operation":"inspect"}'), rows)
+        self.assertEqual(parsed['steps'][0]['folder'], 'this folder')
+
+    def test_only_host_bound_read_only_session_can_supply_implicit_project_scope(self):
+        row = [{'action': 'read_file', 'description': 'Read scoped source'}]
+        self.assertNotIn('folder', functions(row, bound_folder='.')[0]['function']['parameters']['required'])
+        step = parse(call('read_file', value='source.py', expected='source'), row, bound_folder='.')['steps'][0]
+        self.assertEqual(step['folder'], '.')
+        writes = [{'action': 'blender_task', 'description': 'Write scene'}]
+        with self.assertRaises(ValueError):
+            parse(call('blender_task', value='scene.blend', expected='scene'), writes, bound_folder='.')
+        with self.assertRaises(ValueError):
+            functions(row, bound_folder='C:/unapproved')
+
     def test_calls_cannot_invent_tools_fields_or_code(self):
         for message in ({}, {'tool_calls': []}, {'tool_calls': call()['tool_calls'] * 2},
                         call('shell_exec'), call(command='erase files'),

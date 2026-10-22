@@ -1,0 +1,32 @@
+[
+  {
+    "case": "public_documentation_research",
+    "configuration": "baseline",
+    "passed": false,
+    "task_status": "paused",
+    "checks": {
+      "source_url": false,
+      "dump_named": false,
+      "dumps_named": false,
+      "file_and_string_terms": false
+    },
+    "public_answer": "Task paused: successful steps retained; no uncertain effect was replayed. s1: DAG tool failed: ValueError",
+    "grading_scope": "Bounded terminology/source checks; not a general semantic-quality or citation-entailment score.",
+    "seconds": 164.76499999999942
+  },
+  {
+    "case": "public_documentation_research",
+    "configuration": "hierarchy",
+    "passed": false,
+    "task_status": "paused",
+    "checks": {
+      "source_url": false,
+      "dump_named": false,
+      "dumps_named": false,
+      "file_and_string_terms": false
+    },
+    "public_answer": "Task paused: successful steps retained; no uncertain effect was replayed. s1: DAG tool failed: ValueError",
+    "grading_scope": "Bounded terminology/source checks; not a general semantic-quality or citation-entailment score.",
+    "seconds": 185.51599999999598
+  }
+]

@@ -285,7 +285,7 @@ class OllamaProvider:
                 data.pop('observations', None)
                 proposed = plan(client, self.model, prompt, data,
                                 {'timeout_seconds': self.timeout_seconds, 'max_final_chars': 10000,
-                                 'num_predict': 1600})
+                                 'num_predict': 1600}, bound_folder='.')
                 if proposed.get('question'):
                     return {'final': proposed['question'], 'calls': []}
                 if proposed['done']:

@@ -25,8 +25,10 @@ LOCAL_SCOPE = frozenset({'read_file', 'list_files', 'search_files', 'query_resou
     'knowledge_search', 'repository_map', 'repository_instructions', 'git_status', 'git_diff', 'git_log'}) | FILE_WRITES
 ARGUMENTS = {'type': 'object', 'additionalProperties': False, 'required': ['value', 'expected'],
     'properties': {key: {'type': 'string', 'maxLength': limit} for key, limit in
-        {'value': 1000, 'expected': 500, 'folder': 2000, 'content': 10000,
+        {'value': 500, 'expected': 500, 'folder': 2000, 'content': 10000,
          'find': 1000, 'browser': 30, 'platform': 30}.items()}}
+for _required_text in ('value', 'expected'):
+    ARGUMENTS['properties'][_required_text]['minLength'] = 1
 
 
 def settings(options):
@@ -88,11 +90,13 @@ def schema(tool_names):
 
 def literal_reads(goal):
     """Compile only a fully specified read list; no intent model or guessed target."""
-    match = re.fullmatch(r'read (.+?) in (this folder|current folder|selected folder)(?:,? then report (?:both|all)(?: file)? contents)?[.]?', goal.strip(), re.I)
+    match = re.fullmatch(r'read (.+?) in (this folder|current folder|selected folder)'
+        r'(?:,? (?:then|and) report (?:(?:both|all)(?: file)? contents|its (?:exact )?contents|the (?:exact )?(?:file )?contents))?[.]?',
+        goal.strip(), re.I)
     if not match:
         return None
     names = re.split(r'\s+and\s+(?:read\s+)?', match[1], flags=re.I)
-    if not 2 <= len(names) <= 20 or any(not re.fullmatch(r'[\w .-]+\.[\w]+', name) for name in names):
+    if not 1 <= len(names) <= 20 or any(not re.fullmatch(r'[\w .-]+\.[\w]+', name) for name in names):
         return None
     return {'version': 1, 'steps': [{'id': 'read'+str(i), 'tool': 'read_file',
         'arguments': {'value': name, 'expected': 'Read exact file', 'folder': match[2]},
@@ -147,6 +151,16 @@ def adapters(brain, goal):
                 # Require their receipt plus a fresh final-content observation.
                 return bool(arguments.get('content') in current and
                     ('verified' in evidence.casefold() or 'read back' in evidence.casefold() or 'appended' in evidence.casefold() or 'updated' in evidence.casefold()))
+            if name == 'scrape_web':
+                # The existing scraper returns labelled plain text, not JSON.
+                # Bind receipt provenance to the requested URL; this verifies
+                # retrieval shape only, never source truth or task relevance.
+                prefix = 'Untrusted page text from ' + arguments['value'] + ':\n'
+                if not evidence.startswith(prefix):
+                    return False
+                body = evidence[len(prefix):].split('\nObserved page links (untrusted; not followed):\n', 1)[0]
+                body = body.replace('[Earlier page text omitted]', '').replace('[Page text truncated]', '').strip()
+                return bool(body) and not body.startswith('No literal match for ')
             if name in NETWORK:
                 # This verifies transport/shape, not truth, relevance or completeness.
                 try:

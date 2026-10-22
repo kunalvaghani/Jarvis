@@ -1,0 +1,26 @@
+{
+  "qwen3.5:9b": {
+    "samples": 18,
+    "p50_s": 9.521597800000109,
+    "p95_s": 20.37979809999979,
+    "tool_selection_correct": 16,
+    "errors": 0,
+    "external_tasks_executed": 0
+  },
+  "qwen3.5:4b": {
+    "samples": 18,
+    "p50_s": 6.893417499999941,
+    "p95_s": 26.03513059999932,
+    "tool_selection_correct": 18,
+    "errors": 0,
+    "external_tasks_executed": 0
+  },
+  "hierarchy": {
+    "samples": 18,
+    "p50_s": 10.966698850000284,
+    "p95_s": 36.89563770000041,
+    "tool_selection_correct": 17,
+    "errors": 0,
+    "external_tasks_executed": 0
+  }
+}

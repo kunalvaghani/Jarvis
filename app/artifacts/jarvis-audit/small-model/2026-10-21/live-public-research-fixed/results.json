@@ -1,0 +1,32 @@
+[
+  {
+    "case": "public_documentation_research",
+    "configuration": "baseline",
+    "passed": true,
+    "task_status": "completed",
+    "checks": {
+      "source_url": true,
+      "dump_named": true,
+      "dumps_named": true,
+      "file_and_string_terms": true
+    },
+    "public_answer": "Based on the provided documentation from https://docs.python.org/3/library/json.html:\n\nThe core difference between `json.dump` and `json.dumps` lies in their output destination:\n\n1.  **`json.dumps()`** (dump string):\n    *   Encodes a Python object into a JSON formatted **string**.\n    *   It returns the resulting string directly.\n    *   Example from docs: `json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])` returns `'[\"foo\", {\"bar\": [\"baz\", null, 1.0, 2]}]'`.\n\n2.  **`json.dump()`** (dump file-like object):\n    *   Encodes a Python object into a JSON formatted string and writes it directly to a **file-like object** (e.g., `StringIO`, a file handle).\n    *   It does not return the string; instead, it writes to the provided stream.\n    *   Example from docs: \n        ```python\n        from io import StringIO\n        io = StringIO()\n        json.dump(['streaming API'], io)\n        # Access content via io.getvalue()\n        ```\n\nIn summary: `dumps` returns a string, while `dump` writes to a stream.",
+    "grading_scope": "Bounded terminology/source checks; not a general semantic-quality or citation-entailment score.",
+    "seconds": 105.15600000000268
+  },
+  {
+    "case": "public_documentation_research",
+    "configuration": "hierarchy",
+    "passed": true,
+    "task_status": "completed",
+    "checks": {
+      "source_url": true,
+      "dump_named": true,
+      "dumps_named": true,
+      "file_and_string_terms": true
+    },
+    "public_answer": "Based on the provided documentation from https://docs.python.org/3/library/json.html:\n\nThe primary difference between `json.dump` and `json.dumps` lies in their output destination:\n\n1.  **`json.dumps()` (dump string)**: This function encodes a Python object into a JSON formatted *string*. It returns the resulting string to the caller.\n    *   Example from docs: `json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])` returns `'[\"foo\", {\"bar\": [\"baz\", null, 1.0, 2]}]'`.\n\n2.  **`json.dump()` (dump file-like)**: This function encodes a Python object into a JSON formatted string and writes it directly to a *file-like object* (such as `StringIO`, a file handle, or socket). It does not return the string; instead, it performs the write operation.\n    *   Example from docs:\n        ```python\n        from io import StringIO\n        io = StringIO()\n        json.dump(['streaming API'], io)\n        # To get the content, you must read it from 'io'\n        io.getvalue()  # Returns '[\"streaming API\"]'\n        ```\n\nIn summary: `dumps` returns a string; `dump` writes to a file-like object.",
+    "grading_scope": "Bounded terminology/source checks; not a general semantic-quality or citation-entailment score.",
+    "seconds": 233.17199999999866
+  }
+]

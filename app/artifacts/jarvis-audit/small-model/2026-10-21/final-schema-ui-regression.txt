@@ -1,0 +1,52 @@
+...FF................................                                    [100%]
+================================== FAILURES ===================================
+___ InterfaceTests.test_controls_preserve_handlers_and_initially_hide_panel ___
+tests\test_hud.py:59: in setUp
+    build_interface(self.app)
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: in element_create
+    self.tk.call(self._name, "element", "create", elementname, etype,
+E   _tkinter.TclError: Duplicate element GlassButton.surface
+_ InterfaceTests.test_primary_controls_remain_accessible_at_small_window_size _
+tests\test_hud.py:59: in setUp
+    build_interface(self.app)
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: in element_create
+    self.tk.call(self._name, "element", "create", elementname, etype,
+E   _tkinter.TclError: Duplicate element GlassButton.surface
+---------------------------- Captured stderr call -----------------------------
+Python WNDPROC handler failed
+Error in sys.excepthook:
+
+Original exception was:
+Python WNDPROC handler failed
+Error in sys.excepthook:
+
+Original exception was:
+-------------------------- Captured stderr teardown ---------------------------
+Python WNDPROC handler failed
+Error in sys.excepthook:
+
+Original exception was:
+Python WNDPROC handler failed
+Error in sys.excepthook:
+
+Original exception was:
+Python WNDPROC handler failed
+Error in sys.excepthook:
+
+Original exception was:
+=========================== short test summary info ===========================
+FAILED tests/test_hud.py::InterfaceTests::test_controls_preserve_handlers_and_initially_hide_panel
+FAILED tests/test_hud.py::InterfaceTests::test_primary_controls_remain_accessible_at_small_window_size
+2 failed, 35 passed in 62.58s (0:01:02)

@@ -1,0 +1,20 @@
+...............F........................................................ [ 73%]
+..........................                                               [100%]
+================================== FAILURES ===================================
+_ IntegrationTests.test_schema_planning_activity_uses_protocol_during_redirect _
+tests\test_hierarchical.py:163: in test_schema_planning_activity_uses_protocol_during_redirect
+    result = models.generate('installed-model', 'Plan task', {'tools': [{'action': 'read'}]}, 'dag_plan')
+jarvis\brain_worker.py:235: in generate
+    validate_schema_value(schema, result, 'proposal')
+jarvis\mcp_contract.py:74: in validate_schema_value
+    _validate(schema, value, path, 0, [0])
+jarvis\mcp_contract.py:129: in _validate
+    _validate(properties[key], item, path + '.' + str(key), depth + 1, visited)
+jarvis\mcp_contract.py:116: in _validate
+    _validate(schema['items'], item, path + '[' + str(index) + ']', depth + 1, visited)
+jarvis\mcp_contract.py:88: in _validate
+    raise ContractError('Unsupported schema keyword(s) at ' + path + ': ' + ', '.join(sorted(unknown))[:120])
+E   jarvis.mcp_contract.ContractError: Unsupported schema keyword(s) at proposal.steps[0]: anyOf
+=========================== short test summary info ===========================
+FAILED tests/test_hierarchical.py::IntegrationTests::test_schema_planning_activity_uses_protocol_during_redirect
+1 failed, 97 passed in 5.20s

@@ -1,0 +1,139 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+...........................s............................................ [  5%]
+........................................................................ [  7%]
+............sss......................................................... [  8%]
+........................................................................ [ 10%]
+................................................s.s..................... [ 12%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+....................s.................................................s. [ 24%]
+.s...................................................................... [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+.........................ssssssss....................................... [ 33%]
+............................ssssssssssss................................ [ 35%]
+..........................s............................................. [ 37%]
+.........................................................ssssssssss..... [ 38%]
+........................................................................ [ 40%]
+.................F...................................................... [ 42%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+...........................ssssssssssssssss............................. [ 47%]
+.............................s.s......s......................s.......... [ 49%]
+........................................................................ [ 51%]
+..............................................sssss..................... [ 52%]
+........................................................................ [ 54%]
+........................................................................ [ 56%]
+...............................s...............s........................ [ 58%]
+........................................F............................... [ 60%]
+........................................................................ [ 61%]
+.......................sssssss.......................................... [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+..........s............................................................. [ 68%]
+..........................................................s......s...... [ 70%]
+..........................s.s......s.....................s.............. [ 72%]
+........................................................................ [ 74%]
+..................sssssssssss........................................... [ 75%]
+...........s.................s.......................................... [ 77%]
+...............sssssssssssss............................................ [ 79%]
+....................ssssssssssss........................................ [ 81%]
+............................................ssss......................s. [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+...............................s....s................................... [ 95%]
+........................sssssss......................................... [ 97%]
+..............sssssssssssssssss......................................... [ 98%]
+.............................................                            [100%]
+================================== FAILURES ===================================
+___ InterfaceTests.test_controls_preserve_handlers_and_initially_hide_panel ___
+tests\test_hud.py:38: in setUp
+    self.root = tk.Tk()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E   _tkinter.TclError: Can't find a usable tk.tcl in the following directories: 
+E       C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/library
+E   
+E   C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/scale.tcl": no such file or directory
+E   couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/scale.tcl": no such file or directory
+E       while executing
+E   "source -encoding utf-8 [file join $::ttk::library scale.tcl]"
+E       (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl" line 103)
+E       invoked from within
+E   "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl"
+E       ("uplevel" body line 1)
+E       invoked from within
+E   "uplevel \#0 [list source -encoding utf-8 $::ttk::library/ttk.tcl]"
+E       (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl" line 706)
+E       invoked from within
+E   "source C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl"
+E       ("uplevel" body line 1)
+E       invoked from within
+E   "uplevel #0 [list source $file]"
+E   
+E   
+E   This probably means that tk wasn't installed properly.
+________________ test_P06_gate_quarantines_resource_exhaustion ________________
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:617: in _rmtree_unsafe
+    os.unlink(fullname)
+E   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\tmpwz6syo2h\\err.txt'
+
+During handling of the above exception, another exception occurred:
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:843: in onerror
+    _os.unlink(path)
+E   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\tmpwz6syo2h\\err.txt'
+
+During handling of the above exception, another exception occurred:
+tests\test_phase06_controlled_evolution.py:275: in test_P06_gate_quarantines_resource_exhaustion
+    report = gate_run(research_for(canon, tmp_path), {'base_seconds': 0.95, 'max_seconds': 2.0})
+tests\test_phase06_controlled_evolution.py:249: in gate_run
+    return research.gate.evaluate('read_retry_backoff', parent_tree, child)
+evolution_eval\gate.py:214: in evaluate
+    result = self.compare(parent_root, child_root, target, repeats, cancelled)
+evolution_eval\gate.py:149: in compare
+    result = self.benchmark(root, benchmark, cancelled=cancelled)
+evolution_eval\gate.py:134: in benchmark
+    run = run_bounded([self.python, '-I', '-B', str(self.dir / 'runner.py'), str(root)], root, spec['timeout'],
+evolution_eval\process.py:55: in run_bounded
+    with tempfile.TemporaryDirectory() as folder:
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:869: in __exit__
+    self.cleanup()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:873: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:855: in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:749: in rmtree
+    return _rmtree_unsafe(path, onerror)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:619: in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:846: in onerror
+    cls._rmtree(path, ignore_errors=ignore_errors)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tempfile.py:855: in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:749: in rmtree
+    return _rmtree_unsafe(path, onerror)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:600: in _rmtree_unsafe
+    onerror(os.scandir, path, sys.exc_info())
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\shutil.py:597: in _rmtree_unsafe
+    with os.scandir(path) as scandir_it:
+E   NotADirectoryError: [WinError 267] The directory name is invalid: 'C:\\Users\\kunal\\AppData\\Local\\Temp\\tmpwz6syo2h\\err.txt'
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_hud.py::InterfaceTests::test_controls_preserve_handlers_and_initially_hide_panel
+FAILED tests/test_phase06_controlled_evolution.py::test_P06_gate_quarantines_resource_exhaustion
+2 failed, 3925 passed, 150 skipped, 1 warning in 2195.33s (0:36:35)

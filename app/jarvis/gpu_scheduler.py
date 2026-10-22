@@ -25,6 +25,7 @@ DEFAULTS = {'enabled':False, 'helper_gpu':False, 'primary_layers':12, 'codex_lay
             'vram_ceiling_mb':3850}
 # Models split across GPU and CPU; their CPU layers use the configured thread count.
 PRIMARY = {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}
+SMALL_MODELS = {'qwen3.5:2b','qwen3.5:4b'}
 _threads = threading.RLock()
 
 
@@ -144,7 +145,13 @@ def allocation(model,context,policy,hardware):
     budget=available-max(policy['reserve_mb'],available/6)
     if model in {'qwen3.5:0.8b','qwen2.5:0.5b'}:
         return -1 if policy['helper_gpu'] and budget>=1024 else 0
-    if model not in {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}:
+    if model in SMALL_MODELS:
+        # Conservative partial offload, with the same speech reserve and safety
+        # margin. This is an admission envelope, not measured full residency.
+        per_layer = 100 if model == 'qwen3.5:2b' else 145
+        return next((n for n in range(policy['primary_layers'],0,-1)
+                     if 600+per_layer*n+.016*context<=budget),0)
+    if model not in PRIMARY:
         return 0  # Unknown model footprint cannot be guessed.
     # Conservative envelope above measured Q4_K_M residency on this 4 GB machine.
     ceiling=policy['codex_layers'] if model.startswith('jarvis-') else policy['primary_layers']
@@ -370,9 +377,9 @@ def install(client,role='question'):
                 if admitted and layers<policy['codex_layers']:
                     raise ValueError('Insufficient reserved VRAM for local Codex; inference was not issued. Free GPU memory or configure CPU coding.')
             else:
-                keep=policy['warm_seconds'] if admitted and layers>0 and model=='qwen3.5:9b' else 0
+                keep=policy['warm_seconds'] if admitted and layers>0 and model in SMALL_MODELS | {'qwen3.5:9b'} else 0
                 options={**payload.get('options',{}),'num_ctx':context,'num_gpu':layers}
-                if policy['cpu_threads'] and model in PRIMARY:options['num_thread']=policy['cpu_threads']
+                if policy['cpu_threads'] and model in PRIMARY | SMALL_MODELS:options['num_thread']=policy['cpu_threads']
                 kwargs['json']={**payload,'keep_alive':keep,'options':options}
             lease.event(stage='dispatch',role=role,model=model,num_gpu=layers,
                 context_tokens=context,gpu_slot=admitted)
@@ -394,7 +401,7 @@ def install(client,role='question'):
                 closed=True
             try:
                 row=None
-                if response.ok and model in {'qwen3.5:9b','jarvis-codex-qwen3.5:9b','jarvis-claude-qwen3.5:9b'}:
+                if response.ok and model in PRIMARY | SMALL_MODELS:
                     try:
                         row=next((r for r in loaded() if r.get('name')==model and r.get('context_length')==context and r.get('digest') and isinstance(r.get('size_vram'),int)),None)
                     except (requests.RequestException,KeyError,ValueError):

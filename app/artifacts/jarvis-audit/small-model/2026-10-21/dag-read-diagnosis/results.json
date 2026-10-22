@@ -1,0 +1,84 @@
+[
+  {
+    "configuration": "baseline",
+    "case": "read",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "DAG rejected before execution: The planner proposed an unsupported step.",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "",
+                "expected": "",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": ""
+              },
+              "dependencies": [],
+              "expected": "Exact contents of one.txt",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      },
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "",
+                "expected": "",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": ""
+              },
+              "dependencies": [],
+              "expected": "Exact contents of one.txt",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      }
+    ],
+    "seconds": 183.26499999999942
+  }
+]

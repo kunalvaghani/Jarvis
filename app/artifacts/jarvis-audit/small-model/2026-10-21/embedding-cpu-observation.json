@@ -1,0 +1,11 @@
+{
+  "scope": "post-regression residency observation, not a peak or exclusive host benchmark",
+  "embeddings": [
+    {
+      "name": "nomic-embed-text:latest",
+      "size": 376449269,
+      "size_vram": 0,
+      "context_length": 2048
+    }
+  ]
+}

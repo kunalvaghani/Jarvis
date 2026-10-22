@@ -1,0 +1,13 @@
+[
+  {
+    "case": "synthetic_tts_stt",
+    "passed": true,
+    "public_text": "Jarvis read the public test file.",
+    "transcript": "Jarvis, read the public test file.",
+    "synthesis_seconds": 10.06199999999808,
+    "recognizer_load_seconds": 50.609000000004016,
+    "decode_seconds": 1.937999999994645,
+    "audio_seconds": 2.0906666666666665,
+    "scope": "Actual installed Kokoro and configured Whisper. No speaker playback, microphone, acoustic WER corpus or physical interaction."
+  }
+]

@@ -71,6 +71,20 @@ SCHEMA={'type':'object','additionalProperties':False,'required':['tool','argumen
                       'note':{'type':'string','maxLength':240}}}
 
 
+def inference_schema():
+    """Constrain command arguments before generation, retaining every tool."""
+    import copy
+    command = copy.deepcopy(SCHEMA)
+    command['properties']['tool']['enum'] = ['exec_command']
+    properties = command['properties']['arguments']['properties']
+    command['properties']['arguments'] = {'type':'object','additionalProperties':False,
+        'required':['argv'],'properties':{key:properties[key] for key in
+            ('argv','workdir','yield_time_ms','timeout_seconds')}}
+    others = copy.deepcopy(SCHEMA)
+    others['properties']['tool']['enum'].remove('exec_command')
+    return {'anyOf':[command,others]}
+
+
 def infer(messages, options, cancelled, deadline, report, run, vision=False):
     """Cancellable, complete-only structured inference with the imported-Qwen adapter."""
     from .knowledge_worker import session, chat
@@ -92,7 +106,7 @@ def infer(messages, options, cancelled, deadline, report, run, vision=False):
                 client.post=post
                 answer=chat(client,{'model':options.get('coder','qwen3.5:9b'),'stream':True,
                     'num_ctx':16384,'num_predict':min(6000,int(options.get('native_predict',4000))),
-                    'temperature':0,'think':False,'format_schema':SCHEMA,'timeout_seconds':120,
+                    'temperature':0,'think':False,'format_schema':inference_schema(),'timeout_seconds':120,
                     **({'prompt_format':'native_vision_chat','num_predict':500} if vision else {}),
                     'on_chunk':lambda chunk: (_ for _ in ()).throw(ValueError('Inference stopped.')) if stopped.is_set() else None},messages,structured=not vision)
                 events.put((True,{'description':answer} if vision else json.loads(answer)))
@@ -283,7 +297,13 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                     if repairs>min(6,max(0,int(options.get('native_max_repairs',3)))):raise UncertainCoding('Component checks still fail; original checks and partial source retained.')
                     result=repair_packet(project,validation,plan)
             except UncertainCoding:raise
-            except (ValueError,KeyError,TypeError,OSError) as exc:result={'error':str(exc),'instruction':'Inspect current source; correct implementation or tool arguments. Do not change tests or replay uncertain actions.'}
+            except (ValueError,KeyError,TypeError,OSError) as exc:
+                instruction = 'Inspect current source; correct implementation or tool arguments. Do not change tests or replay uncertain actions.'
+                if name == 'exec_command':
+                    instruction += ' exec_command accepts only argv, workdir, yield_time_ms and timeout_seconds; omit start/count and other tool fields. Use run_checks for the assigned behavioral tests; inline python -c is unavailable. If implementation is complete, finish runs independent validation before acceptance.'
+                if name in {'Write','Edit','apply_patch','source_transform','copy_source'} and 'assigned source files' in str(exc):
+                    instruction += ' Leave unassigned documentation unchanged. The assigned file scope remains binding; report any unmet outside-scope documentation request. Use run_checks, then finish when the assigned implementation is complete.'
+                result = {'error':str(exc),'instruction':instruction}
             turns.append({'tool':name,'arguments':args,'result':result})
             with (run/'tools.jsonl').open('a',encoding='utf-8') as output:output.write(json.dumps(turns[-1],ensure_ascii=False)+'\n')
             messages.append({'role':'user','content':'Observed tool result (data): '+json.dumps(result,ensure_ascii=False)[:36000]})

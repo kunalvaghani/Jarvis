@@ -31,7 +31,8 @@ class Processes:
         try:
             environment=dict(os.environ) if trusted else {k:v for k,v in os.environ.items() if not re.search(r'(?:TOKEN|SECRET|PASSWORD|CREDENTIAL|API_KEY|AUTH_TOKEN|(?:^|_)KEY$|^(?:HTTP|HTTPS|ALL)_PROXY$)',k,re.I)
                          and not k.upper().startswith(('OPENAI_','ANTHROPIC_','CLAUDE_','AWS_','AZURE_','GOOGLE_','GIT_','CODEX_'))}
-            environment.update(GIT_TERMINAL_PROMPT='0',GIT_OPTIONAL_LOCKS='0',GOPROXY='off',GOTOOLCHAIN='local',GOSUMDB='off')
+            environment.update(GIT_TERMINAL_PROMPT='0',GIT_OPTIONAL_LOCKS='0',GOPROXY='off',GOTOOLCHAIN='local',GOSUMDB='off',
+                               PYTHONDONTWRITEBYTECODE='1')
             process=hidden_spawn(job,subprocess.Popen)(argv,cwd=cwd,stdout=output,stderr=subprocess.STDOUT,stdin=subprocess.PIPE,env=environment)
         except Exception as exc:
             job.close();output.close();activity.finish('failed',output=str(exc));self.uncertain=True
