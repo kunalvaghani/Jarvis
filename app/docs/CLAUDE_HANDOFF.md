@@ -1,5 +1,13 @@
 # Cumulative Claude handoff
 
+## Spotify registration repair — 2026-10-22 IST
+
+**Fixed:** `.jarvis/mcp.json` referenced the removed `LocalGithub/Jarvis-spotify-integration` server. Ran the existing registration script in the primary checkout; its private pre-change backup was retained and the only config diff is the Spotify server path. Other server registrations remain unchanged.
+
+**Fresh evidence:** read-only MCP test loaded the actual repaired registration, verified the server file exists, initialized the child, discovered 86 tools and invoked `spotify_health` successfully. `tests/test_spotify.py` and `tests/test_spotify_connector_integration.py`: **38 passed in 5.03 seconds**. Required `python -m jarvis.launcher --check`: **ready**, no missing/incomplete components. MCP tests ran outside the inspection sandbox because sandbox-local asyncio socket creation stalled; no runtime code workaround was introduced.
+
+**Remaining acceptance:** this repair does not certify playback, physical voice commands, OAuth or account/library operations. No running Jarvis restart, playback/account mutation, package installation or publication was performed. Next acceptance action is a normal Spotify command through the running Jarvis; preserve existing Spotify acceptance gates below.
+
 ## Small-model intelligence candidate — 2026-10-22 IST
 
 Final source build: **3,936 passed / 150 gated skips / zero failures**, 1,155.80 seconds; 104 focused tests passed. Launcher ready, actual native App startup/owned close passed with microphone stopped, all 325 inventoried hashes match, compilation passed, and normal protected evaluator seal matched. No publish/promotion. [Authoritative report](../artifacts/jarvis-audit/small-model/2026-10-21/FINAL_BUILD.md). SM01–SM06 limitations remain open.

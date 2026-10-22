@@ -1,5 +1,11 @@
 # Jarvis — local Windows voice assistant
 
+## Spotify registration repair (2026-10-22 IST)
+
+Corrected the local Spotify MCP registration in `.jarvis/mcp.json` to use this checkout's connector instead of the removed `LocalGithub/Jarvis-spotify-integration` checkout. The setup command in the [Spotify guide](docs/spotify-connector.md#registration-oauth-and-permissions) regenerates paths after relocation and preserves a private backup and other servers.
+
+Fresh checks: the actual configured child initialized, exposed **86 tools**, and passed `spotify_health`; **38 Spotify regressions passed**; `python -m jarvis.launcher --check` returned **ready**. These are read-only health/regression/readiness checks, not live playback, OAuth or account-operation acceptance. No playback/account changes or dependency installation were performed.
+
 ## Small-model-first intelligence candidate (2026-10-22)
 
 Jarvis now runs exact commands directly, selects local Qwen3.5 2B for routine execution, and retains 9B for difficult planning, coding, research and evidence-driven escalation. 4B remains configurable. Strict scoped tool schemas, existing capability retrieval, memory, connectors, privacy, approvals, checkpoints and independent verification stay in the execution path. Verified teacher procedures enter the existing skill index; routing learns advisory outcome statistics. GPU scheduling admits bounded student offload and owned warm-cache handoff. No new dependency, service or UI layout is required; use the existing `Start Jarvis.cmd` launcher.
