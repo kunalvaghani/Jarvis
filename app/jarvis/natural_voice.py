@@ -306,4 +306,6 @@ def voice_style(voice, spec):
 
 def language_for(spec):
     first = str(spec).split(",")[0].strip()
+    if first.startswith('ff_'):
+        return 'fr-fr'
     return "en-gb" if first.startswith("b") else "en-us"

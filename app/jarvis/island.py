@@ -620,6 +620,13 @@ class Island:
 
     def notify(self, kind, message):
         self.activity.notify(kind, message)
+        if kind == 'voice_transcript' and isinstance(message, dict):
+            self.voice_language = message.get('language', 'en').upper()
+            self.message = str(message.get('text', ''))[:450]
+            self.message_until = time.monotonic() + 3
+        elif kind == 'voice_interrupt':
+            self.message = 'User interrupting · ' + str(message).lower()
+            self.message_until = time.monotonic() + 3
         if self.pip is not None:
             self.pip.event(kind, message)  # Pip reacts to what Jarvis does.
         if kind == 'media_card' and isinstance(message, dict):
@@ -705,6 +712,8 @@ class Island:
         message = self.message if now < self.message_until else ""
         scale = window_scale(root)
         detail = self.activity.caption(status, now, speaking, listening)
+        if listening and getattr(self, 'voice_language', None):
+            detail += ' · ' + self.voice_language
         max_width = max(170, root.winfo_screenwidth()/scale-12)
         max_height = max(180, root.winfo_screenheight()/scale-70)
         target, workspace, self.surface_open = self.layout_target(message, detail, status, max_width, max_height)

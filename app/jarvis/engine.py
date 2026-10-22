@@ -1,7 +1,7 @@
 """Incremental command boundaries for spoken commands.
 
-Partial hypotheses may change. Only complete clauses separated by 'then' are
-committed early; most commands wait for a final ASR segment. There is no
+Partial hypotheses may change. All external actions wait for final ASR speech.
+Stable partials may prepare a deterministic intent category only. There is no
 dictation mode: "write ..." is one command (composed or exact text), and
 free speech is typed only while the push-to-write keys are held.
 """
@@ -10,8 +10,8 @@ import time
 import threading
 from .commands import Command, parse
 
-WAKE = re.compile(r"\b(?:hey\s+)?jarvis\b", re.I)
-LEADING_WAKE = re.compile(r"^\W*(?:(?:hey|hi|ok|okay|yo)\W+)?jarvis\b", re.I)
+WAKE = re.compile(r"(?:\b(?:hey\s+)?jarvis\b|જાર્વિસ|जार्विस)", re.I)
+LEADING_WAKE = re.compile(r"^\W*(?:(?:hey|hi|ok|okay|yo)\W+)?(?:jarvis\b|જાર્વિસ|जार्विस)", re.I)
 BOUNDARY = re.compile(r"\s+(?:and then|then|next command)\s+", re.I)
 OPEN_PREFIX = re.compile(r"^(?:(?:please|can you|could you|would you)\s+)*(?:open|launch|start)\s+", re.I)
 AND_WRITE = re.compile(r"\s+and\s+(?=(?:please\s+)?(?:write|type|click|select|choose)\b)", re.I)
@@ -104,6 +104,17 @@ class Engine:
             self._dispatch(Command("whatsapp_answer", text))
             self._reset_segment()
             return
+        if not final:
+            # Never dispatch even an apparently complete clause from revisable speech.
+            return
+        from .voice_runtime import normalize_intent
+        language = re.fullmatch(r'(?:answer|reply|respond|speak) in (english|hindi|gujarati|french)|(?:use|enable) automatic language|reply in (?:the )?same language', text, re.I)
+        if language:
+            selected = {'english': 'en', 'hindi': 'hi', 'gujarati': 'gu', 'french': 'fr'}.get((language[1] or '').lower(), 'auto')
+            self.report('voice_language', selected)
+            self._reset_segment()
+            return
+        text = normalize_intent(text)
         # Whisper may finalize 'open notepad' before the next 'and write ...'.
         continued = bool(re.match(r"^and\s+(?=(?:please\s+)?(?:write|type)\b)", text, re.I))
         text = re.sub(r"^and\s+(?=(?:please\s+)?(?:write|type|click|select|choose)\b)", "", text, flags=re.I)

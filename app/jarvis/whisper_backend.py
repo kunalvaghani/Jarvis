@@ -13,17 +13,31 @@ def settings(options=None):
     if options is not None and not isinstance(options, dict):
         raise ValueError('whisper options must be an object')
     result = {**{'device':'cuda', 'compute_type':'int8_float16', 'language':'en',
-        'partial_interval_seconds':1., 'silence_seconds':.8, 'vad_threshold':.45}, **(options or {})}
+        'partial_interval_seconds':1., 'silence_seconds':.8, 'vad_threshold':.45,
+        'frame_ms':32, 'streaming_enabled':True, 'adaptive_endpointing':True,
+        'endpoint_mode':'balanced', 'max_utterance_seconds':120,
+        'language_confidence':.8, 'language_confirmations':2}, **(options or {})}
     if result['device'] not in ('cuda', 'cpu'):
         raise ValueError('whisper.device must be cuda or cpu')
     if not isinstance(result['compute_type'], str) or not result['compute_type'].strip() or len(result['compute_type'])>32:
         raise ValueError('whisper.compute_type must name a CTranslate2 precision')
     if not isinstance(result['language'], str) or not result['language'].strip() or len(result['language'])>32:
         raise ValueError('whisper.language must name a language or auto')
-    for name, low, high in (('partial_interval_seconds',.2,5), ('silence_seconds',.2,5), ('vad_threshold',0,1)):
+    for name, low, high in (('partial_interval_seconds',.2,5), ('silence_seconds',.2,5), ('vad_threshold',0,1), ('language_confidence',0,1)):
         value = result[name]
         if type(value) not in (int,float) or not math.isfinite(value) or not low<=value<=high:
             raise ValueError('whisper.'+name+' is outside its finite capture range')
+    if result['endpoint_mode'] not in {'fast', 'balanced', 'careful'}:
+        raise ValueError('Invalid endpoint mode')
+    for name in ('streaming_enabled', 'adaptive_endpointing'):
+        if type(result[name]) is not bool:
+            raise ValueError('whisper.' + name + ' must be boolean')
+    for name, low, high in (('frame_ms', 20, 100), ('max_utterance_seconds', 20, 300)):
+        value = result[name]
+        if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
+            raise ValueError('Invalid whisper.' + name)
+    if type(result['language_confirmations']) is not int or not 1 <= result['language_confirmations'] <= 5:
+        raise ValueError('Invalid language confirmation count')
     return result
 
 

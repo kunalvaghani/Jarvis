@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-23 IST",
+  "branch": "codex/realtime-multilingual-voice",
+  "base": "7365aa253e9b10374a08a3ff445010006662ea90",
+  "files": {
+    "app/config/config.json": "bc5bf9ba3c2ac16744827cd7fe7e933e5c88c32b47c521e2aa159a66a1f200b3",
+    "app/config/runtime_manifest.json": "b578b62f1f6154f811167a19298c680e7c44098d552bf82ae89dcd0729af450a",
+    "app/jarvis/actions.py": "1258dbc81a94ccdeae307de86e01f938b72c321392673a0b784d1034f9a5a868",
+    "app/jarvis/audio.py": "a5071495773983b4b0a1b4e4a287e827298c2ad186a1cc2ce527478d8772c953",
+    "app/jarvis/buddy_engine.py": "e59c6e23392a33dcf5e14e19331b9a91b858568c4835c3e9de37b1c15221cdc2",
+    "app/jarvis/config_contract.py": "d66c815da9194dca54db9ec14945a9a9e3e72067e5ce24011d63a06292ebc823",
+    "app/jarvis/engine.py": "10da1f659d7379e878ace63fc542d3f78039e3c84fb9a7befe03858d061e76de",
+    "app/jarvis/hybrid_inference.py": "27490ffb0a4e6c95fcbe63b7327fa4236cb2b0362cac0566dcf321c0a7d5ea77",
+    "app/jarvis/interface.py": "59a3e7a78b5063f2b7ea5b291fc73da7157e821966118ff06765792b644e0933",
+    "app/jarvis/island.py": "6cf7054004cb292a43209829575232aca74aaf10745e361e3912f75a7d98d328",
+    "app/jarvis/island_desk.py": "6d879106f8044eeda5b0dbf62486f554e1d86975ca0dc1838eff2b9a94a00e6f",
+    "app/jarvis/knowledge.py": "1ca3b2e2b5ae51d52567a18dc03f4fb00ae489f2dfd51cba8953f722ecd224c8",
+    "app/jarvis/knowledge_worker.py": "2159921cdc4d76fd2b6a558b9e0beb07ce6e13603db9d024b86a21c4e486d3b3",
+    "app/jarvis/natural_conversation.py": "7c2b6bae966a61099cad958456bc474b5a8be3c4a4dee1a62ae024a6b21d72b5",
+    "app/jarvis/speech.py": "8818de5f94481deceb96b4b1af838de32ce76575d5f2f93c836505e0bd03efdb",
+    "app/jarvis/ui_events.py": "a874d21a2a5d2689d450bdf1dfab9a618f1be818905f8a11a4d506c5cfa115b9",
+    "app/jarvis/voice_input.py": "643e5d149a200fad9ba46d3de03518db16c66f6fc263f14af66dcb2e3b800c74",
+    "app/jarvis/voice_registry.py": "ed9cc1ee8f54f4d3cebdc1e5d2485e2fafc7e5949fd1e52f91c73cd64df9e682",
+    "app/jarvis/voice_runtime.py": "5eb14aa53ba7b2e21d08bd1745ba7b76620da31d0a96cbf8b0593f5a1c6448d1",
+    "app/jarvis/whisper_backend.py": "65e344218ea0de816c4957945fd1a87a3d7356ec1963cb064bf9e0cfd40e8748",
+    "app/main.py": "2f1a7bc3a2ff4828cda38b017f34e2d955a92d844a95beab40f1fd7f771d4df7",
+    "app/scripts/verification/benchmark_realtime_voice.py": "cbe6db8107a90b14afa7917b46022d070655eecc37610da2f94c1167b4277cfe",
+    "app/scripts/verification/verify_realtime_voice_offline.py": "a6c849c52c3b11ea795f9c0c9c671eeb94a650570c25dfd393f3aa6251b5ad79",
+    "app/tests/test_jarvis.py": "1d2f8e008e72359c867165355a47e572f493f971ab2b95dfaa3f21f5ac729e84",
+    "app/tests/test_realtime_voice.py": "2292e01f52926c9dff47a14535dc5e0cc757991c8da0ace2dcbbe2e1e41344d5"
+  }
+}

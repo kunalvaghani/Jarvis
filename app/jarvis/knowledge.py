@@ -29,9 +29,12 @@ PAST_REFERENCE = re.compile(r"\b(?:remember|recall|last time|yesterday|earlier|p
 
 class Knowledge:
     def __init__(self, options, report):
-        self.options, self.report = options, report
+        from .voice_runtime import ResponseReports
+        self.options = options
+        self.report = ResponseReports(report, lambda: self.generation)
         self.queue = queue.Queue(maxsize=4)
         self.generation = 0
+        self.active_generation = None
         self.history = []
         self.context_seed = []
         self.context_lock = threading.RLock()
@@ -45,7 +48,7 @@ class Knowledge:
         self.context_jobs = {}
         self.closed = threading.Event()
         self.screen_handle = lambda: 0
-        self.client = QuestionClient(Path(__file__).resolve().parent.parent, report)
+        self.client = QuestionClient(Path(__file__).resolve().parent.parent, self.report)
         self.quick = QuickAnswers()
         self.on_request = None
         self.thread = threading.Thread(target=self._run, daemon=True)
@@ -254,6 +257,7 @@ class Knowledge:
             self.client.close()
 
     def submit(self, question, web=False, screen=False):
+        generation = self.generation
         if self.on_request is not None:
             self.on_request('ask', question)
         try:
@@ -267,17 +271,18 @@ class Knowledge:
                     self._saved('finish', pending['turn'], status='superseded')
                 turn = self._saved('begin', self.session_id, question)
             self.prepare_context(question)
-            self.queue.put_nowait((self.generation, question, web, bool(screen or wants_screen(question)), handle, turn))
+            self.queue.put_nowait((generation, question, web, bool(screen or wants_screen(question)), handle, turn))
         except queue.Full:
             if turn:
                 self._saved('finish', turn, status='rejected')
             self.report("warning", "Question queue full. Wait for an answer or press Stop all tasks.")
 
     def submit_natural(self, question, grounded=''):
+        generation = self.generation
         try:
             with self.context_lock:
                 turn = self._saved('begin', self.session_id, question)
-            self.queue.put_nowait((self.generation, question, False, False, 0, turn, None, {'grounded_reply': grounded}))
+            self.queue.put_nowait((generation, question, False, False, 0, turn, None, {'grounded_reply': grounded}))
         except queue.Full:
             if turn:
                 self._saved('finish', turn, status='rejected')
@@ -293,6 +298,8 @@ class Knowledge:
             try:
                 job = self.queue.get(timeout=.2)
                 generation, question, web, use_screen, handle, turn = job[:6]
+                self.report.bind(generation)
+                self.active_generation = generation
             except queue.Empty:
                 continue
             process = None
@@ -451,5 +458,6 @@ class Knowledge:
                 if process and process.poll() is None:
                     process.kill()
                     process.communicate()
+                self.active_generation = None
                 self.queue.task_done()
         self.client.close()

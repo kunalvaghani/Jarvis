@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Generated public English sentence; no microphone, playback, LLM contention or multilingual corpus.",
+  "configurations": [
+    {
+      "device": "cpu",
+      "precision": "int8",
+      "model": "models/faster-whisper-medium.en",
+      "audio_seconds": 2.197375,
+      "load_seconds": 7.450349799999913,
+      "samples": [
+        {
+          "seconds": 4.953401400000075,
+          "cpu_seconds": 19.859375,
+          "exact_match": true,
+          "rss_bytes_sampled": 993415168
+        },
+        {
+          "seconds": 5.059582700000192,
+          "cpu_seconds": 20.0625,
+          "exact_match": true,
+          "rss_bytes_sampled": 993447936
+        },
+        {
+          "seconds": 6.054207700000006,
+          "cpu_seconds": 23.75,
+          "exact_match": true,
+          "rss_bytes_sampled": 993488896
+        }
+      ],
+      "p50_seconds": 5.059582700000192,
+      "worst_seconds": 6.054207700000006,
+      "p95_seconds": null,
+      "note": "Three-sample pilot; insufficient for a reliable p95. RSS sampled, not peak."
+    },
+    {
+      "device": "cuda",
+      "precision": "int8_float16",
+      "model": "models/faster-whisper-medium.en",
+      "audio_seconds": 2.197375,
+      "load_seconds": 10.591945199999827,
+      "samples": [
+        {
+          "seconds": 1.6770265000000109,
+          "cpu_seconds": 0.78125,
+          "exact_match": false,
+          "rss_bytes_sampled": 934436864
+        },
+        {
+          "seconds": 0.45296090000010736,
+          "cpu_seconds": 1.0625,
+          "exact_match": false,
+          "rss_bytes_sampled": 936079360
+        },
+        {
+          "seconds": 0.42087480000009236,
+          "cpu_seconds": 1.015625,
+          "exact_match": false,
+          "rss_bytes_sampled": 936124416
+        }
+      ],
+      "p50_seconds": 0.45296090000010736,
+      "worst_seconds": 1.6770265000000109,
+      "p95_seconds": null,
+      "note": "Three-sample pilot; insufficient for a reliable p95. RSS sampled, not peak."
+    }
+  ]
+}

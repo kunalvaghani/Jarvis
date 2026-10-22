@@ -198,7 +198,9 @@ class Buddy:
     def event(self, kind, message, now=None):
         """Things Jarvis reports to the island (Island.notify)."""
         now = self.clock() if now is None else now
-        if kind == "partial" and message:
+        if kind == 'voice_interrupt':
+            self.react('surprised', 1.2, 72, now)
+        elif kind in {"partial", "voice_transcript"} and message:
             self.react("listening", 2.5, 45, now)
         elif kind in {"warning", "fatal", "answer_error"} and message:
             self.note("error", now)

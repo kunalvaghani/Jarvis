@@ -345,7 +345,11 @@ class App:
                 pass
         self.root.after(300, self.remember_external_window)
 
-    def report(self, kind, message):
+    def report_scoped(self, kind, message, guard):
+        if guard():
+            self.report(kind, message, _guard=guard)
+
+    def report(self, kind, message, _guard=None):
         if getattr(self, 'runtime_health', None) is not None:
             self.runtime_health.observe(kind, message)
         if kind in {'partial', 'final'} and message and getattr(self, 'actions', None) is not None:
@@ -361,7 +365,10 @@ class App:
                 self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         elif kind in {"partial", "final"} and self.actions.suggest_enabled:
             self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
-        self.events.put((kind, message))
+        if _guard is not None:
+            self.events.put(('response_guard', (kind, message, _guard)))
+        else:
+            self.events.put((kind, message))
 
     def voice_decision(self, approved):
         """A spoken yes/no answers the card on screen when it was heard; if that card changes first, nothing is decided."""
@@ -437,6 +444,30 @@ class App:
                 kind, message = self.events.get_nowait()
             except queue.Empty:
                 break
+            if kind == 'response_guard':
+                kind, message, guard = message
+                if not guard():
+                    continue
+            if kind in {'voice_prepared'}:
+                continue  # Metadata-only preparation, never an executable command.
+            if kind == 'voice_language':
+                names = {'auto': 'Auto', 'en': 'English', 'hi': 'Hindi', 'gu': 'Gujarati', 'fr': 'French'}
+                self.answer_language.set(names[message])
+                self.save_speech_settings()
+                self.state.set('Response language · ' + names[message])
+                continue
+            if kind == 'voice_transcript':
+                self.voice_transcript = message
+                self.state.set('Listening · ' + message['language'].upper() + ' · ' + message['state'].lower())
+                self.island.notify(kind, message)
+                self.desk.notify(kind, message)
+                continue
+            if kind == 'voice_interrupt':
+                self.ui_activity = 'listening'
+                self.state.set('User interrupting · ' + message.lower())
+                self.island.notify(kind, message)
+                self.desk.notify(kind, message)
+                continue
             if kind == 'realtime_alert':
                 text = message['message'] + ' Source: ' + message['reference']
                 self.log_line('warning', text)
@@ -585,7 +616,24 @@ class App:
         self.engine = engine  # Screen offers wake it so a bare "yes" is heard.
         from jarvis.voice_input import VoiceInput
         from jarvis.command_cleanup import CommandCleanup
-        voice_input = VoiceInput(self.speech)
+        duplex = self.config.get('voice', {}).get('full_duplex', {})
+        def interrupt_response(kind):
+            self.speech.interrupt()
+            self.actions.knowledge.cancel()
+            self.report('answer_stream', {'active': False, 'phase': 'Interrupted', 'text': ''})
+            if kind in {'CANCEL', 'CORRECTION', 'REPLACEMENT'}:
+                # Existing generation/token checks stop at cooperative effect boundaries.
+                # Completed effects are neither repeated nor reversed.
+                self.actions.cancel()
+            if kind == 'RESUME':
+                # Speech-only resume: never replay tool operations.
+                text = getattr(self.actions, 'last_spoken', '')
+                if text:
+                    self.report('spoken_reply', text)
+        voice_input = VoiceInput(self.speech, duplex,
+            awake=lambda: engine.active and time.monotonic() - engine.last_speech < engine.timeout,
+            interrupt=interrupt_response, report=self.report,
+            responding=lambda: self.speech.output_recent() or self.actions.knowledge.active_generation is not None)
         push_to_write = writer = None
         if self.config.get("push_to_write", {}).get("enabled", True):
             # Hold Left Ctrl + Left Alt: what you say is typed at the cursor until you let go.
@@ -609,6 +657,7 @@ class App:
         self.push_to_write, self.spoken_writer = push_to_write, writer
         self.listener = Listener(BASE / self.config["model_path"], self.config.get("microphone"), engine, self.report, whisper_options, activate_on_start=True,
                                  playback=self.speech.output_recent, input_filter=voice_input.filter,
+                                 input_update=voice_input.update,
                                  references=self.speech.output_references,
                                  command_cleanup=CommandCleanup(self.config.get('command_cleanup'), self.report),
                                  push_to_write=push_to_write, writer=writer)
@@ -696,7 +745,7 @@ class App:
         self.speech.options["enabled"] = self.speak_enabled.get()
         if not self.speech.options["enabled"]:
             self.speech.cancel()
-        language = {"Auto": "auto", "English": "en", "Hindi": "hi"}[self.answer_language.get()]
+        language = {"Auto": "auto", "English": "en", "Hindi": "hi", "Gujarati": "gu", "French": "fr"}[self.answer_language.get()]
         self.speech.options["language"] = language
         self.config["knowledge"]["answer_language"] = language
         if not self.config.get('_ui_verification', False):

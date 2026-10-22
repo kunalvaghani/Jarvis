@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-23 IST",
+  "passed": true,
+  "scope": "Actual local Listener decoder and Engine; serial growing windows of one generated public English fixture. No live capture, speaker, external actions or native streaming claim.",
+  "steps": [
+    {
+      "audio_seconds": 0.9,
+      "final": false,
+      "decode_seconds": 0.6720000000000255,
+      "submitted_count": 0
+    },
+    {
+      "audio_seconds": 1.6,
+      "final": false,
+      "decode_seconds": 0.45299999999997453,
+      "submitted_count": 0
+    },
+    {
+      "audio_seconds": 2.197375,
+      "final": true,
+      "decode_seconds": 0.45299999999997453,
+      "submitted_count": 1
+    }
+  ],
+  "transcripts": [
+    {
+      "session_id": "474739804fff4c168cce3003abc49d6e",
+      "utterance_id": 1,
+      "revision": 1,
+      "state": "PROVISIONAL",
+      "text": "Jarvis, Op -",
+      "stable": "",
+      "replace_from": 0,
+      "replacement": "Jarvis, Op -",
+      "timestamp": 3355.156,
+      "language": "en"
+    },
+    {
+      "session_id": "474739804fff4c168cce3003abc49d6e",
+      "utterance_id": 1,
+      "revision": 2,
+      "state": "STABLE",
+      "text": "Jarvis, OpenCalculate.",
+      "stable": "Jarvis,",
+      "replace_from": 10,
+      "replacement": "enCalculate.",
+      "timestamp": 3355.609,
+      "language": "en"
+    },
+    {
+      "session_id": "474739804fff4c168cce3003abc49d6e",
+      "utterance_id": 1,
+      "revision": 3,
+      "state": "FINAL",
+      "text": "Jarvis Open Calculator.",
+      "stable": "Jarvis Open Calculator.",
+      "replace_from": 6,
+      "replacement": " Open Calculator.",
+      "timestamp": 3356.406,
+      "language": "en"
+    }
+  ],
+  "commands": [
+    {
+      "kind": "open",
+      "value": "calculator"
+    }
+  ]
+}

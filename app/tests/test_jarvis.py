@@ -48,7 +48,7 @@ class EngineTests(unittest.TestCase):
     def test_mid_speech_and_no_duplicates(self):
         self.feed("jarvis open notepad then open")
         self.feed("jarvis open notepad then open calculator")
-        self.assertEqual(self.sent, [Command("open", "notepad")])
+        self.assertEqual(self.sent, [])
         self.feed("jarvis open notepad then open calculator", True)
         self.assertEqual(self.sent, [Command("open", "notepad"), Command("open", "calculator")])
 
@@ -127,10 +127,11 @@ class EngineTests(unittest.TestCase):
         self.feed("open paint", True, now=101)
         self.assertEqual(self.sent, [])
 
-    def test_changed_already_sent_clause_suppresses_followup(self):
+    def test_revised_partial_only_executes_final_clauses(self):
         self.feed("jarvis open notepad then open")
+        self.assertEqual(self.sent, [])
         self.feed("jarvis open paint then open calculator", True)
-        self.assertEqual(self.sent, [Command("open", "notepad")])
+        self.assertEqual(self.sent, [Command("open", "paint"), Command("open", "calculator")])
 
 
 class CommandTests(unittest.TestCase):

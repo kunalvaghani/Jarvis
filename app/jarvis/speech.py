@@ -78,12 +78,11 @@ def playback_timeout(text):
 
 
 def speech_language(answer, preference="auto"):
-    if preference in {"en", "hi"}:
+    if preference in {"en", "hi", "gu", "fr"}:
         return preference
-    if re.search(r"[\u0900-\u097f]", answer):
-        return "hi"
-    roman_hindi = re.findall(r"\b(?:hai|hain|kya|kyun|kaise|mujhe|aap|yeh|pani|batao|hota|hoti)\b", answer, re.I)
-    return "hi" if len(roman_hindi) >= 2 else "en"
+    from .voice_runtime import detect_language
+    return detect_language(answer)
+
 
 
 class Speech:
@@ -96,7 +95,7 @@ class Speech:
         if (not isinstance(options,dict) or not isinstance(options.get('engine','piper'),str)
                 or not isinstance(options.get('language','auto'),str)
                 or options.get('engine','piper') not in {'f5','kokoro','piper'}
-                or options.get('language','auto') not in {'auto','en','hi'}):
+                or options.get('language','auto') not in {'auto','en','hi','gu','fr'}):
             raise ValueError('Invalid speech engine or language configuration')
         self.options, self.report = options, report
         self.queue = queue.Queue(maxsize=64)
@@ -121,6 +120,7 @@ class Speech:
         self.worker_ready = threading.Event()
         self.worker_init_error = False
         self.failed_backends = set()
+        self.missing_languages = set()
         self.restart_required = False
         self.trace_id = uuid.uuid4().hex
         self.streamed = None  # Text of the answer being spoken while it is written.
@@ -505,9 +505,28 @@ class Speech:
                             self.failed_backends.add('f5')
                             self._dispose_voice()
                             self.report('repair','F5 startup unavailable; trying installed CPU speech. Check speech.f5.')
-                name = "hi_IN-rohan-medium" if language == "hi" else "en_GB-alan-medium"
+                from .voice_registry import piper_voices, kokoro_voices
                 base = Path(__file__).resolve().parent.parent
-                kokoro = language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends
+                installed = piper_voices(base / 'models/voices')
+                french_voice = self.options.get('french_voice', 'ff_siwis')
+                french_kokoro = (language == 'fr' and 'kokoro' not in self.failed_backends
+                    and french_voice in kokoro_voices(base / 'models/voices/kokoro').get('fr', ()))
+                if language in {'fr', 'gu'} and language not in installed and not french_kokoro:
+                    if language not in self.missing_languages:
+                        self.missing_languages.add(language)
+                        self.report('warning', language.upper() + ' voice unavailable; correct text remains in the transcript.')
+                        if self.options.get('missing_voice_fallback', 'text') == 'notice_en':
+                            content = 'The response is available in the transcript. A voice for this language is not installed.'
+                            language = 'en'
+                        else:
+                            continue
+                    else:
+                        continue
+                    # Never feed unsupported text to an English-only voice.
+                name = installed[language].stem if language in installed else (
+                    {'hi': 'hi_IN-rohan-medium', 'en': 'en_GB-alan-medium'}.get(language, language + '_missing'))
+                base = Path(__file__).resolve().parent.parent
+                kokoro = french_kokoro or (language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends)
                 voice_model = base / "models" / "voices" / ("kokoro/kokoro-v1.0.onnx" if kokoro else name + ".onnx")
                 voices = base / "models/voices/kokoro/voices-v1.0.bin"
                 if not voice_model.is_file() or (kokoro and not voices.is_file()):
@@ -521,9 +540,9 @@ class Speech:
                     # Sent without waiting: the worker plays it right after what is already queued.
                     try:
                         self._kokoro_send(generation, {
-                            "text": content, "voice": self.options.get("voice", "am_michael:60,am_fenrir:40"),
-                            "speed": self.options.get("speed", 1.0), "natural": self.options.get("natural", True),
-                            "breaths": self.options.get("breaths", True),
+                            "text": content, "voice": french_voice if french_kokoro else self.options.get("voice", "am_michael:60,am_fenrir:40"),
+                            "speed": self.options.get("speed", 1.0), "natural": False if french_kokoro else self.options.get("natural", True),
+                            "breaths": False if french_kokoro else self.options.get("breaths", True),
                             "breath_level": self.options.get("breath_level", .012)}, content, engine='kokoro')
                         continue
                     except VoiceStartupError:

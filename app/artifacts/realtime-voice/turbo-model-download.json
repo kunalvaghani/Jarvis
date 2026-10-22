@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-23 IST",
+  "approval": "User approved model download and local tests in this chat",
+  "repo": "dropbox-dash/faster-whisper-large-v3-turbo",
+  "revision": "0a363e9161cbc7ed1431c9597a8ceaf0c4f78fcf",
+  "files": [
+    {
+      "name": "README.md",
+      "size": 1445,
+      "digest": "284b65fb822d8d95331b288fc2af14bc28ce3db7",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "config.json",
+      "size": 2263,
+      "digest": "0351d1d6870005e865747b781b5d7c23ea0459cd",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "model.bin",
+      "size": 1617884929,
+      "digest": "e76620f83d5f5b69efd3d87e3dc180c1bd21df9fbebacfd4335e5e1efcc018da",
+      "algorithm": "sha256",
+      "verified": true
+    },
+    {
+      "name": "preprocessor_config.json",
+      "size": 340,
+      "digest": "931c77a740890c46365c7ae0c9d350ba3cca908f",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "tokenizer.json",
+      "size": 2710337,
+      "digest": "17456db595adc78a973f97d69d8cb50bc87c0b1c",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    },
+    {
+      "name": "vocabulary.json",
+      "size": 1068114,
+      "digest": "0adcd01e7c237205d593b707e66dd5d7bc785d2d",
+      "algorithm": "git-blob-sha1",
+      "verified": true
+    }
+  ],
+  "runtime_configuration_changed": false
+}

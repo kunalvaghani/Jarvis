@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-23 IST",
+  "scope": "Alternating original HEAD Listener decoder versus final candidate decoder, same already-loaded medium.en CUDA model and generated public fixture. Two warmups plus 12 samples/path. Real model and Engine with in-memory effect sink; no microphone/playback, VAD/capture or LLM contention. GPU metrics are global 200-ms samples, not allocator peaks.",
+  "baseline_source_sha256": "20fea234348d901977eb718f9537a0d68862d81291a15835c87e31767d3c9346",
+  "samples": [
+    {
+      "path": "before",
+      "seconds": 0.452816700000767,
+      "cpu_seconds": 1.03125,
+      "rss_bytes_sampled": 839446528
+    },
+    {
+      "path": "after",
+      "seconds": 0.5453168000003643,
+      "cpu_seconds": 1.109375,
+      "rss_bytes_sampled": 839467008
+    },
+    {
+      "path": "after",
+      "seconds": 0.4555411000001186,
+      "cpu_seconds": 1.015625,
+      "rss_bytes_sampled": 839540736
+    },
+    {
+      "path": "before",
+      "seconds": 0.4553933000006509,
+      "cpu_seconds": 1.046875,
+      "rss_bytes_sampled": 839553024
+    },
+    {
+      "path": "before",
+      "seconds": 0.44806940000034956,
+      "cpu_seconds": 1.03125,
+      "rss_bytes_sampled": 839553024
+    },
+    {
+      "path": "after",
+      "seconds": 0.4591059000003952,
+      "cpu_seconds": 1.0625,
+      "rss_bytes_sampled": 839553024
+    },
+    {
+      "path": "after",
+      "seconds": 0.5043426000002,
+      "cpu_seconds": 0.640625,
+      "rss_bytes_sampled": 839565312
+    },
+    {
+      "path": "before",
+      "seconds": 0.45837309999933495,
+      "cpu_seconds": 1.015625,
+      "rss_bytes_sampled": 839569408
+    },
+    {
+      "path": "before",
+      "seconds": 0.46040629999970406,
+      "cpu_seconds": 1.109375,
+      "rss_bytes_sampled": 839577600
+    },
+    {
+      "path": "after",
+      "seconds": 0.45619189999979426,
+      "cpu_seconds": 1.046875,
+      "rss_bytes_sampled": 839585792
+    },
+    {
+      "path": "after",
+      "seconds": 0.4675431000005119,
+      "cpu_seconds": 1.0625,
+      "rss_bytes_sampled": 839585792
+    },
+    {
+      "path": "before",
+      "seconds": 0.4513799000005747,
+      "cpu_seconds": 1.0,
+      "rss_bytes_sampled": 839589888
+    },
+    {
+      "path": "before",
+      "seconds": 0.45539430000007997,
+      "cpu_seconds": 1.015625,
+      "rss_bytes_sampled": 839593984
+    },
+    {
+      "path": "after",
+      "seconds": 0.48969040000065434,
+      "cpu_seconds": 1.09375,
+      "rss_bytes_sampled": 839598080
+    },
+    {
+      "path": "after",
+      "seconds": 0.5004337999998825,
+      "cpu_seconds": 1.046875,
+      "rss_bytes_sampled": 839602176
+    },
+    {
+      "path": "before",
+      "seconds": 0.45428849999916565,
+      "cpu_seconds": 1.125,
+      "rss_bytes_sampled": 839602176
+    },
+    {
+      "path": "before",
+      "seconds": 0.4636449999998149,
+      "cpu_seconds": 1.078125,
+      "rss_bytes_sampled": 839606272
+    },
+    {
+      "path": "after",
+      "seconds": 0.4611609000003227,
+      "cpu_seconds": 1.03125,
+      "rss_bytes_sampled": 839606272
+    },
+    {
+      "path": "after",
+      "seconds": 0.4622968999992736,
+      "cpu_seconds": 1.015625,
+      "rss_bytes_sampled": 839606272
+    },
+    {
+      "path": "before",
+      "seconds": 0.45226159999947413,
+      "cpu_seconds": 1.0625,
+      "rss_bytes_sampled": 839606272
+    },
+    {
+      "path": "before",
+      "seconds": 0.4539545999996335,
+      "cpu_seconds": 1.0625,
+      "rss_bytes_sampled": 839610368
+    },
+    {
+      "path": "after",
+      "seconds": 0.4590628999994806,
+      "cpu_seconds": 1.015625,
+      "rss_bytes_sampled": 839610368
+    },
+    {
+      "path": "after",
+      "seconds": 0.5576420999996117,
+      "cpu_seconds": 1.140625,
+      "rss_bytes_sampled": 839610368
+    },
+    {
+      "path": "before",
+      "seconds": 0.46062329999949725,
+      "cpu_seconds": 1.0625,
+      "rss_bytes_sampled": 839610368
+    }
+  ],
+  "gpu_samples": 91,
+  "gpu_peak_mb_sampled": 1265,
+  "gpu_peak_utilization_sampled": 100,
+  "before": {
+    "p50_seconds": 0.4548408999999083,
+    "p95_empirical_seconds": 0.46062329999949725,
+    "worst_seconds": 0.4636449999998149,
+    "count": 12
+  },
+  "after": {
+    "p50_seconds": 0.46491999999989275,
+    "p95_empirical_seconds": 0.5453168000003643,
+    "worst_seconds": 0.5576420999996117,
+    "count": 12
+  }
+}

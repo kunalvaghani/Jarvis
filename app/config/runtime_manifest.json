@@ -1,5 +1,14 @@
 {
   "version": 1,
+  "realtime_voice": {
+    "date": "2026-10-23 IST",
+    "modules": ["jarvis.voice_runtime", "jarvis.voice_registry"],
+    "services": "Extends the existing listener and speech workers; no additional service or dependency.",
+    "asr": "Rolling overlapping Whisper windows, local agreement metadata, final-only effects; not native streaming.",
+    "duplex": "Headphone no-wake barge-in is opt-in. Speaker mode retains wake gating without acoustic AEC.",
+    "languages": "en/hi/gu/fr routing; English medium.en remains selected. Two approved optional multilingual models failed Gujarati acceptance; existing French Kokoro is reused.",
+    "rollback": "Set whisper.streaming_enabled=false, adaptive_endpointing=false, frame_ms=100; voice.full_duplex.enabled=false. Final-only safety remains enabled."
+  },
   "phase2_gpu_voice_ui": {
     "date": "2026-10-15 IST",
     "modules": [

@@ -354,7 +354,30 @@ class IslandDesk:
         self.game_canvas.itemconfigure(self.game_item,image=self.game_photo)
 
     def notify(self,kind,value):
-        if kind=='anticipation' and isinstance(value,dict):
+        if kind in {'answer', 'answer_stream', 'spoken_reply', 'action', 'warning'}:
+            self.voice_text = ''
+        if kind == 'voice_transcript' and isinstance(value, dict):
+            # Edit only the revised suffix; keep stable words at normal contrast.
+            widget = self.overview
+            text = value['text'][:4000]
+            previous = getattr(self, 'voice_text', '')
+            common = 0
+            for a, b in zip(previous, text):
+                if a != b:
+                    break
+                common += 1
+            widget.configure(state='normal')
+            if not previous:
+                widget.delete('1.0', 'end')
+            else:
+                widget.delete('1.0 + ' + str(common) + ' chars', 'end-1c')
+            widget.insert('end-1c', text[common:])
+            widget.tag_configure('provisional', foreground='#8e8f9a')
+            widget.tag_remove('provisional', '1.0', 'end')
+            widget.tag_add('provisional', '1.0 + ' + str(min(len(value['stable']), len(text))) + ' chars', 'end-1c')
+            widget.configure(state='disabled')
+            self.voice_text = text if value['state'] != 'FINAL' else ''
+        elif kind=='anticipation' and isinstance(value,dict):
             self.update_preparations(value)
         elif kind=='anticipation_reply' and isinstance(value,str):
             self._write(self.prepared_text,value)

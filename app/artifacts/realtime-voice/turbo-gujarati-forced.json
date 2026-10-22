@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-23 IST",
+  "model": "dropbox-dash/faster-whisper-large-v3-turbo",
+  "scope": "Offline public FLEURS test rows plus synthesized public fixtures; production final decode settings with Gujarati explicitly supplied as a diagnostic; not automatic detection. Tiny diagnostic sample, no physical microphone, no broad accuracy claim.",
+  "supported_languages": {
+    "en": true,
+    "hi": true,
+    "gu": true,
+    "fr": true
+  },
+  "results": [
+    {
+      "rss_bytes_sampled": 886726656,
+      "cpu_seconds": 2.578125,
+      "fixture": "fleurs-gu-0.wav",
+      "expected_language": "gu",
+      "detected_language": "gu",
+      "language_probability": 1,
+      "reference": "છોડ ઓક્સિજન બનાવે છે જેનેથી મનુષ્ય શ્વાસ લે છે અને તેઓ કાર્બન-ડાયોક્સાઇડ લે છે જેને મનુષ્ય શ્વાસથી બહાર કાઢે છે એટલે ​​કે શ્વાસ બહાર કાઢે ",
+      "hypothesis": " जोड ओक्सिजन बनावेचे, जेना थी मनुष्यान स्वसन लेचे, अने तेवो कर्बन डायोकसेड लेचे, जेने मनुष्या स्वास थी बहार काड़ेचे, अटलेके स्वास बहार काड़े.",
+      "word_errors": 26,
+      "reference_words": 26,
+      "wer": 1.0,
+      "decode_seconds": 1.4783821999999418,
+      "audio_seconds": 11.16
+    },
+    {
+      "rss_bytes_sampled": 893169664,
+      "cpu_seconds": 7.0625,
+      "fixture": "fleurs-gu-1.wav",
+      "expected_language": "gu",
+      "detected_language": "gu",
+      "language_probability": 1,
+      "reference": "દરેક વ્યક્તિ સમાજનો હિસ્સો બને છે અને પરિવહન પ્રણાલીઓનો ઉપયોગ કરે છે પરિવહન પ્રણાલી વિશે લગભગ દરેકની ફરિયાદ હોય છે",
+      "hypothesis": " દરેક વ્યક્તી સમાજનો હસ્તો બને છે અને પ�રીવ�हણ પ્રણાલીઓનો ઉપ્યોગ કરે છે પરીવ�हણ પ્રણાલી�  પરીવાહણ પ્રણાલીઓનો ઉપ્યોગ કરે છે પરીવાહણ પ્રણાલીબી સે લગ્ભગ દરેકને ફર્યાધ હોઈ છે",
+      "word_errors": 18,
+      "reference_words": 20,
+      "wer": 0.9,
+      "decode_seconds": 2.7311082000005626,
+      "audio_seconds": 8.4
+    },
+    {
+      "rss_bytes_sampled": 896761856,
+      "cpu_seconds": 6.484375,
+      "fixture": "fleurs-gu-2.wav",
+      "expected_language": "gu",
+      "detected_language": "gu",
+      "language_probability": 1,
+      "reference": "29 વર્ષીય ડૉ. મલાર બાલાસુબ્રમણ્યમ ઓહિયોના બ્લૂ એશમાં મળી આવ્યા હતા,સિનસિનાટીથી લગભગ 15 માઇલ ઉત્તરમાં એક ઉપનગરો,રસ્તાની બાજુમાં ટી-શર્ટ અને અન્ડરવેર માં જમીન પર પડેલા અને તે દેખીતી રીતે ભારે દવાની સ્થિતિમાં હતી",
+      "hypothesis": " 19-30 વર્સીએ ડોક્ટર મળાર બાલા સૂબ્રા માણ્યાં ઓહ્યાના બ્લુ એશમાં માડી આવ્યાં સીનાટી થી લગ�",
+      "word_errors": 36,
+      "reference_words": 36,
+      "wer": 1.0,
+      "decode_seconds": 2.649818900000355,
+      "audio_seconds": 19.08
+    },
+    {
+      "rss_bytes_sampled": 895422464,
+      "cpu_seconds": 1.15625,
+      "fixture": "mixed-en-gu-spliced.wav",
+      "expected_language": "gu",
+      "detected_language": "gu",
+      "language_probability": 1,
+      "reference": "Jarvis open calculator. છોડ ઓક્સિજન બનાવે છે જેનેથી મનુષ્ય શ્વાસ લે છે અને તેઓ કાર્બન-ડાયોક્સાઇડ લે છે જેને મનુષ્ય શ્વાસથી બહાર કાઢે છે એટલે ​​કે શ્વાસ બહાર કાઢે ",
+      "hypothesis": " Jarvis, Open Calculator.",
+      "word_errors": 26,
+      "reference_words": 29,
+      "wer": 0.896551724137931,
+      "decode_seconds": 0.48987059999944904,
+      "audio_seconds": 13.457375
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "dataset": "google/fleurs via mteb/fleurs",
+  "source": "https://huggingface.co/datasets/mteb/fleurs",
+  "original_source": "https://huggingface.co/datasets/google/fleurs",
+  "license": "CC-BY-4.0",
+  "attribution": "Google FLEURS contributors; retrieved from the MTEB repackaging",
+  "config": "gu_in",
+  "split": "test",
+  "offset": 0,
+  "id": 1867,
+  "reference": "છોડ ઓક્સિજન બનાવે છે જેનેથી મનુષ્ય શ્વાસ લે છે, અને તેઓ કાર્બન-ડાયોક્સાઇડ લે છે જેને મનુષ્ય શ્વાસથી બહાર કાઢે છે (એટલે ​​કે, શ્વાસ બહાર કાઢે ).",
+  "normalized_reference": "છોડ ઓક્સિજન બનાવે છે જેનેથી મનુષ્ય શ્વાસ લે છે અને તેઓ કાર્બન-ડાયોક્સાઇડ લે છે જેને મનુષ્ય શ્વાસથી બહાર કાઢે છે એટલે ​​કે શ્વાસ બહાર કાઢે ",
+  "num_samples": 178560,
+  "sha256": "8b88338fc51653e4704457f9bf38a8854a668a52f5a1c4e8156617bdf3df4dae",
+  "bytes": 714298,
+  "date": "2026-10-23 IST",
+  "audio_url_retained": false
+}
