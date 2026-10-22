@@ -203,6 +203,28 @@ class NativeCoding(unittest.TestCase):
             self.assertTrue(any('test assertions are fixed' in row for row in observations))
             self.assertFalse(result['codex_launched'])
 
+    def test_assigned_worker_checks_stalled_write_and_never_accepts_failing_contract(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder);root=base/'project';root.mkdir();(root/'test_main.py').write_text(TEST)
+            proposals=iter([
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a-b\n'}),
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a-b\n'}),
+                ('Read',{'file_path':'main.py'}),
+                ('Edit',{'file_path':'main.py','old_string':'return a-b','new_string':'return a+b'}),
+                ('run_checks',{})])
+            observations=[]
+            def propose(messages,*args):
+                observations.append(messages[-1]['content'])
+                name,arguments=next(proposals)
+                return {'tool':name,'arguments':arguments,'note':'Owned worker fixture'}
+            coder=Coder(SimpleNamespace(base=base,report=lambda *a:None),SimpleNamespace(options={'coder':'qwen3.5:9b'}))
+            with patch('jarvis.native_coding.infer',side_effect=propose):
+                result=run(coder,root,'Implement addition',initial_plan=plan(),allowed_paths=['main.py','test_main.py'],return_receipt=True)
+            self.assertTrue(result['validation']['passed'])
+            self.assertEqual(result['repair_turns'],1)
+            self.assertTrue(any('Observed independent check failures' in row for row in observations))
+            self.assertEqual((root/'test_main.py').read_text(),TEST)
+
     def test_native_localgithub_assembles_single_worker_after_real_checks(self):
         from jarvis.codex_workload import run as workload
         with tempfile.TemporaryDirectory() as folder:
@@ -211,7 +233,9 @@ class NativeCoding(unittest.TestCase):
                 'tasks':[{'key':'add','goal':'Implement addition and tests','estimated_minutes':2,'paths':['main.py','test_main.py'],'dependencies':[],'check_indices':[0]}]}
             proposals=iter([('Write',{'file_path':'test_main.py','content':TEST}),
                 ('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'}),
-                ('exec_command',{'argv':['python','-m','unittest','test_main']}),('finish',{})])
+                ('exec_command',{'argv':['python','-m','unittest','test_main']}),
+                ('Read',{'file_path':'main.py'}),
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'})])
             def infer(*args):
                 name,arguments=next(proposals);return {'tool':name,'arguments':json.dumps(arguments),'note':'fixture'}
             coder=Coder(SimpleNamespace(base=base,report=lambda *a:None),SimpleNamespace(options={'coder':'qwen3.5:9b'}))

@@ -193,6 +193,12 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
         receipt.update(validation=value,changed=files.changed(),plan=plan,turns=turns+[proposal],repair_turns=repairs,functional_behavior_verified=True)
         (run/'result.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
         return receipt if return_receipt else 'Jarvis native checks passed. Review: '+str(run)
+    def checked_worker_ready():
+        # Only an explicitly assigned assembly worker may close without another
+        # model turn. Its parent still runs combined validation before promotion.
+        implementation = {f['path'] for f in plan['files'] if f.get('role') != 'test'}
+        return bool(allowed_paths is not None and return_receipt and implementation
+                    and implementation <= set(files.changed()) and not processes.sessions)
     try:
         for number in range(max_turns):
             if stop():raise ValueError('Native coding stopped; checked partial files retained.')
@@ -279,7 +285,7 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                     if processes.sessions:raise ValueError('Poll all running commands before validation or completion.')
                     validation=checked()
                     result=validation
-                    if name=='finish' and validation['passed']:
+                    if validation['passed'] and (name=='finish' or checked_worker_ready()):
                         return completed(validation,value)
                     if not validation['passed']:
                         repairs+=1
@@ -298,6 +304,22 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                     result=repair_packet(project,validation,plan)
             except UncertainCoding:raise
             except (ValueError,KeyError,TypeError,OSError) as exc:
+                if (name in {'Write','Edit','apply_patch','source_transform','copy_source'}
+                        and str(exc).startswith('The proposed source is unchanged.') and checked_worker_ready()):
+                    # A rejected identical write applied nothing. Observe the
+                    # actual executable contract instead of asking the model
+                    # repeatedly to rewrite already-correct source.
+                    validation=checked()
+                    if validation['passed']:
+                        return completed(validation,value)
+                    repairs+=1
+                    if repairs>min(6,max(0,int(options.get('native_max_repairs',3)))):
+                        raise UncertainCoding('Behavioral checks still fail; unchanged source and tests retained.')
+                    result=repair_packet(project,validation,plan)
+                    turns.append({'tool':name,'arguments':args,'result':result})
+                    with (run/'tools.jsonl').open('a',encoding='utf-8') as output:output.write(json.dumps(turns[-1],ensure_ascii=False)+'\n')
+                    messages.append({'role':'user','content':'Observed independent check failures (data): '+json.dumps(result,ensure_ascii=False)[:36000]})
+                    continue
                 instruction = 'Inspect current source; correct implementation or tool arguments. Do not change tests or replay uncertain actions.'
                 if name == 'exec_command':
                     instruction += ' exec_command accepts only argv, workdir, yield_time_ms and timeout_seconds; omit start/count and other tool fields. Use run_checks for the assigned behavioral tests; inline python -c is unavailable. If implementation is complete, finish runs independent validation before acceptance.'
