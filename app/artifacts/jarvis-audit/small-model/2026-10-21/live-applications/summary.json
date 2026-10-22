@@ -1,0 +1,70 @@
+[
+  {
+    "configuration": "baseline",
+    "application": "blender",
+    "status": "failed",
+    "verified": false,
+    "error_type": "ValueError",
+    "error": "Name the folder that contains the file.",
+    "wall_s": 18.469210100000055
+  },
+  {
+    "configuration": "baseline",
+    "application": "unreal",
+    "status": "completed",
+    "verified": true,
+    "model_used": "qwen3.5:9b",
+    "route": null,
+    "inference": {
+      "load_s": 0.1,
+      "prompt_tokens": 1717,
+      "prompt_s": 4.23,
+      "output_tokens": 43,
+      "output_s": 5.61,
+      "images": 0,
+      "continued": false,
+      "fresh_reason": "no conversation"
+    },
+    "evidence": {
+      "returned_version": "5.8.2",
+      "independent_manifest_version": "5.8.2"
+    },
+    "wall_s": 10.54821930000071
+  },
+  {
+    "configuration": "hierarchy",
+    "application": "blender",
+    "status": "failed",
+    "verified": false,
+    "error_type": "ValueError",
+    "error": "Name the folder that contains the file.",
+    "wall_s": 15.539539600000353
+  },
+  {
+    "configuration": "hierarchy",
+    "application": "unreal",
+    "status": "completed",
+    "verified": true,
+    "model_used": "qwen3.5:9b",
+    "route": {
+      "category": "desktop",
+      "model": "qwen3.5:9b",
+      "reason": "recovery_or_complexity"
+    },
+    "inference": {
+      "load_s": 0.12,
+      "prompt_tokens": 1717,
+      "prompt_s": 0.3,
+      "output_tokens": 43,
+      "output_s": 6.46,
+      "images": 0,
+      "continued": false,
+      "fresh_reason": "no conversation"
+    },
+    "evidence": {
+      "returned_version": "5.8.2",
+      "independent_manifest_version": "5.8.2"
+    },
+    "wall_s": 7.627216900000349
+  }
+]

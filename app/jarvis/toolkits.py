@@ -126,6 +126,14 @@ def arguments(step):
     return value
 
 
+def requires_folder(name):
+    """Shared schema/preflight scope contract; never resolves a folder or grants access."""
+    return (name in {'list_files', 'read_file', 'append_file', 'search_files', 'query_resource', 'knowledge_search',
+                     'office_xlsx', 'office_docx', 'pdf_document', 'office_automation', 'blender_task'}
+            or (name in AGENT_TOOLS and name not in {'windows_command', 'windows_command_search', 'tool_search',
+                'runtime_capabilities', 'toolkit_status', 'mcp_status', 'mcp_list_tools', 'mcp_call', 'integration_status', 'application_search'}))
+
+
 def validate_step(step):
     if step["action"] not in TOOLS:
         return
@@ -139,6 +147,8 @@ def validate_step(step):
     if step["action"] in {"list_files", "read_file", "append_file", "search_files", "query_resource", "knowledge_search"}:
         if not isinstance(step.get("folder"), str) or not step["folder"].strip():
             raise ValueError("Toolkit file operations need an explicit folder.")
+    if step['action'] in APP_TOOLS and requires_folder(step['action']) and not str(step.get('folder') or '').strip():
+        raise ValueError('Application file operations need an explicit folder.')
 
 
 def scoped_path(root, name):

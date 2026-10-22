@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-22T05:48:15.028188+00:00",
+  "scope": "Final source build/regression and bounded live evidence; not comprehensive release acceptance or model promotion.",
+  "pytest": {
+    "passed": 3936,
+    "skipped": 150,
+    "failed": 0,
+    "seconds": 1155.8,
+    "log_sha256": "fbdcba8ff3a9d12523500ab08b626e012ceab53088bd6b4486fd5f5af9e466df"
+  },
+  "compileall_exit": 0,
+  "launcher_status": "ready",
+  "ui_startup_passed": true,
+  "microphone_started": false,
+  "source_manifest_files": 325,
+  "source_manifest_mismatches": [],
+  "source_tree_sha256": "4f6edebe192e682e52652fad45f953505d215dd4d723aacab9652b7769bb9206",
+  "normal_evaluator_seal": "1b1354e38a80b3809f03fe3173cb3bf7d5b7b97fa0503afd0379cfbff8828616",
+  "physical_voice_acceptance": "unverified by explicit user choice, 2026-10-22",
+  "unreal_editor_acceptance": "unverified",
+  "actual_lora_training": "unexecuted",
+  "mixed_latency_objective": "regressed; not accepted",
+  "publishing": "not performed"
+}

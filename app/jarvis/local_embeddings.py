@@ -20,7 +20,10 @@ def embed(texts, kind='document', timeout=30):
     if not isinstance(texts, list) or not texts or len(texts) > 64:
         raise ValueError('Embed 1-64 texts at a time.')
     prefix = 'search_query: ' if kind == 'query' else 'search_document: '
-    body = json.dumps({'model': MODEL, 'input': [prefix + str(t)[:4000] for t in texts], 'keep_alive': '10m'}).encode()
+    # Small vector reads must not occupy the 4 GB speech/planner GPU outside
+    # the priority scheduler. Keep the same local weights and lexical fallback.
+    body = json.dumps({'model': MODEL, 'input': [prefix + str(t)[:4000] for t in texts],
+                       'keep_alive': '10m', 'options': {'num_gpu': 0}}).encode()
     request = urllib.request.Request(ENDPOINT, data=body, headers={'Content-Type': 'application/json'})
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:

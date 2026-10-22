@@ -1,0 +1,134 @@
+[
+  {
+    "name": "qwen3.5:2b",
+    "model": "qwen3.5:2b",
+    "modified_at": "2026-10-22T00:07:44.0212731+05:30",
+    "size": 2683396812,
+    "digest": "0689d44085e06d165161a8a9a1731344278cfb5aade63a3c3dbdb48ab54b130a",
+    "details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "1.9B",
+      "quantization_level": "Q8_0",
+      "context_length": 262144,
+      "embedding_length": 2048,
+      "runner": "llamacpp"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  },
+  {
+    "name": "qwen3.5:4b",
+    "model": "qwen3.5:4b",
+    "modified_at": "2026-10-10T01:49:08.6180384+05:30",
+    "size": 3389983735,
+    "digest": "3c3adf637187c95955232acd3ed05b9ea45aeb2a5f953e631c38174a46b5b56a",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.7B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  },
+  {
+    "name": "qwen3.5:4b",
+    "model": "qwen3.5:4b",
+    "modified_at": "2026-10-10T01:49:08.6180384+05:30",
+    "size": 3397841620,
+    "digest": "96f38c742e0a10e194b237d2ffb8b55925ebfeed9d27df72688f565e773569e7",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35",
+        "clip"
+      ],
+      "parameter_size": "4.7B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  },
+  {
+    "name": "qwen3.5:9b",
+    "model": "qwen3.5:9b",
+    "modified_at": "2026-10-07T11:13:42.5658387+05:30",
+    "size": 6594474711,
+    "digest": "2e16a80fe3d77d431d295466415848403c8c266667ee5d7d8991ee445b4e1311",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "9.7B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 4096,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  },
+  {
+    "name": "qwen3.5:9b",
+    "model": "qwen3.5:9b",
+    "modified_at": "2026-10-07T11:13:42.5658387+05:30",
+    "size": 6603314868,
+    "digest": "c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35",
+        "clip"
+      ],
+      "parameter_size": "9.7B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 4096,
+      "runner": "llamacpp"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  }
+]

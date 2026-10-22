@@ -1,0 +1,34 @@
+{
+  "qwen3.5:9b": {
+    "samples": 18,
+    "routine_p50_s": 9.73828364999963,
+    "literal_preserved": 18,
+    "snapshot_max_gpu_mb": 2195,
+    "median_load_s": 0.1,
+    "median_output_tokens_per_s": 7.038904356986981
+  },
+  "qwen3.5:4b": {
+    "samples": 18,
+    "routine_p50_s": 8.637783899999704,
+    "literal_preserved": 18,
+    "snapshot_max_gpu_mb": 1734,
+    "median_load_s": 0.1,
+    "median_output_tokens_per_s": 10.153508771929825
+  },
+  "hierarchy": {
+    "samples": 18,
+    "routine_p50_s": 8.40126224999949,
+    "literal_preserved": 18,
+    "snapshot_max_gpu_mb": 2598,
+    "median_load_s": 0.1,
+    "median_output_tokens_per_s": 7.275245473380776
+  },
+  "qwen3.5:2b": {
+    "samples": 18,
+    "routine_p50_s": 4.718980650000049,
+    "literal_preserved": 18,
+    "snapshot_max_gpu_mb": 1752,
+    "median_load_s": 0.10500000000000001,
+    "median_output_tokens_per_s": 20.534401045922536
+  }
+}

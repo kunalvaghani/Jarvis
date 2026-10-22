@@ -27,7 +27,7 @@
       "persistent": true,
       "command": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\Scripts\\python.exe",
       "args": [
-        "D:\\Kunals GitHub Repo\\LocalGithub\\Jarvis-spotify-integration\\app\\integrations\\jarvis-connectors\\connectors\\apps\\spotify\\server.py",
+        "D:\\Kunals GitHub Repo\\Jarvis\\app\\integrations\\jarvis-connectors\\connectors\\apps\\spotify\\server.py",
         "--runtime",
         "builtin",
         "--allow-write"

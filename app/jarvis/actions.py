@@ -216,6 +216,11 @@ class Actions:
         def completed_task(task):
             self.skills.safe_record(task)
             try:
+                from .small_model import Outcomes
+                Outcomes(Path(base) / '.jarvis-runtime/model-outcomes.sqlite3').record(task)
+            except Exception:
+                pass  # Advisory statistics must never change a verified task.
+            try:
                 self.acquisition.finished(task)
             except (ValueError, OSError):
                 pass  # Learning failure never changes an independently verified task.

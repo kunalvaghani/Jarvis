@@ -1,0 +1,22 @@
+[
+  {
+    "case": "coding_bugfix",
+    "configuration": "baseline",
+    "configured_backend": "jarvis",
+    "configured_coder": "qwen3.5:9b",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Every deliverable must have exactly one workload owner. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\small-model\\2026-10-21\\live-coding-workloads\\baseline\\.jarvis-runtime\\native-workloads\\1f014efb312e4ed2937bbdf7b0d88688",
+    "seconds": 216.18799999999464
+  },
+  {
+    "case": "coding_bugfix",
+    "configuration": "hierarchy",
+    "configured_backend": "jarvis",
+    "configured_coder": "qwen3.5:9b",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "Every deliverable must have exactly one workload owner. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\jarvis-audit\\small-model\\2026-10-21\\live-coding-workloads\\hierarchy\\.jarvis-runtime\\native-workloads\\1023592b9c1f46cf8050e37e20f09a05",
+    "seconds": 282.3899999999994
+  }
+]

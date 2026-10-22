@@ -1,0 +1,162 @@
+[
+  {
+    "configuration": "baseline",
+    "case": "read",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "DAG rejected before execution: The planner proposed an unsupported step.",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      },
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "seconds": 115.95300000000134
+  },
+  {
+    "configuration": "baseline",
+    "case": "workflow",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:38:05.229827+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:39:19.651378+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":74.422,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731\n\nPUBLIC_BETA_942",
+    "seconds": 74.43799999999464
+  },
+  {
+    "configuration": "baseline",
+    "case": "unfamiliar",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:39:33.334353+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:40:21.009501+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":47.672,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nSafe operation: rotate clockwise twice.",
+    "seconds": 47.70300000000134
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "read",
+    "passed": false,
+    "error_type": "ValueError",
+    "error": "DAG rejected before execution: The planner proposed an unsupported step.",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      },
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "seconds": 80.42199999999866
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "workflow",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:41:42.205575+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:42:59.965707+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":77.75,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731\n\nPUBLIC_BETA_942",
+    "seconds": 77.81199999999808
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "unfamiliar",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:43:00.764762+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:44:14.995000+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":74.219,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nSafe operation: rotate clockwise twice.",
+    "seconds": 74.26600000000326
+  }
+]

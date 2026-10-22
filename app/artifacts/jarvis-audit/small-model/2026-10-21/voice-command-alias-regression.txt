@@ -1,0 +1,15 @@
+........F..............................................                  [100%]
+================================== FAILURES ===================================
+_ HandlerTests.test_public_speech_cpu_inflection_stays_a_read_only_native_query _
+tests\test_intent_testbook.py:160: in test_public_speech_cpu_inflection_stays_a_read_only_native_query
+    self.assertNotEqual(parse('shows files from my project').kind,'system_info')
+jarvis\commands.py:71: in parse
+    return _parse_command(text)
+jarvis\commands.py:95: in _parse_command
+    command = _parse(text)
+jarvis\commands.py:532: in _parse
+    raise ValueError(f"Command not understood: {text}")
+E   ValueError: Command not understood: shows files from my project
+=========================== short test summary info ===========================
+FAILED tests/test_intent_testbook.py::HandlerTests::test_public_speech_cpu_inflection_stays_a_read_only_native_query
+1 failed, 54 passed in 27.60s

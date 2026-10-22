@@ -1,0 +1,346 @@
+[
+  {
+    "configuration": "baseline",
+    "case": "read",
+    "status": "completed",
+    "calls": [],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:47:33.900920+00:00",
+        "stage": "executive_route",
+        "evidence": "FAST:simple_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:47:33.986328+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":0.078,\"target_seconds\":5,\"target_met\":true,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731",
+    "seconds": 0.17199999999866122
+  },
+  {
+    "configuration": "baseline",
+    "case": "workflow",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "one.txt",
+                "expected": "Content of one.txt",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "File content retrieved",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            },
+            {
+              "id": "s2",
+              "tool": "read_file",
+              "arguments": {
+                "value": "two.txt",
+                "expected": "Content of two.txt",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "File content retrieved",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:47:34.351307+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:48:51.996700+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":77.641,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731\n\nPUBLIC_BETA_942",
+    "seconds": 77.67199999999866
+  },
+  {
+    "configuration": "baseline",
+    "case": "unfamiliar",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "flarble.txt",
+                "expected": "Documented safe operation for the device",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "Content of flarble.txt containing safe operation instructions",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:48:52.352335+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:49:29.848924+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":37.485,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nSafe operation: rotate clockwise twice.",
+    "seconds": 37.5309999999954
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "read",
+    "status": "completed",
+    "calls": [],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:49:30.208485+00:00",
+        "stage": "executive_route",
+        "evidence": "FAST:simple_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:49:30.259954+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":0.047,\"target_seconds\":5,\"target_met\":true,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731",
+    "seconds": 0.06300000000192085
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "workflow",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "one.txt",
+                "expected": "Content of one.txt",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "Reads and returns the content of one.txt",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            },
+            {
+              "id": "s2",
+              "tool": "read_file",
+              "arguments": {
+                "value": "two.txt",
+                "expected": "Content of two.txt",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "Reads and returns the content of two.txt",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:49:30.606128+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:50:44.322095+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":73.719,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nPUBLIC_ALPHA_731\n\nPUBLIC_BETA_942",
+    "seconds": 73.75
+  },
+  {
+    "configuration": "hierarchy",
+    "case": "unfamiliar",
+    "status": "completed",
+    "calls": [
+      {
+        "operation": "dag_plan",
+        "model": null,
+        "route": null,
+        "public_fixture_proposal": {
+          "version": 1,
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "read_file",
+              "arguments": {
+                "value": "flarble.txt",
+                "expected": "Documented safe operation for the flarble device",
+                "folder": "this folder",
+                "content": "",
+                "find": "",
+                "browser": "chrome",
+                "platform": "windows"
+              },
+              "dependencies": [],
+              "expected": "Content of flarble.txt containing safe operation instructions",
+              "permission": "read",
+              "resources": {
+                "cpu": 1,
+                "ram_mb": 32,
+                "gpu_mb": 0
+              },
+              "retry": {
+                "attempts": 1,
+                "backoff_seconds": 0.1
+              },
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      }
+    ],
+    "passed": true,
+    "expected_contents_in_answer": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-22T02:50:44.796076+00:00",
+        "stage": "executive_route",
+        "evidence": "DEEP:open_ended_task",
+        "source": "deterministic_grammar"
+      },
+      {
+        "at": "2026-10-22T02:51:34.442960+00:00",
+        "stage": "planning_timing",
+        "evidence": "{\"elapsed_seconds\":49.625,\"target_seconds\":5,\"target_met\":false,\"stages\":[],\"retained_images\":0}",
+        "source": "monotonic_clock"
+      }
+    ],
+    "reply": "Completed the dependency plan. Tool receipts and local file readback verified; retrieved content is reference data.\nSafe operation: rotate clockwise twice.",
+    "seconds": 49.67200000000594
+  }
+]

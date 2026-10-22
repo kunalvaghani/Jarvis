@@ -1,0 +1,45 @@
+{
+  "scope": "Actual text-only native Brain loop, ToolRegistry, durable task state and independent exact-byte observation. No screen, microphone or cloud. Functional timing on shared host.",
+  "rows": [
+    {
+      "configuration": "baseline",
+      "repetition": 0,
+      "passed": false,
+      "status": "paused",
+      "exact_verified_read": false,
+      "calls": [],
+      "expected_public_text_reported": false,
+      "seconds": 0.11000000000058208
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 0,
+      "passed": false,
+      "status": "paused",
+      "exact_verified_read": false,
+      "calls": [],
+      "expected_public_text_reported": false,
+      "seconds": 0.046000000002095476
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 1,
+      "passed": false,
+      "status": "paused",
+      "exact_verified_read": false,
+      "calls": [],
+      "expected_public_text_reported": false,
+      "seconds": 0.046999999998661224
+    },
+    {
+      "configuration": "baseline",
+      "repetition": 1,
+      "passed": false,
+      "status": "paused",
+      "exact_verified_read": false,
+      "calls": [],
+      "expected_public_text_reported": false,
+      "seconds": 0.0629999999946449
+    }
+  ]
+}

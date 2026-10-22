@@ -267,6 +267,8 @@ class SkillMemory:
             for score, reliability, _, item in sorted(matches, key=lambda row: (row[0], row[1],row[2]), reverse=True)[:3]:
                 route = {key: item.get(key) for key in ("goal", "kind", "project", "steps", "verification", "revision", "updated_at", "last_attempt", "conditions")}
                 route['observed_reliability']=reliability
+                if isinstance(item.get('teacher_procedure'), dict):
+                    route['teacher_procedure'] = item['teacher_procedure']
                 route["steps"] = [{k: clean(v, 180) for k, v in step.items() if k in {"stage", "action", "target"}}
                                   for step in item.get("steps", [])[-12:] if isinstance(step, dict)]
                 routes.append(route)
@@ -388,6 +390,10 @@ class SkillMemory:
                                     and step.get("action") not in {"create_file", "modify_file"}][-6:]
                 if omit_payload:
                     item["proposal"] = []
+                from .teacher_student import compile_procedure
+                compiled = compile_procedure(task)
+                if compiled is not None:
+                    item['teacher_procedure'] = compiled
                 self.procedures[key] = item
                 description = json.dumps("Previously verified workflow for " + goal[:900], ensure_ascii=False)
                 body = f"---\nname: procedure-{key}\ndescription: {description}\n---\n\n# Historical procedure\n\n[[Jarvis Procedures]] · [[Jarvis Skills]]\n\nRevision {revision}. Scope: {kind}; project: {project or 'none'}.\n\n"

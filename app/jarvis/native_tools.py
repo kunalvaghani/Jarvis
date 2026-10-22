@@ -28,7 +28,19 @@ def parameter_fields(name):
     return {'value', 'expected', 'folder', 'content'}
 
 
-def functions(rows, finish_limit=500):
+def native_required(name, bound_folder=None):
+    from .tools import required_arguments
+    required = required_arguments(name)
+    if bound_folder is not None:
+        if bound_folder != '.':
+            raise ValueError('Native bound scope must be the host-selected current project.')
+        from .agent_tools import READ_TOOLS
+        if name in READ_TOOLS:
+            required.discard('folder')
+    return required
+
+
+def functions(rows, finish_limit=500, bound_folder=None):
     if not isinstance(rows, list) or not rows or len(rows) > 150:
         raise ValueError('Native planning needs a bounded tool catalog.')
     result, seen = [], set()
@@ -38,12 +50,13 @@ def functions(rows, finish_limit=500):
                 or name in seen or name in {FINISH, CLARIFY}):
             raise ValueError('Invalid native tool catalog.')
         seen.add(name)
+        required = {'value', 'expected'} | native_required(name, bound_folder)
         result.append({'type': 'function', 'function': {'name': name,
             'description': str(row.get('description', ''))[:1800] +
                 ' This proposes one checked Jarvis action; runtime approval/verification still apply.',
             'parameters': row['parameters'] if row.get('repository_skill') is True or row.get('utility_skill') is True else {'type': 'object', 'additionalProperties': False,
-                'required': ['value', 'expected'], 'properties': {
-                    key: {'type': 'string', 'maxLength': limit} for key, limit in FIELDS.items()
+                'required': sorted(required), 'properties': {
+                    key: {'type': 'string', 'maxLength': limit, **({'minLength': 1} if key == 'folder' and key in required else {})} for key, limit in FIELDS.items()
                     if key in parameter_fields(name)}}}})
     for name, field, description in (
             (FINISH, 'reason', 'Propose completion only when the entire user goal is evidenced. Explain the observed result; Jarvis independently verifies it.'),
@@ -55,7 +68,7 @@ def functions(rows, finish_limit=500):
     return result
 
 
-def parse(message, rows, finish_limit=500):
+def parse(message, rows, finish_limit=500, bound_folder=None):
     calls = message.get('tool_calls') if isinstance(message, dict) else None
     if not isinstance(calls, list) or len(calls) != 1:
         raise ValueError('Native planner must propose exactly one tool call; no actions executed.')
@@ -97,13 +110,18 @@ def parse(message, rows, finish_limit=500):
         validate(learned['parameters'],args)
         return {'done':False,'question':'','reason':'One approved repository capability proposal; isolated runtime checks and per-call approval remain required.',
             'steps':[{'action':'repository_skill_run','value':name,'content':json.dumps(args),'expected':'Receive the isolated capability result','folder':'','browser':'chrome','find':'','platform':''}]}
+    from .tools import required_arguments, validate_arguments
+    if bound_folder is not None and 'folder' in required_arguments(name) - native_required(name, bound_folder):
+        args = {'folder': bound_folder, **args}  # Only the host can supply a fixed project scope.
     if (set(args) - parameter_fields(name) or not {'value', 'expected'} <= args.keys() or
             any(not isinstance(v, str) or len(v) > FIELDS[k] for k, v in args.items()) or
             not args['value'].strip() or not args['expected'].strip()):
         raise ValueError('Native planner returned invalid action arguments.')
-    return {'done': False, 'question': '', 'reason': 'One native function proposal; fresh runtime checks required',
-            'steps': [{'action': name, 'browser': 'chrome', 'folder': '', 'content': '',
-                       'find': '', 'platform': '', **args}]}
+    step = {'action': name, 'browser': 'chrome', 'folder': '', 'content': '', 'find': '', 'platform': '', **args}
+    if not native_required(name, bound_folder) <= args.keys():
+        raise ValueError('Native proposal omitted required arguments: '+', '.join(sorted(native_required(name, bound_folder)-args.keys())))
+    validate_arguments(step)
+    return {'done': False, 'question': '', 'reason': 'One native function proposal; fresh runtime checks required', 'steps': [step]}
 
 
 CONTEXT_TOKENS = 16384  # Fixed for the primary model; a different size would force a reload.
@@ -147,7 +165,7 @@ def step_update(data, previous_call):
     return update
 
 
-def plan(client, model, prompt, data, options=None):
+def plan(client, model, prompt, data, options=None, bound_folder=None):
     """Read-only inference. Only Brain/AgentSession may dispatch the proposal.
 
     Within one task the calls form a single growing conversation, so the local
@@ -162,7 +180,7 @@ def plan(client, model, prompt, data, options=None):
     conversation = data.pop('conversation', None)
     rows = data.get('tools')
     finish_limit = min(10000, max(500, int(options.get('max_final_chars', 500))))
-    definitions = functions(rows, finish_limit)
+    definitions = functions(rows, finish_limit, bound_folder)
     data.pop('tools', None)  # Descriptions are already sent once as native schemas.
     system = (prompt + BREVITY +
         ' This request uses Ollama native tools: output a function call, not a text JSON plan. '
@@ -220,7 +238,7 @@ def plan(client, model, prompt, data, options=None):
     deadline=time.monotonic()+planning_read_timeout(options)
     # Only inference is retried, before dispatch, within the original deadline.
     # Completed actions remain evidence; they are never resent to execution.
-    attempts=2
+    attempts=1 if options.get('_hierarchy_single_attempt') else 2
     utility_catalog=any(row.get('utility_skill') is True for row in rows)
     for attempt in range(attempts):
         remaining=deadline-time.monotonic()
@@ -232,10 +250,10 @@ def plan(client, model, prompt, data, options=None):
         body = response.json()
         if not isinstance(body, dict) or len(json.dumps(body)) > 100000 or body.get('done_reason') == 'length':
             raise ValueError('Native planning returned oversized or incomplete output; no action executed.')
-        try:result = parse(body.get('message'), rows, finish_limit)
-        except ValueError:
+        try:result = parse(body.get('message'), rows, finish_limit, bound_folder)
+        except ValueError as error:
             if attempt+1==attempts:raise
-            payload['messages'].append({'role':'user','content':'The previous reply failed native function-call validation. No action was dispatched from that reply. Return exactly one advertised function call with schema-correct arguments. If the completed verified operations fully establish the user goal, call jarvis_finish with the observed result.'})
+            payload['messages'].append({'role':'user','content':'The previous reply failed native function-call validation: '+str(error)[:300]+'. No action was dispatched from that reply. Return exactly one advertised function call with schema-correct arguments. If the completed verified operations fully establish the user goal, call jarvis_finish with the observed result.'})
         else:break
     reply = body.get('message') or {}
     result['conversation'] = {'key': key, 'tokens': int(body.get('prompt_eval_count', 0)) + int(body.get('eval_count', 0)),

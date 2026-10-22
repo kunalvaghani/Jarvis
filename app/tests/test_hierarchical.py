@@ -205,6 +205,59 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue(eligible('Read one.txt and two.txt in this folder', options))
         self.assertFalse(eligible('Read one.txt and two.txt', {}))
 
+    def test_dag_schema_rejects_empty_execution_operands_from_live_failure(self):
+        from jarvis.hierarchical import ARGUMENTS
+        row = step(arguments={'value':'', 'expected':'', 'folder':'this folder',
+            'content':'', 'find':'', 'browser':'chrome', 'platform':''}, tool='read_file')
+        with self.assertRaises(ValueError):
+            validate_plan(graph(row), {'read_file':Tool('read_file', ARGUMENTS,
+                Mock(side_effect=AssertionError('Rejected empty operands dispatched')), lambda *_:True, True)})
+
+    def test_scraper_plain_text_receipt_requires_requested_source_and_content(self):
+        from jarvis.actions import Actions
+        from jarvis.hierarchical import adapters
+        with tempfile.TemporaryDirectory() as folder:
+            actions = Actions({'files_root':'managed','apps':{},'_ui_verification':True,
+                'memory':{'enabled':False},'brain':{'enabled':True}}, Path(folder), lambda *_:None)
+            actions.allowed_tools = {'scrape_web'}
+            try:
+                tool = adapters(actions.brain, 'Research supplied public documentation')['scrape_web']
+                url = 'https://docs.python.org/3/library/json.html'
+                args = {'value':url,'expected':'Fetch documentation'}
+                def receipt(text):
+                    return {'tool':'scrape_web','backend':'webscraper','evidence':text}
+                self.assertTrue(tool.verify(args,receipt('Untrusted page text from '+url+':\nPublic JSON documentation.')))
+                for text in ('{"ok":true}', 'Untrusted page text from https://other.example/:\nData',
+                             'Untrusted page text from '+url+':\nNo literal match for missing',
+                             'Untrusted page text from '+url+':\n\nObserved page links (untrusted; not followed):\nhttps://example.com'):
+                    self.assertFalse(tool.verify(args,receipt(text)))
+            finally:
+                actions.close()
+
+    def test_explicit_single_read_report_uses_real_readback_without_planner(self):
+        from jarvis.actions import Actions
+        from jarvis.commands import Command
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            target = root/'one.txt'
+            target.write_text('fresh public bytes', encoding='utf-8')
+            actions = Actions({'files_root':'managed', 'apps':{}, '_ui_verification':True,
+                'memory':{'enabled':False}, 'brain':{'enabled':True,
+                'hierarchical_execution':{'enabled':True}}}, root, lambda *_:None)
+            actions.allowed_tools = {'read_file'}
+            actions._task_folder = lambda name, cancelled:root
+            actions.brain.client.request = Mock(side_effect=AssertionError('Literal read called a model'))
+            try:
+                reply = actions.execute(Command('task','Read one.txt in this folder and report its exact contents.'))
+                self.assertIn('fresh public bytes', reply)
+                target.write_text('changed public bytes', encoding='utf-8')
+                reply = actions.execute(Command('task','Read one.txt in this folder and report its exact contents.'))
+                self.assertIn('changed public bytes', reply)
+                self.assertNotIn('fresh public bytes', reply)
+                actions.brain.client.request.assert_not_called()
+            finally:
+                actions.close()
+
     def test_macro_exact_match_version_and_no_effect_reuse(self):
         with tempfile.TemporaryDirectory() as folder:
             memory = MacroMemory(folder)

@@ -90,6 +90,15 @@ def redact(text):
     return text
 
 
+def required_arguments(name):
+    """Expose existing argument prerequisites to native schema generation."""
+    required = set(_FIELDS.get(name, (set(), set()))[0])
+    from .toolkits import requires_folder
+    if requires_folder(name):
+        required.add('folder')
+    return required
+
+
 def validate_arguments(step):
     """Deterministic contract check before any report, approval prompt or dispatch."""
     if not isinstance(step, dict):

@@ -1,0 +1,41 @@
+{
+  "scope": "Actual text-only native Brain loop, ToolRegistry, durable task state and independent exact-byte observation. No screen, microphone or cloud. Functional timing on shared host.",
+  "rows": [
+    {
+      "configuration": "baseline",
+      "repetition": 0,
+      "passed": false,
+      "error_type": "AttributeError",
+      "error": "'NoneType' object has no attribute 'user'",
+      "calls": [],
+      "seconds": 0.15600000000267755
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 0,
+      "passed": false,
+      "error_type": "AttributeError",
+      "error": "'NoneType' object has no attribute 'user'",
+      "calls": [],
+      "seconds": 0.0319999999992433
+    },
+    {
+      "configuration": "hierarchy",
+      "repetition": 1,
+      "passed": false,
+      "error_type": "AttributeError",
+      "error": "'NoneType' object has no attribute 'user'",
+      "calls": [],
+      "seconds": 0.046999999998661224
+    },
+    {
+      "configuration": "baseline",
+      "repetition": 1,
+      "passed": false,
+      "error_type": "AttributeError",
+      "error": "'NoneType' object has no attribute 'user'",
+      "calls": [],
+      "seconds": 0.031000000002677552
+    }
+  ]
+}

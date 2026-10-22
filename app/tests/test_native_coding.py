@@ -31,6 +31,40 @@ def files(root):
 
 
 class NativeCoding(unittest.TestCase):
+    def test_command_generation_schema_rejects_observed_cross_tool_argument(self):
+        from jarvis.native_coding import inference_schema,SCHEMA
+        from jarvis.mcp_contract import validate_schema_value
+        command,others=inference_schema()['anyOf']
+        proposal={'tool':'exec_command','arguments':{'argv':['python','-m','unittest']},'note':'Public test'}
+        validate_schema_value(command,proposal,'proposal')
+        proposal['arguments']['start']=0
+        with self.assertRaises(ValueError):validate_schema_value(command,proposal,'proposal')
+        self.assertEqual(set(command['properties']['tool']['enum']) | set(others['properties']['tool']['enum']),
+                         set(SCHEMA['properties']['tool']['enum']))
+
+    def test_rejected_inline_and_unassigned_write_get_concrete_safe_recovery(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder);root=base/'project';root.mkdir()
+            (root/'test_main.py').write_text(TEST)
+            proposals=iter([
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'}),
+                ('exec_command',{'argv':['python','-c','print(1)']}),
+                ('Write',{'file_path':'README.md','content':'unassigned'}),
+                ('run_checks',{}),('finish',{})])
+            observations=[]
+            def propose(messages,*args):
+                observations.append(messages[-1]['content'])
+                name,arguments=next(proposals)
+                return {'tool':name,'arguments':arguments,'note':'Public recovery fixture'}
+            coder=Coder(SimpleNamespace(base=base,report=lambda *a:None),SimpleNamespace(options={'coder':'qwen3.5:9b'}))
+            with patch('jarvis.native_coding.infer',side_effect=propose):
+                result=run(coder,root,'Implement addition only',initial_plan=plan(),return_receipt=True)
+            self.assertTrue(result['validation']['passed'])
+            self.assertTrue(any('inline python -c is unavailable' in row and 'run_checks' in row for row in observations))
+            self.assertTrue(any('Leave unassigned documentation unchanged' in row and 'finish' in row for row in observations))
+            self.assertFalse((root/'README.md').exists())
+            self.assertEqual((root/'test_main.py').read_text(),TEST)
+
     def test_platform_markup_finishes_only_after_real_component_checks(self):
         with tempfile.TemporaryDirectory() as folder:
             base=Path(folder);root=base/'project';root.mkdir()
@@ -169,13 +203,39 @@ class NativeCoding(unittest.TestCase):
             self.assertTrue(any('test assertions are fixed' in row for row in observations))
             self.assertFalse(result['codex_launched'])
 
+    def test_assigned_worker_checks_stalled_write_and_never_accepts_failing_contract(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder);root=base/'project';root.mkdir();(root/'test_main.py').write_text(TEST)
+            proposals=iter([
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a-b\n'}),
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a-b\n'}),
+                ('Read',{'file_path':'main.py'}),
+                ('Edit',{'file_path':'main.py','old_string':'return a-b','new_string':'return a+b'}),
+                ('run_checks',{})])
+            observations=[]
+            def propose(messages,*args):
+                observations.append(messages[-1]['content'])
+                name,arguments=next(proposals)
+                return {'tool':name,'arguments':arguments,'note':'Owned worker fixture'}
+            coder=Coder(SimpleNamespace(base=base,report=lambda *a:None),SimpleNamespace(options={'coder':'qwen3.5:9b'}))
+            with patch('jarvis.native_coding.infer',side_effect=propose):
+                result=run(coder,root,'Implement addition',initial_plan=plan(),allowed_paths=['main.py','test_main.py'],return_receipt=True)
+            self.assertTrue(result['validation']['passed'])
+            self.assertEqual(result['repair_turns'],1)
+            self.assertTrue(any('Observed independent check failures' in row for row in observations))
+            self.assertEqual((root/'test_main.py').read_text(),TEST)
+
     def test_native_localgithub_assembles_single_worker_after_real_checks(self):
         from jarvis.codex_workload import run as workload
         with tempfile.TemporaryDirectory() as folder:
             base=Path(folder);root=base/'project';root.mkdir()
             specification={**plan(),'interfaces':'main.add(a,b) returns numeric addition.',
                 'tasks':[{'key':'add','goal':'Implement addition and tests','estimated_minutes':2,'paths':['main.py','test_main.py'],'dependencies':[],'check_indices':[0]}]}
-            proposals=iter([('Write',{'file_path':'test_main.py','content':TEST}),('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'}),('finish',{})])
+            proposals=iter([('Write',{'file_path':'test_main.py','content':TEST}),
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'}),
+                ('exec_command',{'argv':['python','-m','unittest','test_main']}),
+                ('Read',{'file_path':'main.py'}),
+                ('Write',{'file_path':'main.py','content':'def add(a,b): return a+b\n'})])
             def infer(*args):
                 name,arguments=next(proposals);return {'tool':name,'arguments':json.dumps(arguments),'note':'fixture'}
             coder=Coder(SimpleNamespace(base=base,report=lambda *a:None),SimpleNamespace(options={'coder':'qwen3.5:9b'}))
@@ -185,6 +245,7 @@ class NativeCoding(unittest.TestCase):
             receipts=list((base/'.jarvis-runtime/native-workloads').glob('*/receipt.json'))
             receipt=json.loads(receipts[0].read_text());self.assertEqual(receipt['status'],'passed')
             self.assertEqual(len(receipt['workers']),1);self.assertTrue(receipt['validation']['passed'])
+            self.assertFalse((Path(receipt['workers'][0]['workspace'])/'__pycache__').exists())
 
 
 if __name__=='__main__':unittest.main()

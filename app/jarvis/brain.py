@@ -239,6 +239,10 @@ def explicit_file_plan(goal):
     opening = re.match(r"^open (?:the )?folder (.+?)(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?=(?:create|make)\b)", goal, re.I)
     if opening:
         destination, goal = destination or opening[1].strip(), goal[opening.end():]
+    read = re.fullmatch(r'read ([^<>:"/\\|?*\r\n]+?\.[A-Za-z0-9]{1,10}) in (this folder|the current folder)\.?', goal, re.I)
+    if read and not destination and not re.search(r'\b(?:and|then|or)\b', read[1], re.I):
+        return {"steps": [{"action": "read_file", "value": read[1],
+            "folder": read[2], "expected": "Named file contents read from the explicitly selected folder"}]}
     create = re.fullmatch(r"(?:create|make) (?:a |the )?file (?:called |named )?(.+?)"
         r"(?:\s+(?:in|inside) (?:the )?(.+?)|\s+there)?"
         r"(?:\s*(?:,\s*(?:and(?: then)?\s+)?|\s+(?:and(?: then)?|then)\s+)(?:write|put)\s+(.+?)(?:\s+(?:in|into) it[.!?]?)?|\s+(?:containing|with content)\s+(.+))?", goal, re.I)
@@ -644,6 +648,9 @@ class Brain:
                     raise ValueError('Task paused: planning revisited an unchanged state.')
             started = time.monotonic()
             result = self.client.request(operation, cancelled, **data)
+            if identity is not None and isinstance(result, dict) and isinstance(result.get('model_route'), dict) and isinstance(state, TaskState):
+                state.require_identity(identity)
+                state.checkpoint('model_route', evidence=json.dumps(result['model_route']))
             if controller is not None:
                 controller.proposal(result, time.monotonic() - started)
             if identity is not None:
@@ -1290,7 +1297,7 @@ class Brain:
             completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
             fresh_image_ready=bool(self.step_session is not None and screen_aware),
             experience=state.recall(spoken_goal) if isinstance(state, TaskState) else [])
-        if plan.get("model_used") and plan["model_used"] != self.options["planner"]:
+        if plan.get("model_used") and plan["model_used"] != self.options["planner"] and not plan.get('model_route'):
             self.actions.report("brain", "Using installed fallback " + plan["model_used"] + "; preferred model is not installed yet")
         incremental_plan = self.step_session is not None and not (exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan)
         if incremental_plan and plan.get('done'):

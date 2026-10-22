@@ -117,13 +117,18 @@ def run_files(actions, goal, cancelled):
         if cancelled():
             raise ValueError('Task cancelled before input.')
         action, expected, path = step['action'], None, None
-        if action in {'create_file', 'modify_file', 'delete_file'}:
+        if action in {'create_file', 'modify_file', 'delete_file', 'read_file'}:
             folder = Path(actions._task_folder(step['folder'], cancelled)).resolve(strict=True)
             path = folder / filename(step['value'])
             if path.is_symlink() or path.resolve().parent != folder:
                 raise ValueError('The named file must remain inside its selected folder.')
             if action == 'create_file':
                 expected = step['content']
+            elif action == 'read_file':
+                if not path.is_file() or path.stat().st_size > 20_000:
+                    raise ValueError('Choose a UTF-8 text file up to 20,000 bytes.')
+                with path.open('r', encoding='utf-8', newline='') as stream:
+                    expected = stream.read()
             elif action == 'modify_file':
                 if path.stat().st_size > 2_000_000:
                     raise ValueError('The text file is too large.')
@@ -147,10 +152,14 @@ def run_files(actions, goal, cancelled):
             verified = actions.last_deleted == path and not path.exists()
         elif action == 'run_command':
             verified = bool(actions.last_command and actions.last_command[1] == 0)
+        if action == 'read_file':
+            verified = verified and result.replace('\r\n', '\n') == expected.replace('\r\n', '\n')
         if cancelled() or not verified:
             return 'Task paused: the requested result was not verified. Inspect the file or command output; no replay.'
         completed.append({**step, 'verified': True, 'result': result})
         state.checkpoint('verified', action=action, target=step['value'], source='disk_readback_or_exit_status', evidence=result)
         state.update_plan(plan['steps'][len(completed):], completed, 'Exact local result verified')
     state.checkpoint('goal_verified', source='disk_readback_or_exit_status', evidence='Explicit local tool result independently verified')
+    if len(completed) == 1 and completed[0]['action'] == 'read_file':
+        return completed[0]['result']
     return 'Finished; exact file result or command exit status verified without model calls.'

@@ -1,0 +1,18 @@
+{
+  "qwen3.5:9b": {
+    "samples": 18,
+    "p50_s": 9.362611949999518,
+    "p95_s": 13.412054499998703,
+    "tool_selection_correct": 16,
+    "errors": 0,
+    "external_tasks_executed": 0
+  },
+  "hierarchy": {
+    "samples": 18,
+    "p50_s": 9.586331600000449,
+    "p95_s": 30.367959100000007,
+    "tool_selection_correct": 16,
+    "errors": 0,
+    "external_tasks_executed": 0
+  }
+}

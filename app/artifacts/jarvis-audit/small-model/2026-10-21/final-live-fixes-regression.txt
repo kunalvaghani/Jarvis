@@ -1,0 +1,32 @@
+....F........................................................            [100%]
+================================== FAILURES ===================================
+_ InterfaceTests.test_primary_controls_remain_accessible_at_small_window_size _
+tests\test_hud.py:38: in setUp
+    self.root = tk.Tk()
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E   _tkinter.TclError: Can't find a usable tk.tcl in the following directories: 
+E       C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/library
+E   
+E   C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/spinbox.tcl": no such file or directory
+E   couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/spinbox.tcl": no such file or directory
+E       while executing
+E   "source -encoding utf-8 [file join $::ttk::library spinbox.tcl]  "
+E       (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl" line 109)
+E       invoked from within
+E   "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl"
+E       ("uplevel" body line 1)
+E       invoked from within
+E   "uplevel \#0 [list source -encoding utf-8 $::ttk::library/ttk.tcl]"
+E       (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl" line 706)
+E       invoked from within
+E   "source C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl"
+E       ("uplevel" body line 1)
+E       invoked from within
+E   "uplevel #0 [list source $file]"
+E   
+E   
+E   This probably means that tk wasn't installed properly.
+=========================== short test summary info ===========================
+FAILED tests/test_hud.py::InterfaceTests::test_primary_controls_remain_accessible_at_small_window_size
+1 failed, 60 passed in 453.93s (0:07:33)

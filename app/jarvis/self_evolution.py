@@ -475,6 +475,8 @@ class SelfEvolution:
         candidate, never an unvalidated rewrite.
         """
         skills = getattr(self.actions, 'skills', None)
+        from .teacher_student import readiness
+        self.student_readiness = readiness(getattr(skills, 'procedures', {}))
         store = getattr(skills, 'store', None)
         if store is None:
             return []

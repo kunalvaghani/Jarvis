@@ -1,0 +1,13 @@
+{
+  "scope": "Actual configured local Kokoro voice, GPU Whisper, production normalization/Engine/status dispatcher/OS read, then local reply synthesis. Generated public PCM only; no microphone, speaker playback, private transcript or cloud inference.",
+  "passed": false,
+  "input_synthesis_seconds": 1.6569999999992433,
+  "recognizer_load_seconds": 12.921999999998661,
+  "decode_seconds": 1.4369999999980791,
+  "public_phrase": "Jarvis, show CPU usage.",
+  "transcript": "Jarvis shows CPU usage.",
+  "configured_voice": "am_michael:60,am_fenrir:40",
+  "error_type": "TimeoutError",
+  "error": "No native CPU status reply",
+  "total_seconds": 31.01600000000326
+}

@@ -1,0 +1,86 @@
+...................................F.................................... [ 20%]
+........................................................................ [ 40%]
+...................s.................................................... [ 60%]
+....................s................................................... [ 80%]
+.......................................................................  [100%]
+================================== FAILURES ===================================
+__ NativeTests.test_headless_native_call_stays_a_read_only_session_proposal ___
+
+self = <tests.test_native_tools.NativeTests testMethod=test_headless_native_call_stays_a_read_only_session_proposal>
+
+    def test_headless_native_call_stays_a_read_only_session_proposal(self):
+        from jarvis.agent_session import OllamaProvider
+        self.client.post.return_value.json.return_value = {'message': call('read_file', value='source.py', expected='Read source')}
+        with patch('requests.Session') as session:
+            session.return_value.__enter__.return_value = self.client
+>           result = OllamaProvider(native_tools=True)({'goal': 'Read source.py', 'tools': [self.rows[1]],
+                'observations': [{'action': 'read_file', 'value': 'source.py', 'content': '', 'ok': True, 'result': 'Observed source'}]})
+
+tests\test_native_tools.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\agent_session.py:286: in __call__
+    proposed = plan(client, self.model, prompt, data,
+jarvis\native_tools.py:239: in plan
+    try:result = parse(body.get('message'), rows, finish_limit)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+message = {'tool_calls': [{'function': {'arguments': {'expected': 'Read source', 'value': 'source.py'}, 'name': 'read_file'}}]}
+rows = [{'action': 'read_file', 'description': 'Read scoped source'}]
+finish_limit = 10000
+
+    def parse(message, rows, finish_limit=500):
+        calls = message.get('tool_calls') if isinstance(message, dict) else None
+        if not isinstance(calls, list) or len(calls) != 1:
+            raise ValueError('Native planner must propose exactly one tool call; no actions executed.')
+        call = calls[0].get('function') if isinstance(calls[0], dict) else None
+        if not isinstance(call, dict):
+            raise ValueError('Invalid native function call.')
+        name, args = call.get('name'), call.get('arguments')
+        if isinstance(args, str):
+            if len(args) > 14000:
+                raise ValueError('Native arguments exceed the size limit.')
+            try:
+                args = json.loads(args)
+            except (ValueError, RecursionError):
+                raise ValueError('Native arguments are incomplete JSON.') from None
+        if not isinstance(args, dict):
+            raise ValueError('Native function arguments must be an object.')
+        if name in {FINISH, CLARIFY}:
+            field = 'reason' if name == FINISH else 'question'
+            limit = finish_limit if name == FINISH else 500
+            if set(args) != {field} or not isinstance(args[field], str) or not 1 <= len(args[field].strip()) <= limit:
+                raise ValueError('Invalid native completion/clarification.')
+            return {'done': name == FINISH, 'question': args.get('question', ''),
+                    'reason': args.get('reason', ''), 'steps': []}
+        if name not in {row['action'] for row in rows}:
+            raise ValueError('Native planner selected a tool not offered for this task.')
+        utility=next((row for row in rows if row['action']==name and row.get('utility_skill') is True),None)
+        if utility is not None:
+            from .repo_analysis import validate
+            validate(utility['parameters'],args)
+            folder=args.get('folder','')
+            if (name!='skill_gmail_chrome' and not folder.strip()) or not args['expected'].strip():raise ValueError('Utility proposals require an explicit folder and expected result.')
+            content=json.dumps(args['arguments'],allow_nan=False)
+            if len(content)>10000:raise ValueError('Utility arguments exceed the tool budget.')
+            return {'done':False,'question':'','reason':'One typed utility proposal; current validation and runtime approval remain required.',
+                    'steps':[{'action':name,'value':name,'content':content,'folder':folder,'expected':args['expected'],'browser':'chrome','find':'','platform':''}]}
+        learned=next((row for row in rows if row['action']==name and row.get('repository_skill') is True),None)
+        if learned is not None:
+            from .repo_analysis import validate
+            validate(learned['parameters'],args)
+            return {'done':False,'question':'','reason':'One approved repository capability proposal; isolated runtime checks and per-call approval remain required.',
+                'steps':[{'action':'repository_skill_run','value':name,'content':json.dumps(args),'expected':'Receive the isolated capability result','folder':'','browser':'chrome','find':'','platform':''}]}
+        if (set(args) - parameter_fields(name) or not {'value', 'expected'} <= args.keys() or
+                any(not isinstance(v, str) or len(v) > FIELDS[k] for k, v in args.items()) or
+                not args['value'].strip() or not args['expected'].strip()):
+            raise ValueError('Native planner returned invalid action arguments.')
+        step = {'action': name, 'browser': 'chrome', 'folder': '', 'content': '', 'find': '', 'platform': '', **args}
+        from .tools import required_arguments, validate_arguments
+        if not required_arguments(name) <= args.keys():
+>           raise ValueError('Native proposal omitted required arguments: '+', '.join(sorted(required_arguments(name)-args.keys())))
+E           ValueError: Native proposal omitted required arguments: folder
+
+jarvis\native_tools.py:108: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_native_tools.py::NativeTests::test_headless_native_call_stays_a_read_only_session_proposal
+1 failed, 356 passed, 2 skipped in 184.82s (0:03:04)

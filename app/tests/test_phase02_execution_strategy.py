@@ -385,6 +385,7 @@ def test_P02_05b_web_methods_rank_documented_api_before_dom(env):
 @pytest.fixture
 def fixture_window():
     import win32gui
+    import win32con
     title = 'Jarvis UIA Fixture ' + uuid.uuid4().hex[:8]
     process = subprocess.Popen([sys.executable, str(BASE / 'tests/fixtures/uia_fixture_app.py'), title])
     try:
@@ -394,6 +395,12 @@ def fixture_window():
             time.sleep(.05)
         if not handle:
             pytest.skip('BLOCKED: disposable Win32 window did not appear (no interactive desktop).')
+        # This test uses native Value/Invoke patterns only. Keep its owned
+        # window from becoming a physical keyboard target during active desktop
+        # use; otherwise unrelated typing can land after SetValue's readback
+        # and before Invoke, invalidating the fixture rather than the adapter.
+        win32gui.SetWindowLong(handle, win32con.GWL_EXSTYLE,
+            win32gui.GetWindowLong(handle, win32con.GWL_EXSTYLE) | win32con.WS_EX_NOACTIVATE)
         # Diagnostics only: a UIA test once stalled during a full run while the desktop was in active use.
         # If that recurs, every thread's stack is written to the log (the outcome is not changed).
         import faulthandler
@@ -421,10 +428,14 @@ def test_P02_06_structured_uia_first_on_disposable_app(fixture_window):
                          {'role': 'Edit', 'name': '', 'id': list(edit.element_info.runtime_id)}, handle, lambda: None)
         clicked = execute({'operation': 'activate'}, button,
                           {'role': 'Button', 'name': 'Apply', 'id': list(button.element_info.runtime_id)}, handle,
-                          lambda: None, observe=label)
+                          lambda: _require_fixture_value(edit), observe=label)
     assert filled['provider'] == 'ufo' and filled['verified'] is True
     assert clicked['provider'] == 'ufo' and clicked['observed_change'] is True
     assert label() == 'Applied: structured value'
+
+
+def _require_fixture_value(edit):
+    assert edit.iface_value.CurrentValue == 'structured value', 'External input changed the owned fixture before Invoke.'
 
 
 def test_P02_09_cyan_cursor_order_is_configurable_and_remains_the_fallback(tmp_path):

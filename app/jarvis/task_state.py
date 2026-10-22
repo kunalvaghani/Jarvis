@@ -126,6 +126,17 @@ class TaskState:
                     item[key] = str(value)[:500]
             current["stage"] = stage
             current["updated_at"] = item["at"]
+            if stage == 'model_route':
+                # Keep bounded attribution beyond the rolling observation log.
+                # This is advisory metadata, never execution/approval evidence.
+                try:
+                    route = json.loads(evidence)
+                    if (route.get('model') in {'qwen3.5:2b', 'qwen3.5:4b', 'qwen3.5:9b'}
+                            and route.get('category') in {'media', 'files', 'desktop'}):
+                        route = {k: v for k, v in route.items() if k in {'model', 'category', 'reason', 'previous_model', 'error_type'} and isinstance(v, str) and len(v) < 100}
+                        current['model_routes'] = (current.get('model_routes', []) + [route])[-40:]
+                except (ValueError, TypeError, AttributeError):
+                    pass
             current["checkpoints"] = (current["checkpoints"] + [item])[-30:]
             if stage in {'uncertain_external_write','external_write_verified'}:
                 pending = current.setdefault('uncertain_external_writes', [])

@@ -154,6 +154,12 @@ class HandlerTests(unittest.TestCase):
         self.assertTrue(handlers.system_info(actions, "windows").startswith("Windows "))
         self.assertIn("python", handlers.system_info(actions, "running", "python").lower())
 
+    def test_public_speech_cpu_inflection_stays_a_read_only_native_query(self):
+        for phrase in ('show CPU usage', 'shows CPU usage', 'shows the CPU load'):
+            self.assertEqual(parse(phrase), Command('system_info','quick_cpu'))
+        with self.assertRaises(ValueError):
+            parse('shows files from my project')
+
 
 class GodsEyeCameraTests(unittest.TestCase):
     def eye(self):

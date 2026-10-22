@@ -36,15 +36,21 @@ def _tree_rss(process):
 
 
 def _kill_tree(process):
+    import psutil
     try:
         children = process.children(recursive=True)
     except Exception:
         children = []
-    for item in [*children, process]:
+    targets = [*children, process]
+    for item in targets:
         try:
             item.kill()
         except Exception:
             pass
+    # A Windows venv launcher can exit before its Python descendant releases
+    # inherited stdout/stderr handles. Reap the entire killed tree before the
+    # caller reads and removes its temporary output directory.
+    psutil.wait_procs(targets, timeout=10)
 
 
 def run_bounded(command, cwd, timeout, max_rss_mb, cancelled=lambda: False, stdin_text=None, env=None):

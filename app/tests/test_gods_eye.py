@@ -53,9 +53,9 @@ class ParseTests(unittest.TestCase):
 
 
 class Feed(ge.GodsEye):
-    def __init__(self, responses):
+    def __init__(self, responses, clock=time.time):
         actions = SimpleNamespace(base=tempfile.mkdtemp(), config={}, report=Mock(), memory=None, realtime=None)
-        super().__init__(actions, {"radius_km": 40})
+        super().__init__(actions, {"radius_km": 40}, clock=clock)
         self.responses = responses
         self.http = Mock()
         self.http.get.side_effect = lambda *a, **k: Mock(json=lambda: {"features": []})
@@ -69,17 +69,37 @@ class Feed(ge.GodsEye):
 
 class FeedTests(unittest.TestCase):
     def feed(self):
+        # Real-time milliseconds can round-trip one float ULP into the future.
+        # Use one explicit fixture clock; keep production's strict future guard.
+        stamp = 1700000000.0
+        states = [flight("a1", "IGO527 ", 22.45, 73.25, 11000), flight("b2", "LOW1 ", 22.32, 73.21, 600),
+                  flight("c3", "EMG77 ", 22.5, 73.3, 2000, "7700"), flight("d4", "FAR ", 28.6, 77.2, 9000)]
+        for state in states:
+            state[3] = state[4] = stamp
         return Feed({
-            "/api/flights": {"states": [flight("a1", "IGO527 ", 22.45, 73.25, 11000), flight("b2", "LOW1 ", 22.32, 73.21, 600),
-                                        flight("c3", "EMG77 ", 22.5, 73.3, 2000, "7700"), flight("d4", "FAR ", 28.6, 77.2, 9000)]},
-            "/api/military": {"now":time.time()*1000,"total": 100, "ac": [{"seen_pos":0,"hex": "m1", "flight": "IAF01 ", "t": "C130", "lat": 22.35, "lon": 73.22,
+            "/api/flights": {"time": stamp, "states": states},
+            "/api/military": {"now":int(stamp*1000),"total": 100, "ac": [{"seen_pos":0,"hex": "m1", "flight": "IAF01 ", "t": "C130", "lat": 22.35, "lon": 73.22,
                                                     "alt_baro": 2500, "squawk": "4000", "emergency": "none"}]},
             "/api/cyclones": {"storms": [{"name": "Vayu", "position": {"latitude": 21.0, "longitude": 70.5}, "forecastPoints": []}]},
             "/api/fire-perimeters": {"rows": []},
             "/api/weather-effects": {"weather": {"weatherCode": 95, "precipitationMm": 4, "windKph": 30}},
             "/api/local-receivers/aircraft": {"configured": False},
             "/api/tomtom/status": {"hasKey": False},
-        })
+        }, clock=lambda: stamp)
+
+    def test_future_aircraft_timestamps_still_rejected(self):
+        feed = self.feed()
+        future = feed.clock() + 1
+        feed.responses['/api/flights']['time'] = future
+        for state in feed.responses['/api/flights']['states']:
+            state[3] = state[4] = future
+        feed.responses['/api/military']['now'] = int(future*1000)
+        snapshot = feed.poll()
+        self.assertEqual(snapshot['flights']['count'], 0)
+        self.assertEqual(snapshot['military']['count_near'], 0)
+        stamp = 1792639900.00029
+        self.assertGreater(stamp*1000/1000, stamp)
+        self.assertFalse(ge.recent(stamp*1000/1000, stamp))
 
     def test_poll_alerts_and_answers(self):
         feed = self.feed()
