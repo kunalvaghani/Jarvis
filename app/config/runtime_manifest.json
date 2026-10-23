@@ -4,7 +4,7 @@
     "date": "2026-10-23 IST",
     "modules": ["jarvis.voice_runtime", "jarvis.voice_registry"],
     "services": "Extends the existing listener and speech workers; no additional service or dependency.",
-    "asr": "Rolling overlapping Whisper windows, local agreement metadata, final-only effects; not native streaming.",
+    "asr": "Existing medium.en decoder retained. User-requested pre-multilingual capture profile: 100 ms frames and fixed 0.8 second silence endpoint; optional transcript metadata and final-only effects retained. Not native streaming.",
     "duplex": "Headphone no-wake barge-in is opt-in. Speaker mode retains wake gating without acoustic AEC.",
     "languages": "en/hi/gu/fr routing; English medium.en remains selected. Two approved optional multilingual models failed Gujarati acceptance; existing French Kokoro is reused.",
     "rollback": "Set whisper.streaming_enabled=false, adaptive_endpointing=false, frame_ms=100; voice.full_duplex.enabled=false. Final-only safety remains enabled."
@@ -1126,5 +1126,24 @@
     "activation": "Registration helper prepared; active MCP configuration was not modified. Explicit approval required to enable the write-capable registration.",
     "rollback": "scripts/setup/register_blender_connector.py --disable; restart Jarvis. Stop bridge from its own Blender instance only.",
     "capability_guide": "skills/blender-modeling/SKILL.md; existing SkillMemory guidance, never execution authorization."
+  },
+  "durable_task_queue": {
+    "modules": [
+      "jarvis.task_store",
+      "jarvis.task_policy",
+      "jarvis.task_scheduler",
+      "jarvis.task_ingress",
+      "jarvis.task_decisions",
+      "jarvis.workflow_graph",
+      "jarvis.island_queue"
+    ],
+    "storage": ".jarvis-runtime/task-queue.sqlite3",
+    "health": "TaskIngress.healthy; existing watchdog bounded repair",
+    "desktop_gate": "WTS session must be active/unlocked and the input desktop accessible; unknown session state fails closed",
+    "external_action_replay": false,
+    "workflow_graph": "Persistent groups/workflows, one owner per task, DAG edges and audited revisions; typed results, verified conditions, bounded expansion and group reports share TaskStore. No additional service/dependency; existing intake watchdog applies.",
+    "graph_limits": "64 prerequisites/node; 20 generated children/call, 50/workflow, depth 3; 16k structured output, 48k aggregate handoff. Effectful generated subtasks require scope review plus existing tool approval; planner/file mutations retain exclusive locks.",
+    "rollback": "task_queue.enabled=false; preserve SQLite and reports",
+    "dependencies": "Python standard library; existing psutil for resource admission"
   }
 }

@@ -146,6 +146,9 @@ class TaskState:
                 elif stage == 'external_write_verified':
                     current['uncertain_external_writes'] = [row for row in pending if row!=token]
             self._write()
+            callback = getattr(self, 'on_checkpoint', None)
+            if callback is not None:
+                callback(json.loads(json.dumps(current)))
 
     def finish(self, status, result, *, task_id=None):
         with self.lock:

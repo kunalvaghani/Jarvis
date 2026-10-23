@@ -1,0 +1,9 @@
+..F..                                                                    [100%]
+================================== FAILURES ===================================
+_ InterfaceTests.test_compact_island_controls_fit_with_long_response_and_question _
+tests\test_hud.py:113: in test_compact_island_controls_fit_with_long_response_and_question
+    self.assertLessEqual(button.winfo_rooty()+button.winfo_height(),
+E   AssertionError: 20509 not less than or equal to 20360 : Pause
+=========================== short test summary info ===========================
+FAILED tests/test_hud.py::InterfaceTests::test_compact_island_controls_fit_with_long_response_and_question
+1 failed, 4 passed in 2.18s

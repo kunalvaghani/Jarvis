@@ -2,15 +2,17 @@
 
 Implementation candidate on `codex/realtime-multilingual-voice`; **full release acceptance remains open**. [Pre-change architecture](realtime-voice-baseline.md) and [cumulative acceptance handoff](CLAUDE_HANDOFF.md) distinguish implemented policies from acoustic validation.
 
+**Current default follow-up — 2026-10-23:** during the subsequent queue upgrade, the user requested the earlier voice path after physical transcription problems. The existing medium.en model and original decoder remain selected; capture now defaults to **100 ms**, with **adaptive endpointing off** and fixed **0.8 s** silence. The user confirmed the earlier behavior was restored. Passive transcript metadata and optional incremental/duplex settings remain. [Restoration, physical attempts and precise acceptance limits](voice-profile-restoration.md). The older regression/model results below describe the earlier voice candidate, not a fresh certification of the queue follow-up.
+
 ## Architecture and behavior
 
 The existing microphone callback, shared PCM pool, Silero consumer, one Whisper decoder, Engine, Actions/Knowledge generations, speech workers, Dynamic Island and Pip remain in place. No dependency, driver, cloud audio service or competing conversation manager was added. Two optional local ASR models were downloaded only after separate user approvals; neither replaced the configured English ASR because Gujarati acceptance failed.
 
-- Capture defaults to 32 ms frames. The existing PCM queue is bounded to 100 frames; its shared PCM pool remains bounded. Overflow stops listening rather than executing stale work. Existing watchdog/recovery respects deliberate microphone stops. VAD retains approximately its previous 10 Hz evaluation rate to avoid tripling inference cost with smaller frames.
+- Capture defaults to the restored 100 ms frames; 32 ms remains an explicit optional setting. The existing PCM queue is bounded to 100 frames; its shared PCM pool remains bounded. Overflow stops listening rather than executing stale work. Existing watchdog/recovery respects deliberate microphone stops. VAD retains approximately its previous 10 Hz evaluation rate when smaller frames are selected.
 - Existing overlapping 20 s Whisper windows with 4 s overlap remain **rolling-window inference, not native streaming ASR**. Partials coalesce in the existing bounded decode queue; finals/window boundaries remain ordered. A 120 s utterance limit stops unbounded noise/speech instead of committing an arbitrary command. Existing push-to-write finalization remains separate.
 - `voice_transcript` events carry session/utterance IDs, monotonic timestamps, revision numbers, PROVISIONAL/STABLE/FINAL state, original text, a common-prefix replacement offset/suffix and stable prefix. Stability means agreement between adjacent hypotheses; it can still be corrected. Only FINAL speech authorizes effects.
 - All Engine effects, including opening apps, now wait for final speech. Stable partials prepare only a local command category, without network/model/tool calls or privacy bypass. Existing final-command cleanup, planner, connectors, approvals and effect checks still own execution.
-- Endpoint modes are fast (0.5 s), balanced (configured silence, normally 0.8 s) and careful (1.4 s). Unstable speech waits at least 1.1 s; trailing conjunctions/hesitation and writing wait at least 1.8 s. This bounded heuristic cannot infer every intended mid-sentence pause. It does not promise that arbitrary long hesitations stay one command.
+- Fixed 0.8 s endpointing is the restored default. When explicitly enabled, adaptive modes are fast (0.5 s), balanced (configured silence, normally 0.8 s) and careful (1.4 s). Unstable speech then waits at least 1.1 s; trailing conjunctions/hesitation and writing wait at least 1.8 s. This bounded optional heuristic cannot infer every intended mid-sentence pause. It does not promise that arbitrary long hesitations stay one command.
 - `voice.full_duplex` adds committed no-wake interruptions in explicit **headphone mode** while the existing Engine is awake. Capture already runs during inference/playback. Speaker mode retains wake-word gating and textual echo rejection. There is **no acoustic AEC, verified double-talk separation or playback-reference noise cancellation**. Do not claim loudspeaker full-duplex acceptance.
 - STOP/PAUSE silence output and cancel answer generation; CANCEL/CORRECTION/REPLACEMENT also use existing cooperative Actions cancellation. FOLLOW-UP/CONTINUATION retain tool work and conversation history. RESUME repeats the last available response text from its beginning, without replaying tools; exact sample-position pause/resume is not implemented. Irreversible effects are neither reversed nor automatically retried. Native calls stop only at their existing cancellation boundaries.
 - Worker response generations fence producer events and queued UI responses. Canceled intent classification cannot submit its result after its generation changes. Response stream snapshots retain coalescing and replacement barriers. This does not forcibly abort already-running native kernels or remote providers.
@@ -26,10 +28,10 @@ Existing `config/config.json` remains authoritative. Shipped settings retain Eng
 ```json
 {
   "whisper": {
-    "frame_ms": 32,
+    "frame_ms": 100,
     "streaming_enabled": true,
     "partial_interval_seconds": 1.0,
-    "adaptive_endpointing": true,
+    "adaptive_endpointing": false,
     "endpoint_mode": "balanced",
     "silence_seconds": 0.8,
     "max_utterance_seconds": 120,
@@ -116,7 +118,7 @@ Neither command downloads assets, captures the microphone, plays sound or execut
 
 | Capability / files | Before | Implemented candidate | Tested / open |
 |---|---|---|---|
-| Recognition: audio.py, voice_runtime.py, whisper_backend.py | Rolling hypotheses, fixed silence | Revision/stability contract, adaptive endpoints, smaller frames, bounded duration/metrics | Deterministic fixtures and generated English pilot; not native streaming |
+| Recognition: audio.py, voice_runtime.py, whisper_backend.py | Rolling hypotheses, fixed silence | Revision/stability contract, optional adaptive endpoints/smaller frames, bounded duration/metrics; default restored to 100 ms/fixed silence | Earlier candidate fixtures/public pilot; later physical restoration feedback documented separately; not native streaming |
 | Effects: engine.py | Some opening clauses dispatched from partials | Every external action requires FINAL | Revised and existing command regressions |
 | Duplex: voice_input.py, main.py | Concurrent capture; wake-only output interruption | Headphone opt-in no-wake final speech, explicit interruption categories | Fixture policies; physical headphones/speakers open |
 | Cancellation: actions.py, knowledge.py, ui_events.py | Existing worker generations/tokens | Worker/UI stale-response fences and canceled intent suppression | Generation/revision/coalescing regressions; native cancellation boundaries remain |

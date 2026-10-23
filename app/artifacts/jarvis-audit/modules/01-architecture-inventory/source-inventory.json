@@ -6652,6 +6652,13 @@
       "provider_configured": true,
       "state": "adapter_present_live_unverified",
       "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+    },
+    {
+      "name": "workflow_expand",
+      "backend": "toolkit",
+      "approval": "none",
+      "dispatch": "jarvis/tools.py:ToolRegistry._execute",
+      "state": "adapter_present_live_unverified"
     }
   ],
   "registered_tool_count": 120,
@@ -6679,5 +6686,7 @@
     "cognitive_loop",
     "cognition_persistence"
   ],
-  "scope": "Static code symbols, registry metadata and prerequisite presence. No app/model/account actions, no capability certification."
+  "scope": "Static code symbols, registry metadata and prerequisite presence. No app/model/account actions, no capability certification.",
+  "tools_refreshed_at": "2026-10-23T08:18:50.684742+00:00",
+  "tools_refresh_note": "Workflow graph addendum registers workflow_expand. Original module hashes/symbols remain the historical observed_at snapshot. Prior tool table is preserved in artifacts/workflow-graph/architecture-tools-before.json. Inventory is not live acceptance proof."
 }

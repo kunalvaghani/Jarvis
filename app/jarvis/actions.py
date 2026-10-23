@@ -243,6 +243,7 @@ class Actions:
         from .tools import ToolRegistry
         ToolRegistry(self).self_model([])  # Reconcile the persisted metadata view at startup.
         self.brain.client.context_provider = self.knowledge.planning_context
+        self.brain.client.task_result_provider = lambda: self.ingress.scheduler.current_inputs() if getattr(self, 'ingress', None) else []
         from .learning_memory import LearningMemory
         # ReasoningBank lessons, OpenViking vault index and isolated exploration (each optional).
         self.learning = LearningMemory(self, config).attach()
@@ -307,6 +308,13 @@ class Actions:
             notify=lambda kind, message: report(kind, message),
             busy=lambda: self.anticipation.busy())  # Idle-only capability expansion (docs/self-evolution.md).
 
+        self.ingress = None
+        if config.get('task_queue', {}).get('enabled', False) and not config.get('_ui_verification', False):
+            from .task_ingress import TaskIngress
+            self.ingress = TaskIngress(self, self.base / '.jarvis-runtime' / 'task-queue.sqlite3', config.get('task_queue', {}))
+            self.queue = self.ingress.scheduler
+            self.task_state.on_checkpoint = self.ingress.checkpoint
+
     def start(self):
         try:
             self.skills.sync()
@@ -325,12 +333,17 @@ class Actions:
             self.memory.enabled = False
             self.report("warning", "Obsidian memory could not start: " + str(exc))
         self.knowledge.start()
+        if self.ingress is not None:
+            self.ingress.start()
         self.thread.start()
         self.anticipation.start()
         self.realtime.start()
         self.self_evolution.start()
 
     def cancel(self):
+        ingress = getattr(self, 'ingress', None)
+        if ingress is not None and not ingress.closed.is_set():
+            ingress.scheduler.control('cancel')
         realtime = getattr(self, 'realtime', None)
         if realtime is not None:
             realtime.cancel()
@@ -353,6 +366,19 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command, expected_generation=None):
+        if command.kind in {'ask','task'} and not command.extra:
+            from .commands import cloud_command
+            command = cloud_command(command.value) or command
+        ingress = getattr(self, 'ingress', None)
+        from .task_ingress import TaskIngress
+        if isinstance(ingress, TaskIngress):
+            # Explicit answers and emergency controls never wait for classification.
+            if command.kind in {'cloud_control','approval_answer','whatsapp_answer','stop_speaking','cancel_all','cancel_current','sleep','end_conversation'}:
+                return Actions._submit(self, command, expected_generation)
+            return ingress.submit(command, expected_generation)
+        return Actions._submit(self, command, expected_generation)
+
+    def _submit(self, command, expected_generation=None):
         submission_generation = getattr(self, 'generation', 0)
         if expected_generation is not None and expected_generation != submission_generation:
             return
@@ -370,10 +396,13 @@ class Actions:
             self.report('answer', reply)
             return  # Explicit settings bypass chat, pending replies and busy action queues.
         from .whatsapp import answer_prompt
-        if answer_prompt(self, command):
+        from .task_ingress import TaskIngress
+        ingress = getattr(self, 'ingress', None)
+        independent = isinstance(ingress, TaskIngress) and getattr(ingress.local, 'new_task', False)
+        if not independent and answer_prompt(self, command):
             return  # A reply to a waiting WhatsApp question (contact choice, preview approval, call).
         screen = getattr(self, 'screen', None)
-        if screen is not None and command.kind != 'screen_act' and screen.answer(command):
+        if not independent and screen is not None and command.kind != 'screen_act' and screen.answer(command):
             return  # A reply to a screen offer ("yes", "no", or the detail such as a word from a video title).
         if command.kind in {'approval_answer', 'whatsapp_answer'}:
             if self.approvals_waiting and self.decision_handler:
@@ -391,7 +420,7 @@ class Actions:
         evolution = getattr(self, 'self_evolution', None)
         if evolution is not None:
             evolution.note_activity()  # Any user command preempts idle learning immediately.
-        if getattr(self, 'pending_opinion', None) and command.kind in {'task', 'ask'} and command.extra != 'approved_plan':
+        if not independent and getattr(self, 'pending_opinion', None) and command.kind in {'task', 'ask'} and command.extra != 'approved_plan':
             if self._handle_opinion_feedback(command):
                 return  # A reply to a recommendation Jarvis is waiting on (go ahead / no / you decide).
         if command.kind == 'stop_speaking':
@@ -410,6 +439,9 @@ class Actions:
                 self.report('spoken_reply', reply)
             return
         if command.kind in STATUS:
+            if getattr(self, 'ingress', None) is not None:
+                self.ingress.enqueue((self.generation, command, threading.Event()))
+                return
             status_generation = self.generation
             def status_answer():
                 responses = getattr(self, 'response_reports', None)
@@ -427,12 +459,15 @@ class Actions:
             from .commands import Command
             if time.monotonic() < getattr(self, 'chat_only_until', 0.):
                 command = Command('ask', command.value)  # "I'm just thinking aloud": conversation, never a task.
-            elif self.pending_question or self.pending_open:
+            elif not independent and (self.pending_question or self.pending_open):
                 command = Command('task', command.value)  # Likely an answer; keep the reply path.
             else:
                 # Conversation or task? Decide off the audio thread; a tiny model may be needed.
-                threading.Thread(target=self._route_unparsed, args=(command.value, self.generation),
-                                 name='Jarvis intent', daemon=True).start()
+                if getattr(self, 'ingress', None) is not None and getattr(self.ingress.local, 'identity', None):
+                    self._route_unparsed(command.value, self.generation)
+                else:
+                    threading.Thread(target=self._route_unparsed, args=(command.value, self.generation),
+                                     name='Jarvis intent', daemon=True).start()
                 return
         question = cognition.deliberate(command) if cognition is not None and command.kind in {'whatsapp_send', 'messenger_send'} else None
         if question:
@@ -488,7 +523,7 @@ class Actions:
             except (ValueError, TypeError) as exc:
                 self.report('question', str(exc))
             return
-        if getattr(getattr(self, 'knowledge', None), 'pending_memory', None):
+        if not independent and getattr(getattr(self, 'knowledge', None), 'pending_memory', None):
             try:
                 if self.knowledge.memory_reply(command):
                     return
@@ -521,7 +556,8 @@ class Actions:
             if music:
                 self.report('island_music_request',music[1])
         self.memory.ensure_index(self.config)
-        command = self._resolve_reply(command)
+        if not (getattr(self, 'ingress', None) and getattr(self.ingress.local, 'new_task', False)):
+            command = self._resolve_reply(command)
         if command.kind not in {"ask", "forget_chat", "clarification_blocked"}:
             self.memory.record("Jarvis request", f"{command.kind}: {command.value}")
         if self.task_active and command.kind == "resume_task":
@@ -541,7 +577,12 @@ class Actions:
                 threading.Thread(target=self._answer_document, args=(document, command.value), daemon=True,
                                  name="Jarvis document answer").start()
                 return
-            self.knowledge.submit(command.value, command.extra == "web")
+            if getattr(self, 'ingress', None) is not None:
+                self.ingress.local.overrides = {**getattr(self.ingress.local, 'overrides', {}), 'lane': 'question',
+                    'locks': ['conversation'], 'read_only': True, 'unattended': True}
+                self.ingress.enqueue((submission_generation, command, threading.Event()))
+            else:
+                self.knowledge.submit(command.value, command.extra == "web")
             return
         if command.kind == "forget_chat":
             self.knowledge.forget()
@@ -550,8 +591,7 @@ class Actions:
         if command.kind == "sleep":
             if anticipation is not None:
                 anticipation.handle('pause')
-            self.cancel()
-            self.report("state", "Listening for Jarvis Ã‚Â· queued tasks cancelled")
+            self.report("state", "Voice asleep; background tasks continue")
             return
         if command.kind in {'write_text', 'compose_text'}:
             command = self._with_write_target(command)
@@ -566,7 +606,10 @@ class Actions:
         try:
             if command.kind in {'task', 'code_task', 'clarified_task', 'resume_task'}:
                 self.knowledge.prepare_context(command.value)
-            self.queue.put_nowait((submission_generation, command, token))
+            if getattr(self, 'ingress', None) is not None:
+                self.ingress.enqueue((submission_generation, command, token))
+            else:
+                self.queue.put_nowait((submission_generation, command, token))
         except queue.Full:
             with self.queue_lock:
                 self.pending_tasks = [item for item in self.pending_tasks if item[0] is not token]
@@ -866,6 +909,9 @@ class Actions:
         return command
 
     def close(self):
+        ingress = getattr(self, 'ingress', None)
+        if ingress is not None:
+            ingress.close()
         blender_jobs = getattr(self, '_blender_jobs', None)
         if blender_jobs is not None:
             blender_jobs.close()
@@ -929,6 +975,8 @@ class Actions:
             self.browser_automation.close()
         if self.thread.is_alive():
             self.thread.join(timeout=3)
+        if ingress is not None:
+            ingress.close_storage()
         self.brain.client.close()
 
     def _ui(self):
@@ -1681,8 +1729,17 @@ class Actions:
             self.open_target_pending = self.typing_failed = True
             return f"Opened {path}"
         if command.kind == "create":
-            with self._path(command.value).open("x", encoding="utf-8") as file:
+            path = self._path(command.value)
+            with path.open("x", encoding="utf-8") as file:
                 file.write(command.extra)
+            from .task_scheduler import ScheduledQueue
+            if isinstance(getattr(self, 'queue', None), ScheduledQueue):
+                import hashlib
+                observed = path.read_bytes()
+                expected = command.extra.replace('\n', os.linesep).encode('utf-8')
+                if observed != expected:raise ValueError('Created file readback differs; inspect before continuing')
+                self.queue.record_effect({'kind':'file','operation':'created','path':str(path),
+                    'bytes':len(observed),'sha256':hashlib.sha256(observed).hexdigest(),'verification':'fresh byte readback'})
             return f"Created {command.value}"
         if command.kind == "modify":
             from .desktop_tasks import modify_text_file
@@ -1906,7 +1963,8 @@ class Actions:
             try:
                 generation, command, token = self.queue.get(timeout=0.2)
                 if getattr(self, 'response_reports', None) is not None:
-                    self.response_reports.bind(generation)
+                    self.response_reports.bind(generation, lambda generation=generation, token=token:
+                        not self.closed.is_set() and generation == self.generation and not token.is_set())
             except queue.Empty:
                 self._suggest()
                 continue
@@ -1914,7 +1972,10 @@ class Actions:
                 self.pending_tasks = [item for item in self.pending_tasks if item[0] is not token]
                 self.current_item = (token, command)
             try:
-                cancelled = lambda: self.closed.is_set() or generation != self.generation or token.is_set()
+                def cancelled():
+                    if getattr(self, 'ingress', None) is not None:
+                        self.queue.touch()
+                    return self.closed.is_set() or generation != self.generation or token.is_set()
                 if not cancelled():
                     from .progress import status
                     phases = {'open': 'Opening', 'open_folder': 'Opening folder', 'open_file': 'Opening file',
@@ -1923,6 +1984,14 @@ class Actions:
                     status(self.report, phases.get(command.kind, 'Working'),
                            '' if command.kind in {'type', 'dictate', 'run_command'} else command.value)
                     result = self.execute(command, cancelled)
+                    if getattr(self, 'ingress', None) is not None:
+                        state = (self.task_state.snapshot() or {}) if command.kind in {'task','code_task','clarified_task','resume_task'} else {}
+                        outcome = ('COMPLETED' if state.get('status') == 'completed' else 'WAITING_USER' if state.get('status') == 'paused' else 'PARTIAL') if state else ('COMPLETED' if result else 'PARTIAL')
+                        evidence = {'tool_checkpoint': state}
+                        pending = getattr(self, 'pending_question', None)
+                        if outcome == 'WAITING_USER' and pending and pending.get('source', {}).get('task_id') == state.get('task_id'):
+                            evidence['clarification'] = {key:value for key,value in pending.items() if key != 'time'}
+                        self.queue.outcome(outcome, result, evidence)
                     if result and not cancelled() and (command.kind in {"media_control", "spotify_control", "spotify_volume"} or (
                             command.kind == "click_control" and command.value in {"play", "pause"}
                             and getattr(self, "media_resolved", None))):
@@ -1964,6 +2033,9 @@ class Actions:
                             if not str(result).startswith("Task paused, waiting for your answer"):
                                 self.report("spoken_reply", result)  # The question itself was already spoken.
             except Exception as exc:
+                if getattr(self, 'ingress', None) is not None:
+                    self.queue.outcome('CANCELLED' if token.is_set() or generation != self.generation else 'FAILED', str(exc),
+                                       {'uncertain': True, 'tool_checkpoint': self.task_state.snapshot() or {}})
                 if generation in self.superseded_generations and generation != self.generation:
                     self.report("state", "Previous task replaced by your newer request.")
                     self.superseded_generations.discard(generation)

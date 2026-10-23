@@ -1,0 +1,24 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+...........................s............................................ [  5%]
+.......F
+================================== FAILURES ===================================
+_______ test_JRV_01_012_registry_inventory_is_not_live_capability_proof _______
+
+    def test_JRV_01_012_registry_inventory_is_not_live_capability_proof():
+        from jarvis.tools import ToolRegistry,SPECS
+        from jarvis.brain import ALLOWED
+        rows=ToolRegistry(Mock()).catalog()
+        assert {r['action'] for r in rows}==ALLOWED=={r.name for r in SPECS}
+        assert all(row['approval'] in {'none','user'} for row in rows)
+        inventory=json.loads((Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/01-architecture-inventory/source-inventory.json').read_text())
+>       assert len(inventory['tools'])==len(SPECS)
+E       AssertionError: assert 120 == 121
+E        +  where 120 = len([{'approval': 'none', 'backend': 'desktop', 'dispatch': 'jarvis/tools.py:ToolRegistry._execute', 'name': 'application_...': 'none', 'backend': 'dom', 'dispatch': 'jarvis/tools.py:ToolRegistry._execute', 'name': 'browser_inspect', ...}, ...])
+E        +  and   121 = len((ToolSpec(name='workflow_expand', backend='toolkit', description='Propose bounded subtasks in the CURRENT durable work...c(name='browser_search', backend='browser', description='Search the web using the exact query.', approval='none'), ...))
+
+tests\test_architecture_audit.py:151: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_architecture_audit.py::test_JRV_01_012_registry_inventory_is_not_live_capability_proof
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 222 passed, 1 skipped in 48.43s

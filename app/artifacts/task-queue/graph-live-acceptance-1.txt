@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\Kunals GitHub Repo\Jarvis\app\scripts\verification\verify_workflow_graph.py", line 106, in <module>
+    main(parser.parse_args().output.resolve())
+  File "D:\Kunals GitHub Repo\Jarvis\app\scripts\verification\verify_workflow_graph.py", line 74, in main
+    wait_for(lambda:all(store.get(t)['state']=='COMPLETED' for t in list(files.values())+readonly),60)
+  File "D:\Kunals GitHub Repo\Jarvis\app\scripts\verification\verify_workflow_graph.py", line 42, in wait_for
+    raise TimeoutError('Owned workflow acceptance condition did not finish')
+TimeoutError: Owned workflow acceptance condition did not finish

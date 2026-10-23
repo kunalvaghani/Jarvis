@@ -1,0 +1,120 @@
+{
+  "checked_at": "2026-10-23T16:20:23.858071+00:00",
+  "branch": "codex/autonomous-task-queue",
+  "release_accepted": false,
+  "full_regression": {
+    "status": "passed",
+    "passed": 4100,
+    "skipped": 155,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 1211.83,
+    "receipt": "release-uninterrupted-final/release-full-regression.txt",
+    "frozen_source_files": 519,
+    "source_unchanged": true,
+    "previous_complete": {
+      "receipt": "release-private-final/release-full-regression.txt",
+      "passed": 4104,
+      "skipped": 150,
+      "failed": 1,
+      "long_wait_interruption": true,
+      "failure": "90-second owned Office-worker timeout",
+      "isolated_unchanged_rerun_passed": true,
+      "case_passed_in_fresh_full_run": true
+    }
+  },
+  "focused": {
+    "passed": 265,
+    "skipped": 2,
+    "receipt": "privacy-focused.txt"
+  },
+  "live_tasks": {
+    "completed": 12,
+    "passed": true,
+    "receipt": "live-map-final/acceptance.json",
+    "scope": "Ten owned files, two host observations, two actual native 20-second choices; short batch"
+  },
+  "live_crash": {
+    "passed": true,
+    "receipt": "live-crash/acceptance.json"
+  },
+  "live_private_context": {
+    "passed": true,
+    "receipt": "live-private-context.json"
+  },
+  "main_microphone": {
+    "status": "stopped",
+    "stop_marker_present": true
+  },
+  "remaining_acceptance": [
+    "Extended physical overnight/endurance and sleep/battery/thermal workload",
+    "Strict physical speech gate (latest prior receipt 8/10), multilingual/duplex acceptance",
+    "Account-specific live operations",
+    "General parallel coding requires isolated task workspaces and connector/planner state",
+    "Broader arbitrary project-repair and semantic relationship quality",
+    "Current foreground availability for five existing desktop demonstration fixtures"
+  ],
+  "desktop_demonstration": {
+    "status": "gated",
+    "skipped": 5,
+    "deselected": 33,
+    "seconds": 14.21,
+    "reason": "Owned fixture could not obtain foreground focus",
+    "passed_in_previous_complete_run": true,
+    "receipt": "desktop-demonstration-final.txt"
+  },
+  "launcher": {
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "available",
+        "version": "29.8.2",
+        "os": "linux"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "source_integrity": {
+    "checked_at": "2026-10-23T16:20:23.731661+00:00",
+    "files": 519,
+    "changed": [],
+    "source_unchanged": true
+  },
+  "local_links": {
+    "checked_at": "2026-10-23T16:20:23.858071+00:00",
+    "local_targets": 767,
+    "missing": [],
+    "scope": "Maintained root/app README, graph/queue/handoff/system-map and graph evidence index; remote URLs and fragment anchors excluded."
+  }
+}

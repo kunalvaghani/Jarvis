@@ -21,20 +21,24 @@ class ResponseReports:
         self.report, self.generation = report, generation
         self.local = threading.local()
 
-    def bind(self, generation):
+    def bind(self, generation, valid=None):
         self.local.generation = generation
+        self.local.valid = valid
 
     def unbind(self):
         self.local.__dict__.pop('generation', None)
+        self.local.__dict__.pop('valid', None)
 
     def accepts(self, kind):
-        return kind not in self.KINDS or getattr(self.local, 'generation', self.generation()) == self.generation()
+        valid = getattr(self.local, 'valid', None)
+        return kind not in self.KINDS or (getattr(self.local, 'generation', self.generation()) == self.generation() and (valid is None or valid()))
 
     def __call__(self, kind, message=''):
         token = getattr(self.local, 'generation', self.generation())
+        valid = getattr(self.local, 'valid', None)
         if kind in self.KINDS:
-            guard = lambda: token == self.generation()
-            guard.voice_key = (id(self), token)
+            guard = lambda: token == self.generation() and (valid is None or valid())
+            guard.voice_key = (id(self), token, id(valid)) if valid else (id(self), token)
             if not guard():
                 return
             owner = getattr(self.report, '__self__', None)

@@ -97,8 +97,10 @@ class Engine:
             return
         if text or wake:
             self.last_speech = now
+        from .task_policy import queue_request
+        explicit_queue = queue_request(text) or queue_request(raw or '')
         free_text = getattr(self, 'free_text', None)
-        if final and text and free_text is not None and free_text() and not STOP.search(text):
+        if final and text and free_text is not None and free_text() and not STOP.search(text) and not explicit_queue:
             # A question is waiting for words (a name, an email address, a message): pass them through whole,
             # never reinterpreted as a command. "Cancel" / "stop" still go through normal parsing.
             self._dispatch(Command("whatsapp_answer", text))
@@ -106,6 +108,15 @@ class Engine:
             return
         if not final:
             # Never dispatch even an apparently complete clause from revisable speech.
+            return
+        from .task_policy import queue_request
+        source = raw or text
+        leading = LEADING_WAKE.match(source)
+        if leading:
+            source = source[leading.end():].strip(' ,.')
+        if queue_request(source):
+            self._dispatch(Command('task', source, 'queue_request'))
+            self._reset_segment()
             return
         from .voice_runtime import normalize_intent
         language = re.fullmatch(r'(?:answer|reply|respond|speak) in (english|hindi|gujarati|french)|(?:use|enable) automatic language|reply in (?:the )?same language', text, re.I)

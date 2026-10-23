@@ -1,5 +1,15 @@
 # Jarvis system map
 
+## Context-aware workflow graph — 2026-10-23 IST
+
+`TaskIngress` → `workflow_graph.TaskRelationshipResolver` → same `TaskStore` WAL group/workflow/node/edge/result/revision tables → same `ScheduledQueue` dependency/condition/resource gates → existing Actions/Knowledge/ToolRegistry/TaskState/model router. Committed result versions bind at dispatch and reach Brain through `memory_context.task_results`. `workflow_expand` creates bounded child admissions, with scope review for generated effectful work and existing tool approvals. The current Queue view adds group controls/inspection; reports aggregate the current batch. DecisionManager strategies update the persisted DAG atomically, without removing existing verification gates. Existing watchdog and Stop/Quit behavior apply; general mutation workers stay exclusive. [Behavior and remaining acceptance](workflow-graph.md).
+
+## Durable intake and queue — 2026-10-23 IST
+
+Existing Engine / typed Commands → `task_ingress.TaskIngress` → `task_store.TaskStore` (SQLite WAL inbox) → `task_scheduler.ScheduledQueue` → existing Actions / Knowledge workers and allowlisted read-only observation lanes → existing ToolRegistry, approval receipts, TaskState, GPU leases and privacy router. `task_decisions.DecisionManager` handles reversible scheduling preferences; it never creates tool approval receipts. `island_queue.QueueView` extends the existing Island desk. The existing watchdog owns health/recovery; waiting jobs survive Quit and interrupted effects require reconciliation. [Integration, configuration, evidence and open gates](autonomous-task-queue.md).
+
+Saved task clarifications bind an answer to its durable task number/source checkpoint; the native Queue field and `answer task N: ...` use the same continuation route. Created files get fresh byte-readback receipts in the morning report. User-requested earlier voice capture defaults (100 ms, fixed endpoint) retain the existing medium.en decoder; [restoration evidence](voice-profile-restoration.md).
+
 ## Spotify child integration — 2026-10-20 IST
 
 `commands` → `spotify_host` → existing `ToolRegistry` → `mcp_bridge` → per-call approval → `mcp_persistent` → production `BaseConnector` child at `integrations/jarvis-connectors/connectors/apps/spotify/server.py`. The main watchdog registers Spotify MCP ping/repair, and Actions closes it. The child composes one async/MTA backend with API PKCE/WinVault storage and exact Windows Spotify media/audio sessions. All 86 tools are discoverable; six common schemas load by default. YouTube keeps its original short-lived connector path. [Architecture, setup and limitations](spotify-connector.md) · [Evidence](../artifacts/jarvis-audit/spotify-connector/README.md).

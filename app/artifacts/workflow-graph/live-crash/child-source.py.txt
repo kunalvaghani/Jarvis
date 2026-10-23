@@ -1,0 +1,27 @@
+
+from pathlib import Path
+import os,sys,time,threading
+from jarvis.actions import Actions
+from jarvis.commands import Command
+base=Path(sys.argv[1]);config={'files_root':'files','apps':{},'project_roots':[str(base/'files')],'task_queue':{'enabled':True},'knowledge':{'enabled':False}}
+for name in ['memory','cognition','anticipation','realtime','self_evolution','viking_memory','knowledge_acquisition','exploration']:config[name]={'enabled':False}
+a=Actions(config,base,lambda *_:None);s=a.ingress.scheduler;s.store.setting('paused',True);original=a.execute
+
+def execute(command,cancelled):
+ result=original(command,cancelled)
+ if command.kind=='create' and command.value=='producer.txt':
+  a.ingress.expand(s.local.identity,[Command('jarvis_status','uptime')],'discovered-observation')
+ if command.kind=='create' and command.value=='uncertain.txt':os._exit(73)
+ return result
+
+a.execute=execute;a.start()
+ids=[a.submit(Command('create',name)) for name in ['producer.txt','uncertain.txt','independent.txt']]
+until=time.monotonic()+20
+while not all(s.store.get(t)['state']=='QUEUED' for t in ids):
+ if time.monotonic()>until:raise TimeoutError('child admission')
+ time.sleep(.02)
+for t in ids[1:]:
+ s.graph.move(t,s.graph.node(ids[0])['workflow']);s.graph.set_dependencies(t,[ids[0]])
+s.store.setting('paused',False)
+while time.monotonic()<until:time.sleep(.05)
+raise TimeoutError('expected owned crash did not occur')

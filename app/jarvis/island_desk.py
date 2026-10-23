@@ -91,13 +91,15 @@ class IslandDesk:
         nav = self.nav_frame = tk.Frame(self.frame,bg=BG)
         nav.pack(fill='x',pady=(2,4))
         self.nav = {}
-        for name in ('Overview','Prepared','Choices','Music','Games','History','Mind'):
+        for name in ('Overview','Queue','Prepared','Choices','Music','Games','History','Mind'):
             button = ttk.Button(nav,text=name,command=lambda n=name:self.show(n,reveal=True),width=7 if name!='Mind' else 5)
             button.pack(side='left',padx=(0,3))
             self.nav[name] = button
         self.content = tk.Frame(self.frame,bg=BG)
         self.content.pack(fill='both',expand=True)
-        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Prepared','Choices','Music','Games','History','Mind','Settings','Approval','Console')}
+        self.views = {n:tk.Frame(self.content,bg=BG) for n in ('Overview','Queue','Prepared','Choices','Music','Games','History','Mind','Settings','Approval','Console')}
+        from .island_queue import QueueView
+        self.queue_view = QueueView(self.views['Queue'], app)
         from .island_mind import MindView
         self.mind = MindView(self.views['Mind'],app)  # The cognitive architecture, live.
         self.last_mind = 0.
@@ -399,7 +401,7 @@ class IslandDesk:
                 self.full_reply = value['text']
             self.has_reply = True
             self.refresh_overview()
-            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind'}:
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind','Queue'}:
                 self.show('Overview')
         elif kind == 'answer_error' and isinstance(value, str):
             self.answer_phase = 'Interrupted · incomplete'
@@ -412,7 +414,7 @@ class IslandDesk:
             self.full_reply = value
             self.has_reply = True
             self.refresh_overview()
-            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind'}:
+            if self.view not in {'Games','Approval','Choices','Music','Console','Settings','History','Prepared','Mind','Queue'}:
                 self.show('Overview')
         elif kind in {'brain','tool','plan'} and isinstance(value,str):
             self.work['activity'] = value[:300]
@@ -636,6 +638,8 @@ class IslandDesk:
                 self.render_approval()
         if now-self.last_poll >= .3:
             self.last_poll = now
+            if self.view == 'Queue':
+                self.queue_view.tick()
             from .island_choices import snapshot
             self.update_choices(snapshot(self.app.actions))
             target = self.work.get('file') or self.work.get('target','')

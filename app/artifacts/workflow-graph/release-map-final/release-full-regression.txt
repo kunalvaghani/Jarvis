@@ -1,0 +1,101 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+...........................s............................................ [  5%]
+........................................................................ [  6%]
+............sss......................................................... [  8%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+.........................................s.s............................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+.............s.................................................s..s..... [ 25%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+....................ssssssss............................................ [ 33%]
+........................ssssssssssss.................................... [ 35%]
+......................s................................................. [ 37%]
+.....................................................ssssssssss......... [ 38%]
+........................................................................ [ 40%]
+........................................................................ [ 42%]
+......................................F
+================================== FAILURES ===================================
+_ DeskWidgetTests.test_pause_button_focus_does_not_invert_one_explicit_click __
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_pause_button_focus_does_not_invert_one_explicit_click>
+
+    def setUp(self):
+>       self.root = tk.Tk(); self.root.withdraw()
+
+tests\test_island_desk.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.Tk object .>, screenName = None, baseName = '__main__'
+className = 'Tk', useTk = True, sync = False, use = None
+
+    def __init__(self, screenName=None, baseName=None, className='Tk',
+                 useTk=True, sync=False, use=None):
+        """Return a new Toplevel widget on screen SCREENNAME. A new Tcl interpreter will
+        be created. BASENAME will be used for the identification of the profile file (see
+        readprofile).
+        It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
+        is the name of the widget class."""
+        self.master = None
+        self.children = {}
+        self._tkloaded = False
+        # to avoid recursions in the getattr code in case of failure, we
+        # ensure that self.tk is always _something_.
+        self.tk = None
+        if baseName is None:
+            import os
+            baseName = os.path.basename(sys.argv[0])
+            baseName, ext = os.path.splitext(baseName)
+            if ext not in ('.py', '.pyc'):
+                baseName = baseName + ext
+        interactive = False
+>       self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E       _tkinter.TclError: Can't find a usable tk.tcl in the following directories: 
+E           C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/library
+E       
+E       C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/xpTheme.tcl": no such file or directory
+E       couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/xpTheme.tcl": no such file or directory
+E           while executing
+E       "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/xpTheme.tcl"
+E           ("uplevel" body line 1)
+E           invoked from within
+E       "uplevel #0 [list source -encoding utf-8 [file join $library $script]]"
+E           (procedure "ttk::LoadThemes" line 18)
+E           invoked from within
+E       "ttk::LoadThemes"
+E           (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl" line 144)
+E           invoked from within
+E       "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/ttk/ttk.tcl"
+E           ("uplevel" body line 1)
+E           invoked from within
+E       "uplevel \#0 [list source -encoding utf-8 $::ttk::library/ttk.tcl]"
+E           (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl" line 706)
+E           invoked from within
+E       "source C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl"
+E           ("uplevel" body line 1)
+E           invoked from within
+E       "uplevel #0 [list source $file]"
+E       
+E       
+E       This probably means that tk wasn't installed properly.
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: TclError
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_island_desk.py::DeskWidgetTests::test_pause_button_focus_does_not_invert_one_explicit_click
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1798 passed, 40 skipped, 1 warning in 371.45s (0:06:11)

@@ -1,0 +1,166 @@
+{
+  "checked": 32,
+  "missing": [],
+  "links": [
+    {
+      "from": "README.md",
+      "target": "app/docs/autonomous-task-queue.md",
+      "exists": true
+    },
+    {
+      "from": "README.md",
+      "target": "app/artifacts/task-queue/README.md",
+      "exists": true
+    },
+    {
+      "from": "README.md",
+      "target": "app/README.md",
+      "exists": true
+    },
+    {
+      "from": "app/README.md",
+      "target": "docs/autonomous-task-queue.md",
+      "exists": true
+    },
+    {
+      "from": "app/README.md",
+      "target": "artifacts/task-queue/README.md",
+      "exists": true
+    },
+    {
+      "from": "app/README.md",
+      "target": "docs/CLAUDE_HANDOFF.md",
+      "exists": true
+    },
+    {
+      "from": "app/README.md",
+      "target": "artifacts/task-queue/native-queue-fixture.png",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/native-queue-fixture.png",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "system-map.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "upgrade-architecture.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/focused-regression.txt",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/admission-benchmark.json",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/model-benchmark.json",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/launcher-check.txt",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "../artifacts/task-queue/README.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/autonomous-task-queue.md",
+      "target": "CLAUDE_HANDOFF.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/system-map.md",
+      "target": "autonomous-task-queue.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/CLAUDE_HANDOFF.md",
+      "target": "autonomous-task-queue.md",
+      "exists": true
+    },
+    {
+      "from": "app/docs/CLAUDE_HANDOFF.md",
+      "target": "../artifacts/task-queue/README.md",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "../../docs/autonomous-task-queue.md",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "../../docs/CLAUDE_HANDOFF.md",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "focused-regression.txt",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "full-regression.txt",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "source-inventory.json",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "launcher-check.txt",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "admission-benchmark.json",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "model-benchmark.json",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "native-queue-fixture.png",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "link-check.json",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "focused-tk-startup-failure.txt",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "checkpoint-interrupted.txt",
+      "exists": true
+    },
+    {
+      "from": "app/artifacts/task-queue/README.md",
+      "target": "checkpoint-parser-refinement.txt",
+      "exists": true
+    }
+  ]
+}

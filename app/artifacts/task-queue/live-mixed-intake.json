@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-23",
+  "scope": "Actual Actions/Engine/SQLite/native QueueView; seven owned files, two live memory observations, actual Knowledge local-time answer, real presented 20-second routine choice. Typed and injected final text, not physical voice. Actual host resources, no mock clock or mock handlers except an intentional first-job hold.",
+  "passed": true,
+  "seconds": 21.03099999999995,
+  "state": {
+    "phase": "finish",
+    "before_release": [
+      {
+        "number": 1,
+        "state": "RUNNING",
+        "kind": "create"
+      },
+      {
+        "number": 2,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 3,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 4,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 5,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 6,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 7,
+        "state": "QUEUED",
+        "kind": "create"
+      },
+      {
+        "number": 8,
+        "state": "COMPLETED",
+        "kind": "system_info"
+      },
+      {
+        "number": 9,
+        "state": "COMPLETED",
+        "kind": "system_info"
+      },
+      {
+        "number": 10,
+        "state": "COMPLETED",
+        "kind": "ask"
+      },
+      {
+        "number": 11,
+        "state": "PARTIAL",
+        "kind": "task"
+      }
+    ],
+    "selected_elapsed": 20.05016326904297,
+    "error": null
+  },
+  "files": {
+    "mixed0.txt": true,
+    "mixed1.txt": true,
+    "mixed2.txt": true,
+    "mixed3.txt": true,
+    "mixed4.txt": true,
+    "mixed5.txt": true,
+    "mixed6.txt": true
+  },
+  "jobs": [
+    {
+      "number": 1,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 2,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 3,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 4,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 5,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 6,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 7,
+      "state": "COMPLETED",
+      "kind": "create"
+    },
+    {
+      "number": 8,
+      "state": "COMPLETED",
+      "kind": "system_info"
+    },
+    {
+      "number": 9,
+      "state": "COMPLETED",
+      "kind": "system_info"
+    },
+    {
+      "number": 10,
+      "state": "COMPLETED",
+      "kind": "ask"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "f2a0c02b1a4844cd987439ece573ad9f",
+      "question": "Overnight scheduling preference",
+      "options": [
+        "Balanced priorities",
+        "Prefer coding"
+      ],
+      "recommended": 0,
+      "confidence": 0.95,
+      "reversible": true,
+      "sensitive": false,
+      "presented_at": 1792735664.0725296,
+      "choice": 0,
+      "status": "SELECTED",
+      "automatic": true,
+      "justification": "High-confidence reversible routine preference; deadline elapsed"
+    }
+  ],
+  "report_file_receipts": 7,
+  "microphone_started": false,
+  "account_operations": 0,
+  "cloud_requests": 0
+}

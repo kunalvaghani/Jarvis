@@ -1,0 +1,375 @@
+{
+  "passed": true,
+  "checked_at": "2026-10-23T08:24:07.703490+00:00",
+  "child_exit_code": 73,
+  "scope": "Actual Actions file handlers and owned process crash; current SQLite/result/readback inspection after restart; no account effects or physical endurance",
+  "producer_result_reused_without_replay": true,
+  "uncertain_write_paused_and_unchanged": true,
+  "independent_task_completed": true,
+  "generated_child_preserved": true,
+  "unsafe_resume_refused": true,
+  "initial_harness_assertion": "Incorrectly counted same-state RUNNING checkpoint events as new executions; corrected counter uses Exclusive resources acquired lifecycle claims. No runtime change.",
+  "dispatch_counts": {
+    "producer.txt": 1,
+    "uncertain.txt": 1,
+    "independent.txt": 1,
+    "uptime": 1
+  },
+  "states": {
+    "producer.txt": "COMPLETED",
+    "uncertain.txt": "PAUSED",
+    "independent.txt": "COMPLETED",
+    "uptime": "COMPLETED"
+  },
+  "graph": {
+    "groups": [
+      {
+        "id": "4813e4baba584344b69f5c8e64da4b25",
+        "workspace": "local",
+        "project": null,
+        "goal": "producer.txt",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792743785.2157829,
+        "workflows": [
+          "31027ae3b46d4a8ea5a5b0d9eae810f7"
+        ],
+        "tasks": [
+          "ef5fdf574be84015b1fae86fbcfbf273",
+          "018e3eac689d442fbfe8bc0387503787",
+          "474650bbab2d4ded866ed1826922c17a",
+          "76e7d3df983e4e01b09c5c34e7afaa2b"
+        ],
+        "completed": 3,
+        "total": 4,
+        "progress": 0.75,
+        "counts": {
+          "PAUSED": 1,
+          "COMPLETED": 3
+        },
+        "artifacts": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-crash\\files\\producer.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-crash\\files\\independent.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "errors_and_recovery": [
+          {
+            "task": "018e3eac689d442fbfe8bc0387503787",
+            "at": 1792743787.251211,
+            "state": "PAUSED",
+            "detail": "Process interrupted; fresh reconciliation required"
+          }
+        ]
+      },
+      {
+        "id": "31443e87d6a74bf9936365979c2ba35c",
+        "workspace": "local",
+        "project": null,
+        "goal": "uncertain.txt",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792743785.2237835,
+        "workflows": [
+          "4cb06be994434d0689fc733d4c8ca18a"
+        ],
+        "tasks": [],
+        "completed": 0,
+        "total": 0,
+        "progress": 0,
+        "counts": {},
+        "artifacts": [],
+        "errors_and_recovery": []
+      },
+      {
+        "id": "ce74153339e64ff4a1b7aa4be7142352",
+        "workspace": "local",
+        "project": null,
+        "goal": "independent.txt",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792743785.2358665,
+        "workflows": [
+          "20d31360cc8944c0863d157c77d83e80"
+        ],
+        "tasks": [],
+        "completed": 0,
+        "total": 0,
+        "progress": 0,
+        "counts": {},
+        "artifacts": [],
+        "errors_and_recovery": []
+      }
+    ],
+    "nodes": [
+      {
+        "task": "ef5fdf574be84015b1fae86fbcfbf273",
+        "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7",
+        "parent": null,
+        "data": "{\"created\": 1792743785.2157829, \"role\": \"task\"}"
+      },
+      {
+        "task": "018e3eac689d442fbfe8bc0387503787",
+        "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7",
+        "parent": null,
+        "data": "{\"created\": 1792743785.2237835, \"role\": \"task\"}"
+      },
+      {
+        "task": "474650bbab2d4ded866ed1826922c17a",
+        "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7",
+        "parent": null,
+        "data": "{\"created\": 1792743785.2358665, \"role\": \"task\"}"
+      },
+      {
+        "task": "76e7d3df983e4e01b09c5c34e7afaa2b",
+        "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7",
+        "parent": "ef5fdf574be84015b1fae86fbcfbf273",
+        "data": "{\"created\": 1792743785.3971996, \"role\": \"subtask\"}"
+      }
+    ],
+    "edges": [
+      {
+        "upstream": "ef5fdf574be84015b1fae86fbcfbf273",
+        "downstream": "018e3eac689d442fbfe8bc0387503787",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "ef5fdf574be84015b1fae86fbcfbf273",
+        "downstream": "474650bbab2d4ded866ed1826922c17a",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "ef5fdf574be84015b1fae86fbcfbf273",
+        "downstream": "76e7d3df983e4e01b09c5c34e7afaa2b",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": true,
+          "reason": "Explicit dependency update"
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "source": "018e3eac689d442fbfe8bc0387503787",
+        "target": "ef5fdf574be84015b1fae86fbcfbf273",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "474650bbab2d4ded866ed1826922c17a",
+        "target": "ef5fdf574be84015b1fae86fbcfbf273",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "76e7d3df983e4e01b09c5c34e7afaa2b",
+        "target": "ef5fdf574be84015b1fae86fbcfbf273",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "evaluations": {
+      "ef5fdf574be84015b1fae86fbcfbf273": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792743785.2906885
+      },
+      "018e3eac689d442fbfe8bc0387503787": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "ef5fdf574be84015b1fae86fbcfbf273",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created producer.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-crash\\files\\producer.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792743785.4023626,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "producer.txt",
+                "extra": ""
+              },
+              "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "ef5fdf574be84015b1fae86fbcfbf273": 1
+        },
+        "impossible": [],
+        "at": 1792743785.412394
+      },
+      "474650bbab2d4ded866ed1826922c17a": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "ef5fdf574be84015b1fae86fbcfbf273",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created producer.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-crash\\files\\producer.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792743785.4023626,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "producer.txt",
+                "extra": ""
+              },
+              "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "ef5fdf574be84015b1fae86fbcfbf273": 1
+        },
+        "impossible": [],
+        "at": 1792743785.4168146
+      },
+      "76e7d3df983e4e01b09c5c34e7afaa2b": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "ef5fdf574be84015b1fae86fbcfbf273",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created producer.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-crash\\files\\producer.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792743785.4023626,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "producer.txt",
+                "extra": ""
+              },
+              "workflow": "31027ae3b46d4a8ea5a5b0d9eae810f7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "ef5fdf574be84015b1fae86fbcfbf273": 1
+        },
+        "impossible": [],
+        "at": 1792743785.4292808
+      }
+    },
+    "revision": 20
+  },
+  "microphone_started": false
+}

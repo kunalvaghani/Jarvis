@@ -386,6 +386,11 @@ class BrainClient:
             routed = guidance(data['goal'])  # Empty slot prompts (the default) add nothing.
             if routed and isinstance(data['capability_context'], dict):
                 data['capability_context']['task_guidance'] = routed
+        results = getattr(self, 'task_result_provider', None)
+        if results and data.get('goal'):
+            inputs = results()
+            if inputs:
+                data['memory_context'] = {**data.get('memory_context', {}), 'task_results': inputs}
         if (self.worker_module == "jarvis.brain_worker" and (operation in {"plan", "replan"} or (operation == "code_plan" and data.get("development") is True))
                 and harness_options['enabled']):
             from .harness import HarnessClient

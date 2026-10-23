@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-23",
+  "scope": "Existing installed English model; generated noise and existing public TTS fixture only. No microphone recording. Not a physical accuracy certificate.",
+  "results": [
+    {
+      "policy": "baseline",
+      "fixture": "silence",
+      "seconds": 1.0629999999998745,
+      "text": "Thank you very much.",
+      "segments": [
+        {
+          "no_speech_prob": 0.74560546875,
+          "avg_logprob": -0.9631696087973458
+        }
+      ]
+    },
+    {
+      "policy": "baseline",
+      "fixture": "low_white_noise",
+      "seconds": 0.7970000000000255,
+      "text": "Thank you very much.",
+      "segments": [
+        {
+          "no_speech_prob": 0.90185546875,
+          "avg_logprob": -0.8811383587973458
+        }
+      ]
+    },
+    {
+      "policy": "baseline",
+      "fixture": "white_noise",
+      "seconds": 0.3430000000000746,
+      "text": "",
+      "segments": []
+    },
+    {
+      "policy": "baseline",
+      "fixture": "public_speech",
+      "seconds": 0.4379999999998745,
+      "text": "Jarvis Open Calculator.",
+      "segments": [
+        {
+          "no_speech_prob": 0.00046539306640625,
+          "avg_logprob": -0.44698660714285715
+        }
+      ]
+    },
+    {
+      "policy": "baseline",
+      "fixture": "public_speech_padded",
+      "seconds": 0.42200000000002547,
+      "text": "Jarvis Open Calculator.",
+      "segments": [
+        {
+          "no_speech_prob": 0.004398345947265625,
+          "avg_logprob": -0.50390625
+        }
+      ]
+    },
+    {
+      "policy": "filtered",
+      "fixture": "silence",
+      "seconds": 0.15599999999994907,
+      "text": "",
+      "segments": []
+    },
+    {
+      "policy": "filtered",
+      "fixture": "low_white_noise",
+      "seconds": 0.016000000000076398,
+      "text": "",
+      "segments": []
+    },
+    {
+      "policy": "filtered",
+      "fixture": "white_noise",
+      "seconds": 0.015000000000100044,
+      "text": "",
+      "segments": []
+    },
+    {
+      "policy": "filtered",
+      "fixture": "public_speech",
+      "seconds": 0.40599999999994907,
+      "text": "Jarvis Open Calculator.",
+      "segments": [
+        {
+          "no_speech_prob": 0.0072784423828125,
+          "avg_logprob": -0.47739953654153006
+        }
+      ]
+    },
+    {
+      "policy": "filtered",
+      "fixture": "public_speech_padded",
+      "seconds": 0.4379999999998745,
+      "text": "Jarvis Open Calculator.",
+      "segments": [
+        {
+          "no_speech_prob": 0.011322021484375,
+          "avg_logprob": -0.39704241922923494
+        }
+      ]
+    }
+  ]
+}
