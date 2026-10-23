@@ -1,0 +1,334 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+...........................s............................................ [  5%]
+........................................................................ [  6%]
+............sss......................................................... [  8%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 13%]
+...s.s.................................................................. [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 23%]
+...............................................s........................ [ 25%]
+.........................s..s........................................... [ 26%]
+.................FF..................................................... [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+......................................................ssssssss.......... [ 33%]
+..........................................................ssssssssssss.. [ 35%]
+........................................................s............... [ 36%]
+........................................................................ [ 38%]
+...............ssssssssss............................................... [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 45%]
+...........................................................sssssssssssss [ 47%]
+sss..........................................................s.s......s. [ 48%]
+.....................s.................................................. [ 50%]
+........................................................................ [ 52%]
+.........sssss.......................................................... [ 53%]
+........................................................................ [ 55%]
+..................................................................s..... [ 57%]
+..........s............................................................. [ 58%]
+........................................................................ [ 60%]
+...................................................F......sssssss....... [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 65%]
+.............................................s.......................... [ 67%]
+........................................................................ [ 68%]
+.....................s......s................................s.s......s. [ 70%]
+....................s................................................... [ 72%]
+.....................................................sssssssssss........ [ 73%]
+........................................................................ [ 75%]
+...........................s.................s.......................... [ 77%]
+...............................sssssssssssss............................ [ 78%]
+....................................ssssssssssss........................ [ 80%]
+............................................................ssss........ [ 82%]
+..............s......................................................... [ 83%]
+........................................................................ [ 85%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 92%]
+...............................................s....s................... [ 94%]
+........................................sssssss......................... [ 95%]
+..............................sssssssssssssssss......................... [ 97%]
+........................................................................ [ 99%]
+.........................................                                [100%]
+================================== FAILURES ===================================
+_ UIVerificationIsolationTests.test_verification_ignores_inherited_runtime_flags_and_preserves_user_state _
+
+self = <tests.test_diagnostics.UIVerificationIsolationTests testMethod=test_verification_ignores_inherited_runtime_flags_and_preserves_user_state>
+
+    def test_verification_ignores_inherited_runtime_flags_and_preserves_user_state(self):
+        import tkinter as tk
+        import gc
+        import main
+        paths = [main.BASE/name for name in ('config/config.json', '.jarvis-runtime/state/task_state.json',
+                  '.jarvis-runtime/stop', '.jarvis-runtime/repairs.jsonl')]
+        before = {path: path.read_bytes() if path.exists() else None for path in paths}
+        root = tk.Tk()
+        root.withdraw()
+        app = None
+        try:
+            with patch.dict('os.environ', {'JARVIS_UI_VERIFY': '1', 'JARVIS_AUTOLISTEN': '1',
+                    'JARVIS_RESUME_TASK': '1', 'JARVIS_SUPERVISED': '1'}), \
+                    patch('main.Watchdog.start') as start:
+>               app = main.App(root)
+
+tests\test_diagnostics.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <main.App object at 0x000001EA74D6D720>, root = <tkinter.Tk object .>
+
+    def __init__(self, root):
+        self.root = root
+        from jarvis.config_contract import load_config
+        self.config = load_config(config_file(BASE))
+        if os.environ.get("JARVIS_UI_VERIFY") == "1":
+            self.config["memory"] = {"enabled": False}
+            self.config['_ui_verification'] = True
+        from jarvis.ui_events import UIEventBuffer
+        self.events = UIEventBuffer()
+        self.closing = False
+        self.listening_requested = False
+        self.repair_offset = 0
+        from jarvis.runtime_health import RuntimeHealth
+        self.runtime_health = RuntimeHealth()
+        self.speech = Speech(self.config.setdefault("speech", {"enabled": True, "language": "auto"}), self.report)
+        self.speech.start()
+        self.listener = None
+        self.session = 0
+        self.actions = Actions(self.config, BASE, self.report, Desktop())
+        self.actions.start()
+        anticipation_busy = self.actions.anticipation.busy
+        self.actions.anticipation.busy = lambda: (anticipation_busy() or self.speech.speaking.is_set()
+            or bool(getattr(self, 'capture_count', 0)) or bool(getattr(self, 'ui_activity', '')))
+        self.external_handle = 0
+        self.actions.external_handle = lambda: self.external_handle
+        self.capture_count = 0
+        self.command_window = None
+        self.actions.knowledge.screen_handle = lambda: self.external_handle
+        from jarvis.interface import build_interface
+        build_interface(self)
+        self.load_microphones()
+        self.actions.approval_handler = self.request_approval
+        self.actions.decision_handler = self.voice_decision
+        # Screen pre-awareness only asks while you can answer: listening, and Jarvis isn't talking.
+        self.actions.screen.can_offer = lambda: (self.listening_requested and not self.speech.output_recent() and not (
+            getattr(self, 'push_to_write', None) is not None and self.push_to_write.active.is_set()))
+        if not self.config.get('_ui_verification', False):
+            self.actions.start_whatsapp_watch()
+            self.actions.start_background_memory()
+        root.protocol("WM_DELETE_WINDOW", self.close)
+        self.panel.withdraw()
+        root.after(40, self.animate_island)
+        root.after(150, self.exclude_orb_from_capture)
+        root.after(300, self.remember_external_window)
+        root.after(16, self.drain)
+        self.watchdog = Watchdog(self.report)
+        ingress = getattr(self.actions, 'ingress', None)
+        if ingress is not None:
+            self.watchdog.register('Durable task intake', ingress.healthy, ingress.repair, lambda:not self.closing)
+    
+        self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
+            self.actions.cognition.repair_persistence,
+            enabled=lambda:not self.closing and self.actions.cognition.enabled and
+                self.actions.cognition.thread is not None and self.actions.cognition.thread.is_alive() and
+                not self.actions.cognition.stop.is_set())
+        from jarvis.docker_runtime import DockerService
+        self.docker_service = DockerService(BASE, self.report, lambda: self.closing)
+        self.watchdog.register('Docker Linux engine', self.docker_service.healthy, self.docker_service.repair,
+            lambda: not self.closing and self.config.get('docker_runtime', {}).get('enabled', False)
+                and not self.config.get('_ui_verification', False))
+        if self.config.get('docker_runtime', {}).get('enabled', False) and not self.config.get('_ui_verification', False):
+            self.docker_service.repair()
+        viking = getattr(getattr(self.actions, 'learning', None), 'viking', None)
+        if viking is not None and not self.config.get('_ui_verification', False):
+            # Owned loopback OpenViking server for the hierarchical vault index (bounded, silent recovery).
+            self.watchdog.register('Hierarchical vault index', viking.healthy, viking.repair_async,
+                lambda: not self.closing)
+            viking.repair_async()
+        selector = self.actions.knowledge.context_selector
+        if selector:
+            self.watchdog.register('Context selector', selector.healthy, selector.repair,
+                lambda: not self.closing and not selector.closed.is_set() and selector.options['enabled'])
+        self.watchdog.register('Anticipation', self.actions.anticipation.healthy,
+            self.actions.anticipation.repair,
+            lambda: not self.closing and not self.actions.anticipation.closed.is_set()
+                and self.actions.anticipation.options['enabled']
+                and not self.actions.anticipation.paused
+                and not self.actions.anticipation.microphone_stopped)
+        self.watchdog.register('Realtime observations', self.actions.realtime.healthy,
+            self.actions.realtime.repair,
+            lambda: not self.closing and self.actions.realtime.options['enabled']
+                and not self.actions.realtime.closed.is_set() and not self.actions.realtime.paused
+                and not self.actions.realtime.microphone_stopped and not self.actions.realtime.storage_failed)
+        self.watchdog.register('Island media observations',self.desk.media.healthy,self.desk.media.repair,
+            lambda:not self.closing and not self.desk.media.closed)
+        self.ollama_service = OllamaService()
+        from jarvis.model_recovery import ModelRecovery
+        self.model_recovery = ModelRecovery(BASE, self.config, self.report, lambda: self.closing)
+        self.watchdog.register("Ollama", self.ollama_service.healthy, self.ollama_service.repair,
+            lambda: not self.closing and (self.config.get("brain", {}).get("enabled")
+                or self.config.get("knowledge", {}).get("enabled") or self.config.get("command_cleanup", {}).get("enabled")
+                or self.config.get('context_selector', {}).get('enabled')))
+        for name, worker in (("Action worker", self.actions), ("Question worker", self.actions.knowledge), ("Speech worker", self.speech)):
+            self.watchdog.register(name, lambda worker=worker: worker.thread.is_alive(),
+                lambda worker=worker, name=name: restart_thread(worker, name), lambda: not self.closing)
+        self.watchdog.register("Microphone", self.listener_healthy, self.repair_listener,
+            lambda: self.listening_requested and not self.closing)
+        self.watchdog.register("UI Automation worker", self.actions.ui_healthy, self.actions.repair_ui,
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register("Browser automation worker", self.actions.browser_healthy, self.actions.repair_browser,
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register("Configured models", self.model_recovery.healthy, self.model_recovery.repair,
+            lambda: not self.closing)
+        from jarvis.harness import healthy as harness_healthy, repair as repair_harness
+        self.watchdog.register("Harness inference", lambda: harness_healthy(self.actions.brain.client),
+            lambda: repair_harness(self.actions.brain.client),
+            lambda: not self.closing and not self.actions.closed.is_set()
+                and self.config.get('brain', {}).get('harness', {}).get('enabled', False))
+        self.watchdog.register("God's Eye service", self.gods_eye_healthy, self.repair_gods_eye,
+            lambda: not self.closing and self.actions.gods_eye_view is not None)
+        self.watchdog.register('Development preview',
+            lambda: self.actions.development_tools is None or self.actions.development_tools.healthy(),
+            lambda: self.actions.development_tools is None or self.actions.development_tools.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
+        from jarvis.spotify_host import enabled as spotify_enabled
+        self.watchdog.register('Blender MCP',
+            lambda: getattr(self.actions, '_blender_mcp', None) is None or self.actions._blender_mcp.healthy(),
+            lambda: getattr(self.actions, '_blender_mcp', None) is not None and self.actions._blender_mcp.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register('Blender job observations',
+            lambda: getattr(self.actions, '_blender_jobs', None) is None or self.actions._blender_jobs.healthy(),
+            lambda: getattr(self.actions, '_blender_jobs', None) is not None and self.actions._blender_jobs.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set())
+        self.watchdog.register('Spotify MCP',
+            lambda: getattr(self.actions, '_spotify_mcp', None) is None or self.actions._spotify_mcp.healthy(),
+            lambda: getattr(self.actions, '_spotify_mcp', None) is not None and self.actions._spotify_mcp.repair(),
+            lambda: not self.closing and not self.actions.closed.is_set()
+                and spotify_enabled(self.actions))
+        awareness = self.actions.awareness
+>       awareness.self_model.watchdog = self.watchdog if awareness.enabled else None  # Component health for the self-model.
+E       AttributeError: 'AwarenessEngine' object has no attribute 'self_model'
+
+main.py:165: AttributeError
+_ UIVerificationIsolationTests.test_verifier_entrypoint_does_not_publish_an_inherited_supervisor_heartbeat _
+
+self = <tests.test_diagnostics.UIVerificationIsolationTests testMethod=test_verifier_entrypoint_does_not_publish_an_inherited_supervisor_heartbeat>
+
+    def test_verifier_entrypoint_does_not_publish_an_inherited_supervisor_heartbeat(self):
+        import os
+        import subprocess
+        import sys
+        import uuid
+        from pathlib import Path
+        base=Path(__file__).resolve().parents[1]
+        session='ui-verify-test-'+uuid.uuid4().hex
+        heartbeat=base/'.jarvis-runtime'/('heartbeat-'+session+'.json')
+        env={**os.environ,'JARVIS_SESSION_ID':session,'JARVIS_AUTOLISTEN':'1',
+             'JARVIS_RESUME_TASK':'1','JARVIS_SUPERVISED':'1'}
+        result=subprocess.run([sys.executable,'-m', 'scripts.verification.verify_ui'],cwd=base,env=env,
+                              capture_output=True,text=True,timeout=60)
+>       self.assertEqual(result.returncode,0,result.stderr)
+E       AssertionError: 1 != 0 : Traceback (most recent call last):
+E         File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\runpy.py", line 196, in _run_module_as_main
+E           return _run_code(code, main_globals, None,
+E         File "C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\runpy.py", line 86, in _run_code
+E           exec(code, run_globals)
+E         File "D:\Kunals GitHub Repo\Jarvis\app\scripts\verification\verify_ui.py", line 78, in <module>
+E           main()
+E         File "D:\Kunals GitHub Repo\Jarvis\app\scripts\verification\verify_ui.py", line 22, in main
+E           app = App(root)
+E         File "D:\Kunals GitHub Repo\Jarvis\app\main.py", line 165, in __init__
+E           awareness.self_model.watchdog = self.watchdog if awareness.enabled else None  # Component health for the self-model.
+E       AttributeError: 'AwarenessEngine' object has no attribute 'self_model'
+
+tests\test_diagnostics.py:84: AssertionError
+____ test_mind_dag_refresh_tracks_states_without_waiting_for_checkpoint_io ____
+
+self = <jarvis.island_mind.MindView object at 0x000001EA7E4BD390>
+
+    def refresh(self):
+        try:
+>           self.refresh_awareness()
+
+jarvis\island_mind.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <jarvis.island_mind.MindView object at 0x000001EA7E4BD390>
+
+    def refresh_awareness(self):
+        engine = self.awareness()
+        if engine is None or not engine.enabled:
+            text = 'Awareness � off (config awareness.enabled)'
+        else:
+            snap = engine.snapshot()
+            mode = 'stopped' if snap['stopped'] else 'proactive' if snap['proactive'] else 'observe only'
+            parts = [f"Awareness � {snap['status']} � {mode}" + (' � focus' if snap['focus'] else '') +
+                     (' � exploring paused' if snap['exploration_paused'] else '')]
+            if snap['goal']:
+                parts.append('Goal: ' + snap['goal']['text'][:70])
+            if snap['observation']:
+                parts.append('Noticed: ' + snap['observation']['type'].replace('.', ' ') + ' � ' + str(snap['observation']['subject'])[:50])
+            suggestion = snap['suggestion']
+            if suggestion:
+                parts.append(f"#{suggestion['number']} {suggestion['action'].replace('_', ' ')} � {suggestion['status']}"
+                             + (' � automatic' if suggestion.get('automatic') else '') + ': ' + (suggestion.get('message') or suggestion['subject'])[:90])
+            prediction = snap['prediction']
+            if prediction:
+                parts.append(f"Predicts: {prediction['consequence'][:70]} ({prediction['probability']:.0%}"
+                             + ('' if prediction['calibrated'] else ', uncalibrated') + ')')
+            if snap['warnings']:
+                parts.append('Warnings: ' + ', '.join(snap['warnings']))
+            text = '\n'.join(parts)
+>       if text != self.aware_text:
+E       AttributeError: 'MindView' object has no attribute 'aware_text'
+
+jarvis\island_mind.py:109: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+    def test_mind_dag_refresh_tracks_states_without_waiting_for_checkpoint_io():
+        from jarvis.task_state import TaskState
+        from jarvis.island_mind import MindView
+        state=TaskState.__new__(TaskState);state.lock=threading.RLock()
+        state.data={'current':{'task_id':'synthetic','status':'running','dag':{'steps':{'read':{'status':'succeeded'},'plan':{'status':'running'}}}}}
+        view=MindView.__new__(MindView);view.header=Mock();view.dag=Mock();view.dag_text=None
+        view.draw=Mock();view.describe=Mock()
+        cognition=SimpleNamespace(enabled=True,lock=threading.RLock(),snapshot=lambda:{'cycle_hz':4,'cycles':10})
+        view.app=SimpleNamespace(actions=SimpleNamespace(task_state=state,cognition=cognition))
+>       view.refresh();assert 'plan: running' in view.dag.configure.call_args.kwargs['text']
+
+tests\test_phase2_gpu_models_voice_ui.py:329: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <jarvis.island_mind.MindView object at 0x000001EA7E4BD390>
+
+    def refresh(self):
+        try:
+            self.refresh_awareness()
+        except Exception as exc:  # The awareness strip never breaks the Mind view.
+>           self.aware.configure(text='Awareness � unavailable (' + type(exc).__name__ + ')')
+E           AttributeError: 'MindView' object has no attribute 'aware'
+
+jarvis\island_mind.py:124: AttributeError
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_diagnostics.py::UIVerificationIsolationTests::test_verification_ignores_inherited_runtime_flags_and_preserves_user_state
+FAILED tests/test_diagnostics.py::UIVerificationIsolationTests::test_verifier_entrypoint_does_not_publish_an_inherited_supervisor_heartbeat
+FAILED tests/test_phase2_gpu_models_voice_ui.py::test_mind_dag_refresh_tracks_states_without_waiting_for_checkpoint_io
+3 failed, 4136 passed, 150 skipped, 1 warning in 1072.65s (0:17:52)
+
+real	17m55.130s
+user	0m0.000s
+sys	0m0.031s

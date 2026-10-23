@@ -62,7 +62,7 @@ def classify(command, now=None):
     explicit = bool(re.search(r'\b(?:urgent|asap|highest priority)\b', text, re.I))
     readonly = kind in READ_ONLY
     sensitive = kind in {'delete','delete_in_folder','run_command','whatsapp_send','whatsapp_reply','messenger_send','ability_approve','ability_enable','repo_forget','memory_forget'}
-    return {'priority': 100 if explicit else 0, 'explicit_priority': explicit,
+    spec = {'priority': 100 if explicit else 0, 'explicit_priority': explicit,
             'urgency': 10 if re.search(r'\b(?:soon|important)\b', text, re.I) else 0,
             'deadline': None, 'not_before': 0, 'dependencies': [],
             'lane': 'background' if kind == 'jarvis_status' else 'fast' if readonly else 'inference' if kind in {'task', 'code_task', 'ask'} else 'desktop',
@@ -75,6 +75,15 @@ def classify(command, now=None):
                           'cpu': 1, 'network': not readonly, 'disk': 'unknown'},
             'tools': [kind], 'model': 'existing router' if not readonly else None,
             'splittable': False}
+    return _project_step(spec) if kind == 'project_step' else spec
+
+
+def _project_step(spec):
+    # Workspace creation writes only new or Jarvis-generated files; acceptance checks read.
+    spec.update(lane='inference', locks=['legacy-actions', 'shared-planner'], reversible=True, unattended=True,
+                approval=False, risk='new-files-only', complexity='small', duration_seconds=5,
+                resources={'ram_mb': 64, 'gpu': False, 'cpu': 1, 'network': False, 'disk': 'small'}, model=None)
+    return spec
 
 
 def score(row, now):

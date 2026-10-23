@@ -119,6 +119,21 @@ class WorkflowGraph:
             self.revision('attach', {'task': task, 'workflow': workflow, 'parent': parent})
             return self.node(task)
 
+    def create_workflow(self, *, project, goal):
+        """A new workflow in the project's group (created if needed); used for planned project work."""
+        with self.store.transaction():
+            group = next((g for g in self.groups() if project and g['project'] == project), None)
+            if group is None:
+                group = {'id': uuid.uuid4().hex, 'workspace': 'local', 'project': project, 'goal': str(goal)[:2000],
+                         'applications': [], 'priority': 0, 'paused': False,
+                         'completion_criteria': 'All required branches completed with recorded evidence',
+                         'created': self.store.clock()}
+                self.store.db.execute('INSERT INTO workflow_groups VALUES(?,?)', (group['id'], bounded(group)))
+            workflow = uuid.uuid4().hex
+            self.store.db.execute('INSERT INTO workflows VALUES(?,?,?)', (workflow, group['id'], bounded({'goal': str(goal)[:2000]})))
+            self.revision('workflow', {'workflow': workflow, 'group': group['id']})
+            return workflow
+
     def groups(self):
         with self.store.lock:
             return [json.loads(r[0]) for r in self.store.db.execute('SELECT data FROM workflow_groups ORDER BY rowid')]

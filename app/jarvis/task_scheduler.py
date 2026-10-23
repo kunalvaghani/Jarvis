@@ -365,6 +365,8 @@ class ScheduledQueue:
                   'note': 'Outcomes are handler/checkpoint evidence. No inferred files, tests or quality claims.'}
         report['outcomes'] = {state:[r['number'] for r in snapshot['tasks'] if r['state']==state]
                               for state in ('COMPLETED','PARTIAL','FAILED','RUNNING','WAITING_APPROVAL','WAITING_USER','PAUSED')}
+        # Work the awareness layer submitted itself is labelled separately from requested work.
+        report['proactive_tasks'] = [r['number'] for r in snapshot['tasks'] if str(r.get('idem','')).startswith('cognitive:')]
         report['files'] = [{'task':r['number'], **effect} for r in snapshot['tasks']
             for effect in r['checkpoint'].get('effects', []) if effect.get('kind')=='file']
         report['recorded_test_evidence'] = [{'task':r['number'], 'evidence':r['checkpoint']['tests']}

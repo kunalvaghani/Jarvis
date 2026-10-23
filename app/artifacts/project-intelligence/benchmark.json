@@ -1,0 +1,60 @@
+{
+  "measured_at": "2026-10-24 00:03:05 +0530",
+  "python": "3.10.6",
+  "note": "Owned temporary project roots and queue; deterministic handlers only; coding agent not involved.",
+  "acceptance_conversation_ms": [
+    {
+      "utterance": "Jarvis, create a new desktop application.",
+      "ms": 16.868
+    },
+    {
+      "utterance": "Monitor system performance and help optimize my PC.",
+      "ms": 427.672
+    },
+    {
+      "utterance": "Save it in my Projects folder. Use the old monitoring app as reference, but don't modify it.",
+      "ms": 45.66
+    },
+    {
+      "utterance": "Also add battery optimization.",
+      "ms": 13.515
+    },
+    {
+      "utterance": "Make the interface look futuristic.",
+      "ms": 9.943
+    },
+    {
+      "utterance": "Actually, use no cloud services.",
+      "ms": 10.639
+    },
+    {
+      "utterance": "Explain your current progress.",
+      "ms": 5.475
+    },
+    {
+      "utterance": "What's left?",
+      "ms": 2.133
+    },
+    {
+      "utterance": "Finish the safe remaining work overnight.",
+      "ms": 8.595
+    }
+  ],
+  "requirement_change_ms": {
+    "n": 40,
+    "median": 22.889,
+    "p95": 28.255,
+    "max": 38.05,
+    "tasks_in_plan_at_end": 49
+  },
+  "status_query_ms": {
+    "n": 15,
+    "median": 7.939,
+    "p95": 13.249
+  },
+  "reference_snapshot": {
+    "files": 2000,
+    "truncated": false,
+    "seconds": 1.15
+  }
+}

@@ -1,0 +1,105 @@
+........................................................................ [ 13%]
+........................................................................ [ 26%]
+........................................................................ [ 39%]
+........................................................................ [ 52%]
+........................................................................ [ 66%]
+..............FF.F................F..................................... [ 79%]
+........................................................................ [ 92%]
+.................................sssssss                                 [100%]
+================================== FAILURES ===================================
+_ TestbookTests.test_every_scenario_and_its_three_phrasings_reach_the_expected_intent _
+
+self = <tests.test_intent_testbook.TestbookTests testMethod=test_every_scenario_and_its_three_phrasings_reach_the_expected_intent>
+
+    def test_every_scenario_and_its_three_phrasings_reach_the_expected_intent(self):
+        rows = scenarios()
+        self.assertEqual(len(rows), 800)
+        for number, direct, polite, everyday in rows:
+            for text in (direct, polite, everyday):
+                with self.subTest(number=number, text=text):
+>                   self.assertEqual(kind(text), EXPECTED[number])
+E                   AssertionError: 'project' != 'task'
+E                   - project
+E                   + task
+
+tests\test_intent_testbook.py:38: AssertionError
+____________ TestbookTests.test_permutations_reach_the_same_intent ____________
+
+self = <tests.test_intent_testbook.TestbookTests testMethod=test_permutations_reach_the_same_intent>
+
+    def test_permutations_reach_the_same_intent(self):
+        total = 0
+        for number, direct, *_ in scenarios():
+            for text in variants(direct):
+                total += 1
+                with self.subTest(number=number, text=text):
+>                   self.assertEqual(kind(text), EXPECTED[number])
+E                   AssertionError: 'project' != 'task'
+E                   - project
+E                   + task
+
+tests\test_intent_testbook.py:46: AssertionError
+___________ TestbookTests.test_unmatched_negations_still_do_nothing ___________
+
+self = <tests.test_intent_testbook.TestbookTests testMethod=test_unmatched_negations_still_do_nothing>
+
+    def test_unmatched_negations_still_do_nothing(self):
+        for text in ("don't open notepad", "never delete file notes"):
+>           with self.assertRaisesRegex(ValueError, "negated"):
+E           AssertionError: ValueError not raised
+
+tests\test_intent_testbook.py:84: AssertionError
+_ test_reviewed_architecture_cases[JRV-01-010-tests.test_intent_testbook-TestbookTests-test_every_scenario_and_its_three_phrasings_reach_the_expected_intent] _
+
+case = 'JRV-01-010', module = 'tests.test_intent_testbook'
+cls = 'TestbookTests'
+method = 'test_every_scenario_and_its_three_phrasings_reach_the_expected_intent'
+
+    @pytest.mark.parametrize('case,module,cls,method',[
+        ('JRV-01-006','tests.test_native_coding','NativeCoding','test_native_localgithub_assembles_single_worker_after_real_checks'),
+        ('JRV-01-008','tests.test_recovery','RecoveryTests','test_dead_worker_restarts_without_replaying_queued_actions'),
+        ('JRV-01-010','tests.test_intent_testbook','TestbookTests','test_every_scenario_and_its_three_phrasings_reach_the_expected_intent'),
+        ('JRV-01-014','tests.test_launcher_readiness','LauncherReadinessTests','test_timeout_is_reported_as_incomplete_not_missing_dependencies'),
+        ('JRV-01-018','tests.test_task_recovery','TaskRecoveryTests','test_cancel_before_recovery_never_calls_planner'),
+        ('JRV-01-019','tests.test_task_state','TaskStateTests','test_restart_marks_unfinished_task_and_preserves_checkpoints'),
+        ('JRV-01-024','tests.test_task_recovery','TaskRecoveryTests','test_missing_control_uses_fresh_alternative_and_records_failure'),
+        ('JRV-01-026','tests.test_task_recovery','TaskRecoveryTests','test_repeat_cannot_bypass_block_by_changing_unused_fields'),
+        ('JRV-01-030','tests.test_task_recovery','TaskRecoveryTests','test_tool_exception_is_uncertain_and_never_replayed'),
+    ])
+    def test_reviewed_architecture_cases(case,module,cls,method):
+>       run_reviewed(module,cls,method)
+
+tests\test_architecture_audit.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+module = 'tests.test_intent_testbook', cls = 'TestbookTests'
+method = 'test_every_scenario_and_its_three_phrasings_reach_the_expected_intent'
+
+    def run_reviewed(module,cls,method):
+        from importlib import import_module
+        result=unittest.TestResult();getattr(import_module(module),cls)(method).run(result)
+>       assert result.testsRun==1 and result.wasSuccessful() and not result.skipped,result.errors+result.failures
+E       AssertionError: [(<unittest.case._SubTest testMethod=runTest>, 'Traceback (most recent call last):
+E           File "D:\\Kunals GitHub Repo\\Ja...
+E             self.assertEqual(kind(text), EXPECTED[number])
+E         AssertionError: \'project\' != \'task\'
+E         - project
+E         + task
+E         
+E         ')]
+E       assert (1 == 1 and False)
+E        +  where 1 = <unittest.result.TestResult run=1 errors=0 failures=3>.testsRun
+E        +  and   False = wasSuccessful()
+E        +    where wasSuccessful = <unittest.result.TestResult run=1 errors=0 failures=3>.wasSuccessful
+
+tests\test_architecture_audit.py:44: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_intent_testbook.py::TestbookTests::test_every_scenario_and_its_three_phrasings_reach_the_expected_intent
+FAILED tests/test_intent_testbook.py::TestbookTests::test_permutations_reach_the_same_intent
+FAILED tests/test_intent_testbook.py::TestbookTests::test_unmatched_negations_still_do_nothing
+FAILED tests/test_architecture_audit.py::test_reviewed_architecture_cases[JRV-01-010-tests.test_intent_testbook-TestbookTests-test_every_scenario_and_its_three_phrasings_reach_the_expected_intent]
+4 failed, 533 passed, 7 skipped in 85.36s (0:01:25)
+
+real	1m27.961s
+user	0m0.046s
+sys	0m0.015s

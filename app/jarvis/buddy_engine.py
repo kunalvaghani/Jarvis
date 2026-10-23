@@ -208,6 +208,8 @@ class Buddy:
         elif kind == "action" and message:
             self.note("done", now)
             self.react("finished", 2.2, 65, now)
+        elif kind == "awareness" and isinstance(message, dict):
+            self.react("curious", 2., 38, now)  # A proactive note: low priority, below errors and speech.
         elif kind == "media_card" and isinstance(message, dict):
             service, phase = message.get("service"), message.get("phase")
             if service in {"spotify", "youtube"}:

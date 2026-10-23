@@ -161,6 +161,11 @@ class App:
             lambda: getattr(self.actions, '_spotify_mcp', None) is not None and self.actions._spotify_mcp.repair(),
             lambda: not self.closing and not self.actions.closed.is_set()
                 and spotify_enabled(self.actions))
+        awareness = self.actions.awareness
+        if awareness.enabled:
+            awareness.self_model.watchdog = self.watchdog  # Component health for the self-model.
+        self.watchdog.register('Cognitive awareness', awareness.healthy, awareness.repair,
+            lambda: not self.closing and awareness.enabled and not awareness.closed.is_set() and awareness.thread is not None)
         if not self.config.get('_ui_verification', False):
             self.watchdog.start()
             self.root.after(100, self.runtime_tick)
@@ -328,8 +333,9 @@ class App:
                 title = win32gui.GetWindowText(hwnd)
                 self.actions.cognition.perceive_window(title)  # Vision: what's in front of you.
                 screen = getattr(self.actions, 'screen', None)
+                info = self.actions.live_app.windows.get(hwnd) or {}
+                self.actions.awareness.observe_window(title, info.get('executable', ''))  # Opt-in sensor; changes only.
                 if screen is not None:
-                    info = self.actions.live_app.windows.get(hwnd) or {}
                     screen.observe(hwnd, title, info.get('executable', ''), info.get('window_class', ''))
                 if '/' in title:  # Possibly a GitHub repository in the browser: learn it in the background.
                     import psutil
@@ -505,6 +511,18 @@ class App:
             if kind == 'coding_activity':
                 self.coding_console.notify(message)
                 continue  # Source/output stays in its owned review; never spoken or transcript-logged.
+            if kind == 'awareness':
+                # Proactive notes are silent unless the awareness policy allowed an interruption.
+                number = f" (suggestion {message['number']})" if message.get('number') else ''
+                self.log_line('aware', message['text'] + number)
+                if message.get('recovery'):
+                    continue  # Recovery stays silent: transcript only, no status/Pip/speech.
+                self.state.set('Awareness · ' + message['text'][:90])
+                self.island.notify(kind, message)
+                quiet = getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()
+                if message.get('speak') and not quiet and not self.speech.output_recent():
+                    self.speech.say(message['text'])
+                continue
             self.island.notify(kind, message)
             self.desk.notify(kind,message)
             if kind == 'anticipation':

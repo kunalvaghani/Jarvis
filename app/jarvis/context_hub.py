@@ -122,6 +122,13 @@ def situation(actions, question=""):
         lessons = cognition.relevant_lessons(question)
         if lessons:
             found["lessons_learned"] = lessons  # Executive consolidation: what failed before and why.
+    awareness = getattr(actions, "awareness", None)
+    if awareness is not None and awareness.enabled:
+        # Only the planner's slots, and only subjects/choices: no raw observation values reach a prompt.
+        view = awareness.workspace.view("planner", "internal")
+        problems = [p["subject"] + " (" + p["choice"].replace("_", " ") + ")" for p in view.get("problems", [])[:3]]
+        if problems:
+            found["awareness_open_problems"] = problems
     if question and re.search(r"(?i)\b(?:this|that|it|the) (?:repo|repository|project|code)\b", question):
         found.setdefault("note", "The user may mean the repository or project shown above.")
     return found

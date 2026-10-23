@@ -1,0 +1,90 @@
+{
+  "measured_at": "2026-10-23 22:32:25 +0530",
+  "python": "3.10.6",
+  "cpu_count": 16,
+  "ram_total_gb": 31.3,
+  "seconds_per_mode": 20.0,
+  "models_loaded_by_layer": 0,
+  "network_requests_by_layer": 0,
+  "note": "Owned temporary state; real psutil/GetLastInputInfo/nvidia-smi sampling; model probe replaced by a fixture.",
+  "admission_without_awareness": {
+    "n": 200,
+    "median_ms": 0.7291,
+    "p95_ms": 1.1249
+  },
+  "idle": {
+    "process_cpu_percent_one_core": 0.0,
+    "engine_thread_cpu_percent": 1.161,
+    "processed": 0
+  },
+  "admission_with_awareness_running": {
+    "n": 200,
+    "median_ms": 0.7156,
+    "p95_ms": 0.95
+  },
+  "active": {
+    "events_offered": 350,
+    "events_per_second": 15.8,
+    "process_cpu_percent_one_core_including_generator": 7.704,
+    "engine_thread_cpu_percent": 0.629,
+    "slowdown": 1.0,
+    "processing_latency_ms_p50": 14.0593,
+    "processing_latency_ms_p95": 18.5018,
+    "counters": {
+      "observed": 1375,
+      "processed": 1375,
+      "dropped": 0,
+      "coalesced": 0,
+      "rejected": 0,
+      "disabled_sensor": 0,
+      "problems": 6,
+      "filtered": 0,
+      "silent": 5,
+      "notified": 0,
+      "spoken": 0,
+      "asked": 0,
+      "investigations": 1,
+      "proposals": 0,
+      "model_calls": 0,
+      "errors": 0
+    },
+    "cognitive_tasks_admitted": 1
+  },
+  "event_to_decision_ms": {
+    "trials": 5,
+    "median": 15.732,
+    "max": 16.106,
+    "choices": [
+      "investigate",
+      "investigate",
+      "notify_silent",
+      "notify_silent",
+      "notify_silent"
+    ]
+  },
+  "flood": {
+    "observe_calls": 50000,
+    "observe_ms_p50": 0.1518,
+    "observe_ms_p99": 2.9899,
+    "offer_seconds": 4.458,
+    "drain_seconds": 6.77,
+    "process_cpu_percent_one_core": 104.8,
+    "dropped": 1098,
+    "coalesced": 49992,
+    "inbox_capacity": 512
+  },
+  "rss_mb": {
+    "before_engine": 22.8,
+    "after_all_modes": 45.41,
+    "delta": 22.62,
+    "note": "Sampled RSS of the whole benchmark process (includes the queue), not peak memory."
+  },
+  "engine_snapshot": {
+    "status": "planning",
+    "latency_p50_ms": 1966.82,
+    "cpu_percent": 23.371,
+    "slowdown": 8.0,
+    "error": null
+  },
+  "model_calls": 0
+}

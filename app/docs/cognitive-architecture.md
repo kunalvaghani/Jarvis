@@ -1,5 +1,7 @@
 # Cognitive architecture: one perceive → remember → reason → decide → act → learn loop
 
+**Awareness addendum — 2026-10-23 IST:** the separate, feature-flagged [Cognitive Awareness Engine](cognitive-awareness.md) adds typed observations, beliefs, salience-based attention, calibrated predictions, a probed self-model and an interruption-aware policy. It reads this loop's procedure statistics and lessons and leaves the loop unchanged. Its only autonomous effect is a read-only investigation submitted through the existing durable queue. Commands it submits are not perceived here as user speech.
+
 **2026-10-15 audit follow-up:** The attention loop observes inputs and refreshes
 working memory; independent action workers execute commands. Old screen attention
 is invalidated on window switches, including empty titles. Text admission bounds
