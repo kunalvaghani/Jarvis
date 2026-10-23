@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-24 IST",
+  "branch": "codex/engineering-judgment",
+  "baseline_head": "728c239",
+  "release_accepted": false,
+  "rollout": "advisory",
+  "full_regression": {
+    "status": "PASS",
+    "passed": 4268,
+    "skipped": 150,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 1383.89,
+    "receipt": "release-final/full-regression.txt",
+    "scope": "Regression, not physical/account/elapsed overnight acceptance"
+  },
+  "launcher": {
+    "status": "PASS",
+    "receipt": "launcher-final.txt",
+    "scope": "dependencies_and_configured_services; no account or physical voice acceptance"
+  },
+  "focused": {
+    "status": "PASS",
+    "passed": 159,
+    "new_engineering_cases": 79,
+    "receipt": "final-awareness-focused-rerun.txt"
+  },
+  "enabled_skill_evolution": {
+    "status": "PASS",
+    "passed": 6,
+    "receipt": "enabled-skill-evolution.txt",
+    "scope": "Additional artifact check, excluded from tests/ full-run count"
+  },
+  "native_live_fixture": {
+    "status": "PASS",
+    "goals_passed": 2,
+    "goals_total": 2,
+    "model_calls": 5,
+    "receipt": "live-ready-final/acceptance.json",
+    "scope": "Owned connector-shaped frozen-test fixture, real existing local model/queue/DAG/checks; not actual account connector"
+  },
+  "memory_binding": {
+    "status": "PASS",
+    "receipt": "live-memory-binding.json"
+  },
+  "main_microphone": "Stopped; intentional Stop marker preserved",
+  "open_gates": [
+    {
+      "status": "NOT_RUN",
+      "gate": "Semantic novelty of every native repair strategy beyond attempt caps and diagnosed feedback"
+    },
+    {
+      "status": "NOT_RUN",
+      "gate": "General cross-process/workload source attribution and parallel coding isolation"
+    },
+    {
+      "status": "NOT_RUN",
+      "gate": "Arbitrary semantic requirement and architecture quality"
+    },
+    {
+      "status": "NOT_RUN",
+      "gate": "Actual YouTube/Spotify account operation acceptance"
+    },
+    {
+      "status": "NOT_RUN",
+      "gate": "Fresh physical voice/duplex/UI attention, battery/sleep/thermal and elapsed overnight endurance"
+    },
+    {
+      "status": "NOT_RUN",
+      "gate": "Exact prompt token counts, isolated peak RAM/VRAM overhead and population reliability rates"
+    }
+  ],
+  "earlier_unresolved_failures": [
+    "Strict speech fixture 8/10",
+    "Multilingual Gujarati/mixed-language quality gates"
+  ],
+  "source_archive": "Seven hashes and copied skill match pinned source; no installer run",
+  "publication": "No commit, push, merge or publication performed",
+  "source_integrity": {
+    "status": "PASS",
+    "files": 804,
+    "source_unchanged": true,
+    "receipt": "release-final/source-integrity.json"
+  },
+  "repository_isolation": {
+    "status": "PASS",
+    "passed": 2,
+    "receipt": "isolation-mapped-cases.txt"
+  },
+  "completed_at": "2026-10-23T21:01:49.692215+00:00"
+}

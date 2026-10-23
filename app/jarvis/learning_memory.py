@@ -22,6 +22,8 @@ def options(config, name):
 
 def trajectory_from_task(task):
     """A finished Jarvis task as a ReasoningBank trajectory (steps, failures, independent verification)."""
+    from .engineering_judgment import learning_view
+    task = learning_view(task)
     steps = [{'action': str(step.get('action', ''))[:60], 'target': str(step.get('value', ''))[:80],
               'verified': step.get('verified') is True, 'call_id': step.get('call_id')}
              for step in ((task.get('plan') or {}).get('completed') or []) if isinstance(step, dict)]
@@ -29,12 +31,26 @@ def trajectory_from_task(task):
                'error': str(f.get('reason', ''))[:300]} for f in task.get('failures') or [] if isinstance(f, dict)]
     verification = [str(c.get('evidence', ''))[:300] for c in task.get('checkpoints') or []
                     if isinstance(c, dict) and c.get('stage') == 'goal_verified']
+    engineering = task.get('engineering')
+    if engineering:
+        if verification and engineering.get('state') == 'verified':
+            steps.append({'action': 'engineering_scope_and_acceptance', 'target': 'requirement-bounded changes',
+                          'verified': True, 'call_id': engineering['goal_id']})
+        else:
+            steps.append({'action': 'engineering_verification', 'target': 'original goal',
+                          'error': 'Acceptance evidence is incomplete; retain observations without successful-procedure promotion.'})
+        for check in engineering.get('checks', [])[-6:]:
+            if check.get('passed') is False:
+                steps.append({'action': 'engineering_check', 'target': str(check.get('criterion', ''))[:80],
+                              'error': 'Recorded host check did not pass: ' + str(check.get('method', ''))[:160]})
     if steps and verification:
         steps[-1 if not steps[-1].get('error') else 0]['final'] = True
     conditions = task.get('conditions') or {}
     return {'task_id': task.get('task_id', ''), 'source': 'task', 'goal': task.get('goal', ''),
             'status': task.get('status', ''), 'steps': steps, 'verification': verification,
-            'conditions': {'application': conditions.get('app_name', ''), 'surface': conditions.get('surface', '')}}
+            'conditions': {'application': conditions.get('app_name', ''), 'surface': conditions.get('surface', ''),
+                           **({'domain': 'engineering'} if engineering else {})},
+            **({'trajectory_ref': 'engineering-goal:' + str(engineering.get('goal_id', ''))[:80]} if engineering else {})}
 
 
 def sandbox_registry_factory(actions):

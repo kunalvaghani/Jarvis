@@ -1665,5 +1665,19 @@
     "quiet_start_hour": 22,
     "quiet_end_hour": 8,
     "prevent_sleep": false
+  },
+  "engineering_judgment": {
+    "enabled": true,
+    "mode": "advisory",
+    "max_repair_attempts": 2,
+    "clarification_threshold": 0.4,
+    "prompt_characters": 1800,
+    "weights": {
+      "complexity": 1,
+      "maintenance": 1,
+      "integration_risk": 2,
+      "runtime_overhead": 1,
+      "verification_cost": 1
+    }
   }
 }

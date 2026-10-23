@@ -309,6 +309,10 @@ class SkillEvolution:
         if self.mode == 'audit_only' or (self.mode == 'fix_only' and kind != 'fix'):
             raise ValueError('Evolution mode ' + self.mode + ' records ' + kind + ' as a candidate only.')
 
+    def _engineering_guidance(self):
+        from .engineering_judgment import GUIDANCE, settings
+        return {'engineering_guidance': GUIDANCE} if settings(getattr(self.skills.memory, 'engineering_options', {}))['enabled'] else {}
+
     # CAPTURED ---------------------------------------------------------------------------------------------------------
     def capture(self, task, trace, validation_steps, cancelled=lambda: False):
         """trace: [{action, value, folder, content, call_id, verified}] from a finished task (failed steps included)."""
@@ -349,7 +353,7 @@ class SkillEvolution:
                 'writes still require approval.\n\n## Steps\n\n' + '\n'.join(lines) +
                 '\n\n## Verification\n\nEach step must return verification `verified` from its adapter readback.\n')
         if self.author is not None:
-            drafted = self.author('captured', {'goal': task.get('goal'), 'steps': lines, 'name': name, 'tools': tools})
+            drafted = self.author('captured', {'goal': task.get('goal'), 'steps': lines, 'name': name, 'tools': tools, **self._engineering_guidance()})
             if isinstance(drafted, str) and drafted.strip():
                 body = drafted
         validate_skill(body, name)
@@ -395,17 +399,22 @@ class SkillEvolution:
             raise ValueError('Skill is not degraded; FIX needs repeated attributable failures after earlier success.')
         if self.author is None:
             raise ValueError('FIX needs an author to draft a repair.')
-        drafted = self.author('fix', {'body': row['body'], 'failure_causes': metrics['failure_causes'],
+        drafted = self.author('fix', {'body': row['body'], 'failure_causes': metrics['failure_causes'], **self._engineering_guidance(),
                                       'observation': observation})
         validate_skill(drafted, row['name'])
         old_lines, new_lines = row['body'].splitlines(), drafted.splitlines()
         diff = '\n'.join(difflib.unified_diff(old_lines, new_lines, 'before', 'after', lineterm=''))
         changed = sum(1 for line in diff.splitlines() if line[:1] in '+-' and not line.startswith(('+++', '---')))
-        if changed == 0 or changed > max(6, len(old_lines) // 2):
+        engineering = bool(self._engineering_guidance())
+        if changed == 0 or (changed > max(6, len(old_lines) // 2) and not engineering):
             raise ValueError('Repair is not minimal (changed lines: ' + str(changed) + ').')
+        if engineering and not observation:
+            raise ValueError('An engineering FIX needs an observed defect, not a speculative rewrite.')
         if set(validate_skill(drafted)['tools']) - set(row.get('tools', [])):
             raise ValueError('A FIX may not bind new tools; use DERIVED with review.')
-        version, previous = store.add_version(skill_id, drafted, diff, 'candidate', {'observation': observation})
+        version, previous = store.add_version(skill_id, drafted, diff, 'candidate', {'observation': observation,
+            **({'engineering_review': {'changed_lines': changed, 'size_is_diagnostic_only': True,
+                'scope': 'Observed repair; no new tool bindings; existing isolated execution checks still required'}} if engineering else {})})
         if row['origin'] != 'Evolved':
             store.mark_version(skill_id, version, 'proposed')
             return {'skill_id': skill_id, 'status': 'proposed', 'version': version,
@@ -470,7 +479,7 @@ class SkillEvolution:
                 '\n'.join('- ' + p for p in [f'{application} version is {version}'] + preconditions) +
                 '\n\n## Differences from the parent\n\n' + ('\n'.join('- ' + n for n in notes) or '- None beyond the preconditions.') + '\n')
         if self.author is not None:
-            drafted = self.author('derived', {'parent': parent['body'], 'name': name, 'specialization': specialization})
+            drafted = self.author('derived', {'parent': parent['body'], 'name': name, 'specialization': specialization, **self._engineering_guidance()})
             if isinstance(drafted, str) and drafted.strip():
                 body = drafted
         validate_skill(body, name)

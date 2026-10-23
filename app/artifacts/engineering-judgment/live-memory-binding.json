@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-23T20:31:25.732311+00:00",
+  "scope": "Actual saved local-model task and host acceptance/scope proofs projected through current trajectory_from_task into the existing ReasoningBank. Embeddings disabled for this deterministic storage check; no new memory authority.",
+  "goal_id": "42114fb4c40ade3800219eb0",
+  "task_status": "completed",
+  "contract_state": "verified",
+  "trajectory_ref": "engineering-goal:42114fb4c40ade3800219eb0",
+  "verification_count": 1,
+  "learn_result": {
+    "status": "learned",
+    "outcome": "success",
+    "items": [
+      "rb_c8d061320d9d1466"
+    ]
+  },
+  "repeated_learn_status": "already_learned",
+  "passed": true
+}

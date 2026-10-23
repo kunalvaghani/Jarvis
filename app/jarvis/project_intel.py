@@ -190,6 +190,10 @@ class ProjectIntelligence:
 
     def _advance(self, project):
         """Ask only what is worth asking; otherwise default, plan and start the safe work."""
+        from .engineering_judgment import engine_for
+        engineering = engine_for(self.actions)
+        if engineering:
+            project['engineering'] = engineering.project_contract(project, self.store.requirements(project['id'], include_inactive=True))
         plan = plan_questions(self._slots(project), ask_threshold=self.ask_threshold, default_threshold=self.default_threshold)
         project['clarification'] = plan
         self.store.save(project)
@@ -629,6 +633,11 @@ class ProjectIntelligence:
     # --- live changes ---------------------------------------------------------------------------------------------
     def _impact(self, project, requirement_ids=(), topic_set=frozenset(), reason='', mode='update'):
         """Adjust only the affected tasks. mode: update (refresh instructions), stop (incompatible), remove."""
+        from .engineering_judgment import engine_for
+        engineering = engine_for(self.actions)
+        if engineering:
+            project['engineering'] = engineering.project_contract(project, self.store.requirements(project['id'], include_inactive=True))
+            self.store.save(project)
         ingress = self._ingress()
         notes = {'updated': [], 'replaced': [], 'paused': [], 'cancelled': [], 'followups': []}
         tasks = project['plan']['tasks']
@@ -1255,6 +1264,7 @@ class ProjectIntelligence:
                 'completed_features': [r for r in trace if r['status'].startswith('verified') or r['status'] == 'implemented, not verified'],
                 'remaining_features': [r for r in trace if r['status'] in {'pending', 'in progress', 'blocked', 'failed verification'}],
                 'files': self.files(project), 'verification': project.get('verification', {}),
+                'engineering': project.get('engineering'),
                 'automatic_decisions': [d for d in decisions if d.get('automatic')] + [d for d in project['decisions'] if d['automatic']],
                 'failed_or_blocked': {k: project['plan']['tasks'][k].get('blocked_reason', s) for k, s in states.items()
                                       if s in {'FAILED', 'blocked', 'WAITING_APPROVAL', 'WAITING_USER', 'PAUSED'}},

@@ -2,7 +2,10 @@
   "version": 1,
   "realtime_voice": {
     "date": "2026-10-23 IST",
-    "modules": ["jarvis.voice_runtime", "jarvis.voice_registry"],
+    "modules": [
+      "jarvis.voice_runtime",
+      "jarvis.voice_registry"
+    ],
     "services": "Extends the existing listener and speech workers; no additional service or dependency.",
     "asr": "Existing medium.en decoder retained. User-requested pre-multilingual capture profile: 100 ms frames and fixed 0.8 second silence endpoint; optional transcript metadata and final-only effects retained. Not native streaming.",
     "duplex": "Headphone no-wake barge-in is opt-in. Speaker mode retains wake gating without acoustic AEC.",
@@ -1170,7 +1173,11 @@
     "dependencies": "Python standard library; existing psutil, requests and nvidia-smi probes"
   },
   "project_intelligence": {
-    "modules": ["jarvis.project_model", "jarvis.project_requirements", "jarvis.project_intel"],
+    "modules": [
+      "jarvis.project_model",
+      "jarvis.project_requirements",
+      "jarvis.project_intel"
+    ],
     "storage": ".jarvis-runtime/projects.sqlite3",
     "health": "No thread of its own; reconciled from the existing TaskIngress maintenance loop",
     "execution": "Project work is ordinary durable tasks (code_task, task, project_step) in one workflow group per project; approvals, locks, overnight and recovery unchanged",
@@ -1178,5 +1185,15 @@
     "safety": "Reference projects are read-only unless the user grants permission; existing folders are never overwritten; superseded tasks are refused at dispatch",
     "rollback": "project_intelligence.enabled=false; preserve projects.sqlite3",
     "dependencies": "Python standard library"
+  },
+  "engineering_judgment": {
+    "module": "jarvis.engineering_judgment",
+    "upstream_commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+    "default_mode": "advisory",
+    "new_dependencies": [],
+    "new_services": [],
+    "state": "Existing TaskState checkpoints and ProjectStore; no new database",
+    "health": "Configuration validation and bounded source/skill checks",
+    "rollback": "Disable engineering_judgment.enabled; independent permission and privacy policies remain enforced"
   }
 }

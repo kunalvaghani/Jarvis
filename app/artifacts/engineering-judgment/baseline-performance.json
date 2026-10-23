@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-23T19:18:36.218493+00:00",
+  "mode": "disabled",
+  "scope": "Actual bounded SkillMemory selection, command parser and Coder atomic edits of owned temporary files. Model output is a stub; no acoustic, real-model, VRAM or account benchmark.",
+  "skill_selection_median_ms": 3.580849999707425,
+  "command_parse_median_ms": 3.68125000022701,
+  "coding_task_median_ms": 67.64899999689078,
+  "coding_samples_ms": [
+    84.6252999981516,
+    68.80939999973634,
+    67.64899999689078,
+    63.47789999563247,
+    64.01010000263341
+  ],
+  "model_calls_per_task": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "selected_skills": [
+    {
+      "goal": "Open Notepad",
+      "skills": [
+        "app-navigation"
+      ]
+    },
+    {
+      "goal": "Fix the YouTube connector",
+      "skills": [
+        "youtube-media"
+      ]
+    },
+    {
+      "goal": "Refactor the Python parser",
+      "skills": [
+        "project-coding"
+      ]
+    },
+    {
+      "goal": "Create a Blender scene",
+      "skills": [
+        "blender-modeling"
+      ]
+    }
+  ],
+  "prompt_context_characters": [
+    2624,
+    4546,
+    6786,
+    3355
+  ],
+  "cases": [
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    }
+  ],
+  "verified_fixture_outputs": 5,
+  "vram": "not measured",
+  "ram": "not measured; no peak-overhead claim"
+}

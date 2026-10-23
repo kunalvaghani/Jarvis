@@ -1,0 +1,67 @@
+{
+  "baseline_head": "728c239",
+  "baseline_branch": "main",
+  "task_branch": "codex/engineering-judgment",
+  "baseline_tests": {
+    "passed": 360,
+    "skipped": 1,
+    "seconds": 67.61,
+    "receipt": "baseline-focused.txt"
+  },
+  "baseline_code": "Actual scoped atomic Coder edits with stubbed model: 5/5 exact outputs, unrelated dirty notes unchanged, one model call each; no functional verification claimed.",
+  "integration_status": {
+    "skill_registry": "Existing SkillMemory builtin/custom/personal catalog, conditional compact guide; no second registry",
+    "requirements": "Actual ProjectIntelligence and ProjectStore present; bind contracts to spec versions, use existing questions/impact propagation",
+    "cognition": "Cognition plus AwarenessEngine present; record assessment on existing read-only investigation suggestions",
+    "planner": "Existing BrainClient, AdaptivePlanningController, native_coding and codex_workload; compact context only for applicable work",
+    "coding": "Existing Coder atomic writes and FileSession prewrite guards; independent validate_project supplies actual executable-check evidence",
+    "git": "Existing Codex/Claude/workload scoped Git/worktree guards retained; no automatic stash, reset, commit, push or merge added",
+    "queue": "Existing TaskIngress/ScheduledQueue/WorkflowGraph and task SQLite used; structured contracts mirrored through TaskState checkpoints",
+    "memory": "Existing SkillMemory/ExperienceMemory and completed-task learning callback; unverified goal evidence excluded from positive promotion, original audit retained",
+    "ReasoningBank_Obsidian_OpenViking": "Existing learning/retrieval pipeline reused through existing task/memory context; no new memory store or service",
+    "permissions": "Existing ToolRegistry, CLI scope and approvals independent of engineering feature flag",
+    "UI": "Existing Queue inspect detail displays persisted contract, decisions and checks; no new layout or Pip animation system",
+    "skills_upstream": "forrestchang metadata, multica-ai hosting, Karpathy inspiration; pinned seven-file source review, no installation scripts"
+  },
+  "risks": [
+    "Shared task state remains serialized for mutations; context is per-thread via ContextVar",
+    "Advisory mode records incomplete acceptance without authorizing actions; do not claim global enforced rollout",
+    "External CLI child processes retain existing guards; parent engineering metadata cannot grant them permissions",
+    "Whole-project semantic quality and genuine YouTube/account operation acceptance remain distinct from fixtures",
+    "No unverified positive procedural learning from syntax/readback-only success"
+  ],
+  "initial_harness_notes": [
+    "Baseline benchmark initially disabled SkillMemory and got KeyError; corrected to an owned enabled vault before baseline measurement",
+    "Default sandbox denied atomic os.replace on owned temporary files; same benchmark passed in the authorized local test context"
+  ],
+  "latest_focused": {
+    "passed": 159,
+    "skipped": 0,
+    "seconds": 23.34,
+    "receipt": "final-awareness-focused-rerun.txt",
+    "note": "Final runtime cognition and engineering checks; six separate enabled-skill checks also passed."
+  },
+  "previous_focused": {
+    "passed": 350,
+    "skipped": 1,
+    "seconds": 117.32,
+    "receipt": "second-integration.txt",
+    "note": "Before final planning/recovery/promotion refinements; not a completed full-suite result"
+  },
+  "final_regression": {
+    "status": "PASS",
+    "passed": 4268,
+    "skipped": 150,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 1383.89,
+    "receipt": "release-final/full-regression.txt",
+    "scope": "Regression, not physical/account/elapsed overnight acceptance"
+  },
+  "source_integrity": {
+    "status": "PASS",
+    "files": 804,
+    "source_unchanged": true,
+    "receipt": "release-final/source-integrity.json"
+  }
+}

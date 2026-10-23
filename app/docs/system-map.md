@@ -1,5 +1,9 @@
 # Jarvis system map
 
+## Engineering judgment and goal assurance — 2026-10-24 IST
+
+Existing `SkillMemory` and `BrainClient` routing → conditional compact engineering guidance → `EngineeringJudgmentEngine` requirement/strategy/goal metadata → existing Coder/FileSession and independent `validate_project` → existing TaskState checkpoints, queue inspection/reports and evidence-aware learning. ProjectStore contracts follow requirement versions; Awareness investigation suggestions retain evidence assessments. No new planner, database, scheduler, permission authority or service. Local rollout starts advisory; enforced native coding is verified only for the bounded fixtures described in the [architecture and evidence](engineering-judgment.md).
+
 ## Context-aware workflow graph — 2026-10-23 IST
 
 `TaskIngress` → `workflow_graph.TaskRelationshipResolver` → same `TaskStore` WAL group/workflow/node/edge/result/revision tables → same `ScheduledQueue` dependency/condition/resource gates → existing Actions/Knowledge/ToolRegistry/TaskState/model router. Committed result versions bind at dispatch and reach Brain through `memory_context.task_results`. `workflow_expand` creates bounded child admissions, with scope review for generated effectful work and existing tool approvals. The current Queue view adds group controls/inspection; reports aggregate the current batch. DecisionManager strategies update the persisted DAG atomically, without removing existing verification gates. Existing watchdog and Stop/Quit behavior apply; general mutation workers stay exclusive. [Behavior and remaining acceptance](workflow-graph.md).

@@ -1,0 +1,803 @@
+{
+  "scope": "All 56 requested scenario categories mapped to actual test interfaces. This is a coverage map, not a blanket pass or production acceptance claim.",
+  "cases": [
+    {
+      "id": 1,
+      "requirement": "Ambiguous request with materially different interpretations.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_material_performance_ambiguity_uses_existing_target"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 2,
+      "requirement": "Missing project destination.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_missing_destination_and_purpose_are_not_invented"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 3,
+      "requirement": "Incomplete implementation requirements.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_missing_destination_and_purpose_are_not_invented"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 4,
+      "requirement": "Conflicting requirements.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_explicit_requirements_conflicts_and_facts_keep_provenance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 5,
+      "requirement": "User-provided constraints.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_explicit_requirements_conflicts_and_facts_keep_provenance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 6,
+      "requirement": "Safe reversible defaults.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_safe_minor_defaults_do_not_require_a_question"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 7,
+      "requirement": "High-impact ambiguity requiring clarification.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_enforced_missing_requirement_waits_before_model_or_edit"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 8,
+      "requirement": "A late clarification changing an active project.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_actual_project_requirement_change_versions_contract_and_preserves_reference"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 9,
+      "requirement": "Existing method versus unnecessary replacement.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_simplicity_requires_coverage_before_cost"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 10,
+      "requirement": "Simple function versus unnecessary abstraction.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_simplicity_diagnoses_new_abstractions_without_removing_required_safety"
+      ],
+      "status": "PASS",
+      "scope": "AST diagnostic, not proof that an abstraction is unnecessary; advisory scope.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 11,
+      "requirement": "Existing connector versus redundant connector.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_speculative_or_infeasible_cheap_approach_cannot_win"
+      ],
+      "status": "PASS",
+      "scope": "Generic candidate feasibility/speculation policy, not proof of semantic duplicate-connector recognition. Existing connector/tool ranking remains authoritative.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 3,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 12,
+      "requirement": "Deterministic command versus heavyweight LLM.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_conditional_applicability"
+      ],
+      "status": "PASS",
+      "scope": "Trivial commands bypass deterministic engineering applicability; measured policy classification adds no inference. This is not an open-ended model/tool-choice intelligence benchmark.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 12,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 13,
+      "requirement": "Required complexity retained for safe concurrent operations.",
+      "tests": [
+        "tests/test_workflow_graph.py::test_independent_safe_lanes_overlap_but_file_edits_do_not",
+        "tests/test_engineering_judgment.py::test_simplicity_requires_coverage_before_cost"
+      ],
+      "status": "PASS",
+      "scope": "Hard-coverage policy plus actual existing safe-lane/mutation-lock fixture; no proof of arbitrary parallel coding isolation.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 2,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 14,
+      "requirement": "Rejected speculative features.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_speculative_or_infeasible_cheap_approach_cannot_win"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 3,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 15,
+      "requirement": "Single-file bug fix.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_actual_coder_keeps_unrelated_work_and_records_unverified_behavior"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 16,
+      "requirement": "Necessary multi-file refactor.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_scope_one_and_multiple_file_changes_preserve_user_edits"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 17,
+      "requirement": "Unrelated files remain unchanged.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_unrelated_change_and_deletion_are_visible"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 18,
+      "requirement": "Existing uncommitted changes preserved.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_scope_one_and_multiple_file_changes_preserve_user_edits"
+      ],
+      "status": "PASS",
+      "scope": "Working bytes including preexisting user notes are preserved; existing CLI/workload Git guards remain responsible for index/worktree operations.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 19,
+      "requirement": "Accidental formatting changes detected.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_formatting_and_new_unused_import_are_diagnostics_not_line_limits"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 20,
+      "requirement": "Reference projects remain read-only.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_reference_project_remains_read_only"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 21,
+      "requirement": "Unused code introduced by changes is identified.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_formatting_and_new_unused_import_are_diagnostics_not_line_limits"
+      ],
+      "status": "PASS",
+      "scope": "Detects possibly unused newly introduced Python imports. Full dead-code/dataflow analysis is not implemented; intentional re-exports can require review.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 22,
+      "requirement": "Public APIs and contracts remain compatible.",
+      "tests": [
+        "tests/test_coder.py"
+      ],
+      "status": "PASS",
+      "scope": "Existing syntax/public-interface guards and regression suite remain authoritative.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 29,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 23,
+      "requirement": "Reproduce a known bug before fixing.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_native_files_and_actual_executable_verifier_bind_same_goal"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 24,
+      "requirement": "Write or identify a failing test.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_native_files_and_actual_executable_verifier_bind_same_goal"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 25,
+      "requirement": "Apply the fix.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_native_files_and_actual_executable_verifier_bind_same_goal"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 26,
+      "requirement": "Verify the focused test.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_native_files_and_actual_executable_verifier_bind_same_goal"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 27,
+      "requirement": "Run relevant regression tests.",
+      "tests": [
+        "tests/"
+      ],
+      "status": "PASS",
+      "scope": "Complete frozen-source regression required; focused tests do not substitute.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 4268,
+        "SKIPPED": 150
+      }
+    },
+    {
+      "id": 28,
+      "requirement": "Detect false-positive task completion.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_tool_success_does_not_establish_original_goal_acceptance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 29,
+      "requirement": "Distinguish tool success from goal success.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_tool_success_does_not_establish_original_goal_acceptance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 30,
+      "requirement": "Recover after failed tests.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_engineering_native_ready_files_trigger_actual_checks_without_extra_model_turn"
+      ],
+      "status": "PASS",
+      "scope": "Actual executable check fails on the first stub-proposed wrong edit, then existing native feedback/repair succeeds; frozen tests unchanged. Inference is labelled stubbed.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 2,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 31,
+      "requirement": "Stop after bounded unsuccessful attempts.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_duplicate_strategy_and_bounded_repairs_stop"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 32,
+      "requirement": "Start from a vague high-level goal.",
+      "tests": [
+        "tests/test_project_intel.py::test_vague_request_asks_only_what_matters_then_starts"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic project language fixtures, not arbitrary natural-language understanding.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 33,
+      "requirement": "Clarify essential requirements.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_existing_project_target_prevents_redundant_requirement_question"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 34,
+      "requirement": "Create a plan and dependency graph.",
+      "tests": [
+        "tests/test_project_intel.py::test_plan_is_a_dependency_graph_in_one_project_group"
+      ],
+      "status": "PASS",
+      "scope": "Actual SQLite DAG with simulated project workers; separate owned local-model queue probe exercises native workers.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 35,
+      "requirement": "Start safe work automatically.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_native_files_and_actual_executable_verifier_bind_same_goal"
+      ],
+      "status": "PASS",
+      "scope": "Actual scoped host file operations and optional installed-model probe; accounts and desktop actions excluded.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 36,
+      "requirement": "Accept a new requirement mid-execution.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_actual_project_requirement_change_versions_contract_and_preserves_reference"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 37,
+      "requirement": "Replan only affected tasks.",
+      "tests": [
+        "tests/test_project_intel.py::test_live_updates_change_only_affected_work"
+      ],
+      "status": "PASS",
+      "scope": "Existing PIRAE targeted impact/replanning fixtures retained; no duplicate planner.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 38,
+      "requirement": "Preserve unaffected completed work.",
+      "tests": [
+        "tests/test_project_intel.py::test_live_updates_change_only_affected_work"
+      ],
+      "status": "PASS",
+      "scope": "Existing DAG history/progress retention fixtures.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 39,
+      "requirement": "Continue independent overnight work.",
+      "tests": [
+        "tests/test_autonomous_queue.py::test_overnight_sensitive_job_defers_and_independent_work_continues"
+      ],
+      "status": "PASS",
+      "scope": "Existing independent eligible work continues while sensitive work waits. Simulated timing/owned handlers; elapsed overnight endurance and general isolated parallel coding remain separate open gates.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 40,
+      "requirement": "Produce an evidence-grounded final report.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_queue_report_retains_goal_completion_separately_from_transport_state"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 41,
+      "requirement": "Detect unnecessary generated abstractions.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_simplicity_diagnoses_new_abstractions_without_removing_required_safety"
+      ],
+      "status": "PASS",
+      "scope": "New-class/unused-import diagnostics and candidate feasibility checks; semantic necessity remains advisory.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 42,
+      "requirement": "Reject a new skill duplicating an existing capability.",
+      "tests": [
+        "tests/test_phase03_living_skills.py::test_P03_capture_refuses_workflows_an_existing_skill_already_covers"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 43,
+      "requirement": "Prevent unrelated production modifications.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_scope_boundaries_are_independent_of_guidance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 3,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 44,
+      "requirement": "Verify a candidate skill in isolation.",
+      "tests": [
+        "tests/test_repository_skill_isolation.py::RepositoryIsolationTests::test_actual_nonroot_mount_cgroup_and_seccomp_probe",
+        "tests/test_repository_skill_isolation.py::RepositoryIsolationTests::test_malicious_import_never_runs_during_analysis_and_is_blocked_in_execution"
+      ],
+      "status": "PASS",
+      "scope": "Existing isolated repository-skill validation and environment gates, not a newly installed execution sandbox.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 2,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 45,
+      "requirement": "Preserve existing Jarvis commands.",
+      "tests": [
+        "tests/test_coder.py"
+      ],
+      "status": "PASS",
+      "scope": "Existing command/coder regressions and complete suite.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 29,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 46,
+      "requirement": "Reject an unverified capability promotion.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_actual_procedural_store_does_not_promote_unverified_engineering"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 47,
+      "requirement": "Verify skill routing works.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_registered_skill_selection_is_conditional_compact_and_inspectable"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 6,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 48,
+      "requirement": "Verify simple commands do not trigger heavy analysis.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_planner_context_is_compact_persisted_and_free_of_new_inference"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 49,
+      "requirement": "Verify approval policies cannot be bypassed.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_existing_tool_denial_cannot_be_disabled_by_engineering_flags"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 3,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 50,
+      "requirement": "Verify 20-second safe-choice behavior.",
+      "tests": [
+        "tests/test_workflow_graph.py::test_low_risk_visible_twenty_second_graph_decision_and_sensitive_gate"
+      ],
+      "status": "PASS",
+      "scope": "Existing mapped safe-choice and sensitive-timeout invariants; no new timer or silence-as-consent path.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 51,
+      "requirement": "Verify external skill text cannot override trusted instructions.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_scope_boundaries_are_independent_of_guidance"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 3,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 52,
+      "requirement": "Verify privacy-aware model routing.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_privacy_context_cannot_be_promoted_to_public_cloud"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 53,
+      "requirement": "Verify crash and restart recovery.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_actual_owned_process_crash_never_promotes_or_replays"
+      ],
+      "status": "PASS",
+      "scope": "Deterministic policy/owned-filesystem acceptance fixture; not open-ended live production certification.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 1,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 54,
+      "requirement": "Verify concurrency/resource locks.",
+      "tests": [
+        "tests/test_autonomous_queue.py::test_resource_pressure_blocks_without_losing_jobs",
+        "tests/test_engineering_judgment.py::test_policy_context_is_isolated_between_actual_threads"
+      ],
+      "status": "PASS",
+      "scope": "Actual policy ContextVar threads plus existing queue resource-pressure/retained-job regression fixture; broader workload isolation remains open.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 5,
+        "SKIPPED": 0
+      }
+    },
+    {
+      "id": 55,
+      "requirement": "Verify existing voice, Dynamic Island, memory and connectors.",
+      "tests": [
+        "tests/"
+      ],
+      "status": "SKIPPED",
+      "scope": "Full regression/readiness only. Physical voice/duplex, live UI attention, account and elapsed overnight acceptance remain separate.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 4268,
+        "SKIPPED": 150
+      }
+    },
+    {
+      "id": 56,
+      "requirement": "Verify the skill can be disabled without breaking Jarvis.",
+      "tests": [
+        "tests/test_engineering_judgment.py::test_registered_skill_selection_is_conditional_compact_and_inspectable"
+      ],
+      "status": "PASS",
+      "scope": "Disabled fixture/local-model control and conditional skill suppression; security remains independent.",
+      "status_scope": "Referenced automated checks in the frozen full run; PASS does not close broader semantic/live gates. See explicit scope and test-outcomes.json. Gated checks remain SKIPPED.",
+      "outcomes": {
+        "PASS": 6,
+        "SKIPPED": 0
+      }
+    }
+  ],
+  "classification": "PASS/FAIL/SKIPPED/BLOCKED/NOT_RUN classify referenced checks only. A PASS is bounded by each scope field; broader live/semantic gates are listed separately in the evidence index.",
+  "final_regression": {
+    "status": "PASS",
+    "passed": 4268,
+    "skipped": 150,
+    "failed": 0,
+    "warning": 1,
+    "seconds": 1383.89,
+    "source_files_unchanged": 804,
+    "receipt": "release-final/full-regression.txt"
+  }
+}

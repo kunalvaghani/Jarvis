@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-23T20:30:29.603421+00:00",
+  "mode": "advisory",
+  "scope": "Actual bounded SkillMemory selection, command parser and Coder atomic edits of owned temporary files. Model output is a stub; no acoustic, real-model, VRAM or account benchmark.",
+  "skill_selection_median_ms": 4.370249997009523,
+  "command_parse_median_ms": 5.623599998216378,
+  "coding_task_median_ms": 114.32020000211196,
+  "coding_samples_ms": [
+    152.30829999927664,
+    85.00320000166539,
+    94.48629999678815,
+    119.03589999565156,
+    114.32020000211196
+  ],
+  "model_calls_per_task": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "selected_skills": [
+    {
+      "goal": "Open Notepad",
+      "skills": [
+        "app-navigation"
+      ]
+    },
+    {
+      "goal": "Fix the YouTube connector",
+      "skills": [
+        "karpathy-guidelines",
+        "youtube-media"
+      ]
+    },
+    {
+      "goal": "Refactor the Python parser",
+      "skills": [
+        "karpathy-guidelines",
+        "project-coding"
+      ]
+    },
+    {
+      "goal": "Create a Blender scene",
+      "skills": [
+        "blender-modeling"
+      ]
+    }
+  ],
+  "prompt_context_characters": [
+    2624,
+    5213,
+    7453,
+    3355
+  ],
+  "cases": [
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    },
+    {
+      "target_matches": true,
+      "unrelated_unchanged": true,
+      "claims_functional_verification": false
+    }
+  ],
+  "verified_fixture_outputs": 5,
+  "vram": "No inference in this fixture; GPU allocation not measured",
+  "ram_rss_before_mb": 25.8984375,
+  "ram_rss_after_mb": 41.77734375,
+  "ram_scope": "Process RSS samples, including imports/catalog/coder work; not peak or isolated engine allocation"
+}

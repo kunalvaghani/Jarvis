@@ -1,0 +1,8 @@
+{
+  "scope": "Review of preserved first live attempt; receipt is unchanged.",
+  "verified_tasks": 1,
+  "original_completed_field": 0,
+  "calls": 4,
+  "failure": "Second goal asked an unnecessary reliability clarification despite explicit return-value requirements. Fixed with a new policy regression; fresh fixture rerun is separate.",
+  "counter_note": "Initial harness wrote aggregate completed only on both-goal success. Per-goal counters now persist for partial attempts."
+}

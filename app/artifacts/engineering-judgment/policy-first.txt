@@ -1,0 +1,17 @@
+................................F.........................               [100%]
+================================== FAILURES ===================================
+_______ test_scope_boundaries_are_independent_of_guidance[.git/config] ________
+
+project = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-864/test_scope_boundaries_are_inde1/project')
+name = '.git/config'
+
+    @pytest.mark.parametrize('name', ['../outside.py', '.git/config', 'D:/other/secret.py'])
+    def test_scope_boundaries_are_independent_of_guidance(project, name):
+        guard = ChangeScopeGuardian(project)
+>       with pytest.raises((ValueError, OSError)):
+E       Failed: DID NOT RAISE any of (<class 'ValueError'>, <class 'OSError'>)
+
+tests\test_engineering_judgment.py:120: Failed
+=========================== short test summary info ===========================
+FAILED tests/test_engineering_judgment.py::test_scope_boundaries_are_independent_of_guidance[.git/config]
+1 failed, 57 passed in 3.78s

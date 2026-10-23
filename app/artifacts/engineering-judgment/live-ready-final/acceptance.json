@@ -1,0 +1,904 @@
+{
+  "started_at": "2026-10-23T20:23:38.017128+00:00",
+  "passed": true,
+  "mode": "enforced",
+  "source_before": {
+    "scripts\\verification\\verify_engineering_judgment.py": "d2ed1d2851e95837a0856e3d3c8ec222ab5b8cf0327460798a6b5a1d7103ffdc",
+    "jarvis\\ability_runner.py": "627c85f101a22c0449d67d8ae8659aec99da64b7bbd52935772e3ff415827cf2",
+    "jarvis\\actions.py": "34ff3024132eaf27799a2d79a7888d18ad0cdf7a99f87e126b23da9328466b07",
+    "jarvis\\adaptive_planning.py": "5b2d9e589830c5023bbb445d3745c8a819dbf28a7800dd8155180a4316cdbf56",
+    "jarvis\\agent_cli.py": "bef785b79ea434ea713652ecc4b18c4e447d57311db3de9757098f497ab9b5ba",
+    "jarvis\\agent_context.py": "8baaf319b634f963fc4cf79c7b46eb24d97103fa7a405b0fbb9fe996b1824c0e",
+    "jarvis\\agent_events.py": "f4d77efb0fea212bbebb606223b3cc831adcbb84722d84e7b5065f283ebd56a9",
+    "jarvis\\agent_session.py": "633e5027ac59faccd20e257a113066eea3772f095044d677409a23552b50f4ab",
+    "jarvis\\agent_tools.py": "bc094bc66df3b2e87860333f4fefb712de25b73b3715d639f597dd6b235cfd8b",
+    "jarvis\\anticipation.py": "c4fbb4f49c887f35f9254177d3f2bdabd99ae8113cf910511d8c3e907dbcdc25",
+    "jarvis\\anticipation_worker.py": "71d681b50ba64cf7de1d65cad3cbb3c6ad6cecc8053fca3a838eacafba3f7fc3",
+    "jarvis\\application_discovery.py": "b4baf7b911dbc320d81a9def626798be22f59062e94ac237f0c4d84e2c61fc61",
+    "jarvis\\approval_receipt.py": "4b7e7db71ba5725b0619be33f50f6e7b34bf5a4eeef8226a38991a6ee738a33c",
+    "jarvis\\app_adapters.py": "65a4d7cfd85af27383f445fb74b493e5ad1edff4203182b235d7dcce7f631efa",
+    "jarvis\\app_knowledge.py": "d20f195f90d19ab1f46a36dc0ab15571448aeed61f68d484045d08d7628fa622",
+    "jarvis\\audio.py": "0415b1d9228c07855eae5ae0c52310f2f013d0a2035047b9c7fb429fd19cea7c",
+    "jarvis\\autoresearch.py": "483e460b3945826667cdb6b237fae08c646c24f5ee292629cbf1b669e1c38247",
+    "jarvis\\awareness.py": "79521cb388d26b42c6777a2c6b8423728c6d88eac23d179b69757425d1f89dfb",
+    "jarvis\\awareness_model.py": "53f1dcbf2bfd8287d2a635aa016728e84c985f32dec09333d380250fc3e50172",
+    "jarvis\\awareness_policy.py": "0f02f7c687253ca22ee5862719ce3eb61b5db2b0b32af951dfdf39c8c666759c",
+    "jarvis\\awareness_reasoning.py": "bd1f72c817f115c9ec0fe627a4704f600feb99702d4abc6cc7366e8e09e32410",
+    "jarvis\\azr_dataset.py": "51ca61383f90e88d9a769345eeba196495b4a274b426cd6ffbf330c664680585",
+    "jarvis\\azr_proposer.py": "2ed9153e83b652e2edf3b70e484b001227d6ae382c398d3186aae6801c09726e",
+    "jarvis\\azr_reward.py": "84946064bf930837c0d5833e9efb7ce3397dd57f5197f486dbf69e23b660e223",
+    "jarvis\\azr_sandbox.py": "8f86488034a1f0ce1302e845e75398e06d11b52f775787c3fac1214f6b826340",
+    "jarvis\\azr_tasks.py": "7862b492964de7a43af538809993465adb4686d1cae11482ab0112925f223481",
+    "jarvis\\blender_host.py": "9b477a8e84f77d573e1f00278c26ab1aa4852dea24cc46c6aa8cfccb0e3edfa9",
+    "jarvis\\blender_installation.py": "6a0aab80c1a61cb2228b3caae2551a26d0f685deddbcfa99b548e4169cee3074",
+    "jarvis\\blender_jobs.py": "eba55cd59c05e9c5146c75ec1239b9acac223fb883edf3b6269bfc9971847894",
+    "jarvis\\brain.py": "b575c85f6b5a8cfdaba918b04ad60453e40712e565ef0f8329273d66e93fe073",
+    "jarvis\\brain_worker.py": "c15a81e7575b28c90088caf36714e6b73cc49cb873ae79c0c05b27e58ff4bef0",
+    "jarvis\\browser.py": "840373a60a7a359bcf331f0011ff6b3eab25faf86462ac25a0c318ab188431bc",
+    "jarvis\\browser_automation.py": "53296e005256bb7959297caeebe69974832363298b6d0e9eeaa0d533d21d5532",
+    "jarvis\\browser_cursor.py": "a4553ced83a8a62f1b4da918bf0a27b7a808fc9894d56638674c5fc565bea9bc",
+    "jarvis\\browser_worker.py": "eef80f4ab1f5fdf30b82827ddda7c985ba537bb3042ac5097f3000556549bcf6",
+    "jarvis\\buddy_engine.py": "df345dc6c6ad688f6d9c0d5cc3c4dbfa47e2d307d49d6376aa2d6cf5ad50f36e",
+    "jarvis\\capabilities.py": "b4fc7850f377b4c9327a23de08e2b3d3f3c67937c9d32b1b59f45970a56e5c80",
+    "jarvis\\capability_guide.py": "b52c24067a642c2989707ae9637e0723f4f78a8a6f3c61ad1d58a388c650c8ea",
+    "jarvis\\capability_model.py": "6bc55f003bd11a6650a1c52f3f1b0fc9e15bc16dc319e5829e934b12d42fa1e6",
+    "jarvis\\catalog.py": "69c5faeb9526c4b694b3cfb1587e4bd54997f8e4b0d36b0358c1b70059b8af68",
+    "jarvis\\checkpoint_io.py": "88374cf913d63b5e8aad9028a2fce7bfc0069482c36a1543ac1413d07d4f74ad",
+    "jarvis\\clarification.py": "a0ebd2f1021029933eebde8214153b426a20cbc9993f766dba625fc33d93c859",
+    "jarvis\\claude_code.py": "011ca2c85f9a028fa40ef35d0d864ef61709f4b3203080736a4feeb46e08b1d1",
+    "jarvis\\claude_code_guard.py": "2cfd02dc32cde1a1d3c30fd1ee2dddaec9c8267668cbce8bb562679a3e313415",
+    "jarvis\\claude_code_permissions.py": "c0c0e329b3827ba01765bf825f5afd56cf68a4818b4258e67b6b137d04410957",
+    "jarvis\\claude_code_proxy.py": "a19c4c29095728ff3817097dd4c2e129219c2edfd5bf2bcd265724b22d67f97d",
+    "jarvis\\cloud_architect.py": "ab88cd5ffed75d3a967e345781219f308b41b99d6aab77f637ac91cffc519ff3",
+    "jarvis\\cloud_cli.py": "a71b5096e2a032266c3eb7e6531b33ad739efa5a5391dfe800b61ce20784a7d3",
+    "jarvis\\cloud_policy.py": "10f056d2369085c9f2722ffbd66227e88874c2bd2807226bd692d66f3b58a9d1",
+    "jarvis\\cloud_quota.py": "4f5aa42edb8f16f12a3907ad754218185020f2c95b245ada98bd279708dc449f",
+    "jarvis\\coder.py": "87234af6909f927780061fe7d106a6bd5ea0ca1f0c668d3800c5ed382ac7abf3",
+    "jarvis\\codex_browser_check.py": "53659bdbfb9e5e460b5d09cfa0249a3269d115a31bc50603226c54e7f57312d6",
+    "jarvis\\codex_code.py": "9428c8604b28ba53479e9beb6560c05ff3b016f7f817343115032e1391af181b",
+    "jarvis\\codex_files.py": "64f990d5e2f46e90f891d54b0b44defb40f6d06ef9a6c811625c9f005d444f8c",
+    "jarvis\\codex_proxy.py": "cfcfface2632afeee2a015e97c1798d6151680724fd44fd09aa2559020a5c0a0",
+    "jarvis\\codex_validation.py": "012dd0b1ebd270a4c6b1b04d87b39b00d8a54b0f1e2243ead08c2f2e206c882a",
+    "jarvis\\codex_workload.py": "fe5e940d5344376442394bb990bc8eb8cfcc00dad09209813b1ed8b1922d85c3",
+    "jarvis\\code_context.py": "9b4eee4d50ff2dd3ab9abb3ba0d6d7cd7aa4d585d45c07553f6a9064448007ce",
+    "jarvis\\code_stream.py": "a4872a7e205857240eda1850429ba1381309225df11480788b80b7e201486aa2",
+    "jarvis\\coding_activity.py": "f7baade664239b0f833f40ec68d681dcbd8c1e30259175b005a09f3e32274bb1",
+    "jarvis\\coding_console.py": "5c51ace7f880e5e34bb63c9f2c4fecf6d11363d72c2a440f33cd953c333fdc93",
+    "jarvis\\coding_curriculum.py": "e07665dfa6446218b46be8052649bd7b0a27da13842c756a1ee50088fff34924",
+    "jarvis\\coding_files.py": "669e14381a466d9fa0297d54e2e2b8e1fe8343269527296330e6121075856754",
+    "jarvis\\coding_languages.py": "b4e1dd94ce8b25d8ee3abddc8e9af532e530e85f13dae1d253b15589d0ca656d",
+    "jarvis\\coding_lessons.py": "e92dfb29789f7d13278baeb3776574b54ce6232dfa29ff326c8eda7159a41dea",
+    "jarvis\\coding_operations.py": "308cb76777afc39e6c7fc090f19d957bfa6191bf6562d51fd0b51ce6e0996bd8",
+    "jarvis\\coding_processes.py": "eb087827b8a1bdf413cf8c837baa4948091ff7e823f1e712f72b98f5a5546eb4",
+    "jarvis\\coding_programs.py": "737e1c31c31082610122d8c7bf822b08a845e5b31a8bd65d1c7d90c2b4ba8138",
+    "jarvis\\coding_training_data.py": "99fead037281aa34e3242ab9516f5bf66e2d5ba9bfe3b66d8c62490bdeb0c626",
+    "jarvis\\cognition.py": "6b46bc45ba12707666e5b577751f1fe858830cbd2ddace9e92601a54f075d445",
+    "jarvis\\commands.py": "10b3ac53439140a94834158cdfe1ab5ab72ac39159346cca222085c49f664ad7",
+    "jarvis\\command_cleanup.py": "403470847d3158e3a1141e192161d4a665f63b47e2002fe54fdbdff15125187f",
+    "jarvis\\command_reference.py": "0a0fc2c8d01ecb8e89d36effff075def1c3ee596ef5d2370be8351163afede48",
+    "jarvis\\config_contract.py": "64701e5bb95efc065ada285ee3cab565bede0a79d259bfe50361ebde9f184ec9",
+    "jarvis\\context_hub.py": "ba849d95fd3077cbfdf28e0d3f0c7e766f708c46e667a34464c1817144842991",
+    "jarvis\\context_selector.py": "e9c406b218b346b7c0aa3039d0c582ef9d2a9d35307dbfdc18994c516abb79c0",
+    "jarvis\\conversation_intent.py": "418cf384d167090ed33fe6e097aa5e0793db44282aaf9cedf6cdfb42ff5ad5b3",
+    "jarvis\\conversation_memory.py": "9a0bfe5f35ad7007a0f70e4911ac9a43d201216294e648f876cf3a8753bb34c1",
+    "jarvis\\dag_execution.py": "20f68252fc5075c157b19da41c4e9c72d35bcd1d987aa5824af8af597d570ab9",
+    "jarvis\\deerflow.py": "750faa8e334fabfa1d2e66053b579f827152cfd745e74c74c0b429aae412f6d0",
+    "jarvis\\deerflow_cli.py": "d78fca1a1e52ca84e2dda0b6f46d773ffb414bf6e87b425e562f97987db3ab0a",
+    "jarvis\\deerflow_media.py": "8373cecdf3e7b8cacbb74b366e60db7bdf7047a4fe8ee13839e85dc54d0ba134",
+    "jarvis\\deerflow_media_runner.py": "473e7d164c67d49e3cc9bc47818ca5c6c799663ab22d27f680ed47977578d9dc",
+    "jarvis\\deerflow_model.py": "8c7521008172d1c51078063732d8457e19b5dbf41a0d775858b4a07ad88289c4",
+    "jarvis\\deerflow_sandbox.py": "dac065f2a2b7a04a1cf3045cdeae0fba6cb16d19b4a97c450b46883d6d9b4c35",
+    "jarvis\\deerflow_worker.py": "e2b23867c855df554ef07911df7e568ce322745e2b125eb7b2894d3e52021a36",
+    "jarvis\\deliberation.py": "cefb0e74473f2bdb9f01c0363bf5c0a2c0b93bcca9753a73085bfc097ab57d9d",
+    "jarvis\\demonstration.py": "6d1fdc5ec8e0b05293ea05ec619c49fca1186132dd1c35ce42c86a2705300237",
+    "jarvis\\desktop_actions.py": "27d4381d8778afff2fd5bde3a8ae7010f22ebbe9d64a87712b211cc2935f2930",
+    "jarvis\\desktop_tasks.py": "3afdb03c595964905e3afeb492d34b8717a6baa2b56ba375a31a6a06b92ae90d",
+    "jarvis\\development.py": "2f8640252f25190753e7081a0d1340a035fe16f74d7a8487e19484be8042b5bd",
+    "jarvis\\development_api.py": "ce548477ee34aa441b58487da28df315a334772327899fc6497ee371cf485f90",
+    "jarvis\\development_browser.py": "f67306f92e1656fb92828100829ec99dd83971327a005cf9a930ea4fc47a3381",
+    "jarvis\\development_design.py": "652ae7a30640cb0c7fd3afa9b57ec9a7f8041dbb3fd17c0108330a1b43a0bac5",
+    "jarvis\\development_knowledge.py": "d07a7d2888e7a0a30e4aaee787e57aecdb0d2cae92b33ae61c8bc4ad9a6129f5",
+    "jarvis\\development_learning.py": "49d53ebd5a01e80845f04b5ab05a90835bc8e0b4cc041ed24f6e7a6526751c46",
+    "jarvis\\development_native.py": "1c93c48e38334ead108c93d434aad6e5c1b51808d1550b65901e15d9645eb90a",
+    "jarvis\\development_projects.py": "6aada3298387c23fc55e9f50077443801ce7f0e77e4eee0b5b77348e6985f8f4",
+    "jarvis\\development_tools.py": "f2eb3c6c8d5946f385737f8303d359d23d695bb27691835f0a1fc4e12ec936a2",
+    "jarvis\\diagnostics.py": "165d6eb538219993f9960255a52e0fdf3097fe76a6b05dc652b5116bd53b88d4",
+    "jarvis\\direct_execution.py": "8766f5246f8ff7ff37829705fe96bdcef469b2fee97e88e64c41cd41fda45d06",
+    "jarvis\\display.py": "3f97d27164aacd7a32685ff8adf15967445cf2b2ecb61c54b234d4b8cc5c3584",
+    "jarvis\\docker_runtime.py": "83751d5eecf7fa6d46ac50a701252bae7bab995372eef615ef645efcd4c18938",
+    "jarvis\\documents.py": "3a56ddf83a485380041d3335ed36ef4647ce75be6ed56722aa7751f04da99b39",
+    "jarvis\\document_worker.py": "2820429aaf561771752394ac0b3e00fe9945a5bb3d4b34fa2d4b4b75872ffc67",
+    "jarvis\\engine.py": "9bef84455b89fa4ab140253fd20fda459c48f9565aefafb6217aff0f8d1ba308",
+    "jarvis\\engineering_judgment.py": "31265667a8aef8495028b6d3f4fcf5d83cb417ccb34886cb6b19c6273cfbd316",
+    "jarvis\\everyday_runtime.py": "dce498ae0158945b2e8cbe99091de3f84b49a087ed3aba3e286492cc6e481787",
+    "jarvis\\evolution_archive.py": "40369f17310af02cdb464b8a97d2fce25e611ff34f3cfd7750b89857edfddcb9",
+    "jarvis\\evolution_lab.py": "d970c57072b3df0b552e6f3d26c0c4ee37f59fe725b5328b997a7905f76fce51",
+    "jarvis\\evolution_promotion.py": "a70e13f22e9501bfcffd2ef0d00916cbdcf1eabb6db267abc99d2418e21d37e6",
+    "jarvis\\evolution_surfaces.py": "162462ec9e86a200339c43f5a9be015a65847ae4cf80e57c571071ae011fc90c",
+    "jarvis\\execution_adapters.py": "0bb2dd65f16e74627e8ac3d313bbc5e5486db09eb08fdee773e607570c4e280c",
+    "jarvis\\execution_contracts.py": "6376d677f87fa865ea2adea300229c21e4810792baf1d1381df5600f6894271b",
+    "jarvis\\execution_router.py": "6d3b9aec0ce6fe5e2afe5830fcaf8686112522950cd088988b97fe0605e1c6b9",
+    "jarvis\\execution_strategy.py": "24f169f0d35280ed0c39ddcfec12042cf711aed8ffc15379be3c367a42e0e43d",
+    "jarvis\\experience.py": "33e40b51574789a1d76a2543a8f18a6bb50906f82d725c912f3eafa385126001",
+    "jarvis\\experience_memory.py": "fcf9111ab9fc9da3dd1da993221bb95655fe8c4b380dfa2a2c622d262be4ca78",
+    "jarvis\\exploration.py": "5ee0e89466a2966aedf1e52843f0636a15a4fdd0c6e76029e1c6d58495ce02d6",
+    "jarvis\\f5_speech.py": "ffb3597dd1be3f0146fb60e3a07c3c56a29c0da5708ea7765453040d61977e0e",
+    "jarvis\\fast_workflows.py": "9f95c0af8ed0bdd1a9e4ac414d74a2043dd168cf62734baa6312a45e7895385a",
+    "jarvis\\file_drop.py": "10fc9d9307561c58c1b253b89bd3e879fee709c526638c1957abf391dcc4017c",
+    "jarvis\\firecrawl_tools.py": "aa29adff8301764b7151794425c885743cd94ac3e05bd996613874041e386747",
+    "jarvis\\folder_lookup.py": "0b60d3e107f2790975af901198dd25fedeaf7fd207d038dbe71ab91617d0e012",
+    "jarvis\\glass_ui.py": "45cb224cd6109052adc348662a15f4f1287f25a032e4d4e62fe8984ab649343b",
+    "jarvis\\gmail_api.py": "a36498e7dc60063c9b96d84a26ff8314c7e704380be68ca4491b0a303b978b3d",
+    "jarvis\\gmail_bridge.py": "1bbe811e24754d420953c076fa94d79e8a7d8fbcedf0330201a1e2baa815b321",
+    "jarvis\\gmail_chrome_worker.py": "81524392faaf98b1144a04dd176ade805116d51dd406a75a285891dbffa3d67a",
+    "jarvis\\gmail_workflows.py": "b3d3ed0a7a558539fc4dd9559d24a2da02ba8c974d449fb1dbfb5101db3f0c1c",
+    "jarvis\\gmail_writes.py": "bcff0efc755210d5a0458bc41a26a8e48ea1880f3732c3ebc4c68e8e534afefd",
+    "jarvis\\gods_eye.py": "e512cfd897d51af728251d4cfdc845b47f2e79984284d3d0e6448e28bbead5e4",
+    "jarvis\\gods_eye_cameras.py": "f15977af148bef14a92e92d05d4a0410772ce87eb7fed22da519b583772c76b5",
+    "jarvis\\gods_eye_update.py": "b4b9edb43f48ca49cc234f94a6ff7a50d4722d764e549c36d76f79dd631a5a25",
+    "jarvis\\gods_eye_view.py": "154de7748571c3349a48e257479095c8a5141854c16bbcdd2826dbede4ee3e34",
+    "jarvis\\gpu_scheduler.py": "c505c35f9f08fc78635eccd46ceaa06a263d931d28438252389aaf7e5c6f85b0",
+    "jarvis\\groq_adapter.py": "2f9354c2a83790b7f345746b1000dcab9bacefd3c9e074c2046674172074a51f",
+    "jarvis\\grounding.py": "e88074db133eecf68bd068d88e4a15bd56635771be71d769dfad2a31c79aae41",
+    "jarvis\\gui_contract.py": "742672b9dba66435efe83a077de048b530ed727c574d750b2bb2b81c675700fd",
+    "jarvis\\harness.py": "d5db908ca2833249b610a9d7205ac6030152e2781a9b149b3c534eea97cccf48",
+    "jarvis\\harness_process.py": "fe04882d3ba1d4dddde24c2c3f492603f559b6caf07862ba8ed4dc788520af72",
+    "jarvis\\harness_worker.py": "8619698f7fc6b87761c416b6108b404144446d25404efad58acfd94e5e29112c",
+    "jarvis\\hermes.py": "a4ab05b3636fc6237492ec2f982dd238aff6debf00de4e7e63651406caab0bc1",
+    "jarvis\\hermes_ollama.py": "44d80cc663842fbc78022375d33ac3a77a411a5781f5da8fd077e93670405dec",
+    "jarvis\\hermes_skills.py": "4f7327016a9beefa8faec4157def87037039de16f6526d173144b150d1a9bb28",
+    "jarvis\\hermes_worker.py": "70ba7a2e2470fd5f252625a4e17a872e26b1053c8bfa2997f6a5e4bc4023675f",
+    "jarvis\\hierarchical.py": "32eeb973accac5423a4abde560744257e999d011f92ccfa1ec41e86992243c97",
+    "jarvis\\hud.py": "527c54183e6aa6953c8cd4bb9b845faad989f6bba7ede671fa21ecb6f05bdcaa",
+    "jarvis\\hybrid_inference.py": "27490ffb0a4e6c95fcbe63b7327fa4236cb2b0362cac0566dcf321c0a7d5ea77",
+    "jarvis\\independent_cursor.py": "a6bd230d17fd32e91975c62e5b574c30e27564bbe4ac0233a4c86fab9cf47a96",
+    "jarvis\\inference_limits.py": "9f5fd9ca3646acda57c0eb86fa15d5e45842a5bfa50b563e4128f79e74d4afa4",
+    "jarvis\\intent_catalog.py": "cfcff9c3d0883ab8d6360b06ad32344b5c33b7ba42347b67f12d421cef3ca413",
+    "jarvis\\intent_handlers.py": "b45b2957d15b1ab493ce3098593f0e621fac559c0ca3b34d3d55e9a9faaab1ce",
+    "jarvis\\interface.py": "59a3e7a78b5063f2b7ea5b291fc73da7157e821966118ff06765792b644e0933",
+    "jarvis\\island.py": "6cf7054004cb292a43209829575232aca74aaf10745e361e3912f75a7d98d328",
+    "jarvis\\island_artwork.py": "5aacfca7878737cfe538e9504366f05dd18f25db4a6fd22f9b04304aebe35751",
+    "jarvis\\island_buddy.py": "7a64bf261108c9f2343853b2593f2f6a243f1a115609ea636621b8300ecabe53",
+    "jarvis\\island_choices.py": "5b5dd0e91e27f82209d7f79afa3fd7b31fb29838862bd83d88d0f91d0de4b8ec",
+    "jarvis\\island_desk.py": "ca3ea9d314e040733376d89fa135f2cd02acb793031460cc6e6632f92181ff3e",
+    "jarvis\\island_games.py": "2cc6fa2f9dab1ce28f594fbed5ea311501db6ba61ae43ae9c37d94a7ec6e7d26",
+    "jarvis\\island_media.py": "74d00deab2662cf8768366cc8c47eaa527400c3a85ebfd3b57cf16ea6803af38",
+    "jarvis\\island_mind.py": "6c64a31add49990afd284cadedf01afea37f905c19154507799a880a67cd60c3",
+    "jarvis\\island_queue.py": "9b00fc14963d11414b2844383fd20ce63cd20b46757d4a2c4fcfffa305a3d421",
+    "jarvis\\island_surface.py": "42193a997c313ac822ce9d7937eb08e72c7dce213e9022b602130b47bc8ba068",
+    "jarvis\\jarvis_pointer.py": "5878b9a4291475a552ab50f0edf5d928f74caf834511a45bc6229d13c4aea9f1",
+    "jarvis\\knowledge.py": "f8c227d64e024380b623a308f7c175eea939d1ec9104d28a83fa76879cb13e48",
+    "jarvis\\knowledge_acquisition.py": "58029b2eccc63d73cea9016f76871e157631d675657461938fac9341d305ea88",
+    "jarvis\\knowledge_worker.py": "39a0b4746bbe901d28ac758cacfcc4e3b8621ec78264d0f969a7edf463de5c2b",
+    "jarvis\\kokoro_speech.py": "7ede67a84d5b6a5dc8e1c1b68c071e1be0903b393023efd1cf7f7d285acce53b",
+    "jarvis\\launcher.py": "6b638aacf1a42290ed03ba53421746cdb6dbbb2f902b1cc2d694d14b0e6df121",
+    "jarvis\\learning_memory.py": "0892709be600e4741742fa3988a4d57f6f28363bbdb414ef74a7ea67a6bfcacc",
+    "jarvis\\live_app_context.py": "e3159826442765d5d880d4d8a22f5ae33ff313176ef29ba8b6323d37076d5aaf",
+    "jarvis\\local_embeddings.py": "9966cb3c66eabd1663891b68c1adea9c6e6da6435f0d7f881caf49354ef84565",
+    "jarvis\\mcp_bridge.py": "20fd2aaa60c1844d40db411cdb129cb9d311b324dacc1fd617ff0c423c866aeb",
+    "jarvis\\mcp_contract.py": "e4bfd1dd21035df432c5f7c516e6a3fd28fc74029ea7fe0f18388a3edde03215",
+    "jarvis\\mcp_persistent.py": "479bac3f31da472fedeb85c50dd4312d95a61be7259a2de2a13211ea6f1b43c0",
+    "jarvis\\mcp_synthesis.py": "429d1c06ac17514c5e923f0cc3fc184cb889237b3e1cf75f1c0aa7a6dd183ce3",
+    "jarvis\\media_commands.py": "5b4b2ec8e38405f10cc98b559eda402056924a887ed259f350b84dfa2cd09f79",
+    "jarvis\\media_player.py": "b5e6570b4f5aa392dd5bcb75d5b54189218a5dfc2d2379b71fa25dbbadf07a64",
+    "jarvis\\media_ui.py": "693c37927bb2bfdc26fd22ec6d4ace9c38952e4d750f482a7c3d38aaff21a077",
+    "jarvis\\memory_curator.py": "1a91c759efba89338a8fb6d009aa50d4d46b0135eb7ce246b730130b02ff8cbb",
+    "jarvis\\memory_index.py": "2ee8eaa0e099aece9e1551b40d100f8b9a6857b3701cdb3ed1d040bae3415404",
+    "jarvis\\messengers.py": "0a7b6e0dcdb8a904afde02ff72ebb47fc7019bec7465479ce24c192f54da6281",
+    "jarvis\\model_performance.py": "dd8fa7b12efdc0a61dc867111aebaf79b553a977b51cf99be19a42f3ff4d3411",
+    "jarvis\\model_recovery.py": "2ce83063b646aa1ab691df3baacb0f2bd0fd3c5b943168dddb002248be2ecf08",
+    "jarvis\\model_registry.py": "16fcac19b7dbc3a730277fd09eb5b1612e880565feb1cf4b03dcc43e647571a7",
+    "jarvis\\model_selection.py": "345e1a715912a124e4825e9b238493268539b3c5af9e91add977ba0d3a1817fa",
+    "jarvis\\names.py": "52d684c45b03c29c5aa9278d659454205494a09e3020cba7980f6f44a83e4c0f",
+    "jarvis\\native_coding.py": "ea0681bb1eb472e6b852e501af5f0180c04248f58acf6709c5a6ba7e6c29baa3",
+    "jarvis\\native_tools.py": "29f4a13c8d261c536e360e4d7d8496d4fb23d78abc87323a13681ec65eec8b26",
+    "jarvis\\natural_conversation.py": "7c2b6bae966a61099cad958456bc474b5a8be3c4a4dee1a62ae024a6b21d72b5",
+    "jarvis\\natural_voice.py": "a54328ef96a1487313c27b6de917d26ef94258458db174651a8c6498c6144772",
+    "jarvis\\notch_widgets.py": "870b25b1fe899aa744516a2baf1de68a740baf33ae2face0bcdd07728c8dbd65",
+    "jarvis\\obsidian_memory.py": "0a8a9a15ba5f8ced2868a6d424a255c18ed1bf30f301144c5ce802f36ee25863",
+    "jarvis\\office_com_worker.py": "ac5173bae9c3ee8318ad2c2808d862989217dc675ea0600a7267439c7462f594",
+    "jarvis\\ollama_models.py": "8bfbfd8820192d4237e93529af963378c8ce4a688febb5624c62135b245614c8",
+    "jarvis\\paths.py": "669cc10a79a2f140747656e4e48e6d8f7bf014320b205f95b8883e66e6ff9c80",
+    "jarvis\\pcm_ring.py": "0e3fd6414c066814a5c1313fb631c9dceef18a16265b006fc1b196ccb58954ac",
+    "jarvis\\pc_context.py": "464770e3a55a7db15c334a615da4badf8d141714262e3780b64c8df2ffd604e2",
+    "jarvis\\phrasing.py": "e0e09258adea9cb21731d10cd2c6949c231a40e8b73e1cdd1700a63b6e1cbedf",
+    "jarvis\\piper_speech.py": "9931fd246c5d9c7cb541c8ab983d92aa326d0b44e136aaa39c1a1083c4fc1042",
+    "jarvis\\planner_settings.py": "dae5aa01e902bce48bb30614c9f99b6588076275fd094a61d7144f7750441696",
+    "jarvis\\polyglot_training_data.py": "4692572302cb02531133e05fe35f528b5545c366ea68716ea7637d44e5823e9a",
+    "jarvis\\progress.py": "67c7a4d65b072a1b47b1f598f51240b39f23990f1bb12b558dda95183aabfb22",
+    "jarvis\\projects.py": "09f6e89a8ee2c2b7a6551aac2f3eaada6f31c10bb99b4f611247b3399f27c35b",
+    "jarvis\\project_intel.py": "fa2413fc5f1506b692d01070c52311fc3d84bf22504e597345ff6318c08a2a33",
+    "jarvis\\project_model.py": "6ac3d06630a032ab2dc783cdd3c46ec30fa1e8b51e6589b4af0110a0a243a1d7",
+    "jarvis\\project_requirements.py": "1b262ce475b772c16f5cf7e5062e79653c3f3c4225a77ce89f27dc382a9d59b6",
+    "jarvis\\prompt_evolution.py": "6eecfb77964431c491e197f6dbbc2d5bcf48381037452c8950f4839953fc3770",
+    "jarvis\\prompt_router.py": "96a09d23f349f9517f3bbc0e202c251a92d5a2e89df6747ea9be415a4750ac3f",
+    "jarvis\\provider_identity.py": "5f79bfa618bf7ad5779d497ed6fdc6f29c7a3148bb519913b02cbc762c065d46",
+    "jarvis\\push_to_write.py": "63a4a8bedd8588ca0f4bd5306455cddb87f489707ef8151653dd3056cee1326d",
+    "jarvis\\question_client.py": "f0fccba9b4ad04d8c2bd2e59a29610ad953269630a95b6322b5e789626740f29",
+    "jarvis\\quick_answers.py": "94df28f8deebce8b2fc5a3c4ccc730108bac26d9bfc9c9d76a0ba57c4c83a5bc",
+    "jarvis\\realtime.py": "de7cdb6b5ed07ab524c687b2ff8f7f28fd670aeaa0fa5680d08bb5e693783f0a",
+    "jarvis\\realtime_catalog.py": "2b05b32cb171a7f88b847b2fd3381090e6dbd0693f8e64ea9d0be75c4534d366",
+    "jarvis\\realtime_sources.py": "5396ec35ab51c3b07e6a90fc233101f2150e9d2be8c8ec1002c5fc7823e23865",
+    "jarvis\\reasoning_bank.py": "67c33848ebe6533d56193f7556858e5058b1e921524adc30a0ca8b6df87b93ba",
+    "jarvis\\rea_tools.py": "b1080dd87d88e81e9776b78241473d0c8cdaafae237803747d25f68e2b112375",
+    "jarvis\\recovery.py": "0010f00fe2ddb09a0ede3566cc70614cb987d093fa00c1c0316a5acb56f5417c",
+    "jarvis\\repair_authorization.py": "217846b1dd791a112c82194cc568322cda80c70513dc604259c568960eb1d130",
+    "jarvis\\repository_skills.py": "e3e8896b683badc17d2f605db8c281121994daa34c14bfe57906dcdd0a2a8db5",
+    "jarvis\\repo_abilities.py": "56889d3934f42adeaf7f1345f3616f7af31a8f7f170fc5cfd6b42184566f56f9",
+    "jarvis\\repo_acquisition.py": "be986b6b2f90d16478afc3584c12b0109b2866f0aa5be45b13dc1224c115ec75",
+    "jarvis\\repo_analysis.py": "a4aedd102ac8983ad12e749fb9a1c3e2cbc17d130fd8d1cb658747138234c3dc",
+    "jarvis\\repo_learning.py": "f3d1c5d9c11f35d0ddab0ae806b9c89473e3601ef36127079a7613bbd38c2b9b",
+    "jarvis\\repo_runtime_runner.py": "08dc807360e45dd6da43eb92e22ab350bedfc9565896322febe9d9317ce69aa0",
+    "jarvis\\repo_sandbox.py": "a6089c1944b228b4757ab97b8837c2cca1a30296682ff5823ad251d4d2706c97",
+    "jarvis\\repo_tools.py": "d4deb4f953ea6392468e48aae74da5eb2a1441bfda95019096c2466046d71a03",
+    "jarvis\\research_evidence.py": "359060bdfb462be5317160eca436fbc7bb5b26f671bfa96515d8e535b1a608e5",
+    "jarvis\\runtime_health.py": "c0178f238a933a2721a73542d043782a4f8b8be286fa3fbe383b35639e1829a5",
+    "jarvis\\screen_awareness.py": "cc145de90ef8eb241303613e8664d611dda031e6363008fe9af15bd19257ecca",
+    "jarvis\\screen_worker.py": "9a9fe4b1d84d8dc6445bc87134c5dcf901b1f2d6a989377df3578662cfe3a007",
+    "jarvis\\self_evolution.py": "16c083c84198fc5e22b292bb3c71086b4cea64ea4d48bf51b586c90bbf54443c",
+    "jarvis\\skill_evolution.py": "0d72735736b31b00dfa4f62bfa92e7250bec010a14a0d5a4d55b077468b57616",
+    "jarvis\\skill_memory.py": "8c1544c8bc159b9931d5a3d2f14508a685cdf79b1d05a5d673f2e7fe9a41967a",
+    "jarvis\\skill_store.py": "b28f5aad86ac21da16280b1bd13ddfb0d57d1e6ce4302cfef874041259beabbb",
+    "jarvis\\small_model.py": "bdf90a0f1a16a9ad5c80a63fe029315602c4ea7d1a6588669bc59456c6fe468c",
+    "jarvis\\speech.py": "f4a4b8b9f957be3574735e75fa5c28800579183a0fed53bb1801a0a6b22d9f98",
+    "jarvis\\speech_normalizer.py": "d2307722b8d0509b6c46679623d66bfb7d255ebd2f30fdbc75caec43e11307d6",
+    "jarvis\\spotify.py": "b311185f59767076483d0d648e6959b7662d7b687dca3a35b7158ef2fbf80ac2",
+    "jarvis\\spotify_host.py": "f417f266760af8879e2688f8d4c9f63288732399144be6e2ef60f18559fe84d5",
+    "jarvis\\step_planning.py": "2334841c73fb08b3580e213057c757ffb69d8913bf292e2f5f4bc48ad2f9c7ad",
+    "jarvis\\targeting.py": "c09799b13ee400424a92fb431a02495b65a197d27e1d6544f9bae061461d8828",
+    "jarvis\\task_decisions.py": "f6b75fe5345503a8833e7dada36125f0742203a1bf66392b416509e51abc506c",
+    "jarvis\\task_graph.py": "5fba6db493f0505f7ccad2fc10ebe08cc8075f2c776e96ac37a0174db60033c9",
+    "jarvis\\task_ingress.py": "15f68a75393f06f076e2448cd65fba5dc8406fcc295ae293fab9ee38091bff83",
+    "jarvis\\task_policy.py": "a48ef5c9f9308ff3a883bfede3778aa520e00cc7af6a345ab4aa16a965a0d4c7",
+    "jarvis\\task_queue.py": "a72bebc4e7b3f8b55b4f6b2e49b42d9853756bf6610580779fa8e561ad6c3e9e",
+    "jarvis\\task_recovery.py": "b2a5723ed071adbce40909fa2d169e3088ef1c424bee384486f63220fa71b65e",
+    "jarvis\\task_scheduler.py": "c6a1cad061d8588fbd80472b0ec8aee5bcb3dc1fe5d892e9efb2a1c9673a7a4d",
+    "jarvis\\task_state.py": "ad698c1264407b4feb1d076cfdcc11db1ad5eccc89f71390112dd93bb1a6292c",
+    "jarvis\\task_store.py": "ba72794100f42c0030c8580ef2f41acae1c72a483b03c45b7aaa7a76491d5f20",
+    "jarvis\\teacher_student.py": "0e3184ab4885aa89863a5e520e0265cf0ff8750a495b20cb2ad18d1f4a5b2c8d",
+    "jarvis\\technology_watch.py": "380d56bdfe5bbc857789a9acc453cfb0c53e8c7651c98925e4ca8af91473d856",
+    "jarvis\\toolkits.py": "c9055cd264f097aa668a76d3bb08252858c66f2a15977eeeb6f3c84e0f0181e0",
+    "jarvis\\tools.py": "ed96d9f5f843b3817d666e3964e9cc6629994207d723f0eadc3aeec103426d9b",
+    "jarvis\\tool_errors.py": "c7bef23e0314507db80056466caa502e6788a1b6688986249fa9ae3cd2e99045",
+    "jarvis\\trained_coder.py": "973df2a7a6fbe0a0910b5ad3dc523901c50e217264893bdcd1427cdd9aae8e59",
+    "jarvis\\trained_pc.py": "01667123847c22840d2bf5132df9b2ae5c58ef1b1bf28a873cf67d34c34b181a",
+    "jarvis\\ui_controls.py": "eb3e4e4b0223869896c74051906bdabe281d3a5f5254f5bd4158a3630d23a2f9",
+    "jarvis\\ui_events.py": "91fef1b9f99efd7bbb065d4e2ebe4fce5fb0bc2c21f5933d96c94bbf69a1c14d",
+    "jarvis\\ui_memory.py": "ca380dd605fedc39aaccb3885d7b9d09711e2c47e57e3420b947219c3e579452",
+    "jarvis\\ui_preview.py": "37a62a7ae8efbf1d3c37ad31738ffaa8e498199061fa4363f0899af13b8872c4",
+    "jarvis\\ui_transport.py": "828b4383c27de6c1a40783852d77ccaf5dfb4bc66b9f6c2f86503b4e388a767a",
+    "jarvis\\ui_worker.py": "ac6ff5f9f90f6a1192375204d81acdab10690f70edaed7ad874108ef2cf81da2",
+    "jarvis\\upstream_windows_patterns.py": "4f43c44023ec9319533d9ebfad00b89626a5ca7eb53d110e3d2c74f57e192bd9",
+    "jarvis\\utility_audio_worker.py": "4e4b0b5f7d2a95c481fa594c2999b54eb5fc02c2e35200a1f399bf7b776bd5ef",
+    "jarvis\\utility_container_runner.py": "d667ca069d8594d0f5d65b6b43660097b76b5c9e7272a8ecd292c6a119fcefd2",
+    "jarvis\\utility_core.py": "c6367b0e4802287b14335d2f901d98dc3f9f98274a5f03e8966daea3456cd826",
+    "jarvis\\utility_host.py": "a1cacc09dd5081dc5f5735f76b12d4baa15d7f6e1fef01543cab4ab2c140c09d",
+    "jarvis\\utility_isolation.py": "64351d2f8d6ad96d3ae9d658f63c51d8a959e9995836daef0e72f704d792d383",
+    "jarvis\\utility_profiles.py": "dff8c5905c5476714b8fd6db5a8cc6fb38908caae662ee295a5ff57470832005",
+    "jarvis\\utility_services.py": "536fe4273bdaad5412e4bc09cc54c2cb19fafa4adb9abfa726c9888c05b4f4b9",
+    "jarvis\\utility_service_transport.py": "cd279bb938f1b5aeb08f0281b11cd58cc13efc8dcc66ef74b8ab90dc307b441c",
+    "jarvis\\utility_tools.py": "d6b1320e90e603a69ddc8a2262cd5f2fb21028c1484e1b255eef6a39cb17be3b",
+    "jarvis\\utility_worker.py": "1a8740825a9b6f46a91c785b36487297e5f31bd0ac1c16c81fa116284a58c1f6",
+    "jarvis\\viking_memory.py": "6f866b7f60d560cdb263479a18ff32cd696ec6a32876f677735f585407de67e0",
+    "jarvis\\viking_worker.py": "c344b99d784aa637ba8aa039caa57b4aa1fa39ac2bccc48be2c91fb240fa65df",
+    "jarvis\\visual_fallback.py": "1bd6d22d98d86fa5bf1f8531080e362a3a920fc0c75aef844cd812534272ce8e",
+    "jarvis\\visual_worker.py": "9d2dddd7afc3c0abe6398094102d3fcc7bb1dee9c57a57b7e8a374231ddb7ef7",
+    "jarvis\\voice_input.py": "bfac6d2c19390e448312f0227578b431d0cb20e70df79feff2a1cb975d62da43",
+    "jarvis\\voice_registry.py": "25ab7bd3e3c370e82f83368fd5d32aa6cf9e806184df7aa0876b10cb63565e2b",
+    "jarvis\\voice_runtime.py": "7903e52e4dec741937790293fefd92c1b157dd58ea62a7aab5ae41f77d6c77e7",
+    "jarvis\\weather_units.py": "8b3752baf1b5c993d4695991a37518b816d8089e3e06a277dec095fa3116c8c5",
+    "jarvis\\weather_watch.py": "f5b1b494a345fcbdd172bcb5ee8a0957609708405cc383006573b43031a32454",
+    "jarvis\\whatsapp.py": "e6a93f51666eb0f769f37791297b7238a9d4efb528ed6ddec67f4878de8eb33b",
+    "jarvis\\whatsapp_writes.py": "3acdaff2e91befab58777da0a6f1b0bbd0159f4df3902e37a05e1efbb3c00712",
+    "jarvis\\whisper_backend.py": "edc5bfdacc875899d32560d49c7dd0dc60329058c5c64fd7ccb0f5ee7c8f4cb0",
+    "jarvis\\windows_commands.py": "8c3ce28b43c65c6b137b5bb1e3c0ff0655fd438bbd55949eac6fd94551d86825",
+    "jarvis\\windows_command_browser.py": "2c7abbd0618a6d41e92609883ac2862c470ecf38ca65e236d56cf960a3a21529",
+    "jarvis\\windows_command_desktop.py": "b0e9bd827e9c480f94dde4af2cba15b872cea6cc3a1ea6e42269b0b91eea7d1d",
+    "jarvis\\window_focus.py": "e8031309d57be99e9d30ce8e34a0240b2165d909cd0dbd45e6dc85def09f64bc",
+    "jarvis\\workflow_graph.py": "2b9e20c39dd7422dfd6760267b5d774300a0c0fedef51fb3a5e468f29939fbbe",
+    "jarvis\\writing.py": "539ddeb0f6798f5fddf576cbd2bcebe33f07014f0a948381b19c0038a05f7112",
+    "jarvis\\youtube_chrome.py": "a877c302005409757e7010473182a6febafda06a6a28ad3cb84627a371b929b4",
+    "jarvis\\__init__.py": "13d7892d81b8c39f453cb7ea5710dfde007ca7b9c7147adefc6955292fbdc712"
+  },
+  "scope": "Actual ScheduledQueue/SQLite DAG, existing native coding model and independent executable checks on an owned deliberately buggy local connector. Host freezes plans/tests and denies network, accounts, shell, installation and non-source tools. Not real YouTube/account, voice/UI or overnight acceptance.",
+  "model": "qwen3.5:9b",
+  "microphone_started": false,
+  "account_effects": false,
+  "tasks": [
+    {
+      "id": "3c93877bee3340d3b736b62d3900354b",
+      "goal_id": "500d268a5efeb3d172471a01",
+      "contract": {
+        "goal_id": "500d268a5efeb3d172471a01",
+        "parent_project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project",
+        "version": 1,
+        "objective": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+        "validation": {
+          "objective": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+          "requirements": [],
+          "assumptions": [
+            {
+              "text": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+              "category": "user_confirmed",
+              "source": "current request"
+            },
+            {
+              "text": "Selected project directory exists.",
+              "category": "verified_repository_fact",
+              "source": "Filesystem scope validation: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project"
+            }
+          ],
+          "missing": [],
+          "conflicts": [],
+          "clarification_value": 0.07,
+          "heuristic_not_probability": true,
+          "needs_clarification": false,
+          "safe_default": true,
+          "question": "",
+          "investigation": "Inspect existing facts and tests before asking for facts already present.",
+          "domain": "engineering"
+        },
+        "expected_artifacts": [
+          "youtube_connector.py"
+        ],
+        "required_behavior": [
+          "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py."
+        ],
+        "constraints": [],
+        "known_assumptions": [
+          {
+            "text": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+            "category": "user_confirmed",
+            "source": "current request"
+          },
+          {
+            "text": "Selected project directory exists.",
+            "category": "verified_repository_fact",
+            "source": "Filesystem scope validation: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project"
+          }
+        ],
+        "domain": "engineering",
+        "acceptance": [
+          {
+            "id": "behavior",
+            "verified": true,
+            "method": "existing validate_project executable checks",
+            "evidence": "{\"date\": \"2026-10-23T20:24:32.842519+00:00\", \"errors\": [], \"checks\": [{\"exit_code\": 0, \"output\": \"test_existing_url (test_core.Core) ... ok\\r\\ntest_missing_playlist (test_core.Core) ... ok\\r\\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 3 tests in 0.001s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.5, \"kind\": \"python_tests\", \"path\": \"test_core.py\"}], \"passed\": true, \"runtime_verified\": true, \"rejected_tools\": [], \"hashes\": {\"youtube_connector.py\": \"23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8\", \"test_core.py\": \"05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15\"}}",
+            "source_hashes": {}
+          },
+          {
+            "id": "scope",
+            "verified": true,
+            "method": "bounded file hash comparison",
+            "evidence": "{\"changed\": [\"youtube_connector.py\"], \"unexpected\": [], \"complete\": true, \"verified\": true, \"before_hashes\": {\"youtube_connector.py\": \"3daed3de7e8840f2ecdbb48fe4560fd4b76d47e8b42a44d21fd1138cb69eba82\"}, \"after_hashes\": {\"youtube_connector.py\": \"23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8\"}}",
+            "source_hashes": {}
+          },
+          {
+            "id": "regression",
+            "verified": true,
+            "method": "existing validate_project executable checks",
+            "evidence": "{\"date\": \"2026-10-23T20:24:32.842519+00:00\", \"errors\": [], \"checks\": [{\"exit_code\": 0, \"output\": \"test_existing_url (test_core.Core) ... ok\\r\\ntest_missing_playlist (test_core.Core) ... ok\\r\\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 3 tests in 0.001s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.5, \"kind\": \"python_tests\", \"path\": \"test_core.py\"}], \"passed\": true, \"runtime_verified\": true, \"rejected_tools\": [], \"hashes\": {\"youtube_connector.py\": \"23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8\", \"test_core.py\": \"05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15\"}}",
+            "source_hashes": {}
+          }
+        ],
+        "test_commands": [
+          "{'kind': 'python_tests', 'path': 'test_core.py'}"
+        ],
+        "required_permissions": "Existing tool/connector approvals; this contract grants none",
+        "state": "verified",
+        "decisions": [
+          {
+            "selected": {
+              "id": "extend-existing",
+              "cost": 3.0,
+              "reuse": true
+            },
+            "feasible": [
+              {
+                "id": "extend-existing",
+                "cost": 3.0,
+                "reuse": true
+              },
+              {
+                "id": "replace-implementation",
+                "cost": 12.0,
+                "reuse": false
+              }
+            ],
+            "rejected": [],
+            "reason": "Least configured cost among approaches satisfying every hard requirement",
+            "costs_are_heuristics": true,
+            "existing_source_evidence": [
+              "test_core.py",
+              "test_playlist.py",
+              "youtube_connector.py"
+            ],
+            "scope": "Advisory strategy comparison; coverage is a proposal, not acceptance evidence."
+          }
+        ],
+        "checks": [
+          {
+            "criterion": "behavior",
+            "passed": true,
+            "method": "existing validate_project executable checks"
+          },
+          {
+            "criterion": "regression",
+            "passed": true,
+            "method": "existing validate_project executable checks"
+          },
+          {
+            "criterion": "scope",
+            "passed": true,
+            "method": "bounded file hash comparison"
+          }
+        ],
+        "repairs": [],
+        "mode": "enforced",
+        "updated_at": 1792787073.46636,
+        "file_requirements": {
+          "youtube_connector.py": "Proposed implementation of active objective: Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the exi"
+        },
+        "change_reviews": [
+          {
+            "path": "youtube_connector.py",
+            "findings": [],
+            "diff_lines": 25,
+            "note": "Diff size is diagnostic only; imports may be intentional re-exports.",
+            "simplicity": {
+              "new_types": [],
+              "signals": [],
+              "necessary_complexity_may_apply": false,
+              "automatic_rejection": false
+            }
+          }
+        ],
+        "verified_sources": {
+          "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8",
+          "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15"
+        },
+        "scope": {
+          "changed": [
+            "youtube_connector.py"
+          ],
+          "unexpected": [],
+          "complete": true,
+          "verified": true,
+          "before_hashes": {
+            "youtube_connector.py": "3daed3de7e8840f2ecdbb48fe4560fd4b76d47e8b42a44d21fd1138cb69eba82"
+          },
+          "after_hashes": {
+            "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8"
+          }
+        }
+      },
+      "input_versions": [],
+      "validation": {
+        "date": "2026-10-23T20:24:32.842519+00:00",
+        "errors": [],
+        "checks": [
+          {
+            "exit_code": 0,
+            "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.001s\r\n\r\nOK\r\n",
+            "seconds": 0.5,
+            "kind": "python_tests",
+            "path": "test_core.py"
+          }
+        ],
+        "passed": true,
+        "runtime_verified": true,
+        "rejected_tools": [],
+        "hashes": {
+          "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8",
+          "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15"
+        }
+      },
+      "worker_review": ".jarvis-runtime\\native-code\\e18e42aea0904096b706340d5032c4f5"
+    },
+    {
+      "id": "ffcfa679f45d46b5a335354e1b00e62f",
+      "goal_id": "42114fb4c40ade3800219eb0",
+      "contract": {
+        "goal_id": "42114fb4c40ade3800219eb0",
+        "parent_project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project",
+        "version": 1,
+        "objective": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+        "validation": {
+          "objective": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+          "requirements": [],
+          "assumptions": [
+            {
+              "text": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+              "category": "user_confirmed",
+              "source": "current request"
+            },
+            {
+              "text": "Selected project directory exists.",
+              "category": "verified_repository_fact",
+              "source": "Filesystem scope validation: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project"
+            }
+          ],
+          "missing": [],
+          "conflicts": [],
+          "clarification_value": 0.07,
+          "heuristic_not_probability": true,
+          "needs_clarification": false,
+          "safe_default": true,
+          "question": "",
+          "investigation": "Inspect existing facts and tests before asking for facts already present.",
+          "domain": "engineering"
+        },
+        "expected_artifacts": [
+          "youtube_connector.py"
+        ],
+        "required_behavior": [
+          "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py."
+        ],
+        "constraints": [],
+        "known_assumptions": [
+          {
+            "text": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+            "category": "user_confirmed",
+            "source": "current request"
+          },
+          {
+            "text": "Selected project directory exists.",
+            "category": "verified_repository_fact",
+            "source": "Filesystem scope validation: D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project"
+          }
+        ],
+        "domain": "engineering",
+        "acceptance": [
+          {
+            "id": "behavior",
+            "verified": true,
+            "method": "existing validate_project executable checks",
+            "evidence": "{\"date\": \"2026-10-23T20:25:09.909776+00:00\", \"errors\": [], \"checks\": [{\"exit_code\": 0, \"output\": \"test_existing_url (test_core.Core) ... ok\\r\\ntest_missing_playlist (test_core.Core) ... ok\\r\\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 3 tests in 0.000s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.516, \"kind\": \"python_tests\", \"path\": \"test_core.py\"}, {\"exit_code\": 0, \"output\": \"test_missing_title (test_playlist.Playlist) ... ok\\r\\ntest_valid_title (test_playlist.Playlist) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 2 tests in 0.000s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.531, \"kind\": \"python_tests\", \"path\": \"test_playlist.py\"}], \"passed\": true, \"runtime_verified\": true, \"rejected_tools\": [], \"hashes\": {\"youtube_connector.py\": \"2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77\", \"test_core.py\": \"05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15\", \"test_playlist.py\": \"e98cdef196b40b9209e0279c0372a4e30254efa628cdbfc070562905f761648e\"}}",
+            "source_hashes": {}
+          },
+          {
+            "id": "scope",
+            "verified": true,
+            "method": "bounded file hash comparison",
+            "evidence": "{\"changed\": [\"youtube_connector.py\"], \"unexpected\": [], \"complete\": true, \"verified\": true, \"before_hashes\": {\"youtube_connector.py\": \"23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8\"}, \"after_hashes\": {\"youtube_connector.py\": \"2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77\"}}",
+            "source_hashes": {}
+          },
+          {
+            "id": "regression",
+            "verified": true,
+            "method": "existing validate_project executable checks",
+            "evidence": "{\"date\": \"2026-10-23T20:25:09.909776+00:00\", \"errors\": [], \"checks\": [{\"exit_code\": 0, \"output\": \"test_existing_url (test_core.Core) ... ok\\r\\ntest_missing_playlist (test_core.Core) ... ok\\r\\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 3 tests in 0.000s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.516, \"kind\": \"python_tests\", \"path\": \"test_core.py\"}, {\"exit_code\": 0, \"output\": \"test_missing_title (test_playlist.Playlist) ... ok\\r\\ntest_valid_title (test_playlist.Playlist) ... ok\\r\\n\\r\\n----------------------------------------------------------------------\\r\\nRan 2 tests in 0.000s\\r\\n\\r\\nOK\\r\\n\", \"seconds\": 0.531, \"kind\": \"python_tests\", \"path\": \"test_playlist.py\"}], \"passed\": true, \"runtime_verified\": true, \"rejected_tools\": [], \"hashes\": {\"youtube_connector.py\": \"2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77\", \"test_core.py\": \"05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15\", \"test_playlist.py\": \"e98cdef196b40b9209e0279c0372a4e30254efa628cdbfc070562905f761648e\"}}",
+            "source_hashes": {}
+          }
+        ],
+        "test_commands": [
+          "{'kind': 'python_tests', 'path': 'test_core.py'}",
+          "{'kind': 'python_tests', 'path': 'test_playlist.py'}"
+        ],
+        "required_permissions": "Existing tool/connector approvals; this contract grants none",
+        "state": "verified",
+        "decisions": [
+          {
+            "selected": {
+              "id": "extend-existing",
+              "cost": 3.0,
+              "reuse": true
+            },
+            "feasible": [
+              {
+                "id": "extend-existing",
+                "cost": 3.0,
+                "reuse": true
+              },
+              {
+                "id": "replace-implementation",
+                "cost": 12.0,
+                "reuse": false
+              }
+            ],
+            "rejected": [],
+            "reason": "Least configured cost among approaches satisfying every hard requirement",
+            "costs_are_heuristics": true,
+            "existing_source_evidence": [
+              "test_core.py",
+              "test_playlist.py",
+              "youtube_connector.py"
+            ],
+            "scope": "Advisory strategy comparison; coverage is a proposal, not acceptance evidence."
+          }
+        ],
+        "checks": [
+          {
+            "criterion": "behavior",
+            "passed": true,
+            "method": "existing validate_project executable checks"
+          },
+          {
+            "criterion": "regression",
+            "passed": true,
+            "method": "existing validate_project executable checks"
+          },
+          {
+            "criterion": "scope",
+            "passed": true,
+            "method": "bounded file hash comparison"
+          }
+        ],
+        "repairs": [],
+        "mode": "enforced",
+        "updated_at": 1792787111.124237,
+        "file_requirements": {
+          "youtube_connector.py": "Proposed implementation of active objective: Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py."
+        },
+        "change_reviews": [
+          {
+            "path": "youtube_connector.py",
+            "findings": [],
+            "diff_lines": 13,
+            "note": "Diff size is diagnostic only; imports may be intentional re-exports.",
+            "simplicity": {
+              "new_types": [],
+              "signals": [],
+              "necessary_complexity_may_apply": false,
+              "automatic_rejection": false
+            }
+          }
+        ],
+        "verified_sources": {
+          "youtube_connector.py": "2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77",
+          "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15",
+          "test_playlist.py": "e98cdef196b40b9209e0279c0372a4e30254efa628cdbfc070562905f761648e"
+        },
+        "scope": {
+          "changed": [
+            "youtube_connector.py"
+          ],
+          "unexpected": [],
+          "complete": true,
+          "verified": true,
+          "before_hashes": {
+            "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8"
+          },
+          "after_hashes": {
+            "youtube_connector.py": "2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77"
+          }
+        }
+      },
+      "input_versions": [
+        1
+      ],
+      "validation": {
+        "date": "2026-10-23T20:25:09.909776+00:00",
+        "errors": [],
+        "checks": [
+          {
+            "exit_code": 0,
+            "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.000s\r\n\r\nOK\r\n",
+            "seconds": 0.516,
+            "kind": "python_tests",
+            "path": "test_core.py"
+          },
+          {
+            "exit_code": 0,
+            "output": "test_missing_title (test_playlist.Playlist) ... ok\r\ntest_valid_title (test_playlist.Playlist) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 2 tests in 0.000s\r\n\r\nOK\r\n",
+            "seconds": 0.531,
+            "kind": "python_tests",
+            "path": "test_playlist.py"
+          }
+        ],
+        "passed": true,
+        "runtime_verified": true,
+        "rejected_tools": [],
+        "hashes": {
+          "youtube_connector.py": "2c0f46b50c251a57dc17021e9179aad9b5414e9992a7afd9039d2c4273c7df77",
+          "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15",
+          "test_playlist.py": "e98cdef196b40b9209e0279c0372a4e30254efa628cdbfc070562905f761648e"
+        }
+      },
+      "worker_review": ".jarvis-runtime\\native-code\\ce18e25f785a4cc892c971c3cf448977"
+    }
+  ],
+  "completed": 2,
+  "calls": [
+    {
+      "tool": "Read",
+      "at": 1792787028.71254
+    },
+    {
+      "tool": "Read",
+      "at": 1792787036.2146368
+    },
+    {
+      "tool": "Write",
+      "at": 1792787072.7157948
+    },
+    {
+      "tool": "Read",
+      "at": 1792787083.911466
+    },
+    {
+      "tool": "Edit",
+      "at": 1792787109.783393
+    }
+  ],
+  "graph": {
+    "groups": [
+      {
+        "id": "ccc7d0b223824b519492fd456a754711",
+        "workspace": "local",
+        "project": null,
+        "goal": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792787017.9458606,
+        "workflows": [
+          "7a7b25bbe67b4137acba2532c94dab76"
+        ],
+        "tasks": [
+          "3c93877bee3340d3b736b62d3900354b",
+          "ffcfa679f45d46b5a335354e1b00e62f"
+        ],
+        "completed": 2,
+        "total": 2,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 2
+        },
+        "artifacts": [],
+        "errors_and_recovery": []
+      },
+      {
+        "id": "50f554462daa4d0f81c1b8acc941b9e3",
+        "workspace": "local",
+        "project": null,
+        "goal": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792787017.948866,
+        "workflows": [
+          "a91d2ac182b946759e9d2df517977d9b"
+        ],
+        "tasks": [],
+        "completed": 0,
+        "total": 0,
+        "progress": 0,
+        "counts": {},
+        "artifacts": [],
+        "errors_and_recovery": []
+      }
+    ],
+    "nodes": [
+      {
+        "task": "3c93877bee3340d3b736b62d3900354b",
+        "workflow": "7a7b25bbe67b4137acba2532c94dab76",
+        "parent": null,
+        "data": "{\"created\": 1792787017.9468668, \"role\": \"task\"}"
+      },
+      {
+        "task": "ffcfa679f45d46b5a335354e1b00e62f",
+        "workflow": "7a7b25bbe67b4137acba2532c94dab76",
+        "parent": null,
+        "data": "{\"created\": 1792787017.948866, \"role\": \"task\"}"
+      }
+    ],
+    "edges": [
+      {
+        "upstream": "3c93877bee3340d3b736b62d3900354b",
+        "downstream": "ffcfa679f45d46b5a335354e1b00e62f",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": true,
+          "reason": "Explicit dependency update"
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "source": "ffcfa679f45d46b5a335354e1b00e62f",
+        "target": "3c93877bee3340d3b736b62d3900354b",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "ffcfa679f45d46b5a335354e1b00e62f",
+        "target": "3c93877bee3340d3b736b62d3900354b",
+        "kind": "CONTINUATION_OF",
+        "data": {
+          "reason": "Explicit same-project playlist continuation",
+          "confidence": 1.0,
+          "ordering": false
+        }
+      }
+    ],
+    "evaluations": {
+      "3c93877bee3340d3b736b62d3900354b": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792787018.0417583
+      },
+      "ffcfa679f45d46b5a335354e1b00e62f": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "3c93877bee3340d3b736b62d3900354b",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "goal_id": "500d268a5efeb3d172471a01",
+              "checks": [
+                {
+                  "exit_code": 0,
+                  "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.001s\r\n\r\nOK\r\n",
+                  "seconds": 0.5,
+                  "kind": "python_tests",
+                  "path": "test_core.py"
+                }
+              ],
+              "source_hashes": {
+                "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8",
+                "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15"
+              },
+              "scope": {
+                "changed": [
+                  "youtube_connector.py"
+                ],
+                "unexpected": [],
+                "complete": true,
+                "verified": true,
+                "before_hashes": {
+                  "youtube_connector.py": "3daed3de7e8840f2ecdbb48fe4560fd4b76d47e8b42a44d21fd1138cb69eba82"
+                },
+                "after_hashes": {
+                  "youtube_connector.py": "23b0f22847551304d98104aee5e944b0b2a6f0aeb3cfba6e82a9325c07b515e8"
+                }
+              }
+            },
+            "artifacts": [],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792787073.4817686,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": "16bfa46b3dbb4be8b1f493ff3332b7e6",
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "code_task",
+                "value": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+                "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-ready-final\\project"
+              },
+              "workflow": "7a7b25bbe67b4137acba2532c94dab76"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "3c93877bee3340d3b736b62d3900354b": 1
+        },
+        "impossible": [],
+        "at": 1792787073.4959073
+      }
+    },
+    "revision": 11
+  },
+  "report": "reports\\morning-1792787111166.json",
+  "finished_at": "2026-10-23T20:25:11.172959+00:00",
+  "source_unchanged": true
+}
