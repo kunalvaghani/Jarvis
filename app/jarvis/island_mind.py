@@ -6,6 +6,7 @@ and clicking a node shows what it does in Jarvis, the code behind it, its pathwa
 import math
 import time
 import tkinter as tk
+from pathlib import Path
 
 BG, CARD, TEXT, MUTED, ACCENT = '#000000', '#151515', '#eeeeee', '#909090', '#b4caff'
 COLOURS = {'perception': '#7fd1ff', 'working_memory': '#b4caff', 'long_term_memory': '#c9a7ff',
@@ -35,6 +36,32 @@ class MindView:
                             wraplength=440,font=('Segoe UI',8))
         self.dag.pack(fill='x')
         self.dag_text = None
+        # Cognitive awareness: operational state and controls, not a stream of internal thoughts.
+        self.aware = tk.Label(parent, text='Awareness · off', bg=BG, fg=MUTED, anchor='w', justify='left',
+                              wraplength=440, font=('Segoe UI', 8))
+        self.aware.pack(fill='x')
+        self.aware_text = None
+        controls = tk.Frame(parent, bg=BG)
+        controls.pack(fill='x')
+        for label, value in (('Proactive on/off', 'toggle'), ('Focus', 'focus'), ('Pause exploring', 'exploration'),
+                             ('Why?', 'why'), ("Don't suggest", 'feedback:reject_similar'), ('Clear observations', 'clear:all'),
+                             ('Stop', 'stop')):
+            tk.Button(controls, text=label, command=lambda v=value: self.awareness_control(v), bg=CARD, fg=TEXT,
+                      activebackground='#2a2a2a', activeforeground=TEXT, relief='flat', font=('Segoe UI', 7),
+                      padx=4, pady=1).pack(side='left', padx=(0, 3), pady=(1, 2))
+        # Project collaboration: the active project's state from ProjectStore and the queue; voice remains primary.
+        self.project = tk.Label(parent, text='Project · none', bg=BG, fg=MUTED, anchor='w', justify='left',
+                                wraplength=440, font=('Segoe UI', 8))
+        self.project.pack(fill='x')
+        self.project_text = None
+        actions_row = tk.Frame(parent, bg=BG)
+        actions_row.pack(fill='x')
+        for label, value in (('Next project', 'next'), ('Requirements', 'show the requirements'), ('Plan', 'show the plan'),
+                             ("What's left", "what's left"), ('Blockers', 'what are the blockers'), ('Pause/Resume', 'toggle'),
+                             ('Open folder', 'open')):
+            tk.Button(actions_row, text=label, command=lambda v=value: self.project_control(v), bg=CARD, fg=TEXT,
+                      activebackground='#2a2a2a', activeforeground=TEXT, relief='flat', font=('Segoe UI', 7),
+                      padx=4, pady=1).pack(side='left', padx=(0, 3), pady=(1, 2))
         self.canvas = tk.Canvas(parent, bg=CARD, highlightthickness=0, height=220)
         self.canvas.pack(fill='x', pady=(2, 4))
         self.canvas.bind('<Button-1>', self.click)
@@ -46,6 +73,119 @@ class MindView:
     def cognition(self):
         return getattr(getattr(self.app, 'actions', None), 'cognition', None)
 
+    def awareness(self):
+        return getattr(getattr(self.app, 'actions', None), 'awareness', None)
+
+    def awareness_control(self, value):
+        engine = self.awareness()
+        if engine is None or not engine.enabled:
+            self.aware.configure(text='Awareness is off (config awareness.enabled)')
+            return
+        try:
+            if value == 'toggle':
+                reply = engine.control('off' if engine.proactive and not engine.stopped else 'resume')
+            elif value == 'focus':
+                reply = engine.control('focus:' + ('off' if engine.focus else 'on'))
+            elif value == 'exploration':
+                reply = engine.control('exploration:' + ('resume' if engine.curiosity.paused else 'pause'))
+            elif value == 'why':
+                reply = engine.status('why')
+            else:
+                reply = engine.control(value)
+        except (ValueError, OSError) as exc:
+            reply = 'Awareness control failed: ' + str(exc)[:120]
+        self.detail.configure(text=reply)
+
+    def projects(self):
+        return getattr(getattr(self.app, 'actions', None), 'project_intel', None)
+
+    def project_control(self, value):
+        engine = self.projects()
+        if engine is None or not engine.enabled:
+            self.detail.configure(text='Project intelligence is off (config project_intelligence.enabled)')
+            return
+        from .commands import Command
+        try:
+            project = engine.store.active()
+            if value == 'next':
+                rows = engine.store.all()
+                if not rows:
+                    reply = 'No projects yet. Say "create a new project".'
+                else:
+                    index = next((i for i, p in enumerate(rows) if project and p['id'] == project['id']), -1)
+                    engine.store.setting('active_project', rows[(index + 1) % len(rows)]['id'])
+                    reply = 'Active project: ' + rows[(index + 1) % len(rows)]['name']
+            elif value == 'open':
+                if project and project.get('workspace') and Path(project['workspace']).is_dir():
+                    import os
+                    os.startfile(project['workspace'])  # Opens the project's own workspace in Explorer.
+                    reply = 'Opened ' + project['workspace']
+                else:
+                    reply = 'The workspace has not been created yet.'
+            else:
+                text = ('resume the project' if project and project['status'] == 'paused' else 'pause the project') if value == 'toggle' else value
+                reply = engine.handle(Command('project', text))
+        except (ValueError, OSError) as exc:
+            reply = 'Project control failed: ' + str(exc)[:160]
+        self.detail.configure(text=reply)
+
+    def refresh_project(self):
+        engine = self.projects()
+        snap = engine.snapshot() if engine is not None else {'enabled': False}
+        if not snap.get('enabled'):
+            text = 'Project · off (config project_intelligence.enabled)'
+        elif not snap.get('project'):
+            text = f"Project · none active ({snap.get('projects', 0)} saved)"
+        else:
+            done, total = snap['progress']
+            parts = [f"Project · {snap['project']} · {snap['status']} · spec v{snap['version']} · {done}/{total} tasks done"]
+            if snap['task']:
+                parts.append(f"Now: {snap['milestone']} · {snap['task'][:70]}")
+            if snap['question']:
+                parts.append('Waiting for you: ' + snap['question'][:110])
+            change = snap.get('last_change') or {}
+            if change.get('op'):
+                parts.append(f"Last change: {change['op']} {change.get('requirement', '')} {str(change.get('text') or change.get('to') or '')[:60]}".rstrip())
+            results = snap.get('verification') or {}
+            if results:
+                parts.append('Checks: ' + ', '.join(f'{k} {v}' for k, v in list(results.items())[:6]))
+            if snap['blockers']:
+                parts.append(f"Blocked tasks: {snap['blockers']}")
+            if snap['next']:
+                parts.append(snap['next'])
+            text = '\n'.join(parts)
+        if text != self.project_text:
+            self.project.configure(text=text)
+            self.project_text = text
+
+    def refresh_awareness(self):
+        engine = self.awareness()
+        if engine is None or not engine.enabled:
+            text = 'Awareness · off (config awareness.enabled)'
+        else:
+            snap = engine.snapshot()
+            mode = 'stopped' if snap['stopped'] else 'proactive' if snap['proactive'] else 'observe only'
+            parts = [f"Awareness · {snap['status']} · {mode}" + (' · focus' if snap['focus'] else '') +
+                     (' · exploring paused' if snap['exploration_paused'] else '')]
+            if snap['goal']:
+                parts.append('Goal: ' + snap['goal']['text'][:70])
+            if snap['observation']:
+                parts.append('Noticed: ' + snap['observation']['type'].replace('.', ' ') + ' · ' + str(snap['observation']['subject'])[:50])
+            suggestion = snap['suggestion']
+            if suggestion:
+                parts.append(f"#{suggestion['number']} {suggestion['action'].replace('_', ' ')} · {suggestion['status']}"
+                             + (' · automatic' if suggestion.get('automatic') else '') + ': ' + (suggestion.get('message') or suggestion['subject'])[:90])
+            prediction = snap['prediction']
+            if prediction:
+                parts.append(f"Predicts: {prediction['consequence'][:70]} ({prediction['probability']:.0%}"
+                             + ('' if prediction['calibrated'] else ', uncalibrated') + ')')
+            if snap['warnings']:
+                parts.append('Warnings: ' + ', '.join(snap['warnings']))
+            text = '\n'.join(parts)
+        if text != self.aware_text:
+            self.aware.configure(text=text)
+            self.aware_text = text
+
     def click(self, event):
         for name, (x1, y1, x2, y2) in self.boxes.items():
             if x1 <= event.x <= x2 and y1 <= event.y <= y2:
@@ -54,6 +194,16 @@ class MindView:
                 return
 
     def refresh(self):
+        if getattr(self, 'aware', None) is not None:
+            try:
+                self.refresh_awareness()
+            except Exception as exc:  # The awareness strip never breaks the Mind view.
+                self.aware.configure(text='Awareness · unavailable (' + type(exc).__name__ + ')')
+        if getattr(self, 'project', None) is not None:
+            try:
+                self.refresh_project()
+            except Exception as exc:  # Nor does the project strip.
+                self.project.configure(text='Project · unavailable (' + type(exc).__name__ + ')')
         cognition = self.cognition()
         if cognition is None or not cognition.enabled:
             self.header.configure(text='Cognitive loop is off (config cognition.enabled)')

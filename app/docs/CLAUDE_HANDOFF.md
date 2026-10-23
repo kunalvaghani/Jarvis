@@ -1,5 +1,54 @@
 # Cumulative Claude handoff
 
+## Project intelligence (PIRAE) addendum — 2026-10-24 IST
+
+**Implemented candidate on the same uncommitted `claude/cognitive-awareness` branch. Full release acceptance remains open.** [Architecture](project-intelligence.md) · [Evidence](../artifacts/project-intelligence/README.md).
+
+- **Completed and verified:**
+  - New modules `project_model.py`, `project_requirements.py` and `project_intel.py`.
+  - Small extensions: `TaskIngress.submit(dependencies=…)`, explicit-workflow relationship resolution, generated-origin for `project:` tasks, and throttled `reconcile()` from ingress maintenance; `WorkflowGraph.create_workflow`; `project_step` classification; the Actions hook, dispatch guard and step execution; parse rules; the Mind-view project strip; config, contract and manifest entries.
+  - 48 tests.
+  - Complete suite **4,189 passed / 150 gated skips / 0 failures**. Launcher **ready**.
+- **Defects found and fixed:**
+  - The admission crash for Jarvis-generated `code_task` came from the awareness change: `cognition` was assigned only in the user path.
+  - The dispatch guard mis-parsed task keys containing colons.
+  - Classification targets were lowercased, breaking paths.
+  - Two parse rules were too broad: 4 testbook failures in the first focused run.
+  - A regex `\b` became a backspace character during a scripted edit (all files were scanned afterwards; none remain).
+  - Repair notes were overwritten by replanning.
+  - User speech was intercepted before cognition perceived it.
+- **Unexecuted acceptance gates:**
+  - The real coding agent on PIRAE instructions, and real build/test results.
+  - A network-disabled runtime test for offline requirements. Only a static scan exists.
+  - Battery-mode behavior.
+  - Live voice/UI and a strip screenshot.
+  - A real overnight run with mixed projects.
+  - Semantic conflict detection beyond concept families.
+- **Next action:** try one real small project in a scratch folder with `project_intelligence.enabled` on and inspect REQUIREMENTS.md, the queue and "what's left?". Then add a test-running task type so functional requirements can reach behavioral verification.
+
+## Cognitive Awareness Engine addendum — 2026-10-23 IST
+
+**Implemented candidate on `claude/cognitive-awareness` (from main at PR #16). Full release acceptance remains open.** The task-queue prompt was already implemented in PR #16 and is not repeated here. [Architecture](cognitive-awareness.md) · [Evidence](../artifacts/cognitive-awareness/README.md).
+
+- **Completed and verified:** new `awareness*.py` modules; Actions, main, intent, Mind-view, context and report integration; config, contract and manifest entries; 36 new tests. Complete suite on the final code: **4,141 passed / 150 gated skips / 0 failures**. Launcher **ready**. A benchmark receipt is recorded.
+- **Defects found and fixed:**
+  - The first full run had **3 failures**: disabled-awareness startup touched `self_model` in UI-verification mode, and MindView was built without the new widgets.
+  - Duplicate investigations reached the same subject through a repeated-failure prediction.
+  - Silent remedies had no acceptance path.
+  - Investigation outcomes overwrote the user's "last result".
+  - Watchdog repairs could have been re-announced. They are now silent, which preserves the app/AGENTS.md recovery rule.
+  - Awareness-submitted commands were being perceived as user speech and user activity.
+- **Unexecuted acceptance gates:**
+  - Live desktop, voice and UI check of the awareness strip and notifications (no screenshot was taken).
+  - A real compiler or IDE emitting `observe_build`; no builder calls the hook yet.
+  - VRAM shortfall under real model load (the per-task need `gpu_task_vram_mb` is an estimate).
+  - Real-use usefulness, false-positive rate and calibration.
+  - An overnight run with the engine on.
+  - Example D's research, sandbox test and verified-fix proposal (not implemented).
+  - Long-duration stability.
+- **Next action:** run Jarvis with `awareness.enabled` on during a real coding session, rate suggestions ("that suggestion was helpful/wrong"), then inspect `awareness:report` and the calibration report. Wire a build/test runner to `actions.awareness.observe_build(project, ok, detail, kind)`.
+- **Note:** `tests/test_blender_connector_integration.py` rewrites a tracked artifact (`natural-language-fixture.json`) on every run. It was restored after each run here; consider writing that file to a temp path instead.
+
 ## Context-aware task graph addendum — 2026-10-23 IST
 
 **Implemented candidate; full release acceptance remains open.** Continues the same uncommitted `codex/autonomous-task-queue` branch and existing scheduler. [Architecture/commands](workflow-graph.md) · [Dated graph evidence](../artifacts/workflow-graph/README.md). The queue-only 4,054-pass frozen-source run below predates this addendum; its “final”/closed TQ01 language applies only to that earlier checkpoint.

@@ -1359,6 +1359,61 @@
     "enabled": true,
     "cycle_hz": 4
   },
+  "project_intelligence": {
+    "enabled": true,
+    "default_workspace": null,
+    "ask_threshold": 0.4,
+    "default_threshold": 0.2,
+    "max_repair_attempts": 2,
+    "search_roots": [],
+    "search_home": true
+  },
+  "awareness": {
+    "enabled": true,
+    "autonomy": "investigate",
+    "tick_seconds": 1,
+    "event_queue": 512,
+    "retention_days": 7,
+    "cpu_budget_percent": 2,
+    "max_tasks_per_hour": 3,
+    "suggestion_cooldown_seconds": 1800,
+    "system_sample_seconds": 10,
+    "gpu_sample_seconds": 60,
+    "predict_seconds": 15,
+    "self_model_seconds": 300,
+    "gpu_task_vram_mb": 2048,
+    "reprioritize": true,
+    "decisions": true,
+    "deliberative_reasoning": false,
+    "quiet_hours": true,
+    "sensors": {
+      "system": true,
+      "tasks": true,
+      "jarvis": true,
+      "user_presence": true,
+      "foreground_app": true,
+      "files": false,
+      "external": false
+    },
+    "watch_paths": [],
+    "attention": {
+      "weights": {
+        "relevance": 0.3,
+        "urgency": 0.25,
+        "novelty": 0.2,
+        "confidence": 0.15,
+        "goal": 0.1
+      },
+      "threshold": 0.45,
+      "cooldown_seconds": 900,
+      "interruptions_per_hour": 6
+    },
+    "curiosity": {
+      "daily_budget": 12,
+      "threshold": 0.25,
+      "information_gain_weight": 1.0
+    }
+  },
   "gods_eye": {
     "enabled": true,
     "autostart": true,

@@ -86,6 +86,12 @@ def _parse_command(text: str) -> Command:
     from .phrasing import canonical
     text = canonical(text)  # "Could you pull up my desktop?" -> "show me my desktop".
     cleaned_words = spoken_clean(text)
+    from .project_requirements import project_request
+    if re.fullmatch(r"show (?:me )?(?:the )?(?:current |project(?:'s)? )?(?:design|plan|requirements|spec(?:ification)?|architecture)"
+                    r"(?: (?:of|for) (?:the|this|my) project)?[.!?]?", text.strip(), re.I):
+        return Command("project", text.strip())
+    if project_request(text.strip().rstrip('.!?')):
+        return Command("project", text.strip())  # Project intelligence: requirement discovery (project_intel.py).
     if APPROVE_WORDS.fullmatch(cleaned_words):
         return Command("approval_answer", "yes")  # A waiting preview, call or approval card takes it.
     if REJECT_WORDS.fullmatch(cleaned_words):
@@ -230,6 +236,9 @@ def _parse(text: str) -> Command:
         return Command("task", text)
     if re.fullmatch(r"(?:never ?mind|forget it|scratch that|don'?t do that|do not do that|cancel that)[.!]*", text, re.I):
         return Command("cancel_task", "last")  # Drops the most recent request (or the running one).
+    from .project_requirements import NEGATED_CONSTRAINT
+    if NEGATED_CONSTRAINT.match(text.strip()):
+        return Command("project", text.strip())  # A restriction for the active project; never an action.
     if re.match(r"^(?:do not|don't|never)\b", text, re.I) and not re.match(r"^(?:never ?mind|don'?t do|do not do)\b", text, re.I):
         raise ValueError("No action taken for a negated command.")
     from .memory_curator import parse_command as memory_command

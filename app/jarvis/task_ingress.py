@@ -89,7 +89,7 @@ class TaskIngress:
         self.background_thread.start()
         self.question_thread.start()
 
-    def submit(self, command, expected_generation=None, idempotency_key=None, workflow=None):
+    def submit(self, command, expected_generation=None, idempotency_key=None, workflow=None, dependencies=None):
         if self.closed.is_set() or self.actions.closed.is_set():
             return None
         # Already-classified followups retain the original task on the ingress thread.
@@ -100,7 +100,14 @@ class TaskIngress:
         try:
             with self.store.transaction():
                 identity, fresh = self.store.admit(asdict(command), idempotency_key)
-                if workflow and fresh:self.scheduler.graph.attach(identity, workflow=workflow)
+                if workflow and fresh:
+                    self.scheduler.graph.attach(identity, workflow=workflow)
+                    # The caller named the owning workflow; no conversational relationship guessing.
+                    self.store.transition(identity, 'RECEIVED', 'Explicit workflow admission', checkpoint={'relationship_resolved': True})
+                if dependencies and fresh:
+                    if any(not self.store.get(d) for d in dependencies):
+                        raise ValueError('Unknown dependency')
+                    self.store.setting('admission_overrides:'+identity, {'dependencies': list(dependencies)})
         except (BufferError, OSError, ValueError, sqlite3.Error) as exc:
             self.actions.report('warning', str(exc))
             return None
@@ -135,6 +142,12 @@ class TaskIngress:
             self.store.transition(identity,row['state'],'Task relationship resolution recorded',
                 checkpoint={**row['checkpoint'],'relationship_resolved':True})
         return self.scheduler.put_nowait(item, identity, getattr(self.local, 'overrides', None))
+
+    def proactive_origin(self):
+        """True on the ingress thread while it routes work the awareness layer submitted itself."""
+        identity = getattr(self.local, 'identity', None)
+        row = self.store.get(identity) if identity else None
+        return bool(row and str(row['idem']).startswith(('cognitive:', 'project:')))
 
     def checkpoint(self, state):
         identity = getattr(self.scheduler.local, 'identity', None)
@@ -192,6 +205,9 @@ class TaskIngress:
                 self.local.identity, self.local.overrides, self.local.new_task = identity, {}, False
                 self.store.transition(identity, 'CLASSIFYING')
                 command = self._parse(Command(**self.store.get(identity)['command']))
+                stored = self.store.setting('admission_overrides:'+identity)
+                if stored:
+                    self.local.overrides = {**getattr(self.local, 'overrides', {}), **stored}
                 handled_control = self.control(command)
                 if not handled_control:
                     self.actions._submit(command)
@@ -223,8 +239,8 @@ class TaskIngress:
             try:
                 if not token.is_set() and generation == self.actions.generation:
                     reply = execute(self.actions, command)
-                    if not token.is_set() and generation == self.actions.generation:
-                        self.actions.report('answer', reply)
+                    if reply and not token.is_set() and generation == self.actions.generation:
+                        self.actions.report('answer', reply)  # Silent handlers (awareness investigations) return ''.
                     self.scheduler.outcome('COMPLETED', reply, {'source': 'existing read-only intent handler'})
                 else:
                     self.scheduler.outcome('CANCELLED', 'Cancelled before handler')
@@ -268,6 +284,12 @@ class TaskIngress:
 
     def _maintenance(self):
         self._power()
+        projects = getattr(self.actions, 'project_intel', None)
+        if projects is not None and getattr(projects, 'enabled', False):
+            try:
+                projects.reconcile()  # Fold finished project tasks back into their plans (throttled).
+            except Exception as exc:
+                self.actions.report('warning', 'Project reconciliation failed: '+type(exc).__name__)
         self._resolve_waiting_relationships()
         for warning in self.scheduler.supervise():
             self.actions.report('repair', warning)

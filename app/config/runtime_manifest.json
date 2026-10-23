@@ -390,7 +390,14 @@
     "jarvis.task_queue",
     "jarvis.docker_runtime",
     "jarvis.deerflow_sandbox",
-    "jarvis.deerflow_media"
+    "jarvis.deerflow_media",
+    "jarvis.awareness",
+    "jarvis.awareness_model",
+    "jarvis.awareness_reasoning",
+    "jarvis.awareness_policy",
+    "jarvis.project_model",
+    "jarvis.project_requirements",
+    "jarvis.project_intel"
   ],
   "brain_imports": [
     "requests",
@@ -519,7 +526,8 @@
     "docker_linux_engine",
     "cognitive_loop",
     "cognition_persistence",
-    "spotify_mcp"
+    "spotify_mcp",
+    "cognitive_awareness"
   ],
   "ui_assets": [],
   "optional_audit": {
@@ -1025,7 +1033,7 @@
     ],
     "lifecycle": "Existing owned capture/decoder; stop clears buffers, decoder join bounded to 2 seconds; live decoder retains ownership and blocks duplicate restart, intentional stops respected; categorical repair health and trace UUID",
     "audio": "Resample release block to 16 kHz before enqueue; reject duplicate final utterance IDs; retain explicitly repeated requests; no model, quantization or endpoint-default change",
-    "validation": "Finite partial/silence intervals 0.2\u20135 seconds and VAD 0\u20131; explicit cuda/cpu device; no silent CPU fallback; typed mode available on failure",
+    "validation": "Finite partial/silence intervals 0.2–5 seconds and VAD 0–1; explicit cuda/cpu device; no silent CPU fallback; typed mode available on failure",
     "limitations": "Fixture coverage only; quiet-room accuracy, background-TV false activations and long-pause acoustic tests BLOCKED pending labeled audio and dedicated GPU headroom",
     "new_dependencies": [],
     "new_services": []
@@ -1145,5 +1153,30 @@
     "graph_limits": "64 prerequisites/node; 20 generated children/call, 50/workflow, depth 3; 16k structured output, 48k aggregate handoff. Effectful generated subtasks require scope review plus existing tool approval; planner/file mutations retain exclusive locks.",
     "rollback": "task_queue.enabled=false; preserve SQLite and reports",
     "dependencies": "Python standard library; existing psutil for resource admission"
+  },
+  "cognitive_awareness": {
+    "modules": [
+      "jarvis.awareness",
+      "jarvis.awareness_model",
+      "jarvis.awareness_reasoning",
+      "jarvis.awareness_policy"
+    ],
+    "storage": ".jarvis-runtime/awareness.sqlite3",
+    "health": "AwarenessEngine.healthy; existing watchdog bounded repair (three restarts)",
+    "execution": "No executor of its own. Read-only investigations and user-accepted suggestions enter the existing durable TaskIngress; routine choices use the existing DecisionManager; tool approvals unchanged.",
+    "external_action_replay": false,
+    "privacy": "Private observations (window titles, task instructions, message text) stay in memory; only non-private, day-retention observations are persisted and expire.",
+    "rollback": "awareness.enabled=false; ordinary commands, queue and cognition loop unaffected; preserve awareness.sqlite3 for inspection",
+    "dependencies": "Python standard library; existing psutil, requests and nvidia-smi probes"
+  },
+  "project_intelligence": {
+    "modules": ["jarvis.project_model", "jarvis.project_requirements", "jarvis.project_intel"],
+    "storage": ".jarvis-runtime/projects.sqlite3",
+    "health": "No thread of its own; reconciled from the existing TaskIngress maintenance loop",
+    "execution": "Project work is ordinary durable tasks (code_task, task, project_step) in one workflow group per project; approvals, locks, overnight and recovery unchanged",
+    "external_action_replay": false,
+    "safety": "Reference projects are read-only unless the user grants permission; existing folders are never overwritten; superseded tasks are refused at dispatch",
+    "rollback": "project_intelligence.enabled=false; preserve projects.sqlite3",
+    "dependencies": "Python standard library"
   }
 }

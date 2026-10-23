@@ -147,6 +147,15 @@ class Actions:
             if cognition is not None and isinstance(message, str) and message and (
                     "alert" in kind or kind in {"warning", "repair", "whatsapp_message", "incoming_call"}):
                 cognition.perceive(kind, "sensor", message, .7)  # Background sensors -> perception.
+            awareness = getattr(self, "awareness", None)
+            if awareness is not None:
+                awareness.observe_report(kind, message)  # Nonblocking; never changes the report.
+            projects = getattr(self, "project_intel", None)
+            if projects is not None and kind in {"task_decision", "task_report"}:
+                try:
+                    projects.observe_report(kind, message)
+                except Exception as exc:
+                    responses("warning", "Project intelligence could not record that: " + type(exc).__name__)
             responses(kind, message)
         self.report = filtered
         self.session_style = {}  # "short", "simple", "serious" answers asked for in this session.
@@ -314,6 +323,24 @@ class Actions:
             self.ingress = TaskIngress(self, self.base / '.jarvis-runtime' / 'task-queue.sqlite3', config.get('task_queue', {}))
             self.queue = self.ingress.scheduler
             self.task_state.on_checkpoint = self.ingress.checkpoint
+        from .awareness import AwarenessEngine
+        awareness_options = dict(config.get('awareness', {}))
+        if config.get('_ui_verification', False):
+            awareness_options['enabled'] = False
+        try:
+            self.awareness = AwarenessEngine(self, awareness_options)  # Additive layer (docs/cognitive-awareness.md).
+        except (OSError, ValueError) as exc:
+            self.awareness = AwarenessEngine(self, {'enabled': False})
+            report('warning', 'Cognitive awareness is off: ' + str(exc)[:200])
+        from .project_intel import ProjectIntelligence
+        project_options = dict(config.get('project_intelligence', {}))
+        if config.get('_ui_verification', False):
+            project_options['enabled'] = False
+        try:
+            self.project_intel = ProjectIntelligence(self, project_options)  # docs/project-intelligence.md
+        except (OSError, ValueError) as exc:
+            self.project_intel = ProjectIntelligence(self, {'enabled': False})
+            report('warning', 'Project intelligence is off: ' + str(exc)[:200])
 
     def start(self):
         try:
@@ -399,6 +426,9 @@ class Actions:
         from .task_ingress import TaskIngress
         ingress = getattr(self, 'ingress', None)
         independent = isinstance(ingress, TaskIngress) and getattr(ingress.local, 'new_task', False)
+        # Awareness-submitted work is never a reply to a waiting prompt, user activity or user speech.
+        proactive = isinstance(ingress, TaskIngress) and ingress.proactive_origin()
+        independent = independent or proactive
         if not independent and answer_prompt(self, command):
             return  # A reply to a waiting WhatsApp question (contact choice, preview approval, call).
         screen = getattr(self, 'screen', None)
@@ -411,15 +441,20 @@ class Actions:
                 self.report('spoken_reply', 'Nothing is waiting for your approval right now.')
             return
         from .intent_handlers import IMMEDIATE, STATUS, execute as intent_execute
-        self.last_command_at = time.monotonic()  # Background ability building waits until the user is idle.
-        if command.kind not in {'island_choice', 'memory_choice'} and hasattr(self, 'command_history'):
-            self.command_history.append((command.value or command.kind.replace('_', ' ')).splitlines()[0][:120] if command.value or command.kind else '')
-        cognition = getattr(self, 'cognition', None)
-        if cognition is not None:
-            cognition.perceive_command(command)
-        evolution = getattr(self, 'self_evolution', None)
-        if evolution is not None:
-            evolution.note_activity()  # Any user command preempts idle learning immediately.
+        cognition = getattr(self, 'cognition', None)  # Used below for every command, generated or not.
+        if not proactive:
+            self.last_command_at = time.monotonic()  # Background ability building waits until the user is idle.
+            if command.kind not in {'island_choice', 'memory_choice'} and hasattr(self, 'command_history'):
+                self.command_history.append((command.value or command.kind.replace('_', ' ')).splitlines()[0][:120] if command.value or command.kind else '')
+            if cognition is not None:
+                cognition.perceive_command(command)
+            evolution = getattr(self, 'self_evolution', None)
+            if evolution is not None:
+                evolution.note_activity()  # Any user command preempts idle learning immediately.
+        projects = getattr(self, 'project_intel', None)
+        if projects is not None and not proactive and not independent and projects.claims(command):
+            self.report('spoken_reply', projects.handle(command))  # Same project, live requirement updates.
+            return
         if not independent and getattr(self, 'pending_opinion', None) and command.kind in {'task', 'ask'} and command.extra != 'approved_plan':
             if self._handle_opinion_feedback(command):
                 return  # A reply to a recommendation Jarvis is waiting on (go ahead / no / you decide).
@@ -940,6 +975,12 @@ class Actions:
         eye = getattr(self, 'gods_eye', None)
         if eye is not None:
             eye.close()
+        awareness = getattr(self, 'awareness', None)
+        if awareness is not None:
+            awareness.close()
+        projects = getattr(self, 'project_intel', None)
+        if projects is not None:
+            projects.close()
         cognition = getattr(self, 'cognition', None)
         if cognition is not None:
             cognition.close()
@@ -1097,6 +1138,7 @@ class Actions:
         if self.gods_eye.enabled:
             self.gods_eye.start()  # God's Eye server plus the 25-mile side-thread feed and its alerts.
         self.cognition.start()  # The cognitive loop (docs/cognitive-architecture.md).
+        self.awareness.start()  # Event-driven awareness; submits only through the durable queue.
         settings = self.config.get("weather_alerts", {})
         if settings.get("enabled", True):
             from .weather_watch import WeatherWatch
@@ -1146,6 +1188,10 @@ class Actions:
 
     def execute(self, command, cancelled=lambda: False):
         """Audit outer direct commands without duplicating nested task execution."""
+        projects, ingress = getattr(self, "project_intel", None), getattr(self, "ingress", None)
+        if projects is not None and ingress is not None:
+            # A project task superseded by a newer requirement version is refused before it writes anything.
+            projects.dispatch_guard(getattr(ingress.scheduler.local, "identity", None))
         local = getattr(self, "_learning_local", None)
         if local is None or getattr(local, "active", False):
             return self._execute(command, cancelled)
@@ -1416,6 +1462,8 @@ class Actions:
                 raise
             finally:
                 self.task_active = False
+        if command.kind == "project_step":
+            return self.project_intel.run_step(command.value, cancelled)
         if command.kind == "code_task":
             from .coder import Coder
             selected=bool(command.extra and Path(command.extra).is_absolute())

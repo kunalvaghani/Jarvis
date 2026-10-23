@@ -1,5 +1,40 @@
 # Jarvis — local Windows voice assistant
 
+## Project intelligence candidate — 2026-10-24 IST
+
+Direct a project in conversation: "create a new desktop application" → "What should it do?" → "Where should I save it? Is there an existing project I should use as reference?" Then keep talking while it works: "also add battery optimization", "make the interface look futuristic", "actually, use no cloud services", "what's left?", "finish the safe remaining work overnight".
+
+- **Questions:** Jarvis asks only when `U·(0.4·Impact + 0.3·Rework + 0.3·Risk)` is high. Otherwise it uses reversible defaults or a 20-second routine choice.
+- **Requirements:** kept as a versioned specification. Each requirement is labelled explicit, inferred, assumption, confirmed or rejected, and keeps its evidence.
+- **Plan:** work is queued in dependency order into the **existing** durable queue, one workflow group per project. Implementation uses the existing coding agent (`code_task`) or planner.
+- **Changes mid-build** touch only the affected tasks. Unstarted tasks are updated in place with no duplicates, incompatible running work pauses at a safe checkpoint, and stale tasks are refused before they write. Tests and verification rerun when the spec changes.
+- **Conflicts** between explicit requirements are explained and decided by you.
+- **References** are read-only and checked by SHA-256. Existing folders are never overwritten.
+- **Status:** a requirement is never marked verified just because a tool ran. Static checks are labelled as static.
+- **Gaps and conflicts** go to the awareness engine as recommendations.
+- **Mind view:** gains a project strip with controls.
+
+Verification:
+
+- 48 new tests.
+- Complete suite **4,189 passed / 150 gated skips / 0 failures**.
+- Launcher **ready**.
+- A requirement change takes 22.9 ms median.
+
+This work also fixed a real admission crash for Jarvis-generated `code_task`s, introduced by the awareness change.
+
+The real coding agent, live voice/UI and a real overnight run are **not** verified. [Behavior, commands and limits](docs/project-intelligence.md) · [Evidence](artifacts/project-intelligence/README.md).
+
+## Cognitive Awareness Engine candidate — 2026-10-23 IST
+
+An additive, feature-flagged awareness layer (`awareness.enabled`). It turns queue events, Jarvis health and resource telemetry into observations, plus opt-in signals: input idle time, foreground app, watched folders and connector hooks. From these it keeps a provenance-labelled world state, beliefs that decay with stale evidence, and salience-based attention. It runs calibrated deterministic predictions (RAM trend, VRAM shortfall, deadline risk, dependency blockers, stale tests, repeated failures) and keeps a probed self-model. An interruption-aware policy treats silence as a valid choice.
+
+Its only autonomous effect is a **read-only investigation submitted through the existing durable queue**. The investigation stores verified readbacks separately from unverified ReasoningBank/OpenViking/Obsidian hits. Routine choices use the existing 20-second `DecisionManager`. Remedies need `accept suggestion N`, and existing approvals still apply. Watchdog recovery stays silent. New questions: "what can you currently do?", "what are your limitations?", "why did that fail?", "which connector is broken?", "how confident are you in that result?" and "why did you suggest that?". The Mind view gains an awareness strip with controls, including Stop.
+
+Verification: **36 new tests**; complete suite on the final code **4,141 passed / 150 gated skips / 0 failures** (an earlier run's 3 failures were fixed); launcher **ready**. Benchmark: queue admission 0.73 → 0.72 ms median with the engine running; engine thread about 1.2 % (idle, incl. startup) / 0.6 % (active) of one core; zero model calls.
+
+Real-use usefulness, calibration, live UI/voice behavior and an overnight run with the engine on have **not** been verified. [Architecture, commands, configuration and limits](docs/cognitive-awareness.md) · [Evidence](artifacts/cognitive-awareness/README.md).
+
 ## Context-aware workflow graph candidate — 2026-10-23 IST
 
 The existing durable queue now persists project/goal groups, one owning workflow per task, dependency/result relationships, graph revisions, condition evaluations and typed result versions. Exact task/project/artifact references and corroborated conversation/application context link justified continuations; ambiguous references pause for task-number clarification. Actual verified results feed downstream planning at dispatch. Stale artifact/input chains invalidate results without replaying writes. Existing resource gates, model router, approvals and conservative mutation locks remain authoritative.

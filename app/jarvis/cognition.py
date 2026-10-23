@@ -45,7 +45,8 @@ MEDIA = {"play_media", "media_search", "media_control", "spotify_control", "spot
 VIEW = {"gods_eye_show", "gods_eye_camera", "gods_eye_view", "gods_eye_cameras", "open", "open_folder", "open_file",
         "open_project", "browse", "browser_search", "messenger_focus"}
 SESSION = {"conversation_style", "stop_speaking", "end_conversation", "cancel_task", "cancel_current", "cancel_all",
-           "approval_answer", "resume_task", "memory_summarize", "repo_learn", "repo_forget", "gods_eye_update"}
+           "approval_answer", "resume_task", "memory_summarize", "repo_learn", "repo_forget", "gods_eye_update",
+           "awareness_control", "project"}
 DEFAULT_SECONDS = {"ask": 6, "task": 40, "code_task": 300, "play_media": 12, "whatsapp_send": 25, "whatsapp_reply": 30,
                    "gods_eye_show": 20, "gods_eye_camera": 2, "open": 3, "api_health": 25, "weather_alerts": 6,
                    "repo_learn": 90, "media_search": 8}
