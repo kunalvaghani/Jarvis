@@ -1,5 +1,11 @@
 # Jarvis — local Windows voice assistant
 
+## Engineering judgment candidate — 2026-10-24 IST
+
+The Engineering Judgment & Goal Assurance Engine (EJGAE) extends existing skill routing, requirement tracking, scoped coding, executable verification and learning. It registers the pinned Karpathy-inspired guide conditionally and starts with `engineering_judgment.enabled=true`, `mode=advisory`. No new planner, scheduler, permission authority, database, dependency or service is added. [Architecture and configuration](docs/engineering-judgment.md) · [Measured evidence](artifacts/engineering-judgment/README.md) · [Cumulative handoff](docs/CLAUDE_HANDOFF.md).
+
+Fresh verification: **4,268 passed / 150 gated skips / zero failures**, one existing COM warning, **23m 03s**; all **804 frozen files unchanged**. Launcher readiness is **ready**. The owned connector-shaped fixture passed **2/2 linked goals with five actual local-model calls**, real executable checks and dependent result reuse. Current ReasoningBank binding, six enabled skill-evolution checks and two real kernel-isolation checks also passed. Skill selection adds **0.613 ms median** in the matched flag fixture; two engineering contexts add **667 characters**, with no extra classifier call. These are bounded measurements, not general model-quality or acoustic speedup claims. Exact tokens and isolated peak RAM/VRAM were not measured. Production connector accounts, physical speech/duplex, general parallel coding isolation, semantic novelty of native repair strategies and elapsed overnight endurance remain open. Main microphone remains stopped; the existing voice profile is preserved.
+
 ## Project intelligence candidate — 2026-10-24 IST
 
 Direct a project in conversation: "create a new desktop application" → "What should it do?" → "Where should I save it? Is there an existing project I should use as reference?" Then keep talking while it works: "also add battery optimization", "make the interface look futuristic", "actually, use no cloud services", "what's left?", "finish the safe remaining work overnight".

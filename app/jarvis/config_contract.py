@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 OBJECT_FIELDS = frozenset('task_queue voice knowledge_acquisition groq gpu_scheduler realtime context_selector command_cleanup anticipation ui agent_runtime whisper cursor push_to_write apps folders files knowledge memory weather cognition gods_eye repo_learning weather_alerts whatsapp media speech brain documents repo_abilities repository_skills rea deliberation self_evolution docker_runtime execution_strategy reasoning_bank viking_memory exploration cloud_architect demonstration evolution_lab awareness project_intelligence'.split())
+OBJECT_FIELDS = OBJECT_FIELDS | {'engineering_judgment'}
 KNOWN_FIELDS = OBJECT_FIELDS | frozenset({'model_path','files_root','project_roots','microphone',
     'wake_timeout_seconds','suggestion_seconds','file_catalog','_ui_verification'})
 MAX_ROOT_FIELDS = 128
@@ -42,4 +43,7 @@ def validate_root(config):
         # Never echo values or unknown names: either may contain a pasted secret.
         warnings.warn('Unknown top-level Jarvis configuration fields: '+str(len(unknown))+
             '. They are not a permission grant; check the documented configuration.',ConfigurationWarning,stacklevel=2)
+    if 'engineering_judgment' in config:
+        from .engineering_judgment import settings
+        settings(config['engineering_judgment'])
     return config

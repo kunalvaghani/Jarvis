@@ -1,0 +1,48 @@
+{
+  "reviewed_at": "2026-10-23T19:15:37.622684+00:00",
+  "repository": "https://github.com/multica-ai/andrej-karpathy-skills",
+  "commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+  "files": {
+    "README.md": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/README.md",
+      "bytes": 6198,
+      "sha256": "daf314efb31894b86d68b67786c820bd8470bb2126e578ba9cd0e3e2667883f8"
+    },
+    "CLAUDE.md": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/CLAUDE.md",
+      "bytes": 2357,
+      "sha256": "694a2d721e41c385f3db492838c23299826df5ba9809e3b0721aac70021e196a"
+    },
+    "EXAMPLES.md": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/EXAMPLES.md",
+      "bytes": 14838,
+      "sha256": "9bc0ba934077a0514bab0fc7a4ffad37ecd40bfddf57f29d0b8cef5e5b3d1f28"
+    },
+    "skills/karpathy-guidelines/SKILL.md": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/skills/karpathy-guidelines/SKILL.md",
+      "bytes": 2518,
+      "sha256": "6e22cc54cb02a5e98ae42d06d9d7292db0c1b43894831b32879beb0166b2aea7"
+    },
+    ".cursor/rules/karpathy-guidelines.mdc": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/.cursor/rules/karpathy-guidelines.mdc",
+      "bytes": 2638,
+      "sha256": "259cf32ac1a493b7bf863992bbb968079a2b6ffdce99dad092ec6f4e2764717d"
+    },
+    ".claude-plugin/plugin.json": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/.claude-plugin/plugin.json",
+      "bytes": 390,
+      "sha256": "52919436493fc5403e3022c45dff0d6a82f0047c02b17797e2bad14b3ec22ce9"
+    },
+    ".claude-plugin/marketplace.json": {
+      "url": "https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/2c606141936f1eeef17fa3043a72095b4765b9c2/.claude-plugin/marketplace.json",
+      "bytes": 758,
+      "sha256": "9e5d3a1e84c7a49eff1be18b698018c58fdef3bf6f6c94729c663f7577ca3032"
+    }
+  },
+  "license_declaration": "MIT in README, skill frontmatter and plugin manifest",
+  "license_file": "Root LICENSE returns 404 at reviewed commit; no copyright notice fabricated.",
+  "implementation_author": "forrestchang (plugin metadata); repository hosted by multica-ai",
+  "inspiration": "Andrej Karpathy observations; no personal maintenance claim",
+  "observed_main_commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+  "current_matches_reviewed": true
+}

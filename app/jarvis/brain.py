@@ -333,6 +333,13 @@ class BrainClient:
             self._request_lock.release()
 
     def _request(self, operation, cancelled, **data):
+        from .engineering_judgment import active_context, EngineeringJudgmentEngine
+        engineering_context = active_context()
+        engineering = getattr(self, 'engineering', None)
+        if not engineering_context and isinstance(engineering, EngineeringJudgmentEngine) and data.get('goal') and operation in {'plan', 'replan', 'next_step', 'code_plan', 'code_edit'}:
+            engineering_context = engineering.planning_context(data['goal'], data.get('skill_project'))
+        if engineering_context and operation in {'plan', 'replan', 'next_step', 'code_plan', 'code_edit'}:
+            data['memory_context'] = {**data.get('memory_context', {}), 'engineering': engineering_context}
         from .planner_settings import settings
         harness_options = settings(self.options, 'harness')
         hermes_options = settings(self.options, 'hermes')
@@ -351,9 +358,9 @@ class BrainClient:
         if memory is not None and data.get("goal"):
             if operation in {'code_plan', 'code_edit'}:
                 saved = memory.task_context(data['goal'])
-                data['memory_context'] = {key: saved.get(key, [])[:2] for key in ('projects', 'apps')}
+                data['memory_context'] = {**data.get('memory_context', {}), **{key: saved.get(key, [])[:2] for key in ('projects', 'apps')}}
             else:
-                data["memory_context"] = memory.task_context(data["goal"])
+                data["memory_context"] = {**data.get('memory_context', {}), **memory.task_context(data["goal"])}
             skills = getattr(memory, "skills", None)
             if skills is not None and operation in {"plan", "replan", "next_step", "code_plan", "code_edit"}:
                 from .experience_memory import observe_conditions

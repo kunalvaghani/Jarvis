@@ -804,11 +804,18 @@ class AwarenessEngine:
         self._notify(problem, message, action == 'speak', row['number'])
 
     def _investigate(self, problem, command=None):
+        from .engineering_judgment import engine_for
+        engineering = engine_for(self.actions)
+        if engineering:
+            judgment = engineering.assess_proposal(problem['subject'], evidence=problem.get('observed', []), active_goal=problem.get('task'))
+            # Reference assessment only; existing awareness autonomy/consent remains authoritative.
+            problem = {**problem, 'engineering': judgment}
         ingress = self._ingress()
         if ingress is None:
             return None
         self.status_word = 'investigating'
-        row = self._suggest(problem, 'investigate', 'submitted', '', task=None)
+        row = self._suggest(problem, 'investigate', 'submitted', '', task=None,
+                            **({'engineering': problem['engineering']} if problem.get('engineering') else {}))
         command = command or Command('jarvis_status', 'awareness:investigate:' + row['id'])
         workflow = None
         if problem.get('task'):

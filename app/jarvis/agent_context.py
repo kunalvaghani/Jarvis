@@ -156,10 +156,12 @@ def repository_map(project, files=None, budget=5000):
 
 
 def coding_context(project, goal, target=None, files=None):
+    from .engineering_judgment import active_context
     from .coding_languages import context as language_context
     from .development_knowledge import context as development_context, detect_stack
     from .development_learning import recall
-    return {'language_context': language_context(goal, target),
+    return {'engineering_context': active_context(),
+            'language_context': language_context(goal, target),
             'development_skills': development_context(project, goal, target),
             'development_lessons': recall(Path(__file__).parent.parent, detect_stack(project, goal), goal) if Path(target or '').suffix != '.py' else [],
             'repository_instructions': instruction_context(project, target),

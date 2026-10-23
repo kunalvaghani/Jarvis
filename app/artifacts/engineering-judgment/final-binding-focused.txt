@@ -1,0 +1,153 @@
+.............................................................FFFF....... [ 32%]
+........................................................................ [ 64%]
+................................................................s....... [ 97%]
+......                                                                   [100%]
+================================== FAILURES ===================================
+__ test_queue_report_retains_goal_completion_separately_from_transport_state __
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_queue_report_retains_goal0')
+
+    def test_queue_report_retains_goal_completion_separately_from_transport_state(tmp_path):
+        from jarvis.task_store import TaskStore
+        from jarvis.task_scheduler import ScheduledQueue
+        from tests.test_workflow_graph import add
+        store = TaskStore(tmp_path / 'queue.sqlite3')
+        scheduler = ScheduledQueue(store)
+        try:
+            identity = add(scheduler, 'Engineering report')
+            row = store.get(identity)
+            contract = GoalContractGenerator().create('Fix app.py')
+            store.transition(identity, row['state'], checkpoint={'tool_checkpoint': {'engineering': contract}})
+            path = scheduler.report(tmp_path / 'reports')
+            # The existing report API returns a Path and never executes queued work.
+>           report = json.loads(Path(path).read_text(encoding='utf-8'))
+
+tests\test_engineering_judgment.py:353: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:960: in __new__
+    self = cls._from_parts(args)
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:594: in _from_parts
+    drv, root, parts = self._parse_args(args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = <class 'pathlib.WindowsPath'>
+args = (({'counts': {'QUEUED': 1}, 'decisions': [], 'engineering_goals': [{'contract': {'acceptance': [...], 'checks': [], 'c...l/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_queue_report_retains_goal0/reports/morning-1792784609380.json')),)
+
+    @classmethod
+    def _parse_args(cls, args):
+        # This is useful when you don't want to create an instance, just
+        # canonicalize some constructor arguments.
+        parts = []
+        for a in args:
+            if isinstance(a, PurePath):
+                parts += a._parts
+            else:
+>               a = os.fspath(a)
+E               TypeError: expected str, bytes or os.PathLike object, not tuple
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\pathlib.py:578: TypeError
+_ test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options0] _
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann0')
+project = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann0/project')
+options = {'enabled': False}
+
+    @pytest.mark.parametrize('options', [{'enabled': False}, {'enabled': True, 'mode': 'advisory'}, {'enabled': True, 'mode': 'enforced'}])
+    def test_existing_tool_denial_cannot_be_disabled_by_engineering_flags(tmp_path, project, options):
+        from jarvis.actions import Actions
+        from jarvis.tools import ToolRegistry
+        policy = tmp_path / '.jarvis'; policy.mkdir()
+        (policy / 'policy.json').write_text(json.dumps({'deny_tools': ['read_file']}))
+>       actions = Actions({'files_root': 'files', 'engineering_judgment': options}, tmp_path, lambda *args: None)
+
+tests\test_engineering_judgment.py:366: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <jarvis.actions.Actions object at 0x00000177F4B36A10>
+config = {'engineering_judgment': {'enabled': False}, 'files_root': 'files'}
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann0')
+report = <function test_existing_tool_denial_cannot_be_disabled_by_engineering_flags.<locals>.<lambda> at 0x00000177F4B91000>
+desktop = None, recycler = None
+
+    def __init__(self, config, base, report, desktop=None, recycler=None):
+        self.base = Path(base).resolve()
+        self.config = config
+        self._discovered_tools = set()
+        self.root = (Path(base) / config["files_root"]).resolve()
+        self.root.mkdir(parents=True, exist_ok=True)
+>       self.apps = dict(config["apps"])
+E       KeyError: 'apps'
+
+jarvis\actions.py:128: KeyError
+_ test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options1] _
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann1')
+project = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann1/project')
+options = {'enabled': True, 'mode': 'advisory'}
+
+    @pytest.mark.parametrize('options', [{'enabled': False}, {'enabled': True, 'mode': 'advisory'}, {'enabled': True, 'mode': 'enforced'}])
+    def test_existing_tool_denial_cannot_be_disabled_by_engineering_flags(tmp_path, project, options):
+        from jarvis.actions import Actions
+        from jarvis.tools import ToolRegistry
+        policy = tmp_path / '.jarvis'; policy.mkdir()
+        (policy / 'policy.json').write_text(json.dumps({'deny_tools': ['read_file']}))
+>       actions = Actions({'files_root': 'files', 'engineering_judgment': options}, tmp_path, lambda *args: None)
+
+tests\test_engineering_judgment.py:366: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <jarvis.actions.Actions object at 0x00000177F4AB3D90>
+config = {'engineering_judgment': {'enabled': True, 'mode': 'advisory'}, 'files_root': 'files'}
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann1')
+report = <function test_existing_tool_denial_cannot_be_disabled_by_engineering_flags.<locals>.<lambda> at 0x00000177F49AF2E0>
+desktop = None, recycler = None
+
+    def __init__(self, config, base, report, desktop=None, recycler=None):
+        self.base = Path(base).resolve()
+        self.config = config
+        self._discovered_tools = set()
+        self.root = (Path(base) / config["files_root"]).resolve()
+        self.root.mkdir(parents=True, exist_ok=True)
+>       self.apps = dict(config["apps"])
+E       KeyError: 'apps'
+
+jarvis\actions.py:128: KeyError
+_ test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options2] _
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann2')
+project = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann2/project')
+options = {'enabled': True, 'mode': 'enforced'}
+
+    @pytest.mark.parametrize('options', [{'enabled': False}, {'enabled': True, 'mode': 'advisory'}, {'enabled': True, 'mode': 'enforced'}])
+    def test_existing_tool_denial_cannot_be_disabled_by_engineering_flags(tmp_path, project, options):
+        from jarvis.actions import Actions
+        from jarvis.tools import ToolRegistry
+        policy = tmp_path / '.jarvis'; policy.mkdir()
+        (policy / 'policy.json').write_text(json.dumps({'deny_tools': ['read_file']}))
+>       actions = Actions({'files_root': 'files', 'engineering_judgment': options}, tmp_path, lambda *args: None)
+
+tests\test_engineering_judgment.py:366: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <jarvis.actions.Actions object at 0x00000177F4B375B0>
+config = {'engineering_judgment': {'enabled': True, 'mode': 'enforced'}, 'files_root': 'files'}
+base = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-866/test_existing_tool_denial_cann2')
+report = <function test_existing_tool_denial_cannot_be_disabled_by_engineering_flags.<locals>.<lambda> at 0x00000177F3B64280>
+desktop = None, recycler = None
+
+    def __init__(self, config, base, report, desktop=None, recycler=None):
+        self.base = Path(base).resolve()
+        self.config = config
+        self._discovered_tools = set()
+        self.root = (Path(base) / config["files_root"]).resolve()
+        self.root.mkdir(parents=True, exist_ok=True)
+>       self.apps = dict(config["apps"])
+E       KeyError: 'apps'
+
+jarvis\actions.py:128: KeyError
+=========================== short test summary info ===========================
+FAILED tests/test_engineering_judgment.py::test_queue_report_retains_goal_completion_separately_from_transport_state
+FAILED tests/test_engineering_judgment.py::test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options0]
+FAILED tests/test_engineering_judgment.py::test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options1]
+FAILED tests/test_engineering_judgment.py::test_existing_tool_denial_cannot_be_disabled_by_engineering_flags[options2]
+4 failed, 217 passed, 1 skipped in 131.08s (0:02:11)

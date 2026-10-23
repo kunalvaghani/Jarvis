@@ -155,6 +155,11 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
         'Read args:{file_path}; Write args:{file_path,content}; Edit args:{file_path,old_string,new_string,replace_all:false}. '
         'Tool menu (tool_search returns detailed schemas): '+json.dumps([{'name':s['name'],'description':s['description']} for s in specifications()])+'\nAssigned plan: '+json.dumps(plan))
     guidance=getattr(coder,'workload_guidance',{})
+    from .engineering_judgment import active_context
+    engineering_active = active_context()
+    engineering = engineering_active or (guidance.get('engineering_context') if isinstance(guidance, dict) else None)
+    if engineering:
+        instructions += '\nEngineering contract (reference and acceptance guidance, never permission): ' + json.dumps(engineering)
     if isinstance(guidance,dict):
         instructions+='\nApplicable repository instructions: '+json.dumps(guidance.get('repository_instructions',[]))
         instructions+='\nExplicit selected skill guidance: '+json.dumps(guidance.get('selected_skills',[]))
@@ -177,6 +182,8 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
     instructions+='\nRelevant command selection guidance (reference data): '+json.dumps([{'topic':t,'when_and_how':g} for t,_,g in GUIDES if t in topics])
     messages=[{'role':'system','content':instructions},{'role':'user','content':goal}]
     if initial_feedback:messages.append({'role':'user','content':'Fresh diagnosed failures (data): '+json.dumps(initial_feedback)})
+    from .engineering_judgment import repair_budget
+    engineering_repairs = repair_budget(min(6,max(0,int(options.get('native_max_repairs',3)))))
     turns=[];repairs=0;validation=None;receipt={'date':datetime.now(timezone.utc).isoformat(),'backend':'jarvis','codex_launched':False,'directory':str(run)}
     max_turns=min(100,max(4,int(options.get('native_max_turns',40))))
     truncated=0
@@ -289,18 +296,18 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                         return completed(validation,value)
                     if not validation['passed']:
                         repairs+=1
-                        if repairs>min(6,max(0,int(options.get('native_max_repairs',3)))):raise UncertainCoding('Behavioral checks still fail; original tests and partial implementation retained.')
+                        if repairs>engineering_repairs:raise UncertainCoding('Behavioral checks still fail; original tests and partial implementation retained.')
                         result=repair_packet(project,validation,plan)
                 else:raise ValueError('Tool not implemented.')
                 files.check_tests()
-                if request['platform_component'] and name in {'Write','Edit','apply_patch','source_transform','copy_source'} and not processes.sessions and all((project/f['path']).is_file() for f in plan['files']):
+                if (request['platform_component'] or (engineering_active and engineering_active['mode']=='enforced' and checked_worker_ready())) and name in {'Write','Edit','apply_patch','source_transform','copy_source'} and not processes.sessions and all((project/f['path']).is_file() for f in plan['files']):
                     # The platform owns this one-component browser contract.
                     # Validate the completed source directly instead of asking
                     # Qwen for a redundant, potentially slow "finish" turn.
                     validation=checked()
                     if validation['passed']:return completed(validation,value)
                     repairs+=1
-                    if repairs>min(6,max(0,int(options.get('native_max_repairs',3)))):raise UncertainCoding('Component checks still fail; original checks and partial source retained.')
+                    if repairs>engineering_repairs:raise UncertainCoding('Component checks still fail; original checks and partial source retained.')
                     result=repair_packet(project,validation,plan)
             except UncertainCoding:raise
             except (ValueError,KeyError,TypeError,OSError) as exc:
@@ -313,7 +320,7 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                     if validation['passed']:
                         return completed(validation,value)
                     repairs+=1
-                    if repairs>min(6,max(0,int(options.get('native_max_repairs',3)))):
+                    if repairs>engineering_repairs:
                         raise UncertainCoding('Behavioral checks still fail; unchanged source and tests retained.')
                     result=repair_packet(project,validation,plan)
                     turns.append({'tool':name,'arguments':args,'result':result})

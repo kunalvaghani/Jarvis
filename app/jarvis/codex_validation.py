@@ -348,6 +348,8 @@ def validate_project(root, run, goal, changed, plan, cancelled, report, deferred
     for name,digest in result.get('hashes',{}).items():
         if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise ValueError('Source changed during validation: '+name+'. Inspect before repair; no task replayed.')
     result['passed']=not result['errors'];result['runtime_verified']=result['passed'] and bool(result['checks'])
+    from .engineering_judgment import verified_coding_checks
+    verified_coding_checks(root, result, plan)
     (run/'validation.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     return result
 

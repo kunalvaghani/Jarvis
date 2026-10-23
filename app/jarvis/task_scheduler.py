@@ -369,6 +369,8 @@ class ScheduledQueue:
         report['proactive_tasks'] = [r['number'] for r in snapshot['tasks'] if str(r.get('idem','')).startswith('cognitive:')]
         report['files'] = [{'task':r['number'], **effect} for r in snapshot['tasks']
             for effect in r['checkpoint'].get('effects', []) if effect.get('kind')=='file']
+        report['engineering_goals'] = [{'task':r['number'], 'contract':r['checkpoint']['tool_checkpoint']['engineering']}
+            for r in snapshot['tasks'] if r['checkpoint'].get('tool_checkpoint', {}).get('engineering')]
         report['recorded_test_evidence'] = [{'task':r['number'], 'evidence':r['checkpoint']['tests']}
             for r in snapshot['tasks'] if r['checkpoint'].get('tests')]
         report['errors_and_recovery'] = [{'task':r['number'], **event} for r in snapshot['tasks']

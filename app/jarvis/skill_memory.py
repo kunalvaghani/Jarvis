@@ -243,13 +243,23 @@ class SkillMemory:
             explicit = set(re.findall(r'\$custom:([a-z0-9-]{1,64})\b', str(goal)))
             from .capabilities import skill_score,skill_ranking
             ranking=skill_ranking(goal)
-            live = [item for item in self.catalog if item.get('enabled', True)]
+            from .engineering_judgment import applicability, settings as engineering_settings, GUIDANCE
+            engineering = engineering_settings(getattr(self.memory, 'engineering_options', {}))
+            eligible = engineering['enabled'] and applicability(goal, kind) == 'engineering'
+            live = [item for item in self.catalog if item.get('enabled', True)
+                    and (item['name'] != 'karpathy-guidelines' or eligible)]
             metrics = self._living_metrics()
             from .skill_evolution import living_score
             scores={id(item):living_score(skill_score(item,goal,ranking), metrics.get(item.get('skill_id')), item) for item in live}
             ranked = sorted(live, key=lambda item: (item['name'] in explicit, scores[id(item)]), reverse=True)
             chosen = [item for item in ranked[:2] if item['name'] in explicit or scores[id(item)] > 0]
-            selected = [{"name": item["name"], "guidance": item["body"],
+            if eligible:
+                guide = next((item for item in live if item['name'] == 'karpathy-guidelines'), None)
+                if guide is not None and guide not in chosen:
+                    chosen = [guide, *chosen[:1]]
+            selected = [{"name": item["name"], "guidance": GUIDANCE if item['name'] == 'karpathy-guidelines' else item["body"],
+                         **({'selection_reason': 'Deterministic engineering intent; compact pinned behavioral guidance',
+                             'source_commit': '2c606141936f1eeef17fa3043a72095b4765b9c2'} if item['name'] == 'karpathy-guidelines' else {}),
                          **({"trust_state": "provisional", "notice": "Provisional evolved guidance: verify every step independently."}
                             if item.get('trust_state') == 'provisional' else {})} for item in chosen]
             self._living_selected(chosen)
@@ -332,6 +342,8 @@ class SkillMemory:
         """Record every attempt; promote only a completed, independently verified goal."""
         if not isinstance(task, dict):
             return
+        from .engineering_judgment import learning_view
+        task = learning_view(task)
         try:
             self.living_finish(task)
         except Exception as exc:  # Broad by design: telemetry never changes a task outcome.

@@ -1,0 +1,368 @@
+{
+  "generated_at": 1792786294.046421,
+  "tasks": [
+    {
+      "number": 1,
+      "id": "d61a7407415f44fe8f1f463ca5997767",
+      "idem": "3dbf682a5a1b4747a4ea734e1a31b267",
+      "created": 1792785987.8107383,
+      "updated": 1792786059.9650798,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "code_task",
+        "value": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+        "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-disabled-final\\project"
+      },
+      "original": {
+        "kind": "code_task",
+        "value": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+        "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-disabled-final\\project"
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [],
+        "lane": "inference",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "code_task"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "scheduling_score": 0.04005631156934061
+      },
+      "retries": 0,
+      "outcome": "Host executable checks and goal scope verified",
+      "checkpoint": {
+        "dispatch_at": 1792785988.01575,
+        "input_versions": {},
+        "task_result": {
+          "structured_output": {
+            "goal_id": null,
+            "checks": [
+              {
+                "exit_code": 0,
+                "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.000s\r\n\r\nOK\r\n",
+                "seconds": 0.515,
+                "kind": "python_tests",
+                "path": "test_core.py"
+              }
+            ],
+            "source_hashes": {
+              "youtube_connector.py": "18f17c3b2a7fdff3d7a5f705f3c67674480fc39c66452a0ebe92ef783d772a3f",
+              "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15"
+            },
+            "scope": "Existing native scope guards; engineering disabled control"
+          },
+          "findings": [],
+          "verified": true
+        },
+        "elapsed_seconds": 71.94932985305786
+      }
+    },
+    {
+      "number": 2,
+      "id": "3a409ca6fa9e4855bc718220c20d63e3",
+      "idem": "923bd11332794145a0a435415c164942",
+      "created": 1792785987.8107383,
+      "updated": 1792786294.0310254,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "code_task",
+        "value": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+        "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-disabled-final\\project"
+      },
+      "original": {
+        "kind": "code_task",
+        "value": "Also make playlist handling more reliable in the same youtube_connector.py: playlist_title(None) and missing/empty title return Untitled, strip whitespace from valid titles. Preserve normalize_playlist and video_url and all frozen tests. No network or accounts. Only edit youtube_connector.py.",
+        "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-disabled-final\\project"
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "d61a7407415f44fe8f1f463ca5997767"
+        ],
+        "lane": "inference",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "code_task"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "d61a7407415f44fe8f1f463ca5997767",
+            "condition": "success",
+            "optional": false,
+            "requires_result": true,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 2.4401117279944096
+      },
+      "retries": 0,
+      "outcome": "Host executable checks and goal scope verified",
+      "checkpoint": {
+        "dispatch_at": 1792786060.0174124,
+        "input_versions": {
+          "d61a7407415f44fe8f1f463ca5997767": 1
+        },
+        "task_result": {
+          "structured_output": {
+            "goal_id": null,
+            "checks": [
+              {
+                "exit_code": 0,
+                "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.001s\r\n\r\nOK\r\n",
+                "seconds": 0.5,
+                "kind": "python_tests",
+                "path": "test_core.py"
+              },
+              {
+                "exit_code": 0,
+                "output": "test_missing_title (test_playlist.Playlist) ... ok\r\ntest_valid_title (test_playlist.Playlist) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 2 tests in 0.000s\r\n\r\nOK\r\n",
+                "seconds": 0.625,
+                "kind": "python_tests",
+                "path": "test_playlist.py"
+              }
+            ],
+            "source_hashes": {
+              "youtube_connector.py": "6c47c2cdf690e31c4ebad2c470ac4e1ca92942182ba32a7779fa5f1814710c51",
+              "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15",
+              "test_playlist.py": "e98cdef196b40b9209e0279c0372a4e30254efa628cdbfc070562905f761648e"
+            },
+            "scope": "Existing native scope guards; engineering disabled control"
+          },
+          "findings": [],
+          "verified": true
+        },
+        "elapsed_seconds": 234.01361298561096
+      }
+    }
+  ],
+  "counts": {
+    "COMPLETED": 2
+  },
+  "total": 2,
+  "resources": {
+    "ram_available_mb": 5849.17578125,
+    "cpu_percent": 40.6,
+    "battery_low": false,
+    "desktop": true
+  },
+  "graph": {
+    "groups": [
+      {
+        "id": "9983ed67290d4f788b229f2f375ab61e",
+        "workspace": "local",
+        "project": null,
+        "goal": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792785987.8107383,
+        "workflows": [
+          "c115275b528944bf8c628d967c4341ed"
+        ],
+        "tasks": [
+          "d61a7407415f44fe8f1f463ca5997767",
+          "3a409ca6fa9e4855bc718220c20d63e3"
+        ],
+        "completed": 2,
+        "total": 2,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 2
+        },
+        "artifacts": [],
+        "errors_and_recovery": [],
+        "lifetime_progress": 1.0
+      }
+    ],
+    "nodes": [
+      {
+        "task": "d61a7407415f44fe8f1f463ca5997767",
+        "workflow": "c115275b528944bf8c628d967c4341ed",
+        "parent": null,
+        "data": "{\"created\": 1792785987.8107383, \"role\": \"task\"}"
+      },
+      {
+        "task": "3a409ca6fa9e4855bc718220c20d63e3",
+        "workflow": "c115275b528944bf8c628d967c4341ed",
+        "parent": null,
+        "data": "{\"created\": 1792785987.8107383, \"role\": \"task\"}"
+      }
+    ],
+    "edges": [
+      {
+        "upstream": "d61a7407415f44fe8f1f463ca5997767",
+        "downstream": "3a409ca6fa9e4855bc718220c20d63e3",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": true,
+          "reason": "Explicit dependency update"
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "source": "3a409ca6fa9e4855bc718220c20d63e3",
+        "target": "d61a7407415f44fe8f1f463ca5997767",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "3a409ca6fa9e4855bc718220c20d63e3",
+        "target": "d61a7407415f44fe8f1f463ca5997767",
+        "kind": "CONTINUATION_OF",
+        "data": {
+          "reason": "Explicit same-project playlist continuation",
+          "confidence": 1.0,
+          "ordering": false
+        }
+      }
+    ],
+    "evaluations": {
+      "d61a7407415f44fe8f1f463ca5997767": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792785988.0167572
+      },
+      "3a409ca6fa9e4855bc718220c20d63e3": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "d61a7407415f44fe8f1f463ca5997767",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "goal_id": null,
+              "checks": [
+                {
+                  "exit_code": 0,
+                  "output": "test_existing_url (test_core.Core) ... ok\r\ntest_missing_playlist (test_core.Core) ... ok\r\ntest_valid_items_preserve_order_without_duplicates (test_core.Core) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.000s\r\n\r\nOK\r\n",
+                  "seconds": 0.515,
+                  "kind": "python_tests",
+                  "path": "test_core.py"
+                }
+              ],
+              "source_hashes": {
+                "youtube_connector.py": "18f17c3b2a7fdff3d7a5f705f3c67674480fc39c66452a0ebe92ef783d772a3f",
+                "test_core.py": "05b42a324e5258a18f3bffcca0c870a45036012a99e4fc1752aee1a4777a4f15"
+              },
+              "scope": "Existing native scope guards; engineering disabled control"
+            },
+            "artifacts": [],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792786059.9650798,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "code_task",
+                "value": "Fix youtube_connector.py normalize_playlist reliability: None returns an empty list; only nonblank string IDs are valid; ignore missing IDs, non-string IDs, blank/whitespace IDs and None entries; retain valid string IDs in order without duplicates. Preserve video_url and playlist_title. Read the existing frozen test_core.py. No network or accounts. Only edit youtube_connector.py.",
+                "extra": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\engineering-judgment\\live-disabled-final\\project"
+              },
+              "workflow": "c115275b528944bf8c628d967c4341ed"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "d61a7407415f44fe8f1f463ca5997767": 1
+        },
+        "impossible": [],
+        "at": 1792786059.979645
+      }
+    },
+    "revision": 11,
+    "scope": "Current report batch; lifetime progress is separately labeled",
+    "reused_prerequisites": []
+  },
+  "overnight": false,
+  "paused": false,
+  "running": 0,
+  "queued": 0,
+  "decisions": [],
+  "note": "Outcomes are handler/checkpoint evidence. No inferred files, tests or quality claims.",
+  "outcomes": {
+    "COMPLETED": [
+      1,
+      2
+    ],
+    "PARTIAL": [],
+    "FAILED": [],
+    "RUNNING": [],
+    "WAITING_APPROVAL": [],
+    "WAITING_USER": [],
+    "PAUSED": []
+  },
+  "proactive_tasks": [],
+  "files": [],
+  "engineering_goals": [],
+  "recorded_test_evidence": [],
+  "errors_and_recovery": [],
+  "next_actions": []
+}

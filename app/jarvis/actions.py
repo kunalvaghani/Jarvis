@@ -180,7 +180,10 @@ class Actions:
         self.memory = ObsidianMemory(base, config.get("memory"))
         self.catalog.memory = self.memory
         from .skill_memory import SkillMemory
+        self.memory.engineering_options = config.get('engineering_judgment', {})
         self.skills = SkillMemory(self.memory)
+        from .engineering_judgment import EngineeringJudgmentEngine
+        self.engineering = EngineeringJudgmentEngine(self, config.get('engineering_judgment', {}))
         self.skills.task_id_provider = self.task_state.running_identity  # Living-skill telemetry per running task.
         self.memory.skills = self.skills
         self.task_state.on_finish = self.skills.safe_record
@@ -228,6 +231,8 @@ class Actions:
         self.acquisition = Acquisition(self)
         self.memory.app_knowledge = self.screen.knowledge
         def completed_task(task):
+            from .engineering_judgment import learning_view
+            task = learning_view(task)
             self.skills.safe_record(task)
             try:
                 from .small_model import Outcomes
@@ -252,6 +257,7 @@ class Actions:
         from .tools import ToolRegistry
         ToolRegistry(self).self_model([])  # Reconcile the persisted metadata view at startup.
         self.brain.client.context_provider = self.knowledge.planning_context
+        self.brain.client.engineering = self.engineering
         self.brain.client.task_result_provider = lambda: self.ingress.scheduler.current_inputs() if getattr(self, 'ingress', None) else []
         from .learning_memory import LearningMemory
         # ReasoningBank lessons, OpenViking vault index and isolated exploration (each optional).
@@ -393,6 +399,13 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command, expected_generation=None):
+        if command.kind in {'ask', 'task'} and not command.extra and (expected_generation is None or expected_generation == self.generation):
+            from .engineering_judgment import engine_for
+            engineering = engine_for(self)
+            explanation = engineering.explain(command.value) if engineering else None
+            if explanation is not None:
+                self.report('answer', explanation)
+                return
         if command.kind in {'ask','task'} and not command.extra:
             from .commands import cloud_command
             command = cloud_command(command.value) or command

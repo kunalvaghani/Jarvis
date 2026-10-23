@@ -11,8 +11,15 @@
   "utility_availability": "stale_validation",
   "utility_offered": 0,
   "current_snapshot": {
-    "date": "2026-10-21 IST",
-    "builtin_guides": 11,
-    "reason": "Added the Blender capability guide; original 2026-10-15 count of 10 is preserved."
-  }
+    "date": "2026-10-24 IST",
+    "builtin_guides": 12,
+    "reason": "Added the pinned Karpathy-inspired engineering guide. Historical 10/11-guide snapshots remain preserved."
+  },
+  "previous_snapshots": [
+    {
+      "date": "2026-10-21 IST",
+      "builtin_guides": 11,
+      "reason": "Added the Blender capability guide; original 2026-10-15 count of 10 is preserved."
+    }
+  ]
 }

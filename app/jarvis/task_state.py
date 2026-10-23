@@ -32,6 +32,13 @@ class TaskState:
             current["status"] = "interrupted"
             current["updated_at"] = _now()
             current["result"] = "Jarvis stopped before this task was completed. Inspect the last checkpoint before retrying."
+            engineering = current.get('engineering')
+            if isinstance(engineering, dict):
+                engineering['interrupted_state'] = engineering.get('state')
+                engineering['state'] = 'blocked'
+                engineering['recovery'] = 'Fresh source/goal verification required; no automatic effect replay.'
+                for criterion in engineering.get('acceptance', []):
+                    criterion['verified'] = False
             adaptive = current.get('adaptive')
             if isinstance(adaptive, dict):
                 adaptive['interrupted_state'] = adaptive.get('state')
@@ -114,6 +121,19 @@ class TaskState:
     def require_identity(self, expected):
         if not isinstance(expected,str) or not expected or self.identity()!=expected:
             raise ValueError('Task identity changed; unrelated execution refused.')
+
+    def set_engineering(self, record):
+        """Persist bounded host policy metadata in the existing task/checkpoint authority."""
+        from .question_client import bounded_request
+        payload = bounded_request(record)
+        if len(json.dumps(payload)) > 64000:
+            raise ValueError('Engineering contract exceeds the task metadata budget.')
+        with self.lock:
+            current = self.data.get('current')
+            if not current or current.get('status') != 'running':
+                return
+            current['engineering'] = payload
+            self.checkpoint('engineering_judgment', evidence=payload.get('goal_id', ''), source='host_policy')
 
     def checkpoint(self, stage, *, action=None, target=None, evidence=None, screen=None, source=None):
         with self.lock:

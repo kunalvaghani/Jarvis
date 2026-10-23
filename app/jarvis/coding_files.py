@@ -118,6 +118,8 @@ class FileSession:
             path=None;before=''
             if writing:
                 path,_=decide(self.root,tool,args);name=path.relative_to(self.root).as_posix();self.protect(name)
+                from .engineering_judgment import proposed_file
+                proposed_file(self.root, name)
                 before=path.read_text(encoding='utf-8') if path.exists() else ''
             label={'Read':'Read','Glob':'Listed','Grep':'Searched','Write':'Created' if path and not path.exists() else 'Edited','Edit':'Edited','Plan':'Inspected plan'}[tool]
             item=Activity(self.report,self.run,'file' if writing else 'read',label+' '+str(args.get('file_path',args.get('pattern','plan'))),worker=self.worker)
@@ -125,6 +127,8 @@ class FileSession:
                 result=execute(tool,args,context=self)
                 if writing:
                     result={**result,**review(before,path.read_text(encoding='utf-8'),name)}
+                    from .engineering_judgment import reviewed_file
+                    reviewed_file(self.root, name, before, path.read_text(encoding='utf-8'))
                     if name in self.tests:self.fixed_tests[name]=digest(path)
                 item.finish(**({k:result[k] for k in ('file','added','removed','diff') if k in result}),output=json.dumps(result,ensure_ascii=False)[:24000])
                 return result

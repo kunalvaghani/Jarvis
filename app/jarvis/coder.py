@@ -417,6 +417,14 @@ class Coder:
         self.actions, self.client = actions, client
 
     def run(self, project, goal, cancelled=lambda: False, selected=False):
+        from .engineering_judgment import engine_for
+        engineering = engine_for(self.actions)
+        if engineering:
+            with engineering.coding(project, goal, cancelled):
+                return self._dispatch(project, goal, cancelled, selected)
+        return self._dispatch(project, goal, cancelled, selected)
+
+    def _dispatch(self, project, goal, cancelled=lambda: False, selected=False):
         from .development_projects import requested
         from .task_graph import MAX_TASK_GOAL_CHARS
         backend=getattr(self.client, 'options', {}).get('coding_backend')
@@ -594,6 +602,10 @@ class Coder:
         # Resolve all target guidance before creating any folders or draft files.
         target_contexts = {step['path']: {**coding_context(project, goal, step['path'], files), **(development_context or {}), "skill_project": str(project)}
                            for step, _, _, _ in sources}
+        from .engineering_judgment import engine_for
+        engineering = engine_for(self.actions)
+        if engineering:
+            engineering.proposal(steps)
         created_dirs = []
         for folder in planned_dirs:
             if cancelled():
@@ -653,6 +665,10 @@ class Coder:
                 raise ValueError(f"Generated {path.name} removed too much existing code; no files were written.")
             if current == content:
                 continue
+            from .engineering_judgment import engine_for
+            engineering = engine_for(self.actions)
+            if engineering:
+                engineering.review_source(path.relative_to(project).as_posix(), current, content)
             prepared.append((path, original, content))
         if not prepared:
             for stream in streams:

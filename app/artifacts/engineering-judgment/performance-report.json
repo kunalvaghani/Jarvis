@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-23T20:42:19.316426+00:00",
+  "scope": "Bounded owned fixtures. No population reliability, live account or acoustic improvement claim.",
+  "measurements": [
+    {
+      "metric": "skill_selection",
+      "status": "PASS",
+      "disabled_median_ms": 3.7568499974440783,
+      "advisory_median_ms": 4.370249997009523,
+      "delta_ms": 0.6133999995654449
+    },
+    {
+      "metric": "extra_policy_inference_calls",
+      "status": "PASS",
+      "calls": 0,
+      "scope": "Deterministic policy and classification in measured fixtures; existing code generation still calls its model."
+    },
+    {
+      "metric": "prompt_tokens",
+      "status": "NOT_RUN",
+      "proxy": "Selected engineering contexts add 667 characters; not tokens."
+    },
+    {
+      "metric": "command_response_latency",
+      "status": "NOT_RUN",
+      "proxy": {
+        "parser_disabled_median_ms": 5.820350001158658,
+        "parser_advisory_median_ms": 5.623599998216378
+      },
+      "scope": "Parser only, no microphone, ASR, model response or desktop effect."
+    },
+    {
+      "metric": "atomic_coding_fixture_latency",
+      "status": "PASS",
+      "disabled_median_ms": 123.17600000096718,
+      "advisory_median_ms": 114.32020000211196,
+      "scope": "Five tasks/mode with stubbed inference, all five expected outputs and unrelated notes preserved. Different timings do not establish speedup."
+    },
+    {
+      "metric": "strict_two_goal_local_model_latency",
+      "status": "PASS",
+      "disabled_seconds": 306.078,
+      "enforced_corrected_seconds": 93.156,
+      "disabled_model_calls": 12,
+      "enforced_model_calls": 5,
+      "scope": "Connector-shaped owned fixture with frozen tests. Includes enforced verification-handoff fix, not general reliability/intelligence proof."
+    },
+    {
+      "metric": "isolated_peak_RAM_VRAM_overhead",
+      "status": "NOT_RUN",
+      "proxy": "Process RSS samples and shared resident model snapshot exist; neither isolates EJGAE overhead or peak use."
+    },
+    {
+      "metric": "focused_test_success",
+      "status": "PASS",
+      "passed": 159,
+      "failed": 0,
+      "new_parameterized_cases": 79,
+      "receipt": "final-awareness-focused-rerun.txt"
+    },
+    {
+      "metric": "full_regression_rate",
+      "status": "PASS",
+      "scope": "Frozen full regression, 150 gated checks remain skipped; no production failure population rate inferred.",
+      "passed": 4268,
+      "skipped": 150,
+      "failed": 0,
+      "seconds": 1383.89
+    },
+    {
+      "metric": "unrelated_changed_files_in_atomic_fixture",
+      "status": "PASS",
+      "count": 0,
+      "scope": "Five owned edits/mode plus final live owned fixture; not all arbitrary tasks."
+    },
+    {
+      "metric": "unnecessary_clarification_population_rate",
+      "status": "NOT_RUN",
+      "observed_defect": "First live probe asked despite explicit return criteria; fixed and subsequent strict goals passed without that question."
+    },
+    {
+      "metric": "false_positive_completion_population_rate",
+      "status": "NOT_RUN",
+      "scope": "Policy/native tests reject syntax/readback-only completion and stale source; no population rate measured."
+    },
+    {
+      "metric": "wrong_assumption_rework_population_rate",
+      "status": "NOT_RUN",
+      "scope": "Requirement provenance/conflict/revision fixtures exist; no population rate measured."
+    }
+  ]
+}

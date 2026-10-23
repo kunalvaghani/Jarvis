@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-23T20:14:06.265227+00:00",
+  "scope": "Read-only snapshot from existing Ollama API used by gpu_scheduler.py; model residency during owned probe, not peak or isolated EJGAE overhead. Context length is capacity, not measured prompt tokens.",
+  "models": [
+    {
+      "name": "qwen3.5:9b",
+      "size": 6041957822,
+      "size_vram": 2155756911,
+      "context_length": 4096,
+      "expires_at": "2026-10-24T02:13:24.5487567+05:30"
+    }
+  ]
+}
