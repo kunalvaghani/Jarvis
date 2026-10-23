@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-23",
+  "scope": "Actual short overnight-mode batch: 20 jobs, owned files, actual host observations and existing local-time answer; one deliberate existing-file failure, admission-order dependency, pre-dispatch sensitive approval deferral, delay and real mapped 20-second choice. Not physical voice, account effects or extended endurance.",
+  "seconds": 21.188000000000102,
+  "state": {
+    "phase": "finish",
+    "error": null,
+    "decision_seconds": 20.126627683639526
+  },
+  "counts": {
+    "FAILED": 1,
+    "WAITING_APPROVAL": 1,
+    "COMPLETED": 17,
+    "WAITING_DEPENDENCY": 1
+  },
+  "expected_files": {
+    "held.txt": true,
+    "work1.txt": true,
+    "work2.txt": true,
+    "work3.txt": true,
+    "work4.txt": true,
+    "work5.txt": true,
+    "work6.txt": true,
+    "work7.txt": true,
+    "work8.txt": true,
+    "work9.txt": true,
+    "delayed.txt": true
+  },
+  "existing_file_preserved": true,
+  "dependency_bound_to_failed_job": true,
+  "dependent_file_absent": true,
+  "sensitive_state": "WAITING_APPROVAL",
+  "sensitive_handler_dispatched": false,
+  "report_file_receipts": 11,
+  "report_matches_persisted_history": true,
+  "cloud_requests": 0,
+  "microphone_started": false,
+  "passed": true
+}

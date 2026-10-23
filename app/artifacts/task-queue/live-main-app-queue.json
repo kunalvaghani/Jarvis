@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-23",
+  "scope": "Actual production main.App, existing typed Entry/send_input, real Actions/SQLite queue, Island navigation/event drain and mapped decision timer. Isolated configuration disables microphone, speech, account features and background learning; ordinary stopped Jarvis session untouched.",
+  "seconds": 23.42199999999957,
+  "state": {
+    "admitted": true,
+    "queue_revealed": true,
+    "choice_presented": true,
+    "automatic_choice": true,
+    "queue_preserved_during_completion": true,
+    "error": null,
+    "screenshot": false,
+    "screenshot_error_type": "RuntimeError"
+  },
+  "jobs": [
+    {
+      "number": 1,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 2,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 3,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 4,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 5,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 6,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 7,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 8,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 9,
+      "state": "COMPLETED"
+    },
+    {
+      "number": 10,
+      "state": "COMPLETED"
+    }
+  ],
+  "files": {
+    "ui0.txt": true,
+    "ui1.txt": true,
+    "ui2.txt": true,
+    "ui3.txt": true,
+    "ui4.txt": true,
+    "ui5.txt": true,
+    "ui6.txt": true,
+    "ui7.txt": true,
+    "ui8.txt": true,
+    "ui9.txt": true
+  },
+  "microphone_started": false,
+  "isolated_config": true,
+  "passed": true
+}

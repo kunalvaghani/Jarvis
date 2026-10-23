@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-23",
+  "scope": "Three local public JSON probes per configured model through existing gpu_scheduler; not classification or task-quality acceptance",
+  "models": [
+    {
+      "role": "context",
+      "model": "qwen3.5:0.8b",
+      "installed": true,
+      "samples": [
+        {
+          "seconds": 6.99174529999982,
+          "matched": true
+        },
+        {
+          "seconds": 3.4462772000006225,
+          "matched": true
+        },
+        {
+          "seconds": 3.3611276999999973,
+          "matched": true
+        }
+      ],
+      "p50_seconds": 3.4462772000006225,
+      "p95_seconds": null
+    },
+    {
+      "role": "planner",
+      "model": "qwen3.5:9b",
+      "installed": true,
+      "samples": [
+        {
+          "seconds": 26.810431400001107,
+          "matched": true
+        },
+        {
+          "seconds": 9.428197900000669,
+          "matched": true
+        },
+        {
+          "seconds": 9.041115199999695,
+          "matched": true
+        }
+      ],
+      "p50_seconds": 9.428197900000669,
+      "p95_seconds": null
+    }
+  ],
+  "cloud_requests": 0,
+  "model_downloads": 0,
+  "note": "Cold/loading/handoff and lease wait are included; sample size does not support p95."
+}

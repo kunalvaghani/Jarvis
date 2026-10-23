@@ -1,0 +1,158 @@
+........................................................................ [ 40%]
+........................................................................ [ 80%]
+...............................FFFF                                      [100%]
+================================== FAILURES ===================================
+_ DeskWidgetTests.test_background_file_visible_in_every_view_and_code_draft_is_not_saved _
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_background_file_visible_in_every_view_and_code_draft_is_not_saved>
+
+    def setUp(self):
+        self.root = self.interface_root; self.root.withdraw()
+        self.app = Mock()
+        self.app.root=self.root
+        self.app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
+        self.app.speech.options={'enabled':False}
+>       build_interface(self.app)
+
+tests\test_island_desk.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.ttk.Style object at 0x0000019BFF629E70>
+elementname = 'GlassButton.surface', etype = 'image'
+args = (<PIL.ImageTk.PhotoImage object at 0x0000019BFF629C60>, ('disabled', <PIL.ImageTk.PhotoImage object at 0x0000019BFF629...L.ImageTk.PhotoImage object at 0x0000019BFF629810>), ('active', <PIL.ImageTk.PhotoImage object at 0x0000019BFF629A50>))
+kw = {'border': (15, 15, 15, 15), 'height': 35, 'padding': 0, 'sticky': 'nsew', ...}
+spec = 'pyimage45 disabled pyimage48 pressed pyimage47 focus pyimage49 active pyimage46'
+opts = ('-border', '15 15 15 15', '-padding', 0, '-width', 0, ...)
+
+    def element_create(self, elementname, etype, *args, **kw):
+        """Create a new element in the current theme of given etype."""
+        spec, opts = _format_elemcreate(etype, False, *args, **kw)
+>       self.tk.call(self._name, "element", "create", elementname, etype,
+            spec, *opts)
+E       _tkinter.TclError: Duplicate element GlassButton.surface
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: TclError
+_ DeskWidgetTests.test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget _
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget>
+
+    def setUp(self):
+        self.root = self.interface_root; self.root.withdraw()
+        self.app = Mock()
+        self.app.root=self.root
+        self.app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
+        self.app.speech.options={'enabled':False}
+>       build_interface(self.app)
+
+tests\test_island_desk.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.ttk.Style object at 0x0000019BFF6D5BA0>
+elementname = 'GlassButton.surface', etype = 'image'
+args = (<PIL.ImageTk.PhotoImage object at 0x0000019BFF6D5AE0>, ('disabled', <PIL.ImageTk.PhotoImage object at 0x0000019BFF6D5...L.ImageTk.PhotoImage object at 0x0000019BFF6D5AB0>), ('active', <PIL.ImageTk.PhotoImage object at 0x0000019BFF6D6EF0>))
+kw = {'border': (15, 15, 15, 15), 'height': 35, 'padding': 0, 'sticky': 'nsew', ...}
+spec = 'pyimage50 disabled pyimage53 pressed pyimage52 focus pyimage54 active pyimage51'
+opts = ('-border', '15 15 15 15', '-padding', 0, '-width', 0, ...)
+
+    def element_create(self, elementname, etype, *args, **kw):
+        """Create a new element in the current theme of given etype."""
+        spec, opts = _format_elemcreate(etype, False, *args, **kw)
+>       self.tk.call(self._name, "element", "create", elementname, etype,
+            spec, *opts)
+E       _tkinter.TclError: Duplicate element GlassButton.surface
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: TclError
+_ DeskWidgetTests.test_inline_approval_does_not_block_game_or_task_and_close_denies _
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_inline_approval_does_not_block_game_or_task_and_close_denies>
+
+    def setUp(self):
+        self.root = self.interface_root; self.root.withdraw()
+        self.app = Mock()
+        self.app.root=self.root
+        self.app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
+        self.app.speech.options={'enabled':False}
+>       build_interface(self.app)
+
+tests\test_island_desk.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.ttk.Style object at 0x0000019BFEC63970>
+elementname = 'GlassButton.surface', etype = 'image'
+args = (<PIL.ImageTk.PhotoImage object at 0x0000019BFEC62590>, ('disabled', <PIL.ImageTk.PhotoImage object at 0x0000019BFEC62...L.ImageTk.PhotoImage object at 0x0000019BFEC61960>), ('active', <PIL.ImageTk.PhotoImage object at 0x0000019BFEC625C0>))
+kw = {'border': (15, 15, 15, 15), 'height': 35, 'padding': 0, 'sticky': 'nsew', ...}
+spec = 'pyimage55 disabled pyimage58 pressed pyimage57 focus pyimage59 active pyimage56'
+opts = ('-border', '15 15 15 15', '-padding', 0, '-width', 0, ...)
+
+    def element_create(self, elementname, etype, *args, **kw):
+        """Create a new element in the current theme of given etype."""
+        spec, opts = _format_elemcreate(etype, False, *args, **kw)
+>       self.tk.call(self._name, "element", "create", elementname, etype,
+            spec, *opts)
+E       _tkinter.TclError: Duplicate element GlassButton.surface
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: TclError
+_ DeskWidgetTests.test_pause_button_focus_does_not_invert_one_explicit_click __
+
+self = <tests.test_island_desk.DeskWidgetTests testMethod=test_pause_button_focus_does_not_invert_one_explicit_click>
+
+    def setUp(self):
+        self.root = self.interface_root; self.root.withdraw()
+        self.app = Mock()
+        self.app.root=self.root
+        self.app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
+        self.app.speech.options={'enabled':False}
+>       build_interface(self.app)
+
+tests\test_island_desk.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\interface.py:98: in build_interface
+    install_glass(root, style)
+jarvis\glass_ui.py:75: in install_glass
+    element('GlassButton.surface')
+jarvis\glass_ui.py:72: in element
+    style.element_create(name,'image',images['normal'],('disabled',images['disabled']),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.ttk.Style object at 0x0000019BFEBC2080>
+elementname = 'GlassButton.surface', etype = 'image'
+args = (<PIL.ImageTk.PhotoImage object at 0x0000019BFEBC0100>, ('disabled', <PIL.ImageTk.PhotoImage object at 0x0000019BFEBC1...L.ImageTk.PhotoImage object at 0x0000019BFEBC1E70>), ('active', <PIL.ImageTk.PhotoImage object at 0x0000019BFEBC28F0>))
+kw = {'border': (15, 15, 15, 15), 'height': 35, 'padding': 0, 'sticky': 'nsew', ...}
+spec = 'pyimage60 disabled pyimage63 pressed pyimage62 focus pyimage64 active pyimage61'
+opts = ('-border', '15 15 15 15', '-padding', 0, '-width', 0, ...)
+
+    def element_create(self, elementname, etype, *args, **kw):
+        """Create a new element in the current theme of given etype."""
+        spec, opts = _format_elemcreate(etype, False, *args, **kw)
+>       self.tk.call(self._name, "element", "create", elementname, etype,
+            spec, *opts)
+E       _tkinter.TclError: Duplicate element GlassButton.surface
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\ttk.py:460: TclError
+=========================== short test summary info ===========================
+FAILED tests/test_island_desk.py::DeskWidgetTests::test_background_file_visible_in_every_view_and_code_draft_is_not_saved
+FAILED tests/test_island_desk.py::DeskWidgetTests::test_click_and_voice_use_same_bound_choice_path_and_old_button_cannot_retarget
+FAILED tests/test_island_desk.py::DeskWidgetTests::test_inline_approval_does_not_block_game_or_task_and_close_denies
+FAILED tests/test_island_desk.py::DeskWidgetTests::test_pause_button_focus_does_not_invert_one_explicit_click
+4 failed, 175 passed in 28.88s

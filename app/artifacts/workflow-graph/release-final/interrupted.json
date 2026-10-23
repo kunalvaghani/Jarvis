@@ -1,0 +1,26 @@
+{
+  "status": "incomplete",
+  "reason": "Early regression failure and native preview issue require fixes before final full rerun",
+  "owned_processes_stopped": [
+    {
+      "pid": 15272,
+      "name": "python.exe"
+    },
+    {
+      "pid": 28052,
+      "name": "python.exe"
+    },
+    {
+      "pid": 18776,
+      "name": "python.exe"
+    },
+    {
+      "pid": 12596,
+      "name": "python.exe"
+    },
+    {
+      "pid": 20736,
+      "name": "python.exe"
+    }
+  ]
+}

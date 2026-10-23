@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-23",
+  "scope": "Real owned Python process exits after actual file readback but before completion; new Actions instance opens the same WAL queue. Owned fixture files only. No microphone, cloud, account operations or unrelated process termination.",
+  "child_exit_code": 73,
+  "uncertain_task_state": "PAUSED",
+  "uncertain_checkpoint": true,
+  "first_file_unchanged": true,
+  "first_file_sha256": "638a3aefcb459fc9576a9a099abd060a31a7bcff02a895e93421287a9f9e7440",
+  "unsafe_resume_refused": true,
+  "waiting_task_state": "COMPLETED",
+  "waiting_file_verified": true,
+  "passed": true
+}

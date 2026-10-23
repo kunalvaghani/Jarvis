@@ -1,0 +1,23 @@
+{
+  "app/config/config.json": "6087e533b850c88c37361b40fd4a7aa2881632fe3c9a7b96eec11a426b8c41a5",
+  "app/config/runtime_manifest.json": "ef071031126797e9064af2befff764a249c02e38b26d4221754f54af707c5b0f",
+  "app/jarvis/actions.py": "cf2d70d4dc2875d035528ebc94355500ac189246155fc70530db28c473179b7b",
+  "app/jarvis/commands.py": "3b52daffbf4fc445a966c6c82db3d82847af467f26ca3e8db4946333b63e464a",
+  "app/jarvis/config_contract.py": "9b71d674becdc29c825c2d66541890b93a518f7eea3df35781895e9f4a86c4cc",
+  "app/jarvis/engine.py": "f6e4a54ac5c2fc88dd38610f74ed09406c3ba4f6d3907e3bbcc670c014a695a5",
+  "app/jarvis/island_desk.py": "8ce40410700c17d75c8dc72dcc895fbce6fc704be0f6e2d758cd0fb6e79f044d",
+  "app/jarvis/island_queue.py": "5239b5790d89daeb25b04fe39f3b276b7098138223680cb285125939de93b302",
+  "app/jarvis/knowledge.py": "7115a559072d31b8c876a51dfc21dc6c4d229da77ac50240b405d2a744c60820",
+  "app/jarvis/task_decisions.py": "e2748136157bb0ebeb4fd0f714de35c3bdeb8e8d58245b834aa8e8eb8cfedc49",
+  "app/jarvis/task_ingress.py": "cb64900ae936f47f8feb03d0511d71ea4d1e467ab1bed102b72ba86614c34f76",
+  "app/jarvis/task_policy.py": "85170c719f1be37d723f8b350975bf3b48034a601f2c229a79cf9368de9a8e63",
+  "app/jarvis/task_scheduler.py": "dbd55d83cd7e988615d6932552e51b797ac92bb0d95aa82ec53568bc10e33f32",
+  "app/jarvis/task_state.py": "81f76ac8f705fe1f762547535ebebcc7751431ba7b078331d18f1b11cd6e9d13",
+  "app/jarvis/task_store.py": "1b252ee72789769be6373803407ca1e7c2ce21ce2b4b9c5f30910a38e121e5f3",
+  "app/jarvis/voice_runtime.py": "7903e52e4dec741937790293fefd92c1b157dd58ea62a7aab5ae41f77d6c77e7",
+  "app/main.py": "b11797864e4c955790a5cd5f46e1c922ae9fa1397c61f14f75a799e5d371b10b",
+  "app/scripts/verification/benchmark_queue_models.py": "ca993398008a8bcf613757afd9abb0936016f89b9e90938e240857b8afde3af2",
+  "app/scripts/verification/benchmark_task_queue.py": "f537f60c4adfa99416cff8729c8f5d1db7d9f928be6c76679d092e158240b397",
+  "app/scripts/verification/render_queue_fixture.py": "1a8626ec899b7b96582abe568009be7788b9f3e07395f7fed9e1474092b1cdda",
+  "app/tests/test_autonomous_queue.py": "d856c9d3f8e627c90192abfb63733f6aa6115bbde155ed3174f62c39507f134b"
+}

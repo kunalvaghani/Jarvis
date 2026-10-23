@@ -1,0 +1,543 @@
+{
+  "started_at": "2026-10-23T05:57:08.366108+00:00",
+  "scope": "User-started physical headphone/microphone -> actual Listener/Engine/Actions/durable queue, owned fixture files only",
+  "recordings_saved": false,
+  "private_audio_uploaded": false,
+  "unknown_commands_dispatched": 0,
+  "ignored_commands": 4,
+  "received_while_worker_held": 8,
+  "microphone_started_by_user": true,
+  "voice_profile": {
+    "model_path": "models/faster-whisper-medium.en",
+    "whisper": {
+      "model": "medium.en",
+      "repo": "Systran/faster-whisper-medium.en",
+      "device": "cuda",
+      "compute_type": "int8_float16",
+      "language": "en",
+      "frame_ms": 100,
+      "streaming_enabled": true,
+      "adaptive_endpointing": false,
+      "endpoint_mode": "balanced",
+      "max_utterance_seconds": 120,
+      "partial_interval_seconds": 1.0,
+      "silence_seconds": 0.8,
+      "vad_threshold": 0.45
+    },
+    "microphone": null
+  },
+  "finished_at": "2026-10-23T05:58:53.652690+00:00",
+  "capture_started": true,
+  "asr_decode_metrics": [
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 0.375,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 0.7649999999998727,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 0.42099999999982174,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 1,
+      "final": true,
+      "decode_seconds": 0.46900000000005093,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 2,
+      "final": false,
+      "decode_seconds": 0.9070000000001528,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 2,
+      "final": false,
+      "decode_seconds": 0.4070000000001528,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 2,
+      "final": false,
+      "decode_seconds": 0.43800000000010186,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 2,
+      "final": true,
+      "decode_seconds": 0.43699999999989814,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.7339999999999236,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 1.030999999999949,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.7970000000000255,
+      "queue_seconds": 0.03099999999994907,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 3,
+      "final": true,
+      "decode_seconds": 0.42200000000002547,
+      "queue_seconds": 0.125,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.7179999999998472,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.375,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.40599999999994907,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 4,
+      "final": true,
+      "decode_seconds": 0.8279999999999745,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.6559999999999491,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.43699999999989814,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.40599999999994907,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 5,
+      "final": true,
+      "decode_seconds": 0.43699999999989814,
+      "queue_seconds": 0.06300000000010186,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.7959999999998217,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.40599999999994907,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.45299999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 6,
+      "final": true,
+      "decode_seconds": 0.45400000000017826,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 7,
+      "final": false,
+      "decode_seconds": 0.32799999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 7,
+      "final": false,
+      "decode_seconds": 0.42200000000002547,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 7,
+      "final": false,
+      "decode_seconds": 0.42200000000002547,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 7,
+      "final": true,
+      "decode_seconds": 0.45299999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 8,
+      "final": false,
+      "decode_seconds": 0.375,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 8,
+      "final": false,
+      "decode_seconds": 0.4070000000001528,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 8,
+      "final": false,
+      "decode_seconds": 0.43800000000010186,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 8,
+      "final": true,
+      "decode_seconds": 0.8910000000000764,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 9,
+      "final": false,
+      "decode_seconds": 0.7820000000001528,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 9,
+      "final": false,
+      "decode_seconds": 0.3910000000000764,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 9,
+      "final": false,
+      "decode_seconds": 0.45299999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 9,
+      "final": true,
+      "decode_seconds": 0.45400000000017826,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 10,
+      "final": false,
+      "decode_seconds": 0.6880000000001019,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 10,
+      "final": false,
+      "decode_seconds": 0.42200000000002547,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 10,
+      "final": false,
+      "decode_seconds": 0.43800000000010186,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 10,
+      "final": true,
+      "decode_seconds": 0.45299999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 11,
+      "final": false,
+      "decode_seconds": 0.375,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 11,
+      "final": false,
+      "decode_seconds": 0.75,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 11,
+      "final": false,
+      "decode_seconds": 0.45400000000017826,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 11,
+      "final": true,
+      "decode_seconds": 0.43800000000010186,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 12,
+      "final": false,
+      "decode_seconds": 0.5470000000000255,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 12,
+      "final": false,
+      "decode_seconds": 0.46900000000005093,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 12,
+      "final": false,
+      "decode_seconds": 0.45299999999997453,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 12,
+      "final": true,
+      "decode_seconds": 0.4839999999999236,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 13,
+      "final": false,
+      "decode_seconds": 0.9540000000001783,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 13,
+      "final": false,
+      "decode_seconds": 0.43800000000010186,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 13,
+      "final": false,
+      "decode_seconds": 0.45400000000017826,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "343e7d8d861747dbb95b465ae92ae26e",
+      "utterance_id": 13,
+      "final": true,
+      "decode_seconds": 0.4679999999998472,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    }
+  ],
+  "fixture_files": {
+    "live eight.txt": true,
+    "live five.txt": true,
+    "live four.txt": true,
+    "live nine.txt": true,
+    "live one.txt": true,
+    "live seven.txt": true,
+    "live six.txt": false,
+    "live ten.txt": false,
+    "live three.txt": true,
+    "live two.txt": true
+  },
+  "task_states": [
+    {
+      "number": 1,
+      "state": "COMPLETED",
+      "fixture": "live one.txt"
+    },
+    {
+      "number": 2,
+      "state": "COMPLETED",
+      "fixture": "live two.txt"
+    },
+    {
+      "number": 3,
+      "state": "COMPLETED",
+      "fixture": "live three.txt"
+    },
+    {
+      "number": 4,
+      "state": "COMPLETED",
+      "fixture": "live four.txt"
+    },
+    {
+      "number": 5,
+      "state": "COMPLETED",
+      "fixture": "live five.txt"
+    },
+    {
+      "number": 6,
+      "state": "COMPLETED",
+      "fixture": "live seven.txt"
+    },
+    {
+      "number": 7,
+      "state": "COMPLETED",
+      "fixture": "live eight.txt"
+    },
+    {
+      "number": 8,
+      "state": "COMPLETED",
+      "fixture": "live nine.txt"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "23f08fc05a464481a2b73290a837f61d",
+      "question": "Overnight scheduling preference",
+      "options": [
+        "Balanced priorities",
+        "Prefer coding"
+      ],
+      "recommended": 0,
+      "confidence": 0.95,
+      "reversible": true,
+      "sensitive": false,
+      "presented_at": 1792735116.7435167,
+      "choice": null,
+      "status": "PENDING",
+      "automatic": false
+    },
+    {
+      "id": "65a57a91b3474e83911837c27f33ec46",
+      "question": "Overnight scheduling preference",
+      "options": [
+        "Balanced priorities",
+        "Prefer coding"
+      ],
+      "recommended": 0,
+      "confidence": 0.95,
+      "reversible": true,
+      "sensitive": false,
+      "presented_at": null,
+      "choice": null,
+      "status": "PENDING",
+      "automatic": false
+    }
+  ],
+  "all_ten_files_verified": false,
+  "ten_distinct_jobs": false,
+  "all_jobs_completed": false,
+  "automatic_routine_decision": false,
+  "probe_seconds": 82.5,
+  "passed": false
+}

@@ -74,6 +74,9 @@ def parse(text: str) -> Command:
 
 
 def _parse_command(text: str) -> Command:
+    from .task_policy import queue_request
+    if queue_request(text):
+        return Command('task', text, 'queue_request')
     reflex = REFLEX.get(text.strip().rstrip('.!?').casefold())
     if reflex:
         return reflex

@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-23 IST",
+  "branch": "codex/autonomous-task-queue",
+  "candidate": true,
+  "release_accepted": false,
+  "focused": {
+    "passed": 139,
+    "seconds": 13.54
+  },
+  "full_regression": {
+    "passed": 4054,
+    "skipped": 150,
+    "failed": 0,
+    "warnings": 1,
+    "seconds": 1098.25,
+    "receipt": "release-full-regression.txt",
+    "source_files": 513,
+    "source_unchanged": true
+  },
+  "launcher": "ready; launcher-final-check.txt",
+  "frozen_source_files": 513,
+  "new_documentation_links_initial": 32,
+  "microphone_started": true,
+  "jarvis_restarted": false,
+  "model_downloads": 0,
+  "package_installations": 0,
+  "cloud_requests": 0,
+  "physical_overnight_acceptance": false,
+  "known_open_gates": [
+    "general isolated parallel background work",
+    "arbitrary planner routine decisions",
+    "uncertain started-task reconciliation/rollback",
+    "strict physical speech and acoustic duplex",
+    "account effects",
+    "physical sleep/battery/thermal behavior",
+    "prolonged overnight endurance",
+    "broader scheduling language/resources"
+  ],
+  "focused_final": {
+    "passed": 300,
+    "seconds": 29.95,
+    "scope": "earlier expanded focused checkpoint"
+  },
+  "focused_restored": {
+    "passed": 323,
+    "seconds": 47.93,
+    "receipt": "restored-voice-regression.txt"
+  },
+  "main_microphone_started": false,
+  "physical_latest": {
+    "completed_fixture_files": 8,
+    "expected": 10,
+    "automatic_decision": false,
+    "passed": false,
+    "receipt": "live-headphone-restored-profile.json"
+  },
+  "voice_profile": {
+    "model": "medium.en",
+    "frame_ms": 100,
+    "adaptive_endpointing": false,
+    "decoder": "original",
+    "user_confirmed_restored": true
+  },
+  "isolated_clarification_continuation": true,
+  "experimental_decoder_retained": false,
+  "focused_latest": {
+    "passed": 335,
+    "seconds": 35.38,
+    "receipt": "windows-gate-focused-regression.txt"
+  },
+  "live_mixed": {
+    "passed": true,
+    "jobs_completed": 10,
+    "file_receipts": 7,
+    "decision_seconds": 20.05016326904297
+  },
+  "live_process_crash_recovery": {
+    "passed": true,
+    "unsafe_replay_refused": true,
+    "waiting_job_completed": true
+  },
+  "live_overnight_short_batch": {
+    "passed": true,
+    "completed": 17,
+    "deliberate_failed": 1,
+    "dependency_wait": 1,
+    "approval_wait": 1,
+    "verified_file_receipts": 11
+  },
+  "live_windows_lock": {
+    "passed": true,
+    "locked_seconds": 22.203,
+    "closed_gate_observations": 181,
+    "readonly_continued": true
+  },
+  "live_power_api": {
+    "passed": true,
+    "default_prevent_sleep": false,
+    "physical_sleep_certified": false
+  },
+  "main_app_fixture_started": true,
+  "regular_jarvis_session_restarted": false,
+  "live_main_app": {
+    "passed": true,
+    "typed_entry_jobs_completed": 10,
+    "microphone_started": false,
+    "screenshot_captured": false
+  },
+  "new_documentation_links_latest": 777
+}

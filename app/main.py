@@ -79,6 +79,10 @@ class App:
         root.after(300, self.remember_external_window)
         root.after(16, self.drain)
         self.watchdog = Watchdog(self.report)
+        ingress = getattr(self.actions, 'ingress', None)
+        if ingress is not None:
+            self.watchdog.register('Durable task intake', ingress.healthy, ingress.repair, lambda:not self.closing)
+
         self.watchdog.register('Cognition persistence',self.actions.cognition.persistence_healthy,
             self.actions.cognition.repair_persistence,
             enabled=lambda:not self.closing and self.actions.cognition.enabled and
@@ -381,12 +385,23 @@ class App:
         request, issued = new_request_id(), time.monotonic()  # kept locally: an answer cannot supply them
         answer = {"approved": False, "request": request}
         ready = threading.Event()
+        ingress = getattr(getattr(self, 'actions', None), 'ingress', None)
+        identity = getattr(ingress.scheduler.local, 'identity', None) if ingress else None
+        if identity:
+            ingress.store.transition(identity, 'WAITING_APPROVAL', 'Existing explicit approval card; silence is not consent')
         self.report("approval", (kind, detail, answer, ready, cancelled))
         while not ready.wait(.1):
             if cancelled():
                 return False
         # Final boundary: only a receipt for this exact pending request, within its lifetime, authorizes it.
-        return receipt_valid(answer, kind, detail, request, issued, cancelled)
+        approved = receipt_valid(answer, kind, detail, request, issued, cancelled)
+        if identity:
+            row = ingress.store.get(identity)
+            if row['state'] == 'WAITING_APPROVAL':
+                ingress.store.transition(identity, 'RUNNING', 'Explicit approval returned' if approved else 'Approval not granted')
+            if not approved:
+                ingress.scheduler.local.approval_refused = True
+        return approved
 
     def show_command_prompt(self):
         self.desk.show('Console')
@@ -448,6 +463,17 @@ class App:
                 kind, message, guard = message
                 if not guard():
                     continue
+            if kind == 'task_received':
+                self.state.set(f"Task #{message['number']} received · durable queue")
+                continue
+            if kind == 'task_decision':
+                if message.get('status') == 'PENDING':
+                    self.desk.notify('island_navigation', ('Queue', ''))
+                self.desk.queue_view.tick()
+                continue
+            if kind == 'task_report':
+                self.log_line('action', 'Morning report saved: '+message)
+                continue
             if kind in {'voice_prepared'}:
                 continue  # Metadata-only preparation, never an executable command.
             if kind == 'voice_language':
@@ -538,18 +564,18 @@ class App:
                 self.log_line(kind, message)
                 if kind == "answer":
                     self.live.set(message[:450])
-                    self.speech.say(message)
+                    self.speech.say(message) if not (getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()) else None
             elif kind == "stop_speech":
                 self.speech.cancel()  # "Stop talking; I have a question": silence now, keep listening.
             elif kind == "spoken_reply":
                 self.ui_activity = ""
                 self.live.set(message[:450])
-                self.speech.say(message)
+                self.speech.say(message) if not (getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()) else None
             elif kind == "screen_offer":
                 self.question.set(message[:700])  # Screen pre-awareness: answer with yes, no, or the detail.
                 self.live.set(message[:450])
                 self.log_line("question", message)
-                self.speech.say(message)
+                self.speech.say(message) if not (getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()) else None
                 engine = getattr(self, 'engine', None)
                 if engine is not None and not engine.active:
                     engine.activate()
@@ -619,12 +645,19 @@ class App:
         duplex = self.config.get('voice', {}).get('full_duplex', {})
         def interrupt_response(kind):
             self.speech.interrupt()
-            self.actions.knowledge.cancel()
+            ingress = getattr(self.actions, 'ingress', None)
+            if ingress is None:
+                self.actions.knowledge.cancel()
             self.report('answer_stream', {'active': False, 'phase': 'Interrupted', 'text': ''})
             if kind in {'CANCEL', 'CORRECTION', 'REPLACEMENT'}:
                 # Existing generation/token checks stop at cooperative effect boundaries.
                 # Completed effects are neither repeated nor reversed.
-                self.actions.cancel()
+                if ingress is None:
+                    self.actions.cancel()
+                elif kind in {'CORRECTION', 'REPLACEMENT'}:
+                    self.actions._queue_control('cancel_current')
+                # Specific cancellation is dispatched by Engine to the durable task.
+                # A new utterance only interrupts playback; it preserves queued work.
             if kind == 'RESUME':
                 # Speech-only resume: never replay tool operations.
                 text = getattr(self.actions, 'last_spoken', '')
@@ -723,6 +756,9 @@ class App:
     def close(self):
         self.closing = True
         self.actions.closing = True
+        ingress = getattr(self.actions, 'ingress', None)
+        if ingress is not None:
+            ingress.close()  # Freeze durable admissions before legacy microphone shutdown cancels transient work.
         target = getattr(self.island, 'drop_target', None)
         if target is not None:
             target.close()

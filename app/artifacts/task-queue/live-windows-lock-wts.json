@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-23",
+  "scope": "Actual user-controlled Windows lock/unlock, WTS session-state plus input-desktop gate, actual read-only memory check and deferred owned file. No automatic lock or microphone/cloud/account activity.",
+  "state": {
+    "phase": "unlocked",
+    "locked_at": 3941.234,
+    "locked_seconds": 22.202999999999975,
+    "readonly_completed_while_locked": true,
+    "desktop_file_deferred_while_locked": true,
+    "gate_false_for_every_locked_observation": true,
+    "locked_observations": 181,
+    "error": null
+  },
+  "file_verified": true,
+  "task_states": [
+    {
+      "kind": "create",
+      "state": "COMPLETED"
+    },
+    {
+      "kind": "system_info",
+      "state": "COMPLETED"
+    }
+  ],
+  "passed": true
+}

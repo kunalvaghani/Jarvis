@@ -256,7 +256,11 @@ class Knowledge:
         if not self.thread.is_alive():
             self.client.close()
 
-    def submit(self, question, web=False, screen=False):
+    def submit(self, question, web=False, screen=False, on_complete=None, cancel_check=None, workflow_context=None):
+        if workflow_context is not None:
+            from .question_client import bounded_request
+            workflow_context = bounded_request(workflow_context)
+            web = False  # Internal result handoffs are never external search queries.
         generation = self.generation
         if self.on_request is not None:
             self.on_request('ask', question)
@@ -270,12 +274,32 @@ class Knowledge:
                 if pending:
                     self._saved('finish', pending['turn'], status='superseded')
                 turn = self._saved('begin', self.session_id, question)
-            self.prepare_context(question)
-            self.queue.put_nowait((generation, question, web, bool(screen or wants_screen(question)), handle, turn))
+            if workflow_context is None:
+                self.prepare_context(question)
+            job = (generation, question, web, bool(screen or wants_screen(question)), handle, turn)
+            if workflow_context is not None:
+                job += (None, None, workflow_context)
+            if on_complete is not None:
+                callbacks = getattr(self, '_task_callbacks', None)
+                if callbacks is None:
+                    self._task_callbacks = callbacks = {}
+                callbacks[id(job)] = on_complete
+            if cancel_check is not None:
+                if not hasattr(self, '_task_cancellations'):
+                    self._task_cancellations = {}
+                self._task_cancellations[id(job)] = cancel_check
+            try:
+                self.queue.put_nowait(job)
+            except queue.Full:
+                getattr(self, '_task_callbacks', {}).pop(id(job), None)
+                getattr(self, '_task_cancellations', {}).pop(id(job), None)
+                raise
+            return True
         except queue.Full:
             if turn:
                 self._saved('finish', turn, status='rejected')
             self.report("warning", "Question queue full. Wait for an answer or press Stop all tasks.")
+            return False
 
     def submit_natural(self, question, grounded=''):
         generation = self.generation
@@ -306,7 +330,13 @@ class Knowledge:
             direct = None
             capture_hidden = False
             completed = False
-            cancelled = lambda: self.closed.is_set() or generation != self.generation
+            result = {}
+            task_cancelled = getattr(self, '_task_cancellations', {}).get(id(job), lambda:False)
+            workflow_context = job[8] if len(job)>8 else None
+            workflow_fields = ({'task_kind':'workflow', 'conversation_context':True,
+                'memory_context':{'task_results':workflow_context}} if workflow_context is not None else {})
+            cancelled = lambda: self.closed.is_set() or generation != self.generation or task_cancelled()
+            self.report.bind(generation, lambda cancelled=cancelled:not cancelled())
             try:
                 if cancelled():
                     continue
@@ -330,7 +360,7 @@ class Knowledge:
                     continue
                 fresh_public = len(job) <= 6 and standalone_public(self.client.base,
                     {'question': question, 'web': web, 'screen': use_screen})
-                future = None if fresh_public else self.prepare_context(question)
+                future = None if fresh_public or workflow_context is not None else self.prepare_context(question)
                 prepared = None
                 if future and len(job) <= 6:
                     try:
@@ -342,7 +372,7 @@ class Knowledge:
                 with self.context_lock:
                     selected = job[6] if len(job) > 6 else None
                     app_provider=getattr(self,'app_snapshot_provider',None)
-                    resolved = {'history': [], 'source': 'none', 'matches': []} if fresh_public else prepared or self._context(
+                    resolved = {'history': [], 'source': 'none', 'matches': []} if fresh_public or workflow_context is not None else prepared or self._context(
                         question, self.context_seed+self.history, self.session_id,
                         app_context=app_provider() if app_provider else None)
                     context = resolved['history']
@@ -368,8 +398,8 @@ class Knowledge:
                         if context:
                             self.context_seed = context
                 realtime = getattr(self, 'realtime', None)
-                realtime_context = realtime.context(question, cancelled) if realtime and not use_screen else None
-                direct = None if web or use_screen or realtime_context else self.quick.answer(question)
+                realtime_context = realtime.context(question, cancelled) if realtime and not use_screen and workflow_context is None else None
+                direct = None if workflow_context is not None or web or use_screen or realtime_context else self.quick.answer(question)
                 if context and not self.options.get('natural_conversation', {}).get('enabled', False):
                     direct = None  # A follow-up must use its chosen conversation context.
                 if direct is not None:
@@ -421,7 +451,7 @@ class Knowledge:
                 if direct is None:
                     app_context=None
                     app_provider=getattr(self,'live_app_provider',None)
-                    if app_provider and re.search(r'\b(app|window|buttons?|controls?|opened|closed|it|that|this)\b',question,re.I):
+                    if app_provider and workflow_context is None and re.search(r'\b(app|window|buttons?|controls?|opened|closed|it|that|this)\b',question,re.I):
                         app_context=app_provider(cancelled)
                     result = self.client.request({"question": question, "web": web, "options": self.options,
                                                   "realtime_context": realtime_context,
@@ -430,7 +460,7 @@ class Knowledge:
                                                   "conversation_context": bool(context),
                                                   "memory_retrieval_done": True,
                                                   "context_source": 'current_session' if current_found else 'selected_memory' if context else 'none',
-                                                  "stream_answer": self.options.get('stream', True)}, cancelled)
+                                                  "stream_answer": self.options.get('stream', True), **workflow_fields}, cancelled)
                 if cancelled():
                     continue
                 answer = result["answer"]
@@ -459,5 +489,13 @@ class Knowledge:
                     process.kill()
                     process.communicate()
                 self.active_generation = None
+                callback = getattr(self, '_task_callbacks', {}).pop(id(job), None)
+                getattr(self, '_task_cancellations', {}).pop(id(job), None)
+                if callback is not None:
+                    try:
+                        callback(completed and not cancelled(), str((result or {}).get('answer', '')))
+                    except Exception:
+                        pass  # Metadata callback must not kill the existing conversation worker.
                 self.queue.task_done()
+                self.report.unbind()
         self.client.close()

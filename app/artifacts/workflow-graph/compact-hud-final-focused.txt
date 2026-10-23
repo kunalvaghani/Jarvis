@@ -1,0 +1,76 @@
+........................................................................ [ 40%]
+............................F........................................... [ 80%]
+...................................                                      [100%]
+================================== FAILURES ===================================
+____________ test_native_queue_controls_and_hidden_decision_timer _____________
+
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-826/test_native_queue_controls_and0')
+
+    def test_native_queue_controls_and_hidden_decision_timer(tmp_path):
+        import tkinter as tk
+        from jarvis.island_queue import QueueView
+>       root = tk.Tk(); root.withdraw()
+
+tests\test_autonomous_queue.py:462: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <tkinter.Tk object .>, screenName = None, baseName = '__main__'
+className = 'Tk', useTk = True, sync = False, use = None
+
+    def __init__(self, screenName=None, baseName=None, className='Tk',
+                 useTk=True, sync=False, use=None):
+        """Return a new Toplevel widget on screen SCREENNAME. A new Tcl interpreter will
+        be created. BASENAME will be used for the identification of the profile file (see
+        readprofile).
+        It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
+        is the name of the widget class."""
+        self.master = None
+        self.children = {}
+        self._tkloaded = False
+        # to avoid recursions in the getattr code in case of failure, we
+        # ensure that self.tk is always _something_.
+        self.tk = None
+        if baseName is None:
+            import os
+            baseName = os.path.basename(sys.argv[0])
+            baseName, ext = os.path.splitext(baseName)
+            if ext not in ('.py', '.pyc'):
+                baseName = baseName + ext
+        interactive = False
+>       self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+E       _tkinter.TclError: Can't find a usable tk.tcl in the following directories: 
+E           C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tcl8.6/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/lib/tk8.6 C:/Users/kunal/AppData/Local/Programs/Python/library
+E       
+E       C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl: couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/entry.tcl": no such file or directory
+E       couldn't read file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/entry.tcl": no such file or directory
+E           while executing
+E       "source -encoding utf-8 C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/entry.tcl"
+E           (in namespace eval "::" script line 1)
+E           invoked from within
+E       "namespace eval :: [list source -encoding utf-8 [file join $::tk_library $file.tcl]]"
+E           (procedure "SourceLibFile" line 2)
+E           invoked from within
+E       "SourceLibFile entry"
+E           (in namespace eval "::tk" script line 4)
+E           invoked from within
+E       "namespace eval ::tk {
+E       	SourceLibFile icons
+E       	SourceLibFile button
+E       	SourceLibFile entry
+E       	SourceLibFile listbox
+E       	SourceLibFile menu
+E       	SourceLibFile panedw..."
+E           (file "C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl" line 501)
+E           invoked from within
+E       "source C:/Users/kunal/AppData/Local/Programs/Python/Python310/tcl/tk8.6/tk.tcl"
+E           ("uplevel" body line 1)
+E           invoked from within
+E       "uplevel #0 [list source $file]"
+E       
+E       
+E       This probably means that tk wasn't installed properly.
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py:2299: TclError
+=========================== short test summary info ===========================
+FAILED tests/test_autonomous_queue.py::test_native_queue_controls_and_hidden_decision_timer
+1 failed, 178 passed in 34.75s

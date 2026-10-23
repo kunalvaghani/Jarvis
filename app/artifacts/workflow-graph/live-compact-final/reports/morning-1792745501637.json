@@ -1,0 +1,2310 @@
+{
+  "generated_at": 1792745501.6206768,
+  "tasks": [
+    {
+      "number": 1,
+      "id": "753e2a5c227b4a03941e557ebad0a2c4",
+      "idem": "8b1a06e7c78d4dadb43ef4d4ec375cca",
+      "created": 1792745459.4025571,
+      "updated": 1792745501.531288,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 4.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 4.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "37ace7b80bcc47f6913672daf1e1059f",
+          "1ed7140160744f68ab0aa176ec51b619"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "37ace7b80bcc47f6913672daf1e1059f",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          },
+          {
+            "upstream": "1ed7140160744f68ab0aa176ec51b619",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4361713444011683
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 4.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.4910197,
+        "input_versions": {
+          "37ace7b80bcc47f6913672daf1e1059f": 1,
+          "1ed7140160744f68ab0aa176ec51b619": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 4.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.03975176811218262
+      }
+    },
+    {
+      "number": 2,
+      "id": "664204d555c84792bb6b0299adcaa545",
+      "idem": "ab6db122204c49bf81fdfb612fef607c",
+      "created": 1792745459.5118322,
+      "updated": 1792745501.3751783,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 7.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 7.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "08f2bc4f080f425692b121e10a6deef6"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "08f2bc4f080f425692b121e10a6deef6",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4274036601004279
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 7.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.3372643,
+        "input_versions": {
+          "08f2bc4f080f425692b121e10a6deef6": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 7.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.03791403770446777
+      }
+    },
+    {
+      "number": 3,
+      "id": "4678b06fe5154f42a63e3697426f302d",
+      "idem": "208e2c43f59549edb2329315d4ec13e5",
+      "created": 1792745459.6188045,
+      "updated": 1792745501.5562258,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 8.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 8.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "5db010f68a8a4803afe98e0addd9b962",
+          "664204d555c84792bb6b0299adcaa545"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "5db010f68a8a4803afe98e0addd9b962",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          },
+          {
+            "upstream": "664204d555c84792bb6b0299adcaa545",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.430463842036056
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 8.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.536042,
+        "input_versions": {
+          "5db010f68a8a4803afe98e0addd9b962": 1,
+          "664204d555c84792bb6b0299adcaa545": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 8.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.020183801651000977
+      }
+    },
+    {
+      "number": 4,
+      "id": "7d31370f0b514e38891a3c28442bfaac",
+      "idem": "9b2717a0e00b4494b63376aad2fcb125",
+      "created": 1792745459.7428548,
+      "updated": 1792745501.2868302,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 0.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 0.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "scheduling_score": 1.411765356343714
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 0.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.0991378,
+        "input_versions": {},
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 0.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.18769240379333496
+      }
+    },
+    {
+      "number": 5,
+      "id": "08f2bc4f080f425692b121e10a6deef6",
+      "idem": "d9b988d8560c41c29a68c82eae287546",
+      "created": 1792745459.8510754,
+      "updated": 1792745501.3315032,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 5.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 5.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "scheduling_score": 1.4147482270814256
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 5.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.2968445,
+        "input_versions": {},
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 5.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.03465867042541504
+      }
+    },
+    {
+      "number": 6,
+      "id": "d028a6c3679948c291af1f54029f9970",
+      "idem": "5d7e3db6faed487598b94659e4529625",
+      "created": 1792745459.9618177,
+      "updated": 1792745501.5935235,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 9.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 9.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "5db010f68a8a4803afe98e0addd9b962",
+          "664204d555c84792bb6b0299adcaa545"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "5db010f68a8a4803afe98e0addd9b962",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          },
+          {
+            "upstream": "664204d555c84792bb6b0299adcaa545",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4201119457500453
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 9.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.5684984,
+        "input_versions": {
+          "5db010f68a8a4803afe98e0addd9b962": 1,
+          "664204d555c84792bb6b0299adcaa545": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 9.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.025025129318237305
+      }
+    },
+    {
+      "number": 7,
+      "id": "37ace7b80bcc47f6913672daf1e1059f",
+      "idem": "e58cc8603dc84221908a4a8340daa238",
+      "created": 1792745460.068328,
+      "updated": 1792745501.4064424,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 1.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 1.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "7d31370f0b514e38891a3c28442bfaac"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "7d31370f0b514e38891a3c28442bfaac",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4102947508113857
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 1.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.3804927,
+        "input_versions": {
+          "7d31370f0b514e38891a3c28442bfaac": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 1.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.025949716567993164
+      }
+    },
+    {
+      "number": 8,
+      "id": "5ea8f4a505a4466990ba55f1edd562b0",
+      "idem": "3b60caa188484a17a302bc211a43bc68",
+      "created": 1792745460.1826818,
+      "updated": 1792745501.6168034,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 3.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 3.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "37ace7b80bcc47f6913672daf1e1059f",
+          "1ed7140160744f68ab0aa176ec51b619"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "37ace7b80bcc47f6913672daf1e1059f",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          },
+          {
+            "upstream": "1ed7140160744f68ab0aa176ec51b619",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.413758050880559
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 3.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.5987456,
+        "input_versions": {
+          "37ace7b80bcc47f6913672daf1e1059f": 1,
+          "1ed7140160744f68ab0aa176ec51b619": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 3.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.018057823181152344
+      }
+    },
+    {
+      "number": 9,
+      "id": "1ed7140160744f68ab0aa176ec51b619",
+      "idem": "bd88744d2baa4f5383cfca5f9d4a1045",
+      "created": 1792745460.2893732,
+      "updated": 1792745501.442109,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 2.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 2.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "7d31370f0b514e38891a3c28442bfaac"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "7d31370f0b514e38891a3c28442bfaac",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4039831513978318
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 2.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.41219,
+        "input_versions": {
+          "7d31370f0b514e38891a3c28442bfaac": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 2.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.029919147491455078
+      }
+    },
+    {
+      "number": 10,
+      "id": "5db010f68a8a4803afe98e0addd9b962",
+      "idem": "1435be54f942468c8e89fded41c3a3e7",
+      "created": 1792745460.3958335,
+      "updated": 1792745501.4862452,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "create",
+        "value": "workflow acceptance 6.txt",
+        "extra": ""
+      },
+      "original": {
+        "kind": "create",
+        "value": "workflow acceptance 6.txt",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [
+          "08f2bc4f080f425692b121e10a6deef6"
+        ],
+        "lane": "desktop",
+        "locks": [
+          "legacy-actions",
+          "desktop",
+          "shared-planner"
+        ],
+        "read_only": false,
+        "reversible": false,
+        "unattended": false,
+        "approval": "execution-time tool policy",
+        "risk": "tool-policy",
+        "complexity": "unknown",
+        "duration_seconds": 300,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 512,
+          "gpu": true,
+          "cpu": 1,
+          "network": true,
+          "disk": "unknown"
+        },
+        "tools": [
+          "create"
+        ],
+        "model": "existing router",
+        "splittable": false,
+        "graph_dependencies": [
+          {
+            "upstream": "08f2bc4f080f425692b121e10a6deef6",
+            "condition": "success",
+            "optional": false,
+            "requires_result": false,
+            "reason": "Explicit dependency update"
+          }
+        ],
+        "scheduling_score": 1.4016906375504807
+      },
+      "retries": 0,
+      "outcome": "Created workflow acceptance 6.txt",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.4498749,
+        "input_versions": {
+          "08f2bc4f080f425692b121e10a6deef6": 1
+        },
+        "effects": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 6.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "tool_checkpoint": {},
+        "elapsed_seconds": 0.036370277404785156
+      }
+    },
+    {
+      "number": 11,
+      "id": "988407e94c05477e84a2cef44a54aecf",
+      "idem": "bc4b9d056d6a482092021d0405688ab8",
+      "created": 1792745460.398851,
+      "updated": 1792745501.2126787,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "jarvis_status",
+        "value": "uptime",
+        "extra": ""
+      },
+      "original": {
+        "kind": "jarvis_status",
+        "value": "uptime",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [],
+        "lane": "background",
+        "locks": [],
+        "read_only": true,
+        "reversible": true,
+        "unattended": true,
+        "approval": false,
+        "risk": "read-only",
+        "complexity": "small",
+        "duration_seconds": 2,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 32,
+          "gpu": false,
+          "cpu": 1,
+          "network": false,
+          "disk": "unknown"
+        },
+        "tools": [
+          "jarvis_status"
+        ],
+        "model": null,
+        "splittable": false,
+        "scheduling_score": 4.693229802449545
+      },
+      "retries": 0,
+      "outcome": "I've been running for 44 seconds.",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.195745,
+        "input_versions": {},
+        "source": "existing read-only intent handler",
+        "elapsed_seconds": 0.016933679580688477
+      }
+    },
+    {
+      "number": 12,
+      "id": "00a181ae3c834621bcab16c7755dcfaa",
+      "idem": "127f4483245b4a7cb2f6e9eed9483536",
+      "created": 1792745460.4030364,
+      "updated": 1792745501.208771,
+      "state": "COMPLETED",
+      "command": {
+        "kind": "system_info",
+        "value": "memory",
+        "extra": ""
+      },
+      "original": {
+        "kind": "system_info",
+        "value": "memory",
+        "extra": ""
+      },
+      "spec": {
+        "priority": 0,
+        "explicit_priority": false,
+        "urgency": 0,
+        "deadline": null,
+        "not_before": 0,
+        "dependencies": [],
+        "lane": "fast",
+        "locks": [],
+        "read_only": true,
+        "reversible": true,
+        "unattended": true,
+        "approval": false,
+        "risk": "read-only",
+        "complexity": "small",
+        "duration_seconds": 2,
+        "uncertainty": "high",
+        "resources": {
+          "ram_mb": 32,
+          "gpu": false,
+          "cpu": 1,
+          "network": false,
+          "disk": "unknown"
+        },
+        "tools": [
+          "system_info"
+        ],
+        "model": null,
+        "splittable": false,
+        "scheduling_score": 4.692853315671285
+      },
+      "retries": 0,
+      "outcome": "15.7 GB of 31.3 GB memory is free (50% used).",
+      "checkpoint": {
+        "relationship_resolved": true,
+        "dispatch_at": 1792745501.1886358,
+        "input_versions": {},
+        "source": "existing read-only intent handler",
+        "elapsed_seconds": 0.020135164260864258
+      }
+    },
+    {
+      "number": 13,
+      "id": "978de38e16f64b1b945f43fd26cc9c09",
+      "idem": "328068137b6d4086840fee6dad820728",
+      "created": 1792745480.9355462,
+      "updated": 1792745480.9523823,
+      "state": "PARTIAL",
+      "command": {
+        "kind": "task",
+        "value": "run the queue overnight",
+        "extra": ""
+      },
+      "original": {
+        "kind": "task",
+        "value": "run the queue overnight",
+        "extra": ""
+      },
+      "spec": {},
+      "retries": 0,
+      "outcome": "",
+      "checkpoint": {
+        "control": true
+      }
+    }
+  ],
+  "counts": {
+    "PARTIAL": 1,
+    "COMPLETED": 12
+  },
+  "total": 13,
+  "resources": {
+    "ram_available_mb": 16046.11328125,
+    "cpu_percent": 33.3,
+    "battery_low": false,
+    "desktop": true
+  },
+  "graph": {
+    "groups": [
+      {
+        "id": "b4495a94f1214961a47fb909c4fffbc9",
+        "workspace": "local",
+        "project": null,
+        "goal": "workflow acceptance 0.txt",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792745460.1454048,
+        "workflows": [
+          "c232e0397d3b4602828cbc0a0404c5b7"
+        ],
+        "tasks": [
+          "753e2a5c227b4a03941e557ebad0a2c4",
+          "7d31370f0b514e38891a3c28442bfaac",
+          "37ace7b80bcc47f6913672daf1e1059f",
+          "5ea8f4a505a4466990ba55f1edd562b0",
+          "1ed7140160744f68ab0aa176ec51b619"
+        ],
+        "completed": 5,
+        "total": 5,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 5
+        },
+        "artifacts": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 4.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 0.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 1.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 3.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 2.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "errors_and_recovery": [],
+        "lifetime_progress": 1.0
+      },
+      {
+        "id": "604b5ff6e6374a1783a50e2bf95fd31c",
+        "workspace": "local",
+        "project": null,
+        "goal": "workflow acceptance 5.txt",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792745460.398851,
+        "workflows": [
+          "f78605736338481f90b7b8226fff3263"
+        ],
+        "tasks": [
+          "664204d555c84792bb6b0299adcaa545",
+          "4678b06fe5154f42a63e3697426f302d",
+          "08f2bc4f080f425692b121e10a6deef6",
+          "d028a6c3679948c291af1f54029f9970",
+          "5db010f68a8a4803afe98e0addd9b962"
+        ],
+        "completed": 5,
+        "total": 5,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 5
+        },
+        "artifacts": [
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 7.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 8.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 5.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 9.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          },
+          {
+            "kind": "file",
+            "operation": "created",
+            "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 6.txt",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "verification": "fresh byte readback"
+          }
+        ],
+        "errors_and_recovery": [],
+        "lifetime_progress": 1.0
+      },
+      {
+        "id": "8985cb35591441f1bd296afe767e040a",
+        "workspace": "local",
+        "project": null,
+        "goal": "uptime",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792745460.4734707,
+        "workflows": [
+          "b07cdc868f2c4c1db197b50300f77709"
+        ],
+        "tasks": [
+          "988407e94c05477e84a2cef44a54aecf"
+        ],
+        "completed": 1,
+        "total": 1,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 1
+        },
+        "artifacts": [],
+        "errors_and_recovery": [],
+        "lifetime_progress": 1.0
+      },
+      {
+        "id": "a9de107a125542f1abfab4512fa378c1",
+        "workspace": "local",
+        "project": null,
+        "goal": "memory",
+        "applications": [],
+        "priority": 0,
+        "paused": false,
+        "completion_criteria": "All required branches completed with recorded evidence",
+        "created": 1792745460.485698,
+        "workflows": [
+          "5086f5e3f6324a51b001188369f77c10"
+        ],
+        "tasks": [
+          "00a181ae3c834621bcab16c7755dcfaa"
+        ],
+        "completed": 1,
+        "total": 1,
+        "progress": 1.0,
+        "counts": {
+          "COMPLETED": 1
+        },
+        "artifacts": [],
+        "errors_and_recovery": [],
+        "lifetime_progress": 1.0
+      }
+    ],
+    "nodes": [
+      {
+        "task": "753e2a5c227b4a03941e557ebad0a2c4",
+        "workflow": "c232e0397d3b4602828cbc0a0404c5b7",
+        "parent": null,
+        "data": "{\"created\": 1792745459.5096688, \"role\": \"task\"}"
+      },
+      {
+        "task": "664204d555c84792bb6b0299adcaa545",
+        "workflow": "f78605736338481f90b7b8226fff3263",
+        "parent": null,
+        "data": "{\"created\": 1792745459.7408483, \"role\": \"task\"}"
+      },
+      {
+        "task": "4678b06fe5154f42a63e3697426f302d",
+        "workflow": "f78605736338481f90b7b8226fff3263",
+        "parent": null,
+        "data": "{\"created\": 1792745459.9596977, \"role\": \"task\"}"
+      },
+      {
+        "task": "7d31370f0b514e38891a3c28442bfaac",
+        "workflow": "c232e0397d3b4602828cbc0a0404c5b7",
+        "parent": null,
+        "data": "{\"created\": 1792745460.1826818, \"role\": \"task\"}"
+      },
+      {
+        "task": "08f2bc4f080f425692b121e10a6deef6",
+        "workflow": "f78605736338481f90b7b8226fff3263",
+        "parent": null,
+        "data": "{\"created\": 1792745460.398851, \"role\": \"task\"}"
+      },
+      {
+        "task": "d028a6c3679948c291af1f54029f9970",
+        "workflow": "f78605736338481f90b7b8226fff3263",
+        "parent": null,
+        "data": "{\"created\": 1792745460.4146545, \"role\": \"task\"}"
+      },
+      {
+        "task": "37ace7b80bcc47f6913672daf1e1059f",
+        "workflow": "c232e0397d3b4602828cbc0a0404c5b7",
+        "parent": null,
+        "data": "{\"created\": 1792745460.424983, \"role\": \"task\"}"
+      },
+      {
+        "task": "5ea8f4a505a4466990ba55f1edd562b0",
+        "workflow": "c232e0397d3b4602828cbc0a0404c5b7",
+        "parent": null,
+        "data": "{\"created\": 1792745460.4394171, \"role\": \"task\"}"
+      },
+      {
+        "task": "1ed7140160744f68ab0aa176ec51b619",
+        "workflow": "c232e0397d3b4602828cbc0a0404c5b7",
+        "parent": null,
+        "data": "{\"created\": 1792745460.4494355, \"role\": \"task\"}"
+      },
+      {
+        "task": "5db010f68a8a4803afe98e0addd9b962",
+        "workflow": "f78605736338481f90b7b8226fff3263",
+        "parent": null,
+        "data": "{\"created\": 1792745460.461364, \"role\": \"task\"}"
+      },
+      {
+        "task": "988407e94c05477e84a2cef44a54aecf",
+        "workflow": "b07cdc868f2c4c1db197b50300f77709",
+        "parent": null,
+        "data": "{\"created\": 1792745460.4734707, \"role\": \"task\"}"
+      },
+      {
+        "task": "00a181ae3c834621bcab16c7755dcfaa",
+        "workflow": "5086f5e3f6324a51b001188369f77c10",
+        "parent": null,
+        "data": "{\"created\": 1792745460.485698, \"role\": \"task\"}"
+      }
+    ],
+    "edges": [
+      {
+        "upstream": "7d31370f0b514e38891a3c28442bfaac",
+        "downstream": "37ace7b80bcc47f6913672daf1e1059f",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "7d31370f0b514e38891a3c28442bfaac",
+        "downstream": "1ed7140160744f68ab0aa176ec51b619",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "37ace7b80bcc47f6913672daf1e1059f",
+        "downstream": "5ea8f4a505a4466990ba55f1edd562b0",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "1ed7140160744f68ab0aa176ec51b619",
+        "downstream": "5ea8f4a505a4466990ba55f1edd562b0",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "37ace7b80bcc47f6913672daf1e1059f",
+        "downstream": "753e2a5c227b4a03941e557ebad0a2c4",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "1ed7140160744f68ab0aa176ec51b619",
+        "downstream": "753e2a5c227b4a03941e557ebad0a2c4",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "08f2bc4f080f425692b121e10a6deef6",
+        "downstream": "5db010f68a8a4803afe98e0addd9b962",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "08f2bc4f080f425692b121e10a6deef6",
+        "downstream": "664204d555c84792bb6b0299adcaa545",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "5db010f68a8a4803afe98e0addd9b962",
+        "downstream": "4678b06fe5154f42a63e3697426f302d",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "664204d555c84792bb6b0299adcaa545",
+        "downstream": "4678b06fe5154f42a63e3697426f302d",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "5db010f68a8a4803afe98e0addd9b962",
+        "downstream": "d028a6c3679948c291af1f54029f9970",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      },
+      {
+        "upstream": "664204d555c84792bb6b0299adcaa545",
+        "downstream": "d028a6c3679948c291af1f54029f9970",
+        "data": {
+          "condition": "success",
+          "optional": false,
+          "requires_result": false,
+          "reason": "Explicit dependency update"
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "source": "37ace7b80bcc47f6913672daf1e1059f",
+        "target": "7d31370f0b514e38891a3c28442bfaac",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "1ed7140160744f68ab0aa176ec51b619",
+        "target": "7d31370f0b514e38891a3c28442bfaac",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "5ea8f4a505a4466990ba55f1edd562b0",
+        "target": "37ace7b80bcc47f6913672daf1e1059f",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "5ea8f4a505a4466990ba55f1edd562b0",
+        "target": "1ed7140160744f68ab0aa176ec51b619",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "753e2a5c227b4a03941e557ebad0a2c4",
+        "target": "37ace7b80bcc47f6913672daf1e1059f",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "753e2a5c227b4a03941e557ebad0a2c4",
+        "target": "1ed7140160744f68ab0aa176ec51b619",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "5db010f68a8a4803afe98e0addd9b962",
+        "target": "08f2bc4f080f425692b121e10a6deef6",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "664204d555c84792bb6b0299adcaa545",
+        "target": "08f2bc4f080f425692b121e10a6deef6",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "4678b06fe5154f42a63e3697426f302d",
+        "target": "5db010f68a8a4803afe98e0addd9b962",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "4678b06fe5154f42a63e3697426f302d",
+        "target": "664204d555c84792bb6b0299adcaa545",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "d028a6c3679948c291af1f54029f9970",
+        "target": "5db010f68a8a4803afe98e0addd9b962",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      },
+      {
+        "source": "d028a6c3679948c291af1f54029f9970",
+        "target": "664204d555c84792bb6b0299adcaa545",
+        "kind": "DEPENDS_ON",
+        "data": {
+          "ordering": true,
+          "reason": "Explicit dependency update",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "evaluations": {
+      "7d31370f0b514e38891a3c28442bfaac": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792745501.1566386
+      },
+      "08f2bc4f080f425692b121e10a6deef6": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792745501.1627126
+      },
+      "00a181ae3c834621bcab16c7755dcfaa": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792745501.1908927
+      },
+      "988407e94c05477e84a2cef44a54aecf": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [],
+        "versions": {},
+        "impossible": [],
+        "at": 1792745501.195745
+      },
+      "37ace7b80bcc47f6913672daf1e1059f": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "7d31370f0b514e38891a3c28442bfaac",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 0.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 0.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.2868302,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 0.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "7d31370f0b514e38891a3c28442bfaac": 1
+        },
+        "impossible": [],
+        "at": 1792745501.306031
+      },
+      "1ed7140160744f68ab0aa176ec51b619": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "7d31370f0b514e38891a3c28442bfaac",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 0.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 0.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.2868302,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 0.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "7d31370f0b514e38891a3c28442bfaac": 1
+        },
+        "impossible": [],
+        "at": 1792745501.312549
+      },
+      "664204d555c84792bb6b0299adcaa545": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "08f2bc4f080f425692b121e10a6deef6",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 5.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 5.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.3315032,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 5.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "08f2bc4f080f425692b121e10a6deef6": 1
+        },
+        "impossible": [],
+        "at": 1792745501.3412783
+      },
+      "5db010f68a8a4803afe98e0addd9b962": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "08f2bc4f080f425692b121e10a6deef6",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 5.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 5.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.3315032,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {}
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 5.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "08f2bc4f080f425692b121e10a6deef6": 1
+        },
+        "impossible": [],
+        "at": 1792745501.3570755
+      },
+      "753e2a5c227b4a03941e557ebad0a2c4": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "37ace7b80bcc47f6913672daf1e1059f",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 1.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 1.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.4064424,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "7d31370f0b514e38891a3c28442bfaac": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 1.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          },
+          {
+            "task_id": "1ed7140160744f68ab0aa176ec51b619",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 2.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 2.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.442109,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "7d31370f0b514e38891a3c28442bfaac": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 2.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "37ace7b80bcc47f6913672daf1e1059f": 1,
+          "1ed7140160744f68ab0aa176ec51b619": 1
+        },
+        "impossible": [],
+        "at": 1792745501.453887
+      },
+      "5ea8f4a505a4466990ba55f1edd562b0": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "37ace7b80bcc47f6913672daf1e1059f",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 1.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 1.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.4064424,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "7d31370f0b514e38891a3c28442bfaac": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 1.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          },
+          {
+            "task_id": "1ed7140160744f68ab0aa176ec51b619",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 2.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 2.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.442109,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "7d31370f0b514e38891a3c28442bfaac": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 2.txt",
+                "extra": ""
+              },
+              "workflow": "c232e0397d3b4602828cbc0a0404c5b7"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "37ace7b80bcc47f6913672daf1e1059f": 1,
+          "1ed7140160744f68ab0aa176ec51b619": 1
+        },
+        "impossible": [],
+        "at": 1792745501.4637935
+      },
+      "4678b06fe5154f42a63e3697426f302d": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "5db010f68a8a4803afe98e0addd9b962",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 6.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 6.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.4862452,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "08f2bc4f080f425692b121e10a6deef6": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 6.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          },
+          {
+            "task_id": "664204d555c84792bb6b0299adcaa545",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 7.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 7.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.3751783,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "08f2bc4f080f425692b121e10a6deef6": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 7.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "5db010f68a8a4803afe98e0addd9b962": 1,
+          "664204d555c84792bb6b0299adcaa545": 1
+        },
+        "impossible": [],
+        "at": 1792745501.4928548
+      },
+      "d028a6c3679948c291af1f54029f9970": {
+        "ready": true,
+        "blockers": [],
+        "inputs": [
+          {
+            "task_id": "5db010f68a8a4803afe98e0addd9b962",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 6.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 6.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.4862452,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "08f2bc4f080f425692b121e10a6deef6": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 6.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          },
+          {
+            "task_id": "664204d555c84792bb6b0299adcaa545",
+            "outcome": "COMPLETED",
+            "verification": "verified",
+            "structured_output": {
+              "summary": "Created workflow acceptance 7.txt",
+              "execution_checkpoints": []
+            },
+            "artifacts": [
+              {
+                "kind": "file",
+                "operation": "created",
+                "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 7.txt",
+                "bytes": 0,
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "verification": "fresh byte readback"
+              }
+            ],
+            "findings": [],
+            "errors": [],
+            "warnings": [],
+            "tests": {},
+            "version": 1,
+            "timestamp": 1792745501.3751783,
+            "provenance": {
+              "source": "TaskStore committed lifecycle",
+              "checkpoint": null,
+              "input_versions": {
+                "08f2bc4f080f425692b121e10a6deef6": 1
+              }
+            },
+            "context": {
+              "command": {
+                "kind": "create",
+                "value": "workflow acceptance 7.txt",
+                "extra": ""
+              },
+              "workflow": "f78605736338481f90b7b8226fff3263"
+            },
+            "valid": true
+          }
+        ],
+        "versions": {
+          "5db010f68a8a4803afe98e0addd9b962": 1,
+          "664204d555c84792bb6b0299adcaa545": 1
+        },
+        "impossible": [],
+        "at": 1792745501.502079
+      }
+    },
+    "revision": 99,
+    "scope": "Current report batch; lifetime progress is separately labeled",
+    "reused_prerequisites": []
+  },
+  "overnight": true,
+  "paused": false,
+  "running": 0,
+  "queued": 0,
+  "decisions": [
+    {
+      "id": "4b3aaf7223ca45d1ac046c86dc6e8f44",
+      "question": "Routine read-only branch order",
+      "options": [
+        "Independent observations",
+        "Sequential observations"
+      ],
+      "recommended": 0,
+      "confidence": 0.95,
+      "reversible": true,
+      "sensitive": false,
+      "presented_at": 1792745460.8023455,
+      "choice": 0,
+      "status": "SELECTED",
+      "automatic": true,
+      "justification": "High-confidence reversible routine preference; deadline elapsed"
+    },
+    {
+      "id": "993fe2a033384e5a899f98755fb9592e",
+      "question": "Overnight scheduling preference",
+      "options": [
+        "Balanced priorities",
+        "Prefer coding"
+      ],
+      "recommended": 0,
+      "confidence": 0.95,
+      "reversible": true,
+      "sensitive": false,
+      "presented_at": 1792745480.978129,
+      "choice": 0,
+      "status": "SELECTED",
+      "automatic": true,
+      "justification": "High-confidence reversible routine preference; deadline elapsed"
+    }
+  ],
+  "note": "Outcomes are handler/checkpoint evidence. No inferred files, tests or quality claims.",
+  "outcomes": {
+    "COMPLETED": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "PARTIAL": [
+      13
+    ],
+    "FAILED": [],
+    "RUNNING": [],
+    "WAITING_APPROVAL": [],
+    "WAITING_USER": [],
+    "PAUSED": []
+  },
+  "files": [
+    {
+      "task": 1,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 4.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 2,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 7.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 3,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 8.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 4,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 0.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 5,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 5.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 6,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 9.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 7,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 1.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 8,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 3.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 9,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 2.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    },
+    {
+      "task": 10,
+      "kind": "file",
+      "operation": "created",
+      "path": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\workflow-graph\\live-compact-final\\files\\workflow acceptance 6.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "fresh byte readback"
+    }
+  ],
+  "recorded_test_evidence": [],
+  "errors_and_recovery": [],
+  "next_actions": [
+    {
+      "task": 13,
+      "action": "Inspect the task outcome and dependencies before continuing"
+    }
+  ]
+}

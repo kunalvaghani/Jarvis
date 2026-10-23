@@ -19,6 +19,7 @@ class ToolSpec:
 
 
 SPECS = (
+    ToolSpec('workflow_expand', 'toolkit', 'Propose bounded subtasks in the CURRENT durable workflow. value=stable expansion key; content=JSON {requests:[{kind:"task"|"ask"|"jarvis_status"|"system_info"|"screen_info",value:"...",extra:""}],join:optional existing task UUID}. Maximum 20 children/call, 50/workflow, depth 3. Children wait for a verified parent result; effectful children additionally require explicit scope review and existing tool approvals. Does not execute children or grant permissions.'),
     ToolSpec('application_inspect', 'desktop', 'Read a configured app executable/version and sanitized foreground controls. value MUST be an exact configured application name or current for the current configured app. Cube, Modifier and other object/control names are invalid; use select for controls. Read-only: never selects objects, launches, types, clicks, installs or executes scripts.'),
     ToolSpec('realtime_query', 'realtime', 'Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}. No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provider; self-hosted sources require configured endpoints.'),
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
@@ -50,6 +51,7 @@ TOOL_NAMES = tuple(spec.name for spec in SPECS)
 
 # Fields each built-in tool reads: (required, optional). Toolkit tools are checked by toolkits.validate_step.
 _FIELDS = {
+    'workflow_expand': ({'value','content'}, set()),
     'application_inspect': ({'value'}, set()), 'realtime_query': ({'value'}, {'content'}),
     'open': ({'value'}, set()), 'browse': ({'value'}, {'browser'}), 'browser_search': ({'value'}, {'browser'}),
     'browser_inspect': (set(), {'value', 'folder', 'content'}), 'browser_navigate': (set(), {'value', 'folder', 'content'}),
@@ -131,6 +133,18 @@ def validate_arguments(step):
             raise ToolArgumentError('realtime_query content must be a JSON object.') from None
         if not isinstance(params, dict):
             raise ToolArgumentError('realtime_query content must be a JSON object.')
+    if name == 'workflow_expand':
+        try:
+            data = json.loads(step['content'])
+            if not isinstance(data,dict) or set(data)-{'requests','join'} or not isinstance(data.get('requests'),list) or not 1 <= len(data['requests']) <= 20:
+                raise ValueError()
+            if len(step['value']) > 100 or len(step['content']) > 64000:raise ValueError()
+            for command in data['requests']:
+                if not isinstance(command,dict) or set(command)!={'kind','value','extra'} or any(not isinstance(v,str) for v in command.values()):raise ValueError()
+                if command['kind'] not in {'task','ask','jarvis_status','system_info','screen_info'} or command['extra']:raise ValueError()
+            if 'join' in data and (not isinstance(data['join'],str) or not re.fullmatch('[0-9a-f]{32}',data['join'])):raise ValueError()
+        except (ValueError,TypeError,RecursionError):
+            raise ToolArgumentError('workflow_expand requires bounded ordinary requests, a stable key and optional task UUID.') from None
 
 
 def failure_category(exc, cancelled):
@@ -181,6 +195,8 @@ class ToolRegistry:
         rows = [{"action": spec.name, "backend": spec.backend,
                  "description": spec.description, "approval": spec.approval}
                 for spec in self.specs.values() if goal is None or spec.name not in KIT_TOOLS or available(spec.name)]
+        if getattr(self.actions,'ingress',None) is None:
+            rows = [row for row in rows if row['action']!='workflow_expand']
         allowed = getattr(self.actions, 'allowed_tools', None)
         if isinstance(allowed, (set, frozenset)):
             rows = [row for row in rows if row['action'] in allowed]
@@ -269,6 +285,13 @@ class ToolRegistry:
             raise ValueError("Unsupported tool: " + str(name))
         if cancelled():
             raise ValueError("Task cancelled before tool execution.")
+        if name == 'workflow_expand':
+            ingress = getattr(self.actions,'ingress',None)
+            parent = getattr(ingress.scheduler.local,'identity',None) if ingress else None
+            if not parent:raise ValueError('Workflow expansion requires an active durable task')
+            data = json.loads(step['content'])
+            children = ingress.expand(parent,[Command(**c) for c in data['requests']],step['value'],join=data.get('join'))
+            return ToolResult(name,'toolkit',json.dumps({'parent':parent,'children':children,'execution':'pending parent verification and policy gates'}))
         if name == 'application_inspect':
             from .application_discovery import inspect
             return ToolResult(name, 'desktop_observation', json.dumps(inspect(self.actions, step['value'], cancelled), ensure_ascii=False))

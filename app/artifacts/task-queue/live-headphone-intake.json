@@ -1,0 +1,250 @@
+{
+  "started_at": "2026-10-23T05:34:13.745353+00:00",
+  "scope": "User-started physical headphone/microphone -> actual Listener/Engine/Actions/durable queue, owned fixture files only",
+  "recordings_saved": false,
+  "private_audio_uploaded": false,
+  "unknown_commands_dispatched": 0,
+  "ignored_commands": 6,
+  "received_while_worker_held": 0,
+  "microphone_started_by_user": true,
+  "finished_at": "2026-10-23T05:37:12.866549+00:00",
+  "capture_started": true,
+  "asr_decode_metrics": [
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 1.0,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 0.375,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 1,
+      "final": false,
+      "decode_seconds": 0.3909999999999627,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 1,
+      "final": true,
+      "decode_seconds": 0.4219999999999118,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 2,
+      "final": false,
+      "decode_seconds": 0.3909999999999627,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 2,
+      "final": true,
+      "decode_seconds": 0.40600000000006276,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.5470000000000255,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.4070000000000391,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.4840000000000373,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 3,
+      "final": false,
+      "decode_seconds": 0.5,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 3,
+      "final": true,
+      "decode_seconds": 0.5159999999999627,
+      "queue_seconds": 0.06200000000001182,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.75,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.9840000000000373,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.46899999999993724,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 4,
+      "final": false,
+      "decode_seconds": 0.5309999999999491,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 4,
+      "final": true,
+      "decode_seconds": 0.5629999999999882,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.5159999999999627,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.9840000000000373,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.7660000000000764,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.7960000000000491,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": false,
+      "decode_seconds": 0.5,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 5,
+      "final": true,
+      "decode_seconds": 0.5149999999999864,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.9370000000000118,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.4069999999999254,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.7810000000000628,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 6,
+      "final": false,
+      "decode_seconds": 0.48500000000001364,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    },
+    {
+      "session_id": "84610e05c3f149c68da27956873e2ca6",
+      "utterance_id": 6,
+      "final": true,
+      "decode_seconds": 0.5,
+      "queue_seconds": 0.0,
+      "audio_offset": 0.0
+    }
+  ],
+  "fixture_files": {
+    "live eight.txt": false,
+    "live five.txt": false,
+    "live four.txt": false,
+    "live nine.txt": false,
+    "live one.txt": false,
+    "live seven.txt": false,
+    "live six.txt": false,
+    "live ten.txt": false,
+    "live three.txt": false,
+    "live two.txt": false
+  },
+  "task_states": [],
+  "decisions": [],
+  "all_ten_files_verified": false,
+  "ten_distinct_jobs": false,
+  "all_jobs_completed": false,
+  "automatic_routine_decision": false,
+  "probe_seconds": 100.23400000000004,
+  "passed": false
+}

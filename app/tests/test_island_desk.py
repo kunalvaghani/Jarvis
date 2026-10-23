@@ -321,20 +321,46 @@ class ApprovalAndMediaTests(unittest.TestCase):
 
 
 class DeskWidgetTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Match the production app's single Tcl interpreter lifetime. Repeated
+        # interpreter teardown on this Windows host intermittently fails to
+        # source existing/readable Tk scripts. Each case still gets fresh UI,
+        # app mocks, games and approvals; no assertion or case is skipped.
+        cls.interface_root = tk.Tk(); cls.interface_root.withdraw()
+        cls.interface_app = Mock()
+        cls.interface_app.root = cls.interface_root
+        cls.interface_app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
+        cls.interface_app.speech.options={'enabled':False}
+        build_interface(cls.interface_app)
+        cls.desk_parent = cls.interface_app.desk.frame.master
+        cls.interface_app.desk.close();cls.interface_app.desk.frame.destroy()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.interface_app.island.close()
+        cls.interface_root.destroy(); cls.interface_root = cls.interface_app = None
+        gc.collect()
+
     def setUp(self):
-        self.root = tk.Tk(); self.root.withdraw()
-        self.app = Mock()
-        self.app.root=self.root
-        self.app.config={'whisper':{'model':'test'},'knowledge':{},'_ui_verification':True}
-        self.app.speech.options={'enabled':False}
-        build_interface(self.app)
+        self.root = self.interface_root; self.root.withdraw()
+        self.app = self.interface_app
+        self.app.reset_mock();self.app.actions=Mock()
+        self.app.live.set('');self.app.question.set('')
+        # Rebuild only the desk, retaining the interpreter's real glass theme.
+        # Tk themes intentionally cannot define the same image element twice.
+        from jarvis.island_desk import IslandDesk
+        self.app.desk = IslandDesk(self.app,self.desk_parent)
         self.app.panel.geometry('660x760+20000+20000')
         self.app.panel.deiconify()
         self.root.update()
 
     def tearDown(self):
         self.app.desk.close()
-        self.root.destroy()
+        for callback in self.root.tk.call('after','info'):
+            self.root.after_cancel(callback)
+        self.app.desk.frame.destroy()
+        self.app.panel.withdraw()
         self.app=None; self.root=None
         gc.collect()
 

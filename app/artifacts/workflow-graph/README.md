@@ -1,0 +1,59 @@
+# Workflow graph verification — 2026-10-23 IST
+
+This evidence extends the [queue candidate](../task-queue/README.md). It is separate from strict physical speech, account effects and elapsed overnight endurance.
+
+- [Initial focused run](../task-queue/graph-focused-initial.txt): 85 passed, one test-fixture ordering assumption failed; downstream scheduling correctly favored the prerequisite that unlocks required work. The fixture now explicitly prioritizes its intended failure first.
+- [Second focused run](../task-queue/graph-focused-second.txt): 86 passed.
+- [Planner/tool/routing/recovery/Island integration checkpoint](../task-queue/graph-integration-regression.txt): 326 passed.
+- [Expanded integration checkpoint](../task-queue/graph-final-integration.txt): 335 passed.
+- [First live probe](live-acceptance-1/acceptance.json): **failed overall**. Ten real file tasks and both mapped real-time choices completed; two status requests used invalid empty topics. The corrected probe uses existing `uptime` and `memory` topics and disables optional background/learning features in its owned configuration.
+
+The final full regression passed **4,100 tests / 155 gated skips / zero failures**, one existing COM warning, in **1,211.83 s**. All **519 frozen source hashes unchanged**, exit 0. See the complete receipt and integrity record below. The [targeted desktop rerun](desktop-demonstration-final.txt) recorded **five gated skips / 33 deselections in 14.21 s**: owned windows could not obtain foreground focus. Those cases passed in the preceding complete run; no assertion or guard was bypassed. [Final launcher readiness](launcher-release-final.txt) is **ready**, no missing/incomplete components; optional account inference is not live checked. Earlier successful queue-only full-suite receipts predate this graph addendum and do not establish the new candidate's regression status.
+
+Final checks: [machine-readable summary](verification-summary.json), [local links](link-check.json), [post-documentation source hashes](final-source-check.json). The unrelated suite-generated Blender fixture was restored; all remaining source changes belong to the queue/voice/graph work. Full release acceptance remains open for the gates recorded in the handoff.
+
+## Current live and readiness results
+
+- [Internal-result regression](privacy-focused.txt): **265 passed / two gated skips**. Six new privacy cases cover natural-chat modes, immutable bounded admission, internal classification and uncertain/current-looking questions with an external-search spy. The existing question, queue, graph, inventory and native UI regressions also pass.
+- [Actual local result inference](live-private-context.json): the real Knowledge thread and QuestionClient child used installed `qwen3.5:0.8b` to return **7319**, supplied only in a synthetic structured TaskResult. Request classification was INTERNAL/local_executor_task, web false; microphone/accounts off. No private recording or user data was used. This demonstrates the local handoff, not general model accuracy or external account acceptance.
+- [Current complete full regression](release-uninterrupted-final/release-full-regression.txt): **4,100 passed / 155 skipped / zero failures**. [Source freeze](release-uninterrupted-final/release-source-inventory.json) and [integrity](release-uninterrupted-final/release-source-integrity.json): **519/519 unchanged**. Five additional skips are existing native demonstration fixtures; they passed in the preceding complete run, and the targeted rerun recorded foreground-focus gates as described above. The preceding [complete run](release-private-final/release-full-regression.txt) finished 4,104 passed / 150 skipped / one native Excel Office-worker timeout, with all 519 hashes unchanged; its wall time includes a roughly 4.5-hour wait/scheduling interruption. The unchanged [isolated Excel rerun](excel-after-interruption.txt) passed in 14.74 s. Causation is not proved; the fresh complete run above passed unchanged. The preceding `release-full-final` run was interrupted for that fix and is not a pass. The single-interpreter Desk fixture retains the actual theme and creates fresh widgets per case; [its focused check](single-interpreter-final-focused.txt) passed **179/179**, without skipping assertions.
+- [Current corrected live receipt](live-map-final/acceptance.json): **12/12 completed** (ten actual Engine/Actions file tasks, two real host observations), plus one accurately marked PARTIAL control admission. Two actual mapped 20-second choices resolved automatically. File hashes, input-result versions, graph decisions and a current-batch report were checked. Owned configuration disables microphone, accounts, memory and optional background learning. This short overnight-mode batch does not establish elapsed overnight endurance or project-repair quality.
+- [Actual current native QueueView](live-map-final/native-workflow-current.png): inspected image of the owned live window, with 5/5 completed tasks in each file workflow, task states and group inspection. It is not a full production-App screenshot or a synthetic mockup. An earlier preview exposed empty moved-from groups crowding the list; the view now hides empty rows while preserving their durable history, and the capture waits for native paint completion.
+- [Final launcher check](launcher-release-final.txt): **ready**, no missing or incomplete dependencies/services. Existing Docker/Ollama available; optional account inference not live checked. Regular microphone Stop marker preserved.
+- [Latest inventory/UI/queue checks](inventory-ui-focused.txt): **141 passed**. Earlier [339 integration passes](final-focused-regression.txt) preceded the final decision/fault/UI tests.
+- [Full run stopped for the display fix](release-final/interrupted.json): incomplete, early failure observed, not a pass.
+- [First complete diagnostic stop](release-verified/release-full-regression.txt): 222 passed, one failed, one skipped; registered-tool inventory still listed 120 tools after adding the 121st tool. Refreshed only its tool table, retained the historical module snapshot date, and preserved the [old tool inventory](architecture-tools-before.json). The corrected full run is separate.
+- [Actual process-crash graph recovery](live-crash/acceptance.json): owned Actions child exited with code 73 after a real readback-recorded write, before terminal completion. On restart, that write stayed PAUSED/uncertain with identical bytes and unsafe resume refused. The committed producer result was reused at version 1, an independent dependent file task completed, and the dynamically generated observation child survived. Exact dispatch claims occurred once for each task. The initial harness incorrectly counted RUNNING checkpoint-update events as executions; the receipt discloses the corrected assertion and unchanged runtime. This is not uncertain account-effect reconciliation or overnight endurance.
+- [Final context/graph/queue/inventory/native checks](final-context-focused.txt): **146 passed in 21.37 s**, including stale, closed, hidden and future-dated cached-context refusal. A further [partial full checkpoint](release-complete/interrupted.json) was intentionally stopped for this safety fix; no completed full-suite result is inferred from it.
+- [Compact Island visibility/scrolling check](compact-ui-focused.txt): **147 passed in 24.29 s**. Inspection of the real 614-wide Island layout exposed clipping in the originally tall queue widget. Decisions now sit above a scrollable body, and their timer checks actual leaf-widget bounds/mapping rather than the parent view alone. The [context-final partial full run](release-context-final/interrupted.json) was stopped for this real UI safety fix, with no pass inferred from its partial output.
+- [Compact full-run diagnostic](release-compact-final/release-full-regression.txt): 1,701 passed / 40 skipped / one failed; the unchanged HUD geometry test found hidden Queue canvas children retaining Tk mapped flags outside the panel. Explicit Queue map/unmap binding fixes that real integration issue without weakening the HUD assertion. [Focused follow-up](compact-hud-final-focused.txt): the HUD cases pass, but one unrelated Tk startup failed loading `entry.tcl` (178 passed / one failed); the unchanged rerun is preserved separately. No dependency or driver installation was attempted.
+- [Map-fix full-run diagnostic](release-map-final/release-full-regression.txt): 1,798 passed / 40 skipped / one failed during a later GUI test's Tk initialization (`xpTheme.tcl`), before its assertion. The theme script was independently present/readable. The desk fixture now matches the production app's single interpreter/theme lifetime, while each case rebuilds fresh desk widgets and mocks. Its first draft exposed duplicate theme initialization; that [failed draft](single-interpreter-focused.txt) is retained, and the [corrected fixture run](single-interpreter-final-focused.txt) passed **179/179 in 32.22 s**. No original assertion/case was removed or skipped. The complete final run is `release-full-final`.
+
+## Automated acceptance coverage
+
+All tests use real SQLite/lifecycle records; observations/resources/models are fixtures unless explicitly labeled live above. [Graph tests](../../tests/test_workflow_graph.py) and [existing queue tests](../../tests/test_autonomous_queue.py) distinguish eligibility, actual handler receipts and uncertain effects.
+
+| Requested scenario | Evidence in graph tests / current live check |
+|---|---|
+| 1. Ten requests in random order | Shuffled ten-node DAG; live Engine typed commands shuffled before graph release |
+| 2. Shared project context | Exact project grouping without forced dependencies |
+| 3. Unrelated intervening command | Stage/project reference survives unrelated status admission |
+| 4. After that | Explicit compatible-lineage ordering |
+| 5. Ambiguous pronouns | Competing projects wait; conversation and observed project must agree |
+| 6. Two prerequisite results | Both committed structured outputs and versions bound at dispatch |
+| 7. Independent concurrent branches | Actual worker-thread overlap in independent safe lane |
+| 8. Same-file mutations | Exclusive planner/file locks serialize pending writers |
+| 9. Tests-pass condition | Verified structured pass/fail branches; prose is insufficient |
+| 10. Prerequisite failure | Dependent waits while unrelated/optional branches continue |
+| 11. Dynamic subtasks | Registry expansion, stable-key dedup, rollback, quota/depth and generated scope review |
+| 12. Joining running group | Move/join ownership with original history and checkpoints |
+| 13. Circular dependencies | Atomic whole-graph rejection with unchanged revision |
+| 14. Restart during execution | SQLite recovery fixture and actual owned process crash above |
+| 15. Routine 20-second decision | Fake-clock boundary tests plus two mapped real-time choices in live probe |
+| 16. High-risk decision | WAITING_APPROVAL at timeout; no graph application or tool permission |
+| 17. Similar but independent | Separate projects/explicit independent workflows stay distinct |
+| 18. Artifact invalidation | Transitive hash/input-version invalidation without completed-task replay |
+| 19. Duplicate effects | Stable expansion keys; uncertain write refusal; actual dispatch counts/readbacks |
+| 20. Overnight report | Current-batch groups, reused inputs, failures/blockers/artifacts; short live overnight-mode run, **extended real overnight duration unexecuted** |
+
+Additional tests cover late strategy changes, preservation of newly added verification gates, metadata-commit faults, oversized handoffs, inventory, native group controls, old priorities/resource locks, task clarifications, model/tool routing and recovery. Prior voice/acoustic/account/hardware limitations are not closed by these fixtures.

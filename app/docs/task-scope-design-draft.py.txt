@@ -1,0 +1,95 @@
+# DESIGN SKETCH ONLY — not imported, enabled, tested or production-ready.
+# The proposed custom TaskState path API is not implemented. Do not execute this sketch.
+"""Task-owned coding state around existing Coder/Brain clients, never a second router.
+
+Explicit projects have canonical overlapping-path locks. Desktop and external
+account actions are excluded; their original approval/execution lane is required.
+"""
+import copy
+import os
+from pathlib import Path
+import threading
+from types import MethodType
+
+
+def project_scope(command):
+    if command['kind'] != 'code_task' or not command.get('extra'):
+        return None
+    path=Path(command['extra'])
+    if not path.is_absolute():
+        return None
+    path=path.resolve(strict=True)
+    if not path.is_dir() or path.parent==path:
+        raise ValueError('Background coding requires an existing individual project directory')
+    return str(path)
+
+
+def conflicts(left, right):
+    if left==right:return True
+    if not left.startswith('project:') or not right.startswith('project:'):return False
+    a,b=left[8:],right[8:]
+    if '*' in {a,b}:return True
+    a,b=Path(a),Path(b)
+    return a==b or a in b.parents or b in a.parents
+
+
+class CodingScope:
+    def __init__(self, parent, identity, project, report, checkpoint):
+        from .brain import Brain
+        from .task_state import TaskState
+        self.project=Path(project).resolve(strict=True)
+        self.actions=scope=copy.copy(parent)
+        scope.config=copy.deepcopy(parent.config)
+        scope.task_state=TaskState(parent.base,path=parent.base/'.jarvis-runtime'/'tasks'/identity/'task-state.json')
+        scope.task_state.on_checkpoint=checkpoint
+        scope.report=report
+        scope.projects=copy.copy(parent.projects)
+        scope.projects.pending=None
+        scope.allowed_tools=frozenset({'read_file','list_files','search_files','query_resource','create_file','modify_file','append_file'})
+        scope.desktop=scope.ui_controls=scope.browser_automation=scope.screen=None
+        scope.development_tools=scope.utility_server=None
+        scope.cognition=scope.deliberation=None
+        scope.pending_question=scope.pending_open=scope.pending_opinion=scope.resume_source=None
+        scope.last_created=scope.last_modified=scope.last_deleted=None
+        scope._learning_local=threading.local()
+        scope.whatsapp_prompts=[]
+        scope.task_active=False
+        options=copy.deepcopy(parent.brain.options)
+        options.update(screen_aware=False,reuse_navigation_workflows=False)
+        options['visual_fallback']={**options.get('visual_fallback',{}),'enabled':False}
+        scope.brain=Brain(scope,parent.base,options)
+        scope.brain.client.app_context_provider=lambda:{}
+
+        def folder(_scope,requested,cancelled=lambda:False):
+            if cancelled():raise ValueError('Task cancelled before project inspection')
+            path=self.project if requested in {'this folder','the open folder','current folder',str(self.project)} else Path(requested)
+            path=path.resolve(strict=True)
+            if path!=self.project and self.project not in path.parents:
+                raise ValueError('File target is outside the assigned project')
+            return path
+        scope._task_folder=MethodType(folder,scope)
+        def no_desktop(*_args,**_kwargs):
+            raise ValueError('This isolated coding task cannot control the interactive desktop or browser')
+        scope._ui=scope._browser=scope._open_project=no_desktop
+        scope.approval_handler=lambda kind,detail,cancelled: (
+            parent.approval_handler(kind,detail,cancelled)
+            if kind=='command' and parent.approval_handler is not None else False)
+        self.closed=False
+
+    def run(self,command,cancelled):
+        from .actions import Actions
+        return Actions.execute(self.actions,command,cancelled)
+
+    def close(self):
+        if self.closed:return
+        self.closed=True
+        self.actions.brain.client.close()
+        tools=self.actions.development_tools
+        if tools is not None:tools.close()
+        server=self.actions.utility_server
+        if server is not None and server is not getattr(self.actions,'_parent_utility_server',None):
+            server.close()
+
+
+def project_lock(project):
+    return 'project:'+os.path.normcase(str(Path(project).resolve(strict=True)))

@@ -14,7 +14,7 @@ def settings(options=None):
         raise ValueError('whisper options must be an object')
     result = {**{'device':'cuda', 'compute_type':'int8_float16', 'language':'en',
         'partial_interval_seconds':1., 'silence_seconds':.8, 'vad_threshold':.45,
-        'frame_ms':32, 'streaming_enabled':True, 'adaptive_endpointing':True,
+        'frame_ms':100, 'streaming_enabled':True, 'adaptive_endpointing':False,
         'endpoint_mode':'balanced', 'max_utterance_seconds':120,
         'language_confidence':.8, 'language_confirmations':2}, **(options or {})}
     if result['device'] not in ('cuda', 'cpu'):

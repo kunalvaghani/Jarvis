@@ -8,6 +8,14 @@ from jarvis.engine import Engine
 
 
 class WhisperTests(unittest.TestCase):
+    def test_user_requested_previous_capture_profile_is_default(self):
+        from jarvis.whisper_backend import settings
+        options=settings()
+        self.assertEqual(options['frame_ms'],100)
+        self.assertEqual(options['silence_seconds'],.8)
+        self.assertFalse(options['adaptive_endpointing'])
+        self.assertEqual(options['language'],'en')
+
     def test_punctuation_preserves_filenames_and_negations(self):
         self.assertEqual(command_text("Hey Jarvis, create a file called notes.txt."), "hey jarvis create a file called notes.txt")
         self.assertEqual(command_text("Hey Jarvis, create a file called Notes. Text."), "hey jarvis create a file called notes.text")

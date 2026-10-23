@@ -1,0 +1,22 @@
+..........F............................................................. [ 83%]
+..............                                                           [100%]
+================================== FAILURES ===================================
+_________ test_optional_failed_prerequisite_does_not_block_other_path _________
+
+runtime = (<jarvis.task_store.TaskStore object at 0x000002969A304EE0>, <jarvis.task_scheduler.ScheduledQueue object at 0x000002969A304A00>, <jarvis.workflow_graph.WorkflowGraph object at 0x000002969A304460>)
+
+    def test_optional_failed_prerequisite_does_not_block_other_path(runtime):
+        store,scheduler,graph=runtime
+        bad=add(scheduler,'bad');other=add(scheduler,'other');child=add(scheduler,'child')
+        graph.set_dependencies(child,[{'upstream':bad,'optional':True},other])
+        scheduler.get(lane='background',timeout=0);complete(scheduler,'FAILED')
+>       scheduler.get(lane='background',timeout=0);assert scheduler.local.identity==other;complete(scheduler)
+E       AssertionError: assert '36b0250a3686...2405cbd96f33b' == '9352fedeea89...c11a33bcf47af'
+E         
+E         - 9352fedeea89417e892c11a33bcf47af
+E         + 36b0250a3686495da412405cbd96f33b
+
+tests\test_workflow_graph.py:159: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_workflow_graph.py::test_optional_failed_prerequisite_does_not_block_other_path
+1 failed, 85 passed in 11.60s

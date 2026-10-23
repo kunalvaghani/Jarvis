@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-23",
+  "scope": "Actual Windows execution-state API on one owned fixture thread, then explicit release. Does not change shipped prevent_sleep=false or certify a physical sleep/overnight session.",
+  "low_battery": false,
+  "request_accepted": true,
+  "released": true,
+  "thread_ended": true,
+  "desktop_gate_samples": 200,
+  "all_samples_unlocked": true,
+  "desktop_gate_mean_ms": 0.4252384999995229,
+  "passed": true
+}

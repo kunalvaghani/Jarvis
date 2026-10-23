@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-23",
+  "scope": "synthetic owned SQLite + fake resources; sequential no-effect handlers",
+  "baseline_memory_admission": {
+    "samples": 200,
+    "p50_ms": 0.0036999999792897142,
+    "empirical_p95_ms": 0.004099999841855606,
+    "worst_ms": 0.014199999895936344
+  },
+  "durable_admission": {
+    "samples": 200,
+    "p50_ms": 0.6497999997918669,
+    "empirical_p95_ms": 0.9719999998196727,
+    "worst_ms": 2.9525999998440966
+  },
+  "dispatch_with_200_accumulated_history_rows": {
+    "samples": 200,
+    "p50_ms": 0.6946500002413813,
+    "empirical_p95_ms": 1.0474999999132706,
+    "worst_ms": 1.185799999802839
+  },
+  "wall_seconds": 0.9415985000000546,
+  "verified_states": {
+    "COMPLETED": 200
+  },
+  "rss_before_mb": 20.5078125,
+  "rss_after_mb": 22.859375,
+  "database_and_wal_bytes_before_close": 4480528,
+  "note": "Durability adds overhead. Excludes speech/UI/models/tools and cannot establish live throughput or responsiveness."
+}
