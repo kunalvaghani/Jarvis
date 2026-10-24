@@ -1,0 +1,88 @@
+{
+  "measured_at": "2026-10-24 03:37:14 +0530",
+  "python": "3.10.6",
+  "model_calls": 0,
+  "note": "Recorded GitHub fixtures with a 120 ms simulated request delay unless marked live.",
+  "memory_first_prepare_ms": {
+    "n": 5,
+    "first_cold": 517.2,
+    "median": 362.21,
+    "max": 517.2,
+    "library_items": 500,
+    "project_files": 302,
+    "local_candidates": 1
+  },
+  "research_wall_seconds_concurrency_1": 2.978,
+  "research_wall_seconds_concurrency_3": 1.441,
+  "research_wall_seconds_cached_repeat": 0.165,
+  "cache_hit_rate": 0.5,
+  "research_spent": {
+    "queries": 3,
+    "repositories": 4,
+    "files": 8,
+    "bytes": 1608,
+    "seconds": 1.281,
+    "model_calls": 0
+  },
+  "coding_start_delay_ms": {
+    "before_synchronous_research_estimate": 1441.0,
+    "after_memory_first": 260.57,
+    "note": "Before: the coder waited for research to finish (same simulated network). After: only the local lookup."
+  },
+  "design_gate": {
+    "status": "PASS",
+    "render": "PASS",
+    "seconds": 4.24,
+    "screenshots": 4
+  },
+  "rss_mb": {
+    "before": 33.9,
+    "after": 50.1,
+    "note": "Sampled whole-process RSS including Playwright driver objects; not peak."
+  },
+  "live_github_research": {
+    "seconds": 0.8,
+    "spent": {
+      "queries": 1,
+      "repositories": 0,
+      "files": 0,
+      "bytes": 0,
+      "seconds": 0.782,
+      "model_calls": 0
+    },
+    "notes": [
+      "0 local candidates; online research queued on the research lane",
+      "network/search errors: magicuidesign/magicui: HTTPError: rate limit; shadcn-ui/ui: HTTPError: rate limit; GitHub API rate limit reached; online research paused until it resets (configure a GitHub token to raise it)"
+    ],
+    "candidates": [
+      {
+        "name": "Aceternity UI",
+        "state": "VALIDATED",
+        "origin": "https://ui.aceternity.com",
+        "license_status": "reference only: per-component terms must be checked on the site",
+        "score": null
+      },
+      {
+        "name": "Aceternity UI",
+        "state": "VALIDATED",
+        "origin": "https://ui.aceternity.com",
+        "license_status": "reference only: per-component terms must be checked on the site",
+        "score": null
+      },
+      {
+        "name": "21st.dev",
+        "state": "VALIDATED",
+        "origin": "https://21st.dev",
+        "license_status": "reference only: per-component terms must be checked on the site",
+        "score": null
+      },
+      {
+        "name": "21st.dev",
+        "state": "VALIDATED",
+        "origin": "https://21st.dev",
+        "license_status": "reference only: per-component terms must be checked on the site",
+        "score": null
+      }
+    ]
+  }
+}

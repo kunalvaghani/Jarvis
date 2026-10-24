@@ -107,9 +107,9 @@ class ScheduledQueue:
                     self.items.pop(identity, None)
                     continue
                 spec = row['spec']
-                if lane in {'fast', 'question', 'background'} and spec.get('lane') != lane:
+                if lane in {'fast', 'question', 'background', 'research'} and spec.get('lane') != lane:
                     continue
-                if lane == 'legacy' and spec.get('lane') in {'fast', 'question', 'background'}:
+                if lane == 'legacy' and spec.get('lane') in {'fast', 'question', 'background', 'research'}:
                     continue
                 if row['state'] in {'PAUSED', 'WAITING_APPROVAL', 'WAITING_USER'}:
                     continue
@@ -233,7 +233,7 @@ class ScheduledQueue:
 
     def failure(self, error):
         row = self.store.get(self.local.identity)
-        if row['spec'].get('read_only') and row['spec']['lane'] in {'fast','background'} and isinstance(error, (TimeoutError, ConnectionError, OSError)) and row['retries'] < 3:
+        if row['spec'].get('read_only') and row['spec']['lane'] in {'fast','background','research'} and isinstance(error, (TimeoutError, ConnectionError, OSError)) and row['retries'] < 3:
             self.local.outcome = ('RETRY_BACKOFF', type(error).__name__, {})
         else:
             self.outcome('FAILED', type(error).__name__+': '+str(error)[:1000])

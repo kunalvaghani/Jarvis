@@ -1359,6 +1359,21 @@
     "enabled": true,
     "cycle_hz": 4
   },
+  "pcide": {
+    "enabled": true,
+    "online_research": true,
+    "visual_qa": true,
+    "max_design_iterations": 2,
+    "cache_days": 7,
+    "research_budget": {
+      "queries": 4,
+      "repositories": 6,
+      "files": 20,
+      "bytes": 3000000,
+      "seconds": 90,
+      "concurrency": 3
+    }
+  },
   "project_intelligence": {
     "enabled": true,
     "default_workspace": null,

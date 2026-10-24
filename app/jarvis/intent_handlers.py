@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-IMMEDIATE = {"behavior", "conversation_style", "repeat_last", "stop_speaking", "cognition_predict", "awareness_control"}  # Answered at once, never queued.
+IMMEDIATE = {"behavior", "conversation_style", "repeat_last", "stop_speaking", "cognition_predict", "awareness_control", "code_intel"}  # Answered at once, never queued.
 STATUS = {"jarvis_status", "system_info", "screen_info"}  # Read-only; answered off the queue so a running task never delays them.
 QUEUED = {"whatsapp_read", "gods_eye_camera", "media_related", "memory_summarize", "messenger_focus", "screen_act"}  # Touch apps.
 SPOKEN = IMMEDIATE | STATUS | QUEUED
@@ -714,6 +714,12 @@ def execute(actions, command, cancelled=lambda: False):
         return repeat_last(actions, command.value)
     if kind == "cognition_predict":
         return cognition_predict(actions, command.value)
+    if kind in {"code_research", "code_intel"}:
+        from .pcide import engine
+        intel = engine()
+        if intel is None:
+            return "" if kind == "code_research" else "Parallel code intelligence is off (config pcide.enabled)."
+        return intel.run_research(command.value, cancelled) if kind == "code_research" else intel.control(command.value)
     if kind == "awareness_control":
         awareness = getattr(actions, "awareness", None)
         return awareness.control(command.value) if awareness is not None else "Cognitive awareness is not available in this session."

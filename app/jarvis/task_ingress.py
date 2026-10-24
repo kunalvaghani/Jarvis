@@ -41,6 +41,7 @@ class TaskIngress:
         self.fast_thread = threading.Thread(target=self._fast, name='Jarvis read-only lane', daemon=True)
         self.background_thread = threading.Thread(target=self._fast, args=('background',), name='Jarvis background observations', daemon=True)
         self.question_thread = threading.Thread(target=self._questions, name='Jarvis durable questions', daemon=True)
+        self.research_thread = threading.Thread(target=self._fast, args=('research',), name='Jarvis code research', daemon=True)
         self.last_heartbeat = time.monotonic()
         self.started = False
 
@@ -88,6 +89,7 @@ class TaskIngress:
         self.fast_thread.start()
         self.background_thread.start()
         self.question_thread.start()
+        self.research_thread.start()
 
     def submit(self, command, expected_generation=None, idempotency_key=None, workflow=None, dependencies=None):
         if self.closed.is_set() or self.actions.closed.is_set():
@@ -147,7 +149,7 @@ class TaskIngress:
         """True on the ingress thread while it routes work the awareness layer submitted itself."""
         identity = getattr(self.local, 'identity', None)
         row = self.store.get(identity) if identity else None
-        return bool(row and str(row['idem']).startswith(('cognitive:', 'project:')))
+        return bool(row and str(row['idem']).startswith(('cognitive:', 'project:', 'pcide:')))
 
     def checkpoint(self, state):
         identity = getattr(self.scheduler.local, 'identity', None)
@@ -638,7 +640,7 @@ class TaskIngress:
             else:raise ValueError('Unknown group control')
 
     def healthy(self):
-        return not self.closed.is_set() and all(t.is_alive() for t in [self.thread,self.fast_thread,self.background_thread,self.question_thread])
+        return not self.closed.is_set() and all(t.is_alive() for t in [self.thread,self.fast_thread,self.background_thread,self.question_thread,self.research_thread])
 
     def repair(self):
         # Never overlap an alive worker or replay an admission interrupted in CLASSIFYING.
@@ -660,6 +662,9 @@ class TaskIngress:
         if not self.background_thread.is_alive():
             self.background_thread = threading.Thread(target=self._fast, args=('background',), name='Jarvis background observations', daemon=True)
             self.background_thread.start()
+        if not self.research_thread.is_alive():
+            self.research_thread = threading.Thread(target=self._fast, args=('research',), name='Jarvis code research', daemon=True)
+            self.research_thread.start()
 
     def close(self):
         self.closed.set()
@@ -667,7 +672,7 @@ class TaskIngress:
         # SQLite stays open until process exit: an in-flight owned handler may still checkpoint.
 
     def close_storage(self):
-        threads = [self.thread, self.fast_thread, self.background_thread, self.question_thread, self.actions.thread]
+        threads = [self.thread, self.fast_thread, self.background_thread, self.question_thread, self.research_thread, self.actions.thread]
         for thread in threads:
             if thread.is_alive() and thread is not threading.current_thread():
                 thread.join(timeout=1)

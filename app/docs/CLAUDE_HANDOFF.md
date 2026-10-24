@@ -1,5 +1,34 @@
 # Cumulative Claude handoff
 
+## Parallel code intelligence (PCIDE) and Island input addendum — 2026-10-24 IST
+
+**Implemented candidate on `claude/parallel-code-intelligence` (from main at PR #18). Full release acceptance remains open.** [Architecture](parallel-code-intelligence.md) · [Evidence](../artifacts/code-intelligence/README.md).
+
+- **Completed and verified:**
+  - New modules `code_memory.py`, `code_intel.py`, `design_intel.py` and `pcide.py`.
+  - The queue's `research` lane, with its own thread and `code_research` classification.
+  - Hooks in `agent_context.coding_context`, the `native_coding` turn loop, the `codex_workload` planner prompt and the Actions `code_task` branch (memory-first, with the old synchronous path kept for disabled mode).
+  - Project intelligence: research per spec version, a design step with bounded fixes, design results in acceptance checks, refinement on "make X more Y", and specific requirements preferred over the objective.
+  - Intent controls, the Mind strip, and config, contract and manifest entries.
+  - Island: the typed box clears with history recall; choice dismissal by click or voice with an animated reveal and exit.
+  - Results: complete suite **4,291 passed / 150 gated skips / 0 failures**; launcher ready.
+- **Defects found and fixed:**
+  - Candidate IDs collided across research passes, silently dropping repeat candidates.
+  - Memory-first lookup took 1.26 s; it now takes 362 ms.
+  - Parallelism covered search only, not inspection.
+  - A rate-limit edit misplaced the ranking block (caught by tests).
+  - Control choices must dismiss only after their live revalidation.
+  - Three robustness failures in the first full run.
+- **Unexecuted acceptance gates:**
+  - Live GitHub research: the core API limit for this IP was exhausted (403). A GitHub token for RepoLearner raises the limit.
+  - The real Qwen worker consuming candidates and design specs.
+  - Real React/Vite projects rendering (desktop Tk apps get static design checks only).
+  - npm advisory checks.
+  - Live Island animation on screen, and a screenshot.
+  - The full PC-monitoring acceptance scenario with the real agent; an overnight run.
+- **Note:** `test_island_desk.py` plus `test_notch.py` in one process intermittently fails to start a Tk interpreter. This is reproduced on the unmodified baseline.
+- **Next action:** set a GitHub token, run `python scripts/pcide_benchmark.py --live`, then try one real React project end to end and inspect `show me which code you reused` and the design-review output under `.jarvis/visual-qa/`.
+
 ## Engineering Judgment & Goal Assurance Engine — 2026-10-24 IST
 
 **Implemented and regression-verified candidate on `codex/engineering-judgment`, from clean main `728c239` (PIRAE/cognitive merge). Full release acceptance remains open.** Earlier graph/queue/voice work is now in main; do not assume the old uncommitted branch is current. [Audit and pre-change hashes](../artifacts/engineering-judgment/architecture-audit.json) · [Source review](../artifacts/engineering-judgment/upstream-review.json) · [Current receipts and attempted fixes](../artifacts/engineering-judgment/README.md).

@@ -131,6 +131,8 @@ def build_interface(app):
     app.preview = ttk.Entry(composer.content,font=('Segoe UI',11),textvariable=input_text,style='Card.TEntry')
     app.preview.pack(side='left',fill='both',expand=True)
     app.preview.bind('<Return>',lambda _event:app.send_input())
+    app.preview.bind('<Up>',lambda _event:app.recall_input(-1))
+    app.preview.bind('<Down>',lambda _event:app.recall_input(1))
     placeholder = label(app.preview,'Ask Jarvis anything…',bg='#1b1c21',fg=MUTED,font=('Segoe UI',11),padx=0,pady=0)
     placeholder.bind('<Button-1>',lambda _e:app.preview.focus_set())
     def show_placeholder(*_):

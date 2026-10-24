@@ -23,7 +23,7 @@ WHOLE = {"blender_request", "ask", "task", "code_task", "toolkit", "anticipation
          # Everyday phrasings from intent_catalog.py describe one request even when they say "then".
          "behavior", "conversation_style", "jarvis_status", "system_info", "whatsapp_read", "media_related",
          "memory_summarize", "messenger_focus", "gods_eye_show", "gods_eye_camera", "gods_eye_explain", "gods_eye_cameras",
-         "cognition_predict", "screen_info", "awareness_control", "project"}
+         "cognition_predict", "screen_info", "awareness_control", "project", "code_intel"}
 FINAL_ONLY = WHOLE | {"cloud_control", "run_command", "modify", "browse", "browser_search", "context_search", "media_search",
     "media_control", "play_media", "spotify_request", "spotify_control", "spotify_open_playlist", "spotify_volume", "close_app",
     "forget_chat", "delete", "rename", "click_control", "select_context", "choose_control", "list_controls",

@@ -392,6 +392,95 @@ class DeskWidgetTests(unittest.TestCase):
         self.assertEqual(resolve(actions,selected.extra,1),Command('open','chrome'))
         with self.assertRaises(ValueError): resolve(actions,selected.extra,1)
 
+    def pump(self, seconds):
+        deadline = time.monotonic() + seconds
+        while time.monotonic() < deadline:
+            self.root.update()
+            time.sleep(.01)
+
+    def test_clicked_choice_card_confirms_then_leaves_and_does_not_return(self):
+        actions = pending_actions()
+        actions.pending_open={'time':time.monotonic(),'choices':[Command('open','spotify'),Command('open','chrome'),Command('open','code')]}
+        actions.submit=Mock()
+        self.app.actions=actions
+        desk=self.app.desk
+        card=snapshot(actions)
+        desk.update_choices(card)
+        self.pump(.4)  # Staggered entrance completes.
+        rows=desk.choice_rows.winfo_children()
+        self.assertEqual(len(rows),3)
+        self.assertTrue(all(r.winfo_manager()=='pack' and r.pack_info()['padx'] in (0,'0') for r in rows))
+        desk.choice_buttons[1].invoke()
+        self.assertTrue(desk.choice_buttons[1].cget('text').startswith('✓'))
+        desk.update_choices(snapshot(actions))  # Backend has not resolved yet: the same token must not come back.
+        self.pump(.9)
+        self.assertEqual(desk.choice_rows.winfo_children(),[])
+        self.assertTrue(desk.choice_hint.cget('text').startswith('Selected · chrome') or 'chrome' in desk.choice_hint.cget('text'))
+        self.assertIsNone(desk.pending)
+        self.assertEqual(resolve(actions,card['token'],1),Command('open','chrome'))
+        self.assertIsNone(snapshot(actions))
+        desk.choice_buttons=[]
+        actions.submit.assert_called_once_with(Command('island_choice','1',card['token']))
+
+    def test_voice_answer_removes_card_with_animation(self):
+        actions = pending_actions()
+        actions.pending_open={'time':time.monotonic(),'choices':[Command('open','spotify'),Command('open','chrome')]}
+        self.app.actions=actions
+        desk=self.app.desk
+        desk.update_choices(snapshot(actions))
+        self.pump(.3)
+        self.assertEqual(len(desk.choice_rows.winfo_children()),2)
+        reply=actions._resolve_reply(Command('task','the second one'))
+        self.assertEqual(reply,Command('choose_control','2'))
+        self.assertIsNone(snapshot(actions))  # The spoken answer dismissed it, like a click.
+        desk.update_choices(snapshot(actions))
+        self.pump(.6)
+        self.assertEqual(desk.choice_rows.winfo_children(),[])
+        self.assertEqual(desk.choice_hint.cget('text'),'Answered.')
+
+    def test_new_list_after_an_answer_shows_again(self):
+        actions = pending_actions()
+        actions.pending_open={'time':time.monotonic(),'choices':[Command('open','a'),Command('open','b')]}
+        first=snapshot(actions)
+        from jarvis.island_choices import dismiss
+        dismiss(actions,first['token'])
+        self.assertIsNone(snapshot(actions))
+        actions.pending_open={'time':time.monotonic()+1,'choices':[Command('open','c'),Command('open','d')]}
+        self.assertIsNotNone(snapshot(actions))
+
+    def test_youtube_choice_card_goes_but_results_stay_for_next_one(self):
+        from jarvis.media_player import remember_results, recent_results
+        actions = pending_actions()
+        remember_results(actions,'video',[{'title':'One','url':'u1'},{'title':'Two','url':'u2'}])
+        self.assertEqual(snapshot(actions)['kind'],'youtube')
+        from jarvis.island_choices import dismiss
+        dismiss(actions,kind='youtube')
+        self.assertIsNone(snapshot(actions))
+        self.assertEqual(len(recent_results(actions)['rows']),2)
+
+    def test_typed_command_clears_box_and_up_recalls_it(self):
+        import main
+        entry=tk.Entry(self.app.panel)
+        entry.pack()
+        app=SimpleNamespace(preview=entry)
+        for name in ('take_input','recall_input'):
+            setattr(app,name,getattr(main.App,name).__get__(app))
+        entry.insert(0,'  open notepad  ')
+        self.assertEqual(app.take_input(),'open notepad')
+        self.assertEqual(entry.get(),'')
+        entry.insert(0,'play music')
+        app.take_input()
+        self.assertEqual(app.recall_input(-1),'break')
+        self.assertEqual(entry.get(),'play music')
+        app.recall_input(-1)
+        self.assertEqual(entry.get(),'open notepad')
+        app.recall_input(1)
+        self.assertEqual(entry.get(),'play music')
+        app.recall_input(1)
+        self.assertEqual(entry.get(),'')
+        self.assertEqual(app.take_input(),'')
+        entry.destroy()
+
     def test_inline_approval_does_not_block_game_or_task_and_close_denies(self):
         desk=self.app.desk
         desk.show('Games')

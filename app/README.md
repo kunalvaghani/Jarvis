@@ -6,6 +6,30 @@ The Engineering Judgment & Goal Assurance Engine (EJGAE) extends existing skill 
 
 Fresh verification: **4,268 passed / 150 gated skips / zero failures**, one existing COM warning, **23m 03s**; all **804 frozen files unchanged**. Launcher readiness is **ready**. The owned connector-shaped fixture passed **2/2 linked goals with five actual local-model calls**, real executable checks and dependent result reuse. Current ReasoningBank binding, six enabled skill-evolution checks and two real kernel-isolation checks also passed. Skill selection adds **0.613 ms median** in the matched flag fixture; two engineering contexts add **667 characters**, with no extra classifier call. These are bounded measurements, not general model-quality or acoustic speedup claims. Exact tokens and isolated peak RAM/VRAM were not measured. Production connector accounts, physical speech/duplex, general parallel coding isolation, semantic novelty of native repair strategies and elapsed overnight endurance remain open. Main microphone remains stopped; the existing voice profile is preserved.
 
+## Parallel code intelligence and Island input candidate — 2026-10-24 IST
+
+Coding is now **memory-first**. Before writing code, Jarvis looks up the current project's own symbols and a verified, versioned code library, and the existing coder starts at once. Online GitHub and UI-library research runs **in parallel**, as a durable task on the queue's new research lane. The research workers read repositories at a pinned commit. Candidates must pass hard gates: a permissive license plus a license file to copy, no install scripts, no credentials or obfuscation, a matching framework, and the project's own policy (for example "no animation library" or "offline"). They are then ranked and handed to the native Qwen worker **between tool turns**, as data, never as edits.
+
+Other parts of the upgrade:
+
+- **Design:** style words become concrete design tokens with restraint rules ("futuristic" does not mean neon everywhere). A project's existing tokens are reused.
+- **Visual QA:** a rendered gate in headless Chrome checks desktop (light and dark), tablet and mobile for overflow, contrast, labels, keyboard focus, console errors and reduced motion. Its defects become bounded, targeted fix tasks in project plans.
+- **Code memory:** only test-covered components from passing coding runs are promoted, and they stay project-private until you say "save this component for future projects". "Use something similar in my other project" reuses them without new research.
+- **Groq:** audited, not connected to coding, so left unchanged.
+
+**Island fixes:**
+
+- The typed command box now clears after Enter or send, and Up/Down recall recent commands.
+- Choice cards now leave once answered, by click or by voice, with a staggered slide-in, a hover accent and a confirm-then-collapse exit.
+
+Verification:
+
+- 18 new code-intelligence tests and 5 Island tests.
+- Complete suite **4,291 passed / 150 gated skips / 0 failures** (an earlier run's 3 failures were fixed).
+- Launcher **ready**.
+- Benchmark: memory-first lookup 362 ms median; parallel research about 2× faster than serial; the coder starts after the local lookup only.
+- **Live GitHub research was blocked by the API rate limit here**, and the real coding agent and live Island animation were not observed. [Behavior, commands and limits](docs/parallel-code-intelligence.md) · [Evidence](artifacts/code-intelligence/README.md).
+
 ## Project intelligence candidate — 2026-10-24 IST
 
 Direct a project in conversation: "create a new desktop application" → "What should it do?" → "Where should I save it? Is there an existing project I should use as reference?" Then keep talking while it works: "also add battery optimization", "make the interface look futuristic", "actually, use no cloud services", "what's left?", "finish the safe remaining work overnight".

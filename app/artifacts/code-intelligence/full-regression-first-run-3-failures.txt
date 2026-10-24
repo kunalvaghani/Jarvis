@@ -1,0 +1,193 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+...........................s............................................ [  4%]
+........................................................................ [  6%]
+............sssF........................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+.....s.s................................................................ [ 14%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+.................................................s...................... [ 24%]
+...........................s..s......................................... [ 25%]
+........................................................................ [ 27%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+...............................................................ssssssss. [ 34%]
+...................................................................sssss [ 35%]
+sssssss..........................................................s...... [ 37%]
+........................................................................ [ 38%]
+........................ssssssssss...................................... [ 40%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 45%]
+........................................................................ [ 47%]
+.ssssssssssssssss....................................................... [ 48%]
+...s.s......s......................s.................................... [ 50%]
+........................................................................ [ 51%]
+.......................sssss............................................ [ 53%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+..........................s...............s............................. [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+..................sssssss............................................... [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+.....................................................s.................. [ 68%]
+........................................................................ [ 69%]
+.............................s......s................................s.s [ 71%]
+......s.....................s........................................... [ 72%]
+.............................................................sssssssssss [ 74%]
+........................................................................ [ 76%]
+...................................s.................s.................. [ 77%]
+.......................................sssssssssssss.................... [ 79%]
+............................................ssssssssssss................ [ 81%]
+....................................................................ssss [ 82%]
+......................s................................................. [ 84%]
+........................................................................ [ 85%]
+........................F............................................... [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 92%]
+.......................................................s....s........... [ 94%]
+................................................sssssss................. [ 95%]
+......................................sssssssssssssssss................. [ 97%]
+........................................................................ [ 98%]
+.......................................F.........                        [100%]
+================================== FAILURES ===================================
+______________________ test_voice_completion[JRV-04-006] ______________________
+
+case = 6
+tmp_path = WindowsPath('C:/Users/kunal/AppData/Local/Temp/pytest-of-kunal/pytest-889/test_voice_completion_JRV_04_03')
+
+    @pytest.mark.parametrize('case',VOICE_CASES,ids=lambda n:f'JRV-04-{n:03}')
+    def test_voice_completion(case,tmp_path):
+        from jarvis.audio import DecodeJob,DecodeQueue,Listener,workers_alive
+        from jarvis.command_cleanup import CommandCleanup
+        from tests.test_voice_stt_audit import capture_fixture,decode_words,wait_for
+        if case in (1,2,3):
+            prerequisites={1:'Dedicated medium.en WER/latency session requires free GPU headroom; only 1396 MiB free was observed and no labeled quiet-room corpus is supplied.',
+                2:'No labeled background-TV audio corpus with channel/source annotations; textual echo tests cannot measure acoustic false activation rate.',
+                3:'No labeled long-pause utterance corpus or reference word timings; 0.8-second VAD endpoint policy cannot certify arbitrary pause intent.'}
+            pytest.skip('BLOCKED: '+prerequisites[case])
+        elif case==6:
+            from jarvis.whisper_backend import WhisperUnavailable
+            from main import App
+            events=[];listener=Listener(tmp_path,None,Mock(),lambda *a:events.append(a))
+            with patch('jarvis.whisper_backend.load_model',side_effect=WhisperUnavailable('model_missing','private path')):
+                listener.run()
+            assert listener.health()['error']=='model_missing' and listener.stop_event.is_set()
+            app=SimpleNamespace(preview=Mock(),actions=SimpleNamespace(submit=Mock()),report=Mock())
+>           app.preview.get.return_value='open Calculator';App.send_input(app)
+
+tests\test_audit_completion_cases.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = namespace(preview=<Mock id='2778639989584'>, actions=namespace(submit=<Mock id='2778639981520'>), report=<Mock id='2778636311216'>)
+
+    def send_input(self):
+        """Enter uses the same command/question routing as spoken instructions."""
+>       text = self.take_input()
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'take_input'
+
+main.py:783: AttributeError
+__________ TaskRoutingTests.test_enter_routes_actions_and_questions ___________
+
+self = <tests.test_task_routing.TaskRoutingTests testMethod=test_enter_routes_actions_and_questions>
+
+    def test_enter_routes_actions_and_questions(self):
+        from main import App
+        app = Mock()
+        for text, expected in [("open calculator", "open"), ("How do robots work?", "ask"),
+                               ("open youtube and search for how to make robot and play first video", "task")]:
+            app.actions.submit.reset_mock()
+            app.preview.get.return_value = text
+>           App.send_input(app)
+
+tests\test_task_routing.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main.py:788: in send_input
+    engine.feed(command_text(text), final=True, raw=text)
+jarvis\audio.py:79: in command_text
+    text = re.sub(r"\b([a-z0-9_-]+)\.\s+(?=(?:text|txt|py|js|jsx|ts|tsx|json|html|css|md|yaml|yml|toml)\b)",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+pattern = '\\b([a-z0-9_-]+)\\.\\s+(?=(?:text|txt|py|js|jsx|ts|tsx|json|html|css|md|yaml|yml|toml)\\b)'
+repl = '\\1.'
+string = <Mock name='mock.take_input().replace()' id='2778117267632'>, count = 0
+flags = re.IGNORECASE
+
+    def sub(pattern, repl, string, count=0, flags=0):
+        """Return the string obtained by replacing the leftmost
+        non-overlapping occurrences of the pattern in string by the
+        replacement repl.  repl can be either a string or a callable;
+        if a string, backslash escapes in it are processed.  If it is
+        a callable, it's passed the Match object and must return
+        a replacement string to be used."""
+>       return _compile(pattern, flags).sub(repl, string, count)
+E       TypeError: expected string or bytes-like object
+
+C:\Users\kunal\AppData\Local\Programs\Python\Python310\lib\re.py:209: TypeError
+________________ test_numbered_choice_plays_that_exact_result _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002868837EE30>
+
+    def test_numbered_choice_plays_that_exact_result(monkeypatch):
+        a, played = actions(), []
+        monkeypatch.setattr(media_player, 'play_youtube_item', lambda *x, **k: played.append((x[1], k)) or 'ok')
+        rows = [{'playlist_id': PL[:-1] + str(i), 'title': 'P' + str(i), 'channel': '', 'first_video_id': 'U5ewn_HTZa' + str(i)}
+                for i in range(1, 4)]
+        media_player.remember_results(a, 'playlist', rows)
+>       media_player.play_result(a, 2, 'playlist', lambda: False)
+
+tests\test_youtube_user_chrome.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+jarvis\media_player.py:332: in play_result
+    dismiss(actions, kind='youtube')  # The results stay remembered for "play the next one"; the card goes.
+jarvis\island_choices.py:17: in dismiss
+    card = next((c for c in cards(actions) if kind is None or c['kind'] == kind), None)
+jarvis\island_choices.py:17: in <genexpr>
+    card = next((c for c in cards(actions) if kind is None or c['kind'] == kind), None)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+actions = namespace(config={'media': {'youtube_browser': 'user_chrome', 'youtube_chrome_profile': 'Default'}}, apps={'chrome': [...'}], 'question': 'Which YouTube playlist? Say play the first, second or third playlist.'}, last_media_search='youtube')
+now = 61456.843
+
+    def cards(actions, now=None):
+        now = time.monotonic() if now is None else now
+        from .whatsapp import snapshot as whatsapp_snapshot
+        waiting = whatsapp_snapshot(actions)
+        if waiting:
+            yield waiting  # A paused WhatsApp step (contact choice, message preview, incoming call).
+        knowledge = getattr(actions, 'knowledge', None)
+        if knowledge is not None and getattr(knowledge, 'pending_memory', None):
+            card = knowledge.choice_snapshot()
+            if card:
+                yield card
+>       groups = [('open', actions.pending_open, 45), ('project', actions.projects.pending, 180),
+                  ('control', actions.ui_controls.pending if actions.ui_controls else None, 45),
+                  ('task', actions.pending_question, 180), ('youtube', getattr(actions, 'youtube_results', None), 300)]
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'pending_open'
+
+jarvis\island_choices.py:35: AttributeError
+============================== warnings summary ===============================
+tests/test_desktop_control_audit.py::test_real_pointer_adapter_rechecks_after_idle
+  D:\Kunals GitHub Repo\Jarvis\app\.venv\lib\site-packages\pywinauto\__init__.py:80: UserWarning: Revert to STA COM threading mode
+    warnings.warn("Revert to STA COM threading mode", UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_audit_completion_cases.py::test_voice_completion[JRV-04-006]
+FAILED tests/test_task_routing.py::TaskRoutingTests::test_enter_routes_actions_and_questions
+FAILED tests/test_youtube_user_chrome.py::test_numbered_choice_plays_that_exact_result
+3 failed, 4288 passed, 150 skipped, 1 warning in 1158.07s (0:19:18)
+
+real	19m21.640s
+user	0m0.031s
+sys	0m0.015s

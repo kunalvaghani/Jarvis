@@ -126,6 +126,31 @@ RULES = [
      r"(?:predict|simulate) what (?:would happen|happens|will happen) if (?:you|i (?:asked|told) you to) (.+)|"
      r"before you do it,? (?:tell me )?what would happen if you (.+)",
      lambda m: C("cognition_predict", next(g for g in m.groups() if g))),
+    # Parallel code intelligence (pcide.py): memory-first reuse, research, provenance and the code library.
+    (r"(?:use|reuse) (?:an? )?existing (?:component|implementation|code|function)(?: for (?:this|that|it))?|"
+     r"search (?:your |the )?(?:code )?memory (?:first|before (?:writing|you write) (?:any )?new code)",
+     lambda m: C("code_intel", "memory_first")),
+    (r"(?=.*\b(?:component|components|navbar|nav|navigation|dock|menu|sidebar|library|implementation|function|animation|animations|chart|charts|ui|button|card|cards|layout|algorithm|code|module|package|hook|api|widget|dashboard|transition|form|modal)\b)(?:(?:find|search for|look for|get) (?:me )?(?:a )?better (.+)|find (?:some )?examples? of (.+))|"
+     r"check github for (?:an? )?(?:implementation|example|library) (?:of|for) (.+)|"
+     r"(?:use|find) the best compatible open[- ]source (?:library|package|component)(?: for (.+))?",
+     lambda m: C("code_intel", "research:" + next((g for g in m.groups() if g), ""))),
+    (r"(?:show|tell) me (?:which|what) code you (?:reused|re-used|borrowed)|what code did you reuse|which components did you reuse",
+     lambda m: C("code_intel", "reused")),
+    (r"(?=.*\b(?:component|components|navbar|nav|navigation|dock|menu|sidebar|library|implementation|function|animation|animations|chart|charts|ui|button|card|cards|layout|algorithm|code|module|package|hook|api|widget|dashboard|transition|form|modal)\b)(?:where did you (?:find|get) (?:this|that|the)? ?(.*?)|where did (.+?) come from)",
+     lambda m: C("code_intel", "where:" + next((g for g in m.groups() if g), ""))),
+    (r"(?:verify|check) the licen[cs]e(?: (?:of|for) (.+))?", lambda m: C("code_intel", "license:" + (m.group(1) or ""))),
+    (r"compare (?:these|the) two (?:implementations|components|libraries|candidates)|(?=.*\b(?:component|components|navbar|nav|navigation|dock|menu|sidebar|library|implementation|function|animation|animations|chart|charts|ui|button|card|cards|layout|algorithm|code|module|package|hook|api|widget|dashboard|transition|form|modal)\b)compare (.+?) (?:and|with|vs\\.?|versus) (.+)",
+     lambda m: C("code_intel", "compare:" + (" and ".join(g for g in m.groups() if g)))),
+    (r"save (?:this|that|the) (?:verified )?(.*?)(?:component|function|code)?(?: for (?:future|other|later) projects?)",
+     lambda m: C("code_intel", "save:" + (m.group(1) or "").strip())),
+    (r"(?:show|list|what(?:'s| is) in) (?:me )?(?:your |the )?(?:verified )?(?:code library|component library|reusable code|saved components)",
+     lambda m: C("code_intel", "library")),
+    (r"(disable|enable|remove) (?:the )?(.+?) (?:component )?(?:from|in) (?:your |the )?(?:code|component) library",
+     lambda m: C("code_intel", m.group(1) + ":" + m.group(2))),
+    (r"improve the design but keep (?:the )?(?:existing )?functionality|review (?:the |this )?(?:ui|interface|design)(?: quality)?|"
+     r"run (?:a )?(?:visual|design) (?:qa|check|review)", lambda m: C("code_intel", "design:" + m.group(0))),
+    (r"use something similar in my other project(?: (.+))?|reuse (?:it|that|this) in (?:my )?(?:other|the other) project(?: (.+))?",
+     lambda m: C("code_intel", "reuse_in:" + next((g for g in m.groups() if g), ""))),
     # Cognitive awareness engine (awareness.py): self-model, situational status and user controls.
     (r"what can you (?:currently |actually )?do(?: right now| now)?|what are your (?:current )?capabilities(?: right now)?",
      lambda m: C("jarvis_status", "awareness:capabilities")),
