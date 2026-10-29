@@ -1,0 +1,63 @@
+{
+  "kind": "baseline",
+  "system": "old control stack",
+  "date": "2026-10-29T18:47:48.345129+00:00",
+  "revision": "7e7a39a9b4c0226e2c9ec89235476be5f17999a7",
+  "python": "3.10.6",
+  "machine": "Windows-10-10.0.26200-SP0",
+  "in_process_decisions": {
+    "desktop_actions.explicit_desktop_plan (regex intent -> step)": {
+      "iterations": 2000,
+      "p50_ms": 0.0296,
+      "p95_ms": 0.0349,
+      "max_ms": 0.9318,
+      "mean_ms": 0.0306
+    },
+    "tools.validate_arguments (browser_click)": {
+      "iterations": 2000,
+      "p50_ms": 0.0015,
+      "p95_ms": 0.0016,
+      "max_ms": 0.0124,
+      "mean_ms": 0.0015
+    },
+    "browser_worker.validate_request (click)": {
+      "iterations": 2000,
+      "p50_ms": 0.0033,
+      "p95_ms": 0.0035,
+      "max_ms": 0.0179,
+      "mean_ms": 0.0034
+    },
+    "execution_adapters.desktop_order (reads config.json each call)": {
+      "iterations": 500,
+      "p50_ms": 1.1255,
+      "p95_ms": 1.393,
+      "max_ms": 1.6672,
+      "mean_ms": 1.1601
+    }
+  },
+  "explicit_plan_coverage": {
+    "fill the search field with python venv": true,
+    "scroll down": true,
+    "press ctrl+s": true,
+    "open the file menu": true,
+    "click Save in the dialog": true,
+    "click OK": true,
+    "open notepad and type hello": false
+  },
+  "controlled_tasks": {
+    "defined": 7,
+    "executed": 0,
+    "passed": 0,
+    "status": "BLOCKED",
+    "reason": "Live desktop/browser baseline needs the approved test directory and a clean test browser profile (the owned profile holds Login Data/Cookies). Asked the user in Phase 0.",
+    "ids": [
+      "web-001",
+      "web-002",
+      "native-001",
+      "native-002",
+      "vision-001",
+      "cross-001",
+      "adv-001"
+    ]
+  }
+}

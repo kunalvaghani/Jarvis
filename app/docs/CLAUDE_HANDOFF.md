@@ -1,5 +1,12 @@
 # Cumulative Claude handoff
 
+## Browser + PC control rework, Phase 0 — 2026-10-30 IST
+
+New, unrelated feature work on branch `claude_ControlArchitect` (start `7e7a39a`). It does not touch the paused campaign. Phase 0 (audit, dependency map, integration contract, rollback, baseline) is complete. No runtime code was changed. Live checklist: [rework PROGRESS](rework/PROGRESS.md).
+- Baseline suite: 4532 passed, 39 failed (all pre-existing coding-agent fixtures: Mock-as-path and `SimpleNamespace.base`), 150 skipped. Launcher check: `ready`.
+- **Unexecuted gates:** the live desktop/browser baseline (7 skeleton tasks) is BLOCKED. It needs an approved test directory and a clean browser profile.
+- **Next action:** wait for the user's answers (test directory, profile, installs of mypy/coverage/mss/dxcam, Python 3.10 vs 3.11, gmail_chrome_worker scope), then Phase 1 contracts in `jarvis/control/`.
+
 ## Explicit safe pause — 2026-10-29 IST
 
 **PAUSED_BY_USER. This supersedes all historical RUNNING statements and next-trial instructions below.** Do not resume the campaign, spend cloud quota or alter frozen applications without a new explicit user request. Normal unrelated feature work remains allowed. Branch `codex/autonomous-repair-2026-10-24`, committed baseline `087a7393a74cf833a3bc558f06f07ddcbf6f39e9`; mixed existing ownership prevented a safe WIP commit. A verified source snapshot and Git bundle preserve the uncommitted work instead. Private checkpoint: `app/.jarvis-runtime/campaign-checkpoints/autonomous-repair-pause-2026-10-29` (repository relative).

@@ -516,6 +516,8 @@ so existing local absolute paths continue working. New checkouts use `app`.
 
 ## Verification and history
 
+**2026-10-30:** the browser and PC control rework has started (Phase 0 audit and baseline only; no runtime behaviour has changed). See the [rework progress](app/docs/rework/PROGRESS.md) and the [control architecture](app/docs/architecture/control-architecture.md).
+
 The [project-structure guide](app/docs/project-structure.md#verification-record)
 records the **2026-10-09–10 IST** reorganization and fresh checks: **1,315 regression
 tests ran successfully with one skip**, launcher readiness is `ready`, and all seven existing
