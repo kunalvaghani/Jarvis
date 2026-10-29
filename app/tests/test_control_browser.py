@@ -1,19 +1,22 @@
 """Route 2 integration tests: real Chrome (headless, throwaway profile) against the local D1 site."""
+import importlib.util
 from pathlib import Path
 import re
 import sys
 
 import pytest
 
+from jarvis.control.coords import Frame, Point
+from jarvis.control.policy import Policy
+from jarvis.control.routes.browser import BrowserExecutor
+from jarvis.control.types import Action, ErrorCategory, Expectation, Route
+
 APP = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(APP / 'benchmarks' / 'sites' / 'd1'))
-
-from server import Site  # noqa: E402
-
-from jarvis.control.coords import Frame, Point  # noqa: E402
-from jarvis.control.policy import Policy  # noqa: E402
-from jarvis.control.routes.browser import BrowserExecutor  # noqa: E402
-from jarvis.control.types import Action, ErrorCategory, Expectation, Route  # noqa: E402
+# Load D1 by path under a unique name: other suites put unrelated `server` modules on sys.path.
+_spec = importlib.util.spec_from_file_location('jarvis_d1_site', APP / 'benchmarks' / 'sites' / 'd1' / 'server.py')
+_d1 = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_d1)
+Site = _d1.Site
 
 pytestmark = pytest.mark.skipif(sys.platform != 'win32', reason='installed Chrome on the Jarvis host')
 

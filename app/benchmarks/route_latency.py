@@ -16,7 +16,6 @@ import time
 
 APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
-sys.path.insert(0, str(APP / 'benchmarks' / 'sites' / 'd1'))
 
 
 def summary(samples):
@@ -27,8 +26,12 @@ def summary(samples):
 
 
 def browser(iterations, headless):
+    import importlib.util
     import re
-    from server import Site
+    spec = importlib.util.spec_from_file_location('jarvis_d1_site', APP / 'benchmarks' / 'sites' / 'd1' / 'server.py')
+    d1 = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(d1)
+    Site = d1.Site
     from jarvis.control.policy import Policy
     from jarvis.control.routes.browser import BrowserExecutor
     from jarvis.control.types import Action, Expectation, Route

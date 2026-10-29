@@ -10,7 +10,7 @@ Branch `claude_ControlArchitect`, starting revision `7e7a39a`. Rollback: [rollba
 |---|---|---|
 | 0 Audit, contract, baseline | **PASS** (2026-10-30) | [audit](audit.md), [dependency map](migration-dependency-map.md), [integration contract](integration-contract.md), [rollback](rollback.md), [baseline.json](../../benchmarks/results/baseline.json), pytest log (local, gitignored: `benchmarks/results/baseline-pytest-2026-10-30.log`) |
 | 1 Core contracts | **PASS** (2026-10-30) | `jarvis/control/` 13 modules; 79 passed / 1 skipped on Python 3.10.6 and 3.11.9; line coverage **100%** (969 statements); `mypy --strict` clean ([mypy.ini](../../mypy.ini)). Skip = symlink creation needs a privilege this account lacks; the junction-escape test covers the same attack and passes. |
-| 2 Route executors | **IN PROGRESS** | Route 2 browser: built ([ADR 0003](../adr/0003-browser-route-cdp-refs.md)), 11/11 integration tests on real installed Chrome vs the [D1 site](../../benchmarks/sites/d1/), stable over 5 repeat runs, 3.10 and 3.11. Latency (headless, warm, n=30, 2026-10-30): ref click+verify p50 **84.6 ms** / p95 95.8 ms (target p50 ≤ 400 ms); form_input+readback p50 80.3 ms; local navigate p50 45.7 ms; cold start 1.3 s ([route-latency.json](../../benchmarks/results/route-latency.json)). Headful latency not yet measured. Route 3 UIA, Route 4 vision, Route 1 API: TODO. |
+| 2 Route executors | **IN PROGRESS** | Route 2 browser: built ([ADR 0003](../adr/0003-browser-route-cdp-refs.md)), 11/11 integration tests on real installed Chrome vs the [D1 site](../../benchmarks/sites/d1/), stable over 5 repeat runs, 3.10 and 3.11. Latency (headless, warm, n=30, 2026-10-30): ref click+verify p50 **84.6 ms** / p95 95.8 ms (target p50 ≤ 400 ms); form_input+readback p50 80.3 ms; local navigate p50 45.7 ms; cold start 1.3 s ([route-latency.json](../../benchmarks/results/route-latency.json)). Headful latency not yet measured. **Route 3 UIA** built: `jarvis/control/routes/uia.py` uses comtypes `IUIAutomation` with cache requests, not the `uiautomation` package, because that package forces DPI v1 on import. Patterns are used first. It detects elevated targets, the secure desktop, a protected window in front and Chromium windows with accessibility off. Shared input module: `jarvis/control/input.py`. Desktop tests (`JARVIS_DESKTOP_TESTS=1`, 2026-10-30): **PASS** for Calculator by AutomationId via InvokePattern (2+3=5 read back), Explorer limited to the approved folder, policy refusals, and blocked-input reporting. **UNTESTED:** successful keyboard typing, because Windows dropped all injected input while a protected `GameInputServiceWindow` held the foreground and the user was idle 43 min; and the Notepad flow, skipped because the user's own Notepad (`context.txt`) is open. Route 4 vision, Route 1 API: TODO. |
 | 3 MCP research/selection | NOT STARTED | — |
 | 4 Validation harness | NOT STARTED | — |
 | 5 Integration | NOT STARTED | — |
@@ -45,9 +45,9 @@ All 39 failures are in coding-agent tests (`test_coder` 17, `test_coding_workflo
 |---|---|
 | `.venv311` created from Python 3.11.9 with the identical package set | DONE |
 | Control-layer tests on 3.11 | PASS (79/1 skip) |
-| Full suite on 3.11 vs 3.10 baseline | RUNNING |
-| Launcher check on 3.11 | TODO |
-| Switch `Start Jarvis.cmd` / bootstrap / manifest; keep `.venv` as rollback | TODO (after parity) |
+| Full suite on 3.11 vs 3.10 baseline | **PASS**: identical 39 pre-existing failures, none new (after fixing the SQLite handle leak) |
+| Launcher check on 3.11 | **PASS** (`ready`) |
+| Switch | **DONE**: `.venv` rebuilt as 3.11.9 with the identical package set; 3.10 kept at `.venv310`; no launcher edits needed. Final full run on the switched `.venv`: 4617 passed / 39 failed (same set) / 156 skipped |
 | Secondary venvs (brain, f5, harness, openviking, skills, training) | TODO, one at a time |
 
 ## Open issues
@@ -56,6 +56,8 @@ All 39 failures are in coding-agent tests (`test_coder` 17, `test_coding_workflo
 - Python 3.11: first full run showed 28 extra failures. All were one real bug: SQLite connections in `catalog.py`, `folder_lookup.py` and `repository_skills.py` were never closed (`with sqlite3.connect()` only commits). Fixed with the repo's existing `closing(...)` / contextmanager idioms; the 43 affected tests now pass on 3.10 and 3.11. Full 3.11 re-run pending.
 - No emergency stop for in-flight control exists today (only proactive-awareness stop).
 - Owned browser has no URL policy/request hook; refuses multi-tab.
+
+- Real-desktop finding (2026-10-30): with a protected or elevated window in front, Windows (UIPI) silently drops all injected keys and clicks. The new layer now detects that up front, and confirms a SendInput pointer move landed before pressing, so this is reported as `elevated_target` with "click your desktop once", never as a silent success.
 
 ## Next step
 

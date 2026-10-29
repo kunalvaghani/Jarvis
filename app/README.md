@@ -2,7 +2,13 @@
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](docs/autonomous-repair-acceptance.md) · [Handoff](docs/CLAUDE_HANDOFF.md).
 
-## Browser and PC control rework — Phase 0, 2026-10-30 IST
+## Browser and PC control rework and Python 3.11 — 2026-10-30 IST
+
+**Python 3.11:** the main environment `app/.venv` now runs **Python 3.11.9** with the identical 120-package set. Before switching, the full suite was run on 3.11 side by side. The first run exposed a real bug: SQLite connections in `catalog.py`, `folder_lookup.py` and `repository_skills.py` were never closed. That bug was fixed, and the re-run then matched the 3.10 baseline failure-for-failure (the same 39 pre-existing coding-agent failures, none new). Launcher readiness on 3.11 is `ready`. The old environment is kept at `app/.venv310`; see [rollback](docs/rework/rollback.md#python-311-interpreter-switch-2026-10-30). The secondary environments (`.venv-brain`, `.venv-f5`, `.venv-harness`, `.venv-openviking`, `.venv-skills`, `.venv-training`) are still 3.10 and move one at a time.
+
+**Control rework progress:** Phase 1 (core contracts in `jarvis/control/`, 100% line coverage, `mypy --strict` clean) and the browser route of Phase 2 are done; see [progress](docs/rework/PROGRESS.md). The browser route reads pages through Chrome's accessibility tree and refuses clicks on targets that moved, changed or are covered. It passed 11 integration tests on real Chrome against the local [D1 test site](benchmarks/sites/d1/). Measured locally, headless and warm: ref click plus verification p50 84.6 ms. Jarvis's live routing is unchanged until Phase 5.
+
+### Phase 0 record
 
 Work has started on rebuilding browser and Windows control as one capability-aware layer with four routes: API/MCP, Playwright browser, Windows UI Automation and vision fallback. Design source: [control architecture](docs/architecture/control-architecture.md). **No runtime behaviour has changed yet.** Phase 0 delivered the [audit](docs/rework/audit.md), [dependency map](docs/rework/migration-dependency-map.md), [integration contract](docs/rework/integration-contract.md), [rollback](docs/rework/rollback.md), [layout ADR](docs/adr/0001-control-layer-layout.md) and [progress checklist](docs/rework/PROGRESS.md).
 
@@ -731,8 +737,8 @@ remain authoritative. The system map now distinguishes the attention tick from
 execution workers, language models from speech runtimes, and registrations from
 live capability proof. It records the missing repository-assimilation guide.
 [Cases, source/health bindings, benchmarks, upstream checks and rollback](artifacts/jarvis-audit/modules/01-architecture-inventory/inventory.md).
-Whole-system production readiness remains uncertified: Python 3.10 is upstream
-end-of-life, two environment dependency checks lack pip, and live integration
+Whole-system production readiness remains uncertified: at the time of this audit Python 3.10 was upstream
+end-of-life (the main `.venv` moved to Python 3.11.9 on 2026-10-30; see the control rework section above), two environment dependency checks lack pip, and live integration
 and ability-isolation gaps remain. [Current catalog progress](artifacts/jarvis-audit/final-report.md).
 
 **Initial audit pass (2026-10-14 IST):** All 37 supplied subsystem
@@ -1849,7 +1855,7 @@ App names match installed candidates using aliases, spelling edits, swapped lett
 
 If installation is interrupted, double-click **launchers/Resume Whisper Setup.cmd** when the connection is stable. It installs the missing packages, resumes the model download, and runs a synthetic-speech GPU check before reporting success.
 
-Requires Windows 10/11, Python 3.10+, and an NVIDIA CUDA GPU with an up-to-date driver. From this folder run:
+Requires Windows 10/11, Python 3.11 (the main `.venv` runs 3.11.9 since 2026-10-30; 3.10 still works), and an NVIDIA CUDA GPU with an up-to-date driver. From this folder run:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts/setup/setup.ps1

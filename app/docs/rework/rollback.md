@@ -19,6 +19,20 @@ Each phase is a separate commit on this branch, so rollback never needs a force-
 4. After Phase 5, the switch is guarded by `control_layer.enabled` in `config/config.json` (added in Phase 5); setting it to `false` restores the old routing without a code change until the old controllers are deleted in Phase 10.
 5. Never delete `.jarvis-runtime/` during rollback; it holds task checkpoints and receipts.
 
+## Python 3.11 interpreter switch (2026-10-30)
+
+`app/.venv` is now Python 3.11.9 with exactly the 120 packages, at the same versions, that the 3.10 environment had. The previous 3.10.6 environment was moved, not deleted, to `app/.venv310`. Every launcher keeps using `.venv`, so no script changed.
+
+To roll back the interpreter (Jarvis stopped first with `Stop Jarvis.cmd`):
+
+```bat
+cd app
+ren .venv .venv311-switched
+ren .venv310 .venv
+```
+
+`app/.venv311` is the side-by-side environment used for the parity check. It is no longer used by anything and can be removed once the user agrees.
+
 ## Reproducing the Phase 0 evidence
 
 ```bash
