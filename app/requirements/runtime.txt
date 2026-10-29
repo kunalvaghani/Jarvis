@@ -29,3 +29,7 @@ winrt-Windows.Storage.Streams==3.2.1; sys_platform == 'win32'
 pycaw==20260921; sys_platform == 'win32'
 playwright==1.63.0
 PyYAML==6.0.3
+# Control-layer rework (2026-10-30): screen capture and Windows UI Automation for routes 3/4.
+mss==10.2.0
+dxcam==0.3.0; sys_platform == 'win32'
+uiautomation==2.0.29; sys_platform == 'win32'

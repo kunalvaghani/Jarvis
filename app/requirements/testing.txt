@@ -1,3 +1,7 @@
 # Optional QA environment, not required by Start Jarvis.
 pytest==8.4.2
 pytest-asyncio==0.26.0
+# Control-layer contract gate: strict typing and coverage.
+mypy==2.4.0
+coverage==7.16.2
+pytest-cov==7.1.0
