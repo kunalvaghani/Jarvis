@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Frames</title></head><body>
+<h1>Frames</h1>
+<iframe id="same" title="Same origin frame" width="300" height="80"
+  srcdoc="<button onclick=&quot;parent.document.getElementById('out').textContent='inner clicked'&quot;>Inner button</button>"></iframe>
+<iframe id="cross" title="Cross origin frame" width="400" height="120"></iframe>
+<p id="out">idle</p>
+<script>fetch('/peer').then(r => r.json()).then(d => { document.getElementById('cross').src = d.peer + '/frame-child.html'; });</script>
+</body></html>

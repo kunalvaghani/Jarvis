@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Dynamic</title></head><body>
+<h1>Dynamic content</h1>
+<button id="load" onclick="fetch('/data?ms=600').then(r=>r.json()).then(d=>{document.getElementById('list').innerHTML=d.items.map(i=>'<li>'+i+'</li>').join('');document.getElementById('state').textContent='loaded'})">Load items</button>
+<ul id="list"></ul><p id="state">empty</p>
+<button id="later" disabled>Ready soon</button>
+<script>
+setTimeout(() => { const b = document.getElementById('later'); b.disabled = false; b.textContent = 'Ready now';
+  b.onclick = () => document.getElementById('state').textContent = 'ready clicked'; }, 700);
+</script>
+<div id="app"></div>
+<script>
+// React-style re-render: every render replaces the button node but keeps its label.
+let renders = 0;
+function render() {
+  renders++;
+  document.getElementById('app').innerHTML = '<button id="rerender">Rerender</button> <span id="renders">' + renders + '</span>';
+  document.getElementById('rerender').onclick = render;
+}
+render();
+</script>
+<button id="mover" style="position:relative;left:0" onclick="document.getElementById('state').textContent='mover clicked'">Moving target</button>
+<script>
+let x = 0;
+const m = setInterval(() => { x += 40; document.getElementById('mover').style.left = x + 'px'; if (x >= 200) clearInterval(m); }, 100);
+</script>
+<div id="cover" style="position:fixed;inset:0;background:rgba(0,0,0,.3);display:none" onclick="this.style.display='none'"></div>
+<button id="covered" onclick="document.getElementById('state').textContent='covered clicked'">Under overlay</button>
+<button id="showcover" onclick="document.getElementById('cover').style.display='block'">Show overlay</button>
+</body></html>

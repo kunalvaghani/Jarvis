@@ -2,6 +2,7 @@
 
 Only metadata is loaded in Jarvis. Repository modules never enter sys.modules here.
 """
+from contextlib import contextmanager
 from datetime import datetime,timezone
 import hashlib
 import json
@@ -51,10 +52,15 @@ class RepositorySkills:
             try:self.fresh(self.get(identifier))
             except (ValueError,OSError,KeyError,TypeError):self.transition(identifier,'QUARANTINED')
 
+    @contextmanager
     def connect(self):
+        # Commit/rollback like a plain connection context, and always release the file handle.
         if linked(self.path):raise ValueError('Linked registry database refused.')
         db=sqlite3.connect(self.path,timeout=5);db.row_factory=sqlite3.Row
-        db.execute('PRAGMA foreign_keys=ON');return db
+        try:
+            db.execute('PRAGMA foreign_keys=ON')
+            with db: yield db
+        finally: db.close()
 
     def require_enabled(self):
         if not self.enabled:raise ValueError('Repository skills are disabled in configuration.')

@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Forms</title></head><body>
+<h1>Contact form</h1>
+<form id="contact" onsubmit="event.preventDefault();document.getElementById('status').textContent='submitted';">
+<label for="name">Name</label> <input id="name" name="name">
+<label for="email">Email</label> <input id="email" type="email">
+<label for="password">Password</label> <input id="password" type="password">
+<label for="topic">Topic</label> <select id="topic"><option>General</option><option>Billing</option><option>Support</option></select>
+<label><input type="checkbox" id="newsletter"> Newsletter</label>
+<fieldset><legend>Plan</legend><label><input type="radio" name="plan" id="basic" checked> Basic</label>
+<label><input type="radio" name="plan" id="pro"> Pro</label></fieldset>
+<label for="message">Message</label> <textarea id="message"></textarea>
+<button type="submit">Send message</button>
+<button type="button" disabled>Archived</button>
+<button type="button" style="display:none">Secret</button>
+</form>
+<p id="status" role="status">not submitted</p>
+<p><button type="button" id="counter" onclick="this.dataset.n=(+this.dataset.n||0)+1;this.textContent='Count '+this.dataset.n">Count 0</button></p>
+</body></html>

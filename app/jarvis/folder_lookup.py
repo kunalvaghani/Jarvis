@@ -1,4 +1,5 @@
 """Drive-scoped folder discovery and local preferences for opening folders."""
+from contextlib import closing
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -87,7 +88,7 @@ class FolderLookup:
         candidates = set(live)
         candidates.update(p for p in self.history if self.scoped(p, drive))
         if database.is_file():
-            with sqlite3.connect(database.as_uri() + '?mode=ro', uri=True) as connection:
+            with closing(sqlite3.connect(database.as_uri() + '?mode=ro', uri=True)) as connection:
                 stat = source.stat()
                 if connection.execute('SELECT size,mtime FROM metadata').fetchone() != (stat.st_size, stat.st_mtime_ns):
                     # A live root match still works while the deep index needs rebuilding.

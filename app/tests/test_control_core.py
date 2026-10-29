@@ -148,6 +148,8 @@ def test_builtin_verifiers(tmp_path):
     cases = [('url_equals', {'url': state['url']}, True), ('url_matches', {'pattern': r'python\.org'}, True),
              ('url_matches', {'pattern': 'example'}, False), ('value_equals', {'expected': 'hello'}, True),
              ('state_equals', {'key': 'value', 'expected': 'hello'}, True), ('changed', {'before': 'a'}, True),
+             ('probe_equals', {'what': 'value', 'expected': 'hello'}, True),
+             ('probe_equals', {'what': 'state', 'args': {'key': 'url'}, 'expected': 'nope'}, False),
              ('changed', {'before': 'b'}, False), ('file_exists', {'path': f}, True),
              ('file_exists', {'path': tmp_path, 'kind': 'dir'}, True), ('file_exists', {'path': tmp_path / 'x'}, False),
              ('file_contains', {'path': f, 'text': 'venv'}, True), ('file_contains', {'path': f, 'text': 'venv', 'exact': True}, False),

@@ -1,5 +1,6 @@
 """Exact, ambiguity-aware name lookup for the local path catalog."""
 from collections import defaultdict
+from contextlib import closing
 import json
 from pathlib import Path
 import re
@@ -39,7 +40,7 @@ class Catalog:
         catalog = self.base / self.config.get("file_catalog", ".jarvis-runtime/state/file_catalog.json")
         database = catalog.with_suffix(".sqlite3")
         if database.is_file():
-            with sqlite3.connect(database.as_uri() + "?mode=ro", uri=True) as connection:
+            with closing(sqlite3.connect(database.as_uri() + "?mode=ro", uri=True)) as connection:
                 stat = catalog.stat()
                 recorded = connection.execute("SELECT size,mtime FROM metadata").fetchone()
                 if recorded != (stat.st_size, stat.st_mtime_ns):

@@ -1,0 +1,6 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Files</title></head><body>
+<h1>Files</h1><a href="sample.txt" download="sample.txt">Download sample</a>
+<label for="up">Upload file</label>
+<input type="file" id="up" onchange="document.getElementById('upstate').textContent = this.files[0] ? this.files[0].name : 'none'">
+<p id="upstate">none</p>
+</body></html>

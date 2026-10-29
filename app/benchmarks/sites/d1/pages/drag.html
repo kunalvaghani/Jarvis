@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Drag</title></head><body style="margin:0">
+<div id="item" role="img" aria-label="Draggable item" style="position:absolute;left:20px;top:20px;width:60px;height:60px;background:#888"></div>
+<div id="zone" role="region" aria-label="Drop zone" style="position:absolute;left:300px;top:20px;width:120px;height:120px;border:2px dashed"></div>
+<p id="drop" style="position:absolute;top:200px">not dropped</p>
+<script>
+let dragging = false;
+const it = document.getElementById('item');
+it.addEventListener('mousedown', () => { dragging = true; });
+document.addEventListener('mousemove', e => { if (dragging) { it.style.left = (e.clientX - 30) + 'px'; it.style.top = (e.clientY - 30) + 'px'; } });
+document.addEventListener('mouseup', e => {
+  if (!dragging) return;
+  dragging = false;
+  const z = document.getElementById('zone').getBoundingClientRect();
+  const inside = e.clientX >= z.left && e.clientX <= z.right && e.clientY >= z.top && e.clientY <= z.bottom;
+  document.getElementById('drop').textContent = inside ? 'dropped' : 'missed';
+});
+</script></body></html>

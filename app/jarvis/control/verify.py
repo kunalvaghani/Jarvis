@@ -33,6 +33,12 @@ def _state_equals(params: Mapping[str, Any], probe: Probe) -> Tuple[bool, str]:
     return value == params['expected'], f'{params["key"]} is {value!r}'
 
 
+def _probe_equals(params: Mapping[str, Any], probe: Probe) -> Tuple[bool, str]:
+    """Any route-specific read, e.g. {'what': 'text', 'args': {'selector': '#status'}, 'expected': 'sent'}."""
+    value = probe(params['what'], **dict(params.get('args', {})))
+    return value == params['expected'], f'{params["what"]} read back {str(value)[:80]!r}'
+
+
 def _changed(params: Mapping[str, Any], probe: Probe) -> Tuple[bool, str]:
     after = probe('signature')
     return after != params['before'], 'observed state changed' if after != params['before'] else 'no change observed'
@@ -111,6 +117,6 @@ class Verifier:
 
 default_verifier = Verifier()
 for _kind, _checker in {'url_equals': _url_equals, 'url_matches': _url_matches, 'value_equals': _value_equals,
-                        'state_equals': _state_equals, 'changed': _changed, 'file_exists': _file_exists,
+                        'state_equals': _state_equals, 'probe_equals': _probe_equals, 'changed': _changed, 'file_exists': _file_exists,
                         'file_contains': _file_contains, 'file_sha256': _file_sha256}.items():
     default_verifier.register(_kind, _checker)

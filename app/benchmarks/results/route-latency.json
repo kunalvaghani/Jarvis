@@ -1,0 +1,45 @@
+[
+  {
+    "date": "2026-10-29T20:30:03.637366+00:00",
+    "revision": "79c9805",
+    "python": "3.10.6",
+    "route": "browser",
+    "chrome": "installed (channel=chrome)",
+    "headless": true,
+    "results": {
+      "cold_start_ms": 1319.2,
+      "navigate_local": {
+        "n": 30,
+        "p50_ms": 45.7,
+        "p90_ms": 54.0,
+        "p95_ms": 54.3,
+        "max_ms": 55.8,
+        "mean_ms": 46.5
+      },
+      "read_page_interactive": {
+        "n": 30,
+        "p50_ms": 14.0,
+        "p90_ms": 16.1,
+        "p95_ms": 16.7,
+        "max_ms": 26.5,
+        "mean_ms": 14.4
+      },
+      "ref_click_plus_verify": {
+        "n": 30,
+        "p50_ms": 84.6,
+        "p90_ms": 94.2,
+        "p95_ms": 95.8,
+        "max_ms": 97.2,
+        "mean_ms": 85.0
+      },
+      "form_input_plus_readback": {
+        "n": 30,
+        "p50_ms": 80.3,
+        "p90_ms": 94.9,
+        "p95_ms": 94.9,
+        "max_ms": 96.1,
+        "mean_ms": 83.7
+      }
+    }
+  }
+]

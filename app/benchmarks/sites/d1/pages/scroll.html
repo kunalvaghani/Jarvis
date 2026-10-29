@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>D1 Scrolling</title></head><body>
+<h1>Long page</h1><div style="height:3000px">spacer</div>
+<button id="bottom" onclick="document.getElementById('sstate').textContent='bottom clicked'">Bottom button</button>
+<p id="sstate">idle</p>
+<div id="box" style="height:150px;overflow:auto;border:1px solid"><ul id="items"></ul></div>
+<div id="virtual" role="list" aria-label="Virtual list" style="height:200px;overflow:auto;position:relative"><div style="height:20000px"></div></div>
+<script>
+const items = document.getElementById('items');
+for (let i = 1; i <= 60; i++) {
+  const li = document.createElement('li'), b = document.createElement('button');
+  b.textContent = 'Item ' + i;
+  b.onclick = () => { document.getElementById('sstate').textContent = 'item ' + i; };
+  li.appendChild(b); items.appendChild(li);
+}
+const v = document.getElementById('virtual');
+function draw() {
+  const first = Math.floor(v.scrollTop / 40);
+  v.querySelectorAll('.row').forEach(e => e.remove());
+  for (let i = first; i < first + 6 && i < 500; i++) {
+    const d = document.createElement('div');
+    d.className = 'row'; d.setAttribute('role', 'listitem'); d.textContent = 'Row ' + (i + 1);
+    d.style.cssText = 'position:absolute;top:' + (i * 40) + 'px;height:40px';
+    v.appendChild(d);
+  }
+}
+v.addEventListener('scroll', draw); draw();
+</script>
+</body></html>
