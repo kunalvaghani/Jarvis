@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-25T23:01:20.870085+00:00",
+  "campaign": "21980f4803724d99bfc423a7bedda61b",
+  "native": "a37d9a0c60a640dcb4eedeb6e318b5e4",
+  "finished_at": "2026-10-25T22:58:54.964108+00:00",
+  "seconds": 603.311,
+  "owner_exited": true,
+  "remaining_nonterminal": [],
+  "source_after_cancel": {
+    "README.md": "53499256a4220c485de9c5cd81ddf20c499eaa15287e55a4a8a07a9aec286bfa",
+    "calculator_logic.py": "509964d625d339f6a825806ee7ea282c03578e0a9aeaacf3ce1890a39309f378",
+    "test_calculator.py": "2855b63cd98a0df0dc1feca6aa36e8bc7ae66ad560d37df0c01a98e8f24018c1",
+    "test_gui_behavior.py": "4db5f6cc0cc4c7f5cdcd2f9fb5b35399261394f900b36052fd5255f8190613f2"
+  },
+  "frozen_tests": {
+    "test_calculator.py": "2855b63cd98a0df0dc1feca6aa36e8bc7ae66ad560d37df0c01a98e8f24018c1",
+    "test_gui_behavior.py": "4db5f6cc0cc4c7f5cdcd2f9fb5b35399261394f900b36052fd5255f8190613f2"
+  },
+  "pre_cancel_frozen_hashes_unchanged": true,
+  "reason": "Frozen GUI test calls tkinter.Event(keysym=...), incompatible with installed signature (). Direct actual stdlib probe raised TypeError before app callback. New installed-dependency signature guard passed targeted regression. Preserve all source/tests and cancel obsolete runtime; no application repair can correct the test call without improper dependency mutation. Broader regression continues before any restart.",
+  "api_probe": {
+    "api": "tkinter.Event",
+    "signature": "()",
+    "observed_error": "TypeError: Event() takes no arguments",
+    "window_created": false
+  },
+  "api_scope": "Safe signature binding for statically identifiable selected Tkinter constructors; no application import, constructor invocation or window creation. Starred arguments and shadowed imports unverified.",
+  "target_regression": {
+    "passed": true,
+    "tests": 1,
+    "seconds": 0.755,
+    "log": ".jarvis-runtime/repair-gui-api-signature-target.log"
+  },
+  "broad_regression": {
+    "tests": 134,
+    "passed": 134,
+    "seconds": 149.594,
+    "log": ".jarvis-runtime/repair-gui-api-signature-final.log"
+  },
+  "acceptance": "OPEN"
+}

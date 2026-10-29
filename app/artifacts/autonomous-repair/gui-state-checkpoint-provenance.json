@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-26T03:26:29.708648+00:00",
+  "source_campaign": "3b270506fbf64e2dbdfc9e89e8857c55",
+  "native_id": "806f853a0405457f95383023aa746309",
+  "source_snapshot": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\3b270506fbf64e2dbdfc9e89e8857c55\\.jarvis-runtime\\native-code\\806f853a0405457f95383023aa746309\\check-workspace-1792984216068733300",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-checkpoint-a982db5e4d8b4dc7a16d604eb450792c",
+  "copy_policy": "Exact complete snapshot source bytes, no mixed checkpoints, no supervisor application implementation. Original frozen tests and source retained. Generated app is currently failing, not acceptance.",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "593090ec8ddeb5b6f212aeb60aae9f5accc6afd643a492aed29bf91907256d7f",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "45fc4014dfca1dadb1a4f89064b77bef735f25732ce4d1b656dbdee658598071"
+  },
+  "copied_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "593090ec8ddeb5b6f212aeb60aae9f5accc6afd643a492aed29bf91907256d7f",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "45fc4014dfca1dadb1a4f89064b77bef735f25732ce4d1b656dbdee658598071"
+  },
+  "byte_identical": true,
+  "frozen_tests": [
+    "test_calculator.py",
+    "test_gui_behavior.py"
+  ],
+  "known_failures": [
+    "Calculator.clear does not reset input_text.",
+    "CalculatorApp lacks the frozen tests buttons interface."
+  ],
+  "raw_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\3b270506fbf64e2dbdfc9e89e8857c55\\.jarvis-runtime\\native-code\\806f853a0405457f95383023aa746309\\tools.jsonl",
+  "source_changed_during_original_trial": false,
+  "next_action": "After native context/focus regression verification, submit production existing-project repair preserving all existing tests and specifications; no fresh-creation acceptance claim."
+}

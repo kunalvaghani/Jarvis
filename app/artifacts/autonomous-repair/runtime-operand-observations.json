@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-27T14:49:45.804585+00:00",
+  "status": "REGRESSION_PASS_PRODUCTION_NO_IMPROVEMENT",
+  "application_acceptance": false,
+  "source_trial": "121fc09473f447d096789476eeb791aa",
+  "source_native": "ee7019af90b9488e9f6ff7639154c127",
+  "observed_failure": "The canonical pre-save plan and one guarded replacement were exercised, but the model still guessed that button text was an integer. Same GUI failures recurred four times; the old owner has exited.",
+  "repair": "A trusted absolute -I unittest runner preserves discovery, original assertions and result semantics while collecting only bounded primitive operands at the actual trusted-stdlib exception statement. No test/widget/callback replacement; no string contents or object repr. Facts are linked to current diagnostic context only after method/type/library hash/line matches.",
+  "controlled_fixture_observation": {
+    "module_path": "tkinter/__init__.py",
+    "function": "cget",
+    "key": {
+      "type": "int",
+      "value": 0
+    },
+    "scope": "Actual controlled subprocess observation; not yet a live GUI operand result."
+  },
+  "targeted": {
+    "tests": 3,
+    "seconds": 1.08,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-runtime-operands-target2.log"
+  },
+  "broad_log": ".jarvis-runtime/repair-runtime-operands-final.log",
+  "limits": {
+    "max_error_records": 4,
+    "max_operand_fields": 8,
+    "max_diagnostic_characters": 3000,
+    "strings": "type only",
+    "objects": "omitted",
+    "numeric_magnitude": 1000000000000
+  },
+  "next_action": "No unchanged full trial. Focused interface-contract diagnosis and evidence extraction regression before another production repair. Independent GUI acceptance remains open.",
+  "affected_regression": {
+    "tests": 178,
+    "seconds": 174.412,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-runtime-operands-final2.log"
+  },
+  "campaign": "e4c1443203d8469195fea71b2ed0f212",
+  "owner_session": 34748,
+  "task": "7963d30edca84bde838d091024a8b598",
+  "final_targeted": {
+    "tests": 3,
+    "seconds": 0.867,
+    "result": "PASS; includes no snapshot bytecode writes",
+    "log": ".jarvis-runtime/repair-runtime-operands-target3.log"
+  },
+  "actual_gui_regression": "artifacts/autonomous-repair/gui-runtime-operand-regression.json",
+  "actual_gui_operand": {
+    "key": {
+      "type": "int",
+      "value": 0
+    }
+  },
+  "approval_block": {
+    "action": "Direct retained-GUI diagnostic regression",
+    "executed": false,
+    "reason": "Automatic approval review could not complete due usage limit; it was not an unsafe-action determination.",
+    "resolution": "The stated20:12 IST reset passed; user requested continue; normal escalated approval succeeded and the action then executed."
+  },
+  "native": "c4c376f59826464187bc03f6cbe8979b",
+  "workload": "18dcca1aa189457cb5e14d552b271613",
+  "relative_links_checked": 697,
+  "production_primary_context": {
+    "validation": ".jarvis-runtime/autonomous-repair/e4c1443203d8469195fea71b2ed0f212/.jarvis-runtime/native-code/c4c376f59826464187bc03f6cbe8979b/validation-a8796135681543a6a3f99020d1d48241.json",
+    "validation_sha256": "36515ba629fa75229e74555dbcbcd8639a5b0fbfd5a1e231c16e90be5bc8071e",
+    "source_sha256": "e2403f96a4d4f12cdcb4115a6c9a4d03979f3e1878e86bb24b6280dc32582641",
+    "context": {
+      "primary_error": "TypeError: can only concatenate str (not \"int\") to str",
+      "primary_error_partial": false,
+      "source_locations": [
+        {
+          "file": "test_gui_behavior.py",
+          "line": 20
+        },
+        {
+          "file": "__init__.py",
+          "line": 1681
+        }
+      ],
+      "installed_stdlib_source": {
+        "module_path": "tkinter/__init__.py",
+        "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+        "failure_line": 1681,
+        "start": 1679,
+        "numbered_source": "1679:     def cget(self, key):\n1680:         \"\"\"Return the resource value for a KEY given as string.\"\"\"\n1681:         return self.tk.call(self._w, 'cget', '-' + key)\n1682: \n1683:     __getitem__ = cget",
+        "partial": true,
+        "source_truncated": false,
+        "scope": "Installed standard-library source at the primary traceback; read-only evidence, no repair or permission inferred.",
+        "observed_operands": {
+          "key": {
+            "type": "int",
+            "value": 0
+          }
+        },
+        "operand_evidence": "Actual failing unittest traceback; matching test method, exception type, library hash and line. Strings and objects omitted."
+      },
+      "test_method": "test_button_click_addition",
+      "test_line": 18,
+      "failure_line": 20,
+      "failed_statement": "self.buttons[\"+\"][0].invoke()",
+      "failed_statement_partial": false,
+      "frozen_test_source": "def test_button_click_addition(self):\n        self.buttons[\"2\"].invoke()\n        self.buttons[\"+\"][0].invoke()\n        self.buttons[\"3\"][0].invoke()\n        self.root.update_idletasks()\n        self.assertEqual(self.display.get(), \"2+3\")"
+    }
+  },
+  "finished_at": "2026-10-27T15:07:39.018474+00:00",
+  "record_to_shutdown_seconds": 1199.835,
+  "jarvis_source_changed_during_trial": false,
+  "configuration_changed_during_trial": false,
+  "protected_worker_files_unchanged": true,
+  "external_checkpoint_files_unchanged": true,
+  "final_progress": {
+    "identical_failed_checks": 4,
+    "diagnostic_plan_attempts": 1,
+    "guarded_replacement_attempts": 1
+  }
+}

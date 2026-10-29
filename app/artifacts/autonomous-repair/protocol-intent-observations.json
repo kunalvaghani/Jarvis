@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-28T10:20:44.972548+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "defects": [
+    "Free-text diagnosis strategy and predicted success were forwarded into coding despite contradictory frozen access forms.",
+    "Generic exact edit inventory selected only the first32 statements and omitted later handlers; duplicate inner statements lacked unique anchors."
+  ],
+  "changes": [
+    "Complete source-bound interface intent: closed strategy families and exact per-key access obligations. Model cause/uncertainty remain audit data and cannot become replacement instructions.",
+    "Key-specific recovery offers actual value-binding statements, excluding empty container initialization and earlier value factories.",
+    "Complete unique methods/functions up to64lines/2400characters reserved before small statements; existing32-span/6000-character/8000-byte source limits and original write/candidate guards remain."
+  ],
+  "target_regression": {
+    "tests": 4,
+    "seconds": 0.104,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-protocol-contract-target-final.log"
+  },
+  "retained_initial_failure": ".jarvis-runtime/repair-protocol-intent-target.log (frozen receiver alias differed from source member; generic alias provenance was then fixed)",
+  "affected_regression": {
+    "tests": 203,
+    "seconds": 226.983,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-protocol-intent-regression.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 20.21,
+    "log": ".jarvis-runtime/repair-protocol-intent-audit.log"
+  },
+  "qualification": "artifacts/autonomous-repair/protocol-intent-gui-qualification.json",
+  "readiness": "DockerEngineUnavailable only; required local models and LocalGithub available.",
+  "source_sha256": {
+    "jarvis/repair_contract.py": "d0777f7385eef760d79cadf5225f299328a231be85e08e9c559533f7ca9fa70b",
+    "jarvis/native_coding.py": "8b19307462520c31a0bd7bc49e94486e0e5d157c5d41b3baa86858db707b3217",
+    "jarvis/source_observation.py": "8205f5921c3d539348bbf7f9ac2d61b07c72b090f952f82d1bc6ef51d6b5ee00",
+    "tests/test_repair_contract.py": "0c924a821afa84f0d75fb4f6422f7e59942567cceea998ee0c3c938b0e39d710",
+    "tests/test_native_coding.py": "9aede777dee712051f6fc8206998f804b531f5d21ecd0b7bd523481a255331ac"
+  },
+  "production": {
+    "campaign": "3c5700ed49164cde8741125711ddbb6f",
+    "task": "333615f976734d2282d56c653af20d42",
+    "owner_session": 2573,
+    "status": "FINISHED",
+    "raw_result": "FAIL",
+    "finished_at": "2026-10-28T10:18:50.456579+00:00",
+    "seconds": 903.03,
+    "source_changed": true,
+    "configuration_changed": false,
+    "all_eight_external_hashes_match": true,
+    "native": {
+      "id": "1f3aab7fc9b54cfba1947b0681dbf761",
+      "status": "stopped",
+      "error": "Native coding stopped; no partial model output executed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 14,
+        "guarded_replacement_attempts": 1,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 2
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "053abf428ce470451f73e0757be3ce5fb276c83885f37e4b48f35631143cf600",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\3c5700ed49164cde8741125711ddbb6f\\.jarvis-runtime\\native-code\\1f3aab7fc9b54cfba1947b0681dbf761\\validation-c79cac3bab944963807ebc590355fa4b.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\3c5700ed49164cde8741125711ddbb6f\\.jarvis-runtime\\native-code\\1f3aab7fc9b54cfba1947b0681dbf761\\candidate-checks\\9632db2cb1c343e69d6fe6b1ae8ef695\\validation-e05368555ad046f08dffa8eb9fd7ed2d.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {},
+          "verified_case_progress": false
+        }
+      ],
+      "diagnostic_plans": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "file_path": "ui_builder.py",
+          "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+          "steps": [
+            "Use an owned compatible value interface preserving every recorded access route and the original real objects/callbacks.",
+            "Frozen source-bound obligations: [{\"test_file\": \"test_gui_behavior.py\", \"receiver\": \"self.buttons\", \"method\": \"invoke\", \"accesses\": [{\"key\": \"2\", \"subscripts_after_key\": 0, \"line\": 19, \"call\": \"self.buttons['2'].invoke()\"}, {\"key\": \"+\", \"subscripts_after_key\": 1, \"line\": 20, \"call\": \"self.buttons['+'][0].invoke()\"}, {\"key\": \"3\", \"subscripts_after_key\": 1, \"line\": 21, \"call\": \"self.buttons['3'][0].invoke()\"}, {\"key\": \"C\", \"subscripts_after_key\": 1, \"line\": 27, \"call\": \"self.buttons['C'][0].invoke()\"}, {\"key\": \"1\", \"subscripts_after_key\": 1, \"line\": 44, \"call\": \"self.buttons['1'][0].invoke()\"}, {\"key\": \"/\", \"subscripts_after_key\": 1, \"line\": 45, \"call\": \"self.buttons['/'][0].invoke()\"}, {\"key\": \"0\", \"subscripts_after_key\": 1, \"line\": 46, \"call\": \"self.buttons['0'][0].invoke()\"}]}]",
+            "Run every original unchanged executable check. No passing result or additional permission is implied."
+          ],
+          "typed_diagnosis": {
+            "observed_cause": "The `self.buttons` dictionary stores a list containing a single `ttk.Button` instance for each key (e.g., `self.buttons['2'] = [btn]`). The frozen tests in `test_gui_behavior.py` expect two distinct access patterns: 1) Direct method call on",
+            "strategy": "owned_compatible_interface",
+            "uncertainty": "None. The fix strictly adheres to the frozen test assertions by ensuring `self.buttons[key]` returns a list where index `[0]` is the widget, while also ensuring"
+          },
+          "verified": false,
+          "original_goal_used": true,
+          "planner_hypotheses_authoritative": false,
+          "replacement_context": "current-evidence-only",
+          "protocol_contract": {
+            "file_path": "ui_builder.py",
+            "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+            "test_sha256": {
+              "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+            },
+            "members": [
+              "buttons"
+            ],
+            "obligations": [
+              {
+                "test_file": "test_gui_behavior.py",
+                "receiver": "self.buttons",
+                "method": "invoke",
+                "accesses": [
+                  {
+                    "key": "2",
+                    "subscripts_after_key": 0,
+                    "line": 19,
+                    "call": "self.buttons['2'].invoke()"
+                  },
+                  {
+                    "key": "+",
+                    "subscripts_after_key": 1,
+                    "line": 20,
+                    "call": "self.buttons['+'][0].invoke()"
+                  },
+                  {
+                    "key": "3",
+                    "subscripts_after_key": 1,
+                    "line": 21,
+                    "call": "self.buttons['3'][0].invoke()"
+                  },
+                  {
+                    "key": "C",
+                    "subscripts_after_key": 1,
+                    "line": 27,
+                    "call": "self.buttons['C'][0].invoke()"
+                  },
+                  {
+                    "key": "1",
+                    "subscripts_after_key": 1,
+                    "line": 44,
+                    "call": "self.buttons['1'][0].invoke()"
+                  },
+                  {
+                    "key": "/",
+                    "subscripts_after_key": 1,
+                    "line": 45,
+                    "call": "self.buttons['/'][0].invoke()"
+                  },
+                  {
+                    "key": "0",
+                    "subscripts_after_key": 1,
+                    "line": 46,
+                    "call": "self.buttons['0'][0].invoke()"
+                  }
+                ]
+              }
+            ],
+            "strategies": [
+              "key_specific_values",
+              "owned_compatible_interface",
+              "unresolved"
+            ]
+          },
+          "model_prose_forwarded": false,
+          "rejected_repair_proposals": 2
+        }
+      ],
+      "bounded_recovery_rejection": null,
+      "all_six_protected_hashes_match": true,
+      "outcomes": [
+        {
+          "path": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "test_count": 6,
+          "successful": false,
+          "skipped": 0,
+          "passed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ],
+          "partial": false,
+          "failed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        },
+        {
+          "path": "test_calculator.py",
+          "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_count": 6,
+          "successful": true,
+          "skipped": 0,
+          "passed_ids": [
+            "test_calculator.TestCalculator.test_addition",
+            "test_calculator.TestCalculator.test_clear",
+            "test_calculator.TestCalculator.test_division",
+            "test_calculator.TestCalculator.test_division_by_zero",
+            "test_calculator.TestCalculator.test_multiplication",
+            "test_calculator.TestCalculator.test_subtraction"
+          ],
+          "partial": false,
+          "failed_ids": [],
+          "error_ids": []
+        }
+      ]
+    }
+  }
+}

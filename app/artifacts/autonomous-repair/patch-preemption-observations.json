@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-28T09:33:56.395039+00:00",
+  "status": "REGRESSION_AND_EXACT_GUI_PREFIX_REPLAY_PASS",
+  "application_acceptance": false,
+  "trigger_campaign": "5af8ffdd76c946c88f503b85e1fa1acc",
+  "scope": "An already-qualified read-only diagnosis can preempt a queued normal apply_patch fallback. Candidate failures were already counted; the gate excluded the fallback tool. No new retries, budgets, writes, roles, models or permissions.",
+  "before_fix": {
+    "result": "EXPECTED_FAILURE",
+    "subcases_failed": 2,
+    "seconds": 3.19,
+    "log": ".jarvis-runtime/repair-patch-preemption-before-fix-final.log",
+    "observed": "Original gate selects apply_patch instead of update_plan with recognized mixed frozen interfaces and two proven rejections."
+  },
+  "target_regression": {
+    "tests": 1,
+    "subcases": 2,
+    "seconds": 4.74,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-patch-preemption-target-final2.log"
+  },
+  "affected_regression": {
+    "tests": 199,
+    "seconds": 242.924,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-patch-preemption-regression.log"
+  },
+  "native_audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 23.81,
+    "log": ".jarvis-runtime/repair-patch-preemption-audit.log"
+  },
+  "real_GUI_prefix_replay": "artifacts/autonomous-repair/patch-preemption-gui-replay.json",
+  "retained_replay_harness_failure": ".jarvis-runtime/repair-patch-preemption-gui-replay.log (decoder stage was not production tool stage; assertion stopped with working files unchanged; corrected replay passed)",
+  "readiness": "DockerEngineUnavailable only; required local models/LocalGithub available.",
+  "production_successor": null,
+  "application_owner_active": false,
+  "remaining": "Core6/6, frozen GUI2/6; last independent real-Tk1/8. Model plan still makes contradictory interface claims; complete GUI, physical/visual, fresh generation and release acceptance open. No identical live restart justified.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "35dc79b27c203163134cd862a07f3ba55110109fd1c825b260e0cb53c815eebf",
+    "jarvis/acceptance_observations.py": "f990d95c4de07b36168982c3b37e38c82f8e49503efaaf6bf84194ef8aef8bb1",
+    "tests/test_native_coding.py": "2ed9f0a9f6cabe720baa8f29abaf23e094a83713d3c5edb684a14e1b4f8100a7"
+  }
+}

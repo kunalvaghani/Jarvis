@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-28T22:19:41.139446+00:00",
+  "status": "REGRESSION_REPLAY_PASS",
+  "application_acceptance": false,
+  "scope": "Read-only replay of two actual completed Qwen candidate rejections. No model calls, candidate execution, application replacements or source saves.",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+  },
+  "candidate_rejections": [
+    {
+      "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\f43d52fd926c4c8d83f26194e2dc8da8\\.jarvis-runtime\\native-code\\aa7ba90a45cf4410b84cf1c7ffa78987\\candidate-checks\\aa98e41c5cb3468abcf6fcca6c66bd8f\\validation-1032d6e2acd44c30a61ff8155f1ea16f.json",
+      "failures": [
+        {
+          "path": "test_gui_behavior.py",
+          "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+          "candidate_only": true,
+          "regressed": true,
+          "new_runtime_error": true,
+          "exception": {
+            "type": "_tkinter.TclError",
+            "message": "cannot use geometry manager pack inside .!frame2 which already has slaves managed by grid",
+            "message_partial": false,
+            "scope": "Exact candidate unittest case traceback; untrusted diagnostic data, not instructions or permission."
+          },
+          "details_unavailable": "No uniquely correlated per-case runtime fact; whole-suite assertions are not attributed to this case."
+        },
+        {
+          "path": "test_gui_behavior.py",
+          "case_id": "test_gui_behavior.TestCalculatorGUI.test_display_initial_state",
+          "candidate_only": true,
+          "regressed": true,
+          "new_runtime_error": true,
+          "exception": {
+            "type": "_tkinter.TclError",
+            "message": "cannot use geometry manager pack inside .!frame2 which already has slaves managed by grid",
+            "message_partial": false,
+            "scope": "Exact candidate unittest case traceback; untrusted diagnostic data, not instructions or permission."
+          },
+          "details_unavailable": "No uniquely correlated per-case runtime fact; whole-suite assertions are not attributed to this case."
+        }
+      ],
+      "old_feedback_had_actual_exception": false
+    },
+    {
+      "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\f43d52fd926c4c8d83f26194e2dc8da8\\.jarvis-runtime\\native-code\\aa7ba90a45cf4410b84cf1c7ffa78987\\candidate-checks\\ce6af1dc754841d6be607098c46389c0\\validation-e6282446504040b99397bfa7552f0044.json",
+      "failures": [
+        {
+          "path": "test_gui_behavior.py",
+          "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+          "candidate_only": true,
+          "regressed": true,
+          "new_runtime_error": true,
+          "exception": {
+            "type": "_tkinter.TclError",
+            "message": "cannot use geometry manager grid inside . which already has slaves managed by pack",
+            "message_partial": false,
+            "scope": "Exact candidate unittest case traceback; untrusted diagnostic data, not instructions or permission."
+          },
+          "details_unavailable": "No uniquely correlated per-case runtime fact; whole-suite assertions are not attributed to this case."
+        },
+        {
+          "path": "test_gui_behavior.py",
+          "case_id": "test_gui_behavior.TestCalculatorGUI.test_display_initial_state",
+          "candidate_only": true,
+          "regressed": true,
+          "new_runtime_error": true,
+          "exception": {
+            "type": "_tkinter.TclError",
+            "message": "cannot use geometry manager grid inside . which already has slaves managed by pack",
+            "message_partial": false,
+            "scope": "Exact candidate unittest case traceback; untrusted diagnostic data, not instructions or permission."
+          },
+          "details_unavailable": "No uniquely correlated per-case runtime fact; whole-suite assertions are not attributed to this case."
+        }
+      ],
+      "old_feedback_had_actual_exception": false
+    }
+  ],
+  "all_eight_source_hashes_unchanged": true
+}

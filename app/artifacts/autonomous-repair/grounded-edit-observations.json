@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_PRODUCTION_EXACT_CONTEXT_CONFIRMED_GUI_FAILED",
+  "application_acceptance": false,
+  "trigger_campaign": "d437aa39900b4f999aa2ea15b4d895e4",
+  "target_regression": {
+    "tests": 1,
+    "seconds": 1.396,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-grounded-edit-target.log"
+  },
+  "retained_Qwen_proposal_schema_replay": {
+    "rejected_before_action": true,
+    "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+    "offered_statements": 32,
+    "worker_source_files_unchanged": true,
+    "scope": "Read-only schema validation only; no model call, tool execution or replacement source authored."
+  },
+  "broad_regression": {
+    "status": "PASS",
+    "log": ".jarvis-runtime/repair-grounded-edit-regression.log",
+    "tests": 199,
+    "seconds": 202.314,
+    "result": "OK"
+  },
+  "scope": "One focused editable Python implementation, existing failed checks and fresh full-source read hash, source up to8000bytes/characters. Existing exact unique statement selection and independent file/candidate/check guards. Optional complementary reads retained; larger/ambiguous source workflows unchanged.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "e5f70a052d6cd36644e5922d6dbbd01a3e1a046d54b5cb4d8408ab089783ea8a",
+    "tests/test_native_coding.py": "84fc9599aa57f1edb8192b0cf3f30dfaa9d8952385e64310c961855aefb97ca6"
+  },
+  "successor": {
+    "campaign": "160ce0dfd45f49a99122712fd48c9a51",
+    "task": "9931bb4ba71945c1a5d05846e081fced",
+    "owner_session": 34212,
+    "seconds_limit": 900,
+    "status": "FAILED_NORMAL_OWNER_EXIT",
+    "finished_at": "2026-10-28T05:04:33.546932+00:00",
+    "record_to_shutdown_seconds": 796.771,
+    "raw_campaign_result": "FAIL",
+    "native_status": "failed",
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 3,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 0
+    },
+    "grounded_edit_stages": [
+      {
+        "file_path": "ui_builder.py",
+        "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "candidate_count": 32,
+        "phase": "normal_repair",
+        "precedes_proposal": true
+      },
+      {
+        "file_path": "ui_builder.py",
+        "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "candidate_count": 32,
+        "phase": "normal_repair",
+        "precedes_proposal": true
+      },
+      {
+        "file_path": "ui_builder.py",
+        "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "candidate_count": 32,
+        "phase": "normal_repair",
+        "precedes_proposal": true
+      },
+      {
+        "file_path": "ui_builder.py",
+        "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "candidate_count": 32,
+        "phase": "normal_repair",
+        "precedes_proposal": true
+      },
+      {
+        "file_path": "ui_builder.py",
+        "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "candidate_count": 32,
+        "phase": "normal_repair",
+        "precedes_proposal": true
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": true,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "68311c901a2bfa61a5595ca2acec391d4bbec2057cfc310dbd170c0bdadba6e5",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\160ce0dfd45f49a99122712fd48c9a51\\.jarvis-runtime\\native-code\\dde61838c5dd4f0792f7ea5ed2520a07\\validation-88fac51b7dee45159584803d50dcccdf.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\160ce0dfd45f49a99122712fd48c9a51\\.jarvis-runtime\\native-code\\dde61838c5dd4f0792f7ea5ed2520a07\\candidate-checks\\cb6a2a84901a465bac8811a70464783d\\validation-faf9e7fbc76049478abd1afec4071d0e.json",
+        "lost_previously_passing_cases": {}
+      },
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "9e91a4eb1fe48fb5aa0c472b2e0b59869ef4e301f36ce9334594b2b4fe67f27f",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\160ce0dfd45f49a99122712fd48c9a51\\.jarvis-runtime\\native-code\\dde61838c5dd4f0792f7ea5ed2520a07\\validation-39e6c453f920429fbfeb7ed519d3356e.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\160ce0dfd45f49a99122712fd48c9a51\\.jarvis-runtime\\native-code\\dde61838c5dd4f0792f7ea5ed2520a07\\candidate-checks\\5b6922b6492e405fb90946fba9cf267c\\validation-93a0ed3f1382445e9e9feecedd856e6b.json",
+        "lost_previously_passing_cases": {
+          "test_gui_behavior.py": [
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ]
+        }
+      }
+    ],
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "outcomes": [
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false
+      },
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false
+      }
+    ]
+  },
+  "readiness": "DockerEngineUnavailable only; required models and local Git available."
+}

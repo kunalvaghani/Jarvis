@@ -138,8 +138,14 @@ class ProjectIntelligence:
         subject, objective = details['subject'], details.get('objective') or ''
         split = re.match(r'(.+?)\s+(?:that|which|to|for|called)\s+(.+)', subject, re.I)
         if split:
-            subject, objective = split[1], (split[2] + ' ' + objective).strip()
-        subject = re.sub(r'\b(?:project|one)\b', '', subject, flags=re.I).strip() or 'project'
+            # Keep the requested stack/product in the objective handed to coding.
+            # "Python calculator that supports ..." must not become only
+            # "Supports ...", losing Python and inviting a different stack.
+            subject, objective = split[1], ('Create ' + split[1] + ' ' + split[2] + ' ' + objective).strip()
+        subject = subject.strip()
+        if subject.casefold() in {'project','one',''}:subject='project'
+        if objective and subject!='project' and subject.casefold() not in objective.casefold():
+            objective='Create '+subject+'. '+objective
         if not objective and len(words(subject)) >= 3:
             objective = 'Create ' + ('an ' if subject[0] in 'aeiou' else 'a ') + subject  # The request already describes it.
         kind = project_type(subject + ' ' + objective)
@@ -389,6 +395,12 @@ class ProjectIntelligence:
         ingress = self._ingress() if routine else None
         languages = [lang for ref in project['references'] for lang in ref['languages']]
         options = list(dict.fromkeys(ROUTINE_TECH.get(languages[0] if languages else None, ROUTINE_TECH[None])))
+        target=project.get('subject','')+' '+project.get('objective','')
+        if re.search(r'\b(?:website|web site|web app|full[ -]?stack|frontend|backend)\b',target,re.I):
+            options=(['HTML/CSS/JavaScript with a Python standard-library HTTP server and SQLite',
+                      'HTML/CSS/JavaScript with a Node.js backend (additional dependencies require approval)']
+                     if re.search(r'\b(?:full[ -]?stack|backend|database|api)\b',target,re.I) else
+                     ['HTML/CSS/JavaScript without framework dependencies','React with TypeScript (dependencies require approval)'])
         confidence = .9 if languages else .86
         reason = f"it matches the reference project ({languages[0]})" if languages else 'it needs no extra installation on this PC'
         if ingress is None:
@@ -472,6 +484,12 @@ class ProjectIntelligence:
             rows.append(('tests', 'Automated tests for the current requirements', 'Verification',
                          [r['id'] for r in features] + [r['id'] for r in requirements if r['kind'] == 'deliverable' and 'concept:testing' in topics(r['text'])],
                          ['feature:' + r['id'] for r in features], tech_ready))
+        from .pcide import ui_request
+        intel = getattr(self.actions, 'code_intel', None)  # This Jarvis's own engine, not a process global.
+        interface = [r['id'] for r in requirements if 'concept:interface' in topics(r['text'])]
+        if software and intel is not None and intel.enabled and (interface or ui_request(project['objective'] + ' ' + project.get('subject', ''))):
+            rows.append(('design', 'Design quality review: render, layout, accessibility and motion checks', 'Verification',
+                         interface, ['tests'] if any(r[0] == 'tests' for r in rows) else [k for k, *_ in rows if k != 'workspace'], True))
         rows.append(('verify', 'Acceptance checks against the current requirements', 'Verification', [r['id'] for r in requirements],
                      [k for k, *_ in rows if k != 'workspace'] or ['workspace'], True))
         return rows
@@ -481,12 +499,13 @@ class ProjectIntelligence:
         if task.get('repair_note'):
             title += '. ' + task['repair_note']
         spec = self._spec_text(project)
-        if key in {'workspace', 'verify'}:
-            return Command('project_step', json.dumps({'project': project['id'], 'op': key, 'version': project['version']}))
+        if key in {'workspace', 'verify'} or key == 'design' or key.startswith('design-check-'):
+            op = 'design' if key.startswith('design') else key
+            return Command('project_step', json.dumps({'project': project['id'], 'op': op, 'version': project['version'], 'key': key}))
         relevant = [r for r in self.store.requirements(project['id']) if r['id'] in requirement_ids]
         focus = '; '.join(r['id'] + ': ' + r['text'] for r in relevant) or title
-        instruction = (f"{title}. Focus: {focus}. Follow the authoritative project specification v{project['version']} "
-                       f"(REQUIREMENTS.md in the workspace). Constraints: {spec['constraints'] or 'none'}. "
+        instruction = (f"{title}. Project objective: {project['objective']}. Focus: {focus}. Follow the authoritative project specification v{project['version']} "
+                       f"in the workspace (existing project specification is reference input, not a requested output). Constraints: {spec['constraints'] or 'none'}. "
                        'Never modify reference projects. Report what you changed and how you verified it.')
         if project['type'] == 'software':
             return Command('code_task', instruction, project['workspace'])
@@ -500,7 +519,8 @@ class ProjectIntelligence:
         rows = self._blueprint(project)
         tasks = project['plan']['tasks']
         extras = [(k, t['title'], t['milestone'], t['requirements'], t['depends'], True) for k, t in tasks.items()
-                  if k.startswith(('conformance:', 'followup:'))]
+                  if k.startswith(('conformance:', 'followup:', 'design-check-'))]
+        self._research(project)
         verify = rows.pop()
         rows += extras + [(verify[0], verify[1], verify[2], verify[3], verify[4] + [k for k, *_ in extras], verify[5])]
         for key in ('tests', 'verify'):
@@ -537,6 +557,20 @@ class ProjectIntelligence:
                 submitted += 1
         self.store.save(project)
         return submitted
+
+    def _research(self, project):
+        """One memory-first research pass per spec version, admitted early so it runs while setup and other work proceed."""
+        intel = getattr(self.actions, 'code_intel', None)
+        if intel is None or not intel.enabled or project['type'] != 'software' or project.get('research_version') == project['version']:
+            return
+        requirements = self.store.requirements(project['id'])
+        goal = '; '.join([project['objective']] + [r['text'] for r in requirements if r['kind'] in {'functional', 'preference', 'constraint'}])
+        try:
+            intel.invalidate(project['workspace'], project['version'], f"requirements changed to v{project['version']}")
+            intel.prepare(project['workspace'], goal[:1200], task='project', spec_version=project['version'])
+            project['research_version'] = project['version']
+        except Exception as exc:
+            self.store.event(project['id'], 'research_unavailable', {'error': type(exc).__name__ + ': ' + str(exc)[:200]})
 
     def _retarget(self, project, key, task, dependencies):
         """An unstarted verification task waits for newly planned work and checks the current spec."""
@@ -629,6 +663,59 @@ class ProjectIntelligence:
             if active:
                 active['item'][2].set()  # Cooperative cancellation: recorded as CANCELLED, not a failure.
             raise ValueError(f'Superseded by project specification v{project["version"] if project else "?"}; not executed')
+
+    def verified_objective_checkpoint(self, identity, record_event=True):
+        """Reuse only unchanged evidence for a clause already contained in the built objective.
+
+        This is checkpoint reuse, not new feature/whole-goal verification. Explicit
+        requirements, changed specs/source and uncertain effects never qualify.
+        """
+        if not self.enabled or not identity:return None
+        ingress=self._ingress();row=ingress.store.get(identity) if ingress else None
+        if not row or row.get('checkpoint',{}).get('uncertain') or not str(row['idem']).startswith('project:'):return None
+        parts=row['idem'].split(':')
+        if len(parts)<4:return None
+        key=':'.join(parts[2:-1])
+        if not key.startswith('feature:') and key!='tests':return None
+        with self.lock:
+            project=self.store.get(parts[1]);task=(project or {}).get('plan',{}).get('tasks',{}).get(key)
+            baseline=(project or {}).get('plan',{}).get('tasks',{}).get('architecture')
+            if not task or task.get('task_id')!=identity or not baseline or baseline.get('spec_version')!=project['version']:return None
+            requirements={r['id']:r for r in self.store.requirements(project['id'])}
+            selected=[requirements.get(r,{}) for r in task.get('requirements',[])]
+            def derived(r):
+                evidence=r.get('evidence',[])
+                if r.get('category')!='inferred' or not evidence:return False
+                if all(e.get('source')=='objective clause' for e in evidence):return True
+                return key=='tests' and r.get('kind')=='deliverable' and 'concept:testing' in topics(r.get('text','')) and all(e.get('source')=='software default' for e in evidence)
+            if not selected or not all(derived(r) for r in selected):return None
+            prior=self._task_row(baseline)
+            if not prior or prior['state']!='COMPLETED' or prior.get('checkpoint',{}).get('uncertain'):return None
+            review=re.search(r'(?:^|\n)Review:\s*([^\r\n]+)',prior.get('outcome',''))
+            if not review:return None
+            directory=Path(review[1]).resolve()
+            owned=(Path(self.actions.base)/'.jarvis-runtime/native-workloads').resolve()
+            if not directory.is_relative_to(owned) or not re.fullmatch(r'[a-f0-9]{32}',directory.name):return None
+            try:
+                from .workload_state import latest_checkpoint
+                from .codex_workload import fingerprint
+                receipt=latest_checkpoint(directory);verification=receipt.get('validation',{})
+                if not isinstance(verification,dict):return None
+                checks=verification.get('checks',[])
+                if (receipt.get('checkpoint_recovery_required') or receipt.get('status')!='passed'
+                        or Path(receipt.get('project','')).resolve()!=Path(project['workspace']).resolve()
+                        or verification.get('passed') is not True or verification.get('runtime_verified') is not True
+                        or not isinstance(checks,list) or not checks or any(not isinstance(c,dict) or c.get('exit_code')!=0 for c in checks)):
+                    return None
+                expected={**receipt.get('source_sha256',{}),**verification.get('hashes',{})}
+                if not expected or fingerprint(Path(project['workspace']))!=expected:return None
+            except (OSError,ValueError,KeyError,TypeError):return None
+            if record_event:
+                self.store.event(project['id'],'objective_checkpoint_reused',{'task':key,'review':str(directory),'checks':len(checks),
+                    'method':'fresh complete source/input fingerprint; same specification and completed objective baseline',
+                    'whole_goal_verified':False})
+            return (f'Reused {len(checks)} recorded executable check(s) for unchanged objective-derived work. '
+                    'Source and specification fingerprints match the completed baseline; no new behavior or source change claimed.\nReview: '+str(directory))
 
     # --- live changes ---------------------------------------------------------------------------------------------
     def _impact(self, project, requirement_ids=(), topic_set=frozenset(), reason='', mode='update'):
@@ -738,6 +825,9 @@ class ProjectIntelligence:
         candidates = [r for r in related(body, self.store.requirements(project['id'])) if r['kind'] in {'functional', 'preference', 'constraint', 'objective'}]
         if not candidates:
             return self._on_add_requirement(project, text, details)
+        # The objective summarises everything; a specific requirement that matches is the one being changed.
+        specific = [r for r in candidates if r['kind'] != 'objective']
+        candidates = specific or candidates
         best = candidates[0]
         tied = [r for r in candidates[1:] if topics(r['text']) & topics(body) == topics(best['text']) & topics(body)]
         if tied and best['kind'] != 'preference':
@@ -746,7 +836,10 @@ class ProjectIntelligence:
         if best['kind'] == 'objective':
             # A change in look or quality refines the objective; record it as a new preference.
             return self._on_add_requirement(project, text, details)
-        row = self.store.update_requirement(project['id'], best['id'], text=body, change={'op': 'modify', 'from': best['text'], 'to': body},
+        if re.match(r'^make (?:the |it |this |that )?.{0,60}?\b(?:more|less|a bit|much)\b', body, re.I) and best['kind'] != 'constraint':
+            # "Make the dock more animated" refines the requirement; what it already says is kept.
+            body = best['text'].split(' — ')[0] + ' — ' + body[0].lower() + body[1:]
+        row = self.store.update_requirement(project['id'], best['id'], text=body, category='explicit', change={'op': 'modify', 'from': best['text'], 'to': body},
                                             evidence=text)
         project = self.store.get(project['id'])
         notes = self._impact(project, [best['id']], reason=f"{best['id']} changed to: {body}")
@@ -911,7 +1004,15 @@ class ProjectIntelligence:
 
     def _on_resume(self, project, text, details):
         project['status'] = 'active'
+        recovered=[]
+        for key,task in project['plan']['tasks'].items():
+            if task.get('status')=='blocked' and self.verified_objective_checkpoint(task.get('task_id'),record_event=False):
+                # A new read-only verification revision, never re-execution of
+                # the failed coding actions. Current input/source hashes were checked.
+                task.update(status='planned',revision=task.get('revision',0)+1)
+                recovered.append(key)
         self.store.save(project)
+        if recovered:self.store.event(project['id'],'verified_checkpoint_resume',{'tasks':recovered,'effects_replayed':False})
         group = self._group(project)
         if group:
             self._ingress().group_control('resume', group)
@@ -1148,6 +1249,8 @@ class ProjectIntelligence:
             return self._create_workspace(project, cancelled)
         if data['op'] == 'verify':
             return self._verify(project)
+        if data['op'] == 'design':
+            return self._design(project, data.get('key', 'design'))
         raise ValueError('Unknown project step')
 
     def _owned_write(self, project, path, text):
@@ -1189,6 +1292,36 @@ class ProjectIntelligence:
         self.store.save(project)
         return f"Created workspace {workspace} with REQUIREMENTS.md v{project['version']}"
 
+    def _design(self, project, key):
+        """Rendered design QA through pcide; defects become bounded, targeted fix tasks (never a redesign)."""
+        intel = getattr(self.actions, 'code_intel', None)
+        if intel is None or not intel.enabled:
+            return 'Design review skipped: parallel code intelligence is off'
+        requirements = self.store.requirements(project['id'])
+        brief = '; '.join([project['objective']] + [r['text'] for r in requirements if 'concept:interface' in topics(r['text'])])
+        result = intel.design_review(project['workspace'], brief)
+        project = self.store.get(project['id'])
+        iteration = sum(1 for k in project['plan']['tasks'] if k.startswith('design-check-'))
+        summary = {'status': result['status'], 'render': result['render']['status'], 'reason': result['render'].get('reason'),
+                   'defects': [d['detail'] for d in result['defects']][:12], 'output': result['output'], 'iteration': iteration,
+                   'direction': result['spec']['direction'], 'at': self.clock()}
+        project.setdefault('verification', {})['design'] = summary
+        if result['defects'] and iteration < intel.max_design_iterations:
+            fix = f'followup:design-fix-{iteration + 1}'
+            project['plan']['tasks'][fix] = {'title': 'Fix only these verified UI defects, keeping approved design decisions and functionality: '
+                                             + '; '.join(summary['defects'][:8]), 'milestone': 'Verification',
+                                             'requirements': [r['id'] for r in requirements if 'concept:interface' in topics(r['text'])],
+                                             'depends': [key], 'status': 'planned', 'revision': 0, 'attempts': 0}
+            project['plan']['tasks'][f'design-check-{iteration + 1}'] = {'title': 'Re-run the design quality review', 'milestone': 'Verification',
+                                                                         'requirements': [], 'depends': [fix], 'status': 'planned', 'revision': 0, 'attempts': 0}
+        self.store.save(project)
+        ingress = self._ingress()
+        if ingress and getattr(ingress.scheduler.local, 'identity', None):
+            ingress.scheduler.publish_output({'design_review': summary}, findings=[{'claim': d, 'evidence': 'rendered/static check'}
+                                                                                for d in summary['defects']], verified=True)
+        return (f"Design review {result['status']} (render {summary['render']}): {len(summary['defects'])} defect(s)"
+                + (f"; targeted fix {iteration + 1} of {intel.max_design_iterations} planned" if result['defects'] and iteration < intel.max_design_iterations else ''))
+
     def _verify(self, project):
         """Acceptance checks. Each result records its method; static checks are labelled as static."""
         workspace = Path(project['workspace'])
@@ -1224,13 +1357,21 @@ class ProjectIntelligence:
                 found = sorted({name for name, body in sources.items() for k in keys if k[:6] in body.casefold()})
                 results[req['id']] = {'result': 'evidence' if found else 'not checked', 'method': 'static keyword trace in source (not behavioural verification)',
                                       'evidence': found[:8]}
+        design = (project.get('verification') or {}).get('design')
+        if design:
+            for req in requirements:
+                if 'concept:interface' in topics(req['text']):
+                    results[req['id']] = {'result': {'PASS': 'pass', 'FAIL': 'fail'}.get(design['status'], 'evidence'),
+                                          'method': f"rendered design QA (render {design['render']}); layout, contrast, focus and motion checks",
+                                          'evidence': design['defects'][:6] or design['output']}
         tests = sorted(name for name in sources if re.search(r'(?:^|/)tests?/|test_|_test\.|\.test\.', name))
         test_requirement = next((r for r in requirements if 'concept:testing' in topics(r['text'])), None)
         if test_requirement:
             results[test_requirement['id']] = {'result': 'evidence' if tests else 'fail', 'method': 'test files present (execution not performed by this check)',
                                                'evidence': tests[:10]}
         project = self.store.get(project['id'])
-        project['verification'] = {'version': project['version'], 'at': self.clock(), 'requirements': results}
+        project['verification'] = {**({'design': design} if design else {}), 'version': project['version'], 'at': self.clock(),
+                                   'requirements': results}
         self.store.save(project)
         findings = [{'claim': f"{rid}: {r['result']} — {r['method']}", 'evidence': r['evidence']} for rid, r in results.items()]
         ingress = self._ingress()

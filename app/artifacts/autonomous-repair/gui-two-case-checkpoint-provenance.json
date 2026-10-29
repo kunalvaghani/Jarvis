@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-28T07:50:07.489722+00:00",
+  "status": "PRESERVED_PARTIAL_CHECKPOINT",
+  "application_acceptance": false,
+  "source_campaign": "27ee816aee224e8f970d95011d94b77b",
+  "native": "19702bffc2a74faa9a48016ff55ca8e7",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-two-case-checkpoint-38d99c23649d475892e895ee0726a2bc",
+  "original_checkpoint": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-initial-state-checkpoint-7ea693a190964240b1377e28216eb100",
+  "validation": ".jarvis-runtime/autonomous-repair/27ee816aee224e8f970d95011d94b77b/.jarvis-runtime/native-code/19702bffc2a74faa9a48016ff55ca8e7/validation-b05251ca882841c09c62efe790823804.json",
+  "validation_sha256": "04f02ea94e9970effe7d5f5270d8c7bc1461e4b03aee8e79e4ac148f5cd4f7fe",
+  "hashes": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "ui_builder.py": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b"
+  },
+  "all_eight_files_copied_exactly": true,
+  "all_six_protected_hashes_match": true,
+  "original_checkpoint_unchanged": true,
+  "frozen_outcomes": [
+    {
+      "path": "test_gui_behavior.py",
+      "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+      "test_count": 6,
+      "successful": false,
+      "skipped": 0,
+      "passed_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+        "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+      ],
+      "partial": false,
+      "failed_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+        "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+      ],
+      "error_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+        "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+      ]
+    },
+    {
+      "path": "test_calculator.py",
+      "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+      "test_count": 6,
+      "successful": true,
+      "skipped": 0,
+      "passed_ids": [
+        "test_calculator.TestCalculator.test_addition",
+        "test_calculator.TestCalculator.test_clear",
+        "test_calculator.TestCalculator.test_division",
+        "test_calculator.TestCalculator.test_division_by_zero",
+        "test_calculator.TestCalculator.test_multiplication",
+        "test_calculator.TestCalculator.test_subtraction"
+      ],
+      "partial": false,
+      "failed_ids": [],
+      "error_ids": []
+    }
+  ],
+  "independent_probe": ".jarvis-runtime/strict-progress-independent-gui/gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+  "limitations": "Core6/6, GUI2/6; independent real-Tk probe1/8. Clear frozen case is weak because readonly display insertion does not establish populated input. No functional GUI, physical/visual, fresh generation or release PASS. Exact Qwen bytes copied; no supervisor application implementation."
+}

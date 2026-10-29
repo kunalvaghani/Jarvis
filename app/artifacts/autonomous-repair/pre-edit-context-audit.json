@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "SOURCE_FACTS_RESTORED_READ_ONLY_AUDIT",
+  "scope": "Exact retained read/check proposals replayed only on byte-identical owned source copies; inference intercepted before first source action. No model calls or application code authored. Context observation only, not live semantic or acceptance proof.",
+  "retained_runs": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\context-audit-9cd75282b35442ec8381c998ccf8112b",
+  "conditions": [
+    {
+      "canonical": false,
+      "read_only_actions": [
+        "read_batch",
+        "read_slice",
+        "read_batch",
+        "run_checks",
+        "Read",
+        "read_slice"
+      ],
+      "application_files_unchanged": true,
+      "prompt_characters": 15659,
+      "prompt_sha256": "16f9ca248ee53e2625bf6c8cba4fcb83f04ef81700a77072dd999ae977290d1e",
+      "required_tool": "Edit",
+      "mapping_assignment_present": true,
+      "all_protocol_observations_present": true,
+      "runtime_operand_context_present": true,
+      "assigned_workload_text_present": true
+    },
+    {
+      "canonical": true,
+      "read_only_actions": [
+        "read_batch",
+        "read_slice",
+        "read_batch",
+        "run_checks",
+        "Read",
+        "read_slice"
+      ],
+      "application_files_unchanged": true,
+      "prompt_characters": 15674,
+      "prompt_sha256": "7627dc5c2013756a3d056ba306339a128ed73c8110c45cbf49d660bb1f48d867",
+      "required_tool": "Edit",
+      "mapping_assignment_present": true,
+      "all_protocol_observations_present": true,
+      "runtime_operand_context_present": true,
+      "assigned_workload_text_present": false
+    }
+  ],
+  "before_fix_evidence": "artifacts/autonomous-repair/pre-edit-context-audit-before-member-facts.json"
+}

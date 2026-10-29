@@ -315,9 +315,49 @@ def test_conditional_commit_and_exact_multiple_reference_resolution(runtime):
     commit,result=resolved(store,scheduler,"Don't commit anything until the verification passes for project \"alpha\"")
     assert result['dependencies'][0]['upstream']==tests
     assert result['dependencies'][0]['condition']=='tests_pass'
+    explicit_gate,gate=resolved(store,scheduler,f'After task {store.get(tests)["number"]} commit only when verification passes')
+    assert gate['dependencies'][0]['upstream']==tests
+    assert gate['dependencies'][0]['condition']=='tests_pass'
+    assert not graph.evaluate(explicit_gate)['ready']
     scan,_=resolved(store,scheduler,'Analyze project "beta"')
     consumer,result=resolved(store,scheduler,f'Use results from tasks {store.get(tests)["number"]} and {store.get(scan)["number"]} to compare')
     assert set(store.get(consumer)['spec']['dependencies'])=={tests,scan}
+
+
+@pytest.mark.parametrize('prior_tests',[False,True])
+def test_internal_repair_until_pass_does_not_require_previous_task(runtime,prior_tests):
+    store,scheduler,graph=runtime
+    if prior_tests:
+        resolved(store,scheduler,'Run tests for project "alpha"')
+    identity,result=resolved(store,scheduler,'Repair calculator for project "alpha". Prioritize the control exception, then continue until both original unittest suites pass.','code_task')
+    assert not result.get('question')
+    assert result['dependencies']==[]
+    assert not store.get(identity)['spec'].get('dependencies')
+
+
+def test_until_completion_is_distinct_from_release_and_explicit_context_gates(runtime):
+    from jarvis.workflow_graph import requires_prior_test_result
+    assert not requires_prior_test_result('Fix this calculator until its tests pass.')
+    assert not requires_prior_test_result('Run the tests until all checks pass.')
+    assert requires_prior_test_result("Don't commit anything until verification passes.")
+    assert requires_prior_test_result('Wait until tests pass before publishing.')
+    assert requires_prior_test_result('Commit only when verification passes.')
+    assert requires_prior_test_result('Repair the UI if those tests fail.')
+    assert requires_prior_test_result('Continue until those tests pass.')
+    store,scheduler,graph=runtime
+    upstream,_=resolved(store,scheduler,'Analyze project "alpha"')
+    identity,result=resolved(store,scheduler,f'Use results from task {store.get(upstream)["number"]} to repair until tests pass')
+    assert result['dependencies'][0]['upstream']==upstream
+    assert result['dependencies'][0]['condition']=='success'
+
+
+def test_intake_does_not_coerce_internal_completion_loop_into_context_command():
+    ingress=SimpleNamespace(local=SimpleNamespace())
+    command=Command('ask','Repair this calculator. Continue until both original unittest suites pass.')
+    assert TaskIngress._parse(ingress,command) is command
+    assert ingress.local.new_task is False
+    gated=TaskIngress._parse(ingress,Command('ask',"Don't commit until verification passes."))
+    assert gated.kind=='task' and ingress.local.new_task is True
 
 
 def test_pending_named_project_reference_resolves_when_producer_arrives(tmp_path):

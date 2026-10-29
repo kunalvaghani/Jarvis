@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-28T08:28:05.557933+00:00",
+  "status": "NO_CASE_PROGRESS",
+  "application_acceptance": false,
+  "proposal": ".jarvis-runtime/autonomous-repair/7a8e8255564149d49dfb99a713b22354/.jarvis-runtime/native-code/96801ccf7bf64a509ab5aa91af7edac2/model-responses/tool-f82ba56dcad646f691e46502a9096b95/response.txt",
+  "proposal_sha256": "60a909647df7c8b9906f57a166d7ae7450fd682e7c1cdd99d2df872c96b7095a",
+  "scope": "One isolated feasibility check of exact non-noop remainder from completed Qwen batch. No replacement source authored, no model calls, every working save refused. No product normalization implemented.",
+  "removed_exact_noops": 1,
+  "remaining_changes": 1,
+  "candidate_decision": {
+    "candidate_only": true,
+    "applied": false,
+    "accepted_for_save": false,
+    "source_path": "ui_builder.py",
+    "decision_precedes_working_save": true,
+    "proposed_sha256": "8997f8e7041727d272b0624d24ab2d13d4ac09061061abf6d252eec637d5746b",
+    "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\noop-batch-remainder\\4b376709f2aa48bf8a245d7cc6b4cd9e\\ledger\\validation-5d03e4a70ccb4ca1b1ee6896a1f8971b.json",
+    "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\noop-batch-remainder\\4b376709f2aa48bf8a245d7cc6b4cd9e\\ledger\\candidate-checks\\e78c5e8b921946eda9835bf1cbcaef0a\\validation-61d0ffa2c30a4f85a099e04ef2b1e519.json",
+    "lost_previously_passing_cases": {},
+    "progress_required": true,
+    "newly_passing_cases": {},
+    "case_classifications_complete": true,
+    "errors_reaching_assertions": {},
+    "new_runtime_errors": {},
+    "verified_case_progress": false
+  },
+  "all_eight_working_worker_and_external_hashes_unchanged": true
+}

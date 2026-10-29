@@ -168,7 +168,18 @@ def coding_context(project, goal, target=None, files=None):
             'selected_skills': selected_skills(project, goal),
             'repository_map': repository_map(project, files),
             'reference_repositories': learned_references(goal),
-            'learned_abilities': learned_abilities(goal)}
+            'learned_abilities': learned_abilities(goal),
+            'code_intelligence': code_intelligence(project, goal)}
+
+
+def code_intelligence(project, goal):
+    """Validated reusable candidates, dependency policy and design spec (pcide.py); empty when disabled."""
+    try:
+        from .pcide import engine
+        intel = engine()
+        return intel.guidance(project, goal) if intel is not None else {}
+    except Exception:
+        return {}
 
 
 def learned_abilities(goal):

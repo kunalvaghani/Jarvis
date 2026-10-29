@@ -475,8 +475,16 @@ class IslandDesk:
             self.overview.tag_add('code',start,'end')
 
     def update_choices(self,pending):
-        if (pending or {}).get('token') == (self.pending or {}).get('token'):
+        token = (pending or {}).get('token')
+        if token and token in getattr(self,'answered_tokens',()):
+            pending = None  # Answered here already; the backend's dismissal catches up within a poll.
+            token = None
+        if token == (self.pending or {}).get('token'):
             return
+        if self.pending and not pending:
+            self.leave_choices(None)  # Answered by voice, expired or replaced: animate the card away.
+            return
+        self.choice_generation = getattr(self,'choice_generation',0)+1
         self.pending = pending
         for child in self.choice_rows.winfo_children():
             child.destroy()
@@ -484,13 +492,18 @@ class IslandDesk:
         self.choice_buttons = []
         self.choice_hint.configure(text=((pending.get('question','')+'\n') if pending and pending.get('kind')=='whatsapp' else '')+
                                    ('Click or say the option name / number. Choices expire.' if pending else 'No pending choices. Ask for a fresh list.'),
-                                   wraplength=420,justify='left')
+                                   wraplength=420,justify='left',fg=MUTED)
         if not pending:
             return
+        rows = []
         for index,option in enumerate(pending['options']):
             row = tk.Frame(self.choice_rows,bg=CARD)
-            row.pack(fill='x',pady=3)
-            header = tk.Frame(row,bg=CARD)
+            rows.append(row)
+            strip = tk.Frame(row,bg='#2a3242',width=3)  # Accent edge that lights up on hover.
+            strip.pack(side='left',fill='y')
+            body = tk.Frame(row,bg=CARD)
+            body.pack(side='left',fill='x',expand=True)
+            header = tk.Frame(body,bg=CARD)
             header.pack(fill='x')
             photo = self.decode_image(option.get('image',''),(48,48))
             if photo:
@@ -505,14 +518,18 @@ class IslandDesk:
                 activebackground='#302c49',activeforeground=TEXT,wraplength=380,justify='left',
                 command=lambda i=index,t=pending['token']:self.choose(t,i),font=('Segoe UI',10),padx=7,pady=7)
             button.pack(side='left',fill='x',expand=True)
+            button.choice_label = option['label']
+            for widget in (row,button):
+                widget.bind('<Enter>',lambda _e,s=strip:s.configure(bg=ACCENT),add='+')
+                widget.bind('<Leave>',lambda _e,s=strip:s.configure(bg='#2a3242'),add='+')
             self.choice_buttons.append(button)
             if option.get('context'):
-                text(row,option['context'],bg=CARD,fg=MUTED,anchor='w',justify='left',wraplength=390).pack(
+                text(body,option['context'],bg=CARD,fg=MUTED,anchor='w',justify='left',wraplength=390).pack(
                     side='bottom',fill='x',padx=10,pady=(0,8))
         if pending.get('free_text'):
             # Type the answer (a name, an email address, a message) instead of saying it.
             bar = tk.Frame(self.choice_rows,bg=CARD)
-            bar.pack(fill='x',pady=(6,3))
+            rows.append(bar)
             entry = tk.Entry(bar,bg='#1d1d22',fg=TEXT,insertbackground=TEXT,relief='flat',font=('Segoe UI',10))
             entry.pack(side='left',fill='x',expand=True,padx=(6,4),ipady=6)
             def send(_event=None,token=pending['token']):
@@ -527,11 +544,83 @@ class IslandDesk:
             self.app.root.after(150,entry.focus_set)
         self.show('Choices')
         self.app.show_panel()
+        self.enter_rows(rows,self.choice_generation)
+
+    # Choice-card motion: short ease-out slides of real layout padding (Tk has no per-widget opacity),
+    # staggered 45 ms apart, ~150 ms each. Superseded animations stop at the next frame.
+    SLIDE = (24,15,9,5,2,0)
+
+    def enter_rows(self,rows,generation):
+        self.fade(self.choice_hint,BG,MUTED,generation)
+        for order,row in enumerate(rows):
+            self.app.root.after(order*45,lambda r=row,last=row is rows[-1]:self.slide(r,generation,self.SLIDE,
+                pady=(6,3) if last and r.winfo_children() and isinstance(r.winfo_children()[0],tk.Entry) else 3))
+
+    def slide(self,row,generation,offsets,pady=3,done=None):
+        if generation != getattr(self,'choice_generation',0) or not row.winfo_exists():
+            return
+        if not offsets:
+            if done:
+                done()
+            return
+        if row.winfo_manager() != 'pack':
+            row.pack(fill='x',pady=pady,padx=(offsets[0],0))
+        else:
+            row.pack_configure(padx=(offsets[0],0))
+        self.app.root.after(16,lambda:self.slide(row,generation,offsets[1:],pady,done))
+
+    def fade(self,widget,start,end,generation,steps=6,step=0):
+        if generation != getattr(self,'choice_generation',0) or not widget.winfo_exists():
+            return
+        a,b = (tuple(int(c[i:i+2],16) for i in (1,3,5)) for c in (start,end))
+        t = step/steps
+        t = 1-(1-t)**3
+        widget.configure(fg='#%02x%02x%02x' % tuple(round(x+(y-x)*t) for x,y in zip(a,b)))
+        if step < steps:
+            self.app.root.after(18,lambda:self.fade(widget,start,end,generation,steps,step+1))
+
+    def leave_choices(self,chosen):
+        """Confirm the chosen option, then slide the rest away and collapse the card."""
+        self.choice_generation = getattr(self,'choice_generation',0)+1
+        generation = self.choice_generation
+        rows = [r for r in self.choice_rows.winfo_children()]
+        label = None
+        if chosen is not None and chosen < len(self.choice_buttons):
+            button = self.choice_buttons[chosen]
+            label = getattr(button,'choice_label','')
+            button.configure(text='✓  '+label,fg=ACCENT)
+            button.set_state('pressed')
+        self.pending = None
+        keep = button.master.master.master if label is not None else None
+        others = [r for r in rows if r is not keep]
+        for order,row in enumerate(reversed(others)):
+            self.app.root.after(order*30,lambda r=row:self.slide(r,generation,(2,6,12,20,30),done=lambda r=r:r.destroy()
+                                                                  if r.winfo_exists() else None))
+        def finish():
+            if generation != self.choice_generation:
+                return
+            for child in self.choice_rows.winfo_children():
+                child.destroy()
+            self.choice_buttons = []
+            self.choice_images = []
+            self.choice_hint.configure(text=('Selected · '+label[:80]) if label else 'Answered.',fg=ACCENT)
+            self.fade(self.choice_hint,ACCENT,MUTED,generation,steps=10)
+            self.app.root.after(1600,lambda:generation == self.choice_generation and
+                                self.choice_hint.configure(text='No pending choices. Ask for a fresh list.'))
+        if keep is not None:
+            self.app.root.after(len(others)*30+220,lambda:self.slide(keep,generation,(2,6,12,20,30),done=finish))
+        else:
+            self.app.root.after(len(others)*30+160,finish)
 
     def choose(self,token,index):
         from .commands import Command
+        if (self.pending or {}).get('token') != token:
+            return  # A second click on a card that is already leaving.
         kind = 'memory_choice' if self.pending and self.pending.get('kind') == 'memory' else 'island_choice'
+        self.answered_tokens = (list(getattr(self,'answered_tokens',()))+[token])[-32:]
+        self.leave_choices(index)
         self.app.actions.submit(Command(kind,str(index),token))
+
 
     def decode_image(self,encoded,size):
         if not encoded or len(encoded)>400_000:

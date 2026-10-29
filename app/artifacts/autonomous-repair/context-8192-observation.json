@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-25T14:17:32.448703+00:00",
+  "status": "PASS",
+  "model": "qwen3.5:9b",
+  "scope": "Real long-input capacity/whole-device-memory observation. Temporary policy injection only; not software generation acceptance.",
+  "requested_context": 8192,
+  "role": "coding",
+  "saved_config_changed": false,
+  "root": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\context-probes\\53d423a219934101ae31b62e04395027",
+  "policy_tested": {
+    "enabled": true,
+    "helper_gpu": false,
+    "primary_layers": 12,
+    "codex_layers": 9,
+    "speech_reserve_mb": 1024,
+    "reserve_mb": 512,
+    "wait_seconds": 120,
+    "warm_seconds": 1800,
+    "cpu_threads": 12,
+    "context_limit": 8192,
+    "helper_context_limit": 1024,
+    "vram_ceiling_mb": 3850
+  },
+  "model_metadata": {
+    "general.architecture": "qwen35",
+    "qwen35.attention.head_count_kv": 4,
+    "qwen35.attention.key_length": 256,
+    "qwen35.attention.value_length": 256,
+    "qwen35.block_count": 33,
+    "qwen35.context_length": 262144
+  },
+  "answer": {
+    "ok": true
+  },
+  "completion": {
+    "done": true,
+    "done_reason": "stop",
+    "eval_count": 6,
+    "prompt_eval_count": 4637,
+    "total_duration": 18957483900,
+    "served_model": "qwen3.5:9b"
+  },
+  "seconds": 20.281,
+  "admission": {
+    "role": "coding",
+    "num_gpu": 10,
+    "context_tokens": 8192,
+    "gpu_slot": true
+  },
+  "whole_device_peak_used_mb": 2087,
+  "minimum_available_ram_mb": 12022,
+  "finished_at": "2026-10-25T14:17:53.089161+00:00"
+}

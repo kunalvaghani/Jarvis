@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-28T18:45:12.529988+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "Selected owned-interface strategy at one exact indexed binding requires a complete model-authored owned_definition and a binding_expression constructing that type. Required access methods derive from frozen calls. The controller derives only the existing assignment target, supplies no method bodies, and enforces original source/read/frozen/candidate/atomic-save/budget guards. Other edits retain their existing contract.",
+  "target": {
+    "tests": 10,
+    "seconds": 24.139,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-owned-contract-target.log"
+  },
+  "affected_regression": {
+    "tests": 213,
+    "seconds": 255.027,
+    "result": "OK"
+  },
+  "regression_log": ".jarvis-runtime/repair-owned-contract-regression.log",
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 19.5,
+    "log": ".jarvis-runtime/repair-owned-contract-audit.log"
+  },
+  "launcher_log": ".jarvis-runtime/repair-owned-contract-launcher.log",
+  "exact_qwen_replay": "artifacts/autonomous-repair/owned-contract-gui-replay.json",
+  "preceding_trial": {
+    "id": "47eb172571874258ba713dcff2c6f669",
+    "task": "be7c91809aab486eaa7a94f91dd1d768",
+    "owner_session": 56112,
+    "status": "FINISHED",
+    "raw_result": "FAIL",
+    "seconds": 459.541,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "00f200d15eed4815acaaad0f217cb477",
+      "status": "failed",
+      "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 2,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 1
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\47eb172571874258ba713dcff2c6f669\\.jarvis-runtime\\native-code\\00f200d15eed4815acaaad0f217cb477\\validation-b5ccdbcab0c04c3eb2d498b461e55326.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\47eb172571874258ba713dcff2c6f669\\.jarvis-runtime\\native-code\\00f200d15eed4815acaaad0f217cb477\\candidate-checks\\b7f1a85014c14e359bcd6b55d31767dc\\validation-50d380bdabbe4faaae9fd1301bd36709.json",
+          "lost_previously_passing_cases": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+            ]
+          },
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+            ]
+          },
+          "verified_case_progress": false
+        }
+      ],
+      "binding_renderings": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "changes": [
+            {
+              "old_string": "            self.buttons[text] = [btn]",
+              "proposed_sha256": "373eaf08030cc7e74c0062152164f27977ca69cf1903d4875882ba5437ba6fa7",
+              "rendered_sha256": "f37abdfcb78f767e5bb81b6160dbbff454e4fb72cde0815c3c2e957e866db4bb",
+              "rendered_new_string": "            self.buttons[text] = btn",
+              "ast_unchanged": true
+            }
+          ]
+        }
+      ],
+      "bounded_interface_corrections": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 1,
+          "error": "Candidate would regress previously passing frozen cases: {\"test_gui_behavior.py\": [\"test_gui_behavior.TestCalculatorGUI.test_button_click_clear\"]}. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\47eb172571874258ba713dcff2c6f669\\.jarvis-runtime\\native-code\\00f200d15eed4815acaaad0f217cb477\\candidate-checks\\b7f1a85014c14e359bcd6b55d31767dc\\validation-50d380bdabbe4faaae9fd1301bd36709.json",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    },
+    "all_eight_external_hashes_match": true
+  },
+  "preserved_cli_integrity": {
+    "prior_status": "PASS",
+    "new_functional_run": false,
+    "all_six_original_hashes_match": true
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "e6332b505f149420fa4b487ea7cfc91c4cd5d36695867fd2031b89ec73bc20fa",
+    "jarvis/coding_files.py": "a3f4ae2f0ead7db6e406825667b209aadf17a78a291e801f4cf7ee29ecc0e8c4",
+    "jarvis/repair_contract.py": "74e2006928040c62926c7ec0367a48a1ca970227c225d8f8b2e234e5ec3af784",
+    "tests/test_owned_repair.py": "a16f3082c44463e912284d6d6bb07bb4e88a22ed8ee5a5c1934bbbae73828559"
+  },
+  "configuration_sha256": "d0fa92f27b68bdef99456fbcdc86bbf674075a1bc5b0c9d21412181f50f1cf4f",
+  "intentional_main_stop_marker_present": true,
+  "production": {
+    "id": "6bb932eb9cf74bfbb54eda5888f387d0",
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 478.159,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "8a500eb5cfe64600b501023b748cacf2",
+      "status": "failed",
+      "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 2,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 1
+      },
+      "candidate_decisions": [],
+      "binding_renderings": null,
+      "bounded_interface_corrections": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 1,
+          "error": "Owned-interface binding is incomplete or contradicts its selected strategy: invalid syntax (<unknown>, line 1)",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    }
+  }
+}

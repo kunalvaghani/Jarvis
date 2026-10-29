@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-27T11:13:54.269293+00:00",
+  "status": "FAIL_NO_GUI_PROGRESS",
+  "application_acceptance": false,
+  "campaign": "5980a8e478dc47f8a40c0f263aec0721",
+  "owner_session": 37627,
+  "scope": "Bounded repeated-protocol planning recovery; no acceptance-project implementation supplied by Codex.",
+  "targeted_regression": {
+    "tests": 2,
+    "seconds": 8.03,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-plan-target.log"
+  },
+  "affected_regression": {
+    "tests": 171,
+    "seconds": 172.736,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-plan-final.log"
+  },
+  "launcher": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "source_checkpoint": "artifacts/autonomous-repair/gui-initial-state-checkpoint-provenance.json",
+  "limits": {
+    "plans_per_failure_signature": 1,
+    "plan_steps": 3,
+    "characters_per_step": 240,
+    "replacement_bytes": 8000,
+    "identical_failure_limit": 4,
+    "nonconsecutive_failure_revisits": 2,
+    "idle_tool_turns": 12,
+    "trial_seconds": 3600
+  },
+  "frozen_tests_changed": false,
+  "next_action": "Finish installed-stdlib failure-site regressions and bounded schema transport observations before any new production GUI repair. No unchanged trial retry.",
+  "native": "57caacd172644eb4b384e4e7bd20fd09",
+  "workload": "3c4541a0e0f140728a5c09d76bd87ba0",
+  "first_plan_rejected_before_dispatch": true,
+  "corrected_plan_dispatched": true,
+  "owner_exit_observed": true,
+  "finished_at": "2026-10-27T11:11:25.879870+00:00",
+  "seconds": 1187.44,
+  "jarvis_source_changed_during_trial": false,
+  "configuration_changed_during_trial": false,
+  "external_eight_files_unchanged": true,
+  "six_protected_worker_files_unchanged": true,
+  "progress": {
+    "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+    "identical_failed_checks": 4,
+    "idle_turns": 9,
+    "guarded_replacement_attempts": 0,
+    "failure_history_versions": 4,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1
+  },
+  "terminal_error": "The same executable-check failures recurred four times without diagnostic progress. Stop for root-cause analysis; raw checks, source and frozen tests retained. No action replayed.",
+  "task_states": [
+    [
+      "FAILED",
+      "The same executable-check failures recurred four times without diagnostic progress. Stop for root-cause analysis; raw checks, source and frozen tests retained. No action replayed. Workloads retained for inspection: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\5980a8e478dc47f8a40c0f263aec0721\\.jarvis-runtime\\native-workloads\\3c4541a0e0f140728a5c09d76bd87ba0"
+    ]
+  ],
+  "diagnostic_plan_observations": [
+    {
+      "metadata": ".jarvis-runtime/autonomous-repair/5980a8e478dc47f8a40c0f263aec0721/.jarvis-runtime/native-code/57caacd172644eb4b384e4e7bd20fd09/model-responses/tool-a41b56df9ecf4642967c56a1d2be4be8/metadata.json",
+      "raw_sha256": "b0f74e32e6e652b279520f6ace3588810eac2590d9e7314d9630acae36b72715",
+      "error": "Expecting ',' delimiter: line 7 column 87 (char 421)",
+      "assessment": "Malformed complete JSON was rejected before action; diagnosis also incorrectly blamed display formatting rather than the cget argument expression."
+    }
+  ]
+}

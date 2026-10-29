@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "CONFIRMED_FIRST_WRITE_BASELINE_GAP",
+  "application_acceptance": false,
+  "scope": "Controlled source fixture/mocked inference only; no acceptance application or live model affected. Independent baseline was deliberately not supplied to native worker.",
+  "retained_fixture": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-3882261ddea7494eb7cf07198dd24bb0",
+  "known_before": [
+    "test_main.Checks.test_existing"
+  ],
+  "lost_after_first_write": [
+    "test_main.Checks.test_existing"
+  ],
+  "native_candidate_decisions": [],
+  "frozen_test_unchanged": true,
+  "actual_source_save": true,
+  "native_inferences": 3,
+  "baseline_before": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-3882261ddea7494eb7cf07198dd24bb0\\independent-before\\validation-05543b096c954bdaa0a718d603890f5c.json",
+  "baseline_after": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-3882261ddea7494eb7cf07198dd24bb0\\.jarvis-runtime\\native-code\\836d003b53624ba794f8406d5112da6d\\validation-2ff359326d784971bf08f0c56c9393f5.json"
+}

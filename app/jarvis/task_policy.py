@@ -75,7 +75,7 @@ def classify(command, now=None):
                           'cpu': 1, 'network': not readonly, 'disk': 'unknown'},
             'tools': [kind], 'model': 'existing router' if not readonly else None,
             'splittable': False}
-    return _project_step(spec) if kind == 'project_step' else spec
+    return _project_step(spec) if kind == 'project_step' else _code_research(spec) if kind == 'code_research' else spec
 
 
 def _project_step(spec):
@@ -83,6 +83,14 @@ def _project_step(spec):
     spec.update(lane='inference', locks=['legacy-actions', 'shared-planner'], reversible=True, unattended=True,
                 approval=False, risk='new-files-only', complexity='small', duration_seconds=5,
                 resources={'ram_mb': 64, 'gpu': False, 'cpu': 1, 'network': False, 'disk': 'small'}, model=None)
+    return spec
+
+
+def _code_research(spec):
+    # Reads public sources into Jarvis's own cache; never touches project files or the desktop.
+    spec.update(lane='research', locks=['code-research'], read_only=True, reversible=True, unattended=True, approval=False,
+                risk='read-only', complexity='small', duration_seconds=60,
+                resources={'ram_mb': 128, 'gpu': False, 'cpu': 1, 'network': True, 'disk': 'small'}, model=None)
     return spec
 
 

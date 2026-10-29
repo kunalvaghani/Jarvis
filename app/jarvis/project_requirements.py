@@ -34,7 +34,7 @@ TYPES = [('unreal', r'\bunreal\b|\bue5?\b'), ('blender', r'\bblender\b|\b3d (?:s
          ('automation', r'\b(?:automat\w*|script|bot|workflow|schedule)\b'),
          ('software', r'\b(?:app|application|program|software|tool|website|web app|game|service|api|cli|desktop|dashboard|utility|plugin|extension)\b')]
 NEW_PROJECT = re.compile(r'^(?:(?:please |can you |could you )?(?:create|start|begin|make|build|set up|setup|kick off|develop)\s+'
-                         r'(?:me\s+)?(?:a |an )?(?:brand )?new\s+(\w[\w \-\'/]{0,240}?)|new project(?: called (.+))?)(?:[:,.]\s*(.*))?$', re.I | re.S)
+                         r'(?:me\s+)?(?:a |an )?(?:brand )?new\s+(\w[\w ,\-\'/]{0,240}?)|new project(?: called (.+))?)(?:[:.]\s*(.*))?$', re.I | re.S)
 # A restriction on project work: a constraint verb plus something a project is made of. Deleting is never a constraint.
 NEGATED_CONSTRAINT = re.compile(r"^(?:do not|don'?t|never|stop)\s+(?:use|using|modify|modifying|change|changing|touch|touching|edit|"
                                 r"editing|depend on|rely on|add|include|rewrite|rewriting)\b.*\b(?:file|files|module|modules|code|database|db|"
@@ -53,11 +53,18 @@ def project_request(text):
     """NEW_PROJECT match only when the subject's head is something a project produces, not a branch, file or tab."""
     match = NEW_PROJECT.match(clean(text))
     if not match:
+        # A new product request need not literally contain "new". Preserve
+        # explicit existing scopes/filenames for the ordinary coding handler.
+        implicit=re.match(r'^(create|build|make|develop)\s+(?:a|an)\s+(.+)$',clean(text),re.I|re.S)
+        if (implicit and re.search(r'\b(?:application|calculator|website|dashboard|to-do app)\b',implicit[2],re.I)
+                and not re.search(r'\b(?:existing|current|this|same)\b|\b(?:in|inside) (?:the |my )?folder\b|[A-Za-z]:[\\/]|\b\w+\.(?:py|js|tsx?|html|css)\b',implicit[2],re.I)):
+            match=NEW_PROJECT.match(implicit[1]+' a new '+implicit[2])
+    if not match:
         return None
     if match[1] is None:
         return match
     head = re.split(r'\s+(?:that|which|to|for|called|of|with|about|before|after|so)\s+', match[1].strip(), 1, flags=re.I)[0]
-    return match if set(re.findall(r'[a-z]+', head.casefold())[:4]) & PROJECT_NOUNS else None
+    return match if set(re.findall(r'[a-z]+', head.casefold())[:6]) & (PROJECT_NOUNS | {'calculator','dashboard'}) else None
 
 
 def words(text):
@@ -100,7 +107,7 @@ def classify(text, *, has_project=False, pending=None):
     rules = [
         ('accept_recommendation', r'accept (?:recommendation|suggestion) (\d+)'),
         ('overnight', r'(?:finish|complete|do|continue)(?: (?:the|all|any))? (?:safe )?(?:remaining|rest|leftover)(?: (?:safe|of the))?(?: work| tasks)?(?: of it)? (?:overnight|tonight)|(?:work on|run) (?:the|this) project overnight'),
-        ('progress', r'(?:explain|tell me|give me|report|what(?:\'s| is)) (?:your |the )?(?:current )?(?:progress|status)(?: (?:on|of) (?:the|this) project)?|how(?:\'s| is) (?:the|this|my) project (?:going|coming along)|what are you working on(?: (?:in|for) (?:the|this) project)?'),
+        ('progress', r'(?:explain|tell me|give me|report|what(?:\'s| is)) (?:your |the )?(?:current )?(?:progress|status)(?: (?:on|of) (?:(?:the|this|my) )?project)?|how(?:\'s| is) (?:the|this|my) project (?:going|coming along)|what are you working on(?: (?:in|for) (?:the|this) project)?'),
         ('remaining', r"what(?:'s| is) left|what remains|what(?:'s| is) remaining|what(?:'s| is) still (?:to do|missing from the plan)"),
         ('completed', r'what (?:have|did) you (?:completed?|finish(?:ed)?|done)|what(?:\'s| is) (?:done|finished|completed)'),
         ('blockers', r'what are the blockers|what(?:\'s| is) blocking(?: you| it| the project)?|(?:are there|any) blockers'),

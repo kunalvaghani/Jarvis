@@ -1,0 +1,138 @@
+{
+  "date": "2026-10-26T06:09:32.437355+00:00",
+  "run": "d91620b2230f41ce99c253eadbbbe5ff",
+  "native": "40892512bd8e4de5bb051f45429109a6",
+  "status": "FAIL",
+  "reason": "No saved application progress; bounded idle stop. Coverage reset after rejected repair allowed repeated identical views.",
+  "finished_at": "2026-10-26T06:06:12.133550+00:00",
+  "record_to_shutdown_seconds": 1054.536,
+  "owner_exit_observed": true,
+  "source_unchanged": true,
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d"
+  },
+  "task_states": [
+    "FAILED"
+  ],
+  "jarvis_source_changed_during_trial": true,
+  "configuration_changed_during_trial": false,
+  "old_observed_slice_sequence": [
+    {
+      "start": 48,
+      "count": 10
+    },
+    {
+      "start": 1,
+      "count": 24
+    },
+    {
+      "start": 48,
+      "count": 24
+    },
+    {
+      "start": 1,
+      "count": 10
+    },
+    {
+      "start": 1,
+      "count": 24
+    },
+    {
+      "start": 48,
+      "count": 24
+    }
+  ],
+  "new_read_only_diagnosis": {
+    "file_path": "ui_builder.py",
+    "sha256": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d",
+    "starts": [
+      25
+    ],
+    "count": 24,
+    "reads_used": 2,
+    "symbols": [
+      {
+        "name": "CalculatorApp",
+        "start": 5,
+        "end": 90
+      },
+      {
+        "name": "__init__",
+        "start": 6,
+        "end": 46
+      },
+      {
+        "name": "_handle_action",
+        "start": 48,
+        "end": 72
+      },
+      {
+        "name": "_on_key_press",
+        "start": 74,
+        "end": 87
+      },
+      {
+        "name": "run",
+        "start": 89,
+        "end": 90
+      }
+    ],
+    "windows": [
+      {
+        "start": 48,
+        "lines": [
+          "48:     def _handle_action(self, action):",
+          "49:         current = self.display_var.get()",
+          "50:         if action == \"clear\":",
+          "51:             self.calc.clear()",
+          "52:             self.display_var.set(\"\")",
+          "53:         elif action in (\"add\", \"subtract\", \"multiply\", \"divide\"):",
+          "54:             try:",
+          "55:                 val = float(current)",
+          "56:                 op = {\"add\": \"+\", \"subtract\": \"-\", \"multiply\": \"*\", \"divide\": \"/\"}[action]",
+          "57:                 self.display_var.set(f\"{current} {op}\")"
+        ],
+        "partial": true
+      },
+      {
+        "start": 1,
+        "lines": [
+          "1: import tkinter as tk",
+          "2: from tkinter import ttk, messagebox",
+          "3: from calculator_logic import Calculator",
+          "4: ",
+          "5: class CalculatorApp:",
+          "6:     def __init__(self):",
+          "7:         self.root = tk.Tk()",
+          "8:         self.root.title(\"Modern Calculator\")",
+          "9:         self.root.geometry(\"320x450\")",
+          "10:         self.root.resizable(False, False)",
+          "11:         ",
+          "12:         # Theme",
+          "13:         self.root.configure(bg=\"#f7f7f8\")",
+          "14:         ",
+          "15:         # Logic",
+          "16:         self.calc = Calculator()",
+          "17:         ",
+          "18:         # Display",
+          "19:         self.display_frame = ttk.Frame(self.root, padding=10)",
+          "20:         self.display_frame.pack(fill=tk.X)",
+          "21:         ",
+          "22:         self.display_var = tk.StringVar(value=\"0\")",
+          "23:         self.display = ttk.Entry(self.display_frame, textvariable=self.display_var,",
+          "24:                                  font=(\"Inter\", 24), justify=\"right\","
+        ],
+        "partial": true
+      }
+    ]
+  },
+  "new_application_acceptance": false,
+  "note": "Actual current source facts and recorded tool history only; no application code executed or edited by this observation. Fresh production trial requires completed regressions. Earlier trial loaded old helper; not source-stable release evidence."
+}

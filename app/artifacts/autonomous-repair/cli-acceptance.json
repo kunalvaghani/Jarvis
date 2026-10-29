@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-25T21:20:59.633650+00:00",
+  "status": "PASS",
+  "campaign": "e881677ccf38424680ce202f62bacd9c",
+  "model": "qwen3.5:9b",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\e881677ccf38424680ce202f62bacd9c\\python-calculator-application-supports-addition",
+  "fresh_creation_intake": true,
+  "existing_project_repair": false,
+  "protocol": "compact",
+  "scope": "Independent subprocess arithmetic/input-validation and unchanged generated-source checks for the Jarvis-selected operation/operand CLI. No GUI, visual-quality, reuse or performance acceptance.",
+  "supervisor_authored_implementation": false,
+  "source_before": {
+    "PROJECT.md": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+    "README.md": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+    "REQUIREMENTS.md": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+    "calculator.py": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+    "main.py": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+    "test_calculator.py": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b"
+  },
+  "checks": [
+    {
+      "name": "add 2 3",
+      "argv": [
+        "add",
+        "2",
+        "3"
+      ],
+      "exit_code": 0,
+      "stdout": "5.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "subtract 5 8",
+      "argv": [
+        "sub",
+        "5",
+        "8"
+      ],
+      "exit_code": 0,
+      "stdout": "-3.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply 6 7",
+      "argv": [
+        "mul",
+        "6",
+        "7"
+      ],
+      "exit_code": 0,
+      "stdout": "42.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide 9 2",
+      "argv": [
+        "div",
+        "9",
+        "2"
+      ],
+      "exit_code": 0,
+      "stdout": "4.5\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "add -3.5 2.25",
+      "argv": [
+        "add",
+        "-3.5",
+        "2.25"
+      ],
+      "exit_code": 0,
+      "stdout": "-1.25\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "subtract -2 -7",
+      "argv": [
+        "sub",
+        "-2",
+        "-7"
+      ],
+      "exit_code": 0,
+      "stdout": "5.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply -2.5 4",
+      "argv": [
+        "mul",
+        "-2.5",
+        "4"
+      ],
+      "exit_code": 0,
+      "stdout": "-10.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide -9 -3",
+      "argv": [
+        "div",
+        "-9",
+        "-3"
+      ],
+      "exit_code": 0,
+      "stdout": "3.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide 0 2",
+      "argv": [
+        "div",
+        "0",
+        "2"
+      ],
+      "exit_code": 0,
+      "stdout": "0.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply 0 4",
+      "argv": [
+        "mul",
+        "0",
+        "4"
+      ],
+      "exit_code": 0,
+      "stdout": "0.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "division by zero",
+      "argv": [
+        "div",
+        "1",
+        "0"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Division by zero is not allowed.\n",
+      "passed": true
+    },
+    {
+      "name": "non-numeric operand",
+      "argv": [
+        "add",
+        "banana",
+        "2"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Numbers must be valid.\n",
+      "passed": true
+    },
+    {
+      "name": "non-numeric right operand",
+      "argv": [
+        "add",
+        "2",
+        "banana"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Numbers must be valid.\n",
+      "passed": true
+    },
+    {
+      "name": "unknown operation",
+      "argv": [
+        "unknown",
+        "1",
+        "2"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Unknown operation 'unknown'.\n",
+      "passed": true
+    },
+    {
+      "name": "missing operand",
+      "argv": [
+        "add",
+        "1"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Usage: python main.py <operation> <num1> <num2>\n",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "original_request": "Create a new Python calculator application that supports addition, subtraction, multiplication and division. Include input validation and tests. Save it as a new isolated project.",
+  "project_ids": [
+    "ba44d73575734631b8100a8115deb634"
+  ],
+  "jarvis_source_changed_during_trial": true,
+  "original_tests": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_add (test_calculator.TestCalculator) ... ok\ntest_div (test_calculator.TestCalculator) ... ok\ntest_div_zero (test_calculator.TestCalculator) ... ok\ntest_mul (test_calculator.TestCalculator) ... ok\ntest_sub (test_calculator.TestCalculator) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.520s\n\nOK\n"
+  },
+  "source_after": {
+    "PROJECT.md": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+    "README.md": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+    "REQUIREMENTS.md": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+    "calculator.py": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+    "main.py": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+    "test_calculator.py": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b"
+  },
+  "source_unchanged": true,
+  "coding_task_states": [
+    {
+      "id": "8c03d7fa7cc3438bb56c61939943d802",
+      "state": "COMPLETED"
+    },
+    {
+      "id": "d7d831f8ec51485789293f2079a5259b",
+      "state": "COMPLETED"
+    },
+    {
+      "id": "81b014e239fb4f10b4304837329cdccc",
+      "state": "COMPLETED"
+    },
+    {
+      "id": "c856ccedd6674f14aa909616876715dd",
+      "state": "COMPLETED"
+    },
+    {
+      "id": "11ca8de911614b7587bb4bb772d96b0f",
+      "state": "COMPLETED"
+    }
+  ],
+  "campaign_finished": true,
+  "unfinished_tasks": [],
+  "failed_work_tasks": [],
+  "local_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c\\independent-cli-acceptance-b816ce05486245ec930e90b0cee5a7b4.json",
+  "coding_policy": {
+    "native_max_turns": 64,
+    "native_max_repairs": 6,
+    "native_max_workers": 1,
+    "max_coding_seconds": 1800
+  },
+  "jarvis_source_sha256_at_start": "1aa0cdf7ec94cb29971af224e4d8ad7889c753a4bcc5d389a9c22b4ed093d685",
+  "configuration_changed_during_trial": false,
+  "generation_to_shutdown_seconds": 393.15,
+  "native_source_producers": {
+    "test_calculator.py": {
+      "native_run": "373b890d910d435da4d6d8e9cfc4f919",
+      "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c\\.jarvis-runtime\\native-code\\373b890d910d435da4d6d8e9cfc4f919\\file-events.jsonl",
+      "sha256": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b",
+      "stage": "applied"
+    },
+    "calculator.py": {
+      "native_run": "373b890d910d435da4d6d8e9cfc4f919",
+      "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c\\.jarvis-runtime\\native-code\\373b890d910d435da4d6d8e9cfc4f919\\file-events.jsonl",
+      "sha256": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+      "stage": "applied"
+    },
+    "main.py": {
+      "native_run": "373b890d910d435da4d6d8e9cfc4f919",
+      "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c\\.jarvis-runtime\\native-code\\373b890d910d435da4d6d8e9cfc4f919\\file-events.jsonl",
+      "sha256": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+      "stage": "applied"
+    },
+    "README.md": {
+      "native_run": "373b890d910d435da4d6d8e9cfc4f919",
+      "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c\\.jarvis-runtime\\native-code\\373b890d910d435da4d6d8e9cfc4f919\\file-events.jsonl",
+      "sha256": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+      "stage": "applied"
+    }
+  },
+  "limitations": [
+    "Jarvis product source changed during generation. Functional application acceptance passes; this is not source-stable release verification of every latest recovery change.",
+    "Project intelligence static verification is not substituted for runtime probes.",
+    "No GUI, cross-project reuse, performance speedup, physical voice or full release acceptance is established."
+  ]
+}

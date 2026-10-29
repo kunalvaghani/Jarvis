@@ -22,7 +22,7 @@
     "timeout_seconds": 90,
     "allow_sensitive_data": false,
     "live_tests_enabled": false,
-    "safety_margin": 0.1,
+    "safety_margin": 0.2,
     "max_output_tokens": 1536,
     "metadata_ttl_seconds": 300,
     "routing": "auto"
@@ -36,7 +36,8 @@
     "reserve_mb": 512,
     "wait_seconds": 120,
     "warm_seconds": 1800,
-    "cpu_threads": 12
+    "cpu_threads": 12,
+    "context_limit": 8192
   },
   "realtime": {
     "enabled": true,
@@ -1359,6 +1360,21 @@
     "enabled": true,
     "cycle_hz": 4
   },
+  "pcide": {
+    "enabled": true,
+    "online_research": true,
+    "visual_qa": true,
+    "max_design_iterations": 2,
+    "cache_days": 7,
+    "research_budget": {
+      "queries": 4,
+      "repositories": 6,
+      "files": 20,
+      "bytes": 3000000,
+      "seconds": 90,
+      "concurrency": 3
+    }
+  },
   "project_intelligence": {
     "enabled": true,
     "default_workspace": null,
@@ -1540,8 +1556,8 @@
       "D:\\Ollama\\models",
       "D:\\OllamaModels"
     ],
-    "native_max_turns": 40,
-    "native_max_repairs": 3,
+    "native_max_turns": 64,
+    "native_max_repairs": 6,
     "native_max_workers": 2,
     "native_predict": 4000
   },
@@ -1679,5 +1695,42 @@
       "runtime_overhead": 1,
       "verification_cost": 1
     }
+  },
+  "gemini": {
+    "enabled": true,
+    "model": "gemini-3.8-flash",
+    "api_project_id": "gen-lang-client-0611339880",
+    "quota_project_id": "gen-lang-client-0611339880",
+    "quota_model_id": "gemini-3.8-flash",
+    "quota_verified": true,
+    "key_project_confirmed": true,
+    "billing_disabled_confirmed": true,
+    "free_tier_confirmed": true,
+    "account_plan": "free",
+    "free_only": true,
+    "quota_key_sha256": "665a31d3c1d32d4fa626a6aa6322f5697a3d4ef755fee6be460e229bb2082185",
+    "max_minute_requests": 5,
+    "max_daily_requests": 20,
+    "max_minute_input_tokens": 250000,
+    "max_minute_tokens": null,
+    "max_daily_tokens": null,
+    "safety_margin": 0.2,
+    "daily_reset": "America/Los_Angeles",
+    "max_concurrent_calls": 1,
+    "max_task_calls": 5,
+    "max_output_tokens": 8192,
+    "timeout_seconds": 120,
+    "thinking": "low",
+    "quota_source": "user_confirmed_model_project_dashboard_2026_10_29",
+    "api_protocol": "generate_content"
+  },
+  "coding_cloud": {
+    "enabled": true,
+    "dry_run_verified": false,
+    "preference": "auto",
+    "max_task_cloud_calls": 8,
+    "groq_max_output_tokens": 1536,
+    "gemini_max_task_calls": 3,
+    "repair_escalation_after": 2
   }
 }

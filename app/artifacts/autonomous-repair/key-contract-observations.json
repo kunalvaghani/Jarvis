@@ -1,0 +1,653 @@
+{
+  "date": "2026-10-28T21:05:25.685620+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "Both single-indexed-binding strategies have typed contracts. Per-key edits require model-selected keys from one observed route group and a model-selected source-grounded value variant; the old fallback remains unchanged. Uniform edits and mixed route selections cannot encode the chosen intent. All selector choices and application bodies remain model-supplied; no calculator keys or algorithm are supplied by the controller. Both sealed contexts retain mandatory guidance and frozen-bound failure facts. Existing source, syntax, candidate, budget, frozen and uncertain-action guards remain.",
+  "target": {
+    "tests": 8,
+    "seconds": 26.764,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-key-contract-target.log"
+  },
+  "final_scalar_and_contract_guard": {
+    "tests": 2,
+    "seconds": 2.807,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-key-contract-target-final.log"
+  },
+  "affected_regression": {
+    "tests": 218,
+    "seconds": 269.096,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-key-contract-regression.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 22.73,
+    "log": ".jarvis-runtime/repair-key-contract-audit.log"
+  },
+  "typed_methods_historical_checkpoint": {
+    "tests": 215,
+    "seconds": 254.021,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-owned-methods-regression.log",
+    "scope": "Before failure-fact context wiring; current-source verification is216 above, not this historical215 result."
+  },
+  "launcher_log": ".jarvis-runtime/repair-key-contract-launcher.log",
+  "exact_qwen_replay": "artifacts/autonomous-repair/key-contract-gui-replay.json",
+  "preceding_trial": {
+    "id": "d92acf8d4e344e3babb799e2b210fdd5",
+    "task": "caed86038e3947d4b7708d0671965855",
+    "owner_session": 33660,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 564.07,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "a1d92cc1ef1d40988f6940b1c250e50c",
+      "status": "failed",
+      "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 3,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 2
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d92acf8d4e344e3babb799e2b210fdd5\\.jarvis-runtime\\native-code\\a1d92cc1ef1d40988f6940b1c250e50c\\validation-b70b45d2521948b79c03ca17596b0f61.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d92acf8d4e344e3babb799e2b210fdd5\\.jarvis-runtime\\native-code\\a1d92cc1ef1d40988f6940b1c250e50c\\candidate-checks\\a843a83761c74572a27215c6402bc569\\validation-2965584c8ea145a78aafb4c0b3caafc1.json",
+          "lost_previously_passing_cases": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+            ]
+          },
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+            ]
+          },
+          "verified_case_progress": false
+        }
+      ],
+      "binding_renderings": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "changes": [
+            {
+              "old_string": "            self.buttons[text] = [btn]",
+              "proposed_sha256": "373eaf08030cc7e74c0062152164f27977ca69cf1903d4875882ba5437ba6fa7",
+              "rendered_sha256": "f37abdfcb78f767e5bb81b6160dbbff454e4fb72cde0815c3c2e957e866db4bb",
+              "rendered_new_string": "            self.buttons[text] = btn",
+              "ast_unchanged": true
+            }
+          ]
+        }
+      ],
+      "bounded_interface_corrections": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 1,
+          "error": "Candidate would regress previously passing frozen cases: {\"test_gui_behavior.py\": [\"test_gui_behavior.TestCalculatorGUI.test_button_click_clear\"]}. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d92acf8d4e344e3babb799e2b210fdd5\\.jarvis-runtime\\native-code\\a1d92cc1ef1d40988f6940b1c250e50c\\candidate-checks\\a843a83761c74572a27215c6402bc569\\validation-2965584c8ea145a78aafb4c0b3caafc1.json",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        },
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 2,
+          "error": "Local inference did not produce a complete proposal; no tool action executed. The model reached its answer limit. Ask a shorter question.",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        }
+      ],
+      "bounded_stage_contexts": null,
+      "diagnostic_evidence_handoffs": [
+        {
+          "stage": "diagnosis",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        },
+        {
+          "stage": "replacement",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        },
+        {
+          "stage": "replacement",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        },
+        {
+          "stage": "replacement",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    },
+    "all_eight_external_hashes_match": true
+  },
+  "preserved_cli_integrity": {
+    "prior_status": "PASS",
+    "new_functional_run": false,
+    "all_six_original_hashes_match": true
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "2b8b91eaf47fb8d6f5c523595995b0ac7a926d9e24f119fce7624e28fafcd9e6",
+    "jarvis/repair_contract.py": "44fa13f449225f96b57e416643f1dbf6fa77562f64d8267842319676e18b677a",
+    "jarvis/coding_files.py": "8ab0fcb06d87b3e25f53b8d0e7f48748f8ebe005a9476ca452594c012a4d3a31",
+    "tests/test_owned_repair.py": "4db53d6483a11e9a78a784fbee4ecf6af743cb9512a4eba9107718f70deec34a",
+    "tests/test_key_specific_repair.py": "fab84f0b6ce1140ac4623fb5ce8e766676899320742e3cc1cb49fe8d4ab4c248"
+  },
+  "configuration_sha256": "d0fa92f27b68bdef99456fbcdc86bbf674075a1bc5b0c9d21412181f50f1cf4f",
+  "intentional_main_stop_marker_present": true,
+  "production": {
+    "id": "22abb681f2e542d6a0405a35ecc9d8b1",
+    "task": "932c0a7cdf0846d6982f3750e8a4bf8f",
+    "owner_session": 58371,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 903.728,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "1bb352eac8f84adb96dfc92f42a81ecf",
+      "status": "failed",
+      "error": "Executable checks still fail after 12 tool turns without a confirmed source save or changed diagnostics. Stop the stalled repair for root-cause analysis; source and frozen tests retained. No action replayed.",
+      "progress": {
+        "validation_signature": "197b20f6fa96d2af23dfde1cd262d71cbfaf046625a4471a059d843ac08e1d94",
+        "identical_failed_checks": 1,
+        "idle_turns": 12,
+        "guarded_replacement_attempts": 1,
+        "failure_history_versions": 2,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 3
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": true,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "8dfc317dcc868bca9d02f3f256bb9de748c0d2bd107d3eefbfc0ae71304b1424",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\validation-be8ec41c56a34fcfaa2940bd5084d3e3.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\candidate-checks\\d5249a600a2e4b6b8443a7bfc893ec19\\validation-e7b3a1f75ea24b56897de3b2249ea3b6.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_addition"
+            ]
+          },
+          "new_runtime_errors": {},
+          "verified_case_progress": true
+        },
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "eb4caf01dba818d8b31013897c5bdc3a649df35da2c261f4657b8c0f118f7515",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\validation-a0137d9537754ad481518a634af465ba.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\candidate-checks\\4740d5aae80040e98fe3853263a4fbe2\\validation-c531449058dc465eabc30c5474855f16.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {},
+          "verified_case_progress": false
+        }
+      ],
+      "binding_renderings": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "changes": [
+            {
+              "model_selected_key_sha256": [
+                "cc11310c456c3690d5a74c23aa31cc25b4e74cdae146c71e54ad9dbc1d109fde"
+              ],
+              "model_value_expression_sha256": "2dbdc96b9117837a4826ec26eea5db7c01cca81700b801bec2de1a98d41d6fee",
+              "original_fallback_retained": true,
+              "controller_supplied_selector_choices": false,
+              "controller_supplied_callback_bodies": false
+            },
+            {
+              "old_string": "            self.buttons[text] = [btn]",
+              "proposed_sha256": "16427a1df0612225d36b8bb7e48d2f0eab8db5c6192fe257a35ddb618bf669a9",
+              "rendered_sha256": "dd43ca6def5850286ad016c179261241c09ce51c8ab9f23a7fb8961793ba8870",
+              "rendered_new_string": "            self.buttons[text] = btn if text in ('2',) else [btn]",
+              "ast_unchanged": true
+            }
+          ]
+        }
+      ],
+      "bounded_interface_corrections": null,
+      "bounded_stage_contexts": [
+        {
+          "stage": "key_specific_values",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "original_system_characters": 11837,
+          "actual_system_characters": 6743,
+          "mandatory_guidance_retained": true,
+          "unrelated_reference_design_context_omitted": true
+        }
+      ],
+      "diagnostic_evidence_handoffs": [
+        {
+          "stage": "diagnosis",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        },
+        {
+          "stage": "replacement",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "observations": [
+            {
+              "kind": "current_failed_check",
+              "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            },
+            {
+              "kind": "historical_counterexample",
+              "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+              "checks": [
+                {
+                  "test_file": "test_gui_behavior.py",
+                  "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+                  "failed_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+                    "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+                  ],
+                  "error_cases": [
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+                    "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+                    "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+                  ],
+                  "runtime_failure_facts": [
+                    {
+                      "test_method": "test_button_click_addition",
+                      "exception_type": "TypeError",
+                      "frames": [
+                        {
+                          "module_path": "tkinter/__init__.py",
+                          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                          "line": 1681,
+                          "function": "cget",
+                          "operands": {
+                            "key": {
+                              "type": "int",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ],
+                      "partial": true
+                    }
+                  ]
+                }
+              ],
+              "untrusted_diagnostic_data": true,
+              "current_check_credit": false
+            }
+          ]
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    },
+    "all_eight_external_hashes_match": true
+  }
+}

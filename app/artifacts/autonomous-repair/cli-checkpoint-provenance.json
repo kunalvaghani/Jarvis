@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-25T21:17:35.343307+00:00",
+  "source_campaign": "24528f2a0aa44a42bda8e75d1c3b2d7f",
+  "source_validation": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\24528f2a0aa44a42bda8e75d1c3b2d7f\\.jarvis-runtime\\native-code\\7f81077aaa544d95bd6b23a53a9764e6\\validation-ebfa27cbf0d346258271fe3c7b3e7f71.json",
+  "source_validation_sha256": "5a622d125ec435174cb9855f182571cd32e2eabe407a8048757061d2fbe7b4be",
+  "source_check_workspace": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\24528f2a0aa44a42bda8e75d1c3b2d7f\\.jarvis-runtime\\native-code\\7f81077aaa544d95bd6b23a53a9764e6\\check-workspace-1792961888213108800",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\cli-checkpoint-5dcbeacdd20f4754b774b4af44535a17",
+  "passing_test_methods": 11,
+  "total_test_methods": 13,
+  "validation_passed": false,
+  "scope": "Exact complete Jarvis validation snapshot selected by highest count of passing original test methods, newest on ties. No mixing of snapshots or supervisor implementation edits. Original frozen-test hashes verified. This checkpoint still fails and is not promotion or acceptance. Raw later regressions remain preserved.",
+  "files": {
+    "PROJECT.md": {
+      "sha256": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+      "bytes": 330
+    },
+    "README.md": {
+      "sha256": "aa1dfe836392908265cdb1e283a0e7eab9198f07e53dadda47dc88233f4b75cd",
+      "bytes": 1502
+    },
+    "REQUIREMENTS.md": {
+      "sha256": "6d57320ac423e7f5f19342b59f70e5ee7ed23b10d133980e0d8e50b729d511da",
+      "bytes": 1119
+    },
+    "calculator.py": {
+      "sha256": "5cd4018ed5f1df645d13f81fd0ae449cfaffeba01c09bef475f8ab198a9d253e",
+      "bytes": 609
+    },
+    "main.py": {
+      "sha256": "35338a9e6e0291e04f626a2428664a6c35890073de6dcbb9907a738dc1958bea",
+      "bytes": 1412
+    },
+    "test_calculator.py": {
+      "sha256": "49146e6ddf92b57c23962f3e1d69044afb728300c2b37e1ae840bf02ba7972e8",
+      "bytes": 1261
+    },
+    "test_main.py": {
+      "sha256": "33490daa6d2796414bf2dff83eca635e64b67935ce01255c2128033d9fb04752",
+      "bytes": 1603
+    }
+  }
+}

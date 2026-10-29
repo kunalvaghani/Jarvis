@@ -70,12 +70,22 @@ class Processes:
         return result
 
     def _finish(self, key, state, text=''):
-        row=self.sessions.pop(key);p=row['process'];row['job'].close()
-        if p.poll() is None:
-            p.kill();p.wait(timeout=5)
-        row['activity'].finish(state,output=text,exit_code=p.poll())
-        if p.stdin:p.stdin.close()
-        row['output'].close()
+        row=self.sessions.pop(key);p=row['process']
+        # Windows' Python launcher can leave a child holding inherited logs
+        # briefly after job termination. Observe only this owned process tree
+        # before closing the ownership fence and wait for its handles to drain.
+        import psutil
+        try:children=psutil.Process(p.pid).children(recursive=True)
+        except (psutil.NoSuchProcess,psutil.AccessDenied):children=[]
+        try:
+            row['job'].close()
+            if p.poll() is None:p.kill()
+            p.wait(timeout=5)
+            if children:psutil.wait_procs(children,timeout=2)
+        finally:
+            if p.stdin:p.stdin.close()
+            row['output'].close()
+            row['activity'].finish(state,output=text,exit_code=p.poll())
 
     def close(self):
         for key in list(self.sessions): self._finish(key,'stopped')

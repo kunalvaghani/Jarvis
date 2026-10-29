@@ -143,10 +143,11 @@ def execute(tool, args, *, context=None):
             if re.search(r'\b(?:convert|rewrite|replace)\b.{0,60}\b'+re.escape(path.name)+r'\b',goal,re.I) and re.search(r'\b(?:unittest|test cases|test assertions|test harness|test suite)\b',goal,re.I):
                 interface_goal+=' rewrite the explicitly selected test harness'
         if path.exists(): check_python_interfaces(path.read_text(encoding='utf-8'), content, interface_goal)
-        from .codex_validation import desktop_gui_target
+        from .codex_validation import desktop_gui_target,check_gui_source
         if tool == 'Write' and desktop_gui_target(root,path,goal,plan):
-            from .gui_contract import check
-            check(content, goal)
+            check_gui_source(root,path,content,goal,plan)
+    candidate_check=getattr(context,'candidate_check',None) if context is not None else None
+    if candidate_check is not None:candidate_check(path.relative_to(root).as_posix(),content)
     signature = hashlib.sha256(json.dumps({'tool':tool,'path':str(path),'args':args},sort_keys=True).encode()).hexdigest()
     events = run/'file-events.jsonl'
     if events.exists() and any(json.loads(line).get('signature') == signature for line in events.read_text(encoding='utf-8').splitlines()):

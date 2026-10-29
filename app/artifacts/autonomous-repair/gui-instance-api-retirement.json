@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-26T02:50:41.823934+00:00",
+  "campaign": "e8048906bcff4068abde7ba4e1d113d0",
+  "native": "ad1f8b2dda2842f79188cd70e9c70ab1",
+  "owner_exited": true,
+  "finished_at": "2026-10-26T02:47:26.320943+00:00",
+  "seconds": 924.974,
+  "remaining_nonterminal": [],
+  "source_after_cancel": {
+    "calculator_logic.py": "c3040eb5bd5afaa8c84e278d1c7d9d03acb220eece15d9fba0c872c719334ca7",
+    "test_calculator.py": "02c169bf507a6332f4eed88152648b0e9aa48d16d48fb2c5d282973ae4cccdf2",
+    "test_gui_behavior.py": "d67ac5934fcf2de6f50be74a911f60c82d5047590273c9fe77bb7dce47c33eee"
+  },
+  "frozen_tests": {
+    "test_calculator.py": "02c169bf507a6332f4eed88152648b0e9aa48d16d48fb2c5d282973ae4cccdf2",
+    "test_gui_behavior.py": "d67ac5934fcf2de6f50be74a911f60c82d5047590273c9fe77bb7dce47c33eee"
+  },
+  "pre_cancel_frozen_hashes_unchanged": true,
+  "reason": "Frozen test invoked nonexistent installed tkinter.Event.generate. Preserve application/test source, stop obsolete worker after verified root fix; no framework monkeypatch or test rewrite.",
+  "regression": {
+    "tests": 149,
+    "passed": 149,
+    "seconds": 166.949,
+    "log": ".jarvis-runtime/repair-gui-instance-api-final.log"
+  },
+  "known_fault_corpus": "artifacts/autonomous-repair/gui-oracle-fault-corpus.json",
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "validated_source_sha256": {
+    "jarvis/codex_validation.py": "8b467f602129a356ad75d7dc35428f479ba3e0949dbc8807062e07785e028c09",
+    "jarvis/native_coding.py": "da5671349c047c11e37ee1435845f371dd48ff8d152414c05e6a337b2f4e8bc2",
+    "jarvis/gui_contract.py": "5d16d1e970ba96ba5c60aad2af05214afc3c6f7683d7f729ddd7cd70a07c8170",
+    "jarvis/codex_files.py": "fd0e3075b3effd5c7c33feaea39cbdfb757b8b87fd41737e02716f581724cff3"
+  },
+  "independent_gui_acceptance": "OPEN",
+  "physical_desktop": "BLOCKED: desktop tool kernel asset initialization failure"
+}

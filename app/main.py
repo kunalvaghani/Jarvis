@@ -747,14 +747,41 @@ class App:
         engine.activate()
         engine.feed(self.preview.get(), final=True)
 
-    def ask_question(self):
+    def take_input(self):
+        """The typed command, cleared from the box once sent and kept for Up/Down recall."""
         text = self.preview.get().strip()
+        if text:
+            self.preview.delete(0, 'end')
+            history = getattr(self, 'input_history', None)
+            history = history if isinstance(history, list) else []
+            if not history or history[-1] != text:
+                history.append(text)
+            self.input_history, self.input_recall = history[-50:], None
+        return text
+
+    def recall_input(self, step):
+        history = getattr(self, 'input_history', None)
+        if not isinstance(history, list) or not history:
+            return 'break'
+        index = getattr(self, 'input_recall', None)
+        index = len(history) - 1 if index is None and step < 0 else (index or 0) + step if index is not None else None
+        if index is None or index >= len(history):
+            self.input_recall = None
+            self.preview.delete(0, 'end')
+            return 'break'
+        self.input_recall = max(0, index)
+        self.preview.delete(0, 'end')
+        self.preview.insert(0, history[self.input_recall])
+        return 'break'
+
+    def ask_question(self):
+        text = App.take_input(self)
         if text:
             self.actions.submit(Command("ask", text))
 
     def send_input(self):
         """Enter uses the same command/question routing as spoken instructions."""
-        text = self.preview.get().strip()
+        text = App.take_input(self)
         if text:
             from jarvis.audio import command_text
             engine = Engine(self.actions.submit, self.report)
@@ -762,12 +789,12 @@ class App:
             engine.feed(command_text(text), final=True, raw=text)
 
     def ask_screen(self):
-        text = self.preview.get().strip() or "What is visible in this window?"
+        text = App.take_input(self) or "What is visible in this window?"
         self.report("question", text)
         self.actions.knowledge.submit(text, screen=True)
 
     def do_task(self):
-        text = self.preview.get().strip()
+        text = App.take_input(self)
         if text:
             self.actions.submit(Command("task", text))
 

@@ -328,7 +328,8 @@ def draft_content(path):
 
 
 def check_content(path, content):
-    if not isinstance(content, str) or not content.strip() or len(content) > 20000 or "\x00" in content:
+    empty_marker = Path(path).name.casefold() in {'requirements.txt','__init__.py'} and content == ''
+    if not isinstance(content, str) or (not content.strip() and not empty_marker) or len(content) > 20000 or "\x00" in content:
         raise ValueError("The coding model returned empty or oversized file content.")
     try:
         content.encode('utf-8')
@@ -417,6 +418,8 @@ class Coder:
         self.actions, self.client = actions, client
 
     def run(self, project, goal, cancelled=lambda: False, selected=False):
+        from .campaign_pause import assert_allowed
+        assert_allowed(project=project,run=self.actions.base)
         from .engineering_judgment import engine_for
         engineering = engine_for(self.actions)
         if engineering:

@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Read-only qualification of source-derived generic repair contract against exact retained planner failure. No model plan selected, source replacement authored or app code changed.",
+  "contract": {
+    "file_path": "ui_builder.py",
+    "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+    "test_sha256": {
+      "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+    },
+    "members": [
+      "buttons"
+    ],
+    "obligations": [
+      {
+        "test_file": "test_gui_behavior.py",
+        "receiver": "self.buttons",
+        "method": "invoke",
+        "accesses": [
+          {
+            "key": "2",
+            "subscripts_after_key": 0,
+            "line": 19,
+            "call": "self.buttons['2'].invoke()"
+          },
+          {
+            "key": "+",
+            "subscripts_after_key": 1,
+            "line": 20,
+            "call": "self.buttons['+'][0].invoke()"
+          },
+          {
+            "key": "3",
+            "subscripts_after_key": 1,
+            "line": 21,
+            "call": "self.buttons['3'][0].invoke()"
+          },
+          {
+            "key": "C",
+            "subscripts_after_key": 1,
+            "line": 27,
+            "call": "self.buttons['C'][0].invoke()"
+          },
+          {
+            "key": "1",
+            "subscripts_after_key": 1,
+            "line": 44,
+            "call": "self.buttons['1'][0].invoke()"
+          },
+          {
+            "key": "/",
+            "subscripts_after_key": 1,
+            "line": 45,
+            "call": "self.buttons['/'][0].invoke()"
+          },
+          {
+            "key": "0",
+            "subscripts_after_key": 1,
+            "line": 46,
+            "call": "self.buttons['0'][0].invoke()"
+          }
+        ]
+      }
+    ],
+    "strategies": [
+      "key_specific_values",
+      "owned_compatible_interface",
+      "unresolved"
+    ]
+  },
+  "contradictory_retained_plan_rejected": true,
+  "eligible_binding_lines": [
+    42
+  ],
+  "handler_method_spans_available": true,
+  "statement_count": 32,
+  "span_characters": 5917,
+  "all_eight_source_hashes_unchanged": true
+}

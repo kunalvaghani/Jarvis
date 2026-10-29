@@ -400,7 +400,16 @@
     "jarvis.awareness_policy",
     "jarvis.project_model",
     "jarvis.project_requirements",
-    "jarvis.project_intel"
+    "jarvis.project_intel",
+    "jarvis.code_memory",
+    "jarvis.code_intel",
+    "jarvis.design_intel",
+    "jarvis.pcide",
+    "jarvis.gemini_adapter",
+    "jarvis.coding_cloud_policy",
+    "jarvis.coding_cloud_context",
+    "jarvis.coding_cloud_routes",
+    "dateutil.tz"
   ],
   "brain_imports": [
     "requests",
@@ -982,10 +991,10 @@
     "endpoint": "https://api.groq.com/openai/v1",
     "credentials": "GROQ_API_KEY or ignored secrets/groq.json; never in tracked config",
     "new_dependencies": [],
-    "runtime": "Existing question-only worker; background bounded metadata refresh and per-call cancellation/deadline monitor; no new GPU model or persistent service",
+    "runtime": "Existing public question gateway plus explicitly approved coding/planning inference through the same native worker;bounded metadata/deadline threads;no persistent new service.",
     "store": ".jarvis-runtime/cloud/{quota.sqlite3,performance.sqlite3,policy.json,last-route.json}",
     "privacy": "Self-contained public questions only; cloud payload excludes private profile/situation enrichment. Context, screenshots, account/PC operations and ambiguity stay local.",
-    "quota": "SQLite atomic reservations, conservative UTF-8 byte estimate plus output allowance, 10 percent margin, rolling 24h/60s limits, provider daily-request and minute-token feedback, no paid route or uncertain replay",
+    "quota": "Existing SQLite atomic reservations shared by public questions and coding;20percent margin, rolling daily/60-second windows, actual metering and stricter provider headers.",
     "verification": "Offline mocks and loopback fake provider only; real Groq inference requires separate explicit authorization and remains untested."
   },
   "optional_deerflow": {
@@ -1195,5 +1204,42 @@
     "state": "Existing TaskState checkpoints and ProjectStore; no new database",
     "health": "Configuration validation and bounded source/skill checks",
     "rollback": "Disable engineering_judgment.enabled; independent permission and privacy policies remain enforced"
+  },
+  "parallel_code_intelligence": {
+    "modules": [
+      "jarvis.code_memory",
+      "jarvis.code_intel",
+      "jarvis.design_intel",
+      "jarvis.pcide"
+    ],
+    "storage": [
+      ".jarvis-runtime/code-memory/library.sqlite3",
+      ".jarvis-runtime/code-intel.sqlite3",
+      "vault: Jarvis Code Library/"
+    ],
+    "execution": "Online research is an ordinary durable task (code_research) on the queue's research lane; coding uses the existing coder; no model calls",
+    "health": "Research lane thread is part of TaskIngress.healthy and repaired with it",
+    "external_action_replay": false,
+    "safety": "Retrieved code is untrusted: license gate (permissive + license file), static scan, install scripts never run, project dependency policy; project-scoped memory stays private unless the user saves it",
+    "rollback": "pcide.enabled=false restores the previous synchronous repository preparation; preserve both SQLite files",
+    "dependencies": "Python standard library; existing requests session, Playwright/Chromium and Pillow"
+  },
+  "cloud_coding": {
+    "module": "jarvis.hybrid_inference",
+    "providers": {
+      "groq": "qwen/qwen3.8-27b",
+      "gemini": "gemini-3.8-flash"
+    },
+    "pipeline": "Existing durable workloads and native worker schema/file/candidate/validation guards; no separate executor.",
+    "policy": "Explicit trusted synthetic or approved-project provenance, global offline override, free-only accounts and persistent atomic quota.",
+    "gemini_quota": "User-confirmed project gen-lang-client-0611339880:5RPM/250000 inputTPM/20RPD;20percent headroom ->4/200000/16;Pacific midnight;one concurrent;three calls per task;no daily token limit.",
+    "gemini_live": "BLOCKED pending local GEMINI_API_KEY and confirmed same-project key fingerprint; free-only billing/model/project attestation recorded2026-10-29.",
+    "dry_run": "Must pass network-denied provider and controller simulations before dry_run_verified is enabled.",
+    "dependencies": [
+      "requests (existing)",
+      "python-dateutil==2.9.0.post0 (already installed, declared for Windows Pacific timezone fallback)"
+    ],
+    "quota_store": "Existing .jarvis-runtime/cloud/quota.sqlite3 for Groq;Gemini existing ledger mechanism scoped by SHA256(project/model) under .jarvis-runtime/cloud/gemini/",
+    "groq_baseline": "Published provisional upper bound30RPM/1000RPD/8000TPM/200000TPD;20percent margin, stricter provider feedback wins;actual organization limits not fetched."
   }
 }

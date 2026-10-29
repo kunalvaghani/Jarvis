@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-28T08:24:34.366333+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "focused_regression": {
+    "tests": 4,
+    "seconds": 1.551,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-independent-feedback-target-final.log"
+  },
+  "native_audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 18.63,
+    "log": ".jarvis-runtime/repair-independent-feedback-audit.log"
+  },
+  "affected_regression": {
+    "tests": 194,
+    "seconds": 224.435,
+    "result": "OK"
+  },
+  "affected_regression_log": ".jarvis-runtime/repair-independent-feedback-regression.log",
+  "readiness": "DockerEngineUnavailable only; required local models/LocalGithub available.",
+  "scope": "Explicit failed report identities in supervisor-owned acceptance-observations directory. All declared source and frozen hashes bound; fresh byte checks at each inference. Bounded failure details only, no raw output/traces/success credit/action instructions. Context expires after source drift and does not grant manual read permission. Original goals, checks, write scopes and budgets unchanged.",
+  "real_GUI_replay": "artifacts/autonomous-repair/independent-feedback-gui-replay.json",
+  "diagnosis_pair": "artifacts/autonomous-repair/two-case-diagnosis-comparison.json",
+  "source_sha256": {
+    "jarvis/acceptance_observations.py": "8b5486d01a1878280ab6887fb6b08dc237ef9a6483a47f31e2b990c80e80b6de",
+    "jarvis/native_coding.py": "a85ab75ddcf415a6d3ef7062b454e9e8ed337dd59b44778d77cfaace5b96104c",
+    "tests/test_acceptance_observations.py": "3e69b1e6637e351fa358e0b4210603acbaca950a47415b5b0f7f6f628224f271",
+    "scripts/verification/verify_autonomous_repair.py": "9c80101e09887778882ae4514ec4826cc102d4624cc2cef7223192eec8cae659"
+  },
+  "production_successor": {
+    "campaign": "7a8e8255564149d49dfb99a713b22354",
+    "task": "947a2e3db653407da645eda29c38b753",
+    "owner_session": 67896,
+    "status": "FINISHED",
+    "finished_at": "2026-10-28T08:23:53.557096+00:00",
+    "record_to_shutdown_seconds": 805.035,
+    "raw_campaign_result": "FAIL",
+    "all_eight_external_hashes_match": true,
+    "jarvis_source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "native": {
+      "status": "failed",
+      "error": "Bounded planned replacement was rejected; stop for root-cause analysis. No generic action fallback or replay. Batch changes must differ and use at most1200 replacement characters each.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 14,
+        "guarded_replacement_attempts": 1,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 2
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "053abf428ce470451f73e0757be3ce5fb276c83885f37e4b48f35631143cf600",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\7a8e8255564149d49dfb99a713b22354\\.jarvis-runtime\\native-code\\96801ccf7bf64a509ab5aa91af7edac2\\validation-bee136ef6eb74a1db0ce8043335c70ec.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\7a8e8255564149d49dfb99a713b22354\\.jarvis-runtime\\native-code\\96801ccf7bf64a509ab5aa91af7edac2\\candidate-checks\\1e9b29a040224e76807ca91babf8c784\\validation-cfc7babbbc6249b390e505b740a89954.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {},
+          "verified_case_progress": false
+        }
+      ],
+      "require_repair_progress": true,
+      "imported_independent_observations": [
+        {
+          "accepted": true,
+          "path": "gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+          "report_sha256": "d4bb50848b157a643e674bc43c3fcc69eb2e20bd62cfe294b80913d16f1fe82d",
+          "failed_observations": 7,
+          "scope": "Read-only diagnostic data; no current check, success credit or permissions."
+        }
+      ],
+      "bounded_recovery_rejection": {
+        "stage": "planned replacement",
+        "error": "Batch changes must differ and use at most1200 replacement characters each.",
+        "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "generic_fallback_allowed": false
+      },
+      "id": "96801ccf7bf64a509ab5aa91af7edac2",
+      "outcomes": [
+        {
+          "path": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "test_count": 6,
+          "successful": false,
+          "skipped": 0,
+          "passed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ],
+          "partial": false,
+          "failed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        },
+        {
+          "path": "test_calculator.py",
+          "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_count": 6,
+          "successful": true,
+          "skipped": 0,
+          "passed_ids": [
+            "test_calculator.TestCalculator.test_addition",
+            "test_calculator.TestCalculator.test_clear",
+            "test_calculator.TestCalculator.test_division",
+            "test_calculator.TestCalculator.test_division_by_zero",
+            "test_calculator.TestCalculator.test_multiplication",
+            "test_calculator.TestCalculator.test_subtraction"
+          ],
+          "partial": false,
+          "failed_ids": [],
+          "error_ids": []
+        }
+      ],
+      "all_six_protected_worker_hashes_match": true
+    }
+  }
+}

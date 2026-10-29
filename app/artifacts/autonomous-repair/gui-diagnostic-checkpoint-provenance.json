@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-26T04:44:46.600449+00:00",
+  "source_campaign": "aca25d424c7b4cbe91c6585d3ff9e453",
+  "source_native": "eb5b5e76c80140a8abfdd2da6af40ba9",
+  "source_snapshot": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\aca25d424c7b4cbe91c6585d3ff9e453\\.jarvis-runtime\\native-code\\eb5b5e76c80140a8abfdd2da6af40ba9\\check-workspace-1792988257859394600",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-diagnostic-checkpoint-61ac8fc4a1b947edbece3859530c0a1b",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d"
+  },
+  "copied_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d"
+  },
+  "byte_identical": true,
+  "protected_files": [
+    "calculator_logic.py",
+    "main.py",
+    "test_calculator.py",
+    "test_gui_behavior.py",
+    "PROJECT.md",
+    "REQUIREMENTS.md"
+  ],
+  "protected_hashes_match_previous": true,
+  "snapshot_selection": "First complete runtime checkpoint with original controls exposed as buttons; excludes later non-progressing handler edits, no mixed files or supervisor application code.",
+  "runtime_status": "Core6/6PASS; GUI2errors4failures. Partial, not acceptance.",
+  "trial_finished_at": "2026-10-26T04:29:45.374672+00:00",
+  "trial_seconds": 1192.958,
+  "source_changed_during_trial": false,
+  "owner_exited": true,
+  "cancellation_needed": false,
+  "native_error": "The same executable-check failures recurred four times without diagnostic progress. Stop for root-cause analysis; raw checks, source and frozen tests retained. No action replayed.",
+  "native_progress": {
+    "validation_signature": "7847b2f9fdcc44f462795dd2b198ff546ebc82cb97b26eea875bdc4f47908a33",
+    "identical_failed_checks": 4,
+    "idle_turns": 5
+  },
+  "actual_writable_grammar_observed": {
+    "Write": [
+      "README.md",
+      "ui_builder.py"
+    ],
+    "Edit": [
+      "README.md",
+      "ui_builder.py"
+    ]
+  },
+  "root_cause": "Repeated ten-line slice35 followed by forcedEdit omitted handler/state context; early failures reduced to last suite error. New bounded complementary views and multiple failure excerpts under verification.",
+  "next_action": "Production UI-only repair with validated diagnosis stage and identical protected inputs; independent GUI acceptance remains open.",
+  "regression": {
+    "tests": 158,
+    "passed": 158,
+    "seconds": 155.726,
+    "log": ".jarvis-runtime/repair-diagnostic-windows-final.log",
+    "targeted": {
+      "tests": 3,
+      "passed": 3,
+      "seconds": 1.272,
+      "log": ".jarvis-runtime/repair-diagnostic-windows-target2.log",
+      "counts_overlap": true
+    }
+  },
+  "validated_source_sha256": {
+    "jarvis/source_observation.py": "7914c4dd86e9ef6f6712b829b9ff1a1e18c11499c8613354123dcb5cf6b5ccc3",
+    "jarvis/native_coding.py": "1bfd94c2918c4b9f67e2b39c9e7706811d86987d9b55814adf1e925f83ec2402",
+    "jarvis/coding_files.py": "3b021fa300a845751cf8f3ca48a2a87e24f1f936e67c05a46ec751df8e1a59c8",
+    "jarvis/codex_validation.py": "901c94f3517c53ae360de50642731d27f0f5c3af47347d4c85726b080b3decf7",
+    "jarvis/gui_contract.py": "5d16d1e970ba96ba5c60aad2af05214afc3c6f7683d7f729ddd7cd70a07c8170",
+    "jarvis/codex_files.py": "fd0e3075b3effd5c7c33feaea39cbdfb757b8b87fd41737e02716f581724cff3"
+  },
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  }
+}

@@ -1,0 +1,384 @@
+{
+  "date": "2026-10-27",
+  "status": "EXPERIMENTAL_DISABLED",
+  "application_acceptance": false,
+  "production_enabled": false,
+  "installed_browser": "Chrome155.0.8059.86",
+  "installed_playwright": "1.63.0",
+  "native_playwright_webmcp": false,
+  "native_webmcp_documented_since": "1.64",
+  "capability_default": {
+    "date": "2026-10-27T15:56:56.333551+00:00",
+    "status": "OBSERVED",
+    "playwright_version": "1.63.0",
+    "native_page_webmcp": false,
+    "native_frame_webmcp": false,
+    "experimental_flag": false,
+    "production_changes": false,
+    "scope": "Ephemeral headless Chrome, no authenticated profile or application tool execution.",
+    "browser_version": "155.0.8059.86",
+    "interfaces": {
+      "secureContext": true,
+      "origin": "http://127.0.0.1:38417",
+      "document": {
+        "present": false,
+        "methods": {
+          "registerTool": "undefined",
+          "unregisterTool": "undefined",
+          "getTools": "undefined",
+          "executeTool": "undefined",
+          "listTools": "undefined"
+        }
+      },
+      "navigator": {
+        "present": false,
+        "methods": {
+          "registerTool": "undefined",
+          "unregisterTool": "undefined",
+          "getTools": "undefined",
+          "executeTool": "undefined",
+          "listTools": "undefined"
+        }
+      },
+      "testing": {
+        "present": false,
+        "methods": {
+          "registerTool": "undefined",
+          "unregisterTool": "undefined",
+          "getTools": "undefined",
+          "executeTool": "undefined",
+          "listTools": "undefined"
+        }
+      }
+    },
+    "cdp_available": true,
+    "seconds": 1.562
+  },
+  "capability_experimental": {
+    "date": "2026-10-27T15:56:58.513765+00:00",
+    "status": "OBSERVED",
+    "playwright_version": "1.63.0",
+    "native_page_webmcp": false,
+    "native_frame_webmcp": false,
+    "experimental_flag": true,
+    "production_changes": false,
+    "scope": "Ephemeral headless Chrome, no authenticated profile or application tool execution.",
+    "browser_version": "155.0.8059.86",
+    "interfaces": {
+      "secureContext": true,
+      "origin": "http://127.0.0.1:38417",
+      "document": {
+        "present": true,
+        "methods": {
+          "registerTool": "function",
+          "unregisterTool": "undefined",
+          "getTools": "function",
+          "executeTool": "function",
+          "listTools": "undefined"
+        }
+      },
+      "navigator": {
+        "present": false,
+        "methods": {
+          "registerTool": "undefined",
+          "unregisterTool": "undefined",
+          "getTools": "undefined",
+          "executeTool": "undefined",
+          "listTools": "undefined"
+        }
+      },
+      "testing": {
+        "present": false,
+        "methods": {
+          "registerTool": "undefined",
+          "unregisterTool": "undefined",
+          "getTools": "undefined",
+          "executeTool": "undefined",
+          "listTools": "undefined"
+        }
+      }
+    },
+    "cdp_available": true,
+    "seconds": 1.563
+  },
+  "fixture_verification": {
+    "date": "2026-10-27T17:06:14.456641+00:00",
+    "application_acceptance": false,
+    "production_enabled": false,
+    "scope": "Supervisor-authored isolated browser fixture; no generated application or authenticated site.",
+    "checks": [
+      {
+        "name": "actual_discovery",
+        "status": "PASS",
+        "seconds": 0.312
+      },
+      {
+        "name": "structured_search_independent_DOM",
+        "status": "PASS",
+        "seconds": 0.109
+      },
+      {
+        "name": "permission_denial_no_effect",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "invalid_arguments_no_dispatch",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "invalid_schema_refused",
+        "status": "PASS",
+        "seconds": 0.0
+      },
+      {
+        "name": "navigation_invalidates_registration",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "timeout_no_retry_or_fallback",
+        "status": "PASS",
+        "seconds": 0.234
+      },
+      {
+        "name": "user_cancellation_before_dispatch",
+        "status": "PASS",
+        "seconds": 0.047
+      },
+      {
+        "name": "user_cancellation_inflight",
+        "status": "PASS",
+        "seconds": 0.187
+      },
+      {
+        "name": "untrusted_description_cannot_authorize",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "result_injection_fails_independent_verification",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "navigation_during_execution_uncertain",
+        "status": "PASS",
+        "seconds": 0.078
+      },
+      {
+        "name": "journal_required_before_dispatch",
+        "status": "PASS",
+        "seconds": 0.063
+      },
+      {
+        "name": "disabled_route_skips_discovery",
+        "status": "PASS",
+        "seconds": 0.062
+      },
+      {
+        "name": "schema_drift_ineligible",
+        "status": "PASS",
+        "seconds": 0.047
+      },
+      {
+        "name": "dynamic_page_state",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "toolchange_invalidates_cache",
+        "status": "PASS",
+        "seconds": 0.062
+      },
+      {
+        "name": "filters_and_sort_independent_DOM",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "approved_owned_form_completion",
+        "status": "PASS",
+        "seconds": 0.094
+      },
+      {
+        "name": "approved_multistep_search_selection",
+        "status": "PASS",
+        "seconds": 0.109
+      },
+      {
+        "name": "same_origin_child_tools_excluded",
+        "status": "PASS",
+        "seconds": 0.125
+      },
+      {
+        "name": "new_page_cannot_reuse_registration",
+        "status": "PASS",
+        "seconds": 0.156
+      },
+      {
+        "name": "matched_search_benchmark_5_pairs",
+        "status": "PASS",
+        "seconds": 0.938
+      },
+      {
+        "name": "matched_filters_and_form_5_pairs_each",
+        "status": "PASS",
+        "seconds": 2.375
+      },
+      {
+        "name": "unsupported_cached_and_real_DOM_fallback",
+        "status": "PASS",
+        "seconds": 1.484
+      }
+    ],
+    "benchmarks": {
+      "DOM": {
+        "samples_seconds": [
+          0.061999999976251274,
+          0.0470000000204891,
+          0.046999999962281436,
+          0.0470000000204891,
+          0.046999999962281436
+        ],
+        "median_seconds": 0.0470000000204891,
+        "min_seconds": 0.046999999962281436,
+        "max_seconds": 0.061999999976251274,
+        "verified_trials": 5
+      },
+      "WebMCP": {
+        "samples_seconds": [
+          0.046999999962281436,
+          0.031000000017229468,
+          0.045999999972991645,
+          0.031000000017229468,
+          0.031000000017229468
+        ],
+        "median_seconds": 0.031000000017229468,
+        "min_seconds": 0.031000000017229468,
+        "max_seconds": 0.046999999962281436,
+        "verified_trials": 5
+      },
+      "filters": {
+        "DOM": {
+          "samples_seconds": [
+            0.06300000002374873,
+            0.07800000003771856,
+            0.0779999999795109,
+            0.06300000002374873,
+            0.07900000002700835
+          ],
+          "median_seconds": 0.0779999999795109,
+          "min_seconds": 0.06300000002374873,
+          "max_seconds": 0.07900000002700835,
+          "verified_trials": 5,
+          "action_count": 3
+        },
+        "WebMCP": {
+          "samples_seconds": [
+            0.062000000034458935,
+            0.06300000002374873,
+            0.0470000000204891,
+            0.0470000000204891,
+            0.06300000002374873
+          ],
+          "median_seconds": 0.062000000034458935,
+          "min_seconds": 0.0470000000204891,
+          "max_seconds": 0.06300000002374873,
+          "verified_trials": 5,
+          "action_count": 1
+        }
+      },
+      "form": {
+        "DOM": {
+          "samples_seconds": [
+            0.07900000002700835,
+            0.06300000002374873,
+            0.07900000002700835,
+            0.0470000000204891,
+            0.046999999962281436
+          ],
+          "median_seconds": 0.06300000002374873,
+          "min_seconds": 0.046999999962281436,
+          "max_seconds": 0.07900000002700835,
+          "verified_trials": 5,
+          "action_count": 3
+        },
+        "WebMCP": {
+          "samples_seconds": [
+            0.06300000002374873,
+            0.06300000002374873,
+            0.0470000000204891,
+            0.046999999962281436,
+            0.0470000000204891
+          ],
+          "median_seconds": 0.0470000000204891,
+          "min_seconds": 0.046999999962281436,
+          "max_seconds": 0.06300000002374873,
+          "verified_trials": 5,
+          "action_count": 1
+        }
+      }
+    },
+    "model_calls": 0,
+    "model_tokens": 0,
+    "status": "PASS",
+    "limitations": [
+      "Search, filters and owned forms benchmarked; multi-step performance, full browser restart, cross-origin delegated exposure and resource measurements still pending.",
+      "Screenshot/vision comparison not executed; this fixture has no visual acceptance claim.",
+      "Experimental adapter is not wired into production tool registry or browser worker. No rollout justified."
+    ]
+  },
+  "official_sources": [
+    "https://developer.chrome.com/docs/ai/webmcp",
+    "https://developer.chrome.com/docs/ai/webmcp/imperative-api",
+    "https://developer.chrome.com/docs/ai/webmcp/declarative-api",
+    "https://webmachinelearning.github.io/webmcp/",
+    "https://playwright.dev/docs/api/class-webmcp",
+    "https://raw.githubusercontent.com/ChromeDevTools/chrome-devtools-mcp/main/src/tools/webmcp.ts"
+  ],
+  "implementation": [
+    "jarvis/webmcp.py",
+    "scripts/verification/audit_webmcp.py",
+    "scripts/verification/verify_webmcp.py",
+    "tests/test_webmcp.py"
+  ],
+  "production_registry_changed": false,
+  "existing_adapter_reused": "Already-owned Playwright Page; existing bounded MCP schema validator. No new browser controller, server or model.",
+  "chrome_devtools_mcp": "Upstream list_webmcp_tools/execute_webmcp_tool confirmed; no server installed or started in this campaign. Existing stdio MCP retains explicit trusted executable/allowlist/approval requirements.",
+  "rollout": "Keep disabled. Small controlled fixture latency differences do not establish meaningful production advantage, security completeness or coding performance impact. Further acceptance scenarios and resource measurement remain pending.",
+  "limits": [
+    "Main document and same-origin tools only; child-frame registrations excluded.",
+    "Host pins origin/name/input/output schemas and operation; all calls require authorization and independent verification.",
+    "Journal intent before dispatch; uncertain effect retires binding with no replay or automatic fallback.",
+    "Page metadata/results untrusted; page read-only annotations grant no rights.",
+    "Chrome155 JSON-text result encoding explicitly selected for structured fixture outputs; arbitrary mixed transport not inferred.",
+    "No browser-worker or production capability-registry integration; no production enable flag.",
+    "Hard hung-page/process deadlines still need existing worker integration before rollout."
+  ],
+  "contract_regression": {
+    "tests": 6,
+    "seconds": 0.178,
+    "result": "PASS",
+    "log": ".jarvis-runtime/webmcp-contracts-final.log"
+  },
+  "nearby_regression": {
+    "tests": 20,
+    "seconds": 11.843,
+    "result": "PASS",
+    "log": ".jarvis-runtime/webmcp-nearby-regression.log"
+  },
+  "readiness": "DockerEngineUnavailable only; required installed Ollama models and local Git available.",
+  "adapter_sha256": "36ed09950ad288151da7ff52e9bfb3887a48c3ee31a304d5dd8ad41454546a6d",
+  "measurement_conditions": "Final guarded adapter, no active local coding inference or regression suite; same ephemeral Chrome/browser fixture, five matched pairs per task. No resource sampler or visual model was used.",
+  "offer_mutation_regression": {
+    "reproduced": true,
+    "before_log": ".jarvis-runtime/webmcp-offer-integrity-before.log",
+    "final_regression_tests": 21,
+    "seconds": 5.642,
+    "result": "PASS",
+    "log": ".jarvis-runtime/webmcp-offer-integrity-final.log"
+  },
+  "final_idle_fixture_log": ".jarvis-runtime/webmcp-final-idle-baseline.log"
+}

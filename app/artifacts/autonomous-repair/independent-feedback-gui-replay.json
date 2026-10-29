@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-28T08:06:55.799664+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Read-only replay of exact independent real-Tk failure report against exact copied Qwen checkpoint; no model calls, source changes, check credit or permissions.",
+  "selected_report": "gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+  "original_report": ".jarvis-runtime/strict-progress-independent-gui/gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+  "report_sha256": "d4bb50848b157a643e674bc43c3fcc69eb2e20bd62cfe294b80913d16f1fe82d",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-two-case-checkpoint-38d99c23649d475892e895ee0726a2bc",
+  "source_hashes": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b"
+  },
+  "all_eight_source_hashes_unchanged": true,
+  "all_six_frozen_hashes_bound": true,
+  "forwarded_failures": [
+    {
+      "name": "original buttons 2+3=",
+      "type": "AssertionError",
+      "error": "Button '2' not visible"
+    },
+    {
+      "name": "original buttons 9-4=",
+      "type": "AssertionError",
+      "error": "Button '9' not visible"
+    },
+    {
+      "name": "original buttons 6*7=",
+      "type": "AssertionError",
+      "error": "Button '6' not visible"
+    },
+    {
+      "name": "original buttons 8/2=",
+      "type": "AssertionError",
+      "error": "Button '8' not visible"
+    },
+    {
+      "name": "original binding with real Tk keyboard events",
+      "type": "InvalidOperation",
+      "error": "[<class 'decimal.ConversionSyntax'>]"
+    },
+    {
+      "name": "clear original button",
+      "type": "AssertionError",
+      "error": "Clear left stale input"
+    },
+    {
+      "name": "visible division-by-zero error",
+      "type": "AssertionError",
+      "error": "Button '1' not visible"
+    }
+  ],
+  "context_characters": 1211,
+  "manifest": [
+    {
+      "accepted": true,
+      "path": "gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+      "report_sha256": "d4bb50848b157a643e674bc43c3fcc69eb2e20bd62cfe294b80913d16f1fe82d",
+      "failed_observations": 7,
+      "scope": "Read-only diagnostic data; no current check, success credit or permissions."
+    }
+  ]
+}

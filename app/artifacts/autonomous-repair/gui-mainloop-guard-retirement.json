@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-25T22:48:47.817704+00:00",
+  "campaign": "c19a8175e4654d31b48fa603b5961ae9",
+  "native": "9a0fa86760fb4ef99f1878cb70d6dfbe",
+  "finished_at": "2026-10-25T22:48:14.063352+00:00",
+  "seconds": 872.324,
+  "owner_exited": true,
+  "remaining_nonterminal": [],
+  "source_after_cancel": {
+    "calculator_logic.py": "44da76244e1aed4a966a8ef3549485413a32c9e0d421044c2bf3b3d16415dc1d",
+    "test_calculator.py": "dc38ffa0f6fb292f0c5f141fb2ccf0f8881ad03e410bfde5ae23f3602977858d",
+    "test_gui_behavior.py": "434cec90cf34ed94c2ddc0fb2ae26234f063f8f3ca255612ca0a0ff6e9f22966",
+    "ui_builder.py": "7b81a4f90169d7c0f5fd0d08a334e595b729aa05e54efc6eb27403376a73c2d4"
+  },
+  "frozen_tests": {
+    "test_calculator.py": "dc38ffa0f6fb292f0c5f141fb2ccf0f8881ad03e410bfde5ae23f3602977858d",
+    "test_gui_behavior.py": "434cec90cf34ed94c2ddc0fb2ae26234f063f8f3ca255612ca0a0ff6e9f22966"
+  },
+  "pre_cancel_frozen_hashes_unchanged": true,
+  "source_changed_during_trial": true,
+  "reason": "New frozen test called persistent mainloop in setup; Jarvis draft guard repaired and verified before graceful cancellation. No application implementation or frozen test changed by supervisor.",
+  "regression": {
+    "tests": 133,
+    "passed": 133,
+    "seconds": 272.646,
+    "log": ".jarvis-runtime/repair-gui-test-loop-final.log"
+  },
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "source_sha256": {
+    "jarvis/codex_validation.py": "fd4be41e855b2c1a87af10687134641a91add26e42f798ca24841f43405155fb",
+    "jarvis/native_coding.py": "8d4de931c76b133858846c86deb8a4298d57525bbe8e94b40867eea55300dd26"
+  },
+  "gui_acceptance": "OPEN",
+  "physical_ui": "BLOCKED: desktop tool kernel assets initialization"
+}

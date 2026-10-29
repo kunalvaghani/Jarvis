@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "NO_VERIFIED_PROGRESS_WITHIN_BOUND",
+  "application_acceptance": false,
+  "scope": "Read-only feasibility of proper subsets of one exact retained complete Qwen batch. All replacement strings unmodified from model output; original file guards/candidate checks reused and every working save deliberately aborted. No model calls or app implementation authored.",
+  "original_proposal_sha256": "7dcd65b0214e35dac1bc42c18f2373b64ff2fd43df898cebf69c2073bbc3c605",
+  "trials": [
+    {
+      "indices": [
+        0
+      ],
+      "status": "REJECTED_NO_CASE_PROGRESS_OR_REGRESSION",
+      "decision": {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "9d986909b929f15f298981b9742353517c94c5fd2489f01ba10fefdfde6637c7",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\validation-da1fea591327489187009636b5bf82b0.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\candidate-checks\\5a82586705cf48b8b4744995e63c3923\\validation-8af61b66eb7a42f5858660ac5aa55044.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      }
+    },
+    {
+      "indices": [
+        1
+      ],
+      "status": "REJECTED_NO_CASE_PROGRESS_OR_REGRESSION",
+      "decision": {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "4e978ea40701498cc3d12061dec7a2e33636517e62dd384a9d8f5883a64b0ca9",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\validation-da1fea591327489187009636b5bf82b0.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\candidate-checks\\ee33f49fcc0e43ee931ed513d65a5b13\\validation-199f8becdf374090a5282e170af5e3c7.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      }
+    },
+    {
+      "indices": [
+        2
+      ],
+      "status": "REJECTED_NO_CASE_PROGRESS_OR_REGRESSION",
+      "decision": {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "bbd02cfefd6d734e7b0e483b72e79bac696466791533154258f3b0515e51118a",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\validation-da1fea591327489187009636b5bf82b0.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\candidate-checks\\2e7c3baef2914395a427651a0e8c3dd9\\validation-eb7ec4c4d07149f6b2cbd9551e41ba18.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      }
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "status": "REJECTED_NO_CASE_PROGRESS_OR_REGRESSION",
+      "decision": {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "813afcea31e44a9a7fc2984c0a0e9f2034ac15235d89e523e8a9543f130ec87e",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\validation-da1fea591327489187009636b5bf82b0.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438\\ledger\\candidate-checks\\c877a6bbde3b49978d1fd69aedaf5625\\validation-9f6f6dbfd15a4440a9014b3e91bb0d19.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      }
+    }
+  ],
+  "trial_limit": 4,
+  "working_eight_files_unchanged": true,
+  "old_worker_unchanged": true,
+  "retained_fixture": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\batch-subset-feasibility-8c2faaf9d27b4c0f94835fefef079438"
+}

@@ -1,5 +1,7 @@
 # Jarvis maintenance requirements
 
+The autonomous application repair/regression campaign is **PAUSED_BY_USER (2026-10-29)**. Read [the pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) and [resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) before changing campaign state or frozen application artifacts. Resume requires an explicit new user request and compatibility validation. Normal unrelated feature development remains allowed; do not start old trials, inference probes or retries as part of a new feature request.
+
 For every Jarvis upgrade in this workspace:
 
 - Keep `README.md` current in the same change: features, usage examples, setup, configuration, paths, architecture, integrations, limitations, troubleshooting, and dated verification results. Update the parent repository README when its overview changes. Include current UI images when available, distinguish rendered previews from live screenshots and upstream demos, preserve attribution, and verify repository-relative links. If there is no documentation impact, say so in the final report; do not invent results or add filler.

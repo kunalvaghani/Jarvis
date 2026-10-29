@@ -30,6 +30,10 @@ def required_models(config):
     realtime = realtime_settings(config.get('realtime'))
     if realtime['enabled'] and realtime['model_enabled']:
         required.add(realtime['model'])
+    cloud={'gemini-3.8-flash','qwen/qwen3.8-27b'}
+    if required & cloud:
+        required-=cloud
+        required.add('qwen3.5:9b')  # checked fallback; cloud IDs are never Ollama installs
     return required
 
 

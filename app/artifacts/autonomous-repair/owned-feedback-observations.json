@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-28T19:00:54.300550+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "Independent owned-definition/expression validation errors are collected together with actionable field names. The sealed owned-binding stage retains safety, engineering, explicit repository/skill/language/dependency and progress guidance while omitting unrelated design/reference narratives. Ordinary coding keeps its full context. Actual per-stage before/after system character counts are recorded; no model/context/token/repair/time budget or source permission changes.",
+  "target": {
+    "tests": 11,
+    "seconds": 23.47,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-owned-feedback-target.log"
+  },
+  "affected_regression": {
+    "tests": 214,
+    "seconds": 262.933,
+    "result": "OK"
+  },
+  "regression_log": ".jarvis-runtime/repair-owned-feedback-regression.log",
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 22.59,
+    "log": ".jarvis-runtime/repair-owned-feedback-audit.log"
+  },
+  "launcher_log": ".jarvis-runtime/repair-owned-feedback-launcher.log",
+  "exact_qwen_replay": "artifacts/autonomous-repair/owned-feedback-gui-replay.json",
+  "preceding_trial": {
+    "id": "6bb932eb9cf74bfbb54eda5888f387d0",
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 478.159,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "8a500eb5cfe64600b501023b748cacf2",
+      "status": "failed",
+      "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 2,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 1
+      },
+      "candidate_decisions": [],
+      "binding_renderings": null,
+      "bounded_interface_corrections": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 1,
+          "error": "Owned-interface binding is incomplete or contradicts its selected strategy: invalid syntax (<unknown>, line 1)",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    }
+  },
+  "preceding_owned_inference_counts": [
+    {
+      "prompt_characters": 28496,
+      "prompt_eval_count": 7087,
+      "eval_count": 250,
+      "done_reason": "stop"
+    },
+    {
+      "prompt_characters": 27368,
+      "prompt_eval_count": 6777,
+      "eval_count": 246,
+      "done_reason": "stop"
+    }
+  ],
+  "token_interpretation": "Both retained complete proposals fit the verified8192 context:6777+246 and7087+250 tokens. No evidence of context overflow or discarded feedback. The actual component error was unlocalized invalid syntax and hid the independently missing indexing method.",
+  "preserved_cli_integrity": {
+    "prior_status": "PASS",
+    "new_functional_run": false,
+    "all_six_original_hashes_match": true
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "45668bc58adad6ed7f1229deea190341eb83315fc6aa5b98e7c23d08c03fd4c4",
+    "jarvis/repair_contract.py": "1fae0ca22e07b8b2ef01111ddb9a91ce96d960ac9541a420c44ca722b608b475",
+    "tests/test_owned_repair.py": "c52749675fd125f81764cae429915a5d337b0fd75bbe629435c74a93a1d76802"
+  },
+  "configuration_sha256": "d0fa92f27b68bdef99456fbcdc86bbf674075a1bc5b0c9d21412181f50f1cf4f",
+  "intentional_main_stop_marker_present": true,
+  "production": {
+    "id": "a70746cfdec346ca9d846b4666619efc",
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 473.649,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "675c4dbb266240e298aa870a1203f81c",
+      "status": "failed",
+      "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 2,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 1
+      },
+      "candidate_decisions": [],
+      "binding_renderings": null,
+      "bounded_interface_corrections": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "correction": 1,
+          "error": "Owned-interface component errors (all independent checks): {\"owned_definition\": \"Owned type does not define required access methods: __getitem__\", \"binding_expression\": \"Use only the bare owned constructor call (RHS), not an assignment. invalid syntax (<unknown>, line 1)\"}",
+          "source_unchanged": true,
+          "repair_turn_charged": true,
+          "action_replayed": false
+        }
+      ],
+      "bounded_stage_contexts": [
+        {
+          "stage": "owned_interface",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "original_system_characters": 11837,
+          "actual_system_characters": 6743,
+          "mandatory_guidance_retained": true,
+          "unrelated_reference_design_context_omitted": true
+        },
+        {
+          "stage": "owned_interface",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "original_system_characters": 11837,
+          "actual_system_characters": 6743,
+          "mandatory_guidance_retained": true,
+          "unrelated_reference_design_context_omitted": true
+        }
+      ],
+      "all_six_protected_hashes_match": true
+    }
+  }
+}

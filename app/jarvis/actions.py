@@ -338,6 +338,15 @@ class Actions:
         except (OSError, ValueError) as exc:
             self.awareness = AwarenessEngine(self, {'enabled': False})
             report('warning', 'Cognitive awareness is off: ' + str(exc)[:200])
+        from .pcide import ParallelCodeIntelligence
+        code_options = dict(config.get('pcide', {}))
+        if config.get('_ui_verification', False):
+            code_options['enabled'] = False
+        try:
+            self.code_intel = ParallelCodeIntelligence(self, code_options)  # docs/parallel-code-intelligence.md
+        except (OSError, ValueError) as exc:
+            self.code_intel = ParallelCodeIntelligence(self, {'enabled': False})
+            report('warning', 'Parallel code intelligence is off: ' + str(exc)[:200])
         from .project_intel import ProjectIntelligence
         project_options = dict(config.get('project_intelligence', {}))
         if config.get('_ui_verification', False):
@@ -908,6 +917,8 @@ class Actions:
                     if not 0 <= index < len(labels):
                         self.report("question", "That number is not in the list. Choose 1 through " + str(len(labels)) + ".")
                         return Command("clarification_blocked", "That number is not in the list; your choices are still available.")
+                    from .island_choices import dismiss
+                    dismiss(self)  # A spoken choice answers the card just as a click does.
                     return Command("choose_control", str(index + 1))
         pending = task_pending or self.pending_question
         folder_reply = bool(pending and pending["slot"] == "folder" and command.kind == "open_folder")
@@ -994,6 +1005,9 @@ class Actions:
         projects = getattr(self, 'project_intel', None)
         if projects is not None:
             projects.close()
+        intel = getattr(self, 'code_intel', None)
+        if intel is not None:
+            intel.close()
         cognition = getattr(self, 'cognition', None)
         if cognition is not None:
             cognition.close()
@@ -1294,6 +1308,8 @@ class Actions:
             current = snapshot(self)
             if not current or current['token']!=command.extra or current['kind']!='control':
                 raise ValueError('Those choices changed or expired. Get a fresh list.')
+            from .island_choices import dismiss
+            dismiss(self, command.extra)  # Revalidated against the live window; now the card is answered.
             return self._ui().execute(Command('choose_control',str(int(command.value)+1),'island_bound'),cancelled)
         if command.kind == "open" and command.value.casefold() in {"jarvis browser", "automation browser"}:
             return str(self._browser().request("reset", cancelled))
@@ -1484,14 +1500,46 @@ class Actions:
             self.task_active = True
             try:
                 self.task_state.start(command.value, "code_task", project)
+                projects=getattr(self,'project_intel',None)
+                ingress=getattr(self,'ingress',None)
+                from .project_intel import ProjectIntelligence
+                from .task_ingress import TaskIngress
+                reused=projects.verified_objective_checkpoint(getattr(ingress.scheduler.local,'identity',None)) if isinstance(projects,ProjectIntelligence) and isinstance(ingress,TaskIngress) else None
+                if reused:
+                    self.task_state.finish('completed',reused)
+                    return reused
                 coder = Coder(self, self.brain.client)
-                # Learned repositories for this kind of task: saved memory first, otherwise GitHub (then saved).
+                intel = getattr(self, 'code_intel', None)
+                if intel is not None and intel.enabled:
+                    # Memory-first: saved repository knowledge and the code library now; online research runs in
+                    # parallel on the queue's research lane and reaches the coder between turns.
+                    try:
+                        coder.reference_repositories = [ref for _, name, _ in self.repo_learner.relevant(command.value)
+                                                        for ref in [self.repo_learner.reference(name, command.value)] if ref][:2]
+                    except Exception:
+                        coder.reference_repositories = []
+                    try:
+                        intel.prepare(project, command.value, cancelled=cancelled)
+                    except Exception as exc:
+                        self.report("warning", "Code intelligence unavailable for this task: " + str(exc)[:160])
+                else:
+                    # Learned repositories for this kind of task: saved memory first, otherwise GitHub (then saved).
+                    try:
+                        coder.reference_repositories = self.repo_learner.prepare(command.value, cancelled)
+                    except Exception as exc:
+                        coder.reference_repositories = []
+                        self.report("warning", "Coding without repository references: " + str(exc)[:160])
                 try:
-                    coder.reference_repositories = self.repo_learner.prepare(command.value, cancelled)
-                except Exception as exc:
-                    coder.reference_repositories = []
-                    self.report("warning", "Coding without repository references: " + str(exc)[:160])
-                result = coder.run(project, command.value, cancelled, selected=selected)
+                    result = coder.run(project, command.value, cancelled, selected=selected)
+                except Exception:
+                    if intel is not None and intel.enabled:
+                        intel.cancel_for(project, 'coding task ended without success')
+                    raise
+                if intel is not None and intel.enabled:
+                    try:
+                        intel.after_coding(project, command.value, result)
+                    except Exception as exc:
+                        self.report("warning", "Verified code memory was not updated: " + str(exc)[:160])
                 self.task_state.finish("paused" if result and "stopped" in result.casefold() else "completed", result)
                 return result
             except Exception as exc:

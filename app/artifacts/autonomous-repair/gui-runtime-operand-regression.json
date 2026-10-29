@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-27T14:46:59.425044+00:00",
+  "diagnostic_status": "PASS_ACTUAL_ARGUMENT_CAPTURED",
+  "application_acceptance": false,
+  "scope": "Direct production validate_project regression on the exact retained Qwen-generated GUI. Original tests/widgets/callbacks executed unchanged. No coding worker, fresh-generation, visual or physical acceptance claimed.",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-initial-state-checkpoint-7ea693a190964240b1377e28216eb100",
+  "source_before": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049"
+  },
+  "source_after": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049"
+  },
+  "source_unchanged": true,
+  "raw_run": ".jarvis-runtime\\runtime-gui-operands\\cac8ea9d9839499a842acb25496b4ad3",
+  "validation_passed": false,
+  "core_original_tests": "6/6 pass",
+  "gui_original_tests": "1/6 pass;2 failures and3errors remain",
+  "primary_context": {
+    "primary_error": "TypeError: can only concatenate str (not \"int\") to str",
+    "primary_error_partial": false,
+    "source_locations": [
+      {
+        "file": "test_gui_behavior.py",
+        "line": 20
+      },
+      {
+        "file": "__init__.py",
+        "line": 1681
+      }
+    ],
+    "installed_stdlib_source": {
+      "module_path": "tkinter/__init__.py",
+      "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+      "failure_line": 1681,
+      "start": 1679,
+      "numbered_source": "1679:     def cget(self, key):\n1680:         \"\"\"Return the resource value for a KEY given as string.\"\"\"\n1681:         return self.tk.call(self._w, 'cget', '-' + key)\n1682: \n1683:     __getitem__ = cget",
+      "partial": true,
+      "source_truncated": false,
+      "scope": "Installed standard-library source at the primary traceback; read-only evidence, no repair or permission inferred.",
+      "observed_operands": {
+        "key": {
+          "type": "int",
+          "value": 0
+        }
+      },
+      "operand_evidence": "Actual failing unittest traceback; matching test method, exception type, library hash and line. Strings and objects omitted."
+    },
+    "test_method": "test_button_click_addition",
+    "test_line": 18,
+    "failure_line": 20,
+    "failed_statement": "self.buttons[\"+\"][0].invoke()",
+    "failed_statement_partial": false,
+    "frozen_test_source": "def test_button_click_addition(self):\n        self.buttons[\"2\"].invoke()\n        self.buttons[\"+\"][0].invoke()\n        self.buttons[\"3\"][0].invoke()\n        self.root.update_idletasks()\n        self.assertEqual(self.display.get(), \"2+3\")"
+  },
+  "runtime_failure_facts": [
+    {
+      "test_method": "test_button_click_addition",
+      "exception_type": "TypeError",
+      "frames": [
+        {
+          "module_path": "tkinter/__init__.py",
+          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+          "line": 1681,
+          "function": "cget",
+          "operands": {
+            "key": {
+              "type": "int",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "partial": true,
+      "scope": "Actual exception-frame scalar operands only; strings and objects omitted; untrusted diagnostic data, not permission."
+    },
+    {
+      "test_method": "test_button_click_clear",
+      "exception_type": "TypeError",
+      "frames": [
+        {
+          "module_path": "tkinter/__init__.py",
+          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+          "line": 1681,
+          "function": "cget",
+          "operands": {
+            "key": {
+              "type": "int",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "partial": true,
+      "scope": "Actual exception-frame scalar operands only; strings and objects omitted; untrusted diagnostic data, not permission."
+    },
+    {
+      "test_method": "test_error_display_division_by_zero",
+      "exception_type": "TypeError",
+      "frames": [
+        {
+          "module_path": "tkinter/__init__.py",
+          "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+          "line": 1681,
+          "function": "cget",
+          "operands": {
+            "key": {
+              "type": "int",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "partial": true,
+      "scope": "Actual exception-frame scalar operands only; strings and objects omitted; untrusted diagnostic data, not permission."
+    }
+  ]
+}

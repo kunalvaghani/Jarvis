@@ -366,13 +366,14 @@ def run(coder, project, goal, cancelled, initial_plan=None, initial_feedback=Non
     """Finish only after independent checks; repair specific observed failures."""
     from .codex_validation import validate_project, repair_packet, error_summary
     options=getattr(coder.client,'options',{})
+    validation_goal=getattr(coder,'validation_goal',goal)
     deadline=time.monotonic()+min(3600,max(60,float(options.get('max_coding_seconds',1800))))
     if total_deadline is not None:deadline=min(deadline,total_deadline)
     limit=min(3,max(0,int(options.get('codex_max_repairs',2))))
     project=Path(project).resolve(strict=True)
     if initial_plan:
         from .codex_validation import contract
-        initial_plan=contract(project,goal,initial_plan,partial=bool(deferred_paths))
+        initial_plan=contract(project,validation_goal,initial_plan,partial=bool(deferred_paths))
     plan=initial_plan;feedback=initial_feedback;changed=[];turns=[]
     for attempt in range(limit+1):
         if cancelled():raise ValueError('Codex stopped before validation/repair; partial files retained.')
@@ -381,7 +382,7 @@ def run(coder, project, goal, cancelled, initial_plan=None, initial_feedback=Non
         if allowed_paths is None:turn=_turn(coder,project,goal,cancelled,feedback,plan,deadline)
         else:turn=_turn(coder,project,goal,cancelled,feedback,plan,deadline,allowed_paths)
         turns.append(str(turn['directory']));changed=list(dict.fromkeys(changed+turn['changed']));plan=turn['plan']
-        validation_args=(project,turn['directory'],goal,changed,plan,lambda:cancelled() or time.monotonic()>=deadline,coder.actions.report)
+        validation_args=(project,turn['directory'],validation_goal,changed,plan,lambda:cancelled() or time.monotonic()>=deadline,coder.actions.report)
         result=validate_project(*validation_args,**({'deferred_paths':deferred_paths} if deferred_paths else {}))
         (turn['directory']/'validation.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
         if result['passed']:

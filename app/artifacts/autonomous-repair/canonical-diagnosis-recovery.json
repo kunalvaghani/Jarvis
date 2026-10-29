@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-27T12:21:44.720694+00:00",
+  "application_acceptance": false,
+  "status": "FAIL_IDLE_BEFORE_DIAGNOSIS",
+  "source_trial": "ba020fd758614a47bd643d436c2f3064",
+  "source_request": ".jarvis-runtime/autonomous-repair/ba020fd758614a47bd643d436c2f3064/.jarvis-runtime/native-code/4454adf97657448ba22cf65cf4ac4438/request.json",
+  "source_request_sha256": "c7a2fda18b9a7c11e0e62a2ab6c1dab225911c284a651769d5035e0b76017a52",
+  "observed_unverified_assigned_workload": "Repair ui_builder.py to fix lambda closure issues in button commands and ensure keyboard events update the display correctly without side effects that break tests. Update README.md to reflect the polished state of the application.",
+  "observed_primary_failure": "Frozen GUI line20 invokes widget indexing; the installed tkinter cget expression at1681 fails before an application callback.",
+  "root_cause": "The model-generated task description asserted a callback/closure diagnosis before executing checks. Fresh planning kept that task description as the user goal, repeatedly reinforcing an unverified cause.",
+  "repair": "Read-only root-cause planning and its one separate guarded replacement use the canonical validation_goal and current source/frozen/primary failure facts. Original system/file scopes remain binding. Failed assistant/tool history and planner causal claims do not become diagnostic authority.",
+  "plan_data_policy": "Exactly3 bounded nonempty strings are untrusted read-only data; normal error citations are allowed. No text is evaluated or automatically applied. Replacement is a separate freshly hash-guarded model proposal checked against unchanged frozen tests.",
+  "targeted_regression": {
+    "tests": 4,
+    "seconds": 4.005,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-canonical-diagnosis-target.log"
+  },
+  "prior_readonly_data_regression": {
+    "tests": 175,
+    "seconds": 199.761,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-readonly-plan-data-final.log"
+  },
+  "broad_regression": ".jarvis-runtime/repair-canonical-diagnosis-final.log",
+  "next_action": "Verify escalation on proven pre-write failures before one new protected trial; this trial did not exercise the canonical diagnosis or replacement.",
+  "affected_regression": {
+    "tests": 175,
+    "seconds": 185.809,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-canonical-diagnosis-final.log"
+  },
+  "relative_links_checked": 687,
+  "owner_session": 7348,
+  "campaign": "3943e16c858347248c1477fd9704a87b",
+  "task": "a9f131426bc7436db170238aa96b6a78",
+  "native": "39a42ad7585a47189881c9a9f1f75d45",
+  "workload": "d1e16050a7eb4e42807e80204b5943e3",
+  "owner_exit_observed": true,
+  "finished_at": "2026-10-27T12:40:14.871603+00:00",
+  "seconds": 916.664,
+  "progress": {
+    "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+    "identical_failed_checks": 1,
+    "idle_turns": 12,
+    "guarded_replacement_attempts": 0,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 0
+  },
+  "terminal_error": "Executable checks still fail after 12 tool turns without a confirmed source save or changed diagnostics. Stop the stalled repair for root-cause analysis; source and frozen tests retained. No action replayed.",
+  "jarvis_source_changed_during_trial": false,
+  "configuration_changed_during_trial": false,
+  "worker_eight_files_unchanged": true,
+  "external_eight_files_unchanged": true,
+  "canonical_live_stage_exercised": false
+}

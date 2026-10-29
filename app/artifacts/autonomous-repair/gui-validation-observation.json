@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-25T16:11:26.876644+00:00",
+  "run": "d65b3709477940c6adee55201eb2e3e1",
+  "result": "FAIL",
+  "scope": "One independent actual entrypoint launch of preserved Jarvis-generated worker source; no app source edited or promoted. Invalid frozen GUI test retained.",
+  "entrypoint": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d65b3709477940c6adee55201eb2e3e1\\.jarvis-runtime\\native-workloads\\785f0aceda7345f9ae0e2f3861abbbfe\\workers\\all\\main.py",
+  "launch": {
+    "exit_code": 1,
+    "output": "Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d65b3709477940c6adee55201eb2e3e1\\.jarvis-runtime\\native-workloads\\785f0aceda7345f9ae0e2f3861abbbfe\\workers\\all\\main.py\", line 27, in <module>\r\n    main()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d65b3709477940c6adee55201eb2e3e1\\.jarvis-runtime\\native-workloads\\785f0aceda7345f9ae0e2f3861abbbfe\\workers\\all\\main.py\", line 13, in main\r\n    app = CalculatorGUI(root)\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d65b3709477940c6adee55201eb2e3e1\\.jarvis-runtime\\native-workloads\\785f0aceda7345f9ae0e2f3861abbbfe\\workers\\all\\ui_builder.py\", line 48, in __init__\r\n    btn.configure(style=style_name)\r\n  File \"C:\\Users\\kunal\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\__init__.py\", line 1675, in configure\r\n    return self._configure('configure', cnf, kw)\r\n  File \"C:\\Users\\kunal\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\__init__.py\", line 1665, in _configure\r\n    self.tk.call(_flatten((self._w, cmd)) + self._options(cnf))\r\n_tkinter.TclError: Layout danger not found\r\n",
+    "seconds": 1.609
+  },
+  "current_test_draft_guard_recheck": "GUI behavioral test draft replaces application event bindings or button commands (line 30). Exercise original controls with invoke/event_generate and process events; do not register test callbacks or manufacture their behavior. Nothing saved; correct this draft before assertions freeze.",
+  "source_hashes_before_after_match": true,
+  "planned_source_hashes": {
+    "main.py": "5a909951310e5b467cccd7e948355890e938c87b9dd3e19beb2a243f130b7c3d",
+    "calculator_logic.py": "1d4ba848d920f2658085f67c5c1e779cce9c52758db18f7819eefc9596c6bb3b",
+    "ui_builder.py": "db3a784857202a5b443f8734746250c00749bd3def0891e26555390311f3d209",
+    "test_calculator.py": "5238b534370410f05a37341b6b1fbe42097fadea8a1c1553dab8165150b32d9c",
+    "test_gui_behavior.py": "b36c2c15167c7199be442cddd85639e74983a5f8b5c68f78c4431a66f9e36d81",
+    "README.md": "2aaf9ba7094fd92463b9fd664298a9d85693d2157b0aa3c61bcfc3283c820fe7"
+  },
+  "attempts": 1,
+  "screenshot": null,
+  "application_acceptance": "OPEN",
+  "evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d65b3709477940c6adee55201eb2e3e1\\independent-gui-diagnostic-62b7247f953a4ad8914374df86c8a919"
+}

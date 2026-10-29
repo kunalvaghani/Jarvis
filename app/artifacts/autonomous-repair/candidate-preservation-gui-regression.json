@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-27T18:46:43.776060+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact complete retained Qwen implementation replayed only in isolated candidate snapshots. Original application and frozen tests unchanged.",
+  "source_trial": "458aa08047f74b079eeb3ac8e6450902",
+  "source_validation": ".jarvis-runtime/autonomous-repair/458aa08047f74b079eeb3ac8e6450902/.jarvis-runtime/native-code/14b15daf6774416c996b4d94f49551e5/validation-bf7a0254b55341ea97ea16b7b3063c9f.json",
+  "source_validation_sha256": "8230e8607103e9b04b4f1960f6747c44648ea02284f8aa77f10a79d0676aafd9",
+  "proposed_source_sha256": "b29f0f1356038ba23c7660a92724cc38a3cde4739ccd9ae9469ffbbdaa95fbfd",
+  "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-candidate-preservation\\3a500c5a28774cb5a027b369cd0cdcf5\\baseline\\validation-b1c37a1864e54b43b442a42af090db0c.json",
+  "baseline_outcomes": [
+    {
+      "path": "test_calculator.py",
+      "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+      "test_count": 6,
+      "successful": true,
+      "skipped": 0,
+      "passed_ids": [
+        "test_calculator.TestCalculator.test_addition",
+        "test_calculator.TestCalculator.test_clear",
+        "test_calculator.TestCalculator.test_division",
+        "test_calculator.TestCalculator.test_division_by_zero",
+        "test_calculator.TestCalculator.test_multiplication",
+        "test_calculator.TestCalculator.test_subtraction"
+      ],
+      "partial": false
+    },
+    {
+      "path": "test_gui_behavior.py",
+      "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+      "test_count": 6,
+      "successful": false,
+      "skipped": 0,
+      "passed_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+      ],
+      "partial": false
+    }
+  ],
+  "candidate_decision": {
+    "candidate_only": true,
+    "applied": false,
+    "accepted_for_save": false,
+    "source_path": "ui_builder.py",
+    "decision_precedes_working_save": true,
+    "proposed_sha256": "b29f0f1356038ba23c7660a92724cc38a3cde4739ccd9ae9469ffbbdaa95fbfd",
+    "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-candidate-preservation\\3a500c5a28774cb5a027b369cd0cdcf5\\baseline\\validation-b1c37a1864e54b43b442a42af090db0c.json",
+    "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-candidate-preservation\\3a500c5a28774cb5a027b369cd0cdcf5\\candidate-checks\\9ffc9c77f6ad45a9b6d351ff498a453b\\validation-da5816dbc36f4f2389619b37d57e0ee5.json",
+    "lost_previously_passing_cases": {
+      "test_gui_behavior.py": [
+        "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+      ]
+    }
+  },
+  "candidate_rejected_before_working_save": true,
+  "original_eight_file_hashes_unchanged": true,
+  "before_hashes": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049"
+  },
+  "limitations": "Controller regression proof, not a repaired GUI, new generation, visual acceptance or release acceptance."
+}

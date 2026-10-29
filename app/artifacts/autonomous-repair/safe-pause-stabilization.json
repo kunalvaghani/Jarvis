@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-29T18:13:13.517397+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "seconds": 18.984,
+  "real_gemini_requests": 0,
+  "real_groq_requests": 0,
+  "real_ollama_inference_requests": 0,
+  "application_trials_started": 0,
+  "network_guard": "All HTTP/socket connections denied; model/desktop handlers mocked.",
+  "denied_attempts": [
+    {
+      "surface": "socket"
+    },
+    {
+      "surface": "socket"
+    },
+    {
+      "surface": "socket"
+    }
+  ],
+  "scope": "Bounded pause persistence, existing scheduler/intake, dependency, checkpoint, quota, cancellation, source guard and readiness regressions. No live GUI/voice/browser acceptance."
+}

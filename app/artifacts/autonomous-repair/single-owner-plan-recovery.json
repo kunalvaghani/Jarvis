@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-27",
+  "result": "PASS_READ_ONLY_PLAN_REPLAY",
+  "application_acceptance": false,
+  "source_trial": "f32db555c2694fbbaa884c6e19699ffa",
+  "rejected_plan": ".jarvis-runtime/autonomous-repair/f32db555c2694fbbaa884c6e19699ffa/.jarvis-runtime/native-workloads/d33274746e63425b84d0471b4b2c8e13/rejected-plan-1.json",
+  "rejected_plan_sha256": "0f8f89f13f6378049b3e4017f4b69274dbddcb82eedbf7b79c66553649d8b3f7",
+  "added_ownership_paths": [
+    "calculator_logic.py",
+    "main.py",
+    "PROJECT.md",
+    "REQUIREMENTS.md"
+  ],
+  "declared_files_unchanged": true,
+  "checks_unchanged": true,
+  "original_goal_unchanged": true,
+  "external_project_unchanged": true,
+  "planned_worker_count": 1,
+  "new_file_declarations": false,
+  "write_scope_permission_change": false,
+  "scope": "Exact retained rejected proposal through production ownership normalizer and workload validator; no inference, app code or tool writes.",
+  "previous_trial_terminal": {
+    "finished_at": "2026-10-27T16:27:40.725032+00:00",
+    "seconds": 903.265,
+    "result": "FAIL",
+    "native_status": "stopped",
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 2,
+      "guarded_replacement_attempts": 0,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 0
+    },
+    "jarvis_source_changed": true,
+    "configuration_changed": false,
+    "protected_worker_files_unchanged": true,
+    "external_checkpoint_unchanged": true,
+    "shutdown": "Owner reached its900-second limit and closed Actions gracefully before the supervisor cancellation check. No cancellation replay was issued; owner exit confirmed."
+  },
+  "regression": {
+    "tests": 112,
+    "seconds": 293.768,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-single-owner-regression.log"
+  },
+  "successor": {
+    "campaign": "75c0504dd92e494389bef8aaa93f79e9",
+    "owner_session": 19818,
+    "task": "24a4be5229c442d0be819be789ac6b3b",
+    "status": "RUNNING",
+    "seconds_limit": 900
+  }
+}

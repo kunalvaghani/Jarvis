@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "BASELINE_PROTECTION_CONFIRMED",
+  "application_acceptance": false,
+  "scope": "Controlled source fixture/mocked inference only; no acceptance application or live model affected. Independent baseline was deliberately not supplied to native worker.",
+  "retained_fixture": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-a576315d4cde454193bb6066642fc55e",
+  "known_before": [
+    "test_main.Checks.test_existing"
+  ],
+  "lost_after_first_write": [],
+  "native_candidate_decisions": [
+    {
+      "candidate_only": true,
+      "applied": false,
+      "accepted_for_save": false,
+      "source_path": "main.py",
+      "decision_precedes_working_save": true,
+      "proposed_sha256": "fcb8e78036e5e35f3cfd53e24daa07b9bd05de7d31c1e13936d6064e93863047",
+      "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-a576315d4cde454193bb6066642fc55e\\.jarvis-runtime\\native-code\\baf03804d2bd48b5ab2eeeae8f0f4931\\validation-f0b3f60b094748df8e5b02b355ed0215.json",
+      "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-a576315d4cde454193bb6066642fc55e\\.jarvis-runtime\\native-code\\baf03804d2bd48b5ab2eeeae8f0f4931\\candidate-checks\\14d141c1fd2844cab6f5081171352ee3\\validation-505fa767a0374f3e8068aa9196073c2a.json",
+      "lost_previously_passing_cases": {
+        "test_main.py": [
+          "test_main.Checks.test_existing"
+        ]
+      },
+      "progress_required": false,
+      "newly_passing_cases": {
+        "test_main.py": [
+          "test_main.Checks.test_new"
+        ]
+      },
+      "case_classifications_complete": true,
+      "errors_reaching_assertions": {},
+      "new_runtime_errors": {},
+      "verified_case_progress": false
+    }
+  ],
+  "frozen_test_unchanged": true,
+  "actual_source_save": false,
+  "native_inferences": 3,
+  "baseline_before": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-a576315d4cde454193bb6066642fc55e\\independent-before\\validation-e622c4ed0d504a03addfdd9ecf193f4d.json",
+  "baseline_after": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\first-write-boundary-a576315d4cde454193bb6066642fc55e\\.jarvis-runtime\\native-code\\baf03804d2bd48b5ab2eeeae8f0f4931\\validation-f0b3f60b094748df8e5b02b355ed0215.json"
+}

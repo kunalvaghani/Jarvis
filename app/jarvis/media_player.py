@@ -328,6 +328,8 @@ def play_result(actions, position, category, cancelled):
         position = len(rows)
     if not 1 <= position <= len(rows):
         raise ValueError("Choose a number from 1 to " + str(len(rows)) + ".")
+    from .island_choices import dismiss
+    dismiss(actions, kind='youtube')  # The results stay remembered for "play the next one"; the card goes.
     row = rows[position - 1]
     if found["kind"] == "playlist":
         return play_youtube_item(actions, row["first_video_id"] if "first_video_id" in row else row["video_id"],

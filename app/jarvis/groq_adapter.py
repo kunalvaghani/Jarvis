@@ -19,6 +19,50 @@ class CloudFailure(ValueError):
         super().__init__(reason); self.partial=partial
 
 
+def provider_failure(response,redactions=()):
+    """Retain categorical error and bounded rejected model text, never free-form error messages."""
+    failure=CloudFailure('provider_http_'+str(response.status_code))
+    try:
+        raw=b''
+        for chunk in response.iter_content(4096):
+            raw+=chunk
+            if len(raw)>64000:return failure
+        data=json.loads(raw);error=data.get('error',{})
+        codes={'json_validate_failed','tool_use_failed','context_length_exceeded','invalid_api_key',
+               'rate_limit_exceeded','model_not_found','unsupported_parameter','invalid_request_error','invalid_request'}
+        types={'invalid_request_error','authentication_error','rate_limit_error','server_error','tokens','requests'}
+        failure.provider_diagnostic={'http_status':response.status_code,
+            'code':error.get('code') if error.get('code') in codes else 'unclassified',
+            'type':error.get('type') if error.get('type') in types else 'unclassified'}
+        status=error.get('status')
+        if status in {'INVALID_ARGUMENT','PERMISSION_DENIED','NOT_FOUND','RESOURCE_EXHAUSTED','UNAUTHENTICATED','INTERNAL','UNAVAILABLE'}:
+            failure.provider_diagnostic['status']=status
+        private_message=error.get('message','')
+        if isinstance(private_message,str) and len(private_message.encode())<=3000:
+            for secret in redactions:
+                if isinstance(secret,str) and secret:private_message=private_message.replace(secret,'[REDACTED]')
+            from .coding_cloud_policy import SECRET
+            if private_message and not SECRET.search(private_message):failure.provider_message=private_message
+        message=error.get('message','')
+        message=message.lower() if isinstance(message,str) else ''
+        if ('schema' in message or 'constraint' in message) and any(word in message for word in ('complex','states','branch','nested')):
+            failure.provider_diagnostic['category']='schema_too_complex'
+        elif ('pattern' in message or 'regex' in message) and any(word in message for word in ('invalid','unsupported')):
+            failure.provider_diagnostic['category']='unsupported_schema_pattern'
+        elif 'unknown name' in message or 'unknown field' in message:
+            failure.provider_diagnostic['category']='unsupported_request_field'
+        elif 'json' in message and 'fail' in message:
+            failure.provider_diagnostic['category']='invalid_generated_json'
+        generation=error.get('failed_generation')
+        if isinstance(generation,str):
+            from .coding_cloud_policy import SECRET
+            withheld=len(generation.encode())>16000 or bool(SECRET.search(generation)) or any(isinstance(secret,str) and secret and secret in generation for secret in redactions)
+            failure.provider_diagnostic['rejected_generation_withheld']=withheld
+            if not withheld:failure.rejected_generation=generation
+    except (ValueError,TypeError,AttributeError):pass
+    return failure
+
+
 class GroqAdapter:
     def __init__(self, key, options, guardian, transport=None, endpoint=ENDPOINT, testing=False):
         if endpoint!=ENDPOINT and not (testing and endpoint.startswith('http://127.0.0.1:')):
@@ -68,7 +112,7 @@ class GroqAdapter:
                 return False
         return not self.closed.is_set()
 
-    def complete(self,messages,output_tokens=512,on_chunk=None,cancelled=lambda:False,tools=None,json_mode=False,reasoning='none',request_id=None,approved_image_hashes=()):
+    def complete(self,messages,output_tokens=512,on_chunk=None,cancelled=lambda:False,tools=None,json_mode=False,reasoning='none',request_id=None,approved_image_hashes=(),coding_context=None,task_id=None,task_limit=None):
         if (not self.options['enabled'] or self.options['routing']=='local' or not self.options['free_only'] or
                 self.options['account_plan']!='free' or not self.options['free_tier_confirmed'] or not self.options['dedicated_quota_confirmed']):
             raise CloudFailure('free_dispatch_policy_not_confirmed')
@@ -77,7 +121,11 @@ class GroqAdapter:
         if reasoning not in {'none','low','medium','high'}: raise CloudFailure('unsupported_reasoning')
         if type(output_tokens) is not int or not 1<=output_tokens<=self.options['max_output_tokens']:
             raise CloudFailure('output_budget_invalid')
-        amount=screen_payload({'messages':messages,'tools':tools or []})+output_tokens
+        if coding_context is not None:
+            from .coding_cloud_policy import approved_payload,token_estimate
+            messages=approved_payload(messages,coding_context)
+            amount=token_estimate({'messages':messages,'tools':tools or []})+output_tokens
+        else:amount=screen_payload({'messages':messages,'tools':tools or []})+output_tokens
         images=0
         for message in messages:
             if not isinstance(message,dict) or message.get('role') not in {'system','user','assistant','tool'}:
@@ -98,7 +146,9 @@ class GroqAdapter:
                     amount+=4096  # conservative extra allowance for small-image visual tokens
         if images>1: raise CloudFailure('free_quota_allows_only_one_small_approved_image')
         if tools and on_chunk: raise CloudFailure('streamed_tools_not_supported')
-        identifier=self.guardian.reserve(self.options['model'],amount,request_id,input_tokens=amount-output_tokens,output_tokens=output_tokens)
+        if json_mode and tools:raise CloudFailure('separate_structured_and_function_modes')
+        identifier=self.guardian.reserve(self.options['model'],amount,request_id,input_tokens=amount-output_tokens,output_tokens=output_tokens,
+            **({'task_id':task_id,'task_limit':task_limit} if task_id is not None else {}))
         payload={'model':self.options['model'],'messages':messages,'max_completion_tokens':output_tokens,
             'reasoning_effort':reasoning,'reasoning_format':'hidden','stream':on_chunk is not None}
         if json_mode: payload['response_format']={'type':'json_object'}
@@ -126,7 +176,7 @@ class GroqAdapter:
                 elif response.status_code in {401,403,404}:
                     self.available_until=0;self.next_refresh=time.monotonic()+60
                 else: self.guardian.block(30)
-                raise CloudFailure('provider_http_'+str(response.status_code))
+                raise provider_failure(response,redactions=(self.key,))
             if not payload['stream']:
                 raw=b''
                 for chunk in response.iter_content(4096):

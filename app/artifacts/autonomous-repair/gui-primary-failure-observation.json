@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-26T05:20:20.337912+00:00",
+  "campaign": "ee06be389ffc4421ab8bbb134e4561a0",
+  "native": "c19b3df31de44b6a822d0339299ce39f",
+  "owner_exited": true,
+  "finished_at": "2026-10-26T05:10:10.439682+00:00",
+  "seconds": 1223.621,
+  "source_changed_during_trial": false,
+  "native_error": "Executable checks still fail after 12 tool turns without a confirmed source save or changed diagnostics. Stop the stalled repair for root-cause analysis; source and frozen tests retained. No action replayed.",
+  "progress": {
+    "validation_signature": "7847b2f9fdcc44f462795dd2b198ff546ebc82cb97b26eea875bdc4f47908a33",
+    "identical_failed_checks": 2,
+    "idle_turns": 12
+  },
+  "retained_checkpoint_unchanged": true,
+  "primary_context_from_actual_frozen_failure": {
+    "primary_error": "AttributeError: 'list' object has no attribute 'invoke'",
+    "primary_error_partial": false,
+    "test_method": "test_button_click_addition",
+    "test_line": 18,
+    "frozen_test_source": "def test_button_click_addition(self):\n        self.buttons[\"2\"].invoke()\n        self.buttons[\"+\"][0].invoke()\n        self.buttons[\"3\"][0].invoke()\n        self.root.update_idletasks()\n        self.assertEqual(self.display.get(), \"2+3\")"
+  },
+  "regression": {
+    "tests": 159,
+    "passed": 159,
+    "seconds": 166.202,
+    "log": ".jarvis-runtime/repair-primary-failure-final.log"
+  },
+  "request_clarification": "Production UI callback implementations may be repaired; test-installed substitute callbacks and toolkit/stdlib monkeypatches remain forbidden. Previous request wording was overly broad. All six byte-protected inputs and all original checks remain unchanged.",
+  "acceptance": "OPEN; core6/6PASS, GUI2errors4failures; no physical acceptance."
+}

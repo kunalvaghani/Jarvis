@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "READ_ONLY_CONTEXT_AUDIT_COMPLETE",
+  "scope": "Exact retained read/check proposals replayed only on byte-identical owned source copies; inference intercepted before first source action. No model calls or application code authored. Context observation only, not live semantic or acceptance proof.",
+  "retained_runs": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\context-audit-d9b67afdfdca4c74b1d66c0727b4f778",
+  "conditions": [
+    {
+      "canonical": false,
+      "read_only_actions": [
+        "read_batch",
+        "read_slice",
+        "read_batch",
+        "run_checks",
+        "Read",
+        "read_slice"
+      ],
+      "application_files_unchanged": true,
+      "prompt_characters": 14607,
+      "prompt_sha256": "24e68482b6f26827023efe5df16faa9405f686858679295f157b6329fcfe91f8",
+      "required_tool": "Edit",
+      "mapping_assignment_present": false,
+      "all_protocol_observations_present": true,
+      "runtime_integer_zero_present": true,
+      "assigned_workload_text_present": true
+    },
+    {
+      "canonical": true,
+      "read_only_actions": [
+        "read_batch",
+        "read_slice",
+        "read_batch",
+        "run_checks",
+        "Read",
+        "read_slice"
+      ],
+      "application_files_unchanged": true,
+      "prompt_characters": 14622,
+      "prompt_sha256": "489ca1822af629b8a6c78cbc9c4001a33a0839612a274bc97a25215561a8d557",
+      "required_tool": "Edit",
+      "mapping_assignment_present": false,
+      "all_protocol_observations_present": true,
+      "runtime_integer_zero_present": true,
+      "assigned_workload_text_present": false
+    }
+  ]
+}

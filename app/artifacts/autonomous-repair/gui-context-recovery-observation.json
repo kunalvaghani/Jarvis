@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-26T06:34:18.120852+00:00",
+  "status": "FAIL",
+  "run": "47ba4e872cb94c8ebafc21c92820950e",
+  "native": "0afd9408f0e04c70abed7aa73d22ea9f",
+  "finished_at": "2026-10-26T06:28:40.077416+00:00",
+  "record_to_shutdown_seconds": 964.056,
+  "owner_exit_observed": true,
+  "task_states": [
+    "FAILED"
+  ],
+  "product_source_changed_during_trial": false,
+  "configuration_changed_during_trial": false,
+  "progress": {
+    "validation_signature": "7847b2f9fdcc44f462795dd2b198ff546ebc82cb97b26eea875bdc4f47908a33",
+    "identical_failed_checks": 2,
+    "idle_turns": 12
+  },
+  "error": "Executable checks still fail after 12 tool turns without a confirmed source save or changed diagnostics. Stop the stalled repair for root-cause analysis; source and frozen tests retained. No action replayed.",
+  "external_checkpoint_all_eight_unchanged": true,
+  "worker_protected_six_unchanged": true,
+  "applied_save_count": 1,
+  "save_scope": "One added duplicate except ValueError handler; GUI diagnostic outcomes unchanged. Not accepted progress.",
+  "actual_read_slices": [
+    {
+      "start": 1,
+      "count": 94,
+      "sha256": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d"
+    },
+    {
+      "start": 48,
+      "count": 10,
+      "sha256": "50996732850dc4186ad8ac2031d8d00a3368dffaf3049671a70232c1fccee92d"
+    },
+    {
+      "start": 48,
+      "count": 10,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 1,
+      "count": 24,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 25,
+      "count": 24,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 48,
+      "count": 10,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 58,
+      "count": 24,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 76,
+      "count": 21,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    },
+    {
+      "start": 48,
+      "count": 10,
+      "sha256": "58f41eb0ee648807f43ae8646fe119a6c504ba2cbe1a2cf4d2137366c518bfa2"
+    }
+  ],
+  "rejected_mutations": [
+    {
+      "tool": "apply_patch",
+      "error": "Patch context must match exactly once; file: ui_builder.py. Read current source and use a unique hunk."
+    },
+    {
+      "tool": "Edit",
+      "error": "Edit text must match uniquely or explicitly replace all matches."
+    }
+  ],
+  "diagnosis": "Two different unmatched-context proposals were safely rejected, but controller forced more Edit cycles. Existing full-file guarded replacement covered inference no-ops only. Extend it after two proven pre-write context rejections, retaining fresh read, scoped existing implementation <=8000 bytes, protected-source exclusions, source hash and independent tests.",
+  "new_application_acceptance": false
+}

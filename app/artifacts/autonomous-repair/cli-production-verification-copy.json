@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-25T21:35:44.018701+00:00",
+  "source_campaign": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e881677ccf38424680ce202f62bacd9c",
+  "source_project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\e881677ccf38424680ce202f62bacd9c\\python-calculator-application-supports-addition",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\cli-verification-ecc7e2935f744496b3dbedabc50858bf",
+  "scope": "Exact copy of independently accepted Jarvis-generated CLI for source-preserving production subprocess-test generation. No supervisor-authored implementation/test content or changes. Original accepted project remains unchanged. Copying is not another creation acceptance.",
+  "files": {
+    "PROJECT.md": {
+      "sha256": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+      "bytes": 330
+    },
+    "README.md": {
+      "sha256": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+      "bytes": 1071
+    },
+    "REQUIREMENTS.md": {
+      "sha256": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+      "bytes": 1119
+    },
+    "calculator.py": {
+      "sha256": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+      "bytes": 1107
+    },
+    "main.py": {
+      "sha256": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+      "bytes": 118
+    },
+    "test_calculator.py": {
+      "sha256": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b",
+      "bytes": 1199
+    }
+  }
+}

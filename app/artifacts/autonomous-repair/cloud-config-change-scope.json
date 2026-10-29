@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29T06:24:58.348315+00:00",
+  "status": "PASS",
+  "changed_top_level_sections": [
+    "coding_cloud",
+    "gemini",
+    "groq"
+  ],
+  "existing_groq_changes": [
+    "safety_margin"
+  ],
+  "all_other_configuration_preserved": true,
+  "scope": "Semantic comparison against the private pre-cloud source archive; no secrets included."
+}

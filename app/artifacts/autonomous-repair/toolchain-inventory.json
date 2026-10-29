@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-24T14:24:23.352498+00:00",
+  "scope": "Existing interpreter imports, executable PATH and app-local dependency directories; not an exhaustive machine-wide package search. No installations.",
+  "python_imports": {
+    "tkinter": true,
+    "psutil": true,
+    "flask": false,
+    "fastapi": false,
+    "PySide6": false,
+    "PyQt5": false,
+    "playwright": true
+  },
+  "executables": {
+    "node": "C:\\Program Files\\nodejs\\node.EXE",
+    "npm": "C:\\Program Files\\nodejs\\npm.CMD",
+    "vite": null,
+    "next": null,
+    "tsc": null
+  },
+  "app_local_modules": {
+    "react": false,
+    "vite": false,
+    "next": false
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-28T18:18:05.125939+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact completed Qwen prefix reaches the owned-interface generation contract; the retained borrowed-value proposal is rejected by the new schema before candidate execution or working save. Zero live model calls or supervisor-authored application logic.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "e6332b505f149420fa4b487ea7cfc91c4cd5d36695867fd2031b89ec73bc20fa",
+    "jarvis/coding_files.py": "a3f4ae2f0ead7db6e406825667b209aadf17a78a291e801f4cf7ee29ecc0e8c4",
+    "jarvis/repair_contract.py": "74e2006928040c62926c7ec0367a48a1ca970227c225d8f8b2e234e5ec3af784"
+  },
+  "source_campaign": "47eb172571874258ba713dcff2c6f669",
+  "retained_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-cb5f52b84e65427eb7348ea15ab1292b/response.txt",
+      "sha256": "93e1d94b97906cf308fccf75fb7dced0d6555550c962a7efc43140dd61401b82"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-574626905474419897fae91e534ea610/response.txt",
+      "sha256": "3e302287ada333f5b094b3a89fa43d47c83d88a3ba893112e7b0eb113dfbba0a"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-ad53a0c534664d609747233fc2031342/response.txt",
+      "sha256": "525eb284c9331cc5d7583d161e97fa05dfcc4776985ea39fd40bfde9b7d91c3e"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-fe4e6f472e3c46c59640aca675036127/response.txt",
+      "sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-b815de8a438c42578ec877af62cc0f9b/response.txt",
+      "sha256": "3c7a9253ec43baba065a8718cfcd3f8117d64947aa0c871805cc9ba8f526d984"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-cb0db03fd9ab492197178f228ba64eaf/response.txt",
+      "sha256": "35e396e227cd8315d34d35fc243055393ee4f8472cac61e13adeabd48d7f9022"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-b0c900f159f44903b045ff8e404da74c/response.txt",
+      "sha256": "ca0c35e1f20c4a8ad610125699ba40c51c26a07a8652d044daf7cd889f16822c"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/47eb172571874258ba713dcff2c6f669/.jarvis-runtime/native-code/00f200d15eed4815acaaad0f217cb477/model-responses/tool-975cc843be334e7783890cad33d415aa/response.txt",
+      "sha256": "02251676addc168d8d3b0523acade75e7d81d3f96200186cd0990d0ec3003493"
+    }
+  ],
+  "live_model_calls": 0,
+  "corrective_inference_ready": true,
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 2,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 1
+  },
+  "bounded_interface_corrections": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "correction": 1,
+      "error": "tool matches no allowed contract: tool.arguments.changes[0] is missing required field(s): owned_definition, binding_expression Evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-interface-correction\\a8d384066d014915ace5cf1e69511d5c\\.jarvis-runtime\\native-code\\fd80f6cc458940db82e3eb6ecb865710\\model-responses\\tool-6a8e1b09df0c4cfdbf072c5593afa1b9",
+      "source_unchanged": true,
+      "repair_turn_charged": true,
+      "action_replayed": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true
+}

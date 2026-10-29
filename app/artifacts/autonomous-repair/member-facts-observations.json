@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_PRODUCTION_REPAIR_TARGET_CHANGED_GUI_FAILED",
+  "application_acceptance": false,
+  "trigger_campaign": "73025887e51845f6b486ed240f785143",
+  "target_regression": {
+    "tests": 2,
+    "seconds": 0.031,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-member-facts-target.log"
+  },
+  "context_audit": "artifacts/autonomous-repair/pre-edit-context-audit.json",
+  "before_fix_audit": "artifacts/autonomous-repair/pre-edit-context-audit-before-member-facts.json",
+  "broad_regression": {
+    "status": "PASS",
+    "log": ".jarvis-runtime/repair-member-facts-regression.log",
+    "tests": 198,
+    "seconds": 206.176,
+    "result": "OK"
+  },
+  "limits": {
+    "source_bytes": 80000,
+    "members": 8,
+    "examined_statements": 24,
+    "retained_statements": 6,
+    "statement_characters": 240,
+    "statement_payload_characters": 800,
+    "total_source_facts_characters": 1000
+  },
+  "scope": "Fresh static same-named member writes and unique local RHS definitions only; non-exhaustive and not runtime alias/type proof. No import/eval, source action, read-before-write bypass, changed checks or rights. Model/context policy unchanged.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "610e9551191c91da328935be26d452516bf7c571b10ffc8f276753839445afb6",
+    "jarvis/source_observation.py": "e4d23d0f32121be798f9aaa52d1599c24c3e8095173d023c179cdbd9cb7fe518",
+    "tests/test_native_coding.py": "0f02899ac18939892f2e059abc8bda426f53bb19a55c3e8a45c56d8102e9e981"
+  },
+  "successor": {
+    "campaign": "d437aa39900b4f999aa2ea15b4d895e4",
+    "task": "1ec5db069ed1451594f670afd8687be4",
+    "owner_session": 16883,
+    "status": "FAILED_NORMAL_OWNER_EXIT",
+    "finished_at": "2026-10-28T04:40:37.679397+00:00",
+    "record_to_shutdown_seconds": 789.45,
+    "raw_campaign_result": "FAIL",
+    "native_status": "failed",
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 1,
+      "idle_turns": 14,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 1,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 3
+    },
+    "bounded_recovery_rejection": {
+      "stage": "planned replacement",
+      "error": "Edit old_string and new_string are identical; no change was proposed and no action executed. Choose a materially different correction, or use run_checks to observe the current source. Evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d437aa39900b4f999aa2ea15b4d895e4\\.jarvis-runtime\\native-code\\bc8f67c329c448858d2645b970b4de3c\\model-responses\\tool-2625fe4b6de249288876c15763f4bd9e",
+      "failure_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "action_executed": false,
+      "generic_fallback_allowed": false
+    },
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "outcomes": [
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false
+      },
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false
+      }
+    ],
+    "first_edit_target": "Button constructor/storage rather than handler; invented lambda/indentation old context was rejected."
+  },
+  "readiness": "DockerEngineUnavailable only; required models and local Git available."
+}

@@ -32,7 +32,7 @@ from pathlib import Path
 MODULES = ("perception", "working_memory", "long_term_memory", "reasoning", "executive", "action")
 
 # --- World model: what each kind of command does to the world -------------------------------------------------------
-READ_ONLY = {"ask", "queue_status", "jarvis_status", "system_info", "behavior", "memory_list", "memory_conversations",
+READ_ONLY = {"code_research", "ask", "queue_status", "jarvis_status", "system_info", "behavior", "memory_list", "memory_conversations",
              "repo_list", "repo_explain", "api_health", "weather_alerts", "gods_eye_explain", "gods_eye_status",
              "repeat_last", "project_recent", "project_list", "windows_catalog", "context_search", "list_controls",
              "whatsapp_read", "cognition_predict", "realtime", "screen_info"}
@@ -46,7 +46,7 @@ VIEW = {"gods_eye_show", "gods_eye_camera", "gods_eye_view", "gods_eye_cameras",
         "open_project", "browse", "browser_search", "messenger_focus"}
 SESSION = {"conversation_style", "stop_speaking", "end_conversation", "cancel_task", "cancel_current", "cancel_all",
            "approval_answer", "resume_task", "memory_summarize", "repo_learn", "repo_forget", "gods_eye_update",
-           "awareness_control", "project"}
+           "awareness_control", "project", "code_intel"}
 DEFAULT_SECONDS = {"ask": 6, "task": 40, "code_task": 300, "play_media": 12, "whatsapp_send": 25, "whatsapp_reply": 30,
                    "gods_eye_show": 20, "gods_eye_camera": 2, "open": 3, "api_health": 25, "weather_alerts": 6,
                    "repo_learn": 90, "media_search": 8}

@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-27",
+  "status": "REGRESSION_PASS_HISTORY_IMPORTED_GUI_REGRESSED",
+  "application_acceptance": false,
+  "scope": "Explicit immutable failed-validation handoff through the existing native diagnostic context; no new memory service, source copy, cached success or action replay.",
+  "verified_real_history": [
+    {
+      "accepted": true,
+      "path": "47ba4e872cb94c8ebafc21c92820950e/.jarvis-runtime/native-code/0afd9408f0e04c70abed7aa73d22ea9f/validation-7dcadb6dd1624b93bcb2068db160dee7.json",
+      "validation_sha256": "18f9376abaa1d47d56523a53c34d6d97f24579266c2522e96608bc5c08760d75",
+      "request_sha256": "44434555e712181667136694d7fb869bd3161f08de189f7b8278258d8512564c",
+      "snapshot": "47ba4e872cb94c8ebafc21c92820950e/.jarvis-runtime/native-code/0afd9408f0e04c70abed7aa73d22ea9f/check-workspace-1792995485922208300",
+      "frozen_hashes": {
+        "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+        "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+        "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+        "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12"
+      },
+      "source_fingerprint": "16061c77d0736270e0734b221b395a0617957f1d13e6bb03f446d286bba73fd9"
+    }
+  ],
+  "initial_historical_observations": [
+    {
+      "check": "test_gui_behavior.py",
+      "primary_error": "AttributeError: 'list' object has no attribute 'invoke'",
+      "source_fingerprint": "16061c77d0736270e0734b221b395a0617957f1d13e6bb03f446d286bba73fd9",
+      "validation_date": "2026-10-26T06:18:05.776660+00:00",
+      "frozen_test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+      "failure_line": 19,
+      "failed_statement": "self.buttons[\"2\"].invoke()"
+    }
+  ],
+  "bounds": {
+    "selected_records": 4,
+    "validation_bytes": 200000,
+    "source_files_per_snapshot": 32,
+    "source_file_bytes": 80000,
+    "snapshot_candidates": 4,
+    "model_observation_characters": 1200
+  },
+  "affected_regression": {
+    "tests": 190,
+    "seconds": 175.493,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-history-handoff-regression.log"
+  },
+  "final_frozen_binding_regression": {
+    "tests": 4,
+    "seconds": 1.072,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-history-handoff-final-bindings.log"
+  },
+  "limitations": [
+    "Explicit selected receipts only; automatic discovery across unrelated project histories is not enabled.",
+    "Old failures are historical untrusted data, never current acceptance or permission.",
+    "A matching import is not evidence that the model used it correctly or repaired the GUI."
+  ],
+  "source_protection": {
+    "protected_worker_unchanged": true,
+    "external_checkpoint_unchanged": true
+  },
+  "successor": {
+    "campaign": "458aa08047f74b079eeb3ac8e6450902",
+    "task": "cec0d5761c264028bb6ce4d39daa433e",
+    "owner_session": 94220,
+    "status": "STOPPED",
+    "seconds_limit": 900,
+    "finished_at": "2026-10-27T18:12:30.923346+00:00",
+    "seconds": 903.039
+  },
+  "production_imports": [
+    {
+      "accepted": true,
+      "path": "47ba4e872cb94c8ebafc21c92820950e/.jarvis-runtime/native-code/0afd9408f0e04c70abed7aa73d22ea9f/validation-7dcadb6dd1624b93bcb2068db160dee7.json",
+      "validation_sha256": "18f9376abaa1d47d56523a53c34d6d97f24579266c2522e96608bc5c08760d75",
+      "request_sha256": "44434555e712181667136694d7fb869bd3161f08de189f7b8278258d8512564c",
+      "snapshot": "47ba4e872cb94c8ebafc21c92820950e/.jarvis-runtime/native-code/0afd9408f0e04c70abed7aa73d22ea9f/check-workspace-1792995485922208300",
+      "frozen_hashes": {
+        "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+        "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+        "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+        "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+        "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+      },
+      "source_fingerprint": "16061c77d0736270e0734b221b395a0617957f1d13e6bb03f446d286bba73fd9"
+    }
+  ],
+  "production_progress": {
+    "validation_signature": "15e401aa2bc531a44923ba9340ef1b0f54f9e0269cc69eb410802d321ff7640d",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 0,
+    "failure_history_versions": 2,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 0,
+    "rejected_repair_proposals": 0
+  },
+  "production_jarvis_source_changed": false,
+  "production_configuration_changed": false,
+  "production_source_protection": {
+    "protected_worker_unchanged": true,
+    "external_checkpoint_unchanged": true
+  },
+  "production_outcome": "Historical receipt accepted in real native worker; model introduced mixed grid/pack geometry and lost the prior initial-display success. No GUI acceptance. Candidate-before-save protection is the next validated fix."
+}

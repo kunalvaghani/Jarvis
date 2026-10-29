@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-26T09:53:10.725767+00:00",
+  "status": "FAIL",
+  "run": "99805e9959014b77b6881852c08215f9",
+  "native": "8379ec7a6dec4b0ea17f59645b25f172",
+  "finished_at": "2026-10-26T09:50:07.580276+00:00",
+  "record_to_shutdown_seconds": 2415.011,
+  "owner_exit_observed": true,
+  "task_states": [
+    [
+      1,
+      "CANCELLED"
+    ],
+    [
+      2,
+      "PARTIAL"
+    ]
+  ],
+  "cancellation": {
+    "date": "2026-10-26T09:49:54.398836+00:00",
+    "reason": "Retire source-obsolete GUI trial after primary-exception frame mismatch reproduced and targeted regression passed. Actual prompt selected downstream lines16/35/41 instead of failing frozen line20. New source pairs exact primary frames and statement. Complete broad regressions without obsolete Qwen generation before restart; keep all original source/tests/journals.",
+    "targets": [
+      {
+        "id": "aabe2a63c06343f4aa156f657a6f1ab4",
+        "number": 1,
+        "state": "RUNNING"
+      }
+    ],
+    "requests": [
+      {
+        "target": "aabe2a63c06343f4aa156f657a6f1ab4",
+        "control": [
+          "c6aeea804f85435a95dc326cba4a7906",
+          true
+        ]
+      }
+    ]
+  },
+  "all_eight_external_files_unchanged": true,
+  "six_protected_worker_files_unchanged": true,
+  "jarvis_source_changed_during_trial": true,
+  "configuration_changed_during_trial": false,
+  "progress": {
+    "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+    "identical_failed_checks": 1,
+    "idle_turns": 6,
+    "guarded_replacement_attempts": 3
+  },
+  "applied_saves": 3,
+  "raw_write_transport_proof": [
+    {
+      "response": ".jarvis-runtime\\native-code\\8379ec7a6dec4b0ea17f59645b25f172\\model-responses\\tool-48e3379252444279a712c9b7bb879acf\\response.txt",
+      "source_sha256": "23e76d57dfa5a34c639b24e8e549cc99e0374ed3c4c466598d38e2a40413d544",
+      "confirmed_matching_save": true
+    },
+    {
+      "response": ".jarvis-runtime\\native-code\\8379ec7a6dec4b0ea17f59645b25f172\\model-responses\\tool-86928d7fb8684606a22f5770db4310d1\\response.txt",
+      "source_sha256": "e94722abfa54b1d68853bcbeb0577374374e5d6c06563b9fb678a4ce7b635f56",
+      "confirmed_matching_save": true
+    },
+    {
+      "response": ".jarvis-runtime\\native-code\\8379ec7a6dec4b0ea17f59645b25f172\\model-responses\\tool-9c0ce655bab74e5a9b176ed7328c12ed\\response.txt",
+      "source_sha256": "635a5245203fac4c53082b253f5c897a94ff3c8cddbdfa6a12b6897bb24f1c29",
+      "confirmed_matching_save": true
+    }
+  ],
+  "incomplete_cancelled_responses_retained": [
+    ".jarvis-runtime\\native-code\\8379ec7a6dec4b0ea17f59645b25f172\\model-responses\\inference-2a7c41209626438f99fa46fcc90dad7b\\response.txt"
+  ],
+  "new_diagnostic": {
+    "path": "test_gui_behavior.py",
+    "error": "TypeError: can only concatenate str (not \"int\") to str",
+    "primary_test_context": {
+      "primary_error": "TypeError: can only concatenate str (not \"int\") to str",
+      "primary_error_partial": false,
+      "test_method": "test_button_click_addition",
+      "test_line": 18,
+      "failure_line": 20,
+      "failed_statement": "self.buttons[\"+\"][0].invoke()",
+      "failed_statement_partial": false,
+      "frozen_test_source": "def test_button_click_addition(self):\n        self.buttons[\"2\"].invoke()\n        self.buttons[\"+\"][0].invoke()\n        self.buttons[\"3\"][0].invoke()\n        self.root.update_idletasks()\n        self.assertEqual(self.display.get(), \"2+3\")"
+    },
+    "failure_excerpts": [
+      "TypeError: can only concatenate str (not \"int\") to str",
+      "AssertionError: '1234567890' not found in ''",
+      "AssertionError: '+' not found in ''"
+    ],
+    "failed_tests": [
+      "test_button_click_addition (test_gui_behavior.TestCalculatorGUI)",
+      "test_button_click_clear (test_gui_behavior.TestCalculatorGUI)",
+      "test_error_display_division_by_zero (test_gui_behavior.TestCalculatorGUI)",
+      "test_keyboard_input_numbers (test_gui_behavior.TestCalculatorGUI)",
+      "test_keyboard_input_operators (test_gui_behavior.TestCalculatorGUI)"
+    ],
+    "source_locations": [
+      {
+        "file": "test_gui_behavior.py",
+        "line": 20
+      },
+      {
+        "file": "__init__.py",
+        "line": 1681
+      }
+    ]
+  },
+  "old_incorrect_locations": [
+    {
+      "file": "test_gui_behavior.py",
+      "line": 16
+    },
+    {
+      "file": "test_gui_behavior.py",
+      "line": 35
+    },
+    {
+      "file": "test_gui_behavior.py",
+      "line": 41
+    }
+  ],
+  "diagnosis": "Primary TypeError belongs to frozen GUI line20 and tkinter cget1681; prior diagnostic used downstream lines16,35,41. Pair frames with chosen exception block and quote exact unchanged failing statement. New helper has targeted regression; broad verification pending.",
+  "application_outcomes": "Core checks pass; GUI remains six failed/erroring tests. Guarded replacement executed in production, but no GUI acceptance improvement. No candidate promoted to original external checkpoint.",
+  "new_application_acceptance": false
+}

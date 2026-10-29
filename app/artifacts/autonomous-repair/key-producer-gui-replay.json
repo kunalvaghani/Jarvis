@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-28T21:03:18.498985+00:00",
+  "status": "REGRESSION_REPLAY_PASS",
+  "application_acceptance": false,
+  "scope": "Read-only actual Qwen source/frozen validation and rejected proposals. No model calls, candidate execution or working saves. No supervisor-authored application replacement.",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "ui_builder.py": "8dfc317dcc868bca9d02f3f256bb9de748c0d2bd107d3eefbfc0ae71304b1424"
+  },
+  "producer": {
+    "old_string": "        buttons = [\n            (\"C\", \"clear\"), (\"/\", \"divide\"), (\"*\", \"multiply\"),\n            (\"7\", \"7\"), (\"8\", \"8\"), (\"9\", \"9\"), (\"-\", \"subtract\"),\n            (\"4\", \"4\"), (\"5\", \"5\"), (\"6\", \"6\"), (\"+\", \"add\"),\n            (\"1\", \"1\"), (\"2\", \"2\"), (\"3\", \"3\"), (\"=\", \"equals\")\n        ]",
+    "member": "buttons",
+    "missing_key": "0",
+    "observed_keys": [
+      "C",
+      "/",
+      "*",
+      "7",
+      "8",
+      "9",
+      "-",
+      "4",
+      "5",
+      "6",
+      "+",
+      "1",
+      "2",
+      "3",
+      "="
+    ],
+    "name": "buttons",
+    "key_position": 0,
+    "declaration_line": 32,
+    "loop_line": 40,
+    "binding_line": 42
+  },
+  "rejected_actual_proposals": [
+    {
+      "old_string": "        self.buttons = {}",
+      "new_string_sha256": "544788a9866cd1c3fe4d76c69ab582d35c520ded12cdede86e64907d17d57ab2",
+      "rejected_before_save": true
+    }
+  ],
+  "frozen_test_sha256": {
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+  },
+  "validation": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\validation-a0137d9537754ad481518a634af465ba.json",
+  "independent_failure_archive": "gui-acceptance-3d38ccb4d0f8476592dcb6a3590cc0e3.json",
+  "all_eight_source_hashes_unchanged": true
+}

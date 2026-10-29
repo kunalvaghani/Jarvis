@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_PRODUCTION_METADATA_APPLIED_GUI_FAILED",
+  "trigger_campaign": "bea40060ee574da6873368556191ef3d",
+  "original_errors": [
+    "Declare each checked entry/test file in the file list.",
+    "Worker all must own its test file test_gui_behavior.py in paths as well as its implementation.",
+    "Worker all must own its test file test_calculator.py in paths as well as its implementation.",
+    "Declare checked file test_gui_behavior.py in files and assign it.",
+    "Declare checked file test_calculator.py in files and assign it."
+  ],
+  "preserved_named_paths": [
+    "calculator_logic.py",
+    "main.py",
+    "project.md",
+    "requirements.md",
+    "test_calculator.py",
+    "test_gui_behavior.py"
+  ],
+  "added_existing_test_metadata": [
+    "test_gui_behavior.py",
+    "test_calculator.py"
+  ],
+  "checks_unchanged": true,
+  "goal_unchanged": true,
+  "validator_result": "VALID_METADATA_ONLY_PLAN",
+  "application_source_modified": false,
+  "code_fix_implemented": true,
+  "scope": "Metadata-only analysis of the exact rejected Qwen plan. Existing declared checks and current explicitly frozen files only; no model/source execution, write rights or acceptance.",
+  "analysis_driver_initial_error": "AttributeError: 'list' object has no attribute 'normalize_roots'",
+  "implementation": "jarvis/codex_workload.py:complete_frozen_test_metadata",
+  "actual_helper_added": [
+    "test_gui_behavior.py",
+    "test_calculator.py"
+  ],
+  "actual_helper_validator_result": "PASS",
+  "external_files_unchanged": true,
+  "target_regression": {
+    "tests": 1,
+    "seconds": 0.044,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-frozen-metadata-target.log"
+  },
+  "limits": "One independent worker; only root-level test_*.py paths already used by declared Python checks, explicitly frozen in the original goal, present in the pre-planning fingerprint and still matching raw SHA256; maximum32 files/12 checks. No test content or check changes; normal contract/file guards still apply.",
+  "affected_regression": {
+    "tests": 195,
+    "seconds": 197.301,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-frozen-metadata-regression.log"
+  },
+  "source_sha256": {
+    "jarvis/codex_workload.py": "d6b467728a6722121f2b4a8a5bc99aab9d6468f2902bfb65e25e9b25fadc208a",
+    "jarvis/native_coding.py": "8ce874c720d6f5e449a1dd52a0c666e89f354659511e0efcfddeb7c37a08fc73",
+    "tests/test_codex_workload.py": "91a485533a2065522494eee6de6647235f81bd88e58ce4e1bd6c745a77171056",
+    "tests/test_native_coding.py": "59de99fd5627aca7208afe18d51385b1ad3d876690790d96add13fc24424d9d5",
+    "tests/test_structured_output.py": "c53814b32e12c2afd13c2f2ffc7484a3141ff20c232a9078ff39e777291b6416"
+  },
+  "successor": {
+    "campaign": "ba8eed4086ae471681cfa59bb8b4d679",
+    "task": "53b0785f0a9946a58b6a385408499f94",
+    "owner_session": 31285,
+    "seconds_limit": 900,
+    "status": "FAILED_NORMAL_OWNER_EXIT",
+    "finished_at": "2026-10-28T04:01:08.462945+00:00",
+    "record_to_shutdown_seconds": 550.5,
+    "raw_campaign_result": "FAIL",
+    "native_status": "failed",
+    "bounded_recovery_rejection": {
+      "stage": "planned replacement",
+      "error": "Edit old_string and new_string are identical; no change was proposed and no action executed. Choose a materially different correction, or use run_checks to observe the current source. Evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ba8eed4086ae471681cfa59bb8b4d679\\.jarvis-runtime\\native-code\\846cba1488114038ae8fb07003b206c4\\model-responses\\tool-2b7a80cde12640bea7ba85c0ce3b2959",
+      "failure_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "action_executed": false,
+      "generic_fallback_allowed": false
+    },
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 3,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 0
+    },
+    "planning_seconds": 94.906,
+    "completed_frozen_test_metadata_paths": [
+      "test_gui_behavior.py",
+      "test_calculator.py"
+    ],
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "outcomes": [
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false
+      },
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false
+      }
+    ]
+  }
+}

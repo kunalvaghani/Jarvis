@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-25T19:21:58.900558+00:00",
+  "source_campaign": "02ee3f67b9a34c478eaa2d821e882c18",
+  "parent_provenance": "gui-repair-copy-provenance.json",
+  "source_worker": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\02ee3f67b9a34c478eaa2d821e882c18\\.jarvis-runtime\\native-workloads\\3e4d1368eece402c8dd8baa7a431eff2\\workers\\all",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-repair-continuation-68750b0e386b4075bf753420d66e9e36",
+  "scope": "Retained Jarvis-generated partial implementation copied exactly from failed repair. Two frozen tests explicitly restored byte-for-byte from original provenance after Git line-ending conversion; decoded test content matches failed worker. No supervisor-authored implementation, promotion or acceptance. Raw failed worker preserved.",
+  "files": {
+    "README.md": {
+      "source": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\02ee3f67b9a34c478eaa2d821e882c18\\.jarvis-runtime\\native-workloads\\3e4d1368eece402c8dd8baa7a431eff2\\workers\\all\\README.md",
+      "sha256": "a10e22e10497bc54bfd4c6c198c98b256744a02040e3ef27a6b9255451fd168d",
+      "bytes": 895,
+      "worker_sha256": "a10e22e10497bc54bfd4c6c198c98b256744a02040e3ef27a6b9255451fd168d",
+      "worker_bytes": 895,
+      "original_test_bytes_restored": false
+    },
+    "calculator_logic.py": {
+      "source": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\02ee3f67b9a34c478eaa2d821e882c18\\.jarvis-runtime\\native-workloads\\3e4d1368eece402c8dd8baa7a431eff2\\workers\\all\\calculator_logic.py",
+      "sha256": "bc0e7dea8a9ddf6049f25250b4fcf10b6103340d4613abf77cd3487f384b45f1",
+      "bytes": 5216,
+      "worker_sha256": "bc0e7dea8a9ddf6049f25250b4fcf10b6103340d4613abf77cd3487f384b45f1",
+      "worker_bytes": 5216,
+      "original_test_bytes_restored": false
+    },
+    "main.py": {
+      "source": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\02ee3f67b9a34c478eaa2d821e882c18\\.jarvis-runtime\\native-workloads\\3e4d1368eece402c8dd8baa7a431eff2\\workers\\all\\main.py",
+      "sha256": "14787c414ad67926fa34387f1a407715a4e6b86a407c52359cfff4a720254775",
+      "bytes": 522,
+      "worker_sha256": "14787c414ad67926fa34387f1a407715a4e6b86a407c52359cfff4a720254775",
+      "worker_bytes": 522,
+      "original_test_bytes_restored": false
+    },
+    "test_calculator.py": {
+      "source": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-repair-fe2cf64116f14677b1f50d0785bde935\\test_calculator.py",
+      "sha256": "36bf211cf60d3c962aef5fb1d44f2b9d0aafd1a714610d6e3127a97852e0a78b",
+      "bytes": 1037,
+      "worker_sha256": "1608f3b98d0476473a82d6ab7adf7196a90d3cfc43684fa8a8ab403d13e7fb51",
+      "worker_bytes": 1071,
+      "original_test_bytes_restored": true
+    },
+    "test_gui_behavior.py": {
+      "source": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-repair-fe2cf64116f14677b1f50d0785bde935\\test_gui_behavior.py",
+      "sha256": "9d110f3c368379888051e61c275f99965ebcd04c506d81a06dab38f0c0d4d110",
+      "bytes": 1251,
+      "worker_sha256": "8316436e76386e9251ae47132be6c29f0608d39bce957b021b40572ee085cda8",
+      "worker_bytes": 1294,
+      "original_test_bytes_restored": true
+    },
+    "ui_builder.py": {
+      "source": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\02ee3f67b9a34c478eaa2d821e882c18\\.jarvis-runtime\\native-workloads\\3e4d1368eece402c8dd8baa7a431eff2\\workers\\all\\ui_builder.py",
+      "sha256": "ba88267017e9edb86674d83c44146ccdf135c50dc715b15dd139b18c5d86374b",
+      "bytes": 4536,
+      "worker_sha256": "ba88267017e9edb86674d83c44146ccdf135c50dc715b15dd139b18c5d86374b",
+      "worker_bytes": 4536,
+      "original_test_bytes_restored": false
+    }
+  }
+}

@@ -6,19 +6,40 @@ import time
 
 
 def snapshot(actions, now=None):
+    """The first pending choice card that has not already been answered (by click or voice)."""
+    dismissed = set(getattr(actions, 'dismissed_choices', ()) or ())
+    return next((card for card in cards(actions, now) if card['token'] not in dismissed), None)
+
+
+def dismiss(actions, token=None, kind=None):
+    """Hide an answered card. Its underlying context (e.g. YouTube results for "play the next one") stays."""
+    if token is None:
+        try:
+            card = next((c for c in cards(actions) if kind is None or c['kind'] == kind), None)
+        except (AttributeError, KeyError, TypeError):
+            return None  # Never let card bookkeeping break the action that answered it.
+        token = card and card['token']
+    if token:
+        actions.dismissed_choices = (list(getattr(actions, 'dismissed_choices', ()) or ()) + [token])[-32:]
+    return token
+
+
+def cards(actions, now=None):
     now = time.monotonic() if now is None else now
     from .whatsapp import snapshot as whatsapp_snapshot
     waiting = whatsapp_snapshot(actions)
     if waiting:
-        return waiting  # A paused WhatsApp step (contact choice, message preview, incoming call).
+        yield waiting  # A paused WhatsApp step (contact choice, message preview, incoming call).
     knowledge = getattr(actions, 'knowledge', None)
     if knowledge is not None and getattr(knowledge, 'pending_memory', None):
         card = knowledge.choice_snapshot()
         if card:
-            return card
-    groups = [('open', actions.pending_open, 45), ('project', actions.projects.pending, 180),
-              ('control', actions.ui_controls.pending if actions.ui_controls else None, 45),
-              ('task', actions.pending_question, 180), ('youtube', getattr(actions, 'youtube_results', None), 300)]
+            yield card
+    controls = getattr(actions, 'ui_controls', None)
+    groups = [('open', getattr(actions, 'pending_open', None), 45),
+              ('project', getattr(getattr(actions, 'projects', None), 'pending', None), 180),
+              ('control', controls.pending if controls else None, 45),
+              ('task', getattr(actions, 'pending_question', None), 180), ('youtube', getattr(actions, 'youtube_results', None), 300)]
     for kind, pending, lifetime in groups:
         if not pending or not pending.get('choices') or now-pending['time'] > lifetime:
             continue
@@ -30,11 +51,10 @@ def snapshot(actions, now=None):
                     'verb': pending.get('verb'), 'labels': labels}
         token = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
         images = pending.get('thumbnails', {})
-        return {'token': token, 'kind': kind, 'expires': pending['time']+lifetime,
-                'question': pending.get('question', 'Choose an option or say its name / number.'),
-                'options': [{'label': label[:500], 'image': images.get(str(c.get('id')), '') if kind=='control' else ''}
-                            for label,c in zip(labels,choices)]}
-    return None
+        yield {'token': token, 'kind': kind, 'expires': pending['time']+lifetime,
+               'question': pending.get('question', 'Choose an option or say its name / number.'),
+               'options': [{'label': label[:500], 'image': images.get(str(c.get('id')), '') if kind=='control' else ''}
+                           for label,c in zip(labels,choices)]}
 
 
 def resolve(actions, token, index):
@@ -42,6 +62,8 @@ def resolve(actions, token, index):
     current = snapshot(actions)
     if not current or current['token'] != token or not 0 <= index < len(current['options']):
         raise ValueError('Those choices changed or expired. Repeat the request for a fresh list.')
+    if current['kind'] != 'control':
+        dismiss(actions, token)  # Answered: the card goes away; a fresh list gets a new token.
     if current['kind'] == 'memory':
         return Command('memory_choice', str(index), token)
     if current['kind']=='open':

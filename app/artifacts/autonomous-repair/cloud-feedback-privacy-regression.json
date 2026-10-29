@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29T05:49:58.936819+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "archived_feedback_reproduces": "unredacted_host_path",
+  "new_feedback_cloud_privacy_accepted": true,
+  "host_path_rejection_unchanged": true,
+  "ordinary_python_expression_validation": true,
+  "diagnostic_correction": "Archived schema already accepted r/n and valid names. Apparent doubled escapes were diagnostic representation, not a defective pattern. The actual bug was regex repr in error feedback falsely matching UNC; the fix omits raw schema regex from errors. Anchors also now reject trailing physical newlines.",
+  "focused_tests": {
+    "passed": 94,
+    "seconds": 50.354,
+    "scope": "Initial94-test targeted fix check; subsequent path diagnostic compatibility is covered by current194 native and89 cloud tests."
+  },
+  "network_denied_tests": {
+    "passed": 89,
+    "seconds": 22.984,
+    "tokens": 0
+  },
+  "architecture_tests": {
+    "passed": 96,
+    "skipped": 3,
+    "seconds": 24.12
+  },
+  "files": {
+    "jarvis/structured_output.py": "9509672b52f4cbd6268ce5a636e9319c15b9535b5df555997c84168a97373be6",
+    "jarvis/execution_contract.py": "87da4d5ad8ad583455c0a956561c12b1678e22e2515d0a9128c4d4b60fb32f74",
+    "jarvis/config_contract.py": "0f7041183afa0e1e884f56045fb2e91dac7f6131ea65e7bff6d6b5dde1325b20",
+    "tests/test_execution_contract.py": "eaee6859d3eef31997933f8440a4fd19a03276f509fdc72b59737976ec639b75",
+    "tests/test_cloud_coding_routes.py": "afd77e20053360c2a0f5f424fa685ca4241fd75a0997b26b76b598ba1703d7ee"
+  },
+  "native_regression": {
+    "passed": 194,
+    "seconds": 217.186,
+    "log": ".jarvis-runtime/cloud-feedback-native-regression.log"
+  },
+  "initial_compatibility_failure": {
+    "log": ".jarvis-runtime/cloud-feedback-native-regression-before-path-wording.log",
+    "resolution": "Preserved existing required path format wording for path/file_path fields; original assertion unchanged; full194-test rerun passes."
+  }
+}

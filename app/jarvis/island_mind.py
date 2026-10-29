@@ -62,6 +62,11 @@ class MindView:
             tk.Button(actions_row, text=label, command=lambda v=value: self.project_control(v), bg=CARD, fg=TEXT,
                       activebackground='#2a2a2a', activeforeground=TEXT, relief='flat', font=('Segoe UI', 7),
                       padx=4, pady=1).pack(side='left', padx=(0, 3), pady=(1, 2))
+        # Code intelligence: research progress, the best candidate and its provenance (never raw search results).
+        self.code = tk.Label(parent, text='Code intelligence · off', bg=BG, fg=MUTED, anchor='w', justify='left',
+                             wraplength=440, font=('Segoe UI', 8))
+        self.code.pack(fill='x')
+        self.code_text = None
         self.canvas = tk.Canvas(parent, bg=CARD, highlightthickness=0, height=220)
         self.canvas.pack(fill='x', pady=(2, 4))
         self.canvas.bind('<Button-1>', self.click)
@@ -128,6 +133,26 @@ class MindView:
         except (ValueError, OSError) as exc:
             reply = 'Project control failed: ' + str(exc)[:160]
         self.detail.configure(text=reply)
+
+    def refresh_code(self):
+        from .pcide import engine
+        intel = engine()
+        snap = intel.snapshot() if intel is not None else {'enabled': False}
+        if not snap.get('enabled'):
+            text = 'Code intelligence · off (config pcide.enabled)'
+        else:
+            research, best, library = snap['research'], snap['best'], snap['library']
+            phase = {'QUEUED': 'Research queued', 'RUNNING': 'Researching implementations', 'COMPLETE': 'Research complete',
+                     'CANCELLED': 'Research cancelled', 'OBSOLETE': 'Research superseded by new requirements', 'FAILED': 'Research failed'}
+            parts = [f"Code intelligence · {phase.get(research['state'], 'Idle') if research else 'Idle'}"
+                     + (f" · {research['validated']} usable / {research['rejected']} rejected of {research['candidates']}" if research else '')
+                     + f" · library {library['reusable']} reusable of {library['items']}"]
+            if best:
+                parts.append(f"Best: {best['name']} — {best['license_status'] or 'license unknown'} · {best['state'].lower()}")
+            text = '\n'.join(parts)
+        if text != self.code_text:
+            self.code.configure(text=text)
+            self.code_text = text
 
     def refresh_project(self):
         engine = self.projects()
@@ -199,6 +224,11 @@ class MindView:
                 self.refresh_awareness()
             except Exception as exc:  # The awareness strip never breaks the Mind view.
                 self.aware.configure(text='Awareness · unavailable (' + type(exc).__name__ + ')')
+        if getattr(self, 'code', None) is not None:
+            try:
+                self.refresh_code()
+            except Exception as exc:
+                self.code.configure(text='Code intelligence · unavailable (' + type(exc).__name__ + ')')
         if getattr(self, 'project', None) is not None:
             try:
                 self.refresh_project()

@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-28T20:07:57.260222+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact completed Qwen prefix reaches the owned-interface generation contract; the actual retained uniform assignment contradicts the selected per-key intent and is rejected by typed selector/value fields before candidate execution or save; verified failure facts remain present. Zero live model calls or supervisor-authored application logic.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "2b8b91eaf47fb8d6f5c523595995b0ac7a926d9e24f119fce7624e28fafcd9e6",
+    "jarvis/coding_files.py": "8ab0fcb06d87b3e25f53b8d0e7f48748f8ebe005a9476ca452594c012a4d3a31",
+    "jarvis/repair_contract.py": "44fa13f449225f96b57e416643f1dbf6fa77562f64d8267842319676e18b677a"
+  },
+  "source_campaign": "d92acf8d4e344e3babb799e2b210fdd5",
+  "retained_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-9e72a4f5bed441a98f5bb91e4c79fc91/response.txt",
+      "sha256": "cd461d50da977f946bd88fdaabd7db213423c159ca056ef91c91dda3cdc86d0b"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-62ca01451ae2439a8d342791ffed824b/response.txt",
+      "sha256": "3e302287ada333f5b094b3a89fa43d47c83d88a3ba893112e7b0eb113dfbba0a"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-a0cbf0ecee0b42af94d6feee13ac9660/response.txt",
+      "sha256": "120a5e07a06d86789ca1eccb06d7b71011171d8b7e5951798834f685916250b7"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-5109842ab4ea441c81656de1dbea38b0/response.txt",
+      "sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-6825848f3cb24bf4b8f7e45fd42b66a2/response.txt",
+      "sha256": "0fbaf20e5f6c76f2a42957ab0064e90a09485a1dcd54fc50e55a1127db0e4ca8"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-67d0ca2b43a3462aa4a6dab25b0bb287/response.txt",
+      "sha256": "1f4ca1e0b920e7689fa0ed79ed94673a9ab19249f62ea6358f21bb172eab9b8f"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-3c64f18bcac1449b923243ae772d73d7/response.txt",
+      "sha256": "0c3f4cd6b077522a94d2dddbc79111f1c5af11da819de898e7a16819a79a0111"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/d92acf8d4e344e3babb799e2b210fdd5/.jarvis-runtime/native-code/a1d92cc1ef1d40988f6940b1c250e50c/model-responses/tool-7374559c9fc04174800562bbeb699531/response.txt",
+      "sha256": "6c5bffb171c0d02092f26917ff1d3b0d46467c3fce8169ecef0f4216235cd1b8"
+    }
+  ],
+  "live_model_calls": 0,
+  "corrective_inference_ready": true,
+  "restored_observations": [
+    {
+      "kind": "current_failed_check",
+      "source_fingerprint": "c86c764642943d4db30a5028af0c98186ab22919196ea021905b522805becc1d",
+      "checks": [
+        {
+          "test_file": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "failed_cases": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_cases": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        }
+      ],
+      "untrusted_diagnostic_data": true,
+      "current_check_credit": false
+    },
+    {
+      "kind": "historical_counterexample",
+      "source_fingerprint": "29d635c75564d3b29cef66f472a6db31994106c93ad5b68c0dd8b4d90e055208",
+      "checks": [
+        {
+          "test_file": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "failed_cases": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_cases": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ],
+          "runtime_failure_facts": [
+            {
+              "test_method": "test_button_click_addition",
+              "exception_type": "TypeError",
+              "frames": [
+                {
+                  "module_path": "tkinter/__init__.py",
+                  "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+                  "line": 1681,
+                  "function": "cget",
+                  "operands": {
+                    "key": {
+                      "type": "int",
+                      "value": 0
+                    }
+                  }
+                }
+              ],
+              "partial": true
+            }
+          ]
+        }
+      ],
+      "untrusted_diagnostic_data": true,
+      "current_check_credit": false
+    }
+  ],
+  "typed_method_schema": {
+    "anyOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "old_string",
+          "when_keys",
+          "value_expression"
+        ],
+        "properties": {
+          "old_string": {
+            "type": "string",
+            "enum": [
+              "            self.buttons[text] = [btn]"
+            ]
+          },
+          "when_keys": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "enum": [
+                "2"
+              ]
+            }
+          },
+          "value_expression": {
+            "type": "string",
+            "enum": [
+              "btn",
+              "[[btn]]"
+            ]
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "old_string",
+          "when_keys",
+          "value_expression"
+        ],
+        "properties": {
+          "old_string": {
+            "type": "string",
+            "enum": [
+              "            self.buttons[text] = [btn]"
+            ]
+          },
+          "when_keys": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": {
+              "enum": [
+                "+",
+                "3",
+                "C",
+                "1",
+                "/",
+                "0"
+              ]
+            }
+          },
+          "value_expression": {
+            "type": "string",
+            "enum": [
+              "btn",
+              "[[btn]]"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 2,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 1
+  },
+  "bounded_interface_corrections": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "correction": 1,
+      "error": "tool matches no allowed contract: tool.arguments.changes[0] matches no allowed contract: tool.arguments.changes[0] is missing required field(s): when_keys, value_expression; tool.arguments.changes[0] is missing required field(s): when_keys, value_expression Evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-interface-correction\\33a4c219ccb44514962d77489c108ee6\\.jarvis-runtime\\native-code\\ad8c82c5a02745b2ad900dae6f19e7da\\model-responses\\tool-939eface6568416f84db236b3401fed6",
+      "source_unchanged": true,
+      "repair_turn_charged": true,
+      "action_replayed": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true
+}

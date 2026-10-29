@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-28T10:57:58.075514+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "Both structural intent families use actual value-binding spans when available. The generator schema recomputes that subset from fresh source and caps changes at the number of unique eligible spans. No new write rights, model/context, retries or source/replacement budgets.",
+  "target": {
+    "tests": 69,
+    "seconds": 63.102,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bound-interface-target.log"
+  },
+  "affected_regression": {
+    "tests": 206,
+    "seconds": 253.365,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bound-interface-regression.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 23.07,
+    "log": ".jarvis-runtime/repair-bound-interface-audit.log"
+  },
+  "qualification": "artifacts/autonomous-repair/bound-interface-gui-qualification.json",
+  "independent_gui_baseline": ".jarvis-runtime/independent-gui/gui-acceptance-26411e2efbc74807aeaa72a90c0da4d7.json",
+  "preceding_trial": {
+    "id": "ec44667bdd374d7eaba6396b03555825",
+    "seconds": 640.369,
+    "source_stable": true,
+    "structural_plan_and_source_bound_recurrence_exercised": true,
+    "outcome": "No source gain. Completed batch contained no-op/unrelated/truncated handler changes and was rejected. No fallback or source replay."
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "94b63fcb8c7a098372c49e94a7e6b125f0dad647bd9d5e93af4903e13304d063",
+    "jarvis/repair_contract.py": "d0777f7385eef760d79cadf5225f299328a231be85e08e9c559533f7ca9fa70b",
+    "jarvis/source_observation.py": "8205f5921c3d539348bbf7f9ac2d61b07c72b090f952f82d1bc6ef51d6b5ee00",
+    "tests/test_repair_contract.py": "461a882d77a4882ca047d5dbf5fdd63995845c241687263256d7b70270375c1b"
+  },
+  "production": {
+    "id": "4714bd2545e54e85896cd1daa60809b7",
+    "task": "705262d34ed24ce0bbede031eb9472c2",
+    "owner_session": 46400,
+    "status": "RUNNING",
+    "raw_result": "NOT_RUN",
+    "finished_at": null,
+    "seconds": null,
+    "source_changed": null,
+    "configuration_changed": null,
+    "all_eight_external_hashes_match": true
+  }
+}

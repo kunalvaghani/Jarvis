@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-27T11:59:24.809241+00:00",
+  "status": "CANCELLED_SOURCE_OBSOLETE",
+  "application_acceptance": false,
+  "campaign": "9079b77bb956496f8dce9174bb8b603b",
+  "owner_session": 69596,
+  "workload": "f78087b50ed44300bb60c76a8eda83a0",
+  "regression": {
+    "tests": 175,
+    "seconds": 163.794,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-generation-grammar-final3.log"
+  },
+  "source_checkpoint": "artifacts/autonomous-repair/gui-initial-state-checkpoint-provenance.json",
+  "architectural_changes": [
+    "Installed standard-library primary failure source facts with hash and strict path bounds",
+    "Copied backend generation grammar; original regex semantics remain locally enforced before dispatch"
+  ],
+  "scope": "One bounded real production GUI repair; no supervisor-authored application implementation.",
+  "next_action": "Complete isolated-cause regression and launcher checks before one new source-frozen production trial.",
+  "native": "11f712bf9a00455ba7099814cca33462",
+  "owner_exit_observed": true,
+  "finished_at": "2026-10-27T11:56:59.977259+00:00",
+  "seconds": 1192.67,
+  "jarvis_source_changed_during_trial": true,
+  "configuration_changed_during_trial": false,
+  "external_eight_files_unchanged": true,
+  "six_protected_worker_files_unchanged": true,
+  "task_states": [
+    [
+      "CANCELLED",
+      "Stopped at a cooperative boundary; completed effects preserved"
+    ],
+    [
+      "PARTIAL",
+      ""
+    ]
+  ],
+  "cancellation_intent": ".jarvis-runtime/autonomous-repair/9079b77bb956496f8dce9174bb8b603b/supervisor-cancellation.json",
+  "diagnostic_plan_observations": [
+    {
+      "raw_path": ".jarvis-runtime/autonomous-repair/9079b77bb956496f8dce9174bb8b603b/.jarvis-runtime/native-code/11f712bf9a00455ba7099814cca33462/model-responses/tool-e92ba3122c924030b525fcf82e8a6d55/response.txt",
+      "sha256": "9e707bcfd087d339dbae42cd7c4fd93c8e0e8d3f4fc1eb6b3eec560a1894c0d4",
+      "json_parseable": true,
+      "local_validation_error": "tool matches no allowed contract: tool.arguments.steps[1] does not match the required path format '^[A-Za-z0-9 .,;:()/_+-]+$': \"Identify that the lambda closure captures 'action' incorrectly, causing all buttons to execute the same action.\".",
+      "semantic_correctness_verified": false
+    }
+  ]
+}
