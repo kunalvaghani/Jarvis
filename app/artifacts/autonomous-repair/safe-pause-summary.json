@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-29T18:16:25.626523+00:00",
+  "status": "PAUSED_BY_USER",
+  "checkpoint": ".jarvis-runtime/campaign-checkpoints/autonomous-repair-pause-2026-10-29",
+  "branch": "codex/autonomous-repair-2026-10-24",
+  "head": "087a7393a74cf833a3bc558f06f07ddcbf6f39e9",
+  "wip_commit": "NOT_CREATED_MIXED_PREEXISTING_OWNERSHIP",
+  "campaign_queues": 133,
+  "paused_tasks": 295,
+  "historical_uncertain_nonterminal_tasks": 27,
+  "campaign_workers": 0,
+  "held_campaign_locks": 0,
+  "active_or_pending_gpu_leases": 0,
+  "main_queue_unchanged": true,
+  "main_unrelated_pending_tasks": 6,
+  "configuration_unchanged": true,
+  "quota_counters_unchanged": true,
+  "gemini_uncertain_charges": 4,
+  "current_logical_groq_attempts": 9,
+  "new_cloud_requests": 0,
+  "new_local_inference": 0,
+  "new_application_trials": 0,
+  "frozen_artifacts_verified": 20,
+  "critical_interfaces_fingerprinted": 48,
+  "stabilization": {
+    "passed": 198,
+    "skipped": 1,
+    "seconds": 18.48,
+    "skip_reason": "Native Windows symlink creation unavailable",
+    "real_inference": 0
+  },
+  "readiness": {
+    "status": "repair_required",
+    "blocker": "DockerEngineUnavailable",
+    "ollama_required_models": "available",
+    "localgithub": "available",
+    "live_gui_voice_browser_connectors": "NOT_RUN",
+    "intentional_assistant_microphone_stop": "preserved"
+  },
+  "acceptance": {
+    "cli": "FUNCTIONAL_PASS_15_PROBES_5_TESTS",
+    "gui": "FAIL_CORE_6_OF_6_FROZEN_GUI_2_OF_6_INDEPENDENT_1_OF_8",
+    "search": "SCOPED_PASS_12_PROBES_9_TESTS",
+    "full_release": "OPEN"
+  },
+  "unverified_change": "Experimental five-call Gemini priority ceiling/120-second timeout: only two focused mocks, not fully recertified, dry_run_verified remains false, no fifth live call",
+  "readback_report": "Private checkpoint verification.json; no state restoration or resume authorization",
+  "future_resume": "New explicit user request, current-source/schema/quota comparison and isolated validation required",
+  "credentials_archived": false,
+  "webmcp": "DEFERRED"
+}

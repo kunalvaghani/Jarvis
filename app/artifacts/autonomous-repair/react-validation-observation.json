@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-25T15:50:21.178445+00:00",
+  "run": "1b09769bf9fa47a9ace8d5d8042068bc",
+  "result": "FAIL",
+  "scope": "Real generated dashboard validation; no supervisor-authored application source. Current source changed during trial, so not controlled before/after performance evidence.",
+  "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\1b09769bf9fa47a9ace8d5d8042068bc\\.jarvis-runtime\\native-code\\847e4bf74b52428aa3cfe54e8a3aa50e\\validation-6f3d111654104db2b94e0b5f6306e86d.json",
+  "validation_index_sha256": "5511d41b99ada905d87febb267a7a6d05e1844dc7fc23bcd1f7835221ecb2b39",
+  "checks_passed": false,
+  "errors": [
+    {
+      "path": "package.json",
+      "diagnostic": "Missing local vite dependency; installation was not attempted."
+    },
+    {
+      "path": "package.json",
+      "diagnostic": "Missing or unsupported test script; use the declared local test/build tool without shell chains."
+    },
+    {
+      "path": "public/browser-test.html",
+      "diagnostic": "Check failed (exit 1): Traceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\jarvis\\codex_browser_check.py\", line 127, in run\r\n    expect(target).to_be_visible()\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\lib\\site-packages\\playwright\\sync_api\\_generated.py\", line 23501, in to_be_visible\r\n    self._sync(\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.venv\\lib\\site-packages\\playwright\\_impl\\_sync_base.py\", line 115, in _sync"
+    }
+  ],
+  "manifest": {
+    "name": "productivity-dashboard",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview",
+      "test": "vitest"
+    },
+    "dependencies": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+      "vite": "^5.0.0",
+      "vitest": "^1.0.0"
+    }
+  },
+  "declared_html_entries": [],
+  "current_guard_read_only_recheck": "React website/dashboard browser checks must target the actual declared HTML application entry, not a separate test HTML copy.",
+  "source_hashes_before_after_match": true,
+  "dependency_installation_attempted": false,
+  "application_acceptance": "OPEN"
+}

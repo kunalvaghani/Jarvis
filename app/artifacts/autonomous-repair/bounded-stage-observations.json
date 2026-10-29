@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_PRODUCTION_STOP_CONFIRMED",
+  "trigger_campaign": "bea40060ee574da6873368556191ef3d",
+  "trigger_native": "6865e357522d4a88b5d8283aad6f7b4a",
+  "defect": "Invalid one-attempt diagnosis/replacement inference or rejected tool proposal must not switch to generic action regeneration.",
+  "guarded_stage_regression": {
+    "tests": 1,
+    "subcases": 5,
+    "seconds": 6.781,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-stage-target.log"
+  },
+  "affected_regression": {
+    "tests": 194,
+    "seconds": 194.176,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-stage-regression.log"
+  },
+  "subsequent_metadata_change_regression": {
+    "tests": 195,
+    "seconds": 197.301,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-frozen-metadata-regression.log"
+  },
+  "application_acceptance": false,
+  "raw_model_failure_metadata": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/bea40060ee574da6873368556191ef3d/.jarvis-runtime/native-code/6865e357522d4a88b5d8283aad6f7b4a/model-responses/tool-286a77f533a844fd99514f40e3471ecd/metadata.json",
+      "sha256": "ed271dbb37b7658f2e23a13e1f3d7c121bfbfb170e578c81c153b2a2fe819757"
+    }
+  ],
+  "successor": {
+    "campaign": "ba8eed4086ae471681cfa59bb8b4d679",
+    "task": "53b0785f0a9946a58b6a385408499f94",
+    "owner_session": 31285,
+    "seconds_limit": 900,
+    "status": "FAILED_NORMAL_OWNER_EXIT",
+    "finished_at": "2026-10-28T04:01:08.462945+00:00",
+    "record_to_shutdown_seconds": 550.5,
+    "raw_campaign_result": "FAIL",
+    "native_status": "failed",
+    "bounded_recovery_rejection": {
+      "stage": "planned replacement",
+      "error": "Edit old_string and new_string are identical; no change was proposed and no action executed. Choose a materially different correction, or use run_checks to observe the current source. Evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ba8eed4086ae471681cfa59bb8b4d679\\.jarvis-runtime\\native-code\\846cba1488114038ae8fb07003b206c4\\model-responses\\tool-2b7a80cde12640bea7ba85c0ce3b2959",
+      "failure_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "action_executed": false,
+      "generic_fallback_allowed": false
+    },
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 3,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 0
+    },
+    "planning_seconds": 94.906,
+    "completed_frozen_test_metadata_paths": [
+      "test_gui_behavior.py",
+      "test_calculator.py"
+    ],
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "outcomes": [
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false
+      },
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false
+      }
+    ]
+  }
+}

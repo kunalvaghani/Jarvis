@@ -1,0 +1,24 @@
+{
+  "recorded_at": "2026-10-25T22:29:18.226394+00:00",
+  "campaign_id": "77c2d177a0e84addab2e22f1cbebbdd1",
+  "native_id": "053e02df4d894678bcd86253af2ac9e1",
+  "finished_at": "2026-10-25T22:02:53.267434+00:00",
+  "source_stable": true,
+  "owner_exited": true,
+  "cancellation_needed": false,
+  "reason": "Owner exited after failed native worker. Invalid frozen python_tests main.py check cannot be silently removed. Retain source, tests, raw failures and journals; use a fresh production plan after regression verification.",
+  "source_sha256": {
+    "README.md": "9b0cfea9c354114046048eb7395cd8aff7e9ea263b19221fc227b225dd39bd54",
+    "calculator_logic.py": "134ca382932295733f61932e49194262a22ae170b6ed844403ce8f538beea710",
+    "main.py": "ed22e321764712aa6cd81184af7a188490f1f03cbffb05f521f5b80b7182ebb8",
+    "test_calculator.py": "3d104d4f51d314cdd4976c9bc4d7e77d334de7c7b810bfbd2ae2db8953246a12",
+    "test_gui_behavior.py": "fada52789d406799dd3232f4482c99fedca715314f1cc218cc6d5c177c9a864a",
+    "ui_builder.py": "bd9cf3cbd0308347a9f53f1aa407e291323d07dce8d62901e38b6b5cd1442b74"
+  },
+  "frozen_test_paths": [
+    "test_calculator.py",
+    "test_gui_behavior.py"
+  ],
+  "native_error": "The same rejected proposal recurred three times without progress. No rejected action was applied; inspect the retained tools journal and assigned paths. Last error: Edit text must match uniquely or explicitly replace all matches.",
+  "next_gate": "Fresh GUI generation with role-checked unittest targets and owned traceback-centered reads. Physical Windows UI acceptance remains blocked by desktop tool initialization."
+}

@@ -12,7 +12,7 @@ from .task_store import TaskStore, TERMINAL
 from .task_scheduler import ScheduledQueue
 from .task_decisions import DecisionManager
 from .task_policy import CONTROL, modifiers
-from .workflow_graph import TaskRelationshipResolver
+from .workflow_graph import TaskRelationshipResolver, requires_prior_test_result
 
 
 class TaskIngress:
@@ -177,7 +177,7 @@ class TaskIngress:
             overrides['dependencies'], text = [matches[0]['id']], named[2]
             self.local.new_task = True
         self.local.overrides = overrides
-        if re.search(r'(?i)^(?:after that|after tasks? \d+|now fix|fix them|test the fixes|use the report|do the same|take those|continue the earlier)|\bthose (?:issues|results|findings)\b|\b(?:if|until)\b.*\b(?:pass|passes|fail|fails)\b', text):
+        if re.search(r'(?i)^(?:after that|after tasks? \d+|now fix|fix them|test the fixes|use the report|do the same|take those|continue the earlier)|\bthose (?:issues|results|findings)\b', text) or requires_prior_test_result(text):
             self.local.new_task = True
             return Command('task', text)
         if text != command.value:
@@ -193,6 +193,10 @@ class TaskIngress:
 
     def _run(self):
         while not self.closed.is_set():
+            from .campaign_pause import queue_paused
+            if queue_paused(self.store):
+                self.closed.wait(.1)
+                continue
             self.last_heartbeat = time.monotonic()
             try:
                 identity = self.buffer.get(timeout=.1)

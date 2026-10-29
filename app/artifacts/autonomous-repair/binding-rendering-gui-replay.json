@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-28T17:37:51.241986+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact first completed Qwen binding proposal is rendered with identical Python AST at its existing scope, then rejected by original real-Tk candidate checks. Zero live model calls or working source saves. No application logic supplied by supervisor.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "c558f8547ec3f01b10d20b2c4879ef86a6d3f6f86efc8b65496c8f339059a5d0",
+    "jarvis/coding_files.py": "09429ea32c82256c8367f3804cbb0af11eb6e5207e60d636cc1f753615aef69c",
+    "jarvis/repair_contract.py": "65035e1f9e5256ed5c8c833500058e69e389f2b6846487b398c3d6cde646142f"
+  },
+  "source_campaign": "ea62c72013d143f6a76db577fc0344cb",
+  "retained_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-8c0935d1878844c0b35ed838644e3a58/response.txt",
+      "sha256": "93e1d94b97906cf308fccf75fb7dced0d6555550c962a7efc43140dd61401b82"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-3322e7108ae842a88e681238a0c44061/response.txt",
+      "sha256": "0c7edfcfdc5c7553bd2935f681ed1888973fb75782d8cc073635918c41806789"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-44359fcd940f4babbcf3de134587ed4d/response.txt",
+      "sha256": "c75aa3fb730b8b98687ac1eac2b6f656f4e925fe11dc1ae49b18992e040b8f2b"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-c7cd86acf4ff4671820b4ff830044f48/response.txt",
+      "sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-200f397b7ddf4522901ea5cefe170668/response.txt",
+      "sha256": "dedd18d309a8dc59ce8486e30a77cbaf521f98119226eed032230d4175601d80"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-b4a8942b27384daf92b9788db039d20f/response.txt",
+      "sha256": "1f4ca1e0b920e7689fa0ed79ed94673a9ab19249f62ea6358f21bb172eab9b8f"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-0b03a1cffae14d41869e5b6cb661e7b2/response.txt",
+      "sha256": "ca0c35e1f20c4a8ad610125699ba40c51c26a07a8652d044daf7cd889f16822c"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/ea62c72013d143f6a76db577fc0344cb/.jarvis-runtime/native-code/c844a0067e184b84b36410c36991a0d0/model-responses/tool-19368ec35cdf47ceab40128eb3abe76f/response.txt",
+      "sha256": "5a970751cf78ff9bbf4b1d999a58186ec54c4d1bf368786c10f9027b091212ee"
+    }
+  ],
+  "live_model_calls": 0,
+  "corrective_inference_ready": true,
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 2,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 1
+  },
+  "bounded_interface_corrections": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "correction": 1,
+      "error": "Candidate would regress previously passing frozen cases: {\"test_gui_behavior.py\": [\"test_gui_behavior.TestCalculatorGUI.test_button_click_clear\"]}. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-interface-correction\\bd063c53d1544899a1a6eb106ecb1037\\.jarvis-runtime\\native-code\\2d6b8294fdcd4afb92cd4ee4407b7e4e\\candidate-checks\\bdc825972fbc41cc83335c0b6f3264db\\validation-1ec7ffe81fe84d31afb68a62d1c7a34a.json",
+      "source_unchanged": true,
+      "repair_turn_charged": true,
+      "action_replayed": false
+    }
+  ],
+  "binding_renderings": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "changes": [
+        {
+          "old_string": "            self.buttons[text] = [btn]",
+          "proposed_sha256": "373eaf08030cc7e74c0062152164f27977ca69cf1903d4875882ba5437ba6fa7",
+          "rendered_sha256": "f37abdfcb78f767e5bb81b6160dbbff454e4fb72cde0815c3c2e957e866db4bb",
+          "rendered_new_string": "            self.buttons[text] = btn",
+          "ast_unchanged": true
+        }
+      ]
+    }
+  ],
+  "candidate_decisions": [
+    {
+      "candidate_only": true,
+      "applied": false,
+      "accepted_for_save": false,
+      "source_path": "ui_builder.py",
+      "decision_precedes_working_save": true,
+      "proposed_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+      "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-interface-correction\\bd063c53d1544899a1a6eb106ecb1037\\.jarvis-runtime\\native-code\\2d6b8294fdcd4afb92cd4ee4407b7e4e\\validation-6e9957cdefd24be7aee93a47a822d371.json",
+      "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-interface-correction\\bd063c53d1544899a1a6eb106ecb1037\\.jarvis-runtime\\native-code\\2d6b8294fdcd4afb92cd4ee4407b7e4e\\candidate-checks\\bdc825972fbc41cc83335c0b6f3264db\\validation-1ec7ffe81fe84d31afb68a62d1c7a34a.json",
+      "lost_previously_passing_cases": {
+        "test_gui_behavior.py": [
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+        ]
+      },
+      "progress_required": true,
+      "newly_passing_cases": {},
+      "case_classifications_complete": true,
+      "errors_reaching_assertions": {},
+      "new_runtime_errors": {
+        "test_gui_behavior.py": [
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+        ]
+      },
+      "verified_case_progress": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true
+}

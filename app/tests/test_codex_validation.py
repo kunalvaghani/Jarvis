@@ -21,11 +21,126 @@ class CodexValidation(unittest.TestCase):
             'checks':[{'kind':'python_tests','path':'test_logic.py'}]}
         (self.root/'test_logic.py').write_text('import unittest\nfrom logic import answer\nclass Checks(unittest.TestCase):\n    def test_answer(self): self.assertEqual(answer(),42)\n')
 
+    def test_actual_failed_dependency_call_retains_scalar_operands_with_frozen_tests_unchanged(self):
+        source=('from tkinter import Misc\nfrom types import SimpleNamespace\n'
+                'def answer():\n return Misc.cget(SimpleNamespace(tk=SimpleNamespace(call=lambda *a: None),_w="."),0)\n')
+        (self.root/'logic.py').write_text(source)
+        before=(self.root/'test_logic.py').read_bytes()
+        result=validate_project(self.root,self.run,'Return the requested answer',[],self.plan,lambda:False,Mock())
+        self.assertFalse(result['passed'])
+        facts=result['errors'][0]['runtime_failure_facts']
+        frame=next(frame for row in facts for frame in row['frames'] if frame['module_path']=='tkinter/__init__.py')
+        self.assertEqual(frame['operands']['key'],{'type':'int','value':0})
+        from jarvis.source_observation import failure_context
+        context=failure_context(result['errors'][0],SimpleNamespace(root=self.root,tests={'test_logic.py'}))
+        self.assertEqual(context['installed_stdlib_source']['observed_operands']['key'],{'type':'int','value':0})
+        self.assertIn('TypeError:',result['errors'][0]['error'])
+        self.assertEqual((self.root/'test_logic.py').read_bytes(),before)
+        self.assertEqual((self.root/'logic.py').read_text(),source)
+        workspace=next(self.run.glob('check-workspace-*'))
+        self.assertFalse(any(workspace.rglob('__pycache__')))
+
+    def test_runtime_scalar_capture_omits_strings_objects_and_unbounded_numbers(self):
+        from jarvis.codex_unittest_check import scalar_operands
+        class NoRepr:
+            def __repr__(self):raise AssertionError('Object repr must never run')
+        values={'key':0,'text':'private_fixture_value','object':NoRepr(),'huge':10**100,'nan':float('nan')}
+        facts=scalar_operands(values,set(values))
+        self.assertEqual(facts['key'],{'type':'int','value':0})
+        self.assertEqual(facts['text'],{'type':'str'})
+        self.assertNotIn('object',facts)
+        self.assertNotIn('value',facts['huge']);self.assertNotIn('value',facts['nan'])
+        self.assertNotIn('private_fixture_value',json.dumps(facts,allow_nan=False))
+
+    def test_unittest_check_rejects_application_role_before_generation(self):
+        for role in ('entrypoint','logic','frontend'):
+            value=json.loads(json.dumps(self.plan))
+            value['files'][0]['role']=role
+            value['checks'].append({'kind':'python_tests','path':'logic.py'})
+            with self.subTest(role=role),self.assertRaisesRegex(ValueError,'test-role'):
+                contract(self.root,'Create a Python graphical calculator',value)
+            self.assertFalse((self.root/'logic.py').exists())
+        self.assertEqual(contract(self.root,'Create a Python graphical calculator',self.plan),self.plan)
+
+    def test_modular_gui_entrypoint_uses_declared_sources_at_checked_save_and_inspection(self):
+        from jarvis.coding_files import FileSession
+        ui='import tkinter as tk\ndef build_window():\n root=tk.Tk()\n button=tk.Button(root,text="Go",command=lambda:tk.Label(root,text="Done").pack())\n button.pack()\n return root\n'
+        (self.root/'ui_builder.py').write_text(ui)
+        value={'files':[{'path':'main.py','role':'entrypoint','purpose':'Launch the real graphical application'},
+                        {'path':'ui_builder.py','role':'frontend','purpose':'Create real connected and laid out widgets'},
+                        self.plan['files'][1]],'checks':self.plan['checks']}
+        goal='Create a Python desktop calculator with a graphical interface'
+        (self.run/'request.json').write_text(json.dumps({'project':str(self.root),'goal':goal,'validation_goal':goal,'allowed_paths':['main.py','ui_builder.py']}))
+        (self.run/'validation-contract.json').write_text(json.dumps(value))
+        session=FileSession(self.root,self.run)
+        entry='from ui_builder import build_window\nif __name__=="__main__":\n build_window().mainloop()\n'
+        test_before=(self.root/'test_logic.py').read_bytes()
+        result=session.call('Write',{'file_path':'main.py','content':entry})
+        self.assertTrue(result['saved'])
+        errors,_=inspect(self.root,value,[],goal)
+        self.assertFalse(any('graphical UI' in e['error'] for e in errors))
+        # An unrelated UI or imported stub cannot manufacture structural success.
+        (self.root/'ui_builder.py').write_text('def build_window():\n return None\n')
+        session.call('Read',{'file_path':'main.py'})
+        with self.assertRaisesRegex(ValueError,'graphical UI'):
+            session.call('Write',{'file_path':'main.py','content':entry+'# preserve guarded save\n'})
+        self.assertEqual((self.root/'main.py').read_text(),entry)
+        self.assertEqual((self.root/'test_logic.py').read_bytes(),test_before)
+
+    def test_preserved_named_inputs_are_not_required_generated_deliverables(self):
+        from jarvis.codex_validation import preserved_named_files
+        (self.root/'logic.py').write_text('def answer():\n return 42\n')
+        for name in ('PROJECT.md','REQUIREMENTS.md','modify.py'):(self.root/name).write_text('original protected input\n')
+        before={name:(self.root/name).read_bytes() for name in ('PROJECT.md','REQUIREMENTS.md','modify.py')}
+        goal='Repair logic.py. Preserve PROJECT.md and REQUIREMENTS.md byte-for-byte. Do not modify modify.py.'
+        errors,hashes=inspect(self.root,self.plan,[],goal)
+        self.assertEqual(errors,[])
+        self.assertTrue({'PROJECT.md','REQUIREMENTS.md','modify.py'}<=set(hashes))
+        self.assertEqual(preserved_named_files('Keep modify.py unchanged and update missing.py'),{'modify.py'})
+        errors,_=inspect(self.root,self.plan,[],'Preserve PROJECT.md byte-for-byte and update missing.py')
+        self.assertTrue(any(e['path']=='missing.py' and 'expected deliverables' in e['error'] for e in errors))
+        errors,_=inspect(self.root,self.plan,[],'Create missing.py.')
+        self.assertTrue(any(e['path']=='missing.py' and 'expected deliverables' in e['error'] for e in errors))
+        errors,_=inspect(self.root,self.plan,[],'Preserve absent.md byte-for-byte')
+        self.assertTrue(any(e['path']=='absent.md' and 'preservation does not authorize' in e['error'] for e in errors))
+        errors,_=inspect(self.root,self.plan,[],'Preserve calculations in modify.py while fixing its behavior')
+        self.assertTrue(any(e['path']=='modify.py' and 'expected deliverables' in e['error'] for e in errors))
+        self.assertEqual(before,{name:(self.root/name).read_bytes() for name in before})
+
+    def test_preserved_input_bytes_remain_guarded_even_when_not_output_deliverables(self):
+        (self.root/'logic.py').write_text('def answer():\n return 42\n')
+        protected=self.root/'PROJECT.md';protected.write_text('original reference\n')
+        frozen=(self.root/'test_logic.py').read_bytes()
+        def mutated_check(*args,**kwargs):
+            protected.write_text('changed during check\n')
+            return {'exit_code':0,'output':'Ran 1 test in 0.001s\nOK\n','seconds':0.001}
+        with patch('jarvis.codex_validation.execute_check',side_effect=mutated_check):
+            with self.assertRaisesRegex(ValueError,'Source changed during validation: PROJECT.md'):
+                validate_project(self.root,self.run,'Repair logic.py. Preserve PROJECT.md byte-for-byte.',[],self.plan,lambda:False,lambda *a:None)
+        self.assertEqual((self.root/'test_logic.py').read_bytes(),frozen)
+
     def test_contract_requires_behavior_and_backend_integration(self):
         self.assertEqual(contract(self.root,'create a script',self.plan),self.plan)
         with self.assertRaisesRegex(ValueError,'behavioral'):contract(self.root,'create a script',{**self.plan,'checks':[{'kind':'python_script','path':'logic.py'}]})
         with self.assertRaisesRegex(ValueError,'frontend and backend'):contract(self.root,'create a full-stack app',self.plan)
         with self.assertRaisesRegex(ValueError,'relative'):contract(self.root,'create a script',{'files':[{'path':'../outside.py','role':'logic','purpose':'Implementation'}],'checks':self.plan['checks']})
+
+    def test_new_python_application_requires_entrypoint_but_library_and_existing_scope_do_not(self):
+        from jarvis.codex_validation import plain_python_application_goal
+        goal='Create a new Python calculator application with input validation and tests.'
+        with self.assertRaisesRegex(ValueError,'runnable .py entrypoint'):
+            contract(self.root,goal,self.plan)
+        value=json.loads(json.dumps(self.plan));value['files'][0]['role']='entrypoint'
+        self.assertEqual(contract(self.root,goal,value),value)
+        self.assertEqual(contract(self.root,'Create a Python library for a calculator application',self.plan),self.plan)
+        self.assertFalse(plain_python_application_goal('Create a Python module app.py'))
+        self.assertFalse(plain_python_application_goal('Create a Python desktop application'))
+        self.assertFalse(plain_python_application_goal('Create a Python UI application using PySide6'))
+        self.assertTrue(plain_python_application_goal('Create a Python application without GUI'))
+        self.assertFalse(plain_python_application_goal('Create a Python backend application'))
+        self.assertEqual(contract(self.root,goal,self.plan,partial=True),self.plan)
+        (self.root/'existing.py').write_text('VALUE = 1\n')
+        self.assertEqual(contract(self.root,goal,self.plan),self.plan)
 
     def test_declared_missing_file_reports_purpose_and_exact_path(self):
         errors,_=inspect(self.root,self.plan,[],'create a script')
@@ -34,6 +149,13 @@ class CodexValidation(unittest.TestCase):
         self.assertEqual(packet['expected_deliverables'],self.plan['files'])
         self.assertEqual(packet['source_attachments'][0]['path'],'test_logic.py')
         self.assertEqual(packet['source_attachments'][0]['sha256'],hashlib.sha256((self.root/'test_logic.py').read_bytes()).hexdigest())
+
+    def test_early_source_failure_retains_full_validation_evidence(self):
+        result=validate_project(self.root,self.run,'Create a script',[],self.plan,lambda:False,lambda *args:None)
+        self.assertFalse(result['passed'])
+        self.assertTrue(any(e['path']=='logic.py' for e in result['errors']))
+        self.assertEqual(json.loads(Path(result['evidence']).read_text())['errors'],result['errors'])
+        self.assertEqual(json.loads((self.run/'validation.json').read_text())['errors'],result['errors'])
 
     def test_placeholders_and_missing_frontend_resources_are_failures(self):
         quiet='from http.server import SimpleHTTPRequestHandler\nclass Quiet(SimpleHTTPRequestHandler):\n    def log_message(self,*args): pass\n'
@@ -215,10 +337,58 @@ class CodexValidation(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'changed during validation'):
                 validate_project(self.root,self.run,'create a script',[],self.plan,lambda:False,Mock())
 
+    def test_nested_package_check_launches_in_its_actual_manifest_directory(self):
+        import shutil
+        if not shutil.which('node'):self.skipTest('Installed Node runtime required; no installation attempted.')
+        package=self.root/'web';package.mkdir()
+        (package/'package.json').write_text(json.dumps({'name':'validation-fixture','private':True,
+            'scripts':{'test':'node --test test_package.cjs'}}))
+        (package/'test_package.cjs').write_text("const test = require('node:test');\nconst assert = require('node:assert/strict');\ntest('package cwd', () => assert.equal(process.cwd(), __dirname));\n")
+        plan={'files':[{'path':'web/package.json','role':'configuration','purpose':'Declare a controlled Node test'},
+                       {'path':'web/test_package.cjs','role':'test','purpose':'Assert real subprocess package directory'}],
+              'checks':[{'kind':'npm_test','path':'web/package.json'}]}
+        result=validate_project(self.root,self.run,'Validate a nested package',[],plan,lambda:False,Mock())
+        self.assertTrue(result['passed'],result['errors'])
+        self.assertIn('package cwd',result['checks'][0]['output'])
+        invalid={**plan,'checks':[{'kind':'npm_test','path':'web/test_package.cjs'}]}
+        with self.assertRaisesRegex(ValueError,'actual package.json'):contract(self.root,'Validate package',invalid)
+
     def test_missing_dependency_is_failure_not_installed_or_credited(self):
         (self.root/'logic.py').write_text('import jarvis_missing_fixture_dependency\ndef answer():\n    return 42\n')
         result=validate_project(self.root,self.run,'create a script',[],self.plan,lambda:False,Mock())
         self.assertFalse(result['passed']);self.assertIn('ModuleNotFoundError',result['errors'][0]['error'])
+
+    def test_new_react_project_cannot_substitute_plain_files_or_omit_build(self):
+        from jarvis.codex_validation import contract,inspect,react_goal
+        with self.assertRaisesRegex(ValueError,'React project requires a declared package.json'):
+            contract(self.root,'Create a React website',self.plan)
+        plan={'files':self.plan['files']+[{'path':'package.json','role':'configuration','purpose':'Declare React build dependencies'}],
+              'checks':self.plan['checks'][:]}
+        with self.assertRaisesRegex(ValueError,'npm_build'):
+            contract(self.root,'Create a React website',plan)
+        plan['checks'].append({'kind':'npm_build','path':'package.json'})
+        with self.assertRaisesRegex(ValueError,'actual declared HTML'):
+            contract(self.root,'Create a React website',plan)
+        plan['files'].append({'path':'index.html','role':'entrypoint','purpose':'Launch the actual React website'})
+        plan['checks'].append({'kind':'browser','path':'index.html','steps':[{'action':'text','selector':'h1','value':'Website'}]})
+        (self.root/'index.html').write_text('<html><body><h1>Website</h1></body></html>')
+        contract(self.root,'Create a React website',plan)
+        copy=json.loads(json.dumps(plan));copy['files'].append({'path':'test_ui.html','role':'test','purpose':'An unrelated static test copy'})
+        copy['checks'][-1]['path']='test_ui.html'
+        with self.assertRaisesRegex(ValueError,'actual declared HTML'):
+            contract(self.root,'Create a React dashboard',copy)
+        from jarvis.codex_validation import react_browser_goal
+        self.assertFalse(react_browser_goal('Create a React helper library'))
+        package=self.root/'package.json';package.write_text(json.dumps({'scripts':{'build':'vite build'}}))
+        errors,_=inspect(self.root,plan,[],'Create a React website')
+        self.assertTrue(any('does not declare the react dependency' in e['error'] for e in errors))
+        package.write_text(json.dumps({'scripts':{'build':'vite build'},'dependencies':{'react':'18.2.0'}}))
+        errors,_=inspect(self.root,plan,[],'Create a React website')
+        self.assertFalse(any('react dependency' in e['error'] for e in errors))
+        backend=self.root/'backend';backend.mkdir();(backend/'package.json').write_text(json.dumps({'name':'backend','dependencies':{}}))
+        errors,_=inspect(self.root,plan,[],'Create a React website')
+        self.assertFalse(any('react dependency' in e['error'] for e in errors))
+        self.assertFalse(react_goal('Create a plain website without React'))
 
     def test_orchestrator_attaches_failure_to_new_codex_turn_then_retests(self):
         from jarvis.codex_code import run

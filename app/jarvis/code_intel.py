@@ -327,6 +327,18 @@ class ExternalCodeIntegrationGuard:
 
     def evaluate(self, candidate, facts=None):
         license_ok, license_note = self.license_gate(candidate.get('license'), candidate.get('license_files'))
+        memory_source=str(candidate.get('source','')).startswith('verified memory')
+        if memory_source and candidate.get('state') in {'PROJECT_VERIFIED','REUSABLE'} and str(candidate.get('origin','')).startswith('local:') and candidate.get('license')=='project':
+            license_ok=True;license_note='Verified user-owned project code; preserve its local provenance.'
+        if candidate.get('repository') and not memory_source:
+            files=candidate.get('files') or {}
+            notices=set(candidate.get('license_files') or [])
+            source_present=any(name not in notices and name!='package.json' and isinstance(text,str) and text.strip()
+                               for name,text in files.items())
+            notice_present=any(isinstance(files.get(name),str) and files[name].strip() for name in notices)
+            if not source_present or not notice_present:
+                license_ok=False
+                license_note+='; source or license notice not retrieved: reference only, no copying'
         findings, hard = self.scan(candidate.get('files'), candidate.get('manifest'))
         hard += self.dependency_gate(candidate.get('dependencies'), facts)
         offline = self.policy.get('offline')
@@ -542,14 +554,21 @@ class ResearchBroker:
         with self.lock:
             row = self.db.execute('SELECT at, value FROM cache WHERE key=?', (key,)).fetchone()
         if row and self.clock() - row[0] <= ttl:
-            self.metric('cache_hits', 1)
-            return json.loads(row[1])
+            try:value=json.loads(row[1])
+            except (ValueError,TypeError):
+                self.metric('cache_read_errors',1)
+            else:
+                self.metric('cache_hits', 1)
+                return value
         self.metric('cache_misses', 1)
         return None
 
     def store(self, key, value):
+        text=json.dumps(value,default=str)
+        if len(text)>3_000_000:return False  # Never cache truncated JSON.
         with self.transaction() as db:
-            db.execute('INSERT OR REPLACE INTO cache VALUES(?,?,?)', (key, self.clock(), json.dumps(value, default=str)[:3_000_000]))
+            db.execute('INSERT OR REPLACE INTO cache VALUES(?,?,?)', (key, self.clock(), text))
+        return True
 
     def metric(self, key, amount):
         with self.transaction() as db:
@@ -593,6 +612,8 @@ class ResearchRunner:
         self.budget = {'queries': 4, 'repositories': 6, 'files': 20, 'bytes': 3_000_000, 'seconds': 90., 'concurrency': 3, **(budget or {})}
         self.ttl = ttl_days * 86400
         self.ranker = CodeCandidateRanker()
+        self._source_lock=threading.RLock()
+        self._source_reservations={}
 
     def local(self, research_id, project, facts, guard):
         """Memory-first: the current project's symbols and verified memory, instantly."""
@@ -613,6 +634,9 @@ class ResearchRunner:
                 found += 1
             for row in self.memory.search(intent['phrase'] or intent['query'], project=project, limit=4):
                 item = row['item']
+                if item['state'] in {'PROJECT_VERIFIED','REUSABLE'}:
+                    try:item=self.memory.verified_source(item['id'])
+                    except ValueError:continue
                 candidate = {'id': 'memory:' + item['id'], 'kind': intent['kind'], 'name': item['name'], 'description': item['description'],
                              'source': 'verified memory', 'origin': item['origin'], 'license': item['license'],
                              'license_files': item['license_files'], 'state': item['state'], 'dependencies': item['dependencies'],
@@ -629,13 +653,39 @@ class ResearchRunner:
         return found
 
     def _get(self, url, params=None, raw=False):
-        key = 'http:' + url + ':' + json.dumps(params or {}, sort_keys=True) + (':raw' if raw else '')
+        key = 'http:' + url + ':' + json.dumps(params or {}, sort_keys=True) + (':raw-utf8-v1' if raw else '')
         cached = self.broker.cached(key, self.ttl)
         if cached is not None:
             return cached
         value = self.http(url, params, raw)
+        if raw and isinstance(value,(bytes,bytearray)):
+            value=bytes(value).decode('utf-8-sig')
         self.broker.store(key, value)
         return value
+
+    def _read_source(self,url,size,spent):
+        """Reserve shared in-flight budgets without serializing HTTP reads."""
+        size=size if type(size) is int and 0<size<=120000 else 120000
+        key=id(spent)
+        with self._source_lock:
+            pending=self._source_reservations.setdefault(key,{'files':0,'bytes':0})
+            if spent['files']+pending['files']>=self.budget['files'] or spent['bytes']+pending['bytes']+size>self.budget['bytes']:
+                if not pending['files']:self._source_reservations.pop(key,None)
+                return None
+            pending['files']+=1;pending['bytes']+=size
+        received=None;actual=0
+        try:
+            text=self._get(url,raw=True)
+            if not isinstance(text,str):return None
+            actual=len(text.encode('utf-8'))
+            if actual>size:raise ValueError('Source response exceeds its inspected GitHub size; no source retained.')
+            received=text
+            return text
+        finally:
+            with self._source_lock:
+                pending['files']-=1;pending['bytes']-=size
+                if received is not None:spent['files']+=1;spent['bytes']+=actual
+                if not pending['files']:self._source_reservations.pop(key,None)
 
     def external(self, research_id, project, facts, guard, cancelled=lambda: False):
         """GitHub/UI-library research within budget; streams validated candidates."""
@@ -708,7 +758,7 @@ class ResearchRunner:
         for intent, candidate in inspected:
             ranked = self.ranker.score(candidate, intent['phrase'] or task['goal'], facts, guard)
             state = 'REJECTED' if ranked['rejected'] else 'VALIDATED'
-            self.broker.add(research_id, {**candidate, 'files': {k: v[:4000] for k, v in candidate['files'].items()},
+            self.broker.add(research_id, {**candidate, 'files': candidate['files'],
                                           'ranking': ranked, 'license_status': ranked['evaluation']['license']
                                           if not ranked['rejected'] else '; '.join(ranked['rejected'])}, state)
             spent['repositories'] += 1
@@ -727,20 +777,20 @@ class ResearchRunner:
         commit = (self._get(f'https://api.github.com/repos/{name}/commits/{branch}') or {}).get('sha')
         tree = self._get(f'https://api.github.com/repos/{name}/git/trees/{commit or branch}', {'recursive': '1'}) or {}
         paths = [e['path'] for e in tree.get('tree', []) if e.get('type') == 'blob' and e.get('size', 0) < 120_000]
+        sizes={e['path']:e.get('size',0) for e in tree.get('tree',[]) if e.get('type')=='blob'}
         license_files = [p for p in paths if re.fullmatch(r'(?:LICEN[CS]E|COPYING)(?:\.\w+)?', Path(p).name, re.I)]
         want = set(words(intent['phrase'] or intent['query']))
         def relevance(path):
             return len(want & set(tokens(path))) + (1 if Path(path).suffix in SOURCE_SUFFIXES else -5)
         chosen = [p for p in sorted(paths, key=lambda p: -relevance(p)) if relevance(p) > 0][:max(1, self.budget['files'] // max(1, self.budget['repositories']))]
         files = {}
-        for path in chosen + (['package.json'] if 'package.json' in paths else []):
-            if spent['files'] >= self.budget['files'] or spent['bytes'] > self.budget['bytes']:
-                break
-            text = self._get(f'https://raw.githubusercontent.com/{name}/{commit or branch}/{path}', raw=True)
+        # Policy and attribution must be observable before offering source for
+        # copying. A budget exhausted before source/notice means reference only.
+        wanted=(['package.json'] if 'package.json' in paths else [])+license_files[:1]+chosen
+        for path in dict.fromkeys(wanted):
+            text = self._read_source(f'https://raw.githubusercontent.com/{name}/{commit or branch}/{path}',sizes.get(path),spent)
             if isinstance(text, str):
-                files[path] = text[:120_000]
-                spent['files'] += 1
-                spent['bytes'] += len(text)
+                files[path] = text
         manifest = {}
         if 'package.json' in files:
             try:

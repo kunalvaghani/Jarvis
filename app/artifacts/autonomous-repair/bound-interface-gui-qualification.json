@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Read-only schema qualification against exact retained Qwen batch; no new model/source/action.",
+  "both_intent_families_use_actual_binding": true,
+  "eligible_lines": [
+    42
+  ],
+  "maximum_batch_changes": 1,
+  "ineffective_retained_batch_rejected": true,
+  "all_eight_source_hashes_unchanged": true
+}

@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-26T04:06:58.178594+00:00",
+  "campaign": "2c3de44678f64942bcbdbc08b42163aa",
+  "native": "b4eb91d989d74a5f929c5be52049c04c",
+  "owner_exited": true,
+  "finished_at": "2026-10-26T03:44:49.579391+00:00",
+  "seconds": 878.269,
+  "remaining_nonterminal": [],
+  "protected_source_sha256": {
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12"
+  },
+  "protected_files_unchanged": true,
+  "failure": "Preservation-only metadata names falsely treated as absent generated outputs by obsolete inspector. Original app checks not executed in this trial.",
+  "retained_progress": "Local Qwen implemented Calculator clear state correctly; exact whole source copied and original6core tests pass under repaired production validator. GUI6failmissingbuttons.",
+  "checkpoint_provenance": "D:\\Kunals GitHub Repo\\Jarvis\\app\\artifacts\\autonomous-repair\\gui-state-followup-checkpoint-provenance.json",
+  "regressions": {
+    "intent_and_hashes": {
+      "tests": 154,
+      "passed": 154,
+      "seconds": 149.552,
+      "log": ".jarvis-runtime/repair-preserved-input-hashes-final2.log"
+    },
+    "initial_hash_run": {
+      "tests": 154,
+      "failures": 1,
+      "seconds": 152.822,
+      "log": ".jarvis-runtime/repair-preserved-input-hashes-final.log",
+      "resolution": "Trailing sentence punctuation on modify.py prevented preservation recognition; filename parsing centralized and corrected."
+    },
+    "write_boundary": {
+      "tests": 155,
+      "passed": 155,
+      "seconds": 156.954,
+      "log": ".jarvis-runtime/repair-preserved-source-boundary-final.log"
+    },
+    "final_boundary_and_schema": {
+      "tests": 155,
+      "passed": 155,
+      "seconds": 154.118,
+      "log": ".jarvis-runtime/repair-preserved-source-boundary-final2.log",
+      "strengthened_schema_case": {
+        "tests": 1,
+        "passed": 1,
+        "seconds": 0.1,
+        "log": ".jarvis-runtime/repair-preserved-source-schema-case.log",
+        "counts_overlap": true
+      }
+    }
+  },
+  "gui_acceptance": "OPEN",
+  "physical_ui": "BLOCKED: desktop tool initialization failure",
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  }
+}

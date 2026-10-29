@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-26T02:26:26.310225+00:00",
+  "campaign": "6b1e5f73c10e4c5ca48142b475485632",
+  "native": "2634674485a84029afc0ba512fb7f71c",
+  "finished_at": "2026-10-25T23:22:11.456989+00:00",
+  "seconds": 1166.158,
+  "owner_exited": true,
+  "cancellation_needed": false,
+  "reason": "Native worker hit bounded repeated rejected main.py proposals and owner shut down. Five saved sources retained; main.py never saved. Existing frozen GUI test uses a MagicMock root and cannot count as real GUI acceptance. Main proposal also omitted required root creation.",
+  "source_sha256": {
+    "README.md": "6c92b96892bf2a78dce51e341651752fd4d41b73c3850df8d1a8e51cac30b137",
+    "calculator_logic.py": "94fc8217e284ab8a4fcb6dc3c20a724de711ecfb04b95edb89b75afbeb91fd6e",
+    "test_calculator.py": "2855b63cd98a0df0dc1feca6aa36e8bc7ae66ad560d37df0c01a98e8f24018c1",
+    "test_gui_behavior.py": "bb3103c98b3ba30134c09caf9a3d7d1d3e8cd5cc9b9280f8e4b141e7d2db9d58",
+    "ui_builder.py": "ff6f06e3d1bcf729bcf1a5d656b2ede0671f94ffe9a8dec1147331e88fbb7153"
+  },
+  "frozen_tests": {
+    "test_calculator.py": "2855b63cd98a0df0dc1feca6aa36e8bc7ae66ad560d37df0c01a98e8f24018c1",
+    "test_gui_behavior.py": "bb3103c98b3ba30134c09caf9a3d7d1d3e8cd5cc9b9280f8e4b141e7d2db9d58"
+  },
+  "native_error": "The same rejected proposal recurred three times without progress. No rejected action was applied; inspect the retained tools journal and assigned paths. Last error: Requested graphical UI is missing: GUI imports, reachable window/app launch, interactive controls, connected callbacks, visible layout. Preserve current source and implement a working UI, not console code or launch_ui(): pass.",
+  "source_changed_during_trial": false,
+  "repairs": "Mock-root draft rejection plus owned module graph GUI validation; preserve full structure checks and bounded source ownership.",
+  "regressions": {
+    "prior_existing_gui_validation": {
+      "tests": 38,
+      "passed": 38,
+      "seconds": 46.842,
+      "log": ".jarvis-runtime/repair-gui-modules-target.log"
+    },
+    "targeted_new_cases": {
+      "tests": 2,
+      "passed": 2,
+      "log": ".jarvis-runtime/repair-gui-module-mock-target.log",
+      "seconds": 0.927
+    },
+    "affected_suite": {
+      "tests": 148,
+      "passed": 148,
+      "seconds": 240.969,
+      "log": ".jarvis-runtime/repair-gui-module-mock-final.log"
+    },
+    "final_dotted_import_correction": {
+      "tests": 12,
+      "passed": 12,
+      "seconds": 2.188,
+      "log": ".jarvis-runtime/repair-gui-module-import-final.log",
+      "counts_overlap": true
+    }
+  },
+  "acceptance": "FAIL; no independent GUI acceptance",
+  "physical_ui": "BLOCKED: desktop tool initialization failed",
+  "validated_source_sha256": {
+    "jarvis/gui_contract.py": "5d16d1e970ba96ba5c60aad2af05214afc3c6f7683d7f729ddd7cd70a07c8170",
+    "jarvis/codex_validation.py": "97cce33f3c20a8bacfdca127a602731ae971ba797c053ba8a033afe671978933",
+    "jarvis/codex_files.py": "fd0e3075b3effd5c7c33feaea39cbdfb757b8b87fd41737e02716f581724cff3",
+    "jarvis/native_coding.py": "a45c848076cb05c52c8e0c9fd9692d9666151df31a494dd56b82f445453eec5e"
+  },
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  }
+}

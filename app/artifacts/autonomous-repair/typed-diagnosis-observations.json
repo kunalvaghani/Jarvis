@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_PRODUCTION_FORMAT_IMPROVED_GUI_FAILED",
+  "application_acceptance": false,
+  "trigger_campaign": "da374a7f68ad46a1a5034b7b6852a5df",
+  "trigger_plan_fragments": [
+    "+",
+    "3"
+  ],
+  "fields": [
+    "observed_cause",
+    "permitted_strategy",
+    "verification"
+  ],
+  "grammar_max_characters": 240,
+  "prompt_target_characters": 160,
+  "semantic_guard": "Every field must contain an alphabetic character; raw text remains untrusted and non-executable.",
+  "focused_regression": {
+    "tests": 59,
+    "seconds": 51.921,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-typed-diagnosis-focused.log"
+  },
+  "broad_regression": {
+    "status": "PASS",
+    "prior_tests": 194,
+    "prior_seconds": 197.315,
+    "prior_result": "FAILED (one stale wire-schema fixture; other193 checks passed)",
+    "prior_log": ".jarvis-runtime/repair-typed-diagnosis-regression.log",
+    "log": ".jarvis-runtime/repair-typed-diagnosis-regression-final.log",
+    "tests": 194,
+    "seconds": 188.0,
+    "result": "OK"
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "9abdccf50287384708e4f662a592d10058a4f4abaa1280aaaa9d35f4d3360610",
+    "tests/test_native_coding.py": "dbf706ba19d2a3d6677a3eed792019fccb999b706651fb234070494e448a9793",
+    "tests/test_structured_output.py": "c53814b32e12c2afd13c2f2ffc7484a3141ff20c232a9078ff39e777291b6416"
+  },
+  "successor": {
+    "campaign": "bea40060ee574da6873368556191ef3d",
+    "task": "9aeb45f6ef84429d9821e5faece87207",
+    "owner_session": 3168,
+    "seconds_limit": 900,
+    "status": "STOPPED_AT_OWNER_BOUND",
+    "finished_at": "2026-10-28T03:40:10.451438+00:00",
+    "record_to_shutdown_seconds": 903.114,
+    "raw_campaign_result": "FAIL",
+    "native_status": "stopped",
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 8,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 2
+    },
+    "diagnostic_plans": [
+      {
+        "source_sha256": "a5239f860592ee6c1501e7d154f1e1a6f116925108e1f48c8d62a19dc90944ee",
+        "file_path": "ui_builder.py",
+        "failure_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+        "steps": [
+          "The test suite accesses buttons via list indexing (e.g., self.buttons['+'][0]), but the current implementation stores them in a dict, causing an AttributeError when invoking methods on non-existent list elements.",
+          "Modify ui_builder.py to store ttk.Button instances in a list keyed by their text label instead of a dict, ensuring both direct access and list-indexed access forms work for the frozen tests.",
+          "Run test_gui_behavior.py to confirm that button invocations via both dict-like keys and list indices no longer raise exceptions and that display state assertions pass."
+        ],
+        "typed_diagnosis": {
+          "observed_cause": "The test suite accesses buttons via list indexing (e.g., self.buttons['+'][0]), but the current implementation stores them in a dict, causing an AttributeError when invoking methods on non-existent list elements.",
+          "permitted_strategy": "Modify ui_builder.py to store ttk.Button instances in a list keyed by their text label instead of a dict, ensuring both direct access and list-indexed access forms work for the frozen tests.",
+          "verification": "Run test_gui_behavior.py to confirm that button invocations via both dict-like keys and list indices no longer raise exceptions and that display state assertions pass."
+        },
+        "verified": false,
+        "original_goal_used": true,
+        "planner_hypotheses_authoritative": false,
+        "replacement_context": "current-evidence-only",
+        "rejected_repair_proposals": 0
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": true,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "a5239f860592ee6c1501e7d154f1e1a6f116925108e1f48c8d62a19dc90944ee",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\bea40060ee574da6873368556191ef3d\\.jarvis-runtime\\native-code\\6865e357522d4a88b5d8283aad6f7b4a\\validation-96bdb31809bd4d5e9676c52e49747a5b.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\bea40060ee574da6873368556191ef3d\\.jarvis-runtime\\native-code\\6865e357522d4a88b5d8283aad6f7b4a\\candidate-checks\\b498a53fbeb74bec94ef253da1af685b\\validation-e67162680d444c13a4fde9eaefb98a62.json",
+        "lost_previously_passing_cases": {}
+      }
+    ],
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "outcomes": [
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false
+      },
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false
+      }
+    ]
+  },
+  "readiness": "DockerEngineUnavailable only; required models and local Git available.",
+  "integration_regression": {
+    "result": "286_PASS_1_FAIL_1_SKIP",
+    "seconds": 113.48,
+    "log": ".jarvis-runtime/repair-typed-diagnosis-integration.log",
+    "failure": "Synthetic MCP child initialize timed out at existing one-second request bound; no secret leak observed.",
+    "isolated_reproduction": {
+      "result": "PASS",
+      "tests": 1,
+      "seconds": 2.99,
+      "log": ".jarvis-runtime/repair-typed-diagnosis-mcp-isolation.log"
+    },
+    "code_or_timeout_changed": false,
+    "scope": "Controlled scheduler/intake/approval/model policy/disabled WebMCP compatibility; not GUI or full-release acceptance. Tests overlapped live coding; no coding performance claim."
+  },
+  "new_defect": "Invalid planned Edit regeneration lost its bounded stage and selected a generic placeholder patch. Raw model evidence retained; bounded-stage stop fix under verification."
+}

@@ -66,6 +66,144 @@ def react_project(root, name='dash', deps=None, tokens=True):
     return project
 
 
+def test_production_raw_bytes_are_utf8_before_cache_and_license_notice_is_retained(tmp_path):
+    class ByteGitHub(FakeGitHub):
+        def __call__(self,url,params=None,raw=False):
+            value=super().__call__(url,params,raw)
+            if '/git/trees/' in url:
+                for entry in value['tree']:
+                    text=json.dumps(self.manifest) if entry['path']=='package.json' else self.files[entry['path']]
+                    entry['size']=len(text.encode('utf-8'))
+            return value.encode('utf-8') if raw and isinstance(value,str) else value
+    full_source=DOCK+'\n// café ✓\n'+'// retained source\n'*400+'export const LastSymbol = 1;\n'
+    github=ByteGitHub(extra_files={'src/AnimatedDock.tsx':full_source})
+    intel,actions=make(tmp_path,github,options={'research_budget':{'queries':1,'repositories':1,'files':4}})
+    try:
+        project=react_project(tmp_path)
+        intents=intel.planner.plan('floating navigation dock',project_facts(project),1)
+        research=intel.broker.create(project,'floating navigation dock',intents)
+        intel.runner.external(research,project,project_facts(project),ExternalCodeIntegrationGuard())
+        candidate=next(r for r in intel.broker.candidates(research=research) if r.get('repository')=='example/react-dock')
+        assert candidate['files']['src/AnimatedDock.tsx']==full_source
+        assert candidate['files']['LICENSE'].startswith('MIT License')
+        assert candidate['ranking']['evaluation']['copy_allowed']
+        url='https://raw.githubusercontent.com/example/react-dock/'+'a'*40+'/src/AnimatedDock.tsx'
+        assert intel.runner._get(url,raw=True)==full_source
+        assert intel.runner._get(url,raw=True)==full_source
+        assert intel.broker.get(research)['spent']['files']<=4
+        assert intel.broker.get(research)['spent']['bytes']>=len(full_source.encode('utf-8'))
+        intel.channels[str(project)]={'research':research,'after':0,'goal':'Controlled source-reader fixture'}
+        before={p.relative_to(project).as_posix():p.read_bytes() for p in project.rglob('*') if p.is_file()}
+        metadata=intel.source(project,candidate['id'])
+        assert 'LICENSE' in metadata['files']
+        tail=intel.source(project,candidate['id'],'src/AnimatedDock.tsx',len(full_source.splitlines()),1)
+        assert tail['content']=='export const LastSymbol = 1;' and tail['partial']
+        assert intel.source(project,candidate['id'],'LICENSE')['content'].startswith('MIT License')
+        assert before=={p.relative_to(project).as_posix():p.read_bytes() for p in project.rglob('*') if p.is_file()}
+        with pytest.raises(ValueError):intel.source(tmp_path/'other-project',candidate['id'])
+        with pytest.raises(ValueError):intel.source(project,candidate['id'],'../../outside')
+        reference=intel.broker.add(research,{'name':'Reference','source':'https://example.test',
+            'origin':'https://example.test','license':'unknown','files':{'demo.js':'export const x=1;'}},'VALIDATED')
+        assert not intel.source(project,reference)['copy_allowed']
+        with pytest.raises(ValueError,match='Reference-only'):intel.source(project,reference,'demo.js')
+        intel.broker.update(research,'OBSOLETE')
+        with pytest.raises(ValueError,match='no longer usable'):intel.source(project,candidate['id'])
+    finally:close(intel,actions)
+
+
+def test_remote_metadata_without_source_and_notice_never_grants_copying():
+    guard=ExternalCodeIntegrationGuard()
+    candidate={'repository':'example/component','source':'https://github.com/example/component',
+               'license':'MIT','license_files':['LICENSE'],'files':{}}
+    assert not guard.evaluate(candidate)['copy_allowed']
+    candidate['files']={'component.tsx':DOCK}
+    assert not guard.evaluate(candidate)['copy_allowed']
+    candidate['files']['LICENSE']='MIT License ...'
+    assert guard.evaluate(candidate)['copy_allowed']
+
+
+def test_legacy_metadata_only_approval_is_rechecked_without_rewriting_evidence():
+    candidate={'id':'legacy','name':'Legacy metadata','repository':'example/component',
+        'source':'https://github.com/example/component','origin':'https://github.com/example/component/tree/pinned',
+        'license':'MIT','license_files':['LICENSE'],'files':{},'license_status':'Historical metadata approval',
+        'ranking':{'evaluation':{'copy_allowed':True}}}
+    brief=ParallelCodeIntelligence._brief(candidate)
+    assert not brief['copy_allowed'] and 'reference only' in brief['license_status']
+    assert candidate['ranking']['evaluation']['copy_allowed'] is True
+    assert candidate['license_status']=='Historical metadata approval'
+
+
+@pytest.mark.parametrize('license_id,license_files',[('MIT',['LICENSE']),('project',[])])
+def test_retained_source_reader_rechecks_verified_memory_revocation(tmp_path,license_id,license_files):
+    """Controlled trusted-store fixture; not real cross-project reuse acceptance."""
+    intel,actions=make(tmp_path,options={'online_research':False})
+    try:
+        project=react_project(tmp_path)
+        item=intel.memory.add(name='AnimatedDock',description='Floating navigation dock',category='ui',
+            language='typescript',framework='react',origin='local:fixture',source=DOCK,
+            license=license_id,license_files=license_files,scope=scope_for(project),state='PROJECT_VERIFIED')
+        research=intel.prepare(project,'floating navigation dock')
+        candidate=next(r for r in intel.broker.candidates(research=research) if r.get('memory_item')==item['id'])
+        assert intel.source(project,candidate['id'],'source')['content'].startswith('import')
+        (intel.memory.root/'items'/item['id']/'source.txt').write_text(DOCK+'\n// changed after verification\n',encoding='utf-8')
+        with pytest.raises(ValueError,match='source changed'):intel.source(project,candidate['id'],'source')
+        intel.memory.set_enabled(item['id'],False)
+        with pytest.raises(ValueError,match='revoked'):intel.source(project,candidate['id'],'source')
+    finally:close(intel,actions)
+
+
+def test_saving_verified_component_preserves_license_revision_and_refuses_changed_source(tmp_path):
+    """Controlled trusted-store fixture, not a live reuse benchmark."""
+    intel,actions=make(tmp_path)
+    try:
+        item=intel.memory.add(name='LicensedDock',description='Controlled fixture',category='ui',language='typescript',
+            origin='https://github.com/example/dock',source=DOCK,license='MIT',license_files=['LICENSE'],
+            repository='example/dock',commit='a'*40,scope='project:fixture',state='PROJECT_VERIFIED')
+        assert intel.control('save:LicensedDock').startswith('Saved LicensedDock')
+        saved=next(r for r in intel.memory.all() if r['name']=='LicensedDock' and r['scope']=='global')
+        assert saved['state']=='REUSABLE' and saved['license_files']==['LICENSE']
+        assert saved['repository']=='example/dock' and saved['commit']=='a'*40
+        corrupt=intel.memory.add(name='ChangedDock',description='Controlled fixture',category='ui',language='typescript',
+            origin='local:fixture',source=DOCK+'\n// separate fixture\n',scope='project:other',state='PROJECT_VERIFIED')
+        (intel.memory.root/'items'/corrupt['id']/'source.txt').write_text('changed after verification',encoding='utf-8')
+        assert intel.control('save:ChangedDock').startswith('Cannot save this component:')
+        assert not any(r['name']=='ChangedDock' and r['scope']=='global' for r in intel.memory.all())
+    finally:close(intel,actions)
+
+
+def test_damaged_and_oversized_research_cache_does_not_return_truncated_data(tmp_path):
+    broker=ResearchBroker(tmp_path/'cache.sqlite3')
+    try:
+        assert broker.store('kept',{'value':'original'})
+        assert not broker.store('kept','x'*3_000_001)
+        assert broker.cached('kept',60)=={'value':'original'}
+        with broker.transaction() as db:db.execute('INSERT INTO cache VALUES(?,?,?)',('broken',time.time(),'{"incomplete":'))
+        assert broker.cached('broken',60) is None
+        assert broker.metrics()['cache_read_errors']==1
+    finally:broker.db.close()
+
+
+@pytest.mark.parametrize('budget',[{'files':1,'bytes':10},{'files':2,'bytes':5}])
+def test_concurrent_source_reads_reserve_file_and_byte_budgets(tmp_path,budget):
+    started=threading.Event();release=threading.Event();calls=[];result=[]
+    def http(url,params=None,raw=False):
+        calls.append(url);started.set()
+        assert release.wait(10)
+        return b'abcd'
+    intel,actions=make(tmp_path,http,options={'research_budget':budget})
+    spent={'files':0,'bytes':0}
+    reader=threading.Thread(target=lambda:result.append(intel.runner._read_source('https://example.test/first',4,spent)))
+    try:
+        reader.start();assert started.wait(3)
+        assert intel.runner._read_source('https://example.test/second',2,spent) is None
+        release.set();reader.join(5)
+        assert not reader.is_alive() and result==['abcd']
+        assert len(calls)==1 and spent=={'files':1,'bytes':4}
+        assert intel.runner._source_reservations=={}
+    finally:
+        release.set();reader.join(5);close(intel,actions)
+
+
 def make(tmp_path, http=None, ingress=False, options=None):
     actions = SimpleNamespace(base=tmp_path, config={}, memory=SimpleNamespace(vault=tmp_path / 'vault'), report=Mock(),
                               generation=0, closed=threading.Event(), queue_lock=threading.RLock(), pending_tasks=[],

@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-29T04:42:45.602226+00:00",
+  "status": "REGRESSION_REPLAY_PASS",
+  "application_acceptance": false,
+  "scope": "Actual Qwen read/check prefix and partial-function counterexample. Mocked inference is controller regression only. Zero live model calls, candidates, new application statements or working saves; not GUI acceptance.",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+  },
+  "all_eight_source_hashes_unchanged": true,
+  "model_calls": 0,
+  "controller_inferences": 6,
+  "observations": {
+    "groq_total_reserved_estimate": 5728,
+    "groq_operational_minute_tokens": 6400,
+    "scoped_cloud_messages": 3,
+    "scoped_cloud_bytes": 9224,
+    "cells": [
+      {
+        "function_id": "__init__:6",
+        "statement_id": 33,
+        "definition_line": 41,
+        "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+        "statement_path": [
+          15,
+          "body",
+          0
+        ]
+      },
+      {
+        "function_id": "_handle_action:48",
+        "statement_id": 0,
+        "definition_line": 49,
+        "source": "current = self.display_var.get()"
+      }
+    ],
+    "typed_fields": [
+      "function_id",
+      "placement",
+      "statement_id",
+      "statements"
+    ],
+    "full_current_module_and_caller_present": true,
+    "old_partial_definition_rejected_before_dispatch": true,
+    "structured_nodes_have_no_source_block": true,
+    "statement_source_characters": 32,
+    "linked_callback_statement": {
+      "function_id": "__init__:6",
+      "statement_id": 33,
+      "definition_line": 41,
+      "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+      "statement_path": [
+        15,
+        "body",
+        0
+      ]
+    },
+    "callback_routes": [
+      {
+        "caller": "__init__",
+        "definition_line": 6,
+        "callback_line": 41,
+        "callee": "_handle_action",
+        "parameter": "action",
+        "captured_name": "text",
+        "literal_captures": [
+          {
+            "name": "text",
+            "values": [
+              "C",
+              "/",
+              "*",
+              "7",
+              "8",
+              "9",
+              "-",
+              "4",
+              "5",
+              "6",
+              "+",
+              "1",
+              "2",
+              "3",
+              "0",
+              "="
+            ]
+          },
+          {
+            "name": "action",
+            "values": [
+              "clear",
+              "divide",
+              "multiply",
+              "7",
+              "8",
+              "9",
+              "subtract",
+              "4",
+              "5",
+              "6",
+              "add",
+              "1",
+              "2",
+              "3",
+              "0",
+              "equals"
+            ]
+          }
+        ],
+        "dispatch_literals": [
+          "clear",
+          "add",
+          "subtract",
+          "multiply",
+          "divide",
+          "equals"
+        ],
+        "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+      }
+    ]
+  },
+  "replay_receipt": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\callback-contract-replay\\596573eef4434b8aa2e111f8104b0ed3\\.jarvis-runtime\\native-code\\85cbdd8d07554d86a4adc7cbce140168"
+}

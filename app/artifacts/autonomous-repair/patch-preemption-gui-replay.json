@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-28T09:31:49.733464+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact completed Qwen read/rejected-candidate/noop-inference prefix decoded through native guards on an exact eight-file copy. Zero live model calls; deliberate stop before diagnostic plan inference. No accepted or working source save, patch dispatch, app code authored or GUI repair.",
+  "source_campaign": "5af8ffdd76c946c88f503b85e1fa1acc",
+  "source_hashes": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b"
+  },
+  "recorded_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-8911b2cc23f14e8cbc1adb9b03254a4b/response.txt",
+      "raw_sha256": "3428c47a11956126305609c541449a428c40b06ca40c7451039f8c3a51e61698",
+      "tool": "read_batch"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-594640978992485ab177921a18bbcaff/response.txt",
+      "raw_sha256": "58360663f3ab762ca9ec0be7ed45de32bfff01513fede1cff437ebb88ff4e628",
+      "tool": "read_batch"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-1c20a7b76a184608a11b79071584bf68/response.txt",
+      "raw_sha256": "fe50b252a644f67b187f39be4dd0332e966d8ba1a6b1f960377bbe5a296a503b",
+      "tool": "read_batch"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-d117dba1f8c147ca88b31a3435fb5dbf/response.txt",
+      "raw_sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea",
+      "tool": "run_checks"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-e2797a59faf148d49ba54b78281c7e27/response.txt",
+      "raw_sha256": "0b9ac428540c55d95834337d47f952ed115eb6eb77bebd76e8cd428f131a8e53",
+      "tool": "Read"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-a1d416a6b0fa4153a42860ce4383acb5/response.txt",
+      "raw_sha256": "6aad099595b53756399e5043402743d490b5f6c4d7799165885b1fdf9d052235",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-1b3a4cc626da4ca18467d28e772c91c1/response.txt",
+      "raw_sha256": "d4dc8de10442da6e079c7c8c39f36ed02e9a378be8e4492145c1d5971d81347c",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-53d10d1cdcbd4bcfac372e2298ce6e85/response.txt",
+      "raw_sha256": "f555dc5148325ec5d6a764d3edf4403ea1532888db12faeaff77efd9fddbca96",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-ff3d0c93fafe4f7ca623931d0324574e/response.txt",
+      "raw_sha256": "e9020e91a8a8f786faad02db640f76f387260f9b63d86a334717d744aeaa0d11",
+      "tool": "Edit"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-6a07b834a17b41fea59eb8340b45d535/response.txt",
+      "raw_sha256": "175a9709ad8b203ce459ce84836161d55a8f4831d3a6a6dbb6ef5be1933ec10e",
+      "tool": "Read"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-6193b370459848138f64aaa442bbf37d/response.txt",
+      "raw_sha256": "c789da0eb0802a1487b28b3d86ff91aea468fd0a62b2710968b08f4f2759f242",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-582135c02ee04f25b6c1cda2ffc097ba/response.txt",
+      "raw_sha256": "e4f194ca7b8e1aff1f0240ecb7b999901613a03763be2043717fb6e5031e5f85",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-36cb00f7f7194b90a07b3391c1ec1b87/response.txt",
+      "raw_sha256": "7f79c5918a54640676fc7a24a216865f6107dffd78b679d304f00954f114ac30",
+      "tool": "read_slice"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/5af8ffdd76c946c88f503b85e1fa1acc/.jarvis-runtime/native-code/8a4db23bd95e460aa37161a9cd345b83/model-responses/tool-1c7091c9906347619cd98ac2c025f665/response.txt",
+      "raw_sha256": "b97b974ebe0b424a3459ecf2c2b9536e0c0ec5efa54c2c3ee315bc236f3164de",
+      "tool": "Edit"
+    }
+  ],
+  "replayed_proposals": 14,
+  "live_model_calls": 0,
+  "required_tools": [
+    null,
+    null,
+    null,
+    "run_checks",
+    "Read",
+    "read_slice",
+    "Edit",
+    "Edit",
+    "Edit",
+    "Read",
+    "read_slice",
+    "Edit",
+    "Edit",
+    "Edit",
+    "update_plan"
+  ],
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 10,
+    "guarded_replacement_attempts": 0,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 2
+  },
+  "candidate_decisions": [
+    {
+      "candidate_only": true,
+      "applied": false,
+      "accepted_for_save": false,
+      "source_path": "ui_builder.py",
+      "decision_precedes_working_save": true,
+      "proposed_sha256": "b408fe36b1c862ffbd0adcf42feaa27dde807b01cc714f57886af0a35f6ed6ea",
+      "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-patch-preemption\\b428743ee8954743867c62332b11c9e4\\.jarvis-runtime\\native-code\\54cfb996fe2342d59161b4054c954d63\\validation-fd64101d1eae49bfa33e2d0aa24f8bcb.json",
+      "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\gui-patch-preemption\\b428743ee8954743867c62332b11c9e4\\.jarvis-runtime\\native-code\\54cfb996fe2342d59161b4054c954d63\\candidate-checks\\08272e641e08437288314138487dfa04\\validation-aafb6945c6174383a3ea5983c8181721.json",
+      "lost_previously_passing_cases": {
+        "test_gui_behavior.py": [
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ]
+      },
+      "progress_required": true,
+      "newly_passing_cases": {},
+      "case_classifications_complete": true,
+      "errors_reaching_assertions": {},
+      "new_runtime_errors": {
+        "test_gui_behavior.py": [
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state",
+          "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+          "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+        ]
+      },
+      "verified_case_progress": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true,
+  "read_only_diagnosis_preempted_patch": true,
+  "limitations": "Controller regression on actual retained failures; no new production trial or GUI/physical/visual acceptance."
+}

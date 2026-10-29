@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-24T20:10:58.746442+00:00",
+  "status": "PASS",
+  "campaign": "ae11b92ff83e41e2b2eab7aae82419bd",
+  "scope": "Independent controlled Notes API search/regression acceptance; not fresh application creation, GUI or memory-reuse proof.",
+  "campaign_harness_result": "FAIL",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\controlled-search-09fe0a90d2a541e298a73bccdcfa85ce",
+  "checks": [
+    {
+      "name": "production task completed",
+      "passed": true
+    },
+    {
+      "name": "unrelated README/sentinel and frozen baseline tests unchanged",
+      "passed": true
+    },
+    {
+      "name": "case-insensitive substring search",
+      "passed": true
+    },
+    {
+      "name": "empty/missing/non-string queries",
+      "passed": true
+    },
+    {
+      "name": "search and result mutation preserve stored notes",
+      "passed": true
+    },
+    {
+      "name": "duplicate matches retained",
+      "passed": true
+    },
+    {
+      "name": "removed note no longer matched",
+      "passed": true
+    },
+    {
+      "name": "original real CLI list subprocess",
+      "passed": true
+    },
+    {
+      "name": "additional helper valid substring inputs",
+      "passed": true
+    },
+    {
+      "name": "additional sample-data CLI helper subprocess",
+      "passed": true
+    },
+    {
+      "name": "fresh original plus generated unittest discovery",
+      "passed": true
+    },
+    {
+      "name": "acceptance observation made no source changes",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "artifact_hashes": {
+    "notes.py": "bb6e1cb6888858880c2ac1e80cde039ed60d6a62621ecdbc23dc62c4de383946",
+    "README.md": "4fca2bb744d4700c269d17536b6fb8bccaf90f4316b1c41c3bfe391af3c2c032",
+    "search_notes.py": "ca90a6e2e6d74b5e8290693aa6c99e3a326c44c60598f7f3ae6759eb47936bcb",
+    "test_notes.py": "4a29a1e4b6ac4894fda7cf22fae6e04899c24a31c5d5b3ce7913ac754f9bea82",
+    "test_search_notes.py": "e8ed9a03cbfbdec533a317b6e82bf8a2eb381ee45a1a105ab891179082798caa",
+    "UNCHANGED.txt": "4ec9812c32de1f6b4a56ef214aef2098dfe3c71a2c548ae607161b16f16ef3ea"
+  },
+  "source_changed_during_generation": false,
+  "supervisor_authored_implementation": false,
+  "supervisor_authored_fixture_and_probes": true,
+  "unittest": {
+    "returncode": 0,
+    "output": "test_actual_cli_list (test_notes.ExistingBehavior) ... ok\ntest_add_and_list_are_independent_copies (test_notes.ExistingBehavior) ... ok\ntest_remove_and_ids (test_notes.ExistingBehavior) ... ok\ntest_validation (test_notes.ExistingBehavior) ... ok\ntest_search_case_insensitive (test_search_notes.TestSearchNotes)\nTest case insensitive search. ... ok\ntest_search_empty_query (test_search_notes.TestSearchNotes)\nTest that empty query returns all notes. ... ok\ntest_search_integration_with_list (test_search_notes.TestSearchNotes)\nTest that search works alongside existing list functionality. ... ok\ntest_search_no_matches (test_search_notes.TestSearchNotes)\nTest that non-matching query returns empty list. ... ok\ntest_search_partial_match (test_search_notes.TestSearchNotes)\nTest substring matching. ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.136s\n\nOK\n"
+  },
+  "limitations": [
+    "Additional helper CLI uses sample data; primary existing Notes API is the feature acceptance surface.",
+    "Helper empty-query semantics differ from Notes.search; no single unified CLI search interface is claimed.",
+    "No general Unicode collation, persistence, GUI, cross-project reuse or fresh-project success claim."
+  ]
+}

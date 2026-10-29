@@ -141,6 +141,11 @@ def chat(client, options, messages, structured=False):
         response.raise_for_status()
         data = response.json()
         result = (data["response"] if endpoint == "/api/generate" else data["message"]["content"]).strip()
+    completed_callback=options.get('on_complete')
+    if completed_callback:
+        metadata={key:data.get(key) for key in ('done','done_reason','eval_count','prompt_eval_count','total_duration')}
+        if data.get('model'):metadata['served_model']=data['model']
+        completed_callback(metadata)
     if not result:
         raise ValueError("The local model returned an empty answer.")
     if data.get("done_reason") == "length":

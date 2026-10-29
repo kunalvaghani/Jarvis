@@ -1,0 +1,273 @@
+{
+  "date": "2026-10-25T21:51:00.407048+00:00",
+  "status": "PASS",
+  "campaign": "2c44ff02d1f34db7805ffe8842495bd5",
+  "model": "qwen3.5:9b",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\cli-verification-ecc7e2935f744496b3dbedabc50858bf",
+  "fresh_creation_intake": false,
+  "existing_project_repair": true,
+  "protocol": "compact",
+  "scope": "Existing-project repair only, without fresh-creation acceptance. Independent subprocess arithmetic/input-validation and unchanged generated-source checks for the Jarvis-selected operation/operand CLI. No GUI, visual-quality, reuse or performance acceptance.",
+  "supervisor_authored_implementation": false,
+  "source_before": {
+    "PROJECT.md": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+    "README.md": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+    "REQUIREMENTS.md": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+    "calculator.py": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+    "main.py": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+    "test_calculator.py": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b",
+    "test_cli_subprocess.py": "61828c9f507b36f2a47ba5f586755589d354649309d6ca3d4dc8383d4c63e039"
+  },
+  "checks": [
+    {
+      "name": "add 2 3",
+      "argv": [
+        "add",
+        "2",
+        "3"
+      ],
+      "exit_code": 0,
+      "stdout": "5.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "subtract 5 8",
+      "argv": [
+        "sub",
+        "5",
+        "8"
+      ],
+      "exit_code": 0,
+      "stdout": "-3.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply 6 7",
+      "argv": [
+        "mul",
+        "6",
+        "7"
+      ],
+      "exit_code": 0,
+      "stdout": "42.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide 9 2",
+      "argv": [
+        "div",
+        "9",
+        "2"
+      ],
+      "exit_code": 0,
+      "stdout": "4.5\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "add -3.5 2.25",
+      "argv": [
+        "add",
+        "-3.5",
+        "2.25"
+      ],
+      "exit_code": 0,
+      "stdout": "-1.25\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "subtract -2 -7",
+      "argv": [
+        "sub",
+        "-2",
+        "-7"
+      ],
+      "exit_code": 0,
+      "stdout": "5.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply -2.5 4",
+      "argv": [
+        "mul",
+        "-2.5",
+        "4"
+      ],
+      "exit_code": 0,
+      "stdout": "-10.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide -9 -3",
+      "argv": [
+        "div",
+        "-9",
+        "-3"
+      ],
+      "exit_code": 0,
+      "stdout": "3.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "divide 0 2",
+      "argv": [
+        "div",
+        "0",
+        "2"
+      ],
+      "exit_code": 0,
+      "stdout": "0.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiply 0 4",
+      "argv": [
+        "mul",
+        "0",
+        "4"
+      ],
+      "exit_code": 0,
+      "stdout": "0.0\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "division by zero",
+      "argv": [
+        "div",
+        "1",
+        "0"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Division by zero is not allowed.\n",
+      "passed": true
+    },
+    {
+      "name": "non-numeric operand",
+      "argv": [
+        "add",
+        "banana",
+        "2"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Numbers must be valid.\n",
+      "passed": true
+    },
+    {
+      "name": "non-numeric right operand",
+      "argv": [
+        "add",
+        "2",
+        "banana"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Numbers must be valid.\n",
+      "passed": true
+    },
+    {
+      "name": "unknown operation",
+      "argv": [
+        "unknown",
+        "1",
+        "2"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Unknown operation 'unknown'.\n",
+      "passed": true
+    },
+    {
+      "name": "missing operand",
+      "argv": [
+        "add",
+        "1"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Usage: python main.py <operation> <num1> <num2>\n",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "original_request": "Add one new unittest module named test_cli_subprocess.py that executes this existing Python CLI calculator through actual subprocesses using sys.executable and main.py. Preserve every existing implementation, unittest, metadata and documentation file byte-for-byte; only the new test file may be added. Read the actual documented add/sub/mul/div protocol and current numeric output before freezing assertions. Cover all four operations, signed and decimal operands, non-numeric input on either side, division by zero, unknown operations and missing operands. Check numeric results precisely rather than substring digits. Do not mock application functions, subprocess helpers, results or output. Run the original tests and new real-process tests. Do not install packages or start network services. This is source-preserving verification of already generated code, not new application creation.",
+  "project_ids": [],
+  "jarvis_source_changed_during_trial": false,
+  "original_tests": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_add (test_calculator.TestCalculator) ... ok\ntest_div (test_calculator.TestCalculator) ... ok\ntest_div_zero (test_calculator.TestCalculator) ... ok\ntest_mul (test_calculator.TestCalculator) ... ok\ntest_sub (test_calculator.TestCalculator) ... ok\ntest_add (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_div (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_div_zero (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_invalid_op (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_missing_operand (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_mul (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_non_numeric_left (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_non_numeric_right (test_cli_subprocess.TestCLISubprocess) ... ok\ntest_sub (test_cli_subprocess.TestCLISubprocess) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 3.902s\n\nOK\n"
+  },
+  "source_after": {
+    "PROJECT.md": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+    "README.md": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+    "REQUIREMENTS.md": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+    "calculator.py": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+    "main.py": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+    "test_calculator.py": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b",
+    "test_cli_subprocess.py": "61828c9f507b36f2a47ba5f586755589d354649309d6ca3d4dc8383d4c63e039"
+  },
+  "source_unchanged": true,
+  "coding_task_states": [
+    {
+      "id": "6dfe166126344d4eb3d452bbc03af785",
+      "state": "COMPLETED"
+    }
+  ],
+  "campaign_finished": true,
+  "unfinished_tasks": [],
+  "failed_work_tasks": [],
+  "local_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c44ff02d1f34db7805ffe8842495bd5\\independent-cli-acceptance-5fd4226528874b7d8c1563586170d9b1.json",
+  "source_preservation_verified": true,
+  "only_added_file": "test_cli_subprocess.py",
+  "original_file_hashes": {
+    "PROJECT.md": {
+      "sha256": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+      "bytes": 330
+    },
+    "README.md": {
+      "sha256": "1eb1f5079e1cc0d559aa6d90b5e54958c1f14c4dc25be7960bc39cc4b167d431",
+      "bytes": 1071
+    },
+    "REQUIREMENTS.md": {
+      "sha256": "fcb9517abc106c0e43edfbd1fbe44295aded5b515956c357665b74a760254c49",
+      "bytes": 1119
+    },
+    "calculator.py": {
+      "sha256": "15c0615e59f1e9385ea40648f238f1bdcb4d754a7f5b607da19e86d85a58ae57",
+      "bytes": 1107
+    },
+    "main.py": {
+      "sha256": "c4cf8d5287136dbf59d09ffdb3c615741fe6a1e558c1f3bc5fd9d8cbf6280c71",
+      "bytes": 118
+    },
+    "test_calculator.py": {
+      "sha256": "f822a66ad1d96e833f33f94e96168216e3e1cbc77eddafd144217b9bc913f59b",
+      "bytes": 1199
+    }
+  },
+  "actual_subprocess_test_methods": 9,
+  "source_stable": true,
+  "source_preserving_generation_seconds": 456.852,
+  "limitations": [
+    "Generated subprocess tests use PATH python rather than requested sys.executable; the independent driver uses its own interpreter.",
+    "The nine generated subprocess cases do not include signed/decimal operands; independent15-probe acceptance covers those cases.",
+    "This is source-preserving verification of an exact copy, not a second fresh creation or GUI acceptance."
+  ],
+  "whole_requested_followup_goal_verified": false,
+  "requested_followup_goal_result": "FAIL",
+  "requested_followup_remaining": [
+    "Use of sys.executable was requested but generated tests invoke PATH python.",
+    "Signed/decimal cases were requested in the new production module but are covered only by independent probes."
+  ]
+}

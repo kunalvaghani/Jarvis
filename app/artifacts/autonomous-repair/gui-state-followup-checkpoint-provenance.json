@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-26T03:46:46.706082+00:00",
+  "source_campaign": "2c3de44678f64942bcbdbc08b42163aa",
+  "source_native": "b4eb91d989d74a5f929c5be52049c04c",
+  "source": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\.jarvis-runtime\\native-workloads\\3c68b6a7652e4a3f8820c1ac22a6b198\\workers\\all",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-state-followup-62f1945d0137447ca51bf562023343b4",
+  "copy_policy": "Exact whole worker source snapshot after confirmed owner exit, no mixed files or supervisor implementation",
+  "byte_identical": true,
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "45fc4014dfca1dadb1a4f89064b77bef735f25732ce4d1b656dbdee658598071"
+  },
+  "protected_files": [
+    "test_calculator.py",
+    "test_gui_behavior.py",
+    "PROJECT.md",
+    "REQUIREMENTS.md"
+  ],
+  "protected_source_matches_original": true,
+  "verification": {
+    "date": "2026-10-26T03:46:43.543020+00:00",
+    "errors": [
+      {
+        "path": "test_gui_behavior.py",
+        "error": "Check failed (exit 1): test_button_click_addition (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\ntest_button_click_clear (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\ntest_display_initial_state (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\ntest_error_display_division_by_zero (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\ntest_keyboard_input_numbers (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\ntest_keyboard_input_operators (test_gui_behavior.TestCalculatorGUI) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_button_click_addition (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n======================================================================\r\nERROR: test_button_click_clear (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n======================================================================\r\nERROR: test_display_initial_state (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n======================================================================\r\nERROR: test_error_display_division_by_zero (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n======================================================================\r\nERROR: test_keyboard_input_numbers (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n======================================================================\r\nERROR: test_keyboard_input_operators (test_gui_behavior.TestCalculatorGUI)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\check-workspace-1792986403796817200\\test_gui_behavior.py\", line 10, in setUp\r\n    self.buttons = self.app.buttons\r\nAttributeError: 'CalculatorApp' object has no attribute 'buttons'\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 1.676s\r\n\r\nFAILED (errors=6)\r\n",
+        "purpose": "Execute python_tests against the declared deliverable"
+      }
+    ],
+    "checks": [
+      {
+        "exit_code": 0,
+        "output": "test_addition (test_calculator.TestCalculator) ... ok\r\ntest_clear (test_calculator.TestCalculator) ... ok\r\ntest_division (test_calculator.TestCalculator) ... ok\r\ntest_division_by_zero (test_calculator.TestCalculator) ... ok\r\ntest_multiplication (test_calculator.TestCalculator) ... ok\r\ntest_subtraction (test_calculator.TestCalculator) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 0.001s\r\n\r\nOK\r\n",
+        "seconds": 0.531,
+        "kind": "python_tests",
+        "path": "test_calculator.py"
+      }
+    ],
+    "passed": false,
+    "runtime_verified": false,
+    "rejected_tools": [],
+    "hashes": {
+      "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+      "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+      "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+      "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+      "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+      "ui_builder.py": "45fc4014dfca1dadb1a4f89064b77bef735f25732ce4d1b656dbdee658598071"
+    },
+    "evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\2c3de44678f64942bcbdbc08b42163aa\\postfix-original-checks-cb962cd2df674456a35887945af1f016\\validation-c783381d2ed045a290d9c2e43751e42e.json"
+  },
+  "scope": "Original frozen tests under repaired production validator on exact retained generated source; not fresh-creation or independent physical GUI acceptance.",
+  "source_after_verification_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "45fc4014dfca1dadb1a4f89064b77bef735f25732ce4d1b656dbdee658598071"
+  },
+  "source_unchanged_during_verification": true
+}

@@ -213,6 +213,19 @@ class GPUSchedulerTests(unittest.TestCase):
         result.close();result.close()
         self.assertIsNone(self.state()['active']);self.assertEqual(method.call_count,1)
 
+    def test_configured_larger_context_keeps_the_existing_vram_envelope(self):
+        self.policy['context_limit']=8192
+        client,method=self.transport()
+        result=client.post('http://127.0.0.1:11434/api/chat',json={'model':'qwen3.5:9b',
+            'messages':[{'content':'fixture'}],'options':{'num_ctx':16384}},stream=True)
+        try:
+            options=method.call_args.kwargs['json']['options']
+            self.assertEqual(options['num_ctx'],8192)
+            self.assertEqual(options['num_gpu'],10)
+            self.assertEqual(self.policy['speech_reserve_mb'],1024)
+            self.assertEqual(self.policy['vram_ceiling_mb'],3850)
+        finally:result.close()
+
     def test_transport_failure_releases_without_retry(self):
         client,method=self.transport();method.side_effect=requests.Timeout('uncertain')
         with self.assertRaises(requests.Timeout):

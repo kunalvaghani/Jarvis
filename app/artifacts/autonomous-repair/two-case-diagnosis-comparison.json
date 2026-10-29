@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-28T08:24:34.359716+00:00",
+  "status": "NO_VERIFIED_DIAGNOSIS_PROFILE",
+  "application_acceptance": false,
+  "same_model": true,
+  "same_input_manifest": true,
+  "same_prompt_sha256": true,
+  "scope": "One matched read-only pair on exact finished GUI2/6 input;1400-token/300-second bounds; baseline versus request-scoped thinking/coding sampling profile. No production configuration changes or tool dispatch.",
+  "baseline": {
+    "probe": "14420a4ef5024bb6adceb52b7fa44828",
+    "status": "OBSERVED",
+    "seconds": 134.156,
+    "completion": {
+      "done": true,
+      "done_reason": "stop",
+      "eval_count": 518,
+      "prompt_eval_count": 3790,
+      "total_duration": 132296031500,
+      "served_model": "qwen3.5:9b"
+    },
+    "review": "Incorrect digit-group generalization misses indexed calls for1,3,0; contradictory uniform-storage recommendation, replacement source despite no-source instruction, unwarranted certainty. Not applied."
+  },
+  "thinking": {
+    "probe": "7ae705044e884597afc500f945ebfb82",
+    "status": "FAIL",
+    "seconds": 300.187,
+    "error_type": "AttributeError",
+    "error": "'NoneType' object has no attribute 'read'",
+    "review": "Deadline closed the inference stream at300seconds; transport surfaced NoneType.read afterward. No usable complete diagnosis; no source action or profile promotion."
+  },
+  "all_inputs_and_configuration_unchanged": true,
+  "production_thinking_enabled": false
+}

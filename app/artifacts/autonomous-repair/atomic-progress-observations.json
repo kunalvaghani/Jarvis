@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_AND_GUI_REPLAY_PASS_PRODUCTION_NO_PROGRESS_BLOCKED",
+  "application_acceptance": false,
+  "trigger_campaign": "160ce0dfd45f49a99122712fd48c9a51",
+  "target_regression": {
+    "tests": 9,
+    "seconds": 21.905,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-atomic-progress-target-final.log"
+  },
+  "affected_regression": {
+    "tests": 203,
+    "seconds": 214.829,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-atomic-progress-regression.log"
+  },
+  "real_GUI_replay": "artifacts/autonomous-repair/candidate-progress-gui-regression.json",
+  "readiness": "DockerEngineUnavailable only; required models/local Git available.",
+  "scope": "One existing freshly read assigned Python file, up to8000bytes;1\u20134 non-overlapping exact statements, <=1200chars per replacement and <=2400combined; one existing guarded Write/candidate/save. Final planned batches require complete frozen case classifications, no lost passing cases or new runtime errors, and a gained passing case or runtime-error-to-assertion transition. No source replay, new write rights or app implementation authored by supervisor.",
+  "classification_limits": "Existing32 passed IDs and16KB sidecar preserved. Failure/error IDs combined<=32, ASCII source symbols<=180chars. Incomplete/oversized classifications cannot prove planned progress. No runtime values or object representations added.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "f3bffb570c0b6473bd1248c50c450c32d66a6bed2f707b11d487202a9149bb85",
+    "jarvis/coding_files.py": "182cfa29cee324d14216b2e50fc58f09a3c5bf772ae56779428642d5d0802bff",
+    "jarvis/candidate_checks.py": "db936499580a4dc0a9d82a12c0bd1f1330597f8d933fe12cd54471b49939554d",
+    "jarvis/codex_unittest_check.py": "6dd0fc104f888a0c91c098282e983404a0850e3c1b25f6d93b868da2e5849c14",
+    "tests/test_native_coding.py": "86291560ea02f440b1bab1a9fca9dcd5280fa792e81787121cef2e16e2e77aa4",
+    "tests/test_candidate_checks.py": "fed0af4e66531af7711e1afd92e9a2f721ef788bcfa0d5bcf2b2d256a1ccfe61"
+  },
+  "successor": {
+    "campaign": "e44e7fe70eb0447a8758b3ce341c41b3",
+    "task": "f348345bee2b41e8983433cecaac8782",
+    "owner_session": 58668,
+    "status": "FAILED_NORMAL_OWNER_EXIT",
+    "finished_at": "2026-10-28T05:47:04.125687+00:00",
+    "record_to_shutdown_seconds": 698.022,
+    "raw_campaign_result": "FAIL",
+    "native_status": "failed",
+    "source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "progress": {
+      "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "identical_failed_checks": 2,
+      "idle_turns": 3,
+      "guarded_replacement_attempts": 1,
+      "failure_history_versions": 2,
+      "failure_state_revisits": 0,
+      "diagnostic_plan_attempts": 1,
+      "rejected_repair_proposals": 0
+    },
+    "bounded_recovery_rejection": {
+      "stage": "planned replacement",
+      "error": "Planned candidate makes no verified frozen-case progress or introduces new runtime errors. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e44e7fe70eb0447a8758b3ce341c41b3\\.jarvis-runtime\\native-code\\3171c3b6b7f64cb89c1531de25bcecac\\candidate-checks\\ad5f9a49a6f141fbbb1cada86e7c79c2\\validation-62dd011fbe3f49988cdb0b906f36aa73.json",
+      "failure_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+      "generic_fallback_allowed": false
+    },
+    "candidate_decisions": [
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": true,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "1b7f0d41c53f165737ca25245eb174bc565df3db3088c59d9a5853cbb4144735",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e44e7fe70eb0447a8758b3ce341c41b3\\.jarvis-runtime\\native-code\\3171c3b6b7f64cb89c1531de25bcecac\\validation-ece1e7a752ca481f9cc233429bfc9ff3.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e44e7fe70eb0447a8758b3ce341c41b3\\.jarvis-runtime\\native-code\\3171c3b6b7f64cb89c1531de25bcecac\\candidate-checks\\96c9f708426a4ec3944391e564a70a0f\\validation-8b7473ad205e46d68bad1fe225570e10.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": false,
+        "newly_passing_cases": {},
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      },
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "de4761e75c65460a8431ad55a02adda4fca2a8a6a6e71e3b40c784f93fb08a5c",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e44e7fe70eb0447a8758b3ce341c41b3\\.jarvis-runtime\\native-code\\3171c3b6b7f64cb89c1531de25bcecac\\validation-0e88cddea12044fba925e3c95a628d87.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\e44e7fe70eb0447a8758b3ce341c41b3\\.jarvis-runtime\\native-code\\3171c3b6b7f64cb89c1531de25bcecac\\candidate-checks\\ad5f9a49a6f141fbbb1cada86e7c79c2\\validation-62dd011fbe3f49988cdb0b906f36aa73.json",
+        "lost_previously_passing_cases": {},
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {},
+        "verified_case_progress": false
+      }
+    ],
+    "raw_batch_proposals": [
+      {
+        "metadata": ".jarvis-runtime/autonomous-repair/e44e7fe70eb0447a8758b3ce341c41b3/.jarvis-runtime/native-code/3171c3b6b7f64cb89c1531de25bcecac/model-responses/tool-7953ee0923ae41b18f9eb3ad50f6a335/metadata.json",
+        "raw_sha256": "f8246bb74acd382c112175f5badcd31a9552350e7de32c1073158e39ab9b5143",
+        "changes": 3,
+        "replacement_characters": 437
+      }
+    ],
+    "external_files_unchanged": {
+      "PROJECT.md": true,
+      "README.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true,
+      "ui_builder.py": true
+    },
+    "frozen_worker_files_unchanged": {
+      "PROJECT.md": true,
+      "REQUIREMENTS.md": true,
+      "calculator_logic.py": true,
+      "main.py": true,
+      "test_calculator.py": true,
+      "test_gui_behavior.py": true
+    },
+    "outcomes": [
+      {
+        "path": "test_gui_behavior.py",
+        "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+        "test_count": 6,
+        "successful": false,
+        "skipped": 0,
+        "passed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+        ],
+        "partial": false,
+        "failed_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+          "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+        ],
+        "error_ids": [
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+          "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+          "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+        ]
+      },
+      {
+        "path": "test_calculator.py",
+        "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+        "test_count": 6,
+        "successful": true,
+        "skipped": 0,
+        "passed_ids": [
+          "test_calculator.TestCalculator.test_addition",
+          "test_calculator.TestCalculator.test_clear",
+          "test_calculator.TestCalculator.test_division",
+          "test_calculator.TestCalculator.test_division_by_zero",
+          "test_calculator.TestCalculator.test_multiplication",
+          "test_calculator.TestCalculator.test_subtraction"
+        ],
+        "partial": false,
+        "failed_ids": [],
+        "error_ids": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "date": "2026-10-28T17:38:41.412433+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "Only sealed single-assignment binding spans render complete model-authored statements at the original scope. Both ASTs must match. No nodes or literals are supplied by the controller. Outer-scope escapes and AST no-ops stop; equivalent rendered repeats stop before dispatch. Existing syntax, byte hashes, uncertain journals, fixed source, candidate progress, budgets and atomic-save guards remain. Ordinary edits and complete methods keep original behavior.",
+  "target": {
+    "log": ".jarvis-runtime/repair-binding-rendering-target-final.log",
+    "tests": 8,
+    "seconds": 19.591,
+    "result": "OK"
+  },
+  "affected_regression": {
+    "tests": 209,
+    "seconds": 248.534,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-binding-rendering-regression-final.log"
+  },
+  "audit_log": ".jarvis-runtime/repair-binding-rendering-audit-final.log",
+  "launcher_log": ".jarvis-runtime/repair-binding-rendering-launcher.log",
+  "exact_qwen_replay": "artifacts/autonomous-repair/binding-rendering-gui-replay.json",
+  "source_sha256": {
+    "jarvis/native_coding.py": "c558f8547ec3f01b10d20b2c4879ef86a6d3f6f86efc8b65496c8f339059a5d0",
+    "jarvis/coding_files.py": "09429ea32c82256c8367f3804cbb0af11eb6e5207e60d636cc1f753615aef69c",
+    "jarvis/repair_contract.py": "65035e1f9e5256ed5c8c833500058e69e389f2b6846487b398c3d6cde646142f",
+    "tests/test_repair_contract.py": "4580a36cc1a31293c298357c4f8a1927620479c3c0044fa2e989320773926b38",
+    "tests/test_repair_corrections.py": "02628b64e801caac2cd714e76cd6f24ad07a8b17f2c527d65467e98e8c2dbe14"
+  },
+  "preceding_trial": {
+    "id": "ea62c72013d143f6a76db577fc0344cb",
+    "native": "c844a0067e184b84b36410c36991a0d0",
+    "result": "FAIL",
+    "seconds": 907.42,
+    "jarvis_source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "error": "Native coding stopped; no partial model output executed.",
+    "bounded_interface_corrections": [
+      {
+        "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+        "correction": 1,
+        "error": "Generated ui_builder.py failed syntax validation: unexpected indent (ui_builder.py, line 43)",
+        "source_unchanged": true,
+        "repair_turn_charged": true,
+        "action_replayed": false
+      },
+      {
+        "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+        "correction": 2,
+        "error": "Candidate would regress previously passing frozen cases: {\"test_gui_behavior.py\": [\"test_gui_behavior.TestCalculatorGUI.test_button_click_clear\"]}. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ea62c72013d143f6a76db577fc0344cb\\.jarvis-runtime\\native-code\\c844a0067e184b84b36410c36991a0d0\\candidate-checks\\e4b5dc86d8fc4ae9a923f1bd925c0624\\validation-f9f3fd303a7e4505ba6057a121df6c95.json",
+        "source_unchanged": true,
+        "repair_turn_charged": true,
+        "action_replayed": false
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ea62c72013d143f6a76db577fc0344cb\\.jarvis-runtime\\native-code\\c844a0067e184b84b36410c36991a0d0\\validation-0fdc2dc0af8a49deb2f28e60f99c3c9f.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ea62c72013d143f6a76db577fc0344cb\\.jarvis-runtime\\native-code\\c844a0067e184b84b36410c36991a0d0\\candidate-checks\\e4b5dc86d8fc4ae9a923f1bd925c0624\\validation-f9f3fd303a7e4505ba6057a121df6c95.json",
+        "lost_previously_passing_cases": {
+          "test_gui_behavior.py": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+          ]
+        },
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {
+          "test_gui_behavior.py": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+          ]
+        },
+        "verified_case_progress": false
+      }
+    ],
+    "diagnostic_plans": [
+      {
+        "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+        "file_path": "ui_builder.py",
+        "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "steps": [
+          "Use an owned compatible value interface preserving every recorded access route and the original real objects/callbacks.",
+          "Frozen source-bound obligations: [{\"test_file\": \"test_gui_behavior.py\", \"receiver\": \"self.buttons\", \"method\": \"invoke\", \"accesses\": [{\"key\": \"2\", \"subscripts_after_key\": 0, \"line\": 19, \"call\": \"self.buttons['2'].invoke()\"}, {\"key\": \"+\", \"subscripts_after_key\": 1, \"line\": 20, \"call\": \"self.buttons['+'][0].invoke()\"}, {\"key\": \"3\", \"subscripts_after_key\": 1, \"line\": 21, \"call\": \"self.buttons['3'][0].invoke()\"}, {\"key\": \"C\", \"subscripts_after_key\": 1, \"line\": 27, \"call\": \"self.buttons['C'][0].invoke()\"}, {\"key\": \"1\", \"subscripts_after_key\": 1, \"line\": 44, \"call\": \"self.buttons['1'][0].invoke()\"}, {\"key\": \"/\", \"subscripts_after_key\": 1, \"line\": 45, \"call\": \"self.buttons['/'][0].invoke()\"}, {\"key\": \"0\", \"subscripts_after_key\": 1, \"line\": 46, \"call\": \"self.buttons['0'][0].invoke()\"}]}]",
+          "Run every original unchanged executable check. No passing result or additional permission is implied."
+        ],
+        "typed_diagnosis": {
+          "observed_cause": "The current `ui_builder.py` implementation stores buttons in a dictionary where values are lists (`self.buttons[text] = [btn]`). The frozen tests expect specific access patterns: some keys (like '2', 'C') require `.invoke()` directly on the",
+          "strategy": "owned_compatible_interface",
+          "uncertainty": "None. The fix strictly adheres to the frozen test contract by ensuring `self.buttons[key]` returns a widget with an `invoke` method for all required keys, while"
+        },
+        "verified": false,
+        "original_goal_used": true,
+        "planner_hypotheses_authoritative": false,
+        "replacement_context": "current-evidence-only",
+        "protocol_contract": {
+          "file_path": "ui_builder.py",
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "test_sha256": {
+            "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+          },
+          "members": [
+            "buttons"
+          ],
+          "obligations": [
+            {
+              "test_file": "test_gui_behavior.py",
+              "receiver": "self.buttons",
+              "method": "invoke",
+              "accesses": [
+                {
+                  "key": "2",
+                  "subscripts_after_key": 0,
+                  "line": 19,
+                  "call": "self.buttons['2'].invoke()"
+                },
+                {
+                  "key": "+",
+                  "subscripts_after_key": 1,
+                  "line": 20,
+                  "call": "self.buttons['+'][0].invoke()"
+                },
+                {
+                  "key": "3",
+                  "subscripts_after_key": 1,
+                  "line": 21,
+                  "call": "self.buttons['3'][0].invoke()"
+                },
+                {
+                  "key": "C",
+                  "subscripts_after_key": 1,
+                  "line": 27,
+                  "call": "self.buttons['C'][0].invoke()"
+                },
+                {
+                  "key": "1",
+                  "subscripts_after_key": 1,
+                  "line": 44,
+                  "call": "self.buttons['1'][0].invoke()"
+                },
+                {
+                  "key": "/",
+                  "subscripts_after_key": 1,
+                  "line": 45,
+                  "call": "self.buttons['/'][0].invoke()"
+                },
+                {
+                  "key": "0",
+                  "subscripts_after_key": 1,
+                  "line": 46,
+                  "call": "self.buttons['0'][0].invoke()"
+                }
+              ]
+            }
+          ],
+          "strategies": [
+            "key_specific_values",
+            "owned_compatible_interface",
+            "unresolved"
+          ]
+        },
+        "model_prose_forwarded": false,
+        "rejected_repair_proposals": 0
+      }
+    ],
+    "all_eight_worker_and_external_hashes_unchanged": true,
+    "interpretation": "Live syntax correction completed, ordinary-widget candidate regressed clear and was rejected. Second corrective inference incomplete at deadline; no working source gain. All logs/raw proposals retained; owner exited."
+  },
+  "preserved_cli_integrity": {
+    "prior_status": "PASS",
+    "new_functional_run": false,
+    "all_six_original_hashes_match": true
+  },
+  "configuration_sha256": "d0fa92f27b68bdef99456fbcdc86bbf674075a1bc5b0c9d21412181f50f1cf4f",
+  "intentional_main_stop_marker_present": true,
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 19.59,
+    "log": ".jarvis-runtime/repair-binding-rendering-audit-final.log"
+  },
+  "production": {
+    "id": "c8211d6f028c4719a34ae3535d4b8d33",
+    "native": "f85d7e4219fd4cf3b689aad0702a2638",
+    "raw_result": "FAIL",
+    "seconds": 467.956,
+    "jarvis_source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "error": "Identical planned source proposal repeated; stopped before dispatch. No action replayed.",
+    "binding_renderings": [
+      {
+        "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+        "changes": [
+          {
+            "old_string": "            self.buttons[text] = [btn]",
+            "proposed_sha256": "373eaf08030cc7e74c0062152164f27977ca69cf1903d4875882ba5437ba6fa7",
+            "rendered_sha256": "f37abdfcb78f767e5bb81b6160dbbff454e4fb72cde0815c3c2e957e866db4bb",
+            "rendered_new_string": "            self.buttons[text] = btn",
+            "ast_unchanged": true
+          }
+        ]
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_only": true,
+        "applied": false,
+        "accepted_for_save": false,
+        "source_path": "ui_builder.py",
+        "decision_precedes_working_save": true,
+        "proposed_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+        "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\c8211d6f028c4719a34ae3535d4b8d33\\.jarvis-runtime\\native-code\\f85d7e4219fd4cf3b689aad0702a2638\\validation-148d7f4c5e5a48829f99a990ceefcdf5.json",
+        "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\c8211d6f028c4719a34ae3535d4b8d33\\.jarvis-runtime\\native-code\\f85d7e4219fd4cf3b689aad0702a2638\\candidate-checks\\30d4e0469bd042958b7e9b42ee0e6c73\\validation-fb254757568b446bad274444ba64412f.json",
+        "lost_previously_passing_cases": {
+          "test_gui_behavior.py": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+          ]
+        },
+        "progress_required": true,
+        "newly_passing_cases": {},
+        "case_classifications_complete": true,
+        "errors_reaching_assertions": {},
+        "new_runtime_errors": {
+          "test_gui_behavior.py": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+          ]
+        },
+        "verified_case_progress": false
+      }
+    ],
+    "bounded_interface_corrections": [
+      {
+        "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+        "correction": 1,
+        "error": "Candidate would regress previously passing frozen cases: {\"test_gui_behavior.py\": [\"test_gui_behavior.TestCalculatorGUI.test_button_click_clear\"]}. No working source saved. Candidate evidence: D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\c8211d6f028c4719a34ae3535d4b8d33\\.jarvis-runtime\\native-code\\f85d7e4219fd4cf3b689aad0702a2638\\candidate-checks\\30d4e0469bd042958b7e9b42ee0e6c73\\validation-fb254757568b446bad274444ba64412f.json",
+        "source_unchanged": true,
+        "repair_turn_charged": true,
+        "action_replayed": false
+      }
+    ],
+    "all_eight_worker_external_hashes_unchanged": true
+  }
+}

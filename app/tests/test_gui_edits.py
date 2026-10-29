@@ -17,6 +17,22 @@ from tests.test_coder import UI_SOURCE
 
 
 class GuiEditTests(unittest.TestCase):
+    def test_owned_module_graph_follows_reachable_aliased_ui_without_counting_unrelated_code(self):
+        ui='import tkinter as tk\nclass View:\n def __init__(self,root):\n  self.root=root\n  self.button=tk.Button(root,text="Go",command=lambda:tk.Label(root,text="Done").pack())\n  self.button.grid()\n'
+        for entry,module,sources in (
+            ('from tkinter import Tk\nfrom ui import View as Screen\nScreen(Tk()).root.mainloop()\n','main',{'ui':ui}),
+            ('import tkinter as tk\nimport ui as panel\npanel.View(tk.Tk()).root.mainloop()\n','main',{'ui':ui}),
+            ('from tkinter import Tk\nimport pkg.ui\npkg.ui.View(Tk()).root.mainloop()\n','main',{'pkg.ui':ui}),
+            ('from tkinter import Tk\nfrom .ui import View\nView(Tk()).root.mainloop()\n','pkg.main',{'pkg.ui':ui})):
+            with self.subTest(entry=entry):gui_contract.check(entry,'Create a Python desktop GUI',sources,module)
+        for entry in ('print("console")','from tkinter import Tk\nTk().mainloop()',
+                      'from ui import View\nView(None).root.mainloop()'):
+            with self.subTest(entry=entry),self.assertRaisesRegex(ValueError,'graphical UI'):
+                gui_contract.check(entry,'Create a Python desktop GUI',{'ui':ui},'main')
+        with self.assertRaisesRegex(ValueError,'graphical UI'):
+            gui_contract.check('import ui\nprint("console")','Create a Python desktop GUI',
+                               {'ui':'import main\n'+ui,'main':'import ui\nprint("console")'},'main')
+
     def test_console_and_uncalled_placeholder_are_rejected(self):
         for source in ('print("UI")', 'def launch_ui():\n    pass\n',
                        UI_SOURCE.split('if __name__')[0], 'if False:\n' + '\n'.join('    ' + line for line in UI_SOURCE.splitlines())):

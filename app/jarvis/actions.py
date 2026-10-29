@@ -1500,6 +1500,14 @@ class Actions:
             self.task_active = True
             try:
                 self.task_state.start(command.value, "code_task", project)
+                projects=getattr(self,'project_intel',None)
+                ingress=getattr(self,'ingress',None)
+                from .project_intel import ProjectIntelligence
+                from .task_ingress import TaskIngress
+                reused=projects.verified_objective_checkpoint(getattr(ingress.scheduler.local,'identity',None)) if isinstance(projects,ProjectIntelligence) and isinstance(ingress,TaskIngress) else None
+                if reused:
+                    self.task_state.finish('completed',reused)
+                    return reused
                 coder = Coder(self, self.brain.client)
                 intel = getattr(self, 'code_intel', None)
                 if intel is not None and intel.enabled:

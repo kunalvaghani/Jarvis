@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-28T09:09:29.226503+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "focused_regression": {
+    "tests": 4,
+    "seconds": 2.168,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-diagnostic-feedback-target-final.log"
+  },
+  "retained_initial_target_failure": ".jarvis-runtime/repair-diagnostic-feedback-target.log (controlled fixture model violated existing9B restriction; fixture corrected)",
+  "affected_regression": {
+    "tests": 198,
+    "seconds": 229.019,
+    "result": "OK"
+  },
+  "affected_regression_log": ".jarvis-runtime/repair-diagnostic-feedback-regression.log",
+  "native_audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 20.45,
+    "log": ".jarvis-runtime/repair-diagnostic-feedback-audit.log"
+  },
+  "readiness": "DockerEngineUnavailable only; required local models/LocalGithub available.",
+  "scope": "One explicitly selected complete read-only model diagnosis. Same model, raw response SHA/closed fields/completion, terminal original owner, immutable failed validation, all declared current source/frozen hashes and writable implementation path required. Untrusted hypothesis only; no code, action replay, manual-read permission, check credit or verified-memory promotion. Fresh context expires on source drift.",
+  "partial_probe": {
+    "id": "372f38c5e54d497cb23dce7394574437",
+    "status": "FAIL",
+    "seconds": 291.265,
+    "completion": {
+      "done": true,
+      "done_reason": "length",
+      "eval_count": 1400,
+      "prompt_eval_count": 904,
+      "total_duration": 290721260100,
+      "served_model": "qwen3.5:9b"
+    },
+    "interpretation": "1400-token limit reached;904 prompt tokens. Plausible reasoning draft, no complete conclusion and no action."
+  },
+  "fresh_synthesis": {
+    "id": "b32d0588a2574fc387e7791e0c1143fb",
+    "status": "OBSERVED",
+    "seconds": 33.578,
+    "completion": {
+      "done": true,
+      "done_reason": "stop",
+      "eval_count": 131,
+      "prompt_eval_count": 2372,
+      "total_duration": 33248034500,
+      "served_model": "qwen3.5:9b"
+    },
+    "prior_partial_raw_sha256": "ec8f12e63bcd171bfcdbf95e6d158f7d480cc6d890045fb762684972025f476e",
+    "interpretation": "Fresh strictly decoded complete131-token high-level conclusion; same-input untrusted partial supplied as data, no fragments joined, no source/action output. Feasible heterogeneous access strategy; concrete repair/GUI acceptance unverified."
+  },
+  "retained_synthesis_guard_refusal": ".jarvis-runtime/repair-compact-diagnosis-synthesis.log (wrong local metadata field name; stopped before inference, corrected to prompt_mode)",
+  "real_GUI_replay": "artifacts/autonomous-repair/diagnostic-feedback-gui-replay.json",
+  "noop_remainder_feasibility": "artifacts/autonomous-repair/noop-batch-remainder-feasibility.json",
+  "production_thinking_enabled": false,
+  "production_successor": {
+    "campaign": "5af8ffdd76c946c88f503b85e1fa1acc",
+    "task": "29b47e28040848249290c479c5c5c9f0",
+    "owner_session": 26757,
+    "status": "FINISHED",
+    "raw_campaign_result": "FAIL",
+    "finished_at": "2026-10-28T09:08:43.014037+00:00",
+    "record_to_shutdown_seconds": 818.282,
+    "all_eight_external_hashes_match": true,
+    "jarvis_source_changed_during_trial": false,
+    "configuration_changed_during_trial": false,
+    "native": {
+      "status": "failed",
+      "error": "Bounded planned replacement was rejected; stop for root-cause analysis. No generic action fallback or replay. Batch changes must differ and use at most1200 replacement characters each.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 14,
+        "guarded_replacement_attempts": 1,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 3
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "b408fe36b1c862ffbd0adcf42feaa27dde807b01cc714f57886af0a35f6ed6ea",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\5af8ffdd76c946c88f503b85e1fa1acc\\.jarvis-runtime\\native-code\\8a4db23bd95e460aa37161a9cd345b83\\validation-a856ec41aa584a0eb7d7542e18fbda53.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\5af8ffdd76c946c88f503b85e1fa1acc\\.jarvis-runtime\\native-code\\8a4db23bd95e460aa37161a9cd345b83\\candidate-checks\\b060d2d276c84308a8b3d46feccf5ae8\\validation-ba52fb569b7c400aaa1170589ca74fee.json",
+          "lost_previously_passing_cases": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+            ]
+          },
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+            ]
+          },
+          "verified_case_progress": false
+        }
+      ],
+      "require_repair_progress": true,
+      "imported_independent_observations": [
+        {
+          "accepted": true,
+          "path": "gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json",
+          "report_sha256": "d4bb50848b157a643e674bc43c3fcc69eb2e20bd62cfe294b80913d16f1fe82d",
+          "failed_observations": 7,
+          "scope": "Read-only diagnostic data; no current check, success credit or permissions."
+        }
+      ],
+      "imported_diagnostic_observations": [
+        {
+          "accepted": true,
+          "id": "b32d0588a2574fc387e7791e0c1143fb",
+          "report_sha256": "9d49e83c87c7146b1d5b0895b50ec4aecc6f81c4c1ba0d29ebdf01e8ef76a050",
+          "raw_response_sha256": "6b706c3b5bd69b56e308a56197390041181936b2daef4f06ec1e76fb0bf18c84",
+          "immutable_validation_sha256": "b072a737442f5137eeca3fe2636df239506c8885dfb3aeb798d6dfff5f32cde0",
+          "scope": "Untrusted complete model conclusion only; no semantic verification, check credit or permissions."
+        }
+      ],
+      "bounded_recovery_rejection": {
+        "stage": "planned replacement",
+        "error": "Batch changes must differ and use at most1200 replacement characters each.",
+        "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "generic_fallback_allowed": false
+      },
+      "id": "8a4db23bd95e460aa37161a9cd345b83",
+      "outcomes": [
+        {
+          "path": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "test_count": 6,
+          "successful": false,
+          "skipped": 0,
+          "passed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ],
+          "partial": false,
+          "failed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        },
+        {
+          "path": "test_calculator.py",
+          "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_count": 6,
+          "successful": true,
+          "skipped": 0,
+          "passed_ids": [
+            "test_calculator.TestCalculator.test_addition",
+            "test_calculator.TestCalculator.test_clear",
+            "test_calculator.TestCalculator.test_division",
+            "test_calculator.TestCalculator.test_division_by_zero",
+            "test_calculator.TestCalculator.test_multiplication",
+            "test_calculator.TestCalculator.test_subtraction"
+          ],
+          "partial": false,
+          "failed_ids": [],
+          "error_ids": []
+        }
+      ],
+      "all_six_protected_worker_hashes_match": true
+    }
+  },
+  "source_sha256": {
+    "jarvis/acceptance_observations.py": "f990d95c4de07b36168982c3b37e38c82f8e49503efaaf6bf84194ef8aef8bb1",
+    "jarvis/native_coding.py": "cc8d153e2c92bb8eeb2543f13e7f9b895ba24324700f08653d315f177b84c433",
+    "tests/test_diagnostic_observations.py": "b4b73352984d9ba30ba040f8a412cc0c3038766e0b0c41443fd7fd48ad6f5cdd",
+    "scripts/verification/probe_coding_diagnosis.py": "4310226f4fc2b136e195faa8c664ddd8937d6938923d60c15ea8984b057b95f1",
+    "scripts/verification/verify_autonomous_repair.py": "f7d00193a9ac96066403f28436843f702f9e3bc7f9cd78248362b607c1146c61"
+  }
+}

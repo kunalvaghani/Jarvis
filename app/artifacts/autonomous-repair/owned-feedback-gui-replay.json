@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-28T18:43:28.430040+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact completed Qwen owned-type proposal is rejected before candidate/save and delivers both independently confirmed component errors together. The owned definition lacks indexing and its expression contains assignment. Zero model calls or supervisor-authored application logic.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "45668bc58adad6ed7f1229deea190341eb83315fc6aa5b98e7c23d08c03fd4c4",
+    "jarvis/coding_files.py": "a3f4ae2f0ead7db6e406825667b209aadf17a78a291e801f4cf7ee29ecc0e8c4",
+    "jarvis/repair_contract.py": "1fae0ca22e07b8b2ef01111ddb9a91ce96d960ac9541a420c44ca722b608b475"
+  },
+  "source_campaign": "6bb932eb9cf74bfbb54eda5888f387d0",
+  "retained_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-4b51cdd8bad14948934812851d544d02/response.txt",
+      "sha256": "d14a15a75125953a4ca495a6dc72dbedd99ae4ca36c4165f6d21eef5fa0b4fb4"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-300666aa56084837a90d76c262aa189b/response.txt",
+      "sha256": "5891fb49c5613e0c1d2f3b60d2fbd743765c110a8d5874496a16f97008f22a18"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-fb9bfbb0a78f455289a15b0cdc4359be/response.txt",
+      "sha256": "85fbbd3b93f5894997307516f8fce37e0ff414ba79344a2b8bc00f1b230426d1"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-59542abb61e74ff3a8166246219027af/response.txt",
+      "sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-461771a43b2f4a7db73af7e5b1ded7e1/response.txt",
+      "sha256": "2d33bf7b5483cde8721fc1811070be0d6c2f1f2a19b35f7ea6bfb032f5ff4081"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-44e368c5d5ee4ab9941ae252cf4a8e43/response.txt",
+      "sha256": "17b16ae7f08eaedfe0733ca1e4015bb25a7524793d2f9206cbd254d80eed53c8"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-79346c94f5c541a0b9eb6f487bb4d84c/response.txt",
+      "sha256": "ca0c35e1f20c4a8ad610125699ba40c51c26a07a8652d044daf7cd889f16822c"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/6bb932eb9cf74bfbb54eda5888f387d0/.jarvis-runtime/native-code/8a500eb5cfe64600b501023b748cacf2/model-responses/tool-bc09a563eed3467a8a1b0336c01a8f67/response.txt",
+      "sha256": "c8fb987400693f183b777e0bf9d2df1fb440686795113fc36bc95ea2447c4671"
+    }
+  ],
+  "live_model_calls": 0,
+  "corrective_inference_ready": true,
+  "actual_worker_feedback": {
+    "error": "Owned-interface component errors (all independent checks): {\"owned_definition\": \"Owned type does not define required access methods: __getitem__\", \"binding_expression\": \"Use only the bare owned constructor call (RHS), not an assignment. invalid syntax (<unknown>, line 1)\"}",
+    "previous_proposal_data": "{\"tool\": \"edit_batch\", \"arguments\": {\"file_path\": \"ui_builder.py\", \"source_sha256\": \"990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b\", \"changes\": [{\"old_string\": \"            self.buttons[text] = [btn]\", \"owned_definition\": \"class ButtonWrapper:\\n    def __init__(self, btn):\\n        self._btn = btn\\n    def invoke(self):\\n        self._btn.invoke()\", \"binding_expression\": \"self.buttons[text] = ButtonWrapper(btn)\"}]}}",
+    "preview_partial": false,
+    "required_base_indentation": [
+      12
+    ],
+    "source_unchanged": true,
+    "correction": 1,
+    "remaining_global_repairs": 4
+  },
+  "bounded_stage_contexts": [
+    {
+      "stage": "owned_interface",
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "original_system_characters": 5096,
+      "actual_system_characters": 4916,
+      "mandatory_guidance_retained": true,
+      "unrelated_reference_design_context_omitted": true
+    },
+    {
+      "stage": "owned_interface",
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "original_system_characters": 5096,
+      "actual_system_characters": 4916,
+      "mandatory_guidance_retained": true,
+      "unrelated_reference_design_context_omitted": true
+    }
+  ],
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 2,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 1
+  },
+  "bounded_interface_corrections": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "correction": 1,
+      "error": "Owned-interface component errors (all independent checks): {\"owned_definition\": \"Owned type does not define required access methods: __getitem__\", \"binding_expression\": \"Use only the bare owned constructor call (RHS), not an assignment. invalid syntax (<unknown>, line 1)\"}",
+      "source_unchanged": true,
+      "repair_turn_charged": true,
+      "action_replayed": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true
+}

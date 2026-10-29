@@ -1,0 +1,23 @@
+{
+  "status": "CONFIRMED_CONTRACT_CONTRADICTIONS",
+  "application_acceptance": false,
+  "request_id": "aae5d6b77e304a44b226d96d2c015c13",
+  "response_sha256": "41b971fe51f95ab55c0da6d67a544dbfbe3c73903db8ac9f09ae7224ceb39197",
+  "provider_completed_json": true,
+  "exact_usage": {
+    "input": 3026,
+    "output": 264,
+    "total": 3290
+  },
+  "maximum_offered_changes": 2,
+  "returned_changes": 3,
+  "nested_node_without_kind": true,
+  "unsupported_change_fields": [
+    "function_id_extra"
+  ],
+  "old_prompt_advertised_maximum": 4,
+  "fix": "Shared local/cloud flat node wire description, schema-derived count and neutral compile-validated example. Executable validators unchanged.",
+  "applied_application_saves": 0,
+  "raw_evidence_relative": ".jarvis-runtime\\autonomous-repair\\886fb7120fb14419ae2149158f80a0b1\\.jarvis-runtime\\native-code\\c0920055653146558a8d34e5e2ea5362\\model-responses\\tool-3e1e896f371b4b89bd183a8fda312834\\response.txt",
+  "frozen_tests_modified": false
+}

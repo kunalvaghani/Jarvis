@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-28T11:23:17.097264+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Exact completed Qwen prefix on eight-file copy using production decoding, original real-Tk checks and syntax guard. Zero live model calls. Stop before generating a correction; no app implementation authored or source saved.",
+  "source_campaign": "4714bd2545e54e85896cd1daa60809b7",
+  "retained_proposals": [
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-7cb846c089884d10b7db8629ab0cde69/response.txt",
+      "sha256": "cac204a10d1ec50d0d4304eed41298ff450fa9dbb4fac322b8a5ee45deeeaa64"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-13c3929d2d4d4d63be120fb108f6b497/response.txt",
+      "sha256": "d939b2ef9800ff77c6c307dd02115698c0d2f16281dde795f72aba8866de99d9"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-69f35ad1ef344cebb51c2bb2dc2f82e4/response.txt",
+      "sha256": "525eb284c9331cc5d7583d161e97fa05dfcc4776985ea39fd40bfde9b7d91c3e"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-2b516fac89dd4e38a703969e55d180a0/response.txt",
+      "sha256": "36735ce586a08caacdb8f0b9e0d378fe81428dc7c6dff9df8ab55aa309af04ea"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-afa97d265eb24bd590331f40746af4b2/response.txt",
+      "sha256": "908c5ff3448605027f10a0571faff4dae2e3fc3dd320fb22479ea7320f21f68a"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-5bbc0182ba894cf7a6737bbdc63a9d22/response.txt",
+      "sha256": "94da44393e92fe2407f0f48e93bb65e197c4595b8b18ddb96ca888f44b5ee1a4"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-27bf64a0a2ea45419bd05fcc78806362/response.txt",
+      "sha256": "ca0c35e1f20c4a8ad610125699ba40c51c26a07a8652d044daf7cd889f16822c"
+    },
+    {
+      "path": ".jarvis-runtime/autonomous-repair/4714bd2545e54e85896cd1daa60809b7/.jarvis-runtime/native-code/1d25a77dc314411198d8f3337592d056/model-responses/tool-591398cc996d4b7ea619350cd3a03f94/response.txt",
+      "sha256": "d961aabde43a036b3ede966af483fa252047a0f22bf92447623d79902b4c6db2"
+    }
+  ],
+  "live_model_calls": 0,
+  "corrective_inference_ready": true,
+  "progress": {
+    "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+    "identical_failed_checks": 1,
+    "idle_turns": 4,
+    "guarded_replacement_attempts": 2,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 1
+  },
+  "bounded_interface_corrections": [
+    {
+      "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+      "correction": 1,
+      "error": "Generated ui_builder.py failed syntax validation: unexpected indent (ui_builder.py, line 43)",
+      "source_unchanged": true,
+      "repair_turn_charged": true,
+      "action_replayed": false
+    }
+  ],
+  "all_eight_fixture_worker_external_hashes_unchanged": true
+}

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-25T16:34:59.710440+00:00",
+  "run": "d79ebf9ba5a64458bc6895c96984781d",
+  "result": "FAIL",
+  "scope": "Real production baseline request and preserved failed arithmetic library plan; no application implementation supplied or edited by supervisor.",
+  "seconds": 687.937,
+  "source_changed_during_trial": false,
+  "declared_entrypoints": [],
+  "files": [
+    {
+      "path": "src/calculator.py",
+      "role": "logic",
+      "purpose": "Implements core arithmetic logic (add, sub, mul, div) with input validation and error handling."
+    },
+    {
+      "path": "tests/test_calculator.py",
+      "role": "test",
+      "purpose": "Contains unit tests for all calculator operations and edge cases using unittest."
+    },
+    {
+      "path": "README.md",
+      "role": "documentation",
+      "purpose": "Explains installation, usage, and how to run the tests."
+    }
+  ],
+  "checks": [
+    {
+      "kind": "python_tests",
+      "path": "tests/test_calculator.py"
+    }
+  ],
+  "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d79ebf9ba5a64458bc6895c96984781d\\.jarvis-runtime\\native-code\\c66689be7b54453693f58efc34600dab\\validation-606fe089dbc849b2a5383eb959260e19.json",
+  "validation_errors": [
+    {
+      "path": "tests/test_calculator.py",
+      "diagnostic": "Check failed (exit 1): test_addition (test_calculator.TestCalculator) ... ok\r\ntest_division (test_calculator.TestCalculator) ... ok\r\ntest_division_by_zero (test_calculator.TestCalculator) ... ok\r\ntest_invalid_input_type_add (test_calculator.TestCalculator) ... ok\r\ntest_invalid_input_type_div (test_calculator.TestCalculator) ... ok\r\ntest_invalid_input_type_mul (test_calculator.TestCalculator) ... FAIL\r\ntest_invalid_input_type_sub (test_calculator.TestCalculator) ... ok\r\ntest_multiplication (test_calculator.TestCalculator) ... ok\r\ntest_subtraction (test_calculator.TestCalculator) ... ok\r\n\r\n======================================================================\r\nFAIL: test_invalid_input_type_mul (test_calculator.TestCalculator)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d79ebf9ba5a64458bc6895c96984781d\\.jarvis-runtime\\native-code\\c66689be7b54453693f58efc34600dab\\check-workspace-1792945000582951900\\tests\\test_calculator.py\", line 37, in test_invalid_input_type_mul\r\n    with self.assertRaises(TypeError):\r\nAssertionError: TypeError not raised\r\n\r\n----------------------------------------------------------------------\r\nRan 9 tests in 0.001s\r\n\r\nFAILED (failures=1)\r\n"
+    }
+  ],
+  "current_guard_read_only_recheck": "A new Python application needs a declared runnable .py entrypoint and behavioral launch tests. A class/library with arithmetic unit tests alone is not a runnable application; describe its CLI arguments/stdin/output protocol.",
+  "source_hashes_before_after_match": true,
+  "application_acceptance": "OPEN",
+  "note": "No runnable CLI was declared. Failed unit assertions are retained, not weakened; model repair attempts are not a successful app."
+}

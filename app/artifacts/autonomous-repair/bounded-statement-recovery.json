@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-27",
+  "status": "REGRESSION_PASS_COMPLETED_EDIT_NO_GUI_PROGRESS",
+  "application_acceptance": false,
+  "previous_trial": "75c0504dd92e494389bef8aaa93f79e9",
+  "previous_trial_finished_at": "2026-10-27T16:43:37.159405+00:00",
+  "previous_trial_seconds": 902.88,
+  "observed_failure": "The guarded full-file Write started at16:39:52.375210 UTC and was incomplete when the900-second owner stopped. Partial3814-byte response retained, no source action executed. Earlier complete4416-byte Write required263.464s, so full-file recovery consumes a material portion of the worker budget.",
+  "repair": "After one canonical diagnostic plan, larger owned Python files use one exact bounded statement Edit when unique AST source spans are available. The model generates replacement source. Small/unrepresentable files retain the existing full-file fallback. No assertion changes or relaxed source/permission guards.",
+  "bounds": {
+    "large_source_threshold_characters": 3000,
+    "source_max_characters": 8000,
+    "span_count": 32,
+    "span_characters": 400,
+    "total_span_characters": 6000,
+    "replacement_characters": 1200
+  },
+  "targeted": {
+    "tests": 3,
+    "seconds": 2.658,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-exact-statement-target.log"
+  },
+  "retained_GUI_read_only_schema_check": {
+    "source_sha256": "399d81f482486c297623288070e6fc1289392930200b21e57fe428949773b049",
+    "source_characters": 4110,
+    "candidate_count": 32,
+    "mapping_assignment_offered": true,
+    "source_unchanged": true
+  },
+  "remaining_issue": "Historical counterexamples are retained within a native run but not automatically carried across newly isolated campaign roots. No history system or acceptance evidence has been invented.",
+  "affected_regression": {
+    "tests": 186,
+    "seconds": 180.046,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-exact-statement-regression.log"
+  },
+  "readiness": "DockerEngineUnavailable only; required installed Ollama models and local Git available.",
+  "previous_trial_progress": {
+    "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+    "identical_failed_checks": 1,
+    "idle_turns": 9,
+    "guarded_replacement_attempts": 1,
+    "failure_history_versions": 1,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 2
+  },
+  "previous_trial_source_changed": true,
+  "previous_trial_configuration_changed": false,
+  "previous_trial_protected_worker_files_unchanged": true,
+  "previous_trial_external_checkpoint_unchanged": true,
+  "successor": {
+    "campaign": "de3762e875e84529bb3a4f041449629d",
+    "task": "11595f82792c422082a615a7c44c9842",
+    "owner_session": 43706,
+    "status": "STOPPED",
+    "seconds_limit": 900,
+    "finished_at": "2026-10-27T17:23:31.102696+00:00",
+    "seconds": 902.237
+  },
+  "production_progress": {
+    "validation_signature": "88e6e984898f7b7022af47741b95613f37db0e9966dc6632864ec11f3d6e8a7e",
+    "identical_failed_checks": 3,
+    "idle_turns": 2,
+    "guarded_replacement_attempts": 1,
+    "failure_history_versions": 3,
+    "failure_state_revisits": 0,
+    "diagnostic_plan_attempts": 1,
+    "rejected_repair_proposals": 0
+  },
+  "production_statement_recoveries": [
+    {
+      "file_path": "ui_builder.py",
+      "source_sha256": "00ba61f559b33a30bb7e4f26bf4bc400cfdb8953ae6ffd32b01bc2b8ef0be1d2",
+      "candidate_count": 32,
+      "replacement_characters_limit": 1200
+    }
+  ],
+  "production_outcome": "One exact statement Edit completed and revalidated; it only added an unused self.btn_list field. Three unchanged failed validation states; GUI remains1/6. Owner stopped at its900-second bound; no partial final Edit executed.",
+  "production_jarvis_source_changed": false,
+  "production_configuration_changed": false,
+  "production_source_protection": {
+    "protected_worker_unchanged": true,
+    "external_checkpoint_unchanged": true
+  }
+}

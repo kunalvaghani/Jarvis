@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29T09:05:30.318844+00:00",
+  "before_state": "UNKNOWN",
+  "before_reason": "clock_change_requires_metadata",
+  "after_state": "NORMAL",
+  "recorded_inference_attempts_before": 3,
+  "recorded_inference_attempts_after": 3,
+  "inference_requests": 0,
+  "tokens": 0,
+  "counter_reset": false,
+  "operator_assistance": "Existing metadata clock-refresh method; no source change. Exception-capacity check must perform this recovery automatically in a future verified fix."
+}

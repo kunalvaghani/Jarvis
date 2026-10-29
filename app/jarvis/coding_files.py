@@ -55,7 +55,7 @@ def patch_files(root, patch):
             for old,new,at_end in hunks:
                 if not old:raise ValueError('Update requires existing context; use Add for a new file.')
                 found=[i for i in range(cursor,len(source)-len(old)+1) if source[i:i+len(old)]==old and (not at_end or i+len(old)==len(source))]
-                if len(found)!=1:raise ValueError('Patch context must match exactly once; Read current source and use a unique hunk.')
+                if len(found)!=1:raise ValueError('Patch context must match exactly once; file: '+relative+'. Read current source and use a unique hunk.')
                 at=found[0];source[at:at+len(old)]=new;cursor=at+len(new)
             content='\n'.join(source)+('\n' if content.endswith('\n') else '')
         decide(root,'Write',{'file_path':name,'content':content})
@@ -72,10 +72,17 @@ class FileSession:
         self.root=Path(root).resolve(strict=True);self.run=Path(run).resolve(strict=True)
         self.reads={};self.lock=threading.RLock();self.report=report;self.worker=worker
         request=json.loads((self.run/'request.json').read_text())
+        self.validation_goal=request.get('validation_goal',request.get('goal','')) or ''
         self.plan=json.loads((self.run/'validation-contract.json').read_text())
         self.allowed=set(request.get('allowed_paths') or [f['path'] for f in self.plan['files']])
         self.tests={row['path'] for row in self.plan['files'] if row['role']=='test'}
         self.fixed_tests={name:digest(self.root/name) for name in self.tests if (self.root/name).is_file()}
+        from .codex_validation import preserved_named_files,source_path
+        from .coder import project_files
+        protected=preserved_named_files(self.validation_goal)
+        self.preserved_names=protected
+        self.fixed_sources={name:digest(source_path(self.root,name)) for name in project_files(self.root,limit=161)
+                            if Path(name).name.casefold() in protected}
 
     def uncertain(self):
         path=self.run/'file-events.jsonl'
@@ -101,6 +108,7 @@ class FileSession:
     def protect(self, name):
         if name not in self.allowed:raise ValueError('Writes are limited to this worker assigned source files.')
         if name in self.fixed_tests:raise ValueError('Existing or already created test assertions are fixed. Repair the implementation, not the test.')
+        if Path(name).name.casefold() in self.preserved_names:raise ValueError('This source is explicitly preserved byte-for-byte. Read it as an input; do not rewrite it or add it as a generated output: '+name)
 
     def check_tests(self):
         # A test may appear after session startup through an external save. It
@@ -109,6 +117,14 @@ class FileSession:
             if name not in self.fixed_tests and (self.root/name).is_file():self.fixed_tests[name]=digest(self.root/name)
         if any(digest(self.root/name)!=sha for name,sha in self.fixed_tests.items()):
             raise UncertainCoding('Fixed test source changed; task stopped without replacing or replaying it.')
+        if any(digest(self.root/name)!=sha for name,sha in self.fixed_sources.items()):
+            raise UncertainCoding('Explicitly preserved source changed; task stopped without replacing or replaying it.')
+
+    def pending_test_reads(self):
+        if not any(not (self.root/name).exists() for name in self.tests):return []
+        return sorted(f['path'] for f in self.plan['files']
+            if f['role'] in {'logic','entrypoint','frontend','backend'} and (self.root/f['path']).is_file()
+            and self.reads.get(str((self.root/f['path']).resolve()))!=digest(self.root/f['path']))
 
     def call(self, tool, args):
         with self.lock:
@@ -118,6 +134,15 @@ class FileSession:
             path=None;before=''
             if writing:
                 path,_=decide(self.root,tool,args);name=path.relative_to(self.root).as_posix();self.protect(name)
+                if tool=='Write' and name in self.tests and not path.exists():
+                    unread=self.pending_test_reads()
+                    if unread:raise ValueError('Before fixing new test assertions, Read the current existing implementation/protocol: '+json.dumps(unread)+'. Nothing saved.')
+                    from .codex_validation import validate_test_draft
+                    try:validate_test_draft(name,args.get('content',''),self.plan,self.validation_goal)
+                    except (SyntaxError,ValueError) as error:
+                        with (self.run/'test-draft-rejections.jsonl').open('a',encoding='utf-8') as output:
+                            output.write(json.dumps({'path':name,'error':str(error),'proposed_source':args.get('content',''),'saved':False})+'\n')
+                        raise ValueError(str(error)) from error
                 from .engineering_judgment import proposed_file
                 proposed_file(self.root, name)
                 before=path.read_text(encoding='utf-8') if path.exists() else ''
@@ -136,6 +161,73 @@ class FileSession:
                 item.finish('failed',output=str(exc)[:2000])
                 if self.uncertain():raise UncertainCoding('Save outcome is uncertain; partial state retained without replay.') from exc
                 raise
+
+    def edit_batch(self, args, *, render_members=None, rendering_callback=None, owned_methods=None, key_specific=None, literal_producer=None, function_contract=None):
+        """One guarded save of a model-authored, non-overlapping statement batch."""
+        from .codex_validation import source_path
+        from .source_observation import exact_python_edit_spans
+        with self.lock:
+            if self.uncertain():raise UncertainCoding('An earlier save lacks confirmed readback; no batch replay.')
+            self.check_tests()
+            if set(args)!={'file_path','source_sha256','changes'}:raise ValueError('Batch requires file_path, source_sha256 and changes only.')
+            path=source_path(self.root,args['file_path']);name=path.relative_to(self.root).as_posix();self.protect(name)
+            if path.suffix!='.py' or not path.is_file() or path.stat().st_size>8000:raise ValueError('Batch requires one existing Python source up to8000 bytes.')
+            current=digest(path)
+            if args['source_sha256']!=current or self.reads.get(str(path.resolve()))!=current:
+                raise ValueError('Read the current batch source and use its fresh raw SHA256; nothing saved.')
+            compilations=[]
+            if owned_methods:
+                from .repair_contract import compile_owned_binding
+                args,compilations=compile_owned_binding(args,owned_methods)
+            if key_specific:
+                if owned_methods:raise ValueError('Conflicting sealed interface strategies; no source saved.')
+                from .repair_contract import compile_key_specific_binding
+                args,compilations=compile_key_specific_binding(args,key_specific)
+            content=path.read_text(encoding='utf-8');allowed=set(exact_python_edit_spans(content));changes=args['changes']
+            if function_contract:
+                from .execution_contract import function_spans,render,compile_definitions,compile_statements
+                if owned_methods or key_specific or literal_producer or render_members:raise ValueError('Conflicting repair scopes; no source saved.')
+                if function_contract['source_sha256']!=current:raise ValueError('Executed-function source changed; inspect fresh bytes.')
+                test=function_contract['test_path']
+                if self.fixed_tests.get(test)!=function_contract['test_sha256']:raise ValueError('Executed-function frozen binding changed.')
+                if function_contract.get('statement_cells'):
+                    updated,proof=compile_statements(content,args,function_contract)
+                    if rendering_callback:rendering_callback(args,proof)
+                    return self.call('Write',{'file_path':name,'content':updated})
+                selected=function_spans(content,list(allowed),function_contract['functions'])
+                if not selected:raise ValueError('Executed-function spans changed; no source saved.')
+                args=compile_definitions(args,function_contract,selected)
+                args,proof=render(args,function_contract);changes=args['changes']
+                if rendering_callback:rendering_callback(args,proof)
+            if literal_producer:
+                from .key_producer import producer,validate_replacement
+                fresh=producer(content,list(allowed),[literal_producer['member']],literal_producer['missing_key'])
+                if fresh!=literal_producer:raise ValueError('Producer provenance changed; no source saved.')
+                if not isinstance(changes,list) or len(changes)!=1 or changes[0].get('old_string')!=fresh['old_string']:
+                    raise ValueError('Producer repair requires its single exact literal declaration.')
+                validate_replacement(changes[0]['old_string'],changes[0].get('new_string',''),fresh)
+            if not isinstance(changes,list) or not 1<=len(changes)<=4:raise ValueError('Batch requires1–4 bounded statement changes.')
+            spans=[];total=0
+            for row in changes:
+                if not isinstance(row,dict) or set(row)!={'old_string','new_string'}:raise ValueError('Each batch change requires old_string/new_string only.')
+                old=row['old_string'];new=row['new_string']
+                if not isinstance(old,str) or not isinstance(new,str) or old not in allowed or content.count(old)!=1:
+                    raise ValueError('Batch old_string must be an exact unique current statement.')
+                if old==new or len(new)>1200:raise ValueError('Batch changes must differ and use at most1200 replacement characters each.')
+                total+=len(new);start=content.index(old);spans.append((start,start+len(old),new))
+            if total>2400:raise ValueError('Batch replacement total exceeds2400 characters; nothing saved.')
+            spans.sort()
+            if any(left[1]>right[0] for left,right in zip(spans,spans[1:])):raise ValueError('Batch statements overlap; nothing saved.')
+            if render_members:
+                from .repair_contract import render_bindings
+                rendered,provenance=render_bindings(args,render_members)
+                if rendering_callback:rendering_callback(rendered,compilations+provenance)
+                spans=sorted((content.index(row['old_string']),content.index(row['old_string'])+len(row['old_string']),row['new_string'])
+                             for row in rendered['changes'])
+            for start,end,new in reversed(spans):content=content[:start]+new+content[end:]
+            # Write performs the original syntax/interface, candidate, scope,
+            # fresh-read, atomic journal and readback checks exactly once.
+            return self.call('Write',{'file_path':name,'content':content})
 
     def patch(self, patch):
         with self.lock:

@@ -1,0 +1,494 @@
+{
+  "date": "2026-10-29T01:38:45.836101+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "focused": {
+    "tests": 11,
+    "seconds": 15.92,
+    "log": ".jarvis-runtime/repair-callback-contract-target.log"
+  },
+  "affected_regression": {
+    "passed": true,
+    "tests": 236,
+    "seconds": 300.456,
+    "log": ".jarvis-runtime/repair-callback-contract-regression.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 17.28
+  },
+  "configuration_sha256": "d0fa92f27b68bdef99456fbcdc86bbf674075a1bc5b0c9d21412181f50f1cf4f",
+  "cli_integrity": true,
+  "main_stop_marker_present": true,
+  "source_sha256": {
+    "jarvis/execution_contract.py": "d9b40a77048c58889b53aad51c941bd88e9e65bbf4ce3fce6a755ccc6a955418",
+    "jarvis/callback_contract.py": "b45454eac685b6a2e028d79495f916405e4bfced1967eb86a9d9312ba6733107",
+    "jarvis/native_coding.py": "39352cd311360b1b38392a31afc99bce165aa9878f36c12ef3bd35fd003ca60f",
+    "jarvis/coding_files.py": "4860bc6025ad317cb30c594cdf268a0a82b82d9539aeb0707368c1784b257654",
+    "tests/test_execution_contract.py": "31085df554ebe99c69f45a8273cd0fed7453464d40a7953da5a941d1efbfcc69",
+    "tests/test_callback_contract.py": "7e47032deb61df9df2c9295d2c7db7fd3a4b3ad7e57fc027e9819e2ea767fdb0"
+  },
+  "replay": "artifacts/autonomous-repair/callback-contract-gui-replay.json",
+  "previous_production": {
+    "id": "77c6dab2ecaf4b9d9974dc3e72b9f41b",
+    "task": "ca88d3635d4c4db4957ea8df919ac79b",
+    "owner_session": 2747,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 572.218,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "c07d66fe4e3e4dbbb558c58553a74f53",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77c6dab2ecaf4b9d9974dc3e72b9f41b\\.jarvis-runtime\\native-workloads\\37c80fd1968045f9bcdea3787d3516d4\\workers\\all",
+      "tools": 9,
+      "applied_saves": 0,
+      "status": "failed",
+      "error": "Executed-function repair failed twice under unchanged source/checks; stop for root-cause analysis. No generic initializer fallback or source action replay.",
+      "progress": {
+        "validation_signature": "1dae3c9cc5db672365b62253fea6f0926a0f2253070716bb304b0d37a9eb5fe9",
+        "identical_failed_checks": 1,
+        "idle_turns": 6,
+        "guarded_replacement_attempts": 0,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 0,
+        "rejected_repair_proposals": 0
+      },
+      "candidate_decisions": [],
+      "literal_producer_focus": null,
+      "binding_renderings": null,
+      "candidate_feedback_handoffs": null,
+      "noop_statement_recoveries": null,
+      "executed_function_stages": [
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77c6dab2ecaf4b9d9974dc3e72b9f41b\\.jarvis-runtime\\native-code\\c07d66fe4e3e4dbbb558c58553a74f53\\validation-dc2debb55e5341c387300ecee386cca7.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ]
+          },
+          "attempt": 1,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77c6dab2ecaf4b9d9974dc3e72b9f41b\\.jarvis-runtime\\native-code\\c07d66fe4e3e4dbbb558c58553a74f53\\validation-dc2debb55e5341c387300ecee386cca7.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ]
+          },
+          "attempt": 2,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        }
+      ],
+      "function_renderings": null,
+      "validation": {
+        "passed": false,
+        "hashes": {
+          "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+          "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+          "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+          "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+          "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+          "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+        },
+        "python_test_outcomes": [
+          {
+            "path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "test_count": 6,
+            "successful": false,
+            "skipped": 0,
+            "passed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+            ],
+            "partial": false,
+            "failed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+              "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+            ],
+            "error_ids": []
+          },
+          {
+            "path": "test_calculator.py",
+            "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+            "test_count": 6,
+            "successful": true,
+            "skipped": 0,
+            "passed_ids": [
+              "test_calculator.TestCalculator.test_addition",
+              "test_calculator.TestCalculator.test_clear",
+              "test_calculator.TestCalculator.test_division",
+              "test_calculator.TestCalculator.test_division_by_zero",
+              "test_calculator.TestCalculator.test_multiplication",
+              "test_calculator.TestCalculator.test_subtraction"
+            ],
+            "partial": false,
+            "failed_ids": [],
+            "error_ids": []
+          }
+        ]
+      }
+    }
+  },
+  "execution_observation": {
+    "report": "gui-acceptance-59d4990cfd024dfda41e95f5cd4ad518.json",
+    "failed_cases": 4,
+    "scope": "Additional execution-only observations from the actual original frozen tests. Not independent acceptance, new assertions, source edits or a proposed implementation.",
+    "source_report": "artifacts/autonomous-repair/gui-execution-probe.json"
+  },
+  "production": {
+    "id": "223837190e5b482faa7c150258a57432",
+    "task": "b203f9cdac8048dfa0c8642d7df19b1e",
+    "owner_session": 95835,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 555.221,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "61549f47815141e9ab43bda5aaf8d67e",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\223837190e5b482faa7c150258a57432\\.jarvis-runtime\\native-workloads\\16bd771e15d145b793b76cf9498894c5\\workers\\all",
+      "tools": 9,
+      "applied_saves": 0,
+      "status": "failed",
+      "error": "Executed-function repair failed twice under unchanged source/checks; stop for root-cause analysis. No generic initializer fallback or source action replay.",
+      "progress": {
+        "validation_signature": "1dae3c9cc5db672365b62253fea6f0926a0f2253070716bb304b0d37a9eb5fe9",
+        "identical_failed_checks": 1,
+        "idle_turns": 6,
+        "guarded_replacement_attempts": 0,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 0,
+        "rejected_repair_proposals": 0
+      },
+      "candidate_decisions": [],
+      "literal_producer_focus": null,
+      "binding_renderings": null,
+      "candidate_feedback_handoffs": null,
+      "noop_statement_recoveries": null,
+      "executed_function_stages": [
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\223837190e5b482faa7c150258a57432\\.jarvis-runtime\\native-code\\61549f47815141e9ab43bda5aaf8d67e\\validation-8f2929b160c446138079e0382b5c2e68.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 1,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\223837190e5b482faa7c150258a57432\\.jarvis-runtime\\native-code\\61549f47815141e9ab43bda5aaf8d67e\\validation-8f2929b160c446138079e0382b5c2e68.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 2,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        }
+      ],
+      "function_renderings": null,
+      "validation": {
+        "passed": false,
+        "hashes": {
+          "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+          "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+          "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+          "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+          "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+          "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+        },
+        "python_test_outcomes": [
+          {
+            "path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "test_count": 6,
+            "successful": false,
+            "skipped": 0,
+            "passed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+            ],
+            "partial": false,
+            "failed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+              "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+            ],
+            "error_ids": []
+          },
+          {
+            "path": "test_calculator.py",
+            "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+            "test_count": 6,
+            "successful": true,
+            "skipped": 0,
+            "passed_ids": [
+              "test_calculator.TestCalculator.test_addition",
+              "test_calculator.TestCalculator.test_clear",
+              "test_calculator.TestCalculator.test_division",
+              "test_calculator.TestCalculator.test_division_by_zero",
+              "test_calculator.TestCalculator.test_multiplication",
+              "test_calculator.TestCalculator.test_subtraction"
+            ],
+            "partial": false,
+            "failed_ids": [],
+            "error_ids": []
+          }
+        ]
+      }
+    }
+  },
+  "last_observed": "2026-10-29T03:21:15.090028+00:00"
+}

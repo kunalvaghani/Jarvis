@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-27T12:01:46.823741+00:00",
+  "status": "CANCELLED_SOURCE_OBSOLETE",
+  "application_acceptance": false,
+  "campaign": "ba020fd758614a47bd643d436c2f3064",
+  "task": "a9d1fe9e6eb94ee1bdd4f73f924769f2",
+  "owner_session": 47333,
+  "changes": [
+    "One read-only root-cause planning context excludes failed assistant/tool-edit history while keeping original goal/scope, complete current source and fresh frozen/dependency failure data",
+    "Local prose permits natural apostrophes; backend generation remains ordinary JSON strings and local semantic validation stays strict"
+  ],
+  "targeted_regression": {
+    "tests": 3,
+    "seconds": 12.987,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-isolated-cause-target.log"
+  },
+  "affected_regression": {
+    "tests": 175,
+    "seconds": 243.44,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-isolated-cause-final.log"
+  },
+  "obsolete_trial": "artifacts/autonomous-repair/generation-grammar-production.json",
+  "source_checkpoint": "artifacts/autonomous-repair/gui-initial-state-checkpoint-provenance.json",
+  "limits_changed": false,
+  "approval_or_write_scope_changed": false,
+  "next_action": "Validate canonical original-goal diagnosis and replacement context before another source-frozen production trial.",
+  "native": "4454adf97657448ba22cf65cf4ac4438",
+  "workload": "c02159410c164f1c8d1f1cb4d8c23c54",
+  "owner_exit_observed": true,
+  "finished_at": "2026-10-27T12:13:54.012481+00:00",
+  "seconds": 846.693,
+  "jarvis_source_changed_during_trial": true,
+  "configuration_changed_during_trial": false,
+  "external_eight_files_unchanged": true,
+  "six_protected_worker_files_unchanged": true,
+  "cancellation_intent": ".jarvis-runtime/autonomous-repair/ba020fd758614a47bd643d436c2f3064/supervisor-cancellation.json"
+}

@@ -1,0 +1,1402 @@
+{
+  "date": "2026-10-29T05:06:19.144874+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "affected_regression": {
+    "passed": true,
+    "tests": 420,
+    "seconds": 314.69,
+    "log": ".jarvis-runtime/cloud-coding-final-regression.log",
+    "scope": "Broader compatibility base; final cloud-only feedback/headroom changes additionally covered by the source-matching86-test certificate."
+  },
+  "zero_token": {
+    "tests": 86,
+    "seconds": 21.641,
+    "real_cloud_requests": 0,
+    "real_cloud_inference_tokens": 0,
+    "evidence": "artifacts/autonomous-repair/cloud-coding-zero-token.json"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 18.49
+  },
+  "configuration_sha256": "29df179ba1fc95b81fdea3063b6e13120fcc912faa39746e4588632347a68c32",
+  "source_sha256": {
+    "jarvis/cloud_quota.py": "6fcee59cb2f0fce9644714cb0709df5f98eebdf8a9fe9d1f662480aa1b6a15ef",
+    "jarvis/coding_cloud_policy.py": "b7e6f8d5f5d33b89b5488cdf9b025fd26637b5b2a04f7c65d1b0e4579b5cfba8",
+    "jarvis/coding_cloud_context.py": "603df51e881a23194db7429ae52853b19c517c4413896632af5b3de703f75983",
+    "jarvis/coding_cloud_routes.py": "eb2ee21d067b42c717625eee36b6f245f36159561cf2a62fdc8430d41f3f0192",
+    "jarvis/gemini_adapter.py": "00e8022ac6ac0d94738cca1b946f04960c64b60fdaf1b7557adae8ec7f50c599",
+    "jarvis/groq_adapter.py": "7f208fa0c144a6e8625ec9bbe755450f7bd16bafa288de352e102c6ea3b68d1b",
+    "jarvis/hybrid_inference.py": "814b6885377141027928f10607acbb2048484aac4b154c1a87855486406e52ea",
+    "jarvis/native_coding.py": "1618952f4f3ae574ecb1ac569feaae9ceda9a8cb1afc303b3417d0cf78cbe4fa",
+    "jarvis/codex_workload.py": "33afb0601561d87f2e336250e32bd3b269436465db5696694d91d60939d2ed50",
+    "tests/test_cloud_coding_quota.py": "b163729c2f25f2671d1406dcdb5717b47baee523923cbbfdebfdc8380f726eed",
+    "tests/test_cloud_coding_routes.py": "9264b8450cb7d73cdd4d6fd7e9b21fc6eb5bf100508069f81fccbf6a34b85523",
+    "scripts/verification/verify_cloud_coding_offline.py": "38e5e35ce84be19a23e07a5a39f88c20e965dd6cdf5b461cff308a358ce4a970",
+    "jarvis/execution_contract.py": "d9b40a77048c58889b53aad51c941bd88e9e65bbf4ce3fce6a755ccc6a955418",
+    "jarvis/callback_contract.py": "b45454eac685b6a2e028d79495f916405e4bfced1967eb86a9d9312ba6733107",
+    "jarvis/coding_files.py": "4860bc6025ad317cb30c594cdf268a0a82b82d9539aeb0707368c1784b257654",
+    "jarvis/structured_output.py": "388babc7fb2fd4e3a7974e775bfa39d727bb0b15ad46336f8f03894222402312",
+    "jarvis/cloud_cli.py": "b3faebf4d71ea7d31dfecb6e5ee700be02e277a224d88fb852a22d45d115f640",
+    "jarvis/model_performance.py": "73fc8b51a53034a5f941263f7d054a6407a3860f4b90261c2efdac3219b4be8f",
+    "jarvis/model_selection.py": "60ed2947873b0cd14bf8b7c58d441aa19b72225d4d1b795320993ff718231ca0",
+    "scripts/verification/verify_autonomous_repair.py": "248b1cc13c2d70cfa2fe02478f579237f74531ebd96dc20c2c5acea511ed5e6b"
+  },
+  "cli_integrity": true,
+  "main_stop_marker_present": true,
+  "execution_observation": {
+    "report": "gui-acceptance-59d4990cfd024dfda41e95f5cd4ad518.json",
+    "failed_cases": 4,
+    "scope": "Additional execution-only observations from the actual original frozen tests. Not independent acceptance, new assertions, source edits or a proposed implementation.",
+    "source_report": "artifacts/autonomous-repair/gui-execution-probe.json"
+  },
+  "previous_production": {
+    "id": "d9c07e7f294a4fe28275f2f9a9b369d6",
+    "task": "4de6e24a46af4eaa9561ab80c3608b08",
+    "owner_session": 21861,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 664.664,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "b53eb7d2fa32441293e487930d40b5b5",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d9c07e7f294a4fe28275f2f9a9b369d6\\.jarvis-runtime\\native-workloads\\38cd2d1385e442d9b71a05c4de0a45ec\\workers\\all",
+      "tools": 7,
+      "applied_saves": 0,
+      "status": "failed",
+      "error": "No eligible cloud coding route after the verified local repair bound; source retained, no repeated local inference.",
+      "progress": {
+        "validation_signature": "1dae3c9cc5db672365b62253fea6f0926a0f2253070716bb304b0d37a9eb5fe9",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 0,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 0,
+        "rejected_repair_proposals": 0
+      },
+      "candidate_decisions": [],
+      "literal_producer_focus": null,
+      "binding_renderings": null,
+      "candidate_feedback_handoffs": null,
+      "noop_statement_recoveries": null,
+      "executed_function_stages": [
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d9c07e7f294a4fe28275f2f9a9b369d6\\.jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\validation-e27228ce13444a32a61dff228e7785a0.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 1,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d9c07e7f294a4fe28275f2f9a9b369d6\\.jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\validation-e27228ce13444a32a61dff228e7785a0.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 2,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\d9c07e7f294a4fe28275f2f9a9b369d6\\.jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\validation-e27228ce13444a32a61dff228e7785a0.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 3,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        }
+      ],
+      "function_renderings": null,
+      "validation": {
+        "passed": false,
+        "hashes": {
+          "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+          "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+          "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+          "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+          "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+          "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+        },
+        "python_test_outcomes": [
+          {
+            "path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "test_count": 6,
+            "successful": false,
+            "skipped": 0,
+            "passed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+            ],
+            "partial": false,
+            "failed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+              "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+            ],
+            "error_ids": []
+          },
+          {
+            "path": "test_calculator.py",
+            "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+            "test_count": 6,
+            "successful": true,
+            "skipped": 0,
+            "passed_ids": [
+              "test_calculator.TestCalculator.test_addition",
+              "test_calculator.TestCalculator.test_clear",
+              "test_calculator.TestCalculator.test_division",
+              "test_calculator.TestCalculator.test_division_by_zero",
+              "test_calculator.TestCalculator.test_multiplication",
+              "test_calculator.TestCalculator.test_subtraction"
+            ],
+            "partial": false,
+            "failed_ids": [],
+            "error_ids": []
+          }
+        ]
+      }
+    },
+    "cloud_inference": {
+      "attempts": [
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "5a626726a5f6432fb1692fbc0bcef046",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 16.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "de5707d4d1a744149541e6a7d6fe81a6",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 16.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "d76a446f671b448b85a98d23116eb0e2",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 125.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "3bcd7db8d956469a87100088cd6f8fff",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 15.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "8763471454c4498f9508435f917efa5c",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 15.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "d9b58c1d68954f9888326387b0d5147c",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "0d1375bf3c4e4f9fad4b0df9b873ce1d",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 47.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "31fd1fe3bf11453a897bbf4c4b6c5685",
+          "sent": false,
+          "reason": "unredacted_host_path",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "2fb7b467e4ec45d2b38ff3f7274668f6",
+          "sent": true,
+          "reason": "invalid_structured_output",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {
+            "estimated_total_tokens": 6068,
+            "provider": "groq",
+            "task_id": "d9c07e7f294a4fe28275f2f9a9b369d6",
+            "estimated_input_tokens": 5044,
+            "reserved_output_tokens": 1024,
+            "prompt_tokens": 1906,
+            "completion_tokens": 55,
+            "total_tokens": 1961,
+            "exact_usage_available": true
+          },
+          "latency_ms": 953.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "b5c86c936722403fb90600a056c2e951",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\b53eb7d2fa32441293e487930d40b5b5\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-workloads\\38cd2d1385e442d9b71a05c4de0a45ec\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "aec05b0f4c2f4d0dab8e79604a49756d",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 47.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-workloads\\38cd2d1385e442d9b71a05c4de0a45ec\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        }
+      ],
+      "real_requests": 1,
+      "reported_tokens": 1961,
+      "uncertain_usage_requests": 0,
+      "application_acceptance": false
+    }
+  },
+  "gemini": {
+    "status": "BLOCKED",
+    "reason": "missing_api_key_and_key_project_binding",
+    "project": "gen-lang-client-0611339880",
+    "model": "gemini-3.8-flash",
+    "model_project_free_billing_user_confirmed": true,
+    "provider_limits": {
+      "rpm": 5,
+      "input_tpm": 250000,
+      "rpd": 20
+    },
+    "operational_limits": {
+      "rpm": 4,
+      "input_tpm": 200000,
+      "rpd": 16,
+      "concurrent": 1,
+      "task_calls": 3
+    },
+    "daily_token_limit": null
+  },
+  "groq": {
+    "model": "qwen/qwen3.8-27b",
+    "metadata_available": true,
+    "organization_limits": "UNVERIFIED_published_provisional_baseline_with_20percent_headroom",
+    "real_coding_acceptance": "NOT_RUN"
+  },
+  "gui": {
+    "frozen_passed": 2,
+    "frozen_total": 6,
+    "independent_passed": 1,
+    "independent_total": 8,
+    "status": "FAIL"
+  },
+  "confirmed_fixes": [
+    "Canonical user goal and actual writable paths override planner-purpose prose in cloud context.",
+    "Quota estimation counts decoded model text rather than JSON transport escaping.",
+    "JSON-object mode receives the active local tool schema; required Read cannot be replaced by read_batch.",
+    "Current rejected-candidate causes survive context reduction.",
+    "Rejected proposals retain metered usage; provider resets and rolling recovery are distinct.",
+    "Known external account usage cannot consume the configured free-tier headroom."
+  ],
+  "first_real_cloud_result": {
+    "campaign": "d9c07e7f294a4fe28275f2f9a9b369d6",
+    "status": "FAIL_TOOL_CONTRACT",
+    "provider": "groq",
+    "model": "qwen/qwen3.8-27b",
+    "request_id": "2fb7b467e4ec45d2b38ff3f7274668f6",
+    "input_tokens": 1906,
+    "output_tokens": 55,
+    "total_tokens": 1961,
+    "latency_ms": 953,
+    "source_saves": 0,
+    "independent_application_acceptance": false,
+    "sample_limit": "One short invalid read proposal; no comparative coding-quality or speed conclusion."
+  },
+  "derived_usage_reconciled_from_ledger": true,
+  "production": {
+    "id": "77466f50802e4c589b8b4d1c59b28f4c",
+    "task": "a0d9a3f26c034118a79e34902b2f9176",
+    "owner_session": 97366,
+    "status": "FINISHED",
+    "result": "FAIL",
+    "seconds": 678.351,
+    "source_changed": false,
+    "configuration_changed": false,
+    "native": {
+      "id": "e6a29244171a4795af4c2a9cdfa770de",
+      "project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77466f50802e4c589b8b4d1c59b28f4c\\.jarvis-runtime\\native-workloads\\0a16bbcc38a64ff9a8a64e265a1b910c\\workers\\all",
+      "tools": 9,
+      "applied_saves": 0,
+      "status": "failed",
+      "error": "No eligible cloud coding route after the verified local repair bound; source retained, no repeated local inference.",
+      "progress": {
+        "validation_signature": "1dae3c9cc5db672365b62253fea6f0926a0f2253070716bb304b0d37a9eb5fe9",
+        "identical_failed_checks": 1,
+        "idle_turns": 6,
+        "guarded_replacement_attempts": 0,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 0,
+        "rejected_repair_proposals": 0
+      },
+      "candidate_decisions": [],
+      "literal_producer_focus": null,
+      "binding_renderings": null,
+      "candidate_feedback_handoffs": null,
+      "noop_statement_recoveries": null,
+      "executed_function_stages": [
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77466f50802e4c589b8b4d1c59b28f4c\\.jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\validation-b931a0f8b6ad4332b3f27f080738a4ae.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 1,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77466f50802e4c589b8b4d1c59b28f4c\\.jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\validation-b931a0f8b6ad4332b3f27f080738a4ae.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 2,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        },
+        {
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "contract": {
+            "test_path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "case_id": "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "functions": [
+              {
+                "function": "_handle_action",
+                "definition_line": 48
+              },
+              {
+                "function": "__init__",
+                "definition_line": 6,
+                "callsite_lines": [
+                  41
+                ]
+              }
+            ],
+            "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+            "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\77466f50802e4c589b8b4d1c59b28f4c\\.jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\validation-b931a0f8b6ad4332b3f27f080738a4ae.json",
+            "scope": "Actual complete main-thread test-body call observations. Execution is not proof that these functions cause the assertion.",
+            "statement_cells": [
+              {
+                "function_id": "__init__:6",
+                "statement_id": 33,
+                "definition_line": 41,
+                "source": "btn = ttk.Button(btn_frame, text=text, command=lambda t=text: self._handle_action(t))",
+                "statement_path": [
+                  15,
+                  "body",
+                  0
+                ]
+              },
+              {
+                "function_id": "_handle_action:48",
+                "statement_id": 0,
+                "definition_line": 49,
+                "source": "current = self.display_var.get()"
+              }
+            ],
+            "callback_routes": [
+              {
+                "caller": "__init__",
+                "definition_line": 6,
+                "callback_line": 41,
+                "callee": "_handle_action",
+                "parameter": "action",
+                "captured_name": "text",
+                "literal_captures": [
+                  {
+                    "name": "text",
+                    "values": [
+                      "C",
+                      "/",
+                      "*",
+                      "7",
+                      "8",
+                      "9",
+                      "-",
+                      "4",
+                      "5",
+                      "6",
+                      "+",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "="
+                    ]
+                  },
+                  {
+                    "name": "action",
+                    "values": [
+                      "clear",
+                      "divide",
+                      "multiply",
+                      "7",
+                      "8",
+                      "9",
+                      "subtract",
+                      "4",
+                      "5",
+                      "6",
+                      "add",
+                      "1",
+                      "2",
+                      "3",
+                      "0",
+                      "equals"
+                    ]
+                  }
+                ],
+                "dispatch_literals": [
+                  "clear",
+                  "add",
+                  "subtract",
+                  "multiply",
+                  "divide",
+                  "equals"
+                ],
+                "scope": "Static literal callback route in an observed setup method; not causal proof or a repair instruction."
+              }
+            ]
+          },
+          "attempt": 3,
+          "mandatory_guidance_retained": true,
+          "system_characters": 6743,
+          "controller_supplied_body": false
+        }
+      ],
+      "function_renderings": null,
+      "validation": {
+        "passed": false,
+        "hashes": {
+          "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+          "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+          "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+          "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+          "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+          "ui_builder.py": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4"
+        },
+        "python_test_outcomes": [
+          {
+            "path": "test_gui_behavior.py",
+            "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+            "test_count": 6,
+            "successful": false,
+            "skipped": 0,
+            "passed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+              "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+            ],
+            "partial": false,
+            "failed_ids": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+              "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+              "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+            ],
+            "error_ids": []
+          },
+          {
+            "path": "test_calculator.py",
+            "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+            "test_count": 6,
+            "successful": true,
+            "skipped": 0,
+            "passed_ids": [
+              "test_calculator.TestCalculator.test_addition",
+              "test_calculator.TestCalculator.test_clear",
+              "test_calculator.TestCalculator.test_division",
+              "test_calculator.TestCalculator.test_division_by_zero",
+              "test_calculator.TestCalculator.test_multiplication",
+              "test_calculator.TestCalculator.test_subtraction"
+            ],
+            "partial": false,
+            "failed_ids": [],
+            "error_ids": []
+          }
+        ]
+      }
+    },
+    "cloud_inference": {
+      "attempts": [
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "b2172d33971d431f870ed6058b92c205",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 16.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "39dc4c95049e42c0b86e1ba4badf3cd8",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 15.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "52115e0dfb0446f29043dfb5c13b34ca",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 16.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "01b0d4d13df04198bb356d502d25bb4e",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 16.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "2b9ad634eda0437d9428790ad1f0de40",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 32.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "73e8305c83194333a8ad348bab9caf97",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 32.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "19d85672d5cb49e39dc41d985adb077d",
+          "reason": "direct_assignment",
+          "latency_ms": 1047.0,
+          "sent": true,
+          "valid_proposal": true,
+          "usage": {
+            "estimated_total_tokens": 5852,
+            "provider": "groq",
+            "task_id": "77466f50802e4c589b8b4d1c59b28f4c",
+            "estimated_input_tokens": 4828,
+            "reserved_output_tokens": 1024,
+            "prompt_tokens": 1894,
+            "completion_tokens": 51,
+            "total_tokens": 1945,
+            "exact_usage_available": true
+          },
+          "application_verified": false,
+          "source_sha256": null,
+          "tool": "Read"
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "10e2b7b0c61c4216b5db4cefa0e5b999",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "7d1f66bfe819464bb9a459506d2259c9",
+          "reason": "direct_assignment",
+          "latency_ms": 1015.0,
+          "sent": true,
+          "valid_proposal": true,
+          "usage": {
+            "estimated_total_tokens": 5852,
+            "provider": "groq",
+            "task_id": "77466f50802e4c589b8b4d1c59b28f4c",
+            "estimated_input_tokens": 4828,
+            "reserved_output_tokens": 1024,
+            "prompt_tokens": 1894,
+            "completion_tokens": 70,
+            "total_tokens": 1964,
+            "exact_usage_available": true
+          },
+          "application_verified": false,
+          "source_sha256": null,
+          "tool": "Read"
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "b848e429ee394ec5b87e1c92fce24045",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": "804864043c48949fb59012b4742630f060df9f3a8ec4cf5ff6f433d10da9a4b4",
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-code\\e6a29244171a4795af4c2a9cdfa770de\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-workloads\\0a16bbcc38a64ff9a8a64e265a1b910c\\cloud-route-state.json",
+          "provider": "groq",
+          "model": "qwen/qwen3.8-27b",
+          "request_id": "c5d9d41ff2764dc191eebb975c2eccb5",
+          "sent": false,
+          "reason": "cloud_context_budget_exceeded",
+          "valid_proposal": false,
+          "source_sha256": null,
+          "usage": {},
+          "latency_ms": 31.0,
+          "application_verified": false
+        },
+        {
+          "state_evidence": ".jarvis-runtime\\native-workloads\\0a16bbcc38a64ff9a8a64e265a1b910c\\cloud-route-state.json",
+          "provider": "gemini",
+          "reason": "missing_api_key_or_unverified_account",
+          "sent": false
+        }
+      ],
+      "real_requests": 2,
+      "reported_tokens": 3909,
+      "uncertain_usage_requests": 0,
+      "application_acceptance": false
+    }
+  },
+  "last_observed": "2026-10-29T05:24:51.399122+00:00"
+}

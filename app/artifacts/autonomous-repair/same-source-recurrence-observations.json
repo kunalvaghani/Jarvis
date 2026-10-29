@@ -1,0 +1,224 @@
+{
+  "date": "2026-10-28T10:39:49.205741+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "A fresh failed validation can qualify read-only root-cause planning using an explicitly imported terminal failure only when every current source hash matches. Fingerprint equivalence or complete source-bound case classifications plus exception kinds is required. History grants no current check/PASS credit, write rights, model change or extra retry.",
+  "target": {
+    "tests": 2,
+    "seconds": 3.007,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-same-source-recurrence-target-final.log"
+  },
+  "affected_regression": {
+    "tests": 205,
+    "seconds": 234.923,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-same-source-recurrence-regression-final.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 20.38,
+    "log": ".jarvis-runtime/repair-same-source-recurrence-audit.log"
+  },
+  "retained_prior_attempts": [
+    ".jarvis-runtime/repair-same-source-recurrence-target.log (different owned path in raw IndexError trace)",
+    ".jarvis-runtime/repair-same-source-recurrence-debug.log (exact old/current evidence)",
+    ".jarvis-runtime/repair-same-source-recurrence-regression.log (obsolete fixture run gracefully interrupted)"
+  ],
+  "real_GUI_qualification": "artifacts/autonomous-repair/same-source-recurrence-gui-qualification.json",
+  "preceding_trial": {
+    "id": "3c5700ed49164cde8741125711ddbb6f",
+    "seconds": 903.03,
+    "status": "STOPPED_AT_LIMIT_OWNER_EXITED",
+    "source_changed_while_fix_prepared": true,
+    "configuration_changed": false,
+    "structural_contract_exercised": true,
+    "remaining": "No accepted source gain; core6/6, GUI2/6. Complete valid intent, but replacement response incomplete at deadline. No partial output executed."
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "5a394c83d482f576730843d1ef5b84b92875a538ec66819ce4bbd056d27f97ac",
+    "jarvis/repair_contract.py": "d0777f7385eef760d79cadf5225f299328a231be85e08e9c559533f7ca9fa70b",
+    "jarvis/source_observation.py": "8205f5921c3d539348bbf7f9ac2d61b07c72b090f952f82d1bc6ef51d6b5ee00",
+    "tests/test_repair_recurrence.py": "dcba79ab728ebe18dea9b5e9065fd253648ea44b6299049dc51d5438f8208130"
+  },
+  "production": {
+    "id": "ec44667bdd374d7eaba6396b03555825",
+    "task": "023b1bc1b1f64866827136ed29b95ceb",
+    "owner_session": 12006,
+    "status": "FINISHED",
+    "raw_result": "FAIL",
+    "finished_at": "2026-10-28T10:38:12.472406+00:00",
+    "seconds": 640.369,
+    "source_changed": false,
+    "configuration_changed": false,
+    "all_eight_external_hashes_match": true,
+    "native": {
+      "id": "70cad71f9fea4e99a34626178bbebb8f",
+      "status": "failed",
+      "error": "Bounded planned replacement was rejected; stop for root-cause analysis. No generic action fallback or replay. Batch changes must differ and use at most1200 replacement characters each.",
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 1,
+        "failure_history_versions": 1,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 1,
+        "rejected_repair_proposals": 0
+      },
+      "candidate_decisions": [],
+      "diagnostic_plans": [
+        {
+          "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "file_path": "ui_builder.py",
+          "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+          "steps": [
+            "Use an owned compatible value interface preserving every recorded access route and the original real objects/callbacks.",
+            "Frozen source-bound obligations: [{\"test_file\": \"test_gui_behavior.py\", \"receiver\": \"self.buttons\", \"method\": \"invoke\", \"accesses\": [{\"key\": \"2\", \"subscripts_after_key\": 0, \"line\": 19, \"call\": \"self.buttons['2'].invoke()\"}, {\"key\": \"+\", \"subscripts_after_key\": 1, \"line\": 20, \"call\": \"self.buttons['+'][0].invoke()\"}, {\"key\": \"3\", \"subscripts_after_key\": 1, \"line\": 21, \"call\": \"self.buttons['3'][0].invoke()\"}, {\"key\": \"C\", \"subscripts_after_key\": 1, \"line\": 27, \"call\": \"self.buttons['C'][0].invoke()\"}, {\"key\": \"1\", \"subscripts_after_key\": 1, \"line\": 44, \"call\": \"self.buttons['1'][0].invoke()\"}, {\"key\": \"/\", \"subscripts_after_key\": 1, \"line\": 45, \"call\": \"self.buttons['/'][0].invoke()\"}, {\"key\": \"0\", \"subscripts_after_key\": 1, \"line\": 46, \"call\": \"self.buttons['0'][0].invoke()\"}]}]",
+            "Run every original unchanged executable check. No passing result or additional permission is implied."
+          ],
+          "typed_diagnosis": {
+            "observed_cause": "The `self.buttons` dictionary stores a list containing a single `ttk.Button` instance for each key (e.g., `self.buttons['2'] = [btn]`). The frozen tests in `test_gui_behavior.py` expect two distinct access patterns: 1) Direct method call on",
+            "strategy": "owned_compatible_interface",
+            "uncertainty": "None. The fix strictly adheres to the frozen test assertions by ensuring `self.buttons[key]` returns a list where index `[0]` is the widget, while also ensuring"
+          },
+          "verified": false,
+          "original_goal_used": true,
+          "planner_hypotheses_authoritative": false,
+          "replacement_context": "current-evidence-only",
+          "protocol_contract": {
+            "file_path": "ui_builder.py",
+            "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+            "test_sha256": {
+              "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+            },
+            "members": [
+              "buttons"
+            ],
+            "obligations": [
+              {
+                "test_file": "test_gui_behavior.py",
+                "receiver": "self.buttons",
+                "method": "invoke",
+                "accesses": [
+                  {
+                    "key": "2",
+                    "subscripts_after_key": 0,
+                    "line": 19,
+                    "call": "self.buttons['2'].invoke()"
+                  },
+                  {
+                    "key": "+",
+                    "subscripts_after_key": 1,
+                    "line": 20,
+                    "call": "self.buttons['+'][0].invoke()"
+                  },
+                  {
+                    "key": "3",
+                    "subscripts_after_key": 1,
+                    "line": 21,
+                    "call": "self.buttons['3'][0].invoke()"
+                  },
+                  {
+                    "key": "C",
+                    "subscripts_after_key": 1,
+                    "line": 27,
+                    "call": "self.buttons['C'][0].invoke()"
+                  },
+                  {
+                    "key": "1",
+                    "subscripts_after_key": 1,
+                    "line": 44,
+                    "call": "self.buttons['1'][0].invoke()"
+                  },
+                  {
+                    "key": "/",
+                    "subscripts_after_key": 1,
+                    "line": 45,
+                    "call": "self.buttons['/'][0].invoke()"
+                  },
+                  {
+                    "key": "0",
+                    "subscripts_after_key": 1,
+                    "line": 46,
+                    "call": "self.buttons['0'][0].invoke()"
+                  }
+                ]
+              }
+            ],
+            "strategies": [
+              "key_specific_values",
+              "owned_compatible_interface",
+              "unresolved"
+            ]
+          },
+          "model_prose_forwarded": false,
+          "rejected_repair_proposals": 0
+        }
+      ],
+      "source_bound_failure_recurrence": {
+        "current_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\ec44667bdd374d7eaba6396b03555825\\.jarvis-runtime\\native-code\\70cad71f9fea4e99a34626178bbebb8f\\validation-bcd15b59f3174a4287ad37a94eb514a0.json",
+        "prior_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\7a8e8255564149d49dfb99a713b22354\\.jarvis-runtime\\native-code\\96801ccf7bf64a509ab5aa91af7edac2\\validation-bee136ef6eb74a1db0ce8043335c70ec.json",
+        "source_hashes": {
+          "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+          "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+          "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+          "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+          "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+          "ui_builder.py": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b"
+        },
+        "use": "Diagnostic eligibility only; not a current check or acceptance result."
+      },
+      "bounded_recovery_rejection": {
+        "stage": "planned replacement",
+        "error": "Batch changes must differ and use at most1200 replacement characters each.",
+        "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "generic_fallback_allowed": false
+      },
+      "all_six_protected_hashes_match": true,
+      "outcomes": [
+        {
+          "path": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "test_count": 6,
+          "successful": false,
+          "skipped": 0,
+          "passed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ],
+          "partial": false,
+          "failed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        },
+        {
+          "path": "test_calculator.py",
+          "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_count": 6,
+          "successful": true,
+          "skipped": 0,
+          "passed_ids": [
+            "test_calculator.TestCalculator.test_addition",
+            "test_calculator.TestCalculator.test_clear",
+            "test_calculator.TestCalculator.test_division",
+            "test_calculator.TestCalculator.test_division_by_zero",
+            "test_calculator.TestCalculator.test_multiplication",
+            "test_calculator.TestCalculator.test_subtraction"
+          ],
+          "partial": false,
+          "failed_ids": [],
+          "error_ids": []
+        }
+      ]
+    }
+  }
+}

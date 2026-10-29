@@ -42,8 +42,18 @@ def command(argv, cancelled=lambda:False, timeout=60, input_bytes=None, limit=32
             if process.returncode:raise ValueError('CLI failed: '+raw.decode('utf-8',errors='replace')[-700:])
             return raw
         finally:
-            if process is not None and process.poll() is None:process.terminate();process.wait(timeout=5)
-            job.close()
+            try:
+                if process is not None and process.poll() is None:
+                    try:
+                        process.terminate();process.wait(timeout=5)
+                    except (OSError,subprocess.TimeoutExpired):
+                        # A wedged owned health probe must not mask the original
+                        # timeout or prevent closing its child ownership fence.
+                        job.close()
+                        try:
+                            process.kill();process.wait(timeout=1)
+                        except (OSError,subprocess.TimeoutExpired):pass
+            finally:job.close()
 
 
 def git(argv,cancelled=lambda:False,timeout=60):

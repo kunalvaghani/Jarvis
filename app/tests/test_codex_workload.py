@@ -31,6 +31,47 @@ class Workloads(unittest.TestCase):
     @classmethod
     def setUpClass(cls):cls.utilities,cls.git,_=localgithub({})
 
+    def test_parent_constraints_survive_worker_handoff_and_existing_changes_cannot_promote(self):
+        from jarvis.codex_workload import worker_request,preserve_existing_sources
+        goal='Add new launch tests. Preserve every existing implementation, documentation and test file byte-for-byte; add only the new test file.'
+        child=worker_request(goal,{'goal':'Planner suggested reimplementing the entrypoint'},'CLI')
+        self.assertIn(goal,child)
+        self.assertTrue(preserve_existing_sources(child))
+        self.assertFalse(preserve_existing_sources('Preserve every existing test; repair implementation.'))
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);project=root/'project';project.mkdir();integration=root/'integration';integration.mkdir()
+            (project/'main.py').write_text('original=1\n');(integration/'main.py').write_text('original=2\n')
+            before=fingerprint(project)
+            with self.assertRaisesRegex(ValueError,'preserves every existing'):
+                promote(project,integration,root,' '+goal,{},before,['main.py'],lambda:False)
+            self.assertEqual(fingerprint(project),before)
+
+    def test_single_native_worker_uses_canonical_parent_goal_without_planner_diagnosis(self):
+        from jarvis.codex_workload import worker_request
+        goal='Implement controlled modules against the original interfaces and checks.'
+        value=proposal();hypothesis='UNVERIFIED_PLANNER_HYPOTHESIS: repair a specific callback before observing failures.'
+        value['tasks']=[{'key':'all','goal':hypothesis,'estimated_minutes':10,
+            'paths':[row['path'] for row in value['files']],'dependencies':[],'check_indices':[0,1]}]
+        seen=[]
+        def observe(child,workspace,request,cancelled,**kwargs):
+            seen.append(request)
+            self.assertEqual(child.validation_goal,goal)
+            raise ValueError('controlled handoff exit; no source action')
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);project=root/'project';project.mkdir()
+            coder=Coder(SimpleNamespace(base=root,report=lambda *row:None),SimpleNamespace(options={'max_coding_seconds':120}))
+            with patch('jarvis.codex_workload.propose',return_value=value):
+                with self.assertRaisesRegex(ValueError,'controlled handoff exit'):
+                    run(coder,project,goal,executor=observe,backend='Jarvis')
+            self.assertEqual(len(seen),1);self.assertIn(goal,seen[0]);self.assertNotIn(hypothesis,seen[0])
+            self.assertIn('Assigned immutable file scope',seen[0]);self.assertIn('unverified',seen[0])
+            self.assertEqual(list(project.iterdir()),[])
+            receipt=json.loads(next((root/'.jarvis-runtime/native-workloads').glob('*/receipt.json')).read_text())
+            self.assertEqual(receipt['worker_goal_source'],'canonical-parent-goal')
+            self.assertEqual(json.loads(next((root/'.jarvis-runtime/native-workloads').glob('*/plan.json')).read_text())['tasks'][0]['goal'],hypothesis)
+        # Existing split-worker/legacy request construction retains task guidance.
+        self.assertIn(hypothesis,worker_request(goal,value['tasks'][0],value['interfaces']))
+
     def test_graph_ownership_cycles_checks_and_estimates(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
@@ -46,6 +87,93 @@ class Workloads(unittest.TestCase):
             for value in cases:
                 with self.assertRaises(ValueError):workload_contract(root,'Create modules',value,self.utilities)
 
+    def test_supported_twelve_file_unowned_split_keeps_every_file_and_check(self):
+        from jarvis.codex_workload import collapse_unowned_split
+        value={'files':[],'checks':[],'tasks':[],'interfaces':'Each module exports value(); all behavior is checked after assembly.'}
+        for index in range(6):
+            name=f'module{index}.py';test=f'test_module{index}.py'
+            value['files'] += [{'path':name,'role':'logic','purpose':'Implement module value'},
+                              {'path':test,'role':'test','purpose':'Check module behavior'}]
+            value['checks'].append({'kind':'python_tests','path':test})
+            value['tasks'].append({'key':f'module{index}','goal':'Implement the assigned value module and behavior.',
+                'paths':[name,test],'check_indices':[0],'dependencies':[],'estimated_minutes':3})
+        merged,changed=collapse_unowned_split(value)
+        self.assertTrue(changed);self.assertEqual(merged['files'],value['files']);self.assertEqual(merged['checks'],value['checks'])
+        self.assertEqual(len(merged['tasks']),1);self.assertEqual(len(merged['tasks'][0]['paths']),12)
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertEqual(len(workload_contract(Path(folder),'Create checked modules',merged,self.utilities)['files']),12)
+        too_large={**value,'files':value['files']*3}
+        self.assertFalse(collapse_unowned_split(too_large)[1])
+
+    def test_merging_valid_estimates_does_not_create_an_invalid_worker(self):
+        from jarvis.codex_workload import collapse_unowned_split
+        value=proposal()
+        for task in value['tasks']:task['estimated_minutes']=40;task['check_indices']=[0]
+        original=json.loads(json.dumps(value))
+        merged,changed=collapse_unowned_split(value)
+        self.assertTrue(changed);self.assertEqual(value,original)
+        self.assertEqual(merged['tasks'][0]['estimated_minutes'],60)
+        self.assertEqual(merged['tasks'][0]['source_estimated_minutes'],80)
+        with tempfile.TemporaryDirectory() as folder:
+            checked=workload_contract(Path(folder),'Create Python modules',merged,self.utilities)
+        self.assertEqual(checked['checks'],value['checks'])
+        self.assertEqual(checked['files'],value['files'])
+
+    def test_python_only_planner_excludes_unrelated_npm_checks(self):
+        from jarvis.codex_workload import python_only_goal
+        from jarvis.structured_output import validate_contract
+        self.assertTrue(python_only_goal('Create a Python command-line calculator with tests.'))
+        for goal,names in [('Create a Python backend and React frontend',[]),
+                           ('Build Python full-stack website',[]),
+                           ('Modify Python helpers',['app.tsx']),('Modify Python helpers',['package.json'])]:
+            self.assertFalse(python_only_goal(goal,names))
+        with tempfile.TemporaryDirectory() as folder:
+            sent=[];value=proposal()
+            class Response:
+                def __enter__(self):return self
+                def __exit__(self,*args):return False
+                def raise_for_status(self):return None
+                def iter_lines(self,**kwargs):yield json.dumps({'done':True,'message':{'content':json.dumps(value)}}).encode()
+            class Client:
+                def __enter__(self):return self
+                def __exit__(self,*args):return False
+                def post(self,url,**kwargs):sent.append(kwargs['json']);return Response()
+            coder=Coder(SimpleNamespace(report=lambda *row:None),SimpleNamespace(options={}))
+            with patch('jarvis.knowledge_worker.session',return_value=Client()),patch('jarvis.ollama_models.coding_model'),patch('jarvis.knowledge_worker.local_prompt_format',return_value='ollama_chat'):
+                propose(coder,Path(folder),'Create a Python command-line calculator with tests.',lambda:False,time.monotonic()+3)
+            checks=sent[0]['format']['properties']['checks']['items']
+            validate_contract(checks,{'kind':'python_tests','path':'test_calc.py'})
+            with self.assertRaises(ValueError):validate_contract(checks,{'kind':'npm_build','path':'package.json'})
+            self.assertIn('Python only',sent[0]['messages'][0]['content'])
+
+    def test_plain_fullstack_schema_excludes_npm_without_removing_browser_or_node_tests(self):
+        from jarvis.codex_workload import package_stack_goal
+        self.assertFalse(package_stack_goal('Create HTML CSS JavaScript with a Python HTTP backend and SQLite'))
+        self.assertFalse(package_stack_goal('Complete the next step: HTML CSS JavaScript with a Python server and clickable node cards'))
+        for goal,names in [('Create a React website',[]),('Create a Node.js backend',[]),
+                           ('Fix current app',['web/package.json']),('Fix current UI',['src/App.jsx'])]:
+            self.assertTrue(package_stack_goal(goal,names))
+        with tempfile.TemporaryDirectory() as folder:
+            sent=[];value=proposal()
+            class Response:
+                def __enter__(self):return self
+                def __exit__(self,*args):return False
+                def raise_for_status(self):return None
+                def iter_lines(self,**kwargs):yield json.dumps({'done':True,'message':{'content':json.dumps(value)}}).encode()
+            class Client:
+                def __enter__(self):return self
+                def __exit__(self,*args):return False
+                def post(self,url,**kwargs):sent.append(kwargs['json']);return Response()
+            coder=Coder(SimpleNamespace(report=lambda *row:None),SimpleNamespace(options={}))
+            with patch('jarvis.knowledge_worker.session',return_value=Client()),patch('jarvis.ollama_models.coding_model'),patch('jarvis.knowledge_worker.local_prompt_format',return_value='ollama_chat'):
+                propose(coder,Path(folder),'Create HTML CSS JavaScript with a Python backend and SQLite',lambda:False,time.monotonic()+3)
+            variants=sent[0]['format']['properties']['checks']['items']['anyOf']
+            kinds={v['properties']['kind']['enum'][0] for v in variants}
+            self.assertIn('node_tests',kinds);self.assertIn('python_tests',kinds);self.assertIn('browser',kinds)
+            self.assertFalse(any(k.startswith('npm_') for k in kinds))
+            browser=next(v for v in variants if v['properties']['kind']['enum']==['browser'])
+            self.assertIn('server',browser['required'])
+
     def test_new_plain_website_assigns_source_and_tests_without_authoring_code(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);goal='Build a plain animated website using index.html, styles.css and app.js.'
@@ -60,6 +188,17 @@ class Workloads(unittest.TestCase):
             self.assertIsNone(static_assignment(root,'Build a single-file animated website'))
             self.assertEqual(list(root.iterdir()),[])
 
+            # Real registration creates these reference documents before coding.
+            (root/'PROJECT.md').write_text('Registered project objective')
+            (root/'REQUIREMENTS.md').write_text('Authoritative reference specification')
+            before=fingerprint(root)
+            self.assertEqual(len(static_assignment(root,goal)['tasks']),3)
+            self.assertEqual(fingerprint(root),before)
+            documented=static_assignment(root,goal+' Include a README with local launch instructions.')
+            self.assertIn('README.md',documented['tasks'][0]['paths'])
+            self.assertEqual(documented['files'][-1]['role'],'documentation')
+            self.assertIn('Write ONLY index.html and README.md',documented['tasks'][0]['goal'])
+
             self.assertIsNone(static_assignment(root,'Build a React website using index.html, styles.css and app.js.'))
             (root/'index.html').write_text('<html><body>Existing page</body></html>')
             self.assertIsNone(static_assignment(root,goal))
@@ -69,6 +208,54 @@ class Workloads(unittest.TestCase):
         diagnosis=proposal_diagnostics(value,ValueError('Missing tests'))
         self.assertTrue(any('test_alpha.py' in row for row in diagnosis['errors']))
         self.assertTrue(any('test_beta.py' in row for row in diagnosis['errors']))
+
+    def test_typed_check_and_react_feedback_retains_paths_without_repeating_large_prose(self):
+        from jarvis.codex_workload import planning_feedback
+        value=proposal();value['interfaces']='long shared interface '*1000
+        value['checks'][0]={'kind':'node_tests','path':'test_alpha.py'}
+        diagnosis=proposal_diagnostics(value,ValueError('A new React project requires an executable npm_build check'))
+        self.assertTrue(any('test_alpha.py' in s and 'Python unittest' in s for s in diagnosis['errors']))
+        self.assertTrue(any('package.json' in s and 'npm_build' in s for s in diagnosis['errors']))
+        compact=planning_feedback(diagnosis)
+        self.assertEqual(compact['previous_checks'][0],value['checks'][0])
+        self.assertNotIn('interfaces',compact)
+        self.assertIs(diagnosis['previous_proposal'],value)
+        self.assertLess(len(json.dumps(compact)),2500)
+        self.assertEqual(planning_feedback({'errors':['Expected arrays'],'previous_proposal':{'files':None,'checks':None}})['previous_checks'],[])
+        huge={'checks':[{'kind':'browser','path':'x'*10000,'server':{'path':{'nested':['x'*10000]}}}]*50,
+              'files':[{'path':'x'*10000,'role':'frontend'}]*100}
+        self.assertLessEqual(len(json.dumps(planning_feedback({'errors':['bad']*20,'previous_proposal':huge}))),5000)
+
+    def test_fullstack_correction_targets_declared_frontend_not_test_copy(self):
+        from jarvis.codex_workload import constrain_frontend_correction
+        from jarvis.structured_output import validate_contract
+        schema=planning_schema(full_stack=True)
+        self.assertEqual(constrain_frontend_correction(schema,{'previous_files':[
+            {'path':'index.html','role':'frontend'},{'path':'test_ui.html','role':'test'},
+            {'path':'style.css','role':'frontend'}]}),['index.html'])
+        check=schema['properties']['checks']['items']
+        value={'kind':'browser','path':'index.html','server':{'kind':'python','path':'server.py'},
+               'steps':[{'action':'text','selector':'h1','value':'Tasks'}]}
+        validate_contract(check,value)
+        with self.assertRaises(ValueError):validate_contract(check,{**value,'path':'test_ui.html'})
+        self.assertEqual(constrain_frontend_correction(planning_schema(True),None),[])
+
+    def test_npm_correction_keeps_manifest_paths_and_prioritizes_check_feedback(self):
+        from jarvis.codex_workload import constrain_manifest_correction,planning_feedback
+        from jarvis.structured_output import validate_contract
+        value=proposal();value['files'].append({'path':'web/package.json','role':'configuration'})
+        value['checks'].append({'kind':'npm_test','path':'test/index.test.js'})
+        for i in range(8):value['tasks'].append({'key':str(i),'paths':[],'check_indices':[0]})
+        diagnostic=proposal_diagnostics(value,ValueError('Bad path. Evidence: '+'x'*3000))
+        compact=planning_feedback(diagnostic)
+        self.assertTrue(any('npm_test' in e and 'package.json' in e for e in compact['errors']))
+        self.assertFalse(any('Evidence:' in e for e in compact['errors']))
+        self.assertIs(diagnostic['previous_proposal'],value)
+        schema=planning_schema();self.assertEqual(constrain_manifest_correction(schema,compact),['web/package.json'])
+        check=schema['properties']['checks']['items']
+        validate_contract(check,{'kind':'npm_test','path':'web/package.json'})
+        with self.assertRaises(ValueError):validate_contract(check,{'kind':'npm_test','path':'test/index.test.js'})
+        with self.assertRaises(ValueError):validate_contract(planning_schema()['properties']['checks']['items'],{'kind':'npm_build','path':'config.json'})
 
     def test_diagnostics_report_all_workers_with_empty_or_invalid_check_indices(self):
         value=proposal();value['tasks'][0]['check_indices']=[];value['tasks'][1]['check_indices']=[99]
@@ -123,6 +310,56 @@ class Workloads(unittest.TestCase):
         self.assertEqual(complete_single_test_ownership(value),(value,[]))
         value['files'][1]['role']='test';value['checks'][0]['path']='undeclared_test.py'
         self.assertEqual(complete_single_test_ownership(value),(value,[]))
+
+    def test_single_worker_omitted_declared_files_get_one_owner_without_writes(self):
+        from jarvis.codex_workload import complete_single_file_ownership
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);value=proposal()
+            value['tasks']=[{'key':'all','goal':'Repair declared source and preserve original references',
+                'estimated_minutes':10,'paths':['alpha.py','test_alpha.py'],'dependencies':[],
+                'check_indices':[0,1]}]
+            original=json.dumps(value,sort_keys=True)
+            completed,added=complete_single_file_ownership(value)
+            self.assertEqual(added,['beta.py','test_beta.py'])
+            self.assertEqual(json.dumps(value,sort_keys=True),original)
+            normalized=workload_contract(root,'Repair declared modules',completed,self.utilities)
+            self.assertEqual(normalized['tasks'][0]['paths'],['alpha.py','beta.py','test_alpha.py','test_beta.py'])
+            self.assertEqual(completed['files'],value['files'])
+            self.assertEqual(completed['checks'],value['checks'])
+            self.assertEqual(list(root.iterdir()),[])
+            self.assertEqual(complete_single_file_ownership(completed),(completed,[]))
+            for invalid in [proposal(),{**value,'tasks':[{**value['tasks'][0],'dependencies':['peer']}]},
+                            {**value,'files':[{'role':'logic'}]}]:
+                self.assertEqual(complete_single_file_ownership(invalid),(invalid,[]))
+
+    def test_existing_explicitly_frozen_check_metadata_is_completed_without_write_rights(self):
+        from jarvis.codex_workload import complete_frozen_test_metadata,complete_single_file_ownership
+        from jarvis.coding_files import FileSession
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);value=proposal();value['files']=value['files'][:1]
+            value['checks']=value['checks'][:1];value['tasks']=value['tasks'][:1]
+            value['tasks'][0]['paths']=['alpha.py']
+            (root/'test_alpha.py').write_bytes(b'import unittest\r\nclass Checks(unittest.TestCase):\r\n def test_value(self): self.assertTrue(True)\r\n')
+            before=fingerprint(root);original=json.dumps(value,sort_keys=True)
+            goal='Repair alpha.py. Preserve test_alpha.py byte-for-byte.'
+            completed,added=complete_frozen_test_metadata(value,root,goal,before)
+            self.assertEqual(added,['test_alpha.py']);self.assertEqual(json.dumps(value,sort_keys=True),original)
+            completed,_=complete_single_file_ownership(completed)
+            normalized=workload_contract(root,goal,completed,self.utilities)
+            self.assertEqual(completed['checks'],value['checks']);self.assertEqual(completed['tasks'][0]['goal'],value['tasks'][0]['goal'])
+            self.assertEqual(fingerprint(root),before)
+            run=root/'run';run.mkdir();(run/'request.json').write_text(json.dumps({'validation_goal':goal}))
+            (run/'validation-contract.json').write_text(json.dumps(normalized))
+            session=FileSession(root,run)
+            with self.assertRaisesRegex(ValueError,'assertions are fixed'):session.protect('test_alpha.py')
+            self.assertEqual(complete_frozen_test_metadata(completed,root,goal,before),(completed,[]))
+            for candidate,candidate_goal in ((value,'Repair alpha.py.'),
+                    ({**value,'tasks':value['tasks']*2},goal),
+                    ({**value,'tasks':[{**value['tasks'][0],'dependencies':['peer']}]},goal),
+                    ({**value,'checks':[{'kind':'python_tests','path':'../test_alpha.py'}]},goal)):
+                self.assertEqual(complete_frozen_test_metadata(candidate,root,candidate_goal,before),(candidate,[]))
+            (root/'test_alpha.py').write_text('changed = True\n')
+            self.assertEqual(complete_frozen_test_metadata(value,root,goal,before),(value,[]))
 
     def test_backend_worker_can_test_part_while_final_contract_requires_both_layers(self):
         from jarvis.codex_validation import contract
@@ -224,6 +461,7 @@ class Workloads(unittest.TestCase):
             self.assertTrue(request['stream']);self.assertTrue(request['json']['raw'])
             self.assertIn('<|im_start|>user',request['json']['prompt'])
             self.assertEqual(request['json']['format']['properties']['interfaces']['type'],'string')
+            self.assertNotIn('"pattern":',json.dumps(request['json']['format']))
             self.assertNotIn('messages',request['json']);self.assertEqual(list(root.iterdir()),[])
 
     def test_single_python_module_planner_keeps_tests_in_same_worker_schema(self):
@@ -231,6 +469,11 @@ class Workloads(unittest.TestCase):
         self.assertTrue(single_python_source_goal('Create main.py. Include actual tests.'))
         self.assertTrue(single_python_source_goal('create a python script for drawing circle on screen in test codes folder'))
         self.assertTrue(single_python_source_goal('Write a script using Python to draw a circle.'))
+        self.assertTrue(single_python_source_goal('Fix the existing file main.py and preserve test_main.py.'))
+        self.assertTrue(single_python_source_goal('Create a Python script and save it as main.py.'))
+        self.assertTrue(single_python_source_goal('Implement a calculator in a single Python file named main.py.'))
+        self.assertFalse(single_python_source_goal('Repair this Jarvis-generated Python CLI calculator. Preserve test_calculator.py and test_main.py byte-for-byte. Verify actual main.py subprocess behavior and preserve library interfaces.'))
+        self.assertFalse(single_python_source_goal('Repair this application and verify main.py launches with its existing library.'))
         for goal in ('Create alpha.py and beta.py','Build a backend in main.py','Create a package in main.py','Build a website in index.html','Write main.py and app.js','Write two Python scripts','Create a Python script with a website frontend'):
             self.assertFalse(single_python_source_goal(goal))
         with tempfile.TemporaryDirectory() as folder:
@@ -249,10 +492,16 @@ class Workloads(unittest.TestCase):
             with patch('jarvis.knowledge_worker.session',return_value=Client()),patch('jarvis.ollama_models.coding_model'),patch('jarvis.knowledge_worker.local_prompt_format',return_value='ollama_chat'):
                 self.assertEqual(propose(coder,root,'Create alpha.py and its behavioral unittests.',lambda:False,time.monotonic()+3),value)
                 self.assertEqual(propose(coder,root,'create a python script for drawing circle on screen in test codes folder',lambda:False,time.monotonic()+3),value)
+                # Generation no longer asks the backend regex converter to
+                # enforce suffixes. The original local contract must still do so.
+                from jarvis.structured_output import ModelOutputError
+                value['files'][0]['path']='invalid.txt'
+                with self.assertRaisesRegex(ModelOutputError,'required path format'):
+                    propose(coder,root,'Create alpha.py and its behavioral unittests.',lambda:False,time.monotonic()+3)
             self.assertEqual(sent[0]['format']['properties']['tasks']['maxItems'],1)
             self.assertEqual(sent[1]['format']['properties']['tasks']['maxItems'],1)
             self.assertEqual(sent[1]['format']['properties']['checks']['items']['properties']['kind']['enum'],['python_tests'])
-            self.assertEqual(sent[1]['format']['properties']['files']['items']['properties']['path']['pattern'],r'.*\.py$')
+            self.assertNotIn('pattern',sent[1]['format']['properties']['files']['items']['properties']['path'])
             self.assertIn('not a website',sent[1]['messages'][0]['content'])
             self.assertIn('ONE inseparable',sent[0]['messages'][0]['content'])
             self.assertEqual(planning_schema()['properties']['tasks']['maxItems'],8)
@@ -287,7 +536,16 @@ class Workloads(unittest.TestCase):
             self.assertEqual(list(root.iterdir()),[])
             model_plan['worker_goals']['markup']=model_plan['worker_goals']['markup'].replace('#count','#counter')
             with patch('jarvis.knowledge_worker.session',return_value=Client()),patch('jarvis.ollama_models.coding_model'),patch('jarvis.knowledge_worker.local_prompt_format',return_value='ollama_chat'):
-                with self.assertRaisesRegex(ValueError,'exact shared selector #count'):propose(coder,root,goal,lambda:False,time.monotonic()+3)
+                propagated=propose(coder,root,goal,lambda:False,time.monotonic()+3)
+            from jarvis.codex_workload import worker_request
+            markup=propagated['tasks'][0]
+            self.assertIn('#count',markup['selector_requirements'])
+            self.assertIn('#count',markup['brief_selector_omissions'])
+            self.assertIn('Authoritative exact selectors',worker_request(goal,markup,propagated['interfaces']))
+            self.assertEqual(markup['resource_paths'],{'markup':'index.html','styles':'styles.css','logic':'app.js'})
+            self.assertIn('Authoritative project resource paths',worker_request(goal,markup,propagated['interfaces']))
+            self.assertEqual(propagated['checks'][-1],model_plan['browser'])
+            self.assertIn('#count',propagated['checks'][0]['required_selectors'])
 
     def test_html_parser_ignored_tokens_are_valid_while_empty_tests_and_logic_fail(self):
         from jarvis.codex_validation import placeholders
@@ -410,6 +668,27 @@ class Workloads(unittest.TestCase):
             self.assertEqual(len(receipt['validation']['checks']),2)
             self.assertEqual({p.name for p in project.iterdir()},{'alpha.py','beta.py','test_alpha.py','test_beta.py'})
             self.assertTrue(all(w['commit'] for w in receipt['workers']))
+
+    def test_owned_snapshot_preserves_mixed_line_endings_under_windows_git_defaults(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);project=root/'project';project.mkdir()
+            frozen={'keep_lf.py':b'# original LF\nVALUE = 1\n',
+                    'keep_crlf.py':b'# original CRLF\r\nVALUE = 2\r\n'}
+            attributes=root/'global-attributes';attributes.write_bytes(b'*.py text eol=crlf\n')
+            for name,data in frozen.items():(project/name).write_bytes(data)
+            coder=Coder(SimpleNamespace(base=root,report=lambda *row:None),SimpleNamespace(options={'max_coding_seconds':120}))
+            seen=[]
+            def worker(child,workspace,goal,cancelled,**kwargs):
+                for name,data in frozen.items():self.assertEqual((workspace/name).read_bytes(),data)
+                seen.append(Path(workspace).name)
+                key=Path(workspace).name
+                (workspace/(key+'.py')).write_bytes(('VALUE = '+repr(key)+'\n').encode())
+                (workspace/('test_'+key+'.py')).write_bytes(b'import unittest\nclass Check(unittest.TestCase):\n def test_ok(self): self.assertTrue(True)\n')
+                return {'validation':{'passed':True},'turns':[],'plan':kwargs['initial_plan'],'seconds':0}
+            with patch.dict(os.environ,{'GIT_CONFIG_COUNT':'2','GIT_CONFIG_KEY_0':'core.autocrlf','GIT_CONFIG_VALUE_0':'true','GIT_CONFIG_KEY_1':'core.attributesFile','GIT_CONFIG_VALUE_1':str(attributes)}),patch('jarvis.codex_workload.propose',return_value=proposal()),patch('jarvis.codex_code.run',side_effect=worker):
+                run(coder,project,'Create independent modules')
+            self.assertEqual(sorted(seen),['alpha','beta'])
+            for name,data in frozen.items():self.assertEqual((project/name).read_bytes(),data)
 
     def test_dependency_worker_sees_tested_predecessor(self):
         with tempfile.TemporaryDirectory() as folder:

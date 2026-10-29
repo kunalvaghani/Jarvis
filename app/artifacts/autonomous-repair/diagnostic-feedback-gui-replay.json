@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-28T08:51:43.819592+00:00",
+  "status": "PASS",
+  "application_acceptance": false,
+  "scope": "Read-only loader/context replay using exact complete local-Qwen conclusion and current exact Qwen checkpoint. No model call, source edit, manual-read grant, check credit or semantic success assertion.",
+  "probe": "b32d0588a2574fc387e7791e0c1143fb",
+  "manifest": [
+    {
+      "accepted": true,
+      "id": "b32d0588a2574fc387e7791e0c1143fb",
+      "report_sha256": "9d49e83c87c7146b1d5b0895b50ec4aecc6f81c4c1ba0d29ebdf01e8ef76a050",
+      "raw_response_sha256": "6b706c3b5bd69b56e308a56197390041181936b2daef4f06ec1e76fb0bf18c84",
+      "immutable_validation_sha256": "b072a737442f5137eeca3fe2636df239506c8885dfb3aeb798d6dfff5f32cde0",
+      "scope": "Untrusted complete model conclusion only; no semantic verification, check credit or permissions."
+    }
+  ],
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-two-case-checkpoint-38d99c23649d475892e895ee0726a2bc",
+  "source_hashes": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "ui_builder.py": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b"
+  },
+  "all_eight_source_hashes_unchanged": true,
+  "all_six_frozen_hashes_bound": true,
+  "context_characters": 1255,
+  "review": "The high-level heterogeneous-value approach is feasible for the observed direct/indexed method access forms; concrete repair and all GUI behavior remain unverified. The conclusion contains no replacement source. It remains untrusted data."
+}

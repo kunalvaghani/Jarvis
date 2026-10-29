@@ -18,6 +18,21 @@ CONDITIONS = {'success', 'failure', 'tests_pass', 'tests_fail', 'always'}
 EDITABLE = {'RECEIVED', 'CLASSIFYING', 'QUEUED', 'READY', 'WAITING_DEPENDENCY', 'WAITING_USER', 'PAUSED'}
 
 
+def requires_prior_test_result(text):
+    """An internal repair completion loop is not an upstream test dependency."""
+    for clause in re.split(r';|\n|(?<=[.!?])\s+',text):
+        condition=re.search(r'\b(if|until|only\s+when)\b.*\b(?:pass|passes|fail|fails)\b',clause,re.I)
+        if not condition:continue
+        before=clause[:condition.start()]
+        loop=condition[1].lower()=='until' and bool(re.search(
+            r'\b(?:continue|repair|fix|debug|iterate|repeat|retry|work)\b|\bkeep (?:working|repairing|testing|trying)\b|\b(?:run|execute) (?:the )?(?:tests|checks)\b',before,re.I))
+        external=bool(re.search(r'\b(?:commit|deploy|publish|push|merge|release|send|wait|defer)\b',before,re.I)
+                      or re.search(r"\b(?:do not|don't|never)\s+(?:repair|fix|debug|work|continue|repeat|retry)\b",before,re.I)
+                      or re.search(r'\b(?:those|previous|earlier) (?:tests|checks|results|verification)\b',clause,re.I))
+        if not loop or external:return True
+    return False
+
+
 def bounded(value, limit=64000):
     encoded = json.dumps(value, ensure_ascii=False, allow_nan=False)
     if len(encoded) > limit:
@@ -453,7 +468,7 @@ class TaskRelationshipResolver:
                 and self.graph.node(r['id']) and not r['checkpoint'].get('control')]
         same = [r for r in rows if project and (self.graph.group_for(r['id']) or {}).get('project') == project]
         explicit = re.search(r'(?i)\b(?:after|from|use(?: the)? (?:results?|report) (?:from )?)\s*(?:task|tasks)\s*#?(\d+)((?:\s*(?:,|and)\s*#?\d+)*)', text)
-        conditional = bool(re.search(r'(?i)\b(?:if|until)\b.*\b(?:pass|passes|fail|fails)\b', text))
+        conditional = requires_prior_test_result(text)
         continuation = conditional or bool(re.search(r'(?i)\b(?:after that|those (?:issues|results|findings)|fix them|test the fixes|previous task|earlier .+ work|do the same|take those|now fix|continue the earlier)\b', text))
         independent = bool(re.search(r'(?i)\b(?:independently|unrelated|separate (?:goal|workflow)|other project)\b', text))
         if re.search(r'(?i)\bother project\b',text) and not project:
@@ -511,7 +526,7 @@ class TaskRelationshipResolver:
             for other in rows[-1:]: self.graph.relation(task, other['id'], 'INDEPENDENT_OF', 'Explicit independent request')
         dependencies = []
         for other in candidates:
-            condition = 'tests_pass' if re.search(r'(?i)\b(?:if|only (?:if|when)|until)\b.*\b(?:pass|passes)\b', text) else 'tests_fail' if re.search(r'(?i)\bif\b.*\b(?:fail|fails)\b', text) else 'success'
+            condition = 'tests_pass' if conditional and re.search(r'(?i)\b(?:if|only (?:if|when)|until)\b.*\b(?:pass|passes)\b', text) else 'tests_fail' if conditional and re.search(r'(?i)\bif\b.*\b(?:fail|fails)\b', text) else 'success'
             self.graph.relation(task, other['id'], 'CONTINUATION_OF', 'Explicit reference and compatible task lineage')
             self.graph.relation(other['id'],task,'PRODUCES_INPUT_FOR','Explicit reference to actual producer/result data')
             requires = bool(re.search(r'(?i)\b(?:those|them|results|report|fixes|findings|same)\b', text))

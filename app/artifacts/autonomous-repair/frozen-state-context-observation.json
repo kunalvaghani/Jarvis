@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-26T03:30:03.790574+00:00",
+  "scope": "Actual retained frozen-test context observation, not application acceptance",
+  "project": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-checkpoint-a982db5e4d8b4dc7a16d604eb450792c",
+  "test_sha256": {
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5"
+  },
+  "observed_interfaces": [
+    {
+      "module": "calculator_logic",
+      "exports": [
+        "Calculator"
+      ],
+      "call_examples": [
+        "Calculator()",
+        "self.calc.add(2, 3)",
+        "self.calc.subtract(10, 4)",
+        "self.calc.multiply(3, 4)",
+        "self.calc.divide(10, 2)",
+        "self.calc.clear()",
+        "self.calc.divide(10, 0)"
+      ],
+      "state_examples": [
+        "self.calc.input_text = '123'"
+      ],
+      "assertion_examples": [
+        "with self.assertRaises(ValueError):\n    self.calc.divide(10, 0)",
+        "self.assertEqual(result, 5)",
+        "self.assertEqual(result, 6)",
+        "self.assertEqual(result, 12)",
+        "self.assertEqual(self.calc.input_text, '')"
+      ]
+    },
+    {
+      "module": "ui_builder",
+      "exports": [
+        "CalculatorApp"
+      ],
+      "call_examples": [
+        "CalculatorApp()",
+        "self.root.destroy()",
+        "self.buttons['2'].invoke()",
+        "self.buttons['+'][0].invoke()",
+        "self.buttons['3'][0].invoke()",
+        "self.root.update_idletasks()",
+        "self.display.insert(0, '123')",
+        "self.buttons['C'][0].invoke()"
+      ],
+      "state_examples": [],
+      "assertion_examples": [
+        "self.assertEqual(self.display.get(), '')",
+        "self.assertEqual(self.display.get(), '2+3')",
+        "self.assertIn('1234567890', self.display.get())",
+        "self.assertIn('+', self.display.get())",
+        "self.assertIn('Error', self.display.get())"
+      ]
+    }
+  ],
+  "clear_state_expectation_retained": true,
+  "regression": {
+    "tests": 152,
+    "passed": 152,
+    "seconds": 159.476,
+    "log": ".jarvis-runtime/repair-frozen-state-focus-final.log"
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "9ae36a8df9caef8be74a50ffec208538a8731e00eefe9d8284ac43f977b96c87",
+    "jarvis/codex_validation.py": "8b467f602129a356ad75d7dc35428f479ba3e0949dbc8807062e07785e028c09",
+    "jarvis/gui_contract.py": "5d16d1e970ba96ba5c60aad2af05214afc3c6f7683d7f729ddd7cd70a07c8170",
+    "jarvis/codex_files.py": "fd0e3075b3effd5c7c33feaea39cbdfb757b8b87fd41737e02716f581724cff3"
+  },
+  "frozen_test_sha256_before": {
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5"
+  },
+  "frozen_tests_unchanged": true
+}

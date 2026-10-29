@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-28T20:19:45.436185+00:00",
+  "application_acceptance": false,
+  "status": "VALIDATED_PARTIAL_CHECKPOINT",
+  "scope": "Exact byte copies of Qwen-selected/compiled source after candidate verification and confirmed atomic readback. No application logic or replacement file authored by supervisor. One error reaches assertion; no new GUI pass.",
+  "campaign": "22abb681f2e542d6a0405a35ecc9d8b1",
+  "native": "1bb352eac8f84adb96dfc92f42a81ecf",
+  "source_project": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-workloads\\49329c23a1354dd5bd896fa508d63832\\workers\\all",
+  "checkpoint": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-interface-progress-checkpoint-2c6de225262748eea38d84a9e93b1a9b",
+  "source_sha256": {
+    "PROJECT.md": "5ea4f8059dddcf33b477f6b2e857aada101fc4ea4170e9cc275213c58094b5ef",
+    "REQUIREMENTS.md": "09ae6c794cdad3c3cee1fef6a880276c445e29ed56137f5eba729b568921da12",
+    "calculator_logic.py": "dbdae854c0fe027076aeb5138c1f0385b67bd1f0c922ea65a37095b3b5bd6732",
+    "main.py": "4515423507b93f22f40f383829d0dc85433ef40cf76585bf8661d718f421b5ae",
+    "test_calculator.py": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+    "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+    "README.md": "e2dc109f5da02eda4601ba4b07304591f3174b1b7a7d0c254c8d4c672b4b9d7d",
+    "ui_builder.py": "8dfc317dcc868bca9d02f3f256bb9de748c0d2bd107d3eefbfc0ae71304b1424"
+  },
+  "validation_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\22abb681f2e542d6a0405a35ecc9d8b1\\.jarvis-runtime\\native-code\\1bb352eac8f84adb96dfc92f42a81ecf\\validation-a0137d9537754ad481518a634af465ba.json",
+  "python_test_outcomes": [
+    {
+      "path": "test_gui_behavior.py",
+      "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+      "test_count": 6,
+      "successful": false,
+      "skipped": 0,
+      "passed_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+        "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+      ],
+      "partial": false,
+      "failed_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+        "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+        "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+      ],
+      "error_ids": [
+        "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+      ]
+    },
+    {
+      "path": "test_calculator.py",
+      "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+      "test_count": 6,
+      "successful": true,
+      "skipped": 0,
+      "passed_ids": [
+        "test_calculator.TestCalculator.test_addition",
+        "test_calculator.TestCalculator.test_clear",
+        "test_calculator.TestCalculator.test_division",
+        "test_calculator.TestCalculator.test_division_by_zero",
+        "test_calculator.TestCalculator.test_multiplication",
+        "test_calculator.TestCalculator.test_subtraction"
+      ],
+      "partial": false,
+      "failed_ids": [],
+      "error_ids": []
+    }
+  ],
+  "source_still_same_after_copy": true,
+  "all_six_frozen_hashes_match": true,
+  "independent_gui": "NOT_RUN on this checkpoint yet; wait for active trial to finish to avoid concurrent GUI checks."
+}

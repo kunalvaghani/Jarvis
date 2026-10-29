@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-26T02:47:57.740901+00:00",
+  "scope": "Static pre-freeze re-evaluation of actual preserved model-generated invalid GUI tests; no test rewritten, no application code imported or windows created; not GUI functional acceptance.",
+  "cases": [
+    {
+      "campaign": "c19a8175e4654d31b48fa603b5961ae9",
+      "native": "9a0fa86760fb4ef99f1878cb70d6dfbe",
+      "test_sha256": "434cec90cf34ed94c2ddc0fb2ae26234f063f8f3ca255612ca0a0ff6e9f22966",
+      "expected_diagnostic": "persistent mainloop",
+      "actual_diagnostic": "GUI unittest draft enters a persistent mainloop (line 9). Tests must return without closing the application manually. Exercise original controls with invoke/event_generate and bounded update/update_idletasks calls, then destroy the owned window in cleanup. Keep mainloop in the application entrypoint, not its tests. Nothing saved; correct this draft before assertions freeze.",
+      "expected_rejection_observed": true,
+      "source_unchanged": true
+    },
+    {
+      "campaign": "21980f4803724d99bfc423a7bedda61b",
+      "native": "a37d9a0c60a640dcb4eedeb6e318b5e4",
+      "test_sha256": "4db5f6cc0cc4c7f5cdcd2f9fb5b35399261394f900b36052fd5255f8190613f2",
+      "expected_diagnostic": "Installed stdlib signature",
+      "actual_diagnostic": "GUI unittest draft calls tkinter.Event with incompatible arguments at line 42. Installed stdlib signature: (). got an unexpected keyword argument 'keysym'. Do not repair application code to compensate for a dependency API error. Nothing saved; correct the test draft before assertions freeze.",
+      "expected_rejection_observed": true,
+      "source_unchanged": true
+    },
+    {
+      "campaign": "6b1e5f73c10e4c5ca48142b475485632",
+      "native": "2634674485a84029afc0ba512fb7f71c",
+      "test_sha256": "bb3103c98b3ba30134c09caf9a3d7d1d3e8cd5cc9b9280f8e4b141e7d2db9d58",
+      "expected_diagnostic": "mock",
+      "actual_diagnostic": "GUI test draft passes a mock as an application/window constructor argument at line 16. Construct a real owned Tk/window and exercise original widgets; mocked roots do not verify GUI behavior. Nothing saved; correct this draft before assertions freeze.",
+      "expected_rejection_observed": true,
+      "source_unchanged": true
+    },
+    {
+      "campaign": "e8048906bcff4068abde7ba4e1d113d0",
+      "native": "ad1f8b2dda2842f79188cd70e9c70ab1",
+      "test_sha256": "d67ac5934fcf2de6f50be74a911f60c82d5047590273c9fe77bb7dce47c33eee",
+      "expected_diagnostic": "missing installed API",
+      "actual_diagnostic": "GUI unittest draft calls missing installed API tkinter.Event.generate at line 32. Event is a data object, not an event dispatcher: use the original widget.event_generate and bounded event processing. Never patch the framework or application to invent this method. Nothing saved; correct the draft before assertions freeze.",
+      "expected_rejection_observed": true,
+      "source_unchanged": true
+    }
+  ],
+  "status": "PASS"
+}

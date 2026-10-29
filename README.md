@@ -1,5 +1,19 @@
 # Jarvis — local Windows voice assistant
 
+**2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](app/docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](app/docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](app/docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](app/docs/autonomous-repair-acceptance.md) · [Handoff](app/docs/CLAUDE_HANDOFF.md).
+
+**Autonomous project repair candidate — 2026-10-24 IST:** strict structured-output completion/schema checks, retained model diagnostics, requirement/intake repairs and owned-process cleanup. Real project-creation acceptance is still open; passing regressions and launcher readiness do not establish working generated applications. [Repair report and acceptance matrix](app/docs/autonomous-repair-2026-10-24.md).
+
+The repair also preserves parent constraints through worker handoff, keeps active check failures visible, and enforces explicit existing-file preservation at worker and promotion boundaries. Existing source need not be rewritten to trigger assembly checks; complete stalled file sets advance to verification. React/full-stack plans retain framework/server requirements, and checkpoint ordering survives clock ties or rollback. Jarvis has promoted a calculator with passing unit tests; complete creation/launch acceptance remains separately tracked.
+
+The 2026-10-25 continuation adds bounded proposal regeneration and scoped reads of retained research source/license text, repairs raw UTF-8/cache handling, and upgrades explicit edits to inferred requirements. Real live changes were recorded in one project; final generated-site, source integration and verified-reuse acceptance remain open in the repair report.
+
+Controlled existing-project search acceptance now passes: Jarvis generated the change, with 12 independent probes and nine unit tests passing. The primary context cap is configured to 8,192 after a real installed-model/VRAM probe; earlier context-policy regressions passed 221 tests. These bounded results do not establish full new-app, GUI, reuse or release acceptance. [Exact search scope](app/artifacts/autonomous-repair/search-acceptance.json) · [Context observation](app/artifacts/autonomous-repair/context-8192-observation.json).
+
+The 2026-10-25 continuation repaired stack/entrypoint checks, retained source observations, frozen-test context and bounded native recovery; its stagnation suite passed 153 tests; the later exact-target native/schema suite passed65 tests. The real GUI repair ended at its bounded turn limit with failed checks; the snapshot line-ending fix passed 36 real-worktree regressions and scoped repair and fresh CLI trials are running sequentially. fresh application and release acceptance remain open. [Current evidence](app/docs/autonomous-repair-2026-10-24.md#latest-plan-continuation--2026-10-25-ist).
+
+**2026-10-26 CLI functional acceptance: PASS.** Jarvis's fresh production request delivered a calculator with15 independent real-process probes and5 original tests passing, unchanged source hashes and native Qwen save provenance. Product source changed during generation; this is not source-stable full-release proof. A source-preserving production CLI verification follow-up runs before the GUI calculator. [Evidence and limits](app/artifacts/autonomous-repair/cli-acceptance.json). GUI/reuse/full-release gates remain open.
+
 **Engineering judgment candidate — 2026-10-24 IST:** conditional pinned guidance, requirement validation, feasible-approach comparison, file-scope review and evidence-bound goal contracts extend the existing planner, coding workers, projects and queue. Starts in advisory mode; permissions remain independent. Fresh full regression: **4,268 passed / 150 gated skips / zero failures**, all **804 frozen files unchanged**; launcher ready. A bounded real local-model coding fixture passed **2/2 linked goals**, plus current verified-memory and kernel-isolation checks. Full production acceptance remains open, including account, physical voice/duplex and elapsed overnight gates. [Behavior and limits](app/docs/engineering-judgment.md) · [Evidence](app/artifacts/engineering-judgment/README.md).
 
 **Parallel code intelligence and Island input candidate — 2026-10-24 IST:** memory-first code reuse from a verified, versioned component library and the project's own symbols. Guarded GitHub and UI-library research runs in parallel on a new queue lane while the existing Qwen coder works; candidates are license-gated, statically scanned, policy-checked and handed over between tool turns. Concrete design tokens and a rendered multi-viewport visual-QA gate are included, and only test-covered components are promoted to memory. The Island command box now clears after sending, and choice cards animate away once answered by click or voice. Groq was audited, is not connected to coding, and is unchanged. Complete suite **4,291 passed / 150 gated skips / 0 failures**; live GitHub research was rate-limited here. [Behavior and limits](app/docs/parallel-code-intelligence.md) · [Evidence](app/artifacts/code-intelligence/README.md).
@@ -543,3 +557,39 @@ Upstream licenses, pinned sources and artwork attribution remain with their
 references. See [artwork provenance](app/jarvis/assets/README.md) and the
 [integration guides](app/docs/README.md). Reference sources do not imply that an
 entire upstream product runs inside Jarvis.
+
+
+2026-10-26 GUI follow-on: the fresh model-generated GUI unittest called persistent mainloop in setUp before assertions. A new draft guard rejects this blocking pattern and directs bounded event processing; existing frozen tests remain unchanged. The affected regression rerun is pending; current trial will be retired after verification. GUI acceptance remains open.
+
+
+2026-10-26 verification update: **133 affected regressions passed** after the GUI mainloop draft guard. The obsolete trial exited after graceful cancellation; its four generated files and frozen tests are retained unchanged. A fresh production GUI trial is running with validated source. Physical GUI and release acceptance remain open.
+
+
+2026-10-26 dependency API recovery: a fresh frozen GUI test used an unsupported tkinter.Event keyword constructor. Jarvis now checks identifiable Tkinter constructor calls against installed stdlib signatures before freezing new tests, without executing project code. Targeted regression passed; the broader suite is running. Existing trial files/tests remain preserved and graceful cancellation was requested. Full GUI acceptance remains open.
+
+
+2026-10-26 latest verification: **134 affected regressions passed** for dependency API validation, bounded event processing, traceback reads and existing protections. The obsolete trial exited after graceful cancellation with frozen tests unchanged. One fresh production GUI request is running on validated source. Independent GUI and full release acceptance remain open.
+
+
+2026-10-26 modular GUI continuation: new GUI test drafts reject mocked window roots. Structural checks now follow declared owned UI modules while retaining the complete GUI requirements; a launch without a real root still fails. Latest production trial stopped at its repeated-rejection bound with all five generated files and frozen tests retained. Targeted checks and all12GUI edit regressions pass; broader affected regression is pending. GUI and release acceptance remain open.
+
+
+2026-10-26 modular GUI verification: **148 affected tests passed**, followed by **12 overlapping GUI edit tests** for the final dotted-import correction. Compilation/diff checks passed. No independent GUI acceptance yet; the next trial uses real-root test guards and checks structural GUI requirements across owned modules.
+
+
+2026-10-26 toolkit API validation now also checks identifiable instance methods, preventing fabricated Event.generate calls before GUI tests freeze. All four preserved bad-test categories are rejected by the revised gate with source unchanged. Targeted regression passed; broader verification is pending. The obsolete live trial is being gracefully cancelled with its saved files retained. GUI/release acceptance remains open.
+
+
+2026-10-26 GUI runtime continuation: Jarvis generated its modular GUI and fixed entry styling through an owned traceback slice, then stopped at bounded repeated ineffective clear edits. The compact test summary had omitted direct state assertions and aliased widget APIs; this is now repaired, with imported-module repair focus. Targeted tests pass; broader verification is running. An exact generated checkpoint is retained for production repair with frozen tests unchanged. GUI acceptance remains open.
+
+
+2026-10-26 preserved-input repair: explicit instructions to preserve existing files are no longer misread as generated-output requirements; preserved input hashes remain checked. The retained model-generated follow-up now passes all6original calculator tests; GUI tests still fail at a missing buttons interface. Final affected regression is running before restarting production repair. Original tests and requirements remain unchanged; independent GUI acceptance is open.
+
+
+2026-10-26 latest: **155 affected regressions passed**. Explicitly preserved files remain readable but are excluded from write grammar and rejected before mutation; byte drift stops the worker. A production UI-only repair now uses the retained core6/6passing checkpoint with core, entrypoint, tests and requirements frozen. Independent GUI and release acceptance remain open.
+
+
+2026-10-26 latest diagnosis verification: **158 affected regressions passed**. A bounded Python source observer now supplies symbol spans and permits up to two complementary read windows before an edit, preserving distinct failure causes and all frozen-source guards. The current production UI repair has exercised the extra-read path; calculator6/6passes, GUI stillfails. Physical desktop runtime and independent GUI/release acceptance remain open.
+
+
+2026-10-26 latest: **159 affected regressions passed**. Repair prompts now prioritize the earlier runtime exception and quote its actual frozen test, retaining remaining failures. A clarified production UI repair permits legitimate callback fixes while preserving the toolkit, tests, core and source boundaries. Independent GUI/physical/release acceptance remains open.

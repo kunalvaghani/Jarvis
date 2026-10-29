@@ -1,0 +1,249 @@
+{
+  "date": "2026-10-27T11:27:43.677044+00:00",
+  "application_acceptance": false,
+  "model": "qwen3.5:9b",
+  "server_version": "0.40.0",
+  "scope": "Read-only model transport experiments; no application inputs, model/driver installation, service changes or dispatched tools.",
+  "observations": [
+    {
+      "probe": "23c755af1e90415aa3ceadc7a6b4267f",
+      "raw_result": ".jarvis-runtime/transport-probes/23c755af1e90415aa3ceadc7a6b4267f/result.json",
+      "status": "PASS",
+      "assessment": "Preliminary only: schema in prompt prevents separating prompt compliance from backend enforcement.",
+      "configuration_unchanged": true,
+      "requests": [
+        {
+          "case": "scalar",
+          "contract_passed": true,
+          "seconds": 3.75,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "b673253b3d66b111aa81deb9c978bf54130f8b447ed0861b3682871cb2ab63bb"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 14,
+            "prompt_eval_count": 98,
+            "total_duration": 3364106500,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        },
+        {
+          "case": "diagnostic_union",
+          "contract_passed": true,
+          "seconds": 24.063,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "d12b2fc620dd050028c0c430de8453d400f7cbdd1538887108b8d291531e1e5b"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 110,
+            "prompt_eval_count": 209,
+            "total_duration": 23710692400,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        },
+        {
+          "case": "diagnostic_branch",
+          "contract_passed": true,
+          "seconds": 21.921,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "d93331c64cc4d8442c2ff4d5f648ac94819357f9a2a1813f8e2b1f6e0ad54628"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 100,
+            "prompt_eval_count": 204,
+            "total_duration": 21523571800,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "probe": "de97303eeba74cdeb6ad166fa11318cf",
+      "raw_result": ".jarvis-runtime/transport-probes/de97303eeba74cdeb6ad166fa11318cf/result.json",
+      "status": "FAIL",
+      "assessment": "Controlled literal-text baseline passed; scalar enum forced a different valid JSON response. Both diagnostic regex variants emitted invalid comments and reached250 tokens.",
+      "configuration_unchanged": true,
+      "requests": [
+        {
+          "case": "unconstrained_control",
+          "contract_passed": true,
+          "seconds": 1.812,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 3,
+            "prompt_eval_count": 48,
+            "total_duration": 1458788900,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        },
+        {
+          "case": "scalar",
+          "contract_passed": true,
+          "seconds": 4.344,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "b673253b3d66b111aa81deb9c978bf54130f8b447ed0861b3682871cb2ab63bb"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 19,
+            "prompt_eval_count": 48,
+            "total_duration": 3939266300,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        },
+        {
+          "case": "diagnostic_union",
+          "contract_passed": false,
+          "seconds": 53.688,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "d12b2fc620dd050028c0c430de8453d400f7cbdd1538887108b8d291531e1e5b"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "length",
+            "eval_count": 250,
+            "prompt_eval_count": 48,
+            "total_duration": 53315058000,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": "The model reached its answer limit. Ask a shorter question."
+        },
+        {
+          "case": "diagnostic_branch",
+          "contract_passed": false,
+          "seconds": 54.875,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "d93331c64cc4d8442c2ff4d5f648ac94819357f9a2a1813f8e2b1f6e0ad54628"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "length",
+            "eval_count": 250,
+            "prompt_eval_count": 48,
+            "total_duration": 54535312500,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": "The model reached its answer limit. Ask a shorter question."
+        }
+      ]
+    },
+    {
+      "probe": "126bc6d7a83f428e97de15fb8073c7a5",
+      "raw_result": ".jarvis-runtime/transport-probes/126bc6d7a83f428e97de15fb8073c7a5/result.json",
+      "status": "PASS",
+      "assessment": "Paired isolation: ordinary JSON strings and a positive ASCII pattern both completed valid contracts under the same adversarial literal-text prompt.",
+      "configuration_unchanged": true,
+      "requests": [
+        {
+          "case": "ordinary_json_strings",
+          "contract_passed": true,
+          "seconds": 9.516,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "72c8cb1b5edd9e1c180294134e90ba3ba30e3423648a534ca581a9fc705e8162"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 47,
+            "prompt_eval_count": 48,
+            "total_duration": 9182341100,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        },
+        {
+          "case": "positive_ascii_pattern",
+          "contract_passed": true,
+          "seconds": 10.672,
+          "transport": {
+            "endpoint": "http://127.0.0.1:11434/api/generate",
+            "raw": true,
+            "format_matches_schema": true,
+            "format_sha256": "f079e16971c8e80e845b410bfb5f9876d0204f5679c6b259bf46746b4996aa46"
+          },
+          "completion": {
+            "done": true,
+            "done_reason": "stop",
+            "eval_count": 47,
+            "prompt_eval_count": 48,
+            "total_duration": 10233189100,
+            "served_model": "qwen3.5:9b"
+          },
+          "error": null
+        }
+      ]
+    }
+  ],
+  "conclusion": "The observed diagnostic negated-character pattern admitted JSON delimiter/comment text in this installed backend. No-pattern JSON strings and the restricted positive pattern passed the paired check. This does not establish the cause of historical parser failures whose raw payloads are missing.",
+  "repair": "Native tools and workload planner use a copied generation schema without regex keywords; every original semantic regex remains enforced by strict local decode before dispatch. Required fields, closed object shapes, enums, array and size bounds stay in the generation grammar. Diagnostic prose also has a positive ASCII semantic pattern.",
+  "public_reference": "https://docs.ollama.com/api/generate",
+  "public_reference_scope": "Official API documents JSON-schema format and raw prompt behavior; it does not diagnose this observed backend failure.",
+  "next_action": "Finish175 affected regressions, launcher and source guards, then one production GUI trial with installed stdlib failure evidence and the corrected grammar.",
+  "verification": {
+    "first_affected_run": {
+      "tests": 175,
+      "seconds": 172.823,
+      "result": "1 ERROR: obsolete wire-pattern expectation",
+      "log": ".jarvis-runtime/repair-generation-grammar-final.log"
+    },
+    "target3": {
+      "tests": 4,
+      "seconds": 0.292,
+      "result": "PASS; includes original planner suffix rejection",
+      "log": ".jarvis-runtime/repair-generation-grammar-target3.log"
+    },
+    "obsolete_regression_retirement": {
+      "pid": 42124,
+      "parent_pid": 51612,
+      "identity_verified_before_stop": true,
+      "reason": "The strengthened suffix assertion expected the wrong error wording. Only this owned regression was stopped; no GUI trial or shared service was killed.",
+      "partial_log": ".jarvis-runtime/repair-generation-grammar-final2.log"
+    },
+    "current_run": ".jarvis-runtime/repair-generation-grammar-final3.log",
+    "current_status": "PASS",
+    "current_result": {
+      "tests": 175,
+      "seconds": 163.794,
+      "result": "PASS"
+    }
+  }
+}

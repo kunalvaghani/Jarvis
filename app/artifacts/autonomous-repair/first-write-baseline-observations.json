@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-28 IST",
+  "status": "REGRESSION_PASS_FAULT_REPLAY_FIXED",
+  "application_acceptance": false,
+  "before_fix": "artifacts/autonomous-repair/first-write-boundary-before-fix.json",
+  "fault_replay": "artifacts/autonomous-repair/first-write-boundary-observation.json",
+  "target_regression": {
+    "tests": 9,
+    "seconds": 18.297,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-first-write-baseline-target-final.log"
+  },
+  "history_target": {
+    "tests": 1,
+    "seconds": 1.547,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-first-write-history-target.log"
+  },
+  "affected_regression": {
+    "tests": 205,
+    "seconds": 214.6,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-first-write-baseline-regression-final2.log"
+  },
+  "retained_prior_runs": [
+    {
+      "tests": 205,
+      "seconds": 212.403,
+      "result": "ONE_STALE_HISTORY_EXPECTATION_FAILED",
+      "log": ".jarvis-runtime/repair-first-write-baseline-regression.log"
+    },
+    {
+      "result": "INTERRUPTED_OBSOLETE_FIXTURE_RUN",
+      "log": ".jarvis-runtime/repair-first-write-baseline-regression-final.log"
+    }
+  ],
+  "scope": "Existing single editable Python implementation, complete declared files and unittest checks: capture/reobserve baseline before first candidate/save, block cancelled action after inference and around baseline checks, and check cancellation before missing-evidence early return. Source/test scopes and original verification are unchanged.",
+  "source_sha256": {
+    "jarvis/native_coding.py": "59b5cfd2cceb4fa48475d4ca807ccabaaa03127a8e2b01ce63e45ae9fcc34093",
+    "jarvis/candidate_checks.py": "9aabd6e097e021d7dfaaa61e894391141db1dab805fb62b0ddfae1f770b4b39a",
+    "tests/test_candidate_checks.py": "03e9368ec7c19732a1054388e3a07b97212e8ec162c58e0a1d84507a5f27f926",
+    "tests/test_native_coding.py": "726f55e1e7f9d6fcd2767020c798f1b36795208b015ed8981366b4ab5d8cf3b3"
+  },
+  "readiness": "DockerEngineUnavailable only; required models/local Git available.",
+  "new_application_trial": null
+}

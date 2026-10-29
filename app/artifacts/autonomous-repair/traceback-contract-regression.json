@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-25T22:36:19.079343+00:00",
+  "scope": "Architectural regression and readiness, not live application acceptance",
+  "changes": [
+    "Reject application-role python_tests targets before generation; preserve frozen-check rejection precedence.",
+    "Pin bounded read_slice start/count/tail to an exact owned application traceback frame, recomputing window as observation count shrinks."
+  ],
+  "regression": {
+    "tests": 132,
+    "passed": 132,
+    "seconds": 138.89,
+    "log": ".jarvis-runtime/repair-traceback-contract-final2.log",
+    "initial_run": {
+      "tests": 131,
+      "failure": 1,
+      "error": 1,
+      "seconds": 151.515,
+      "log": ".jarvis-runtime/repair-traceback-contract-final.log",
+      "resolution": "Fixture supplied validation_contract; frozen-check weakening rejection retains precedence."
+    }
+  },
+  "deep_frame_regression": {
+    "passed": true,
+    "scope": "Real frozen unittest failure at line122 in >6KB implementation; actual read/slice/edit then passing executable check, unchanged test; controlled inference fixture, not Qwen acceptance."
+  },
+  "readiness": {
+    "status": "repair_required",
+    "missing": [
+      "docker: unavailable (DockerEngineUnavailable)"
+    ],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "services": {
+      "groq": {
+        "status": "optional_not_live_checked",
+        "model": "qwen/qwen3.8-27b",
+        "live_inference_checked": false,
+        "free_account_confirmed": true
+      },
+      "docker": {
+        "status": "unavailable",
+        "error_type": "DockerEngineUnavailable"
+      },
+      "ollama": {
+        "status": "available",
+        "required_models": [
+          "qwen2.5:0.5b",
+          "qwen3.5:0.8b",
+          "qwen3.5:9b"
+        ],
+        "missing_models": []
+      },
+      "localgithub": {
+        "status": "available",
+        "mode": "local_git",
+        "hosted_services_checked": false
+      }
+    },
+    "adaptive_planning": true,
+    "incremental_planning": true,
+    "reuse_navigation_workflows": true,
+    "native_tool_calling": true,
+    "task_recovery": true,
+    "planner": "qwen3.5:9b",
+    "planning_backend": "qwen-native-tools",
+    "screen_model": "qwen3.5:9b",
+    "visual_fallback": "ui-tars-parser"
+  },
+  "source_sha256": {
+    "jarvis/codex_validation.py": "23d3ba61d62d21313ede38a8ec669b7630d9f388daace421726e3c057a8393a7",
+    "jarvis/codex_workload.py": "e6c85b26a5790415bf0dfd1ddfc61d61aa452fc43247a4670e4c700a55868dda",
+    "jarvis/native_coding.py": "84ab6a11ec067d1eb457d681624425a640e6405dab6f63581ea0cd0819ee7152"
+  },
+  "evidence_sha256": {
+    ".jarvis-runtime/repair-traceback-contract-final.log": "35220618c236acfe559f940dc5cc6783a66f602573bdb8803b35a201e586f90b",
+    ".jarvis-runtime/repair-traceback-contract-final2.log": "abb49d886fc4c99f69cab1b73a59b656b2d6412a41b8e5f2dbd161b4289faa0b",
+    ".jarvis-runtime/repair-traceback-deep-integration.log": "f97e4481ddc91c56aba098b3f171c3c5e2f2192d280ce3da375314c8b99749d5",
+    ".jarvis-runtime/repair-traceback-launcher-check-final.log": "184c61144188cda7832dd4f8ed4ad43287ff9d18697335aae4f4e2c7c78954b0"
+  },
+  "fresh_gui_run": "c19a8175e4654d31b48fa603b5961ae9",
+  "retired_gui_run": "77c2d177a0e84addab2e22f1cbebbdd1",
+  "full_release_acceptance": "OPEN",
+  "physical_gui_acceptance": "BLOCKED: desktop tool kernel asset initialization failed"
+}

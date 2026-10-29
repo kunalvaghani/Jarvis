@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-27T11:47:13.809255+00:00",
+  "application_acceptance": false,
+  "campaign": "9079b77bb956496f8dce9174bb8b603b",
+  "native": "11f712bf9a00455ba7099814cca33462",
+  "raw_validation": ".jarvis-runtime/autonomous-repair/9079b77bb956496f8dce9174bb8b603b/.jarvis-runtime/native-code/11f712bf9a00455ba7099814cca33462/validation-3cb0a723220745409cc8cadb58a8f9c0.json",
+  "raw_validation_sha256": "8705b5b1a58a423b313d3e784ae8465b746b00ba82a62661b72aa62048a77155",
+  "scope": "Read-only reproduction of current production failure-context construction; no app imports, execution, source writes or claims the model reasoned correctly.",
+  "primary_context": {
+    "primary_error": "TypeError: can only concatenate str (not \"int\") to str",
+    "primary_error_partial": false,
+    "source_locations": [
+      {
+        "file": "test_gui_behavior.py",
+        "line": 20
+      },
+      {
+        "file": "__init__.py",
+        "line": 1681
+      }
+    ],
+    "installed_stdlib_source": {
+      "module_path": "tkinter/__init__.py",
+      "sha256": "bbbbbc1c23265f00949b0a65dc5760b41008643cf40e414bedafd33d015150ec",
+      "failure_line": 1681,
+      "start": 1679,
+      "numbered_source": "1679:     def cget(self, key):\n1680:         \"\"\"Return the resource value for a KEY given as string.\"\"\"\n1681:         return self.tk.call(self._w, 'cget', '-' + key)\n1682: \n1683:     __getitem__ = cget",
+      "partial": true,
+      "source_truncated": false,
+      "scope": "Installed standard-library source at the primary traceback; read-only evidence, no repair or permission inferred."
+    },
+    "test_method": "test_button_click_addition",
+    "test_line": 18,
+    "failure_line": 20,
+    "failed_statement": "self.buttons[\"+\"][0].invoke()",
+    "failed_statement_partial": false,
+    "frozen_test_source": "def test_button_click_addition(self):\n        self.buttons[\"2\"].invoke()\n        self.buttons[\"+\"][0].invoke()\n        self.buttons[\"3\"][0].invoke()\n        self.root.update_idletasks()\n        self.assertEqual(self.display.get(), \"2+3\")"
+  }
+}

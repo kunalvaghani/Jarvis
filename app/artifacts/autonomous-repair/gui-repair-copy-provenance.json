@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-25T17:17:41.547819+00:00",
+  "source_campaign": "5e16ba59b1b94e1a9147ee7220eedb91",
+  "source_worker": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\5e16ba59b1b94e1a9147ee7220eedb91\\.jarvis-runtime\\native-workloads\\dd2810af36cc453393fcf2e6e4233e26\\workers\\all",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\gui-repair-fe2cf64116f14677b1f50d0785bde935",
+  "scope": "Exact forensic copy of failed Jarvis-generated source for a new production Jarvis repair task. No implementation authored or altered by supervisor. This copy is not promotion or application acceptance.",
+  "files": {
+    "main.py": {
+      "sha256": "e9f74992efa7120242a0cb2f62cb57d53d3c6e4ebbc55aa04712d3602f24b588",
+      "bytes": 500
+    },
+    "calculator_logic.py": {
+      "sha256": "a06cc248d5da7104b9cb857f27a227dbce1373206dde27d0c5da6b8b13b24cc2",
+      "bytes": 5135
+    },
+    "ui_builder.py": {
+      "sha256": "6597a26e6e71e87aeed5ddf2654eb15d0bafd84c5a8a8ed7868d09ce4647e140",
+      "bytes": 2631
+    },
+    "test_calculator.py": {
+      "sha256": "36bf211cf60d3c962aef5fb1d44f2b9d0aafd1a714610d6e3127a97852e0a78b",
+      "bytes": 1037
+    },
+    "test_gui_behavior.py": {
+      "sha256": "9d110f3c368379888051e61c275f99965ebcd04c506d81a06dab38f0c0d4d110",
+      "bytes": 1251
+    },
+    "README.md": {
+      "sha256": "1aa54108a02f575ce99a62f649f6ede24489ea1767857e2719695d3f99520fb9",
+      "bytes": 860
+    }
+  }
+}

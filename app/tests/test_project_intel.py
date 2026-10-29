@@ -30,6 +30,103 @@ def requirements(env, inactive=False):
     return {r['id']: r for r in env.projects.store.requirements(project['id'], include_inactive=inactive)}
 
 
+def test_calculator_objective_preserves_requested_product_and_language(tmp_path):
+    env=make(tmp_path,options={'default_workspace':str(tmp_path)})
+    try:
+        say(env,'Create a new Python calculator application that supports addition, subtraction and division. Include input validation and tests.')
+        project=env.projects.store.active()
+        assert 'Python calculator application' in project['objective']
+        assert 'division' in project['objective']
+        assert 'input validation' in project['objective']
+        assert 'Python' in project['name']
+    finally:close(env)
+
+
+@pytest.mark.parametrize('subject',['project management website with reusable project-card components',
+                                  'one-time reminder application'])
+def test_project_subject_preserves_domain_words_and_hyphenated_features(tmp_path,subject):
+    env=make(tmp_path,options={'default_workspace':str(tmp_path)})
+    try:
+        say(env,'Create a new '+subject+'.')
+        project=env.projects.store.active()
+        rows=env.projects.store.requirements(project['id'])
+        assert any(r['kind']=='deliverable' and subject in r['text'] for r in rows)
+        if project['objective']:assert subject in project['objective']
+    finally:close(env)
+
+
+def test_reported_status_question_is_not_recorded_as_a_feature(tmp_path):
+    env=make(tmp_path)
+    try:
+        start(env)
+        before=requirements(env)
+        assert classify("What's the status of project",has_project=True)[0]=='progress'
+        say(env,"What's the status of project")
+        assert requirements(env)==before
+    finally:close(env)
+
+
+def test_product_creation_without_new_routes_to_registration():
+    text='Create a Python desktop calculator with an elegant, modern graphical interface. It must support basic arithmetic.'
+    intent,details=classify(text)
+    assert intent=='new_project'
+    assert 'Python desktop calculator' in details['subject']
+    assert 'basic arithmetic' in details['objective']
+    assert classify('Create a Python calculator in folder TestCodes')[0]=='none'
+    assert classify('Create a dashboard for this existing application')[0]=='none'
+
+
+def test_second_sentence_preserves_product_in_coding_objective(tmp_path):
+    env=make(tmp_path,options={'default_workspace':str(tmp_path)})
+    try:
+        say(env,'Create a Python desktop calculator with an elegant, modern graphical interface. It must support basic arithmetic.')
+        project=env.projects.store.active()
+        assert 'Python desktop calculator' in project['objective']
+        assert 'basic arithmetic' in project['objective']
+        task={'title':'Implement calculator UI','requirements':[]}
+        goal=env.projects._command(project,'feature:ui',task).value
+        assert 'Python desktop calculator' in goal
+        assert 'REQUIREMENTS.md' not in goal  # Reference metadata must not become an explicit output filename.
+        assert 'reference input' in goal
+    finally:close(env)
+
+
+def test_objective_checkpoint_reuse_requires_unchanged_source_and_inferred_clause(tmp_path):
+    """Metadata fault fixture, not live generation or a new feature PASS."""
+    from unittest.mock import patch
+    from jarvis.codex_workload import fingerprint
+    env=make(tmp_path)
+    try:
+        start(env);run_next(env);run_next(env);env.projects.reconcile(force=True)
+        project=env.projects.store.active();workspace=Path(project['workspace'])
+        baseline=project['plan']['tasks']['architecture'];target=project['plan']['tasks']['feature:R3']['task_id']
+        directory=tmp_path/'.jarvis-runtime/native-workloads'/('a'*32);directory.mkdir(parents=True)
+        receipt={'status':'passed','project':str(workspace),'source_sha256':{},
+            'validation':{'passed':True,'runtime_verified':True,'checks':[{'kind':'python_tests','exit_code':0}],
+                          'hashes':fingerprint(workspace)}}
+        (directory/'receipt.json').write_text(json.dumps(receipt))
+        env.ingress.store.transition(baseline['task_id'],'COMPLETED','Fixture recorded checks',outcome='Baseline fixture\nReview: '+str(directory))
+        assert env.projects.verified_objective_checkpoint(target)
+        assert env.projects.verified_objective_checkpoint(project['plan']['tasks']['tests']['task_id'])
+        explicit=[{**r,'category':'explicit'} for r in env.projects.store.requirements(project['id'])]
+        with patch.object(env.projects.store,'requirements',return_value=explicit):
+            assert env.projects.verified_objective_checkpoint(target) is None
+        # Explicit resume creates a fresh verification revision; no failed coding action is replayed.
+        state=env.ingress.store.get(target)['state']
+        if state=='WAITING_DEPENDENCY':env.ingress.store.transition(target,'QUEUED','Fixture prerequisite ready')
+        env.ingress.store.transition(target,'RUNNING','Read-only fixture')
+        env.ingress.store.transition(target,'FAILED','Read-only fixture stopped',outcome='No source effects')
+        project=env.projects.store.active();project['plan']['tasks']['feature:R3']['status']='blocked';env.projects.store.save(project)
+        before=fingerprint(workspace)
+        env.projects._on_resume(project,'Resume the project',{})
+        resumed=env.projects.store.active()['plan']['tasks']['feature:R3']['task_id']
+        assert resumed!=target and env.projects.verified_objective_checkpoint(resumed)
+        assert fingerprint(workspace)==before
+        (workspace/'additional.py').write_text('value=1')
+        assert env.projects.verified_objective_checkpoint(resumed) is None
+    finally:close(env)
+
+
 # --- language layer -------------------------------------------------------------------------------------------------
 def test_parse_routes_project_phrases_without_stealing_other_commands():
     assert parse('Jarvis, create a new desktop application.').kind == 'project'
@@ -236,6 +333,19 @@ def test_safe_work_starts_while_a_routine_choice_waits_and_times_out(tmp_path):
         close(env)
 
 
+def test_fullstack_routine_choice_preserves_web_target_without_installation(tmp_path):
+    env=make(tmp_path,options={'default_workspace':str(tmp_path)})
+    try:
+        reply=say(env,'Create a small full-stack task management website with a frontend, backend API and local database. Users should be able to create, update, view and delete tasks.')
+        assert 'Python standard-library HTTP server and SQLite' in reply
+        assert 'Tkinter' not in reply
+        admit(env);run_next(env);resolve_decisions(env)
+        project=env.projects.store.active()
+        assert any('HTTP server and SQLite' in d['text'] for d in project['decisions'])
+        assert plan(env)['architecture']['status']=='submitted'
+    finally:close(env)
+
+
 def test_live_updates_change_only_affected_work(tmp_path):
     env = make(tmp_path)
     try:
@@ -282,6 +392,24 @@ def test_modification_updates_the_requirement_and_its_unstarted_task_in_place(tm
         assert 'Reverted' in reply and requirements(env)[rid]['text'] == 'Add a dark dashboard for CPU graphs'
     finally:
         close(env)
+
+
+def test_user_modification_upgrades_inferred_requirement_without_losing_identity(tmp_path):
+    env=make(tmp_path)
+    try:
+        start(env)
+        project=env.projects.store.active()
+        row=env.projects.store.add_requirement(project['id'],'The navigation should be static',
+            kind='functional',category='inferred',source='software default',evidence='Controlled inferred requirement')
+        reply=say(env,'Make the navigation animated.')
+        updated=requirements(env)[row['id']]
+        assert reply.startswith('Updated '+row['id']+':')
+        assert updated['category']=='explicit'
+        assert updated['text']=='Make the navigation animated'
+        assert updated['created_version']==row['created_version']
+        assert updated['updated_version']>row['updated_version']
+        assert updated['evidence'][-1]['previous']['text']=='The navigation should be static'
+    finally:close(env)
 
 
 def test_removing_a_feature_cancels_its_unstarted_task_only(tmp_path):

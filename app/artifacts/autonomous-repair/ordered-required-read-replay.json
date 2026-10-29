@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29T06:19:42.886125+00:00",
+  "status": "REGRESSION_REPLAY_PASS",
+  "real_project_source_context": true,
+  "explicit_controller_order": [
+    "ui_builder.py",
+    "test_gui_behavior.py"
+  ],
+  "proposal": {
+    "tool": "Read",
+    "arguments": {
+      "file_path": "ui_builder.py"
+    }
+  },
+  "all_eight_source_hashes_preserved": true,
+  "real_model_requests": 0,
+  "tokens": 0,
+  "application_acceptance": false,
+  "scope": "Selection from the actual owned project and frozen read targets only; no tool execution or application repair."
+}

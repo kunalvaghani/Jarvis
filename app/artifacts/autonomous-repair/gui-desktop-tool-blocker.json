@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-25T22:11:59.429697+00:00",
+  "result": "BLOCKED",
+  "scope": "Physical Windows GUI interaction and actual screenshot capture only; not a generated-application failure.",
+  "attempts": [
+    "Computer-use node_repl initialization failed before import.",
+    "Clean js_reset succeeded; initialization retry failed with the same error.",
+    "Built-in cua_repl getState fallback failed with the same error before inventory."
+  ],
+  "error": "failed to write kernel assets: The system cannot find the path specified. (os error 3)",
+  "windows_selected": 0,
+  "desktop_input_actions": 0,
+  "screenshots_captured": 0,
+  "inference_work_continues": true,
+  "unexecuted_gates": [
+    "Physical mouse/button checks",
+    "Physical keyboard/focus checks",
+    "Actual owned-window screenshots and visual polish review"
+  ],
+  "not_inferred": [
+    "Desktop lock state",
+    "Root cause of missing runtime asset path"
+  ],
+  "recovery": "No further identical UI initialization retries. Desktop runtime needs restoration before physical GUI acceptance; retain programmatic testing as separately scoped evidence.",
+  "read_only_investigations": [
+    {
+      "date": "2026-10-26",
+      "official_docs": "https://learn.chatgpt.com/docs/reference/troubleshooting",
+      "specific_kernel_error_documented": false,
+      "host_temp_exists": true,
+      "host_log_error_matches": 0,
+      "app_files_or_settings_changed": false,
+      "runtime_reinitialized": false,
+      "confirmed_repair": false
+    }
+  ],
+  "resumed_session_checks": [
+    {
+      "date": "2026-10-28 IST",
+      "method": "Prescribed node_repl @oai/sky Initialize only",
+      "result": "BLOCKED_BEFORE_IMPORT",
+      "error": "failed to write kernel assets: The system cannot find the path specified. (os error 3)",
+      "desktop_actions": 0,
+      "reset_or_fallback_repeated": false
+    }
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "date": "2026-10-28T17:09:50.644034+00:00",
+  "status": "REGRESSION_PASS",
+  "application_acceptance": false,
+  "scope": "At most two new corrective inferences for source-unchanged verified pre-save interface binding failures, charged to existing repair/turn/time limits. Identical proposals and uncertain actions cannot be replayed. Model note is excluded from worker feedback.",
+  "target": {
+    "tests": 1,
+    "subcases": 7,
+    "seconds": 16.376,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-corrections-target-final2.log"
+  },
+  "affected_regression": {
+    "tests": 207,
+    "seconds": 246.873,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-bounded-corrections-regression-final.log"
+  },
+  "audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 20.44,
+    "log": ".jarvis-runtime/repair-bounded-corrections-audit.log"
+  },
+  "exact_source_replay": "artifacts/autonomous-repair/interface-correction-gui-replay.json",
+  "readiness_log": ".jarvis-runtime/repair-bounded-corrections-launcher.log",
+  "production": [
+    {
+      "id": "4714bd2545e54e85896cd1daa60809b7",
+      "status": "FINISHED",
+      "raw_result": "FAIL",
+      "finished_at": "2026-10-28T11:02:01.631434+00:00",
+      "seconds": 407.165,
+      "source_changed": false,
+      "configuration_changed": false,
+      "all_eight_external_hashes_match": true,
+      "workers": [
+        {
+          "id": "1d25a77dc314411198d8f3337592d056",
+          "status": "failed",
+          "error": "Bounded planned replacement was rejected; stop for root-cause analysis. No generic action fallback or replay. Generated ui_builder.py failed syntax validation: unexpected indent (ui_builder.py, line 43)",
+          "progress": {
+            "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+            "identical_failed_checks": 1,
+            "idle_turns": 4,
+            "guarded_replacement_attempts": 1,
+            "failure_history_versions": 1,
+            "failure_state_revisits": 0,
+            "diagnostic_plan_attempts": 1,
+            "rejected_repair_proposals": 0
+          },
+          "candidate_decisions": [],
+          "diagnostic_plans": [
+            {
+              "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+              "file_path": "ui_builder.py",
+              "failure_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+              "steps": [
+                "Use an owned compatible value interface preserving every recorded access route and the original real objects/callbacks.",
+                "Frozen source-bound obligations: [{\"test_file\": \"test_gui_behavior.py\", \"receiver\": \"self.buttons\", \"method\": \"invoke\", \"accesses\": [{\"key\": \"2\", \"subscripts_after_key\": 0, \"line\": 19, \"call\": \"self.buttons['2'].invoke()\"}, {\"key\": \"+\", \"subscripts_after_key\": 1, \"line\": 20, \"call\": \"self.buttons['+'][0].invoke()\"}, {\"key\": \"3\", \"subscripts_after_key\": 1, \"line\": 21, \"call\": \"self.buttons['3'][0].invoke()\"}, {\"key\": \"C\", \"subscripts_after_key\": 1, \"line\": 27, \"call\": \"self.buttons['C'][0].invoke()\"}, {\"key\": \"1\", \"subscripts_after_key\": 1, \"line\": 44, \"call\": \"self.buttons['1'][0].invoke()\"}, {\"key\": \"/\", \"subscripts_after_key\": 1, \"line\": 45, \"call\": \"self.buttons['/'][0].invoke()\"}, {\"key\": \"0\", \"subscripts_after_key\": 1, \"line\": 46, \"call\": \"self.buttons['0'][0].invoke()\"}]}]",
+                "Run every original unchanged executable check. No passing result or additional permission is implied."
+              ],
+              "typed_diagnosis": {
+                "observed_cause": "The current `ui_builder.py` implementation stores buttons in a dictionary where values are lists (`self.buttons[text] = [btn]`). The frozen tests expect specific access patterns: some keys (like '2', 'C') require `.invoke()` directly on the",
+                "strategy": "owned_compatible_interface",
+                "uncertainty": "None. The fix strictly adheres to the frozen test contract by ensuring `self.buttons[key]` returns a widget with an `invoke` method for all required keys, while"
+              },
+              "verified": false,
+              "original_goal_used": true,
+              "planner_hypotheses_authoritative": false,
+              "replacement_context": "current-evidence-only",
+              "protocol_contract": {
+                "file_path": "ui_builder.py",
+                "source_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+                "test_sha256": {
+                  "test_gui_behavior.py": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e"
+                },
+                "members": [
+                  "buttons"
+                ],
+                "obligations": [
+                  {
+                    "test_file": "test_gui_behavior.py",
+                    "receiver": "self.buttons",
+                    "method": "invoke",
+                    "accesses": [
+                      {
+                        "key": "2",
+                        "subscripts_after_key": 0,
+                        "line": 19,
+                        "call": "self.buttons['2'].invoke()"
+                      },
+                      {
+                        "key": "+",
+                        "subscripts_after_key": 1,
+                        "line": 20,
+                        "call": "self.buttons['+'][0].invoke()"
+                      },
+                      {
+                        "key": "3",
+                        "subscripts_after_key": 1,
+                        "line": 21,
+                        "call": "self.buttons['3'][0].invoke()"
+                      },
+                      {
+                        "key": "C",
+                        "subscripts_after_key": 1,
+                        "line": 27,
+                        "call": "self.buttons['C'][0].invoke()"
+                      },
+                      {
+                        "key": "1",
+                        "subscripts_after_key": 1,
+                        "line": 44,
+                        "call": "self.buttons['1'][0].invoke()"
+                      },
+                      {
+                        "key": "/",
+                        "subscripts_after_key": 1,
+                        "line": 45,
+                        "call": "self.buttons['/'][0].invoke()"
+                      },
+                      {
+                        "key": "0",
+                        "subscripts_after_key": 1,
+                        "line": 46,
+                        "call": "self.buttons['0'][0].invoke()"
+                      }
+                    ]
+                  }
+                ],
+                "strategies": [
+                  "key_specific_values",
+                  "owned_compatible_interface",
+                  "unresolved"
+                ]
+              },
+              "model_prose_forwarded": false,
+              "rejected_repair_proposals": 0
+            }
+          ],
+          "bounded_interface_corrections": null,
+          "all_six_protected_hashes_match": true
+        }
+      ]
+    },
+    {
+      "id": "b27c493e68f647faba3c0cb69b7ff15e",
+      "status": "FINISHED",
+      "raw_result": "FAIL",
+      "finished_at": "2026-10-28T16:56:19.172197+00:00",
+      "seconds": 19843.939,
+      "source_changed": false,
+      "configuration_changed": false,
+      "all_eight_external_hashes_match": true,
+      "workers": [
+        {
+          "id": "a0e955707fc147e08f571685ceccf8da",
+          "status": "stopped",
+          "error": "Native coding stopped; no partial model output executed.",
+          "progress": {
+            "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+            "identical_failed_checks": 1,
+            "idle_turns": 1,
+            "guarded_replacement_attempts": 0,
+            "failure_history_versions": 1,
+            "failure_state_revisits": 0,
+            "diagnostic_plan_attempts": 0,
+            "rejected_repair_proposals": 0
+          },
+          "candidate_decisions": [],
+          "diagnostic_plans": null,
+          "bounded_interface_corrections": null,
+          "all_six_protected_hashes_match": true
+        }
+      ],
+      "interpretation": "Incomplete inference stopped, no edits or structural diagnosis. 19616.813s recorded model activity; cause of scheduling/elapsed gap not established. Owner exited; no duplicate worker or replay."
+    },
+    {
+      "id": "ea62c72013d143f6a76db577fc0344cb",
+      "status": "RUNNING",
+      "raw_result": "NOT_RUN",
+      "finished_at": null,
+      "seconds": null,
+      "source_changed": null,
+      "configuration_changed": null,
+      "all_eight_external_hashes_match": true,
+      "workers": []
+    }
+  ],
+  "source_sha256": {
+    "jarvis/native_coding.py": "2b6e53f25a6cce5c2ad692481e8cfb1dd709d8f55f20b11584edc4c62d15313b",
+    "jarvis/repair_contract.py": "d0777f7385eef760d79cadf5225f299328a231be85e08e9c559533f7ca9fa70b",
+    "jarvis/source_observation.py": "8205f5921c3d539348bbf7f9ac2d61b07c72b090f952f82d1bc6ef51d6b5ee00",
+    "tests/test_repair_corrections.py": "923b547a6298a51d26defc53361bfe9ff3914bed1e5c7c47880ef109324ddcfe"
+  }
+}

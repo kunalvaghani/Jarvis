@@ -92,7 +92,8 @@ class ScheduledQueue:
     def _take(self, lane):
         with self.lock:
             self.heartbeat = self.clock()
-            if self.closed or self.store.setting('paused'):
+            from .campaign_pause import queue_paused
+            if self.closed or self.store.setting('paused') or queue_paused(self.store):
                 return None
             self.last_resource = self.observe()
             now, candidates = self.clock(), []

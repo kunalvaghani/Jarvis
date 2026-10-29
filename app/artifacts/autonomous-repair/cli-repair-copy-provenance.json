@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-25T20:22:53.975351+00:00",
+  "source_campaign": "cb676c3fd68a49069483f792aa25989f",
+  "source_worker": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\cb676c3fd68a49069483f792aa25989f\\.jarvis-runtime\\native-workloads\\bbae0ef1affa4c6684dfbc54861a67cb\\workers\\all",
+  "target": "C:\\Users\\kunal\\.codex\\visualizations\\2026\\10\\24\\01a16bd3-c642-7f33-9645-554dca74d6c6\\jarvis-acceptance\\cli-repair-8e91b259914e42439d53e84e7b40cdae",
+  "scope": "Exact copy of retained Jarvis-generated partial CLI application after controlled cancellation. Frozen tests match first confirmed generated test saves. No supervisor-authored implementation or test modification. Copying is not promotion, fresh creation acceptance or successful repair.",
+  "files": {
+    "PROJECT.md": {
+      "sha256": "a8d07ec0b385a634ea425714f16843fa557a2696ccb0badbf585fe2a1f927a08",
+      "bytes": 330,
+      "frozen_original_test": false
+    },
+    "README.md": {
+      "sha256": "aa1dfe836392908265cdb1e283a0e7eab9198f07e53dadda47dc88233f4b75cd",
+      "bytes": 1502,
+      "frozen_original_test": false
+    },
+    "REQUIREMENTS.md": {
+      "sha256": "6d57320ac423e7f5f19342b59f70e5ee7ed23b10d133980e0d8e50b729d511da",
+      "bytes": 1119,
+      "frozen_original_test": false
+    },
+    "calculator.py": {
+      "sha256": "5cd4018ed5f1df645d13f81fd0ae449cfaffeba01c09bef475f8ab198a9d253e",
+      "bytes": 609,
+      "frozen_original_test": false
+    },
+    "main.py": {
+      "sha256": "b49ec79e77ad6bf4cee8bdeeb70ec3107df89e5c9c45e4ccf2110596bad0fe92",
+      "bytes": 1361,
+      "frozen_original_test": false
+    },
+    "test_calculator.py": {
+      "sha256": "49146e6ddf92b57c23962f3e1d69044afb728300c2b37e1ae840bf02ba7972e8",
+      "bytes": 1261,
+      "frozen_original_test": true
+    },
+    "test_main.py": {
+      "sha256": "33490daa6d2796414bf2dff83eca635e64b67935ce01255c2128033d9fb04752",
+      "bytes": 1603,
+      "frozen_original_test": true
+    }
+  }
+}

@@ -62,15 +62,16 @@ def standalone_public(base, request):
 def get_service(base=BASE):
     global _service,_stamp
     # File metadata and environment configuration only, no provider I/O here.
-    paths=[Path(base)/'config/config.json',Path(base)/'.jarvis-runtime/cloud/policy.json',Path(base)/'secrets/groq.json']
+    paths=[Path(base)/'config/config.json',Path(base)/'.jarvis-runtime/cloud/policy.json',Path(base)/'secrets/groq.json',Path(base)/'secrets/gemini.json']
     stamp=(str(base),tuple(p.stat().st_mtime_ns if p.exists() else None for p in paths),
         tuple(sorted((k,v) for k,v in os.environ.items() if k.startswith('GROQ_') and k!='GROQ_API_KEY')),
-        hashlib.sha256(os.environ.get('GROQ_API_KEY','').encode()).digest())
+        hashlib.sha256(os.environ.get('GROQ_API_KEY','').encode()).digest(),hashlib.sha256(os.environ.get('GEMINI_API_KEY','').encode()).digest())
     with _lock:
         if stamp!=_stamp:
             if _service: _service.close()
             options=configured(base)
-            _service=HybridGateway(base,options) if options['enabled'] else None
+            config=json.loads((Path(base)/'config/config.json').read_text(encoding='utf-8'))
+            _service=HybridGateway(base,options) if options['enabled'] or config.get('coding_cloud',{}).get('enabled') else None
             _stamp=stamp
         return _service
 
@@ -79,7 +80,8 @@ class HybridGateway:
     def __init__(self,base,options,adapter=None,guardian=None):
         self.base=Path(base); self.options=options
         self.root=self.base/'.jarvis-runtime/cloud'
-        self.guardian=guardian or QuotaGuardian(self.root/'quota.sqlite3',options)
+        from .cloud_quota import CloudQuotaManager
+        self.guardian=guardian or CloudQuotaManager(self.root/'quota.sqlite3',{**options,'provider':'groq','keep_dispatch_time':True,'max_concurrent_calls':2})
         from .model_performance import PerformanceTracker
         self.performance=PerformanceTracker(self.root/'performance.sqlite3')
         self.adapter=adapter
@@ -87,10 +89,19 @@ class HybridGateway:
             key=credential(base)
             if key: self.adapter=GroqAdapter(key,options,self.guardian)
         self.closed=False
+        self.coding_routes=None
 
     def close(self):
         self.closed=True
         if self.adapter: self.adapter.close()
+        if self.coding_routes:self.coding_routes.close()
+
+    def coding(self,messages,schema,options,run,cancelled,deadline,**kwargs):
+        if self.coding_routes is None:
+            from .coding_cloud_routes import CodingRoutes
+            config=json.loads((self.base/'config/config.json').read_text(encoding='utf-8'))
+            self.coding_routes=CodingRoutes(self,config)
+        return self.coding_routes.complete(messages,schema,options,run,cancelled,deadline,**kwargs)
 
     def decide(self,request):
         start=time.perf_counter()
@@ -194,6 +205,18 @@ def maybe_answer(request,progress=None,base=BASE):
         return None  # policy/storage uncertainty always keeps inference local
 
 
+def maybe_coding(messages,schema,options,run,cancelled,deadline,*,failure=None,stage='coding',base=BASE):
+    if options.get('native_coding_provider')=='local':return None
+    context=options.get('native_cloud_context')
+    if not isinstance(context,dict) or context.get('provenance') not in ('synthetic','explicitly_approved') or context.get('restricted') is not False:return None
+    try:
+        service=get_service(base)
+        if service:return service.coding(messages,schema,options,run,cancelled,deadline,failure=failure,stage=stage)
+    except (CloudFailure,QuotaDenied,ValueError,KeyError,TypeError,OSError,sqlite3.Error):
+        if cancelled() or time.monotonic()>=deadline:raise CloudFailure('cancelled')
+    return None
+
+
 def control(base,value):
     root=Path(base)/'.jarvis-runtime/cloud'
     if value in {'correct','incorrect','reset_feedback'}:
@@ -228,15 +251,26 @@ def control(base,value):
         atomic(root/'policy.json',json.dumps(current))
         return 'Local answer model preference saved: '+name
     result={'configuration':configured(base),'quota_scope':'No provider balance fetched; never infer daily tokens from minute headers.'}
+    try:
+        service=get_service(base)
+        if service:
+            if service.coding_routes is None:
+                from .coding_cloud_routes import CodingRoutes
+                service.coding_routes=CodingRoutes(service,json.loads((Path(base)/'config/config.json').read_text(encoding='utf-8')))
+            result['coding']=service.coding_routes.status()
+    except (OSError,ValueError,sqlite3.Error):result['coding']={'state':'UNKNOWN'}
     try: result['last_route']=json.loads((root/'last-route.json').read_text())
     except (OSError,ValueError): result['last_route']={'provider':'local','reason':'No cloud route recorded.'}
     if (root/'quota.sqlite3').exists(): result['quota']=QuotaGuardian(root/'quota.sqlite3',result['configuration']).snapshot()
     else: result['quota']={'state':'UNKNOWN','reason':'Cloud has not been initialized.'}
     route=result['last_route']; quota=result['quota']
     remaining=quota.get('remaining',{})
+    coding=result.get('coding',{});gemini=coding.get('gemini',{})
+    gemini_summary=(' Gemini coding: '+str(gemini.get('reason') or gemini.get('state',{}).get('state','unknown'))+
+                    '; project '+str(gemini.get('project') or 'unconfirmed')+'; operational limits '+json.dumps(gemini.get('jarvis_limits',{}))+'.') if gemini else ''
     return ('The last recorded route is '+route.get('provider','local')+' using '+route.get('model','the configured local model')+
         '. Reason: '+route.get('reason','unavailable')+'. Groq quota state: '+quota.get('state','UNKNOWN')+
         '. Locally estimated remaining rolling 24-hour tokens: '+str(remaining.get('daily_tokens','unknown'))+
         ', requests: '+str(remaining.get('daily_requests','unknown'))+
         '. Daily tokens are local estimates; provider token headers describe minute limits. Last inference duration in milliseconds: '+
-        str(route.get('inference_ms','not measured'))+'. Model accuracy comparisons and quota savings have not been validated.')
+        str(route.get('inference_ms','not measured'))+'. Model accuracy comparisons and quota savings have not been validated.'+gemini_summary)

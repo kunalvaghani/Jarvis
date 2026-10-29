@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 OBJECT_FIELDS = frozenset('task_queue voice knowledge_acquisition groq gpu_scheduler realtime context_selector command_cleanup anticipation ui agent_runtime whisper cursor push_to_write apps folders files knowledge memory weather cognition gods_eye repo_learning weather_alerts whatsapp media speech brain documents repo_abilities repository_skills rea deliberation self_evolution docker_runtime execution_strategy reasoning_bank viking_memory exploration cloud_architect demonstration evolution_lab awareness project_intelligence pcide'.split())
-OBJECT_FIELDS = OBJECT_FIELDS | {'engineering_judgment'}
+OBJECT_FIELDS = OBJECT_FIELDS | {'engineering_judgment','gemini','coding_cloud'}
 KNOWN_FIELDS = OBJECT_FIELDS | frozenset({'model_path','files_root','project_roots','microphone',
     'wake_timeout_seconds','suggestion_seconds','file_catalog','_ui_verification'})
 MAX_ROOT_FIELDS = 128

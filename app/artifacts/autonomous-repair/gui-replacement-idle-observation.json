@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-26T09:06:12.306241+00:00",
+  "status": "FAIL",
+  "run": "83a881bc73cb447481fe7416313982b0",
+  "native": "9b1a89d2725d4f4eb7c56732662f6666",
+  "finished_at": "2026-10-26T08:58:10.877439+00:00",
+  "record_to_shutdown_seconds": 1044.9,
+  "owner_exit_observed": true,
+  "task_states": [
+    "FAILED"
+  ],
+  "source_stable": true,
+  "configuration_stable": true,
+  "all_eight_external_files_unchanged": true,
+  "protected_worker_files_unchanged": true,
+  "confirmed_save_journal_exists": false,
+  "progress": {
+    "validation_signature": "7847b2f9fdcc44f462795dd2b198ff546ebc82cb97b26eea875bdc4f47908a33",
+    "identical_failed_checks": 1,
+    "idle_turns": 12
+  },
+  "error": "Executable checks still fail after 12 tool turns without a confirmed source save or changed diagnostics. Stop the stalled repair for root-cause analysis; source and frozen tests retained. No action replayed.",
+  "rejected_contexts": [
+    {
+      "tool": "Edit",
+      "error": "Edit text must match uniquely or explicitly replace all matches."
+    },
+    {
+      "tool": "Edit",
+      "error": "Edit text must match uniquely or explicitly replace all matches."
+    }
+  ],
+  "last_observation": {
+    "tool": "Read",
+    "path": "ui_builder.py"
+  },
+  "diagnosis": "Two context failures qualified the file for guarded replacement, but the mandatory fresh read reached idle12 and the earlier stop check prevented that one recovery attempt. Reproduced actual tool sequence with unchanged real unittest; preserve idle counter and permit exactly one eligible final guarded replacement inference, then stop if no confirmed save.",
+  "new_application_acceptance": false
+}

@@ -195,6 +195,17 @@ class VerifiedCodeMemory:
             row = self.db.execute('SELECT state, enabled, data FROM items WHERE id=?', (identity,)).fetchone()
         return self._decode(row, source) if row else None
 
+    def verified_source(self,identity):
+        """Fresh trusted source read, including integrity and revocation gates."""
+        with self.lock:
+            row=self.db.execute('SELECT state,enabled,data,source_hash FROM items WHERE id=?',(identity,)).fetchone()
+            item=self._decode(row,True) if row else None
+        if not item or not item['enabled'] or item['state'] not in TRUSTED or not item.get('copy_allowed'):
+            raise ValueError('Verified memory item is unavailable, revoked or not project-verified.')
+        if not row['source_hash'] or not isinstance(item.get('source'),str) or normalized_hash(item['source'])!=row['source_hash']:
+            raise ValueError('Verified memory source changed or is unavailable; fresh verification is required.')
+        return item
+
     def _decode(self, row, source=True):
         data = json.loads(row['data'])
         path = self.root / 'items' / data['id'] / 'source.txt'

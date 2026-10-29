@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-28T07:51:01.411055+00:00",
+  "application_acceptance": false,
+  "status": "PRODUCTION_FINISHED",
+  "target_regression": {
+    "tests": 1,
+    "subcases": 3,
+    "seconds": 8.538,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-strict-progress-target.log"
+  },
+  "affected_regression": {
+    "tests": 190,
+    "seconds": 222.45,
+    "result": "PASS",
+    "log": ".jarvis-runtime/repair-strict-progress-regression.log"
+  },
+  "native_audit": {
+    "passed": 30,
+    "skipped": 5,
+    "seconds": 16.35,
+    "log": ".jarvis-runtime/repair-strict-progress-audit.log"
+  },
+  "scope": "Explicit trial option only, existing single editable Python implementation and complete unittest baseline. Ordinary neutral repair candidates now use the existing progress gate before save. Passing baselines/default behavior preserved. Original eight-candidate and atomic batch budgets, frozen tests and source scopes unchanged.",
+  "readiness": "DockerEngineUnavailable only; required local models and LocalGithub available.",
+  "prior_first_write_proof": "artifacts/autonomous-repair/first-write-baseline-observations.json",
+  "subset_feasibility": "artifacts/autonomous-repair/batch-subset-feasibility.json",
+  "production": {
+    "campaign": "27ee816aee224e8f970d95011d94b77b",
+    "task": "cbaa2f3cd50042b08479df19f748a07a",
+    "owner_session": 33143,
+    "raw_result": "FAIL",
+    "finished_at": "2026-10-28T07:01:43.603400+00:00",
+    "coding_policy": {
+      "native_max_turns": 64,
+      "native_max_repairs": 6,
+      "native_max_workers": 1,
+      "max_coding_seconds": 900,
+      "native_require_repair_progress": true
+    },
+    "all_eight_external_hashes_unchanged": true,
+    "source_changed_during_trial": false,
+    "record_to_shutdown_seconds": 903.843,
+    "configuration_changed_during_trial": false,
+    "native": {
+      "status": "stopped",
+      "error": "Native coding stopped; no partial model output executed.",
+      "require_repair_progress": true,
+      "progress": {
+        "validation_signature": "f60d43f488c6cf3f5b2b2a9a26d96e21a741bede8d2e96fa8e8328e36bfaef5a",
+        "identical_failed_checks": 1,
+        "idle_turns": 4,
+        "guarded_replacement_attempts": 0,
+        "failure_history_versions": 2,
+        "failure_state_revisits": 0,
+        "diagnostic_plan_attempts": 0,
+        "rejected_repair_proposals": 1
+      },
+      "candidate_decisions": [
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": false,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "1cca19f4103591acfe51e87517ee8142bc2f7ba329fc084ea6951831848aa775",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\27ee816aee224e8f970d95011d94b77b\\.jarvis-runtime\\native-code\\19702bffc2a74faa9a48016ff55ca8e7\\validation-d26c3ee937644077a79df02d152eb1fb.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\27ee816aee224e8f970d95011d94b77b\\.jarvis-runtime\\native-code\\19702bffc2a74faa9a48016ff55ca8e7\\candidate-checks\\e05feff534ab4011a6d0cd50b66a965f\\validation-2407e4dcf6cf4e6ba0536287a4e0fbd3.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {},
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {},
+          "verified_case_progress": false
+        },
+        {
+          "candidate_only": true,
+          "applied": false,
+          "accepted_for_save": true,
+          "source_path": "ui_builder.py",
+          "decision_precedes_working_save": true,
+          "proposed_sha256": "990f6164626108ae60f6f5d463fd45889af949cb94cd98e888d7fb28b4c00e7b",
+          "baseline_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\27ee816aee224e8f970d95011d94b77b\\.jarvis-runtime\\native-code\\19702bffc2a74faa9a48016ff55ca8e7\\validation-d26c3ee937644077a79df02d152eb1fb.json",
+          "candidate_evidence": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\autonomous-repair\\27ee816aee224e8f970d95011d94b77b\\.jarvis-runtime\\native-code\\19702bffc2a74faa9a48016ff55ca8e7\\candidate-checks\\ecb942994f60409faef668d216720e99\\validation-8aec8b23ba804d14a43778035e51f04a.json",
+          "lost_previously_passing_cases": {},
+          "progress_required": true,
+          "newly_passing_cases": {
+            "test_gui_behavior.py": [
+              "test_gui_behavior.TestCalculatorGUI.test_button_click_clear"
+            ]
+          },
+          "case_classifications_complete": true,
+          "errors_reaching_assertions": {},
+          "new_runtime_errors": {},
+          "verified_case_progress": true
+        }
+      ],
+      "bounded_recovery_rejection": null,
+      "id": "19702bffc2a74faa9a48016ff55ca8e7",
+      "outcomes": [
+        {
+          "path": "test_gui_behavior.py",
+          "test_sha256": "cf8b0dc6d97bcd57abe38a3b944a2199fb6196697c30e4f208ec2de79a9c420e",
+          "test_count": 6,
+          "successful": false,
+          "skipped": 0,
+          "passed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_clear",
+            "test_gui_behavior.TestCalculatorGUI.test_display_initial_state"
+          ],
+          "partial": false,
+          "failed_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_numbers",
+            "test_gui_behavior.TestCalculatorGUI.test_keyboard_input_operators"
+          ],
+          "error_ids": [
+            "test_gui_behavior.TestCalculatorGUI.test_button_click_addition",
+            "test_gui_behavior.TestCalculatorGUI.test_error_display_division_by_zero"
+          ]
+        },
+        {
+          "path": "test_calculator.py",
+          "test_sha256": "88aee8268b6903d821559440cf0ff3fa5c97d4576ad4a35fb457a1b6409988e5",
+          "test_count": 6,
+          "successful": true,
+          "skipped": 0,
+          "passed_ids": [
+            "test_calculator.TestCalculator.test_addition",
+            "test_calculator.TestCalculator.test_clear",
+            "test_calculator.TestCalculator.test_division",
+            "test_calculator.TestCalculator.test_division_by_zero",
+            "test_calculator.TestCalculator.test_multiplication",
+            "test_calculator.TestCalculator.test_subtraction"
+          ],
+          "partial": false,
+          "failed_ids": [],
+          "error_ids": []
+        }
+      ],
+      "all_six_protected_worker_hashes_match": true
+    }
+  },
+  "source_sha256": {
+    "jarvis/native_coding.py": "da83a760a9857062dc5d43c5669efe9aee6faccd308892fa435a435bd90dd043",
+    "jarvis/candidate_checks.py": "9aabd6e097e021d7dfaaa61e894391141db1dab805fb62b0ddfae1f770b4b39a",
+    "tests/test_candidate_checks.py": "4e35f1a3a42601c94f82684e17c345f531aa19a7673c8b5e691ec401060f4915",
+    "scripts/verification/verify_autonomous_repair.py": "1e6aa8e8797257c001cd38c8bf64ce27e98b56a6760a8a90cacb3490530720df"
+  },
+  "independent_GUI": {
+    "status": "FAIL",
+    "passed_checks": 1,
+    "failed_checks": 7,
+    "source_unchanged": true,
+    "evidence": ".jarvis-runtime/strict-progress-independent-gui/gui-acceptance-1fddcf0b2b6848cf810e9bcf7b0c31e7.json"
+  },
+  "partial_checkpoint": "artifacts/autonomous-repair/gui-two-case-checkpoint-provenance.json"
+}
