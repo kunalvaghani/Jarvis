@@ -476,7 +476,7 @@ class VisionExecutor(RouteExecutor):
                 button = 'right' if name == 'right_click' else 'left'
                 method = self.input.click(x, y, button, 2 if name == 'double_click' else 1, action.cancel)
                 if name == 'type':
-                    self.input.text(str(p['text']), action.cancel)
+                    self.input.enter(str(p['text']), action.cancel)
             label = str(p.get('target', 'point'))[:60]
             return self._done(action, f'{name.replace("_", " ")} "{label}" at ({x}, {y}) in {app} ({method})',
                               evidence=found.evidence, point=(x, y))

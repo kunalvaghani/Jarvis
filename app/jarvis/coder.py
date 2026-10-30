@@ -94,7 +94,13 @@ def coding_folder(actions, goal, cancelled, prior=None):
     """Explicit path, then freshly observed open folder, then remembered scope."""
     requested = named_folder_request(goal)
     if requested:
-        return actions._task_folder('the open folder' if requested == 'open folder' else requested, cancelled)
+        parent = actions._task_folder('the open folder' if requested == 'open folder' else requested, cancelled)
+        child = re.search(r'\b(?:new\s+)?(?:project\s+)?folder\s+(?:called|named)\s+["\']?([A-Za-z0-9][\w.-]{0,80})', goal, re.I)
+        if child and child.group(1).casefold() != Path(parent).name.casefold():
+            target = Path(parent) / child.group(1)
+            target.mkdir(exist_ok=True)  # The user asked for this new project folder inside the named one.
+            return str(target)
+        return parent
     try:
         return actions._task_folder('this folder', cancelled)
     except ValueError:
@@ -439,7 +445,15 @@ class Coder:
             raise ValueError('Choose an individual project folder with a project marker.')
         folder_name = named_folder_request(goal)
         if selected and folder_name and not folder_matches_request(folder_name, root):
-            raise ValueError('The selected folder does not match the requested coding folder.')
+            # A named folder alias ("my jarvis test folder") matches when it resolves to this very folder.
+            try:
+                named = Path(self.actions._task_folder(folder_name, cancelled)).resolve()
+                # The named folder itself, or the new project folder the request created inside it.
+                same = named == root or (named == root.parent and root.name.casefold() in goal.casefold())
+            except Exception:
+                same = False
+            if not same:
+                raise ValueError('The selected folder does not match the requested coding folder.')
         if cli and not simple_folder_request(goal):
             if backend=='jarvis':
                 from .codex_workload import run as workload_run

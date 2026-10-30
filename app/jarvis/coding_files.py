@@ -77,6 +77,7 @@ class FileSession:
         self.allowed=set(request.get('allowed_paths') or [f['path'] for f in self.plan['files']])
         self.tests={row['path'] for row in self.plan['files'] if row['role']=='test'}
         self.fixed_tests={name:digest(self.root/name) for name in self.tests if (self.root/name).is_file()}
+        self.correctable={};self.corrected=set()  # A frozen test whose assertion contradicts the goal: one bounded redraft.
         from .codex_validation import preserved_named_files,source_path
         from .coder import project_files
         protected=preserved_named_files(self.validation_goal)
@@ -107,8 +108,13 @@ class FileSession:
 
     def protect(self, name):
         if name not in self.allowed:raise ValueError('Writes are limited to this worker assigned source files.')
-        if name in self.fixed_tests:raise ValueError('Existing or already created test assertions are fixed. Repair the implementation, not the test.')
+        if name in self.fixed_tests and name not in self.correctable:raise ValueError('Existing or already created test assertions are fixed. Repair the implementation, not the test.')
         if Path(name).name.casefold() in self.preserved_names:raise ValueError('This source is explicitly preserved byte-for-byte. Read it as an input; do not rewrite it or add it as a generated output: '+name)
+
+    def allow_test_correction(self, name):
+        """Once per test: a stalled repair may redraft a frozen test whose failing assertion contradicts the goal."""
+        if name not in self.fixed_tests or name in self.corrected or not (self.root/name).is_file():return False
+        self.correctable[name]=(self.root/name).read_text(encoding='utf-8');return True
 
     def check_tests(self):
         # A test may appear after session startup through an external save. It
@@ -134,6 +140,11 @@ class FileSession:
             path=None;before=''
             if writing:
                 path,_=decide(self.root,tool,args);name=path.relative_to(self.root).as_posix();self.protect(name)
+                if name in self.correctable:
+                    if tool!='Write':raise ValueError('Correct the frozen test with one complete Write of the whole file. Nothing saved.')
+                    from .codex_validation import validate_test_correction,validate_test_draft
+                    validate_test_draft(name,args.get('content',''),self.plan,self.validation_goal)
+                    validate_test_correction(self.correctable[name],args.get('content',''))
                 if tool=='Write' and name in self.tests and not path.exists():
                     unread=self.pending_test_reads()
                     if unread:raise ValueError('Before fixing new test assertions, Read the current existing implementation/protocol: '+json.dumps(unread)+'. Nothing saved.')
@@ -155,6 +166,7 @@ class FileSession:
                     from .engineering_judgment import reviewed_file
                     reviewed_file(self.root, name, before, path.read_text(encoding='utf-8'))
                     if name in self.tests:self.fixed_tests[name]=digest(path)
+                    if self.correctable.pop(name,None) is not None:self.corrected.add(name)
                 item.finish(**({k:result[k] for k in ('file','added','removed','diff') if k in result}),output=json.dumps(result,ensure_ascii=False)[:24000])
                 return result
             except Exception as exc:

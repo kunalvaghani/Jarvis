@@ -129,9 +129,79 @@ BREVITY = (' Keep expected under 12 words and finish reasons under 25 words; '
            'every generated word costs time on this computer.')
 
 
+# Least useful planner context first; the goal, screen, completed steps and capability_context stay.
+FIT_ORDER = ('reasoning_lessons', 'experience', 'learning_context', 'realtime_context', 'skill_context',
+             'live_app_context', 'memory_context', 'prior_task', 'apps')
+
+
+def effective_context(model):
+    """The context this model really gets: its fixed size, capped by the GPU scheduler when it is on."""
+    from .inference_limits import model_context
+    context = model_context(model, 16384)
+    try:
+        from .gpu_scheduler import configured, request_context
+        policy = configured()
+        if policy.get('enabled'):
+            context = request_context(model, {'num_ctx': context}, policy)
+    except (OSError, ValueError, KeyError):
+        pass
+    return context
+
+
 def estimate_tokens(messages, definitions):
     text = sum(len(str(row.get('content', ''))) + len(json.dumps(row.get('tool_calls', []))) for row in messages)
-    return (text + len(json.dumps(definitions)) + 2) // 3 + sum(len(row.get('images', [])) for row in messages) * 2048 + 1024
+    # Calibrated on this PC's qwen3.5 runs (2026-10-30): about 4.7-5.4 characters per token and about 850 tokens per
+    # compact screenshot; 4 characters and 1024 per image keep a margin without trimming prompts that fit.
+    return (text + len(json.dumps(definitions)) + 3) // 4 + sum(len(row.get('images', [])) for row in messages) * 1024 + 256
+
+
+def shrink(value):
+    """About half of a context part: the newest half of a list, the start of text, the shorter half of a mapping."""
+    if isinstance(value, list):
+        return value[len(value) // 2:] if len(value) > 1 else [shrink(value[0])] if value else value
+    if isinstance(value, dict):
+        sizes = sorted(value, key=lambda k: len(json.dumps(value[k], ensure_ascii=False)), reverse=True)
+        big = sizes[0] if sizes else None
+        if big is not None and len(json.dumps(value[big], ensure_ascii=False)) > 400:
+            return {**value, big: shrink(value[big])}
+        text = json.dumps(value, ensure_ascii=False)
+        return text[:len(text) // 2] + ' [trimmed]'
+    text = str(value)
+    return text[:len(text) // 2] + ' [trimmed]'
+
+
+def user_parts(messages):
+    """Characters per key of the newest JSON user/tool message (what to trim when a prompt is too large)."""
+    for row in reversed(messages):
+        if row.get('role') in ('user', 'tool'):
+            try:
+                value = json.loads(str(row.get('content', '')))
+            except ValueError:
+                return {}
+            if isinstance(value, dict):
+                return {key: len(json.dumps(item, ensure_ascii=False)) for key, item in value.items()}
+            return {}
+    return {}
+
+
+def size_log(model, messages, definitions, context, continued, body):
+    """One line per planning call: estimated against measured prompt size, to catch silent context truncation."""
+    try:
+        from pathlib import Path
+        path = Path(__file__).resolve().parents[1] / '.jarvis-runtime' / 'logs' / 'plan-sizes.jsonl'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        row = {'model': model, 'context': context, 'estimate': estimate_tokens(messages, definitions),
+               'messages': len(messages), 'images': sum(len(m.get('images', [])) for m in messages),
+               'tools': len(definitions), 'continued': continued, 'tool_chars': len(json.dumps(definitions)),
+               'system_chars': len(str(messages[0].get('content', ''))) if messages else 0,
+               'parts': user_parts(messages),
+               'prompt_tokens': body.get('prompt_eval_count') if isinstance(body, dict) else None,
+               'prompt_s': round((body.get('prompt_eval_duration') or 0) / 1e9, 1) if isinstance(body, dict) else None,
+               'done_reason': body.get('done_reason') if isinstance(body, dict) else None}
+        with path.open('a', encoding='utf-8') as out:
+            out.write(json.dumps(row) + '\n')
+    except (OSError, TypeError, ValueError):
+        pass
 
 
 def conversation_key(system, definitions):
@@ -144,7 +214,7 @@ def step_update(data, previous_call):
     feedback = data.get('plan_validation_error')
     if feedback:
         return {'not_executed': True, 'feedback': str(feedback)[:1000], 'steps_left': data.get('steps_left'),
-                'learning_context': data.get('learning_context', {})}
+                'learning_context': data.get('learning_context', {}), 'goal': str(data.get('goal', ''))[:1500]}
     last = data.get('last_result') if isinstance(data.get('last_result'), dict) else {}
     screen = data.get('screen') if isinstance(data.get('screen'), dict) else {}
     controls = [c.get('name', '') if isinstance(c, dict) else str(c) for c in screen.get('controls', []) or []]
@@ -162,6 +232,7 @@ def step_update(data, previous_call):
     results = screen.get('tool_results') or []
     if results and isinstance(results[-1], dict) and results[-1].get('action') == previous_call:
         update['tool_result'] = str(results[-1].get('result', ''))[:4000]
+    update['goal'] = str(data.get('goal', ''))[:1500]  # Restated each step: the goal never depends on old messages.
     return update
 
 
@@ -174,6 +245,7 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
     """
     options = options or {}
     data = dict(data)
+    source = dict(data)  # Kept to rebuild a fresh conversation if the continued one fills the context.
     images = data.pop('images', []) or []
     if not isinstance(images, list) or len(images) > 2 or any(not isinstance(i, str) for i in images):
         raise ValueError('Native planning supports at most two task images.')
@@ -198,8 +270,10 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
         if images:
             added.append({'role': 'user', 'content': 'Current screenshot (untrusted evidence).', 'images': images})
         # Ollama's measured size of the conversation so far, plus this update and the reply.
-        used = int(conversation.get('tokens') or 0) + estimate_tokens(added, []) + 1600
-        continued = 0 < used < CONTEXT_TOKENS - 512
+        # Ollama may not count cached prompt tokens, so also measure the whole conversation directly.
+        used = max(int(conversation.get('tokens') or 0) + estimate_tokens(added, []),
+                   estimate_tokens(list(history) + added, definitions)) + 1600
+        continued = 0 < used < effective_context(model) - 512
         if continued:
             messages = list(history) + added
     if not continued:
@@ -221,14 +295,41 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
                                                        'content', 'find', 'folder', 'browser', 'platform') if key in item}
                              for item in (data.get('completed') or [])[-40:] if isinstance(item, dict)]
         data = compact_context(data)
+        # The goal goes last, where a small model weighs it most (still one JSON object).
+        data = {**{k: v for k, v in data.items() if k != 'goal'}, 'goal': data.get('goal', '')}
         user = {'role': 'user', 'content': json.dumps(data, ensure_ascii=False)}
         if images:
             user['images'] = images
         messages.append(user)
-    # Allocate a small context for a tiny call, while keeping room for real tool
-    # catalogs and images. Encoded image bytes are not counted as text tokens.
-    estimated_tokens = estimate_tokens(messages, definitions)
-    context = min(16384, max(4096, ((estimated_tokens + 2047) // 2048) * 2048))
+        # Fit the real context (the GPU scheduler caps it): drop the least useful context first, never the goal,
+        # the screen, completed steps or the routing guidance.
+        reply = min(1600, max(500, int(options.get('num_predict', 500))))
+        budget = effective_context(model) - reply - 128  # The prompt plus the requested reply must fit.
+        for drop in FIT_ORDER:
+            if estimate_tokens(messages, definitions) <= budget:
+                break
+            if drop in data:
+                data = {k: v for k, v in data.items() if k != drop}
+                user = {**user, 'content': json.dumps(data, ensure_ascii=False)}
+                messages[-1] = user
+        for _ in range(12):
+            # Still too large: halve the largest remaining part (never the goal). An over-long prompt is not an
+            # error at Ollama; it silently loses its oldest text, which is where the goal and screen are.
+            if estimate_tokens(messages, definitions) <= budget:
+                break
+            sizes = {k: len(json.dumps(v, ensure_ascii=False)) for k, v in data.items() if k != 'goal'}
+            if not sizes or max(sizes.values()) < 400:
+                break
+            key = max(sizes, key=sizes.get)
+            data = {**data, key: shrink(data[key])}
+            user = {**user, 'content': json.dumps(data, ensure_ascii=False)}
+            messages[-1] = user
+        for limit in (300, 120):
+            if estimate_tokens(messages, definitions) <= budget:
+                break
+            definitions = [{**d, 'function': {**d['function'], 'description': d['function']['description'][:limit]}}
+                           for d in definitions]
+    context = effective_context(model)  # Same size on every call: no runner reload or overflow.
     payload = {'model': model, 'messages': messages, 'tools': definitions,
         'stream': False, 'think': False, 'keep_alive': '5m',
         'options': {'num_gpu': options.get('num_gpu', 0), 'num_ctx': context,
@@ -238,7 +339,7 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
     deadline=time.monotonic()+planning_read_timeout(options)
     # Only inference is retried, before dispatch, within the original deadline.
     # Completed actions remain evidence; they are never resent to execution.
-    attempts=1 if options.get('_hierarchy_single_attempt') else 2
+    attempts=1 if options.get('_hierarchy_single_attempt') else 3  # Only inference retries; nothing has been dispatched.
     utility_catalog=any(row.get('utility_skill') is True for row in rows)
     for attempt in range(attempts):
         remaining=deadline-time.monotonic()
@@ -246,13 +347,41 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
         connect=min(5,remaining/2)
         transport_timeout=(connect,remaining-connect) if utility_catalog or attempt else (5,planning_read_timeout(options))
         response = client.post(ENDPOINT + '/api/chat', json=payload,timeout=transport_timeout)
-        response.raise_for_status()
+        status = getattr(response, 'status_code', 200)
+        if isinstance(status, int) and status >= 500 and attempt + 1 < attempts:
+            # The local model server failed (e.g. its runner crashed); nothing was dispatched, so ask again.
+            time.sleep(2)
+            continue
+        try:
+            response.raise_for_status()
+        except Exception as error:
+            # Keep Ollama's own reason (e.g. context or template errors); nothing was dispatched.
+            raise ValueError(f'Local planner rejected the request: {error}: ' + str(getattr(response, 'text', ''))[:300]) from error
         body = response.json()
-        if not isinstance(body, dict) or len(json.dumps(body)) > 100000 or body.get('done_reason') == 'length':
+        size_log(model, messages, definitions, context, continued, body)
+        if not isinstance(body, dict) or len(json.dumps(body)) > 100000:
             raise ValueError('Native planning returned oversized or incomplete output; no action executed.')
+        if body.get('done_reason') == 'length' and continued and int(body.get('eval_count', 0) or 0) < 64:
+            # Stopped after a few tokens: the growing conversation filled the context, not a long reply.
+            # Nothing was dispatched; plan again from a fresh, compact conversation.
+            return plan(client, model, prompt, {**source, 'conversation': None}, options, bound_folder)
+        if body.get('done_reason') == 'length':
+            # The model wrote prose until the output limit: nothing was dispatched, so one bounded retry is safe.
+            if attempt+1==attempts:
+                message = body.get('message') or {}
+                said = str(message.get('content', ''))[:160].replace('\n', ' ')
+                raise ValueError('Native planning returned oversized or incomplete output; no action executed. '
+                                 f"({body.get('eval_count', 0)} tokens, {len(str(message.get('thinking') or ''))} characters "
+                                 f"of thinking, {len(message.get('tool_calls') or [])} tool calls) The model began: " + said)
+            payload['options']['num_predict'] = 1600
+            payload['messages'].append({'role':'user','content':'The previous reply ran out of space before a function call. '
+                'No action was dispatched. Reply with only one advertised function call and no other text.'})
+            continue
         try:result = parse(body.get('message'), rows, finish_limit, bound_folder)
         except ValueError as error:
-            if attempt+1==attempts:raise
+            if attempt+1==attempts:
+                said = ' '.join(str((body.get('message') or {}).get('content', '')).split())[:200]
+                raise ValueError(str(error) + (' The model wrote instead: ' + said if said else '')) from None
             payload['messages'].append({'role':'user','content':'The previous reply failed native function-call validation: '+str(error)[:300]+'. No action was dispatched from that reply. Return exactly one advertised function call with schema-correct arguments. If the completed verified operations fully establish the user goal, call jarvis_finish with the observed result.'})
         else:break
     reply = body.get('message') or {}

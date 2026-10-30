@@ -1308,7 +1308,8 @@
     "d drive": "D:\\",
     "ollama": "D:\\Ollama",
     "olamind": "D:\\Ollama",
-    "olamide": "D:\\Ollama"
+    "olamide": "D:\\Ollama",
+    "jarvis test folder": "D:\\Phython Project\\TestCodes\\jarvis-control-tests"
   },
   "files": {},
   "file_catalog": ".jarvis-runtime/state/file_catalog.json",
@@ -1557,6 +1558,7 @@
       "D:\\OllamaModels"
     ],
     "native_max_turns": 64,
+    "native_test_correction": true,
     "native_max_repairs": 6,
     "native_max_workers": 2,
     "native_predict": 4000

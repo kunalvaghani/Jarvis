@@ -67,9 +67,14 @@ class FolderLookup:
             if drive:
                 return self.catalog._exists(drive + ':\\', 'folder')
             raise ValueError('Name a folder or a drive.')
+        # "my jarvis test", "the jarvis test folder" and "jarvis test folder" all name the alias "jarvis test folder".
+        spoken = set()
+        for name in (key(query), key(raw)):
+            bare = re.sub(r'^(?:my|the|our) ', '', name)
+            spoken |= {name, bare, re.sub(r' folder$', '', bare), re.sub(r' folder$', '', bare) + ' folder'}
         for alias, path in self.catalog.config.get('folders', {}).items():
             path = str((self.base / path).resolve())
-            if key(alias) in {key(query), key(raw)} and self.scoped(path, drive):
+            if key(alias) in spoken and self.scoped(path, drive):
                 return self.catalog._exists(path, 'folder')
         # Read just drive-root entries; newly created top-level folders need no full scan.
         live = []

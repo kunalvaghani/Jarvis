@@ -65,3 +65,14 @@ def planning_limits(options):
     if not math.isfinite(total):
         raise ValueError('Maximum planning time must be a finite number of seconds.')
     return idle, min(3600, max(idle + 30, total))
+
+
+# One context size per model across every request type. Ollama's llama.cpp runner keeps the size it loaded
+# with: a later request asking for more fails ("exceeds the available context size") or crashes the runner.
+MODEL_CONTEXT = {'qwen3.5:9b': 16384, 'jarvis-codex-qwen3.5:9b': 16384}
+
+
+def model_context(model, requested):
+    """The fixed context for a known model (never smaller than requested), else the requested size."""
+    fixed = MODEL_CONTEXT.get(str(model))
+    return max(int(requested or 0), fixed) if fixed else requested

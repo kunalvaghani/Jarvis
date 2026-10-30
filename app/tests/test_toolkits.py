@@ -337,7 +337,8 @@ class ToolkitTests(unittest.TestCase):
             return {"verified": True}
         brain.client.request.side_effect = inference
         self.assertIn("Finished", brain.run("Read notes.txt in project and draft tests for it", lambda: False))
-        self.assertEqual(brain.visual_screen.call_count, 1)
+        # Code work is routed to file/API tools, which read the source themselves: no startup screenshot (2026-10-30).
+        self.assertEqual(brain.visual_screen.call_count, 0)
         brain.observe_after_action.assert_not_called()
         self.assertLessEqual(len(self.actions.task_state.snapshot()["plan"]["completed"][0]["result"]), 500)
 

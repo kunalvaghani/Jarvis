@@ -11,7 +11,7 @@ from pathlib import Path
 
 SMALL = {'qwen3.5:2b', 'qwen3.5:4b'}
 DEFAULTS = {'enabled': True, 'execution_model': 'qwen3.5:4b', 'reasoning_model': 'qwen3.5:9b'}
-HARD = re.compile(r'\b(debug|refactor|implement|design|architecture|research|compare|autonomous|unreal|blender|code|script|unknown|unfamiliar|delete|send|publish|install|password|secret)\b', re.I)
+HARD = re.compile(r'\b(debug|refactor|implement|design|architecture|research|compare|autonomous|unreal|blender|code|script|unknown|unfamiliar|delete|send|publish|install|password|secret|type|write|compose|draft|report|fill|form)\b', re.I)
 ROUTINE = re.compile(r'^(?:please )?(?:open|show|launch|find|locate|search|play|pause|resume|skip|mute|unmute|set volume|list|read|create|append)\b', re.I)
 
 

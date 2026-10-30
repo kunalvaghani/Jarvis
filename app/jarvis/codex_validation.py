@@ -118,6 +118,34 @@ def validate_gui_test_roots(tree,plan):
             raise ValueError('GUI test draft patches the application/window constructor. Use the original owned GUI instead. Nothing saved.')
 
 
+def validate_test_correction(old, new):
+    """A frozen-test correction keeps every test and every assertion except at most one changed or removed."""
+    def shape(source):
+        tree=ast.parse(source)
+        tests={n.name for n in ast.walk(tree) if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test')}
+        checks=[ast.unparse(n) for n in ast.walk(tree) if isinstance(n,ast.Call) and (
+            isinstance(n.func,ast.Attribute) and n.func.attr.startswith('assert'))]+[
+            ast.unparse(n) for n in ast.walk(tree) if isinstance(n,ast.Assert)]
+        return tests,checks
+    old_tests,old_checks=shape(old);new_tests,new_checks=shape(new)
+    if old_tests-new_tests:
+        raise ValueError('A test correction must keep every test method; missing: '+', '.join(sorted(old_tests-new_tests))+'. Nothing saved.')
+    remaining=list(new_checks)
+    for check in old_checks:
+        if check in remaining:remaining.remove(check)
+    kept=len(old_checks)-(len(new_checks)-len(remaining))
+    if kept>1:
+        raise ValueError('A test correction may change or remove only the one assertion that contradicts the goal; '
+                         +str(kept)+' original assertions changed. Nothing saved.')
+    tree=ast.parse(new)
+    for node in ast.walk(tree):
+        if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef)) and node.name.startswith('test') and not any(
+                isinstance(n,ast.Assert) or isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr.startswith('assert')
+                for n in ast.walk(node)):
+            raise ValueError('A test correction must leave '+node.name+' checking behaviour: correct the wrong expectation '
+                             'instead of removing the only assertion. Nothing saved.')
+
+
 def validate_test_draft(name, content, plan, goal=''):
     """Reject an undiscoverable new test before its assertions become immutable."""
     if not any(c.get('kind')=='python_tests' and c.get('path')==name for c in plan.get('checks',[])):
@@ -147,6 +175,17 @@ def validate_test_draft(name, content, plan, goal=''):
                 replacement |= any(isinstance(t,ast.Subscript) and isinstance(t.slice,ast.Constant) and t.slice.value=='command' for t in targets)
             if replacement:
                 raise ValueError('GUI behavioral test draft replaces application event bindings or button commands (line '+str(node.lineno)+'). Exercise original controls with invoke/event_generate and process events; do not register test callbacks or manufacture their behavior. Nothing saved; correct this draft before assertions freeze.')
+    planned={f['path'][:-3].replace('\\','/').replace('/','.') for f in plan.get('files',[])
+             if isinstance(f.get('path'),str) and f['path'].endswith('.py')}
+    for node in ast.walk(tree):
+        names=[node.module] if isinstance(node,ast.ImportFrom) and node.module and not node.level else (
+            [a.name for a in node.names] if isinstance(node,ast.Import) else [])
+        for module in names:
+            # A dotted path ending in a planned module the plan does not place there cannot import.
+            if module not in planned and '.' in module and module.split('.')[0] not in sys.stdlib_module_names and any(module.endswith('.'+p) for p in planned):
+                target=next(p for p in planned if module.endswith('.'+p))
+                raise ValueError('Test draft imports '+module+' (line '+str(node.lineno)+'), but the planned module is '+target+
+                    ' at the project root, and the test runs from that root. Import it as '+target+'. Nothing saved; correct this draft before its assertions are frozen.')
     modules={'unittest'};bases=set();standard={'TestCase','IsolatedAsyncioTestCase'}
     for node in tree.body:
         if isinstance(node,ast.Import):
@@ -321,7 +360,23 @@ def contract(root, goal, args, previous=None, partial=False):
         direct=any(c['path']==item['path'] and c['kind'] in {'python_tests','node_tests','browser'} for c in checks)
         package=suffix in {'.js','.mjs','.cjs','.jsx','.ts','.tsx'} and any(c['kind']=='npm_test' for c in checks)
         if not (direct or package):raise ValueError('Declared test file has no executable test check: '+item['path'])
+    entry=printed_entrypoint(goal,files,checks)
+    if entry:result['checks']=checks+[{'kind':'python_script','path':entry}]
     return result
+
+
+def prints_output(goal):
+    """The user asked for a one-shot console program that prints something."""
+    return bool(re.search(r'\b(?:\w+\.py|program|script)\s+(?:that\s+|which\s+|to\s+)?(?:prints?|outputs?)\b', goal, re.I)
+                and not re.search(r'\b(?:tkinter|turtle|gui|graphical|server|website|flask|fastapi|input|interactive)\b', goal, re.I))
+
+
+def printed_entrypoint(goal, files, checks):
+    """The Python entrypoint a printing program must actually run, when no script check runs it yet."""
+    if not prints_output(goal):return None
+    entries=[f['path'] for f in files if f.get('role')=='entrypoint' and str(f.get('path','')).endswith('.py')]
+    if len(entries)!=1 or any(c.get('kind')=='python_script' and c.get('path')==entries[0] for c in checks):return None
+    return entries[0]
 
 
 def declare(root, run, args):
@@ -638,6 +693,8 @@ def validate_project(root, run, goal, changed, plan, cancelled, report, deferred
                 except (OSError,ValueError,TypeError):outcome['runtime_facts_unavailable']=True
             result.setdefault('executed_checks',[]).append({k:outcome[k] for k in ('kind','path','exit_code')})
             if outcome['exit_code']:raise ValueError('Check failed (exit '+str(outcome['exit_code'])+'): '+outcome['output'][-8000:])
+            if kind=='python_script' and prints_output(goal) and not outcome['output'].strip():
+                raise ValueError('Running '+check['path']+' printed nothing, but the user asked for a program that prints its result. Call the logic from the script entry (if __name__ == "__main__": print(...)).')
             test_evidence(kind,outcome['output'])
             result['checks'].append(outcome)
         except (OSError,ValueError) as error:

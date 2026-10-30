@@ -1,5 +1,7 @@
 # Jarvis documentation
 
+- [Complete technical context: architecture, tools, MCPs, APIs, models, limitations and recorded benchmarks — 2026-10-30](JARVIS_FULL_CONTEXT.md)
+
 - [GPU/model/voice/UI Phase 2, configuration, current rendered preview and verification limits — 2026-10-15 IST](phase2-gpu-voice-ui.md)
 
 Start with the [application guide](../README.md) and [project structure](project-structure.md).

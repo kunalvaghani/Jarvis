@@ -77,9 +77,10 @@ def local_prompt_format(client, model):
 
 
 def chat(client, options, messages, structured=False):
+    from .inference_limits import model_context
     payload = {"model": options.get("model", "qwen3:4b"), "messages": messages,
         "stream": bool(options.get('stream', False)), "think": options.get("think", False), "keep_alive": options.get('keep_alive', '5m'),
-        "options": {"num_ctx": options.get("num_ctx", 4096),
+        "options": {"num_ctx": model_context(options.get("model", "qwen3:4b"), options.get("num_ctx", 4096)),
                     "num_predict": options.get("num_predict", 600),
                     "temperature": options.get("temperature", .2),
                     "num_gpu": options.get("num_gpu", 0)}}

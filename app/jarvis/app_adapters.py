@@ -589,11 +589,31 @@ def _blender(actions, request, cancelled):
     return result['value']
 
 
+def blender_object(item):
+    """Unambiguous model shapes into template vectors: {x,y,z} -> [x,y,z]; cylinder/cone radius+depth -> scale."""
+    if not isinstance(item, dict):
+        return item
+    item = dict(item)
+    for key in ('location', 'scale'):
+        value = item.get(key)
+        if isinstance(value, dict) and set(value) <= {'x', 'y', 'z'} and value:
+            item[key] = [value.get('x', 0 if key == 'location' else 1), value.get('y', 0 if key == 'location' else 1),
+                         value.get('z', 0 if key == 'location' else 1)]
+    scale = item.get('scale')
+    if isinstance(scale, dict) and set(scale) <= {'radius', 'depth', 'height'} and scale:
+        radius = scale.get('radius', 1)
+        depth = scale.get('depth', scale.get('height', 2))
+        # Blender's default cylinder/cone is radius 1, depth 2; a sphere uses the radius on every axis.
+        item['scale'] = [radius, radius, radius] if item.get('type') == 'sphere' else [radius, radius, depth / 2]
+    return item
+
+
 def blender_task(actions, step, cancelled):
     arguments = _arguments(step)
     operation = arguments.get('operation', 'inspect')
     root = _root(actions, step, cancelled)
-    path = scoped_path(root, step['value'])
+    named = re.search(r'[\w .()-]*?([\w.()-]+\.blend)\b', str(step.get('value', '')), re.I)
+    path = scoped_path(root, named.group(1) if named else step['value'])  # "cylinder.blend, radius 1m" -> cylinder.blend
     if path.suffix.casefold() != '.blend':
         raise ValueError('Name a .blend file.')
     if operation == 'inspect':
@@ -602,7 +622,9 @@ def blender_task(actions, step, cancelled):
                        **_blender(actions, {'operation': 'inspect', 'path': str(path)}, cancelled))
     if operation != 'create':
         raise ValueError('Use create or inspect.')
-    objects = arguments.get('objects')
+    objects = [blender_object(item) for item in arguments.get('objects')] if isinstance(arguments.get('objects'), list) else None
+    if arguments.get('export') == {}:
+        arguments = {k: v for k, v in arguments.items() if k != 'export'}  # An empty export means none.
     if not isinstance(objects, list) or not 1 <= len(objects) <= 100:
         raise ValueError('Create needs 1-100 objects.')
     names = set()

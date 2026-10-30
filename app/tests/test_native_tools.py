@@ -273,3 +273,76 @@ class DiscoveryTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+def test_a_reply_cut_off_by_the_output_limit_is_retried_then_refused():
+    from unittest.mock import Mock
+    from jarvis.native_tools import plan
+    cut = {'done_reason': 'length', 'message': {'content': 'Let me think about this goal' * 20}}
+    good = {'done_reason': 'stop', 'message': {'content': '', 'tool_calls': [
+        {'function': {'name': 'jarvis_finish', 'arguments': {'reason': 'Done: 68,315'}}}]}}
+    replies = [cut, good]
+    client = Mock()
+    client.post.side_effect = lambda *a, **k: Mock(json=Mock(return_value=replies.pop(0)), raise_for_status=Mock())
+    result = plan(client, 'qwen3.5:9b', 'Plan.', {'goal': 'g', 'tools': [{'action': 'open', 'description': 'Open.'}]}, {})
+    assert result['done'] is True and client.post.call_count == 2
+    retry = client.post.call_args_list[1].kwargs['json']
+    assert retry['options']['num_predict'] > 500 and 'ran out of space' in retry['messages'][-1]['content']
+    replies[:] = [cut, cut, cut]  # Bounded: every attempt cut off, then a refusal.
+    client.post.reset_mock()
+    import pytest
+    with pytest.raises(ValueError, match='incomplete output'):
+        plan(client, 'qwen3.5:9b', 'Plan.', {'goal': 'g', 'tools': [{'action': 'open', 'description': 'Open.'}]}, {})
+
+
+def test_a_full_context_restarts_from_a_fresh_conversation_instead_of_failing():
+    from unittest.mock import Mock
+    from jarvis.native_tools import plan
+    rows = [{'action': 'open', 'description': 'Open.'}]
+    first = plan(Mock(post=Mock(return_value=Mock(raise_for_status=Mock(), json=Mock(return_value={
+        'done_reason': 'stop', 'prompt_eval_count': 100, 'eval_count': 20,
+        'message': {'content': '', 'tool_calls': [{'function': {'name': 'open', 'arguments': {'value': 'notepad', 'expected': 'open'}}}]}})))),
+        'qwen3.5:9b', 'Plan.', {'goal': 'g', 'tools': rows}, {})
+    overflow = {'done_reason': 'length', 'eval_count': 27, 'message': {'content': ''}}
+    done = {'done_reason': 'stop', 'message': {'content': '', 'tool_calls': [
+        {'function': {'name': 'jarvis_finish', 'arguments': {'reason': 'Done'}}}]}}
+    replies = [overflow, done]
+    client = Mock()
+    client.post.side_effect = lambda *a, **k: Mock(json=Mock(return_value=replies.pop(0)), raise_for_status=Mock())
+    result = plan(client, 'qwen3.5:9b', 'Plan.', {'goal': 'g', 'tools': rows, 'conversation': first['conversation'],
+                                                  'last_result': {'verified': True, 'result': 'opened'}}, {})
+    assert result['done'] is True and client.post.call_count == 2
+    fresh = client.post.call_args_list[1].kwargs['json']['messages']
+    assert fresh[0]['role'] == 'system' and len(fresh) == 2  # Rebuilt from scratch, not the overflowing history.
+
+
+def test_a_crashed_model_server_is_asked_again_before_anything_is_dispatched(monkeypatch):
+    from unittest.mock import Mock
+    import time
+    from jarvis.native_tools import plan
+    monkeypatch.setattr(time, 'sleep', lambda s: None)
+    crash = Mock(status_code=500, text='{"error":"EOF"}', raise_for_status=Mock(side_effect=OSError('500 Server Error')))
+    good = Mock(status_code=200, raise_for_status=Mock(), json=Mock(return_value={'done_reason': 'stop', 'message': {
+        'content': '', 'tool_calls': [{'function': {'name': 'jarvis_finish', 'arguments': {'reason': 'Done'}}}]}}))
+    client = Mock()
+    client.post.side_effect = [crash, good]
+    result = plan(client, 'qwen3.5:9b', 'Plan.', {'goal': 'g', 'tools': [{'action': 'open', 'description': 'Open.'}]}, {})
+    assert result['done'] is True and client.post.call_count == 2
+
+
+def test_an_oversized_request_is_fitted_under_the_real_context_and_keeps_its_goal(monkeypatch):
+    from unittest.mock import Mock
+    import json
+    from jarvis import native_tools
+    monkeypatch.setattr(native_tools, 'effective_context', lambda model: 8192)
+    done = {'done_reason': 'stop', 'message': {'content': '', 'tool_calls': [
+        {'function': {'name': 'jarvis_finish', 'arguments': {'reason': 'Done'}}}]}}
+    client = Mock(post=Mock(return_value=Mock(status_code=200, raise_for_status=Mock(), json=Mock(return_value=done))))
+    goal = 'Open Blender, add a cylinder named JarvisCylinder and save cylinder.blend'
+    huge = {'goal': goal, 'tools': [{'action': 'open', 'description': 'Open. ' * 200}],
+            'screen': {'title': 'Desktop', 'controls': ['control ' * 20] * 400},
+            'capability_context': {'groups': ['capability ' * 30] * 200}, 'route_hint': 'route ' * 4000}
+    native_tools.plan(client, 'qwen3.5:9b', 'Plan.', huge, {})
+    payload = client.post.call_args.kwargs['json']
+    assert native_tools.estimate_tokens(payload["messages"], payload["tools"]) <= 8192 - 500 - 128
+    assert json.loads(payload['messages'][-1]['content'])['goal'] == goal

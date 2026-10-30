@@ -79,6 +79,10 @@ class FakeInput:
     def text(self, text, cancel=None):
         self.events.append(('text', text))
 
+    def enter(self, text, cancel=None):
+        self.events.append(('text', text))
+        return 'keys'
+
     def keys(self, text, repeat=1, cancel=None):
         self.events.append(('keys', text, repeat))
 

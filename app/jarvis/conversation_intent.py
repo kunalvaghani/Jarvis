@@ -20,6 +20,8 @@ ACTION = re.compile(
     r"read|check|show|close|quit|go to|visit|browse|listen|delete|remove|move|label|archive|mark|group|speak|"
     r"type|dictate|email|download|save|run|set|turn|pause|resume|stop|skip|list|edit|update|change|reply|"
     r"select|click|choose|tap|press|scroll|mute|unmute|put on|"
+    r"use|calculate|compute|work out|fill(?: in| out)?|apply|draw|enter|tick|untick|add|rename|copy|paste|"
+    r"summari[sz]e|compare|go through|look through|"
     r"(?:next|previous) (?:song|track|video|one|result|page))\b", re.I)
 # Speech recognition often hears a third-person verb ("opens spotify", "plays the song").
 PLURAL_VERB = re.compile(r"^(open|play|launch|search|select|click|choose|close|pause|skip)s\b", re.I)

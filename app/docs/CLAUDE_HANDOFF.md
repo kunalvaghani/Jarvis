@@ -1,5 +1,65 @@
 # Cumulative Claude handoff
 
+## Safe pause: live control rounds 19–23 — 2026-10-30 IST
+
+**PAUSED_BY_USER at a safe point.** Live round 23 was stopped while H3 was still in workload planning, before any write to the test folder. No Jarvis test processes are left running. Everything since commit `b08c192` is **uncommitted** on branch `claude_ControlArchitect`. The full regression suite has not been rerun on these changes.
+
+**Live acceptance status** (3 consecutive passes needed per case):
+
+| Case | Status | Latest evidence |
+|---|---|---|
+| S1, S2, S4 | Accepted | Earlier rounds |
+| S3 (Notepad list) | Failing | Round 23: saved, but typed as bare lines (`milk`, `eggs`, `bread`) without the required title or points. The planner did not apply the list rule. |
+| H3 (VS Code FizzBuzz) | Failing | Round 22: the coder wrote a wrong frozen test and the judge was not reached; verdict logging is now added. Round 23 was stopped in planning. |
+| H2 (Blender) | Failing | Round 22: empty `blender_task` content and folder `jarvis`. Both are fixed in code; not yet re-run. |
+| H4, H5, H6 | Not run | |
+| H1 (Workday) | Waiting | Needs the user's Workday sign-in in the personal profile. |
+
+**Fixes made this session (unit-tested; not yet live-verified):**
+- **Coder:**
+  - a test draft that imports a planned module through an invented package is rejected (`codex_validation.validate_test_draft`);
+  - a goal like "main.py that prints X" adds a `python_script` check that fails on empty output (`printed_entrypoint`);
+  - one bounded correction of a frozen test is allowed only after the model resubmits the same implementation three times, an independent local judge says a correct program could not pass the assertion, and the correction changes at most one assertion and keeps every test method checking behaviour (`native_coding.test_correction`, `coding_files.allow_test_correction`, config `brain.native_test_correction`). Judge verdicts are logged to `<native-code run>/test-corrections.jsonl`.
+- **After coding:** a request naming VS Code opens the project there (`actions.py`).
+- **Planner:**
+  - the goal is restated in every step update;
+  - the context estimate is calibrated at 4 characters per token and 1,024 tokens per image (measured on this machine: about 4.7–5.4 characters per token and about 850 per image);
+  - oversized prompts halve their largest part, never the goal;
+  - every planner call is logged to `.jarvis-runtime/logs/plan-sizes.jsonl`;
+  - a needless "what is the goal" question mid-task is answered once;
+  - composing and typing goals use the reasoning model.
+- **Control:**
+  - new `app_act save_as` (Save As dialog, refuses to overwrite, verifies the file on disk);
+  - a key chord in the value field is treated as `key`;
+  - an empty `type` is refused;
+  - plain-text content is accepted for text operations;
+  - after `type`, the editor is read back and a mismatch is reported as a failure;
+  - Notepad's "Cannot find file" notice is dismissed, and a fresh empty tab is verified.
+- **Brain:**
+  - a shortened name for one named folder resolves to it, also for document tools;
+  - `fill_text` accepts the user's titled list format.
+- **Test harness:**
+  - scripted approvals approve only cards naming the requested file;
+  - archiving uses an atomic rename and closes only the VS Code window showing that test folder.
+  - The user's request to remove approvals for new-file creation was blocked by the safety classifier and not applied.
+
+**Next actions:**
+1. S3: find why the planner typed bare lines (check that the list rule reaches the step prompt).
+2. Re-run S3, H3 and H2.
+3. Run H4, H5 and H6.
+4. Run the full regression suite and `launcher --check`.
+5. Update the READMEs and PROGRESS.md, then commit.
+
+## Consolidated technical context — 2026-10-30 IST
+
+Added [JARVIS_FULL_CONTEXT.md](JARVIS_FULL_CONTEXT.md), a static working-tree reference covering request flow, model and voice roles, source tool declarations, actual configured MCP allowlists, API catalog, dependencies, state, privacy/recovery boundaries and dated benchmark provenance. Linked from both READMEs and the documentation index. No runtime source/configuration or frozen campaign artifact was changed for this documentation request; no application/module import, inference, account operation, package installation, benchmark or campaign resume ran.
+
+The report distinguishes 33 core literal declarations, 109 adapter literal declarations, 42 conditional utility profiles and 82 public API catalog entries from effective runtime exposure. Saved speech selection is Kokoro; older F5-selected prose is stale. Existing later live JSONL receipts show S3/H2/H3 failures despite earlier progress prose saying the live plan had not run. S4 records passed=true with status=error and needs its case oracle to interpret. These existing untracked receipts are local evidence, not committed release acceptance.
+
+**Documentation checks:** 85 relative file links resolved, 19 selected source SHA-256 bindings matched, code fences balanced, narrow credential-pattern scan passed and `git diff --check` reported no whitespace errors. These static checks do not certify application behavior or complete secret detection.
+
+**Unresolved / next action:** retain the 39-failure historical regression baseline, failed live-task evidence, Gmail reconnect/source validation, browser sign-in, security and physical voice/endurance gates. Diagnose remaining task failures against the exact active source in a separately authorized implementation session. The repair campaign stays PAUSED_BY_USER; its frozen artifacts and original acceptance remain unchanged. Documentation verification checks relative links, declaration/API counts, benchmark transcription and selected source SHA-256 bindings; no fresh launcher or live acceptance result is claimed.
+
 ## Browser + PC control rework, Phase 2 routes 3 and 4 — 2026-10-30 IST
 
 Branch `claude_ControlArchitect`. Live checklist: [rework PROGRESS](rework/PROGRESS.md).

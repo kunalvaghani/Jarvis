@@ -112,21 +112,40 @@ class Input:
                     self._guard(cancel)
                     self._send(self._key_rows(codes))
 
-    def text(self, text: str, cancel: Optional[CancelToken] = None, chunk: int = 64) -> None:
+    def text(self, text: str, cancel: Optional[CancelToken] = None, chunk: int = 64, pace: float = 0.0) -> None:
         if len(text) > 20_000:
             raise ControlError('Typed text is limited to 20,000 characters.', ErrorCategory.INVALID_ARGUMENTS)
         units = text.replace('\r\n', '\n').encode('utf-16-le')
         with self.locks.foreground_input(self.owner, cancel=cancel):
             for start in range(0, len(units), chunk * 2):
                 self._guard(cancel)
-                rows = []
+                rows: List[INPUT] = []
                 for offset in range(start, min(len(units), start + chunk * 2), 2):
                     code = int.from_bytes(units[offset:offset + 2], 'little')
-                    if code == 10:  # Newline as a real Enter key: editors ignore a Unicode LF.
-                        rows += self._key_rows([VK['enter']])
+                    if code == 10:
+                        # Newline as a real Enter key (editors ignore a Unicode LF), sent on its own with a pause:
+                        # characters queued right behind an Enter were dropped by Notepad (measured 2026-10-30).
+                        self._send(rows)
+                        rows = []
+                        self._send(self._key_rows([VK['enter']]))
+                        time.sleep(.04)
                         continue
                     rows += [INPUT(1, _UNION(ki=KEYBDINPUT(0, code, KEYEVENTF_UNICODE | up, 0, 0))) for up in (0, KEYEVENTF_KEYUP)]
                 self._send(rows)
+                if pace:
+                    time.sleep(pace)
+
+    def enter(self, text: str, cancel: Optional[CancelToken] = None) -> str:
+        """Put text at the cursor reliably: short single-line text in one batch, other text paced per character.
+
+        Batched keystrokes lost characters after Enter and capitals after a space in Windows 11 Notepad (measured
+        2026-10-30); one character at a time with a short gap lets the editor keep up. The clipboard is never used.
+        """
+        if chr(10) not in text and len(text) <= 40:
+            self.text(text, cancel)
+            return 'keys'
+        self.text(text, cancel, chunk=1, pace=.015)
+        return 'paced keys'
 
     def _absolute(self, x: int, y: int) -> Tuple[int, int]:
         left, top = int(self.user32.GetSystemMetrics(76)), int(self.user32.GetSystemMetrics(77))

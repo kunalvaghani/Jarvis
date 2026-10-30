@@ -136,3 +136,12 @@ def test_approval_gate_asks_only_for_tier_two_and_fails_closed():
         with pytest.raises(ControlError) as raised:
             ApprovalGate(confirm).require(action(Risk.CONSEQUENTIAL))
         assert raised.value.category is ErrorCategory.APPROVAL_DENIED
+
+
+def test_nat64_addresses_are_judged_by_their_embedded_ipv4():
+    # IPv6-only networks (DNS64/NAT64) map public IPv4 sites into 64:ff9b::/96.
+    public = Policy(resolver=lambda host: ('64:ff9b::2347:b14f', '35.71.177.79'))
+    assert public.check_url('https://the-internet.herokuapp.com/tables').startswith('https://')
+    for wrapped in ('64:ff9b::a00:1', '64:ff9b::a9fe:a9fe', '64:ff9b::7f00:1'):  # 10.0.0.1, 169.254.169.254, 127.0.0.1
+        with pytest.raises(ControlError):
+            Policy(resolver=lambda host, w=wrapped: (w,)).check_url('https://sneaky.example.com/')

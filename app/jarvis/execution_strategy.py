@@ -479,7 +479,8 @@ def hint(goal, offered):
         if word in str(goal).casefold() and not any(r['target'].endswith(target) for r in rows):
             rows.append({'target': word, 'order': [{'method': m.id, 'tool': m.tool, 'tier': m.tier}
                                                    for m in METHODS if target in m.targets and m.tool in offered]})
-    return rows
+    from .route_guide import guide  # Which channel fits each named app/target, incl. screen routes.
+    return rows + guide(goal, offered)
 
 
 TOOLS = {

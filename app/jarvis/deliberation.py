@@ -442,6 +442,9 @@ class Deliberation:
 
 # ---- Phase 5: failure classification and recovery routing -------------------------------------------------------------
 FAILURE_PATTERNS = (
+    # Policy-forbidden (no approval can unlock it) is checked before ordinary permission.
+    ('forbidden', r'not (?:in|on) the allowed|blocked: |is blocked by policy|outside the approved|never (?:automate|control|touch)|'
+                  r'secure desktop|runs as administrator'),
     ('permission', r'approval|denied|permission|not authori[sz]ed|risky|unsafe|not allowed|refused by (?:policy|the user)'),
     ('missing_tool', r'unsupported tool|tool is outside|not registered|no (?:api|structured) (?:or structured )?method|'
                      r'configure environment|tool unavailable|is not installed|no tool'),
@@ -453,7 +456,7 @@ FAILURE_PATTERNS = (
 )
 ROUTES = {'missing_tool': 'pillar_a_capability_discovery', 'broken_skill': 'pillar_a_fix', 'unknown_ui': 'show_me_once',
           'reasoning': 'local_replan_then_cloud_architect', 'planner_structure': 'pillar_c_evidence',
-          'permission': 'stop_request_authorization', 'unknown': 'stop_request_guidance'}
+          'permission': 'stop_request_authorization', 'forbidden': 'refuse', 'unknown': 'stop_request_guidance'}
 MAX_ESCALATIONS_PER_TASK = 3
 
 

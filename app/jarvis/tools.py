@@ -25,12 +25,12 @@ SPECS = (
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
     ToolSpec("browse", "browser", "Only SHOW the user a website in their own browser. Jarvis cannot read, answer from or act on that page; for any goal that needs the page content or interaction use web_open instead."),
     ToolSpec("browser_search", "browser", "Search the web using the exact query."),
-    ToolSpec("web_open", "control", "Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional JSON {\"profile\":\"personal\" ONLY when the user asks to use their signed-in browser, \"new_tab\":true}. Returns the outcome then the page's interactive elements as lines like button \"Search\" [ref_12]. Use those refs with web_act."),
-    ToolSpec("web_read", "control", "Read the current page in Jarvis's Chrome again. value optional: interactive (default), all (also text) or visible. content optional JSON {\"find\":\"words\"} to search elements, or {\"ref\":\"ref_12\"} to read inside one element. Refs change after navigation: read again instead of guessing."),
+    ToolSpec("web_open", "control", "Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional JSON {\"profile\":\"personal\" ONLY when the user asks to use their signed-in browser, \"new_tab\":true}. Returns the outcome then the page's text and elements as lines like text \"Total\" or button \"Search\" [ref_12]. Use those refs with web_act."),
+    ToolSpec("web_read", "control", "Read the current page in Jarvis's Chrome again. value optional: all (default: text and controls), interactive (controls only) or visible (on screen). content optional JSON {\"find\":\"words\"} to search elements, or {\"ref\":\"ref_12\"} to read inside one element. Refs change after navigation: read again instead of guessing."),
     ToolSpec("web_act", "control", "Act on the current page by ref. value=click|double_click|right_click|hover|fill|select|check|type|key|scroll|scroll_to|back|forward|reload|new_tab|switch_tab|close_tab|wait. content JSON: {\"ref\":\"ref_12\"} for element actions; fill/select add \"text\"; check adds \"checked\":true|false; type/key add \"text\" (key examples: Enter, ctrl+a); scroll adds \"direction\":up|down and \"amount\":1-10; tabs use \"tab\":\"tab-2\"; new_tab \"url\"; wait \"seconds\". Returns the result and the page's fresh refs. Clicks on send/buy/delete/submit-like targets ask the user first. Never fills passwords."),
     ToolSpec("app_open", "control", "Open an allowed Windows app (notepad, calculator, explorer, paint) and read its window. value=app name; content optional JSON {\"path\":\"file or folder inside the approved test folder\"}. Returns the window handle and its controls as lines like Button \"Seven\" [u12]."),
     ToolSpec("app_read", "control", "Read a Windows app window's controls with refs. value=part of the window title, or its handle number; content optional JSON {\"filter\":\"all\"} to include text and labels."),
-    ToolSpec("app_act", "control", "Act on the last read window by ref. value=click|invoke|set_value|toggle|select|expand|collapse|scroll|focus|type|key|focus_window|close_window. content JSON {\"ref\":\"u12\"} for control actions; set_value/type/key add \"text\" (keys like ctrl+s, Enter); add \"expect_title\" (part of the window title) before typing so text never goes to the wrong window. Returns the result and the window's fresh refs."),
+    ToolSpec("app_act", "control", "Act on the last read window by ref. value=click|invoke|set_value|toggle|select|expand|collapse|scroll|focus|type|key|save_as|focus_window|close_window. content JSON {\"ref\":\"u12\"} for control actions; set_value/type/key add \"text\" (keys like ctrl+s, Enter, escape); save_as adds \"text\" = full file path and saves the open document through its Save As dialog; add \"expect_title\" before typing. Returns the result, what changed, and fresh refs. If a result is wrong, correct it rather than repeating the same step."),
     ToolSpec("screen_act", "control", "LAST RESORT when no web_read/app_read ref exists (canvas apps, games, custom-drawn UI): find a target on screen with Jarvis's local vision model and act. value=click|double_click|right_click|type|scroll|locate|key. content JSON {\"target\":\"short visual description\", \"label\":\"exact visible text if it has any\", \"text\":\"for type/key\", \"window\":\"handle to search inside\"}. Refuses rather than guessing; screenshots never leave the PC."),
     ToolSpec("control_check", "control", "Check every browser/PC control connection (Chrome, Windows apps, keyboard/mouse, screen capture, local vision models, approved folder, Gmail) and say what needs fixing. No arguments."),
     ToolSpec("browser_inspect", "dom", "Read the Jarvis-owned browser's current URL, title and visible named controls. Use before browser_click/fill."),
@@ -224,6 +224,7 @@ class ToolRegistry:
             from .capabilities import relevant_tool
             # Tools the ranking chose for this request (including skill-guided ones) always stay.
             rows=[row for row in rows if row['action'] in selected or relevant_tool(row['action'], goal)]
+            rows=limit_tools(rows, goal, selected)
         from .repo_tools import definitions
         from .utility_profiles import decorate
         return decorate(rows)+definitions(self.actions,goal or '.',6)
@@ -376,11 +377,11 @@ def control_tool(actions, step, cancelled):
     name, value = step['action'], step.get('value', '').strip()
     service = actions.control()
     try:
-        args = parse_args(step.get('content', ''))
+        args = parse_args(step.get('content', ''), value if name in ('app_act', 'web_act', 'screen_act') else '')
         if name == 'web_open':
             text = service.web_open(value, cancelled, str(args.get('profile', '')), bool(args.get('new_tab', False)))
         elif name == 'web_read':
-            text = service.web_read(cancelled, value or 'interactive', str(args.get('find', '')), str(args.get('ref', '')))
+            text = service.web_read(cancelled, value or 'all', str(args.get('find', '')), str(args.get('ref', '')))
         elif name == 'web_act':
             text = service.web_act(value, args, cancelled)
         elif name == 'app_open':
@@ -398,3 +399,24 @@ def control_tool(actions, step, cancelled):
                            'result': str(error)[:600]}, ensure_ascii=False)
     actions.report('tool', redact('control: ' + name + ' ' + value)[:300])
     return text
+
+
+CORE_TOOLS = ('open', 'create_file', 'read_file', 'web_open', 'app_open', 'app_read', 'tool_search')
+COMPANIONS = {'app_open': ('app_read', 'app_act'), 'app_act': ('app_read',), 'web_open': ('web_read', 'web_act'),
+              'screen_act': ('app_open', 'app_read'), 'blender_task': ('open',), 'office_xlsx': ('open',)}
+MAX_OFFERED = 14  # Tool definitions are the largest part of a planning prompt (arXiv 2602.17046, ToolSEE).
+
+
+def limit_tools(rows, goal, selected):
+    """Keep the tools this step most likely needs: route-guide order, then the relevance ranking, then a core."""
+    if len(rows) <= MAX_OFFERED:
+        return rows
+    from .route_guide import guide
+    names = {row['action'] for row in rows}
+    preferred = [step['tool'] for row in guide(goal, names) for step in row.get('order', [])]
+    ranked = [row['action'] for row in rows if row['action'] in selected]
+    companions = [c for tool in preferred for c in COMPANIONS.get(tool, ())]
+    order = list(dict.fromkeys([*preferred, *companions, *CORE_TOOLS, *ranked, *(row['action'] for row in rows)]))
+    order = [name for name in order if name in names]
+    keep = set(order[:MAX_OFFERED])
+    return [row for row in rows if row['action'] in keep]

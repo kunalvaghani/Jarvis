@@ -64,9 +64,14 @@ def _valid_hostname(host: str) -> bool:
     return True
 
 
+NAT64 = ipaddress.IPv6Network('64:ff9b::/96')
+
+
 def _private(address: IPAddress) -> bool:
     if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped is not None:
         address = address.ipv4_mapped
+    elif isinstance(address, ipaddress.IPv6Address) and address in NAT64:
+        address = ipaddress.IPv4Address(int(address) & 0xFFFFFFFF)  # IPv6-only networks reach IPv4 sites this way.
     return (address.is_private or address.is_loopback or address.is_link_local or address.is_reserved
             or address.is_multicast or address.is_unspecified or str(address) in METADATA_HOSTS)
 

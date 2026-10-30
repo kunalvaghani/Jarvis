@@ -93,6 +93,12 @@ class PlannerInputTests(unittest.TestCase):
 
 class ConversationReuseTests(unittest.TestCase):
     """Each task's planner calls form one growing conversation so the cache is reused."""
+
+    def setUp(self):
+        # These fixtures report 6000-token prompts: pin a 16k context instead of reading this PC's GPU scheduler cap.
+        patcher = patch('jarvis.native_tools.effective_context', return_value=16384)
+        patcher.start()
+        self.addCleanup(patcher.stop)
     rows = [{'action': 'browse', 'description': 'Open a URL'}, {'action': 'select', 'description': 'Click'}]
 
     def client(self, calls, name='browse'):

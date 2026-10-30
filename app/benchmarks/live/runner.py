@@ -21,7 +21,11 @@ APP = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(APP))
 
 
-def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None):
+RECORD: List[Dict[str, Any]] = []  # Tool steps of the current run (diagnosis).
+CALLS: List[Dict[str, Any]] = []  # Model calls of the current run (diagnosis).
+
+
+def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None, memory: bool = False):
     """A real Jarvis Actions object on the user's configuration, cloud off, scripted approval answers."""
     from jarvis.actions import Actions, Desktop
     config = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'))
@@ -29,7 +33,13 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
     config['gemini'] = {**config.get('gemini', {}), 'enabled': False}
     # Isolation: no user memory read or written, no background knowledge work; a fresh task state per run
     # (a previous run's paused question must never steer the next run).
-    config['memory'] = {**config.get('memory', {}), 'enabled': False}
+    stored = config.get('memory', {})
+    if memory:  # Read the vault, but never learn from a test run.
+        config['memory'] = {**stored, 'long_term': {**stored.get('long_term', {}), 'learn_facts': False,
+                                                    'summarize_conversations': False},
+                            'experience_learning': {**stored.get('experience_learning', {}), 'enabled': False}}
+    else:
+        config['memory'] = {**stored, 'enabled': False}
     config['knowledge_acquisition'] = {**config.get('knowledge_acquisition', {}), 'enabled': False}
     events: List[Dict[str, Any]] = []
     lock = threading.Lock()
@@ -42,6 +52,43 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
         if log:
             log(kind, value)
     actions = Actions(config, APP, report, Desktop())
+    # Diagnosis record only: each tool step and the start of its result (observes, never changes behaviour).
+    from jarvis import tools as tool_module
+    steps: List[Dict[str, Any]] = []
+    original = tool_module.ToolRegistry._execute_traced
+    if not getattr(original, '_recorded', False):
+        def recorded(self, step, cancelled, activate=None):
+            row = {'action': step.get('action') if isinstance(step, dict) else None,
+                   'value': str(step.get('value', ''))[:200] if isinstance(step, dict) else '',
+                   'content': str(step.get('content', ''))[:300] if isinstance(step, dict) else ''}
+            try:
+                result = original(self, step, cancelled, activate)
+                row['result'] = str(getattr(result, 'evidence', result))[:1500]
+                return result
+            except Exception as error:
+                row['error'] = f'{type(error).__name__}: {error}'[:500]
+                raise
+            finally:
+                RECORD.append(row)
+        recorded._recorded = True
+        tool_module.ToolRegistry._execute_traced = recorded
+    RECORD.clear()
+    CALLS.clear()
+    client = actions.brain.client
+    original_once = client._request_once
+
+    def timed(operation, cancelled, **data):  # Diagnosis: which model call took how long (never changes it).
+        started = time.monotonic()
+        row = {'operation': operation, 'started': round(started, 1)}
+        CALLS.append(row)
+        try:
+            return original_once(operation, cancelled, **data)
+        except Exception as error:
+            row['error'] = f'{type(error).__name__}: {error}'[:300]
+            raise
+        finally:
+            row['seconds'] = round(time.monotonic() - started, 1)
+    client._request_once = timed
     from uuid import uuid4
     from jarvis.task_state import TaskState
     state = APP / '.jarvis-runtime' / 'live-control' / uuid4().hex
@@ -50,28 +97,48 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
     approvals: List[Dict[str, Any]] = []
 
     def handler(kind, detail, cancelled):
-        answer = approve == 'approve'
+        if isinstance(approve, (list, tuple)):  # Approve only a card that names something the user asked for.
+            answer = any(str(name).lower() in str(detail).lower() for name in approve)
+        else:
+            answer = approve == 'approve'
         approvals.append({'kind': kind, 'detail': str(detail)[:1000], 'answer': 'approved' if answer else 'denied'})
         return answer
     actions.approval_handler = handler
     return actions, events, approvals
 
 
-def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False) -> Dict[str, Any]:
-    from jarvis.commands import parse
-
+def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False,
+        memory: bool = False) -> Dict[str, Any]:
     def log(kind, value):
         if not quiet and kind in ('tool', 'plan', 'brain', 'answer', 'warning', 'media_card', 'question'):
             text = value.get('phase', '') + ' ' + value.get('title', '') if isinstance(value, dict) else str(value)
             print(f'  [{kind}] {text[:160]}', flush=True)
-    actions, events, approvals = build(approve, log)
+    actions, events, approvals = build(approve, log, memory)
     started = time.monotonic()
     row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve}
     try:
-        command = parse(utterance)
-        row['command'] = {'kind': command.kind, 'value': str(command.value)[:300]}
-        row['answer'] = str(actions.execute(command, lambda: time.monotonic() - started > timeout))
-        row['status'] = 'answered'
+        # Exactly the app's entry for typed/spoken text (main.py: Engine(actions.submit).feed(command_text(text), ...)).
+        from jarvis.audio import command_text
+        from jarvis.commands import Command
+        from jarvis.conversation_intent import model_kind, quick_kind
+        from jarvis.engine import Engine
+        commands: List[Any] = []
+        engine = Engine(commands.append, lambda *_: None)
+        engine.activate()
+        engine.feed(command_text(utterance), final=True, raw=utterance)
+        answers = []
+        for command in commands:
+            if command.kind == 'task' and command.extra == 'unparsed':  # Actions.submit -> _route_unparsed.
+                kind = quick_kind(command.value) or model_kind(command.value, {'model': actions.config.get(
+                    'context_selector', {}).get('model', 'qwen3.5:0.8b'), 'timeout_seconds': 3.0}, lambda: False)
+                command = Command('ask' if kind == 'chat' else 'task', command.value)
+            row.setdefault('commands', []).append({'kind': command.kind, 'value': str(command.value)[:300]})
+            if command.kind == 'ask':  # The app answers conversation on its chat path: no task runs.
+                answers.append('[Jarvis treated this as conversation; no task was run]')
+                continue
+            answers.append(str(actions.execute(command, lambda: time.monotonic() - started > timeout)))
+        row['answer'] = '\n'.join(answers)
+        row['status'] = 'answered' if commands else 'not understood'
     except Exception as error:  # A refusal or failure is an outcome to judge, not a crash.
         import traceback
         row.update(status='error', error=f'{type(error).__name__}: {error}'[:2000],
@@ -79,6 +146,8 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
     finally:
         row['seconds'] = round(time.monotonic() - started, 1)
         row['tools'] = [e['value'] for e in events if e['kind'] == 'tool']
+        row['steps'] = list(RECORD)
+        row['model_calls'] = list(CALLS)
         row['island_cards'] = [{k: e['value'].get(k) for k in ('service', 'phase', 'title', 'step', 'steps')}
                                for e in events if e['kind'] == 'media_card' and isinstance(e['value'], dict)]
         row['approvals'] = approvals

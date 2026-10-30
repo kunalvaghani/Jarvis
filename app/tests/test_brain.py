@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
+from jarvis.clarification import TaskClarification
 from jarvis.actions import Actions
 from jarvis.brain import Brain, explicit_command_plan, explicit_file_plan, normalize_plan, validate_plan
 from jarvis.brain_worker import Models
@@ -226,6 +227,20 @@ class LoopTests(unittest.TestCase):
                 self.brain.client.request.return_value = response
                 with self.assertRaises(ValueError):
                     self.brain.revise_plan("play video", {}, [], [{"action": "open", "value": "chrome"}], [], 5, lambda: False)
+
+    def test_replanner_asking_for_the_goal_is_answered_once_then_real_questions_reach_the_user(self):
+        done = {"action": "open", "value": "chrome", "expected": "Chrome open"}
+        ask = {"done": False, "steps": [], "question": "What task or goal should I complete?"}
+        self.brain.client.request.side_effect = [ask, {"done": True, "steps": []}]
+        self.assertEqual(self.brain.revise_plan("open chrome", {}, [], [done], [], 1, lambda: False), [])
+        feedback = self.brain.client.request.call_args_list[-1]
+        self.assertIn("The goal is exactly: open chrome", str(feedback))
+        self.brain.client.request.side_effect = [ask, ask]
+        with self.assertRaises(TaskClarification):
+            self.brain.revise_plan("open chrome", {}, [], [done], [], 1, lambda: False)
+        self.brain.client.request.side_effect = [{"done": False, "steps": [], "question": "Which colour do you want?"}]
+        with self.assertRaisesRegex(TaskClarification, "colour"):
+            self.brain.revise_plan("open chrome", {}, [], [done], [], 1, lambda: False)
 
     def test_adaptive_cancel_after_inference_prevents_plan_acceptance(self):
         stopped = [False]

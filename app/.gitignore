@@ -114,3 +114,7 @@ integrations/deer-flow/
 
 # Windows cache accidentally generated with an unexpanded environment variable.
 /%SystemDrive%/
+
+# Upgrade v2 Phase 0 (2026-10-31): coverage output and raw live-run receipts (requests, answers, traces) stay local.
+.coverage
+benchmarks/results/live/*.jsonl

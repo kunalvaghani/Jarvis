@@ -41,8 +41,14 @@ NATIVE_NEXT_PROMPT = (
     'answer questions about a page only from what web_read returned, never from memory. browse only opens '
     "the user's own browser and cannot read or act on the page. For Notepad, Calculator, Explorer and Paint use "
     'app_open/app_read/app_act with [uN] refs; use screen_act only when no ref exists (canvas, custom-drawn). '
+    'Named folders such as Downloads, Desktop or the Jarvis test folder are resolved by Jarvis: pass the '
+    'name as folder and never ask for a path the user already named. '
+    'Whenever you write a list (shopping list, to-do list, checklist, steps), start with a title line naming its '
+    "topic, for example 'Shopping List', then put each item on its own line starting with '- '. "
     'Correct plan_validation_error without changing the goal. '
-    'Call jarvis_finish only when fresh evidence establishes the entire goal. '
+    'Call jarvis_finish only when fresh evidence establishes the entire goal. As soon as a result or its changes '
+    'already show the answer to the user (a value, a name, a display), call jarvis_finish with that answer as the '
+    'reason instead of acting again. In web_act and app_act, ref must be a ref like ref_12 or u17 from the last read. '
     'Call jarvis_clarify for essential missing information or an unavailable required '
     'capability; explain that limitation plainly. Do not ask about optional preferences. '
     'An email draft is not a sent email. Prefer connected Gmail API tools for mail '

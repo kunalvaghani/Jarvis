@@ -185,3 +185,10 @@ class LedgerTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_policy_forbidden_failures_refuse_instead_of_asking_for_authorization():
+    from jarvis.deliberation import ROUTES, classify_failure
+    blocked = 'Step rejected before acting: Registry Editor is not in the allowed app list for app_open'
+    assert classify_failure(blocked, {}) == 'forbidden' and ROUTES['forbidden'] == 'refuse'
+    assert classify_failure('Action cancelled; approval was not given.', {}) == 'permission'  # The user can still approve.

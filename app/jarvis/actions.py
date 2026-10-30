@@ -1240,6 +1240,11 @@ class Actions:
 
     def execute(self, command, cancelled=lambda: False):
         """Audit outer direct commands without duplicating nested task execution."""
+        if command.kind in {"task", "open", "run_command", "click_control", "write_text", "compose_text"}:
+            from .request_safety import refusal
+            refused = refusal(command.value)  # Before planning or opening anything: no step is ever tried.
+            if refused:
+                raise ValueError(refused)
         projects, ingress = getattr(self, "project_intel", None), getattr(self, "ingress", None)
         if projects is not None and ingress is not None:
             # A project task superseded by a newer requirement version is refused before it writes anything.
@@ -1565,6 +1570,15 @@ class Actions:
                         intel.after_coding(project, command.value, result)
                     except Exception as exc:
                         self.report("warning", "Verified code memory was not updated: " + str(exc)[:160])
+                if result and "stopped" not in result.casefold() and re.search(
+                        r'\b(?:vs ?code|visual studio code)\b', command.value, re.I):
+                    # The user asked for VS Code: show the finished project there.
+                    try:
+                        from .app_adapters import vscode
+                        vscode(['--reuse-window', str(project)], cancelled)
+                        result += '\nOpened ' + str(project) + ' in VS Code.'
+                    except Exception as exc:
+                        self.report("warning", "VS Code did not open the project: " + str(exc)[:160])
                 self.task_state.finish("paused" if result and "stopped" in result.casefold() else "completed", result)
                 return result
             except Exception as exc:
@@ -1990,6 +2004,9 @@ class Actions:
                     return self.execute(choices[0], cancelled)
                 if choices:
                     return self._offer_open(choices[:20])
+                if re.search(r"\s(?:and|then)\s", str(command.value)):
+                    # "open registry editor and delete the run key": a compound request, not an app name.
+                    return self.brain.run('open ' + str(command.value), cancelled)
                 raise ValueError(f"No matching app, file, or folder for '{command.value}'. Try another word from its name.")
             self.open_target_pending = True
             self.typing_failed = True

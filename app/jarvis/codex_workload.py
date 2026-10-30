@@ -423,11 +423,13 @@ def workload_contract(root, goal, value, utilities):
         check_ids=task.get('check_indices',[])
         if not isinstance(check_ids,list) or not check_ids or any(type(i) is not int or not 0<=i<len(plan['checks']) for i in check_ids):
             raise ValueError('Every worker needs indices of its executable behavioral checks.')
+        # A run-the-entrypoint check the contract added belongs to the worker that owns the entrypoint.
+        check_ids=check_ids+[i for i,c in enumerate(plan['checks']) if i>=len(value['checks']) and c['path'] in paths and i not in check_ids]
         subset={'files':[files[p] for p in paths],'checks':[plan['checks'][i] for i in check_ids]}
         if any(c['path'] not in paths or (c.get('server') and c['server']['path'] not in paths) for c in subset['checks']):
             raise ValueError('Worker checks must use entry/test files owned by that worker.')
         contract(root,task['goal'],subset,partial=True)
-        normalized.append({**task,'paths':paths,'dependencies':dependencies,'plan':subset})
+        normalized.append({**task,'paths':paths,'dependencies':dependencies,'check_indices':check_ids,'plan':subset})
     if assigned!=set(files):raise ValueError('Every deliverable must have exactly one workload owner.')
     done=set();visiting=set();lookup={t['key']:t for t in normalized}
     def visit(key):

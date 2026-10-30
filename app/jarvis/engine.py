@@ -181,7 +181,11 @@ class Engine:
                 if str(exc).startswith("Command not understood:"):
                     if final:
                         # Unrecognised speech may be conversation, not a task; Actions decides.
-                        self._dispatch(Command("task", clause, "unparsed"))
+                        unparsed = Command("task", clause, "unparsed")
+                        if raw:  # Keep the speaker's/typist's capitals when the words are the same.
+                            from .writing import with_original_case
+                            unparsed = with_original_case(unparsed, raw)
+                        self._dispatch(unparsed)
                         self.done[index] = clause
                     else:
                         self.pending[index] = clause

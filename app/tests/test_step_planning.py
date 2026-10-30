@@ -369,11 +369,15 @@ class LoopTests(unittest.TestCase):
         self.assertIsNone(self.brain.step_session)
 
     def test_already_done_requires_independent_goal_verifier(self):
-        self.brain.client.request.side_effect = [{'done': True, 'steps': [], 'question': ''}, {'verified': False}]
+        # A rejected "already done" gets one corrected re-plan; insisting again still pauses without acting.
+        self.brain.client.request.side_effect = [{'done': True, 'steps': [], 'question': ''}, {'verified': False},
+                                                 {'done': True, 'steps': [], 'question': ''}]
         result = self.brain.run('Show general settings in Notepad', lambda: False)
         self.assertIn('paused', result)
         self.brain.dispatch.assert_not_called()
         self.assertEqual(self.brain.workflows.rows, {})
+        replan = self.brain.client.request.call_args_list[2]
+        self.assertIn('NOT satisfied', str(replan.kwargs.get('plan_validation_error', '')))
 
 
 if __name__ == '__main__':

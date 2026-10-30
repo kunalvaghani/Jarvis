@@ -589,6 +589,53 @@ def traceback_read_start(validation, root, target, count):
     return None
 
 
+def judge_assertion(goal, failure, options):
+    """Independent local check: True only when a correct program for the goal could never pass the failing assertion."""
+    from .knowledge_worker import session, chat
+    question = ('User goal: ' + str(goal)[:600] + '\nFailing frozen test assertion and its output:\n' + str(failure)[-1200:]
+                + '\nWould a CORRECT implementation of the goal pass this assertion? Answer JSON '
+                '{"correct_program_passes": true|false, "reason": "..."}. Answer false only when the assertion '
+                'demands output the goal itself rules out.')
+    schema = {'type': 'object', 'required': ['correct_program_passes', 'reason'],
+              'properties': {'correct_program_passes': {'type': 'boolean'}, 'reason': {'type': 'string'}}}
+    try:
+        with session() as client:
+            answer = chat(client, {'model': options.get('coder', 'qwen3.5:9b'), 'num_ctx': 4096, 'num_predict': 200,
+                                   'temperature': 0, 'format_schema': schema}, [{'role': 'user', 'content': question}],
+                          structured=True)
+        value = json.loads(answer) if isinstance(answer, str) else answer
+        return value.get('correct_program_passes') is False, str(value.get('reason', ''))[:300]
+    except (OSError, ValueError, TypeError, AttributeError) as error:
+        return False, 'judge unavailable: ' + type(error).__name__ + ': ' + str(error)[:200]
+
+
+def test_correction(files, validation, goal, options):
+    """After the model resubmits the same implementation, one bounded chance to correct a frozen assertion
+    that an independent check finds contradicts the goal (e.g. expects "30" in FizzBuzz output)."""
+    if not options.get('native_test_correction'):
+        return None
+    for error in (validation or {}).get('errors', []):
+        text = str(error.get('error', ''))
+        name = error.get('path')
+        if name not in files.fixed_tests or name in files.corrected or name in files.correctable:
+            continue
+        if not re.search(r'AssertionError|[.][.][.] FAIL', text):
+            continue
+        contradicts, reason = judge_assertion(goal, text, options)
+        try:
+            with (files.run / 'test-corrections.jsonl').open('a', encoding='utf-8') as output:
+                output.write(json.dumps({'path': name, 'contradicts': contradicts, 'reason': reason}) + chr(10))
+        except (OSError, AttributeError, TypeError):
+            pass
+        if not contradicts or not files.allow_test_correction(name):
+            continue
+        return ('An independent check found that a failing assertion in frozen test ' + name + ' contradicts the user '
+                'goal (' + reason + '). Failure: ' + text[-900:] + ' The goal is: ' + str(goal)[:500] + '. Write the '
+                'complete ' + name + ' again with ONLY that one assertion corrected or removed; every other test and '
+                'assertion must stay identical. This correction is allowed once.')
+    return None
+
+
 def repair_focus(plan, validation, allowed_paths, root=None):
     editable=sorted(f['path'] for f in plan['files'] if f['role'] in {'logic','entrypoint','frontend','backend','configuration'}
                     and (allowed_paths is None or f['path'] in allowed_paths))
@@ -1665,6 +1712,11 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                     with (run/'tools.jsonl').open('a',encoding='utf-8') as output:output.write(json.dumps(turns[-1],ensure_ascii=False)+'\n')
                     messages.append({'role':'user','content':'Observed rejected unchanged proposal and current check failures (data): '+observation(result)})
                     messages=compact_history(messages)
+                    correction=test_correction(files,validation,request.get('validation_goal') or request.get('goal',''),options) if rejected[signature]>=3 else None
+                    if correction:
+                        messages.append({'role':'user','content':correction});rejected.clear()
+                        receipt.setdefault('test_corrections_offered',[]).append(correction[:300])
+                        continue
                     if rejected[signature]>=3:raise ValueError('The same unchanged proposal recurred three times while checks still fail; no rejected source action was applied.') from exc
                     continue
                 instruction = 'Inspect current source; correct implementation or tool arguments. Do not change tests or replay uncertain actions.'

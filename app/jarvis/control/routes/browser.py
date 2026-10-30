@@ -485,8 +485,13 @@ class BrowserExecutor(RouteExecutor):
                 dx, dy = self._frame_offset(tab, key[0])
                 point = (sum(quad[0::2]) / 4 + dx, sum(quad[1::2]) / 4 + dy)
                 if last is not None and abs(point[0] - last[0]) < 1 and abs(point[1] - last[1]) < 1:
-                    hit = session.send('Runtime.callFunctionOn', {'objectId': node, 'functionDeclaration': HIT_TEST,
-                                                                  'returnByValue': True})['result']['value']
+                    reply = session.send('Runtime.callFunctionOn', {'objectId': node, 'functionDeclaration': HIT_TEST,
+                                                                    'returnByValue': True})
+                    if 'exceptionDetails' in reply or 'value' not in reply.get('result', {}):
+                        # The page itself or a non-element node: nothing to click, and nothing was sent.
+                        raise ControlError('That element (for example the whole page) is not clickable; choose a '
+                                           'button, link or field from the read.', ErrorCategory.NOT_ACTIONABLE)
+                    hit = reply['result']['value']
                     covered = not hit['ok']
                     if not covered and not hit['top']:
                         tag = tab.page.evaluate('([x, y]) => document.elementFromPoint(x, y)?.tagName', list(point))

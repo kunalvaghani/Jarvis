@@ -559,7 +559,7 @@ class UIAExecutor(RouteExecutor):
                 self.focus(window)
                 self.title_guard(window, str(p.get('expect_title', '')))
                 if name == 'type':
-                    self.input.text(str(p['text']), action.cancel)
+                    self.input.enter(str(p['text']), action.cancel)
                 elif name == 'key':
                     self.input.keys(str(p['text']), int(p.get('repeat', 1)), action.cancel)
             return self._done(action, f'{name} sent to "{window.title[:60]}"', executed=name != 'focus_window',
@@ -619,7 +619,7 @@ class UIAExecutor(RouteExecutor):
             element.SetFocus()
             self.title_guard(state.window, str(p.get('expect_title', '')))
             self.input.keys('ctrl+a', cancel=action.cancel)
-            self.input.text(value, action.cancel)
+            self.input.enter(value, action.cancel)
             deadline = self.clock() + action.timeout_s
             current = ''
             while self.clock() < deadline:

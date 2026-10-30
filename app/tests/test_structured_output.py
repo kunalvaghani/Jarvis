@@ -546,6 +546,16 @@ class StructuredOutput(unittest.TestCase):
                        'from unittest import IsolatedAsyncioTestCase as AsyncCase\nclass Check(AsyncCase):\n async def test_api(self): self.assertEqual(2+3,5)\n'):
             validate_test_draft('test_api.py',source,plan)
 
+    def test_new_test_importing_a_planned_module_through_an_invented_package_is_rejected(self):
+        from jarvis.codex_validation import validate_test_draft
+        plan={'files':[{'path':'main.py','role':'entrypoint'},{'path':'path.py','role':'logic'}],
+              'checks':[{'kind':'python_tests','path':'test_main.py'}]}
+        body='class Check(unittest.TestCase):\n def test_run(self): self.assertTrue(run())\n'
+        with self.assertRaisesRegex(ValueError,'Import it as main'):
+            validate_test_draft('test_main.py','import unittest\nfrom fizzbuzz_app.main import run\n'+body,plan)
+        for header in ('from main import run','import os.path\nfrom main import run'):
+            validate_test_draft('test_main.py','import unittest\n'+header+'\n'+body,plan)
+
     def test_gui_mock_roots_are_rejected_before_freezing_but_service_mocks_remain_allowed(self):
         from tests.test_native_coding import files
         with tempfile.TemporaryDirectory() as folder:
@@ -805,3 +815,29 @@ class StructuredOutput(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class FrozenTestCorrection(unittest.TestCase):
+    OLD = ('import unittest\nfrom main import run\nclass T(unittest.TestCase):\n def test_a(self):\n'
+           "  self.assertIn('Fizz', run())\n  self.assertIn('30', run())\n def test_b(self):\n  self.assertTrue(run())\n")
+
+    def test_a_correction_changes_at_most_one_assertion_and_keeps_every_test(self):
+        from jarvis.codex_validation import validate_test_correction
+        validate_test_correction(self.OLD, self.OLD.replace("  self.assertIn('30', run())\n", ''))
+        validate_test_correction(self.OLD, self.OLD.replace("'30'", "'FizzBuzz'"))
+        with self.assertRaisesRegex(ValueError, 'only the one assertion'):
+            validate_test_correction(self.OLD, self.OLD.replace("'30'", "'x'").replace("'Fizz',", "'y',"))
+        with self.assertRaisesRegex(ValueError, 'every test method'):
+            validate_test_correction(self.OLD, self.OLD.replace('def test_b', 'def helper_b'))
+
+    def test_correction_needs_the_setting_and_an_independent_contradiction_verdict(self):
+        from jarvis import native_coding
+        files = SimpleNamespace(fixed_tests={'test_main.py': 'sha'}, corrected=set(), correctable={},
+                                allow_test_correction=lambda name: True)
+        failed = {'errors': [{'path': 'test_main.py', 'error': "FAIL\nAssertionError: '30' not found"}]}
+        self.assertIsNone(native_coding.test_correction(files, failed, 'FizzBuzz 1 to 30', {}))
+        with patch('jarvis.native_coding.judge_assertion', return_value=(False, 'correct')):
+            self.assertIsNone(native_coding.test_correction(files, failed, 'FizzBuzz 1 to 30', {'native_test_correction': True}))
+        with patch('jarvis.native_coding.judge_assertion', return_value=(True, '30 prints FizzBuzz')):
+            message = native_coding.test_correction(files, failed, 'FizzBuzz 1 to 30', {'native_test_correction': True})
+        self.assertIn('ONLY that one assertion', message)
