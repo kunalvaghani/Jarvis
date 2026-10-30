@@ -37,6 +37,10 @@ NATIVE_NEXT_PROMPT = (
     'and user-requested text; read before inventing IDs, paths or content. '
     'Use open to launch a configured application such as Chrome. browser_navigate '
     'requires a public website URL/domain, never an application name. '
+    'To read or act on a website, use web_open, then web_read/web_act with the [ref_N] refs it returns; '
+    'answer questions about a page only from what web_read returned, never from memory. browse only opens '
+    "the user's own browser and cannot read or act on the page. For Notepad, Calculator, Explorer and Paint use "
+    'app_open/app_read/app_act with [uN] refs; use screen_act only when no ref exists (canvas, custom-drawn). '
     'Correct plan_validation_error without changing the goal. '
     'Call jarvis_finish only when fresh evidence establishes the entire goal. '
     'Call jarvis_clarify for essential missing information or an unavailable required '

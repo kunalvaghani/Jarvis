@@ -26,6 +26,10 @@ MEDIA_PHASES = {"searching": "Searching", "loading": "Starting", "playing": "Pla
                 "hungry": "Drop it here — I'll eat it!", "eating": "Nom nom…", "reading": "Reading it",
                 "indexing": "Building its knowledge graph", "ready": "What should I do with it?", "thinking": "Thinking",
                 "happy": "Done!", "sad": "Oops"}
+from . import island_control as control
+SERVICE.update(control.SERVICES)
+MEDIA_PHASES.update(control.PHASES)
+WORKING |= control.WORKING
 BUDDY_TILE = (54, 54 + 54)  # Pip's square on the left of a card (x0, x1), top at card top + 8.
 
 
@@ -157,7 +161,8 @@ def media_amplitude(state, phase, index):
     return 2
 
 
-def animate_frame(base, width, height, status, phase, level, scale, media=None, buddy=None):
+def animate_frame(base, width, height, status, phase, level, scale, media=None, buddy=None, live=None):
+    """`live` is the current browser/PC-control card: its route badge replaces the status bars in the header."""
     """Redraw the small moving regions; reuse all text, artwork and static glass."""
     image = base.copy()
     sampling = scale*2
@@ -188,7 +193,11 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None, 
         paint(rectangle, left, top)
         tile = tile.resize((pixels[2]-pixels[0],pixels[3]-pixels[1]),Image.Resampling.LANCZOS)
         image.paste(tile,(pixels[0],pixels[1]))
-    if status != 'STANDBY':
+    if live:
+        # Route badge: spinning ring while working, outcome glyph after, step pips; visible even with the workspace open.
+        sketch((width-118,10,width-80,32),BLACK,lambda draw,left,top:control.draw_badge(draw,width-118-left,10-top,
+            live['service'],live.get('phase',''),phase,sampling,live.get('step',0),live.get('steps',0)))
+    elif status != 'STANDBY':
         color = ACCENTS.get(status,ACCENTS['STANDBY'])
         def header(rectangle,left,top):
             for index in range(9):
@@ -201,8 +210,13 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None, 
         accent = SERVICE.get(media.get('service'),('#b9c9ff','Media'))[0]
         right, top, bottom = width-44,46,height-10
         meter_x = right-58
+        routed = control.is_control(media)
+        if routed:
+            tile_x, tile_y = 44+10, 46+8
+            sketch((tile_x,tile_y,tile_x+54,tile_y+54),'#111216',lambda draw,left,y:control.draw_tile(
+                draw,tile_x-left,tile_y-y,54,media['service'],state,phase,sampling))
         def meter(rectangle,left,y):
-            for index in range(5 if media.get('service') != 'buddy' else 0):
+            for index in range(5 if media.get('service') != 'buddy' and not routed else 0):
                 amplitude = media_amplitude(state,phase,index)
                 x = meter_x+8+index*8-left
                 rectangle((x,top+28-amplitude-y,x+4,top+28+amplitude-y),2,accent)
@@ -210,7 +224,20 @@ def animate_frame(base, width, height, status, phase, level, scale, media=None, 
         bar_x1, bar_x2, bar_y = 44+10+54+14,right-14,bottom-10
         def progress(rectangle,left,y):
             rectangle((bar_x1-left,bar_y-y,bar_x2-left,bar_y+4-y),2,'#2a2b32')
-            if state in WORKING:
+            done = control.fraction(media) if routed else None
+            if done is not None:
+                # Determinate step bar; the current step's segment shimmers while it runs.
+                steps = max(1,int(media.get('steps') or 1))
+                span = (bar_x2-bar_x1)/steps
+                if done > 0:
+                    rectangle((bar_x1-left,bar_y-y,bar_x1+(bar_x2-bar_x1)*done-left,bar_y+4-y),2,accent)
+                if state in WORKING:
+                    seg = bar_x1+(bar_x2-bar_x1)*done
+                    glow = .35+.65*abs(math.sin(phase*3))
+                    end = min(bar_x2,seg+span*glow)
+                    if end > seg:
+                        rectangle((seg-left,bar_y-y,end-left,bar_y+4-y),2,'#ffffff' if glow > .9 else accent)
+            elif state in WORKING:
                 sweep = (phase*.6)%1.4-.2
                 start = bar_x1+(bar_x2-bar_x1)*max(0.,sweep)
                 end = bar_x1+(bar_x2-bar_x1)*min(1.,sweep+.25)
@@ -319,6 +346,8 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
                           fill=accent, width=max(1, round(1.4 * sampling)))
                 draw.ellipse(tuple(round(v * sampling) for v in (ex - 2, ey - 2, ex + 2, ey + 2)), fill="#d7fff4")
             draw.ellipse(tuple(round(v * sampling) for v in (cx - 5, cy - 5, cx + 5, cy + 5)), fill=accent)
+        elif control.is_control(media):
+            rectangle((art_x, art_y, art_x + side, art_y + side), radius=10, fill=control.TILE_FILL[media["service"]])
         elif media.get("service") == "buddy":
             from .island_buddy import draw_buddy, mood_for
             # The tile; Pip on it is drawn every frame by animate_frame.
@@ -342,7 +371,7 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
             rectangle((art_x, art_y, art_x + side, art_y + side), radius=8, fill="#1e1f25")
         # Service badge on the artwork corner.
         bx, by = art_x + side - 16, art_y + side - 16
-        if media.get("service") in {"weather", "github", "godseye", "buddy", "evolve"}:
+        if media.get("service") in {"weather", "github", "godseye", "buddy", "evolve"} or control.is_control(media):
             pass  # The tile itself is the badge.
         elif media.get("service") == "whatsapp":
             # Speech bubble with a handset, drawn as simple shapes.
@@ -376,14 +405,19 @@ def render_island(width=208, height=52, status="STANDBY", phase=0, message="", l
         text(text_x, top + 37, fit_text(draw, caption, face_sub, (meter_x - text_x - 6) * sampling), 11,
              "#ff8a80" if state == "error" else accent)
         # Equalizer: live bars while playing, a gentle pulse while searching, flat when paused (not on Pip's cards).
-        for i in range(5 if media.get("service") != "buddy" else 0):
+        for i in range(5 if media.get("service") != "buddy" and not control.is_control(media) else 0):
             amplitude = media_amplitude(state,phase,i)
             x = meter_x + 8 + i * 8
             rectangle((x, top + 28 - amplitude, x + 4, top + 28 + amplitude), radius=2, fill=accent)
         # Progress bar (or a moving shimmer while searching).
         bar_y, bar_x1, bar_x2 = bottom - 10, text_x, right - 14
         rectangle((bar_x1, bar_y, bar_x2, bar_y + 4), radius=2, fill="#2a2b32")
-        if state in WORKING:
+        if control.is_control(media):
+            stamp = control.step_text(media)
+            if stamp:
+                face_time = font(round(9 * sampling))
+                text(bar_x2 - draw.textlength(stamp, font=face_time) / sampling, top + 39, stamp, 9, "#8e8f9a")
+        elif state in WORKING:
             sweep = (phase * 0.6) % 1.4 - 0.2
             start = bar_x1 + (bar_x2 - bar_x1) * max(0., sweep)
             end = bar_x1 + (bar_x2 - bar_x1) * min(1., sweep + 0.25)
@@ -638,7 +672,9 @@ class Island:
                                                    'error': 8, 'alert': 45, 'notice': 20, 'learning': 900,
                                                    'learned': 20, 'opening': 60, 'showing': 12, 'hungry': 1.2,
                                                    'eating': 60, 'reading': 120, 'indexing': 600, 'ready': 180,
-                                                   'thinking': 120, 'happy': 10, 'sad': 10}.get(message.get('phase'), 6)
+                                                   'thinking': 120, 'happy': 10, 'sad': 10,
+                                                   **(control.SHOW_SECONDS if control.is_control(message) else {})
+                                                   }.get(message.get('phase'), 6)
             self.last_frame = None
             return
         if kind == 'task_status' and isinstance(message, dict) and message.get('reveal') is True and message.get('active'):
@@ -735,6 +771,9 @@ class Island:
         settled = abs(width-target[0])+abs(height-target[1]) <= 2
         phase = 0 if reduced or status == "STANDBY" else now
         media = self.media if self.media and now < self.media_until and height >= MEDIA_HEIGHT - 4 and not self.surface_open else None
+        live = self.media if control.is_control(self.media) and now < self.media_until and not media else None
+        if live and not reduced:
+            phase = now  # The route badge animates even when Jarvis's status is idle.
         if media:
             phase = 0 if reduced else now  # The card animates even while Jarvis is otherwise idle.
         mood = self.buddy_pose(now, status, speaking, listening) if self.pip is not None else None
@@ -753,7 +792,7 @@ class Island:
                     self.static_image = render_island(width,height,status,phase if complex_art else 0,'',
                         level,self.surface_open,detail,scale,media,edge_threshold=255 if self.edges.active else 128,buddy=mood)
                     self.static_key = static_key
-                self.preview_image = (animate_frame(self.static_image,width,height,status,phase,level,scale,media,mood)
+                self.preview_image = (animate_frame(self.static_image,width,height,status,phase,level,scale,media,mood,live)
                                       if not complex_art else self.static_image)
                 self.background_image = self.preview_image
                 self.photo = ImageTk.PhotoImage(self.preview_image, master=root)
@@ -766,7 +805,7 @@ class Island:
                     self.static_image = render_island(width,96,status,0,'',level,self.surface_open,detail,scale,
                         edge_threshold=255 if self.edges.active else 128,buddy=mood).crop((0,0,pixels_w,round(44*scale)))
                     self.static_key = static_key
-                header = animate_frame(self.static_image,width,96,status,phase,level,scale,buddy=mood)
+                header = animate_frame(self.static_image,width,96,status,phase,level,scale,buddy=mood,live=live)
                 self.header_photo = ImageTk.PhotoImage(header,master=root)
                 self.canvas.itemconfigure(self.header_item,image=self.header_photo)
                 self.preview_image = self.background_image

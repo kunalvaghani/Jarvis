@@ -18,6 +18,12 @@
   - on the [D1 benchmark](benchmarks/vision_grounding.py) (2026-10-30): 93.8% of targets found, 0 wrong clicks, 0 clicks on absent targets, p50 3.2 s (p95 about 25 s when escalating), peak 2.76 GB VRAM. 2B alone scored 81%;
   - live click on a real Chrome canvas: 3/3;
   - no new model was downloaded: the installed models met the 90% goal.
+- **Jarvis integration and Dynamic Island (2026-10-30):**
+  - Jarvis's planner can now open and read websites, and act on them by element reference, in its own Chrome (`web_open`/`web_read`/`web_act`). It does the same for Notepad, Calculator, Explorer and Paint (`app_open`/`app_read`/`app_act`), and falls back to the local vision model only when nothing else works (`screen_act`).
+  - Clicks on send, buy, delete or submit-like targets ask you first.
+  - Each route shows its own animated card in the Dynamic Island while it works (step bar, outcome badge).
+  - Say "check the control connections", or run `python -m jarvis.control.health`, to see what works and what needs fixing.
+  - Live acceptance tests are planned in [live-acceptance-plan.md](docs/rework/live-acceptance-plan.md) and are not yet run.
 - **Gmail by voice:**
   - The Gmail API connection exists, but Google now rejects its saved sign-in (`invalid_grant`, i.e. expired or revoked). The adapter also changed since its last check.
   - Jarvis now says exactly that, with the fix: run `launchers/Connect Jarvis Gmail API.cmd` once and approve the Google sign-in.

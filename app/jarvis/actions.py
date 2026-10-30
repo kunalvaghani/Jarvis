@@ -169,6 +169,7 @@ class Actions:
         self.desktop = desktop
         self.ui_controls = None
         self.browser_automation = None
+        self._control = None  # Browser/PC control routes (jarvis/control), started on first use.
         self.development_tools = None
         self.external_handle = lambda: 0
         self.pending_open = None
@@ -971,6 +972,9 @@ class Actions:
         ingress = getattr(self, 'ingress', None)
         if ingress is not None:
             ingress.close()
+        control = getattr(self, '_control', None)
+        if control is not None:
+            control.close()
         blender_jobs = getattr(self, '_blender_jobs', None)
         if blender_jobs is not None:
             blender_jobs.close()
@@ -1060,6 +1064,27 @@ class Actions:
 
     def repair_ui(self):
         return not self.closed.is_set() and (self.ui_controls is None or self.ui_controls.repair())
+
+    def control(self):
+        """The control service (browser, Windows apps, vision, files) with island progress and host approvals."""
+        if self._control is None:
+            from .control.service import ControlService
+            from .control.settings import load
+            from .island_control import IslandProgress
+
+            def approve(action):
+                detail = {'action': action.name, 'target': action.goal[:200], 'route': action.route.value,
+                          'fields': {k: v for k, v in action.params.items() if k in ('ref', 'url', 'value', 'text', 'target', 'app')}}
+                try:
+                    from .tools import redact
+                    self._approve('control_' + action.name, redact(json.dumps(detail, ensure_ascii=False)),
+                                  lambda: action.cancel.cancelled)
+                    return True
+                except ValueError:
+                    return False
+            self._control = ControlService(load(self.base, self.config if isinstance(self.config, dict) else None),
+                                           approve, IslandProgress(self))
+        return self._control
 
     def _browser(self):
         if self.browser_automation is None:

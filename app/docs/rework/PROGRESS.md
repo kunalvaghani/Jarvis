@@ -80,6 +80,20 @@ Re-run after the vision escalation and the Gmail status messages (2026-10-30): *
 
 - Real-desktop finding (2026-10-30): with a protected or elevated window in front, Windows (UIPI) silently drops all injected keys and clicks. The new layer now detects that up front, and confirms a SendInput pointer move landed before pressing, so this is reported as `elevated_target` with "click your desktop once", never as a silent success.
 
+## Integration, island UI and connection check (2026-10-30)
+
+- **Connection check:** `python -m jarvis.control.health`, also the planner tool `control_check`. It runs 10 checks with live island progress. Live result on this PC: **8 ready, 2 need the user**: one Chrome sign-in in the personal profile, and a Gmail reconnect.
+- **Island:** [island_control.py](../../jarvis/island_control.py) adds four animated route tiles (browser, Windows apps, vision, apps & files), outcome glyphs, a determinate step bar and a header badge that stays visible while the task workspace is open. 44 render/animation tests.
+- **Integration:**
+  - `Actions.control()` owns the routes, with host approval cards and island progress.
+  - New planner tools: `web_open`, `web_read`, `web_act`, `app_open`, `app_read`, `app_act`, `screen_act` and `control_check`.
+  - Website requests ("open example.com and …") now reach the planner instead of the app opener.
+  - The planner prompt and the `browse` description now steer reading and acting on pages to `web_*`.
+  - Jarvis's stop now reaches long control waits.
+- **End-to-end smoke check** (typed request → planner → `web_open` → `web_read`, island cards streamed): it ran, but the final answer was not verified, because `web_open` returns only interactive elements and so not the heading text. This is a known defect for the live loop.
+- **Regression:** 4704 passed / the same 39 baseline failures after refreshing the architecture tool inventory (prior table preserved), plus 1 inventory test fixed in place. Launcher check: `ready`. `mypy --strict`: clean (23 files).
+- **Live acceptance plan:** [live-acceptance-plan.md](live-acceptance-plan.md), 13 cases. **Awaiting user approval; none executed.**
+
 ## Next step
 
-Phase 2 remainder: headful browser latency; Phase 2 gate review. Phase 5 wraps the existing app/COM/Gmail adapters in Route 1. Gmail: the user reconnects the API once; then live voice check by the user. Then Phase 3 MCP selection.
+Wait for the user's approval of the live acceptance plan, then run it with the no-assistance rules in that plan.

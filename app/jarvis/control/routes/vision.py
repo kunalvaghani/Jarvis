@@ -32,6 +32,7 @@ from ..coords import CoordinateError, Frame, Layout, Point, Rect, Transform, ens
 from ..executor import Health, RouteExecutor
 from ..input import Input
 from ..policy import Policy
+from ..progress import ProgressEvent, Sink, emit
 from ..timing import StageTimer
 from ..types import Action, ActionResult, ControlError, ErrorCategory, Observation, Route
 from .uia import _process_info, secure_desktop_active
@@ -171,6 +172,7 @@ class VisionExecutor(RouteExecutor):
             ensure_per_monitor_dpi()  # mss and SendInput must agree on physical pixels.
         self.policy, self.input, self.grounder, self.capture = policy, input, grounder, capture
         self.fallbacks = tuple(fallbacks)
+        self.progress: Optional[Sink] = None  # Island updates while a model searches (display only).
         self.layout = layout or system_layout
         self.window_at = window_at or _window_at
         self.clock = clock
@@ -266,6 +268,9 @@ class VisionExecutor(RouteExecutor):
                     _release(chain[index - 1])
                     with timer.stage('capture'):  # The next model sees the screen as it is now, not as it was.
                         shot = self.shoot(region)
+                emit(self.progress, ProgressEvent(Route.VISION, 'locating',
+                                                  ('Looking closer' if index else 'Finding') + f' "{target[:50]}"',
+                                                  grounder.name, 'Bigger model' if index else 'On-screen search'))
                 try:
                     found = self._locate_with(grounder, shot, target, deadline, timer, label)
                 except ControlError as error:

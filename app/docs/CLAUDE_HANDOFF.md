@@ -15,6 +15,11 @@ Branch `claude_ControlArchitect`. Live checklist: [rework PROGRESS](rework/PROGR
 - **Gmail:** the voice path is blocked by an expired or revoked OAuth sign-in (`invalid_grant`) plus an adapter-hash change (diff since `b54c0c1` reviewed). Jarvis now reports the exact fix; the user must run `launchers/Connect Jarvis Gmail API.cmd`.
 - **`gmail_chrome`:** never validated; it is not used as a fallback.
 
+**Integration round:**
+- Control routes are wired into Jarvis, with planner tools, island cards and a connection check.
+- The live acceptance plan (13 cases) awaits user approval; nothing has been executed.
+- Known defect: `web_open` omits page text.
+
 **Unresolved:**
 - **Profile sign-ins:** app-bound cookies (v20) cannot transfer to the copied profile. The user must sign in to Chrome there once.
 - **Unexecuted gates:**

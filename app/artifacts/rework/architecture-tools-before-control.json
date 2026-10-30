@@ -1,0 +1,973 @@
+{
+ "tools": [
+  {
+   "name": "application_inspect",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "realtime_query",
+   "backend": "realtime",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "open",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browse",
+   "backend": "browser",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browser_search",
+   "backend": "browser",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browser_inspect",
+   "backend": "dom",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browser_navigate",
+   "backend": "dom",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browser_click",
+   "backend": "dom",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "browser_fill",
+   "backend": "dom",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "media_search",
+   "backend": "browser",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "media_control",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "select",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "fill_text",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "type_text",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "scroll",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "shortcut",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "open_menu",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "handle_dialog",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "save_file",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "close_app",
+   "backend": "desktop",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "create_file",
+   "backend": "files",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "modify_file",
+   "backend": "files",
+   "approval": "none",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "delete_file",
+   "backend": "files",
+   "approval": "user",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "run_command",
+   "backend": "terminal",
+   "approval": "user",
+   "provider_configured": null,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute"
+  },
+  {
+   "name": "think",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "write_spec",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "write_tests",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "write_code",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "improve_code",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "review_pull_request",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "knowledge_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "list_files",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "read_file",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "append_file",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "search_files",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "query_resource",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "web_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "scrape_web",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_read_file",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_pull_request",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_pr_files",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_add_file",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "github_delete_file",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "google_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "serp_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "searx_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "apollo_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "read_email",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "send_email",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "slack_send",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "twitter_send",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "calendar_list",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "calendar_details",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "calendar_create",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "calendar_delete",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "jira_projects",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "jira_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "jira_create",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "jira_edit",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "toolkit_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "windows_command_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "windows_command",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "integration_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "application_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "runtime_capabilities",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "tool_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_map",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_instructions",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "skill_list",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "skill_read",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "git_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "git_diff",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "git_log",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "read_batch",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "mcp_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "mcp_list_tools",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "mcp_call",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_native",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_verify",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_preview",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_feedback",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "development_practice",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "firecrawl_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "firecrawl_scrape",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "firecrawl_map",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": false,
+   "state": "credential_or_prerequisite_gated",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_skill_read",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_skill_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_research",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_web_research",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_sandbox_task",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "deerflow_free_media",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_learn",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_search",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_explain",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_validate",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_activate",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_run",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_health",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "repository_skill_lifecycle",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "rea_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "rea_ingest",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "rea_analyze",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "rea_ledger",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "rea_record",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "office_xlsx",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "office_docx",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "pdf_document",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "office_automation",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "blender_task",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "unreal_task",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "vscode_cli",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "execution_methods",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "strategy_execute",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "evolution_status",
+   "backend": "toolkit",
+   "approval": "none",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "evolution_promote",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "evolution_rollback",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "cloud_architect_consult",
+   "backend": "toolkit",
+   "approval": "user",
+   "provider_configured": true,
+   "state": "adapter_present_live_unverified",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute -> jarvis/toolkits.py:execute"
+  },
+  {
+   "name": "workflow_expand",
+   "backend": "toolkit",
+   "approval": "none",
+   "dispatch": "jarvis/tools.py:ToolRegistry._execute",
+   "state": "adapter_present_live_unverified"
+  }
+ ],
+ "registered_tool_count": 120,
+ "tools_refreshed_at": "2026-10-23T08:18:50.684742+00:00"
+}

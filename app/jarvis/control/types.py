@@ -5,7 +5,7 @@ from dataclasses import dataclass, field, replace
 from enum import Enum, IntEnum
 import threading
 import time
-from typing import Any, Mapping, Optional, Tuple, Union
+from typing import Callable, Any, Mapping, Optional, Tuple, Union
 import uuid
 
 from .coords import Point, Transform
@@ -56,9 +56,10 @@ class ControlError(Exception):
 class CancelToken:
     """Cooperative cancellation shared by an action, its route and the emergency stop."""
 
-    def __init__(self, parent: Optional['CancelToken'] = None) -> None:
+    def __init__(self, parent: Optional['CancelToken'] = None, signal: Optional[Callable[[], bool]] = None) -> None:
         self._event = threading.Event()
         self._parent = parent
+        self._signal = signal  # The host's own cancel check (Jarvis's "stop"), read on every check.
         self.reason = ''
 
     def cancel(self, reason: str = 'cancelled') -> None:
@@ -67,6 +68,12 @@ class CancelToken:
 
     @property
     def cancelled(self) -> bool:
+        if not self._event.is_set() and self._signal is not None:
+            try:
+                if self._signal():
+                    self.cancel('stopped by the user')
+            except Exception:
+                self.cancel('cancel check failed')  # An unreadable stop signal counts as stop.
         return self._event.is_set() or (self._parent is not None and self._parent.cancelled)
 
     def raise_if_cancelled(self) -> None:

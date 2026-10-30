@@ -406,3 +406,14 @@ def test_executor_default_verify_uses_probe():
     ex.cancel()
     ex.close()
     assert Point(1, 2, Frame.CROP).frame is Frame.CROP
+
+
+def test_cancel_token_follows_the_host_stop_signal():
+    from jarvis.control.types import CancelToken
+    stop = {'now': False}
+    token = CancelToken(signal=lambda: stop['now'])
+    assert not token.cancelled
+    stop['now'] = True
+    assert token.cancelled and token.reason == 'stopped by the user'
+    broken = CancelToken(signal=lambda: 1 / 0)
+    assert broken.cancelled and broken.reason == 'cancel check failed'  # Unreadable stop counts as stop.

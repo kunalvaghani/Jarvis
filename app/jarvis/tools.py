@@ -23,8 +23,16 @@ SPECS = (
     ToolSpec('application_inspect', 'desktop', 'Read a configured app executable/version and sanitized foreground controls. value MUST be an exact configured application name or current for the current configured app. Cube, Modifier and other object/control names are invalid; use select for controls. Read-only: never selects objects, launches, types, clicks, installs or executes scripts.'),
     ToolSpec('realtime_query', 'realtime', 'Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}. No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provider; self-hosted sources require configured endpoints.'),
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
-    ToolSpec("browse", "browser", "Open a website URL in an installed browser."),
+    ToolSpec("browse", "browser", "Only SHOW the user a website in their own browser. Jarvis cannot read, answer from or act on that page; for any goal that needs the page content or interaction use web_open instead."),
     ToolSpec("browser_search", "browser", "Search the web using the exact query."),
+    ToolSpec("web_open", "control", "Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional JSON {\"profile\":\"personal\" ONLY when the user asks to use their signed-in browser, \"new_tab\":true}. Returns the outcome then the page's interactive elements as lines like button \"Search\" [ref_12]. Use those refs with web_act."),
+    ToolSpec("web_read", "control", "Read the current page in Jarvis's Chrome again. value optional: interactive (default), all (also text) or visible. content optional JSON {\"find\":\"words\"} to search elements, or {\"ref\":\"ref_12\"} to read inside one element. Refs change after navigation: read again instead of guessing."),
+    ToolSpec("web_act", "control", "Act on the current page by ref. value=click|double_click|right_click|hover|fill|select|check|type|key|scroll|scroll_to|back|forward|reload|new_tab|switch_tab|close_tab|wait. content JSON: {\"ref\":\"ref_12\"} for element actions; fill/select add \"text\"; check adds \"checked\":true|false; type/key add \"text\" (key examples: Enter, ctrl+a); scroll adds \"direction\":up|down and \"amount\":1-10; tabs use \"tab\":\"tab-2\"; new_tab \"url\"; wait \"seconds\". Returns the result and the page's fresh refs. Clicks on send/buy/delete/submit-like targets ask the user first. Never fills passwords."),
+    ToolSpec("app_open", "control", "Open an allowed Windows app (notepad, calculator, explorer, paint) and read its window. value=app name; content optional JSON {\"path\":\"file or folder inside the approved test folder\"}. Returns the window handle and its controls as lines like Button \"Seven\" [u12]."),
+    ToolSpec("app_read", "control", "Read a Windows app window's controls with refs. value=part of the window title, or its handle number; content optional JSON {\"filter\":\"all\"} to include text and labels."),
+    ToolSpec("app_act", "control", "Act on the last read window by ref. value=click|invoke|set_value|toggle|select|expand|collapse|scroll|focus|type|key|focus_window|close_window. content JSON {\"ref\":\"u12\"} for control actions; set_value/type/key add \"text\" (keys like ctrl+s, Enter); add \"expect_title\" (part of the window title) before typing so text never goes to the wrong window. Returns the result and the window's fresh refs."),
+    ToolSpec("screen_act", "control", "LAST RESORT when no web_read/app_read ref exists (canvas apps, games, custom-drawn UI): find a target on screen with Jarvis's local vision model and act. value=click|double_click|right_click|type|scroll|locate|key. content JSON {\"target\":\"short visual description\", \"label\":\"exact visible text if it has any\", \"text\":\"for type/key\", \"window\":\"handle to search inside\"}. Refuses rather than guessing; screenshots never leave the PC."),
+    ToolSpec("control_check", "control", "Check every browser/PC control connection (Chrome, Windows apps, keyboard/mouse, screen capture, local vision models, approved folder, Gmail) and say what needs fixing. No arguments."),
     ToolSpec("browser_inspect", "dom", "Read the Jarvis-owned browser's current URL, title and visible named controls. Use before browser_click/fill."),
     ToolSpec("browser_navigate", "dom", "Open an explicit public website/domain in the Jarvis-owned Chrome profile; returns its current URL/title/controls."),
     ToolSpec("browser_click", "dom", "Click one exact visible named button/link in the Jarvis browser. value=label, folder=last observed exact URL. Does not approve account writes."),
@@ -62,7 +70,11 @@ _FIELDS = {
     'handle_dialog': ({'value'}, set()), 'save_file': ({'value'}, {'folder'}), 'close_app': ({'value'}, set()),
     'create_file': ({'value', 'folder', 'content'}, set()), 'modify_file': ({'value', 'folder', 'content'}, {'find'}),
     'delete_file': ({'value', 'folder'}, set()), 'run_command': ({'value'}, set()),
+    'web_open': ({'value'}, {'content'}), 'web_read': (set(), {'value', 'content'}), 'web_act': ({'value'}, {'content'}),
+    'app_open': ({'value'}, {'content'}), 'app_read': (set(), {'value', 'content'}), 'app_act': ({'value'}, {'content'}),
+    'screen_act': ({'value', 'content'}, set()), 'control_check': (set(), set()),
 }
+CONTROL_TOOLS = frozenset({'web_open', 'web_read', 'web_act', 'app_open', 'app_read', 'app_act', 'screen_act', 'control_check'})
 _LIMITS = {'value': 4000, 'content': 2_000_000, 'find': 1_000_000}
 # A proposal can never carry its own authorization; only the host approval flow grants it.
 APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
@@ -303,6 +315,8 @@ class ToolRegistry:
                 raise ToolUnavailable('Realtime data is not available in this session.')
             result = realtime.query(step.get('value',''), params, cancelled)
             return ToolResult(name, 'realtime', json.dumps(result, ensure_ascii=False))
+        if name in CONTROL_TOOLS:
+            return ToolResult(name, 'control', control_tool(self.actions, step, cancelled))
         if name in {"browser_inspect", "browser_navigate", "browser_click", "browser_fill"}:
             if name == "browser_fill" and (not isinstance(step.get("content"), str) or len(step["content"]) > 10000):
                 raise ValueError("Browser filling requires bounded exact content.")
@@ -353,3 +367,34 @@ class ToolRegistry:
             raise ValueError("Task cancelled after tool execution. Check the last action before repeating it.")
         return ToolResult(name, "spotify" if name == "media_search" and step.get("platform") == "spotify" else spec.backend,
                           str(evidence or "Action attempted; result needs verification."))
+
+
+def control_tool(actions, step, cancelled):
+    """Run one control tool step; refusals come back as readable results, never as a silent retry."""
+    from .control.service import parse_args
+    from .control.types import ControlError
+    name, value = step['action'], step.get('value', '').strip()
+    service = actions.control()
+    try:
+        args = parse_args(step.get('content', ''))
+        if name == 'web_open':
+            text = service.web_open(value, cancelled, str(args.get('profile', '')), bool(args.get('new_tab', False)))
+        elif name == 'web_read':
+            text = service.web_read(cancelled, value or 'interactive', str(args.get('find', '')), str(args.get('ref', '')))
+        elif name == 'web_act':
+            text = service.web_act(value, args, cancelled)
+        elif name == 'app_open':
+            text = service.app_open(value, str(args.get('path', '')), cancelled)
+        elif name == 'app_read':
+            text = service.app_read(value, str(args.get('filter', '')), cancelled)
+        elif name == 'app_act':
+            text = service.app_act(value, args, cancelled)
+        elif name == 'screen_act':
+            text = service.screen_act(value, args, cancelled)
+        else:
+            text = service.check()
+    except ControlError as error:
+        text = json.dumps({'ok': False, 'error': error.category.value, 'executed': error.executed,
+                           'result': str(error)[:600]}, ensure_ascii=False)
+    actions.report('tool', redact('control: ' + name + ' ' + value)[:300])
+    return text

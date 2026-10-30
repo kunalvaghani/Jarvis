@@ -201,6 +201,12 @@ def _parse(text: str) -> Command:
     if text.casefold() in {"list toolkits", "toolkit status", "show toolkits"}:
         return Command("toolkit", "toolkit_status", "{}")
     # Do not swallow the next task as a folder name or a GitHub search query.
+    # A website as the target ("open example.com and tell me...", "go to wikipedia.org") needs the planner's
+    # browser tools, not the one-step app/file opener. App requests keep their existing ordered paths.
+    if re.match(r"(?:open|go to|visit|navigate to|browse to) (?:the )?(?:website |site |page )?(?:https?://)?(?:www\.)?"
+                r"[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|org|net|edu|gov|io|dev|ai|app|co|in|uk|info|me|tv|wiki)\b(?:/\S*)?"
+                r"(?:[.!?]*$|,?\s+(?:and|then)\b)", text, re.I):
+        return Command("task", text)
     if (re.match(r"^(?:read|list|search|scrape|extract)\b", text, re.I)
             and re.search(r"\s+(?:and(?: then)?|then)\s+(?:read|list|search|find|scrape|extract|review|summarize|draft|write|improve|send|email|schedule|create|add|update|modify|edit|delete|remove|post|publish|tell|compare|open|launch|browse|select|click|fill|scroll|press|play|close)\b", text, re.I)):
         return Command("task", text)

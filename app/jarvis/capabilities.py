@@ -28,8 +28,12 @@ ROUTES = {
                          ('reverse-engineer-clone', 'project-coding')),
     'github': (r'\b(github|pull request|repository|repo|git)\b',
                ('github_search', 'github_read_file', 'github_pull_request', 'github_pr_files', 'git_status', 'git_diff', 'git_log'), ('project-coding', 'web-research')),
-    'browser': (r'\b(browser|website|webpage|web page|chrome|edge|firefox|form|textbox)\b',
-                ('browser_inspect', 'browser_navigate', 'browser_fill', 'browser_click'), ('browser-navigation', 'form-entry')),
+    'browser': (r'\b(browser|website|webpage|web page|chrome|edge|firefox|form|textbox|tabs?|url|search (?:for|on))\b|\b\w+\.(?:com|org|net|io|dev|ai|in)\b',
+                ('web_open', 'web_read', 'web_act', 'browser_inspect', 'browser_navigate', 'browser_fill', 'browser_click'),
+                ('browser-navigation', 'form-entry')),
+    'pc_control': (r'\b(notepad|calculator|paint|explorer|window|click|type|press|button|checkbox|menu|desktop|screen|canvas)\b',
+                   ('app_open', 'app_read', 'app_act', 'screen_act'), ('app-navigation', 'form-entry')),
+    'control_health': (r'\b(connections?|control (?:check|status)|health check)\b', ('control_check',), ()),
     'youtube': (r'\b(youtube|you tube)\b', ('media_search', 'media_control', 'browser_inspect'), ('youtube-media',)),
     # Read-only YouTube connector (integrations/jarvis-connectors, MCP server "youtube") for lookups the
     # player cannot answer; playback still uses the tools above.
