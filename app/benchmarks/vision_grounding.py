@@ -5,7 +5,7 @@ the benchmark needs no desktop and never photographs the user's screen. A case p
 point the route would click lies inside the element's DOM box. Results go to
 results/vision-grounding.json.
 
-    python benchmarks/vision_grounding.py [model ...]
+    python benchmarks/vision_grounding.py [model | model>fallback ...]
 """
 from __future__ import annotations
 
@@ -107,9 +107,10 @@ def run(model, rows):
 
     def capture(region):
         return image_for['current'].crop((region.left, region.top, region.right, region.bottom))
-    executor = VisionExecutor(Policy(), None, OllamaGrounder(model), capture=capture,
+    chain = [OllamaGrounder(name) for name in model.split('>')]  # 'a>b' = try b only when a refuses.
+    executor = VisionExecutor(Policy(), None, chain[0], capture=capture,
                               layout=lambda: layout_from_rects([('VIEW', (0, 0) + VIEW, 1.0)]),
-                              window_at=lambda x, y: (1, 'chrome.exe', False))
+                              window_at=lambda x, y: (1, 'chrome.exe', False), fallbacks=chain[1:])
     region = Rect(0, 0, *VIEW)
     image_for['current'] = Image.open(io.BytesIO(rows[0][1])).convert('RGB')
     try:
@@ -154,8 +155,13 @@ def main(models):
                'ground_truth': 'DOM box of the control unioned with its own <label> boxes', 'viewport': VIEW,
                'runs': [run(model, rows) for model in models]}
     out = APP / 'benchmarks/results/vision-grounding.json'
+    try:  # Keep earlier runs of other models; a re-run replaces only its own entry.
+        earlier = [r for r in json.loads(out.read_text(encoding='utf-8')).get('runs', []) if r['model'] not in models]
+    except (OSError, ValueError):
+        earlier = []
+    summary['runs'] = earlier + summary['runs']
     out.write_text(json.dumps(summary, indent=1), encoding='utf-8')
-    for r in summary['runs']:
+    for r in summary['runs'][len(earlier):]:
         print({k: v for k, v in r.items() if k != 'results'})
 
 

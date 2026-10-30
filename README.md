@@ -516,7 +516,7 @@ so existing local absolute paths continue working. New checkouts use `app`.
 
 ## Verification and history
 
-**2026-10-30:** the browser and PC control rework is in Phase 2. The browser, Windows-app (UI Automation) and local-vision routes are built and tested on the real desktop; Jarvis's live routing is unchanged until Phase 5. The main environment now runs Python 3.11.9. See the [rework progress](app/docs/rework/PROGRESS.md), the [control architecture](app/docs/architecture/control-architecture.md) and the [vision grounding ADR](app/docs/adr/0004-vision-route-grounding.md).
+**2026-10-30:** the browser and PC control rework is in Phase 2. The browser, Windows-app (UI Automation) and local-vision routes are built and tested on the real desktop (vision: 93.8% on the D1 benchmark with no wrong clicks); Jarvis's live routing is unchanged until Phase 5. The main environment now runs Python 3.11.9. See the [rework progress](app/docs/rework/PROGRESS.md), the [control architecture](app/docs/architecture/control-architecture.md) and the [vision grounding ADR](app/docs/adr/0004-vision-route-grounding.md).
 
 The [project-structure guide](app/docs/project-structure.md#verification-record)
 records the **2026-10-09–10 IST** reorganization and fresh checks: **1,315 regression

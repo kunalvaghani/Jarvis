@@ -59,6 +59,29 @@ def configured(base=None):
         return False
 
 
+RECONNECT = 'Run launchers/Connect Jarvis Gmail API.cmd once and approve the Google sign-in; then reload Jarvis.'
+
+
+def status(base=None):
+    """Local connection state without contacting Google: connected, not_connected or adapter_changed."""
+    root = directory(base or Path(__file__).resolve().parent.parent)
+    if not (root / 'token.dpapi').exists():
+        return 'not_connected'
+    return 'connected' if configured(base) else 'adapter_changed'
+
+
+def unavailable(base=None):
+    """What to tell the user when the Gmail tools are absent, with the one step that fixes it."""
+    state = status(base)
+    if state == 'adapter_changed':
+        return ('Gmail is not available right now: the Gmail adapter was updated since its last check. Run '
+                'launchers/Connect Jarvis Gmail API.cmd --verify-existing (read-only, no new consent); if Google '
+                'rejects the saved sign-in, run it without the option to sign in again.')
+    if state == 'not_connected':
+        return 'Gmail is not available right now: it is not connected yet. ' + RECONNECT
+    return 'Gmail is not available in this task: it is connected, but its tools were not loaded. Reload Jarvis.'
+
+
 def credentials(base):
     try:
         import win32crypt
@@ -72,7 +95,11 @@ def credentials(base):
             result.refresh(lambda *args, **kwargs: transport(*args, **{**kwargs, 'timeout':20}))
             save_credentials(base, result)
         return result
-    except Exception:
+    except Exception as error:
+        # Google answers invalid_grant when the saved sign-in expired or was revoked (Testing-mode OAuth apps
+        # expire after 7 days). Only the error class is inspected; credentials are never printed.
+        if 'invalid_grant' in str(error):
+            raise ValueError('Google no longer accepts the saved Gmail sign-in (expired or revoked). ' + RECONNECT) from None
         raise ValueError('Connect Gmail API locally with launchers/Connect Jarvis Gmail API.cmd; OAuth credentials are never printed.') from None
 
 

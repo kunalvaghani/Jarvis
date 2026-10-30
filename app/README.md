@@ -14,10 +14,14 @@
   - real-desktop tests 4/4, three runs in a row: Notepad typing saved and read back from disk; Calculator by button ID and keyboard; a title guard that refuses keys meant for another document;
   - reports administrator windows, UAC and protected windows instead of failing silently.
 - **Vision route** ([vision.py](jarvis/control/routes/vision.py), [ADR 0004](docs/adr/0004-vision-route-grounding.md)):
-  - for targets with no accessibility data; screenshots stay on this PC and go only to the local `qwen3-vl:2b`;
-  - on the [D1 benchmark](benchmarks/vision_grounding.py): 81% of targets found, 0 wrong clicks, 0 clicks on absent targets, p50 3.0 s, under 2.8 GB VRAM. Every miss is a refusal;
+  - for targets with no accessibility data; screenshots stay on this PC and go only to local models: `qwen3-vl:2b`, escalating to `qwen3-vl:4b` only when 2B can't find the target (one model on the GPU at a time);
+  - on the [D1 benchmark](benchmarks/vision_grounding.py) (2026-10-30): 93.8% of targets found, 0 wrong clicks, 0 clicks on absent targets, p50 3.2 s (p95 about 25 s when escalating), peak 2.76 GB VRAM. 2B alone scored 81%;
   - live click on a real Chrome canvas: 3/3;
-  - 81% is still below the 90% goal; that goal will be judged at task level in Phase 7.
+  - no new model was downloaded: the installed models met the 90% goal.
+- **Gmail by voice:**
+  - The Gmail API connection exists, but Google now rejects its saved sign-in (`invalid_grant`, i.e. expired or revoked). The adapter also changed since its last check.
+  - Jarvis now says exactly that, with the fix: run `launchers/Connect Jarvis Gmail API.cmd` once and approve the Google sign-in.
+  - After that, requests like "check my unread emails" or "draft an email to …" work by voice again. Every send still asks for approval first.
 - **Browser profiles:**
   - Jarvis now has its own copy of your Chrome `Default` profile at `.jarvis-runtime/personal-browser-profile`, with history, autofill, extensions and settings. Website sign-ins did not carry over: Chrome's app-bound cookie encryption prevents that by design, so sign in to Chrome there once.
   - Benchmarks use the separate empty `.jarvis-runtime/test-browser-profile`.

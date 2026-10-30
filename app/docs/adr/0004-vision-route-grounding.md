@@ -25,7 +25,10 @@ Route 4 is the last resort, for targets with no API, browser ref or UIA element 
 7. **No thinking.** The installed Qwen3-VL builds think before answering even with `think=false`: 150–400 tokens, 10–35 s per pass, measured. Starting the assistant turn with the answer prefix (`{"bbox_2d": [`) skips the thinking: 20 tokens, about 0.5 s warm on 2B. Qwen3-VL boxes use a relative 0–1000 scale; this was confirmed on a known button.
 8. **Context.** A 4k context keeps the model on the GPU. At 16k, `qwen3-vl:4b` took 5.8 GB and ran 68% on the CPU.
 
-**Default model:** `qwen3-vl:2b`. It matches 4B on safety (0 wrong clicks for both), is 3.4 points less accurate and is 2.5× faster.
+**Default: `qwen3-vl:2b`, escalating to `qwen3-vl:4b` only when 2B refuses** (`DEFAULT_CHAIN`, `default_grounders()`; amended 2026-10-30).
+- Each model in the chain sees a fresh capture and runs every check above.
+- Before escalating, 2B is unloaded from the GPU, and 4B is unloaded afterwards, so only one model is ever resident.
+- Only a refusal escalates. A stale screen, a timeout or a cancel stops immediately.
 
 ## Measurements (2026-10-30, `benchmarks/vision_grounding.py`)
 
@@ -41,6 +44,11 @@ Route 4 is the last resort, for targets with no API, browser ref or UIA element 
 | Prefill, no read-back | 4B | 28/32 | **3** | 1 | **1/3** | 4.7 s | 6.5 s | 2.8 GB |
 | **Prefill + read-back (chosen)** | **2B** | **26/32 (81.2%)** | **0** | 6 | **0/3** | 3.0 s | 4.1 s | 2.7 GB |
 | Prefill + read-back | 4B | 27/32 (84.4%) | 0 | 5 | 0/3 | 7.6 s | 9.4 s | 2.8 GB |
+| 2B→4B escalation, both models resident | chain | 30/32 | 0 | 2 | 0/3 | 6.8 s | 30.2 s | **3.95 GB** (over budget; 4B ran 53% on CPU) |
+| 2B→4B, unload around escalation, same capture | chain | 29/32 | 0 | 3 (one: 74 s grounding outlived the 60 s capture age) | 0/3 | 3.3 s | 23.9 s | 2.75 GB |
+| **2B→4B, unload around escalation, fresh capture per model (chosen)** | **chain** | **30/32 (93.8%)** | **0** | 2 | **0/3** | **3.2 s** | 25.6 s | **2.76 GB** |
+| Installed `qwen3.5:2b`, same pipeline | 2B | 1/32 | 4 | 27 | 0/3 | 3.0 s | 3.5 s | 2.6 GB |
+| Installed `qwen3.5:4b`, same pipeline | 4B | 6/32 | 8 | 18 | 0/3 | 22.8 s | 30.6 s | 1.5 GB |
 
 - **Old ground truth:** the prefill rows without read-back used the earlier truth, which counted only the 13 px input box of a checkbox or radio as correct.
 - **Repeatability:** the chosen row was run twice and gave identical results.
@@ -55,8 +63,10 @@ Route 4 is the last resort, for targets with no API, browser ref or UIA element 
 
 ## Consequences
 
-- Vision alone is at **81% accuracy, below the 90% acceptance target**, but every failure is a refusal, not a wrong click. Task-level accuracy depends on the router choosing browser refs or UIA first, and on the planner re-observing after a refusal.
-- **Candidates for a dedicated grounding model.** These need the user's approval to download, and none was measured here. Leaderboard figures are third-party, from [BenchmarkList, ScreenSpot-Pro](https://benchmarklist.com/benchmarks/screenspot_pro/), and still need checking against each model card:
+- With escalation, vision alone reaches **93.8% on D1 with no wrong clicks**: above the 90% target. Two harder cases (a `<select>`, and a radio whose label sits next to another radio) are still refused. The occasional escalation is slow (p95 about 25 s).
+- The installed Qwen3.5 models are unusable in this pipeline: 4–8 wrong clicks. Their box convention probably differs from Qwen3-VL's; this was not investigated further, because Qwen3-VL meets the target.
+- **Download decision (2026-10-30).** The user approved downloading one dedicated model to D:. No download was made: the escalation chain met the target with installed models. Holo2-4B's official card reports 57.2% on ScreenSpot-Pro, while aggregators list its base, Qwen3-VL-4B-Instruct, at about 59.5%. Holo 3.1 publishes no grounding numbers in text and does not document its coordinate format. Ollama already stores models in `D:\Ollama\models`, so a future pull lands on D:.
+- **Candidates for a dedicated grounding model, if more is needed later.** These need the user's approval to download, and none was measured here. Leaderboard figures are third-party, from [BenchmarkList, ScreenSpot-Pro](https://benchmarklist.com/benchmarks/screenspot_pro/), and still need checking against each model card:
 
   | Model | ScreenSpot-Pro (reported) |
   |---|---|

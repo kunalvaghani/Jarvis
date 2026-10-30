@@ -253,7 +253,8 @@ def run_gmail(brain,goal,cancelled):
     registry=ToolRegistry(brain.actions)
     names={row['action'] for row in registry.catalog('gmail')+registry.search('gmail',limit=30)}
     if 'gmail_api_list' not in names:
-        raise TaskClarification('Gmail API is not available in this task. Connect it locally and reload Jarvis after approval. No email action issued.','gmail_api')
+        from .gmail_api import unavailable
+        raise TaskClarification(unavailable(getattr(brain.actions,'base',None))+' No email action issued.','gmail_api')
     request=explicit_request(goal)
     if request is None:
         brain.actions.report('brain','Interpreting Gmail request using local text only')
@@ -438,7 +439,8 @@ def run_unread(brain, goal, cancelled):
     if not unread_request(goal):return None
     if cancelled():raise ValueError('Task cancelled before Gmail search.')
     if 'gmail_api_list' not in {row['action'] for row in ToolRegistry(brain.actions).catalog(goal)}:
-        raise TaskClarification('Gmail API is not available in this task. Connect it locally and reload Jarvis after approval; no mailbox messages were read.', 'gmail_api')
+        from .gmail_api import unavailable
+        raise TaskClarification(unavailable(getattr(brain.actions,'base',None))+' No mailbox messages were read.', 'gmail_api')
     step={'action':'gmail_api_list','value':'unread emails','browser':'chrome',
           'folder':'','find':'','platform':'',
           'content':json.dumps({'query':'is:unread','limit':5,'summaries':True}),

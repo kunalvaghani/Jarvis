@@ -22,7 +22,7 @@ import os
 import re
 import threading
 import time
-from typing import Any, Callable, Dict, Optional, Protocol, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Optional, Protocol, Sequence, Tuple
 from urllib.parse import urlsplit
 import urllib.request
 
@@ -94,6 +94,15 @@ class OllamaGrounder:
                              self.PREFIX, self.num_predict, timeout_s)
         return parse_box(content if 'bbox_2d' in content else self.PREFIX + content)
 
+    def release(self) -> None:
+        """Unload the model from the GPU now (4 GB holds one vision model at a time). Best effort."""
+        body = json.dumps({'model': self.name, 'keep_alive': 0}).encode()
+        try:
+            self.opener(urllib.request.Request(self.url + '/api/generate', body, {'Content-Type': 'application/json'}),
+                        timeout=15).read()
+        except OSError:
+            pass
+
     def read(self, png: bytes, timeout_s: float) -> str:
         content = self._chat(png, 'Read the text of the control at the exact centre of this image.', 'Text: "', 24, timeout_s)
         return content.split('"', 1)[0].strip()
@@ -156,10 +165,12 @@ class VisionExecutor(RouteExecutor):
     def __init__(self, policy: Policy, input: Input, grounder: Grounder,
                  capture: Callable[[Rect], Image.Image] = mss_capture, layout: Optional[Callable[[], Layout]] = None,
                  window_at: Optional[Callable[[int, int], Tuple[int, str, bool]]] = None,
-                 clock: Callable[[], float] = time.monotonic) -> None:
+                 clock: Callable[[], float] = time.monotonic, fallbacks: Sequence[Grounder] = ()) -> None:
+        """`fallbacks` are tried in order, each on a fresh capture, only when the previous model refused."""
         if os.name == 'nt' and capture is mss_capture:
             ensure_per_monitor_dpi()  # mss and SendInput must agree on physical pixels.
         self.policy, self.input, self.grounder, self.capture = policy, input, grounder, capture
+        self.fallbacks = tuple(fallbacks)
         self.layout = layout or system_layout
         self.window_at = window_at or _window_at
         self.clock = clock
@@ -174,8 +185,9 @@ class VisionExecutor(RouteExecutor):
             layout = self.layout()
         except Exception as error:
             return Health(False, f'No monitor layout: {error}')
-        return Health(True, f'{len(layout.monitors)} monitor(s), grounder {self.grounder.name}',
-                      {'grounder': self.grounder.name, 'local_only': True})
+        chain = [g.name for g in (self.grounder, *self.fallbacks)]
+        return Health(True, f'{len(layout.monitors)} monitor(s), grounders {" -> ".join(chain)}',
+                      {'grounder': self.grounder.name, 'chain': chain, 'local_only': True})
 
     def cancel(self) -> None:
         self._cancelled.set()
@@ -246,11 +258,38 @@ class VisionExecutor(RouteExecutor):
         with timer.stage('capture'):
             shot = self.shoot(region)
         deadline = self.clock() + timeout_s
+        refusals: List[str] = []
+        chain = (self.grounder, *self.fallbacks)
+        try:
+            for index, grounder in enumerate(chain):
+                if index:  # Free the GPU for the bigger model instead of spilling both onto the CPU.
+                    _release(chain[index - 1])
+                    with timer.stage('capture'):  # The next model sees the screen as it is now, not as it was.
+                        shot = self.shoot(region)
+                try:
+                    found = self._locate_with(grounder, shot, target, deadline, timer, label)
+                except ControlError as error:
+                    if error.category is not ErrorCategory.TARGET_NOT_FOUND:
+                        raise  # Stale screen, timeout or cancel: a bigger model would not help.
+                    refusals.append(f'{grounder.name}: {error}')
+                    continue
+                if refusals:
+                    found = replace(found, evidence=found.evidence + f' after {len(refusals)} refusal(s)')
+                return found
+        finally:
+            if refusals and len(chain) > 1:
+                _release(chain[min(len(refusals), len(chain) - 1)])  # Give the GPU back to the everyday model.
+        detail = refusals[-1].split(': ', 1)[1]
+        raise ControlError(detail if len(refusals) == 1 else f'{detail} ({len(refusals)} models refused.)',
+                           ErrorCategory.TARGET_NOT_FOUND)
+
+    def _locate_with(self, grounder: Grounder, shot: Shot, target: str, deadline: float, timer: StageTimer,
+                     label: str) -> Located:
         factor = min(1.0, COARSE_EDGE / max(shot.image.size))
         coarse_image = shot.image if factor == 1 else shot.image.resize(
             (max(1, round(shot.image.width * factor)), max(1, round(shot.image.height * factor))), Image.Resampling.LANCZOS)
         with timer.stage('grounding'):
-            coarse = self._ground(coarse_image, target, deadline)
+            coarse = self._ground(grounder, coarse_image, target, deadline)
         if coarse is None:
             raise ControlError(f'"{target[:80]}" is not visible on screen.', ErrorCategory.TARGET_NOT_FOUND)
         width, height = shot.image.size
@@ -263,7 +302,7 @@ class VisionExecutor(RouteExecutor):
         crop_rect = Rect(left, top, left + side_w, top + side_h)
         crop_image = shot.image.crop((crop_rect.left, crop_rect.top, crop_rect.right, crop_rect.bottom))
         with timer.stage('grounding'):
-            fine = self._ground(crop_image, target, deadline)
+            fine = self._ground(grounder, crop_image, target, deadline)
         if fine is None:
             raise ControlError(f'"{target[:80]}" was found in the overview but not up close; nothing was clicked.',
                                ErrorCategory.TARGET_NOT_FOUND)
@@ -286,12 +325,13 @@ class VisionExecutor(RouteExecutor):
                        round(crop.origin_x + fine[0] * crop.width * crop.scale_x) + 1),
                    max(round(crop.origin_y + fine[3] * crop.height * crop.scale_y),
                        round(crop.origin_y + fine[1] * crop.height * crop.scale_y) + 1))
-        evidence = f'{self.grounder.name} coarse+crop at ({point.x:.0f}, {point.y:.0f})'
+        evidence = f'{grounder.name} coarse+crop at ({point.x:.0f}, {point.y:.0f})'
         if label.strip():
-            evidence += self._read_back(shot, sx, sy, box, label, deadline, timer)
+            evidence += self._read_back(grounder, shot, sx, sy, box, label, deadline, timer)
         return Located(point, box, shot, evidence)
 
-    def _read_back(self, shot: Shot, x: float, y: float, box: Rect, text: str, deadline: float, timer: StageTimer) -> str:
+    def _read_back(self, grounder: Grounder, shot: Shot, x: float, y: float, box: Rect, text: str, deadline: float,
+                   timer: StageTimer) -> str:
         """Read the label at the grounded point; a different label means the model picked the wrong control."""
         width, height = shot.image.size
         half_w = max(60, round(box.width * shot.transform.scale_x ** -1 * READ_PAD / 2) + 30)
@@ -303,20 +343,19 @@ class VisionExecutor(RouteExecutor):
         if remaining <= 0:
             raise ControlError('Locating the target took too long.', ErrorCategory.TIMEOUT)
         with timer.stage('grounding'):
-            seen = self.grounder.read(png_bytes(patch), remaining)
+            seen = grounder.read(png_bytes(patch), remaining)
         if normal(text) not in normal(seen):
             raise ControlError(f'The control found for "{text[:60]}" reads "{seen[:60]}"; nothing was clicked.',
                                ErrorCategory.TARGET_NOT_FOUND)
         return f'; label read back "{seen[:60]}"'
 
-
-    def _ground(self, image: Image.Image, target: str, deadline: float) -> Optional[Box]:
+    def _ground(self, grounder: Grounder, image: Image.Image, target: str, deadline: float) -> Optional[Box]:
         if self._cancelled.is_set():
             raise ControlError('Cancelled.', ErrorCategory.CANCELLED)
         remaining = deadline - self.clock()
         if remaining <= 0:
             raise ControlError('Locating the target took too long.', ErrorCategory.TIMEOUT)
-        return self.grounder.locate(png_bytes(image), target, remaining)
+        return grounder.locate(png_bytes(image), target, remaining)
 
     # Safety checks before input ----------------------------------------------------
     def _unchanged(self, shot: Shot, box: Rect) -> None:
@@ -441,6 +480,21 @@ class VisionExecutor(RouteExecutor):
                 self.input.keys(str(p['text']), int(p.get('repeat', 1)), action.cancel)
             return self._done(action, f'Pressed {p["text"]}')
         raise ControlError(f'Unsupported vision action {name!r}.', ErrorCategory.UNSUPPORTED)
+
+
+DEFAULT_CHAIN = ('qwen3-vl:2b', 'qwen3-vl:4b')  # ADR 0004: 2B every time, 4B only after a 2B refusal.
+
+
+def default_grounders(url: str = 'http://127.0.0.1:11434') -> Tuple[Grounder, Tuple[Grounder, ...]]:
+    """The measured default: (primary, fallbacks) for VisionExecutor."""
+    chain = [OllamaGrounder(model, url) for model in DEFAULT_CHAIN]
+    return chain[0], tuple(chain[1:])
+
+
+def _release(grounder: Grounder) -> None:
+    release = getattr(grounder, 'release', None)
+    if callable(release):
+        release()
 
 
 def _window_at(x: int, y: int) -> Tuple[int, str, bool]:

@@ -10,8 +10,12 @@ Branch `claude_ControlArchitect`. Live checklist: [rework PROGRESS](rework/PROGR
 - **Route 4 (vision):** built ([ADR 0004](adr/0004-vision-route-grounding.md)). D1 benchmark: 81.2% hits, 0 wrong clicks, 0 false clicks, p50 3.0 s. Live canvas click 3/3.
 - **Personal Chrome profile:** copied from `Default`.
 
+**Update, same day:**
+- **Vision:** with a 2B→4B escalation on refusal, 93.8% on D1, 0 wrong clicks, peak VRAM 2.76 GB. No download was needed.
+- **Gmail:** the voice path is blocked by an expired or revoked OAuth sign-in (`invalid_grant`) plus an adapter-hash change (diff since `b54c0c1` reviewed). Jarvis now reports the exact fix; the user must run `launchers/Connect Jarvis Gmail API.cmd`.
+- **`gmail_chrome`:** never validated; it is not used as a fallback.
+
 **Unresolved:**
-- **Vision accuracy:** below 90%. The next action needs user approval to download a dedicated grounding model; otherwise try a 2B→4B escalation on refusal.
 - **Profile sign-ins:** app-bound cookies (v20) cannot transfer to the copied profile. The user must sign in to Chrome there once.
 - **Unexecuted gates:**
   - Route 1 API/MCP;

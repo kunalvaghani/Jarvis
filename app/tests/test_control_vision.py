@@ -119,6 +119,13 @@ def test_grounder_refuses_non_loopback_servers():
     OllamaGrounder(url='http://localhost:11434')
 
 
+def test_default_chain_is_local_2b_then_4b():
+    from jarvis.control.routes.vision import default_grounders
+    primary, fallbacks = default_grounders()
+    assert (primary.name, [g.name for g in fallbacks]) == ('qwen3-vl:2b', ['qwen3-vl:4b'])
+    assert all(g.url.startswith('http://127.0.0.1') for g in (primary, *fallbacks))
+
+
 def test_grounder_parses_a_local_reply_without_network():
     class Reply:
         def read(self):
@@ -290,3 +297,61 @@ def test_live_model_clicks_a_canvas_shape_in_a_real_chrome_window():
             browser.close()
     finally:
         site.stop()
+
+
+class Blind(ColourGrounder):
+    name = 'blind-fake'
+
+    def locate(self, png, target, timeout_s):
+        self.calls.append(target)
+        return None
+
+
+def test_refusal_escalates_to_the_next_model_on_a_fresh_capture():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    first, second = Blind(), ColourGrounder()
+    inp = FakeInput()
+    executor = VisionExecutor(Policy(allowed_apps=frozenset({'notepad.exe'})), inp, first, capture=desktop.capture,
+                              layout=lambda: LAYOUT, window_at=lambda x, y: (1, r'C:\Windows\notepad.exe', False),
+                              fallbacks=(second,))
+    result = act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000))
+    assert result.ok and 'after 1 refusal' in result.evidence and 'colour-fake' in result.evidence
+    assert len(first.calls) == 1 and inp.events[0][1:3] == (320, 320)
+    assert desktop.captures == 3  # A capture per model plus the pre-click comparison.
+    assert executor.health_check().capabilities['chain'] == ['blind-fake', 'colour-fake']
+
+
+def test_escalation_hands_the_gpu_to_one_model_at_a_time():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    released = []
+    first, second = Blind(), ColourGrounder()
+    first.release, second.release = (lambda: released.append('first')), (lambda: released.append('second'))
+    executor, inp = make(desktop, first)
+    executor.fallbacks = (second,)
+    assert act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000)).ok
+    assert released == ['first', 'second']  # Unload before escalating; unload the fallback afterwards.
+    released.clear()
+    executor.grounder = ColourGrounder()
+    executor.grounder.release = lambda: released.append('primary')
+    assert act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000)).ok
+    assert released == []  # No escalation: the everyday model stays loaded.
+
+
+def test_every_model_refusing_is_reported_and_nothing_is_clicked():
+    desktop = Desktop()
+    executor, inp = make(desktop, Blind())
+    executor.fallbacks = (Blind(),)
+    result = act(executor, 'click', target='red square', rect=(0, 0, 800, 600))
+    assert result.error_category is ErrorCategory.TARGET_NOT_FOUND and '2 models refused' in result.text and not inp.events
+
+
+def test_cancel_does_not_escalate():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    backup = ColourGrounder()
+    executor, inp = make(desktop, ColourGrounder(on_locate=lambda call: executor.cancel()))
+    executor.fallbacks = (backup,)
+    result = act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000))
+    assert result.error_category is ErrorCategory.CANCELLED and not backup.calls and not inp.events
