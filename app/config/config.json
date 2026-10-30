@@ -1734,5 +1734,41 @@
     "groq_max_output_tokens": 1536,
     "gemini_max_task_calls": 3,
     "repair_escalation_after": 2
+  },
+  "telemetry": {
+    "timing_ledger": false,
+    "shadow_log": false
+  },
+  "speed": {
+    "cache_order": false
+  },
+  "control": {
+    "event_waits": false,
+    "compact_reads": false,
+    "form_fill": false
+  },
+  "vision": {
+    "tight_escalation": false
+  },
+  "recipes": {
+    "replay": "off"
+  },
+  "fast_path": {
+    "system1": "off",
+    "plan_cache": "off"
+  },
+  "learning": {
+    "mode": "off",
+    "cloud_research": false,
+    "sleep_time": false
+  },
+  "memory_v2": {
+    "facade": false,
+    "ingest": false,
+    "context_pack": false,
+    "resolver": "off"
+  },
+  "proactive": {
+    "enabled": false
   }
 }

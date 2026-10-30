@@ -20,6 +20,7 @@ from .locks import LockManager
 from .policy import ApprovalGate, Policy, classify
 from .progress import ProgressEvent, Reporting, Sink, emit
 from .settings import ControlSettings, load
+from ..telemetry.ledger import pause  # Fixed waits, recorded when the timing ledger is on.
 from .types import Action, ActionResult, CancelToken, ControlError, ErrorCategory, Risk, Route, TargetContext
 
 # Kind "name" [optional state such as focused or value='x'] [ref]: the state must not hide a Submit from risk checks.
@@ -323,9 +324,9 @@ class ControlService:
                 route.inner.act(self._action(Route.UIA, 'invoke', {'scope': self.app_scope, 'ref': notice}, cancelled,
                                              'OK', window=handle))
                 extra['dismissed'] = 'Notepad notice about a missing file'
-                time.sleep(.5)
+                pause(.5)
             route.inner.act(self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+n'}, cancelled, window=handle))
-            time.sleep(.6)
+            pause(.6)
             read = self._settled_read(route, handle)
             extra['new_tab'] = fresh_notepad_tab(read)
             if not extra['new_tab']:
@@ -342,7 +343,7 @@ class ControlService:
             if len(text.splitlines()) >= 4 and text == previous:
                 return text
             previous = text
-            time.sleep(.4)
+            pause(.4)
         return text
 
     def _read_window(self, route: Reporting, handle: int, filter: str) -> str:
@@ -402,7 +403,7 @@ class ControlService:
         if result.executed and handle and op != 'close_window':
             if op in ('type', 'key', 'set_value'):
                 import time
-                time.sleep(.3)  # Let the app draw the input before reading it back.
+                pause(.3)  # Let the app draw the input before reading it back.
             try:
                 read = self._read_window(route, handle, 'all')
             except ControlError:
@@ -446,7 +447,7 @@ class ControlService:
         field = save = ''
         deadline = time.monotonic() + 8
         while time.monotonic() < deadline and not (field and save):
-            time.sleep(.4)
+            pause(.4)
             found = labels(self._read_window(route, handle, 'all'))
             field = next((r for r, (kind, name) in found.items() if kind == 'Edit' and name.startswith('File name')), '')
             save = next((r for r, (kind, name) in found.items() if kind == 'Button' and name in ('Save', '&Save')), '')
@@ -461,7 +462,7 @@ class ControlService:
                                                f'Save {target.name}', window=handle))
         deadline = time.monotonic() + 6
         while result.ok and not target.exists() and time.monotonic() < deadline:
-            time.sleep(.3)
+            pause(.3)
         saved = target.exists()
         read = self._read_window(route, handle, 'all') if result.executed else ''
         row = {'ok': saved, 'verified': saved, 'executed': result.executed,

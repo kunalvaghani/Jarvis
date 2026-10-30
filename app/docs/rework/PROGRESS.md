@@ -96,4 +96,37 @@ Re-run after the vision escalation and the Gmail status messages (2026-10-30): *
 
 ## Next step
 
-Wait for the user's approval of the live acceptance plan, then run it with the no-assistance rules in that plan.
+The live acceptance plan was approved on 2026-10-30; see [the handoff](../CLAUDE_HANDOFF.md) for case status (S1, S2, S4 accepted; S3, H2, H3 failing). Control rework work continues alongside upgrade v2 below.
+
+## Upgrade v2: learn-it-myself loop, fast path, unified memory
+
+Every v2 capability sits behind a flag in `config/config.json`, shipped off ([ADR 0005](../adr/0005-upgrade-v2-flags-ledger-verifiers.md)).
+
+| Phase | Status | Gate evidence |
+|---|---|---|
+| 0 Groundwork and verifiers | **PASS** (2026-10-31) | [plan](upgrade-v2/phase-0-plan.md). Unit: 69 new tests pass (including a real headless-Blender check). `mypy --strict` clean on 34 files. Full suite: 4817 passed / 40 failed / 157 skipped; the 39 baseline failures plus one intermittent Windows temp-folder clean-up race in `test_development_tools.py` (1 of 7 isolated runs), fixed in the test and then 10/10. Launcher check `ready`. `control.health`: 8 of 10 ready (personal-profile sign-in and Gmail reconnect need the user, as before). Live parity with every flag off: the first round of S1/S2/S4 × 3 (seed 31) had one S1 failure, the verify defect below. After the fix, S1, S2 and S4 × 3 in shuffled order (seed 32) gave **9/9 passes**: S1 158.8–199.8 s, S2 102.7–128.9 s, S4 refused in 0.1–0.2 s. |
+| 1 Quick wins and app APIs first | NOT STARTED | |
+| 2 Skills as code and the fast path | NOT STARTED | |
+| 3 Learning mode and unified memory | NOT STARTED | |
+| 4 Sleep-time and proactivity | NOT STARTED | |
+
+**Phase 0 contents:**
+- `jarvis/flags.py`: every v2 flag, with malformed values read as off. Decider modes are off, shadow, suggest and act.
+- `jarvis/telemetry/ledger.py` and `benchmarks/ledger_report.py`: the per-step timing ledger.
+- `jarvis/telemetry/shadow.py`: the shadow-decision log.
+- `jarvis/learning/verifiers/`: sealed verifiers for a text file, a Blender object and a Python project.
+- 22 daily live cases (D01–D22), plus `--repeat`, `--shuffle`, `--seed` and `--telemetry` on `benchmarks/live/cases.py`.
+- Hooks in existing code, each one line:
+  - `Actions.execute`;
+  - `BrainClient._request_once`;
+  - `ToolRegistry.execute`;
+  - `control/service.py` fixed sleeps → `ledger.pause`.
+
+**Fixes found on the way:**
+- Committing the WIP (`f253a41`) exposed 4 new test failures, all fixed:
+  - a Brain without a client;
+  - two tests that read this PC's scheduler context cap;
+  - the no-startup-screenshot routing change.
+- Live parity S1 failed once: the final verify call wrote an unbounded `reason` until its 900-token limit (160 s on CPU) and errored. `brain_worker`'s verify schema now caps `reason` at 600 characters. Ollama enforces `maxLength` (checked on `qwen3.5:0.8b`).
+
+**Baseline (31 runnable cases × 3, shuffled, telemetry only; H1 waits for the Workday sign-in):** not yet run; see the handoff.

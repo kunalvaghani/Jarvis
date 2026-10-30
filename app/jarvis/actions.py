@@ -1,4 +1,5 @@
 from .paths import state_file
+from .telemetry.ledger import timed_task
 import ctypes
 from ctypes import wintypes
 import json
@@ -1238,6 +1239,7 @@ class Actions:
             raise AmbiguousName(name, matches)
         return Path(matches[0]) if matches else self.projects.resolve(name)
 
+    @timed_task  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, command, cancelled=lambda: False):
         """Audit outer direct commands without duplicating nested task execution."""
         if command.kind in {"task", "open", "run_command", "click_control", "write_text", "compose_text"}:

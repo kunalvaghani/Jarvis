@@ -518,6 +518,8 @@ so existing local absolute paths continue working. New checkouts use `app`.
 
 ## Verification and history
 
+**2026-10-31:** upgrade v2 Phase 0 adds feature flags (all off), a per-step timing ledger, a shadow-decision log, sealed outcome verifiers and 22 daily live cases. Behaviour is unchanged with the flags off. Live S1/S2/S4 passed 9/9 in shuffled order, and the full suite shows no new failures beyond the 39-failure baseline. See [ADR 0005](app/docs/adr/0005-upgrade-v2-flags-ledger-verifiers.md) and the [rework progress](app/docs/rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory).
+
 **2026-10-30:** the browser and PC control rework is in Phase 2. The browser, Windows-app (UI Automation) and local-vision routes are built and tested on the real desktop (vision: 93.8% on the D1 benchmark with no wrong clicks); Jarvis's live routing is unchanged until Phase 5. The main environment now runs Python 3.11.9. See the [rework progress](app/docs/rework/PROGRESS.md), the [control architecture](app/docs/architecture/control-architecture.md) and the [vision grounding ADR](app/docs/adr/0004-vision-route-grounding.md).
 
 The [project-structure guide](app/docs/project-structure.md#verification-record)

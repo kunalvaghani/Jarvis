@@ -25,7 +25,8 @@ RECORD: List[Dict[str, Any]] = []  # Tool steps of the current run (diagnosis).
 CALLS: List[Dict[str, Any]] = []  # Model calls of the current run (diagnosis).
 
 
-def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None, memory: bool = False):
+def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None, memory: bool = False,
+          telemetry: bool = False):
     """A real Jarvis Actions object on the user's configuration, cloud off, scripted approval answers."""
     from jarvis.actions import Actions, Desktop
     config = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'))
@@ -41,6 +42,8 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
     else:
         config['memory'] = {**stored, 'enabled': False}
     config['knowledge_acquisition'] = {**config.get('knowledge_acquisition', {}), 'enabled': False}
+    if telemetry:  # Observation only: the per-step timing ledger and shadow log for this run.
+        config['telemetry'] = {**config.get('telemetry', {}), 'timing_ledger': True, 'shadow_log': True}
     events: List[Dict[str, Any]] = []
     lock = threading.Lock()
 
@@ -108,12 +111,12 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
 
 
 def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False,
-        memory: bool = False) -> Dict[str, Any]:
+        memory: bool = False, telemetry: bool = False) -> Dict[str, Any]:
     def log(kind, value):
         if not quiet and kind in ('tool', 'plan', 'brain', 'answer', 'warning', 'media_card', 'question'):
             text = value.get('phase', '') + ' ' + value.get('title', '') if isinstance(value, dict) else str(value)
             print(f'  [{kind}] {text[:160]}', flush=True)
-    actions, events, approvals = build(approve, log, memory)
+    actions, events, approvals = build(approve, log, memory, telemetry)
     started = time.monotonic()
     row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve}
     try:
@@ -151,8 +154,25 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
         row['island_cards'] = [{k: e['value'].get(k) for k in ('service', 'phase', 'title', 'step', 'steps')}
                                for e in events if e['kind'] == 'media_card' and isinstance(e['value'], dict)]
         row['approvals'] = approvals
+        if telemetry:
+            row['ledger'] = ledger_summary(row['date'])
         row['actions'] = actions
     return row
+
+
+def ledger_summary(since: str) -> Optional[Dict[str, Any]]:
+    """The timing-ledger summary of the task(s) this run started (None if the ledger wrote nothing)."""
+    path = APP / '.jarvis-runtime' / 'logs' / 'timing-ledger.jsonl'
+    try:
+        rows = [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
+    except (OSError, ValueError):
+        return None
+    tasks = [r for r in rows if r.get('type') == 'task' and str(r.get('at', '')) >= since]
+    if not tasks:
+        return None
+    keys = ('total_s', 'model_s', 'tool_s', 'wait_s', 'other_s', 'prompt_tokens', 'output_tokens', 'model_calls',
+            'calls_9b', 'steps')
+    return {'tasks': len(tasks), **{k: round(sum(float(t.get(k) or 0) for t in tasks), 3) for k in keys}}
 
 
 def main(argv: List[str]) -> int:

@@ -9,7 +9,8 @@ from jarvis.development_browser import validate_tests
 
 class ToolsTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory()
+        # A cancelled child is already waited for, but Windows can release its hold on the folder a moment later.
+        self.tmp=tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.addCleanup(self.tmp.cleanup)
         self.root=Path(self.tmp.name)
         self.tools=DevelopmentTools(self.root)

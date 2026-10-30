@@ -11,6 +11,7 @@ import threading
 import time
 
 from .commands import Command
+from .telemetry.ledger import timed_model
 from .clarification import TaskClarification
 from .names import common
 from .task_state import TaskState
@@ -533,6 +534,7 @@ class BrainClient:
                 from .recovery import record
                 record(self.base, "Brain inference worker stopped; restarted and retried inference only, without replaying actions.")
 
+    @timed_model  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def _request_once(self, operation, cancelled, **data):
         request_timeout = data.pop('_timeout_seconds', None)
         if request_timeout is not None:

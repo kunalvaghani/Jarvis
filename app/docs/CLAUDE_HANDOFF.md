@@ -1,5 +1,40 @@
 # Cumulative Claude handoff
 
+## Upgrade v2 Phase 0: flags, timing ledger, shadow log, sealed verifiers — 2026-10-31 IST
+
+The user approved the master prompt v2 Phase 0 plan ([plan](rework/upgrade-v2/phase-0-plan.md), [ADR 0005](adr/0005-upgrade-v2-flags-ledger-verifiers.md), [PROGRESS](rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). The blueprint's "Integration plan" tab was never attached; flag names follow the master prompt, with `brain.system1`/`brain.plan_cache` moved to `fast_path.*` (see the ADR).
+
+**Commits:**
+- `f253a41`: live rounds 19–23 WIP. Its regression found 4 new failures, all fixed in that commit.
+- Phase 0: the next commit.
+
+**Gate (Phase 0):**
+
+| Check | Result |
+|---|---|
+| Unit | 69 new tests pass |
+| `mypy --strict` | clean (34 files) |
+| Full suite | 4817 passed / 40 failed / 157 skipped, which is the 39 baseline failures plus 1 intermittent temp-folder race, fixed (10/10 after) |
+| `launcher --check` | `ready` |
+| `control.health` | 8/10 ready (Chrome sign-in in the personal profile and Gmail reconnect need the user) |
+| Live parity, every flag off | S1/S2/S4 × 3 shuffled: 9/9, after one fix |
+
+**Fix outside the flags:** the verify call's `reason` is now `maxLength` 600 in `brain_worker.py`. An unbounded reason ran to the 900-token limit (160 s on CPU) and failed S1 once.
+
+**Unexecuted gate:** the 32-case baseline (31 runnable × 3, shuffled, `--telemetry`).
+- Command: `python benchmarks/live/cases.py all --repeat 3 --shuffle --telemetry`.
+- It needs about 3–6 hours of unattended desktop time and is the "before" measurement for Phase 1.
+- Summarise it with `python benchmarks/ledger_report.py --since <start>` and per-case pass rates from `benchmarks/results/live/*.jsonl` (local only, gitignored).
+
+**Still open from the live rounds:**
+- S3, H2 and H3 are failing.
+- H4–H6 have not run.
+- H1 needs the Workday sign-in.
+
+**Next action:**
+1. Run the baseline.
+2. Write the Phase 1 plan and its test cases, then wait for the user's approval.
+
 ## Safe pause: live control rounds 19–23 — 2026-10-30 IST
 
 **PAUSED_BY_USER at a safe point.** Live round 23 was stopped while H3 was still in workload planning, before any write to the test folder. No Jarvis test processes are left running. Everything since commit `b08c192` is **uncommitted** on branch `claude_ControlArchitect`. The full regression suite has not been rerun on these changes.

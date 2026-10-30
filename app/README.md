@@ -4,6 +4,31 @@
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](docs/autonomous-repair-acceptance.md) · [Handoff](docs/CLAUDE_HANDOFF.md).
 
+## Upgrade v2 groundwork (Phase 0) — 2026-10-31 IST
+
+Groundwork for the learn-it-myself loop, the fast path and unified memory. **Nothing changes until you turn a flag on.** Every new feature has a flag in `config/config.json` and ships off ([ADR 0005](docs/adr/0005-upgrade-v2-flags-ledger-verifiers.md), [plan](docs/rework/upgrade-v2/phase-0-plan.md), [progress](docs/rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)).
+
+**Flag sections:** `telemetry`, `speed`, `control`, `vision`, `recipes`, `fast_path`, `learning`, `memory_v2` and `proactive`.
+- A malformed value reads as off.
+- Decider modes go `off` → `shadow` → `suggest` → `act`. Only you raise a mode.
+
+**What Phase 0 adds:**
+- **Timing ledger** (`telemetry.timing_ledger`). For every task it records model time, tool time, wait time, prompt tokens, 9B calls and steps, in `.jarvis-runtime/logs/timing-ledger.jsonl`. `python benchmarks/ledger_report.py` gives p50/p95.
+- **Shadow log** (`telemetry.shadow_log`). It records what a new decider would have chosen next to what Jarvis actually did, with an agreement rate.
+- **Sealed verifiers** (`jarvis/learning/verifiers/`). They check a saved text file, a Blender object (headless Blender) and a Python project (isolated run). A changed verifier file is refused, and one that only reads a "success" message is rejected. The S3, H2 and H3 live checks now use them.
+- **Live suite.** It grows to 32 cases, adding 22 daily tasks (D01–D22). `benchmarks/live/cases.py all --repeat 3 --shuffle --telemetry` runs shuffled repeats with the ledger on for those runs only.
+
+**Verification (2026-10-31):**
+- 69 new unit tests pass.
+- `mypy --strict` is clean on 34 files.
+- Full suite: no new failures beyond the 39-failure baseline. One intermittent Windows temp-folder race was fixed in its test.
+- `launcher --check`: `ready`.
+- Live check with every flag off: S1, S2 and S4 each passed 3 times in shuffled order (9/9), after fixing one defect.
+
+**The defect:** the final verification call could write an unbounded reason until its output limit (160 s on the CPU). Its reason is now capped at 600 characters.
+
+**Not yet run:** the 32-case baseline (3–6 h of unattended desktop time).
+
 ## Browser and PC control rework and Python 3.11 — 2026-10-30 IST
 
 **Python 3.11:** the main environment `app/.venv` now runs **Python 3.11.9** with the identical 120-package set. Before switching, the full suite was run on 3.11 side by side. The first run exposed a real bug: SQLite connections in `catalog.py`, `folder_lookup.py` and `repository_skills.py` were never closed. That bug was fixed, and the re-run then matched the 3.10 baseline failure-for-failure (the same 39 pre-existing coding-agent failures, none new). Launcher readiness on 3.11 is `ready`. The old environment is kept at `app/.venv310`; see [rollback](docs/rework/rollback.md#python-311-interpreter-switch-2026-10-30). The secondary environments (`.venv-brain`, `.venv-f5`, `.venv-harness`, `.venv-openviking`, `.venv-skills`, `.venv-training`) are still 3.10 and move one at a time.

@@ -108,8 +108,9 @@ SCHEMAS = {
                 "id": {"type": "integer", "minimum": 0}, "dep": {"type": "array", "items": {"type": "integer"}}}}}}},
     "decide": {"type": "object", "additionalProperties": False, "required": ["approved", "choice", "reason"], "properties": {
         "approved": {"type": "boolean"}, "choice": {"type": "string"}, "reason": {"type": "string"}}},
+    # A bounded reason: an unbounded one once ran to the 900-token limit (160 s on CPU) and failed live S1 (2026-10-31).
     "verify": {"type": "object", "additionalProperties": False, "required": ["verified", "reason"], "properties": {
-        "verified": {"type": "boolean"}, "reason": {"type": "string"}}},
+        "verified": {"type": "boolean"}, "reason": {"type": "string", "maxLength": 600}}},
     "deliberate": {"type": "object", "additionalProperties": False,
         "required": ["understanding", "recommendation", "reasoning", "alternatives", "confidence", "agrees_with_user", "claims", "question"],
         "properties": {

@@ -6,6 +6,7 @@ import re
 import time
 
 from .commands import Command
+from .telemetry.ledger import timed_tool
 from .desktop_actions import CONTROL_ACTIONS, validate_desktop_step
 from .toolkits import TOOLS as KIT_TOOLS
 
@@ -246,6 +247,7 @@ class ToolRegistry:
                  'approval': spec.approval} for spec in (self.specs[name] for name in names)]
                 )+definitions(self.actions,query,min(limit,6)))
 
+    @timed_tool  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, step, cancelled, activate=None):
         from .agent_events import task_trace
         with task_trace(self.actions):
