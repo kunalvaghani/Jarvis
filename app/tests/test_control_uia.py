@@ -121,8 +121,12 @@ def test_calculator_by_automation_id(uia):
         scope = f'win-{handle}'
         assert uia.probe('name', scope=scope, ref=display.id).replace('\u202f', ' ').endswith(' 5')
         result = lambda: uia.probe('name', scope=scope, ref=display.id).replace('\u202f', ' ')  # noqa: E731
+        five = uia.probe('name', scope=scope, ref=display.id)
         guarded = act(uia, 'key', handle=handle, text='9', expect_title='some-other-document.txt')
-        typed = act(uia, 'key', handle=handle, text='escape 7', expect_title='Calculator')
+        # Calculator applies keys asynchronously: the action waits for the display to read back 7.
+        shows_seven = Expectation('probe_equals', {'what': 'name', 'args': {'scope': scope, 'ref': display.id},
+                                                   'expected': five[:-1] + '7'})
+        typed = act(uia, 'key', handle=handle, text='escape 7', expect_title='Calculator', expectation=shows_seven)
         blocker = uia.protected_foreground()
         if blocker is not None and ctypes_foreground() != handle:
             # Windows drops injected keys while a protected window is in front: reported, never silent.
@@ -133,7 +137,7 @@ def test_calculator_by_automation_id(uia):
         else:
             # Keyboard input is refused when the window in front does not show the expected document.
             assert guarded.error_category is ErrorCategory.FOCUS_LOST and not guarded.executed
-            assert typed.ok, typed.text
+            assert typed.ok and typed.verified, (typed.text, typed.evidence)
             assert result().endswith(' 7')
     finally:
         act(uia, 'close_window', handle=handle)

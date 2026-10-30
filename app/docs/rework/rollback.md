@@ -31,7 +31,7 @@ ren .venv .venv311-switched
 ren .venv310 .venv
 ```
 
-`app/.venv311` is the side-by-side environment used for the parity check. It is no longer used by anything and can be removed once the user agrees.
+`app/.venv311` was the side-by-side environment used for the parity check. Nothing referenced it; it was deleted with the user's approval on 2026-10-30. `.venv310` remains the rollback.
 
 ## Reproducing the Phase 0 evidence
 

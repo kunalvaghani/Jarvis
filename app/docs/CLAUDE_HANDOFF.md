@@ -1,5 +1,24 @@
 # Cumulative Claude handoff
 
+## Browser + PC control rework, Phase 2 routes 3 and 4 — 2026-10-30 IST
+
+Branch `claude_ControlArchitect`. Live checklist: [rework PROGRESS](rework/PROGRESS.md).
+
+**Done:**
+- **Python 3.11 switch:** complete. `.venv311` deleted with the user's approval; `.venv310` is the rollback.
+- **Route 3 (UIA):** real-desktop tests 4/4, three consecutive runs.
+- **Route 4 (vision):** built ([ADR 0004](adr/0004-vision-route-grounding.md)). D1 benchmark: 81.2% hits, 0 wrong clicks, 0 false clicks, p50 3.0 s. Live canvas click 3/3.
+- **Personal Chrome profile:** copied from `Default`.
+
+**Unresolved:**
+- **Vision accuracy:** below 90%. The next action needs user approval to download a dedicated grounding model; otherwise try a 2B→4B escalation on refusal.
+- **Profile sign-ins:** app-bound cookies (v20) cannot transfer to the copied profile. The user must sign in to Chrome there once.
+- **Unexecuted gates:**
+  - Route 1 API/MCP;
+  - Gmail adapter;
+  - headful browser latency;
+  - Phases 3-10.
+
 ## Browser + PC control rework, Phase 0 — 2026-10-30 IST
 
 New, unrelated feature work on branch `claude_ControlArchitect` (start `7e7a39a`). It does not touch the paused campaign. Phase 0 (audit, dependency map, integration contract, rollback, baseline) is complete. No runtime code was changed. Live checklist: [rework PROGRESS](rework/PROGRESS.md).

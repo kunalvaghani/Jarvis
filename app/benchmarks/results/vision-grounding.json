@@ -1,0 +1,922 @@
+{
+ "date": "2026-10-30",
+ "pipeline": "coarse 1280px + native crop, prefilled answer (no thinking), num_ctx 4096",
+ "label_read_back": true,
+ "ground_truth": "DOM box of the control unioned with its own <label> boxes",
+ "viewport": [
+  1280,
+  800
+ ],
+ "runs": [
+  {
+   "model": "qwen3-vl:2b",
+   "cases": 32,
+   "hits": 26,
+   "wrong_clicks": 0,
+   "refused": 6,
+   "accuracy": 0.812,
+   "absent_cases": 3,
+   "false_clicks_on_absent": 0,
+   "p50_ms": 3001,
+   "p95_ms": 4056,
+   "peak_vram_mib": 2725,
+   "results": [
+    {
+     "page": "index",
+     "target": "the \"Forms\" link",
+     "box": [
+      8,
+      79.875,
+      47,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(27, 90)",
+     "ms": 2929
+    },
+    {
+     "page": "index",
+     "target": "the \"Dynamic\" link",
+     "box": [
+      51,
+      79.875,
+      104,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(77, 90)",
+     "ms": 2091
+    },
+    {
+     "page": "index",
+     "target": "the \"Modal\" link",
+     "box": [
+      108,
+      79.875,
+      148,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(124, 90)",
+     "ms": 2299
+    },
+    {
+     "page": "index",
+     "target": "the \"Frames\" link",
+     "box": [
+      152,
+      79.875,
+      197,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(172, 90)",
+     "ms": 2102
+    },
+    {
+     "page": "index",
+     "target": "the \"Scrolling\" link",
+     "box": [
+      201,
+      79.875,
+      253,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(228, 90)",
+     "ms": 3015
+    },
+    {
+     "page": "index",
+     "target": "the \"Canvas\" link",
+     "box": [
+      257,
+      79.875,
+      302,
+      98.875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The overview and the close-up disagree about \"the \"Canvas\" link\"; nothing was cl",
+     "ms": 1776
+    },
+    {
+     "page": "index",
+     "target": "the \"Drag and drop\" link",
+     "box": [
+      306,
+      79.875,
+      395,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(347, 90)",
+     "ms": 3281
+    },
+    {
+     "page": "index",
+     "target": "the \"Files\" link",
+     "box": [
+      399,
+      79.875,
+      427,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(411, 88)",
+     "ms": 3239
+    },
+    {
+     "page": "index",
+     "target": "the \"Forms in a new tab\" link",
+     "box": [
+      431,
+      79.875,
+      547,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(487, 89)",
+     "ms": 3161
+    },
+    {
+     "page": "forms",
+     "target": "the Name field",
+     "box": [
+      8,
+      79.875,
+      226,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(151, 91)",
+     "ms": 4056
+    },
+    {
+     "page": "forms",
+     "target": "the Email field",
+     "box": [
+      230,
+      79.875,
+      444,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(334, 90)",
+     "ms": 3094
+    },
+    {
+     "page": "forms",
+     "target": "the Password field",
+     "box": [
+      448,
+      79.875,
+      689,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(566, 90)",
+     "ms": 3031
+    },
+    {
+     "page": "forms",
+     "target": "the Topic field",
+     "box": [
+      693,
+      80.875,
+      798,
+      100.875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The overview and the close-up disagree about \"the Topic field\"; nothing was clic",
+     "ms": 1876
+    },
+    {
+     "page": "forms",
+     "target": "the Newsletter field",
+     "box": [
+      802,
+      80.875,
+      892,
+      99.875
+     ],
+     "outcome": "hit",
+     "detail": "(851, 91)",
+     "ms": 3001
+    },
+    {
+     "page": "forms",
+     "target": "the Basic field",
+     "box": [
+      24,
+      128.46875,
+      82,
+      147.46875
+     ],
+     "outcome": "hit",
+     "detail": "(65, 139)",
+     "ms": 3083
+    },
+    {
+     "page": "forms",
+     "target": "the Pro field",
+     "box": [
+      86,
+      128.46875,
+      133,
+      147.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Pro\" reads \"Basic\"; nothing was clicked.",
+     "ms": 3269
+    },
+    {
+     "page": "forms",
+     "target": "the Message field",
+     "box": [
+      8,
+      160.46875,
+      227,
+      200.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Message\" reads \"Send mess\"; nothing was clicked.",
+     "ms": 3139
+    },
+    {
+     "page": "forms",
+     "target": "the \"Send message\" button",
+     "box": [
+      231,
+      180.46875,
+      334,
+      202.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The overview and the close-up disagree about \"the \"Send message\" button\"; nothin",
+     "ms": 1804
+    },
+    {
+     "page": "forms",
+     "target": "the \"Archived\" button",
+     "box": [
+      338,
+      180.46875,
+      403,
+      202.46875
+     ],
+     "outcome": "hit",
+     "detail": "(370, 191)",
+     "ms": 2992
+    },
+    {
+     "page": "forms",
+     "target": "the \"Count 0\" button",
+     "box": [
+      8,
+      254.46875,
+      69,
+      276.46875
+     ],
+     "outcome": "hit",
+     "detail": "(40, 267)",
+     "ms": 2978
+    },
+    {
+     "page": "modal",
+     "target": "the \"Open dialog\" button",
+     "box": [
+      8,
+      79.875,
+      93,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(50, 91)",
+     "ms": 4110
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Load items\" button",
+     "box": [
+      8,
+      79.875,
+      88,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(48, 91)",
+     "ms": 4174
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Ready soon\" button",
+     "box": [
+      8,
+      153.875,
+      93,
+      175.875
+     ],
+     "outcome": "hit",
+     "detail": "(48, 165)",
+     "ms": 2170
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Rerender\" button",
+     "box": [
+      8,
+      175.875,
+      76,
+      197.875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Rerender\" reads \"Ready soon\"; nothing was clicked.",
+     "ms": 2952
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Moving target\" button",
+     "box": [
+      8,
+      197.875,
+      101,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(56, 209)",
+     "ms": 3229
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Under overlay\" button",
+     "box": [
+      105,
+      197.875,
+      199,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(151, 210)",
+     "ms": 3034
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Show overlay\" button",
+     "box": [
+      203,
+      197.875,
+      295,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(248, 205)",
+     "ms": 3058
+    },
+    {
+     "page": "files",
+     "target": "the \"Download sample\" link",
+     "box": [
+      8,
+      80.875,
+      117,
+      99.875
+     ],
+     "outcome": "hit",
+     "detail": "(62, 92)",
+     "ms": 4019
+    },
+    {
+     "page": "files",
+     "target": "the Upload file field",
+     "box": [
+      121,
+      79.875,
+      429,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(151, 90)",
+     "ms": 3002
+    },
+    {
+     "page": "canvas",
+     "target": "the red square",
+     "box": [
+      40,
+      60,
+      100,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(70, 90)",
+     "ms": 2731
+    },
+    {
+     "page": "canvas",
+     "target": "the blue square",
+     "box": [
+      170,
+      60,
+      230,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(199, 91)",
+     "ms": 1797
+    },
+    {
+     "page": "canvas",
+     "target": "the green square",
+     "box": [
+      300,
+      60,
+      360,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(329, 90)",
+     "ms": 1787
+    },
+    {
+     "page": "forms",
+     "target": "the \"Delete account\" button",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "\"the \"Delete account\" button\" is not visible on screen.",
+     "ms": 421
+    },
+    {
+     "page": "index",
+     "target": "the \"Checkout\" link",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "The overview and the close-up disagree about \"the \"Checkout\" link\"; nothing was ",
+     "ms": 917
+    },
+    {
+     "page": "canvas",
+     "target": "the yellow triangle",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "\"the yellow triangle\" is not visible on screen.",
+     "ms": 416
+    }
+   ]
+  },
+  {
+   "model": "qwen3-vl:4b",
+   "cases": 32,
+   "hits": 27,
+   "wrong_clicks": 0,
+   "refused": 5,
+   "accuracy": 0.844,
+   "absent_cases": 3,
+   "false_clicks_on_absent": 0,
+   "p50_ms": 7568,
+   "p95_ms": 9399,
+   "peak_vram_mib": 2765,
+   "results": [
+    {
+     "page": "index",
+     "target": "the \"Forms\" link",
+     "box": [
+      8,
+      79.875,
+      47,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(26, 90)",
+     "ms": 5883
+    },
+    {
+     "page": "index",
+     "target": "the \"Dynamic\" link",
+     "box": [
+      51,
+      79.875,
+      104,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(77, 89)",
+     "ms": 6170
+    },
+    {
+     "page": "index",
+     "target": "the \"Modal\" link",
+     "box": [
+      108,
+      79.875,
+      148,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(128, 89)",
+     "ms": 6073
+    },
+    {
+     "page": "index",
+     "target": "the \"Frames\" link",
+     "box": [
+      152,
+      79.875,
+      197,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(175, 89)",
+     "ms": 5868
+    },
+    {
+     "page": "index",
+     "target": "the \"Scrolling\" link",
+     "box": [
+      201,
+      79.875,
+      253,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(227, 88)",
+     "ms": 7747
+    },
+    {
+     "page": "index",
+     "target": "the \"Canvas\" link",
+     "box": [
+      257,
+      79.875,
+      302,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(278, 89)",
+     "ms": 7568
+    },
+    {
+     "page": "index",
+     "target": "the \"Drag and drop\" link",
+     "box": [
+      306,
+      79.875,
+      395,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(349, 89)",
+     "ms": 8161
+    },
+    {
+     "page": "index",
+     "target": "the \"Files\" link",
+     "box": [
+      399,
+      79.875,
+      427,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(413, 88)",
+     "ms": 7660
+    },
+    {
+     "page": "index",
+     "target": "the \"Forms in a new tab\" link",
+     "box": [
+      431,
+      79.875,
+      547,
+      98.875
+     ],
+     "outcome": "hit",
+     "detail": "(489, 89)",
+     "ms": 8245
+    },
+    {
+     "page": "forms",
+     "target": "the Name field",
+     "box": [
+      8,
+      79.875,
+      226,
+      101.875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Name\" reads \"Plan\"; nothing was clicked.",
+     "ms": 9681
+    },
+    {
+     "page": "forms",
+     "target": "the Email field",
+     "box": [
+      230,
+      79.875,
+      444,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(337, 90)",
+     "ms": 8004
+    },
+    {
+     "page": "forms",
+     "target": "the Password field",
+     "box": [
+      448,
+      79.875,
+      689,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(602, 91)",
+     "ms": 7750
+    },
+    {
+     "page": "forms",
+     "target": "the Topic field",
+     "box": [
+      693,
+      80.875,
+      798,
+      100.875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The overview and the close-up disagree about \"the Topic field\"; nothing was clic",
+     "ms": 5039
+    },
+    {
+     "page": "forms",
+     "target": "the Newsletter field",
+     "box": [
+      802,
+      80.875,
+      892,
+      99.875
+     ],
+     "outcome": "hit",
+     "detail": "(849, 90)",
+     "ms": 7628
+    },
+    {
+     "page": "forms",
+     "target": "the Basic field",
+     "box": [
+      24,
+      128.46875,
+      82,
+      147.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Basic\" reads \"Plan\"; nothing was clicked.",
+     "ms": 7160
+    },
+    {
+     "page": "forms",
+     "target": "the Pro field",
+     "box": [
+      86,
+      128.46875,
+      133,
+      147.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Pro\" reads \"Basic\"; nothing was clicked.",
+     "ms": 5745
+    },
+    {
+     "page": "forms",
+     "target": "the Message field",
+     "box": [
+      8,
+      160.46875,
+      227,
+      200.46875
+     ],
+     "outcome": "hit",
+     "detail": "(147, 178)",
+     "ms": 7917
+    },
+    {
+     "page": "forms",
+     "target": "the \"Send message\" button",
+     "box": [
+      231,
+      180.46875,
+      334,
+      202.46875
+     ],
+     "outcome": "hit",
+     "detail": "(282, 190)",
+     "ms": 7615
+    },
+    {
+     "page": "forms",
+     "target": "the \"Archived\" button",
+     "box": [
+      338,
+      180.46875,
+      403,
+      202.46875
+     ],
+     "outcome": "target_not_found",
+     "detail": "The control found for \"Archived\" reads \"ssage\"; nothing was clicked.",
+     "ms": 7794
+    },
+    {
+     "page": "forms",
+     "target": "the \"Count 0\" button",
+     "box": [
+      8,
+      254.46875,
+      69,
+      276.46875
+     ],
+     "outcome": "hit",
+     "detail": "(38, 264)",
+     "ms": 7408
+    },
+    {
+     "page": "modal",
+     "target": "the \"Open dialog\" button",
+     "box": [
+      8,
+      79.875,
+      93,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(50, 90)",
+     "ms": 9188
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Load items\" button",
+     "box": [
+      8,
+      79.875,
+      88,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(47, 90)",
+     "ms": 9399
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Ready soon\" button",
+     "box": [
+      8,
+      153.875,
+      93,
+      175.875
+     ],
+     "outcome": "hit",
+     "detail": "(50, 166)",
+     "ms": 5662
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Rerender\" button",
+     "box": [
+      8,
+      175.875,
+      76,
+      197.875
+     ],
+     "outcome": "hit",
+     "detail": "(40, 187)",
+     "ms": 5886
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Moving target\" button",
+     "box": [
+      8,
+      197.875,
+      101,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(55, 209)",
+     "ms": 7363
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Under overlay\" button",
+     "box": [
+      105,
+      197.875,
+      199,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(153, 209)",
+     "ms": 5774
+    },
+    {
+     "page": "dynamic",
+     "target": "the \"Show overlay\" button",
+     "box": [
+      203,
+      197.875,
+      295,
+      219.875
+     ],
+     "outcome": "hit",
+     "detail": "(248, 208)",
+     "ms": 7692
+    },
+    {
+     "page": "files",
+     "target": "the \"Download sample\" link",
+     "box": [
+      8,
+      80.875,
+      117,
+      99.875
+     ],
+     "outcome": "hit",
+     "detail": "(62, 90)",
+     "ms": 9838
+    },
+    {
+     "page": "files",
+     "target": "the Upload file field",
+     "box": [
+      121,
+      79.875,
+      429,
+      101.875
+     ],
+     "outcome": "hit",
+     "detail": "(154, 90)",
+     "ms": 7666
+    },
+    {
+     "page": "canvas",
+     "target": "the red square",
+     "box": [
+      40,
+      60,
+      100,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(70, 90)",
+     "ms": 6562
+    },
+    {
+     "page": "canvas",
+     "target": "the blue square",
+     "box": [
+      170,
+      60,
+      230,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(200, 89)",
+     "ms": 4724
+    },
+    {
+     "page": "canvas",
+     "target": "the green square",
+     "box": [
+      300,
+      60,
+      360,
+      120
+     ],
+     "outcome": "hit",
+     "detail": "(330, 89)",
+     "ms": 4921
+    },
+    {
+     "page": "forms",
+     "target": "the \"Delete account\" button",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "The overview and the close-up disagree about \"the \"Delete account\" button\"; noth",
+     "ms": 3191
+    },
+    {
+     "page": "index",
+     "target": "the \"Checkout\" link",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "The control found for \"Checkout\" reads \"Forms Dynam\"; nothing was clicked.",
+     "ms": 7821
+    },
+    {
+     "page": "canvas",
+     "target": "the yellow triangle",
+     "box": null,
+     "outcome": "correct_refusal",
+     "detail": "\"the yellow triangle\" is not visible on screen.",
+     "ms": 1129
+    }
+   ]
+  }
+ ]
+}

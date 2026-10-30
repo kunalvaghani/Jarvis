@@ -8,6 +8,20 @@
 
 **Control rework progress:** Phase 1 (core contracts in `jarvis/control/`, 100% line coverage, `mypy --strict` clean) and the browser route of Phase 2 are done; see [progress](docs/rework/PROGRESS.md). The browser route reads pages through Chrome's accessibility tree and refuses clicks on targets that moved, changed or are covered. It passed 11 integration tests on real Chrome against the local [D1 test site](benchmarks/sites/d1/). Measured locally, headless and warm: ref click plus verification p50 84.6 ms. Jarvis's live routing is unchanged until Phase 5.
 
+**Windows apps and vision (2026-10-30):**
+- **Windows-app route** ([uia.py](jarvis/control/routes/uia.py)):
+  - drives Notepad, Calculator and Explorer through UI Automation;
+  - real-desktop tests 4/4, three runs in a row: Notepad typing saved and read back from disk; Calculator by button ID and keyboard; a title guard that refuses keys meant for another document;
+  - reports administrator windows, UAC and protected windows instead of failing silently.
+- **Vision route** ([vision.py](jarvis/control/routes/vision.py), [ADR 0004](docs/adr/0004-vision-route-grounding.md)):
+  - for targets with no accessibility data; screenshots stay on this PC and go only to the local `qwen3-vl:2b`;
+  - on the [D1 benchmark](benchmarks/vision_grounding.py): 81% of targets found, 0 wrong clicks, 0 clicks on absent targets, p50 3.0 s, under 2.8 GB VRAM. Every miss is a refusal;
+  - live click on a real Chrome canvas: 3/3;
+  - 81% is still below the 90% goal; that goal will be judged at task level in Phase 7.
+- **Browser profiles:**
+  - Jarvis now has its own copy of your Chrome `Default` profile at `.jarvis-runtime/personal-browser-profile`, with history, autofill, extensions and settings. Website sign-ins did not carry over: Chrome's app-bound cookie encryption prevents that by design, so sign in to Chrome there once.
+  - Benchmarks use the separate empty `.jarvis-runtime/test-browser-profile`.
+
 ### Phase 0 record
 
 Work has started on rebuilding browser and Windows control as one capability-aware layer with four routes: API/MCP, Playwright browser, Windows UI Automation and vision fallback. Design source: [control architecture](docs/architecture/control-architecture.md). **No runtime behaviour has changed yet.** Phase 0 delivered the [audit](docs/rework/audit.md), [dependency map](docs/rework/migration-dependency-map.md), [integration contract](docs/rework/integration-contract.md), [rollback](docs/rework/rollback.md), [layout ADR](docs/adr/0001-control-layer-layout.md) and [progress checklist](docs/rework/PROGRESS.md).
