@@ -1562,7 +1562,11 @@ class Actions:
                         coder.reference_repositories = []
                         self.report("warning", "Coding without repository references: " + str(exc)[:160])
                 try:
-                    result = coder.run(project, command.value, cancelled, selected=selected)
+                    from . import flags
+                    from .small_program import matches, run_small_program  # Upgrade v2 flag, default off.
+                    small = matches(command.value) if flags.enabled(self.config, 'control', 'api_routes') else None
+                    result = (run_small_program(self, project, command.value, small, cancelled) if small else
+                              coder.run(project, command.value, cancelled, selected=selected))
                 except Exception:
                     if intel is not None and intel.enabled:
                         intel.cancel_for(project, 'coding task ended without success')

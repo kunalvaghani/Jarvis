@@ -11,10 +11,13 @@ from dataclasses import replace
 import json
 import re
 import threading
+import time
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
 from urllib.parse import urlsplit
 
+from .compact import compact
 from .executor import RouteExecutor
+from .waits import until
 from .input import Input
 from .locks import LockManager
 from .policy import ApprovalGate, Policy, classify
@@ -167,7 +170,8 @@ class ControlService:
         def build() -> RouteExecutor:
             from .routes.vision import OllamaGrounder, VisionExecutor
             chain = [OllamaGrounder(model, self.settings.ollama_url) for model in self.settings.vision_models]
-            executor = VisionExecutor(self.policy, self._shared_input(), chain[0], fallbacks=chain[1:])
+            executor = VisionExecutor(self.policy, self._shared_input(), chain[0], fallbacks=chain[1:],
+                                      tight_escalation=self.settings.flags.get('vision.tight_escalation') is True)
             executor.progress = self.sink
             return executor
         return self._route('vision', build, 'Vision · on this PC')
@@ -209,8 +213,41 @@ class ControlService:
             return ActionResult.failure(action, error)
         return route.act(action)
 
-    @staticmethod
-    def _report(result: ActionResult, read: str = '', extra: Optional[Mapping[str, Any]] = None) -> str:
+    def _wait(self, seconds: float, done: Callable[[], bool]) -> None:
+        """A fixed wait, or with control.event_waits a condition wait that ends early (never later)."""
+        if self.settings.extra.get('event_waits') is True:
+            until(done, seconds)
+        else:
+            pause(seconds)
+
+    def _settle_input(self, route: Reporting, handle: int, typed: str, before: str) -> None:
+        """After typed text or keys: with control.event_waits, read until the window has settled.
+
+        A fixed 0.3 s read once caught Calculator mid-calculation ("69104 Minus ( 7"); the planner then pressed
+        Equals again and Calculator repeated the subtraction (live S2, 2026-10-31). Settled means a field showing
+        the whole typed text, or two equal reads after the window changed (or after 0.3 s if it does not change).
+        It can take longer than 0.3 s only while the app is still changing, and never more than 2 s."""
+        if self.settings.extra.get('event_waits') is not True:
+            pause(.3)
+            return
+        start, last = time.monotonic(), ['']
+
+        def settled() -> bool:
+            read = self._read_window(route, handle, 'all')
+            shown = field_text(read)
+            if typed and shown is not None and typed_intact(typed, shown):
+                return True
+            same, last[0] = read == last[0], read
+            return same and (read != before or time.monotonic() - start >= .3)
+        until(settled, 2.0, interval=.1)
+
+    def _interval(self, fixed: float, fast: float) -> float:
+        """Polling interval inside an existing deadline: shorter with control.event_waits."""
+        return fast if self.settings.extra.get('event_waits') is True else fixed
+
+    def _report(self, result: ActionResult, read: str = '', extra: Optional[Mapping[str, Any]] = None) -> str:
+        if read and self.settings.extra.get('compact_reads') is True:  # Upgrade v2 flag, default off.
+            read = compact(read)
         row: Dict[str, Any] = {'ok': result.ok, 'verified': result.verified, 'executed': result.executed}
         if result.text:
             row['result'] = result.text[:600]
@@ -324,9 +361,9 @@ class ControlService:
                 route.inner.act(self._action(Route.UIA, 'invoke', {'scope': self.app_scope, 'ref': notice}, cancelled,
                                              'OK', window=handle))
                 extra['dismissed'] = 'Notepad notice about a missing file'
-                pause(.5)
+                self._wait(.5, lambda: not notepad_notice(self._read_window(route, handle, 'all')))
             route.inner.act(self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+n'}, cancelled, window=handle))
-            pause(.6)
+            self._wait(.6, lambda: fresh_notepad_tab(self._read_window(route, handle, 'all')))
             read = self._settled_read(route, handle)
             extra['new_tab'] = fresh_notepad_tab(read)
             if not extra['new_tab']:
@@ -343,7 +380,7 @@ class ControlService:
             if len(text.splitlines()) >= 4 and text == previous:
                 return text
             previous = text
-            pause(.4)
+            pause(self._interval(.4, .15))
         return text
 
     def _read_window(self, route: Reporting, handle: int, filter: str) -> str:
@@ -402,8 +439,8 @@ class ControlService:
         read = ''
         if result.executed and handle and op != 'close_window':
             if op in ('type', 'key', 'set_value'):
-                import time
-                pause(.3)  # Let the app draw the input before reading it back.
+                # Let the app draw the input before reading it back.
+                self._settle_input(route, handle, str(params.get('text', '')) if op == 'type' else '', before)
             try:
                 read = self._read_window(route, handle, 'all')
             except ControlError:
@@ -447,7 +484,7 @@ class ControlService:
         field = save = ''
         deadline = time.monotonic() + 8
         while time.monotonic() < deadline and not (field and save):
-            pause(.4)
+            pause(self._interval(.4, .1))
             found = labels(self._read_window(route, handle, 'all'))
             field = next((r for r, (kind, name) in found.items() if kind == 'Edit' and name.startswith('File name')), '')
             save = next((r for r, (kind, name) in found.items() if kind == 'Button' and name in ('Save', '&Save')), '')
@@ -462,7 +499,7 @@ class ControlService:
                                                f'Save {target.name}', window=handle))
         deadline = time.monotonic() + 6
         while result.ok and not target.exists() and time.monotonic() < deadline:
-            pause(.3)
+            pause(self._interval(.3, .05))
         saved = target.exists()
         read = self._read_window(route, handle, 'all') if result.executed else ''
         row = {'ok': saved, 'verified': saved, 'executed': result.executed,
@@ -470,6 +507,8 @@ class ControlService:
                'evidence': f'file exists, {target.stat().st_size} bytes' if saved else (result.text or '')[:200]}
         if not saved:
             row['error'] = (result.error_category.value if not result.ok else 'unverified')
+        if read and self.settings.extra.get('compact_reads') is True:  # Upgrade v2 flag, default off.
+            read = compact(read)
         return json.dumps(row, ensure_ascii=False) + ('\n' + read[:READ_LIMIT] if read else '')
 
     # Screen (vision) ----------------------------------------------------------------

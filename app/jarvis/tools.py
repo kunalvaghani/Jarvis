@@ -6,6 +6,7 @@ import re
 import time
 
 from .commands import Command
+from . import flags
 from .telemetry.ledger import timed_tool
 from .desktop_actions import CONTROL_ACTIONS, validate_desktop_step
 from .toolkits import TOOLS as KIT_TOOLS
@@ -342,10 +343,22 @@ class ToolRegistry:
             if not task or task.get('status') != 'running':
                 raise ValueError('Save requires a current explicitly authorized Jarvis task.')
             self.actions.brain.validate_remaining([step], task['goal'])
-            evidence = self.actions.brain.visual_fallback.save_file(task['goal'], step, cancelled)
+            evidence = None
+            if flags.enabled(getattr(self.actions, 'config', None), 'control', 'shared_save'):
+                from .control.save_dialog import save_file_step  # Upgrade v2 flag, default off.
+                evidence = save_file_step(self.actions, step, cancelled)
+            if evidence is None:
+                evidence = self.actions.brain.visual_fallback.save_file(task['goal'], step, cancelled)
         elif name in KIT_TOOLS:
             from .toolkits import execute
             evidence = execute(self.actions, step, cancelled)
+            if flags.enabled(getattr(self.actions, 'config', None), 'control', 'api_routes'):
+                from .app_routes import show_document  # Upgrade v2 flag, default off.
+                from .task_state import TaskState
+                state = getattr(self.actions, 'task_state', None)
+                task = state.snapshot() if isinstance(state, TaskState) else None
+                if isinstance(task, dict):
+                    evidence = show_document(self.actions, step, str(evidence), str(task.get('goal', '')), cancelled)
         elif name in CONTROL_ACTIONS or name in {"shortcut", "scroll", "type_text"}:
             if activate is None:
                 raise ValueError("Selection requires a freshly checked visible control.")
@@ -372,6 +385,15 @@ class ToolRegistry:
                           str(evidence or "Action attempted; result needs verification."))
 
 
+def list_rule(actions, text):
+    """Typed text for a list goal follows the user's titled-list rule (list_format.titled); other text is unchanged."""
+    from .list_format import titled
+    from .task_state import TaskState
+    state = getattr(actions, 'task_state', None)
+    task = state.snapshot() if isinstance(state, TaskState) else None
+    return titled(text, str(task.get('goal', ''))) if isinstance(task, dict) else text
+
+
 def control_tool(actions, step, cancelled):
     """Run one control tool step; refusals come back as readable results, never as a silent retry."""
     from .control.service import parse_args
@@ -391,6 +413,8 @@ def control_tool(actions, step, cancelled):
         elif name == 'app_read':
             text = service.app_read(value, str(args.get('filter', '')), cancelled)
         elif name == 'app_act':
+            if value in ('type', 'set_value') and isinstance(args.get('text'), str):
+                args = {**args, 'text': list_rule(actions, args['text'])}
             text = service.app_act(value, args, cancelled)
         elif name == 'screen_act':
             text = service.screen_act(value, args, cancelled)

@@ -1,5 +1,6 @@
 {
- "date": "2026-10-30",
+ "date": "2026-10-31",
+ "tight_escalation": false,
  "pipeline": "coarse 1280px + native crop, prefilled answer (no thinking), num_ctx 4096",
  "label_read_back": true,
  "ground_truth": "DOM box of the control unioned with its own <label> boxes",
@@ -1837,7 +1838,7 @@
    "accuracy": 0.938,
    "absent_cases": 3,
    "false_clicks_on_absent": 0,
-   "p50_ms": 3215,
+   "p50_ms": 3262,
    "p95_ms": 25641,
    "peak_vram_mib": 2757,
    "results": [
@@ -1852,7 +1853,7 @@
      ],
      "outcome": "hit",
      "detail": "(27, 90)",
-     "ms": 2915
+     "ms": 3119
     },
     {
      "page": "index",
@@ -1865,7 +1866,7 @@
      ],
      "outcome": "hit",
      "detail": "(77, 90)",
-     "ms": 2084
+     "ms": 2205
     },
     {
      "page": "index",
@@ -1878,7 +1879,7 @@
      ],
      "outcome": "hit",
      "detail": "(124, 90)",
-     "ms": 2298
+     "ms": 2334
     },
     {
      "page": "index",
@@ -1891,7 +1892,7 @@
      ],
      "outcome": "hit",
      "detail": "(172, 90)",
-     "ms": 2091
+     "ms": 2150
     },
     {
      "page": "index",
@@ -1904,7 +1905,7 @@
      ],
      "outcome": "hit",
      "detail": "(228, 90)",
-     "ms": 2979
+     "ms": 2995
     },
     {
      "page": "index",
@@ -1917,7 +1918,7 @@
      ],
      "outcome": "hit",
      "detail": "(278, 89)",
-     "ms": 16563
+     "ms": 26948
     },
     {
      "page": "index",
@@ -1930,7 +1931,7 @@
      ],
      "outcome": "hit",
      "detail": "(347, 90)",
-     "ms": 9326
+     "ms": 10094
     },
     {
      "page": "index",
@@ -1943,7 +1944,7 @@
      ],
      "outcome": "hit",
      "detail": "(411, 88)",
-     "ms": 3215
+     "ms": 3262
     },
     {
      "page": "index",
@@ -1956,7 +1957,7 @@
      ],
      "outcome": "hit",
      "detail": "(487, 89)",
-     "ms": 3120
+     "ms": 3132
     },
     {
      "page": "forms",
@@ -1969,7 +1970,7 @@
      ],
      "outcome": "hit",
      "detail": "(151, 91)",
-     "ms": 4029
+     "ms": 4082
     },
     {
      "page": "forms",
@@ -1982,7 +1983,7 @@
      ],
      "outcome": "hit",
      "detail": "(334, 90)",
-     "ms": 3062
+     "ms": 3127
     },
     {
      "page": "forms",
@@ -1995,7 +1996,7 @@
      ],
      "outcome": "hit",
      "detail": "(566, 90)",
-     "ms": 3023
+     "ms": 3079
     },
     {
      "page": "forms",
@@ -2008,7 +2009,7 @@
      ],
      "outcome": "target_not_found",
      "detail": "The overview and the close-up disagree about \"the Topic field\"; nothing was clic",
-     "ms": 14209
+     "ms": 15371
     },
     {
      "page": "forms",
@@ -2021,7 +2022,7 @@
      ],
      "outcome": "hit",
      "detail": "(851, 91)",
-     "ms": 10851
+     "ms": 9891
     },
     {
      "page": "forms",
@@ -2034,7 +2035,7 @@
      ],
      "outcome": "hit",
      "detail": "(65, 139)",
-     "ms": 3070
+     "ms": 3084
     },
     {
      "page": "forms",
@@ -2047,7 +2048,7 @@
      ],
      "outcome": "target_not_found",
      "detail": "The control found for \"Pro\" reads \"Basic\"; nothing was clicked. (2 models refuse",
-     "ms": 19987
+     "ms": 18916
     },
     {
      "page": "forms",
@@ -2060,7 +2061,7 @@
      ],
      "outcome": "hit",
      "detail": "(147, 178)",
-     "ms": 24989
+     "ms": 25641
     },
     {
      "page": "forms",
@@ -2073,7 +2074,7 @@
      ],
      "outcome": "hit",
      "detail": "(282, 190)",
-     "ms": 25641
+     "ms": 26182
     },
     {
      "page": "forms",
@@ -2086,7 +2087,7 @@
      ],
      "outcome": "hit",
      "detail": "(370, 191)",
-     "ms": 9616
+     "ms": 10779
     },
     {
      "page": "forms",
@@ -2099,7 +2100,7 @@
      ],
      "outcome": "hit",
      "detail": "(40, 267)",
-     "ms": 2980
+     "ms": 3029
     },
     {
      "page": "modal",
@@ -2112,7 +2113,7 @@
      ],
      "outcome": "hit",
      "detail": "(50, 91)",
-     "ms": 4057
+     "ms": 4090
     },
     {
      "page": "dynamic",
@@ -2125,7 +2126,7 @@
      ],
      "outcome": "hit",
      "detail": "(48, 91)",
-     "ms": 4151
+     "ms": 4174
     },
     {
      "page": "dynamic",
@@ -2138,7 +2139,7 @@
      ],
      "outcome": "hit",
      "detail": "(48, 165)",
-     "ms": 2106
+     "ms": 2143
     },
     {
      "page": "dynamic",
@@ -2151,7 +2152,7 @@
      ],
      "outcome": "hit",
      "detail": "(40, 187)",
-     "ms": 18410
+     "ms": 20010
     },
     {
      "page": "dynamic",
@@ -2164,7 +2165,7 @@
      ],
      "outcome": "hit",
      "detail": "(56, 209)",
-     "ms": 9954
+     "ms": 10508
     },
     {
      "page": "dynamic",
@@ -2177,7 +2178,7 @@
      ],
      "outcome": "hit",
      "detail": "(151, 210)",
-     "ms": 2998
+     "ms": 3049
     },
     {
      "page": "dynamic",
@@ -2190,7 +2191,7 @@
      ],
      "outcome": "hit",
      "detail": "(248, 205)",
-     "ms": 3009
+     "ms": 3077
     },
     {
      "page": "files",
@@ -2203,7 +2204,7 @@
      ],
      "outcome": "hit",
      "detail": "(62, 92)",
-     "ms": 3937
+     "ms": 3969
     },
     {
      "page": "files",
@@ -2216,7 +2217,7 @@
      ],
      "outcome": "hit",
      "detail": "(151, 90)",
-     "ms": 3004
+     "ms": 3108
     },
     {
      "page": "canvas",
@@ -2229,7 +2230,7 @@
      ],
      "outcome": "hit",
      "detail": "(70, 90)",
-     "ms": 2715
+     "ms": 2725
     },
     {
      "page": "canvas",
@@ -2242,7 +2243,7 @@
      ],
      "outcome": "hit",
      "detail": "(199, 91)",
-     "ms": 1810
+     "ms": 1814
     },
     {
      "page": "canvas",
@@ -2255,7 +2256,7 @@
      ],
      "outcome": "hit",
      "detail": "(329, 90)",
-     "ms": 1766
+     "ms": 1801
     },
     {
      "page": "forms",
@@ -2263,7 +2264,7 @@
      "box": null,
      "outcome": "correct_refusal",
      "detail": "The overview and the close-up disagree about \"the \"Delete account\" button\"; noth",
-     "ms": 44077
+     "ms": 15624
     },
     {
      "page": "index",
@@ -2271,7 +2272,7 @@
      "box": null,
      "outcome": "correct_refusal",
      "detail": "The control found for \"Checkout\" reads \"Forms Dynam\"; nothing was clicked. (2 mo",
-     "ms": 26704
+     "ms": 24570
     },
     {
      "page": "canvas",
@@ -2279,7 +2280,7 @@
      "box": null,
      "outcome": "correct_refusal",
      "detail": "\"the yellow triangle\" is not visible on screen. (2 models refused.)",
-     "ms": 15289
+     "ms": 16350
     }
    ]
   }

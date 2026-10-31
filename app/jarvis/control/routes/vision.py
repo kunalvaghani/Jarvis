@@ -166,12 +166,17 @@ class VisionExecutor(RouteExecutor):
     def __init__(self, policy: Policy, input: Input, grounder: Grounder,
                  capture: Callable[[Rect], Image.Image] = mss_capture, layout: Optional[Callable[[], Layout]] = None,
                  window_at: Optional[Callable[[int, int], Tuple[int, str, bool]]] = None,
-                 clock: Callable[[], float] = time.monotonic, fallbacks: Sequence[Grounder] = ()) -> None:
-        """`fallbacks` are tried in order, each on a fresh capture, only when the previous model refused."""
+                 clock: Callable[[], float] = time.monotonic, fallbacks: Sequence[Grounder] = (),
+                 tight_escalation: bool = False) -> None:
+        """`fallbacks` are tried in order, each on a fresh capture, only when the previous model refused.
+        With `tight_escalation` (flag vision.tight_escalation) a fallback whose predecessor found the target in the
+        overview grounds only the close-up around that overview box instead of repeating the full-screen pass."""
         if os.name == 'nt' and capture is mss_capture:
             ensure_per_monitor_dpi()  # mss and SendInput must agree on physical pixels.
         self.policy, self.input, self.grounder, self.capture = policy, input, grounder, capture
         self.fallbacks = tuple(fallbacks)
+        self.tight_escalation = tight_escalation
+        self._overview: Optional[Box] = None  # The last overview box of a model that then refused.
         self.progress: Optional[Sink] = None  # Island updates while a model searches (display only).
         self.layout = layout or system_layout
         self.window_at = window_at or _window_at
@@ -271,8 +276,17 @@ class VisionExecutor(RouteExecutor):
                 emit(self.progress, ProgressEvent(Route.VISION, 'locating',
                                                   ('Looking closer' if index else 'Finding') + f' "{target[:50]}"',
                                                   grounder.name, 'Bigger model' if index else 'On-screen search'))
+                hint = self._overview if index and self.tight_escalation else None
+                self._overview = None
                 try:
-                    found = self._locate_with(grounder, shot, target, deadline, timer, label)
+                    try:
+                        found = self._locate_with(grounder, shot, target, deadline, timer, label, hint)
+                    except ControlError as error:
+                        if hint is None or error.category is not ErrorCategory.TARGET_NOT_FOUND:
+                            raise
+                        # The smaller model's overview box may be off target (D1 "Send message", 2026-10-31):
+                        # the bigger model then makes its own full pass, as without tight escalation.
+                        found = self._locate_with(grounder, shot, target, deadline, timer, label)
                 except ControlError as error:
                     if error.category is not ErrorCategory.TARGET_NOT_FOUND:
                         raise  # Stale screen, timeout or cancel: a bigger model would not help.
@@ -289,14 +303,19 @@ class VisionExecutor(RouteExecutor):
                            ErrorCategory.TARGET_NOT_FOUND)
 
     def _locate_with(self, grounder: Grounder, shot: Shot, target: str, deadline: float, timer: StageTimer,
-                     label: str) -> Located:
-        factor = min(1.0, COARSE_EDGE / max(shot.image.size))
-        coarse_image = shot.image if factor == 1 else shot.image.resize(
-            (max(1, round(shot.image.width * factor)), max(1, round(shot.image.height * factor))), Image.Resampling.LANCZOS)
-        with timer.stage('grounding'):
-            coarse = self._ground(grounder, coarse_image, target, deadline)
+                     label: str, overview: Optional[Box] = None) -> Located:
+        """`overview`: a smaller model's overview box for this region; when given, only the close-up is grounded."""
+        if overview is not None:
+            coarse: Optional[Box] = overview
+        else:
+            factor = min(1.0, COARSE_EDGE / max(shot.image.size))
+            coarse_image = shot.image if factor == 1 else shot.image.resize(
+                (max(1, round(shot.image.width * factor)), max(1, round(shot.image.height * factor))), Image.Resampling.LANCZOS)
+            with timer.stage('grounding'):
+                coarse = self._ground(grounder, coarse_image, target, deadline)
         if coarse is None:
             raise ControlError(f'"{target[:80]}" is not visible on screen.', ErrorCategory.TARGET_NOT_FOUND)
+        self._overview = coarse  # Kept for a bigger model if a later check refuses.
         width, height = shot.image.size
         cx, cy = (coarse[0] + coarse[2]) / 2 * width, (coarse[1] + coarse[3]) / 2 * height
         bw, bh = (coarse[2] - coarse[0]) * width, (coarse[3] - coarse[1]) * height

@@ -359,3 +359,63 @@ def test_cancel_does_not_escalate():
     executor.fallbacks = (backup,)
     result = act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000))
     assert result.error_category is ErrorCategory.CANCELLED and not backup.calls and not inp.events
+
+
+class Overview(ColourGrounder):
+    """Finds the target in the overview, then refuses the close-up (a 2B that is not sure)."""
+    name = 'overview-fake'
+
+    def locate(self, png, target, timeout_s):
+        box = super().locate(png, target, timeout_s)
+        return box if len(self.calls) == 1 else None
+
+
+def escalating(desktop, tight):
+    first, second, inp = Overview(), ColourGrounder(), FakeInput()
+    executor = VisionExecutor(Policy(allowed_apps=frozenset({'notepad.exe'})), inp, first, capture=desktop.capture,
+                              layout=lambda: LAYOUT, window_at=lambda x, y: (1, r'C:\Windows\notepad.exe', False),
+                              fallbacks=(second,), tight_escalation=tight)
+    return executor, first, second, inp
+
+
+def test_tight_escalation_grounds_only_the_close_up():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    executor, first, second, inp = escalating(desktop, tight=True)
+    result = act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000))
+    assert result.ok and 'after 1 refusal' in result.evidence
+    assert len(first.calls) == 2 and len(second.calls) == 1  # The bigger model skipped its overview pass.
+    assert max(second.calls[0]) < 1000 and inp.events[0][1:3] == (320, 320)
+
+
+def test_without_the_flag_the_bigger_model_repeats_the_overview():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    executor, first, second, inp = escalating(desktop, tight=False)
+    assert act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000)).ok
+    assert len(second.calls) == 2 and inp.events[0][1:3] == (320, 320)
+
+
+def test_tight_escalation_runs_the_full_pass_when_the_small_model_saw_nothing():
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    executor, _, second, inp = escalating(desktop, tight=True)
+    executor.grounder = Blind()
+    assert act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000)).ok
+    assert len(second.calls) == 2
+
+
+def test_a_refused_tight_crop_falls_back_to_the_full_pass():
+    # D1 "Send message" (2026-10-31): the small model's overview was off target, so the close-up missed it.
+    desktop = Desktop()
+    desktop.draw((300, 300, 340, 340), COLOURS['red square'])
+    executor, _, second, inp = escalating(desktop, tight=True)
+
+    class MissesFirst(ColourGrounder):
+        def locate(self, png, target, timeout_s):
+            box = super().locate(png, target, timeout_s)
+            return None if len(self.calls) == 1 else box
+    executor.fallbacks = (MissesFirst(),)
+    result = act(executor, 'click', target='red square', rect=(0, 0, 1600, 1000))
+    assert result.ok and len(executor.fallbacks[0].calls) == 3  # tight close-up, then overview + close-up
+    assert inp.events[0][1:3] == (320, 320)

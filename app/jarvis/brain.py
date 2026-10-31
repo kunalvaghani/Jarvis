@@ -700,6 +700,9 @@ class Brain:
             data['learning_context'] = acquisition.prepare(data['goal'], cancelled, data.get('screen'))
         data.setdefault('max_task_actions', action_budget(self.options))
         data.setdefault('steps_left', action_budget(self.options)-len(data.get('completed', [])))
+        from . import flags
+        if flags.enabled(getattr(self.actions, 'config', None), 'speed', 'cache_order'):
+            data['cache_order'] = True  # Upgrade v2: the planner keeps room to continue its cached conversation.
         session = self.step_session
         if session is None:
             data.pop('fresh_image_ready', None)

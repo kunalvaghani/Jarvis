@@ -1,0 +1,33 @@
+RootWebArea "The Internet" focused [ref_1]
+  generic "" [ref_2]
+    generic "" [ref_3]
+    generic "" [ref_4]
+    link "Fork me on GitHub" [ref_5]
+      image "Fork me on GitHub" [ref_6]
+    generic "" [ref_7]
+      heading "Data Tables" [ref_8]
+        text "Data Tables"
+      paragraph "" [ref_9]
+        text "Often times when you see a table it contains data which is sortable -- sometimes with actions that can be taken within each row (e.g. edit, delete). And it can be challenging to automate interaction with sets of data in a table depending on how it is constructed."
+      heading "Example 1" [ref_10]
+        text "Example 1"
+      paragraph "" [ref_11]
+        text "No Class or ID attributes to signify groupings of rows and columns"
+      table "" [ref_12]
+        rowgroup "" [ref_13]
+          row "" [ref_14]
+            columnheader "Last Name" [ref_15]
+              text "Last Name"
+            columnheader "First Name" [ref_16]
+              text "First Name"
+            columnheader "Email" [ref_17]
+              text "Email"
+            columnheader "Due" [ref_18]
+              text "Due"
+            columnheader "Web Site" [ref_19]
+              text "Web Site"
+            columnheader "Action" [ref_20]
+              text "Action"
+        row "" [ref_21]
+          cell "Smith" [ref_22]
+      

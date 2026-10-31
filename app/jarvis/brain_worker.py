@@ -451,7 +451,8 @@ class Models:
                 return plan(self.client, model, RULES.replace('Return only JSON.', '') + NATIVE_NEXT_PROMPT,
                     {k: request.get(k) for k in ('goal', 'screen', 'apps', 'completed', 'prior_task', 'tools',
                         'last_result', 'steps_left', 'failures', 'step_number', 'prompt_scaffold', 'images', 'plan_validation_error',
-                        'memory_context', 'live_app_context', 'skill_context', 'capability_context', 'realtime_context', 'learning_context', 'reasoning_lessons', 'conversation')}, options)
+                        'memory_context', 'live_app_context', 'skill_context', 'capability_context', 'realtime_context', 'learning_context', 'reasoning_lessons', 'conversation')},
+                    {**options, 'cache_order': True} if request.get('cache_order') is True else options)
             return self.generate(model, prompt,
                 {k: request.get(k) for k in ('goal', 'screen', 'apps', 'completed', 'prior_task', 'tools',
                     'last_result', 'steps_left', 'failures', 'step_number', 'prompt_scaffold', 'images', 'plan_validation_error',

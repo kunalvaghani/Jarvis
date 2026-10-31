@@ -48,7 +48,10 @@ ROUTES = (
         ('open', 'api', 'then open it in Obsidian to show it'))),
     (r'\bnotepad\b|\.txt\b|\b(?:shopping|to-?do|grocery|task) list\b', 'text', (
         ('app_open', 'structured', 'open Notepad (a fresh tab) when the user asked for Notepad'),
-        ('app_act', 'structured', 'type the text (app_open gives a new empty tab): value=type, content {"text": "..."}'),
+        ('app_act', 'structured', 'type ALL the text in ONE step (app_open gives a new empty tab): value=type, content '
+                                  '{"text": "..."}; a list is a title line then one "- item" line each, e.g. '
+                                  '"Shopping List\\n- milk\\n- eggs". When the result says the editor shows the typed '
+                                  'text, it is done: do not type it again'),
         ('app_act', 'structured', 'then value=save_as, content {"text": "<full path of the file>"}: saves through the '
                                   'Save As dialog and checks the file exists'),
         ('create_file', 'api', 'write the file directly when the user did not ask for Notepad'),

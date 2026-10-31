@@ -138,9 +138,16 @@ def h2(run: Run) -> List[str]:
     from jarvis.learning.verifiers import load
     problems = verdict_problems(load('blender_object').check(path=path, name='JarvisCylinder', dims=(2, 2, 2),
                                                              location=(0, 0, 0), tolerance=.01, blender=BLENDER))
-    if 'blender.exe' not in run.seen:
+    # A visible Blender window (the plan's oracle), not only a process: background Blender also runs blender.exe
+    # (tightened 2026-10-31; earlier H2 receipts used the process check).
+    if 'blender.exe' not in run.seen or not blender_window():
         problems.append('no Blender window was opened')
     return problems
+
+
+def blender_window() -> bool:
+    from jarvis.control.routes.uia import top_windows
+    return any('blender' in window.title.lower() for window in top_windows())
 
 
 def fizzbuzz(n: int) -> str:
@@ -713,7 +720,7 @@ def run_case(case: Case) -> Dict[str, Any]:
     watcher = threading.Thread(target=watch, args=(stop, seen, baseline, started), daemon=True)
     watcher.start()
     print(f'== {case.cid}: {case.request}', flush=True)
-    row = runner.run(case.request, case.approve, case.timeout, memory=case.memory, telemetry=TELEMETRY)
+    row = runner.run(case.request, case.approve, case.timeout, memory=case.memory, telemetry=TELEMETRY, enable=ENABLE)
     actions = row.pop('actions')
     stop.set()
     watcher.join(2)
@@ -746,6 +753,7 @@ def run_case(case: Case) -> Dict[str, Any]:
 
 
 TELEMETRY = False  # --telemetry: timing ledger and shadow log on for these runs only (config.json untouched).
+ENABLE: Tuple[str, ...] = ()  # --enable section.key,...: upgrade v2 flags on for these runs only.
 
 
 def select(names: List[str]) -> List[str]:
@@ -770,15 +778,17 @@ def schedule(names: List[str], repeat: int = 1, seed: Optional[int] = None) -> L
 
 def main(argv: List[str]) -> int:
     import argparse
-    global TELEMETRY
+    global TELEMETRY, ENABLE
     parser = argparse.ArgumentParser(description='Run live acceptance cases.')
     parser.add_argument('names', nargs='+', help='case ids, "all" (every runnable case) or "daily"')
     parser.add_argument('--repeat', type=int, default=1)
     parser.add_argument('--shuffle', action='store_true', help='shuffle each round (seed from --seed or the clock)')
     parser.add_argument('--seed', type=int)
     parser.add_argument('--telemetry', action='store_true')
+    parser.add_argument('--enable', default='', help='comma-separated upgrade v2 flags, e.g. control.compact_reads')
     args = parser.parse_args(argv)
     TELEMETRY = args.telemetry
+    ENABLE = tuple(name.strip() for name in args.enable.split(',') if name.strip())
     seed = args.seed if args.seed is not None else (int(time.time()) if args.shuffle else None)
     names = schedule(select(args.names), args.repeat, seed)
     print(f'{len(names)} runs, seed {seed}: {names}', flush=True)

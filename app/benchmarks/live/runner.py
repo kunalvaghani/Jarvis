@@ -15,7 +15,7 @@ from pathlib import Path
 import sys
 import threading
 import time
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 APP = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(APP))
@@ -26,7 +26,7 @@ CALLS: List[Dict[str, Any]] = []  # Model calls of the current run (diagnosis).
 
 
 def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None, memory: bool = False,
-          telemetry: bool = False):
+          telemetry: bool = False, enable: Tuple[str, ...] = ()):
     """A real Jarvis Actions object on the user's configuration, cloud off, scripted approval answers."""
     from jarvis.actions import Actions, Desktop
     config = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'))
@@ -44,6 +44,11 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
     config['knowledge_acquisition'] = {**config.get('knowledge_acquisition', {}), 'enabled': False}
     if telemetry:  # Observation only: the per-step timing ledger and shadow log for this run.
         config['telemetry'] = {**config.get('telemetry', {}), 'timing_ledger': True, 'shadow_log': True}
+    from jarvis import flags
+    for name in enable:  # Upgrade v2 flags turned on for this run only (on/off flags to true, modes to "act").
+        section, _, key = name.partition('.')
+        default = flags.FLAGS[(section, key)]  # KeyError for an unknown flag: a typo must not pass silently.
+        config[section] = {**config.get(section, {}), key: 'act' if isinstance(default, str) else True}
     events: List[Dict[str, Any]] = []
     lock = threading.Lock()
 
@@ -111,14 +116,15 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
 
 
 def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False,
-        memory: bool = False, telemetry: bool = False) -> Dict[str, Any]:
+        memory: bool = False, telemetry: bool = False, enable: Tuple[str, ...] = ()) -> Dict[str, Any]:
     def log(kind, value):
         if not quiet and kind in ('tool', 'plan', 'brain', 'answer', 'warning', 'media_card', 'question'):
             text = value.get('phase', '') + ' ' + value.get('title', '') if isinstance(value, dict) else str(value)
             print(f'  [{kind}] {text[:160]}', flush=True)
-    actions, events, approvals = build(approve, log, memory, telemetry)
+    actions, events, approvals = build(approve, log, memory, telemetry, enable)
     started = time.monotonic()
-    row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve}
+    row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve,
+                           'flags': list(enable)}
     try:
         # Exactly the app's entry for typed/spoken text (main.py: Engine(actions.submit).feed(command_text(text), ...)).
         from jarvis.audio import command_text

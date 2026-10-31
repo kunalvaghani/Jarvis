@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any, Mapping, Optional, Tuple
 
+from ..flags import summary
+
 APP = Path(__file__).resolve().parents[2]
 DEFAULT_ROOT = Path(r'D:\Phython Project\TestCodes\jarvis-control-tests')
 DEFAULT_APPS = ('notepad.exe', 'calculatorapp.exe', 'applicationframehost.exe', 'explorer.exe', 'mspaint.exe', 'chrome.exe')
@@ -22,6 +24,7 @@ class ControlSettings:
     ollama_url: str = 'http://127.0.0.1:11434'
     headless: bool = False  # The user sees what Jarvis does.
     extra: Mapping[str, Any] = field(default_factory=dict)
+    flags: Mapping[str, Any] = field(default_factory=dict)  # Effective upgrade v2 flags (jarvis/flags.py), all off by default.
 
 
 def load(base: Optional[Path] = None, config: Optional[Mapping[str, Any]] = None) -> ControlSettings:
@@ -51,4 +54,5 @@ def load(base: Optional[Path] = None, config: Optional[Mapping[str, Any]] = None
         vision_models=tuple(str(m) for m in models) if isinstance(models, list) and models else defaults.vision_models,
         ollama_url=str(section.get('ollama_url', defaults.ollama_url)),
         headless=bool(section.get('headless', False)),
-        extra={k: v for k, v in section.items() if k not in ControlSettings.__dataclass_fields__})
+        extra={k: v for k, v in section.items() if k not in ControlSettings.__dataclass_fields__},
+        flags=summary(config))

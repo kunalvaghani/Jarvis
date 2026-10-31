@@ -1745,7 +1745,9 @@
   "control": {
     "event_waits": false,
     "compact_reads": false,
-    "form_fill": false
+    "form_fill": false,
+    "shared_save": false,
+    "api_routes": false
   },
   "vision": {
     "tight_escalation": false

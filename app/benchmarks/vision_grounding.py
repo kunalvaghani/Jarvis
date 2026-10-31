@@ -31,6 +31,7 @@ from jarvis.control.types import ControlError  # noqa: E402
 
 VIEW = (1280, 800)
 READ_BACK = '--no-read-back' not in sys.argv
+TIGHT = '--tight' in sys.argv  # Upgrade v2 vision.tight_escalation; results go to their own file.
 PAGES = ('index', 'forms', 'modal', 'dynamic', 'scroll', 'files')
 ELEMENTS = '''() => [...document.querySelectorAll('a,button,input,select,textarea,summary')].filter(e => {
   const r = e.getBoundingClientRect(), s = getComputedStyle(e);
@@ -110,7 +111,8 @@ def run(model, rows):
     chain = [OllamaGrounder(name) for name in model.split('>')]  # 'a>b' = try b only when a refuses.
     executor = VisionExecutor(Policy(), None, chain[0], capture=capture,
                               layout=lambda: layout_from_rects([('VIEW', (0, 0) + VIEW, 1.0)]),
-                              window_at=lambda x, y: (1, 'chrome.exe', False), fallbacks=chain[1:])
+                              window_at=lambda x, y: (1, 'chrome.exe', False), fallbacks=chain[1:],
+                              tight_escalation=TIGHT)
     region = Rect(0, 0, *VIEW)
     image_for['current'] = Image.open(io.BytesIO(rows[0][1])).convert('RGB')
     try:
@@ -151,10 +153,10 @@ def run(model, rows):
 def main(models):
     rows = cases()
     print(f'{len(rows)} cases')
-    summary = {'date': time.strftime('%Y-%m-%d'), 'pipeline': 'coarse 1280px + native crop, prefilled answer (no thinking), num_ctx 4096', 'label_read_back': READ_BACK,
+    summary = {'date': time.strftime('%Y-%m-%d'), 'tight_escalation': TIGHT, 'pipeline': 'coarse 1280px + native crop, prefilled answer (no thinking), num_ctx 4096', 'label_read_back': READ_BACK,
                'ground_truth': 'DOM box of the control unioned with its own <label> boxes', 'viewport': VIEW,
                'runs': [run(model, rows) for model in models]}
-    out = APP / 'benchmarks/results/vision-grounding.json'
+    out = APP / ('benchmarks/results/vision-grounding-tight.json' if TIGHT else 'benchmarks/results/vision-grounding.json')
     try:  # Keep earlier runs of other models; a re-run replaces only its own entry.
         earlier = [r for r in json.loads(out.read_text(encoding='utf-8')).get('runs', []) if r['model'] not in models]
     except (OSError, ValueError):

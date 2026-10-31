@@ -1,0 +1,28 @@
+Window "Calculator" [u1]
+  Window "Calculator" [u2] aid=TitleBar value='Calculator'
+    MenuBar "System" [u3] aid=SystemMenuBar
+      MenuItem "System" [u4]
+    Button "Minimize Calculator" [u5] aid=Minimize
+    Button "Maximize Calculator" [u6] aid=Maximize
+    Button "Close Calculator" [u7] aid=Close
+  Window "Calculator" [u9] focused
+    Text "Calculator" [u10] aid=AppName
+    Custom "" [u11] aid=NavView
+      Button "Open Navigation" [u12] aid=TogglePaneButton
+      Group "" [u13]
+        Text "Display is 0" [u14] aid=CalculatorResults focused
+        Button "Open history flyout" [u15] aid=HistoryButton
+        Group "Memory controls" [u16] aid=MemoryPanel
+          Button "Clear all memory" [u17] aid=ClearMemoryButton disabled
+          Button "Memory recall" [u18] aid=MemRecall disabled
+          Button "Memory add" [u19] aid=MemPlus
+          Button "Memory subtract" [u20] aid=MemMinus
+          Button "Memory store" [u21] aid=memButton
+          Button "Open memory flyout" [u22] aid=MemoryButton disabled
+        Group "Display controls" [u23] aid=DisplayControls
+          Button "Percent" [u24] aid=percentButton
+          Button "Clear entry" [u25] aid=clearEntryButton
+          Button "Clear" [u26] aid=clearButton
+          Button "Backspace" [u27] aid=backSpaceButton
+        Group "Standard functions" [u28] aid=StandardFunctions
+        

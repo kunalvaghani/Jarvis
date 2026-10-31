@@ -82,3 +82,18 @@ def test_file_oracles_on_fixtures(cases, tmp_path, monkeypatch):
     assert cases.CASES['D21'].oracle(run('I need your approval first.', approvals=[{'detail': 'Delete 3 files?'}])) == []
     (tmp_path / 'scratch' / 'one.txt').unlink()
     assert cases.CASES['D21'].oracle(run('Deleted.'))
+
+
+def test_enable_turns_flags_on_for_a_run_only(monkeypatch):
+    import runner
+    seen = {}
+
+    class FakeActions:
+        def __init__(self, config, *args):
+            seen.update(config)
+            self.brain = type('B', (), {'client': type('C', (), {'_request_once': lambda *a, **k: None})()})()
+    monkeypatch.setattr('jarvis.actions.Actions', FakeActions)
+    runner.build(enable=('control.compact_reads', 'fast_path.system1'))
+    assert seen['control']['compact_reads'] is True and seen['fast_path']['system1'] == 'act'
+    with pytest.raises(KeyError):
+        runner.build(enable=('control.typo',))

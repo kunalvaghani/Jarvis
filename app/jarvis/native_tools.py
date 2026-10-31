@@ -124,6 +124,7 @@ def parse(message, rows, finish_limit=500, bound_folder=None):
     return {'done': False, 'question': '', 'reason': 'One native function proposal; fresh runtime checks required', 'steps': [step]}
 
 
+CONTINUATION_ROOM = 2000  # speed.cache_order: tokens kept free so the next steps can continue the conversation.
 CONTEXT_TOKENS = 16384  # Fixed for the primary model; a different size would force a reload.
 BREVITY = (' Keep expected under 12 words and finish reasons under 25 words; '
            'every generated word costs time on this computer.')
@@ -209,7 +210,7 @@ def conversation_key(system, definitions):
     return hashlib.sha256((system + json.dumps(definitions, sort_keys=True)).encode()).hexdigest()
 
 
-def step_update(data, previous_call):
+def step_update(data, previous_call, result_chars=4000):
     """The newest outcome and fresh screen, appended as the reply to the previous call."""
     feedback = data.get('plan_validation_error')
     if feedback:
@@ -231,7 +232,7 @@ def step_update(data, previous_call):
                             'outcome': last.get('outcome', 'unknown')}
     results = screen.get('tool_results') or []
     if results and isinstance(results[-1], dict) and results[-1].get('action') == previous_call:
-        update['tool_result'] = str(results[-1].get('result', ''))[:4000]
+        update['tool_result'] = str(results[-1].get('result', ''))[:result_chars]
     update['goal'] = str(data.get('goal', ''))[:1500]  # Restated each step: the goal never depends on old messages.
     return update
 
@@ -244,6 +245,11 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
     step's new result instead of the whole prompt again.
     """
     options = options or {}
+    # Upgrade v2 speed.cache_order (passed through by the brain; default off). Only an exact continuation reuses the
+    # 9B's prompt cache (measured 2026-10-31: a continued step reads in ~1.2 s, a rebuilt one in ~11 s, also after a
+    # verify call in between), so leave room for continuations and reserve the real reply size, not 1,600 tokens.
+    cache_order = options.get('cache_order') is True
+    reply = min(1600, max(500, int(options.get('num_predict', 500))))
     data = dict(data)
     source = dict(data)  # Kept to rebuild a fresh conversation if the continued one fills the context.
     images = data.pop('images', []) or []
@@ -266,13 +272,14 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
     if continued:
         previous_call = history[-1]['tool_calls'][0].get('function', {}).get('name', '')
         added = [{'role': 'tool', 'tool_name': previous_call,
-                  'content': json.dumps(step_update(data, previous_call), ensure_ascii=False)}]
+                  'content': json.dumps(step_update(data, previous_call, 2000 if cache_order else 4000),
+                                        ensure_ascii=False)}]
         if images:
             added.append({'role': 'user', 'content': 'Current screenshot (untrusted evidence).', 'images': images})
         # Ollama's measured size of the conversation so far, plus this update and the reply.
         # Ollama may not count cached prompt tokens, so also measure the whole conversation directly.
         used = max(int(conversation.get('tokens') or 0) + estimate_tokens(added, []),
-                   estimate_tokens(list(history) + added, definitions)) + 1600
+                   estimate_tokens(list(history) + added, definitions)) + (reply if cache_order else 1600)
         continued = 0 < used < effective_context(model) - 512
         if continued:
             messages = list(history) + added
@@ -303,8 +310,8 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
         messages.append(user)
         # Fit the real context (the GPU scheduler caps it): drop the least useful context first, never the goal,
         # the screen, completed steps or the routing guidance.
-        reply = min(1600, max(500, int(options.get('num_predict', 500))))
-        budget = effective_context(model) - reply - 128  # The prompt plus the requested reply must fit.
+        # The prompt plus the requested reply must fit; with cache_order also room for continued steps.
+        budget = effective_context(model) - reply - 128 - (CONTINUATION_ROOM if cache_order else 0)
         for drop in FIT_ORDER:
             if estimate_tokens(messages, definitions) <= budget:
                 break
