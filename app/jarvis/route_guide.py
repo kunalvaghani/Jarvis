@@ -33,6 +33,10 @@ ROUTES = (
                                 'cylinder.blend, folder jarvis test folder, content {"operation":"create","objects":'
                                 '[{"type":"cylinder","name":"JarvisCylinder","location":[0,0,0],"scale":[1,1,1]}]} '
                                 '(a default cylinder is radius 1 m, depth 2 m; scale it for other sizes)'),
+        ('blender_task', 'api', 'sizes: give cylinder and cone scale as {"radius": r, "depth": d} (depth is the '
+                                'height, along z), a sphere as {"radius": r}; a default cube is 2 m on each side, '
+                                'so scale [s/2, s/2, s/2] for side s. The .blend is the save; export only for '
+                                'gltf, obj or stl'),
         ('open', 'api', 'then open the saved .blend in Blender so the user sees it'),
         ('screen_act', 'gui', 'only for what the templates cannot do, inside the open Blender window'))),
     (r'\b(?:vs ?code|visual studio code|code editor)\b|\bnew (?:coding )?project\b', 'code', (
@@ -59,7 +63,8 @@ ROUTES = (
     (r'\bcalculator\b|\bcalculat\w+|\bwork out\b|\bhow much is\b', 'calculation', (
         ('app_open', 'structured', 'use the Calculator app when the user asked for it'),
         ('app_act', 'structured', 'type the whole calculation with digits and + - * / ending in =, e.g. 1234*56-789= '
-                                  '(never words); the changes show the display'),
+                                  '(never words); the changes show the display. Then read the display and answer: '
+                                  'never press = or Enter again, Calculator would repeat the last operation'),
         ('think', 'api', 'otherwise compute directly and show the working'))),
     (r'\bpaint\b|\bdraw\b|\bcanvas\b|\bsketch\b', 'drawing', (
         ('app_open', 'structured', 'open Paint and its tools by ref'),

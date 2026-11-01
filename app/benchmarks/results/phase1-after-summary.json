@@ -1,0 +1,62 @@
+{
+ "S1": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 23.7,
+  "model_s": 16.3,
+  "prompt_tok": 0,
+  "calls_9b": 1.0,
+  "steps": 0,
+  "wait_s": 0
+ },
+ "S2": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 1.8,
+  "model_s": 0,
+  "prompt_tok": 0,
+  "calls_9b": 0,
+  "steps": 0,
+  "wait_s": 0.7
+ },
+ "S3": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 163.2,
+  "model_s": 140.3,
+  "prompt_tok": 27520,
+  "calls_9b": 5.0,
+  "steps": 3.0,
+  "wait_s": 0.9
+ },
+ "S4": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 0.1,
+  "model_s": 0,
+  "prompt_tok": 0,
+  "calls_9b": 0,
+  "steps": 0,
+  "wait_s": 0
+ },
+ "H2": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 16.3,
+  "model_s": 0,
+  "prompt_tok": 0,
+  "calls_9b": 0,
+  "steps": 0,
+  "wait_s": 0
+ },
+ "H3": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 54.1,
+  "model_s": 48.1,
+  "prompt_tok": 0,
+  "calls_9b": 3.0,
+  "steps": 0,
+  "wait_s": 0
+ }
+}

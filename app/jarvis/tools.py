@@ -401,6 +401,10 @@ def control_tool(actions, step, cancelled):
     name, value = step['action'], step.get('value', '').strip()
     service = actions.control()
     try:
+        if name == 'app_act' and flags.enabled(getattr(actions, 'config', None), 'control', 'arg_repair'):
+            from .control.arg_repair import repaired
+            step = repaired(step)
+            value = step.get('value', '').strip()
         args = parse_args(step.get('content', ''), value if name in ('app_act', 'web_act', 'screen_act') else '')
         if name == 'web_open':
             text = service.web_open(value, cancelled, str(args.get('profile', '')), bool(args.get('new_tab', False)))
@@ -415,6 +419,9 @@ def control_tool(actions, step, cancelled):
         elif name == 'app_act':
             if value in ('type', 'set_value') and isinstance(args.get('text'), str):
                 args = {**args, 'text': list_rule(actions, args['text'])}
+            elif value == 'save_as' and flags.enabled(getattr(actions, 'config', None), 'control', 'shared_save'):
+                from .control.save_dialog import save_as_args
+                args = save_as_args(actions, dict(args), cancelled)
             text = service.app_act(value, args, cancelled)
         elif name == 'screen_act':
             text = service.screen_act(value, args, cancelled)

@@ -66,3 +66,9 @@ def test_app_act_type_applies_the_rule_from_the_running_task():
     idle.control.return_value.app_act.return_value = '{"ok": true}'
     control_tool(idle, {'action': 'app_act', 'value': 'type', 'content': '{"text": "milk\\neggs"}'}, lambda: False)
     assert idle.control.return_value.app_act.call_args.args[1]['text'] == 'milk\neggs'
+
+
+def test_a_named_kind_of_list_wins_over_its_items():
+    from jarvis.list_format import topic_title
+    assert topic_title('type a reading list of Dune, Emma and Ulysses, one per line') == 'Reading List'
+    assert topic_title('write a chores list: laundry, dishes') == 'Chores List'

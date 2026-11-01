@@ -4,6 +4,33 @@
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](docs/autonomous-repair-acceptance.md) · [Handoff](docs/CLAUDE_HANDOFF.md).
 
+## Upgrade v2 Phase 1: faster, checked routes and live modelling — 2026-11-02 IST
+
+Every Phase 1 feature is behind a flag that ships **off** ([ADR 0006](docs/adr/0006-upgrade-v2-phase1-speed-and-app-routes.md), [plan](docs/rework/upgrade-v2/phase-1-plan.md), [progress](docs/rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). With the flags off, behaviour is unchanged (live parity 9/9).
+
+**Measured (2026-11-02, this PC):** on the six gate tasks, 18/18 passed with the flags on against 10/18 before, and the total typical time fell from 1,520 s to 259 s (5.9×). Calculator 114 → 1.8 s, Blender 298 → 16 s, the FizzBuzz project 775 → 54 s, the web table question 163 → 24 s.
+
+**What the flags add:**
+- **`speed.cache_order`, `control.compact_reads`, `control.event_waits`:** the 9B planner keeps its cached conversation; page and window reads are about a third smaller; fixed pauses become condition waits.
+- **`control.shared_save`, `control.arg_repair`:** one Save As recipe for both save tools; one exact planner argument mistake repaired.
+- **`control.api_routes`:** clear requests skip the planner and are checked:
+  - Calculator sums are typed once and the display must show the exact value;
+  - questions about a named website are answered only from the page, every number checked against it;
+  - one-file Python programs and edits must match an independent reference program; a new function must agree with an independent version on 66 inputs;
+  - animated single-page web apps (GSAP or anime.js from cdnjs) are tested in a real browser (no errors, the animation used, every button and text box working) and repaired up to three times before anything is saved;
+  - **live Blender:** the default cube is turned into the requested shape in a visible window; houses are built to a plan (openings cut in the walls, framed glass, door, floors, interior walls, stairs, furniture, roof, procedural brick, wood, stone, tile and glass materials); realistic heads and bodies start from Blender Studio's free *Human Base Meshes* and get skin, eyes and hair strands live; original sports cars. A separate Blender reads every saved file back and a sealed geometry check verifies it.
+- **`learning.cloud_research`:** a house style is researched on Wikipedia, then Jarvis browses Wikimedia Commons photos in its own browser window and the local vision model reads them into the plan (only the search words leave the PC).
+
+**Also fixed (no flag):** a question naming a website is a task, not chat; "add 2025 and 375, then multiply the result" stays one command; VS Code opens a project in a **new** window and never replaces the one you have open; "in a new folder called X in my Y folder" creates X inside Y.
+
+**Configuration:** `brain.web_coder` (`qwen3-coder:30b`, already installed; 19 tokens/s against 5 for the 9B) writes whole web pages. The human meshes are downloaded to `.jarvis-runtime/assets/human-base-meshes/` (CC0, 49 MB, not committed).
+
+**Testing:** `benchmarks/live/cases.py` adds `--vary` (a different task on every repeat: websites, sums, lists, refusals, Blender shapes, humans, cars, houses, code edits, web apps) and `--full` (cloud models as configured, memory read-only).
+
+**Verification (2026-11-02):** full suite 4,981 passed with exactly the 39 baseline failures; `mypy --strict` clean on 48 files; `launcher --check` reports only that the Docker engine was stopped.
+
+**Limits:** the models are procedural, not photo-real sculpting; cars are untextured; web apps need the internet for the CDN.
+
 ## Upgrade v2 groundwork (Phase 0) — 2026-10-31 IST
 
 Groundwork for the learn-it-myself loop, the fast path and unified memory. **Nothing changes until you turn a flag on.** Every new feature has a flag in `config/config.json` and ships off ([ADR 0005](docs/adr/0005-upgrade-v2-flags-ledger-verifiers.md), [plan](docs/rework/upgrade-v2/phase-0-plan.md), [progress](docs/rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)).

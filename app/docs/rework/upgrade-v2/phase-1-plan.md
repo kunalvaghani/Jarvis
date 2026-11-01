@@ -1,4 +1,4 @@
-# Upgrade v2, Phase 1: quick wins and app APIs first (plan, awaiting approval)
+# Upgrade v2, Phase 1: quick wins and app APIs first (approved 2026-10-31; gate PASS 2026-11-02, see [ADR 0006](../../adr/0006-upgrade-v2-phase1-speed-and-app-routes.md))
 
 Date: 2026-10-31. Branch `claude_ControlArchitect`, after Phase 0 (`6ef4977`). Every change below is behind a flag that ships off unless it is marked **fix**: a repair of existing behaviour that fails today, needing no new capability. With the flags off, Phase 0's parity holds (S1/S2/S4 9/9).
 

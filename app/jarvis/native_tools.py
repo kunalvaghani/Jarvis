@@ -133,6 +133,9 @@ BREVITY = (' Keep expected under 12 words and finish reasons under 25 words; '
 # Least useful planner context first; the goal, screen, completed steps and capability_context stay.
 FIT_ORDER = ('reasoning_lessons', 'experience', 'learning_context', 'realtime_context', 'skill_context',
              'live_app_context', 'memory_context', 'prior_task', 'apps')
+# speed.cache_order frees CONTINUATION_ROOM only from these. Live gate 2026-10-31: freeing it from every part
+# dropped learned skill/memory context and the planner's Blender arguments went wrong in 3 of 3 runs.
+ROOM_DROPS = ('reasoning_lessons', 'experience', 'realtime_context')
 
 
 def effective_context(model):
@@ -210,7 +213,10 @@ def conversation_key(system, definitions):
     return hashlib.sha256((system + json.dumps(definitions, sort_keys=True)).encode()).hexdigest()
 
 
-def step_update(data, previous_call, result_chars=4000):
+CUT_NOTE = ' [... read shortened here; use web_read or app_read with "find" to look for the rest]'
+
+
+def step_update(data, previous_call, result_chars=4000, note_cut=False):
     """The newest outcome and fresh screen, appended as the reply to the previous call."""
     feedback = data.get('plan_validation_error')
     if feedback:
@@ -232,7 +238,8 @@ def step_update(data, previous_call, result_chars=4000):
                             'outcome': last.get('outcome', 'unknown')}
     results = screen.get('tool_results') or []
     if results and isinstance(results[-1], dict) and results[-1].get('action') == previous_call:
-        update['tool_result'] = str(results[-1].get('result', ''))[:result_chars]
+        text = str(results[-1].get('result', ''))
+        update['tool_result'] = text[:result_chars] + (CUT_NOTE if note_cut and len(text) > result_chars else '')
     update['goal'] = str(data.get('goal', ''))[:1500]  # Restated each step: the goal never depends on old messages.
     return update
 
@@ -272,7 +279,7 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
     if continued:
         previous_call = history[-1]['tool_calls'][0].get('function', {}).get('name', '')
         added = [{'role': 'tool', 'tool_name': previous_call,
-                  'content': json.dumps(step_update(data, previous_call, 2000 if cache_order else 4000),
+                  'content': json.dumps(step_update(data, previous_call, 2000 if cache_order else 4000, cache_order),
                                         ensure_ascii=False)}]
         if images:
             added.append({'role': 'user', 'content': 'Current screenshot (untrusted evidence).', 'images': images})
@@ -310,8 +317,16 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
         messages.append(user)
         # Fit the real context (the GPU scheduler caps it): drop the least useful context first, never the goal,
         # the screen, completed steps or the routing guidance.
-        # The prompt plus the requested reply must fit; with cache_order also room for continued steps.
-        budget = effective_context(model) - reply - 128 - (CONTINUATION_ROOM if cache_order else 0)
+        # The prompt plus the requested reply must fit.
+        budget = effective_context(model) - reply - 128
+        for drop in ROOM_DROPS if cache_order else ():
+            # cache_order: room for continued steps, taken only from the least useful parts.
+            if estimate_tokens(messages, definitions) <= budget - CONTINUATION_ROOM:
+                break
+            if drop in data:
+                data = {k: v for k, v in data.items() if k != drop}
+                user = {**user, 'content': json.dumps(data, ensure_ascii=False)}
+                messages[-1] = user
         for drop in FIT_ORDER:
             if estimate_tokens(messages, definitions) <= budget:
                 break

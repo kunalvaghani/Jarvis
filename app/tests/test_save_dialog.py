@@ -99,3 +99,46 @@ def test_tool_uses_the_recipe_only_with_the_flag(tmp_path):
         (tmp_path / 'x').mkdir()
         unknown.control.return_value.app_scope = ''
         assert ToolRegistry(unknown).execute(step, lambda: False).evidence == 'visual path'
+
+
+def test_save_as_with_a_file_name_and_folder_gets_the_full_path(tmp_path):
+    from jarvis.control.save_dialog import save_as_args
+    actions = fake_actions(tmp_path)
+    full = str(tmp_path.resolve() / 'shopping.txt')
+    # Live S3: {"filename": "shopping.txt", "folder": "Jarvis test"}.
+    assert save_as_args(actions, {'filename': 'shopping.txt', 'folder': 'Jarvis test'}, lambda: False)['text'] == full
+    assert save_as_args(actions, {'text': 'shopping.txt', 'folder': 'Jarvis test'}, lambda: False)['text'] == full
+    actions._task_folder.assert_called_with('Jarvis test', actions._task_folder.call_args.args[1])
+
+
+@pytest.mark.parametrize('args', [
+    {'text': r'D:\elsewhere\keep.txt', 'folder': 'tests'},  # A full path is used as given.
+    {'filename': 'shopping.txt'},  # No folder: save_as reports its own error.
+    {'filename': r'..\shopping.txt', 'folder': 'tests'},  # Not a bare name.
+    {'filename': 'shopping', 'folder': 'tests'},  # No extension.
+    {'folder': 'tests'},
+])
+def test_save_as_arguments_that_do_not_resolve_are_unchanged(tmp_path, args):
+    from jarvis.control.save_dialog import save_as_args
+    assert save_as_args(fake_actions(tmp_path), dict(args), lambda: False) == args
+
+
+def test_save_as_with_an_unknown_folder_is_unchanged(tmp_path):
+    from jarvis.clarification import TaskClarification
+    from jarvis.control.save_dialog import save_as_args
+    actions = fake_actions(tmp_path)
+    actions._task_folder.side_effect = TaskClarification('Which folder?', 'folder')
+    args = {'filename': 'shopping.txt', 'folder': 'nowhere'}
+    assert save_as_args(actions, dict(args), lambda: False) == args
+
+
+def test_control_tool_resolves_save_as_only_with_the_flag(tmp_path):
+    from jarvis.tools import control_tool
+    step = {'action': 'app_act', 'value': 'save_as', 'content': '{"filename": "shopping.txt", "folder": "Jarvis test"}'}
+    for config, expected in (({}, None), ({'control': {'shared_save': True}}, str(tmp_path.resolve() / 'shopping.txt'))):
+        actions = fake_actions(tmp_path)
+        actions.config = config
+        seen = {}
+        actions.control.return_value.app_act.side_effect = lambda op, args, cancelled: seen.update(args) or '{}'
+        control_tool(actions, step, lambda: False)
+        assert seen.get('text') == expected

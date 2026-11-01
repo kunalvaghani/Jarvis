@@ -51,4 +51,37 @@ def save_file_step(actions: Any, step: Dict[str, Any], cancelled: Callable[[], b
     if head.get('ok') is not True or not path.is_file():
         raise ValueError('Save As did not produce ' + str(path) + '; the shortcut was not repeated. ' +
                          str(head.get('result') or head.get('evidence') or '')[:200])
+    # The brain verifies save_file against this record (varied live gate 2026-10-31: without it a correct save was
+    # reported as "no longer matches its independent disk readback").
+    fallback = getattr(getattr(actions, 'brain', None), 'visual_fallback', None)
+    if fallback is not None:
+        state = fallback.file_state(path)
+        if isinstance(state, dict):
+            fallback.last_saved = {'path': path, **state}
     return f'Saved {path} through the Save As dialog; file verified on disk ({path.stat().st_size} bytes).'
+
+
+NAME_KEYS = ('text', 'filename', 'file_name', 'name', 'file', 'path')
+
+
+def save_as_args(actions: Any, args: Dict[str, Any], cancelled: Callable[[], bool]) -> Dict[str, Any]:
+    """`app_act save_as` with a file name and a folder (as `create_file` takes them) gets the full path.
+
+    Live S3 (2026-10-31): the planner sent {"filename": "shopping.txt", "folder": "Jarvis test"} three runs out of
+    three. Anything that does not resolve stays as it was, so save_as reports its own error and sends nothing.
+    """
+    text = args.get('text')
+    if isinstance(text, str) and Path(text.strip().strip('"')).is_absolute():
+        return args
+    name = next((args[k] for k in NAME_KEYS if isinstance(args.get(k), str) and args[k].strip()), None)
+    folder = args.get('folder')
+    if name is None or not isinstance(folder, str) or not folder.strip():
+        return args
+    name = name.strip().strip('"')
+    if Path(name).name != name or not Path(name).suffix:
+        return args
+    try:
+        path = target(actions, {'value': name, 'folder': folder}, cancelled)
+    except (ValueError, OSError):
+        return args
+    return {**args, 'text': str(path)}

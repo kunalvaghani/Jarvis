@@ -13,6 +13,21 @@ from .commands import Command, parse
 WAKE = re.compile(r"(?:\b(?:hey\s+)?jarvis\b|જાર્વિસ|जार्विस)", re.I)
 LEADING_WAKE = re.compile(r"^\W*(?:(?:hey|hi|ok|okay|yo)\W+)?(?:jarvis\b|જાર્વિસ|जार्विस)", re.I)
 BOUNDARY = re.compile(r"\s+(?:and then|then|next command)\s+", re.I)
+# "add 2025 and 375, then multiply the result by 12" is ONE request: the second part works on the first's result.
+CONTINUES = re.compile(r"^(?:(?:please|and)\s+)?(?:multiply|divide|subtract|add|square|double|halve|round|times|minus|plus)\b"
+                       r"|^(?:\w+\s+){0,3}(?:the result|the answer|the total|the sum|that number|it by)\b", re.I)
+
+
+def split_commands(text):
+    """Split at spoken command boundaries, except where the next part continues the previous result."""
+    parts = BOUNDARY.split(text)
+    merged = [parts[0]]
+    for part in parts[1:]:
+        if CONTINUES.match(part.strip()):
+            merged[-1] = merged[-1].rstrip() + ' then ' + part  # Varied live gate 2026-11-01 (S2c).
+        else:
+            merged.append(part)
+    return merged
 OPEN_PREFIX = re.compile(r"^(?:(?:please|can you|could you|would you)\s+)*(?:open|launch|start)\s+", re.I)
 AND_WRITE = re.compile(r"\s+and\s+(?=(?:please\s+)?(?:write|type|click|select|choose)\b)", re.I)
 STOP = re.compile(r"\b(?:go to sleep|stop listening|cancel|stop all tasks)\b", re.I)
@@ -134,7 +149,7 @@ class Engine:
             whole = parse(text).kind in WHOLE
         except ValueError:
             whole = False
-        for part in ([text] if whole else BOUNDARY.split(text)):
+        for part in ([text] if whole else split_commands(text)):
             # A planned multi-step task stays intact, including its exact text.
             clauses.extend(AND_WRITE.split(part, maxsplit=1) if not whole and OPEN_PREFIX.match(part) else [part])
         for index, clause in enumerate(clauses):

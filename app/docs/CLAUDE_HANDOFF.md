@@ -1,5 +1,32 @@
 # Cumulative Claude handoff
 
+## Upgrade v2 Phase 1: speed, fixed routes, live models, checked web apps — 2026-11-02 IST
+
+Phase 1 of the master prompt v2 ([plan](rework/upgrade-v2/phase-1-plan.md), [ADR 0006](adr/0006-upgrade-v2-phase1-speed-and-app-routes.md), [PROGRESS](rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). The first gate failed; the user then asked for a different task on every run, live Blender modelling (realistic humans, houses with interiors, cars), varied web apps with an animated UI library, and image references. All of it is behind flags that ship off.
+
+**Gate (Phase 1):**
+
+| Check | Result |
+|---|---|
+| Live gate, Phase 1 flags on (S1–S4, H2, H3 × 3, seed 52) | **18/18** (before: 10/18); total typical time 1,520 → 259 s |
+| Live parity, every flag off (S1, S2, S4 × 3, seed 54) | **9/9**, after a fix (below) |
+| Full suite | 4,981 passed, exactly the 39 baseline failures |
+| `mypy --strict` | clean (48 files) |
+| `control.health` | Gmail reconnect needed (user) |
+| `launcher --check` | `repair_required`: Docker engine stopped (environment, not Phase 1) |
+
+**Flags ready for the user to promote** (passed the gate and parity): `speed.cache_order`, `control.compact_reads`, `control.event_waits`, `control.shared_save`, `control.api_routes`, `control.arg_repair`. **Not ready:** `vision.tight_escalation` (30/32 but p95 30.3 s against 25.6 s). `learning.cloud_research` is the user's privacy choice (Wikipedia and Commons search words leave the PC).
+
+**User decisions this phase:** Blender Studio *Human Base Meshes* (CC0) downloaded to `.jarvis-runtime/assets/human-base-meshes/`; original car and house designs, no trademarked models; animated UI libraries from cdnjs, no npm installs; full-capability test runs (`cases.py --full`) use the cloud models as configured and read-only memory.
+
+**Defects found and fixed during the phase** (each from a live run): `cache_order` dropping learned context; Calculator Equals repeated; planner arguments in the operation slot; FizzBuzz route on the wrong hook; unsafe model-written reference programs; Fizz/Buzz swapped by both programs; Notepad save recorded wrongly by the shared recipe; timing-ledger lines interleaved by concurrent tasks; website questions answered as chat; "add ... then multiply the result" split in two; a question declared done before it was answered; nested and "new folder called" paths; VS Code `--reuse-window` replacing the user's open project; list titles; skin check failing darker skin; non-house reference photos; rooms squeezed onto one floor; anime.js use counted too early; the parity regression where a question with an old page open was re-planned with a contradictory message.
+
+**Known limits:** procedural models, not photo-real sculpting; references are Wikipedia text and Commons photos; cars untextured; program and edit checks use two programs from the same local model; web apps need the internet for the CDN; an Excel automation test failed once in a full run (slow Excel shutdown) and passed twice alone.
+
+**Unexecuted:** the full-capability run of every case (`cases.py all --full --vary`), the 32-case baseline with flags off, H1 (needs the Workday sign-in).
+
+**Next action:** run the full-capability suite; write the Phase 2 plan (skills as code, model tiers, larger live suite) for approval.
+
 ## Upgrade v2 Phase 0: flags, timing ledger, shadow log, sealed verifiers — 2026-10-31 IST
 
 The user approved the master prompt v2 Phase 0 plan ([plan](rework/upgrade-v2/phase-0-plan.md), [ADR 0005](adr/0005-upgrade-v2-flags-ledger-verifiers.md), [PROGRESS](rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). The blueprint's "Integration plan" tab was never attached; flag names follow the master prompt, with `brain.system1`/`brain.plan_cache` moved to `fast_path.*` (see the ADR).

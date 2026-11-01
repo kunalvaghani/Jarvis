@@ -14,6 +14,8 @@ FIZZ = ("for i in range(1, 31):\n    print('FizzBuzz' if i % 15 == 0 else 'Fizz'
 REFERENCE = ("print('\\n'.join('FizzBuzz' if n % 15 == 0 else 'Fizz' if n % 3 == 0 else 'Buzz' if n % 5 == 0 "
              "else str(n) for n in range(1, 31)))\n")
 
+RULE = 'Multiples of 3 print Fizz, multiples of 5 print Buzz, multiples of both print FizzBuzz, others the number.'
+
 
 @pytest.mark.parametrize('goal,name', [
     (H3, 'main.py'), ('write hello.py that prints Hello, Jarvis', 'hello.py'),
@@ -42,6 +44,8 @@ def model(*replies):
     calls = []
 
     def request(operation, cancelled, **data):
+        if data['tool'] == 'think':  # The stated rule (asked once per request); not a program.
+            return {'text': RULE}
         calls.append(data)
         return {'text': queue.pop(0)}
     return request, calls
@@ -52,7 +56,7 @@ def test_agreeing_independent_programs_are_kept():
     code, problems = agreed(request, 'main.py', H3, lambda: False)
     assert code == FIZZ and problems == []
     assert len(calls) == 2 and all(c['tool'] == 'write_code' for c in calls)
-    assert 'reference' in calls[1]['goal'] or 'prints exactly' in calls[1]['goal']
+    assert 'standalone' in calls[1]['goal'] and 'print exactly' in calls[1]['goal']
 
 
 def test_disagreement_retries_once_then_writes_nothing():
@@ -111,3 +115,54 @@ def test_disagreement_writes_nothing(tmp_path):
         run_small_program(actions, tmp_path, H3, 'main.py', lambda: False)
     actions.execute.assert_not_called()
     assert not (tmp_path / 'main.py').exists()
+
+
+def test_the_coder_hook_runs_only_with_the_flag(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(small_program, 'run_small_program', lambda *a, **k: calls.append(a) or 'Created main.py')
+    opened = []
+    import jarvis.app_adapters as adapters
+    monkeypatch.setattr(adapters, 'vscode', lambda argv, cancelled: opened.append(argv) or '')
+    off = Mock(config={})
+    assert small_program.route(off, tmp_path, H3, lambda: False) is None and calls == []
+    on = Mock(config={'control': {'api_routes': True}})
+    result = small_program.route(on, tmp_path, H3, lambda: False)
+    assert calls and 'Opened' in result and opened[0][0] == '--new-window'  # H3 names VS Code.
+    assert small_program.route(on, tmp_path, 'build a web app with main.py that shows prices', lambda: False) is None
+
+
+def test_coder_run_uses_the_route_before_the_multi_file_coder(tmp_path, monkeypatch):
+    from jarvis import coder
+    monkeypatch.setattr(small_program, 'route', lambda actions, project, goal, cancelled: 'small result')
+    monkeypatch.setattr('jarvis.campaign_pause.assert_allowed', lambda **k: None)
+    instance = coder.Coder(Mock(base=tmp_path), Mock())
+    instance._dispatch = Mock(side_effect=AssertionError('the multi-file coder must not run'))
+    assert instance.run(tmp_path, H3) == 'small result'
+    monkeypatch.setattr(small_program, 'route', lambda actions, project, goal, cancelled: None)
+    instance._dispatch = Mock(return_value='coder result')
+    monkeypatch.setattr('jarvis.engineering_judgment.engine_for', lambda actions: None)
+    assert instance.run(tmp_path, H3) == 'coder result'
+
+
+def test_both_programs_get_the_stated_rule_and_only_the_program_part():
+    request, calls = model(FIZZ, REFERENCE)
+    agreed(request, 'main.py', H3, lambda: False)
+    for call in calls:
+        assert RULE in call['goal'] and 'prints FizzBuzz for 1 to 30' in call['goal']
+        assert 'VS Code' not in call['goal'] and 'folder' not in call['goal'].replace('no files', '')
+
+
+@pytest.mark.parametrize('code', [
+    'import os; os.system("code .")', 'import subprocess', 'from shutil import rmtree',
+    'open("x", "w").write("y")', 'exec("print(1)")', 'print(().__class__.__bases__)',
+    'from . import x', '__import__("os")',
+])
+def test_programs_that_could_act_are_refused_before_running(code):
+    run = Mock()
+    assert small_program.output(code, run) == (False, '')
+    run.assert_not_called()
+
+
+def test_the_request_is_cut_to_the_program_part():
+    assert small_program.spec(H3, 'main.py') == 'prints FizzBuzz for 1 to 30'
+    assert small_program.spec('make hello.py that prints hello world', 'hello.py') == 'prints hello world'

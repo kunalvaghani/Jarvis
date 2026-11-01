@@ -90,10 +90,39 @@ def folder_matches_request(requested, project):
     return re.sub(r'[^a-z0-9]', '', requested.casefold()) == re.sub(r'[^a-z0-9]', '', Path(project).name.casefold())
 
 
+def nested_folder(actions, goal, requested, cancelled):
+    """An existing child named inside a known folder ("the fizzbuzz-app folder in my Jarvis test folder"), else None."""
+    found = re.search(r"\b" + re.escape(requested) + r"\s+(?:project\s+)?folder\s+(?:in|inside)\s+(?:my\s+|the\s+)?"
+                      r"([a-z0-9][\w -]{0,60}?folder)\b", goal, re.I)
+    if not found or re.search(r"[\\/]", requested):
+        return None
+    try:
+        parent = Path(actions._task_folder(found[1], cancelled))
+    except ValueError:
+        return None
+    child = parent / requested
+    return str(child) if child.is_dir() and not child.is_symlink() else None
+
+
+NEW_CHILD = re.compile(r"\bnew\s+(?:project\s+)?folder\s+(?:called|named)\s+[\"']?([A-Za-z0-9][\w.-]{0,80})[\"']?\s+"
+                       r"(?:in|inside)\s+(?:my\s+|the\s+)?([\w -]{1,60}?folder)\b", re.I)
+
+
 def coding_folder(actions, goal, cancelled, prior=None):
     """Explicit path, then freshly observed open folder, then remembered scope."""
+    new_child = NEW_CHILD.search(goal)
+    if new_child:
+        # "in a new folder called pomodoro-app in my Jarvis test folder": the child inside the named parent
+        # (varied live gate 2026-11-02 read "in a new folder" as a folder named "a new").
+        parent = Path(actions._task_folder(new_child.group(2).strip(), cancelled))
+        target = parent / new_child.group(1)
+        target.mkdir(exist_ok=True)
+        return str(target)
     requested = named_folder_request(goal)
     if requested:
+        nested = nested_folder(actions, goal, requested, cancelled)
+        if nested:
+            return nested
         parent = actions._task_folder('the open folder' if requested == 'open folder' else requested, cancelled)
         child = re.search(r'\b(?:new\s+)?(?:project\s+)?folder\s+(?:called|named)\s+["\']?([A-Za-z0-9][\w.-]{0,80})', goal, re.I)
         if child and child.group(1).casefold() != Path(parent).name.casefold():
@@ -111,8 +140,12 @@ def coding_folder(actions, goal, cancelled, prior=None):
         raise
 
 
+USE_APP = re.compile(r"\b(?:use|using|open|opening|launch|start|in|with)\s+(?:the\s+)?[a-z][\w ]{0,30}?\s+app\b", re.I)
+
+
 def workspace_coding_request(goal):
     goal = normalize_spoken_code_request(goal)
+    goal = USE_APP.sub(' ', goal)  # Varied live gate 2026-10-31: "Use the Calculator app: add 2025 and 375" asked for a project folder.
     # Notes/data workflows remain file operations even when their subject is
     # called "project". A plain folder scope is not a code-generation request.
     if (re.search(r'\b[a-z][\w-]*\.(?:txt|csv)\b', goal, re.I)
@@ -120,8 +153,11 @@ def workspace_coding_request(goal):
             and not re.search(r'\b(?:python|code|scripts?|programs?|apps?)\b', goal, re.I)
             and not requested_new_folder(goal)):
         return False
-    return bool(re.search(r"\b(?:create|make|build|add|modify|edit|update|write|fix|refactor)\b", goal, re.I)
-                and (re.search(r"\b(?:scripts?|programs?|apps?|projects?|games?|websites?|webpages?)\b", goal, re.I)
+    if re.search(r"\bchange\b", goal, re.I) and re.search(r"\b[a-z][\w-]*\.(?:" + CODING_PATTERN + r")\b", goal, re.I):
+        return True  # "change main.py so ..." (varied live gate 2026-10-31); "change" alone is too broad.
+    return bool(re.search(r"\b(?:create|make|build|add|modify|edit|update|write|fix|refactor|design|develop)\b", goal, re.I)
+                and (re.search(r"\b(?:scripts?|programs?|apps?|projects?|games?|websites?|webpages?|web pages?|"
+                               r"landing pages?|dashboards?)\b", goal, re.I)
                      or re.search(r'(?<!\w)' + LANGUAGE_PATTERN + r'(?!\w)', goal, re.I)
                      or simple_folder_request(goal) or requested_new_folder(goal)
                      or (gui_contract.requested(goal) and re.fullmatch(r'(?:please )?(?:add|fix|update|modify|change)\s+(?:the |a )?(?:ui|gui)(?:\s+(?:to it|again|please))*[.!?]*', goal, re.I))
@@ -426,6 +462,10 @@ class Coder:
     def run(self, project, goal, cancelled=lambda: False, selected=False):
         from .campaign_pause import assert_allowed
         assert_allowed(project=project,run=self.actions.base)
+        from .small_program import route  # Upgrade v2 control.api_routes (default off): None keeps the coder.
+        small = route(self.actions, Path(project), goal, cancelled)
+        if small is not None:
+            return small
         from .engineering_judgment import engine_for
         engineering = engine_for(self.actions)
         if engineering:

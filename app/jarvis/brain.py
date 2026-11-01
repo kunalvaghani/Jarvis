@@ -352,6 +352,12 @@ def list_from_goal(content, goal):
     return all(point.match(line).group(1).strip().rstrip('.').casefold() in low for line in lines[1:])
 
 
+# A request that asks for an answer ("what is the price ...?", "tell me the answer") is never done before Jarvis
+# has found that answer: the screen can look finished (a page left open by an earlier task) while nothing was read.
+ASKS_ANSWER = re.compile(r"\?\s*$|^\s*(?:on\s+\S+,?\s+)?(?:what|who|which|how many|how much|when|where)\b|"
+                         r"\btell me\b|\bwhat (?:is|are)\b", re.I)
+
+
 def needless_question(question, goal, base):
     """The answer to a planner question Jarvis can answer itself, else None (real questions still reach the user)."""
     text = str(question or '').strip()
@@ -619,6 +625,8 @@ class BrainClient:
             seconds = min(seconds, request_timeout)
         if operation=='tool_text' and data.get('tool')=='test_writer' and data.get('development') is True:
             seconds=max(300, seconds)
+        if operation == 'tool_text' and data.get('long_output') is True:
+            seconds = max(900, seconds)  # A whole checked file (web_app.py); the worker allows the same.
         deadline = time.monotonic() + seconds
         total_deadline = time.monotonic() + total if coding or planning else deadline
         try:
@@ -1332,6 +1340,10 @@ class Brain:
             raise ValueError("Autonomous brain is disabled. Enable brain.enabled after launchers/Setup Jarvis Brain.cmd succeeds.")
         if not goal.strip() or len(goal) > MAX_TASK_GOAL_CHARS:
             raise ValueError("Use a short, specific task.")
+        from .fast_routes import run as fast_route  # Upgrade v2 control.api_routes (default off): None = planner.
+        routed = fast_route(self.actions, goal, cancelled)
+        if routed is not None:
+            return routed
         from .coder import Coder, create_python_from_goal, python_file_request, workspace_coding_request, explicit_coding_intent
         from .commands import normalize_spoken_code_request
         spoken_goal = goal
@@ -1445,7 +1457,7 @@ class Brain:
             final = self.client.request('verify', cancelled, goal=goal,
                 step={'action': 'goal', 'value': goal, 'expected': 'The ENTIRE user goal is satisfied: ' + goal},
                 screen=self.planning_context(self.visual_context(captured) if screen_aware else self.screen(snapshot)))
-            if final.get('verified') is True:
+            if final.get('verified') is True and not ASKS_ANSWER.search(goal):  # Varied live gate 2026-11-01 (S1b).
                 self.checkpoint('goal_verified', source='fresh_goal_verifier', evidence=str(final.get('reason', 'Goal already complete')))
                 return 'Finished. Your goal is already satisfied on the current screen.'
             # "Already done" with nothing done and an independent check that disagrees: ask once for a real first
@@ -1455,9 +1467,13 @@ class Brain:
                 completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
                 fresh_image_ready=bool(self.step_session is not None and screen_aware),
                 experience=state.recall(spoken_goal) if isinstance(state, TaskState) else [],
-                plan_validation_error='Nothing has been done in this task yet and an independent check found the goal NOT '
-                    'satisfied (' + str(final.get('reason', ''))[:200] + '). Propose the first real action. To answer about '
-                    'a website, open and read it with web_open; never answer from memory.')
+                plan_validation_error=('The goal asks for an answer and nothing has been read in this task yet: what is '
+                    'on the screen is from before this task. ' if final.get('verified') is True else
+                    'Nothing has been done in this task yet and an independent check found the goal NOT satisfied (' +
+                    str(final.get('reason', ''))[:200] + '). ') + 'Propose the first real action. To answer about a '
+                    'website, open and read it with web_open; never answer from memory.')
+            # The earlier message said the check found the goal NOT satisfied even when it had found it satisfied
+            # (a question with an old page still open); the planner then asked what to do (parity run 2026-11-02).
             if plan.get('done'):
                 return 'Task paused: the current screen does not independently verify the whole goal.'
         needless = needless_question(plan.get('question'), goal, getattr(getattr(self, 'client', None), 'base', None)) if incremental_plan else None

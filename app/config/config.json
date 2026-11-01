@@ -1518,6 +1518,7 @@
       "reasoning_model": "qwen3.5:9b"
     },
     "coder": "qwen3.5:9b",
+    "web_coder": "qwen3-coder:30b",
     "coding_timeout_seconds": 900,
     "decision": "qwen3.5:9b",
     "screen_aware": true,
@@ -1747,7 +1748,8 @@
     "compact_reads": false,
     "form_fill": false,
     "shared_save": false,
-    "api_routes": false
+    "api_routes": false,
+    "arg_repair": false
   },
   "vision": {
     "tight_escalation": false

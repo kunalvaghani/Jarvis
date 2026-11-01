@@ -28,6 +28,10 @@ NINE_B = re.compile(r'(?i)(?<![\d.])9b\b')
 F = TypeVar('F', bound=Callable[..., Any])
 
 
+# A per-task lock let two concurrent tasks interleave their lines (full suite 2026-11-01: an empty line).
+_WRITE_LOCK = threading.Lock()
+
+
 class Task:
     def __init__(self, path: Path, kind: str, reasoning_model: str) -> None:
         self.id, self.kind, self.path = uuid4().hex[:12], kind, path
@@ -45,7 +49,7 @@ class Task:
         try:
             line = json.dumps({'task': self.id, 'at': datetime.now(timezone.utc).isoformat(timespec='milliseconds'),
                                **row}, default=str)
-            with self.lock:
+            with _WRITE_LOCK:  # One lock for every task: concurrent tasks append to the same file.
                 self.path.parent.mkdir(parents=True, exist_ok=True)
                 with self.path.open('a', encoding='utf-8') as out:
                     out.write(line + '\n')

@@ -26,12 +26,17 @@ CALLS: List[Dict[str, Any]] = []  # Model calls of the current run (diagnosis).
 
 
 def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = None, memory: bool = False,
-          telemetry: bool = False, enable: Tuple[str, ...] = ()):
-    """A real Jarvis Actions object on the user's configuration, cloud off, scripted approval answers."""
+          telemetry: bool = False, enable: Tuple[str, ...] = (), cloud: bool = False):
+    """A real Jarvis Actions object on the user's configuration, scripted approval answers.
+
+    Default isolation: cloud models off, no memory. `cloud=True` keeps Groq and Gemini as the user configured them
+    (full-capability runs, user decision 2026-11-02); memory is read-only whenever it is on.
+    """
     from jarvis.actions import Actions, Desktop
     config = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'))
-    config['groq'] = {**config.get('groq', {}), 'enabled': False}
-    config['gemini'] = {**config.get('gemini', {}), 'enabled': False}
+    if not cloud:
+        config['groq'] = {**config.get('groq', {}), 'enabled': False}
+        config['gemini'] = {**config.get('gemini', {}), 'enabled': False}
     # Isolation: no user memory read or written, no background knowledge work; a fresh task state per run
     # (a previous run's paused question must never steer the next run).
     stored = config.get('memory', {})
@@ -116,15 +121,15 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
 
 
 def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False,
-        memory: bool = False, telemetry: bool = False, enable: Tuple[str, ...] = ()) -> Dict[str, Any]:
+        memory: bool = False, telemetry: bool = False, enable: Tuple[str, ...] = (), cloud: bool = False) -> Dict[str, Any]:
     def log(kind, value):
         if not quiet and kind in ('tool', 'plan', 'brain', 'answer', 'warning', 'media_card', 'question'):
             text = value.get('phase', '') + ' ' + value.get('title', '') if isinstance(value, dict) else str(value)
             print(f'  [{kind}] {text[:160]}', flush=True)
-    actions, events, approvals = build(approve, log, memory, telemetry, enable)
+    actions, events, approvals = build(approve, log, memory, telemetry, enable, cloud)
     started = time.monotonic()
     row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve,
-                           'flags': list(enable)}
+                           'flags': list(enable), 'full': cloud and memory}
     try:
         # Exactly the app's entry for typed/spoken text (main.py: Engine(actions.submit).feed(command_text(text), ...)).
         from jarvis.audio import command_text

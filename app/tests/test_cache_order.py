@@ -92,3 +92,14 @@ def test_the_brain_passes_the_flag_only_when_it_is_on():
         brain.propose_plan = lambda operation, cancelled, **data: seen.update(data) or {}
         brain.planning_request('next_step', lambda: False, goal='g', completed=[])
         assert ('cache_order' in seen) is expected
+
+
+def test_room_for_continuations_never_costs_learned_context():
+    big = {'goal': 'g', 'tools': ROWS, 'screen': {'controls': ['A']}, 'experience': ['exp ' * 2000] * 3,
+           'skill_context': 'skill ' * 1800, 'memory_context': 'memory ' * 1500, 'prior_task': 'prior ' * 200}
+    calls = []
+    plan(client(calls, 3000), 'qwen3.5:9b', 'Rules.', dict(big), {'cache_order': True})
+    user = json.loads(calls[0]['messages'][-1]['content'])
+    assert 'experience' not in user
+    assert user['skill_context'] == big['skill_context'] and user['memory_context'] == big['memory_context']
+    assert user['prior_task'] == big['prior_task']

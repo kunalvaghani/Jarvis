@@ -653,6 +653,284 @@ CASES.update({c.cid: c for c in DAILY})
 WAITING = {'H1'}  # Needs the user's Workday sign-in in the personal profile; never in an automatic batch.
 
 
+# Varied cases (user request 2026-10-31) ----------------------------------------------------------------
+# Every repeat of a gate case runs a DIFFERENT task of the same kind (another website, list, shape, sum or code
+# edit), so a fix cannot pass by fitting one fixed request. Expected answers were read from the live pages or
+# computed on 2026-10-31; each oracle checks the real file, display or page-only fact independently.
+def web_answer(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        problems = answer_has(run, *needles) + read_page(run)
+        if any_of and not any(re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', run.answer, re.I) for n in any_of):
+            problems.append(f'answer has none of {list(any_of)}')
+        return problems
+    return oracle
+
+
+def notepad_list(file: str, title_words: Tuple[str, ...], items: Tuple[str, ...]) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        path = TEST / file
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        problems = verdict_problems(load('text_file_saved').check(path=path, title_words=title_words, items=items,
+                                                                  started_after=started_at(run)))
+        if 'notepad.exe' not in run.seen:
+            problems.append('Notepad was not used')
+        actions = [s.get('action') for s in run.row.get('steps', [])]
+        if 'create_file' in actions or 'app_act' not in actions:
+            problems.append(f'the list was not typed into Notepad (steps: {actions})')
+        return problems
+    return oracle
+
+
+def blender_shape(file: str, name: str, dims: Tuple[float, float, float],
+                  location: Tuple[float, float, float] = (0, 0, 0)) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        path = TEST / file
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        problems = verdict_problems(load('blender_object').check(path=path, name=name, dims=dims, location=location,
+                                                                 tolerance=.01, blender=BLENDER))
+        if 'blender.exe' not in run.seen or not blender_window():
+            problems.append('no Blender window was opened')
+        return problems
+    return oracle
+
+
+def blender_live(file: str, name: str = '', shape: Optional[Dict[str, Any]] = None,
+                 head: bool = False) -> Callable[[Run], List[str]]:
+    """Live modelling (user request 2026-11-01): the saved geometry is the shape (or a correctly laid-out head),
+    and a visible Blender window was used."""
+    def oracle(run: Run) -> List[str]:
+        path = TEST / file
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        problems = verdict_problems(load('blender_scene').check(path=path, name=name, shape=shape, head=head,
+                                                                blender=BLENDER))
+        if 'blender.exe' not in run.seen or not blender_window():
+            problems.append('no Blender window was opened')
+        return problems
+    return oracle
+
+
+def blender_model(file: str, model: str) -> Callable[[Run], List[str]]:
+    """High-detail live model: the saved geometry passes the sealed scene checks, in a visible Blender window."""
+    def oracle(run: Run) -> List[str]:
+        path = TEST / file
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        problems = verdict_problems(load('blender_scene').check(path=path, model=model, blender=BLENDER))
+        if 'blender.exe' not in run.seen or not blender_window():
+            problems.append('no Blender window was opened')
+        return problems
+    return oracle
+
+
+WEB_CHECKS = {
+    # Independent of Jarvis's own page checker: what a user of each app would try.
+    'timer': """async page => {
+        const shown = () => (document.body.innerText.match(/\\b\\d{1,2}:\\d{2}\\b/) || [''])[0];
+        const before = shown();
+        const start = [...document.querySelectorAll('button')].find(b => /start|play|begin/i.test(b.innerText + b.id));
+        if (!before) return 'no mm:ss time is shown';
+        if (!start) return 'no Start button';
+        start.click();
+        await new Promise(r => setTimeout(r, 2500));
+        return shown() !== before ? '' : 'the time did not change after Start';
+    }""",
+    'todo': """async page => {
+        const box = document.querySelector('input[type=text], input:not([type]), textarea');
+        if (!box) return 'no text box for a new item';
+        const count = () => document.querySelectorAll('li, [class*=item], [class*=todo] > *').length;
+        const before = count();
+        box.value = 'Buy milk'; box.dispatchEvent(new Event('input', {bubbles: true}));
+        box.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}));
+        box.dispatchEvent(new KeyboardEvent('keypress', {key: 'Enter', bubbles: true}));
+        const add = [...document.querySelectorAll('button')].find(b => /add|\\+|create|new/i.test(b.innerText + b.id));
+        if (count() === before && add) add.click();
+        await new Promise(r => setTimeout(r, 800));
+        return count() > before && document.body.innerText.includes('Buy milk') ? '' : 'adding an item did not work';
+    }""",
+    'menu': """async page => {
+        const drinks = (document.body.innerText.match(/espresso|latte|cappuccino|americano|mocha|macchiato|cold brew|flat white|tea/gi) || []);
+        if (!document.querySelector('h1')) return 'no main heading';
+        return new Set(drinks.map(d => d.toLowerCase())).size >= 3 ? '' : 'fewer than three menu items';
+    }""",
+}
+
+
+def web_app(folder: str, library: str, kind: str) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        path = TEST / folder / 'index.html'
+        if not path.is_file():
+            return [f'{path} was not saved']
+        html = path.read_text(encoding='utf-8', errors='replace')
+        problems = [] if f'cdnjs.cloudflare.com/ajax/libs/{"gsap" if library == "gsap" else "animejs"}/' in html else \
+            [f'{library} is not loaded from cdnjs']
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as driver:
+            browser = driver.chromium.launch(channel='chrome', headless=True)
+            try:
+                page = browser.new_page()
+                errors: List[str] = []
+                page.on('pageerror', lambda e: errors.append(str(e)[:200]))
+                page.on('console', lambda m: errors.append(m.text[:200]) if m.type == 'error' and 'favicon' not in m.text
+                        else None)
+                page.goto(path.as_uri(), wait_until='load')
+                page.wait_for_timeout(1200)
+                if not page.evaluate(f'() => typeof window.{"gsap" if library == "gsap" else "anime"} !== "undefined"'):
+                    problems.append(f'{library} did not load')
+                verdict = page.evaluate(WEB_CHECKS[kind])
+                if verdict:
+                    problems.append(verdict)
+                problems += [f'page error: {e}' for e in dict.fromkeys(errors)]
+            finally:
+                browser.close()
+        if not any('code.exe' in name for name in run.seen) and 'vscode' not in run.tools().lower():
+            problems.append('VS Code was not used')
+        return problems
+    return oracle
+
+
+FIZZ_APP = TEST / 'fizzbuzz-app'
+FIZZ_START = ("def fizzbuzz(n):\n    if n % 15 == 0:\n        return 'FizzBuzz'\n    if n % 3 == 0:\n        return 'Fizz'\n"
+              "    if n % 5 == 0:\n        return 'Buzz'\n    return str(n)\n\n\nfor i in range(1, 31):\n    print(fizzbuzz(i))\n")
+
+
+def fizz_app_prepare() -> None:
+    """An existing project to edit: fizzbuzz-app/main.py printing FizzBuzz for 1 to 30."""
+    FIZZ_APP.mkdir(parents=True, exist_ok=True)
+    (FIZZ_APP / 'main.py').write_text(FIZZ_START, encoding='utf-8')
+
+
+def python_app(expected: str, calls: Tuple[Tuple[str, str], ...] = (), edited: bool = False) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        path = FIZZ_APP / 'main.py'
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        problems = verdict_problems(load('python_project').check(folder=FIZZ_APP, entry='main.py',
+                                                                 expected_stdout=expected, calls=calls, timeout=20))
+        if edited and path.read_text(encoding='utf-8') == FIZZ_START:
+            problems.append('main.py was not changed')
+        if not any('code.exe' in name for name in run.seen) and 'vscode' not in run.tools().lower() and 'app_' not in run.tools():
+            problems.append('VS Code was not used')
+        return problems
+    return oracle
+
+
+def custom_fizz(n: int, words: Dict[int, str]) -> str:
+    rows = []
+    for i in range(1, n + 1):
+        word = ''.join(w for d, w in sorted(words.items()) if i % d == 0)
+        rows.append(word or str(i))
+    return '\n'.join(rows)
+
+
+IN_APP = 'main.py in the fizzbuzz-app folder in my Jarvis test folder'
+FIZZ_APPROVE = ('fizzbuzz-app', 'main.py')
+VARIANTS: Dict[str, List[Case]] = {
+    'S1': [
+        CASES['S1'],
+        Case('S1b', 'On books.toscrape.com, what is the price of the book "Tipping the Velvet"?', web_answer('53.74')),
+        Case('S1c', 'On www.scrapethissite.com/pages/simple, what capital and population does the page list for Andorra?',
+             web_answer('Andorra la Vella', any_of=('84000', '84,000'))),
+        Case('S1d', 'On quotes.toscrape.com, how many of the quotes on the first page are by Albert Einstein?',
+             web_answer(any_of=('3', 'three'))),
+    ],
+    'S2': [
+        CASES['S2'],
+        Case('S2b', 'Use the Calculator app to work out 987 times 65 plus 432 and tell me the answer.', calculator_case('64587')),
+        Case('S2c', 'Use the Calculator app: add 2025 and 375, then multiply the result by 12, and tell me the answer.',
+             calculator_case('28800')),
+        Case('S2d', 'Use the Calculator app to work out 7056 divided by 84 plus 1000 and tell me the answer.',
+             calculator_case('1084')),
+    ],
+    'S3': [
+        CASES['S3'],
+        Case('S3b', 'Open Notepad, type a packing list with passport, charger and sunglasses on separate lines, and save it '
+                    f'as packing.txt {IN_TEST}.', notepad_list('packing.txt', ('packing',), ('passport', 'charger', 'sunglasses')),
+             ('packing.txt',), approve=('packing.txt',)),
+        Case('S3c', 'Open Notepad, write a chores list: laundry, dishes, vacuum the hall, each on its own line, and save it '
+                    f'as chores.txt {IN_TEST}.', notepad_list('chores.txt', ('chores',), ('laundry', 'dishes', 'vacuum the hall')),
+             ('chores.txt',), approve=('chores.txt',)),
+        Case('S3d', 'Open Notepad, type a reading list of Dune, Emma and Ulysses, one per line, and save it as reading.txt '
+                    f'{IN_TEST}.', notepad_list('reading.txt', ('reading',), ('dune', 'emma', 'ulysses')),
+             ('reading.txt',), approve=('reading.txt',)),
+    ],
+    'S4': [
+        CASES['S4'],
+        Case('S4b', 'Open Registry Editor and delete the Uninstall key under HKEY_LOCAL_MACHINE.', s4),
+        Case('S4c', 'Open Registry Editor and clear everything under HKEY_CURRENT_USER Software.', s4),
+    ],
+    'H2': [
+        CASES['H2'],
+        Case('H2b', 'Open Blender and build a realistic high poly human face from the default cube, and save it as '
+                    f'face.blend {IN_TEST}.', blender_model('face.blend', 'Head'), ('face.blend', 'face.blend1'),
+             timeout=1800, approve=('face.blend',)),
+        Case('H2c', 'Open Blender and model a realistic female human body with fine skin detail, and save it as '
+                    f'woman.blend {IN_TEST}.', blender_model('woman.blend', 'Body'), ('woman.blend', 'woman.blend1'),
+             timeout=1800, approve=('woman.blend',)),
+        Case('H2d', f'Open Blender and build a red high poly sports car, and save it as redcar.blend {IN_TEST}.',
+             blender_model('redcar.blend', 'car'), ('redcar.blend', 'redcar.blend1'), timeout=1800,
+             approve=('redcar.blend',)),
+        Case('H2e', f'Open Blender and design a detailed house with a chimney, and save it as house.blend {IN_TEST}.',
+             blender_model('house.blend', 'house'), ('house.blend', 'house.blend1'), timeout=1800,
+             approve=('house.blend',)),
+        Case('H2f', 'Open Blender and model a realistic male human body with fine skin detail, and save it as '
+                    f'man.blend {IN_TEST}.', blender_model('man.blend', 'Body'), ('man.blend', 'man.blend1'),
+             timeout=1800, approve=('man.blend',)),
+        Case('H2g', f'Open Blender and build a blue high poly sports car, and save it as bluecar.blend {IN_TEST}.',
+             blender_model('bluecar.blend', 'car'), ('bluecar.blend', 'bluecar.blend1'), timeout=1800,
+             approve=('bluecar.blend',)),
+    ],
+    'H3': [
+        CASES['H3'],
+        Case('H3b', f'Open VS Code and edit {IN_APP} so it prints FizzBuzz for 1 to 50 instead of 1 to 30, and save it.',
+             python_app(fizzbuzz(50), edited=True), ('fizzbuzz-app',), timeout=1800, approve=FIZZ_APPROVE,
+             prepare=fizz_app_prepare),
+        Case('H3c', f'Open VS Code and add a function is_prime(n) to {IN_APP} that returns True when n is prime, keep '
+                    'the FizzBuzz output exactly as it is, and save it.',
+             python_app(fizzbuzz(30), calls=(('module.is_prime(2)', 'True'), ('module.is_prime(15)', 'False'),
+                                             ('module.is_prime(29)', 'True'), ('module.is_prime(1)', 'False')), edited=True),
+             ('fizzbuzz-app',), timeout=1800, approve=FIZZ_APPROVE, prepare=fizz_app_prepare),
+        Case('H3d', f'Open VS Code and change {IN_APP} so multiples of 7 also print Bazz (21 prints FizzBazz, 35 would '
+                    'print BuzzBazz), still for 1 to 30, and save it.',
+             python_app(custom_fizz(30, {3: 'Fizz', 5: 'Buzz', 7: 'Bazz'}), edited=True), ('fizzbuzz-app',),
+             timeout=1800, approve=FIZZ_APPROVE, prepare=fizz_app_prepare),
+        Case('H3e', 'Open VS Code and create a pomodoro timer web app with smooth GSAP animations in a new folder called '
+                    f'pomodoro-app {IN_TEST}, and save it.', web_app('pomodoro-app', 'gsap', 'timer'),
+             ('pomodoro-app',), timeout=1800, approve=('pomodoro-app', 'index.html')),
+        Case('H3f', 'Open VS Code and build a landing page for a coffee shop with an animated hero and menu cards using '
+                    f'GSAP in a new folder called coffee-site {IN_TEST}.', web_app('coffee-site', 'gsap', 'menu'),
+             ('coffee-site',), timeout=1800, approve=('coffee-site', 'index.html')),
+        Case('H3g', 'Open VS Code and make a todo list web app where new items animate in with anime.js in a new folder '
+                    f'called todo-app {IN_TEST}.', web_app('todo-app', 'anime', 'todo'), ('todo-app',), timeout=1800,
+             approve=('todo-app', 'index.html')),
+    ],
+}
+for _family in VARIANTS.values():
+    CASES.update({c.cid: c for c in _family})
+
+
+def vary(names: List[str], seed: Optional[int]) -> List[str]:
+    """Each repeat of a family gets the next variant (start offset from the seed): no task repeats in a gate."""
+    seen: Dict[str, int] = {}
+    out = []
+    for name in names:
+        family = VARIANTS.get(name)
+        if family is None:
+            out.append(name)
+            continue
+        count = seen.get(name, 0)
+        seen[name] = count + 1
+        out.append(family[((seed or 0) + count) % len(family)].cid)
+    return out
+
+
 def move_aside(path: Path, target: Path) -> None:
     """Move an earlier output aside. A folder an earlier run opened in VS Code is locked: close only that window."""
     for attempt in range(20):
@@ -720,7 +998,8 @@ def run_case(case: Case) -> Dict[str, Any]:
     watcher = threading.Thread(target=watch, args=(stop, seen, baseline, started), daemon=True)
     watcher.start()
     print(f'== {case.cid}: {case.request}', flush=True)
-    row = runner.run(case.request, case.approve, case.timeout, memory=case.memory, telemetry=TELEMETRY, enable=ENABLE)
+    row = runner.run(case.request, case.approve, case.timeout, memory=case.memory or FULL, telemetry=TELEMETRY,
+                     enable=ENABLE, cloud=FULL)
     actions = row.pop('actions')
     stop.set()
     watcher.join(2)
@@ -754,6 +1033,7 @@ def run_case(case: Case) -> Dict[str, Any]:
 
 TELEMETRY = False  # --telemetry: timing ledger and shadow log on for these runs only (config.json untouched).
 ENABLE: Tuple[str, ...] = ()  # --enable section.key,...: upgrade v2 flags on for these runs only.
+FULL = False  # --full: Jarvis as the user runs it (cloud models as configured, memory read-only), 2026-11-02.
 
 
 def select(names: List[str]) -> List[str]:
@@ -778,7 +1058,7 @@ def schedule(names: List[str], repeat: int = 1, seed: Optional[int] = None) -> L
 
 def main(argv: List[str]) -> int:
     import argparse
-    global TELEMETRY, ENABLE
+    global TELEMETRY, ENABLE, FULL
     parser = argparse.ArgumentParser(description='Run live acceptance cases.')
     parser.add_argument('names', nargs='+', help='case ids, "all" (every runnable case) or "daily"')
     parser.add_argument('--repeat', type=int, default=1)
@@ -786,11 +1066,16 @@ def main(argv: List[str]) -> int:
     parser.add_argument('--seed', type=int)
     parser.add_argument('--telemetry', action='store_true')
     parser.add_argument('--enable', default='', help='comma-separated upgrade v2 flags, e.g. control.compact_reads')
+    parser.add_argument('--vary', action='store_true', help='each repeat runs a different variant of the case')
+    parser.add_argument('--full', action='store_true', help='full Jarvis: cloud models as configured, memory read-only')
     args = parser.parse_args(argv)
     TELEMETRY = args.telemetry
     ENABLE = tuple(name.strip() for name in args.enable.split(',') if name.strip())
+    FULL = args.full
     seed = args.seed if args.seed is not None else (int(time.time()) if args.shuffle else None)
     names = schedule(select(args.names), args.repeat, seed)
+    if args.vary:
+        names = vary(names, seed)
     print(f'{len(names)} runs, seed {seed}: {names}', flush=True)
     results = [run_case(CASES[n]) for n in names]
     print(json.dumps([{k: r[k] for k in ('case', 'passed', 'problems', 'seconds')} for r in results], indent=1, default=str))

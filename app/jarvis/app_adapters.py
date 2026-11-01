@@ -608,7 +608,14 @@ def blender_object(item):
     return item
 
 
+INLINE_CONTENT = re.compile(r'^\s*([^,{]+?\.blend)\s*,?\s*content\s*[=:]\s*(\{.*\})\s*$', re.I | re.S)
+
+
 def blender_task(actions, step, cancelled):
+    inline = INLINE_CONTENT.match(str(step.get('value', ''))) if not str(step.get('content') or '').strip() else None
+    if inline:
+        # "cube.blend, content={...}" in the value field (varied live gate 2026-11-01): the same two fields.
+        step = {**step, 'value': inline.group(1).strip(), 'content': inline.group(2)}
     arguments = _arguments(step)
     operation = arguments.get('operation', 'inspect')
     root = _root(actions, step, cancelled)
@@ -623,8 +630,11 @@ def blender_task(actions, step, cancelled):
     if operation != 'create':
         raise ValueError('Use create or inspect.')
     objects = [blender_object(item) for item in arguments.get('objects')] if isinstance(arguments.get('objects'), list) else None
-    if arguments.get('export') == {}:
-        arguments = {k: v for k, v in arguments.items() if k != 'export'}  # An empty export means none.
+    export = arguments.get('export')
+    if export == {} or (isinstance(export, dict) and str(export.get('format', '')).casefold() == 'blend'
+                        and Path(str(export.get('path', path.name))).name.casefold() == path.name.casefold()):
+        # An empty export, or one that only repeats the .blend being saved (varied live gate 2026-10-31), is none.
+        arguments = {k: v for k, v in arguments.items() if k != 'export'}
     if not isinstance(objects, list) or not 1 <= len(objects) <= 100:
         raise ValueError('Create needs 1-100 objects.')
     names = set()

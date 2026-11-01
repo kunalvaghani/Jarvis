@@ -18,9 +18,7 @@ MAX_ITEM = 80
 
 def topic_title(goal: str) -> Optional[str]:
     """'Shopping List', 'To-Do List', 'Checklist' or 'Packing List' from the goal; None if it asks for no list."""
-    of = LIST_OF.search(goal)
-    if of:
-        return of['of'].title() + ' List'
+    # A named kind of list ("a reading list of Dune, ...") wins over its items; "a list of X" names it by X.
     for match in TOPIC.finditer(goal):
         if match['check']:
             return 'Checklist'
@@ -29,7 +27,8 @@ def topic_title(goal: str) -> Optional[str]:
             return 'To-Do List'
         if topic not in SKIP_TOPICS:
             return topic.title() + ' List'
-    return None
+    of = LIST_OF.search(goal)
+    return of['of'].title() + ' List' if of else None
 
 
 def titled(text: str, goal: str) -> str:

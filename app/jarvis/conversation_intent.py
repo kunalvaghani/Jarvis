@@ -82,10 +82,17 @@ def normalize(text):
     return text if text != original.strip(' .!?') else original
 
 
+# A named website or URL ("On quotes.toscrape.com, how many ...?") can only be answered by reading the page.
+SITE = re.compile(r'(?:\bhttps?://|\bwww\.[a-z0-9-]|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|org|net|io|gov|edu|dev|app|'
+                  r'co|uk|info|me|ai)\b(?![.\w-]))', re.I)
+
+
 def quick_kind(text):
     """Cheap rules first: 'task', 'chat' or None when a model must decide."""
     if action_text(text) is not None or CORRECTION.fullmatch(text.strip().strip(' .!?')):
         return 'task'
+    if SITE.search(text):
+        return 'task'  # Varied live gate 2026-10-31: these questions were answered as small talk, unread.
     text = FILLER.sub('', text.strip())
     if CHAT.match(text) or text.endswith('?'):
         return 'chat'

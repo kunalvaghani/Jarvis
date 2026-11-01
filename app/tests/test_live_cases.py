@@ -19,7 +19,8 @@ def cases():
 
 
 def test_thirty_two_cases_each_with_an_oracle(cases):
-    assert len(cases.CASES) == 32
+    variants = {c.cid for family in cases.VARIANTS.values() for c in family[1:]}
+    assert len(set(cases.CASES) - variants) == 32 and len(variants) == 23
     assert {f'D{n:02d}' for n in range(1, 23)} <= set(cases.CASES)
     for case in cases.CASES.values():
         assert callable(case.oracle) and case.request.strip()
@@ -97,3 +98,26 @@ def test_enable_turns_flags_on_for_a_run_only(monkeypatch):
     assert seen['control']['compact_reads'] is True and seen['fast_path']['system1'] == 'act'
     with pytest.raises(KeyError):
         runner.build(enable=('control.typo',))
+
+
+def test_every_repeat_of_a_case_runs_a_different_variant(cases):
+    names = cases.vary(cases.schedule(['S1', 'S2', 'S3', 'S4', 'H2', 'H3'], repeat=3, seed=46), 46)
+    for family, variants in cases.VARIANTS.items():
+        picked = [n for n in names if n in {c.cid for c in variants}]
+        assert len(picked) == 3 and len(set(picked)) == 3, family
+    assert cases.vary(['D01', 'S1'], 0) == ['D01', 'S1']  # Cases without variants are unchanged.
+
+
+def test_variant_oracles_check_the_real_result(cases, tmp_path, monkeypatch):
+    monkeypatch.setattr(cases, 'FIZZ_APP', tmp_path)
+    row = {'steps': [], 'tools': ['vscode_cli open']}
+    run = cases.Run(row, [], {'code.exe'})
+    (tmp_path / 'main.py').write_text(cases.FIZZ_START, encoding='utf-8')
+    assert 'main.py was not changed' in cases.CASES['H3b'].oracle(run)
+    (tmp_path / 'main.py').write_text(cases.FIZZ_START.replace('31', '51'), encoding='utf-8')
+    assert cases.CASES['H3b'].oracle(run) == []
+    bazz = cases.custom_fizz(30, {3: 'Fizz', 5: 'Buzz', 7: 'Bazz'}).split()
+    assert (bazz[6], bazz[20], bazz[14]) == ('Bazz', 'FizzBazz', 'FizzBuzz')
+    answer = cases.Run({'answer': 'It costs £53.74.', 'tools': ['control: web_open x']}, [], set())
+    assert cases.CASES['S1b'].oracle(answer) == []
+    assert cases.CASES['S1d'].oracle(cases.Run({'answer': 'There are 13 quotes', 'tools': ['web_read']}, [], set()))

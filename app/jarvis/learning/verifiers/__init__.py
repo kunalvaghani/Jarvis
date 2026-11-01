@@ -21,6 +21,7 @@ MANIFEST = HERE / 'MANIFEST.json'
 REGISTRY: Dict[str, tuple[str, str]] = {
     'text_file_saved': ('text_file', 'TextFileSaved'),
     'blender_object': ('blender_object', 'BlenderObject'),
+    'blender_scene': ('blender_scene', 'BlenderScene'),
     'python_project': ('python_project', 'PythonProject'),
 }
 SEALED = ('__init__.py', 'base.py', *sorted({f'{module}.py' for module, _ in REGISTRY.values()}))

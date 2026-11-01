@@ -1562,11 +1562,7 @@ class Actions:
                         coder.reference_repositories = []
                         self.report("warning", "Coding without repository references: " + str(exc)[:160])
                 try:
-                    from . import flags
-                    from .small_program import matches, run_small_program  # Upgrade v2 flag, default off.
-                    small = matches(command.value) if flags.enabled(self.config, 'control', 'api_routes') else None
-                    result = (run_small_program(self, project, command.value, small, cancelled) if small else
-                              coder.run(project, command.value, cancelled, selected=selected))
+                    result = coder.run(project, command.value, cancelled, selected=selected)
                 except Exception:
                     if intel is not None and intel.enabled:
                         intel.cancel_for(project, 'coding task ended without success')
@@ -1576,12 +1572,13 @@ class Actions:
                         intel.after_coding(project, command.value, result)
                     except Exception as exc:
                         self.report("warning", "Verified code memory was not updated: " + str(exc)[:160])
-                if result and "stopped" not in result.casefold() and re.search(
+                if result and "stopped" not in result.casefold() and 'in VS Code.' not in result and re.search(
                         r'\b(?:vs ?code|visual studio code)\b', command.value, re.I):
-                    # The user asked for VS Code: show the finished project there.
+                    # The user asked for VS Code: show the finished project there, in its own window (never
+                    # --reuse-window: that replaced whatever project the user had open).
                     try:
                         from .app_adapters import vscode
-                        vscode(['--reuse-window', str(project)], cancelled)
+                        vscode(['--new-window', str(project)], cancelled)
                         result += '\nOpened ' + str(project) + ' in VS Code.'
                     except Exception as exc:
                         self.report("warning", "VS Code did not open the project: " + str(exc)[:160])
