@@ -38,7 +38,7 @@ class Fake:
     def __call__(self, argv, **kwargs):
         self.argv.append(argv)
         rest = argv[argv.index('--session') + 2:]
-        rest = [a for a in rest if a not in ('--headed',)]
+        rest = [a for a in rest if a not in ('--headed', '--auto-connect')]
         while rest and rest[0] in ('--profile', '--executable-path'):
             rest = rest[2:]
         key = ' '.join(rest[:2]) if rest[:1] in (['tab'], ['get']) else rest[0]
@@ -50,7 +50,7 @@ class Fake:
         out = []
         for argv in self.argv:
             rest = argv[argv.index('--session') + 2:]
-            rest = [a for a in rest if a != '--headed']
+            rest = [a for a in rest if a not in ('--headed', '--auto-connect')]
             while rest and rest[0] in ('--profile', '--executable-path'):
                 rest = rest[2:]
             out.append(rest[0])
@@ -200,7 +200,29 @@ class ShadowAndSecrets(unittest.TestCase):
         with mock.patch.dict('os.environ', {'JARVIS_WEB_BACKEND': 'agent_browser'}):
             inner = ControlService(ControlSettings()).browser().inner
         self.assertEqual(type(inner).__name__, 'AgentBrowserExecutor')
-        self.assertEqual(inner.run.session, 'jarvis-test')
+        # The user's signed-in Chrome "Person 1", reached through auto-connect, is the default (2026-11-02).
+        self.assertEqual(inner.run.session, 'jarvis-personal')
+        self.assertTrue(inner.run.auto_connect)
+        self.assertIn('--auto-connect', inner.run.argv(['snapshot']))
+        self.assertNotIn('--profile', inner.run.argv(['snapshot']))
+
+    def test_attached_to_the_users_chrome_jarvis_uses_its_own_tab_and_never_closes_the_browser(self):
+        tabs = [json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': True, 'url': 'https://mine'}]}}),
+                json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': False, 'url': 'https://mine'},
+                                                              {'tabId': 't2', 'active': True, 'url': 'https://example.com/'}]}})]
+        fake = Fake({'tab list': tabs, 'tab new': ok({'tabId': 't2'}), 'get url': fixture('url'),
+                     'tab close': ok({'closed': True})})
+        with tempfile.TemporaryDirectory() as folder:
+            runner = BrowserRunner(Path('agent-browser.exe'), profile='auto-connect', run=fake,
+                                   policy_file=write_policy(Path(folder) / 'p.json'))
+            ex = AgentBrowserExecutor(Policy(), runner)
+            ex.act(act('navigate', url='https://example.com'))
+            ex.close()
+        commands = fake.commands()
+        self.assertIn('tab', commands)
+        self.assertNotIn('open', commands)    # the user's active tab is never navigated
+        self.assertNotIn('close', commands)   # the user's browser is never closed
+        self.assertEqual(ex.own_tab, 't2')
 
 
 if __name__ == '__main__':

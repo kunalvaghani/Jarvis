@@ -50,6 +50,10 @@ DENY = ('evaluate', 'evalhandle', 'addinitscript', 'addscript', 'addstyle', 'exp
         'useragent', 'user_agent', 'geolocation', 'device')
 CONFIRM = ('upload', 'clipboard', 'download', 'waitfordownload')
 CONTENT_COMMANDS = frozenset({'open', 'snapshot', 'read', 'get'})
+# The user's real, running Chrome profile ("Person 1"), reached through Chrome's own remote-debugging switch
+# (chrome://inspect/#remote-debugging, Chrome 144+, each connection approved in Chrome). A copied profile would be
+# signed out: Windows Chrome binds cookies to the original profile folder (checked 2026-11-02).
+AUTO_CONNECT = 'auto-connect'
 NOT_RUN = re.compile(r'unknown ref|denied by policy|not in the allow list|invalid|unknown command|required argument|'
                      r'no such tab|not found', re.I)
 LINE = re.compile(r'^(?P<indent>\s*)- (?P<role>[\w-]+)(?: "(?P<name>(?:[^"\\]|\\.)*)")?(?P<rest>.*)$')
@@ -63,7 +67,7 @@ class Reply(BaseModel):
     error: Optional[str] = None
 
     @property
-    def boundary(self) -> Optional[Dict[str, Any]]:
+    def boundary(self) -> Optional[Dict[str, Any]]:  # noqa: D401
         extra = self.model_extra or {}
         found = extra.get('_boundary')
         return found if isinstance(found, dict) else None
@@ -96,14 +100,17 @@ class BrowserRunner:
         self.session, self.profile, self.headed, self._run = session, profile, headed, run
         self.policy_file = policy_file or write_policy()
         self.chrome = chrome
+        self.auto_connect = profile == AUTO_CONNECT
         self.calls: List[Dict[str, Any]] = []
 
     def argv(self, args: Sequence[str]) -> List[str]:
         argv = [str(self.binary), '--json', '--content-boundaries', '--max-output', str(MAX_OUTPUT),
                 '--action-policy', str(self.policy_file), '--session', self.session]
-        if self.profile:
+        if self.auto_connect:
+            argv.append('--auto-connect')  # the user's own running Chrome (signed in); never launched or closed by us
+        elif self.profile:
             argv += ['--profile', self.profile]
-        if self.headed:
+        if self.headed and not self.auto_connect:
             argv.append('--headed')
         if self.chrome:
             argv += ['--executable-path', self.chrome]
@@ -193,6 +200,7 @@ class AgentBrowserExecutor(RouteExecutor):
         self.refs: Dict[str, str] = {}
         self.roles: Dict[str, str] = {}
         self.last_url = ''
+        self.own_tab = ''  # with --auto-connect: the one tab Jarvis opened; the user's tabs are never driven
         self._lock = threading.RLock()
 
     def start(self) -> None:
@@ -205,10 +213,32 @@ class AgentBrowserExecutor(RouteExecutor):
         return None
 
     def close(self) -> None:
+        if getattr(self.run, 'auto_connect', False):
+            if self.own_tab:  # close only Jarvis's own tab; the user's browser stays as it was
+                try:
+                    self.run(['tab', 'close', self.own_tab], timeout_s=20)
+                except ControlError:
+                    pass
+            return
         try:
             self.run(['close'], timeout_s=20)
         except ControlError:
             pass
+
+    def _own_tab(self, url: str = '') -> bool:
+        """Attached to the user's Chrome: make sure Jarvis acts in its own tab. True when a new tab was opened."""
+        if not getattr(self.run, 'auto_connect', False):
+            return False
+        tabs = self._tabs()
+        if self.own_tab and any(t['tab_id'] == self.own_tab for t in tabs):
+            if not any(t['tab_id'] == self.own_tab and t['active'] for t in tabs):
+                self._call(['tab', self.own_tab], acting=False)
+            return False
+        before = {t['tab_id'] for t in tabs}
+        self._call(['tab', 'new'] + ([url] if url else []), acting=True, timeout_s=60)
+        fresh = [t for t in self._tabs() if t['tab_id'] not in before]
+        self.own_tab = str(fresh[0]['tab_id']) if fresh else ''
+        return True
 
     # Helpers ----------------------------------------------------------------------------
     def _call(self, args: List[str], acting: bool, timeout_s: float = 60.0) -> Reply:
@@ -254,6 +284,8 @@ class AgentBrowserExecutor(RouteExecutor):
 
     # Reading ----------------------------------------------------------------------------
     def read_page(self, filter: str = 'all', ref: Optional[str] = None) -> Observation:
+        if getattr(self.run, 'auto_connect', False) and self.own_tab:
+            self._own_tab()  # read Jarvis's tab, not whatever the user is looking at
         if ref:
             reply = self._call(['get', 'text', self._ref(ref)], acting=False)
             text = str((reply.data or {}).get('text', '')) if isinstance(reply.data, dict) else ''
@@ -304,12 +336,17 @@ class AgentBrowserExecutor(RouteExecutor):
     def _dispatch(self, action: Action) -> ActionResult:
         name, p = action.name, action.params
         action.cancel.raise_if_cancelled()
+        if self.own_tab and name not in ('navigate', 'new_tab', 'switch_tab', 'close_tab', 'list_tabs', 'read_page'):
+            self._own_tab()
         if name == 'navigate':
             url = str(p.get('url', ''))
             if url in ('back', 'forward', 'reload'):
+                self._own_tab()
                 self._call([url], acting=True)
             else:
-                self._call(['open', self.policy.check_url(url)], acting=True, timeout_s=action.timeout_s + 15)
+                checked = self.policy.check_url(url)
+                if not self._own_tab(checked):
+                    self._call(['open', checked], acting=True, timeout_s=action.timeout_s + 15)
             final = self._final_url()
             return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
         if name == 'new_tab':
@@ -402,11 +439,12 @@ class AgentBrowserExecutor(RouteExecutor):
 
 
 def profile_for(kind: str, settings: Any) -> str:
-    """'personal' = the user's chosen Chrome profile (config control.personal_chrome_profile, e.g. Default);
+    """'personal' = the user's signed-in Chrome "Person 1" through auto-connect (config
+    control.personal_chrome_profile: 'auto-connect' by default, or a profile name to use a signed-out copy);
     'test' = Jarvis's own persistent profile folder."""
     extra = getattr(settings, 'extra', {}) or {}
     if kind == 'personal':
-        return str(extra.get('personal_chrome_profile', 'Default'))
+        return str(extra.get('personal_chrome_profile', AUTO_CONNECT))
     return str(getattr(settings, 'test_profile', APP / '.jarvis-runtime' / 'test-browser-profile'))
 
 

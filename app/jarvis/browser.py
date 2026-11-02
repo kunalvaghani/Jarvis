@@ -1,4 +1,5 @@
 """Open public websites/search URLs with an installed browser, without shell code."""
+from pathlib import Path
 from urllib.parse import quote, quote_plus, urlsplit
 import re
 from .names import common, rank
@@ -32,7 +33,26 @@ def browser_args(apps, name):
             executables.append(args)
     if len(executables) != 1:
         raise ValueError(f"Cannot uniquely identify the installed browser '{name}'. Say Chrome, Edge, or Firefox.")
-    return executables[0]
+    args = list(executables[0])
+    # The user's signed-in Chrome profile, always (2026-11-02: "Person 1", comedywithkh@gmail.com = folder Default).
+    # Without it Chrome shows its "Who's using Chrome?" picker and the task stalls.
+    if args[0].lower().endswith('chrome.exe') and not any(a.startswith('--profile-directory') for a in args):
+        args.append('--profile-directory=' + chrome_profile())
+    return args
+
+
+def chrome_profile():
+    """Chrome profile folder Jarvis uses: JARVIS_CHROME_PROFILE, else config chrome_profile, else Default."""
+    import json
+    import os
+    value = os.environ.get('JARVIS_CHROME_PROFILE', '').strip()
+    if not value:
+        try:
+            config = json.loads((Path(__file__).resolve().parents[1] / 'config' / 'config.json').read_text(encoding='utf-8'))
+            value = str(config.get('chrome_profile') or config.get('youtube_chrome_profile') or '')
+        except (OSError, ValueError):
+            value = ''
+    return value if value and '/' not in value and '\\' not in value else 'Default'
 
 
 def music_search_url(query, platform):

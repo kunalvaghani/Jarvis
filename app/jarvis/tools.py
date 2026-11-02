@@ -215,6 +215,14 @@ class ToolRegistry:
         if isinstance(allowed, (set, frozenset)):
             rows = [row for row in rows if row['action'] in allowed]
         config = getattr(self.actions, 'config', {})
+        from .control.backends import pc_backend, web_backend
+        hidden = set()
+        if pc_backend(config if isinstance(config, dict) else {}) == 'agent_desktop':
+            hidden |= AGENT_DESKTOP_REPLACES  # every app step goes through app_* on agent-desktop
+        if web_backend(config if isinstance(config, dict) else {}) == 'agent_browser':
+            hidden |= AGENT_BROWSER_REPLACES  # every page step goes through web_* on agent-browser
+        if hidden:
+            rows = [row for row in rows if row['action'] not in hidden]
         if goal is not None and (not isinstance(config, dict) or not config.get('brain', {}).get('visual_fallback', {}).get('enabled', False)):
             rows = [row for row in rows if row['action'] != 'save_file']
         options = config.get('agent_runtime', {}) if isinstance(config, dict) else {}
@@ -438,6 +446,12 @@ def control_tool(actions, step, cancelled):
 
 
 CORE_TOOLS = ('open', 'create_file', 'read_file', 'web_open', 'app_open', 'app_read', 'tool_search')
+# Older direct pywinauto/pyautogui and DOM tools that the new backends replace (docs/control/ADAPTER_PLAN.md).
+# Hidden from the planner only while that backend is on, so the agent-desktop / agent-browser path is the one used.
+# Spotify/YouTube media tools stay: the user prefers their existing route (2026-11-02).
+AGENT_DESKTOP_REPLACES = frozenset({'select', 'fill_text', 'type_text', 'scroll', 'shortcut', 'open_menu',
+                                    'handle_dialog', 'save_file', 'close_app'})
+AGENT_BROWSER_REPLACES = frozenset({'browser_inspect', 'browser_navigate', 'browser_click', 'browser_fill'})
 COMPANIONS = {'app_open': ('app_read', 'app_act'), 'app_act': ('app_read',), 'web_open': ('web_read', 'web_act'),
               'screen_act': ('app_open', 'app_read'), 'blender_task': ('open',), 'office_xlsx': ('open',)}
 MAX_OFFERED = 14  # Tool definitions are the largest part of a planning prompt (arXiv 2602.17046, ToolSEE).

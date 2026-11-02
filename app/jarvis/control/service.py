@@ -126,7 +126,10 @@ class ControlService:
         self._lock = threading.RLock()
         self._routes: Dict[str, Reporting] = {}
         self._input: Optional[Input] = None
-        self.profile = 'test'
+        # The user asked (2026-11-02) that Jarvis always use their signed-in Chrome "Person 1" profile.
+        self.profile = str(self.settings.extra.get('default_profile', 'personal'))
+        if self.profile not in ('test', 'personal'):
+            self.profile = 'test'
         self.last_web = ''          # Last page read (ref -> label lookup).
         self.last_app = ''          # Last window read.
         self.app_scope = ''         # 'win-<handle>' of the last window read.
