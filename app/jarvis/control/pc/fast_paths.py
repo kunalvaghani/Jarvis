@@ -9,7 +9,7 @@ normal planner handles it.
 from __future__ import annotations
 
 import re
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from ..types import ControlError, ErrorCategory
 from . import resolver
@@ -53,16 +53,43 @@ def run(goal: str, approve: Callable[[str, str], bool], runner: Optional[Runner]
     target = resolver.resolve(value)
     if target is None or not target.image:
         return None  # Not a known app: let the planner work out what was meant.
-    image = target.image
-    command = {'minimize': ['minimize', '--app', image], 'maximize': ['maximize', '--app', image],
-               'restore': ['restore', '--app', image], 'close': ['close-app', image]}[op]
-    env = run_(command, timeout_s=30)
-    if not env.ok:
-        if env.error is not None and env.error.code == 'APP_NOT_FOUND':
-            return f'{target.name} is not open.'
-        raise to_control_error(env)
-    windows = run_(['list-windows', '--app', image], timeout_s=15)
-    rows = [w for w in (windows.data or []) if isinstance(w, dict)] if windows.ok else []
+    image = target.image.lower()
+
+    def listed() -> List[Dict[str, Any]]:
+        env = run_(['list-windows'], timeout_s=15)
+        return [w for w in (env.data or []) if isinstance(w, dict)] if env.ok else []
+
+    # Window ids from the full list: hosted Store apps (Calculator) answer to their own image name here, while
+    # `--app <image>` and `close-app <image>` resolve to ApplicationFrameHost and miss them. A minimized hosted
+    # window then reports ApplicationFrameHost as its owner, so after acting it is followed by id (seen live).
+    before = [w for w in listed() if str(w.get('app_name', '')).lower() == image or (
+        str(w.get('app_name', '')).lower() == 'applicationframehost.exe' and target.store
+        and str(w.get('title', '')).lower().startswith(target.name.lower()))]
+    if not before:
+        return None  # Not open (or not visible to agent-desktop): the planner decides what to say or do.
+    ids = {str(w.get('id')) for w in before}
+    for window in before:
+        wid = str(window.get('id'))
+        if op == 'close':  # Graceful: the window's own Close button, so the app's save prompt stays in charge.
+            match_ = None
+            for label in ('Close', f'Close {window.get("title", "")}'.strip()):  # Store apps: "Close Calculator"
+                hit = run_(['find', '--window-id', wid, '--role', 'button', '--name', label, '--exact', '--first'],
+                             timeout_s=15)
+                match_ = (hit.data or {}).get("match") if hit.ok and isinstance(hit.data, dict) else None
+                if match_ and match_.get('ref_id'):
+                    break
+            if not match_ or not match_.get('ref_id'):
+                return None
+            env = run_(['click', match_['ref_id']], timeout_s=20)
+        else:
+            env = run_([op, '--window-id', wid], timeout_s=20)
+        if not env.ok and not env.may_have_acted:
+            raise to_control_error(env)
+        # A possibly delivered failure is never repeated: the fresh read below decides what happened.
+    if op == 'close':
+        run_(['wait', '--event', 'window-closed', '--window-id', str(before[0].get('id')), '--timeout', '5000'],
+             timeout_s=15)
+    rows = [w for w in listed() if str(w.get('id')) in ids]
     if op == 'close':
         ok = not rows
     elif op == 'minimize':

@@ -380,9 +380,14 @@ class AgentDesktopExecutor(RouteExecutor):
         return self._done(action, f'type sent to "{str(match.get("name", ""))[:60]}"', env)
 
     def _close_window(self, action: Action, handle: int) -> ActionResult:
-        found = self._check(self.run(['find', '--window-id', f'w-{handle}', '--role', 'button', '--name', 'Close',
-                                      '--exact', '--first'], timeout_s=15))
-        match = (found.data or {}).get('match') if isinstance(found.data, dict) else None
+        match = None
+        title = str(self.probe('window_title', handle=handle))
+        for label in ('Close', f'Close {title}'.strip()):  # Store apps name it "Close Calculator"
+            found = self.run(['find', '--window-id', f'w-{handle}', '--role', 'button', '--name', label, '--exact',
+                              '--first'], timeout_s=15)
+            match = (found.data or {}).get('match') if found.ok and isinstance(found.data, dict) else None
+            if match and match.get('ref_id'):
+                break
         if not match or not match.get('ref_id'):
             raise ControlError('This window has no Close button to press.', ErrorCategory.UNSUPPORTED)
         env = self.run(['click', match['ref_id']], timeout_s=20)

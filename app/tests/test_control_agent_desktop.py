@@ -335,23 +335,47 @@ class FastPaths(unittest.TestCase):
 
     def test_window_op_is_verified_by_a_fresh_read(self):
         from jarvis.control.pc import fast_paths
-        minimized = ok('list-windows', [{'id': 'w-1', 'title': 'Spotify', 'minimized': True}])
-        fake = Fake({'minimize': acted('minimize'), 'list-windows': minimized})
+        open_ = ok('list-windows', [{'id': 'w-1', 'app_name': 'Spotify.exe', 'title': 'Spotify', 'minimized': False}])
+        # A minimized hosted window may report another owner; it is followed by id.
+        minimized = ok('list-windows', [{'id': 'w-1', 'app_name': 'ApplicationFrameHost.exe', 'title': 'Spotify',
+                                         'minimized': True}])
+        fake = Fake({'minimize': acted('minimize'), 'list-windows': [open_, minimized]})
         with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
             answer = fast_paths.run('minimize spotify', lambda k, d: True, Runner(Path('a.exe'), run=fake))
         self.assertIn('Minimized Spotify', answer)
-        still = ok('list-windows', [{'id': 'w-1', 'title': 'Spotify', 'minimized': False}])
-        fake = Fake({'minimize': acted('minimize', 'delivered_unverified'), 'list-windows': still})
+        self.assertIn(['minimize', '--window-id', 'w-1'], [a[1:] for a in fake.argv])
+        fake = Fake({'minimize': acted('minimize', 'delivered_unverified'), 'list-windows': [open_, open_]})
         with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
             with self.assertRaises(ControlError):
                 fast_paths.run('minimize spotify', lambda k, d: True, Runner(Path('a.exe'), run=fake))
 
+    def test_a_possibly_delivered_error_is_judged_by_a_fresh_read_not_repeated(self):
+        from jarvis.control.pc import fast_paths
+        open_ = ok('list-windows', [{'id': 'w-1', 'app_name': 'Spotify.exe', 'title': 'Spotify', 'minimized': False}])
+        minimized = ok('list-windows', [{'id': 'w-1', 'app_name': 'Spotify.exe', 'title': 'Spotify', 'minimized': True}])
+        fake = Fake({'minimize': err('minimize', 'WINDOW_NOT_FOUND', 'delivered_unverified', 'unsafe'),
+                     'list-windows': [open_, minimized]})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            self.assertIn('Minimized', fast_paths.run('minimize spotify', lambda k, d: True,
+                                                      Runner(Path('a.exe'), run=fake)))
+        self.assertEqual(fake.commands().count('minimize'), 1)
+
+    def test_not_open_goes_back_to_the_planner(self):
+        from jarvis.control.pc import fast_paths
+        fake = Fake({'list-windows': ok('list-windows', [])})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            self.assertIsNone(fast_paths.run('close spotify', lambda k, d: True, Runner(Path('a.exe'), run=fake)))
+
     def test_close_is_graceful_and_clipboard_asks_first(self):
         from jarvis.control.pc import fast_paths
-        fake = Fake({'close-app': acted('close-app'), 'list-windows': ok('list-windows', [])})
+        open_ = ok('list-windows', [{'id': 'w-2', 'app_name': 'Notepad.exe', 'title': 'Untitled - Notepad'}])
+        fake = Fake({'list-windows': [open_, ok('list-windows', [])],
+                     'find': [ok('find', {}), ok('find', {'match': {'ref_id': '@s1:e4', 'role': 'button'}})],
+                     'click': acted('click'), 'wait': ok('wait', {'found': True})})
         with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
             self.assertIn('Closed', fast_paths.run('close notepad', lambda k, d: True, Runner(Path('a.exe'), run=fake)))
         self.assertFalse(any('--force' in a for a in fake.argv))
+        self.assertNotIn('close-app', fake.commands())
         fake = Fake({})
         with self.assertRaises(ControlError):
             fast_paths.run('copy secret to the clipboard', lambda k, d: False, Runner(Path('a.exe'), run=fake))
