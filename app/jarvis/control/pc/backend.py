@@ -77,6 +77,7 @@ class HeadedGate:
 class _Scope:
     handle: int
     snapshot_id: str = ''
+    app: str = ''  # process image the window belonged to, to find its replacement window
     by_ref: Dict[str, Ref] = field(default_factory=dict)        # Jarvis ref -> agent-desktop ref
     identity: Dict[Tuple[str, str, int], str] = field(default_factory=dict)  # (role, name, nth) -> Jarvis ref
     counter: int = 0
@@ -144,6 +145,7 @@ class AgentDesktopExecutor(RouteExecutor):
         with self._lock:
             state = self.scopes.setdefault(scope, _Scope(handle))
             state.snapshot_id, state.by_ref = snap.snapshot_id, {}
+            state.app = state.app or snap.app
             lines: List[str] = []
             refs: List[JarvisRef] = []
             seen: Dict[Tuple[str, str], int] = {}
@@ -302,8 +304,14 @@ class AgentDesktopExecutor(RouteExecutor):
             rows = [f'{str(w.get("title", ""))[:80]} | {w.get("app_name", "")} | handle {str(w.get("id", ""))[2:]}'
                     for w in self.windows()]
             return self._done(action, '\n'.join(rows), executed=False, verified=True)
+        if name in ('click_named', 'menu_path'):
+            handle = self._live_handle(int(p.get('handle') or action.context.window or 0))
+            if name == 'click_named':
+                return self._click_named(action, handle, str(p['name']), str(p.get('role', '')))
+            return self._menu_path(action, handle, [str(n) for n in p['names']])
         if name in ('read_window', 'focus_window', 'type', 'key', 'close_window'):
             handle = int(p.get('handle') or action.context.window or self._find_window(str(p.get('window', ''))))
+            handle = self._live_handle(handle)
             scope = f'win-{handle}'
             if name == 'read_window':
                 obs = self.read_window(handle, str(p.get('filter', 'interactive')))
@@ -318,7 +326,7 @@ class AgentDesktopExecutor(RouteExecutor):
             if name == 'type':
                 return self._type(action, handle, str(p['text']))
             self.headed.require(scope, f'pressing {p["text"]}')
-            env = self.run(['press', str(p['text']), '--window-id', f'w-{handle}'], headed=True, timeout_s=20)
+            env = self._press(str(p['text']), handle)
             if not env.ok:
                 raise to_control_error(env)  # A blocked shortcut stays blocked: --force is never used.
             return self._done(action, f'key sent: {p["text"]}', env)
@@ -379,12 +387,44 @@ class AgentDesktopExecutor(RouteExecutor):
             raise to_control_error(env)
         return self._done(action, f'type sent to "{str(match.get("name", ""))[:60]}"', env)
 
-    KEYS = {'+': 'shift+=', '*': 'shift+8', '(': 'shift+9', ')': 'shift+0', '%': 'shift+5', '=': '=', '-': '-',
-            '/': '/', '.': '.', ',': ',', ' ': 'space', '\n': 'return'}
+    KEYS = {' ': 'space', '\n': 'return', '=': 'return'}  # agent-desktop key names: a-z, 0-9 and named keys
+
+    BUTTONS = {**{str(d): n for d, n in enumerate(('Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
+                                                  'Eight', 'Nine'))},
+               '+': 'Plus', '-': 'Minus', '*': 'Multiply by', 'x': 'Multiply by', '/': 'Divide by', '=': 'Equals',
+               '.': 'Decimal separator', '%': 'Percent'}
+
+    def _buttons(self, handle: int, text: str) -> Optional[List[str]]:
+        """Refs of the window's own buttons for each character (Calculator), or None if any is missing."""
+        env = self.run(['snapshot', '--window-id', f'w-{handle}', '-i', '--compact', '--timeout-ms', str(self.settle_ms)],
+                       timeout_s=self.settle_ms / 1000 + 15)
+        if not env.ok:
+            return None
+        named = {r.name.strip().lower(): r.ref_id for r in Snapshot.model_validate(env.data).refs()
+                 if r.role == 'button' and 'offscreen' not in r.states}
+        refs = []
+        for char in text.replace(' ', ''):
+            name = self.BUTTONS.get(char.lower())
+            if name is None or name.lower() not in named:
+                return None
+            refs.append(named[name.lower()])
+        return refs
 
     def _keystrokes(self, action: Action, handle: int, text: str) -> ActionResult:
-        """A window with no text field (Calculator, games): send the text as key presses. Physical input, so it
-        passes the headed gate; one key at a time, never retried after a delivered key."""
+        """A window with no text field (Calculator): click its own buttons for each character (headless, works in
+        the background); only if it has no such buttons, send key presses (physical, behind the headed gate; one
+        key at a time, never retried after a delivered key)."""
+        buttons = self._buttons(handle, text)
+        if buttons:
+            for count, ref in enumerate(buttons):
+                action.cancel.raise_if_cancelled()
+                env = self.run(['click', ref], timeout_s=20)
+                if not env.ok:
+                    error = to_control_error(env)
+                    error.executed = error.executed or count > 0
+                    raise error
+            return self._done(action, f'clicked {len(buttons)} buttons for {text!r}', executed=True, verified=False,
+                              evidence='buttons pressed headless; read the window to confirm')
         keys = []
         for char in text:
             if char.isalnum() and char.isascii():
@@ -400,7 +440,7 @@ class AgentDesktopExecutor(RouteExecutor):
         sent = 0
         for key in keys:
             action.cancel.raise_if_cancelled()
-            env = self.run(['press', key, '--window-id', f'w-{handle}'], headed=True, timeout_s=15)
+            env = self._press(key, handle)
             if not env.ok:
                 error = to_control_error(env)
                 error.executed = error.executed or sent > 0
@@ -408,6 +448,89 @@ class AgentDesktopExecutor(RouteExecutor):
             sent += 1
         return self._done(action, f'typed {len(keys)} keys', executed=True, verified=False,
                           evidence='key presses delivered; read the window to confirm')
+
+    def _find(self, handle: int, name: str, role: str = '', surface: str = '') -> Optional[str]:
+        args = ['find', '--name', name, '--exact', '--first']
+        if surface:
+            app = str(getattr(self.scopes.get(f'win-{handle}'), 'app', '') or '')
+            args += ['--surface', surface] + (['--app', app] if app else [])
+        else:
+            args += ['--window-id', f'w-{handle}']
+        if role:
+            args += ['--role', role]
+        env = self.run(args, timeout_s=15)
+        match = (env.data or {}).get('match') if env.ok and isinstance(env.data, dict) else None
+        return str(match['ref_id']) if match and match.get('ref_id') else None
+
+    def _click_named(self, action: Action, handle: int, name: str, role: str = '') -> ActionResult:
+        """Activate a control by its exact name without moving the mouse (e.g. Notepad's "Add New Tab")."""
+        ref = self._find(handle, name, role)
+        if ref is None:
+            raise ControlError(f'No control named "{name}" in this window.', ErrorCategory.TARGET_NOT_FOUND)
+        env = self.run(['click', ref], timeout_s=20)
+        if not env.ok:
+            raise to_control_error(env)
+        return self._done(action, f'Invoked "{name}"', env)
+
+    def _menu_path(self, action: Action, handle: int, names: List[str]) -> ActionResult:
+        """File > Save as, headless: the first item is in the window, the rest in the menu it opens."""
+        if not names:
+            raise ControlError('menu_path needs names.', ErrorCategory.INVALID_ARGUMENTS)
+        ref = self._find(handle, names[0], 'menuitem') or self._find(handle, names[0])
+        if ref is None:
+            raise ControlError(f'No menu "{names[0]}" in this window.', ErrorCategory.TARGET_NOT_FOUND)
+        env = self.run(['click', ref], timeout_s=20)
+        if not env.ok:
+            raise to_control_error(env)
+        for count, name in enumerate(names[1:], 1):
+            ref = None
+            deadline = time.monotonic() + 4
+            while ref is None and time.monotonic() < deadline:
+                ref = self._find(handle, name, surface='menu') or self._find(handle, name)
+                if ref is None:
+                    time.sleep(.2)
+            if ref is None:
+                raise ControlError(f'Menu item "{name}" did not appear; the menu may still be open.',
+                                   ErrorCategory.TARGET_NOT_FOUND, executed=True)
+            env = self.run(['click', ref], timeout_s=20)
+            if not env.ok:
+                error = to_control_error(env)
+                error.executed = True
+                raise error
+        return self._done(action, 'Chose ' + ' > '.join(names), env)
+
+    def _live_handle(self, handle: int) -> int:
+        """The window may have been replaced (Windows 11 Notepad makes a new window for a new tab). If the handle is
+        gone, use the same app's current window: nothing was sent to the old one, so this is safe."""
+        try:
+            rows = self.windows()
+        except ControlError:
+            return handle  # cannot tell: keep the handle; the action itself reports a missing window
+        if not rows or any(str(w.get('id')) == f'w-{handle}' for w in rows):
+            return handle
+        known = self.scopes.get(f'win-{handle}')
+        app = str(getattr(known, 'app', '') or '')
+        same = [w for w in rows if app and str(w.get('app_name', '')).lower() == app.lower()]
+        focused = [w for w in same if w.get('is_focused')]
+        chosen = (focused or same)[:1]
+        if not chosen:
+            raise ControlError('The window was closed.', ErrorCategory.STALE_REF)
+        new = int(str(chosen[0]['id'])[2:])
+        if known is not None:
+            self.scopes[f'win-{new}'] = known
+            known.handle = new
+        return new
+
+    def _press(self, key: str, handle: int) -> Envelope:
+        """Physical key press into one window. `press --window-id` resolves the app by process name, which misses
+        hosted Store apps (Calculator); so the window is focused by its id and the key goes to the foreground."""
+        env = self.run(['press', key, '--window-id', f'w-{handle}'], headed=True, timeout_s=20)
+        if env.ok or env.error is None or env.error.code != 'APP_NOT_FOUND' or env.may_have_acted:
+            return env
+        focused = self.run(['focus-window', '--window-id', f'w-{handle}'], timeout_s=15)
+        if not focused.ok:
+            return focused
+        return self.run(['press', key], headed=True, timeout_s=20)
 
     def _close_window(self, action: Action, handle: int) -> ActionResult:
         match = None
@@ -445,6 +568,11 @@ class AgentDesktopExecutor(RouteExecutor):
         existing = self.windows(target.image) if target.image else []
         before = {str(w.get('id')) for w in existing}
         attached: Optional[Dict[str, Any]] = None
+        if existing and not argument:
+            # Already open and no file to open: use its window. `launch` would only attach after waiting out its
+            # whole timeout (15 s measured on Notepad).
+            chosen = next((w for w in existing if w.get('is_focused')), existing[0])
+            return int(str(chosen['id'])[2:]), str(chosen.get('title', ''))
         if target.store:
             # Store apps have no exe path; the shell starts them, agent-desktop then finds the window.
             self._popen(['explorer.exe', *target.args], creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))

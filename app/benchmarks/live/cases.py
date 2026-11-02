@@ -1235,9 +1235,10 @@ def close_started(started: List[psutil.Process]) -> None:
 
 def run_case(case: Case) -> Dict[str, Any]:
     archive(case)
+    # Before prepare: apps a scenario's setup opens (a minimized Notepad, a covered Calculator) are closed too.
+    baseline = {p.pid for p in psutil.process_iter()}
     if case.prepare:
         case.prepare()
-    baseline = {p.pid for p in psutil.process_iter()}
     seen: set[str] = set()
     started: List[psutil.Process] = []
     stop = threading.Event()

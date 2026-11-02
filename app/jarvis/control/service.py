@@ -400,7 +400,11 @@ class ControlService:
                                              'OK', window=handle))
                 extra['dismissed'] = 'Notepad notice about a missing file'
                 self._wait(.5, lambda: not notepad_notice(self._read_window(route, handle, 'all')))
-            route.inner.act(self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+n'}, cancelled, window=handle))
+            if self._agent_desktop():  # headless: Notepad's own button, no focus or key press needed
+                route.inner.act(self._action(Route.UIA, 'click_named', {'handle': handle, 'name': 'Add New Tab',
+                                                                         'role': 'button'}, cancelled, window=handle))
+            else:
+                route.inner.act(self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+n'}, cancelled, window=handle))
             self._wait(.6, lambda: fresh_notepad_tab(self._read_window(route, handle, 'all')))
             read = self._settled_read(route, handle)
             extra['new_tab'] = fresh_notepad_tab(read)
@@ -498,6 +502,10 @@ class ControlService:
                 extra['next'] = 'Select all (key ctrl+a) and type the whole text again, or use a fresh tab.'
         return self._report(result, read, extra or None)
 
+    def _agent_desktop(self) -> bool:
+        from .backends import pc_backend
+        return pc_backend({'control': dict(self.settings.extra)}) == 'agent_desktop'
+
     def _laya_ref(self, ref: str, args: Mapping[str, Any]) -> str:
         """agent-desktop backend: a control named in words ("the Save button") is resolved by Laya on the GPU."""
         found = labels(self.last_app)
@@ -535,7 +543,11 @@ class ControlService:
             int(self.app_scope[4:]) if self.app_scope.startswith('win-') else None)
         if handle is None:
             raise ControlError('save_as needs an open app window: use app_open or app_read first.', ErrorCategory.INVALID_ARGUMENTS)
-        opened = self._run(route, self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+shift+s'}, cancelled,
+        if self._agent_desktop():  # headless File > Save as: works while the user works in another window
+            opened = self._run(route, self._action(Route.UIA, 'menu_path', {'handle': handle, 'names': ['File', 'Save as']},
+                                                   cancelled, 'Save As', window=handle))
+        else:
+            opened = self._run(route, self._action(Route.UIA, 'key', {'handle': handle, 'text': 'ctrl+shift+s'}, cancelled,
                                                'Save As', window=handle))
         if not opened.ok:
             return self._report(opened)

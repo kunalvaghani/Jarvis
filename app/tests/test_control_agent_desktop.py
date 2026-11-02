@@ -414,3 +414,22 @@ class Faults(unittest.TestCase):
 
 
 import unittest.mock  # noqa: E402
+
+
+class WindowQuirks(unittest.TestCase):
+    def test_a_replaced_window_is_followed_to_the_same_apps_new_window(self):
+        rows = ok('list-windows', [{'id': 'w-9', 'app_name': 'Notepad.exe', 'title': 'Untitled - Notepad',
+                                    'is_focused': True}])
+        ex, fake = executor({'snapshot': SNAP, 'list-windows': rows,
+                             'find': ok('find', {'match': {'ref_id': '@s1:e1', 'role': 'textfield', 'value': ''}}),
+                             'set-value': acted('set-value')})
+        ex.read_window(5, 'all')  # the old window, Notepad.exe
+        result = ex.act(action('type', handle=5, text='hello'))
+        self.assertTrue(result.ok)
+        self.assertIn(['find', '--window-id', 'w-9', '--role', 'textfield', '--first'], [a[1:] for a in fake.argv])
+
+    def test_keys_to_a_hosted_store_app_focus_its_window_first(self):
+        ex, fake = executor({'press': [err('press', 'APP_NOT_FOUND'), acted('press', 'delivered_unverified')],
+                             'focus-window': acted('focus-window'), 'list-windows': ok('list-windows', [])}, gate='allow')
+        self.assertTrue(ex.act(action('key', handle=7, text='ctrl+n')).ok)
+        self.assertEqual(fake.commands(), ['list-windows', 'press', 'focus-window', 'press'])
