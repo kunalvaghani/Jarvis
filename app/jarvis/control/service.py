@@ -152,11 +152,23 @@ class ControlService:
         self.profile = profile
 
         def build() -> RouteExecutor:
+            from .backends import web_backend
             from .routes.browser import BrowserExecutor
+            backend = web_backend({'control': dict(self.settings.extra)})
+            if backend == 'agent_browser':
+                from .web.agent_browser_backend import AgentBrowserExecutor, BrowserRunner, profile_for
+                runner = BrowserRunner(session=f'jarvis-{profile}', profile=profile_for(profile, self.settings),
+                                       headed=not self.settings.headless)
+                return AgentBrowserExecutor(self.policy, runner, self._confirm_headed)
             directory = self.settings.personal_profile if profile == 'personal' else self.settings.test_profile
             directory.mkdir(parents=True, exist_ok=True)
             executor = BrowserExecutor(directory, self.policy, self.settings.downloads, headless=self.settings.headless)
             executor.start()
+            if backend == 'shadow':
+                from .web.agent_browser_backend import AgentBrowserExecutor
+                from .web.shadow import ReadOnlyBrowserRunner, WebShadowExecutor
+                runner = ReadOnlyBrowserRunner(session='jarvis-shadow', profile='', headed=False)
+                return WebShadowExecutor(executor, AgentBrowserExecutor(self.policy, runner), profile == 'personal')
             return executor
         return self._route('browser', build, 'Browser · ' + ('your profile' if profile == 'personal' else 'Jarvis profile'))
 
