@@ -1741,15 +1741,15 @@
     "shadow_log": false
   },
   "speed": {
-    "cache_order": false
+    "cache_order": true
   },
   "control": {
-    "event_waits": false,
-    "compact_reads": false,
+    "event_waits": true,
+    "compact_reads": true,
     "form_fill": false,
-    "shared_save": false,
-    "api_routes": false,
-    "arg_repair": false
+    "shared_save": true,
+    "api_routes": true,
+    "arg_repair": true
   },
   "vision": {
     "tight_escalation": false
