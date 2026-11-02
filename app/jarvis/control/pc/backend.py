@@ -139,7 +139,11 @@ class AgentDesktopExecutor(RouteExecutor):
             args.append('-i')
         env = self.run(args, timeout_s=self.settle_ms / 1000 + 15)
         if not env.ok and env.error is not None and env.error.code == 'WINDOW_NOT_FOUND':
-            raise ControlError('The window was closed.', ErrorCategory.STALE_REF)
+            # Windows 11 Notepad replaces its window when a tab opens: follow the same app's window (live C42).
+            replaced = self._live_handle(handle)
+            if replaced == handle:
+                raise ControlError('The window was closed.', ErrorCategory.STALE_REF)
+            return self.read_window(replaced, filter)
         snap = Snapshot.model_validate(self._check(env).data)
         scope = f'win-{handle}'
         with self._lock:

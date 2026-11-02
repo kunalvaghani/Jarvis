@@ -37,7 +37,18 @@ def split_commands(text):
             app = merged[i - 1].strip()[opened.end():].strip().rstrip('.!')
             if app and len(app.split()) <= 4:
                 merged[i] = f'{pronoun.group(1)} {app}'
-    return merged
+    # Any other step that only says "it/that" belongs to the request before it: keep them together
+    # ("open c19.txt in Notepad, minimize it, then restore it", live C19, 2026-11-03).
+    joined: list = [merged[0]]
+    for part in merged[1:]:
+        if REFERS_BACK.match(part.strip()) and not CLOSE_IT.match(part.strip()):
+            joined[-1] = joined[-1].rstrip() + ', then ' + part.strip()
+        else:
+            joined.append(part)
+    return joined
+
+
+REFERS_BACK = re.compile(r'^(?:please\s+)?\w+\s+(?:it|that|this|them)\b', re.I)
 
 
 CLOSE_IT = re.compile(r'^(close|quit|exit)\s+(?:it|that|this)[.!]?$', re.I)

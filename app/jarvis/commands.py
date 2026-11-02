@@ -144,6 +144,11 @@ def cloud_command(text: str) -> Command | None:
     return None
 
 
+# A second instruction after a comma or "and": the whole request is a task (live C19, 2026-11-03).
+COMPOUND = re.compile(r"(?:,|\band\b|\bthen\b)\s*(?:then\s+)?(?:minimi[sz]e|maximi[sz]e|restore|close|type|write|add|save|"
+                      r"resize|move|click|press|copy|paste|rename|delete|play|search|read|edit|append)\b", re.I)
+
+
 def _parse(text: str) -> Command:
     from .blender_host import parse_request as blender_request
     blender = blender_request(text)
@@ -522,7 +527,7 @@ def _parse(text: str) -> Command:
         if drive or re.search(r"\s+(?:folder|directory)$", m[1], re.I):
             return Command('open_folder', m[1])
     m = re.fullmatch(r"(?:open|launch|start) (?:the )?(.+?)(?: app)?", text, re.I)
-    if m:
+    if m and not COMPOUND.search(m[1]):  # "open X, minimize it" is a task, not an app named "x, minimize it"
         return Command("open", m[1].lower())
     from .writing import parse_write
     written = parse_write(text)  # "write a note here" (composed) or "write exactly ..." (verbatim)
