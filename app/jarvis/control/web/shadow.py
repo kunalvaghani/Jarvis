@@ -44,7 +44,7 @@ def controls(text: str) -> Dict[str, Tuple[str, str]]:
 
 
 class WebShadowExecutor(RouteExecutor):
-    def __init__(self, legacy: Any, candidate: AgentBrowserExecutor, personal: bool, log: Path = LOG) -> None:
+    def __init__(self, legacy: RouteExecutor, candidate: AgentBrowserExecutor, personal: bool, log: Path = LOG) -> None:
         self.legacy, self.candidate, self.personal, self.log = legacy, candidate, personal, log
         self.route = Route.BROWSER
         self.legacy_seen: Dict[str, Tuple[str, str]] = {}
@@ -54,7 +54,7 @@ class WebShadowExecutor(RouteExecutor):
         return getattr(self.legacy, name)
 
     def start(self) -> None:
-        self.legacy.start()
+        getattr(self.legacy, "start", lambda: None)()
 
     def health_check(self) -> Health:
         return self.legacy.health_check()
