@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -1184,6 +1185,14 @@ def run_case(case: Case) -> Dict[str, Any]:
     answer = str(row.get('answer') or row.get('error') or '')
     if case.cid != 'S4' and re.search(r'not verified|Task paused', answer):
         problems.append('Jarvis did not finish with a verified result')
+    service = getattr(actions, '_neural_service', None)
+    if service is not None:  # The oracle's verdict is the independent evidence the brain's learning may use.
+        try:
+            row['brain_shadow'] = service.journal.judge_latest('failed' if problems else 'verified')
+            goals = service.journal.rows('SELECT goal_id, state, stop_reason FROM goals ORDER BY updated DESC LIMIT 1')
+            row['brain_goal'] = goals[0] if goals else None
+        except Exception as error:
+            row['brain_shadow'] = f'unrecorded: {type(error).__name__}'
     try:
         actions.close()
     except Exception:
@@ -1237,7 +1246,10 @@ def main(argv: List[str]) -> int:
     parser.add_argument('--enable', default='', help='comma-separated upgrade v2 flags, e.g. control.compact_reads')
     parser.add_argument('--vary', action='store_true', help='each repeat runs a different variant of the case')
     parser.add_argument('--full', action='store_true', help='full Jarvis: cloud models as configured, memory read-only')
+    parser.add_argument('--brain', choices=('off', 'shadow', 'on'), help='neural brain mode for these runs only')
     args = parser.parse_args(argv)
+    if args.brain:
+        os.environ['JARVIS_BRAIN_MODE'] = args.brain  # Read per task by jarvis.neural.brain_mode.
     TELEMETRY = args.telemetry
     ENABLE = tuple(name.strip() for name in args.enable.split(',') if name.strip())
     FULL = args.full

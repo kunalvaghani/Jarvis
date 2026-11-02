@@ -4,6 +4,38 @@
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](docs/autonomous-repair-acceptance.md) · [Handoff](docs/CLAUDE_HANDOFF.md).
 
+## Neural brain (BNEG), phases 1–5 implemented — 2026-11-02 IST
+
+Jarvis now has a brain made of **neurons** and **synapses**:
+- **Neurons** are registered, typed, versioned capabilities: every tool, MCP tool, fixed route, verifier and model step.
+- **Synapses** are directed, typed and guarded links. A synapse forms only where one neuron's output type is another's input type.
+
+It works on **stimulus**. A request or a result is a signal. The signal fires the next neurons, and every firing is written to a SQLite journal before it acts. The design is in [docs/brain/ARCHITECTURE.md](docs/brain/ARCHITECTURE.md), progress in [docs/brain/PROGRESS.md](docs/brain/PROGRESS.md), and the report in [docs/brain/reports/phases-1-5.md](docs/brain/reports/phases-1-5.md).
+
+**Ships off.** `neural.mode` is `off`. Set `JARVIS_BRAIN_MODE=shadow` to let the brain watch: legacy acts while the brain records what it would have fired and why. `on` lets the brain run the workflows it knows. Rollback is one step, `JARVIS_BRAIN_MODE=off` ([migration guide](docs/brain/MIGRATION_GUIDE.md)). Live end-to-end tests run after the implementation, as the user asked.
+
+**What it does:**
+- **It grows by itself.** The registry is rebuilt from Jarvis's own code at every start: 267 neurons and 229 synapses on this PC, built in under a second on the CPU.
+  - New tools, MCP tools and verifiers appear without regeneration.
+  - Tool chains that ended verified three times become proposed composite neurons. Read-only ones activate; anything that writes waits for your approval (`python -m jarvis.neural approve <id>`).
+- **Hard gates, then learning.** Eligibility is never learned. That covers status, unknown side effects (denied), session allowlist, missing secrets, privacy, request safety, and secrets leaving the PC.
+  - Learning only reorders eligible routes, using verified outcomes (Beta-Bernoulli).
+  - `neural.learning` is `shadow` by default, `on` to use it, `off` to roll back.
+- **Durable, bounded execution.** Per-goal plans are acyclic and checked against the capability graph.
+  - Idempotency keys; a crash never replays a write; read-only steps resume.
+  - Repairs are bounded, every goal has a deadline, and approval is asked once per scope.
+  - Success means the goal's verifier passed. Nothing else counts as done.
+- **Workflows so far:**
+  - research → analysis → grounded report;
+  - bug fix: inspect → patch → tests on a scratch copy → apply → re-test the real folder;
+  - exact text file, checked by the sealed `text_file_saved` verifier.
+
+  Everything else falls back to the legacy planner, unchanged.
+- **See it:** `python -m jarvis.neural viewer` opens a local live neuron map (127.0.0.1, read-only). Every lit neuron is a journaled event, and no payloads are shown. `python -m jarvis.neural export` writes a one-way Obsidian projection.
+  - Electron was considered and not added: it would keep a second Chromium running.
+
+**Tests:** 66 new brain tests pass, and mypy is clean on `jarvis/neural`. The full regression has the same 39 known failures as before. The live suite gains `--brain off|shadow|on`, and each oracle's verdict is fed back as the only evidence learning may use.
+
 ## Upgrade v2 Phase 1: faster, checked routes and live modelling — 2026-11-02 IST
 
 Every Phase 1 feature is behind a flag that ships **off** ([ADR 0006](docs/adr/0006-upgrade-v2-phase1-speed-and-app-routes.md), [plan](docs/rework/upgrade-v2/phase-1-plan.md), [progress](docs/rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). With the flags off, behaviour is unchanged (live parity 9/9).

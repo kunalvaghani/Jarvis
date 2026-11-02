@@ -251,6 +251,9 @@ class ToolRegistry:
     @timed_tool  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, step, cancelled, activate=None):
         from .agent_events import task_trace
+        from .neural.service import shadow_tool
+        if isinstance(step, dict):
+            shadow_tool(self.actions, step.get('action'))  # Brain shadow log only; no effect on the call.
         with task_trace(self.actions):
             return self._execute_traced(step, cancelled, activate)
 

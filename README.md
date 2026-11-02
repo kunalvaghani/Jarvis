@@ -2,6 +2,14 @@
 
 [Complete Jarvis technical context — 2026-10-30](app/docs/JARVIS_FULL_CONTEXT.md): architecture, request flow, source-declared tools, MCP allowlists, APIs, models, memory, dependencies, recorded benchmarks, failed acceptance gates and known limitations. Documentation snapshot only; no fresh runtime tests or campaign resume.
 
+**Neural brain (BNEG), phases 1–5 implemented, 2026-11-02 IST. Ships off.** Jarvis has a brain made of neurons and synapses that works on stimulus:
+- **Neurons:** typed, versioned capabilities.
+- **Synapses:** guarded links between matching types.
+- **Signals:** every firing is journaled before it acts.
+
+Live end-to-end tests come next. More: [app/README.md](app/README.md#neural-brain-bneg-phases-15-implemented--2026-11-02-ist), [architecture](app/docs/brain/ARCHITECTURE.md), [report](app/docs/brain/reports/phases-1-5.md).
+
+
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](app/docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](app/docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](app/docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](app/docs/autonomous-repair-acceptance.md) · [Handoff](app/docs/CLAUDE_HANDOFF.md).
 
 **Autonomous project repair candidate — 2026-10-24 IST:** strict structured-output completion/schema checks, retained model diagnostics, requirement/intake repairs and owned-process cleanup. Real project-creation acceptance is still open; passing regressions and launcher readiness do not establish working generated applications. [Repair report and acceptance matrix](app/docs/autonomous-repair-2026-10-24.md).
