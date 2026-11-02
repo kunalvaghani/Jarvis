@@ -157,6 +157,9 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
                     'context_selector', {}).get('model', 'qwen3.5:0.8b'), 'timeout_seconds': 3.0}, lambda: False)
                 command = Command('ask' if kind == 'chat' else 'task', command.value)
             row.setdefault('commands', []).append({'kind': command.kind, 'value': str(command.value)[:300]})
+            from jarvis.conversation_intent import needs_page
+            if command.kind == 'ask' and needs_page(command.value):  # Actions._submit resubmits it as a task.
+                command = Command('task', command.value)
             if command.kind == 'ask':  # The app answers conversation on its chat path: no task runs.
                 answers.append('[Jarvis treated this as conversation; no task was run]')
                 continue

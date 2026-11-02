@@ -87,6 +87,11 @@ SITE = re.compile(r'(?:\bhttps?://|\bwww\.[a-z0-9-]|\b[a-z0-9-]+(?:\.[a-z0-9-]+)
                   r'co|uk|info|me|ai)\b(?![.\w-]))', re.I)
 
 
+def needs_page(text):
+    """A question about a named website (or "on Wikipedia") can only be answered by reading the page."""
+    return bool(SITE.search(str(text or '')) or re.search(r'\b(?:on|from|according to) wikipedia\b', str(text or ''), re.I))
+
+
 def quick_kind(text):
     """Cheap rules first: 'task', 'chat' or None when a model must decide."""
     if action_text(text) is not None or CORRECTION.fullmatch(text.strip().strip(' .!?')):
