@@ -314,6 +314,16 @@ class AgentBrowserExecutor(RouteExecutor):
             self.refs = {}
             lines = render(str(data.get('snapshot', '')), self.refs)
             self.roles = roles(str(data.get('snapshot', '')))
+        if filter != 'interactive':
+            # The tree omits the page title, which can be the only place a heading-like answer appears
+            # (example.com today: "Example Domain" is the title only; live D12).
+            try:
+                titled = self.run(['get', 'title'], 20)
+                title = str((titled.data or {}).get('title', '')) if titled.success and isinstance(titled.data, dict) else ''
+            except ControlError:
+                title = ''
+            if title:
+                lines.insert(0, f'title "{title[:300]}"')
         refs = tuple(JarvisRef(r, Route.BROWSER, 'tab', 0) for r in self.refs)
         return Observation(Route.BROWSER, 'tab', '\n'.join(lines), refs,
                            state={'url': str(data.get('origin', '')), 'boundary': bool(reply.boundary)})

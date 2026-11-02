@@ -167,11 +167,25 @@ SITE = re.compile(r'(?:https?://\S+|\bwww\.[\w.-]+(?:/\S*)?|\b[a-z0-9-]+(?:\.[a-
 ANSWER_LIMIT = 9000
 
 
+WIKIPEDIA = re.compile(r"^\s*(?:on|from|according to)\s+wikipedia,?\s+(?P<q>.+?)\s*\??\s*$", re.I)
+
+
 def site_question(goal: str) -> Optional[Tuple[str, str]]:
     """(page, question) for "On <site>, <question>?" with exactly one site; None otherwise."""
     if not goal.rstrip().endswith('?') and not re.match(r'\s*(?:what|who|which|how)\b', goal, re.I):
         return None
     sites = SITE.findall(goal)
+    wiki = WIKIPEDIA.match(goal)
+    if not sites and wiki:
+        # "On Wikipedia, what year was the Eiffel Tower completed?": Wikipedia's own search goes to the article.
+        from urllib.parse import quote_plus
+        subject = re.sub(r'^(?:what|which|when|who|how|where|why)\b.*?\b(?:was|were|is|are|did|does|do)\s+(?:the\s+)?',
+                         '', wiki.group('q'), flags=re.I)
+        subject = re.sub(r'\s+(?:completed|built|born|founded|opened|made|released|located|invented)\b.*$', '', subject,
+                         flags=re.I).strip(' ?.')
+        if not subject or subject.lower() in ('who', 'what', 'which', 'when', 'where', 'why', 'how'):
+            subject = re.sub(r'^(?:who|what|which|when|where|why|how)\s+', '', wiki.group('q'), flags=re.I)
+        sites = [f'en.wikipedia.org/w/index.php?search={quote_plus(subject)}']
     if len(sites) != 1 or re.search(r'\b(?:log ?in|sign ?in|buy|order|submit|send|post|fill|book (?:a|an|me)|booking)\b', goal, re.I):
         return None
     page = str(sites[0]).rstrip('.,/')
