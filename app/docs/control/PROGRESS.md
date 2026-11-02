@@ -38,3 +38,35 @@ Contradictions with the master prompt, and what was done instead:
 - Before (brain branch, 2026-11-02): 5,062 passed, 39 known failures; see [reports/tests_before.txt](reports/tests_before.txt).
 - After each control step: all control, fast-route and live-suite tests pass; mypy is clean on the new modules.
 - After (control branch, 2026-11-02): **5,116 passed, 39 failed — exactly the 39 known failures, none new.**
+
+## Combined live round, 2026-11-03 (brain on + agent-desktop + agent-browser + Laya on CPU + Phase 1 flags)
+
+All 16 scenarios in the set passed: 11 desktop, Blender H2, and web D12, D14, S1, S1c. These are single runs; the repeat runs and the A/B intervals are still to come. The pass results came from runs B6 to B9, after the fixes each run exposed.
+
+| Scenario | Before (2026-11-02) | Now |
+|---|---|---|
+| C01 Notepad write and save | 407 s | 30 s (brain workflow) |
+| C03 Calculator | 150–226 s, failed | 9.5 s |
+| C05 rename / C06 new folder | failed / 522 s | instant (brain workflows) |
+| C08 open then close Paint | failed | 7.8 s |
+| C14 Start menu launch | failed | 3.3 s |
+| C18 resize / C19 minimize and restore | failed | 18 s each (brain workflow) |
+| C42 side by side | failed | 34.5 s |
+| H2 Blender live build | n/a | 17 s |
+| D12 / D14 / S1 / S1c web | failed | 24 / 36 / 33 / 37 s |
+
+Root causes found:
+- The Phase 1 flags were off by default (the user promoted them).
+- Laya on the GPU squeezed the 9B planner onto the CPU (Laya now runs on the CPU).
+- The Windows foreground lock blocked physical input (paths are now headless first).
+- Hosted Store app window identity.
+- Website questions were treated as chat.
+- The page title was missing from agent-browser reads.
+- Parser bugs.
+
+Full regression after the round: 5,131 passed, the same 39 known failures.
+
+Still open:
+- Gmail, Drive, Docs and Sheets scenarios need the user's `chrome://inspect/#remote-debugging` switch.
+- Multi-agent cursors and parallel window reads.
+- Repeat runs and `COMPARISON.md`.
