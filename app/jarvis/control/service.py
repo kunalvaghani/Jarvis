@@ -507,10 +507,10 @@ class ControlService:
         if pc_backend({'control': dict(self.settings.extra)}) != 'agent_desktop':
             return ref
         from .pc.laya import Resolver
-        resolver = Resolver()
-        if not resolver.ready():
+        if not Resolver().ready():
             return ref
-        answer = resolver.choose(ref, str(args.get('app', '')), found)
+        # Laya on the GPU first; JEV only as a backup the user allowed (free + cloud consent; off by default).
+        answer = Resolver.resolve(ref, str(args.get('app', '')), found, {'control': dict(self.settings.extra)})
         if answer['ref']:
             return str(answer['ref'])
         names = ', '.join(f'{r} {found[r][0]} "{found[r][1]}"' for r in list(answer['candidates'])[:4])  # type: ignore[call-overload]

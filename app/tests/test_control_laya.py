@@ -56,5 +56,42 @@ class Resolver(unittest.TestCase):
             self.assertEqual(laya.endpoint(), 'http://127.0.0.1:8765/v1/systemone')
 
 
+
+class JevSwitch(unittest.TestCase):
+    def test_jev_backup_needs_free_and_consent(self):
+        self.assertFalse(laya.backup_allowed({}))
+        self.assertFalse(laya.backup_allowed({'control': {'decision_backup': 'jev', 'decision_cloud_consent': True}}))
+        self.assertFalse(laya.backup_allowed({'control': {'decision_backup': 'jev', 'decision_backup_free': True}}))
+        self.assertTrue(laya.backup_allowed({'control': {'decision_backup': 'jev', 'decision_backup_free': True,
+                                                         'decision_cloud_consent': True}}))
+
+    def test_laya_first_and_jev_only_when_laya_is_unsure_and_allowed(self):
+        calls = []
+
+        def urlopen(request, timeout):
+            body = json.loads(request.data)
+            calls.append('jev' if body.get('model') else 'laya')
+            return reply('c0', 0.5 if not body.get('model') else 0.97)
+        allowed = {'control': {'decision_backup': 'jev', 'decision_backup_free': True, 'decision_cloud_consent': True}}
+        with mock.patch.object(laya.urllib.request, 'urlopen', urlopen), \
+                mock.patch.object(laya.Resolver, 'ready', lambda self: True):
+            self.assertIsNone(laya.Resolver.resolve('history', 'Calc', CONTROLS, {})['ref'])
+            self.assertEqual(calls, ['laya'])  # not allowed: the cloud is never called
+            answer = laya.Resolver.resolve('history', 'Calc', CONTROLS, allowed)
+        self.assertEqual((answer['why'], calls[-1]), ('jev backup', 'jev'))
+
+    def test_jev_reads_the_whole_window_and_names_its_model(self):
+        controls = {f'd{i}': ('Button', f'Item {i}') for i in range(40)}
+        sent = []
+
+        def urlopen(request, timeout):
+            sent.append(json.loads(request.data))
+            return reply('c0', 0.97)
+        with mock.patch.object(laya.urllib.request, 'urlopen', urlopen):
+            laya.Resolver(key='k', model='jev').choose('item 7', 'App', controls)
+        self.assertEqual(sent[0]['model'], 'typesafe/jev-1.13')
+        self.assertEqual(len(sent[0]['questions']['target']['criteria']), 41)
+
+
 if __name__ == '__main__':
     unittest.main()
