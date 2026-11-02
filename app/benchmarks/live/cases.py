@@ -1223,6 +1223,45 @@ def watch(stop: threading.Event, seen: set[str], baseline: set[int], started: Li
         stop.wait(.25)
 
 
+CLOSE_APPS = {'notepad.exe', 'calculatorapp.exe', 'mspaint.exe', 'applicationframehost.exe'}
+
+
+def app_windows() -> set:
+    """Handles of visible top-level windows that belong to the test apps (Notepad, Calculator, Paint)."""
+    import win32gui
+    import win32process
+    found = set()
+
+    def visit(handle: int, _: Any) -> bool:
+        if not win32gui.IsWindowVisible(handle) or not win32gui.GetWindowText(handle):
+            return True
+        try:
+            _, pid = win32process.GetWindowThreadProcessId(handle)
+            name = psutil.Process(pid).name().lower()
+        except (psutil.Error, OSError):
+            return True
+        title = win32gui.GetWindowText(handle).lower()
+        if name in CLOSE_APPS and (name != 'applicationframehost.exe' or 'calculator' in title):
+            found.add(handle)
+        return True
+    win32gui.EnumWindows(visit, None)
+    return found
+
+
+def close_new_windows(before: set) -> None:
+    """Close (gracefully, WM_CLOSE) every test-app window that appeared during the scenario, also when the app
+    reused a process that was already running (Windows 11 Notepad keeps one process). Windows 11 Notepad keeps
+    unsaved tabs in its session, so closing never loses text and shows no save prompt."""
+    import win32con
+    import win32gui
+    for handle in app_windows() - before:
+        try:
+            win32gui.PostMessage(handle, win32con.WM_CLOSE, 0, 0)
+        except OSError:
+            pass
+    time.sleep(1)
+
+
 def close_started(started: List[psutil.Process]) -> None:
     """Close only processes that appeared during the run (Jarvis's), never the user's earlier ones."""
     for process in started:
@@ -1237,6 +1276,7 @@ def run_case(case: Case) -> Dict[str, Any]:
     archive(case)
     # Before prepare: apps a scenario's setup opens (a minimized Notepad, a covered Calculator) are closed too.
     baseline = {p.pid for p in psutil.process_iter()}
+    windows_before = app_windows()
     if case.prepare:
         case.prepare()
     seen: set[str] = set()
@@ -1280,6 +1320,7 @@ def run_case(case: Case) -> Dict[str, Any]:
     except Exception:
         pass
     close_started(started)
+    close_new_windows(windows_before)
     result = {'case': case.cid, 'passed': not problems, 'problems': problems, 'processes': sorted(seen),
               **{k: v for k, v in row.items() if k not in ('island_cards',)},
               'island_card_count': len(row.get('island_cards', [])),
