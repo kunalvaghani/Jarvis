@@ -687,7 +687,9 @@ def parse_command(text):
                          clean, re.I)
     if match:
         return Command("doc_ask", match["q"].strip())
-    match = re.fullmatch(r"(?:in|according to|from) (?:the |this |my )?(?:pdf|document|doc|file),?\s+(?P<q>.+)", clean, re.I)
+    # "In File Explorer, create a folder" is an app instruction, not a document question (live C06, 2026-11-02).
+    match = re.fullmatch(r"(?:in|according to|from) (?:the |this |my )?(?:pdf|document|doc|file)"
+                         r"(?!\s+(?:explorer|manager|menu|folder|name|path|history|tab)\b),?\s+(?P<q>.+)", clean, re.I)
     if match:
         return Command("doc_ask", match["q"].strip())
     match = re.fullmatch(r"what does (?:the |this |my )?(?:pdf|document|doc|file) say about (?P<q>.+)", clean, re.I)

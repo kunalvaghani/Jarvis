@@ -27,7 +27,20 @@ def split_commands(text):
             merged[-1] = merged[-1].rstrip() + ' then ' + part  # Varied live gate 2026-11-01 (S2c).
         else:
             merged.append(part)
+    # "Open Paint, then close it": the comma is not part of the app name, and "it" is the app just opened
+    # (live C08, 2026-11-02).
+    merged = [re.sub(r'[,;]\s*$', '', p.rstrip()) for p in merged]
+    for i in range(1, len(merged)):
+        pronoun = CLOSE_IT.match(merged[i].strip())
+        opened = OPEN_PREFIX.match(merged[i - 1].strip())
+        if pronoun and opened:
+            app = merged[i - 1].strip()[opened.end():].strip().rstrip('.!')
+            if app and len(app.split()) <= 4:
+                merged[i] = f'{pronoun.group(1)} {app}'
     return merged
+
+
+CLOSE_IT = re.compile(r'^(close|quit|exit)\s+(?:it|that|this)[.!]?$', re.I)
 OPEN_PREFIX = re.compile(r"^(?:(?:please|can you|could you|would you)\s+)*(?:open|launch|start)\s+", re.I)
 AND_WRITE = re.compile(r"\s+and\s+(?=(?:please\s+)?(?:write|type|click|select|choose)\b)", re.I)
 STOP = re.compile(r"\b(?:go to sleep|stop listening|cancel|stop all tasks)\b", re.I)
