@@ -207,7 +207,14 @@ def grounded(answer: str, page: str) -> bool:
 def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     """Brain._run's hook: a finished answer for a request one of the fixed routes covers, else None."""
     from . import flags
-    if not flags.enabled(getattr(actions, 'config', None), 'control', 'api_routes'):
+    from .control.backends import pc_backend
+    config = getattr(actions, 'config', None)
+    if pc_backend(config if isinstance(config, dict) else {}) == 'agent_desktop':
+        from .control.pc.fast_paths import run as pc_fast_path
+        answer = pc_fast_path(goal, lambda kind, detail: _approved(actions, kind, detail, cancelled))
+        if answer is not None:
+            return answer  # "minimize Spotify", "copy X to the clipboard": one command, then a fresh read.
+    if not flags.enabled(config, 'control', 'api_routes'):
         return None
     from .blender_live import live_request, run as live_blender
     live = live_request(goal)
@@ -223,6 +230,17 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     if asked is not None:
         return _website(actions, asked[0], asked[1], cancelled)
     return None
+
+
+def _approved(actions: Any, kind: str, detail: str, cancelled: Cancelled) -> bool:
+    ask = getattr(actions, '_approve', None)
+    if ask is None:
+        return False
+    try:
+        ask(kind, detail, cancelled)
+        return True
+    except Exception:
+        return False
 
 
 def _blender(actions: Any, step: Dict[str, Any], cancelled: Cancelled) -> str:

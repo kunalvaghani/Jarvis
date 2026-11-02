@@ -323,3 +323,70 @@ class Flags(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class FastPaths(unittest.TestCase):
+    def test_matching(self):
+        from jarvis.control.pc.fast_paths import match
+        self.assertEqual(match('minimise Spotify'), ('minimize', 'Spotify'))
+        self.assertEqual(match('Maximize the VS Code window'), ('maximize', 'VS Code'))
+        self.assertEqual(match('copy hello world to the clipboard'), ('clipboard', 'hello world'))
+        self.assertIsNone(match('open spotify and play jazz'))
+
+    def test_window_op_is_verified_by_a_fresh_read(self):
+        from jarvis.control.pc import fast_paths
+        minimized = ok('list-windows', [{'id': 'w-1', 'title': 'Spotify', 'minimized': True}])
+        fake = Fake({'minimize': acted('minimize'), 'list-windows': minimized})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            answer = fast_paths.run('minimize spotify', lambda k, d: True, Runner(Path('a.exe'), run=fake))
+        self.assertIn('Minimized Spotify', answer)
+        still = ok('list-windows', [{'id': 'w-1', 'title': 'Spotify', 'minimized': False}])
+        fake = Fake({'minimize': acted('minimize', 'delivered_unverified'), 'list-windows': still})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            with self.assertRaises(ControlError):
+                fast_paths.run('minimize spotify', lambda k, d: True, Runner(Path('a.exe'), run=fake))
+
+    def test_close_is_graceful_and_clipboard_asks_first(self):
+        from jarvis.control.pc import fast_paths
+        fake = Fake({'close-app': acted('close-app'), 'list-windows': ok('list-windows', [])})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            self.assertIn('Closed', fast_paths.run('close notepad', lambda k, d: True, Runner(Path('a.exe'), run=fake)))
+        self.assertFalse(any('--force' in a for a in fake.argv))
+        fake = Fake({})
+        with self.assertRaises(ControlError):
+            fast_paths.run('copy secret to the clipboard', lambda k, d: False, Runner(Path('a.exe'), run=fake))
+        self.assertEqual(fake.argv, [])
+        fake = Fake({'clipboard-set': acted('clipboard-set'), 'clipboard-get': ok('clipboard-get', {'type': 'text', 'text': 'abc'})})
+        self.assertIn('Copied', fast_paths.run('copy abc to the clipboard', lambda k, d: True,
+                                              Runner(Path('a.exe'), run=fake)))
+
+
+class Faults(unittest.TestCase):
+    def test_a_hung_agent_desktop_is_uncertain_and_never_retried(self):
+        calls = []
+
+        def hang(argv, **kwargs):
+            calls.append(argv)
+            raise subprocess.TimeoutExpired(argv, 1)
+        ex = AgentDesktopExecutor(Policy(), Runner(Path('a.exe'), run=hang))
+        ex.scopes['win-5'] = __import__('jarvis.control.pc.backend', fromlist=['_Scope'])._Scope(5)
+        from jarvis.control.pc.runner import Ref
+        ex.scopes['win-5'].by_ref['d1'] = Ref(ref_id='@s1:e1', role='button', name='OK')
+        result = ex.act(action('click', scope='win-5', ref='d1'))
+        self.assertEqual(result.error_category, ErrorCategory.UNCERTAIN)
+        self.assertTrue(result.executed)
+        self.assertEqual(len(calls), 1)
+
+    def test_missing_binary_and_crashed_process(self):
+        def missing(argv, **kwargs):
+            raise FileNotFoundError(argv[0])
+        with self.assertRaises(ControlError) as caught:
+            Runner(Path('nope.exe'), run=missing)(['status'])
+        self.assertEqual(caught.exception.category, ErrorCategory.TOOL_ERROR)
+        crashed = Runner(Path('a.exe'), run=lambda argv, **k: subprocess.CompletedProcess(argv, -1073741819, '', 'boom'))
+        env = crashed(['click', '@s1:e1'])
+        self.assertFalse(env.ok)
+        self.assertTrue(env.may_have_acted)  # a crash mid-action is never treated as "nothing happened"
+
+
+import unittest.mock  # noqa: E402
