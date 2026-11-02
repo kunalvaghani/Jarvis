@@ -433,3 +433,21 @@ class WindowQuirks(unittest.TestCase):
                              'focus-window': acted('focus-window'), 'list-windows': ok('list-windows', [])}, gate='allow')
         self.assertTrue(ex.act(action('key', handle=7, text='ctrl+n')).ok)
         self.assertEqual(fake.commands(), ['list-windows', 'press', 'focus-window', 'press'])
+
+
+class Resize(unittest.TestCase):
+    def test_resize_is_verified_by_the_real_window_size(self):
+        from jarvis.control.pc import fast_paths
+        self.assertEqual(fast_paths.match('resize notepad to 800 by 600'), ('resize', 'notepad|800|600'))
+        before = ok('list-windows', [{'id': 'w-3', 'app_name': 'Notepad.exe', 'title': 'x',
+                                      'bounds': {'width': 1200, 'height': 900}}])
+        after = ok('list-windows', [{'id': 'w-3', 'app_name': 'Notepad.exe', 'title': 'x',
+                                     'bounds': {'width': 806, 'height': 598}}])
+        fake = Fake({'list-windows': [before, after], 'resize-window': acted('resize-window')})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            self.assertIn('Resized to 800x600', fast_paths.run('resize notepad to 800 by 600', lambda k, d: True,
+                                                                Runner(Path('a.exe'), run=fake)))
+        fake = Fake({'list-windows': [before, before], 'resize-window': acted('resize-window')})
+        with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
+            with self.assertRaises(ControlError):
+                fast_paths.run('resize notepad to 800 by 600', lambda k, d: True, Runner(Path('a.exe'), run=fake))

@@ -302,7 +302,88 @@ def text_file_saved(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, 
                         'evidence': [json.dumps(verdict.evidence, default=str)[:300]]}}
 
 
+# Desktop workflows (2026-11-03) ---------------------------------------------------------------------------------
+NAME_OK = re.compile(r'^[\w.() -]{1,120}$')
+
+
+def _approved_path(env: Env, folder: str, name: str) -> Path:
+    base = Path(folder)
+    if not NAME_OK.match(name) or name in ('.', '..'):
+        raise NotStarted(f'{name!r} is not a plain file or folder name')
+    target = (base / name).resolve()
+    if not inside(target, allowed_roots(env.config)) or target.parent != base.resolve():
+        raise NotStarted(f'{target} is outside the approved folder')
+    return target
+
+
+def notepad_save(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    """Notepad through ControlService (agent-desktop when that backend is on): new tab, type, File > Save as."""
+    target = _approved_path(env, str(inputs['folder']), str(inputs['name']))
+    if target.exists():
+        raise NotStarted(f'{target.name} already exists; Jarvis does not overwrite without asking')
+    control = getattr(env.actions, 'control', None)
+    if control is None:
+        raise NotStarted('no Jarvis control service')
+    service = control()
+    opened = json.loads(service.app_open('notepad', '', env.cancelled).splitlines()[0])
+    if not opened.get('ok'):
+        raise NotStarted(f'Notepad did not open: {opened.get("result")}')
+    typed = json.loads(service.app_act('type', {'text': str(inputs['text'])}, env.cancelled).splitlines()[0])
+    if not typed.get('ok'):
+        raise RuntimeError(f'typing failed: {typed.get("result")}')  # may have acted: reported, never repeated
+    saved = json.loads(service.app_act('save_as', {'text': str(target)}, env.cancelled).splitlines()[0])
+    if not saved.get('ok'):
+        raise RuntimeError(f'saving failed: {saved.get("result")}')
+    return {'path': str(target)}
+
+
+def rename(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    source = _approved_path(env, str(inputs['folder']), str(inputs['name']))
+    target = _approved_path(env, str(inputs['folder']), str(inputs['new']))
+    if not source.is_file():
+        raise NotStarted(f'{source.name} does not exist')
+    if target.exists():
+        raise NotStarted(f'{target.name} already exists; nothing was renamed')
+    env.notes['renamed_text'] = source.read_text(encoding='utf-8', errors='replace')
+    os.rename(source, target)
+    env.notes['renamed_from'] = str(source)
+    return {'path': str(target)}
+
+
+def mkdir(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    target = _approved_path(env, str(inputs['folder']), str(inputs['name']))
+    if target.exists():
+        raise NotStarted(f'{target.name} already exists')
+    target.mkdir()
+    return {'path': str(target)}
+
+
+def file_renamed(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    target = Path(str(inputs['path']))
+    problems = []
+    if not target.is_file():
+        problems.append(f'{target.name} does not exist')
+    elif env.notes.get('renamed_text') is not None and \
+            target.read_text(encoding='utf-8', errors='replace') != env.notes['renamed_text']:
+        problems.append(f'{target.name} does not hold the original text')
+    if env.notes.get('renamed_from') and Path(env.notes['renamed_from']).exists():
+        problems.append('the old name still exists')
+    return {'verdict': {'passed': not problems, 'problems': problems, 'evidence': [f'{target.name} on disk']}}
+
+
+def folder_exists(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    target = Path(str(inputs['path']))
+    ok = target.is_dir()
+    return {'verdict': {'passed': ok, 'problems': [] if ok else [f'{target} is not a folder'],
+                        'evidence': [f'{target.name} is a folder on disk'] if ok else []}}
+
+
 ADAPTERS: Dict[str, Adapter] = {
+    'skill.pc.notepad_save@v1': notepad_save,
+    'skill.file.rename@v1': rename,
+    'skill.file.mkdir@v1': mkdir,
+    'verifier.file_renamed@v1': file_renamed,
+    'verifier.folder_exists@v1': folder_exists,
     'verifier.text_file_saved@v1': text_file_saved,
     'skill.research.pick_source@v1': pick_source,
     'skill.research.analyse@v1': analyse,

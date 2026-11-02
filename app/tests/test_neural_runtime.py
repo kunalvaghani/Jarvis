@@ -287,3 +287,28 @@ class PlanChecks(Base):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class DesktopWorkflows(Base):
+    def test_rename_is_verified_on_disk_and_never_overwrites(self):
+        (self.root / 'a.txt').write_text('body\n', encoding='utf-8')
+        goal = 'In File Explorer, rename a.txt in the tests-root folder to b.txt.'
+        self.config['control']['allowed_roots'] = [str(self.root.parent)]
+        plan = compile_goal(goal, self.journal, self.config)
+        self.assertEqual(plan.workflow, 'file.rename')
+        outcome = self.dispatcher.run(plan, self.env())
+        self.assertTrue(outcome.verified, outcome.stop_reason)
+        self.assertEqual((self.root / 'b.txt').read_text(encoding='utf-8'), 'body\n')
+        self.assertFalse((self.root / 'a.txt').exists())
+        (self.root / 'c.txt').write_text('x', encoding='utf-8')
+        plan = compile_goal('rename c.txt in the tests-root folder to b.txt', self.journal, self.config)
+        self.assertEqual(self.dispatcher.run(plan, self.env()).state, 'failed')
+        self.assertEqual((self.root / 'b.txt').read_text(encoding='utf-8'), 'body\n')
+
+    def test_make_folder_and_refuse_names_that_escape(self):
+        self.config['control']['allowed_roots'] = [str(self.root.parent)]
+        plan = compile_goal('create a new folder named fresh in the tests-root folder', self.journal, self.config)
+        self.assertTrue(self.dispatcher.run(plan, self.env()).verified)
+        self.assertTrue((self.root / 'fresh').is_dir())
+        with self.assertRaises(A.NotStarted):
+            A.mkdir(None, {'folder': str(self.root), 'name': '..'}, self.env())

@@ -116,12 +116,84 @@ def create_text(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
     ]
 
 
+FILE_NAME = r'[\w.() -]{1,80}?\.[A-Za-z0-9]{1,6}'
+NOTEPAD = re.compile(r'^\s*(?:please\s+)?open\s+notepad,?\s+(?:and\s+)?(?:type|write)\s+(?:exactly\s+)?["“](?P<text>[^"”]{1,2000})["”]'
+                     r'\s+and\s+save\s+(?:it|the\s+file)\s+as\s+(?P<name>' + FILE_NAME + r')\s+(?P<where>.{0,80}?)\s*[.!]?\s*$', re.I | re.S)
+RENAME = re.compile(r'^\s*(?:please\s+)?(?:in\s+file\s+explorer,?\s+)?rename\s+(?P<name>' + FILE_NAME + r')\s+'
+                    r'(?P<where>(?:in|inside)\s+.{1,80}?)\s+to\s+(?P<new>' + FILE_NAME + r')\s*[.!]?\s*$', re.I)
+MKDIR = re.compile(r'^\s*(?:please\s+)?(?:in\s+file\s+explorer,?\s+)?(?:create|make)\s+(?:a\s+)?(?:new\s+)?folder\s+'
+                   r'(?:named|called)\s+(?P<name>[\w.() -]{1,60}?)\s+(?P<where>(?:in|inside)\s+.{1,80}?)\s*[.!]?\s*$', re.I)
+
+
+def _folder(where: str, goal: str, config: Any) -> Optional[Path]:
+    from .adapters import allowed_roots
+    if TEST_FOLDER.search(where):
+        return allowed_roots(config)[0]
+    return resolve_folder(goal, config)
+
+
+def notepad_save(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
+    match = NOTEPAD.match(goal)
+    folder = _folder(match.group('where'), goal, config) if match else None
+    if not match or folder is None:
+        return None
+    text, name = match.group('text'), match.group('name')
+    scope = f'write {name} with Notepad in {folder.name}'
+    return [
+        Step(step_id='write', neuron='skill.pc.notepad_save@v1', approval_scope=scope,
+             bind={'folder': _const(journal, str(folder), 'FolderPath'), 'name': _const(journal, name, 'Text'),
+                   'text': _const(journal, text, 'FileText')}),
+        Step(step_id='check', neuron='verifier.text_file_saved@v1',
+             bind={'path': Bind(step='write', port='path'), 'expected': _const(journal, text, 'FileText')}),
+        Step(step_id='answer', neuron='motor.report@v1',
+             bind={'report': _const(journal, f'I typed it in Notepad and saved {name} in {folder.name}.', 'Report'),
+                   'verdict': Bind(step='check', port='verdict')}),
+    ]
+
+
+def rename_file(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
+    match = RENAME.match(goal)
+    folder = _folder(match.group('where'), goal, config) if match else None
+    if not match or folder is None:
+        return None
+    old, new = match.group('name'), match.group('new')
+    return [
+        Step(step_id='rename', neuron='skill.file.rename@v1', approval_scope=f'rename {old} to {new} in {folder.name}',
+             bind={'folder': _const(journal, str(folder), 'FolderPath'), 'name': _const(journal, old, 'Text'),
+                   'new': _const(journal, new, 'Text')}),
+        Step(step_id='check', neuron='verifier.file_renamed@v1', bind={'path': Bind(step='rename', port='path')}),
+        Step(step_id='answer', neuron='motor.report@v1',
+             bind={'report': _const(journal, f'I renamed {old} to {new} in {folder.name}.', 'Report'),
+                   'verdict': Bind(step='check', port='verdict')}),
+    ]
+
+
+def make_folder(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
+    match = MKDIR.match(goal)
+    folder = _folder(match.group('where'), goal, config) if match else None
+    if not match or folder is None:
+        return None
+    name = match.group('name').strip()
+    return [
+        Step(step_id='mkdir', neuron='skill.file.mkdir@v1', approval_scope=f'create folder {name} in {folder.name}',
+             bind={'folder': _const(journal, str(folder), 'FolderPath'), 'name': _const(journal, name, 'Text')}),
+        Step(step_id='check', neuron='verifier.folder_exists@v1', bind={'path': Bind(step='mkdir', port='path')}),
+        Step(step_id='answer', neuron='motor.report@v1',
+             bind={'report': _const(journal, f'I created the folder {name} in {folder.name}.', 'Report'),
+                   'verdict': Bind(step='check', port='verdict')}),
+    ]
+
+
 WORKFLOWS: Dict[str, Callable[[str, Any, Any], Optional[List[Step]]]] = {
+    'pc.notepad_save': notepad_save,
+    'file.rename': rename_file,
+    'file.mkdir': make_folder,
     'file.create_text': create_text,
     'code.bug_fix': bug_fix,
     'research.answer': research,
 }
-GOAL_VERIFIER = {'code.bug_fix': 'final_check', 'research.answer': 'check', 'file.create_text': 'check'}
+GOAL_VERIFIER = {'code.bug_fix': 'final_check', 'research.answer': 'check', 'file.create_text': 'check',
+                 'pc.notepad_save': 'check', 'file.rename': 'check', 'file.mkdir': 'check'}
 
 
 def compile_goal(goal: str, journal: Any, config: Any, graph_version: int = 0) -> Optional[Plan]:

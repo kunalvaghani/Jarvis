@@ -179,6 +179,20 @@ CORE.update({
     'web.auth': ('tool', "jarvis.control (agent-browser with the user's Chrome profile)", ('url:Url',),
                  ('page:WebPage',), 'external_write', '', 'Use a signed-in profile. Always asks first.'),
 })
+# Desktop workflows the brain runs itself, without the planner (2026-11-03): deterministic, verified.
+CORE.update({
+    'skill.pc.notepad_save': ('skill', 'jarvis.neural.adapters (Notepad via ControlService)',
+                              ('folder:FolderPath', 'name:Text', 'text:FileText'), ('path:FilePath',), 'local_write', '',
+                              'Open Notepad in a new tab, type the exact text, save it with File > Save as.'),
+    'skill.file.rename': ('skill', 'jarvis.neural.adapters (rename)', ('folder:FolderPath', 'name:Text', 'new:Text'),
+                          ('path:FilePath',), 'local_write', '', 'Rename one file inside an approved folder.'),
+    'skill.file.mkdir': ('skill', 'jarvis.neural.adapters (mkdir)', ('folder:FolderPath', 'name:Text'),
+                         ('path:FilePath',), 'local_write', '', 'Create one new folder inside an approved folder.'),
+    'verifier.file_renamed': ('verifier', 'jarvis.neural.adapters (renamed)', ('path:FilePath', 'expected:FileText?'),
+                              ('verdict:Verdict',), 'read_only', '', 'The new name holds the old text; the old is gone.'),
+    'verifier.folder_exists': ('verifier', 'jarvis.neural.adapters (folder)', ('path:FilePath',), ('verdict:Verdict',),
+                               'read_only', '', 'The folder exists on disk.'),
+})
 APPROVAL_CORE = frozenset({'pc.act.headed', 'web.auth', 'pc.clipboard'})
 CORE_REQUIREMENTS = {
     **{name: ('control_backend:pc=agent_desktop',) for name in ('pc.observe', 'pc.act.semantic', 'pc.act.headed',

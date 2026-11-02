@@ -308,6 +308,9 @@ class AgentDesktopExecutor(RouteExecutor):
             rows = [f'{str(w.get("title", ""))[:80]} | {w.get("app_name", "")} | handle {str(w.get("id", ""))[2:]}'
                     for w in self.windows()]
             return self._done(action, '\n'.join(rows), executed=False, verified=True)
+        if name == 'window_op':
+            return self._window_op(action, self._live_handle(int(p.get('handle') or 0)), str(p['op']),
+                                   int(p.get('width') or 0), int(p.get('height') or 0))
         if name in ('click_named', 'menu_path'):
             handle = self._live_handle(int(p.get('handle') or action.context.window or 0))
             if name == 'click_named':
@@ -502,6 +505,36 @@ class AgentDesktopExecutor(RouteExecutor):
                 error.executed = True
                 raise error
         return self._done(action, 'Chose ' + ' > '.join(names), env)
+
+    def _window_op(self, action: Action, handle: int, op: str, width: int = 0, height: int = 0) -> ActionResult:
+        """Minimize / maximize / restore / resize one window, then read the window list back to prove it."""
+        if op == 'resize':
+            if not (200 <= width <= 8000 and 150 <= height <= 8000):
+                raise ControlError('resize needs width 200-8000 and height 150-8000.', ErrorCategory.INVALID_ARGUMENTS)
+            command = ['resize-window', '--window-id', f'w-{handle}', '--width', str(width), '--height', str(height)]
+        elif op in ('minimize', 'maximize', 'restore'):
+            command = [op, '--window-id', f'w-{handle}']
+        else:
+            raise ControlError(f'Unknown window operation {op!r}.', ErrorCategory.INVALID_ARGUMENTS)
+        env = self.run(command, timeout_s=20)
+        if not env.ok and not env.may_have_acted:
+            raise to_control_error(env)
+        row = next((w for w in self.windows() if str(w.get('id')) == f'w-{handle}'), None)
+        bounds = (row or {}).get('bounds') or {}
+        if row is None:
+            ok = False
+        elif op == 'minimize':
+            ok = bool(row.get('minimized'))
+        elif op == 'resize':
+            ok = abs(float(bounds.get('width', 0)) - width) <= 24 and abs(float(bounds.get('height', 0)) - height) <= 24
+        else:
+            ok = not row.get('minimized')
+        if not ok:
+            raise ControlError(f'{op}: the window list does not show the change.', ErrorCategory.VERIFICATION_FAILED,
+                               executed=True)
+        detail = f' to {int(bounds.get("width", 0))}x{int(bounds.get("height", 0))}' if op == 'resize' else ''
+        return self._done(action, f'{op}d the window{detail}', executed=True, verified=True,
+                          evidence='window list read back')
 
     def _live_handle(self, handle: int) -> int:
         """The window may have been replaced (Windows 11 Notepad makes a new window for a new tab). If the handle is

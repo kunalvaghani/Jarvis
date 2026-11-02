@@ -21,7 +21,14 @@ CLIP = re.compile(r'^\s*(?:please\s+)?copy\s+(?:the\s+text\s+)?["\']?(?P<text>[^
                   r'clipboard\s*[.!]?\s*$', re.I)
 
 
+RESIZE = re.compile(r'^\s*(?:please\s+)?resize\s+(?:the\s+)?(?P<app>[\w .+-]{2,40}?)(?:\s+(?:app|window))?\s+to\s+'
+                    r'(?P<w>\d{3,4})\s*(?:x|by|\*)\s*(?P<h>\d{3,4})\s*(?:pixels?)?\s*[.!]?\s*$', re.I)
+
+
 def match(goal: str) -> Optional[Tuple[str, str]]:
+    found = RESIZE.match(goal or '')
+    if found:
+        return 'resize', f'{found.group("app").strip()}|{found.group("w")}|{found.group("h")}'
     found = WINDOW.match(goal or '')
     if found:
         return found.group('op').lower().replace('mise', 'mize'), found.group('app').strip()
@@ -50,6 +57,12 @@ def run(goal: str, approve: Callable[[str, str], bool], runner: Optional[Runner]
             raise ControlError('The clipboard does not hold the text after copying.', ErrorCategory.VERIFICATION_FAILED,
                                executed=True)
         return f'Copied "{value[:80]}" to the clipboard (checked by reading it back).'
+    size = (0, 0)
+    if op == 'resize':
+        value, width, height = value.split('|')
+        size = (int(width), int(height))
+        if not (200 <= size[0] <= 8000 and 150 <= size[1] <= 8000):
+            return None
     target = resolver.resolve(value)
     if target is None or not target.image:
         return None  # Not a known app: let the planner work out what was meant.
@@ -81,6 +94,9 @@ def run(goal: str, approve: Callable[[str, str], bool], runner: Optional[Runner]
             if not match_ or not match_.get('ref_id'):
                 return None
             env = run_(['click', match_['ref_id']], timeout_s=20)
+        elif op == 'resize':
+            env = run_(['resize-window', '--window-id', wid, '--width', str(size[0]), '--height', str(size[1])],
+                       timeout_s=20)
         else:
             env = run_([op, '--window-id', wid], timeout_s=20)
         if not env.ok and not env.may_have_acted:
@@ -94,10 +110,14 @@ def run(goal: str, approve: Callable[[str, str], bool], runner: Optional[Runner]
         ok = not rows
     elif op == 'minimize':
         ok = bool(rows) and all(w.get('minimized') for w in rows)
+    elif op == 'resize':  # the window's real size, read back (borders may differ by a few pixels)
+        ok = bool(rows) and all(abs(float((w.get('bounds') or {}).get('width', 0)) - size[0]) <= 24 and
+                                abs(float((w.get('bounds') or {}).get('height', 0)) - size[1]) <= 24 for w in rows)
     else:
         ok = bool(rows) and not any(w.get('minimized') for w in rows)
     if not ok:
         raise ControlError(f'{op} {target.name}: the window state did not change as expected.',
                            ErrorCategory.VERIFICATION_FAILED, executed=True)
-    done = {'minimize': 'Minimized', 'maximize': 'Maximized', 'restore': 'Restored', 'close': 'Closed'}[op]
+    done = {'minimize': 'Minimized', 'maximize': 'Maximized', 'restore': 'Restored', 'close': 'Closed',
+            'resize': f'Resized to {size[0]}x{size[1]}:'}[op]
     return f'{done} {target.name} (checked: the window list shows it).'

@@ -33,7 +33,8 @@ WEB_OPS = {'click': 'left_click', 'double_click': 'double_click', 'right_click':
            'scroll': 'scroll', 'scroll_to': 'scroll_to', 'back': 'navigate', 'forward': 'navigate', 'reload': 'navigate',
            'new_tab': 'new_tab', 'switch_tab': 'switch_tab', 'close_tab': 'close_tab', 'wait': 'wait'}
 APP_OPS = {'click', 'invoke', 'set_value', 'toggle', 'select', 'expand', 'collapse', 'scroll', 'focus', 'type', 'key',
-           'close_window', 'focus_window', 'save_as'}
+           'close_window', 'focus_window', 'save_as', 'minimize', 'maximize', 'restore', 'resize'}
+WINDOW_OPS = {'minimize', 'maximize', 'restore', 'resize'}  # agent-desktop backend: window-level, verified
 # A key chord or a single named key the model may put in value instead of the op name.
 CHORD = re.compile(r'(?i)(?:(?:ctrl|control|alt|shift|win)\+)+\w+|enter|return|escape|esc|tab|f\d{1,2}|delete|backspace')
 SCREEN_OPS = {'click', 'double_click', 'right_click', 'type', 'scroll', 'locate', 'key', 'screenshot'}
@@ -459,6 +460,13 @@ class ControlService:
         before = self.last_app
         params: Dict[str, Any] = {}
         handle = int(self.app_scope[4:]) if self.app_scope.startswith('win-') else None
+        if op in WINDOW_OPS:
+            if not self._agent_desktop():
+                raise ControlError(f'{op} needs the agent-desktop PC backend.', ErrorCategory.UNSUPPORTED)
+            params = {'handle': int(args['window']) if str(args.get('window', '')).isdigit() else handle, 'op': op,
+                      'width': int(args.get('width', 0) or 0), 'height': int(args.get('height', 0) or 0)}
+            result = self._run(route, self._action(Route.UIA, 'window_op', params, cancelled, op, window=handle))
+            return self._report(result)
         if op in ('type', 'key', 'close_window', 'focus_window'):
             params['handle'] = int(args['window']) if str(args.get('window', '')).isdigit() else handle
             if op in ('type', 'key'):
