@@ -190,6 +190,11 @@ CORE.update({
                          ('path:FilePath',), 'local_write', '', 'Create one new folder inside an approved folder.'),
     'verifier.file_renamed': ('verifier', 'jarvis.neural.adapters (renamed)', ('path:FilePath', 'expected:FileText?'),
                               ('verdict:Verdict',), 'read_only', '', 'The new name holds the old text; the old is gone.'),
+    'skill.pc.open_arrange': ('skill', 'jarvis.neural.adapters (open a file in an app, then window steps)',
+                              ('path:FilePath', 'app:AppName', 'plan:Plan'), ('window:WindowRefs',),
+                              'ui_or_media_state', '', 'Open a file in an app, then minimize/restore/maximize/resize.'),
+    'verifier.window_state': ('verifier', 'jarvis.neural.adapters (window list)', ('window:WindowRefs', 'plan:Plan'),
+                              ('verdict:Verdict',), 'read_only', '', 'The window list shows the requested final state.'),
     'verifier.folder_exists': ('verifier', 'jarvis.neural.adapters (folder)', ('path:FilePath',), ('verdict:Verdict',),
                                'read_only', '', 'The folder exists on disk.'),
 })

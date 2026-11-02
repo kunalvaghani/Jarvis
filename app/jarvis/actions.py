@@ -1681,6 +1681,12 @@ class Actions:
         if self.ui_controls:
             self.ui_controls.clear_pending()
         if command.kind == "close_app":
+            from .control.backends import pc_backend
+            if pc_backend(self.config) == 'agent_desktop' and command.value.lower() not in ('this app', 'it'):
+                from .control.pc.fast_paths import run as pc_fast_path
+                closed = pc_fast_path(f'close {command.value}', lambda kind, detail: False)
+                if closed is not None:
+                    return closed  # graceful close through the app's own Close button, read back (live C08)
             from .desktop_tasks import close_app
             from .task_state import TaskState
             outcome = {}

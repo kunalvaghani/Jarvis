@@ -378,7 +378,54 @@ def folder_exists(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, An
                         'evidence': [f'{target.name} is a folder on disk'] if ok else []}}
 
 
+def open_arrange(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    """Open the file in the app through ControlService, then run each window step (resize/minimize/restore/...)."""
+    path = Path(str(inputs['path']))
+    if not inside(path, allowed_roots(env.config)) or not path.is_file():
+        raise NotStarted(f'{path} is not a file inside the approved folder')
+    control = getattr(env.actions, 'control', None)
+    if control is None:
+        raise NotStarted('no Jarvis control service')
+    service = control()
+    opened = json.loads(service.app_open(str(inputs['app']), str(path), env.cancelled).splitlines()[0])
+    if not opened.get('ok'):
+        raise NotStarted(f'{path.name} did not open: {opened.get("result")}')
+    handle = int(opened.get('window') or 0)
+    for step in inputs['plan']:
+        args = {'window': str(handle), **({'width': step[1], 'height': step[2]} if step[0] == 'resize' else {})}
+        done = json.loads(service.app_act(step[0], args, env.cancelled).splitlines()[0])
+        if not done.get('ok'):
+            raise RuntimeError(f'{step[0]} failed: {done.get("result")}')
+    return {'window': {'handle': handle, 'title': path.name}}
+
+
+def window_state(neuron: Any, inputs: Dict[str, Any], env: Env) -> Dict[str, Any]:
+    """Independent read of the window list: the file's window exists and ends in the requested state."""
+    from ..control.pc.runner import Runner
+    handle = int((inputs['window'] or {}).get('handle') or 0)
+    reply = Runner()(['list-windows'], timeout_s=15)
+    rows = [w for w in (reply.data or []) if isinstance(w, dict)] if reply.ok else []
+    row = next((w for w in rows if str(w.get('id')) == f'w-{handle}'), None)
+    problems = []
+    if row is None:
+        problems.append('the window is not open')
+    else:
+        last = [s for s in inputs['plan'] if s[0] in ('minimize', 'restore', 'maximize')][-1:]
+        if last and last[0][0] == 'minimize' and not row.get('minimized'):
+            problems.append('the window is not minimized')
+        if last and last[0][0] in ('restore', 'maximize') and row.get('minimized'):
+            problems.append('the window is still minimized')
+        sizes = [s for s in inputs['plan'] if s[0] == 'resize'][-1:]
+        bounds = row.get('bounds') or {}
+        if sizes and (abs(float(bounds.get('width', 0)) - sizes[0][1]) > 24 or
+                      abs(float(bounds.get('height', 0)) - sizes[0][2]) > 24):
+            problems.append(f'the window is {bounds.get("width")}x{bounds.get("height")}')
+    return {'verdict': {'passed': not problems, 'problems': problems, 'evidence': ['window list read back']}}
+
+
 ADAPTERS: Dict[str, Adapter] = {
+    'skill.pc.open_arrange@v1': open_arrange,
+    'verifier.window_state@v1': window_state,
     'skill.pc.notepad_save@v1': notepad_save,
     'skill.file.rename@v1': rename,
     'skill.file.mkdir@v1': mkdir,

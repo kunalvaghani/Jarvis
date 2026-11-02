@@ -1257,7 +1257,7 @@ def close_new_windows(before: set) -> None:
     for handle in app_windows() - before:
         try:
             win32gui.PostMessage(handle, win32con.WM_CLOSE, 0, 0)
-        except OSError:
+        except Exception:  # pywintypes.error: the window already closed by itself
             pass
     time.sleep(1)
 

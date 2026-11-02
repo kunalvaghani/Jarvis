@@ -184,7 +184,47 @@ def make_folder(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
     ]
 
 
+OPEN_IN = re.compile(r'^\s*(?:please\s+)?open\s+(?P<name>' + FILE_NAME + r')\s+(?P<where>(?:in|from)\s+.{1,60}?)\s+in\s+'
+                     r'(?P<app>notepad|paint|wordpad)\b(?P<rest>.*)$', re.I)
+WINDOW_STEP = re.compile(r'(?P<op>minimi[sz]e|maximi[sz]e|restore|resize)\b(?:[^0-9]{0,30}?(?P<w>\d{3,4})\s*(?:x|by|\*)\s*(?P<h>\d{3,4}))?',
+                         re.I)
+
+
+def open_arrange(goal: str, journal: Any, config: Any) -> Optional[List[Step]]:
+    match = OPEN_IN.match(goal)
+    if not match:
+        return None
+    rest = match.group('rest')
+    steps = []
+    for step in WINDOW_STEP.finditer(rest):
+        op = step.group('op').lower().replace('mise', 'mize')
+        if op == 'resize':
+            if not step.group('w'):
+                return None
+            steps.append(['resize', int(step.group('w')), int(step.group('h'))])
+        else:
+            steps.append([op])
+    leftover = WINDOW_STEP.sub('', rest)
+    if not steps or re.search(r'\b(?:type|write|add|save|delete|close|copy|paste)\b', leftover, re.I):
+        return None  # anything beyond window steps is the planner's job
+    folder = _folder(match.group('where'), goal, config)
+    if folder is None:
+        return None
+    path = folder / match.group('name')
+    return [
+        Step(step_id='arrange', neuron='skill.pc.open_arrange@v1',
+             bind={'path': _const(journal, str(path), 'FilePath'), 'app': _const(journal, match.group('app').lower(), 'AppName'),
+                   'plan': _const(journal, steps, 'Plan')}),
+        Step(step_id='check', neuron='verifier.window_state@v1',
+             bind={'window': Bind(step='arrange', port='window'), 'plan': _const(journal, steps, 'Plan')}),
+        Step(step_id='answer', neuron='motor.report@v1',
+             bind={'report': _const(journal, f'I opened {path.name} and did: ' + ', '.join(' '.join(map(str, s)) for s in steps)
+                                    + '.', 'Report'), 'verdict': Bind(step='check', port='verdict')}),
+    ]
+
+
 WORKFLOWS: Dict[str, Callable[[str, Any, Any], Optional[List[Step]]]] = {
+    'pc.open_arrange': open_arrange,
     'pc.notepad_save': notepad_save,
     'file.rename': rename_file,
     'file.mkdir': make_folder,
@@ -193,7 +233,7 @@ WORKFLOWS: Dict[str, Callable[[str, Any, Any], Optional[List[Step]]]] = {
     'research.answer': research,
 }
 GOAL_VERIFIER = {'code.bug_fix': 'final_check', 'research.answer': 'check', 'file.create_text': 'check',
-                 'pc.notepad_save': 'check', 'file.rename': 'check', 'file.mkdir': 'check'}
+                 'pc.notepad_save': 'check', 'file.rename': 'check', 'file.mkdir': 'check', 'pc.open_arrange': 'check'}
 
 
 def compile_goal(goal: str, journal: Any, config: Any, graph_version: int = 0) -> Optional[Plan]:
