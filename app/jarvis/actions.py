@@ -625,6 +625,11 @@ class Actions:
         if command.kind == "ask":
             if submission_generation != getattr(self, 'generation', 0):
                 return
+            from .conversation_intent import SITE
+            if SITE.search(command.value) or re.search(r'\b(?:on|from|according to) wikipedia\b', command.value, re.I):
+                # A question about a named website can only be answered by reading the page (live D12/D14).
+                from .commands import Command
+                return self.submit(Command('task', command.value), expected_generation)
             self.pending_open = None
             if self.ui_controls:
                 self.ui_controls.clear_pending()

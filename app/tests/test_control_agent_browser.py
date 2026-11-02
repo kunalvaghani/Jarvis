@@ -207,7 +207,9 @@ class ShadowAndSecrets(unittest.TestCase):
         self.assertNotIn('--profile', inner.run.argv(['snapshot']))
 
     def test_attached_to_the_users_chrome_jarvis_uses_its_own_tab_and_never_closes_the_browser(self):
-        tabs = [json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': True, 'url': 'https://mine'}]}}),
+        mine = json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': True, 'url': 'https://mine'}]}})
+        tabs = [mine,  # the attachability probe
+                json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': True, 'url': 'https://mine'}]}}),
                 json.dumps({'success': True, 'data': {'tabs': [{'tabId': 't1', 'active': False, 'url': 'https://mine'},
                                                               {'tabId': 't2', 'active': True, 'url': 'https://example.com/'}]}})]
         fake = Fake({'tab list': tabs, 'tab new': ok({'tabId': 't2'}), 'get url': fixture('url'),
@@ -237,3 +239,17 @@ class ReadScope(Base):
         ex.act(act('read_page', filter='interactive'))
         snaps = [a[a.index('snapshot'):] for a in fake.argv if 'snapshot' in a]
         self.assertEqual(snaps, [['snapshot'], ['snapshot', '-i', '-c']])
+
+
+class FallbackProfile(Base):
+    def test_unattachable_user_chrome_falls_back_to_jarvis_profile_without_acting(self):
+        down = json.dumps({'success': False, 'data': None,
+                           'error': 'No running Chrome instance found. Launch Chrome with --remote-debugging-port or use --cdp.'})
+        fake = Fake({'open': fixture('open'), 'get url': fixture('url'), 'tab list': [down, ok({'tabs': []})]})
+        runner = BrowserRunner(Path('agent-browser.exe'), profile='auto-connect', run=fake, policy_file=self.policy_file)
+        ex = AgentBrowserExecutor(Policy(), runner)
+        result = ex.act(act('navigate', url='https://example.com'))
+        self.assertFalse(runner.auto_connect)
+        self.assertIn('--profile', runner.argv(['snapshot']))
+        self.assertIn('remote-debugging', ex.notice)
+        self.assertTrue(result.ok, result.text)

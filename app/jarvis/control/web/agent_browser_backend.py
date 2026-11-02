@@ -54,6 +54,7 @@ CONTENT_COMMANDS = frozenset({'open', 'snapshot', 'read', 'get'})
 # (chrome://inspect/#remote-debugging, Chrome 144+, each connection approved in Chrome). A copied profile would be
 # signed out: Windows Chrome binds cookies to the original profile folder (checked 2026-11-02).
 AUTO_CONNECT = 'auto-connect'
+FALLBACK_PROFILE = str(APP / '.jarvis-runtime' / 'test-browser-profile')  # Jarvis's own persistent profile
 NOT_RUN = re.compile(r'unknown ref|denied by policy|not in the allow list|invalid|unknown command|required argument|'
                      r'no such tab|not found', re.I)
 LINE = re.compile(r'^(?P<indent>\s*)- (?P<role>[\w-]+)(?: "(?P<name>(?:[^"\\]|\\.)*)")?(?P<rest>.*)$')
@@ -201,6 +202,7 @@ class AgentBrowserExecutor(RouteExecutor):
         self.roles: Dict[str, str] = {}
         self.last_url = ''
         self.own_tab = ''  # with --auto-connect: the one tab Jarvis opened; the user's tabs are never driven
+        self.notice = ''
         self._lock = threading.RLock()
 
     def start(self) -> None:
@@ -229,6 +231,12 @@ class AgentBrowserExecutor(RouteExecutor):
         """Attached to the user's Chrome: make sure Jarvis acts in its own tab. True when a new tab was opened."""
         if not getattr(self.run, 'auto_connect', False):
             return False
+        try:
+            self._call(['tab', 'list'], acting=False, timeout_s=30)  # attachable? (falls back if not)
+        except ControlError:
+            pass
+        if not getattr(self.run, 'auto_connect', False):
+            return False
         tabs = self._tabs()
         if self.own_tab and any(t['tab_id'] == self.own_tab for t in tabs):
             if not any(t['tab_id'] == self.own_tab and t['active'] for t in tabs):
@@ -243,6 +251,14 @@ class AgentBrowserExecutor(RouteExecutor):
     # Helpers ----------------------------------------------------------------------------
     def _call(self, args: List[str], acting: bool, timeout_s: float = 60.0) -> Reply:
         reply = self.run(args, timeout_s)
+        if not reply.success and getattr(self.run, 'auto_connect', False) and \
+                re.search(r'no running chrome|remote-debugging|failed to connect', str(reply.error), re.I):
+            # The user's Chrome is not attachable (chrome://inspect/#remote-debugging is off). Nothing was sent, so
+            # use Jarvis's own browser profile for this session; signed-in sites will ask for the switch.
+            self.run.auto_connect, self.run.profile = False, FALLBACK_PROFILE
+            self.notice = ('Your Chrome (Person 1) is not open for remote debugging, so I used my own browser profile. '
+                           'For signed-in sites, turn on chrome://inspect/#remote-debugging in your Chrome.')
+            reply = self.run(args, timeout_s)
         data = reply.data if isinstance(reply.data, dict) else {}
         if reply.success and data.get('confirmation_required'):
             what, ident = str(data.get('action', '')), str(data.get('confirmation_id', ''))

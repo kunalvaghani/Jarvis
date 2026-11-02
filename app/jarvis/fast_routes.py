@@ -214,6 +214,11 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
         answer = pc_fast_path(goal, lambda kind, detail: _approved(actions, kind, detail, cancelled))
         if answer is not None:
             return answer  # "minimize Spotify", "copy X to the clipboard": one command, then a fresh read.
+        side = SIDE_BY_SIDE.match(goal)
+        if side:
+            arranged = _side_by_side(actions, [side.group('a').strip(), side.group('b').strip()], cancelled)
+            if arranged:
+                return arranged
         start = START_MENU.match(goal)
         if start:  # same outcome as clicking it in Start: the app's verified launch (live C14, 2026-11-03)
             opened = json.loads(actions.control().app_open(start.group('app').strip(), '', cancelled).splitlines()[0])
@@ -239,6 +244,41 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
 
 START_MENU = re.compile(r"^\s*(?:please\s+)?(?:open\s+the\s+start\s+menu\s+and\s+)?(?:launch|open|start)\s+"
                         r"(?P<app>[\w .+-]{2,40}?)\s+from\s+(?:it|the\s+start\s+menu)\s*[.!]?\s*$", re.I)
+
+
+SIDE_BY_SIDE = re.compile(r"^\s*(?:please\s+)?(?:open|put|place|show)\s+(?P<a>[\w .+-]{2,30}?)\s+and\s+"
+                          r"(?P<b>[\w .+-]{2,30}?)\s+side\s+by\s+side\s*[.!]?\s*$", re.I)
+
+
+def _side_by_side(actions: Any, apps: List[str], cancelled: Cancelled) -> Optional[str]:
+    """Open two apps and give each half of the primary display; read the window list back (live C42)."""
+    from .control.pc.runner import Runner
+    service = actions.control()
+    handles = []
+    for app in apps:
+        opened = json.loads(service.app_open(app, '', cancelled).splitlines()[0])
+        if not opened.get('ok') or not opened.get('window'):
+            return None
+        handles.append(int(opened['window']))
+    run = Runner()
+    displays = run(['list-displays'], timeout_s=15)
+    screen = next((d['bounds'] for d in (displays.data or []) if d.get('is_primary')), None) if displays.ok else None
+    if not screen:
+        return None
+    # Window bounds use the same units as display bounds (checked live): no DPI scaling here. 48 = taskbar.
+    width, height = int(screen['width']), int(screen['height']) - 48
+    half = width // 2
+    for index, handle in enumerate(handles):
+        wid = f'w-{handle}'
+        run(['restore', '--window-id', wid], timeout_s=15)
+        run(['resize-window', '--window-id', wid, '--width', str(half), '--height', str(height)], timeout_s=15)
+        run(['move-window', '--window-id', wid, f'--x={index * half}', '--y=0'], timeout_s=15)
+    listed = run(['list-windows'], timeout_s=15)
+    rows = {str(w.get('id')): w for w in (listed.data or []) if isinstance(w, dict)} if listed.ok else {}
+    placed = [rows.get(f'w-{h}', {}).get('bounds') or {} for h in handles]
+    if len(placed) != 2 or not all(placed) or float(placed[0].get('x', 0)) >= float(placed[1].get('x', 0)):
+        return None
+    return f'Opened {apps[0]} and {apps[1]} side by side (checked: left and right halves).'
 
 
 def _approved(actions: Any, kind: str, detail: str, cancelled: Cancelled) -> bool:
