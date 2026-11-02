@@ -13,6 +13,7 @@ MODES: Tuple[str, ...] = ('off', 'shadow', 'suggest', 'act')
 # (section, key) -> False for an on/off flag, 'off' for a decider mode. These are also the shipped values.
 FLAGS: Dict[Tuple[str, str], Any] = {
     ('telemetry', 'timing_ledger'): False,
+    ('neural', 'mode'): 'off',  # Neural brain (docs/brain/ARCHITECTURE.md); read through jarvis.neural.brain_mode.
     ('telemetry', 'shadow_log'): False,
     ('speed', 'cache_order'): False,
     ('control', 'event_waits'): False,

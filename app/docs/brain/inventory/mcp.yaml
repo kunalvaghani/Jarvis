@@ -1,0 +1,2187 @@
+generated: '2026-11-02'
+snapshot: true
+nodes:
+- node_id: mcp.spotify.spotify_add_current_to_playlist@v1
+  kind: mcp
+  capability: spotify.spotify_add_current_to_playlist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_add_playlist_items@v1
+  kind: mcp
+  capability: spotify.spotify_add_playlist_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_add_to_queue@v1
+  kind: mcp
+  capability: spotify.spotify_add_to_queue
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_album_tracks@v1
+  kind: mcp
+  capability: spotify.spotify_album_tracks
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_artist_albums@v1
+  kind: mcp
+  capability: spotify.spotify_artist_albums
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_audiobook_chapters@v1
+  kind: mcp
+  capability: spotify.spotify_audiobook_chapters
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_contains_saved@v1
+  kind: mcp
+  capability: spotify.spotify_contains_saved
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: unknown
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_create_playlist@v1
+  kind: mcp
+  capability: spotify.spotify_create_playlist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_currently_playing@v1
+  kind: mcp
+  capability: spotify.spotify_currently_playing
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: unknown
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_devices@v1
+  kind: mcp
+  capability: spotify.spotify_devices
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_followed_artists@v1
+  kind: mcp
+  capability: spotify.spotify_followed_artists
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_album@v1
+  kind: mcp
+  capability: spotify.spotify_get_album
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_artist@v1
+  kind: mcp
+  capability: spotify.spotify_get_artist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_audiobook@v1
+  kind: mcp
+  capability: spotify.spotify_get_audiobook
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_chapter@v1
+  kind: mcp
+  capability: spotify.spotify_get_chapter
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_episode@v1
+  kind: mcp
+  capability: spotify.spotify_get_episode
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_playlist@v1
+  kind: mcp
+  capability: spotify.spotify_get_playlist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_profile@v1
+  kind: mcp
+  capability: spotify.spotify_get_profile
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_show@v1
+  kind: mcp
+  capability: spotify.spotify_get_show
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_get_track@v1
+  kind: mcp
+  capability: spotify.spotify_get_track
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_health@v1
+  kind: mcp
+  capability: spotify.spotify_health
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_mute@v1
+  kind: mcp
+  capability: spotify.spotify_local_mute
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_next@v1
+  kind: mcp
+  capability: spotify.spotify_local_next
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_pause@v1
+  kind: mcp
+  capability: spotify.spotify_local_pause
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_play@v1
+  kind: mcp
+  capability: spotify.spotify_local_play
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_previous@v1
+  kind: mcp
+  capability: spotify.spotify_local_previous
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_seek@v1
+  kind: mcp
+  capability: spotify.spotify_local_seek
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_shuffle@v1
+  kind: mcp
+  capability: spotify.spotify_local_shuffle
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_status@v1
+  kind: mcp
+  capability: spotify.spotify_local_status
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_stop@v1
+  kind: mcp
+  capability: spotify.spotify_local_stop
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_volume@v1
+  kind: mcp
+  capability: spotify.spotify_local_volume
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_local_volume_status@v1
+  kind: mcp
+  capability: spotify.spotify_local_volume_status
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_my_playlists@v1
+  kind: mcp
+  capability: spotify.spotify_my_playlists
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_next@v1
+  kind: mcp
+  capability: spotify.spotify_next
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_open_desktop@v1
+  kind: mcp
+  capability: spotify.spotify_open_desktop
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_open_resource@v1
+  kind: mcp
+  capability: spotify.spotify_open_resource
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_open_search@v1
+  kind: mcp
+  capability: spotify.spotify_open_search
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_pause@v1
+  kind: mcp
+  capability: spotify.spotify_pause
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_album@v1
+  kind: mcp
+  capability: spotify.spotify_play_album
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_artist@v1
+  kind: mcp
+  capability: spotify.spotify_play_artist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_episode@v1
+  kind: mcp
+  capability: spotify.spotify_play_episode
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_playlist@v1
+  kind: mcp
+  capability: spotify.spotify_play_playlist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_saved_tracks@v1
+  kind: mcp
+  capability: spotify.spotify_play_saved_tracks
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_search@v1
+  kind: mcp
+  capability: spotify.spotify_play_search
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_show@v1
+  kind: mcp
+  capability: spotify.spotify_play_show
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_track@v1
+  kind: mcp
+  capability: spotify.spotify_play_track
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_play_uris@v1
+  kind: mcp
+  capability: spotify.spotify_play_uris
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_playlist_images@v1
+  kind: mcp
+  capability: spotify.spotify_playlist_images
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_playlist_items@v1
+  kind: mcp
+  capability: spotify.spotify_playlist_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_previous@v1
+  kind: mcp
+  capability: spotify.spotify_previous
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_queue@v1
+  kind: mcp
+  capability: spotify.spotify_queue
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_queue_search@v1
+  kind: mcp
+  capability: spotify.spotify_queue_search
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_recently_played@v1
+  kind: mcp
+  capability: spotify.spotify_recently_played
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: unknown
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_remove_current_saved@v1
+  kind: mcp
+  capability: spotify.spotify_remove_current_saved
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_remove_playlist_items@v1
+  kind: mcp
+  capability: spotify.spotify_remove_playlist_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_remove_saved_items@v1
+  kind: mcp
+  capability: spotify.spotify_remove_saved_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_reorder_playlist_items@v1
+  kind: mcp
+  capability: spotify.spotify_reorder_playlist_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_repeat@v1
+  kind: mcp
+  capability: spotify.spotify_repeat
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_replace_playlist_items@v1
+  kind: mcp
+  capability: spotify.spotify_replace_playlist_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_resume@v1
+  kind: mcp
+  capability: spotify.spotify_resume
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_save_current@v1
+  kind: mcp
+  capability: spotify.spotify_save_current
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_save_items@v1
+  kind: mcp
+  capability: spotify.spotify_save_items
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_saved_albums@v1
+  kind: mcp
+  capability: spotify.spotify_saved_albums
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_saved_episodes@v1
+  kind: mcp
+  capability: spotify.spotify_saved_episodes
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_saved_shows@v1
+  kind: mcp
+  capability: spotify.spotify_saved_shows
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: unknown
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_saved_tracks@v1
+  kind: mcp
+  capability: spotify.spotify_saved_tracks
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search@v1
+  kind: mcp
+  capability: spotify.spotify_search
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search_albums@v1
+  kind: mcp
+  capability: spotify.spotify_search_albums
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search_artists@v1
+  kind: mcp
+  capability: spotify.spotify_search_artists
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search_episodes@v1
+  kind: mcp
+  capability: spotify.spotify_search_episodes
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search_playlists@v1
+  kind: mcp
+  capability: spotify.spotify_search_playlists
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_search_tracks@v1
+  kind: mcp
+  capability: spotify.spotify_search_tracks
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_seek@v1
+  kind: mcp
+  capability: spotify.spotify_seek
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_seek_relative@v1
+  kind: mcp
+  capability: spotify.spotify_seek_relative
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_show_episodes@v1
+  kind: mcp
+  capability: spotify.spotify_show_episodes
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_shuffle@v1
+  kind: mcp
+  capability: spotify.spotify_shuffle
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_status@v1
+  kind: mcp
+  capability: spotify.spotify_status
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_stop@v1
+  kind: mcp
+  capability: spotify.spotify_stop
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_toggle@v1
+  kind: mcp
+  capability: spotify.spotify_toggle
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_top_artists@v1
+  kind: mcp
+  capability: spotify.spotify_top_artists
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_top_tracks@v1
+  kind: mcp
+  capability: spotify.spotify_top_tracks
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_transfer@v1
+  kind: mcp
+  capability: spotify.spotify_transfer
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_update_playlist@v1
+  kind: mcp
+  capability: spotify.spotify_update_playlist
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_verify_playback@v1
+  kind: mcp
+  capability: spotify.spotify_verify_playback
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: unknown
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_volume@v1
+  kind: mcp
+  capability: spotify.spotify_volume
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.spotify.spotify_volume_relative@v1
+  kind: mcp
+  capability: spotify.spotify_volume_relative
+  provider: jarvis.mcp_bridge (spotify)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements:
+  - mcp_server:spotify
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.youtube.parse_link@v1
+  kind: mcp
+  capability: youtube.parse_link
+  provider: jarvis.mcp_bridge (youtube)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:youtube
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.youtube.playlist_videos@v1
+  kind: mcp
+  capability: youtube.playlist_videos
+  provider: jarvis.mcp_bridge (youtube)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:youtube
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.youtube.search_playlists@v1
+  kind: mcp
+  capability: youtube.search_playlists
+  provider: jarvis.mcp_bridge (youtube)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:youtube
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.youtube.search_videos@v1
+  kind: mcp
+  capability: youtube.search_videos
+  provider: jarvis.mcp_bridge (youtube)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:youtube
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true
+- node_id: mcp.youtube.video_details@v1
+  kind: mcp
+  capability: youtube.video_details
+  provider: jarvis.mcp_bridge (youtube)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - mcp_server:youtube
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: mcp_status
+  status: inventoried
+  source: .jarvis/mcp.json allow_tools
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Schema needs a live tools/list (server start needs host approval).
+  enabled: true
+  trusted: true

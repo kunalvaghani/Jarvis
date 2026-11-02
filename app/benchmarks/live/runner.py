@@ -121,15 +121,24 @@ def build(approve: str = 'deny', log: Optional[Callable[[str, Any], None]] = Non
 
 
 def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bool = False,
-        memory: bool = False, telemetry: bool = False, enable: Tuple[str, ...] = (), cloud: bool = False) -> Dict[str, Any]:
+        memory: bool = False, telemetry: bool = False, enable: Tuple[str, ...] = (), cloud: bool = False,
+        interrupt_after: Optional[float] = None, crash_after: Optional[float] = None) -> Dict[str, Any]:
+    """One request through the app's own entry path.
+
+    interrupt_after: the user's stop (the same cancel signal the Stop control sends) after that many seconds.
+    crash_after: the planner worker process is killed after that many seconds (fault injection); Jarvis must fail
+    cleanly and never repeat or half-finish a write. Brain scenarios, Phase 0 (2026-11-02).
+    """
     def log(kind, value):
         if not quiet and kind in ('tool', 'plan', 'brain', 'answer', 'warning', 'media_card', 'question'):
             text = value.get('phase', '') + ' ' + value.get('title', '') if isinstance(value, dict) else str(value)
             print(f'  [{kind}] {text[:160]}', flush=True)
+    built = time.monotonic()
     actions, events, approvals = build(approve, log, memory, telemetry, enable, cloud)
     started = time.monotonic()
     row: Dict[str, Any] = {'utterance': utterance, 'date': datetime.now(timezone.utc).isoformat(), 'approve': approve,
-                           'flags': list(enable), 'full': cloud and memory}
+                           'flags': list(enable), 'full': cloud and memory, 'build_s': round(started - built, 2)}
+    resources = Resources().__enter__()
     try:
         # Exactly the app's entry for typed/spoken text (main.py: Engine(actions.submit).feed(command_text(text), ...)).
         from jarvis.audio import command_text
@@ -150,7 +159,20 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
             if command.kind == 'ask':  # The app answers conversation on its chat path: no task runs.
                 answers.append('[Jarvis treated this as conversation; no task was run]')
                 continue
-            answers.append(str(actions.execute(command, lambda: time.monotonic() - started > timeout)))
+            def cancelled() -> bool:
+                late = interrupt_after is not None and time.monotonic() - started > interrupt_after
+                if late and 'interrupted_at' not in row:
+                    row['interrupted_at'] = round(time.monotonic() - started, 1)
+                return time.monotonic() - started > timeout or late
+            if crash_after is not None:
+                def crash() -> None:
+                    client = getattr(getattr(actions, 'brain', None), 'client', None)
+                    process = getattr(client, 'process', None)
+                    if process is not None and process.poll() is None:
+                        process.kill()
+                        row['crashed_at'] = round(time.monotonic() - started, 1)
+                threading.Timer(crash_after, crash).start()
+            answers.append(str(actions.execute(command, cancelled)))
         row['answer'] = '\n'.join(answers)
         row['status'] = 'answered' if commands else 'not understood'
     except Exception as error:  # A refusal or failure is an outcome to judge, not a crash.
@@ -159,8 +181,13 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
                    traceback=traceback.format_exc()[-6000:])
     finally:
         row['seconds'] = round(time.monotonic() - started, 1)
+        resources.__exit__()
+        row['peak_ram_mb'], row['peak_vram_mb'] = round(resources.peak_ram_mb), round(resources.peak_vram_mb)
+        firsts = [e['t'] for e in events if e['kind'] in ('tool', 'media_card')]
+        row['first_action_s'] = round(min(firsts) - started, 1) if firsts else None
         row['tools'] = [e['value'] for e in events if e['kind'] == 'tool']
         row['steps'] = list(RECORD)
+        row['wasted_retries'] = wasted_retries(row['steps'])
         row['model_calls'] = list(CALLS)
         row['island_cards'] = [{k: e['value'].get(k) for k in ('service', 'phase', 'title', 'step', 'steps')}
                                for e in events if e['kind'] == 'media_card' and isinstance(e['value'], dict)]
@@ -169,6 +196,94 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
             row['ledger'] = ledger_summary(row['date'])
         row['actions'] = actions
     return row
+
+
+def run_parallel(utterances: List[str], approve: Any = 'deny', timeout: float = 1200.0, telemetry: bool = False,
+                 enable: Tuple[str, ...] = (), cloud: bool = False, memory: bool = False) -> Dict[str, Any]:
+    """Several orders at once through Jarvis's own queue (TaskIngress -> ScheduledQueue workers).
+
+    The queue database is a fresh temporary one: the user's real queue (and its single-owner lock) is never
+    touched, and test tasks can never be recovered into it.
+    """
+    import tempfile
+    from jarvis.task_ingress import TaskIngress
+    events_log: List[str] = []
+    actions, events, approvals = build(approve, lambda kind, value: events_log.append(kind), memory, telemetry, enable,
+                                       cloud)
+    started = time.monotonic()
+    row: Dict[str, Any] = {'utterance': ' || '.join(utterances), 'date': datetime.now(timezone.utc).isoformat(),
+                           'approve': approve, 'flags': list(enable), 'parallel': len(utterances)}
+    folder = Path(tempfile.mkdtemp(prefix='jarvis-parallel-queue-'))
+    ingress = TaskIngress(actions, folder / 'task-queue.sqlite3', actions.config.get('task_queue', {}))
+    actions.ingress = ingress
+    try:
+        ingress.start()
+        from jarvis.commands import Command
+        row['task_ids'] = [actions.submit(Command('task', u)) for u in utterances]
+        while time.monotonic() - started < timeout and (ingress.scheduler.qsize() or ingress.scheduler.active):
+            time.sleep(.5)
+        row['status'] = 'answered' if time.monotonic() - started < timeout else 'timeout'
+        row['task_states'] = [(r.get('number'), r.get('state'), str(r.get('detail') or '')[:300])
+                              for r in ingress.store.rows()]
+        row['answer'] = '\n'.join(str(e['value'])[:500] for e in events if e['kind'] in ('answer', 'spoken_reply'))
+    except Exception as error:
+        row.update(status='error', error=f'{type(error).__name__}: {error}'[:2000])
+    finally:
+        try:
+            ingress.close()
+        except Exception:
+            pass
+        row['seconds'] = round(time.monotonic() - started, 1)
+        row['tools'] = [e['value'] for e in events if e['kind'] == 'tool']
+        row['steps'] = list(RECORD)
+        row['approvals'] = approvals
+        if telemetry:
+            row['ledger'] = ledger_summary(row['date'])
+        row['actions'] = actions
+    return row
+
+
+class Resources:
+    """Peak RAM (this process and its children, e.g. the planner worker) and GPU memory while a task runs."""
+
+    def __init__(self, interval: float = 2.0) -> None:
+        self.interval, self.stop, self.peak_ram_mb, self.peak_vram_mb = interval, threading.Event(), 0.0, 0.0
+        self.thread = threading.Thread(target=self.sample, daemon=True)
+
+    def sample(self) -> None:
+        import subprocess
+        import psutil
+        me = psutil.Process()
+        while not self.stop.is_set():
+            try:
+                rss = me.memory_info().rss + sum(c.memory_info().rss for c in me.children(recursive=True))
+                self.peak_ram_mb = max(self.peak_ram_mb, rss / 2**20)
+            except psutil.Error:
+                pass
+            try:
+                out = subprocess.run(['nvidia-smi', '--query-gpu=memory.used', '--format=csv,noheader,nounits'],
+                                     capture_output=True, text=True, timeout=5).stdout
+                self.peak_vram_mb = max(self.peak_vram_mb, float(out.strip().splitlines()[0]))
+            except (OSError, ValueError, IndexError, subprocess.SubprocessError):
+                pass
+            self.stop.wait(self.interval)
+
+    def __enter__(self) -> 'Resources':
+        self.thread.start()
+        return self
+
+    def __exit__(self, *exc: Any) -> None:
+        self.stop.set()
+        self.thread.join(5)
+
+
+def wasted_retries(steps: List[Dict[str, Any]]) -> int:
+    """Tool calls repeated with identical arguments within one task (each repeat after the first counts)."""
+    seen: Dict[str, int] = {}
+    for step in steps:
+        key = json.dumps([step.get('action'), step.get('value'), step.get('content')], default=str, sort_keys=True)
+        seen[key] = seen.get(key, 0) + 1
+    return sum(n - 1 for n in seen.values() if n > 1)
 
 
 def ledger_summary(since: str) -> Optional[Dict[str, Any]]:

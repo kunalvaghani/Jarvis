@@ -33,3 +33,7 @@ PyYAML==6.0.3
 mss==10.2.0
 dxcam==0.3.0; sys_platform == 'win32'
 uiautomation==2.0.29; sys_platform == 'win32'
+# Neural brain (BNEG) contracts and capability graph, approved by the user 2026-11-02
+pydantic==2.14.2
+networkx==3.6.1
+rustworkx==0.18.1

@@ -1241,5 +1241,16 @@
     ],
     "quota_store": "Existing .jarvis-runtime/cloud/quota.sqlite3 for Groq;Gemini existing ledger mechanism scoped by SHA256(project/model) under .jarvis-runtime/cloud/gemini/",
     "groq_baseline": "Published provisional upper bound30RPM/1000RPD/8000TPM/200000TPD;20percent margin, stricter provider feedback wins;actual organization limits not fetched."
+  },
+  "neural_brain": {
+    "status": "Phase 0 (2026-11-02): audit and baseline only; no brain module runs yet",
+    "architecture": "docs/brain/ARCHITECTURE.md",
+    "dependencies": [
+      "pydantic==2.14.2",
+      "networkx==3.6.1",
+      "rustworkx==0.18.1"
+    ],
+    "flag": "neural.mode (off | shadow | on), environment override JARVIS_BRAIN_MODE; default off",
+    "rollback": "set neural.mode to off (or JARVIS_BRAIN_MODE=off); the legacy orchestrator is unchanged"
   }
 }

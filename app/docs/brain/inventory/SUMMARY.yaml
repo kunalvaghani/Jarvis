@@ -1,0 +1,33 @@
+generated: '2026-11-02'
+kind: static snapshot (Phase 0)
+groups:
+  tools:
+    nodes: 129
+    side_effect_classes:
+      local_write: 37
+      read_only: 57
+      ui_or_media_state: 12
+      destructive: 3
+      unknown: 3
+      external_write: 7
+      operation_dependent: 10
+  methods:
+    nodes: 19
+    side_effect_classes:
+      local_write: 15
+      read_only: 4
+  mcp:
+    nodes: 91
+    side_effect_classes:
+      local_write: 11
+      ui_or_media_state: 33
+      read_only: 39
+      unknown: 5
+      destructive: 3
+  routes_and_verifiers:
+    nodes: 10
+    side_effect_classes:
+      local_write: 5
+      read_only: 5
+total_nodes: 249
+duplicate_ids: []

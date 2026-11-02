@@ -1,0 +1,2805 @@
+generated: '2026-11-02'
+snapshot: true
+nodes:
+- node_id: tool.toolkit.workflow_expand@v1
+  kind: tool
+  capability: toolkit.workflow_expand
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Propose bounded subtasks in the CURRENT durable workflow. value=stable expansion key; content=JSON {requests:[{kind:"task"|"ask"|"jarvis_status"|"system_info"|"screen_info",value:"...",extra:""}],join:optional
+    existing task UUID}. Maximum 20 children/call, 50/workflow, depth 3. Children wait for a v
+- node_id: tool.desktop.application_inspect@v1
+  kind: tool
+  capability: desktop.application_inspect
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Read a configured app executable/version and sanitized foreground controls. value MUST be an exact configured
+    application name or current for the current configured app. Cube, Modifier and other object/control names are invalid;
+    use select for controls. Read-only: never selects objects, launches, ty'
+- node_id: tool.realtime.realtime_query@v1
+  kind: tool
+  capability: realtime.realtime_query
+  provider: jarvis.tools.ToolRegistry (realtime)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}.
+    No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provi
+- node_id: tool.desktop.open@v1
+  kind: tool
+  capability: desktop.open
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it.
+    Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes.
+- node_id: tool.browser.browse@v1
+  kind: tool
+  capability: browser.browse
+  provider: jarvis.tools.ToolRegistry (browser)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: public_data_only
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Only SHOW the user a website in their own browser. Jarvis cannot read, answer from or act on that page; for
+    any goal that needs the page content or interaction use web_open instead.
+- node_id: tool.browser.browser_search@v1
+  kind: tool
+  capability: browser.browser_search
+  provider: jarvis.tools.ToolRegistry (browser)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: public_data_only
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search the web using the exact query.
+- node_id: tool.control.web_open@v1
+  kind: tool
+  capability: control.web_open
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional
+    JSON {"profile":"personal" ONLY when the user asks to use their signed-in browser, "new_tab":true}. Returns the outcome
+    then the page's text and elements as lines like text "Total" or butt
+- node_id: tool.control.web_read@v1
+  kind: tool
+  capability: control.web_read
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Read the current page in Jarvis''s Chrome again. value optional: all (default: text and controls), interactive
+    (controls only) or visible (on screen). content optional JSON {"find":"words"} to search elements, or {"ref":"ref_12"}
+    to read inside one element. Refs change after navigation: read again in'
+- node_id: tool.control.web_act@v1
+  kind: tool
+  capability: control.web_act
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Act on the current page by ref. value=click|double_click|right_click|hover|fill|select|check|type|key|scroll|scroll_to|back|forward|reload|new_tab|switch_tab|close_tab|wait.
+    content JSON: {"ref":"ref_12"} for element actions; fill/select add "text"; check adds "checked":true|false; type/key
+    add "tex'
+- node_id: tool.control.app_open@v1
+  kind: tool
+  capability: control.app_open
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Open an allowed Windows app (notepad, calculator, explorer, paint) and read its window. value=app name; content
+    optional JSON {"path":"file or folder inside the approved test folder"}. Returns the window handle and its controls as
+    lines like Button "Seven" [u12].
+- node_id: tool.control.app_read@v1
+  kind: tool
+  capability: control.app_read
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read a Windows app window's controls with refs. value=part of the window title, or its handle number; content
+    optional JSON {"filter":"all"} to include text and labels.
+- node_id: tool.control.app_act@v1
+  kind: tool
+  capability: control.app_act
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Act on the last read window by ref. value=click|invoke|set_value|toggle|select|expand|collapse|scroll|focus|type|key|save_as|focus_window|close_window.
+    content JSON {"ref":"u12"} for control actions; set_value/type/key add "text" (keys like ctrl+s, Enter, escape); save_as
+    adds "text" = full file pat
+- node_id: tool.control.screen_act@v1
+  kind: tool
+  capability: control.screen_act
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'LAST RESORT when no web_read/app_read ref exists (canvas apps, games, custom-drawn UI): find a target on screen
+    with Jarvis''s local vision model and act. value=click|double_click|right_click|type|scroll|locate|key. content JSON {"target":"short
+    visual description", "label":"exact visible text if it '
+- node_id: tool.control.control_check@v1
+  kind: tool
+  capability: control.control_check
+  provider: jarvis.tools.ToolRegistry (control)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Check every browser/PC control connection (Chrome, Windows apps, keyboard/mouse, screen capture, local vision
+    models, approved folder, Gmail) and say what needs fixing. No arguments.
+- node_id: tool.dom.browser_inspect@v1
+  kind: tool
+  capability: dom.browser_inspect
+  provider: jarvis.tools.ToolRegistry (dom)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read the Jarvis-owned browser's current URL, title and visible named controls. Use before browser_click/fill.
+- node_id: tool.dom.browser_navigate@v1
+  kind: tool
+  capability: dom.browser_navigate
+  provider: jarvis.tools.ToolRegistry (dom)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Open an explicit public website/domain in the Jarvis-owned Chrome profile; returns its current URL/title/controls.
+- node_id: tool.dom.browser_click@v1
+  kind: tool
+  capability: dom.browser_click
+  provider: jarvis.tools.ToolRegistry (dom)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Click one exact visible named button/link in the Jarvis browser. value=label, folder=last observed exact URL.
+    Does not approve account writes.
+- node_id: tool.dom.browser_fill@v1
+  kind: tool
+  capability: dom.browser_fill
+  provider: jarvis.tools.ToolRegistry (dom)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Fill one unique named non-password textbox with exact requested content in the Jarvis browser. folder=last
+    observed URL; does not submit.
+- node_id: tool.browser.media_search@v1
+  kind: tool
+  capability: browser.media_search
+  provider: jarvis.tools.ToolRegistry (browser)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: public_data_only
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search YouTube or the native Spotify app; does not start playback.
+- node_id: tool.desktop.media_control@v1
+  kind: tool
+  capability: desktop.media_control
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Control foreground YouTube or native Spotify using fresh accessible controls. Set platform youtube or spotify.
+    YouTube: play, pause, mute, unmute, fullscreen, exit_fullscreen, captions, captions_on/off, seek_10/-10, position_0..100,
+    volume_0..100/up/down, next/previous, speed_up/down, next/previous_'
+- node_id: tool.desktop.select@v1
+  kind: tool
+  capability: desktop.select
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Activate a currently visible enabled control after checking its identity.
+- node_id: tool.desktop.fill_text@v1
+  kind: tool
+  capability: desktop.fill_text
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Replace a named visible Edit field with exact content; does not submit. value = the field's visible name exactly
+    as listed in screen fields (for example Search), content = the exact text to enter.
+- node_id: tool.desktop.type_text@v1
+  kind: tool
+  capability: desktop.type_text
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Type the user's exact words with the keyboard into the focused window, for editors whose text area is not a
+    listed field (for example Notepad or Word). value = the window title, content = the exact text from the request. Does
+    not save.
+- node_id: tool.desktop.scroll@v1
+  kind: tool
+  capability: desktop.scroll
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Scroll the current accessible window one page up, down, left or right.
+- node_id: tool.desktop.shortcut@v1
+  kind: tool
+  capability: desktop.shortcut
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Press an allowed shortcut in the current checked window.
+- node_id: tool.desktop.open_menu@v1
+  kind: tool
+  capability: desktop.open_menu
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Expand or invoke a named visible menu or dropdown, then observe its items.
+- node_id: tool.desktop.handle_dialog@v1
+  kind: tool
+  capability: desktop.handle_dialog
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Choose a named visible dialog button; never guess or approve deletion.
+- node_id: tool.desktop.save_file@v1
+  kind: tool
+  capability: desktop.save_file
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Save the current application document through its Save As dialog to the explicitly requested filename=value
+    and folder. Native controls first, UI-TARS parsed visual fallback when absent. Overwrite needs runtime approval; success
+    requires independent disk readback. Use for user requests to save docum
+- node_id: tool.desktop.close_app@v1
+  kind: tool
+  capability: desktop.close_app
+  provider: jarvis.tools.ToolRegistry (desktop)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Close the app explicitly named by the user.
+- node_id: tool.files.create_file@v1
+  kind: tool
+  capability: files.create_file
+  provider: jarvis.tools.ToolRegistry (files)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Create a named UTF-8 file directly with exact content in the identified folder.
+- node_id: tool.files.modify_file@v1
+  kind: tool
+  capability: files.modify_file
+  provider: jarvis.tools.ToolRegistry (files)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Modify an existing UTF-8 file directly using exact replacement text.
+- node_id: tool.files.delete_file@v1
+  kind: tool
+  capability: files.delete_file
+  provider: jarvis.tools.ToolRegistry (files)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Move one explicitly named file to Recycle Bin after user approval.
+- node_id: tool.terminal.run_command@v1
+  kind: tool
+  capability: terminal.run_command
+  provider: jarvis.tools.ToolRegistry (terminal)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run the explicitly requested command and return output and exit code after approval.
+- node_id: tool.toolkit.think@v1
+  kind: tool
+  capability: toolkit.think
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Explain a problem using the existing local model; value task, content untrusted context.
+- node_id: tool.toolkit.write_spec@v1
+  kind: tool
+  capability: toolkit.write_spec
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Draft a software specification with the existing local model; value goal.
+- node_id: tool.toolkit.write_tests@v1
+  kind: tool
+  capability: toolkit.write_tests
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Draft tests for supplied source; value goal, content source. Returns text without execution.
+- node_id: tool.toolkit.write_code@v1
+  kind: tool
+  capability: toolkit.write_code
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Draft code with the existing local model; value goal, content optional context. Use coding tasks to save validated
+    files.
+- node_id: tool.toolkit.improve_code@v1
+  kind: tool
+  capability: toolkit.improve_code
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Propose source improvements; value goal, content source. Does not write or execute files.
+- node_id: tool.toolkit.review_pull_request@v1
+  kind: tool
+  capability: toolkit.review_pull_request
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Review a public PR with the existing local model; value owner/repo, content JSON {number}.
+- node_id: tool.toolkit.knowledge_search@v1
+  kind: tool
+  capability: toolkit.knowledge_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search local UTF-8 knowledge resources; value literal query, folder scope.
+- node_id: tool.toolkit.list_files@v1
+  kind: tool
+  capability: toolkit.list_files
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: List up to 100 files in folder; value is '.', folder identifies scope.
+- node_id: tool.toolkit.read_file@v1
+  kind: tool
+  capability: toolkit.read_file
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read a small UTF-8 file; value is relative path, folder identifies scope.
+- node_id: tool.toolkit.append_file@v1
+  kind: tool
+  capability: toolkit.append_file
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Append exact content to an existing UTF-8 file; value path and folder required.
+- node_id: tool.toolkit.search_files@v1
+  kind: tool
+  capability: toolkit.search_files
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search filenames and text in folder; value is literal query.
+- node_id: tool.toolkit.query_resource@v1
+  kind: tool
+  capability: toolkit.query_resource
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Find literal content matches in scoped text resources; value query, folder scope.
+- node_id: tool.toolkit.web_search@v1
+  kind: tool
+  capability: toolkit.web_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Return public web search snippets for value query.
+- node_id: tool.toolkit.scrape_web@v1
+  kind: tool
+  capability: toolkit.scrape_web
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Extract public page text without JavaScript or navigation clutter; value URL, optional content JSON {query}
+    selects a literal excerpt.
+- node_id: tool.toolkit.github_search@v1
+  kind: tool
+  capability: toolkit.github_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search public GitHub repositories with value query.
+- node_id: tool.toolkit.github_read_file@v1
+  kind: tool
+  capability: toolkit.github_read_file
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read repository file and current SHA; value owner/repo, content JSON {path,ref}. Result includes text and metadata
+    for later approved updates/deletion.
+- node_id: tool.toolkit.github_pull_request@v1
+  kind: tool
+  capability: toolkit.github_pull_request
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: unknown
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read PR details; value owner/repo, content JSON {number}.
+- node_id: tool.toolkit.github_pr_files@v1
+  kind: tool
+  capability: toolkit.github_pr_files
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read PR file patches; value owner/repo, content JSON {number}.
+- node_id: tool.toolkit.github_add_file@v1
+  kind: tool
+  capability: toolkit.github_add_file
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Create/update repository UTF-8 file after approval; content JSON {path,message,text,branch,sha optional}.
+- node_id: tool.toolkit.github_delete_file@v1
+  kind: tool
+  capability: toolkit.github_delete_file
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Delete repository file after approval; content JSON {path,message,sha,branch}.
+- node_id: tool.toolkit.google_search@v1
+  kind: tool
+  capability: toolkit.google_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search via Google Custom Search; value query.
+- node_id: tool.toolkit.serp_search@v1
+  kind: tool
+  capability: toolkit.serp_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search via SerpAPI; value query.
+- node_id: tool.toolkit.searx_search@v1
+  kind: tool
+  capability: toolkit.searx_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search a configured SearX public endpoint; value query.
+- node_id: tool.toolkit.apollo_search@v1
+  kind: tool
+  capability: toolkit.apollo_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search Apollo organizations; value company query.
+- node_id: tool.toolkit.read_email@v1
+  kind: tool
+  capability: toolkit.read_email
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read latest five INBOX subject/from headers via IMAP; no messages marked read.
+- node_id: tool.toolkit.send_email@v1
+  kind: tool
+  capability: toolkit.send_email
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Send exact email after approval; value recipient, content JSON {subject,body}.
+- node_id: tool.toolkit.slack_send@v1
+  kind: tool
+  capability: toolkit.slack_send
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Send exact Slack message after approval; value channel, content exact text.
+- node_id: tool.toolkit.twitter_send@v1
+  kind: tool
+  capability: toolkit.twitter_send
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Publish exact tweet after approval; content exact text. Requires user-context OAuth token.
+- node_id: tool.toolkit.calendar_list@v1
+  kind: tool
+  capability: toolkit.calendar_list
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: List next calendar events; value calendar ID or primary.
+- node_id: tool.toolkit.calendar_details@v1
+  kind: tool
+  capability: toolkit.calendar_details
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read calendar event; value calendar ID, content JSON {event_id}.
+- node_id: tool.toolkit.calendar_create@v1
+  kind: tool
+  capability: toolkit.calendar_create
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Create event after approval; value calendar ID, content JSON {summary,start,end,description optional}.
+- node_id: tool.toolkit.calendar_delete@v1
+  kind: tool
+  capability: toolkit.calendar_delete
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: destructive
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Delete event after approval; value calendar ID, content JSON {event_id}.
+- node_id: tool.toolkit.jira_projects@v1
+  kind: tool
+  capability: toolkit.jira_projects
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: List Jira projects.
+- node_id: tool.toolkit.jira_search@v1
+  kind: tool
+  capability: toolkit.jira_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search Jira issues; value JQL.
+- node_id: tool.toolkit.jira_create@v1
+  kind: tool
+  capability: toolkit.jira_create
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Create Jira issue after approval; content JSON {fields}.
+- node_id: tool.toolkit.jira_edit@v1
+  kind: tool
+  capability: toolkit.jira_edit
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: external_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Edit Jira issue after approval; value issue key, content JSON {fields}.
+- node_id: tool.toolkit.toolkit_status@v1
+  kind: tool
+  capability: toolkit.toolkit_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: List tools and missing configuration; never displays credentials.
+- node_id: tool.toolkit.windows_command_search@v1
+  kind: tool
+  capability: toolkit.windows_command_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search all 493 imported Windows recipes by exact command ID or task keywords; returns required literal parameters
+    and approval/prerequisites. Does not execute.
+- node_id: tool.toolkit.windows_command@v1
+  kind: tool
+  capability: toolkit.windows_command
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: ui_or_media_state
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Execute one pinned Windows recipe; value ID, content JSON literal parameters. Requires the user to request
+    that exact ID or exact recipe name; use windows_command_search first. No arbitrary shell/Python. Effects require fresh
+    target and approvals; result is dispatch evidence, not goal verification.
+- node_id: tool.toolkit.integration_status@v1
+  kind: tool
+  capability: toolkit.integration_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read registered tool groups, configured app/skill counts, MCP status and missing credential names. Does not
+    start providers or expose secrets.
+- node_id: tool.toolkit.application_search@v1
+  kind: tool
+  capability: toolkit.application_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Find up to twenty configured desktop app names; value app query, or dot to list the first twenty. Uses the
+    current catalog; does not launch anything.
+- node_id: tool.toolkit.runtime_capabilities@v1
+  kind: tool
+  capability: toolkit.runtime_capabilities
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: unknown
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Select runtime tools, relevant skills and validated saved programs for value task. Reports missing configuration;
+    performs no actions.
+- node_id: tool.toolkit.tool_search@v1
+  kind: tool
+  capability: toolkit.tool_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Discover configured tools; value query. Loads matching tools for the next planning step.
+- node_id: tool.toolkit.repository_map@v1
+  kind: tool
+  capability: toolkit.repository_map
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read source paths and Python symbols; folder project, value dot.
+- node_id: tool.toolkit.repository_instructions@v1
+  kind: tool
+  capability: toolkit.repository_instructions
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read applicable AGENTS.md; folder project, value relative target or dot.
+- node_id: tool.toolkit.skill_list@v1
+  kind: tool
+  capability: toolkit.skill_list
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Discover project skills; folder project, value dot. Use @jarvis for local guides, @hermes or @deerflow and
+    value query for upstream guidance.
+- node_id: tool.toolkit.skill_read@v1
+  kind: tool
+  capability: toolkit.skill_read
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read an exact project skill; folder project, value name. Use @jarvis for local guides, @deerflow for a DeerFlow
+    public guide, @hermes for a Hermes guide with optional content reference path. Read-only guidance.
+- node_id: tool.toolkit.git_status@v1
+  kind: tool
+  capability: toolkit.git_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read Git working tree status; folder project, value dot.
+- node_id: tool.toolkit.git_diff@v1
+  kind: tool
+  capability: toolkit.git_diff
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read unstaged diff; folder project, value relative source file. No repository-wide secret diff.
+- node_id: tool.toolkit.git_log@v1
+  kind: tool
+  capability: toolkit.git_log
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read latest ten Git commit subjects; folder project, value dot.
+- node_id: tool.toolkit.read_batch@v1
+  kind: tool
+  capability: toolkit.read_batch
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run up to four independent local read tools in parallel; folder scope, value dot, content JSON {calls:[{action,value}]}.
+    No writes, shell, network or nested batches.
+- node_id: tool.toolkit.mcp_status@v1
+  kind: tool
+  capability: toolkit.mcp_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: List configured MCP server names without starting them; value dot.
+- node_id: tool.toolkit.mcp_list_tools@v1
+  kind: tool
+  capability: toolkit.mcp_list_tools
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Discover tools from a trusted configured stdio MCP server after approval; value server name. Blender content
+    may select {query,category,limit}; returns bounded candidate schemas.
+- node_id: tool.toolkit.mcp_call@v1
+  kind: tool
+  capability: toolkit.mcp_call
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Call an allowlisted tool on a trusted stdio MCP server after approval; value server, content JSON {name,arguments}.
+    Never retries.
+- node_id: tool.toolkit.development_native@v1
+  kind: tool
+  capability: toolkit.development_native
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Native packaging/build only when explicitly requested: folder project, value windows for Electron or android/ios
+    for Expo. Requires toolchain readiness and exact execution approval; no automatic publication.'
+- node_id: tool.toolkit.development_status@v1
+  kind: tool
+  capability: toolkit.development_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read stack, Node readiness, last verification, design references and practice progression; folder project,
+    value dot.
+- node_id: tool.toolkit.development_verify@v1
+  kind: tool
+  capability: toolkit.development_verify
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Type-check/build and functionally test the identified project using reviewed Node tooling; folder project,
+    value dot, content optional JSON {tests:[...]}. Requires execution approval.
+- node_id: tool.toolkit.development_preview@v1
+  kind: tool
+  capability: toolkit.development_preview
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Start an owned loopback preview of an existing build, or stop only the current owned preview; folder project,
+    value start or stop. Starting requires execution approval.
+- node_id: tool.toolkit.development_feedback@v1
+  kind: tool
+  capability: toolkit.development_feedback
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Retain exact human design feedback only; folder project, value exact user feedback, content optional JSON {approve_reference:workspace|forms|motion}.
+    No execution permissions.
+- node_id: tool.toolkit.development_practice@v1
+  kind: tool
+  capability: toolkit.development_practice
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: unknown
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run one explicitly requested development practice project through the normal staged coder; folder project,
+    value practice ID. Execution approval occurs after generated code is available.
+- node_id: tool.toolkit.firecrawl_search@v1
+  kind: tool
+  capability: toolkit.firecrawl_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Search public web via Firecrawl; value query, optional content JSON {limit:1..5}. Requires JARVIS_FIRECRAWL_KEY.
+- node_id: tool.toolkit.firecrawl_scrape@v1
+  kind: tool
+  capability: toolkit.firecrawl_scrape
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read public page markdown via Firecrawl; value exact public URL. No uploads, accounts, browser actions or scripts.
+- node_id: tool.toolkit.firecrawl_map@v1
+  kind: tool
+  capability: toolkit.firecrawl_map
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Find up to twenty public website URLs via Firecrawl; value public URL, optional content JSON {search}.
+- node_id: tool.toolkit.deerflow_status@v1
+  kind: tool
+  capability: toolkit.deerflow_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Inspect the pinned DeerFlow runtime and available public skill names; value dot. No service starts.
+- node_id: tool.toolkit.deerflow_skill_read@v1
+  kind: tool
+  capability: toolkit.deerflow_skill_read
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read bundled DeerFlow public skill guidance; value exact skill name from deerflow_status. Guidance does not
+    install dependencies or grant permission.
+- node_id: tool.toolkit.deerflow_skill_search@v1
+  kind: tool
+  capability: toolkit.deerflow_skill_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Find relevant DeerFlow public workflow guides by value task keywords. Guidance only; required providers are
+    not activated.
+- node_id: tool.toolkit.deerflow_research@v1
+  kind: tool
+  capability: toolkit.deerflow_research
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Research a scoped local project with the real DeerFlow harness and local Qwen; folder project, value question.
+    Read-only, bounded deadline; includes source-read receipts. No shell, writes, accounts or web.
+- node_id: tool.toolkit.deerflow_web_research@v1
+  kind: tool
+  capability: toolkit.deerflow_web_research
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Research a public topic with the real DeerFlow harness and Jarvis public search/page reads; value question.
+    Uses separately configured Jarvis Firecrawl if available, else public web search. No accounts, uploads, shell or local
+    source access.
+- node_id: tool.toolkit.deerflow_sandbox_task@v1
+  kind: tool
+  capability: toolkit.deerflow_sandbox_task
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Execute a requested coding, data-analysis or free media task in a confined offline Docker workspace using DeerFlow
+    and local Qwen. value goal; optional content JSON {inputs:[explicit relative files]} with folder project. Input copies
+    are read-only. Own output workspace; no host shell, credentials, n
+- node_id: tool.toolkit.deerflow_free_media@v1
+  kind: tool
+  capability: toolkit.deerflow_free_media
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Create offline free artifacts. value chart/poster/pdf/slides/video/music/narration; content literal JSON {title,text,labels,values,slides:[{title,text}],duration:1..30,voice}.
+    Charts/posters PNG, report PDF, PPTX, text-card MP4, procedural melody WAV or local Kokoro narration. No commercial API,
+    pho
+- node_id: tool.toolkit.repository_learn@v1
+  kind: tool
+  capability: toolkit.repository_learn
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Learn a canonical public HTTPS GitHub URL or explicit local project directory in value. Static analysis and
+    pinned snapshots only; never imports, installs dependencies or activates candidates.
+- node_id: tool.toolkit.repository_skill_search@v1
+  kind: tool
+  capability: toolkit.repository_skill_search
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Show learned repository capabilities and lifecycle states. value=query or dot; bounded schemas are returned
+    as metadata.
+- node_id: tool.toolkit.repository_skill_explain@v1
+  kind: tool
+  capability: toolkit.repository_skill_explain
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Explain one exact learned skill ID in value, including signature, schema, provenance, validation and untrusted
+    documentation.
+- node_id: tool.toolkit.repository_skill_validate@v1
+  kind: tool
+  capability: toolkit.repository_skill_validate
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Isolated approved smoke check of one exact skill ID in value; content JSON {arguments:{...}}. Requires hardened
+    local Linux runtime. Does not activate.
+- node_id: tool.toolkit.repository_skill_activate@v1
+  kind: tool
+  capability: toolkit.repository_skill_activate
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Activate one freshly validated skill ID after explicit approval; value=skill ID. No host imports or automatic
+    execution.
+- node_id: tool.toolkit.repository_skill_run@v1
+  kind: tool
+  capability: toolkit.repository_skill_run
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run one active approved repository skill in isolation; value=exact skill ID, content JSON arguments. Per-call
+    approval, no network, bounded JSON result. Never retries.
+- node_id: tool.toolkit.repository_skill_health@v1
+  kind: tool
+  capability: toolkit.repository_skill_health
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Check persistent repository skill counts and isolated runtime readiness; value=dot. No repository code executed.
+- node_id: tool.toolkit.repository_skill_lifecycle@v1
+  kind: tool
+  capability: toolkit.repository_skill_lifecycle
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Disable/revoke a skill, disable/enable a repository or all learned execution, or roll back to a retained revision.
+    value=target ID or dot; content JSON {operation,revision optional}. Revocation retains source; enabling/rollback requires
+    approval and revalidation.
+- node_id: tool.toolkit.rea_status@v1
+  kind: tool
+  capability: toolkit.rea_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Report REA reverse-engineering bridge readiness: Node runtime, configured REA entry, allowlisted commands
+    and session count. value dot. Starts nothing and executes no analysis.'
+- node_id: tool.toolkit.rea_ingest@v1
+  kind: tool
+  capability: toolkit.rea_ingest
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Register one reverse-engineering target in value (an absolute local directory, an absolute local file, or a
+    public HTTPS URL); content optional JSON {kind,label}. Creates a local session workspace and reconstruction ledger. Local
+    bookkeeping only; fetches and analyzes nothing.
+- node_id: tool.toolkit.rea_analyze@v1
+  kind: tool
+  capability: toolkit.rea_analyze
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run one allowlisted REA CLI analysis on a session target; value session id, content JSON {command,extra_flags
+    optional}. Spawns the configured Node/REA program, stores untrusted evidence and updates the ledger. Requires approval;
+    never retried.
+- node_id: tool.toolkit.rea_ledger@v1
+  kind: tool
+  capability: toolkit.rea_ledger
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read a session reconstruction ledger and recorded evidence index; value session id or dot to list sessions.
+    Read-only.
+- node_id: tool.toolkit.rea_record@v1
+  kind: tool
+  capability: toolkit.rea_record
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Append a reconstruction obligation, modification instruction or note to a session ledger; value session id,
+    content JSON {kind,text}. Local bounded write; drives later coding, performs no code change itself.
+- node_id: tool.toolkit.office_xlsx@v1
+  kind: tool
+  capability: toolkit.office_xlsx
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Read or edit an .xlsx workbook with openpyxl (API tier). value=relative file, folder=scope, content JSON {operation:
+    read|inspect|write, sheet, cells:{"A1": value or "=formula"}}. Writes need approval, refuse workbooks with macros/charts/pivots/links/drawings/signatures,
+    back up, verify by independe'
+- node_id: tool.toolkit.office_docx@v1
+  kind: tool
+  capability: toolkit.office_docx
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Read or edit a .docx document with python-docx (API tier). value=relative file, folder=scope, content JSON
+    {operation: read|inspect|write, edits:[{kind: append_paragraph,text,style?}|{kind: replace_text,find,replace}|{kind: set_table_cell,table,row,column,text}]}.
+    Refuses macros, signatures and trac'
+- node_id: tool.toolkit.pdf_document@v1
+  kind: tool
+  capability: toolkit.pdf_document
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Inspect a PDF, extract text, or compose a NEW PDF (merge/extract/rotate pages) with pypdf. value=relative
+    file, folder=scope, content JSON {operation: inspect|text|compose, pages?, sources:[{path,pages?,rotate?}], output}. Never
+    edits a PDF in place; creating output needs approval.'
+- node_id: tool.toolkit.office_automation@v1
+  kind: tool
+  capability: toolkit.office_automation
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Edit .xlsx/.xlsm/.docx/.docm through a new hidden Excel or Word instance (structured tier; Office preserves
+    macros/charts). value=relative file, folder=scope, content JSON {operation: write, sheet, cells} or {operation: write,
+    edits}. Edits a temporary copy, macros disabled, approval, backup, indepe'
+- node_id: tool.toolkit.blender_task@v1
+  kind: tool
+  capability: toolkit.blender_task
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Create primitive objects in a NEW .blend (optional glTF/OBJ/STL export) or inspect a .blend with background
+    Blender and fixed templates (scripts disabled). value=relative .blend, folder=scope, content JSON {operation: create|inspect,
+    objects:[{type,name,location?,scale?}], export?:{format,path}}.'
+- node_id: tool.toolkit.unreal_task@v1
+  kind: tool
+  capability: toolkit.unreal_task
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Read the configured Unreal Engine installation version manifest and editor command-line availability. value=inspect.
+    Editor Python on a project is not enabled.
+- node_id: tool.toolkit.vscode_cli@v1
+  kind: tool
+  capability: toolkit.vscode_cli
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Use the VS Code command line: value version|list_extensions|open; for open, folder=scope and content JSON
+    {path, line?}. Opening a file is a UI action without file changes.'
+- node_id: tool.toolkit.execution_methods@v1
+  kind: tool
+  capability: toolkit.execution_methods
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Rank execution methods for an operation on a target without running anything (API/code first, structured automation
+    next, GUI coordinates last), with eligibility reasons and measured reliability. value=target file/app (web, vscode, unreal),
+    folder=scope for files, content JSON {operation: read|inspe'
+- node_id: tool.toolkit.strategy_execute@v1
+  kind: tool
+  capability: toolkit.strategy_execute
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: write
+  privacy: local_private
+  side_effect_class: operation_dependent
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Run a document/3D/editor operation through the best eligible API or structured method, with safe fallback only
+    before any input. value=target file, folder=scope, content JSON {operation, ...method arguments (sheet, cells, edits,
+    objects, sources, output)}. Writes need approval and are never replayed
+- node_id: tool.toolkit.evolution_status@v1
+  kind: tool
+  capability: toolkit.evolution_status
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Read the self-evolution archive (read-only): experiments, candidate lineage, qualified improvement proposals
+    with held-out evidence, and deployed releases.'
+- node_id: tool.toolkit.evolution_promote@v1
+  kind: tool
+  capability: toolkit.evolution_promote
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Deploy one qualified self-evolution proposal (value=candidate id) after an explicit approval card; snapshot,
+    staged health checks and automatic rollback. Never automatic.
+- node_id: tool.toolkit.evolution_rollback@v1
+  kind: tool
+  capability: toolkit.evolution_rollback
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: Restore the known-good snapshot of a deployed self-evolution release (value=release id) after explicit approval.
+- node_id: tool.toolkit.cloud_architect_consult@v1
+  kind: tool
+  capability: toolkit.cloud_architect_consult
+  provider: jarvis.tools.ToolRegistry (toolkit)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local_or_network
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/tools.py SPECS
+  derived: 'heuristic: side_effect_class, privilege'
+  description: 'Ask the optional free-tier cloud architect for advice on an ABSTRACT algorithm, coding or planning problem
+    after local approaches failed. content JSON {category, statement, question, constraints, examples, provenance: public_fact|synthetic}.
+    The privacy gate runs first, the approval card shows the e'

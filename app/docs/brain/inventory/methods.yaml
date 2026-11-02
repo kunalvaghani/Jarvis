@@ -1,0 +1,543 @@
+generated: '2026-11-02'
+snapshot: true
+nodes:
+- node_id: method.xlsx.openpyxl@v1
+  kind: tool
+  capability: spreadsheet.inspect/read/write
+  provider: jarvis.execution_strategy (office_xlsx)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - skills_module:openpyxl
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 1500
+  cost: low
+  targets:
+  - .xlsx
+  unsafe_write_features:
+  - charts
+  - drawings
+  - external_links
+  - macros
+  - pivot_tables
+  - signatures
+- node_id: method.xlsx.excel_com@v1
+  kind: tool
+  capability: spreadsheet.write
+  provider: jarvis.execution_strategy (office_automation)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - com:Excel.Application
+  - skills_module:openpyxl
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: readback
+  expected_latency_ms: 8000
+  cost: high
+  targets:
+  - .xlsm
+  - .xlsx
+  unsafe_write_features:
+  - signatures
+- node_id: method.xlsx.gui@v1
+  kind: tool
+  capability: spreadsheet.write
+  provider: jarvis.execution_strategy (type_text)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: gui
+  verification: observation
+  expected_latency_ms: 9000
+  cost: medium
+  targets:
+  - .xls
+  - .xlsm
+  - .xlsx
+  unsafe_write_features: []
+- node_id: method.docx.python_docx@v1
+  kind: tool
+  capability: document.inspect/read/write
+  provider: jarvis.execution_strategy (office_docx)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - skills_module:docx
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 1200
+  cost: low
+  targets:
+  - .docx
+  unsafe_write_features:
+  - macros
+  - signatures
+  - tracked_changes
+- node_id: method.docx.word_com@v1
+  kind: tool
+  capability: document.write
+  provider: jarvis.execution_strategy (office_automation)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - com:Word.Application
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: readback
+  expected_latency_ms: 9000
+  cost: high
+  targets:
+  - .docm
+  - .docx
+  unsafe_write_features:
+  - signatures
+- node_id: method.docx.gui@v1
+  kind: tool
+  capability: document.write
+  provider: jarvis.execution_strategy (type_text)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: gui
+  verification: observation
+  expected_latency_ms: 9000
+  cost: medium
+  targets:
+  - .doc
+  - .docm
+  - .docx
+  unsafe_write_features: []
+- node_id: method.pdf.pypdf@v1
+  kind: tool
+  capability: pdf.compose/inspect/read
+  provider: jarvis.execution_strategy (pdf_document)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - main_module:pypdf
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 800
+  cost: low
+  targets:
+  - .pdf
+  unsafe_write_features: []
+- node_id: method.blender.background@v1
+  kind: tool
+  capability: 3d.create/inspect
+  provider: jarvis.execution_strategy (blender_task)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - executable:blender
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 5000
+  cost: high
+  targets:
+  - .blend
+  unsafe_write_features: []
+- node_id: method.blender.gui@v1
+  kind: tool
+  capability: 3d.create
+  provider: jarvis.execution_strategy (select)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: gui
+  verification: observation
+  expected_latency_ms: 15000
+  cost: medium
+  targets:
+  - .blend
+  unsafe_write_features: []
+- node_id: method.unreal.manifest@v1
+  kind: tool
+  capability: 3d.inspect
+  provider: jarvis.execution_strategy (unreal_task)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - executable:unreal
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 50
+  cost: low
+  targets:
+  - unreal
+  unsafe_write_features: []
+- node_id: method.web.realtime_api@v1
+  kind: tool
+  capability: web.read
+  provider: jarvis.execution_strategy (realtime_query)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - realtime
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 900
+  cost: low
+  targets:
+  - web
+  unsafe_write_features: []
+- node_id: method.web.http_text@v1
+  kind: tool
+  capability: web.read
+  provider: jarvis.execution_strategy (scrape_web)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: observation
+  expected_latency_ms: 1500
+  cost: low
+  targets:
+  - web
+  unsafe_write_features: []
+- node_id: method.web.dom@v1
+  kind: tool
+  capability: web.inspect/read
+  provider: jarvis.execution_strategy (browser_inspect)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: native_state
+  expected_latency_ms: 3000
+  cost: medium
+  targets:
+  - web
+  unsafe_write_features: []
+- node_id: method.web.dom_fill@v1
+  kind: tool
+  capability: web.write
+  provider: jarvis.execution_strategy (browser_fill)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: native_state
+  expected_latency_ms: 3000
+  cost: medium
+  targets:
+  - web
+  unsafe_write_features: []
+- node_id: method.vscode.cli@v1
+  kind: tool
+  capability: editor.inspect/open
+  provider: jarvis.execution_strategy (vscode_cli)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - executable:code
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: readback
+  expected_latency_ms: 1500
+  cost: low
+  targets:
+  - vscode
+  unsafe_write_features: []
+- node_id: method.vscode.uia@v1
+  kind: tool
+  capability: editor.open
+  provider: jarvis.execution_strategy (select)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: native_state
+  expected_latency_ms: 2500
+  cost: low
+  targets:
+  - vscode
+  unsafe_write_features: []
+- node_id: method.windows.open@v1
+  kind: tool
+  capability: desktop.open
+  provider: jarvis.execution_strategy (open)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: api
+  verification: observation
+  expected_latency_ms: 1200
+  cost: low
+  targets:
+  - app
+  unsafe_write_features: []
+- node_id: method.windows.uia@v1
+  kind: tool
+  capability: desktop.open/write
+  provider: jarvis.execution_strategy (select)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: structured
+  verification: native_state
+  expected_latency_ms: 1500
+  cost: low
+  targets:
+  - app
+  unsafe_write_features: []
+- node_id: method.windows.visual@v1
+  kind: tool
+  capability: desktop.write
+  provider: jarvis.execution_strategy (save_file)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: approval_required
+  privacy: local_private
+  side_effect_class: local_write
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/execution_strategy.py METHODS
+  derived: 'heuristic: side_effect_class, privilege'
+  tier: gui
+  verification: observation
+  expected_latency_ms: 8000
+  cost: medium
+  targets:
+  - app
+  unsafe_write_features: []

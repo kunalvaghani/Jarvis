@@ -1,0 +1,215 @@
+generated: '2026-11-02'
+snapshot: true
+nodes:
+- node_id: route.calculator@v1
+  kind: skill
+  capability: calculator.arithmetic
+  provider: jarvis.fast_routes
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: Calculator typed once, display checked
+- node_id: route.web_question@v1
+  kind: skill
+  capability: web.answer_from_page
+  provider: jarvis.fast_routes
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: read_only
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: page read in full; numbers grounded
+- node_id: route.small_program@v1
+  kind: skill
+  capability: code.create_single_file
+  provider: jarvis.small_program
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: reference program agreement
+- node_id: route.small_edit@v1
+  kind: skill
+  capability: code.edit_single_file
+  provider: jarvis.small_edit
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: reference output and function agreement
+- node_id: route.web_app@v1
+  kind: skill
+  capability: code.web_app
+  provider: jarvis.web_app
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: headless browser checks and repair
+- node_id: route.blender_live@v1
+  kind: skill
+  capability: 3d.live_model
+  provider: jarvis.blender_live
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: write
+  privacy: local_private
+  side_effect_class: local_write
+  requirements:
+  - flag:control.api_routes
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: upgrade v2 Phase 1 fixed routes
+  derived: 'heuristic: side_effect_class, privilege'
+  note: sealed blender_scene verifier
+- node_id: verifier.text_file_saved@v1
+  kind: verifier
+  capability: verify.text_file_saved
+  provider: jarvis.learning.verifiers (text_file)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/learning/verifiers REGISTRY (sealed)
+  derived: 'heuristic: side_effect_class, privilege'
+- node_id: verifier.blender_object@v1
+  kind: verifier
+  capability: verify.blender_object
+  provider: jarvis.learning.verifiers (blender_object)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/learning/verifiers REGISTRY (sealed)
+  derived: 'heuristic: side_effect_class, privilege'
+- node_id: verifier.blender_scene@v1
+  kind: verifier
+  capability: verify.blender_scene
+  provider: jarvis.learning.verifiers (blender_scene)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/learning/verifiers REGISTRY (sealed)
+  derived: 'heuristic: side_effect_class, privilege'
+- node_id: verifier.python_project@v1
+  kind: verifier
+  capability: verify.python_project
+  provider: jarvis.learning.verifiers (python_project)
+  input_schema: TBD (Phase 1)
+  output_schema: TBD (Phase 1)
+  runtime: local
+  privilege: read
+  privacy: local_private
+  side_effect_class: read_only
+  requirements: []
+  resource_cost:
+    gpu_vram_mb: 0
+  timeout_ms: null
+  concurrency_limit: null
+  version: 1
+  healthcheck: null
+  status: inventoried
+  source: jarvis/learning/verifiers REGISTRY (sealed)
+  derived: 'heuristic: side_effect_class, privilege'
