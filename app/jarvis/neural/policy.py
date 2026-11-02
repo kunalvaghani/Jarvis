@@ -81,6 +81,11 @@ def _requirement(req: str, ctx: Context) -> Optional[str]:
         from .registry import mcp_config
         spec = mcp_config(ctx.base) if ctx.base is not None else mcp_config()
         return None if (spec.get(name) or {}).get('enabled') else f'MCP server {name} is not enabled'
+    if kind == 'control_backend':  # e.g. control_backend:pc=agent_desktop: the neuron's backend is switched on
+        from ..control.backends import pc_backend, web_backend
+        which, _, wanted = name.partition('=')
+        current = (pc_backend if which == 'pc' else web_backend)(ctx.config or {}, ctx.environ)
+        return None if current == wanted else f'{which} control backend is {current}, not {wanted}'
     if kind in ('skills_module', 'module'):
         return None if importlib.util.find_spec(name) is not None else f'module {name} is not installed'
     return f'unknown requirement {req}'

@@ -120,9 +120,11 @@ def core_neurons() -> List[Neuron]:
     for name, (kind, provider, inputs, outputs, effect, tool, text) in catalog.CORE.items():
         rows.append(Neuron.model_validate(dict(
             node_id=f'{name}@v1', kind=kind, capability=name, provider=provider, inputs=ports(inputs),
-            outputs=ports(outputs), contract='explicit', privilege='read' if effect == 'read_only' else 'write',
+            outputs=ports(outputs), contract='explicit',
+            privilege='approval_required' if name in catalog.APPROVAL_CORE or effect in ('destructive', 'external_write')
+            else ('read' if effect == 'read_only' else 'write'),
             side_effect_class=effect, tool=tool or None, description=text, source='jarvis/neural/catalog.py CORE',
-            requirements=('flag:control.api_routes',) if kind == 'route' else ())))
+            requirements=('flag:control.api_routes',) if kind == 'route' else catalog.CORE_REQUIREMENTS.get(name, ()))))
     return rows
 
 

@@ -287,3 +287,23 @@ import unittest.mock  # noqa: E402
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ControlNeuronTests(Base):
+    """Control backends as motor neurons (docs/control/ADAPTER_PLAN.md)."""
+
+    ON = {'JARVIS_PC_BACKEND': 'agent_desktop', 'JARVIS_WEB_BACKEND': 'agent_browser'}
+
+    def test_eligible_only_when_their_backend_is_on(self):
+        for name in ('pc.observe@v1', 'pc.act.semantic@v1', 'web.read@v1', 'web.act@v1'):
+            neuron = self.registry.get(name)
+            self.assertFalse(eligibility(neuron, Context(config={}, environ={})).eligible, name)
+            self.assertTrue(eligibility(neuron, Context(config={}, environ=self.ON)).eligible, name)
+
+    def test_headed_input_and_signed_in_browsing_always_ask_and_learning_cannot_change_that(self):
+        for _ in range(50):
+            self.journal.record_outcome('general', 'pc.act.headed@v1', True, 1.0)
+        for name in ('pc.act.headed@v1', 'web.auth@v1', 'pc.clipboard@v1'):
+            neuron = self.registry.get(name)
+            self.assertEqual(neuron.privilege, 'approval_required', name)
+            self.assertTrue(eligibility(neuron, Context(config={}, environ=self.ON)).needs_approval, name)

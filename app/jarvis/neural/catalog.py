@@ -148,6 +148,45 @@ CORE: Dict[str, Tuple[str, str, Tuple[str, ...], Tuple[str, ...], str, str, str]
                       'read_only', '', 'Independent end-of-goal check against the request.'),
 }
 
+# PC and web control capabilities (docs/control/ADAPTER_PLAN.md). They run through ControlService and the
+# app_*/web_* tools; as neurons they let the router learn, per app, which eligible route verifies best.
+CORE.update({
+    'pc.observe': ('tool', 'jarvis.control (agent-desktop snapshot/find)', ('window:WindowRefs?',),
+                   ('window:WindowRefs',), 'read_only', '', "Read a window's accessibility tree (no screenshots)."),
+    'pc.act.semantic': ('tool', 'jarvis.control (agent-desktop headless ref actions)',
+                        ('window:WindowRefs', 'action:UiAction'), ('window:WindowRefs',), 'ui_or_media_state', '',
+                        'Click, set a value, toggle or select by ref, without moving the cursor or stealing focus.'),
+    'pc.act.headed': ('tool', 'jarvis.control (agent-desktop --headed)', ('window:WindowRefs', 'action:UiAction'),
+                      ('window:WindowRefs',), 'ui_or_media_state', '',
+                      'Real keyboard and mouse input. Always asks first; never granted by learning.'),
+    'pc.app.launch': ('tool', 'jarvis.control (agent-desktop launch + app resolver)', ('app:AppName',),
+                      ('window:WindowRefs',), 'ui_or_media_state', '', 'Start an allowed app and find its window.'),
+    'pc.window.manage': ('tool', 'jarvis.control (agent-desktop window commands)', ('window:WindowRefs',),
+                         ('window:WindowRefs',), 'ui_or_media_state', '', 'Move, resize, minimize, restore, close.'),
+    'pc.clipboard': ('tool', 'jarvis.control (agent-desktop clipboard)', ('text:Text?',), ('text:Text',),
+                     'local_write', '', 'Read or write the clipboard (writes ask first).'),
+    'pc.notifications': ('tool', 'jarvis.control (agent-desktop notifications)', (), ('report:Report',),
+                         'read_only', '', 'List Action Center notifications (content stays local).'),
+    'pc.vision_fallback': ('tool', 'jarvis.control.routes.vision (local Qwen-VL)', ('target:ScreenTarget',),
+                           ('window:WindowRefs',), 'ui_or_media_state', '',
+                           'Screen-coordinate fallback for apps with no accessibility tree (e.g. a 3D viewport).'),
+    'web.read': ('tool', 'jarvis.control (agent-browser read)', ('url:Url',), ('page:WebPage',), 'read_only', '',
+                 'Fetch a page as readable text without driving a browser.'),
+    'web.observe': ('tool', 'jarvis.control (agent-browser snapshot)', ('page:WebPage?',), ('page:WebPage',),
+                    'read_only', '', 'Read the open page with refs.'),
+    'web.act': ('tool', 'jarvis.control (agent-browser ref actions)', ('page:WebPage', 'action:PageAction'),
+                ('page:WebPage',), 'ui_or_media_state', '', 'Click, fill, select or press on the open page.'),
+    'web.auth': ('tool', "jarvis.control (agent-browser with the user's Chrome profile)", ('url:Url',),
+                 ('page:WebPage',), 'external_write', '', 'Use a signed-in profile. Always asks first.'),
+})
+APPROVAL_CORE = frozenset({'pc.act.headed', 'web.auth', 'pc.clipboard'})
+CORE_REQUIREMENTS = {
+    **{name: ('control_backend:pc=agent_desktop',) for name in ('pc.observe', 'pc.act.semantic', 'pc.act.headed',
+                                                                 'pc.app.launch', 'pc.window.manage', 'pc.clipboard',
+                                                                 'pc.notifications')},
+    **{name: ('control_backend:web=agent_browser',) for name in ('web.read', 'web.observe', 'web.act', 'web.auth')},
+}
+
 TOKEN = r'(?:^|_)(?:{})(?:_|$)'
 READ = re.compile(TOKEN.format('read|list|lists|search|get|inspect|status|find|check|describe|show|query|lookup|details|'
                                'map|log|diff|explain|health|ledger|instructions|tracks|albums|chapters|episodes|artists|'
