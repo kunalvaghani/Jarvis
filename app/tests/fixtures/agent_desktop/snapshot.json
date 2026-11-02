@@ -1,0 +1,67 @@
+{
+ "version": "2.5",
+ "ok": true,
+ "command": "snapshot",
+ "data": {
+  "app": "Notepad.exe",
+  "complete": true,
+  "ref_count": 3,
+  "snapshot_id": "s1ittgimmq1ziw",
+  "tree": {
+   "available_actions": [
+    "SetFocus"
+   ],
+   "role": "window",
+   "name": "Untitled - Notepad",
+   "children": [
+    {
+     "role": "group",
+     "role_description": "pane",
+     "children": [
+      {
+       "available_actions": [
+        "SetValue",
+        "Scroll",
+        "SetFocus"
+       ],
+       "name": "Text editor",
+       "ref_id": "@s1ittgimmq1ziw:e1",
+       "role": "textfield",
+       "role_description": "document",
+       "states": [
+        "focused"
+       ],
+       "value": ""
+      }
+     ]
+    },
+    {
+     "available_actions": [
+      "Select",
+      "ScrollTo",
+      "Click",
+      "SetFocus"
+     ],
+     "name": "Untitled. Unmodified.",
+     "ref_id": "@s1ittgimmq1ziw:e2",
+     "role": "tab",
+     "states": [
+      "offscreen"
+     ]
+    },
+    {
+     "available_actions": [
+      "Click"
+     ],
+     "name": "Save",
+     "ref_id": "@s1ittgimmq1ziw:e3",
+     "role": "button"
+    }
+   ]
+  },
+  "window": {
+   "id": "w-920228",
+   "title": "Untitled - Notepad"
+  }
+ }
+}

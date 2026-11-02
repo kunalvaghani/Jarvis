@@ -1,0 +1,22 @@
+{
+ "version": "2.5",
+ "ok": true,
+ "command": "find",
+ "data": {
+  "match": {
+   "interactive": true,
+   "name": "Text editor",
+   "path": [
+    "window:Untitled - Notepad",
+    "group"
+   ],
+   "ref_id": "@s24qm9lcpozmt9:e1",
+   "role": "textfield",
+   "states": [
+    "focused"
+   ],
+   "value": ""
+  },
+  "snapshot_id": "s24qm9lcpozmt9"
+ }
+}

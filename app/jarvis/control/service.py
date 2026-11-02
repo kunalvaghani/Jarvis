@@ -162,9 +162,30 @@ class ControlService:
 
     def uia(self) -> Reporting:
         def build() -> RouteExecutor:
+            from .backends import pc_backend
             from .routes.uia import UIAExecutor
-            return UIAExecutor(self.policy, self._shared_input())
+            backend = pc_backend({'control': dict(self.settings.extra)})
+            if backend == 'legacy':
+                return UIAExecutor(self.policy, self._shared_input())
+            from .pc.backend import AgentDesktopExecutor, HeadedGate
+            headed = HeadedGate(str(self.settings.extra.get('headed_input', 'ask')), self._confirm_headed)
+            candidate = AgentDesktopExecutor(self.policy, headed=headed)
+            if backend == 'agent_desktop':
+                return candidate
+            from .pc.shadow import ReadOnlyRunner, ShadowExecutor
+            candidate.run = ReadOnlyRunner()  # Shadow: agent-desktop may only look.
+            return ShadowExecutor(UIAExecutor(self.policy, self._shared_input()), candidate)
         return self._route('uia', build, 'Windows apps')
+
+    def _confirm_headed(self, question: str) -> bool:
+        """Physical keyboard/mouse input for the agent-desktop backend asks through the same approval card."""
+        if self.approvals.confirm is None:
+            return False
+        action = Action('headed_input', question, Route.UIA, risk=Risk.CONSEQUENTIAL)
+        try:
+            return self.approvals.confirm(action) is True
+        except Exception:
+            return False
 
     def vision(self) -> Reporting:
         def build() -> RouteExecutor:
