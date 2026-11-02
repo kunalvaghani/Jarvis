@@ -4,6 +4,26 @@
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](docs/autonomous-repair-acceptance.md) · [Handoff](docs/CLAUDE_HANDOFF.md).
 
+## PC and web control on agent-desktop / agent-browser, built behind flags — 2026-11-02 IST
+
+Jarvis can now drive Windows apps through **agent-desktop 1.0.2** and Chrome through **agent-browser 0.41.1** (Vercel Labs; pinned, checksummed, installed by `scripts/install_control_backends.ps1`), as drop-in executors behind the existing `ControlService`. The planner and its tools did not change.
+
+- **Default is still legacy.** `JARVIS_PC_BACKEND=legacy|shadow|agent_desktop` and `JARVIS_WEB_BACKEND=legacy|shadow|agent_browser`. In `shadow`, legacy acts and the new backend only reads, through runners that refuse every write command.
+- **What the new backends guarantee:**
+  - Accessibility-tree refs with no screenshots.
+  - Headless clicks that don't move your mouse or steal focus. Physical input (`--headed`) asks first, and `--force` is never used.
+  - Retry only when nothing was delivered.
+  - Every web call carries content boundaries and a generated action policy (no script evaluation, no cookie, credential or state writes; uploads and clipboard ask first).
+  - Your Chrome `Default` profile is used for signed-in tasks, with state encrypted by a key in the git-ignored `secrets/` folder.
+- **No-model fast paths:** "minimize / maximize / restore / close X" and "copy … to the clipboard", each checked by a fresh read.
+- **Live checks so far:**
+  - Calculator 2 + 3 = 5: read 0.6 s, clicks 0.4 s each. Minimize, restore, maximize and close were all verified on a hosted Store app.
+  - example.com: navigate 1.3 s, read 0.14 s, click 0.15 s.
+  - These found and fixed three real issues: hosted-app window identity, "Close" button names, and page text dropped by compact snapshots.
+- **Benchmark:** 44 scenarios (native apps, Electron, shell, web, Gmail drafts, Drive, Docs, Sheets, hard cases, focus steal), each with an oracle proven against known-good and known-bad states. Baseline and A/B runs happen in the combined live round.
+
+Docs: [docs/control/](docs/control/ADAPTER_PLAN.md) · [progress](docs/control/PROGRESS.md) · [issues](docs/control/ISSUES.md) · [upgrading](docs/control/UPGRADING.md).
+
 ## Neural brain (BNEG), phases 1–5 implemented — 2026-11-02 IST
 
 Jarvis now has a brain made of **neurons** and **synapses**:

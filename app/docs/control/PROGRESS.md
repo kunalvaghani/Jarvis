@@ -36,4 +36,5 @@ Contradictions with the master prompt, and what was done instead:
 
 ## Regression
 - Before (brain branch, 2026-11-02): 5,062 passed, 39 known failures; see [reports/tests_before.txt](reports/tests_before.txt).
-- After each control step: all 227 control, fast-route and live-suite tests pass; mypy is clean on the new modules.
+- After each control step: all control, fast-route and live-suite tests pass; mypy is clean on the new modules.
+- After (control branch, 2026-11-02): **5,116 passed, 39 failed — exactly the 39 known failures, none new.**

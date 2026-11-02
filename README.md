@@ -9,6 +9,14 @@
 
 Live end-to-end tests come next. More: [app/README.md](app/README.md#neural-brain-bneg-phases-15-implemented--2026-11-02-ist), [architecture](app/docs/brain/ARCHITECTURE.md), [report](app/docs/brain/reports/phases-1-5.md).
 
+**PC and web control on agent-desktop 1.0.2 and agent-browser 0.41.1, 2026-11-02 IST. Built behind flags; default is still legacy.**
+- Headless accessibility-tree control with no screenshots.
+- Physical input asks first.
+- Content boundaries and an action policy on every web call.
+- 44 benchmark scenarios with validated checks; the A/B runs in the combined live round.
+
+More: [app/docs/control/ADAPTER_PLAN.md](app/docs/control/ADAPTER_PLAN.md).
+
 
 **2026-10-29: autonomous repair campaign PAUSED_BY_USER.** All 133 campaign queues are paused; 295 pending tasks and 27 historical uncertain dispatches are preserved. No campaign worker or inference remains active. CLI calculator functional acceptance and scoped notes-search acceptance remain PASS; GUI remains FAIL (2/6 frozen GUI checks, 1/8 independent checks). The verified private checkpoint preserves source, Git history, task DAGs, generated applications, frozen tests, journals and quota ledgers. No WIP commit was forced because existing changes have mixed ownership. Normal new feature development remains available; campaign resume requires a new explicit user request and compatibility review. Bounded stabilization: **198 passed / one skipped**, zero real inference; supported readiness reports the existing DockerEngineUnavailable limitation. UI/voice/browser live behavior was not tested. [Pause report](app/docs/AUTONOMOUS_REPAIR_PAUSE.md) · [Resume procedure](app/docs/AUTONOMOUS_REPAIR_RESUME.md) · [Upgrade compatibility](app/docs/AUTONOMOUS_REPAIR_COMPATIBILITY.md) · [Acceptance](app/docs/autonomous-repair-acceptance.md) · [Handoff](app/docs/CLAUDE_HANDOFF.md).
 
