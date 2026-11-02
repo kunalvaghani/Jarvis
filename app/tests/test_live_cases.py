@@ -20,8 +20,10 @@ def cases():
 
 def test_thirty_two_cases_each_with_an_oracle(cases):
     variants = {c.cid for family in cases.VARIANTS.values() for c in family[1:]}
-    assert len(set(cases.CASES) - variants - {c.cid for c in cases.BRAIN}) == 32 and len(variants) == 23
+    control = {c.cid for c in cases.CONTROL}
+    assert len(set(cases.CASES) - variants - {c.cid for c in cases.BRAIN} - control) == 32 and len(variants) == 23
     assert len(cases.BRAIN) == 9
+    assert len(control) >= 40
     assert {f'D{n:02d}' for n in range(1, 23)} <= set(cases.CASES)
     for case in cases.CASES.values():
         assert callable(case.oracle) and case.request.strip()

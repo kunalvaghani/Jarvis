@@ -180,7 +180,9 @@ class ControlService:
             if backend == 'legacy':
                 return UIAExecutor(self.policy, self._shared_input())
             from .pc.backend import AgentDesktopExecutor, HeadedGate
-            headed = HeadedGate(str(self.settings.extra.get('headed_input', 'ask')), self._confirm_headed)
+            import os
+            mode = os.environ.get('JARVIS_HEADED_INPUT') or str(self.settings.extra.get('headed_input', 'ask'))
+            headed = HeadedGate(mode if mode in ('allow', 'ask', 'deny') else 'ask', self._confirm_headed)
             candidate = AgentDesktopExecutor(self.policy, headed=headed)
             if backend == 'agent_desktop':
                 return candidate

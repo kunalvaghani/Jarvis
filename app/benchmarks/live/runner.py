@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import sys
 import threading
@@ -183,6 +184,10 @@ def run(utterance: str, approve: str = 'deny', timeout: float = 600.0, quiet: bo
         row['seconds'] = round(time.monotonic() - started, 1)
         resources.__exit__()
         row['peak_ram_mb'], row['peak_vram_mb'] = round(resources.peak_ram_mb), round(resources.peak_vram_mb)
+        row['focus_changes'] = resources.focus_changes
+        row['backends'] = {'pc': os.environ.get('JARVIS_PC_BACKEND', 'legacy'),
+                           'web': os.environ.get('JARVIS_WEB_BACKEND', 'legacy'),
+                           'brain': os.environ.get('JARVIS_BRAIN_MODE', '')}
         firsts = [e['t'] for e in events if e['kind'] in ('tool', 'media_card')]
         row['first_action_s'] = round(min(firsts) - started, 1) if firsts else None
         row['tools'] = [e['value'] for e in events if e['kind'] == 'tool']
@@ -248,12 +253,14 @@ class Resources:
 
     def __init__(self, interval: float = 2.0) -> None:
         self.interval, self.stop, self.peak_ram_mb, self.peak_vram_mb = interval, threading.Event(), 0.0, 0.0
+        self.focus_changes = 0
         self.thread = threading.Thread(target=self.sample, daemon=True)
 
     def sample(self) -> None:
         import subprocess
         import psutil
         me = psutil.Process()
+        threading.Thread(target=self.watch_focus, daemon=True).start()
         while not self.stop.is_set():
             try:
                 rss = me.memory_info().rss + sum(c.memory_info().rss for c in me.children(recursive=True))
@@ -267,6 +274,22 @@ class Resources:
             except (OSError, ValueError, IndexError, subprocess.SubprocessError):
                 pass
             self.stop.wait(self.interval)
+
+    def watch_focus(self) -> None:
+        """Foreground window changes during the task: focus steals. The user's own switches count too, so the
+        focus-steal scenario (C41) asks the user to keep working in one window."""
+        try:
+            import ctypes
+            user32 = ctypes.windll.user32
+        except (AttributeError, OSError):
+            return
+        last = user32.GetForegroundWindow()
+        while not self.stop.is_set():
+            now = user32.GetForegroundWindow()
+            if now and now != last:
+                self.focus_changes += 1
+                last = now
+            self.stop.wait(.2)
 
     def __enter__(self) -> 'Resources':
         self.thread.start()

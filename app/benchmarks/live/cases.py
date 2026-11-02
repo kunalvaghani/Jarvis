@@ -45,11 +45,12 @@ class Case:
                  approve: Any = 'deny', timeout: float = 1200, memory: bool = False,
                  prepare: Optional[Callable[[], None]] = None, interrupt_after: Optional[float] = None,
                  crash_after: Optional[float] = None, parallel: Tuple[str, ...] = (),
-                 read_final_page: bool = False) -> None:
+                 read_final_page: bool = False, focus_watch: bool = False) -> None:
         self.cid, self.request, self.oracle, self.outputs = cid, request, oracle, outputs
         self.approve, self.timeout, self.memory, self.prepare = approve, timeout, memory, prepare
         self.interrupt_after, self.crash_after, self.parallel = interrupt_after, crash_after, parallel
         self.read_final_page = read_final_page
+        self.focus_watch = focus_watch  # count foreground changes Jarvis caused while the user works (C41)
 
 
 class Run:
@@ -1081,6 +1082,86 @@ BRAIN: Tuple[Case, ...] = (
 CASES.update({c.cid: c for c in BRAIN})
 
 
+# Control backend scenarios (docs/control/ADAPTER_PLAN.md, 2026-11-02) -----------------------------------------
+def form_filled_named(name: str, email: str) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        page = str(run.row.get('final_page', ''))
+        problems = [] if name in page and email in page else ['the name and email are not in the form']
+        if 'submitted' in page.replace('not submitted', ''):
+            problems.append('the form was submitted (the request said not to)')
+        return problems
+    return oracle
+
+
+def _start(args: List[str]) -> None:
+    subprocess.Popen(args, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+
+
+def notepad_minimized_prepare(name: str, text: str) -> Callable[[], None]:
+    def prepare() -> None:
+        path = TEST / name
+        path.write_text(text, encoding='utf-8')
+        _start(['notepad.exe', str(path)])
+        time.sleep(3)
+        import win32con
+        import win32gui
+        for handle in [h for h in _top_windows() if name in win32gui.GetWindowText(h)]:
+            win32gui.ShowWindow(handle, win32con.SW_MINIMIZE)
+    return prepare
+
+
+def _top_windows() -> List[int]:
+    import win32gui
+    found: List[int] = []
+    win32gui.EnumWindows(lambda h, _: found.append(h) or True, None)
+    return [h for h in found if win32gui.IsWindowVisible(h)]
+
+
+def calculator_covered_prepare() -> None:
+    _start(['calc.exe'])
+    time.sleep(3)
+    _start(['notepad.exe'])  # a window on top of Calculator
+    time.sleep(2)
+
+
+def close_app_prepare(image: str) -> Callable[[], None]:
+    def prepare() -> None:
+        for proc in psutil.process_iter(['name']):
+            if str(proc.info['name'] or '').lower() == image.lower():
+                try:
+                    proc.terminate()
+                except psutil.Error:
+                    pass
+        time.sleep(3)
+    return prepare
+
+
+def blender_copy_prepare(name: str) -> Callable[[], None]:
+    def prepare() -> None:
+        target = TEST / name
+        if target.exists():
+            target.unlink()
+        subprocess.run([str(BLENDER), '--background', '--factory-startup', '--python-expr',
+                        f'import bpy; bpy.ops.wm.save_as_mainfile(filepath=r"{target}")'],
+                       capture_output=True, timeout=180)
+    return prepare
+
+
+def blender_has_object(file: str, name: str) -> Callable[[Run], List[str]]:
+    def oracle(run: Run) -> List[str]:
+        path = TEST / file
+        if not path.is_file():
+            return [f'{path} was not saved']
+        from jarvis.learning.verifiers import load
+        return verdict_problems(load('blender_object').check(path=path, name=name, location=None, blender=BLENDER))
+    return oracle
+
+
+import control_cases  # noqa: E402  (benchmarks/live is on sys.path when this file runs as a script)
+CONTROL: Tuple[Case, ...] = tuple(control_cases.build(sys.modules[__name__]))
+CASES.update({c.cid: c for c in CONTROL})
+
+
 def vary(names: List[str], seed: Optional[int]) -> List[str]:
     """Each repeat of a family gets the next variant (start offset from the seed): no task repeats in a gate."""
     seen: Dict[str, int] = {}
@@ -1219,6 +1300,8 @@ def select(names: List[str]) -> List[str]:
         return [c for c in CASES if c not in WAITING]
     if names == ['daily']:
         return [c for c in CASES if c.startswith('D')]
+    if names == ['control']:
+        return [c.cid for c in CONTROL]
     return list(names)
 
 
@@ -1247,7 +1330,16 @@ def main(argv: List[str]) -> int:
     parser.add_argument('--vary', action='store_true', help='each repeat runs a different variant of the case')
     parser.add_argument('--full', action='store_true', help='full Jarvis: cloud models as configured, memory read-only')
     parser.add_argument('--brain', choices=('off', 'shadow', 'on'), help='neural brain mode for these runs only')
+    parser.add_argument('--pc', choices=('legacy', 'shadow', 'agent_desktop'), help='PC control backend for these runs')
+    parser.add_argument('--web', choices=('legacy', 'shadow', 'agent_browser'), help='web control backend for these runs')
+    parser.add_argument('--headed', choices=('allow', 'ask', 'deny'),
+                        help='physical input for agent-desktop (the user allowed it for benchmarks, 2026-11-02)')
     args = parser.parse_args(argv)
+    for name, value in (('JARVIS_PC_BACKEND', args.pc), ('JARVIS_WEB_BACKEND', args.web)):
+        if value:
+            os.environ[name] = value
+    if args.headed:
+        os.environ['JARVIS_HEADED_INPUT'] = args.headed  # read by ControlService for agent-desktop
     if args.brain:
         os.environ['JARVIS_BRAIN_MODE'] = args.brain  # Read per task by jarvis.neural.brain_mode.
     TELEMETRY = args.telemetry
