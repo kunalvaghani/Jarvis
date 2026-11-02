@@ -364,7 +364,7 @@ class AgentDesktopExecutor(RouteExecutor):
                                      timeout_s=20))
         match = (found.data or {}).get('match') if isinstance(found.data, dict) else None
         if not match or not match.get('ref_id'):
-            raise ControlError('No text field to type into in this window.', ErrorCategory.TARGET_NOT_FOUND)
+            return self._keystrokes(action, handle, text)  # e.g. Calculator: typing is key presses, as legacy did
         if SECRET_STATES & set(match.get('states') or ()):
             raise ControlError('Password fields are never filled automatically.', ErrorCategory.POLICY_DENIED)
         if not str(match.get('value') or ''):
@@ -378,6 +378,36 @@ class AgentDesktopExecutor(RouteExecutor):
         if not env.ok:
             raise to_control_error(env)
         return self._done(action, f'type sent to "{str(match.get("name", ""))[:60]}"', env)
+
+    KEYS = {'+': 'shift+=', '*': 'shift+8', '(': 'shift+9', ')': 'shift+0', '%': 'shift+5', '=': '=', '-': '-',
+            '/': '/', '.': '.', ',': ',', ' ': 'space', '\n': 'return'}
+
+    def _keystrokes(self, action: Action, handle: int, text: str) -> ActionResult:
+        """A window with no text field (Calculator, games): send the text as key presses. Physical input, so it
+        passes the headed gate; one key at a time, never retried after a delivered key."""
+        keys = []
+        for char in text:
+            if char.isalnum() and char.isascii():
+                keys.append(char.lower() if not char.isupper() else 'shift+' + char.lower())
+            elif char in self.KEYS:
+                keys.append(self.KEYS[char])
+            else:
+                raise ControlError(f'Cannot type {char!r} as a key press; use set_value on a field.',
+                                   ErrorCategory.INVALID_ARGUMENTS)
+        if len(keys) > 200:
+            raise ControlError('Too much text to send as key presses.', ErrorCategory.INVALID_ARGUMENTS)
+        self.headed.require(f'win-{handle}', 'typing with the keyboard')
+        sent = 0
+        for key in keys:
+            action.cancel.raise_if_cancelled()
+            env = self.run(['press', key, '--window-id', f'w-{handle}'], headed=True, timeout_s=15)
+            if not env.ok:
+                error = to_control_error(env)
+                error.executed = error.executed or sent > 0
+                raise error
+            sent += 1
+        return self._done(action, f'typed {len(keys)} keys', executed=True, verified=False,
+                          evidence='key presses delivered; read the window to confirm')
 
     def _close_window(self, action: Action, handle: int) -> ActionResult:
         match = None
@@ -419,9 +449,13 @@ class AgentDesktopExecutor(RouteExecutor):
             # Store apps have no exe path; the shell starts them, agent-desktop then finds the window.
             self._popen(['explorer.exe', *target.args], creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         else:
-            args = ['launch', target.target] + ([f'--arg={argument}'] if argument else [])
-            env = self._check(self.run(args, timeout_s=timeout_s + 10))
-            window = (env.data or {}).get('window') if isinstance(env.data, dict) else None
+            # Bound the launch below our own process deadline (its default is 30 s): the window is found below.
+            args = ['launch', target.target, '--timeout', str(int(min(timeout_s, 15) * 1000))] + \
+                ([f'--arg={argument}'] if argument else [])
+            env = self.run(args, timeout_s=timeout_s + 10)
+            if not env.ok and not (env.error is not None and env.error.code == 'TIMEOUT'):
+                raise to_control_error(env)  # a launch TIMEOUT means "no window yet": look for it below
+            window = (env.data or {}).get('window') if env.ok and isinstance(env.data, dict) else None
             if window and window.get('id'):
                 if str(window['id']) not in before:
                     self.launched.append(int(str(window['id'])[2:]))

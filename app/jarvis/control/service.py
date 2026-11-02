@@ -450,6 +450,7 @@ class ControlService:
             return self._save_as(str(args.get('text', '') or args.get('path', '')), args, cancelled)
         route = self.uia()
         ref = resolve_ref(str(args.get('ref', '')), self.last_app)
+        ref = self._laya_ref(ref, args)
         kind, label = labels(self.last_app).get(ref, ('', ''))
         before = self.last_app
         params: Dict[str, Any] = {}
@@ -496,6 +497,25 @@ class ControlService:
                                  evidence='the editor shows ' + repr(shown[:200]))
                 extra['next'] = 'Select all (key ctrl+a) and type the whole text again, or use a fresh tab.'
         return self._report(result, read, extra or None)
+
+    def _laya_ref(self, ref: str, args: Mapping[str, Any]) -> str:
+        """agent-desktop backend: a control named in words ("the Save button") is resolved by Laya on the GPU."""
+        found = labels(self.last_app)
+        if not ref or ref in found:
+            return ref
+        from .backends import pc_backend
+        if pc_backend({'control': dict(self.settings.extra)}) != 'agent_desktop':
+            return ref
+        from .pc.laya import Resolver
+        resolver = Resolver()
+        if not resolver.ready():
+            return ref
+        answer = resolver.choose(ref, str(args.get('app', '')), found)
+        if answer['ref']:
+            return str(answer['ref'])
+        names = ', '.join(f'{r} {found[r][0]} "{found[r][1]}"' for r in list(answer['candidates'])[:4])  # type: ignore[call-overload]
+        raise ControlError(f'No control clearly matches "{ref[:80]}" ({answer["why"]}). Closest: {names}. '
+                           'Use one of these refs. Nothing was done.', ErrorCategory.TARGET_NOT_FOUND)
 
     def _save_as(self, path: str, args: Mapping[str, Any], cancelled: Callable[[], bool]) -> str:
         """Save the front document through the app's standard Save As dialog, then prove the file exists."""

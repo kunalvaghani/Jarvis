@@ -59,6 +59,21 @@ Every call carries `--content-boundaries` and `--action-policy` (generated: deny
 - **Electron CDP handoff** (`launch --cdp` then `agent-browser connect`) is designed but not yet wired. It needs a fresh launch, which would close your running app, so it waits for a scenario that needs it, behind an approval.
 - **The FFI DLL** (`agent_desktop_ffi.dll`) is downloaded but unused. The CLI is about 30–80 ms per call; switch to FFI only if the A/B shows the process spawn matters.
 
+## Laya instead of JEV (user request 2026-11-02)
+
+agent-desktop's JEV goal loop asks a paid remote service (TypeSafe) which element to act on, sending a text description of the screen. Jarvis uses **Laya** instead: a small local decision model (`laya-serve` 0.4.21, its own `.venv-laya` with CUDA PyTorch, started by `scripts/start_laya.ps1`). It runs on the GPU, listens on 127.0.0.1:8765 only, uses a key in `secrets/laya.key`, and answers in about 0.2 s warm.
+
+Measured on Calculator (40 controls):
+- **JEV unchanged, deciding with Laya:** abstained on every intent. JEV treats any `menu` node (the Windows menu bar) as an open overlay, and Laya is weak on long option lists; its own card gives 0.43 on 77 labels.
+- **Jarvis's resolver (`jarvis/control/pc/laya.py`):** controls are shortlisted by name with no model, then Laya chooses among at most 8 or "none". It picked 7 of 8 correctly in about 0.25 s; the eighth was below the bar.
+
+**Live through `ControlService`:** "the digit two", "plus", "the digit three", "equals" gave 2 + 3 = 5, about 1 s per action including the read-back.
+
+Rules:
+- It acts only at 0.9 confidence or higher; otherwise it names the closest refs and does nothing.
+- It is used only with the agent-desktop backend.
+- Screen text goes only to the loopback server.
+
 ## Brain neurons
 
 `pc.observe`, `pc.act.semantic`, `pc.act.headed` (approval), `pc.app.launch`, `pc.window.manage`, `pc.clipboard` (approval), `pc.notifications`, `pc.vision_fallback`, `web.read`, `web.observe`, `web.act`, `web.auth` (approval). Each is eligible only while its backend is on. Learning can rank them; it can never grant `--headed`, `--force` or signed-in browsing.
