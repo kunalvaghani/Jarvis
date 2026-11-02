@@ -258,7 +258,8 @@ class AgentBrowserExecutor(RouteExecutor):
             reply = self._call(['get', 'text', self._ref(ref)], acting=False)
             text = str((reply.data or {}).get('text', '')) if isinstance(reply.data, dict) else ''
             return Observation(Route.BROWSER, 'tab', f'text "{text[:4000]}"', state={'url': self.last_url})
-        args = ['snapshot'] + (['-i'] if filter == 'interactive' else []) + ['-c']
+        # -c (compact) drops all page text (checked live): only interactive reads may use it.
+        args = ['snapshot'] + (['-i', '-c'] if filter == 'interactive' else [])
         reply = self._call(args, acting=False)
         data = reply.data if isinstance(reply.data, dict) else {}
         with self._lock:

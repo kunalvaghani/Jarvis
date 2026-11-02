@@ -205,3 +205,13 @@ class ShadowAndSecrets(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ReadScope(Base):
+    def test_full_reads_keep_page_text_and_only_interactive_reads_compact(self):
+        ex, fake = self.executor({'snapshot': fixture('snapshot_full')})
+        text = ex.act(act('read_page', filter='all')).text
+        self.assertIn('text "This domain is for use', text)
+        ex.act(act('read_page', filter='interactive'))
+        snaps = [a[a.index('snapshot'):] for a in fake.argv if 'snapshot' in a]
+        self.assertEqual(snaps, [['snapshot'], ['snapshot', '-i', '-c']])
