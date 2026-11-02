@@ -36,7 +36,7 @@ class GodsEyeViewTests(unittest.TestCase):
         with patch("jarvis.actions.subprocess.Popen") as launched:
             result = actions.execute(Command("gods_eye_view"))
         actions.gods_eye_view.start.assert_called_once()
-        launched.assert_called_once_with(["chrome.exe", URL], shell=False)
+        launched.assert_called_once_with(["chrome.exe", "--profile-directory=Default", URL], shell=False)  # always Person 1 (2026-11-02)
         self.assertIn("God's Eye View", result)
 
 

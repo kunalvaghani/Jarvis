@@ -145,7 +145,7 @@ def cloud_command(text: str) -> Command | None:
 
 
 # A second instruction after a comma or "and": the whole request is a task (live C19, 2026-11-03).
-COMPOUND = re.compile(r"(?:,|\band\b|\bthen\b)\s*(?:then\s+)?(?:minimi[sz]e|maximi[sz]e|restore|close|type|write|add|save|"
+COMPOUND = re.compile(r"(?:,|\band\b|\bthen\b)\s*(?:then\s+)?(?:minimi[sz]e|maximi[sz]e|restore|close|add|save|"
                       r"resize|move|click|press|copy|paste|rename|delete|play|search|read|edit|append)\b", re.I)
 
 

@@ -84,7 +84,7 @@ class ProjectTests(unittest.TestCase):
             self.assertIn("YouTube in Chrome", result)
             explorer.assert_called_once_with(str(project))
             self.assertEqual(launch.call_args_list[0].args[0], ["codex.exe", "app", str(project)])
-            self.assertEqual(launch.call_args_list[1].args[0], ["chrome.exe", "https://www.youtube.com/"])
+            self.assertEqual(launch.call_args_list[1].args[0], ["chrome.exe", "--profile-directory=Default", "https://www.youtube.com/"])  # always Person 1 (2026-11-02)
             actions.close()
 
     def test_open_folder_name_uses_real_project_directory(self):

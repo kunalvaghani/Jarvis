@@ -13,11 +13,18 @@ APP = Path(__file__).resolve().parents[1]
 SHIPPED = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'))
 
 
-def test_shipped_config_has_every_v2_flag_off():
+# The user promoted the gated Phase 1 flags to on (2026-11-03); code defaults stay off, everything else ships off.
+PROMOTED = {('control', 'api_routes'), ('control', 'arg_repair'), ('control', 'compact_reads'),
+            ('control', 'event_waits'), ('control', 'shared_save'), ('speed', 'cache_order')}
+
+
+def test_shipped_config_has_only_the_promoted_v2_flags_on():
     for (section, key), default in flags.FLAGS.items():
-        assert SHIPPED[section][key] == default, f'{section}.{key}'
         assert default in (False, 'off')
-    assert set(flags.summary(SHIPPED).values()) == {False, 'off'}
+        expected = True if (section, key) in PROMOTED else default
+        assert SHIPPED[section][key] == expected, f'{section}.{key}'
+    on = {name for name, value in flags.summary(SHIPPED).items() if value not in (False, 'off')}
+    assert on == {f'{s}.{k}' for s, k in PROMOTED}
 
 
 @pytest.mark.parametrize('value', [None, 'yes', 1, 'true', [], {}, 'True'])
