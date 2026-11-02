@@ -214,6 +214,11 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
         answer = pc_fast_path(goal, lambda kind, detail: _approved(actions, kind, detail, cancelled))
         if answer is not None:
             return answer  # "minimize Spotify", "copy X to the clipboard": one command, then a fresh read.
+        start = START_MENU.match(goal)
+        if start:  # same outcome as clicking it in Start: the app's verified launch (live C14, 2026-11-03)
+            opened = json.loads(actions.control().app_open(start.group('app').strip(), '', cancelled).splitlines()[0])
+            if opened.get('ok'):
+                return f'Opened {start.group("app").strip()} (checked: its window appeared).'
     if not flags.enabled(config, 'control', 'api_routes'):
         return None
     from .blender_live import live_request, run as live_blender
@@ -230,6 +235,10 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     if asked is not None:
         return _website(actions, asked[0], asked[1], cancelled)
     return None
+
+
+START_MENU = re.compile(r"^\s*(?:please\s+)?(?:open\s+the\s+start\s+menu\s+and\s+)?(?:launch|open|start)\s+"
+                        r"(?P<app>[\w .+-]{2,40}?)\s+from\s+(?:it|the\s+start\s+menu)\s*[.!]?\s*$", re.I)
 
 
 def _approved(actions: Any, kind: str, detail: str, cancelled: Cancelled) -> bool:
