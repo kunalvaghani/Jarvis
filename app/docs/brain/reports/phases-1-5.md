@@ -59,7 +59,9 @@ Changes to existing files are kept small:
 - Two real bugs were found and fixed by these tests:
   - Folder parsing swallowed `calc.py in the calc-bug`; the pattern now tries overlapping matches.
   - After a repair, a downstream check reused its cached result. Idempotency keys now carry the repair generation, and restart replays repairs in order.
-- Full regression: see the commit message for the final number. It must equal the Phase 0 baseline of 39 known failures and no new ones.
+- **Full regression: 5,062 passed, 39 failed. These are exactly the 39 known failures from the Phase 0 baseline, with no new failure.** The first run found one real regression, and it was fixed before this result:
+  - `test_request_safety`: the brain hook ran before the refusal check.
+  - The refusal now comes first in `Actions.execute`, so a forbidden request is refused before the brain or any plan sees it.
 
 ## Open risks and what the live tests must show
 

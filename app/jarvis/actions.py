@@ -1242,13 +1242,16 @@ class Actions:
     @timed_task  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, command, cancelled=lambda: False):
         """Brain shadow hook (neural.mode shadow; off by default), then the audited legacy path."""
+        if command.kind in {"task", "open", "run_command", "click_control", "write_text", "compose_text"}:
+            from .request_safety import refusal
+            refused = refusal(command.value)  # Before the brain or any plan: no step is ever tried.
+            if refused:
+                raise ValueError(refused)
         from .neural.service import act, shadow_begin, shadow_end
         if command.kind == "task":
-            from .request_safety import refusal
-            if not refusal(command.value):  # The legacy path below raises the refusal itself.
-                answer = act(self, command.value, cancelled)  # Brain mode on and a known workflow; else None.
-                if answer is not None:
-                    return answer
+            answer = act(self, command.value, cancelled)  # Brain mode on and a known workflow; else None.
+            if answer is not None:
+                return answer
         goal_id = shadow_begin(self, command.value) if command.kind == "task" else None
         if goal_id is None:
             return self._execute_audited(command, cancelled)
