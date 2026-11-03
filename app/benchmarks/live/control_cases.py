@@ -426,7 +426,8 @@ def build(m: Any) -> List[Any]:
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
              both(first_page_count(50, exact=50), no_send)),  # >50 matches: a full page of 50
         Case('C31', f'In Google Drive, create a folder named "{google_folder}" if it does not exist.',
-             page_shows('https://drive.google.com/drive/search?q=' + google_folder.replace(' ', '%20'), google_folder),
+             both(page_shows('https://drive.google.com/drive/search?q=' + google_folder.replace(' ', '%20'), google_folder),
+                  answer_mentions(any_of=('exist', 'created', 'already'))),  # Jarvis checked or made it
              approve=('drive',)),
         Case('C32', f'In Google Docs, create a document named "Jarvis bench doc {tag}" in the "{google_folder}" folder '
                     'containing the sentence "Control benchmark document."',

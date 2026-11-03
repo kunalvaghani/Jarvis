@@ -287,6 +287,9 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     edit = gmail_edit_draft(goal)
     if edit is not None:
         return _gmail_edit_draft(actions, edit, cancelled)
+    folder = drive_folder(goal)
+    if folder is not None:
+        return _drive_folder(actions, folder, cancelled)
     asked = site_question(goal)
     if asked is not None:
         return _website(actions, asked[0], asked[1], cancelled)
@@ -379,6 +382,83 @@ def _close_current_tab(control: Any, cancelled: Cancelled) -> None:
     if active:
         actions_tab = str(active[0].get('tab_id'))
         control.web_act('close_tab', {'tab': actions_tab}, cancelled)
+
+
+# ---- Google Drive folder ----------------------------------------------------------------------------------------
+DRIVE_FOLDER = re.compile(r'\b(?:create|make|add)\b[^"“]*?\bfolder\s+(?:named|called|titled)?\s*["“](?P<name>[^"”/\\]{1,100})["”]',
+                          re.I)
+
+
+def drive_folder(goal: str) -> Optional[str]:
+    """The folder name for "In Google Drive, create a folder named "X" (if it does not exist)"."""
+    if not re.search(r'\bgoogle drive\b|\bmy drive\b', goal, re.I):
+        return None
+    found = DRIVE_FOLDER.search(goal)
+    return found.group('name').strip() if found else None
+
+
+def _drive_has(control: Any, name: str, cancelled: Cancelled) -> bool:
+    """Drive's search lists an item with exactly this name (its quick-overview button names it)."""
+    from urllib.parse import quote
+    control.web_open('https://drive.google.com/drive/search?q=' + quote(name), cancelled)
+    for _ in range(8):
+        text = str(getattr(control, 'last_web', '') or '')
+        if f"quick overview for '{name}'" in text or re.search(r'(?:LayoutTableCell|gridcell|row) "' + re.escape(name)
+                                                                + r'(?: |")', text):
+            return True
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+    return False
+
+
+def _ref_of(text: str, pattern: str) -> str:
+    found = re.findall(pattern + r'[^\n]*\[(ref_\d+)\]', text)
+    return found[-1] if found else ''
+
+
+def _drive_folder(actions: Any, name: str, cancelled: Cancelled) -> Optional[str]:
+    """Check Drive for the folder; create it (New > New folder > name > Create) only when it is missing."""
+    control = actions.control()
+    actions.report('brain', f'Fixed route: Google Drive folder "{name}"')
+    actions.report('tool', 'control: web_open Drive search')
+    if _drive_has(control, name, cancelled):
+        return f'Finished: the Google Drive folder "{name}" already exists (checked in Drive search), so nothing was created.'
+    if not _approved(actions, 'drive folder', f'Create the folder "{name}" in your Google Drive', cancelled):
+        return f'Did not create the Drive folder "{name}": it was not approved.'
+    control.web_open('https://drive.google.com/drive/my-drive', cancelled)
+    steps = [('button "New"', 'New'), ('menuitem "New folder', 'New folder')]
+    for pattern, label in steps:
+        ref = ''
+        for _ in range(8):
+            ref = _ref_of(str(getattr(control, 'last_web', '') or ''), pattern)
+            if ref:
+                break
+            time.sleep(1.0)
+            control.web_read(cancelled, 'all')
+        if not ref:
+            return f'Could not find Drive\'s "{label}" control, so no folder was created.'
+        actions.report('tool', f'control: web_act click {label}')
+        control.web_act('click', {'ref': ref}, cancelled)
+        time.sleep(1.0)
+    box = ''
+    for _ in range(8):
+        control.web_read(cancelled, 'all')
+        box = _ref_of(str(getattr(control, 'last_web', '') or ''), r'textbox "[^"]*"')
+        if box:
+            break
+        time.sleep(1.0)
+    if not box:
+        return 'Drive\'s new-folder dialog did not show a name box, so no folder was created.'
+    _fill_body(control, box, name, cancelled)
+    create = _ref_of(control.web_read(cancelled, 'all'), 'button "Create"')
+    if not create:
+        return 'Drive\'s new-folder dialog had no Create button, so no folder was created.'
+    actions.report('tool', 'control: web_act click Create')
+    control.web_act('click', {'ref': create}, cancelled)
+    time.sleep(2.0)
+    if _drive_has(control, name, cancelled):
+        return f'Finished: created the Google Drive folder "{name}" (checked: Drive search lists it).'
+    return f'I clicked Create for the Drive folder "{name}", but Drive search does not list it yet. Please check Drive.'
 
 
 def gmail_draft_text(control: Any, subject: str, cancelled: Cancelled) -> Optional[str]:
