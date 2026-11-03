@@ -168,7 +168,10 @@ class Registry:
                 except ValidationError as error:
                     errors.append(f'journaled proposal invalid: {error}'[:400])
                     continue
-                nodes.setdefault(neuron.node_id, neuron)
+                if neuron.status == 'disabled':
+                    nodes[neuron.node_id] = neuron  # a retirement outlives the source that defines the neuron
+                else:
+                    nodes.setdefault(neuron.node_id, neuron)
         with self._lock:
             self.nodes, self.errors = nodes, errors
         return self
@@ -223,6 +226,34 @@ class Registry:
             self.nodes[node_id] = neuron
         if self.journal is not None:
             self.journal.save_proposal(neuron, [], approver)
+        return neuron
+
+    def disable(self, node_id: str, reason: str, actor: str = 'user') -> Neuron:
+        """Retire a neuron (status disabled, journalled with the reason; it stops being eligible). Automatic
+        retirement (actor 'lifecycle') is limited to learned neurons; the user may retire any neuron."""
+        with self._lock:
+            neuron = self.nodes.get(node_id)
+            if neuron is None or neuron.status != 'active':
+                raise RegistryError(f'{node_id} is not an active neuron')
+            if actor != 'user' and neuron.provider != 'jarvis.neural.learning':
+                raise RegistryError(f'{node_id} is built in: only the user can retire it')
+            neuron = neuron.model_copy(update={'status': 'disabled', 'description':
+                                               (neuron.description + f' [retired by {actor}: {reason}]')[:500]})
+            self.nodes[node_id] = neuron
+        if self.journal is not None:
+            self.journal.save_proposal(neuron, [], actor)
+        return neuron
+
+    def restore(self, node_id: str, actor: str = 'user') -> Neuron:
+        """Bring a retired neuron back (the user's decision)."""
+        with self._lock:
+            neuron = self.nodes.get(node_id)
+            if neuron is None or neuron.status != 'disabled':
+                raise RegistryError(f'{node_id} is not a retired neuron')
+            neuron = neuron.model_copy(update={'status': 'active'})
+            self.nodes[node_id] = neuron
+        if self.journal is not None:
+            self.journal.save_proposal(neuron, [], actor)
         return neuron
 
     # Reads --------------------------------------------------------------------------------------------------

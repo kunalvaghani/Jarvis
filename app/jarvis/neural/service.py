@@ -112,6 +112,8 @@ def shadow_end(goal_id: Optional[str], outcome: str) -> None:
     _local.goal = None
     try:
         current[0].journal.shadow_outcome(goal_id, outcome)
+        from .lifecycle import tick
+        tick(current[0])
     except Exception:
         pass
 
@@ -157,6 +159,8 @@ def act(actions: Any, goal: str, cancelled: Any) -> Optional[str]:
                                                    approve=approver(actions, cancelled), config=config))
     finally:
         _local.goal = None
+    from .lifecycle import tick
+    tick(service)  # every few goals: grow learned neurons from verified chains, retire failing learned ones
     if outcome.verified:
         return str(outcome.answer)
     raise ValueError(f'The brain stopped ({outcome.state}): {outcome.stop_reason}')

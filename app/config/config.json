@@ -1777,7 +1777,8 @@
     "enabled": false
   },
   "neural": {
-    "mode": "off"
+    "mode": "act",
+    "learning": "shadow"
   },
   "google": {
     "account": "kunalvaghani35@gmail.com",

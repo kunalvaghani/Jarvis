@@ -16,15 +16,17 @@ SHIPPED = json.loads((APP / 'config' / 'config.json').read_text(encoding='utf-8'
 # The user promoted the gated Phase 1 flags to on (2026-11-03); code defaults stay off, everything else ships off.
 PROMOTED = {('control', 'api_routes'), ('control', 'arg_repair'), ('control', 'compact_reads'),
             ('control', 'event_waits'), ('control', 'shared_save'), ('speed', 'cache_order')}
+# The user turned the brain on for daily use (2026-11-04); JARVIS_BRAIN_MODE=off stays the one-step rollback.
+MODES_ON = {('neural', 'mode'): 'act'}
 
 
 def test_shipped_config_has_only_the_promoted_v2_flags_on():
     for (section, key), default in flags.FLAGS.items():
         assert default in (False, 'off')
-        expected = True if (section, key) in PROMOTED else default
+        expected = True if (section, key) in PROMOTED else MODES_ON.get((section, key), default)
         assert SHIPPED[section][key] == expected, f'{section}.{key}'
     on = {name for name, value in flags.summary(SHIPPED).items() if value not in (False, 'off')}
-    assert on == {f'{s}.{k}' for s, k in PROMOTED}
+    assert on == {f'{s}.{k}' for s, k in PROMOTED} | {f'{s}.{k}' for s, k in MODES_ON}
 
 
 @pytest.mark.parametrize('value', [None, 'yes', 1, 'true', [], {}, 'True'])

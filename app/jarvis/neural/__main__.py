@@ -9,6 +9,9 @@
     python -m jarvis.neural consolidate            propose neurons from repeated verified chains
     python -m jarvis.neural proposals              pending neuron proposals
     python -m jarvis.neural approve <node_id>      activate a proposed neuron (the user's decision)
+    python -m jarvis.neural retire <node_id> [why] retire a neuron (journalled; restore brings it back)
+    python -m jarvis.neural restore <node_id>      bring a retired neuron back
+    python -m jarvis.neural lifecycle              grow learned neurons and retire failing learned ones now
 """
 from __future__ import annotations
 
@@ -61,6 +64,15 @@ def main(argv: List[str]) -> int:
     elif command == 'approve' and rest:
         out = service.registry.approve(rest[0]).model_dump(mode='json')
         service.rebuild()
+    elif command == 'retire' and rest:
+        out = service.registry.disable(rest[0], ' '.join(rest[1:]) or 'retired by the user').model_dump(mode='json')
+        service.rebuild()
+    elif command == 'restore' and rest:
+        out = service.registry.restore(rest[0]).model_dump(mode='json')
+        service.rebuild()
+    elif command == 'lifecycle':
+        from .lifecycle import tick
+        out = tick(service, force=True)
     else:
         print(__doc__)
         return 2
