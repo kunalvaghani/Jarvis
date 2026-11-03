@@ -292,6 +292,20 @@ def draft_body(subject: str, text: str) -> Callable[[Any], List[str]]:
     return oracle
 
 
+def composed_draft(run: Any) -> List[str]:
+    """A written email: the answer shows the subject and body Jarvis wrote; that draft opens in Gmail with that body."""
+    answer = str(getattr(run, 'answer', ''))
+    subject = re.search(r'^Subject: (.+)$', answer, re.M)
+    body = answer.split('\n\n', 1)[1].strip() if '\n\n' in answer else ''
+    if not subject or len(body) < 40:
+        return [f'no written subject and body in the answer ({answer[:80]!r})']
+    saved = READERS['gmail_draft_body'](subject.group(1).strip())
+    if saved is None:
+        return [f'no Gmail draft "{subject.group(1).strip()}" could be opened']
+    first = body.splitlines()[0].strip()[:40]
+    return [] if first and first.lower() in saved.lower() else [f'the draft body does not start with {first!r}']
+
+
 def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         row = getattr(run, 'row', None)
@@ -423,6 +437,8 @@ def build(m: Any) -> List[Any]:
         Case('C29', f'In Gmail, open the draft "Jarvis bench {tag}" and change its body to "edited draft". Do not send.',
              both(draft_body(f'Jarvis bench {tag}', 'edited draft'), no_send),  # the edit itself, read in the draft
              approve=('gmail', 'draft')),
+        Case('C28W', 'draft an email to comedywithkh@gmail.com about cant come to party tmrw, sick, sorry, will make it up',
+             both(composed_draft, no_send), approve=('gmail', 'draft')),  # a rough idea becomes a full email
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
              both(first_page_count(50, exact=50), no_send)),  # >50 matches: a full page of 50
         Case('C31', f'In Google Drive, create a folder named "{google_folder}" if it does not exist.',

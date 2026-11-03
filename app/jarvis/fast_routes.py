@@ -281,6 +281,10 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     calc = calculation(goal)
     if calc is not None:
         return _calculator(actions, calc, cancelled)
+    if gmail_compose_request(goal):
+        composed = _gmail_compose(actions, goal, cancelled)
+        if composed is not None:
+            return composed
     draft = gmail_draft(goal)
     if draft is not None:
         return _gmail_draft(actions, draft, cancelled)
@@ -345,9 +349,15 @@ def _fill_body(control: Any, ref: str, text: str, cancelled: Cancelled) -> bool:
     for _ in range(2):
         control.web_act('fill', {'ref': ref, 'text': text}, cancelled)
         time.sleep(1.0)  # read after a pause: a late load of the box's old text would show here
-        if text.strip() in _box_text(control, ref, cancelled):
+        if same_words(text, _box_text(control, ref, cancelled)):
             return True
     return False
+
+
+def same_words(wanted: str, shown: str) -> bool:
+    """The typed text is in the box, ignoring spacing and line breaks (Gmail adds a blank line per paragraph)."""
+    clean = ' '.join(wanted.split())
+    return bool(clean) and clean in ' '.join(re.sub(r'\\n', ' ', shown).split())
 
 
 def _box_text(control: Any, ref: str, cancelled: Cancelled) -> str:
@@ -461,6 +471,77 @@ def _drive_folder(actions: Any, name: str, cancelled: Cancelled) -> Optional[str
     return f'I clicked Create for the Drive folder "{name}", but Drive search does not list it yet. Please check Drive.'
 
 
+# ---- Gmail: write an email from an idea (browser path while the Gmail API is not connected) -----------------------
+def gmail_compose_request(goal: str) -> bool:
+    """"Draft/write/send an email to x@y.com about ..." when the Gmail API is not connected: the existing Gmail
+    writer (gmail_workflows, local model) composes it and the Jarvis Browser extension makes it in Gmail. With the
+    API connected, gmail_workflows.run_gmail handles it exactly as before."""
+    from . import gmail_api
+    from .gmail_workflows import gmail_request
+    if not gmail_request(goal) or not re.match(r'^(?:please\s+)?(?:draft|compose|write|create|make|send)\b', goal.strip(), re.I):
+        return False
+    if re.search(r'\bdraft\s+(?:titled|called|named|with subject)\b|\b(?:the|my|last|latest)\s+draft\b', goal, re.I):
+        return False  # an existing draft: not a new email
+    return bool(gmail_api.status() != 'connected')
+
+
+def _preview(draft: Dict[str, str]) -> str:
+    return (f'\nTo: {draft["to"] or "(no recipient yet)"}\nSubject: {draft["subject"]}\n\n{draft["body"]}')
+
+
+def _gmail_compose(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
+    from .clarification import TaskClarification
+    from .gmail_workflows import explicit_request, spoken_addresses, validate_request
+    goal = spoken_addresses(goal)
+    request = explicit_request(goal)
+    if request is None:
+        actions.report('brain', 'Writing the email with the local model')
+        request = actions.brain.client.request('gmail_request', cancelled, goal=goal)
+    request = validate_request(request, goal)  # asks for what is missing; never guesses an address from a name
+    if request['operation'] not in ('draft', 'send'):
+        return None  # other mailbox operations: the Gmail API workflow (it says how to connect)
+    draft = {'to': request['to'].strip(), 'subject': request['subject'].strip(), 'body': request['body'].strip()}
+    # The writer never invents who is sending; the user's own name (config email.sign_off_name) closes the email.
+    config = getattr(actions, 'config', None)
+    name = str(((config or {}).get('email') or {}).get('sign_off_name', '') if isinstance(config, dict) else '').strip()
+    if name and draft['body'] and name not in draft['body'][-120:]:
+        draft['body'] += ('\n' if draft['body'].rstrip().endswith(',') else '\n\n') + name
+    if not draft['subject'] or not draft['body']:
+        raise TaskClarification('What should the email say? Give me the idea in a few words.', 'gmail')
+    made = _gmail_draft(actions, draft, cancelled)
+    if not str(made).startswith('Finished'):
+        return str(made)
+    if request['operation'] == 'draft':
+        note = '' if draft['to'] else ' Add the recipient\'s email address before sending (I do not guess addresses).'
+        return (f'Finished: wrote and saved a Gmail draft. It was not sent.{note}' + _preview(draft))
+    return _gmail_send(actions, draft, cancelled)
+
+
+def _gmail_send(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> str:
+    """Send the saved draft after the user approves its exact content; checked in Sent. Send is clicked once."""
+    from urllib.parse import quote
+    control = actions.control()
+    if not _approved(actions, 'gmail send', f'Send this email to {draft["to"]}?' + _preview(draft)[:600], cancelled):
+        return 'Not sent: it was not approved. The draft is saved in Gmail.' + _preview(draft)
+    if gmail_draft_text(control, draft['subject'], cancelled) is None:
+        return 'Not sent: the saved draft did not open. It is still in Drafts.' + _preview(draft)
+    send = _ref_of(control.web_read(cancelled, 'interactive'), r'button "Send(?: |\u202a|")')
+    if not send:
+        return 'Not sent: the draft has no Send button I could find. It is still in Drafts.' + _preview(draft)
+    actions.report('tool', 'control: web_act click Send (approved)')
+    control.web_act('click', {'ref': send}, cancelled)
+    time.sleep(3.0)
+    control.web_open('https://mail.google.com/mail/u/0/#search/' + quote(f'in:sent "{draft["subject"]}"'), cancelled)
+    for _ in range(8):
+        text = str(getattr(control, 'last_web', '') or '')
+        if any(draft['subject'] in row for row in re.findall(r'^\s*row "([^"]*)"', text, re.M)):
+            return f'Finished: sent the email to {draft["to"]} (checked: it is in Sent).' + _preview(draft)
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+    return ('I clicked Send once, but the email is not in Sent yet, so I cannot confirm it went. I will not click '
+            'again; please check Sent.' + _preview(draft))
+
+
 def gmail_draft_text(control: Any, subject: str, cancelled: Cancelled) -> Optional[str]:
     """Reopen the draft with this subject (Drafts search) and read its message box; None if it cannot be opened."""
     from urllib.parse import quote
@@ -513,7 +594,7 @@ def _gmail_edit_draft(actions: Any, edit: Dict[str, str], cancelled: Cancelled) 
     time.sleep(2.0)
     _close_current_tab(control, cancelled)
     found = gmail_draft_text(control, edit['subject'], cancelled)
-    if found is not None and edit['body'] in found:
+    if found is not None and same_words(edit['body'], found):
         return (f'Finished: the draft "{edit["subject"]}" now says "{edit["body"]}". It was not sent (checked: '
                 'reopened, its message box reads the new text).')
     return (f'I replaced the text of the draft "{edit["subject"]}", but on reopening it reads '
@@ -552,7 +633,7 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
         text = str(getattr(control, 'last_web', '') or '')
         if any(draft['subject'] in row for row in re.findall(r'^\s*row "([^"]*)"', text, re.M)):
             body = gmail_draft_text(control, draft['subject'], cancelled) if draft['body'].strip() else ''
-            if draft['body'].strip() and (body is None or draft['body'].strip() not in body):
+            if draft['body'].strip() and (body is None or not same_words(draft['body'], body)):
                 return (f'The draft "{draft["subject"]}" is in Drafts, but its message reads '
                         f'{(body or "nothing readable")[:80]!r}, not the body you asked for. It was not sent; '
                         'please check it.')
