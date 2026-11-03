@@ -281,10 +281,64 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     calc = calculation(goal)
     if calc is not None:
         return _calculator(actions, calc, cancelled)
+    draft = gmail_draft(goal)
+    if draft is not None:
+        return _gmail_draft(actions, draft, cancelled)
     asked = site_question(goal)
     if asked is not None:
         return _website(actions, asked[0], asked[1], cancelled)
     return None
+
+
+# ---- Gmail draft (never sent) ------------------------------------------------------------------------------------
+GMAIL_DRAFT = re.compile(r'\b(?:create|write|make|compose|prepare|save)\b[^.]*?\bdraft\b[^.]*?\bto\s+'
+                         r'(?P<to>[\w.+-]+@[\w-]+(?:\.[\w-]+)+)[^"“]*?\bsubject\s+["“](?P<subject>[^"”]{1,150})["”]'
+                         r'(?:[^"“]*?\bbody\s+["“](?P<body>[^"”]{0,2000})["”])?', re.I)
+
+
+def gmail_draft(goal: str) -> Optional[Dict[str, str]]:
+    """{to, subject, body} for "create a draft to <address> with subject "..." and body "..."". A request that
+    asks to send is not a draft: it goes to the planner and its approvals."""
+    if not re.search(r'\bgmail\b', goal, re.I):
+        return None
+    if re.search(r'\bsend\b', goal, re.I) and not re.search(r"\b(?:do not|don't|never|without)\s+send", goal, re.I):
+        return None
+    found = GMAIL_DRAFT.search(goal)
+    if not found:
+        return None
+    return {'to': found.group('to'), 'subject': found.group('subject').strip(), 'body': found.group('body') or ''}
+
+
+def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> Optional[str]:
+    """Gmail's compose link with the fields filled, saved by Gmail's autosave, then checked in Drafts. Send is
+    never clicked. The draft is created once: no retry after an uncertain step."""
+    from urllib.parse import quote
+    control = actions.control()
+    actions.report('brain', f'Fixed route: Gmail draft "{draft["subject"]}" (not sent)')
+    if not _approved(actions, 'gmail draft', f'Create a Gmail draft to {draft["to"]} with subject '
+                                             f'"{draft["subject"]}" (it is not sent)', cancelled):
+        return 'Did not create the Gmail draft: it was not approved. Nothing was written.'
+    url = ('https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + quote(draft['to']) + '&su=' + quote(draft['subject'])
+           + '&body=' + quote(draft['body']))
+    actions.report('tool', 'control: web_open Gmail compose (filled, not sent)')
+    opened = control.web_open(url, cancelled)
+    head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
+    if head.get('ok') is False:
+        return 'Gmail compose did not open, so no draft was made. ' + str(head.get('result', ''))[:200]
+    time.sleep(5.0)  # Gmail autosaves a filled compose window within a few seconds
+    actions.report('tool', 'control: web_open Gmail drafts (check)')
+    control.web_open('https://mail.google.com/mail/u/0/#drafts', cancelled)
+    for _ in range(8):  # the Drafts list fills in after the page loads
+        text = str(getattr(control, 'last_web', '') or '')
+        if any(draft['subject'] in row for row in re.findall(r'^\s*row "([^"]*)"', text, re.M)):
+            return (f'Finished: saved a Gmail draft to {draft["to"]} with subject "{draft["subject"]}". It was not '
+                    'sent (checked: it is listed in Drafts).')
+        if cancelled():
+            break
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+    return (f'The draft "{draft["subject"]}" is not listed in Gmail Drafts after saving, so I cannot confirm it was '
+            'made. It was not sent; I did not try again, to avoid duplicates. Please check Drafts.')
 
 
 START_MENU = re.compile(r"^\s*(?:please\s+)?(?:open\s+the\s+start\s+menu\s+and\s+)?(?:launch|open|start)\s+"

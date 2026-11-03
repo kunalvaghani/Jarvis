@@ -60,7 +60,7 @@ APPROVAL_WAIT_S = 90.0
 ACCOUNT_SITES = re.compile(r'\b(?:mail|drive|docs|sheets|calendar|myaccount)\.google\.com\b|\bgmail\.com\b', re.I)
 FALLBACK_PROFILE = str(APP / '.jarvis-runtime' / 'test-browser-profile')  # Jarvis's own persistent profile
 NOT_RUN = re.compile(r'unknown ref|denied by policy|not in the allow list|invalid|unknown command|required argument|'
-                     r'no such tab|not found', re.I)
+                     r'no such tab|not found|nothing was done', re.I)
 LINE = re.compile(r'^(?P<indent>\s*)- (?P<role>[\w-]+)(?: "(?P<name>(?:[^"\\]|\\.)*)")?(?P<rest>.*)$')
 REF = re.compile(r'\[ref=(e\d+)\]')
 

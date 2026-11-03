@@ -162,8 +162,15 @@ class ControlService:
             backend = web_backend({'control': dict(self.settings.extra)})
             if backend == 'agent_browser':
                 from .web.agent_browser_backend import AgentBrowserExecutor, BrowserRunner, profile_for
-                runner = BrowserRunner(session=f'jarvis-{profile}', profile=profile_for(profile, self.settings),
-                                       headed=not self.settings.headless)
+                runner: Any = BrowserRunner(session=f'jarvis-{profile}', profile=profile_for(profile, self.settings),
+                                            headed=not self.settings.headless)
+                if profile == 'personal' and self.settings.extra.get('personal_chrome_link', 'extension') == 'extension':
+                    # The Jarvis Browser extension: the user's signed-in Chrome, Jarvis's own tab group, no
+                    # remote-debugging prompt. Not connected: the remote-debugging link above is the fallback.
+                    from .web.extension_runner import ExtensionRunner
+                    linked = ExtensionRunner()
+                    if linked.available():
+                        runner = linked
                 agent = AgentBrowserExecutor(self.policy, runner, self._confirm_headed)
                 # Chrome's "Allow remote debugging?" prompt is the user's to answer: show why Jarvis is waiting.
                 agent.on_notice = lambda text: emit(self.sink, ProgressEvent(
