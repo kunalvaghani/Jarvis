@@ -197,7 +197,10 @@ class ShadowAndSecrets(unittest.TestCase):
         from unittest import mock
         from jarvis.control.service import ControlService
         from jarvis.control.settings import ControlSettings
-        with mock.patch.dict('os.environ', {'JARVIS_WEB_BACKEND': 'agent_browser'}):
+        from jarvis.control.web.extension_runner import ExtensionRunner
+        # The Jarvis Browser extension is preferred when connected (checked below); without it, auto-connect.
+        with mock.patch.dict('os.environ', {'JARVIS_WEB_BACKEND': 'agent_browser'}), \
+                mock.patch.object(ExtensionRunner, 'available', return_value=False):
             inner = ControlService(ControlSettings()).browser().inner
         self.assertEqual(type(inner).__name__, 'AgentBrowserExecutor')
         # The user's signed-in Chrome "Person 1", reached through auto-connect, is the default (2026-11-02).
@@ -337,3 +340,14 @@ def test_a_navigation_only_counts_when_the_tab_reached_the_site():
     assert same_site('gmail.com', 'https://mail.google.com/mail/u/0/')  # redirects are normal
     assert same_site('https://en.wikipedia.org/wiki/X', 'https://en.wikipedia.org/wiki/X')
     assert not same_site('https://www.bbc.com', 'about:blank')
+
+
+def test_the_connected_extension_is_preferred_for_the_users_chrome():
+    from unittest import mock
+    from jarvis.control.service import ControlService
+    from jarvis.control.settings import ControlSettings
+    from jarvis.control.web.extension_runner import ExtensionRunner
+    with mock.patch.dict('os.environ', {'JARVIS_WEB_BACKEND': 'agent_browser'}), \
+            mock.patch.object(ExtensionRunner, 'available', return_value=True):
+        inner = ControlService(ControlSettings()).browser().inner
+    assert isinstance(inner.run, ExtensionRunner)
