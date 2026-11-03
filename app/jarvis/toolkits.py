@@ -97,6 +97,8 @@ TOOLS.update(CLOUD_ARCHITECT_TOOLS)
 from .gmail_api import TOOLS as GMAIL_API_TOOLS
 from .gmail_api import configured as gmail_api_configured
 if gmail_api_configured():TOOLS.update(GMAIL_API_TOOLS)
+from .google_files import TOOLS as GOOGLE_FILE_TOOLS
+TOOLS.update(GOOGLE_FILE_TOOLS)
 
 
 def status():
@@ -110,6 +112,9 @@ def available(name):
     if name in GMAIL_API_TOOLS:
         from .gmail_api import configured
         return configured()
+    if name in GOOGLE_FILE_TOOLS:
+        from .google_files import configured as drive_configured
+        return drive_configured()
     return all(os.environ.get(key) for key in TOOLS[name][2])
 
 
@@ -335,6 +340,9 @@ def execute(actions, step, cancelled):
     if name in GMAIL_API_TOOLS:
         from .gmail_api import execute as gmail_execute
         return gmail_execute(actions,step,cancelled)
+    if name in GOOGLE_FILE_TOOLS:
+        from .google_files import execute as drive_execute
+        return drive_execute(actions, step, cancelled)
     if name in APP_TOOLS:
         # API/code-first adapters approve each write themselves and never retry it.
         from .app_adapters import execute as app_execute

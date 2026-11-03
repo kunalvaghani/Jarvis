@@ -163,7 +163,7 @@ def test_JRV_23_007_scoped_refresh_uses_bounded_fake_transport(tmp_path):
     assert load.call_args.args[1]==SCOPES and request.call_args.kwargs['timeout']==20
     credential.has_scopes.assert_called_once_with(SCOPES);save.assert_called_once()
     # Gmail plus Drive for files Jarvis creates (drive.file), approved by the user 2026-11-03.
-    assert set(SCOPES)=={'https://www.googleapis.com/auth/gmail.'+s for s in ('readonly','compose','modify')}|{'https://www.googleapis.com/auth/drive.file'}
+    assert set(SCOPES)=={'https://www.googleapis.com/auth/gmail.'+s for s in ('readonly','compose','modify')}|{'https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive.readonly'}
 
 
 @pytest.mark.parametrize('operation,args,label',[

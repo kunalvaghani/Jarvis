@@ -19,6 +19,7 @@ import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 Readers = Dict[str, Callable[..., Any]]
+APP = Path(__file__).resolve().parents[2]
 
 
 def _file_text(path: Path) -> Optional[str]:
@@ -338,6 +339,24 @@ def body_uses(*needles: str) -> Callable[[Any], List[str]]:
     return oracle
 
 
+def drive_file(name: str, *needles: str) -> Callable[[Any], List[str]]:
+    """A Drive file with this name exists and its text (Docs as text, Sheets as computed CSV) has the needles."""
+    def oracle(run: Any) -> List[str]:
+        from jarvis import google_files
+        if not google_files.available(APP):
+            return ['Google Drive is not connected']
+        files = google_files.Files(APP)
+        try:
+            found = files.find(name)
+            if not found:
+                return [f'no Drive file named {name!r}']
+            text = str(files.read(str(found[0]['id'])).get('text', ''))
+        finally:
+            files.close()
+        return [f'{name!r} does not contain {n!r}' for n in needles if n.lower() not in text.lower()]
+    return oracle
+
+
 def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         row = getattr(run, 'row', None)
@@ -501,6 +520,22 @@ def build(m: Any) -> List[Any]:
              approve=('gmail', 'draft')),  # to one's parents "Mom and Dad" is right; their names are optional
         Case('E13', 'draft an email to comedywithkh@gmail.com asking my brother to pick up our mother from the station on friday evening. Do not send it.',
              both(composed_draft, body_uses('Jaydeep'), no_send), approve=('gmail', 'draft')),
+        # Google Drive, Docs and Sheets: the user's files read, new ones made (google_files tools).
+        Case('G01', 'Find my Google Drive files named "Jarvis bench doc" and list them.',
+             answer_mentions('Jarvis bench doc')),
+        Case('G02', 'What does my Google Doc "Jarvis bench doc 9441" say?',
+             answer_mentions('Control benchmark document')),
+        Case('G03', 'Using my Google Sheet "Jarvis bench sheet 6396", what number is in cell A4?',
+             answer_mentions('15')),
+        Case('G04', f'Research the history of the Eiffel Tower and save a short summary as a Google Doc named '
+                    f'"Jarvis research Eiffel {tag}" in the "{google_folder}" folder.',
+             drive_file(f'Jarvis research Eiffel {tag}', 'Eiffel', '1889'), approve=('google docs', 'drive')),
+        Case('G05', f'Write a Python script that prints the first 10 Fibonacci numbers and save it to my Google Drive '
+                    f'"{google_folder}" folder as fib_{tag}.py.',
+             drive_file(f'fib_{tag}.py', 'print'), approve=('drive', 'fib')),
+        Case('G06', f'Create a Google Sheet named "Jarvis budget {tag}" in the "{google_folder}" folder with columns '
+                    'Item and Cost: rent 500, food 200, travel 100, and a total row.',
+             drive_file(f'Jarvis budget {tag}', 'rent', '800'), approve=('google sheets', 'drive')),
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
              both(first_page_count(50, exact=50), no_send)),  # >50 matches: a full page of 50
         Case('C31', f'In Google Drive, create a folder named "{google_folder}" if it does not exist.',

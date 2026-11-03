@@ -23,10 +23,10 @@ def main():
     credentials=flow.run_local_server(host='127.0.0.1',port=0,open_browser=True,timeout_seconds=300,
         authorization_prompt_message='Complete the Google authorization in your browser.',
         success_message='Jarvis Gmail API is connected. You can close this tab.',access_type='offline',prompt='consent')
-    if not credentials.has_scopes(SCOPES):raise ValueError('Google did not grant the required Gmail and Drive (drive.file) scopes.')
+    if not credentials.has_scopes(SCOPES):raise ValueError('Google did not grant the required Gmail and Drive (drive.file, drive.readonly) scopes.')
     save_credentials(base,credentials)
     verify_existing(base)
-    print('Google API connected locally: Gmail (read, draft, send, Trash, labels) and Drive/Docs/Sheets for files Jarvis creates. Nothing was sent or written.')
+    print('Google API connected locally: Gmail (read, draft, send, Trash, labels) Drive/Docs/Sheets read access, and writing files Jarvis creates. Nothing was sent or written.')
 
 
 def verify_existing(base):

@@ -13,7 +13,9 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/gmail.compose',
           'https://www.googleapis.com/auth/gmail.modify',
           # Google Drive/Docs/Sheets, only files Jarvis creates or the user opens with it (jarvis/google_files.py).
-          'https://www.googleapis.com/auth/drive.file']
+          'https://www.googleapis.com/auth/drive.file',
+          # Read (only) the user's own Drive files, Docs and Sheets: search them and use them in answers (2026-11-04).
+          'https://www.googleapis.com/auth/drive.readonly']
 BASE = 'https://gmail.googleapis.com/gmail/v1/users/me/'
 # Labels a user may add/remove besides their own; TRASH/SPAM/SENT/DRAFT stay out.
 SYSTEM_LABELS = {'INBOX', 'UNREAD', 'STARRED', 'IMPORTANT'}

@@ -367,3 +367,15 @@ def test_removals_by_other_names_need_approval():
         assert classify('left_click', label) == Risk.CONSEQUENTIAL, label
     for label in ('Move', 'New folder', 'Save & close', 'Binary search'):
         assert classify('left_click', label) != Risk.CONSEQUENTIAL, label
+
+
+def test_google_drive_tasks_are_recognised():
+    from jarvis.fast_routes import google_task
+    assert google_task('Find my Google Drive files named "Budget" and list them.') == {'kind': 'find', 'query': 'Budget'}
+    assert google_task('Using my Google Sheet "Budget 2026", what is the total?')['kind'] == 'answer'
+    research = google_task('Research solar panels and save it as a Google Doc named "Solar notes" in the "Home" folder.')
+    assert research == {'kind': 'research', 'topic': 'solar panels', 'name': 'Solar notes', 'folder': 'Home'}
+    script = google_task('Write a Python script that renames photos and save it to my Google Drive as rename.py')
+    assert script['kind'] == 'script' and script['name'] == 'rename.py' and script['folder'] == 'Jarvis'
+    assert google_task('Create a Google Sheet named "Trip" with columns Day and Cost')['kind'] == 'sheet'
+    assert google_task('What is the weather today?') is None
