@@ -24,7 +24,7 @@ HOST = APP / 'browser_extension' / 'host' / 'jarvis_browser_host.py'
 NOT_CONNECTED = ('The Jarvis Browser extension is not connected: open Chrome (Person 1) with the Jarvis Browser '
                  'extension installed (scripts/install_browser_extension.py). Nothing was done.')
 # The extension implements a fixed command set; anything else never leaves Jarvis (mirrors the agent-browser policy).
-COMMANDS = frozenset({'ping', 'reload', 'render', 'close', 'tab', 'open', 'back', 'forward', 'reload', 'get', 'is', 'snapshot', 'read',
+COMMANDS = frozenset({'ping', 'reload', 'render', 'focus', 'document', 'close', 'tab', 'open', 'back', 'forward', 'reload', 'get', 'is', 'snapshot', 'read',
                       'click', 'dblclick', 'hover', 'rightclick', 'fill', 'select', 'check', 'uncheck', 'keyboard',
                       'press', 'scroll', 'scrollintoview', 'wait'})
 

@@ -351,3 +351,19 @@ def test_the_connected_extension_is_preferred_for_the_users_chrome():
             mock.patch.object(ExtensionRunner, 'available', return_value=True):
         inner = ControlService(ControlSettings()).browser().inner
     assert isinstance(inner.run, ExtensionRunner)
+
+
+def test_route_element_picker_never_takes_a_removal_by_prefix():
+    from jarvis.fast_routes import _ref_of
+    read = '  menuitem "Move m" [ref_77]\n  menuitem "Move to bin t" [ref_79]\n  button "Discard draft" [ref_9]'
+    assert _ref_of(read, 'menuitem "Move') == 'ref_77'          # not "Move to bin" (live mistake, 2026-11-03)
+    assert _ref_of(read, 'button "Discard') == 'ref_9'          # only when the removal is asked for by name
+
+
+def test_removals_by_other_names_need_approval():
+    from jarvis.control.policy import classify
+    from jarvis.control.types import Risk
+    for label in ('Move to bin', 'Discard draft', 'Archive', 'Empty bin'):
+        assert classify('left_click', label) == Risk.CONSEQUENTIAL, label
+    for label in ('Move', 'New folder', 'Save & close', 'Binary search'):
+        assert classify('left_click', label) != Risk.CONSEQUENTIAL, label

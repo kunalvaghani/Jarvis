@@ -421,8 +421,15 @@ def _drive_has(control: Any, name: str, cancelled: Cancelled) -> bool:
     return False
 
 
+REMOVAL = re.compile(r'\b(?:bin|trash|delete|discard|remove|erase|archive)\b', re.I)
+
+
 def _ref_of(text: str, pattern: str) -> str:
-    found = re.findall(pattern + r'[^\n]*\[(ref_\d+)\]', text)
+    """The ref of the last line matching ``pattern``. A line naming a removal (bin, trash, delete, discard ...) is
+    never taken unless the pattern itself names it: a prefix like 'menuitem "Move' once matched "Move to bin"."""
+    rows = re.findall(r'^(.*' + pattern + r'[^\n]*)\[(ref_\d+)\]', text, re.M)
+    allowed = REMOVAL.search(pattern) is not None
+    found = [ref for line, ref in rows if allowed or not REMOVAL.search(line)]
     return found[-1] if found else ''
 
 

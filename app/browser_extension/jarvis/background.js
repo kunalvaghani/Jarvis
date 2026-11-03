@@ -231,9 +231,10 @@ async function mouse(tabId, ref, kind) {
   }
 }
 
-async function typeText(tabId, text) {
+async function typeText(tabId, text, delayMs) {
   // Real key events, one per character: rich editors (Gmail's message box) only register typed input; a single
-  // insertText changed the box on screen but Gmail saved the draft without it (live 2026-11-03).
+  // insertText changed the box on screen but Gmail saved the draft without it (live 2026-11-03). Canvas editors
+  // (Google Docs) drop keys sent back to back in a background tab, so they type with a short pause per key.
   if (text.length > 2000) {
     await cdp(tabId, 'Input.insertText', {text});
     return;
@@ -241,10 +242,11 @@ async function typeText(tabId, text) {
   for (const ch of text) {
     if (ch === '\n') {
       await press(tabId, 'Enter');
-      continue;
+    } else {
+      await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyDown', key: ch, text: ch, unmodifiedText: ch});
+      await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyUp', key: ch});
     }
-    await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyDown', key: ch, text: ch, unmodifiedText: ch});
-    await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyUp', key: ch});
+    if (delayMs) await sleep(delayMs);
   }
 }
 
@@ -421,10 +423,42 @@ async function run(args, session) {
       if (Boolean(now) !== (command === 'check')) await mouse(tabId, rest[0], 'click');
       return {done: true};
     }
-    case 'keyboard':
-      if (rest[0] !== 'type') throw new Error(`unknown command: keyboard ${rest[0]}`);
-      await typeText(tabId, rest[1] || '');
+    case 'keyboard': {
+      // keyboard type <text> [--delay ms] | keyboard insert <text> (one text insertion, for editors that take it)
+      const delay = rest[2] === '--delay' ? Math.min(Number(rest[3]) || 0, 200) : 0;
+      if (rest[0] === 'type') await typeText(tabId, rest[1] || '', delay);
+      else if (rest[0] === 'insert') await cdp(tabId, 'Input.insertText', {text: rest[1] || ''});
+      else throw new Error(`unknown command: keyboard ${rest[0]}`);
       return {done: true};
+    }
+    case 'document': {
+      // document text: the open Google Doc's current text, from Docs' own plain-text export of this document
+      // (fixed code, same origin, read-only). Docs draws on a canvas, so its text is not in the accessibility tree.
+      if (rest[0] !== 'text') throw new Error(`unknown command: document ${rest[0]}`);
+      const result = await cdp(tabId, 'Runtime.evaluate', {returnByValue: true, awaitPromise: true, expression: `(async () => {
+        const id = (location.pathname.match(/\\/document\\/d\\/([\\w-]+)/) || [])[1];
+        if (!id) return null;
+        const reply = await fetch('/document/d/' + id + '/export?format=txt', {credentials: 'same-origin'});
+        return reply.ok ? (await reply.text()).slice(0, 20000) : null;
+      })()`});
+      const text = result.result ? result.result.value : null;
+      if (text === null || text === undefined) throw new Error('this is not an open Google Doc, or its text could not be read');
+      return {text};
+    }
+    case 'focus': {
+      // focus editor: the typing target of canvas editors that are not in the accessibility tree (Google Docs and
+      // Slides take keys through a hidden contenteditable in an iframe). Fixed code, nothing from the page or Jarvis.
+      if (rest[0] !== 'editor') throw new Error(`unknown command: focus ${rest[0]}`);
+      const result = await cdp(tabId, 'Runtime.evaluate', {returnByValue: true, expression: `(() => {
+        const frame = document.querySelector('iframe.docs-texteventtarget-iframe');
+        const target = frame && frame.contentDocument && frame.contentDocument.querySelector('[contenteditable="true"]');
+        if (!target) return false;
+        frame.focus(); target.focus();
+        return frame.contentDocument.activeElement === target;
+      })()`});
+      if (!(result.result && result.result.value)) throw new Error('no editor to type into on this page; nothing typed');
+      return {focused: true};
+    }
     case 'press':
       await press(tabId, rest[0] || 'Enter');
       return {done: true};

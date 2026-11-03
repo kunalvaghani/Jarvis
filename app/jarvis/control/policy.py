@@ -21,7 +21,9 @@ DEVICE_NAMES =re.compile(r'^(?:con|prn|aux|nul|com[0-9]|lpt[0-9])(?:\..*)?$', re
 CONSEQUENTIAL = re.compile(
     r'\b(send|submit|post|publish|purchase|buy|pay|checkout|order|delete|remove|erase|uninstall|install|'
     r'upload|transfer|accept|agree|sign up|subscribe|unsubscribe|confirm|approve|grant|'
-    r'change password|security|permission|share)\b', re.I)
+    r'change password|security|permission|share|'
+    # Removal by another name ("Move to bin" was a plain click before, 2026-11-03).
+    r'trash|discard|archive|empty|wipe|reset|revoke|block|report|(?:to|the|in|from) bin)\b', re.I)
 APPROVAL_CLAIMS = frozenset({'approved', 'approval', 'preapproved', 'user_approved', 'authorized', 'authorization',
                              'skip_approval', 'bypass_approval', 'requires_approval', 'permission', 'permissions'})
 
