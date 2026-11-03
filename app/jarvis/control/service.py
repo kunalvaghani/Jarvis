@@ -163,7 +163,11 @@ class ControlService:
                 from .web.agent_browser_backend import AgentBrowserExecutor, BrowserRunner, profile_for
                 runner = BrowserRunner(session=f'jarvis-{profile}', profile=profile_for(profile, self.settings),
                                        headed=not self.settings.headless)
-                return AgentBrowserExecutor(self.policy, runner, self._confirm_headed)
+                agent = AgentBrowserExecutor(self.policy, runner, self._confirm_headed)
+                # Chrome's "Allow remote debugging?" prompt is the user's to answer: show why Jarvis is waiting.
+                agent.on_notice = lambda text: emit(self.sink, ProgressEvent(
+                    Route.BROWSER, 'waiting_approval', 'Allow remote debugging in Chrome', 'Chrome', text[:80]))
+                return agent
             directory = self.settings.personal_profile if profile == 'personal' else self.settings.test_profile
             directory.mkdir(parents=True, exist_ok=True)
             executor = BrowserExecutor(directory, self.policy, self.settings.downloads, headless=self.settings.headless)

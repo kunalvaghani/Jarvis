@@ -89,7 +89,8 @@ SITE = re.compile(r'(?:\bhttps?://|\bwww\.[a-z0-9-]|\b[a-z0-9-]+(?:\.[a-z0-9-]+)
 
 def needs_page(text):
     """A question about a named website (or "on Wikipedia") can only be answered by reading the page."""
-    return bool(SITE.search(str(text or '')) or re.search(r'\b(?:on|from|according to) wikipedia\b', str(text or ''), re.I))
+    return bool(SITE.search(str(text or '')) or re.search(r'\b(?:on|from|according to) wikipedia\b', str(text or ''), re.I)
+                or re.search(r'\b(?:gmail|my inbox)\b', str(text or ''), re.I))
 
 
 def quick_kind(text):

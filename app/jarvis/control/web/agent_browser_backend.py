@@ -54,6 +54,10 @@ CONTENT_COMMANDS = frozenset({'open', 'snapshot', 'read', 'get'})
 # (chrome://inspect/#remote-debugging, Chrome 144+, each connection approved in Chrome). A copied profile would be
 # signed out: Windows Chrome binds cookies to the original profile folder (checked 2026-11-02).
 AUTO_CONNECT = 'auto-connect'
+APPROVAL_PENDING = re.compile(r'waiting for remote-debugging approval', re.I)
+APPROVAL_WAIT_S = 90.0
+# Sites that only make sense signed in: never fall back to Jarvis's own (signed-out) profile for these.
+ACCOUNT_SITES = re.compile(r'\b(?:mail|drive|docs|sheets|calendar|myaccount)\.google\.com\b|\bgmail\.com\b', re.I)
 FALLBACK_PROFILE = str(APP / '.jarvis-runtime' / 'test-browser-profile')  # Jarvis's own persistent profile
 NOT_RUN = re.compile(r'unknown ref|denied by policy|not in the allow list|invalid|unknown command|required argument|'
                      r'no such tab|not found', re.I)
@@ -203,6 +207,7 @@ class AgentBrowserExecutor(RouteExecutor):
         self.last_url = ''
         self.own_tab = ''  # with --auto-connect: the one tab Jarvis opened; the user's tabs are never driven
         self.notice = ''
+        self.on_notice: Optional[Callable[[str], None]] = None  # shows a notice to the user while Jarvis waits
         self._lock = threading.RLock()
 
     def start(self) -> None:
@@ -251,8 +256,26 @@ class AgentBrowserExecutor(RouteExecutor):
     # Helpers ----------------------------------------------------------------------------
     def _call(self, args: List[str], acting: bool, timeout_s: float = 60.0) -> Reply:
         reply = self.run(args, timeout_s)
+        if not reply.success and getattr(self.run, 'auto_connect', False) and APPROVAL_PENDING.search(str(reply.error)):
+            # Chrome asks the user to allow this connection ("Allow remote debugging?"). That consent is the user's:
+            # Jarvis never clicks it. Say so and wait; once allowed, the session daemon keeps the connection.
+            self.notice = 'Click Allow on the "Allow remote debugging?" prompt in your Chrome so I can continue.'
+            if self.on_notice is not None:
+                self.on_notice(self.notice)
+            deadline = time.monotonic() + APPROVAL_WAIT_S
+            while not reply.success and APPROVAL_PENDING.search(str(reply.error)) and time.monotonic() < deadline:
+                time.sleep(3)
+                reply = self.run(args, timeout_s)
+            if not reply.success and APPROVAL_PENDING.search(str(reply.error)):
+                raise ControlError('Chrome is still waiting for you to allow remote debugging; nothing was done.',
+                                   ErrorCategory.APPROVAL_DENIED)
+            self.notice = ''
         if not reply.success and getattr(self.run, 'auto_connect', False) and \
-                re.search(r'no running chrome|remote-debugging|failed to connect', str(reply.error), re.I):
+                re.search(r'no running chrome|failed to connect', str(reply.error), re.I):
+            if ACCOUNT_SITES.search(' '.join(str(a) for a in args)):
+                # Signed-in sites must not silently open in Jarvis's signed-out profile.
+                raise ControlError('Your Chrome (Person 1) is not open, so I cannot use your signed-in accounts; '
+                                   'open Chrome and try again. Nothing was done.', ErrorCategory.TARGET_NOT_FOUND)
             # The user's Chrome is not attachable (chrome://inspect/#remote-debugging is off). Nothing was sent, so
             # use Jarvis's own browser profile for this session; signed-in sites will ask for the switch.
             self.run.auto_connect, self.run.profile = False, FALLBACK_PROFILE
@@ -371,7 +394,12 @@ class AgentBrowserExecutor(RouteExecutor):
                 self._call([url], acting=True)
             else:
                 checked = self.policy.check_url(url)
-                if not self._own_tab(checked):
+                opened = self._own_tab(checked)
+                if self.run.profile == FALLBACK_PROFILE and ACCOUNT_SITES.search(checked):
+                    # The user's Chrome could not be attached: a signed-in site would open signed out.
+                    raise ControlError('Your Chrome (Person 1) is not open, so I cannot use your signed-in accounts; '
+                                       'open Chrome and try again. Nothing was done.', ErrorCategory.TARGET_NOT_FOUND)
+                if not opened:
                     self._call(['open', checked], acting=True, timeout_s=action.timeout_s + 15)
             final = self._final_url()
             return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')

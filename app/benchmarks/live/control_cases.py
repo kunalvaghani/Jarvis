@@ -234,6 +234,18 @@ def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[An
     return oracle
 
 
+def first_page_count(limit: int = 50) -> Callable[[Any], List[str]]:
+    """A count of one result page: some number 1..limit, and no larger total (an inbox counter is not the answer)."""
+    def oracle(run: Any) -> List[str]:
+        numbers = [int(n.replace(',', '')) for n in re.findall(r'\b\d[\d,]*\b', str(getattr(run, 'answer', '')))]
+        if not any(1 <= n <= limit for n in numbers):
+            return [f'answer gives no count between 1 and {limit}']
+        if any(n > limit for n in numbers):
+            return [f'answer states {max(numbers)}, more than one page ({limit}) can show']
+        return []
+    return oracle
+
+
 def both(*oracles: Callable[[Any], List[str]]) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         return [p for o in oracles for p in o(run)]
@@ -336,7 +348,7 @@ def build(m: Any) -> List[Any]:
              both(page_shows('https://mail.google.com/mail/u/0/#drafts', f'Jarvis bench {tag}'), no_send),
              approve=('gmail', 'draft')),
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
-             both(answer_mentions(any_of=tuple(str(n) for n in range(0, 101))), no_send)),
+             both(first_page_count(50), no_send)),
         Case('C31', f'In Google Drive, create a folder named "{google_folder}" if it does not exist.',
              page_shows('https://drive.google.com/drive/search?q=' + google_folder.replace(' ', '%20'), google_folder),
              approve=('drive',)),

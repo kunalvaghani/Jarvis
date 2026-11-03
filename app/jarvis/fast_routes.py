@@ -20,6 +20,7 @@ from __future__ import annotations
 from fractions import Fraction
 import json
 import re
+import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 Cancelled = Callable[[], bool]
@@ -170,8 +171,30 @@ ANSWER_LIMIT = 9000
 WIKIPEDIA = re.compile(r"^\s*(?:on|from|according to)\s+wikipedia,?\s+(?P<q>.+?)\s*\??\s*$", re.I)
 
 
+GMAIL_READ = re.compile(r'\b(?:gmail|my inbox|my e-?mails?)\b', re.I)
+GMAIL_WRITE = re.compile(r'\b(?:draft|send|sent it|compose|write|reply|forward|delete|archive|mark|label|move|'
+                         r'star|unsubscribe|attach)\b', re.I)
+GMAIL_FROM = re.compile(r'\bsearch(?:es)?\s+(?:for\s+)?(?:e-?mails?|messages?)\s+from\s+(?P<who>[\w.@+-]+)', re.I)
+
+
+def gmail_question(goal: str) -> Optional[Tuple[str, str]]:
+    """(page, question) for read-only Gmail questions ("tell me the subject of the newest email in my inbox",
+    "search for emails from Google and tell me how many..."). Anything that writes goes to the planner."""
+    if not GMAIL_READ.search(goal) or GMAIL_WRITE.search(goal) or \
+            not re.search(r'\b(?:tell me|what|which|who|how many|list|show me)\b', goal, re.I):
+        return None
+    found = GMAIL_FROM.search(goal)
+    if found:
+        from urllib.parse import quote
+        return f'https://mail.google.com/mail/u/0/#search/{quote("from:" + found.group("who").strip())}', goal
+    return 'https://mail.google.com/mail/u/0/#inbox', goal
+
+
 def site_question(goal: str) -> Optional[Tuple[str, str]]:
     """(page, question) for "On <site>, <question>?" with exactly one site; None otherwise."""
+    gmail = gmail_question(goal)
+    if gmail:
+        return gmail
     if not goal.rstrip().endswith('?') and not re.match(r'\s*(?:what|who|which|how)\b', goal, re.I):
         return None
     sites = SITE.findall(goal)
@@ -339,10 +362,30 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
     text = str(getattr(control, 'last_web', '') or '')
     if head.get('ok') is False or len(text) < 50:
         return None  # The page did not open or read; the planner can try another way.
+    page_text = _focus(text, question)
+    if 'mail.google.com' in page:
+        # Gmail's list rows carry sender, subject, time and snippet in one label: give the model just those.
+        rows = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)
+        # Gmail fills the list in stages after the page loads (searches especially; 0, then 5, then 50 rows seen):
+        # re-read until two reads agree, at most 6 more reads.
+        for _ in range(6):
+            if cancelled():
+                break
+            time.sleep(1.0)
+            text = control.web_read(cancelled, 'all')
+            again = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)
+            settled = bool(rows) and len(again) == len(rows)
+            rows = again
+            if settled:
+                break
+        if not rows:
+            return None  # Not the mail list (signed out, still loading): the planner decides.
+        page_text = f'{len(rows)} email rows on this page, newest first:\n' + '\n'.join(
+            f'{n}. {row[:300]}' for n, row in enumerate(rows, 1))
     reply = actions.brain.client.request('tool_text', cancelled, tool='think', context='', goal=(
         'Answer the question using ONLY this page text. Quote names and numbers exactly as the page shows them. '
         'Count carefully when asked how many. If the page text does not contain the answer, reply exactly: '
-        f'NOT ON PAGE.\nQuestion: {question}\nPage text:\n{_focus(text, question)}'))
+        f'NOT ON PAGE.\nQuestion: {question}\nPage text:\n{page_text}'))
     answer = ' '.join(str(reply.get('text', '') if isinstance(reply, dict) else reply).split())[:800]
     if not answer or 'NOT ON PAGE' in answer.upper() or not grounded(answer, text):
         return None  # Not answerable from this page: the planner continues (it can navigate further).

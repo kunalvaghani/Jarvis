@@ -253,3 +253,53 @@ class FallbackProfile(Base):
         self.assertIn('--profile', runner.argv(['snapshot']))
         self.assertIn('remote-debugging', ex.notice)
         self.assertTrue(result.ok, result.text)
+
+
+def test_waits_for_chrome_debugging_approval_and_never_falls_back_for_it():
+    """Chrome's 'Allow remote debugging?' prompt is the user's: Jarvis waits, then continues on the same connection."""
+    from jarvis.control.web import agent_browser_backend as ab
+    replies = [ab.Reply(success=False, error='Chrome is waiting for remote-debugging approval on port 9222.')] * 2 + \
+              [ab.Reply(success=True, data={'tabs': []})]
+    seen, notices = [], []
+
+    class Fake:
+        auto_connect, profile = True, ab.AUTO_CONNECT
+
+        def __call__(self, args, timeout_s=60.0):
+            seen.append(list(args))
+            return replies[len(seen) - 1]
+    executor = ab.AgentBrowserExecutor(Policy(), Fake())
+    executor.on_notice = notices.append
+    original, ab.time.sleep = ab.time.sleep, lambda s: None
+    try:
+        assert executor._call(['tab', 'list'], acting=False).success
+    finally:
+        ab.time.sleep = original
+    assert executor.run.auto_connect and len(seen) == 3 and notices and 'Allow' in notices[0]
+
+
+def test_account_sites_never_open_in_the_signed_out_profile():
+    from jarvis.control.web import agent_browser_backend as ab
+
+    class Fake:
+        auto_connect, profile = True, ab.AUTO_CONNECT
+
+        def __call__(self, args, timeout_s=60.0):
+            return ab.Reply(success=False, error='No running Chrome instance found.')
+    executor = ab.AgentBrowserExecutor(Policy(), Fake())
+    try:
+        executor._call(['open', 'https://mail.google.com/'], acting=True)
+    except ab.ControlError as error:
+        assert 'Person 1' in str(error)
+    else:
+        raise AssertionError('fell back to the signed-out profile for Gmail')
+
+
+def test_read_only_gmail_questions_take_the_fixed_route_and_writes_do_not():
+    from jarvis.fast_routes import site_question
+    assert site_question('Open Gmail in my browser and tell me the subject of the newest email in my inbox.')[0] \
+        == 'https://mail.google.com/mail/u/0/#inbox'
+    assert site_question('In Gmail, search for emails from Google and tell me how many results there are.')[0] \
+        == 'https://mail.google.com/mail/u/0/#search/from%3AGoogle'
+    assert site_question('In Gmail, create a draft to a@example.com with subject "x". Do not send it.') is None
+    assert site_question('Reply to the newest email in my inbox and tell me when done.') is None
