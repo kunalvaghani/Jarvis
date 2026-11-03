@@ -284,6 +284,9 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     draft = gmail_draft(goal)
     if draft is not None:
         return _gmail_draft(actions, draft, cancelled)
+    edit = gmail_edit_draft(goal)
+    if edit is not None:
+        return _gmail_edit_draft(actions, edit, cancelled)
     asked = site_question(goal)
     if asked is not None:
         return _website(actions, asked[0], asked[1], cancelled)
@@ -309,6 +312,134 @@ def gmail_draft(goal: str) -> Optional[Dict[str, str]]:
     return {'to': found.group('to'), 'subject': found.group('subject').strip(), 'body': found.group('body') or ''}
 
 
+GMAIL_EDIT = re.compile(r'\b(?:open|edit|change|update)\b[^"“]*?\bdraft\s+["“](?P<subject>[^"”]{1,150})["”][^"“]*?'
+                        r'\bbody\s+(?:to\s+)?["“](?P<body>[^"”]{0,2000})["”]', re.I)
+
+
+def gmail_edit_draft(goal: str) -> Optional[Dict[str, str]]:
+    """{subject, body} for 'open the draft "X" and change its body to "Y"' (never a send)."""
+    if not re.search(r'\bgmail\b', goal, re.I):
+        return None
+    if re.search(r'\bsend\b', goal, re.I) and not re.search(r"\b(?:do not|don't|never|without)\s+send", goal, re.I):
+        return None
+    found = GMAIL_EDIT.search(goal)
+    return {'subject': found.group('subject').strip(), 'body': found.group('body')} if found else None
+
+
+def _message_body(control: Any, cancelled: Cancelled, tries: int = 15) -> str:
+    """The ref of an open compose window's "Message Body" box, once it has rendered ('' if it never does)."""
+    for _ in range(tries):
+        found = re.search(r'textbox "Message Body"[^\n]*\[(ref_\d+)\]', control.web_read(cancelled, 'interactive'))
+        if found:
+            return found.group(1)
+        time.sleep(1.0)
+    return ''
+
+
+def _fill_body(control: Any, ref: str, text: str, cancelled: Cancelled) -> bool:
+    """Replace the message box's text and read it back; one more fill if it did not land (same box, same text:
+    replacing is idempotent). True when the box reads the text."""
+    for _ in range(2):
+        control.web_act('fill', {'ref': ref, 'text': text}, cancelled)
+        time.sleep(1.0)  # read after a pause: a late load of the box's old text would show here
+        if text.strip() in _box_text(control, ref, cancelled):
+            return True
+    return False
+
+
+def _box_text(control: Any, ref: str, cancelled: Cancelled) -> str:
+    """The text inside one element (web_read's status line removed)."""
+    read = control.web_read(cancelled, 'all', '', ref)
+    return str(read.split('\n', 1)[1] if read.startswith('{') and '\n' in read else read)
+
+
+def _wait_saved(control: Any, cancelled: Cancelled) -> bool:
+    """Gmail saves a typed change a few seconds later ("Saving..." then "Draft saved"); an earlier "Draft saved"
+    (subject only) is not this save, so wait out the typing first and require no "Saving" in progress."""
+    time.sleep(3.0)
+    for _ in range(15):
+        control.web_read(cancelled, 'all')
+        text = str(getattr(control, 'last_web', '') or '')
+        if re.search(r'"(?:Draft saved|Saved)\b', text) and not re.search(r'"Saving', text):
+            return True
+        if cancelled():
+            break
+        time.sleep(1.0)
+    return False
+
+
+def _close_current_tab(control: Any, cancelled: Cancelled) -> None:
+    """Close the tab Jarvis is working in (its own tab: the extension never closes the user's)."""
+    head = control.web_read(cancelled, 'interactive').split('\n', 1)[0]
+    try:
+        tabs = json.loads(head).get('tabs') or []
+    except ValueError:
+        tabs = []
+    active = [t for t in tabs if t.get('active')]
+    if active:
+        actions_tab = str(active[0].get('tab_id'))
+        control.web_act('close_tab', {'tab': actions_tab}, cancelled)
+
+
+def gmail_draft_text(control: Any, subject: str, cancelled: Cancelled) -> Optional[str]:
+    """Reopen the draft with this subject (Drafts search) and read its message box; None if it cannot be opened."""
+    from urllib.parse import quote
+    control.web_open('https://mail.google.com/mail/u/0/#search/' + quote(f'in:drafts "{subject}"'), cancelled)
+    for _ in range(10):
+        text = str(getattr(control, 'last_web', '') or '')
+        refs = [ref for label, ref in re.findall(r'^\s*(?:row|gridcell) "([^"]*)"[^\n]*\[(ref_\d+)\]', text, re.M)
+                if subject in label]
+        if refs:
+            control.web_act('click', {'ref': refs[0]}, cancelled)
+            box = _message_body(control, cancelled, 10)
+            return _box_text(control, box, cancelled) if box else None
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+    return None
+
+
+def _gmail_edit_draft(actions: Any, edit: Dict[str, str], cancelled: Cancelled) -> Optional[str]:
+    """Find the draft by subject in Drafts, open it, replace its body, wait for Gmail's save, read it back."""
+    from urllib.parse import quote
+    control = actions.control()
+    actions.report('brain', f'Fixed route: edit Gmail draft "{edit["subject"]}" (not sent)')
+    if not _approved(actions, 'gmail draft', f'Change the body of the Gmail draft "{edit["subject"]}" '
+                                             '(it is not sent)', cancelled):
+        return 'Did not change the Gmail draft: it was not approved. Nothing was written.'
+    actions.report('tool', 'control: web_open Gmail drafts search')
+    control.web_open('https://mail.google.com/mail/u/0/#search/' + quote(f'in:drafts "{edit["subject"]}"'), cancelled)
+    row_ref = ''
+    for _ in range(10):
+        text = str(getattr(control, 'last_web', '') or '')
+        rows = re.findall(r'^\s*row "([^"]*)"[^\n]*\[(ref_\d+)\]', text, re.M)
+        cells = re.findall(r'^\s*gridcell "([^"]*)"[^\n]*\[(ref_\d+)\]', text, re.M)
+        match = [ref for label, ref in rows + cells if edit['subject'] in label]
+        if match:
+            row_ref = match[0]
+            break
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+    if not row_ref:
+        return f'No Gmail draft titled "{edit["subject"]}" was found, so nothing was changed.'
+    actions.report('tool', 'control: web_act click the draft')
+    control.web_act('click', {'ref': row_ref}, cancelled)
+    body_ref = _message_body(control, cancelled)
+    if not body_ref:
+        return 'The draft did not open for editing, so nothing was changed. Nothing was sent.'
+    time.sleep(2.5)  # an opened draft loads its saved text into the box a moment later; typing first is overwritten
+    actions.report('tool', 'control: web_act fill Message Body (draft only)')
+    _fill_body(control, body_ref, edit['body'], cancelled)
+    # Same as a new draft: Gmail stores the edit when the tab closes (checked live); then reopen it to confirm.
+    time.sleep(2.0)
+    _close_current_tab(control, cancelled)
+    found = gmail_draft_text(control, edit['subject'], cancelled)
+    if found is not None and edit['body'] in found:
+        return (f'Finished: the draft "{edit["subject"]}" now says "{edit["body"]}". It was not sent (checked: '
+                'reopened, its message box reads the new text).')
+    return (f'I replaced the text of the draft "{edit["subject"]}", but on reopening it reads '
+            f'{(found or "nothing readable")[:80]!r}. It was not sent; please check the draft.')
+
+
 def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> Optional[str]:
     """Gmail's compose link with the fields filled, saved by Gmail's autosave, then checked in Drafts. Send is
     never clicked. The draft is created once: no retry after an uncertain step."""
@@ -326,29 +457,27 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
     head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
     if head.get('ok') is False:
         return 'Gmail compose did not open, so no draft was made. ' + str(head.get('result', ''))[:200]
-    body_ref = ''
-    for _ in range(8):  # the compose form renders after the page loads
-        body = re.search(r'textbox "Message Body"[^\n]*\[(ref_\d+)\]', control.web_read(cancelled, 'interactive'))
-        if body:
-            body_ref = body.group(1)
-            break
-        time.sleep(1.0)
+    body_ref = _message_body(control, cancelled)  # the compose form renders after the page loads
     if not body_ref:
         return 'Gmail compose opened, but its message box was not found, so no draft was made. Nothing was sent.'
     actions.report('tool', 'control: web_act fill Message Body (draft only)')
-    control.web_act('fill', {'ref': body_ref, 'value': draft['body'] or ' '}, cancelled)
-    for _ in range(12):  # Gmail shows "Saved" next to the buttons once the draft is stored
-        time.sleep(1.0)
-        control.web_read(cancelled, 'all')
-        if re.search(r'"(?:Draft saved|Saved)\b', str(getattr(control, 'last_web', '') or '')):
-            break
+    _fill_body(control, body_ref, draft['body'] or ' ', cancelled)
+    # Gmail stores the typed body when the compose tab closes (live 2026-11-03: navigating away asked "Leave
+    # site?" and lost it; closing the tab kept it). Close Jarvis's compose tab, then check Drafts in a new one.
+    time.sleep(2.0)
+    _close_current_tab(control, cancelled)
     actions.report('tool', 'control: web_open Gmail drafts (check)')
     control.web_open('https://mail.google.com/mail/u/0/#drafts', cancelled)
     for _ in range(8):  # the Drafts list fills in after the page loads
         text = str(getattr(control, 'last_web', '') or '')
         if any(draft['subject'] in row for row in re.findall(r'^\s*row "([^"]*)"', text, re.M)):
+            body = gmail_draft_text(control, draft['subject'], cancelled) if draft['body'].strip() else ''
+            if draft['body'].strip() and (body is None or draft['body'].strip() not in body):
+                return (f'The draft "{draft["subject"]}" is in Drafts, but its message reads '
+                        f'{(body or "nothing readable")[:80]!r}, not the body you asked for. It was not sent; '
+                        'please check it.')
             return (f'Finished: saved a Gmail draft to {draft["to"]} with subject "{draft["subject"]}". It was not '
-                    'sent (checked: it is listed in Drafts).')
+                    'sent (checked: it is listed in Drafts and its message reads the body).')
         if cancelled():
             break
         time.sleep(1.0)

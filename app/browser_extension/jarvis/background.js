@@ -23,6 +23,8 @@ let port = null;
 const current = new Map();     // Jarvis task (session) -> the tab it works in; tasks run side by side
 const attached = new Set();    // tabs with the debugger attached
 const refMaps = new Map();     // tabId -> Map('e12' -> backendDOMNodeId), from the latest snapshot
+const dialogs = new Map();     // tabId -> the page dialog waiting for an answer (alert/confirm/prompt)
+const leaveBlocked = new Set(); // tabs whose page asked to stay (unsaved changes) on Jarvis's last navigation
 let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
 let renderMode = 'screencast'; // keep hidden tabs drawing ('off' to compare)
 const restored = chrome.storage.session.get('jarvisTabs').then((saved) => {
@@ -56,6 +58,19 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   if (method === 'Page.screencastFrame') {
     chrome.debugger.sendCommand(source, 'Page.screencastFrameAck', {sessionId: params.sessionId}).catch(() => {});
   }
+  // "Leave site?" in Jarvis's own tab means unsaved work: always Stay (never discard typed text) and tell Jarvis,
+  // which waits for the page to save and tries again. A dialog left open froze a Gmail tab for 4 minutes and
+  // leaving lost a typed draft body (live 2026-11-03). Alerts, confirms and prompts are never answered here:
+  // they are reported to Jarvis with the next command's error.
+  if (method === 'Page.javascriptDialogOpening') {
+    if (params.type === 'beforeunload') {
+      leaveBlocked.add(source.tabId);
+      chrome.debugger.sendCommand(source, 'Page.handleJavaScriptDialog', {accept: false}).catch(() => {});
+    } else {
+      dialogs.set(source.tabId, `${params.type}: ${String(params.message || '').slice(0, 200)}`);
+    }
+  }
+  if (method === 'Page.javascriptDialogClosed') dialogs.delete(source.tabId);
 });
 chrome.tabs.onRemoved.addListener((tabId) => {
   attached.delete(tabId);
@@ -137,6 +152,7 @@ async function cdp(tabId, method, params) {
     // Jarvis's tabs stay in the background: the page is told it is focused and active, and (screencast mode)
     // Chrome keeps drawing it, so lists render and drafts autosave while the user works elsewhere.
     const target = {tabId};
+    await chrome.debugger.sendCommand(target, 'Page.enable', {}).catch(() => {});  // dialog events
     await chrome.debugger.sendCommand(target, 'Emulation.setFocusEmulationEnabled', {enabled: true}).catch(() => {});
     await chrome.debugger.sendCommand(target, 'Page.setWebLifecycleState', {state: 'active'}).catch(() => {});
     if (renderMode === 'screencast') {
@@ -205,6 +221,23 @@ async function mouse(tabId, ref, kind) {
   for (let n = 1; n <= clicks; n++) {
     await cdp(tabId, 'Input.dispatchMouseEvent', {type: 'mousePressed', x, y, button, clickCount: n});
     await cdp(tabId, 'Input.dispatchMouseEvent', {type: 'mouseReleased', x, y, button, clickCount: n});
+  }
+}
+
+async function typeText(tabId, text) {
+  // Real key events, one per character: rich editors (Gmail's message box) only register typed input; a single
+  // insertText changed the box on screen but Gmail saved the draft without it (live 2026-11-03).
+  if (text.length > 2000) {
+    await cdp(tabId, 'Input.insertText', {text});
+    return;
+  }
+  for (const ch of text) {
+    if (ch === '\n') {
+      await press(tabId, 'Enter');
+      continue;
+    }
+    await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyDown', key: ch, text: ch, unmodifiedText: ch});
+    await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyUp', key: ch});
   }
 }
 
@@ -306,12 +339,17 @@ async function run(args, session) {
     return {tabId: sub};
   }
   const tabId = await workTab(session);
+  if (dialogs.has(tabId)) throw new Error(`the page shows a dialog (${dialogs.get(tabId)}); it needs a decision`);
   switch (command) {
     case 'open': {
       if (!/^https?:\/\//i.test(rest[0] || '')) throw new Error('invalid url: only http(s) pages open');
+      leaveBlocked.delete(tabId);
       await chrome.tabs.update(tabId, {url: rest[0]});
+      await sleep(600);
+      if (leaveBlocked.delete(tabId)) {
+        throw new Error('unsaved changes: the page asked to stay, so it stayed open (nothing was discarded)');
+      }
       refMaps.delete(tabId);
-      await sleep(300);
       await waitLoad(tabId, 'load', 45000);
       return {url: (await chrome.tabs.get(tabId)).url};
     }
@@ -351,8 +389,14 @@ async function run(args, session) {
     case 'fill': {
       const {backendNodeId} = await node(tabId, rest[0]);
       await cdp(tabId, 'DOM.focus', {backendNodeId});
+      // Keys go to whatever has focus; on a page with keyboard shortcuts (Gmail: "e" archives) a stray key acts.
+      // Type only when the field itself holds the focus.
+      const focused = await onNode(tabId, rest[0], 'function () { this.focus(); const a = document.activeElement; return a === this || this.contains(a); }');
+      if (!focused) throw new Error('could not put the cursor in that field, so nothing was typed');
       await onNode(tabId, rest[0], 'function () { if (this.select) { this.select(); } else { const r = document.createRange(); r.selectNodeContents(this); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } }');
-      await cdp(tabId, 'Input.insertText', {text: rest[1] || ''});
+      await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'rawKeyDown', key: 'Backspace', windowsVirtualKeyCode: 8});
+      await cdp(tabId, 'Input.dispatchKeyEvent', {type: 'keyUp', key: 'Backspace', windowsVirtualKeyCode: 8});
+      await typeText(tabId, rest[1] || '');
       return {done: true};
     }
     case 'select':
@@ -365,7 +409,7 @@ async function run(args, session) {
     }
     case 'keyboard':
       if (rest[0] !== 'type') throw new Error(`unknown command: keyboard ${rest[0]}`);
-      await cdp(tabId, 'Input.insertText', {text: rest[1] || ''});
+      await typeText(tabId, rest[1] || '');
       return {done: true};
     case 'press':
       await press(tabId, rest[0] || 'Enter');

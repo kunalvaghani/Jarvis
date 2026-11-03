@@ -125,13 +125,53 @@ def _google_page(url: str) -> str:
         reader.close()
 
 
+def _gmail_draft_body(subject: str) -> Optional[str]:
+    """The message box text of the Gmail draft with this subject (None: not found). Gmail's Drafts rows and search do
+    not show draft bodies (checked live 2026-11-03), so the oracle opens the draft in its own tab and reads the box;
+    opening does not change a draft."""
+    from urllib.parse import quote
+    from jarvis.control.web.extension_runner import ExtensionRunner
+    from jarvis.control.web.agent_browser_backend import AgentBrowserExecutor
+    from jarvis.control.policy import Policy
+    from jarvis.control.types import Action, Route
+    linked = ExtensionRunner(session='jarvis-oracle')
+    if not linked.available():
+        return None
+    reader = AgentBrowserExecutor(Policy(), linked)
+    try:
+        linked(['tab', 'new', 'https://mail.google.com/mail/u/0/#search/' + quote(f'in:drafts "{subject}"')], 90)
+        row = ''
+        for _ in range(10):
+            time.sleep(1.5)
+            text = reader.read_page('all').text
+            found = [ref for label, ref in re.findall(r'^\s*(?:row|gridcell) "([^"]*)"[^\n]*\[(ref_\d+)\]', text, re.M)
+                     if subject in label]
+            if found:
+                row = found[0]
+                break
+        if not row:
+            return None
+        reader.act(Action('left_click', 'oracle: open the draft to read it', Route.BROWSER, {'ref': row}))
+        for _ in range(10):
+            time.sleep(1.5)
+            box = re.search(r'textbox "Message Body"[^\n]*\[(ref_\d+)\]', reader.read_page('all').text)
+            if box:
+                return str(reader.read_page('all', box.group(1)).text)
+        return None
+    finally:
+        for tab in (linked(['tab', 'list'], 20).data or {}).get('tabs', []):
+            if tab.get('active'):  # this oracle session's own tab only
+                linked(['tab', 'close', str(tab['tabId'])], 20)
+
+
 def _media() -> List[Dict[str, str]]:
     import cases  # type: ignore[import-not-found]
     return list(cases.media_sessions())
 
 
 READERS: Readers = {'file': _file_text, 'processes': _processes, 'windows': _windows, 'clipboard': _clipboard,
-                    'dnd_on': _dnd_on, 'google_page': _google_page, 'media': _media}
+                    'dnd_on': _dnd_on, 'google_page': _google_page, 'gmail_draft_body': _gmail_draft_body,
+                    'media': _media}
 
 
 # Oracle factories (each returns problems; empty = verified) --------------------------------------------------
@@ -240,6 +280,15 @@ def page_shows(url: str, *needles: str) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         text = READERS['google_page'](url)
         return [f'{url} does not show {n!r}' for n in needles if n.lower() not in text.lower()]
+    return oracle
+
+
+def draft_body(subject: str, text: str) -> Callable[[Any], List[str]]:
+    def oracle(run: Any) -> List[str]:
+        body = READERS['gmail_draft_body'](subject)
+        if body is None:
+            return [f'no Gmail draft "{subject}" could be opened']
+        return [] if text.lower() in body.lower() else [f'draft "{subject}" body reads {body[:60]!r}, not {text!r}']
     return oracle
 
 
@@ -369,10 +418,10 @@ def build(m: Any) -> List[Any]:
         # Google (user's account; drafts only, a "Jarvis tests" folder only)
         Case('C28', f'In Gmail, create a draft to comedywithkh@gmail.com with subject "Jarvis bench {tag}" and body '
                     '"benchmark draft". Do not send it.',
-             both(page_shows('https://mail.google.com/mail/u/0/#drafts', f'Jarvis bench {tag}'), no_send),
+             both(draft_body(f'Jarvis bench {tag}', 'benchmark draft'), no_send),  # saved with its body
              approve=('gmail', 'draft')),
         Case('C29', f'In Gmail, open the draft "Jarvis bench {tag}" and change its body to "edited draft". Do not send.',
-             both(page_shows('https://mail.google.com/mail/u/0/#drafts', f'Jarvis bench {tag}'), no_send),
+             both(draft_body(f'Jarvis bench {tag}', 'edited draft'), no_send),  # the edit itself, read in the draft
              approve=('gmail', 'draft')),
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
              both(first_page_count(50, exact=50), no_send)),  # >50 matches: a full page of 50
