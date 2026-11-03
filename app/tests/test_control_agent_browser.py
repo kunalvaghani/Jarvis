@@ -219,12 +219,30 @@ class ShadowAndSecrets(unittest.TestCase):
                                    policy_file=write_policy(Path(folder) / 'p.json'))
             ex = AgentBrowserExecutor(Policy(), runner)
             ex.act(act('navigate', url='https://example.com'))
+            self.assertEqual(ex.own_tab, 't2')
+            self.assertEqual(ex.mine, {'t2'})
             ex.close()
         commands = fake.commands()
         self.assertIn('tab', commands)
         self.assertNotIn('open', commands)    # the user's active tab is never navigated
         self.assertNotIn('close', commands)   # the user's browser is never closed
-        self.assertEqual(ex.own_tab, 't2')
+        self.assertEqual((ex.own_tab, ex.mine), ('', set()))  # Jarvis's tab closed and forgotten
+
+    def test_attached_jarvis_shows_and_drives_only_its_own_tabs(self):
+        listing = json.dumps({'success': True, 'data': {'tabs': [
+            {'tabId': 't1', 'active': False, 'title': 'User private tab', 'url': 'https://private.example'},
+            {'tabId': 't2', 'active': True, 'title': 'Example Domain', 'url': 'https://example.com/'}]}})
+        fake = Fake({'tab list': [listing] * 10, 'get url': fixture('url'), 'tab': ok({})})
+        with tempfile.TemporaryDirectory() as folder:
+            runner = BrowserRunner(Path('agent-browser.exe'), profile='auto-connect', run=fake,
+                                   policy_file=write_policy(Path(folder) / 'p.json'))
+            ex = AgentBrowserExecutor(Policy(), runner)
+            ex.mine, ex.own_tab = {'t2'}, 't2'
+            listed = ex.act(act('list_tabs'))
+            self.assertEqual([t['title'] for t in listed.state['tabs']], ['Example Domain'])
+            refused = ex.act(act('switch_tab', tab_id='t1'))
+            self.assertFalse(refused.ok)
+            self.assertEqual(refused.error_category, ErrorCategory.POLICY_DENIED)
 
 
 if __name__ == '__main__':
@@ -303,3 +321,11 @@ def test_read_only_gmail_questions_take_the_fixed_route_and_writes_do_not():
         == 'https://mail.google.com/mail/u/0/#search/from%3AGoogle'
     assert site_question('In Gmail, create a draft to a@example.com with subject "x". Do not send it.') is None
     assert site_question('Reply to the newest email in my inbox and tell me when done.') is None
+
+
+def test_a_named_wikipedia_page_opens_that_article():
+    from jarvis.conversation_intent import needs_page
+    from jarvis.fast_routes import site_question
+    goal = 'On the Wikipedia page "List of largest cities", what population does it list for Tokyo?'
+    assert needs_page(goal)
+    assert site_question(goal)[0] == 'en.wikipedia.org/wiki/List_of_largest_cities'

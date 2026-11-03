@@ -169,6 +169,8 @@ ANSWER_LIMIT = 9000
 
 
 WIKIPEDIA = re.compile(r"^\s*(?:on|from|according to)\s+wikipedia,?\s+(?P<q>.+?)\s*\??\s*$", re.I)
+WIKI_ARTICLE = re.compile(r'\bwikipedia\s+(?:page|article)\s+(?:(?:called|titled|named|for|on)\s+)?["“](?P<title>[^"”]{2,120})["”]',
+                          re.I)
 
 
 GMAIL_READ = re.compile(r'\b(?:gmail|my inbox|my e-?mails?)\b', re.I)
@@ -199,7 +201,12 @@ def site_question(goal: str) -> Optional[Tuple[str, str]]:
         return None
     sites = SITE.findall(goal)
     wiki = WIKIPEDIA.match(goal)
-    if not sites and wiki:
+    article = WIKI_ARTICLE.search(goal)
+    if not sites and article:
+        # 'On the Wikipedia page "List of largest cities", ...': the named article itself.
+        from urllib.parse import quote
+        sites = ['en.wikipedia.org/wiki/' + quote(article.group('title').strip().replace(' ', '_'))]
+    elif not sites and wiki:
         # "On Wikipedia, what year was the Eiffel Tower completed?": Wikipedia's own search goes to the article.
         from urllib.parse import quote_plus
         subject = re.sub(r'^(?:what|which|when|who|how|where|why)\b.*?\b(?:was|were|is|are|did|does|do)\s+(?:the\s+)?',
@@ -362,7 +369,12 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
     text = str(getattr(control, 'last_web', '') or '')
     if head.get('ok') is False or len(text) < 50:
         return None  # The page did not open or read; the planner can try another way.
-    page_text = _focus(text, question)
+    from . import flags
+    if flags.enabled(getattr(actions, 'config', None), 'control', 'web_scouts'):
+        from .control.web.scouts import brief
+        page_text = brief(question, text, ANSWER_LIMIT)  # page map + best parts (sensor.web.scouts)
+    else:
+        page_text = _focus(text, question)
     if 'mail.google.com' in page:
         # Gmail's list rows carry sender, subject, time and snippet in one label: give the model just those.
         rows = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)

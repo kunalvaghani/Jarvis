@@ -26,7 +26,7 @@ import re
 import subprocess
 import threading
 import time
-from typing import Any, Callable, Dict, List, Optional, Sequence
+from typing import Any, Callable, Dict, List, Optional, Sequence, Set
 
 from pydantic import BaseModel, ConfigDict
 
@@ -206,6 +206,7 @@ class AgentBrowserExecutor(RouteExecutor):
         self.roles: Dict[str, str] = {}
         self.last_url = ''
         self.own_tab = ''  # with --auto-connect: the one tab Jarvis opened; the user's tabs are never driven
+        self.mine: Set[str] = set()  # every tab Jarvis opened in the user's Chrome (only these are shown or driven)
         self.notice = ''
         self.on_notice: Optional[Callable[[str], None]] = None  # shows a notice to the user while Jarvis waits
         self._lock = threading.RLock()
@@ -221,11 +222,13 @@ class AgentBrowserExecutor(RouteExecutor):
 
     def close(self) -> None:
         if getattr(self.run, 'auto_connect', False):
-            if self.own_tab:  # close only Jarvis's own tab; the user's browser stays as it was
-                try:
-                    self.run(['tab', 'close', self.own_tab], timeout_s=20)
+            for tab in sorted(self.mine | ({self.own_tab} if self.own_tab else set())):
+                try:  # close only Jarvis's own tabs; the user's browser stays as it was
+                    self.run(['tab', 'close', tab], timeout_s=20)
                 except ControlError:
                     pass
+            self.mine.clear()
+            self.own_tab = ''
             return
         try:
             self.run(['close'], timeout_s=20)
@@ -251,6 +254,8 @@ class AgentBrowserExecutor(RouteExecutor):
         self._call(['tab', 'new'] + ([url] if url else []), acting=True, timeout_s=60)
         fresh = [t for t in self._tabs() if t['tab_id'] not in before]
         self.own_tab = str(fresh[0]['tab_id']) if fresh else ''
+        if self.own_tab:
+            self.mine.add(self.own_tab)
         return True
 
     # Helpers ----------------------------------------------------------------------------
@@ -313,6 +318,14 @@ class AgentBrowserExecutor(RouteExecutor):
         return [{'tab_id': t.get('tabId'), 'title': str(t.get('title', ''))[:300], 'url': str(t.get('url', ''))[:2000],
                  'active': bool(t.get('active'))} for t in rows if isinstance(t, dict)]
 
+    def _visible_tabs(self) -> List[Dict[str, Any]]:
+        """Tabs the planner may see: in the user's own Chrome only the ones Jarvis opened (the user's tabs, their
+        titles included, stay private and are never taken for Jarvis's pages)."""
+        tabs = self._tabs()
+        if getattr(self.run, 'auto_connect', False):
+            tabs = [t for t in tabs if str(t['tab_id']) in self.mine]
+        return tabs
+
     def _final_url(self) -> str:
         reply = self._call(['get', 'url'], acting=False, timeout_s=20)
         url = str((reply.data or {}).get('url', '')) if isinstance(reply.data, dict) else ''
@@ -371,7 +384,7 @@ class AgentBrowserExecutor(RouteExecutor):
             with self._lock:
                 result = self._dispatch(action)
         except ControlError as error:
-            return ActionResult.failure(action, error, state={'tabs': self._tabs()})
+            return ActionResult.failure(action, error, state={'tabs': self._visible_tabs()})
         except Exception as error:
             return ActionResult(action.action_id, False, Route.BROWSER, text=f'{type(error).__name__}: {error}'[:300],
                                 executed=True, error_category=ErrorCategory.UNCERTAIN)
@@ -380,7 +393,7 @@ class AgentBrowserExecutor(RouteExecutor):
     def _done(self, action: Action, text: str = '', executed: bool = True, verified: bool = False,
               evidence: str = '', **state: Any) -> ActionResult:
         return ActionResult(action.action_id, True, Route.BROWSER, text=text, executed=executed, verified=verified,
-                            evidence=evidence, state={'tabs': self._tabs(), **state})
+                            evidence=evidence, state={'tabs': self._visible_tabs(), **state})
 
     def _dispatch(self, action: Action) -> ActionResult:
         name, p = action.name, action.params
@@ -405,11 +418,27 @@ class AgentBrowserExecutor(RouteExecutor):
             return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
         if name == 'new_tab':
             args = ['tab', 'new'] + ([self.policy.check_url(str(p['url']))] if p.get('url') else [])
+            attached = getattr(self.run, 'auto_connect', False)
+            before = {t['tab_id'] for t in self._tabs()} if attached else set()
             self._call(args, acting=True)
+            if attached:
+                fresh = [str(t['tab_id']) for t in self._tabs() if t['tab_id'] not in before]
+                self.mine.update(fresh)
+                self.own_tab = fresh[0] if fresh else self.own_tab  # the new tab is where Jarvis works now
             if p.get('url'):
                 self._final_url()
             return self._done(action, verified=True)
         if name in ('switch_tab', 'close_tab'):
+            if getattr(self.run, 'auto_connect', False):
+                if str(p['tab_id']) not in self.mine:
+                    raise ControlError(f'Tab {p["tab_id"]} is not one Jarvis opened; your own tabs are never driven.',
+                                       ErrorCategory.POLICY_DENIED)
+                if name == 'switch_tab':
+                    self.own_tab = str(p['tab_id'])
+                else:
+                    self.mine.discard(str(p['tab_id']))
+                    if self.own_tab == str(p['tab_id']):
+                        self.own_tab = next(iter(self.mine), '')
             self._call(['tab', str(p['tab_id'])] if name == 'switch_tab' else ['tab', 'close', str(p['tab_id'])],
                        acting=True)
             return self._done(action, verified=True)
