@@ -197,6 +197,9 @@ CORE.update({
                               ('verdict:Verdict',), 'read_only', '', 'The window list shows the requested final state.'),
     'verifier.folder_exists': ('verifier', 'jarvis.neural.adapters (folder)', ('path:FilePath',), ('verdict:Verdict',),
                                'read_only', '', 'The folder exists on disk.'),
+    'sensor.web.scouts': ('sensor', 'jarvis.control.web.scouts (deterministic; Laya only for ties)',
+                          ('page:WebPage', 'goal:Goal'), ('page:WebPage',), 'read_only', '',
+                          'Split a long page into parts, rank them for the goal, brief the planner.'),
 })
 APPROVAL_CORE = frozenset({'pc.act.headed', 'web.auth', 'pc.clipboard'})
 CORE_REQUIREMENTS = {

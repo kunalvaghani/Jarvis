@@ -411,6 +411,10 @@ def control_tool(actions, step, cancelled):
     from .control.types import ControlError
     name, value = step['action'], step.get('value', '').strip()
     service = actions.control()
+    from .task_state import TaskState
+    state = getattr(actions, 'task_state', None)
+    task = state.snapshot() if isinstance(state, TaskState) else None
+    service.goal = str(task.get('goal', '')) if isinstance(task, dict) else ''
     try:
         if name == 'app_act' and flags.enabled(getattr(actions, 'config', None), 'control', 'arg_repair'):
             from .control.arg_repair import repaired

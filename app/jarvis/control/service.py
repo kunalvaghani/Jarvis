@@ -132,6 +132,7 @@ class ControlService:
         if self.profile not in ('test', 'personal'):
             self.profile = 'test'
         self.last_web = ''          # Last page read (ref -> label lookup).
+        self.goal = ''              # The current task's goal (web scouts rank page parts against it).
         self.last_app = ''          # Last window read.
         self.app_scope = ''         # 'win-<handle>' of the last window read.
 
@@ -323,7 +324,7 @@ class ControlService:
             result = route.act(self._action(Route.BROWSER, 'read_page', params, cancelled))
         if result.ok:
             self.last_web = result.text
-        return self._report(replace_text(result), result.text if result.ok else '')
+        return self._report(replace_text(result), self._page_view(result.text) if result.ok else '')
 
     def web_open(self, url: str, cancelled: Callable[[], bool], profile: str = '', new_tab: bool = False) -> str:
         route = self.browser(profile)
@@ -335,7 +336,16 @@ class ControlService:
             return self._report(result)
         read = route.act(self._action(Route.BROWSER, 'read_page', {'filter': 'all'}, cancelled))  # Text and controls.
         self.last_web = read.text if read.ok else ''
-        return self._report(result, self.last_web)
+        return self._report(result, self._page_view(self.last_web))
+
+    def _page_view(self, read: str) -> str:
+        """A long page as the planner sees it: web scouts' brief (map + best parts) instead of a blind cut at
+        READ_LIMIT. Flag control.web_scouts (default off); last_web keeps the full read for fixed routes."""
+        if len(read) <= READ_LIMIT or self.settings.extra.get('web_scouts') is not True:
+            return read
+        from .web.scouts import brief, laya_tie_break
+        ties = laya_tie_break if self.settings.extra.get('web_scouts_laya') is True else None
+        return brief(self.goal, read, READ_LIMIT, ties)
 
     def web_act(self, op: str, args: Mapping[str, Any], cancelled: Callable[[], bool]) -> str:
         op = infer_op(op, args, WEB_OPS, 'fill')
