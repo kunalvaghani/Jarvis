@@ -383,6 +383,21 @@ class Actions:
         self.anticipation.start()
         self.realtime.start()
         self.self_evolution.start()
+        self._start_mail_replies()
+
+    def _start_mail_replies(self):
+        """Reply drafts on their own (jarvis/mail_replies.py; config mail_replies.enabled): never sends."""
+        options = (self.config or {}).get('mail_replies') if isinstance(getattr(self, 'config', None), dict) else None
+        if not isinstance(options, dict) or options.get('enabled') is not True:
+            return
+        from . import gmail_api
+        if gmail_api.status(self.base) != 'connected':
+            self.report('warning', 'Reply drafts are on, but Gmail API is not connected for your account: '
+                        + gmail_api.unavailable(self.base))
+            return
+        from .mail_replies import MailReplies
+        self.mail_replies = MailReplies(self, options)
+        self.mail_replies.start()
 
     def cancel(self):
         ingress = getattr(self, 'ingress', None)

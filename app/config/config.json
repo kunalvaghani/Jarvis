@@ -1785,5 +1785,12 @@
   },
   "email": {
     "sign_off_name": "Kunal Vaghani"
+  },
+  "mail_replies": {
+    "enabled": true,
+    "interval_seconds": 300,
+    "backfill_days": 30,
+    "max_drafts_per_run": 25,
+    "run_deadline_seconds": 1800
   }
 }
