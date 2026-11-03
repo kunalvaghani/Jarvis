@@ -284,6 +284,10 @@ class AgentBrowserExecutor(RouteExecutor):
             # The user's Chrome is not attachable (chrome://inspect/#remote-debugging is off). Nothing was sent, so
             # use Jarvis's own browser profile for this session; signed-in sites will ask for the switch.
             self.run.auto_connect, self.run.profile = False, FALLBACK_PROFILE
+            if hasattr(self.run, 'session') and not str(self.run.session).endswith('-own'):
+                # The session's daemon is bound to the user's Chrome (CDP): a profile flag on the same session is
+                # ignored and the retry fails the same way. Jarvis's own browser gets its own session.
+                self.run.session = f'{self.run.session}-own'
             self.notice = ('Your Chrome (Person 1) is not open for remote debugging, so I used my own browser profile. '
                            'For signed-in sites, turn on chrome://inspect/#remote-debugging in your Chrome.')
             reply = self.run(args, timeout_s)
