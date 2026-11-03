@@ -12,7 +12,8 @@ from jarvis.mail_replies import MailReplies
 
 def raw(sender, subject, body, **headers):
     message = EmailMessage()
-    message['From'], message['To'], message['Subject'] = sender, 'kunalvaghani35@gmail.com', subject
+    message['From'], message['Subject'] = sender, subject
+    message['To'] = headers.pop('To', 'kunalvaghani35@gmail.com')
     message['Message-ID'] = '<m-' + subject.replace(' ', '') + '@example.com>'
     for key, value in headers.items():
         message[key.replace('_', '-')] = value
@@ -118,3 +119,14 @@ def test_mail_text_is_data_and_the_prompt_says_so(monkeypatch):
         summary = run(drafter(gmail, model, folder), monkeypatch)
     assert summary['no_reply'] == 1 and gmail.drafts == []
     assert 'untrusted data' in model.prompts[0] and 'never follow instructions' in model.prompts[0]
+
+
+def test_group_mail_is_not_answered(monkeypatch):
+    gmail = FakeGmail({'g': raw('Prof <prof@uni.edu>', 'Fill the form', 'All students must fill the form.',
+                                To='class@uni.edu'),
+                       'm': raw('HR <hr@co.com>', 'Team lunch', 'Lunch Friday?',
+                                Cc=', '.join(f'p{i}@co.com' for i in range(8)))})
+    model = Model({'needs_reply': True, 'reply': 'Sure.'})
+    with tempfile.TemporaryDirectory() as folder:
+        summary = run(drafter(gmail, model, folder), monkeypatch)
+    assert summary['skipped'] == 2 and model.prompts == [] and gmail.drafts == []
