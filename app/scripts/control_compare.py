@@ -149,6 +149,7 @@ def main(argv: List[str]) -> int:
               'latency is not significantly worse. "switch" above applies that rule to this round only; small counts '
               'need the repeat runs before any default changes.']
     OUT.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    sys.stdout.reconfigure(errors='replace')  # type: ignore[attr-defined]  # Windows console: cp1252
     print('\n'.join(lines[:24]))
     return 0
 
