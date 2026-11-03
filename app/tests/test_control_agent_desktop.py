@@ -491,3 +491,20 @@ class Cursors(unittest.TestCase):
         seen = ex.read_all()
         self.assertEqual(len(seen), 2)  # the minimized one is skipped
         self.assertEqual(sorted(a[a.index('--window-id') + 1] for a in fake.argv if 'snapshot' in a), ['w-1', 'w-2'])
+
+
+def test_multi_agent_session_always_sends_an_agent_id():
+    """A multi-agent session refuses desktop actions without an agent id: launch from the brain has none yet."""
+    seen = []
+
+    def run(argv, **kwargs):
+        seen.append((argv, kwargs.get('env') or {}))
+        return subprocess.CompletedProcess(argv, 0, '{"version":"2.5","ok":true,"command":"x","data":{}}', '')
+    runner = Runner(binary=Path('agent-desktop.exe'), session='s-1', run=run)
+    runner(['launch', 'notepad'])
+    runner(['click', '@snap:e1'])
+    assert seen[0][1]['AGENT_DESKTOP_AGENT_ID'] == 'jarvis-main'
+    assert seen[1][0][seen[1][0].index('--agent-id') + 1] == 'jarvis-main'
+    runner.agent_id = 'jarvis-t1'
+    runner(['launch', 'notepad'])
+    assert seen[2][1]['AGENT_DESKTOP_AGENT_ID'] == 'jarvis-t1'

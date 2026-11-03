@@ -1,6 +1,7 @@
 """Compare two live-suite arms (legacy vs new control/brain stack) and write docs/control/COMPARISON.md.
 
     python scripts/control_compare.py <arm A start ISO> <arm B start ISO> [<arm B end ISO>]
+    python scripts/control_compare.py <A start> <A end> <B start> <B end>
 
 Reads benchmarks/results/live/C*.jsonl rows by time window: arm A = [A start, B start), arm B = [B start, end).
 Success-rate difference: Newcombe interval from Wilson intervals (95%). Latency difference: bootstrap of the
@@ -96,9 +97,12 @@ def fmt(v: Optional[float], d: int = 1) -> str:
 
 
 def main(argv: List[str]) -> int:
-    a_start, b_start = argv[0], argv[1]
-    end = argv[2] if len(argv) > 2 else '9999'
-    arm_a, arm_b = rows(a_start, b_start), rows(b_start, end)
+    if len(argv) == 4:  # explicit windows: <A start> <A end> <B start> <B end> (arms may have run in either order)
+        a_start, a_end, b_start, end = argv
+    else:
+        a_start, b_start = argv[0], argv[1]
+        a_end, end = b_start, (argv[2] if len(argv) > 2 else '9999')
+    arm_a, arm_b = rows(a_start, a_end), rows(b_start, end)
     lines = ['# Control A/B comparison', '',
              f'Arm A (legacy control, brain shadow) from {a_start}; arm B (agent-desktop + agent-browser, brain on) '
              f'from {b_start}. Same scenarios and shuffle seed, same machine, independent oracles. '

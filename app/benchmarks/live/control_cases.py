@@ -40,15 +40,25 @@ def _processes() -> List[str]:
 
 
 def _windows() -> List[Tuple[int, str, Tuple[int, int, int, int], bool]]:
-    """(handle, title, rect, minimized) of visible top-level windows."""
+    """(handle, title, rect, minimized) of visible top-level windows, in physical pixels: a DPI-unaware reader
+    sees scaled rects (800x600 reads as 640x480 at 125%), so this thread reads per-monitor aware."""
+    import ctypes
     import win32gui
+    try:
+        previous = ctypes.windll.user32.SetThreadDpiAwarenessContext(ctypes.c_void_p(-4))  # PER_MONITOR_AWARE_V2
+    except (AttributeError, OSError):
+        previous = None
     rows: List[Tuple[int, str, Tuple[int, int, int, int], bool]] = []
 
     def visit(h: int, _: Any) -> bool:
         if win32gui.IsWindowVisible(h) and win32gui.GetWindowText(h):
             rows.append((h, win32gui.GetWindowText(h), win32gui.GetWindowRect(h), bool(win32gui.IsIconic(h))))
         return True
-    win32gui.EnumWindows(visit, None)
+    try:
+        win32gui.EnumWindows(visit, None)
+    finally:
+        if previous:  # the oracle runs on Jarvis's thread: leave its DPI awareness as it was
+            ctypes.windll.user32.SetThreadDpiAwarenessContext(ctypes.c_void_p(previous))
     return rows
 
 

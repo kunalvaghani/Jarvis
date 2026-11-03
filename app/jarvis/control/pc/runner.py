@@ -163,15 +163,20 @@ class Runner:
         argv = [str(self.binary)]
         if headed:
             argv.append('--headed')
+        env = self.env
         if self.session:
             argv += ['--session', self.session]
-            if self.agent_id and args and str(args[0]) in AGENT_COMMANDS:
-                argv += ['--agent-id', self.agent_id]
+            # A multi-agent session refuses any desktop action without an agent id (launch, window ops, ...):
+            # actions before a task has claimed its own cursor act as the main Jarvis agent.
+            agent = self.agent_id or 'jarvis-main'
+            if args and str(args[0]) in AGENT_COMMANDS:
+                argv += ['--agent-id', agent]
+            env = {**(self.env if self.env is not None else os.environ), 'AGENT_DESKTOP_AGENT_ID': agent}
         argv += [str(a) for a in args]
         started = time.perf_counter()
         try:
             done = self._run(argv, capture_output=True, text=True, encoding='utf-8', errors='replace',
-                             timeout=timeout_s, env=self.env, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                             timeout=timeout_s, env=env, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         except FileNotFoundError:
             raise ControlError(f'agent-desktop is not installed at {self.binary}; run '
                                'scripts/install_control_backends.ps1.', ErrorCategory.TOOL_ERROR) from None
