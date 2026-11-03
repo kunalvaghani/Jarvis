@@ -1749,7 +1749,8 @@
     "form_fill": false,
     "shared_save": true,
     "api_routes": true,
-    "arg_repair": true
+    "arg_repair": true,
+    "web_scouts": false
   },
   "vision": {
     "tight_escalation": false

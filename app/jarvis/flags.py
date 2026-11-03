@@ -22,6 +22,7 @@ FLAGS: Dict[Tuple[str, str], Any] = {
     ('control', 'shared_save'): False,
     ('control', 'api_routes'): False,
     ('control', 'arg_repair'): False,
+    ('control', 'web_scouts'): False,  # long pages briefed by web scouts (jarvis/control/web/scouts.py)
     ('vision', 'tight_escalation'): False,
     ('recipes', 'replay'): 'off',
     # Not in "brain": that section is sent to the brain worker with every request, which a flag must not change.
