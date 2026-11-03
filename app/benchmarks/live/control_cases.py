@@ -92,8 +92,27 @@ def _set_dnd(on: bool) -> None:
 
 
 def _google_page(url: str) -> str:
-    """A fresh, read-only agent-browser session on the user's Chrome profile: what the server really shows."""
-    from jarvis.control.web.agent_browser_backend import AgentBrowserExecutor, BrowserRunner  # noqa: F401
+    """What the server really shows, read in the user's signed-in Chrome through the Jarvis Browser extension in a
+    separate oracle session and tab (open + read only). Gmail fills lists after load: re-read up to ~12 s and keep
+    the fullest read. Without the extension: a read-only agent-browser session (signed out: Google checks fail)."""
+    from jarvis.control.web.extension_runner import ExtensionRunner
+    from jarvis.control.web.agent_browser_backend import AgentBrowserExecutor
+    from jarvis.control.policy import Policy
+    linked = ExtensionRunner(session='jarvis-oracle')
+    if linked.available():
+        reader = AgentBrowserExecutor(Policy(), linked)
+        try:
+            linked(['tab', 'new', url], 90)
+            best = ''
+            for _ in range(8):
+                time.sleep(1.5)
+                text = reader.read_page('all').text
+                best = text if len(text) > len(best) else best
+            return best
+        finally:
+            for tab in (linked(['tab', 'list'], 20).data or {}).get('tabs', []):
+                if tab.get('active'):  # this session's own tab only
+                    linked(['tab', 'close', str(tab['tabId'])], 20)
     from jarvis.control.web.shadow import ReadOnlyBrowserRunner
     from jarvis.control.policy import Policy
     runner = ReadOnlyBrowserRunner(session='jarvis-oracle', profile='Default', headed=False)
