@@ -23,7 +23,8 @@ const KEYS = {Enter: 13, Tab: 9, Escape: 27, Backspace: 8, Delete: 46, ArrowUp: 
 let port = null;
 const current = new Map();     // Jarvis task (session) -> the tab it works in; tasks run side by side
 const attached = new Set();    // tabs with the debugger attached
-const refMaps = new Map();     // tabId -> Map('e12' -> backendDOMNodeId), from the latest snapshot
+const refMaps = new Map();     // tabId -> Map('e12' -> {node: backendDOMNodeId, session}), latest snapshot
+const frames = new Map();      // tabId -> Map(sessionId -> url) of embedded frames from other sites (OOPIFs)
 const dialogs = new Map();     // tabId -> the page dialog waiting for an answer (alert/confirm/prompt)
 const leaveBlocked = new Set(); // tabs whose page asked to stay (unsaved changes) on Jarvis's last navigation
 let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
@@ -73,10 +74,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     }
   }
   if (method === 'Page.javascriptDialogClosed') dialogs.delete(source.tabId);
+  // Frames from other sites (Docs' Move dialog, embedded widgets) run as their own targets: track their sessions
+  // so reads and actions reach them.
+  if (method === 'Target.attachedToTarget' && params.targetInfo && params.targetInfo.type === 'iframe') {
+    if (!frames.has(source.tabId)) frames.set(source.tabId, new Map());
+    frames.get(source.tabId).set(params.sessionId, params.targetInfo.url || '');
+  }
+  if (method === 'Target.detachedFromTarget' && frames.has(source.tabId)) frames.get(source.tabId).delete(params.sessionId);
 });
 chrome.tabs.onRemoved.addListener((tabId) => {
   attached.delete(tabId);
   refMaps.delete(tabId);
+  frames.delete(tabId);
   if (jarvisTabs.delete(tabId)) remember();
   for (const [session, tab] of current) if (tab === tabId) current.delete(session);
   tabSession.delete(tabId);
@@ -152,7 +161,7 @@ async function ownTab(ref) {
 }
 
 // ---- CDP ------------------------------------------------------------------------------------------------------
-async function cdp(tabId, method, params) {
+async function cdp(tabId, method, params, sessionId) {
   if (!attached.has(tabId)) {
     await chrome.debugger.attach({tabId}, '1.3');
     attached.add(tabId);
@@ -160,6 +169,8 @@ async function cdp(tabId, method, params) {
     // Chrome keeps drawing it, so lists render and drafts autosave while the user works elsewhere.
     const target = {tabId};
     await chrome.debugger.sendCommand(target, 'Page.enable', {}).catch(() => {});  // dialog events
+    await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {autoAttach: true, waitForDebuggerOnStart: false,
+      flatten: true}).catch(() => {});  // embedded frames from other sites
     await chrome.debugger.sendCommand(target, 'Emulation.setFocusEmulationEnabled', {enabled: true}).catch(() => {});
     await chrome.debugger.sendCommand(target, 'Page.setWebLifecycleState', {state: 'active'}).catch(() => {});
     if (renderMode === 'screencast') {
@@ -167,7 +178,7 @@ async function cdp(tabId, method, params) {
         maxHeight: 240, everyNthFrame: 4}).catch(() => {});
     }
   }
-  return chrome.debugger.sendCommand({tabId}, method, params || {});
+  return chrome.debugger.sendCommand(sessionId ? {tabId, sessionId} : {tabId}, method, params || {});
 }
 
 function sleep(ms) {
@@ -190,22 +201,29 @@ async function waitLoad(tabId, state, timeoutMs) {
 
 async function node(tabId, ref) {
   const key = String(ref).replace(/^@/, '');
-  const backendNodeId = (refMaps.get(tabId) || new Map()).get(key);
-  if (backendNodeId === undefined) throw new Error(`unknown ref: ${ref} (read the page again)`);
-  const {object} = await cdp(tabId, 'DOM.resolveNode', {backendNodeId});
-  return {backendNodeId, objectId: object.objectId};
+  const found = (refMaps.get(tabId) || new Map()).get(key);
+  if (found === undefined) throw new Error(`unknown ref: ${ref} (read the page again)`);
+  const {object} = await cdp(tabId, 'DOM.resolveNode', {backendNodeId: found.node}, found.session);
+  return {backendNodeId: found.node, objectId: object.objectId, session: found.session};
 }
 
 async function onNode(tabId, ref, fn, args) {
-  const {objectId} = await node(tabId, ref);
+  const {objectId, session} = await node(tabId, ref);
   const result = await cdp(tabId, 'Runtime.callFunctionOn', {objectId, functionDeclaration: fn,
-    arguments: (args || []).map((value) => ({value})), returnByValue: true, awaitPromise: true});
+    arguments: (args || []).map((value) => ({value})), returnByValue: true, awaitPromise: true}, session);
   if (result.exceptionDetails) throw new Error('the element could not be used: ' + result.exceptionDetails.text);
   return result.result ? result.result.value : undefined;
 }
 
 async function mouse(tabId, ref, kind) {
-  const {backendNodeId} = await node(tabId, ref);
+  const {backendNodeId, session} = await node(tabId, ref);
+  if (session) {  // inside an embedded frame: its own coordinates; the element's own events
+    await cdp(tabId, 'DOM.scrollIntoViewIfNeeded', {backendNodeId}, session).catch(() => {});
+    const events = {hover: 'mouseover', dblclick: 'dblclick', rightclick: 'contextmenu'}[kind];
+    await onNode(tabId, ref, events ? `function () { this.dispatchEvent(new MouseEvent("${events}", {bubbles: true})); }`
+      : 'function () { this.click(); }');
+    return;
+  }
   try {
     await cdp(tabId, 'DOM.scrollIntoViewIfNeeded', {backendNodeId});
   } catch (error) { /* not scrollable: click where it is */ }
@@ -273,11 +291,12 @@ function quote(text) {
 }
 
 async function snapshot(tabId, interactiveOnly) {
-  const {nodes} = await cdp(tabId, 'Accessibility.getFullAXTree', {});
-  const byId = new Map(nodes.map((n) => [n.nodeId, n]));
   const refs = new Map();
   const lines = [];
   let counter = 0;
+  const tree = async (session, depth0) => {
+  const {nodes} = await cdp(tabId, 'Accessibility.getFullAXTree', {}, session);
+  const byId = new Map(nodes.map((n) => [n.nodeId, n]));
   const visit = (n, depth) => {
     const role = n.role ? String(n.role.value) : '';
     const name = n.name ? String(n.name.value || '') : '';
@@ -296,7 +315,7 @@ async function snapshot(tabId, interactiveOnly) {
         }
         if (referable) {
           counter += 1;
-          refs.set('e' + counter, n.backendDOMNodeId);
+          refs.set('e' + counter, {node: n.backendDOMNodeId, session});
           line += ` [ref=e${counter}]`;
         }
         lines.push(line);
@@ -309,7 +328,15 @@ async function snapshot(tabId, interactiveOnly) {
     }
   };
   const root = nodes.find((n) => !n.parentId) || nodes[0];
-  if (root) visit(root, 0);
+  if (root) visit(root, depth0);
+  };
+  await tree(undefined, 0);
+  for (const [session, url] of frames.get(tabId) || new Map()) {
+    let host = '';
+    try { host = new URL(url).host; } catch (error) { host = ''; }
+    lines.push(`- Iframe "${quote(host)}"`);
+    await tree(session, 1).catch(() => lines.push('  - StaticText "(this frame could not be read)"'));
+  }
   refMaps.set(tabId, refs);
   return lines.join('\n');
 }
@@ -384,7 +411,9 @@ async function run(args, session) {
       if (what === 'text') return {text: await onNode(tabId, ref, 'function () { return (this.innerText || this.textContent || "").slice(0, 20000); }')};
       if (what === 'value') return {value: await onNode(tabId, ref, 'function () { return this.value !== undefined ? String(this.value) : (this.innerText || ""); }')};
       // The item ID a list row carries (Drive's data-id): read-only, used to build the item's own address.
-      if (what === 'itemid') return {id: await onNode(tabId, ref, 'function () { const el = this.closest("[data-id]"); return el ? el.getAttribute("data-id") : ""; }')};
+      if (what === 'itemid') return {id: await onNode(tabId, ref, 'function () { for (let el = this; el && el !== document.body; el = el.parentElement) { for (const name of ["data-id", "data-target-id", "data-item-id", "data-doc-id", "data-drive-id", "data-folder-id"]) { const v = el.getAttribute(name); if (v && /^[\\w-]{10,}$/.test(v)) return v; } } return ""; }')};
+      // Diagnostic: the data-* attribute names (not values) on the element and its ancestors.
+      if (what === 'attrnames') return {names: await onNode(tabId, ref, 'function () { const out = []; for (let el = this; el && el !== document.body && out.length < 40; el = el.parentElement) { for (const a of el.attributes) if (a.name.startsWith("data-")) out.push(a.name + (/^[\\w-]{20,}$/.test(a.value) ? "=<id-like>" : "")); } return out; }')};
       throw new Error(`unknown command: get ${what}`);
     }
     case 'is':
@@ -403,8 +432,8 @@ async function run(args, session) {
       await mouse(tabId, rest[0], command);
       return {done: true};
     case 'fill': {
-      const {backendNodeId} = await node(tabId, rest[0]);
-      await cdp(tabId, 'DOM.focus', {backendNodeId});
+      const {backendNodeId, session} = await node(tabId, rest[0]);
+      await cdp(tabId, 'DOM.focus', {backendNodeId}, session);
       // Keys go to whatever has focus; on a page with keyboard shortcuts (Gmail: "e" archives) a stray key acts.
       // Type only when the field itself holds the focus.
       const focused = await onNode(tabId, rest[0], 'function () { this.focus(); const a = document.activeElement; return a === this || this.contains(a); }');
@@ -470,8 +499,8 @@ async function run(args, session) {
       return {done: true};
     }
     case 'scrollintoview': {
-      const {backendNodeId} = await node(tabId, rest[0]);
-      await cdp(tabId, 'DOM.scrollIntoViewIfNeeded', {backendNodeId});
+      const {backendNodeId, session} = await node(tabId, rest[0]);
+      await cdp(tabId, 'DOM.scrollIntoViewIfNeeded', {backendNodeId}, session);
       return {done: true};
     }
     case 'wait': {
