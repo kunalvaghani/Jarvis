@@ -622,10 +622,12 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
     if not body_ref:
         return 'Gmail compose opened, but its message box was not found, so no draft was made. Nothing was sent.'
     actions.report('tool', 'control: web_act fill Message Body (draft only)')
-    _fill_body(control, body_ref, draft['body'] or ' ', cancelled)
+    if not _fill_body(control, body_ref, draft['body'] or ' ', cancelled):
+        return ('The message box did not take the text, so the draft may be saved without its body. It was not '
+                'sent; please check Drafts.')
     # Gmail stores the typed body when the compose tab closes (live 2026-11-03: navigating away asked "Leave
     # site?" and lost it; closing the tab kept it). Close Jarvis's compose tab, then check Drafts in a new one.
-    time.sleep(2.0)
+    time.sleep(4.0)
     _close_current_tab(control, cancelled)
     actions.report('tool', 'control: web_open Gmail drafts (check)')
     control.web_open('https://mail.google.com/mail/u/0/#drafts', cancelled)

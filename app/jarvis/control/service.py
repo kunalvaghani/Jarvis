@@ -39,6 +39,9 @@ WINDOW_OPS = {'minimize', 'maximize', 'restore', 'resize'}  # agent-desktop back
 CHORD = re.compile(r'(?i)(?:(?:ctrl|control|alt|shift|win)\+)+\w+|enter|return|escape|esc|tab|f\d{1,2}|delete|backspace')
 SCREEN_OPS = {'click', 'double_click', 'right_click', 'type', 'scroll', 'locate', 'key', 'screenshot'}
 READ_LIMIT = 9000
+# A task whose point is the page itself keeps its tab: "open youtube", "go to bbc.com", "show me the weather site".
+SHOW_PAGE = re.compile(r'^\s*(?:please\s+)?(?:open|go to|visit|browse|show me|bring up|pull up|load|play|watch)\b', re.I)
+ASKS = re.compile(r'\b(?:tell me|what|which|who|how many|how much|summari[sz]e|read me|and (?:then )?(?:close|tell))\b', re.I)
 Approve = Callable[[Action], bool]
 
 
@@ -235,6 +238,20 @@ class ControlService:
 
     def resume(self) -> None:
         self.locks.reset()
+
+    def end_task(self, goal: str) -> None:
+        """After a task: close the tabs Jarvis opened in the user's Chrome (never the user's own), unless the task
+        was to show a page ("open youtube", "show me bbc.com"). Config control.close_tabs_after_task (default on)."""
+        if self.settings.extra.get('close_tabs_after_task', True) is False or SHOW_PAGE.match(goal or '') \
+                and not ASKS.search(goal or ''):
+            return
+        route = self._routes.get('browser')
+        inner = getattr(route, 'inner', None)
+        if inner is not None and getattr(getattr(inner, 'run', None), 'auto_connect', False):
+            try:
+                inner.close()  # AgentBrowserExecutor.close: only Jarvis's own tabs
+            except Exception:
+                pass
 
     def close(self) -> None:
         with self._lock:

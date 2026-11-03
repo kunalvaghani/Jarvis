@@ -1246,6 +1246,18 @@ class Actions:
 
     @timed_task  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, command, cancelled=lambda: False):
+        """Run one command; after a task, Jarvis's own browser tabs are closed (unless showing the page was the task)."""
+        try:
+            return self._execute_command(command, cancelled)
+        finally:
+            control = getattr(self, '_control', None)
+            if command.kind == "task" and control is not None:
+                try:
+                    control.end_task(command.value)
+                except Exception:
+                    pass  # Tidying tabs must never change the task's outcome.
+
+    def _execute_command(self, command, cancelled=lambda: False):
         """Brain shadow hook (neural.mode shadow; off by default), then the audited legacy path."""
         if command.kind in {"task", "open", "run_command", "click_control", "write_text", "compose_text"}:
             from .request_safety import refusal

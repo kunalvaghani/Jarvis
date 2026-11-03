@@ -229,6 +229,11 @@ class AgentBrowserExecutor(RouteExecutor):
                     pass
             self.mine.clear()
             self.own_tab = ''
+            if getattr(self.run, 'profile', '') == 'extension':
+                try:  # the extension also closes any other tab this task's session opened
+                    self.run(['close'], timeout_s=20)
+                except ControlError:
+                    pass
             return
         try:
             self.run(['close'], timeout_s=20)

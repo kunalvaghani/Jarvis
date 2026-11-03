@@ -27,6 +27,7 @@ const refMaps = new Map();     // tabId -> Map('e12' -> backendDOMNodeId), from 
 const dialogs = new Map();     // tabId -> the page dialog waiting for an answer (alert/confirm/prompt)
 const leaveBlocked = new Set(); // tabs whose page asked to stay (unsaved changes) on Jarvis's last navigation
 let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
+const tabSession = new Map();  // tabId -> the Jarvis task (session) that opened it, for its end-of-task clean-up
 let renderMode = 'screencast'; // keep hidden tabs drawing ('off' to compare)
 const restored = chrome.storage.session.get('jarvisTabs').then((saved) => {
   jarvisTabs = new Set([...(saved.jarvisTabs || []), ...jarvisTabs]);
@@ -78,6 +79,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   refMaps.delete(tabId);
   if (jarvisTabs.delete(tabId)) remember();
   for (const [session, tab] of current) if (tab === tabId) current.delete(session);
+  tabSession.delete(tabId);
 });
 connect();
 
@@ -114,6 +116,7 @@ async function isMine(tabId) {
 async function newTab(url, session) {
   const tab = await chrome.tabs.create({url: url || 'about:blank', active: false});
   jarvisTabs.add(tab.id);
+  tabSession.set(tab.id, session);
   await remember();
   const ids = await groupIds();
   const window = ids.length ? (await chrome.tabGroups.get(ids[0])).windowId : null;
@@ -127,10 +130,13 @@ async function newTab(url, session) {
   return tab.id;
 }
 
-async function workTab(session) {
+async function workTab(session, create) {
   const mine = current.get(session);
   if (mine !== undefined && await isMine(mine)) return mine;
-  return newTab('', session);  // each task gets its own tab; it never takes over another task's or the user's
+  // Only opening a page makes a tab (each task its own; never another task's or the user's). A read or click
+  // with no tab fails instead of leaving an empty tab behind.
+  if (!create) throw new Error('no Jarvis tab is open for this task; open a page first');
+  return newTab('', session);
 }
 
 function tabRef(tabId) {
@@ -318,7 +324,12 @@ async function run(args, session) {
     renderMode = rest[0] === 'off' ? 'off' : 'screencast';
     return {render: renderMode};
   }
-  if (command === 'close') return {closed: false};  // the user's browser is never closed
+  if (command === 'close') {  // end of a task: close the tabs this task opened (never the browser or user tabs)
+    const own = [...jarvisTabs].filter((id) => tabSession.get(id) === session);
+    for (const id of own) await chrome.tabs.remove(id).catch(() => {});
+    current.delete(session);
+    return {closed: own.length};
+  }
   if (command === 'tab') {
     const [sub, value] = rest;
     if (sub === 'list') {
@@ -339,7 +350,7 @@ async function run(args, session) {
     current.set(session, await ownTab(sub));
     return {tabId: sub};
   }
-  const tabId = await workTab(session);
+  const tabId = await workTab(session, command === 'open');
   if (dialogs.has(tabId)) throw new Error(`the page shows a dialog (${dialogs.get(tabId)}); it needs a decision`);
   switch (command) {
     case 'open': {
