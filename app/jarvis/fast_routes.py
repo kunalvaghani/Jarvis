@@ -368,6 +368,7 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
     head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
     text = str(getattr(control, 'last_web', '') or '')
     if head.get('ok') is False or len(text) < 50:
+        actions.report('brain', f'Fixed route gave up: the page did not open or read ({len(text)} characters)')
         return None  # The page did not open or read; the planner can try another way.
     from . import flags
     if flags.enabled(getattr(actions, 'config', None), 'control', 'web_scouts'):
@@ -384,7 +385,8 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
             if cancelled():
                 break
             time.sleep(1.0)
-            text = control.web_read(cancelled, 'all')
+            control.web_read(cancelled, 'all')
+            text = str(getattr(control, 'last_web', '') or '')  # the full read, not the planner's cut view
             again = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)
             settled = bool(rows) and len(again) == len(rows)
             rows = again
@@ -400,5 +402,8 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
         f'NOT ON PAGE.\nQuestion: {question}\nPage text:\n{page_text}'))
     answer = ' '.join(str(reply.get('text', '') if isinstance(reply, dict) else reply).split())[:800]
     if not answer or 'NOT ON PAGE' in answer.upper() or not grounded(answer, text):
+        why = 'no answer' if not answer else ('not on the page' if 'NOT ON PAGE' in answer.upper()
+                                              else 'a number in the answer is not on the page')
+        actions.report('brain', f'Fixed route gave up: {why} ({len(page_text)} of {len(text)} characters read)')
         return None  # Not answerable from this page: the planner continues (it can navigate further).
     return 'Finished: ' + answer

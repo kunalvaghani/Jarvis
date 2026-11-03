@@ -420,6 +420,11 @@ class AgentBrowserExecutor(RouteExecutor):
                     except ControlError:
                         pass  # judged by the final URL below
                 final = self._final_url()
+                deadline = time.monotonic() + 15  # the load wait can pass on the blank tab before navigation starts
+                while not same_site(checked, final) and time.monotonic() < deadline:
+                    action.cancel.raise_if_cancelled()
+                    time.sleep(.5)
+                    final = self._final_url()
                 if not same_site(checked, final):
                     raise ControlError(f'The page did not load {checked} (the tab shows {final or "nothing"}).',
                                        ErrorCategory.VERIFICATION_FAILED, executed=True)
