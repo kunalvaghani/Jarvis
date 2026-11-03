@@ -187,7 +187,8 @@ class ControlService:
             import os
             mode = os.environ.get('JARVIS_HEADED_INPUT') or str(self.settings.extra.get('headed_input', 'ask'))
             headed = HeadedGate(mode if mode in ('allow', 'ask', 'deny') else 'ask', self._confirm_headed)
-            candidate = AgentDesktopExecutor(self.policy, headed=headed)
+            candidate = AgentDesktopExecutor(self.policy, headed=headed,
+                                             cursors=bool(self.settings.extra.get('cursor_overlay', True)))
             if backend == 'agent_desktop':
                 return candidate
             from .pc.shadow import ReadOnlyRunner, ShadowExecutor
@@ -433,6 +434,15 @@ class ControlService:
 
     def app_read(self, window: str, filter: str, cancelled: Callable[[], bool]) -> str:
         route = self.uia()
+        if window.strip().lower() in ('all', 'everything', 'screen') and hasattr(route.inner, 'read_all'):
+            # agent-desktop: every open window at once, read in parallel, one overview for the planner.
+            parts = []
+            for obs in route.inner.read_all(8, 'interactive' if (filter or 'interactive') == 'interactive' else 'all'):
+                lines = obs.text.splitlines()
+                parts.append(f'== {obs.state.get("title", "")} [window {obs.state.get("handle")}] '
+                             f'({len(lines)} controls)\n' + '\n'.join(lines[:60]))
+            return json.dumps({'ok': True, 'verified': True, 'executed': False,
+                               'result': f'{len(parts)} windows read at once'}) + '\n' + '\n'.join(parts)[:READ_LIMIT]
         params: Dict[str, Any] = {'window': window, 'filter': filter or 'all'}  # Text too, e.g. Calculator's display.
         if window.isdigit():
             params = {'handle': int(window), 'filter': filter or 'all'}

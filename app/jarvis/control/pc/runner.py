@@ -124,6 +124,10 @@ CATEGORIES: Dict[str, ErrorCategory] = {
     'NOTIFICATION_NOT_FOUND': ErrorCategory.TARGET_NOT_FOUND, 'INTERNAL': ErrorCategory.TOOL_ERROR,
 }
 REFRESHABLE = frozenset({'STALE_REF', 'AMBIGUOUS_TARGET', 'SNAPSHOT_NOT_FOUND'})
+# Desktop UI actions: in a multi-agent session each carries the acting agent's id (its own cursor).
+AGENT_COMMANDS = frozenset({'click', 'set-value', 'toggle', 'check', 'uncheck', 'select', 'expand', 'collapse', 'scroll',
+                            'scroll-to', 'type', 'press', 'focus', 'clear', 'right-click', 'double-click', 'hover',
+                            'drag', 'mouse-click', 'mouse-move', 'mouse-wheel'})
 
 
 def to_control_error(envelope: Envelope) -> ControlError:
@@ -148,6 +152,7 @@ class Runner:
                  run: Run = subprocess.run, env: Optional[Dict[str, str]] = None) -> None:
         self.binary = Path(binary or os.environ.get('JARVIS_AGENT_DESKTOP') or DEFAULT_BINARY)
         self.session, self.headed, self._run = session, headed, run
+        self.agent_id = ''  # multi-agent cursor session: which Jarvis task this action belongs to
         self.env = env
         self.calls: List[Dict[str, Any]] = []  # bounded per-call log (command, ms, ok, code): never payloads
 
@@ -160,6 +165,8 @@ class Runner:
             argv.append('--headed')
         if self.session:
             argv += ['--session', self.session]
+            if self.agent_id and args and str(args[0]) in AGENT_COMMANDS:
+                argv += ['--agent-id', self.agent_id]
         argv += [str(a) for a in args]
         started = time.perf_counter()
         try:

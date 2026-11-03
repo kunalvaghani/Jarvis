@@ -33,6 +33,21 @@ def acted(command, delivery='delivered_verified'):
     return ok(command, {'disposition': {'delivery': delivery, 'retry': 'unsafe'}, 'steps': []})
 
 
+def command_of(argv):
+    """The agent-desktop command in an argv: the first token that is neither a flag nor a flag's value."""
+    skip = False
+    for token in argv[1:]:
+        if skip:
+            skip = False
+            continue
+        if token in ('--session', '--agent-id'):
+            skip = True
+            continue
+        if not token.startswith('--'):
+            return token
+    return ''
+
+
 class Fake:
     """Scripted agent-desktop: replies per command name, records every argv."""
 
@@ -42,14 +57,13 @@ class Fake:
 
     def __call__(self, argv, **kwargs):
         self.argv.append(argv)
-        command = next(a for a in argv[1:] if not a.startswith('--') and a not in ('--session',) and
-                       not (argv[argv.index(a) - 1] == '--session'))
+        command = command_of(argv)
         queue = self.replies.get(command) or [err(command, 'INTERNAL', 'delivered_unverified', 'unsafe')]
         out = queue.pop(0) if len(queue) > 1 else queue[0]
         return subprocess.CompletedProcess(argv, 0, out, '')
 
     def commands(self):
-        return [next(a for a in v[1:] if not a.startswith('--')) for v in self.argv]
+        return [command_of(v) for v in self.argv]
 
 
 def executor(replies, gate='deny', policy=None):
@@ -451,3 +465,29 @@ class Resize(unittest.TestCase):
         with unittest.mock.patch.object(resolver, 'start_apps', lambda: Launching.APPS):
             with self.assertRaises(ControlError):
                 fast_paths.run('resize notepad to 800 by 600', lambda k, d: True, Runner(Path('a.exe'), run=fake))
+
+
+class Cursors(unittest.TestCase):
+    def test_each_task_acts_under_its_own_agent_and_reads_carry_no_agent(self):
+        fake = Fake({'session': ok('session', {'session_id': 'sess1'}), 'cursor-overlay': ok('cursor-overlay', {'rendered': True}),
+                     'snapshot': SNAP, 'click': acted('click')})
+        ex = AgentDesktopExecutor(Policy(), Runner(Path('a.exe'), run=fake), cursors=True)
+        ex.read_window(5, 'interactive')
+        first = Action('click', 'press save', Route.UIA, params={'scope': 'win-5', 'ref': 'd2'}, task_id='task-a')
+        second = Action('click', 'press save', Route.UIA, params={'scope': 'win-5', 'ref': 'd2'}, task_id='task-b')
+        self.assertTrue(ex.act(first).ok and ex.act(second).ok)
+        clicks = [a for a in fake.argv if 'click' in a]
+        self.assertEqual([c[c.index('--agent-id') + 1] for c in clicks], ['jarvis-task-a', 'jarvis-task-b'])
+        overlays = [a for a in fake.argv if 'cursor-overlay' in a]
+        self.assertEqual(len(overlays), 2)  # one cursor per task, each its own colour
+        self.assertNotEqual(overlays[0][overlays[0].index('--accent') + 1], overlays[1][overlays[1].index('--accent') + 1])
+        self.assertTrue(all('--agent-id' not in a for a in fake.argv if 'snapshot' in a))
+        self.assertIn('--multi-agent', next(a for a in fake.argv if 'session' in a))
+
+    def test_read_all_reads_every_open_window(self):
+        rows = ok('list-windows', [{'id': 'w-1', 'title': 'A', 'visible': True}, {'id': 'w-2', 'title': 'B', 'visible': True},
+                                   {'id': 'w-3', 'title': 'C', 'minimized': True}])
+        ex, fake = executor({'list-windows': rows, 'snapshot': SNAP})
+        seen = ex.read_all()
+        self.assertEqual(len(seen), 2)  # the minimized one is skipped
+        self.assertEqual(sorted(a[a.index('--window-id') + 1] for a in fake.argv if 'snapshot' in a), ['w-1', 'w-2'])

@@ -17,6 +17,7 @@ Rules (docs/control/ADAPTER_PLAN.md):
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import re
 import subprocess
 import threading
 import time
@@ -87,12 +88,14 @@ class AgentDesktopExecutor(RouteExecutor):
     route = Route.UIA  # Same route identity: ControlService and the planner need no change.
 
     def __init__(self, policy: Policy, runner: Optional[Runner] = None, headed: Optional[HeadedGate] = None,
-                 settle_ms: int = 8000, popen: Callable[..., Any] = subprocess.Popen) -> None:
+                 settle_ms: int = 8000, popen: Callable[..., Any] = subprocess.Popen, cursors: bool = False) -> None:
         self.policy, self.run = policy, runner or Runner()
         self.headed = headed or HeadedGate()
         self.settle_ms, self._popen = settle_ms, popen
         self.scopes: Dict[str, _Scope] = {}
         self.launched: List[int] = []
+        self.cursors = cursors  # visible per-task cursors (agent-desktop overlay); presentation only
+        self.agents: Set[str] = set()
         self._lock = threading.RLock()
 
     # Lifecycle ----------------------------------------------------------------------
@@ -113,13 +116,32 @@ class AgentDesktopExecutor(RouteExecutor):
             except ControlError:
                 pass
 
-    def start_session(self, task_id: str) -> None:
-        """One traced session per task: the trace (redacted by agent-desktop) is the verifier's evidence."""
-        name = f'jarvis-{task_id or "task"}'[:120]
-        env = self.run(['session', 'start', '--name', name], timeout_s=10)
+    def start_session(self, task_id: str = '') -> None:
+        """One traced, multi-agent session per Jarvis process: every task acts under its own agent id, so each
+        gets its own visible cursor. The trace (redacted by agent-desktop) is the verifier's evidence."""
+        args = ['session', 'start', '--name', 'jarvis']
+        if self.cursors:
+            args += ['--cursor', '--multi-agent']
+        env = self.run(args, timeout_s=10)
         if env.ok and isinstance(env.data, dict) and env.data.get('session_id'):
             self.close()
             self.run.session = str(env.data['session_id'])
+
+    PALETTE = ('#4299FF', '#22C55E', '#F59E0B', '#EF4444', '#A855F7', '#14B8A6')
+
+    def use_agent(self, task_id: str, label: str = '') -> None:
+        """Act as this task's agent: its own cursor colour and a short label of what it is doing."""
+        agent = 'jarvis-' + (re.sub(r'[^A-Za-z0-9_-]', '', task_id)[:24] or 'main')
+        if agent == self.run.agent_id:
+            return
+        self.run.agent_id = agent
+        if self.cursors and self.run.session and agent not in self.agents:
+            colour = self.PALETTE[len(self.agents) % len(self.PALETTE)]
+            args = ['cursor-overlay', 'enable', '--accent', colour, '--agent-id', agent]
+            if label:
+                args += ['--label', ' '.join(label.split()[:6])]
+            self.run(args, timeout_s=10)
+            self.agents.add(agent)
 
     # Reading --------------------------------------------------------------------------
     def _check(self, env: Envelope) -> Envelope:
@@ -205,6 +227,21 @@ class AgentDesktopExecutor(RouteExecutor):
         if secret:
             extras.append('password')
         return (' ' + ' '.join(extras)) if extras else ''
+
+    def read_all(self, limit: int = 8, filter: str = 'interactive') -> List[Observation]:
+        """Every open, non-minimized window, snapshotted in parallel (reads take no interaction lease)."""
+        from concurrent.futures import ThreadPoolExecutor
+        rows = [w for w in self.windows() if w.get('visible', True) and not w.get('minimized')
+                and w.get('accessible', True)][:limit]
+        handles = [int(str(w['id'])[2:]) for w in rows]
+
+        def one(handle: int) -> Optional[Observation]:
+            try:
+                return self.read_window(handle, filter)
+            except ControlError:
+                return None
+        with ThreadPoolExecutor(max_workers=min(4, max(1, len(handles)))) as pool:
+            return [o for o in pool.map(one, handles) if o is not None]
 
     def observe(self, scope: Optional[str] = None, **options: Any) -> Observation:
         if scope and scope.startswith('win-'):
@@ -298,8 +335,10 @@ class AgentDesktopExecutor(RouteExecutor):
     def _dispatch(self, action: Action) -> ActionResult:
         name, p = action.name, action.params
         action.cancel.raise_if_cancelled()
-        if action.task_id and not self.run.session:
-            self.start_session(action.task_id)
+        if not self.run.session and self.cursors:
+            self.start_session()
+        if self.run.session:
+            self.use_agent(action.task_id or 'main', action.goal)
         if name == 'launch':
             handle, title = self.launch(str(p['app']), str(p.get('path', '')), action.timeout_s)
             return self._done(action, f'Opened {title}', verified=True, evidence='window appeared', handle=handle,
