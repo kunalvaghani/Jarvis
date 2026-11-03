@@ -414,6 +414,16 @@ class AgentBrowserExecutor(RouteExecutor):
                                        'open Chrome and try again. Nothing was done.', ErrorCategory.TARGET_NOT_FOUND)
                 if not opened:
                     self._call(['open', checked], acting=True, timeout_s=action.timeout_s + 15)
+                else:  # 'tab new <url>' returns before the page starts loading (BBC read as about:blank)
+                    try:
+                        self._call(['wait', '--load', 'domcontentloaded'], acting=False, timeout_s=action.timeout_s + 15)
+                    except ControlError:
+                        pass  # judged by the final URL below
+                final = self._final_url()
+                if not same_site(checked, final):
+                    raise ControlError(f'The page did not load {checked} (the tab shows {final or "nothing"}).',
+                                       ErrorCategory.VERIFICATION_FAILED, executed=True)
+                return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
             final = self._final_url()
             return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
         if name == 'new_tab':
@@ -540,3 +550,9 @@ def roles(snapshot: str) -> Dict[str, str]:
         if m and ref:
             found['ref_' + ref.group(1)[1:]] = m.group('role')
     return found
+
+
+def same_site(asked: str, final: str) -> bool:
+    """The tab reached a real page: http(s), not about:blank or an error page. Redirects to another site
+    (gmail.com -> mail.google.com) are normal, so the host is not compared."""
+    return final.startswith(('http://', 'https://')) and not final.startswith('https://chrome-error')

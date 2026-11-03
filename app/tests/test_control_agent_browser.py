@@ -329,3 +329,11 @@ def test_a_named_wikipedia_page_opens_that_article():
     goal = 'On the Wikipedia page "List of largest cities", what population does it list for Tokyo?'
     assert needs_page(goal)
     assert site_question(goal)[0] == 'en.wikipedia.org/wiki/List_of_largest_cities'
+
+
+def test_a_navigation_only_counts_when_the_tab_reached_the_site():
+    from jarvis.control.web.agent_browser_backend import same_site
+    assert same_site('https://www.bbc.com', 'https://www.bbc.com/news')
+    assert same_site('gmail.com', 'https://mail.google.com/mail/u/0/')  # redirects are normal
+    assert same_site('https://en.wikipedia.org/wiki/X', 'https://en.wikipedia.org/wiki/X')
+    assert not same_site('https://www.bbc.com', 'about:blank')
