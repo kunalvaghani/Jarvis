@@ -352,6 +352,16 @@ class ControlService:
 
     def web_open(self, url: str, cancelled: Callable[[], bool], profile: str = '', new_tab: bool = False) -> str:
         route = self.browser(profile)
+        from ..google_account import configured_account, for_account, slot_from
+        account = configured_account()
+        if account:  # Google links go to the user's main account (config google.account), not Chrome's first
+
+            def lookup(name: str) -> Optional[str]:
+                probe = route.act(self._action(Route.BROWSER, 'navigate',
+                                               {'url': 'https://mail.google.com/mail/?authuser=' + name},
+                                               cancelled, 'Gmail account', timeout=45))
+                return slot_from(str(route.probe('url') or '')) if probe.ok else None
+            url = for_account(url, account, lookup)
         host = urlsplit(url if '//' in url else 'https://' + url).hostname or url
         route.subtitle = 'Browser · ' + host
         name, params = ('new_tab', {'url': url}) if new_tab else ('navigate', {'url': url})

@@ -91,6 +91,16 @@ def _set_dnd(on: bool) -> None:
         winreg.SetValueEx(key, 'NOC_GLOBAL_SETTING_TOASTS_ENABLED', 0, winreg.REG_DWORD, 0 if on else 1)
 
 
+def _account_url(linked: Any, url: str) -> str:
+    """The oracle reads the same Google account Jarvis uses (config google.account)."""
+    from jarvis.google_account import configured_account, for_account, slot_from
+
+    def lookup(name: str) -> Optional[str]:
+        linked(['open', 'https://mail.google.com/mail/?authuser=' + name], 60)
+        return slot_from(str((linked(['get', 'url'], 20).data or {}).get('url', '')))
+    return for_account(url, configured_account(), lookup)
+
+
 def _google_page(url: str) -> str:
     """What the server really shows, read in the user's signed-in Chrome through the Jarvis Browser extension in a
     separate oracle session and tab (open + read only). Gmail fills lists after load: re-read up to ~12 s and keep
@@ -102,7 +112,8 @@ def _google_page(url: str) -> str:
     if linked.available():
         reader = AgentBrowserExecutor(Policy(), linked)
         try:
-            linked(['tab', 'new', url], 90)
+            linked(['tab', 'new', 'about:blank'], 30)
+            linked(['open', _account_url(linked, url)], 90)
             best = ''
             for _ in range(8):
                 time.sleep(1.5)
@@ -139,7 +150,9 @@ def _gmail_draft_body(subject: str) -> Optional[str]:
         return None
     reader = AgentBrowserExecutor(Policy(), linked)
     try:
-        linked(['tab', 'new', 'https://mail.google.com/mail/u/0/#search/' + quote(f'in:drafts "{subject}"')], 90)
+        linked(['tab', 'new', 'about:blank'], 30)
+        linked(['open', _account_url(linked, 'https://mail.google.com/mail/u/0/#search/'
+                                     + quote(f'in:drafts "{subject}"'))], 90)
         row = ''
         for _ in range(10):
             time.sleep(1.5)
@@ -279,6 +292,11 @@ def media_playing(source: str, playing: bool = True) -> Callable[[Any], List[str
 def page_shows(url: str, *needles: str) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         text = READERS['google_page'](url)
+        if 'drive.google.com/drive/search' in url:
+            # A search page repeats the query ("No results for 'X'"): only a listed item counts.
+            return [f'Drive search lists no item named {n!r}' for n in needles
+                    if f"quick overview for '{n}'".lower() not in text.lower()
+                    and not re.search(r'(?:LayoutTableCell|gridcell|row) "' + re.escape(n) + r'(?: |")', text, re.I)]
         return [f'{url} does not show {n!r}' for n in needles if n.lower() not in text.lower()]
     return oracle
 
@@ -460,7 +478,9 @@ def build(m: Any) -> List[Any]:
              both(page_shows(f'https://drive.google.com/drive/search?q=Jarvis%20bench%20sheet%20{tag}',
                              f'Jarvis bench sheet {tag}'), answer_mentions('15')), approve=('sheets',)),
         Case('C34', f'Upload c34.txt {IN_TEST} to the "{google_folder}" folder in Google Drive.',
-             page_shows('https://drive.google.com/drive/search?q=c34.txt', 'c34.txt'), approve=('upload', 'drive'),
+             both(page_shows('https://drive.google.com/drive/search?q=c34.txt', 'c34.txt'),
+                  answer_mentions('uploaded')),  # an older c34.txt in Drive must not pass for this upload
+             approve=('upload', 'drive'),
              prepare=fixture('c34.txt', 'upload me\n')),
         # Hard cases
         Case('C35', f'Notepad is minimized with c35.txt open; type " and more" at the end of it and save.',

@@ -449,8 +449,8 @@ def _google_files(actions: Any, request: Dict[str, Any], goal: str, cancelled: C
     from .google_files import DOC, SHEET, Files
     kind, folder_name = request['kind'], request['folder']
     what = {'folder': f'the Drive folder "{folder_name}"',
-            'doc': f'the Google Doc "{request.get("name")}" in "{folder_name}"',
-            'sheet': f'the Google Sheet "{request.get("name")}" in "{folder_name}"',
+            'doc': f'the Google Docs document "{request.get("name")}" in "{folder_name}"',
+            'sheet': f'the Google Sheets spreadsheet "{request.get("name")}" in "{folder_name}"',
             'upload': f'an upload of {request.get("file")} to "{folder_name}"'}[kind]
     actions.report('brain', f'Fixed route: Google API, {what}')
     path = None
@@ -459,7 +459,7 @@ def _google_files(actions: Any, request: Dict[str, Any], goal: str, cancelled: C
         roots = list(folders_in_goal(actions.base, goal).values())
         if len(roots) != 1:
             return f'Which folder is {request["file"]} in? Name one of your folders (for example "my Jarvis test folder").'
-        path = actions.control().policy.check_path(Path(roots[0]) / request['file'])  # approved directories only
+        path = actions.control().policy.confine(Path(roots[0]) / request['file'])  # approved directories only
         if not Path(path).is_file():
             return f'{request["file"]} is not in {roots[0]}, so nothing was uploaded.'
     files = Files(actions.base)
@@ -602,7 +602,16 @@ def gmail_compose_request(goal: str) -> bool:
         return False
     if re.search(r'\bdraft\s+(?:titled|called|named|with subject)\b|\b(?:the|my|last|latest)\s+draft\b', goal, re.I):
         return False  # an existing draft: not a new email
-    return bool(gmail_api.status() != 'connected')
+    from .google_account import configured_account  # noqa: F401  (account mapping happens in web_open)
+    prefer = ''
+    try:
+        prefer = str((json.loads((Path(__file__).resolve().parent.parent / 'config' / 'config.json')
+                                 .read_text(encoding='utf-8')).get('google') or {}).get('gmail', ''))
+    except (OSError, ValueError, AttributeError):
+        prefer = ''
+    # The user's choice (config google.gmail = "browser"): Gmail through the Chrome extension even when the API
+    # is connected; otherwise the API workflow when it is connected for the right account.
+    return prefer == 'browser' or gmail_api.status() != 'connected'
 
 
 def _preview(draft: Dict[str, str]) -> str:
@@ -882,22 +891,29 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
     if 'mail.google.com' in page:
         # Gmail's list rows carry sender, subject, time and snippet in one label: give the model just those.
         rows = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)
-        # Gmail fills the list in stages after the page loads (searches especially; 0, then 5, then 50 rows seen):
-        # re-read until two reads agree, at most 6 more reads.
-        for _ in range(6):
-            if cancelled():
+        # Gmail fills the list in stages after the page loads (0, then 5, then 40 of 50 rows seen live). Its toolbar
+        # range ("1–50 of many") is the page's own count: read until the rows reach it (or two reads agree when
+        # there is no range), at most 10 more reads.
+        def page_range(read: str) -> int:
+            found = re.search(r'"(\d[\d,]*)\s*[–-]\s*(\d[\d,]*) of', read)
+            return int(found.group(2).replace(',', '')) - int(found.group(1).replace(',', '')) + 1 if found else 0
+        for _ in range(10):
+            expected = page_range(text)
+            if rows and (len(rows) == expected if expected else False) or cancelled():
                 break
             time.sleep(1.0)
             control.web_read(cancelled, 'all')
             text = str(getattr(control, 'last_web', '') or '')  # the full read, not the planner's cut view
             again = re.findall(r'^\s*row "([^"]{8,})"', text, re.M)
-            settled = bool(rows) and len(again) == len(rows)
+            settled = not page_range(text) and bool(rows) and len(again) == len(rows)
             rows = again
             if settled:
                 break
         if not rows:
             return None  # Not the mail list (signed out, still loading): the planner decides.
-        page_text = f'{len(rows)} email rows on this page, newest first:\n' + '\n'.join(
+        expected = page_range(text)
+        shown = f'Gmail\'s toolbar shows {expected} emails on this page. ' if expected else ''
+        page_text = f'{shown}{len(rows)} email rows on this page, newest first:\n' + '\n'.join(
             f'{n}. {row[:300]}' for n, row in enumerate(rows, 1))
     reply = actions.brain.client.request('tool_text', cancelled, tool='think', context='', goal=(
         'Answer the question using ONLY this page text. Quote names and numbers exactly as the page shows them. '
