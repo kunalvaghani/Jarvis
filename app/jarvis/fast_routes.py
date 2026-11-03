@@ -318,14 +318,30 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
     if not _approved(actions, 'gmail draft', f'Create a Gmail draft to {draft["to"]} with subject '
                                              f'"{draft["subject"]}" (it is not sent)', cancelled):
         return 'Did not create the Gmail draft: it was not approved. Nothing was written.'
-    url = ('https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + quote(draft['to']) + '&su=' + quote(draft['subject'])
-           + '&body=' + quote(draft['body']))
-    actions.report('tool', 'control: web_open Gmail compose (filled, not sent)')
+    # A compose link alone is not saved (live 2026-11-03: Drafts stayed empty); Gmail saves once the message is
+    # edited. So: recipient and subject from the link, the body typed into "Message Body", then Gmail's "Saved".
+    url = ('https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + quote(draft['to']) + '&su=' + quote(draft['subject']))
+    actions.report('tool', 'control: web_open Gmail compose (not sent)')
     opened = control.web_open(url, cancelled)
     head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
     if head.get('ok') is False:
         return 'Gmail compose did not open, so no draft was made. ' + str(head.get('result', ''))[:200]
-    time.sleep(5.0)  # Gmail autosaves a filled compose window within a few seconds
+    body_ref = ''
+    for _ in range(8):  # the compose form renders after the page loads
+        body = re.search(r'textbox "Message Body"[^\n]*\[(ref_\d+)\]', control.web_read(cancelled, 'interactive'))
+        if body:
+            body_ref = body.group(1)
+            break
+        time.sleep(1.0)
+    if not body_ref:
+        return 'Gmail compose opened, but its message box was not found, so no draft was made. Nothing was sent.'
+    actions.report('tool', 'control: web_act fill Message Body (draft only)')
+    control.web_act('fill', {'ref': body_ref, 'value': draft['body'] or ' '}, cancelled)
+    for _ in range(12):  # Gmail shows "Saved" next to the buttons once the draft is stored
+        time.sleep(1.0)
+        control.web_read(cancelled, 'all')
+        if re.search(r'"(?:Draft saved|Saved)\b', str(getattr(control, 'last_web', '') or '')):
+            break
     actions.report('tool', 'control: web_open Gmail drafts (check)')
     control.web_open('https://mail.google.com/mail/u/0/#drafts', cancelled)
     for _ in range(8):  # the Drafts list fills in after the page loads

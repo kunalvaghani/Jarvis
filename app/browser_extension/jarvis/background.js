@@ -20,9 +20,18 @@ const KEYS = {Enter: 13, Tab: 9, Escape: 27, Backspace: 8, Delete: 46, ArrowUp: 
   ArrowRight: 39, Home: 36, End: 35, PageUp: 33, PageDown: 34, Space: 32};
 
 let port = null;
-let current = null;            // the tab Jarvis is working in (always one of the group's tabs)
+const current = new Map();     // Jarvis task (session) -> the tab it works in; tasks run side by side
 const attached = new Set();    // tabs with the debugger attached
 const refMaps = new Map();     // tabId -> Map('e12' -> backendDOMNodeId), from the latest snapshot
+let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
+let renderMode = 'screencast'; // keep hidden tabs drawing ('off' to compare)
+const restored = chrome.storage.session.get('jarvisTabs').then((saved) => {
+  jarvisTabs = new Set([...(saved.jarvisTabs || []), ...jarvisTabs]);
+});
+
+function remember() {
+  return chrome.storage.session.set({jarvisTabs: [...jarvisTabs]});
+}
 
 // ---- Connection ------------------------------------------------------------------------------------------------
 function connect() {
@@ -42,17 +51,26 @@ chrome.runtime.onInstalled.addListener(connect);
 chrome.alarms.create('jarvis-keepalive', {periodInMinutes: 0.5});
 chrome.alarms.onAlarm.addListener(() => connect());
 chrome.debugger.onDetach.addListener((source) => attached.delete(source.tabId));
+chrome.debugger.onEvent.addListener((source, method, params) => {
+  // Screencast frames keep a background tab drawing (Gmail renders lists and autosaves only when it draws).
+  if (method === 'Page.screencastFrame') {
+    chrome.debugger.sendCommand(source, 'Page.screencastFrameAck', {sessionId: params.sessionId}).catch(() => {});
+  }
+});
 chrome.tabs.onRemoved.addListener((tabId) => {
   attached.delete(tabId);
   refMaps.delete(tabId);
-  if (current === tabId) current = null;
+  if (jarvisTabs.delete(tabId)) remember();
+  for (const [session, tab] of current) if (tab === tabId) current.delete(session);
 });
 connect();
 
 async function onMessage(message) {
   const reply = {id: message && message.id};
   try {
-    reply.data = await run(Array.isArray(message.args) ? message.args.map(String) : []);
+    await restored;
+    const session = String((message && message.session) || 'main');
+    reply.data = await run(Array.isArray(message.args) ? message.args.map(String) : [], session);
     reply.success = true;
   } catch (error) {
     reply.success = false;
@@ -67,17 +85,20 @@ async function groupIds() {
 }
 
 async function groupTabs() {
+  // Jarvis's own tabs: created by Jarvis and still in the Jarvis group (a tab dragged out is no longer driven).
   const tabs = [];
   for (const id of await groupIds()) tabs.push(...await chrome.tabs.query({groupId: id}));
-  return tabs;
+  return tabs.filter((t) => jarvisTabs.has(t.id));
 }
 
 async function isMine(tabId) {
   return (await groupTabs()).some((t) => t.id === tabId);
 }
 
-async function newTab(url) {
+async function newTab(url, session) {
   const tab = await chrome.tabs.create({url: url || 'about:blank', active: false});
+  jarvisTabs.add(tab.id);
+  await remember();
   const ids = await groupIds();
   const window = ids.length ? (await chrome.tabGroups.get(ids[0])).windowId : null;
   if (ids.length && window === tab.windowId) {
@@ -86,18 +107,14 @@ async function newTab(url) {
     const id = await chrome.tabs.group({tabIds: [tab.id]});
     await chrome.tabGroups.update(id, {title: GROUP_TITLE, color: 'blue'});
   }
-  current = tab.id;
+  current.set(session, tab.id);
   return tab.id;
 }
 
-async function workTab() {
-  if (current !== null && await isMine(current)) return current;
-  const tabs = await groupTabs();
-  if (tabs.length) {
-    current = tabs[0].id;
-    return current;
-  }
-  return newTab('');
+async function workTab(session) {
+  const mine = current.get(session);
+  if (mine !== undefined && await isMine(mine)) return mine;
+  return newTab('', session);  // each task gets its own tab; it never takes over another task's or the user's
 }
 
 function tabRef(tabId) {
@@ -117,6 +134,15 @@ async function cdp(tabId, method, params) {
   if (!attached.has(tabId)) {
     await chrome.debugger.attach({tabId}, '1.3');
     attached.add(tabId);
+    // Jarvis's tabs stay in the background: the page is told it is focused and active, and (screencast mode)
+    // Chrome keeps drawing it, so lists render and drafts autosave while the user works elsewhere.
+    const target = {tabId};
+    await chrome.debugger.sendCommand(target, 'Emulation.setFocusEmulationEnabled', {enabled: true}).catch(() => {});
+    await chrome.debugger.sendCommand(target, 'Page.setWebLifecycleState', {state: 'active'}).catch(() => {});
+    if (renderMode === 'screencast') {
+      await chrome.debugger.sendCommand(target, 'Page.startScreencast', {format: 'jpeg', quality: 10, maxWidth: 320,
+        maxHeight: 240, everyNthFrame: 4}).catch(() => {});
+    }
   }
   return chrome.debugger.sendCommand({tabId}, method, params || {});
 }
@@ -247,19 +273,27 @@ async function snapshot(tabId, interactiveOnly) {
 }
 
 // ---- Commands (the agent-browser subset Jarvis uses) ---------------------------------------------------------
-async function run(args) {
+async function run(args, session) {
   const [command, ...rest] = args;
-  if (command === 'ping') return {ok: true, version: chrome.runtime.getManifest().version};
+  if (command === 'ping') return {ok: true, version: chrome.runtime.getManifest().version, render: renderMode};
+  if (command === 'reload') {  // Jarvis updates the extension files, then reloads it (no click in chrome://extensions)
+    setTimeout(() => chrome.runtime.reload(), 200);
+    return {reloading: true};
+  }
+  if (command === 'render') {
+    renderMode = rest[0] === 'off' ? 'off' : 'screencast';
+    return {render: renderMode};
+  }
   if (command === 'close') return {closed: false};  // the user's browser is never closed
   if (command === 'tab') {
     const [sub, value] = rest;
     if (sub === 'list') {
       const tabs = await groupTabs();
       return {tabs: tabs.map((t) => ({tabId: tabRef(t.id), title: t.title || '', url: t.url || '',
-        active: t.id === current}))};
+        active: t.id === current.get(session)}))};
     }
     if (sub === 'new') {
-      const id = await newTab(value || '');
+      const id = await newTab(value || '', session);
       if (value) await waitLoad(id, 'load', 30000);
       return {tabId: tabRef(id)};
     }
@@ -268,10 +302,10 @@ async function run(args) {
       await chrome.tabs.remove(id);
       return {closed: true};
     }
-    current = await ownTab(sub);
+    current.set(session, await ownTab(sub));
     return {tabId: sub};
   }
-  const tabId = await workTab();
+  const tabId = await workTab(session);
   switch (command) {
     case 'open': {
       if (!/^https?:\/\//i.test(rest[0] || '')) throw new Error('invalid url: only http(s) pages open');

@@ -83,7 +83,8 @@ class Bridge:
                     self.counter += 1
                     key = str(self.counter)
                     self.pending[key] = (conn, request.get('id'))
-                self.write_native({'id': key, 'args': [str(a) for a in request.get('args', [])]})
+                self.write_native({'id': key, 'args': [str(a) for a in request.get('args', [])],
+                                   'session': str(request.get('session') or 'main')[:80]})
         except (OSError, ValueError):
             return
         finally:
