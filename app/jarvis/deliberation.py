@@ -56,6 +56,10 @@ VAGUE = re.compile(
 
 EXPLICIT_APPROVAL = re.compile(APPROVE.pattern + r"(?:[,.! ]*(?:please|thanks|thank you))?[.! ]*\Z", re.I)
 RISKY_AMBIGUITY = re.compile(r"\b(?:maybe|perhaps|possibly|not sure|might|do not|don't|never)\b", re.I)
+# A clear prohibition narrows the request instead of making it ambiguous: "draft ... invoice ... Do not send it"
+# was refused as unclear (2026-11-04). Hedges ("maybe pay", "might delete") still ask.
+CLEAR_LIMIT = re.compile(r"\b(?:do not|don't|never)\s+(?:send|post|submit|share|publish|pay|delete|forward|reply|"
+                         r"upload|buy|purchase)\b(?:\s+(?:it|them|this|that|anything|yet))?", re.I)
 
 
 def execution_path(command, runtime=None, apps=None, resuming=False):
@@ -324,7 +328,7 @@ class Deliberation:
         say — a genuine disagreement or a real ambiguity it cannot resolve itself.
         """
         risk, confidence = opinion["risk"], opinion["confidence"]
-        if risk == 'high' and RISKY_AMBIGUITY.search(opinion.get('goal', '')):
+        if risk == 'high' and RISKY_AMBIGUITY.search(CLEAR_LIMIT.sub(' ', opinion.get('goal', ''))):
             return {'propose': True, 'note': False, 'chosen': '', 'risk': risk, 'confidence': confidence,
                     'message': 'Please clarify the intended action and exact scope before I plan any consequential changes.'}
         if risk == 'high' and BULK_DESTRUCTIVE.search(opinion.get('goal','')):

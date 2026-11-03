@@ -329,6 +329,15 @@ def composed_draft(run: Any) -> List[str]:
     return [] if not first or first.lower() in saved.lower() else [f'the draft body does not start with {first!r}']
 
 
+def body_uses(*needles: str) -> Callable[[Any], List[str]]:
+    """The written email's body (after the To/Subject lines) contains the user's details from memory."""
+    def oracle(run: Any) -> List[str]:
+        answer = str(getattr(run, 'answer', ''))
+        body = answer.split('\n\n', 1)[1] if '\n\n' in answer else ''
+        return [f'the email body does not use {n!r} from memory' for n in needles if n.lower() not in body.lower()]
+    return oracle
+
+
 def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
         row = getattr(run, 'row', None)
@@ -463,6 +472,35 @@ def build(m: Any) -> List[Any]:
         Case('C28W', 'draft an email to comedywithkh@gmail.com about cant come to party tmrw, sick, sorry, will make it up. '
                      'Do not send it.',
              both(composed_draft, no_send), approve=('gmail', 'draft')),  # a rough idea becomes a full email
+        # Emails written from a rough idea; E01-E07 need the user's details from Jarvis's memory.
+        Case('E01', 'draft an email to comedywithkh@gmail.com telling my manager im sick today and taking a day off. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani',), no_send), approve=('gmail', 'draft')),
+        Case('E02', 'draft an email to comedywithkh@gmail.com applying for the summer internship, they should reply to my email. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani', 'kunalvaghani35@gmail.com'), no_send), approve=('gmail', 'draft')),
+        Case('E03', 'draft an email to comedywithkh@gmail.com asking professor for a meeting next week about my project, include how to reach me. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani', 'kunalvaghani35@gmail.com'), no_send), approve=('gmail', 'draft')),
+        Case('E04', 'draft an email to comedywithkh@gmail.com complaining order 4417 arrived late and damaged, want refund, give my contact email. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani', 'kunalvaghani35@gmail.com'), no_send), approve=('gmail', 'draft')),
+        Case('E05', 'draft an email to comedywithkh@gmail.com introducing myself to the new team as the new member, say who i am and how to contact me. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani', 'kunalvaghani35@gmail.com'), no_send), approve=('gmail', 'draft')),
+        Case('E06', 'draft an email to comedywithkh@gmail.com following up on unpaid invoice 2209 from last month, sign with my full name. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani',), no_send), approve=('gmail', 'draft')),
+        Case('E07', 'draft an email to comedywithkh@gmail.com asking to update my contact email on my account to my main email. Do not send it.',
+             both(composed_draft, body_uses('Kunal Vaghani', 'kunalvaghani35@gmail.com'), no_send), approve=('gmail', 'draft')),
+        Case('E08', 'draft an email to comedywithkh@gmail.com sorry i missed your call yesterday, free after 6 today. Do not send it.',
+             both(composed_draft, no_send), approve=('gmail', 'draft')),
+        Case('E09', 'draft an email to comedywithkh@gmail.com inviting friends to board game night saturday 7pm at my place, bring snacks. Do not send it.',
+             both(composed_draft, no_send), approve=('gmail', 'draft')),
+        Case('E10', 'draft an email to comedywithkh@gmail.com reminding colleague the report is due friday, ask if they need help. Do not send it.',
+             both(composed_draft, no_send), approve=('gmail', 'draft')),
+        # Family names come from the profile note in Jarvis's memory; the requests never name anyone.
+        Case('E11', 'draft an email to comedywithkh@gmail.com wishing my brother a happy birthday and saying i will call him tonight. Do not send it.',
+             both(composed_draft, body_uses('Jaydeep',), no_send), approve=('gmail', 'draft')),
+        Case('E12', 'draft an email to comedywithkh@gmail.com inviting my parents to dinner this sunday to celebrate their anniversary. Do not send it.',
+             both(composed_draft, body_uses('Kunal'), answer_mentions(any_of=('mom', 'mum', 'dad', 'parents', 'rajeshbhai', 'alkaben')), no_send),
+             approve=('gmail', 'draft')),  # to one's parents "Mom and Dad" is right; their names are optional
+        Case('E13', 'draft an email to comedywithkh@gmail.com asking my brother to pick up our mother from the station on friday evening. Do not send it.',
+             both(composed_draft, body_uses('Jaydeep'), no_send), approve=('gmail', 'draft')),
         Case('C30', 'In Gmail, search for emails from Google and tell me how many results there are on the first page.',
              both(first_page_count(50, exact=50), no_send)),  # >50 matches: a full page of 50
         Case('C31', f'In Google Drive, create a folder named "{google_folder}" if it does not exist.',

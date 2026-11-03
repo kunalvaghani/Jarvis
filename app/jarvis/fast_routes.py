@@ -22,7 +22,7 @@ from pathlib import Path
 import json
 import re
 import time
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 Cancelled = Callable[[], bool]
 
@@ -614,6 +614,81 @@ def gmail_compose_request(goal: str) -> bool:
     return prefer == 'browser' or gmail_api.status() != 'connected'
 
 
+IDENTITY = re.compile(r'\b(?:name|email|e-mail|phone|mobile|number|address|city|job|role|title|company|work|'
+                      r'college|university|school|studying|student|degree|linkedin|website|portfolio|signature)\b', re.I)
+
+
+def sender_facts(actions: Any, goal: str, limit: int = 8) -> List[str]:
+    """Facts about the user from Jarvis's long-term memory that an email may need: who they are (name, email,
+    phone, job, college, city ...) plus the facts related to this email's topic. Secrets are never in memory."""
+    curator = getattr(actions, 'curator', None)
+    if curator is None:
+        return []
+    try:
+        active = list(curator.active())
+        related = list(curator.relevant(goal, limit=limit))
+    except Exception:
+        return []
+    chosen = [f for f in active if IDENTITY.search(str(f.get('text', '')))]
+    chosen += [f for f in related if f not in chosen and IDENTITY.search(str(f.get('text', '')))
+               or f not in chosen and set(re.findall(r'[a-z]{4,}', str(f.get('text', '')).lower()))
+               & set(re.findall(r'[a-z]{4,}', goal.lower()))]
+    facts = [str(f['text']) for f in chosen[:limit]]
+    return facts + [line for line in profile_facts(actions, goal) if not any(
+        fact_value(line).lower() in fact.lower() for fact in facts)]
+
+
+FAMILY = re.compile(r'\b(?:brother|bro|sister|sis|mother|mom|mum|maa|mummy|father|dad|papa|parents?|family|'
+                    r'siblings?)\b', re.I)
+
+
+def profile_facts(actions: Any, goal: str) -> List[str]:
+    """Lines of the user's profile note (Obsidian "Kunal Vaghani.md", ObsidianMemory.profile_text) an email may
+    need: name and city always, family names when the email is about family, other lines when their words match."""
+    memory = getattr(actions, 'memory', None)
+    try:
+        text = memory.profile_text() if memory is not None else ''
+    except Exception:
+        text = ''
+    words = set(re.findall(r'[a-z]{4,}', goal.lower()))
+    chosen = []
+    for key, value in re.findall(r'^\s*-\s*([^:\n]{2,40}):\s*(.+)$', text or '', re.M):
+        key, value = key.strip(), value.strip()
+        always = re.search(r'\b(?:full name|name|current city|city)\b', key, re.I)
+        family = re.search(r'\bfamily\b', key, re.I) and FAMILY.search(goal)
+        related = not re.search(r'\bfamily\b', key, re.I) and words & set(re.findall(r'[a-z]{4,}', (key + ' ' + value).lower()))
+        if always or family or related:
+            chosen.append(f'{key}: {value}')
+    return chosen
+
+
+def fact_value(fact: str) -> str:
+    """The detail a fact gives ("Kunal's main email address is x@y.com" -> "x@y.com"; "Key: value" -> value)."""
+    found = re.search(r'\b(?:is|are)\s+(.+?)\.?$', fact.strip()) or re.search(r'^[^:]{2,40}:\s*(.+?)\.?$', fact.strip())
+    return found.group(1).strip() if found else ''
+
+
+def fact_shown(fact: str, body: str) -> bool:
+    """The email uses this fact: its value, or one of the names or addresses inside it, appears in the body."""
+    value = fact_value(fact)
+    names = re.findall(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+|[A-Z][a-z]+(?: [A-Z][a-z]+)+', value)
+    pieces = names + [name.split()[0] for name in names if ' ' in name] or [value]  # "Jaydeep" for "Jaydeep Vaghani"
+    return any(piece and piece.lower() in body.lower() for piece in pieces)
+
+
+def about_sender(facts: List[str]) -> str:
+    from datetime import date
+    today = date.today()
+    when = (f'\n\nToday is {today.strftime("%A")}, {today.day} {today.strftime("%B %Y")}: use it only to turn words '
+            'such as "today" or "this Friday" into a date where the email needs one; do not mention it otherwise.')
+    if not facts:
+        return when
+    return when + ('\n\nAbout the sender (the user), from Jarvis\'s memory. Use a fact only where this email needs it '
+            '(their name in the sign-off, their email or other details where the email asks for contact details); '
+            'never add facts that are not listed. If the email needs a detail that is not listed, write it as '
+            '[detail] in square brackets:\n' + '\n'.join('- ' + f for f in facts))
+
+
 def _preview(draft: Dict[str, str]) -> str:
     return (f'\nTo: {draft["to"] or "(no recipient yet)"}\nSubject: {draft["subject"]}\n\n{draft["body"]}')
 
@@ -623,17 +698,24 @@ def _gmail_compose(actions: Any, goal: str, cancelled: Cancelled) -> Optional[st
     from .gmail_workflows import explicit_request, spoken_addresses, validate_request
     goal = spoken_addresses(goal)
     request = explicit_request(goal)
+    used = sender_facts(actions, goal)
     if request is None:
-        actions.report('brain', 'Writing the email with the local model')
-        request = actions.brain.client.request('gmail_request', cancelled, goal=goal)
+        actions.report('brain', 'Writing the email with the local model'
+                       + (f' (using {len(used)} facts about you from memory)' if used else ''))
+        request = actions.brain.client.request('gmail_request', cancelled, goal=goal + about_sender(used))
+    # Checked against the user's own words only: a memory fact never becomes a recipient or a target.
     request = validate_request(request, goal)  # asks for what is missing; never guesses an address from a name
     if request['operation'] not in ('draft', 'send'):
         return None  # other mailbox operations: the Gmail API workflow (it says how to connect)
     draft = {'to': request['to'].strip(), 'subject': request['subject'].strip(), 'body': request['body'].strip()}
+    # The writer sometimes echoes the date hint ("Since today is Wednesday, November 4th, 2026, I am writing ...").
+    draft['body'] = re.sub(r'(?i)\b(?:since|as) today is (?:[a-z]+day,?\s*)?(?:\d{1,2}(?:st|nd|rd|th)?\s+[a-z]+|[a-z]+\s+'
+                           r'\d{1,2}(?:st|nd|rd|th)?),?\s*(?:\d{4})?,?\s*(\w)', lambda m: m.group(1).upper(), draft['body'])
     # The writer never invents who is sending; the user's own name (config email.sign_off_name) closes the email.
     config = getattr(actions, 'config', None)
     name = str(((config or {}).get('email') or {}).get('sign_off_name', '') if isinstance(config, dict) else '').strip()
-    if name and draft['body'] and name not in draft['body'][-120:]:
+    tail = draft['body'][-120:].lower()
+    if name and draft['body'] and not any(part.lower() in tail for part in name.split()[:1]):  # already signed
         draft['body'] += ('\n' if draft['body'].rstrip().endswith(',') else '\n\n') + name
     if not draft['subject'] or not draft['body']:
         raise TaskClarification('What should the email say? Give me the idea in a few words.', 'gmail')
@@ -642,6 +724,13 @@ def _gmail_compose(actions: Any, goal: str, cancelled: Cancelled) -> Optional[st
         return str(made)
     if request['operation'] == 'draft':
         note = '' if draft['to'] else ' Add the recipient\'s email address before sending (I do not guess addresses).'
+        missing = sorted(set(re.findall(r'\[([^\]\n]{2,40})\]', draft['subject'] + ' ' + draft['body'])))
+        if missing:
+            note += (' Fill in: ' + ', '.join(missing) + ' (not in my memory; tell me "remember that my ... is ..." '
+                     'and I will use it next time).')
+        shown = [fact for fact in used if fact_shown(fact, draft['body'])]
+        if shown:
+            note += ' Used from memory: ' + '; '.join(f.rstrip('.') for f in shown) + '.'
         return (f'Finished: wrote and saved a Gmail draft. It was not sent.{note}' + _preview(draft))
     return _gmail_send(actions, draft, cancelled)
 
@@ -739,25 +828,27 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
     if not _approved(actions, 'gmail draft', f'Create a Gmail draft to {draft["to"]} with subject '
                                              f'"{draft["subject"]}" (it is not sent)', cancelled):
         return 'Did not create the Gmail draft: it was not approved. Nothing was written.'
-    # A compose link alone is not saved (live 2026-11-03: Drafts stayed empty); Gmail saves once the message is
-    # edited. So: recipient and subject from the link, the body typed into "Message Body", then Gmail's "Saved".
-    url = ('https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + quote(draft['to']) + '&su=' + quote(draft['subject']))
-    actions.report('tool', 'control: web_open Gmail compose (not sent)')
-    opened = control.web_open(url, cancelled)
-    head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
-    if head.get('ok') is False:
-        return 'Gmail compose did not open, so no draft was made. ' + str(head.get('result', ''))[:200]
-    body_ref = _message_body(control, cancelled)  # the compose form renders after the page loads
-    if not body_ref:
-        return 'Gmail compose opened, but its message box was not found, so no draft was made. Nothing was sent.'
-    actions.report('tool', 'control: web_act fill Message Body (draft only)')
-    if not _fill_body(control, body_ref, draft['body'] or ' ', cancelled):
-        return ('The message box did not take the text, so the draft may be saved without its body. It was not '
-                'sent; please check Drafts.')
-    # Gmail stores the typed body when the compose tab closes (live 2026-11-03: navigating away asked "Leave
-    # site?" and lost it; closing the tab kept it). Close Jarvis's compose tab, then check Drafts in a new one.
-    time.sleep(4.0)
-    _close_current_tab(control, cancelled)
+    before = api_draft_ids(actions, draft['subject'])  # older drafts with the same subject are not this one
+    for attempt in (1, 2):
+        made = _compose_and_close(actions, control, draft, cancelled)
+        if made is not None:
+            return made  # it could not be typed: nothing more to try
+        saved = api_draft_body(actions, draft['subject'], exclude=before)
+        if saved is None:
+            break  # no API check for this account: the browser check below decides
+        if saved is not False:
+            if draft['body'].strip() and not same_words(draft['body'], saved):
+                return (f'The draft "{draft["subject"]}" is in Drafts, but its message reads {saved[:80]!r}, not the '
+                        'body you asked for. It was not sent; please check it.')
+            return (f'Finished: saved a Gmail draft to {draft["to"]} with subject "{draft["subject"]}". It was not '
+                    'sent (checked through the Gmail API: it is in Drafts and its message reads the body).')
+        if attempt == 1:
+            # The Gmail API shows no such draft: Gmail lost it when the tab closed (live 2026-11-04). Making it again
+            # cannot duplicate anything.
+            actions.report('brain', 'Gmail did not keep the draft; writing it again (checked: none exists)')
+            continue
+        return (f'Gmail did not keep the draft "{draft["subject"]}" (checked through the Gmail API, twice). It was '
+                'not sent; nothing is in Drafts.')
     actions.report('tool', 'control: web_open Gmail drafts (check)')
     control.web_open('https://mail.google.com/mail/u/0/#drafts', cancelled)
     for _ in range(8):  # the Drafts list fills in after the page loads
@@ -776,6 +867,83 @@ def _gmail_draft(actions: Any, draft: Dict[str, str], cancelled: Cancelled) -> O
         control.web_read(cancelled, 'all')
     return (f'The draft "{draft["subject"]}" is not listed in Gmail Drafts after saving, so I cannot confirm it was '
             'made. It was not sent; I did not try again, to avoid duplicates. Please check Drafts.')
+
+
+def _compose_and_close(actions: Any, control: Any, draft: Dict[str, str], cancelled: Cancelled) -> Optional[str]:
+    """Open Gmail compose with recipient and subject, type the body, let Gmail save, close the tab. None when the
+    body was typed; otherwise why nothing (or no body) was made."""
+    from urllib.parse import quote
+    # A compose link alone is not saved (live 2026-11-03: Drafts stayed empty); Gmail saves once the message is
+    # edited. So: recipient and subject from the link, the body typed into "Message Body".
+    url = ('https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + quote(draft['to']) + '&su=' + quote(draft['subject']))
+    actions.report('tool', 'control: web_open Gmail compose (not sent)')
+    opened = control.web_open(url, cancelled)
+    head = json.loads(opened.split('\n', 1)[0]) if opened.startswith('{') else {}
+    if head.get('ok') is False:
+        return 'Gmail compose did not open, so no draft was made. ' + str(head.get('result', ''))[:200]
+    body_ref = _message_body(control, cancelled)  # the compose form renders after the page loads
+    if not body_ref:
+        return 'Gmail compose opened, but its message box was not found, so no draft was made. Nothing was sent.'
+    actions.report('tool', 'control: web_act fill Message Body (draft only)')
+    if not _fill_body(control, body_ref, draft['body'] or ' ', cancelled):
+        return ('The message box did not take the text, so the draft may be saved without its body. It was not '
+                'sent; please check Drafts.')
+    # Gmail stores the typed body when the compose tab closes (navigating away asked "Leave site?" and lost it).
+    time.sleep(6.0)
+    _close_current_tab(control, cancelled)
+    return None
+
+
+def api_draft_ids(actions: Any, subject: str) -> Set[str]:
+    """IDs of the Gmail drafts with this subject now (empty when the API cannot check)."""
+    from . import gmail_api
+    if gmail_api.status(getattr(actions, 'base', None)) != 'connected':
+        return set()
+    api = gmail_api.API(Path(getattr(actions, 'base', None) or Path(__file__).resolve().parent.parent))
+    try:
+        listing = api.call('GET', 'drafts', params={'q': f'subject:"{subject}"', 'maxResults': 25})
+        return {str(row['id']) for row in listing.get('drafts', [])}
+    except ValueError:
+        return set()
+    finally:
+        api.close()
+
+
+def api_draft_body(actions: Any, subject: str, wait_s: float = 10.0, exclude: Optional[Set[str]] = None) -> Any:
+    """The body of the newest Gmail draft with this exact subject, read through the Gmail API (read-only) when it
+    is connected for the account Jarvis uses; False when there is no such draft; None when the API cannot check."""
+    from . import gmail_api
+    if gmail_api.status(getattr(actions, 'base', None)) != 'connected':
+        return None
+    import base64
+    deadline = time.monotonic() + wait_s
+    api = gmail_api.API(Path(getattr(actions, 'base', None) or Path(__file__).resolve().parent.parent))
+    try:
+        while True:
+            listing = api.call('GET', 'drafts', params={'q': f'subject:"{subject}"', 'maxResults': 5})
+            for row in listing.get('drafts', []):
+                if str(row['id']) in (exclude or set()):
+                    continue
+                full = api.call('GET', 'drafts/' + row['id'], params={'format': 'full'})
+                message = full.get('message', {})
+                headers = {h['name'].lower(): h['value'] for h in message.get('payload', {}).get('headers', [])}
+                if headers.get('subject', '').strip() != subject.strip():
+                    continue
+                parts = [message.get('payload', {})]
+                while parts:
+                    part = parts.pop(0)
+                    parts.extend(part.get('parts', []) or [])
+                    data = (part.get('body') or {}).get('data')
+                    if data and part.get('mimeType', '').startswith('text/plain'):
+                        return base64.urlsafe_b64decode(data + '===').decode('utf-8', 'replace')
+                return str(message.get('snippet', ''))
+            if time.monotonic() >= deadline:
+                return False
+            time.sleep(2.0)
+    except ValueError:
+        return None
+    finally:
+        api.close()
 
 
 START_MENU = re.compile(r"^\s*(?:please\s+)?(?:open\s+the\s+start\s+menu\s+and\s+)?(?:launch|open|start)\s+"

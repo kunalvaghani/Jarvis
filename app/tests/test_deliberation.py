@@ -192,3 +192,10 @@ def test_policy_forbidden_failures_refuse_instead_of_asking_for_authorization():
     blocked = 'Step rejected before acting: Registry Editor is not in the allowed app list for app_open'
     assert classify_failure(blocked, {}) == 'forbidden' and ROUTES['forbidden'] == 'refuse'
     assert classify_failure('Action cancelled; approval was not given.', {}) == 'permission'  # The user can still approve.
+
+
+def test_a_clear_prohibition_is_not_ambiguity_but_hedges_still_ask():
+    from jarvis.deliberation import CLEAR_LIMIT, RISKY_AMBIGUITY
+    assert not RISKY_AMBIGUITY.search(CLEAR_LIMIT.sub(' ', 'draft a follow-up on unpaid invoice 2209. Do not send it.'))
+    assert RISKY_AMBIGUITY.search(CLEAR_LIMIT.sub(' ', 'maybe pay the invoice'))
+    assert RISKY_AMBIGUITY.search(CLEAR_LIMIT.sub(' ', 'I might delete the invoice folder'))
