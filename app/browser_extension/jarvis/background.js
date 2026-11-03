@@ -13,7 +13,8 @@ const HOST = 'com.jarvis.browser';
 const GROUP_TITLE = 'Jarvis';
 const INTERACTIVE = new Set(['button', 'link', 'textbox', 'searchbox', 'combobox', 'checkbox', 'radio', 'menuitem',
   'menuitemcheckbox', 'menuitemradio', 'option', 'tab', 'switch', 'slider', 'spinbutton', 'treeitem', 'listbox']);
-const REFERABLE = new Set([...INTERACTIVE, 'cell', 'gridcell', 'rowheader', 'columnheader', 'heading', 'row']);
+const REFERABLE = new Set([...INTERACTIVE, 'cell', 'gridcell', 'rowheader', 'columnheader', 'heading', 'row',
+  'LayoutTableCell', 'listitem', 'article', 'img', 'image']);  // named items (Drive lists files as layout cells)
 const SKIP = new Set(['none', 'generic', 'GenericContainer', 'InlineTextBox', 'RootWebArea', 'WebArea', 'Ignored',
   'presentation', 'LineBreak']);
 const KEYS = {Enter: 13, Tab: 9, Escape: 27, Backspace: 8, Delete: 46, ArrowUp: 38, ArrowDown: 40, ArrowLeft: 37,
@@ -369,6 +370,8 @@ async function run(args, session) {
       if (what === 'title') return {title: (await chrome.tabs.get(tabId)).title || ''};
       if (what === 'text') return {text: await onNode(tabId, ref, 'function () { return (this.innerText || this.textContent || "").slice(0, 20000); }')};
       if (what === 'value') return {value: await onNode(tabId, ref, 'function () { return this.value !== undefined ? String(this.value) : (this.innerText || ""); }')};
+      // The item ID a list row carries (Drive's data-id): read-only, used to build the item's own address.
+      if (what === 'itemid') return {id: await onNode(tabId, ref, 'function () { const el = this.closest("[data-id]"); return el ? el.getAttribute("data-id") : ""; }')};
       throw new Error(`unknown command: get ${what}`);
     }
     case 'is':
